@@ -48,8 +48,6 @@ const TaskCreationForm = ({ handleRefresh, isOpen, close, onSuccess }) => {
     const [taskCategory, setTaskCategory] = useState("");
 
     //state for graphic designer start
-    const [textForDesignUrl, setTextForDesignUrl] = useState('');
-    console.log("textForDesignUrl", textForDesignUrl);
 
 
     const [typeOfGraphicsCategory, setTypeOfGraphicsCategory] = useState("");
@@ -60,9 +58,13 @@ const TaskCreationForm = ({ handleRefresh, isOpen, close, onSuccess }) => {
     const [referenceList, setReferenceList] = useState([{ reference: "" }]);
     const [fileTypesNeeded, setFileTypesNeeded] = useState([]);
     const [fileType, setFileType] = useState('');
+
+    const [workableUrl, setWorkableUrl] = useState('');
     const [textForDesign, setTextForDesign] = useState([]);
     const [imageForDesigner, setImageForDesigner] = useState([]);
+
     const [imgOrVidForWork, setImgOrVidForWork] = useState([]);
+
     const [fontName, setFontName] = useState('');
     const [fontUrl, setFontUrl] = useState('');
     const [brandGuideline, setBrandGuideline] = useState([]);
@@ -159,7 +161,7 @@ const TaskCreationForm = ({ handleRefresh, isOpen, close, onSuccess }) => {
         setThemeType("");
         setThemeName("");
         setThemeTemplate("");
-        setTextForDesignUrl('');
+        setWorkableUrl('');
     };
     // handle change
     React.useEffect(() => {
@@ -265,12 +267,12 @@ const TaskCreationForm = ({ handleRefresh, isOpen, close, onSuccess }) => {
         //     }
         // }
 
-        if (typeOfGraphicsCategory?.id === 5 || typeOfGraphicsCategory?.id === 6) {
-            if (!imageForDesigner) {
-                err.imageForDesigner = "Image is required for designer";
-                errCount++;
-            }
-        }
+        // if (typeOfGraphicsCategory?.id === 5 || typeOfGraphicsCategory?.id === 6) {
+        //     if (!imageForDesigner) {
+        //         err.imageForDesigner = "Image is required for designer";
+        //         errCount++;
+        //     }
+        // }
 
         if (typeOfGraphicsCategory?.id === 8) {
             if (!imgOrVidForWork) {
@@ -382,7 +384,7 @@ const TaskCreationForm = ({ handleRefresh, isOpen, close, onSuccess }) => {
         fd.append("primary_color", primaryColor ?? "");
         fd.append("primary_color_description", primaryColorDescription ?? "");
         fd.append("secondary_colors", JSON.stringify(secondaryColors) ?? "");
-        fd.append("workable_url", textForDesignUrl ?? "")
+        fd.append("workable_url", workableUrl ?? "")
 
         Array.from(textForDesign).forEach((file) => {
             fd.append("attach_text_files[]", file);
@@ -952,29 +954,13 @@ const TaskCreationForm = ({ handleRefresh, isOpen, close, onSuccess }) => {
                                                         <FileUploadWithInput
                                                             inputType="url"
                                                             placeholder="Enter the URL"
-                                                            inputUrl={textForDesignUrl}
-                                                            setInputUrl={setTextForDesignUrl}
+                                                            inputUrl={workableUrl}
+                                                            setInputUrl={setWorkableUrl}
                                                             inputFiles={textForDesign}
                                                             setInputFiles={setTextForDesign}
                                                         />
                                                     </div>
                                                 </div>
-                                                {/* <div className="col-12 col-md-6">
-                                                    <div className={`form-group my-3 w-100`}>
-                                                        <label
-                                                            htmlFor={'textForDesign'}
-                                                            className={`f-14 text-dark-gray mb-2`}
-                                                            data-label="true"
-                                                        >
-                                                            Attach text that will be used for the design
-                                                            <sup className='f-14 mr-1'>*</sup>
-                                                        </label>
-                                                        <UploadFilesInLine
-                                                            files={textForDesign}
-                                                            setFiles={setTextForDesign}
-                                                        />
-                                                    </div>
-                                                </div> */}
                                             </>
                                         }
 
@@ -990,12 +976,19 @@ const TaskCreationForm = ({ handleRefresh, isOpen, close, onSuccess }) => {
                                                             data-label="true"
                                                         >
                                                             Image where the designer will work
-                                                            <sup className='f-14 mr-1'>*</sup>
                                                         </label>
-                                                        <UploadFilesInLine
+                                                        <FileUploadWithInput
+                                                            inputType="url"
+                                                            placeholder="Enter the URL"
+                                                            inputUrl={workableUrl}
+                                                            setInputUrl={setWorkableUrl}
+                                                            inputFiles={imageForDesigner}
+                                                            setInputFiles={setImageForDesigner}
+                                                        />
+                                                        {/* <UploadFilesInLine
                                                             files={imageForDesigner}
                                                             setFiles={setImageForDesigner}
-                                                        />
+                                                        /> */}
                                                     </div>
                                                 </div>
                                             </>

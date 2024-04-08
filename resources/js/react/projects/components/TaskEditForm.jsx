@@ -73,7 +73,7 @@ const TaskEditForm = ({ isOpen, close, row, table }) => {
     }
 
     //state for graphic designer start
-    const [textForDesignUrl, setTextForDesignUrl] = useState('');
+    const [workableUrl, setWorkableUrl] = useState('');
 
     const [typeOfGraphicsCategory, setTypeOfGraphicsCategory] = useState("");
     const [typeOfLogo, setTypeOfLogo] = useState("");
@@ -239,11 +239,9 @@ const TaskEditForm = ({ isOpen, close, row, table }) => {
             setPrimaryColorDescription(graphicWorkDetails?.primary_color_description);
             setIllustration(graphicWorkDetails?.design_instruction);
             setOthers(graphicWorkDetails?.design_instruction);
-            setTextForDesignUrl(graphicWorkDetails?.workable_url);
+            setWorkableUrl(graphicWorkDetails?.workable_url);
         }
     }, [isOpen])
-
-    console.log(graphicWorkDetails)
 
     // handle onchange
     const handleChange = (e, setState) => {
@@ -337,19 +335,19 @@ const TaskEditForm = ({ isOpen, close, row, table }) => {
             }
         }
 
-        if (typeOfGraphicsCategory?.id === 2 || typeOfGraphicsCategory?.id === 3 || typeOfGraphicsCategory?.id === 4) {
-            if (!textForDesign) {
-                err.textForDesign = "The text for design field is required";
-                errCount++;
-            }
-        }
+        // if (typeOfGraphicsCategory?.id === 2 || typeOfGraphicsCategory?.id === 3 || typeOfGraphicsCategory?.id === 4) {
+        //     if (!textForDesign) {
+        //         err.textForDesign = "The text for design field is required";
+        //         errCount++;
+        //     }
+        // }
 
-        if (typeOfGraphicsCategory?.id === 5 || typeOfGraphicsCategory?.id === 6) {
-            if (!imageForDesigner) {
-                err.imageForDesigner = "Image is required for designer";
-                errCount++;
-            }
-        }
+        // if (typeOfGraphicsCategory?.id === 5 || typeOfGraphicsCategory?.id === 6) {
+        //     if (!imageForDesigner) {
+        //         err.imageForDesigner = "Image is required for designer";
+        //         errCount++;
+        //     }
+        // }
 
         if (typeOfGraphicsCategory?.id === 8) {
             if (!imgOrVidForWork) {
@@ -456,7 +454,7 @@ const TaskEditForm = ({ isOpen, close, row, table }) => {
             });
         }
 
-        fd.append("workable_url", textForDesignUrl ?? "")
+        fd.append("workable_url", workableUrl ?? "")
         fd.append("reference", JSON.stringify(referenceList) ?? "");
         fd.append("font_name", fontName ?? "");
         fd.append("font_url", fontUrl ?? "");
@@ -1009,8 +1007,8 @@ const TaskEditForm = ({ isOpen, close, row, table }) => {
                                                             <FileUploadWithInput
                                                                 inputType="url"
                                                                 placeholder="Enter the URL"
-                                                                inputUrl={textForDesignUrl}
-                                                                setInputUrl={setTextForDesignUrl}
+                                                                inputUrl={workableUrl}
+                                                                setInputUrl={setWorkableUrl}
                                                                 inputFiles={textForDesign}
                                                                 setInputFiles={setTextForDesign}
                                                                 {...(defaultTextForDesignBanner && { previous: defaultTextForDesignBanner })}
@@ -1023,8 +1021,8 @@ const TaskEditForm = ({ isOpen, close, row, table }) => {
                                                             <FileUploadWithInput
                                                                 inputType="url"
                                                                 placeholder="Enter the URL"
-                                                                inputUrl={textForDesignUrl}
-                                                                setInputUrl={setTextForDesignUrl}
+                                                                inputUrl={workableUrl}
+                                                                setInputUrl={setWorkableUrl}
                                                                 inputFiles={textForDesign}
                                                                 setInputFiles={setTextForDesign}
                                                                 {...(defaultTextForDesignBrochure && { previous: defaultTextForDesignBrochure })}
@@ -1037,8 +1035,8 @@ const TaskEditForm = ({ isOpen, close, row, table }) => {
                                                             <FileUploadWithInput
                                                                 inputType="url"
                                                                 placeholder="Enter the URL"
-                                                                inputUrl={textForDesignUrl}
-                                                                setInputUrl={setTextForDesignUrl}
+                                                                inputUrl={workableUrl}
+                                                                setInputUrl={setWorkableUrl}
                                                                 inputFiles={textForDesign}
                                                                 setInputFiles={setTextForDesign}
                                                                 {...(defaultTextForDesignCompanyProfile && { previous: defaultTextForDesignCompanyProfile })}
@@ -1067,23 +1065,39 @@ const TaskEditForm = ({ isOpen, close, row, table }) => {
                                                     </label>
                                                 </div>
                                                 {
-                                                    typeOfGraphicsCategory?.id === 5 && <div style={{ maxHeight: "300px", overflowY: "auto" }}><UploadFilesInLine
-                                                        files={imageForDesigner}
-                                                        setFiles={setImageForDesigner}
-                                                        {...(defaultImageForDesignerRetouching ? { previous: defaultImageForDesignerRetouching } : {})}
-                                                        onPreviousFileDelete={handleDeleteImgForDesigner}
-                                                    />
+                                                    typeOfGraphicsCategory?.id === 5 && <div style={{ maxHeight: "300px", overflowY: "auto" }}>
+                                                        <FileUploadWithInput
+                                                            inputType="url"
+                                                            placeholder="Enter the URL"
+                                                            inputUrl={workableUrl}
+                                                            setInputUrl={setWorkableUrl}
+                                                            inputFiles={imageForDesigner}
+                                                            setInputFiles={setImageForDesigner}
+                                                            {...(defaultImageForDesignerRetouching ? { previous: defaultImageForDesignerRetouching } : {})}
+                                                            onPreviousFileDelete={handleDeleteImgForDesigner}
+                                                        />
                                                     </div>
                                                 }
                                                 {
 
                                                     typeOfGraphicsCategory?.id === 6 && <div style={{ maxHeight: "300px", overflowY: "auto" }}>
-                                                        <UploadFilesInLine
+                                                        <FileUploadWithInput
+                                                            inputType="url"
+                                                            placeholder="Enter the URL"
+                                                            inputUrl={workableUrl}
+                                                            setInputUrl={setWorkableUrl}
+                                                            inputFiles={imageForDesigner}
+                                                            setInputFiles={setImageForDesigner}
+                                                            {...(defaultImageForDesignerBgRemoval ? { previous: defaultImageForDesignerBgRemoval } : {})}
+                                                            onPreviousFileDelete={handleDeleteImgBgForDesigner}
+                                                        />
+
+                                                        {/* <UploadFilesInLine
                                                             files={imageForDesigner}
                                                             setFiles={setImageForDesigner}
                                                             {...(defaultImageForDesignerBgRemoval ? { previous: defaultImageForDesignerBgRemoval } : {})}
                                                             onPreviousFileDelete={handleDeleteImgBgForDesigner}
-                                                        />
+                                                        /> */}
                                                     </div>
                                                 }
                                             </div>

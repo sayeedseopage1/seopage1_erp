@@ -35,7 +35,7 @@ function FileUploadWithInput({ inputType, placeholder, inputUrl, setInputUrl, in
                     id="fileInput"
                     multiple
                 />
-                <label htmlFor="fileInput" className='ml-1 mb-0 bg-light p-2 rounded' style={{ cursor: 'pointer' }}>
+                <label title='Upload File' htmlFor="fileInput" className='ml-1 mb-0 bg-light p-2 rounded' style={{ cursor: 'pointer' }}>
                     <AiOutlineUpload size={20} />
                 </label>
             </div>
