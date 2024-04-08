@@ -3,7 +3,8 @@ import ActionDropdownDataTable from "./ActionDropDownDataTable";
 import Person from "./Person";
 
 import CommentModal from "./CommentModal";
-
+import { User } from "../../../utils/user-details";
+const auth = new User(window.Laravel.user);
 export const DataTableColumns = [
     // {
     //     header: "#",
@@ -119,9 +120,14 @@ export const DataTableColumns = [
         cell: ({ row }) => {
             const data = row.original;
 
-            return <CommentModal comment={data?.team_lead_cmnt} />;
+            if (auth.roleId !== 6) {
+                return <CommentModal comment={data?.team_lead_cmnt} />;
+            } else {
+                return <div style={{ marginLeft: "50px" }}>N/A</div>;
+            }
         },
     },
+
     {
         id: "managements_cmnt",
         header: "Managements Comment",
