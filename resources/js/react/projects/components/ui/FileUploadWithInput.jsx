@@ -126,7 +126,6 @@ function shortenFileName(fileName) {
 function FileUploadWithInput() {
     const [url, setUrl] = useState('');
     const [files, setFiles] = useState([]);
-    const [hoveredIndex, setHoveredIndex] = useState(null);
 
     const handleUrlChange = (event) => {
         setUrl(event.target.value);
@@ -164,10 +163,8 @@ function FileUploadWithInput() {
             </div>
             <div className='d-flex align-items-center flex-wrap' style={{ gap: '10px' }}>
                 {files.map((file, index) => (
-                    <div style={{ width: "150px" }} key={index} className='p-1 text-center mt-2 bg-light rounded'
-                        onMouseEnter={() => setHoveredIndex(index)}
-                        onMouseLeave={() => setHoveredIndex(null)}>
-                        {getFileIcon(file.name.split('.').pop())} {shortenFileName(file.name)}
+                    <div style={{ width: "150px" }} key={index} className='p-1 text-center mt-2 bg-light rounded d-flex align-items-center justify-content-between'>
+                        <div>{getFileIcon(file.name.split('.').pop())} {shortenFileName(file.name)}</div>
 
                         <span className='text-danger' style={{ cursor: 'pointer', marginLeft: '5px' }} onClick={() => {
                             const newFiles = [...files];
