@@ -27,7 +27,8 @@ import TypeOfLogo from "./graphics-design-forms/TypeOfLogo";
 import FileTypesNeeded from "./graphics-design-forms/FileTypesNeeded";
 import CmsDropdown from "./ui-ux-design-forms/CmsDropdown";
 import { RiDeleteBinLine } from "react-icons/ri";
-import { validateUrl } from "../utils/validateUrl";
+import { validateUrl } from "../utils";
+
 
 const TaskEditForm = ({ isOpen, close, row, table }) => {
     const { tasks, filter } = useSelector(s => s.tasks);

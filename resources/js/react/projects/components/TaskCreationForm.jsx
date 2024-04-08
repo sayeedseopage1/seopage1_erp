@@ -27,8 +27,9 @@ import ThemeTypeSelect from "./ui-ux-design-forms/ThemeTypeSelect";
 import { checkIsURL } from "../../utils/check-is-url";
 import CmsDropdown from "./ui-ux-design-forms/CmsDropdown";
 import { RiDeleteBinLine } from "react-icons/ri";
-import { validateUrl } from "../utils/validateUrl";
+// import { validateUrl } from "../utils";
 import FileUploadWithInput from "./ui/FileUploadWithInput";
+import { validateUrl } from "../utils";
 
 // const fileInputStyle = {
 //     height: "39px",
@@ -45,7 +46,16 @@ const TaskCreationForm = ({ handleRefresh, isOpen, close, onSuccess }) => {
     const [dueDate, setDueDate] = useState(null);
     const [project, setProject] = useState("");
     const [taskCategory, setTaskCategory] = useState("");
+
     //state for graphic designer start
+
+    const [textForDesignUrl, setTextForDesignUrl] = useState('');
+    // const [testfiles, setTestFiles] = useState([]);
+
+    console.log("textForDesignUrl", textForDesignUrl);
+    // console.log("files", testfiles);
+
+
     const [typeOfGraphicsCategory, setTypeOfGraphicsCategory] = useState("");
     const [typeOfLogo, setTypeOfLogo] = useState("");
     const [brandName, setBrandName] = useState("");
@@ -130,7 +140,6 @@ const TaskCreationForm = ({ handleRefresh, isOpen, close, onSuccess }) => {
         setTypeOfLogo("");
         setBrandName("");
         setNumOfVersions(null);
-        // setReference("");
         setReferenceList([{ reference: "" }])
         setFileTypesNeeded([]);
         setTextForDesign([]);
@@ -154,6 +163,7 @@ const TaskCreationForm = ({ handleRefresh, isOpen, close, onSuccess }) => {
         setThemeType("");
         setThemeName("");
         setThemeTemplate("");
+        setTextForDesignUrl('');
     };
     // handle change
     React.useEffect(() => {
@@ -206,7 +216,7 @@ const TaskCreationForm = ({ handleRefresh, isOpen, close, onSuccess }) => {
             errCount++;
         }
 
-        // TODO: active it LuAsterisk, when new field is added 
+        // TODO: active it , when new field is added 
 
         if (taskCategory?.category_name === "Graphic Design") {
             if (!typeOfGraphicsCategory) {
@@ -252,12 +262,12 @@ const TaskCreationForm = ({ handleRefresh, isOpen, close, onSuccess }) => {
             }
         }
 
-        if (typeOfGraphicsCategory?.id === 2 || typeOfGraphicsCategory?.id === 3 || typeOfGraphicsCategory?.id === 4) {
-            if (!textForDesign) {
-                err.textForDesign = "The text for design field is required";
-                errCount++;
-            }
-        }
+        // if (typeOfGraphicsCategory?.id === 2 || typeOfGraphicsCategory?.id === 3 || typeOfGraphicsCategory?.id === 4) {
+        //     if (!textForDesign) {
+        //         err.textForDesign = "The text for design field is required";
+        //         errCount++;
+        //     }
+        // }
 
         if (typeOfGraphicsCategory?.id === 5 || typeOfGraphicsCategory?.id === 6) {
             if (!imageForDesigner) {
@@ -376,6 +386,7 @@ const TaskCreationForm = ({ handleRefresh, isOpen, close, onSuccess }) => {
         fd.append("primary_color", primaryColor ?? "");
         fd.append("primary_color_description", primaryColorDescription ?? "");
         fd.append("secondary_colors", JSON.stringify(secondaryColors) ?? "");
+        fd.append("workable_url", textForDesignUrl ?? "")
 
         Array.from(textForDesign).forEach((file) => {
             fd.append("attach_text_files[]", file);
@@ -565,27 +576,6 @@ const TaskCreationForm = ({ handleRefresh, isOpen, close, onSuccess }) => {
         setState(e.target.value);
     };
 
-    // let count = 0;
-    // const err = new Object();
-
-    // if (colorSchema === "") {
-    //     err.colorSchema = "You Need to Select An Option";
-    //     count++;
-    // }
-    // if (colorSchema === "yes") {
-    //     if (primaryColorDescription === "") {
-    //         err.pColorDesc = "You Have to Provide This Field!";
-    //         count++;
-    //     }
-
-    //     _.map(secondaryColors, (item) => {
-    //         if (item.description === "") {
-    //             err.sDescription = "You Have to Provide This Field!";
-    //             count++;
-    //         }
-    //     });
-    // }
-
     // add other file type 
     const handleAddOtherFileType = () => {
         fileTypesNeeded.push(fileType);
@@ -610,8 +600,6 @@ const TaskCreationForm = ({ handleRefresh, isOpen, close, onSuccess }) => {
     const handleReferenceAdd = () => {
         setReferenceList([...referenceList, { reference: "" }]);
     };
-
-    console.log(textForDesign)
 
     return (
         <Modal isOpen={isOpen}>
@@ -964,6 +952,25 @@ const TaskCreationForm = ({ handleRefresh, isOpen, close, onSuccess }) => {
                                                             data-label="true"
                                                         >
                                                             Attach text that will be used for the design
+                                                        </label>
+                                                        <FileUploadWithInput
+                                                            inputType="url"
+                                                            placeholder="Enter the URL"
+                                                            inputUrl={textForDesignUrl}
+                                                            setInputUrl={setTextForDesignUrl}
+                                                            inputFiles={textForDesign}
+                                                            setInputFiles={setTextForDesign}
+                                                        />
+                                                    </div>
+                                                </div>
+                                                {/* <div className="col-12 col-md-6">
+                                                    <div className={`form-group my-3 w-100`}>
+                                                        <label
+                                                            htmlFor={'textForDesign'}
+                                                            className={`f-14 text-dark-gray mb-2`}
+                                                            data-label="true"
+                                                        >
+                                                            Attach text that will be used for the design
                                                             <sup className='f-14 mr-1'>*</sup>
                                                         </label>
                                                         <UploadFilesInLine
@@ -971,25 +978,10 @@ const TaskCreationForm = ({ handleRefresh, isOpen, close, onSuccess }) => {
                                                             setFiles={setTextForDesign}
                                                         />
                                                     </div>
-                                                </div>
+                                                </div> */}
                                             </>
                                         }
-                                        {/* TODO: work on this */}
-                                        {
-                                            <div className="col-12 col-md-6">
-                                                <div className={`form-group my-3 w-100`}>
-                                                    <label
-                                                        htmlFor={'textForDesign'}
-                                                        className={`f-14 text-dark-gray mb-2`}
-                                                        data-label="true"
-                                                    >
-                                                        Experiment File With Url
-                                                        <sup className='f-14 mr-1'>*</sup>
-                                                    </label>
-                                                    <FileUploadWithInput />
-                                                </div>
-                                            </div>
-                                        }
+
 
                                         {/* background removal or image retouching */}
                                         {

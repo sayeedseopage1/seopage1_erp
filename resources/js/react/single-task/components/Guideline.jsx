@@ -9,7 +9,7 @@ import { useGetTaskDetailsQuery, useGetTypesOfGraphicWorksQuery } from '../../se
 import './styles/guideline.css'
 import { useGetSubTasksQuery } from '../../services/api/tasksApiSlice';
 import { de } from '@faker-js/faker';
-import { validateUrl } from '../../projects/utils/validateUrl';
+import { validateUrl } from '../../projects/utils';
 
 const Guideline = ({ text, task, type = "", editorContainerClass, workEnv, singleTask }) => {
     const [expend, setExpend] = useState(false);

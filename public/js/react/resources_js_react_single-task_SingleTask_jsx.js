@@ -2443,7 +2443,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _styles_guideline_css__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./styles/guideline.css */ "./resources/js/react/single-task/components/styles/guideline.css");
 /* harmony import */ var _services_api_tasksApiSlice__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../../services/api/tasksApiSlice */ "./resources/js/react/services/api/tasksApiSlice.js");
 /* harmony import */ var _faker_js_faker__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! @faker-js/faker */ "./node_modules/@faker-js/faker/dist/esm/index.mjs");
-/* harmony import */ var _projects_utils_validateUrl__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ../../projects/utils/validateUrl */ "./resources/js/react/projects/utils/validateUrl.js");
+/* harmony import */ var _projects_utils__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ../../projects/utils */ "./resources/js/react/projects/utils/index.js");
 /* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
 function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
 function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
@@ -2724,7 +2724,7 @@ var Guideline = function Guideline(_ref) {
               children: "Reference"
             }), ": ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)("br", {}), " ", referenceList === null || referenceList === void 0 ? void 0 : referenceList.map(function (item, i) {
               return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)("li", {
-                children: !(0,_projects_utils_validateUrl__WEBPACK_IMPORTED_MODULE_9__.validateUrl)(item === null || item === void 0 ? void 0 : item.reference) ? item === null || item === void 0 ? void 0 : item.reference : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)("a", {
+                children: !(0,_projects_utils__WEBPACK_IMPORTED_MODULE_9__.validateUrl)(item === null || item === void 0 ? void 0 : item.reference) ? item === null || item === void 0 ? void 0 : item.reference : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)("a", {
                   href: item === null || item === void 0 ? void 0 : item.reference,
                   target: "_blank",
                   rel: "noopener noreferrer",
@@ -3110,7 +3110,7 @@ var Guideline = function Guideline(_ref) {
                     children: "Reference"
                   }), ": ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)("br", {}), " ", referenceList === null || referenceList === void 0 ? void 0 : referenceList.map(function (item, i) {
                     return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)("li", {
-                      children: !(0,_projects_utils_validateUrl__WEBPACK_IMPORTED_MODULE_9__.validateUrl)(item === null || item === void 0 ? void 0 : item.reference) ? item === null || item === void 0 ? void 0 : item.reference : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)("a", {
+                      children: !(0,_projects_utils__WEBPACK_IMPORTED_MODULE_9__.validateUrl)(item === null || item === void 0 ? void 0 : item.reference) ? item === null || item === void 0 ? void 0 : item.reference : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)("a", {
                         href: item === null || item === void 0 ? void 0 : item.reference,
                         target: "_blank",
                         rel: "noopener noreferrer",
@@ -14601,8 +14601,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _projects_components_ui_ux_design_forms_ThemeTypeSelect__WEBPACK_IMPORTED_MODULE_23__ = __webpack_require__(/*! ../../../projects/components/ui-ux-design-forms/ThemeTypeSelect */ "./resources/js/react/projects/components/ui-ux-design-forms/ThemeTypeSelect.jsx");
 /* harmony import */ var _utils_check_is_url__WEBPACK_IMPORTED_MODULE_24__ = __webpack_require__(/*! ../../../utils/check-is-url */ "./resources/js/react/utils/check-is-url.js");
 /* harmony import */ var _projects_components_ui_ux_design_forms_CmsDropdown__WEBPACK_IMPORTED_MODULE_25__ = __webpack_require__(/*! ../../../projects/components/ui-ux-design-forms/CmsDropdown */ "./resources/js/react/projects/components/ui-ux-design-forms/CmsDropdown.jsx");
-/* harmony import */ var _projects_utils_validateUrl__WEBPACK_IMPORTED_MODULE_26__ = __webpack_require__(/*! ../../../projects/utils/validateUrl */ "./resources/js/react/projects/utils/validateUrl.js");
 /* harmony import */ var react_icons_ri__WEBPACK_IMPORTED_MODULE_31__ = __webpack_require__(/*! react-icons/ri */ "./node_modules/react-icons/ri/index.esm.js");
+/* harmony import */ var _projects_utils__WEBPACK_IMPORTED_MODULE_26__ = __webpack_require__(/*! ../../../projects/utils */ "./resources/js/react/projects/utils/index.js");
 /* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_27__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
 function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) { return typeof o; } : function (o) { return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o; }, _typeof(o); }
 function ownKeys(e, r) { var t = Object.keys(e); if (Object.getOwnPropertySymbols) { var o = Object.getOwnPropertySymbols(e); r && (o = o.filter(function (r) { return Object.getOwnPropertyDescriptor(e, r).enumerable; })), t.push.apply(t, o); } return t; }
@@ -14648,6 +14648,7 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
 
 
+// import { validateUrl } from "../../../projects/utils/validateUrl";
 
 
 
@@ -15954,7 +15955,7 @@ var TaskEditForm = function TaskEditForm(_ref2) {
                         onChange: function onChange(e) {
                           return handleReferenceChange(e, index);
                         }
-                      }), (singleReference === null || singleReference === void 0 ? void 0 : singleReference.reference) && !(0,_projects_utils_validateUrl__WEBPACK_IMPORTED_MODULE_26__.validateUrl)(singleReference === null || singleReference === void 0 ? void 0 : singleReference.reference) && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_27__.jsx)("div", {
+                      }), (singleReference === null || singleReference === void 0 ? void 0 : singleReference.reference) && !(0,_projects_utils__WEBPACK_IMPORTED_MODULE_26__.validateUrl)(singleReference === null || singleReference === void 0 ? void 0 : singleReference.reference) && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_27__.jsx)("div", {
                         style: {
                           color: "red"
                         },

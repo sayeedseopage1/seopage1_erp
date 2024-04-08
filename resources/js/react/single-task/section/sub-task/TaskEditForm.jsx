@@ -32,8 +32,9 @@ import FileTypesNeeded from "../../../projects/components/graphics-design-forms/
 import ThemeTypeSelect from "../../../projects/components/ui-ux-design-forms/ThemeTypeSelect";
 import { checkIsURL } from "../../../utils/check-is-url";
 import CmsDropdown from "../../../projects/components/ui-ux-design-forms/CmsDropdown";
-import { validateUrl } from "../../../projects/utils/validateUrl";
+// import { validateUrl } from "../../../projects/utils/validateUrl";
 import { RiDeleteBinLine } from "react-icons/ri";
+import { validateUrl } from "../../../projects/utils";
 
 const dayjs = new CompareDate();
 
