@@ -23,6 +23,7 @@ import { isArrayObjectEmpty } from "../../../utils/stateValidation";
 
 // Api
 import {
+    useSaleAnalysisQuestionsListQuery,
     useSaleRiskQuestionAnswerSaveMutation,
     useSalesRiskDealsQuestionListQuery,
 } from "../../../services/api/salesRiskAnalysisSlice";
@@ -49,12 +50,7 @@ const SalesRiskQuestions = () => {
         return new URLSearchParams(queryObject).toString();
     };
     // fetch policy questions
-    const { data, isLoading } = useSalesRiskDealsQuestionListQuery(
-        queryString({
-            page: pageIndex + 1,
-            limit: pageSize,
-        })
-    );
+    const { data, isLoading } = useSalesRiskDealsQuestionListQuery();
 
     const [saleAnalysisQuestionSave, { isLoading: isSaving }] =
         useSaleRiskQuestionAnswerSaveMutation();
@@ -67,8 +63,8 @@ const SalesRiskQuestions = () => {
                 const nestedQuestions = item?.questions || [];
                 return [item, ...flattenArray(nestedQuestions)];
             });
-        if (questions?.data?.length > 0) {
-            const copyArray = [...questions?.data];
+        if (questions?.length > 0) {
+            const copyArray = [...questions];
             const flattenedArray = flattenArray(copyArray);
             setAllQuestions(flattenedArray);
             const addInputFiled = flattenedArray
@@ -111,7 +107,7 @@ const SalesRiskQuestions = () => {
 
             setInputsData([...addInputFiled, ...addChildInputField]);
         }
-    }, [questions?.data]);
+    }, [questions]);
 
     const handleSubmit = async () => {
         const skipKey = ["is_Active_YesNo", "parent_id"];
@@ -258,7 +254,7 @@ const SalesRiskQuestions = () => {
         return setInputsData(addSelectValue);
     };
 
-    console.log(questions?.data);
+    console.log(questions);
 
     return (
         <section>
@@ -273,7 +269,7 @@ const SalesRiskQuestions = () => {
                         ) : (
                             <SaleRiskQuestionsInputContainer
                                 isChild={false}
-                                questions={questions?.data}
+                                questions={questions}
                                 inputsData={inputsData}
                                 allQuestions={allQuestions}
                                 isSubmitting={isSubmitting}
