@@ -36,6 +36,7 @@ import CmsDropdown from "../../../projects/components/ui-ux-design-forms/CmsDrop
 import { RiDeleteBinLine } from "react-icons/ri";
 import { validateUrl } from "../../../projects/utils";
 import FileUploadWithInput from "../../../projects/components/ui/FileUploadWithInput";
+import CustomFileUpload from "../../../projects/components/ui/CustomFileUpload";
 
 const dayjs = new CompareDate();
 
@@ -156,6 +157,7 @@ const TaskEditForm = ({ task, singleTask: row, onSubmit, isLoading, onClose }) =
     const [numOfVersions, setNumOfVersions] = useState(null);
     // const [reference, setReference] = useState("");
     const [referenceList, setReferenceList] = useState([{ reference: "" }]);
+    const [referenceFile, setReferenceFile] = useState([]);
     const [fileTypesNeeded, setFileTypesNeeded] = React.useState(defaultFileTypesNeeded);
     const [fileType, setFileType] = useState('');
     const [textForDesign, setTextForDesign] = useState([]);
@@ -194,6 +196,8 @@ const TaskEditForm = ({ task, singleTask: row, onSubmit, isLoading, onClose }) =
 
     // let defaultImageForDesignerBgRemoval;
     const [defaultImageForDesignerBgRemoval, setDefaultImageForDesignerBgRemoval] = useState(graphicWorkDetails?.type_of_graphic_work_id === 6 && graphicWorkDetails?.graphic_task_files?.filter((item) => item?.file_type == 2))
+
+    const [defaultRefFiles, setDefaultRefFiles] = useState(graphicWorkDetails?.graphic_task_files?.filter((item) => item?.file_type == 5))
 
     useEffect(() => {
         if (themeName || themeTemplate) {
@@ -484,6 +488,9 @@ const TaskEditForm = ({ task, singleTask: row, onSubmit, isLoading, onClose }) =
                 fd.append("workable_image_or_video_files[]", file);
             });
         }
+        Array.from(referenceFile).forEach((file) => {
+            fd.append("reference_files[]", file);
+        });
 
         fd.append("workable_url", workableUrl ?? "")
         fd.append("reference", JSON.stringify(referenceList) ?? "");
@@ -616,6 +623,13 @@ const TaskEditForm = ({ task, singleTask: row, onSubmit, isLoading, onClose }) =
         // delete form ui
         prev = prev?.filter(item => item?.id !== file?.id);
         setDefaultImageForDesignerBgRemoval(prev)
+    }
+
+    const handleDeleteRefFiles = (e, file, prev) => {
+        deleteGraphicsTaskFile(file?.id).unwrap();
+        // delete form ui
+        prev = prev?.filter(item => item?.id !== file?.id);
+        setDefaultRefFiles(prev)
     }
 
     // add secondary color
@@ -1242,6 +1256,14 @@ const TaskEditForm = ({ task, singleTask: row, onSubmit, isLoading, onClose }) =
                                         Reference
                                         <sup className='f-14 mr-1'>*</sup>
                                     </label>
+                                    <div>
+                                        <CustomFileUpload
+                                            refInputFiles={referenceFile}
+                                            setRefInputFiles={setReferenceFile}
+                                            {...(defaultRefFiles ? { previous: defaultRefFiles } : {})}
+                                            onPreviousFileDelete={handleDeleteRefFiles}
+                                        />
+                                    </div>
                                     {referenceList?.map((singleReference, index) => (
                                         <div key={index}>
                                             <div className={`d-flex align-items-start justify-content-between w-100 ${index !== 0 && 'mt-2'}`}>
@@ -1738,7 +1760,9 @@ const TaskEditForm = ({ task, singleTask: row, onSubmit, isLoading, onClose }) =
 
                     <div className="col-12">
                         <div className="form-group my-3">
-                            <label htmlFor=""> Description </label>
+                            <label htmlFor=""> Description
+                                <sup className='f-14 mr-1'>*</sup>
+                            </label>
                             <div
                                 className="sp1_st_write_comment_editor"
                                 style={{ minHeight: "100px" }}

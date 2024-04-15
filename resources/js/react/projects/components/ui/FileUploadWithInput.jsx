@@ -13,7 +13,7 @@ function FileUploadWithInput({ inputType, placeholder, inputUrl, setInputUrl, in
         const selectedFiles = event.target.files;
         if (selectedFiles) {
             const fileList = Array.from(selectedFiles);
-            setInputFiles(fileList);
+            setInputFiles((prev) => [...prev, ...fileList]);
         }
     };
 

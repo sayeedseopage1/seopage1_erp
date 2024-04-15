@@ -29,6 +29,7 @@ import CmsDropdown from "./ui-ux-design-forms/CmsDropdown";
 import { RiDeleteBinLine } from "react-icons/ri";
 import { validateUrl } from "../utils";
 import FileUploadWithInput from "./ui/FileUploadWithInput";
+import CustomFileUpload from "./ui/CustomFileUpload";
 
 
 const TaskEditForm = ({ isOpen, close, row, table }) => {
@@ -81,6 +82,7 @@ const TaskEditForm = ({ isOpen, close, row, table }) => {
     const [numOfVersions, setNumOfVersions] = useState(null);
     // const [reference, setReference] = useState("");
     const [referenceList, setReferenceList] = useState([{ reference: "" }]);
+    const [referenceFile, setReferenceFile] = useState([]);
     const [fileTypesNeeded, setFileTypesNeeded] = React.useState(defaultFileTypesNeeded);
     const [fileType, setFileType] = useState('');
     const [textForDesign, setTextForDesign] = useState([]);
@@ -120,15 +122,7 @@ const TaskEditForm = ({ isOpen, close, row, table }) => {
     // let defaultImageForDesignerBgRemoval;
     const [defaultImageForDesignerBgRemoval, setDefaultImageForDesignerBgRemoval] = useState(graphicWorkDetails?.type_of_graphic_work_id === 6 && graphicWorkDetails?.graphic_task_files?.filter((item) => item?.file_type == 2))
 
-    if (graphicWorkDetails) {
-        // defaultTextForDesignBanner = graphicWorkDetails?.type_of_graphic_work_id === 2 && graphicWorkDetails?.graphic_task_files?.filter((item) => item?.file_type == 1)
-        // defaultTextForDesignBrochure = graphicWorkDetails?.type_of_graphic_work_id === 3 && graphicWorkDetails?.graphic_task_files?.filter((item) => item?.file_type == 1)
-        // defaultTextForDesignCompanyProfile = graphicWorkDetails?.type_of_graphic_work_id === 4 && graphicWorkDetails?.graphic_task_files?.filter((item) => item?.file_type == 1)
-
-        // defaultImageForDesignerRetouching = graphicWorkDetails?.type_of_graphic_work_id === 5 && graphicWorkDetails?.graphic_task_files?.filter((item) => item?.file_type == 2)
-
-        // defaultImageForDesignerBgRemoval = graphicWorkDetails?.type_of_graphic_work_id === 6 && graphicWorkDetails?.graphic_task_files?.filter((item) => item?.file_type == 2)
-    }
+    const [defaultRefFiles, setDefaultRefFiles] = useState(graphicWorkDetails?.graphic_task_files?.filter((item) => item?.file_type == 5))
 
     useEffect(() => {
         if (isOpen) {
@@ -249,10 +243,6 @@ const TaskEditForm = ({ isOpen, close, row, table }) => {
         let value = e.target.value;
         setState(value);
     };
-
-    // console.log("first", imgOrVidForWork?.length < 1 && !workableUrl);
-    // console.log(imgOrVidForWork?.length < 1)
-    // console.log(!workableUrl)
 
     // check validation
     const isValid = () => {
@@ -459,6 +449,10 @@ const TaskEditForm = ({ isOpen, close, row, table }) => {
             });
         }
 
+        Array.from(referenceFile).forEach((file) => {
+            fd.append("reference_files[]", file);
+        });
+
         fd.append("workable_url", workableUrl ?? "")
         fd.append("reference", JSON.stringify(referenceList) ?? "");
         fd.append("font_name", fontName ?? "");
@@ -625,6 +619,13 @@ const TaskEditForm = ({ isOpen, close, row, table }) => {
         // delete form ui
         prev = prev?.filter(item => item?.id !== file?.id);
         setDefaultImageForDesignerBgRemoval(prev)
+    }
+
+    const handleDeleteRefFiles = (e, file, prev) => {
+        deleteGraphicsTaskFile(file?.id).unwrap();
+        // delete form ui
+        prev = prev?.filter(item => item?.id !== file?.id);
+        setDefaultRefFiles(prev)
     }
 
     // add secondary color
@@ -1226,6 +1227,14 @@ const TaskEditForm = ({ isOpen, close, row, table }) => {
                                                 Reference
                                                 <sup className='f-14 mr-1'>*</sup>
                                             </label>
+                                            <div>
+                                                <CustomFileUpload
+                                                    refInputFiles={referenceFile}
+                                                    setRefInputFiles={setReferenceFile}
+                                                    {...(defaultRefFiles ? { previous: defaultRefFiles } : {})}
+                                                    onPreviousFileDelete={handleDeleteRefFiles}
+                                                />
+                                            </div>
                                             {referenceList?.map((singleReference, index) => (
                                                 <div key={index}>
                                                     <div className={`d-flex align-items-start justify-content-between w-100 ${index !== 0 && 'mt-2'}`}>

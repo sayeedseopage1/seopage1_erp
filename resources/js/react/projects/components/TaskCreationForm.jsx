@@ -30,6 +30,7 @@ import { RiDeleteBinLine } from "react-icons/ri";
 // import { validateUrl } from "../utils";
 import FileUploadWithInput from "./ui/FileUploadWithInput";
 import { validateUrl } from "../utils";
+import CustomFileUpload from "./ui/CustomFileUpload";
 
 // const fileInputStyle = {
 //     height: "39px",
@@ -56,6 +57,7 @@ const TaskCreationForm = ({ handleRefresh, isOpen, close, onSuccess }) => {
     const [numOfVersions, setNumOfVersions] = useState(null);
     // const [reference, setReference] = useState("");
     const [referenceList, setReferenceList] = useState([{ reference: "" }]);
+    const [referenceFile, setReferenceFile] = useState([]);
     const [fileTypesNeeded, setFileTypesNeeded] = useState([]);
     const [fileType, setFileType] = useState('');
 
@@ -70,7 +72,6 @@ const TaskCreationForm = ({ handleRefresh, isOpen, close, onSuccess }) => {
     const [brandGuideline, setBrandGuideline] = useState([]);
     const [illustration, setIllustration] = useState("");
     const [others, setOthers] = useState("");
-    // const [colorSchema, setColorSchema] = React.useState("");
     const [primaryColor, setPrimaryColor] = React.useState("#1D82F5");
     const [primaryColorDescription, setPrimaryColorDescription] =
         React.useState("");
@@ -139,6 +140,7 @@ const TaskCreationForm = ({ handleRefresh, isOpen, close, onSuccess }) => {
         setBrandName("");
         setNumOfVersions(null);
         setReferenceList([{ reference: "" }])
+        setReferenceFile([]);
         setFileTypesNeeded([]);
         setTextForDesign([]);
         setImageForDesigner([]);
@@ -221,7 +223,7 @@ const TaskCreationForm = ({ handleRefresh, isOpen, close, onSuccess }) => {
                 err.typeOfGraphicsCategory = "You have to select Type of graphic work";
                 errCount++;
             }
-            if (!referenceList[0].reference) {
+            if (!referenceList[0].reference && referenceFile.length < 1) {
                 err.reference = "The reference field is required";
                 errCount++;
             }
@@ -397,6 +399,9 @@ const TaskCreationForm = ({ handleRefresh, isOpen, close, onSuccess }) => {
         });
         Array.from(brandGuideline).forEach((file) => {
             fd.append("brand_guideline_files[]", file);
+        });
+        Array.from(referenceFile).forEach((file) => {
+            fd.append("reference_files[]", file);
         });
         // graphics end 
 
@@ -946,7 +951,7 @@ const TaskCreationForm = ({ handleRefresh, isOpen, close, onSuccess }) => {
                                                     <div className={`form-group my-3 w-100`}>
                                                         <label
                                                             htmlFor={'textForDesign'}
-                                                            className={`f-14 text-dark-gray mb-2`}
+                                                            className={`f-14 text-dark-gray mb-1`}
                                                             data-label="true"
                                                         >
                                                             Attach text that will be used for the design
@@ -978,7 +983,7 @@ const TaskCreationForm = ({ handleRefresh, isOpen, close, onSuccess }) => {
                                                     <div className={`form-group my-3 w-100`}>
                                                         <label
                                                             htmlFor={'imageForDesigner'}
-                                                            className={`f-14 text-dark-gray mb-2`}
+                                                            className={`f-14 text-dark-gray mb-1`}
                                                             data-label="true"
                                                         >
                                                             Image where the designer will work
@@ -1009,7 +1014,7 @@ const TaskCreationForm = ({ handleRefresh, isOpen, close, onSuccess }) => {
                                                     <div className={`form-group my-3 w-100`}>
                                                         <label
                                                             htmlFor={'imgOrVidForWork'}
-                                                            className={`f-14 text-dark-gray mb-2`}
+                                                            className={`f-14 text-dark-gray mb-1`}
                                                             data-label="true"
                                                         >
                                                             Images/videos that will be used for the work
@@ -1113,6 +1118,12 @@ const TaskCreationForm = ({ handleRefresh, isOpen, close, onSuccess }) => {
                                                     Reference
                                                     <sup className='f-14 mr-1'>*</sup>
                                                 </label>
+                                                <div>
+                                                    <CustomFileUpload
+                                                        refInputFiles={referenceFile}
+                                                        setRefInputFiles={setReferenceFile}
+                                                    />
+                                                </div>
                                                 {referenceList.map((singleReference, index) => (
                                                     <div key={index}>
                                                         <div className={`d-flex align-items-start justify-content-between w-100 ${index !== 0 && 'mt-2'}`}>
