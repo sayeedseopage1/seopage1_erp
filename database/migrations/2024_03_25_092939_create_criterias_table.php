@@ -67,14 +67,18 @@ return new class extends Migration
                 ],
                 [
                     'id' => 12,
-                    'title' => 'Task hold time'
+                    'title' => 'Task hold time for assign phase'
                 ],
                 [
                     'id' => 13,
-                    'title' => 'PM goals'
+                    'title' => 'Task hold time for submission phase'
                 ],
                 [
                     'id' => 14,
+                    'title' => 'PM goals'
+                ],
+                [
+                    'id' => 15,
                     'title' => "For every revision due to Pm's own fault (where in revision calculator, he is held responsible. Partial ones will also count)"
                 ]
             ]);
