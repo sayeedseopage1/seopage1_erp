@@ -583,7 +583,7 @@ class SubTaskController extends AccountBaseController
      */
     public function update(Request $request, $id)
     {
-      
+
        // DB::beginTransaction();
         $setting = global_setting();
         $task = Task::find($id);
@@ -618,6 +618,45 @@ class SubTaskController extends AccountBaseController
         if ($validator->fails()) {
             return response($validator->errors(), 422);
         }
+
+    //     $check_estimation = Task::where('id', $request->task_id)->first();
+    //     $parent_task_minutes = $check_estimation->estimate_hours * 60;
+    //     $total_parent_tasks_minutes= $parent_task_minutes + $check_estimation->estimate_minutes;
+    //     $sub_tasks_hours= Subtask::join('tasks','tasks.subtask_id','sub_tasks.id')->where('sub_tasks.task_id',$request->task_id)
+    //         ->sum('tasks.estimate_hours');
+    //     $sub_tasks_minutes= Subtask::join('tasks','tasks.subtask_id','sub_tasks.id')->where('sub_tasks.task_id',$request->task_id)
+    //         ->sum('tasks.estimate_minutes');
+
+    //     $total_subtasks_minutes = $sub_tasks_hours * 60 + $sub_tasks_minutes;
+
+    //     $hours = $request->estimate_hours * 60;
+    //     $minutes = $request->estimate_minutes;
+    //     $total_minutes = $hours + $minutes;
+    // //  dd($total_parent_tasks_minutes,$total_subtasks_minutes,$total_minutes);
+    //     if($task->independent_task_status != 1)
+    //     {
+    //         if (($total_parent_tasks_minutes - $total_subtasks_minutes) - $total_minutes < 0) {
+    //             return response()->json([
+    //                 "message" => "The given data was invalid.",
+    //                 "errors" => [
+    //                     "hours" => [
+    //                         "Estimate hours cannot exceed from project allocation hours !"
+    //                     ]
+    //                 ]
+    //             ], 422);
+    //         }
+    //         if($total_minutes < 1)
+    //         {
+    //             return response()->json([
+    //                 "message" => "The given data was invalid.",
+    //                 "errors" => [
+    //                     "hours" => [
+    //                         "Estimate hours and minutes cannot be 0 !"
+    //                     ]
+    //                 ]
+    //             ], 422);
+    //         }
+    //     }
 
         $subTask = SubTask::findOrFail($request->subTaskID);
         $subTask->title = $request->title;
