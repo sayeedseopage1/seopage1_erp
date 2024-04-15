@@ -724,7 +724,7 @@ class SalesRiskPolicyController extends AccountBaseController
             ]);
         } catch (\Throwable $th) {
             DB::rollBack();
-            throw $th;
+            // throw $th;
             return response()->json(['status' => 'error', 'message' => 'Data did not stored successfully.'], 500);
         }
     }
@@ -755,11 +755,19 @@ class SalesRiskPolicyController extends AccountBaseController
 
             // --------------------- hourly rate calculation ------------------ //
             // calculate first question key value (hourlyRate)
-            //
+
+            $policy = SalesRiskPolicy::where('key', 'hourlyRate')->first();
+            if( !$policy || $policy->status == '0')
+            {
+                goto endHourlyRate;
+            }
+
             $questions = SalesPolicyQuestion::where('key', 'hourlyRate')->orderBy('sequence')->get();
             if (count($questions) < 1) {
                 goto endHourlyRate;
             }
+
+            $rules = SalesRiskPolicy::where('parent_id', $policy->id)->get();
 
             $pointData['hourlyRate']['questionAnswer'] = [];
             $hours = 0;
@@ -807,8 +815,6 @@ class SalesRiskPolicyController extends AccountBaseController
             }
 
             $hourlyRate = $deal->amount / $hours;
-            $policy_id = $questions->first()->policy_id;
-            $rules = SalesRiskPolicy::where('parent_id', $policy_id)->get();
 
             foreach ($rules as $item) {
                 switch ($item->type) {
@@ -1235,18 +1241,23 @@ class SalesRiskPolicyController extends AccountBaseController
         }
 
         $calculation = self::calculatePolicyPoint($deal_id);
-        $points = $calculation['points'];
-        $pointData = $calculation['pointData'];
-        $message = $calculation['message'];
 
-        $deal = Deal::find($deal_id);
-        $user = User::whereId($deal->added_by)->first(['id', 'name']);
+        if ($calculation['points'] == null)
+        {
+            return response()->json(['status' => 'error', 'message' => $calculation['error'], 'data' => ['points' => null]]);
+        }
+
+        $data['points'] = $calculation['points'];
+        $data['pointData'] = $calculation['pointData'];
+        $data['message'] = $calculation['message'];
+        $data['deal'] = $deal =  Deal::find($deal_id);
+        $data['user'] = User::whereId($deal->added_by)->first(['id', 'name']);
 
         //get Date diff as intervals
         $d1 = new DateTime("$deal->start_date 00:00:00");
         $d2 = new DateTime("$deal->deadline 23:59:59");
         $interval = $d1->diff($d2);
-        $deadline = $interval->d;
+        $data['deadline'] = $interval->d;
 
         /**
          * hourlyRate
@@ -1261,8 +1272,8 @@ class SalesRiskPolicyController extends AccountBaseController
          * projectDeadline
          * projectBudget
          */
-
-        return response()->json(['status' => 'success', 'data' => compact('deal', 'points', 'pointData', 'message', 'user', 'deadline')]);
+        // compact('deal', 'points', 'pointData', 'message', 'user', 'deadline')
+        return response()->json(['status' => 'success', 'data' => $data]);
     }
 
     function salesRiskReportList(Request $req)
