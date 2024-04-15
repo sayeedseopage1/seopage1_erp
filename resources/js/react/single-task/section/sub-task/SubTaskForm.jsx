@@ -35,6 +35,7 @@ import TypeOfLogo from "../../../projects/components/graphics-design-forms/TypeO
 import FileTypesNeeded from "../../../projects/components/graphics-design-forms/FileTypesNeeded";
 import { ColorItem } from "../../components/PMGuideline";
 import FileUploader from "../../../file-upload/FileUploader";
+import FileUploadWithInput from "../../../projects/components/ui/FileUploadWithInput";
 
 const fileInputStyle = {
     height: "39px",
@@ -91,6 +92,8 @@ const SubTaskForm = ({ close, isDesignerTask }) => {
     const [files, setFiles] = React.useState([]);
 
     //state for graphic designer start
+    const [workableUrl, setWorkableUrl] = useState(graphicWorkDetails?.workable_url);
+
     const [typeOfGraphicsCategory, setTypeOfGraphicsCategory] = useState("");
     const [typeOfLogo, setTypeOfLogo] = useState("");
     const [brandName, setBrandName] = useState("");
@@ -149,10 +152,13 @@ const SubTaskForm = ({ close, isDesignerTask }) => {
     const { data: graphicOptions } = useGetTypesOfGraphicWorksQuery("")
 
     // handle change
-    React.useEffect(() => {
+    useEffect(() => {
         setMilestone(task?.milestoneTitle);
         setProject(task?.projectName);
         setParentTask(task?.title);
+    }, [task])
+
+    React.useEffect(() => {
         setBrandName(graphicWorkDetails?.brand_name)
         setNumOfVersions(graphicWorkDetails?.number_of_versions);
         setReferenceList(JSON.parse(graphicWorkDetails?.reference));
@@ -165,7 +171,7 @@ const SubTaskForm = ({ close, isDesignerTask }) => {
         setCms(taskDetails?.cms)
         setThemeName(taskDetails?.theme_name)
         setThemeTemplate(taskDetails?.theme_template_library_link)
-    }, [taskDetails, task, graphicWorkDetails]);
+    }, [taskDetails, graphicWorkDetails]);
 
     React.useEffect(() => {
         getTaskDetails(`/${task?.id}/json?mode=estimation_time`).unwrap();
@@ -814,42 +820,19 @@ const SubTaskForm = ({ close, isDesignerTask }) => {
                                     <div className={`form-group my-3 w-100`}>
                                         <label
                                             htmlFor={'imageForDesigner'}
-                                            className={`f-14 text-dark-gray mb-2`}
+                                            className={`f-14 text-dark-gray mb-1`}
                                             data-label="true"
                                         >
                                             Attach text that will be used for the design
                                             <sup className='f-14 mr-1'>*</sup>
                                         </label>
-                                        <div style={{ maxHeight: "300px", overflowY: "auto" }}>
-                                            <FileUploader>
-                                                {_.map(
-                                                    textForDesign,
-                                                    (attachment) => {
-                                                        const file_icon = attachment?.filename.split(".").pop();
-
-                                                        return attachment?.filename ? (
-                                                            <FileUploader.Preview
-                                                                key={attachment?.id}
-                                                                fileName={attachment?.filename}
-                                                                downloadAble={true}
-                                                                deleteAble={false}
-                                                                downloadUrl={attachment?.file_url}
-                                                                previewUrl={attachment?.file_url}
-                                                                fileType={
-                                                                    _.includes(
-                                                                        ["png", "jpeg", "jpg", "svg", "webp", "gif"],
-                                                                        file_icon
-                                                                    )
-                                                                        ? "images"
-                                                                        : "others"
-                                                                }
-                                                                classname="comment_file"
-                                                                ext={file_icon}
-                                                            />
-                                                        ) : null;
-                                                    }
-                                                )}
-                                            </FileUploader>
+                                        <div>
+                                            <FileUploadWithInput
+                                                inputType="url"
+                                                inputUrl={workableUrl}
+                                                previous={textForDesign}
+                                                readOnly={true}
+                                            />
                                         </div>
                                     </div>
                                 </div>
@@ -862,42 +845,19 @@ const SubTaskForm = ({ close, isDesignerTask }) => {
                                     <div className={`form-group my-3 w-100`}>
                                         <label
                                             htmlFor={'imageForDesigner'}
-                                            className={`f-14 text-dark-gray mb-2`}
+                                            className={`f-14 text-dark-gray mb-1`}
                                             data-label="true"
                                         >
                                             Image where the designer will work
                                             <sup className='f-14 mr-1'>*</sup>
                                         </label>
-                                        <div style={{ maxHeight: "300px", overflowY: "auto" }}>
-                                            <FileUploader>
-                                                {_.map(
-                                                    imageForDesigner,
-                                                    (attachment) => {
-                                                        const file_icon = attachment?.filename.split(".").pop();
-
-                                                        return attachment?.filename ? (
-                                                            <FileUploader.Preview
-                                                                key={attachment?.id}
-                                                                fileName={attachment?.filename}
-                                                                downloadAble={true}
-                                                                deleteAble={false}
-                                                                downloadUrl={attachment?.file_url}
-                                                                previewUrl={attachment?.file_url}
-                                                                fileType={
-                                                                    _.includes(
-                                                                        ["png", "jpeg", "jpg", "svg", "webp", "gif"],
-                                                                        file_icon
-                                                                    )
-                                                                        ? "images"
-                                                                        : "others"
-                                                                }
-                                                                classname="comment_file"
-                                                                ext={file_icon}
-                                                            />
-                                                        ) : null;
-                                                    }
-                                                )}
-                                            </FileUploader>
+                                        <div>
+                                            <FileUploadWithInput
+                                                inputType="url"
+                                                inputUrl={workableUrl}
+                                                previous={imageForDesigner}
+                                                readOnly={true}
+                                            />
                                         </div>
                                     </div>
                                 </div>
@@ -911,42 +871,19 @@ const SubTaskForm = ({ close, isDesignerTask }) => {
                                     <div className={`form-group my-3 w-100`}>
                                         <label
                                             htmlFor={'imgOrVidForWork'}
-                                            className={`f-14 text-dark-gray mb-2`}
+                                            className={`f-14 text-dark-gray mb-1`}
                                             data-label="true"
                                         >
                                             Images/videos that will be used for the work
                                             <sup className='f-14 mr-1'>*</sup>
                                         </label>
-                                        <div style={{ maxHeight: "300px", overflowY: "auto" }}>
-                                            <FileUploader>
-                                                {_.map(
-                                                    imgOrVidForWork,
-                                                    (attachment) => {
-                                                        const file_icon = attachment?.filename.split(".").pop();
-
-                                                        return attachment?.filename ? (
-                                                            <FileUploader.Preview
-                                                                key={attachment?.id}
-                                                                fileName={attachment?.filename}
-                                                                downloadAble={true}
-                                                                deleteAble={false}
-                                                                downloadUrl={attachment?.file_url}
-                                                                previewUrl={attachment?.file_url}
-                                                                fileType={
-                                                                    _.includes(
-                                                                        ["png", "jpeg", "jpg", "svg", "webp", "gif"],
-                                                                        file_icon
-                                                                    )
-                                                                        ? "images"
-                                                                        : "others"
-                                                                }
-                                                                classname="comment_file"
-                                                                ext={file_icon}
-                                                            />
-                                                        ) : null;
-                                                    }
-                                                )}
-                                            </FileUploader>
+                                        <div>
+                                            <FileUploadWithInput
+                                                inputType="url"
+                                                inputUrl={workableUrl}
+                                                previous={imgOrVidForWork}
+                                                readOnly={true}
+                                            />
                                         </div>
                                     </div>
                                 </div>

@@ -1033,7 +1033,6 @@ const TaskEditForm = ({ isOpen, close, row, table }) => {
                                                                 setInputFiles={setTextForDesign}
                                                                 {...(defaultTextForDesignBrochure && { previous: defaultTextForDesignBrochure })}
                                                                 onPreviousFileDelete={handleDeleteTextForDesignBrochure}
-                                                                readOnly={true}
                                                             />
                                                         </div>
                                                     }

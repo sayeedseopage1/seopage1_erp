@@ -84,8 +84,6 @@ const Guideline = ({ text, task, type = "", editorContainerClass, workEnv, singl
         defaultBrandGuidelineFiles = graphic_task_files?.filter((item) => item?.file_type == 4)
     }
 
-    console.log("defaultImgOrVidForWork: ", defaultImgOrVidForWork)
-
     const handleExpend = (e) => {
         e.preventDefault();
         setExpend(!expend);

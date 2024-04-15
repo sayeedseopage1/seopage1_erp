@@ -14,7 +14,7 @@ export const validateUrl = (url) => {
 };
 
 export function getFileIcon(extension) {
-    switch (extension.toLowerCase()) {
+    switch (extension?.toLowerCase()) {
         case "png":
         case "jpg":
         case "jpeg":
@@ -37,16 +37,16 @@ export function getFileIcon(extension) {
 }
 
 export function shortenFileName(fileName) {
-    const nameWithoutExtension = fileName.substring(
+    const nameWithoutExtension = fileName?.substring(
         0,
-        fileName.lastIndexOf(".")
+        fileName?.lastIndexOf(".")
     );
-    const extension = fileName.substring(fileName.lastIndexOf(".") + 1);
-    if (nameWithoutExtension.length > 5) {
+    const extension = fileName?.substring(fileName?.lastIndexOf(".") + 1);
+    if (nameWithoutExtension?.length > 5) {
         return (
-            nameWithoutExtension.substring(0, 4) +
+            nameWithoutExtension?.substring(0, 4) +
             "..." +
-            nameWithoutExtension.charAt(nameWithoutExtension.length - 1) +
+            nameWithoutExtension?.charAt(nameWithoutExtension?.length - 1) +
             "." +
             extension
         );
