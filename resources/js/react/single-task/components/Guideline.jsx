@@ -59,7 +59,8 @@ const Guideline = ({ text, task, type = "", editorContainerClass, workEnv, singl
         type_of_graphic_work_id,
         type_of_logo,
         updated_at,
-        workable_url
+        workable_url,
+        file_extensions
     } = commonGraphicWorkDetails;
 
     const commonUiUixWorkDetails = singleTask?.cms !== null ? singleTask : subUiUixDetails
@@ -76,9 +77,11 @@ const Guideline = ({ text, task, type = "", editorContainerClass, workEnv, singl
     let defaultImgOrVidForWork;
     let defaultBrandGuidelineFiles;
     let defaultRefFiles;
+    let defaultFileExtension;
     if (secondary_colors || file_types_needed || graphic_task_files) {
         defaultSecondaryColors = JSON.parse(secondary_colors)
         defaultFileTypesNeeded = JSON.parse(file_types_needed)
+        defaultFileExtension = JSON.parse(file_extensions)
         defaultTextForDesign = graphic_task_files?.filter((item) => item?.file_type == 1)
         defaultImageForDesigner = graphic_task_files?.filter((item) => item?.file_type == 2)
         defaultImgOrVidForWork = graphic_task_files?.filter((item) => item?.file_type == 3)
@@ -148,6 +151,12 @@ const Guideline = ({ text, task, type = "", editorContainerClass, workEnv, singl
                             <span><strong>Font Url</strong>: <br /> <a target="__blank" href={font_url}>{font_url}</a></span>
                         </div>
                     }
+                    {
+                        defaultFileExtension && <div className="col-12 col-lg-6 col-xl-4 mb-2 word-break">
+                            <span><strong>Required File Extension</strong>: <br /> {defaultFileExtension.join(", ")}</span>
+                        </div>
+                    }
+
                     {
                         referenceList && <div className="col-12 mb-2 word-break">
                             <strong>Reference</strong>: <br />

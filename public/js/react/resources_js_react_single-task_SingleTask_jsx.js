@@ -2527,7 +2527,8 @@ var Guideline = function Guideline(_ref) {
     type_of_graphic_work_id = commonGraphicWorkDetails.type_of_graphic_work_id,
     type_of_logo = commonGraphicWorkDetails.type_of_logo,
     updated_at = commonGraphicWorkDetails.updated_at,
-    workable_url = commonGraphicWorkDetails.workable_url;
+    workable_url = commonGraphicWorkDetails.workable_url,
+    file_extensions = commonGraphicWorkDetails.file_extensions;
   var commonUiUixWorkDetails = (singleTask === null || singleTask === void 0 ? void 0 : singleTask.cms) !== null ? singleTask : subUiUixDetails;
   var _ref2 = commonUiUixWorkDetails || {},
     cms = _ref2.cms,
@@ -2542,9 +2543,11 @@ var Guideline = function Guideline(_ref) {
   var defaultImgOrVidForWork;
   var defaultBrandGuidelineFiles;
   var defaultRefFiles;
+  var defaultFileExtension;
   if (secondary_colors || file_types_needed || graphic_task_files) {
     defaultSecondaryColors = JSON.parse(secondary_colors);
     defaultFileTypesNeeded = JSON.parse(file_types_needed);
+    defaultFileExtension = JSON.parse(file_extensions);
     defaultTextForDesign = graphic_task_files === null || graphic_task_files === void 0 ? void 0 : graphic_task_files.filter(function (item) {
       return (item === null || item === void 0 ? void 0 : item.file_type) == 1;
     });
@@ -2652,6 +2655,13 @@ var Guideline = function Guideline(_ref) {
               href: font_url,
               children: font_url
             })]
+          })
+        }), defaultFileExtension && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)("div", {
+          className: "col-12 col-lg-6 col-xl-4 mb-2 word-break",
+          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsxs)("span", {
+            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)("strong", {
+              children: "Required File Extension"
+            }), ": ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)("br", {}), " ", defaultFileExtension.join(", ")]
           })
         }), referenceList && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsxs)("div", {
           className: "col-12 mb-2 word-break",
