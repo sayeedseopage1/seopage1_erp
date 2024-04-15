@@ -75,6 +75,7 @@ const Guideline = ({ text, task, type = "", editorContainerClass, workEnv, singl
     let defaultImageForDesigner;
     let defaultImgOrVidForWork;
     let defaultBrandGuidelineFiles;
+    let defaultRefFiles;
     if (secondary_colors || file_types_needed || graphic_task_files) {
         defaultSecondaryColors = JSON.parse(secondary_colors)
         defaultFileTypesNeeded = JSON.parse(file_types_needed)
@@ -82,6 +83,7 @@ const Guideline = ({ text, task, type = "", editorContainerClass, workEnv, singl
         defaultImageForDesigner = graphic_task_files?.filter((item) => item?.file_type == 2)
         defaultImgOrVidForWork = graphic_task_files?.filter((item) => item?.file_type == 3)
         defaultBrandGuidelineFiles = graphic_task_files?.filter((item) => item?.file_type == 4)
+        defaultRefFiles = graphic_task_files?.filter((item) => item?.file_type == 5)
     }
 
     const handleExpend = (e) => {
@@ -140,19 +142,63 @@ const Guideline = ({ text, task, type = "", editorContainerClass, workEnv, singl
                             <span><strong>Font Name</strong>: <br /> {font_name}</span>
                         </div>
                     }
-                    {
-                        referenceList && <div className="col-12 col-lg-6 col-xl-4 mb-2 word-break">
-                            <span><strong>Reference</strong>: <br /> {referenceList?.map((item, i) => <li key={i}>
-                                {
-                                    !validateUrl(item?.reference) ? item?.reference : <a href={item?.reference} target="_blank" rel="noopener noreferrer">{item?.reference}</a>
-                                }
 
-                            </li>)}</span>
-                        </div>
-                    }
                     {
                         font_url && <div className="col-12 col-lg-6 col-xl-4 mb-2 word-break">
                             <span><strong>Font Url</strong>: <br /> <a target="__blank" href={font_url}>{font_url}</a></span>
+                        </div>
+                    }
+                    {
+                        referenceList && <div className="col-12 mb-2 word-break">
+                            <strong>Reference</strong>: <br />
+                            <div>
+                                {
+                                    referenceList?.length > 0 && <div>
+                                        <span style={{ fontSize: "10px", fontWeight: "500" }}>URL</span>: <br />
+                                    </div>
+                                }
+                                {referenceList?.map((item, i) => <li key={i}>
+                                    {
+                                        !validateUrl(item?.reference) ? item?.reference : <a href={item?.reference} target="_blank" rel="noopener noreferrer">{item?.reference}</a>
+                                    }
+
+                                </li>)}
+
+                                {
+                                    defaultRefFiles?.length > 0 && <div>
+                                        <span style={{ fontSize: "10px", fontWeight: "500" }}>{defaultRefFiles?.length > 1 ? "Files" : "File"}</span>: <br />
+                                        <FileUploader>
+                                            {_.map(
+                                                defaultRefFiles,
+                                                (attachment) => {
+                                                    const file_icon = attachment?.filename.split(".").pop();
+
+                                                    return attachment?.filename ? (
+                                                        <FileUploader.Preview
+                                                            key={attachment?.id}
+                                                            fileName={attachment?.filename}
+                                                            downloadAble={true}
+                                                            deleteAble={false}
+                                                            downloadUrl={attachment?.file_url}
+                                                            previewUrl={attachment?.file_url}
+                                                            fileType={
+                                                                _.includes(
+                                                                    ["png", "jpeg", "jpg", "svg", "webp", "gif"],
+                                                                    file_icon
+                                                                )
+                                                                    ? "images"
+                                                                    : "others"
+                                                            }
+                                                            classname="comment_file"
+                                                            ext={file_icon}
+                                                        />
+                                                    ) : null;
+                                                }
+                                            )}
+                                        </FileUploader></div>
+                                }
+
+                            </div>
                         </div>
                     }
                     {

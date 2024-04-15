@@ -2467,7 +2467,7 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
 
 var Guideline = function Guideline(_ref) {
-  var _graphicOptions$find, _singleTask$category, _defaultTextForDesign, _defaultTextForDesign2, _defaultImageForDesig, _defaultImageForDesig2, _defaultImgOrVidForWo, _defaultImgOrVidForWo2, _defaultBrandGuidelin, _defaultSecondaryColo, _defaultSecondaryColo2, _singleTask$category2, _singleTask$category3, _singleTask$category4;
+  var _graphicOptions$find, _singleTask$category, _defaultRefFiles, _defaultRefFiles2, _defaultTextForDesign, _defaultTextForDesign2, _defaultImageForDesig, _defaultImageForDesig2, _defaultImgOrVidForWo, _defaultImgOrVidForWo2, _defaultBrandGuidelin, _defaultSecondaryColo, _defaultSecondaryColo2, _singleTask$category2, _singleTask$category3, _singleTask$category4;
   var text = _ref.text,
     task = _ref.task,
     _ref$type = _ref.type,
@@ -2541,6 +2541,7 @@ var Guideline = function Guideline(_ref) {
   var defaultImageForDesigner;
   var defaultImgOrVidForWork;
   var defaultBrandGuidelineFiles;
+  var defaultRefFiles;
   if (secondary_colors || file_types_needed || graphic_task_files) {
     defaultSecondaryColors = JSON.parse(secondary_colors);
     defaultFileTypesNeeded = JSON.parse(file_types_needed);
@@ -2555,6 +2556,9 @@ var Guideline = function Guideline(_ref) {
     });
     defaultBrandGuidelineFiles = graphic_task_files === null || graphic_task_files === void 0 ? void 0 : graphic_task_files.filter(function (item) {
       return (item === null || item === void 0 ? void 0 : item.file_type) == 4;
+    });
+    defaultRefFiles = graphic_task_files === null || graphic_task_files === void 0 ? void 0 : graphic_task_files.filter(function (item) {
+      return (item === null || item === void 0 ? void 0 : item.file_type) == 5;
     });
   }
   var handleExpend = function handleExpend(e) {
@@ -2638,22 +2642,6 @@ var Guideline = function Guideline(_ref) {
               children: "Font Name"
             }), ": ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)("br", {}), " ", font_name]
           })
-        }), referenceList && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)("div", {
-          className: "col-12 col-lg-6 col-xl-4 mb-2 word-break",
-          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsxs)("span", {
-            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)("strong", {
-              children: "Reference"
-            }), ": ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)("br", {}), " ", referenceList === null || referenceList === void 0 ? void 0 : referenceList.map(function (item, i) {
-              return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)("li", {
-                children: !(0,_projects_utils__WEBPACK_IMPORTED_MODULE_9__.validateUrl)(item === null || item === void 0 ? void 0 : item.reference) ? item === null || item === void 0 ? void 0 : item.reference : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)("a", {
-                  href: item === null || item === void 0 ? void 0 : item.reference,
-                  target: "_blank",
-                  rel: "noopener noreferrer",
-                  children: item === null || item === void 0 ? void 0 : item.reference
-                })
-              }, i);
-            })]
-          })
         }), font_url && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)("div", {
           className: "col-12 col-lg-6 col-xl-4 mb-2 word-break",
           children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsxs)("span", {
@@ -2665,6 +2653,52 @@ var Guideline = function Guideline(_ref) {
               children: font_url
             })]
           })
+        }), referenceList && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsxs)("div", {
+          className: "col-12 mb-2 word-break",
+          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)("strong", {
+            children: "Reference"
+          }), ": ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)("br", {}), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsxs)("div", {
+            children: [(referenceList === null || referenceList === void 0 ? void 0 : referenceList.length) > 0 && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsxs)("div", {
+              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)("span", {
+                style: {
+                  fontSize: "10px",
+                  fontWeight: "500"
+                },
+                children: "URL"
+              }), ": ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)("br", {})]
+            }), referenceList === null || referenceList === void 0 ? void 0 : referenceList.map(function (item, i) {
+              return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)("li", {
+                children: !(0,_projects_utils__WEBPACK_IMPORTED_MODULE_9__.validateUrl)(item === null || item === void 0 ? void 0 : item.reference) ? item === null || item === void 0 ? void 0 : item.reference : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)("a", {
+                  href: item === null || item === void 0 ? void 0 : item.reference,
+                  target: "_blank",
+                  rel: "noopener noreferrer",
+                  children: item === null || item === void 0 ? void 0 : item.reference
+                })
+              }, i);
+            }), ((_defaultRefFiles = defaultRefFiles) === null || _defaultRefFiles === void 0 ? void 0 : _defaultRefFiles.length) > 0 && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsxs)("div", {
+              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)("span", {
+                style: {
+                  fontSize: "10px",
+                  fontWeight: "500"
+                },
+                children: ((_defaultRefFiles2 = defaultRefFiles) === null || _defaultRefFiles2 === void 0 ? void 0 : _defaultRefFiles2.length) > 1 ? "Files" : "File"
+              }), ": ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)("br", {}), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)(_file_upload_FileUploader__WEBPACK_IMPORTED_MODULE_4__["default"], {
+                children: lodash__WEBPACK_IMPORTED_MODULE_2___default().map(defaultRefFiles, function (attachment) {
+                  var file_icon = attachment === null || attachment === void 0 ? void 0 : attachment.filename.split(".").pop();
+                  return attachment !== null && attachment !== void 0 && attachment.filename ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)(_file_upload_FileUploader__WEBPACK_IMPORTED_MODULE_4__["default"].Preview, {
+                    fileName: attachment === null || attachment === void 0 ? void 0 : attachment.filename,
+                    downloadAble: true,
+                    deleteAble: false,
+                    downloadUrl: attachment === null || attachment === void 0 ? void 0 : attachment.file_url,
+                    previewUrl: attachment === null || attachment === void 0 ? void 0 : attachment.file_url,
+                    fileType: lodash__WEBPACK_IMPORTED_MODULE_2___default().includes(["png", "jpeg", "jpg", "svg", "webp", "gif"], file_icon) ? "images" : "others",
+                    classname: "comment_file",
+                    ext: file_icon
+                  }, attachment === null || attachment === void 0 ? void 0 : attachment.id) : null;
+                })
+              })]
+            })]
+          })]
         }), (type_of_graphic_work_id === 2 || type_of_graphic_work_id === 3 || type_of_graphic_work_id === 4) && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.Fragment, {
           children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)("div", {
             className: "col-12 mb-2 word-break",
