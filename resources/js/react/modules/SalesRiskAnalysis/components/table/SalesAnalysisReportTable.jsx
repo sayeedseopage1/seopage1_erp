@@ -195,7 +195,8 @@ const SalesAnalysisReportTable = ({
                     </tbody>
                 </table>
                 {/* Table for empty */}
-                {(!isLoading || !isFetching) &&
+                {!isLoading &&
+                    !isFetching &&
                     _.size(table.getRowModel().rows) === 0 && <EmptyTable />}
             </div>
             {/* pagination */}
