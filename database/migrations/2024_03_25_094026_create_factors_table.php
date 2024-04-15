@@ -20,8 +20,8 @@ return new class extends Migration
             $table->unsignedTinyInteger('project_type')->comment('1 = Fixed, 2 = Hourly');
             $table->decimal('lower_limit')->nullable();
             $table->decimal('upper_limit')->nullable();
-            $table->unsignedTinyInteger('limit_type')->nullable()->comment('1 = Static, 2 = Percentage');
-            $table->unsignedTinyInteger('limit_unit')->nullable()->comment('1 = Hour, 2 = Day, 3 = Boolean, 4 = Item, 5 = Others');
+            $table->unsignedTinyInteger('limit_type')->nullable()->comment('1 = Range, 2 = Boolean');
+            $table->unsignedTinyInteger('limit_unit')->nullable()->comment('1 = Hour, 2 = Day, 3 = Item, 4 = Others');
             $table->string('lower_limit_condition')->nullable()->comment('>,<,=,=>,=<,!=');
             $table->string('upper_limit_condition')->nullable()->comment('>,<,==,=>,=<,!=');
             $table->string('limit_depend_on_models_and_fields')->nullable()->comment('The limit depend on this model and fields');
