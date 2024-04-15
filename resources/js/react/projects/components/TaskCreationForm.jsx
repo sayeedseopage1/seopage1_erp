@@ -31,6 +31,7 @@ import { RiDeleteBinLine } from "react-icons/ri";
 import FileUploadWithInput from "./ui/FileUploadWithInput";
 import { validateUrl } from "../utils";
 import CustomFileUpload from "./ui/CustomFileUpload";
+import FileExtensionMultiSelect from "./graphics-design-forms/FileExtensionMultiSelect";
 
 // const fileInputStyle = {
 //     height: "39px",
@@ -82,6 +83,7 @@ const TaskCreationForm = ({ handleRefresh, isOpen, close, onSuccess }) => {
             description: "",
         },
     ]);
+    const [fileExtension, setFileExtension] = useState([]);
 
     // state for ui/ux start
     // const [cms, setCms] = useState("")
@@ -164,6 +166,7 @@ const TaskCreationForm = ({ handleRefresh, isOpen, close, onSuccess }) => {
         setThemeName("");
         setThemeTemplate("");
         setWorkableUrl('');
+        setFileExtension([]);
     };
     // handle change
     React.useEffect(() => {
@@ -230,6 +233,10 @@ const TaskCreationForm = ({ handleRefresh, isOpen, close, onSuccess }) => {
 
             if (!fontName) {
                 err.fontName = "Font name is required";
+                errCount++;
+            }
+            if (!fileExtension) {
+                err.fileExtension = "File extension is required";
                 errCount++;
             }
             // if (!checkIsURL(fontUrl)) {
@@ -387,6 +394,7 @@ const TaskCreationForm = ({ handleRefresh, isOpen, close, onSuccess }) => {
         fd.append("primary_color_description", primaryColorDescription ?? "");
         fd.append("secondary_colors", JSON.stringify(secondaryColors) ?? "");
         fd.append("workable_url", workableUrl ?? "")
+        fd.append("file_extensions", JSON.stringify(fileExtension ?? ""));
 
         Array.from(textForDesign).forEach((file) => {
             fd.append("attach_text_files[]", file);
@@ -1209,6 +1217,7 @@ const TaskCreationForm = ({ handleRefresh, isOpen, close, onSuccess }) => {
                                                 }
                                             />
                                         </div>
+
                                         {/* Brand guideline */}
                                         <div className="col-12 col-md-6">
                                             <div className={`form-group my-3 w-100`}>
@@ -1225,7 +1234,6 @@ const TaskCreationForm = ({ handleRefresh, isOpen, close, onSuccess }) => {
                                                 />
                                             </div>
                                         </div>
-
 
                                         {/* color schema */}
                                         <div className="col-12">
@@ -1512,6 +1520,33 @@ const TaskCreationForm = ({ handleRefresh, isOpen, close, onSuccess }) => {
                                             </div>
                                         </div>
                                         {/* end color schema */}
+
+                                        {/* required file extension */}
+                                        <div className="col-12 col-md-6">
+                                            <div className={`form-group my-3 w-100`}>
+                                                <label
+                                                    htmlFor={'fileExtension'}
+                                                    className={`f-14 text-dark-gray mb-1`}
+                                                    data-label="true"
+                                                >
+                                                    Required File Extension
+                                                    <sup className='f-14 mr-1'>*</sup>
+                                                </label>
+                                                <FileExtensionMultiSelect
+                                                    className={`form-control height-35 w-100 f-14`}
+                                                    id='fileExtension'
+                                                    // fileExtension={fileExtension?.filter(type => type !== 'Others')}
+                                                    fileExtension={fileExtension}
+                                                    setFileExtension={setFileExtension}
+                                                    multiple
+                                                />
+                                                {formError?.fileExtension && (
+                                                    <div style={{ color: "red" }}>
+                                                        {formError?.fileExtension}
+                                                    </div>
+                                                )}
+                                            </div>
+                                        </div>
 
                                     </> : null
                                 }

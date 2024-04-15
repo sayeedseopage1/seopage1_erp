@@ -37,6 +37,7 @@ import { RiDeleteBinLine } from "react-icons/ri";
 import { validateUrl } from "../../../projects/utils";
 import FileUploadWithInput from "../../../projects/components/ui/FileUploadWithInput";
 import CustomFileUpload from "../../../projects/components/ui/CustomFileUpload";
+import FileExtensionMultiSelect from "../../../projects/components/graphics-design-forms/FileExtensionMultiSelect";
 
 const dayjs = new CompareDate();
 
@@ -133,15 +134,17 @@ const TaskEditForm = ({ task, singleTask: row, onSubmit, isLoading, onClose }) =
 
     let defaultSecondaryColors;
     let defaultFileTypesNeeded;
+    let defaultFileExtension;
 
     // files
     const [defaultBrandGuidelineFiles, setDefaultBrandGuidelineFiles] = useState(graphicWorkDetails?.graphic_task_files?.filter((item) => item?.file_type == 4))
 
     const [defaultImgOrVidForWork, setDefaultImgOrVidForWork] = useState(graphicWorkDetails?.graphic_task_files?.filter((item) => item?.file_type == 3))
 
-    if (graphicWorkDetails?.secondary_colors || graphicWorkDetails?.file_types_needed) {
+    if (graphicWorkDetails?.secondary_colors || graphicWorkDetails?.file_types_needed || graphicWorkDetails?.file_extensions) {
         defaultSecondaryColors = JSON.parse(graphicWorkDetails?.secondary_colors)
         defaultFileTypesNeeded = JSON.parse(graphicWorkDetails?.file_types_needed)
+        defaultFileExtension = JSON.parse(graphicWorkDetails?.file_extensions)
         // defaultTextForDesign = graphicWorkDetails?.graphic_task_files?.filter((item) => item?.file_type == 1)
         // defaultImageForDesigner = graphicWorkDetails?.graphic_task_files?.filter((item) => item?.file_type == 2)
         // defaultImgOrVidForWork = graphicWorkDetails?.graphic_task_files?.filter((item) => item?.file_type == 3)
@@ -172,6 +175,7 @@ const TaskEditForm = ({ task, singleTask: row, onSubmit, isLoading, onClose }) =
     const [primaryColorDescription, setPrimaryColorDescription] =
         React.useState("");
     const [secondaryColors, setSecondaryColors] = React.useState(defaultSecondaryColors);
+    const [fileExtension, setFileExtension] = React.useState(defaultFileExtension);
     const { data: graphicOptions } = useGetTypesOfGraphicWorksQuery("")
     //state for graphic designer end
 
@@ -337,15 +341,20 @@ const TaskEditForm = ({ task, singleTask: row, onSubmit, isLoading, onClose }) =
                 err.fontName = "Font name is required";
                 count++;
             }
+
+            if (!fileExtension) {
+                err.fileExtension = "File extension is required";
+                errCount++;
+            }
             // if (!checkIsURL(fontUrl)) {
             //     err.fontUrl = "You have to provide a valid font URL";
             //     toast.warn("You have to provide a valid font URL");
             //     count++;
             // }
-            if (!brandGuideline) {
-                err.brandGuideline = "Brand guideline is required";
-                count++;
-            }
+            // if (!brandGuideline) {
+            //     err.brandGuideline = "Brand guideline is required";
+            //     count++;
+            // }
         }
 
         if (typeOfGraphicsCategory?.id === 1) {
@@ -499,6 +508,7 @@ const TaskEditForm = ({ task, singleTask: row, onSubmit, isLoading, onClose }) =
         fd.append("primary_color", primaryColor ?? "");
         fd.append("primary_color_description", primaryColorDescription ?? "");
         fd.append("secondary_colors", JSON.stringify(secondaryColors) ?? "");
+        fd.append("file_extensions", JSON.stringify(fileExtension ?? ""));
         Array.from(brandGuideline).forEach((file) => {
             fd.append("brand_guideline_files[]", file);
         });
@@ -1625,6 +1635,33 @@ const TaskEditForm = ({ task, singleTask: row, onSubmit, isLoading, onClose }) =
                                 </div>
                             </div>
                             {/* end color schema */}
+
+                            {/* required file extension */}
+                            <div className="col-12 col-md-6">
+                                <div className={`form-group my-3 w-100`}>
+                                    <label
+                                        htmlFor={'fileExtension'}
+                                        className={`f-14 text-dark-gray mb-1`}
+                                        data-label="true"
+                                    >
+                                        Required File Extension
+                                        <sup className='f-14 mr-1'>*</sup>
+                                    </label>
+                                    <FileExtensionMultiSelect
+                                        className={`form-control height-35 w-100 f-14`}
+                                        id='fileExtension'
+                                        // fileExtension={fileExtension?.filter(type => type !== 'Others')}
+                                        fileExtension={fileExtension}
+                                        setFileExtension={setFileExtension}
+                                        multiple
+                                    />
+                                    {error?.fileExtension && (
+                                        <div style={{ color: "red" }}>
+                                            {error?.fileExtension}
+                                        </div>
+                                    )}
+                                </div>
+                            </div>
 
                         </> : null
                     }
