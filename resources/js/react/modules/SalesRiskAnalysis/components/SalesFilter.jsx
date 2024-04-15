@@ -3,7 +3,6 @@ import PropTypes from "prop-types";
 import { Listbox } from "@headlessui/react";
 import { filter, lowerCase, includes } from "lodash";
 
-
 // style
 import styles from "./SalesFilter.module.css";
 
@@ -13,13 +12,17 @@ import Avatar from "../../../global/Avatar";
 export default function SalesFilter({ value, onChange, data }) {
     const [query, setQuery] = React.useState("");
 
-    const filteredData = data
-        ? query
-            ? filter(data, (person) =>
-                  includes(lowerCase(person.name), lowerCase(query))
-              )
-            : data
-        : [];
+    const formatFilter = (data) => {
+        if (!data) return [];
+        if (query) {
+            return filter(data, (person) =>
+                includes(lowerCase(person.name), lowerCase(query))
+            );
+        }
+        return data;
+    };
+
+    const filteredData = formatFilter(data);
     return (
         <div className={styles.toggleWrapper}>
             <span>
@@ -85,9 +88,8 @@ export default function SalesFilter({ value, onChange, data }) {
     );
 }
 
-
 SalesFilter.propTypes = {
     value: PropTypes.object,
     onChange: PropTypes.func,
     data: PropTypes.array,
-}
+};

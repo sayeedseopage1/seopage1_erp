@@ -10,7 +10,3 @@
   background-color: #218838 !important;
   border-color: #218838 !important;
 }
-.custom-control-input:checked~.sales_risk_status_toggle_checked::before {
-  background-color: #218838 !important;
-  border-color: #218838 !important;
-}

@@ -185,7 +185,6 @@ QuestionsModalTable.propTypes = {
     tableColumns: PropTypes.array,
     tableName: PropTypes.string,
     isLoading: PropTypes.bool,
-    handleScrollToTop: PropTypes.func,
     setSingleQuestion: PropTypes.func,
     setIsQuestionUpdating: PropTypes.func,
     handleScrollToBottom: PropTypes.func,

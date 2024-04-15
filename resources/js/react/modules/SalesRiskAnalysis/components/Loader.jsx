@@ -10,7 +10,7 @@ const Loader = ({
             <div className='d-flex align-items-center'>
                 <div
                     className="spinner-border text-dark mr-2"
-                    role="status"
+                    // role="status"
                     style={{
                         width,
                         height,

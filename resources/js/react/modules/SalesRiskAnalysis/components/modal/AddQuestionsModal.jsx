@@ -497,7 +497,6 @@ AddQuestionsModal.propTypes = {
     open: PropTypes.bool,
     closeModal: PropTypes.func,
     addQuestionsData: PropTypes.object,
-    singlePolicyQuestions: PropTypes.array,
     setAddQuestionsData: PropTypes.func,
     refetchSaleRiskAnalysis: PropTypes.func,
 };

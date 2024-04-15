@@ -45,7 +45,7 @@ const SalesRiskAuthorize = () => {
     const { data, isLoading } = useSaleRiskQuestionDealReportQuery(deal_id);
     useEffect(() => {
         if (data?.data && !isLoading) {
-            const { pointData, ...rest } = data?.data;
+            const { pointData, ...rest } = data?.data ?? {};
             const formatData = Object.entries(data?.data?.pointData).map(
                 ([key, value]) => {
                     return {
@@ -173,7 +173,7 @@ const SalesRiskAuthorize = () => {
                                     }}
                                     disabled={isActionLoading}
                                 >
-                                    {isActionLoading && status === 1
+                                    {isActionLoading && status == 1
                                         ? "Authorizing.."
                                         : "Authorize"}
                                 </SaleRiskAuthorizeButton>
@@ -186,7 +186,7 @@ const SalesRiskAuthorize = () => {
                                     }}
                                     disabled={isActionLoading}
                                 >
-                                    {isActionLoading && status === 0
+                                    {isActionLoading && status == 0
                                         ? "Saving.."
                                         : "Deny"}
                                 </SaleRiskAuthorizeButton>

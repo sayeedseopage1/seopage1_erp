@@ -46,33 +46,26 @@ const MultiSelect = ({
     }, [search]);
 
     const onSelected = (option) => {
-        if (
-            newPolicyData?.countries?.some((selectedItem) =>
-                _.isEqual(selectedItem, option)
-            )
-        ) {
-            console.log("includes");
+        if (newPolicyData?.countries?.some((selectedItem) => _.isEqual(selectedItem, option))) {
             let newPolicyDataCopy = { ...newPolicyData };
             let updateCountry = newPolicyDataCopy?.countries?.filter(
                 (country) => country.name !== option.name
             );
-
+    
             setSelected({
                 ...newPolicyDataCopy,
                 [filedName]: updateCountry,
             });
+        } else if (newPolicyData?.countries?.length) {
+            setSelected({
+                ...newPolicyData,
+                [filedName]: [...newPolicyData?.countries ?? [] , option],
+            });
         } else {
-            if (newPolicyData?.countries?.length) {
-                setSelected({
-                    ...newPolicyData,
-                    [filedName]: [...newPolicyData?.countries, option],
-                });
-            } else {
-                setSelected({
-                    ...newPolicyData,
-                    [filedName]: [option],
-                });
-            }
+            setSelected({
+                ...newPolicyData,
+                [filedName]: [option],
+            });
         }
     };
 
@@ -167,7 +160,6 @@ export default MultiSelect;
 
 MultiSelect.propTypes = {
     setSelected: PropTypes.func,
-    options: PropTypes.func,
     newPolicyData: PropTypes.object,
     filedName: PropTypes.string,
     selectedCountries: PropTypes.array,

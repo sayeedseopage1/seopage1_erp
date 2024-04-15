@@ -220,4 +220,5 @@ SalesAnalysisReportTable.propTypes = {
     onPageChange: PropTypes.func,
     filter: PropTypes.object,
     search: PropTypes.string,
+    isFetching: PropTypes.bool,
 };

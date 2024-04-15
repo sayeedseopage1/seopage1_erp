@@ -13,7 +13,6 @@ import {
 
 // ui components
 import WithoutDraggableColumnHeader from "./WithoutDraggableColumnHeader";
-import QuestionsModalTableLoader from "../loader/QuestionsModalTableLoader";
 
 // Table components
 import EmptyTable from "../../../../global/EmptyTable";
@@ -259,10 +258,9 @@ QuestionsListTable.propTypes = {
     tableName: PropTypes.string,
     isLoading: PropTypes.bool,
     isFetching: PropTypes.bool,
-    handleScrollToBottom: PropTypes.func,
-    setAllQuestions: PropTypes.func,
     allQuestions: PropTypes.array,
     setSingleQuestion: PropTypes.func,
     setIsQuestionUpdating: PropTypes.func,
     onPageChange: PropTypes.func,
+    handleOpenAddQuestionsModal: PropTypes.func,
 };

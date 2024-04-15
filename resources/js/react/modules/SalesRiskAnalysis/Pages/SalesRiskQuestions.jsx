@@ -28,26 +28,16 @@ import {
 } from "../../../services/api/salesRiskAnalysisSlice";
 
 const SalesRiskQuestions = () => {
-    const [{ pageIndex, pageSize }, setPagination] = React.useState({
-        pageIndex: 0,
-        pageSize: 50,
-    });
     const [focusedQuestion, setFocusedQuestion] = React.useState([]);
-    const [yesNoQuestions, setYesNoQuestions] = React.useState([]);
     const [inputsData, setInputsData] = React.useState([]);
     const [allQuestions, setAllQuestions] = React.useState([]);
     const [isChecked, setIsChecked] = React.useState(false);
     const [isSubmitting, setIsSubmitting] = React.useState(false);
-    const [redirectUrl, setRedirectUrl] = React.useState("");
 
     // modal open close state
     const [questionModalOpen, setQuestionModalOpen] = React.useState(false);
 
-    // make query string
-    const queryString = (object) => {
-        const queryObject = _.pickBy(object, Boolean);
-        return new URLSearchParams(queryObject).toString();
-    };
+
     // fetch policy questions
     const { data, isLoading } = useSalesRiskDealsQuestionListQuery();
 

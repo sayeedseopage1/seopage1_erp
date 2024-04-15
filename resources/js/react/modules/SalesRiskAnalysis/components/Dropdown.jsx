@@ -46,18 +46,31 @@ const DropdownItem = ({
     ...props
 }) => {
     const { setIsOpen } = useDropdown();
+
+    // mouse up event
+    const handleMouseUp = () => {
+        if (!disabled && !isCloseSingle) {
+            setIsOpen(false);
+        }
+    };
+
+    // click event
+    const handleClick = (e) => {
+        if (!disabled && onClick) {
+            onClick(e);
+        }
+    };
+
     return (
         <div
-            onMouseUp={() =>
-                disabled ? null : isCloseSingle ? null : setIsOpen(false)
-            }
-            onClick={(e) => (disabled ? null : onClick ? onClick(e) : null)}
+            onMouseUp={handleMouseUp}
+            onClick={handleClick}
             className={`cnx_dropdown__item ${
                 disabled ? "cnx_dropdown__item_disabled}" : ""
             } ${className}`}
             role="button"
             tabIndex={0}
-            onKeyDown={(e) => (disabled ? null : onClick ? onClick(e) : null)}
+            onKeyDown={handleClick}
             {...props}
         >
             {children}
@@ -107,7 +120,10 @@ const DropdownMenu = ({
     const [width, setWidth] = React.useState(100);
 
     // generate random id for dropdown menu
-    const id = React.useMemo(() => Math.random().toString(36).substr(2, 9), []);
+    const id = React.useMemo(
+        () => Math.random().toString(36).substring(2, 9),
+        []
+    );
 
     let DOM = document.getElementById(id);
     const { styles, attributes } = usePopper(reference, popperElement, {
@@ -249,5 +265,4 @@ Dropdown.propTypes = {
     children:
         PropTypes.node.isRequired ||
         PropTypes.arrayOf(PropTypes.node).isRequired,
-    
 };

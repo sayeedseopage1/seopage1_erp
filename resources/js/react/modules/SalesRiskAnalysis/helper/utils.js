@@ -1,3 +1,5 @@
+import crypto from 'crypto';
+
 export function filterNullValues(obj) {
   const filteredObj = {};
   for (const key in obj) {
@@ -6,4 +8,9 @@ export function filterNullValues(obj) {
       }
   }
   return filteredObj;
+}
+
+
+export const getRandomNumber = () => {
+  return crypto.randomUUID();
 }

@@ -162,4 +162,5 @@ CustomAccordion.propTypes = {
     onChange: PropTypes.func,
     value: PropTypes.string,
     isSubmitting: PropTypes.bool,
+    props: PropTypes.any,
 }

@@ -1,5 +1,5 @@
 // table columns
-import { ExpandTask } from "../ExpandTable";
+import { ExpandQuestion } from "../ExpandTable";
 
 // ui components
 import Tooltip from "../Tooltip";
@@ -18,7 +18,7 @@ export const QuestionsModalTableColumns = [
         header: "",
         cell: ({ row, table }) => {
             const { pageIndex } = table.getState();
-            return <ExpandTask row={row} table={table} pageIndex={pageIndex} />;
+            return <ExpandQuestion row={row} table={table} pageIndex={pageIndex} />;
         },
     },
     {

@@ -80,7 +80,7 @@ const SalesRiskAnalysisTable = ({
     const [ruleActionModalOpen, setRuleActionModalOpen] = React.useState(false);
     const [addQuestionsModalOpen, setAddQuestionsModalOpen] =
         React.useState(false);
-    const [editPolicyModal, setEditPolicyModalOpen] = React.useState(false);
+    const [editPolicyModalOpen, setEditPolicyModalOpen] = React.useState(false);
     const [editCountryListModalOpen, setEditCountryListModalOpen] =
         React.useState(false);
 
@@ -752,9 +752,9 @@ const SalesRiskAnalysisTable = ({
                     refetchSaleRiskAnalysis={refetch}
                 />
             )}
-            {editPolicyModal && (
+            {editPolicyModalOpen && (
                 <EditPolicyModal
-                    open={editPolicyModal}
+                    open={editPolicyModalOpen}
                     closeModal={handleCloseEditPolicyModal}
                     editPolicyData={editPolicyData}
                     editPolicyDefaultData={editPolicyDefaultData}

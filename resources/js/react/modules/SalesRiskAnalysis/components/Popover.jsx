@@ -19,8 +19,6 @@ const Panel = ({ children, className, placement = "auto", ...props }) => {
         refElement,
         popperElement,
         setPopperElement,
-        arrowElement,
-        setArrowElement,
     } = usePopover();
 
     // generate random id for dropdown menu
@@ -86,9 +84,7 @@ const Toggle = ({ children, className,  ...props }) => {
             className={`${css.popover_toggle} ${className}`}
             onMouseOver={() => {
                 setIsVisible(true);
-                // setTimeout(() => {
-                //     debugger;
-                // }, 5000);
+                
             }}
             tabIndex={0}
             onKeyDown={() => {

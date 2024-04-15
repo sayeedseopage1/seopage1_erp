@@ -1,11 +1,11 @@
 import React from "react";
 import PropTypes from "prop-types";
-import { useDispatch } from "react-redux";
 
+// loader component
 import LoaderSpin from "./LoaderSpin";
 
 // expend sub task
-export const ExpandTask = ({ row, table, pageIndex }) => {
+export const ExpandQuestion = ({ row, table, pageIndex }) => {
     const [loading, setLoading] = React.useState(false);
     const data = row?.original;
 
@@ -61,7 +61,7 @@ export const ExpandTask = ({ row, table, pageIndex }) => {
     );
 };
 
-ExpandTask.propTypes = {
+ExpandQuestion.propTypes = {
     row: PropTypes.object,
     table: PropTypes.object,
     pageIndex: PropTypes.number,

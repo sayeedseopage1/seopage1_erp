@@ -7,7 +7,6 @@ import React, { useContext, useEffect, useRef, useState } from "react";
 import Switch from "../Switch";
 import CustomDropDown from "../CustomDropDown";
 import QuestionsSelect from "../QuestionsSelect";
-import RuleMultiSelect from "../RuleMultiSelect";
 import CustomModal from "../ui/CustomModal/CustomModal";
 
 // sections components
@@ -32,17 +31,14 @@ import { QuestionsTypes } from "../../constant";
 import {
     useEditQuestionSalesRiskAnalysisMutation,
     useGetSinglePolicySalesRiskAnalysisQuery,
-    usePolicyQuestionsListByPolicyIdQuery,
     useQuestionAddonPolicyMutation,
     useSaleAnalysisQuestionSaveMutation,
-    useSinglePolicyQuestionsQuery,
 } from "../../../../services/api/salesRiskAnalysisSlice";
 
 // helper functions
 import { getValidFields } from "../../helper/createFromValidation";
 import { generateUniqueString } from "../../../../utils/customUidGenerate";
 import { formatAPIErrors } from "../../../../utils/formatAPIErrors";
-import { formatQuestionData } from "../../helper/formatEditPolicyData";
 
 // table components
 
@@ -73,10 +69,6 @@ const AddQuestionsListModal = ({
         isSubmitting: false,
     });
 
-    const [
-        submitQuestionAddonPolicy,
-        { isLoading, isFetching: isQuestionAddonPolicyFetching },
-    ] = useQuestionAddonPolicyMutation();
 
     const [editSinglePolicySalesRiskAnalysis] =
         useEditQuestionSalesRiskAnalysisMutation();
@@ -667,7 +659,7 @@ const AddQuestionsListModal = ({
                     </div>
                     <Flex gap="10px" justifyContent="center">
                         <ModalButton onClick={handleAddQuestion} width="200px">
-                            {isLoading || isSaleAnalysisQuestionSaveLoading
+                            {isSaleAnalysisQuestionSaveLoading
                                 ? "Saving..."
                                 : isQuestionUpdating
                                 ? "Update Question"
@@ -695,7 +687,9 @@ AddQuestionsListModal.propTypes = {
     open: PropTypes.bool,
     closeModal: PropTypes.func,
     addQuestionsData: PropTypes.object,
-    singlePolicyQuestions: PropTypes.array,
     setAddQuestionsData: PropTypes.func,
     refetchSaleRiskAnalysis: PropTypes.func,
+    isQuestionUpdating: PropTypes.bool,
+    singleQuestion: PropTypes.object,
+    setSingleQuestion: PropTypes.func,
 };

@@ -1,11 +1,9 @@
-import { createContext } from "react";
-import React, { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
 import PropTypes from "prop-types";
+import React, { useEffect,createContext } from "react";
+import { useDispatch, useSelector } from "react-redux";
 
 // Api services
 import {
-    useGetAllCountryOptionsQuery,
     useGetAllFilterOptionQuery,
 } from "../../../services/api/FilterBarOptionsApiSlice";
 import {

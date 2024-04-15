@@ -514,4 +514,5 @@ NewPolicyModalInputsContainer.propTypes = {
     newPolicyDataValidation: PropTypes.object,
     selectedCountries: PropTypes.array,
     handleMultiSelectChange: PropTypes.func,
+    allPolicyData: PropTypes.array,
 };
