@@ -36,7 +36,7 @@ class SalesRiskPolicyController extends AccountBaseController
         });
     }
 
-    static function Routes()
+    public static function Routes()
     {
         Route::controller(self::class)->prefix('account/sales-risk-policies')->name('account.sale-risk-policies.')->group(function () {
 
@@ -147,7 +147,11 @@ class SalesRiskPolicyController extends AccountBaseController
             DB::commit();
         } catch (\Throwable $th) {
             DB::rollBack();
-            throw $th;
+            // throw $th;
+            return response()->json([
+                'status' => 'error',
+                'message' => $th->getMessage()
+            ]);
         }
 
         return response()->json([
@@ -224,7 +228,7 @@ class SalesRiskPolicyController extends AccountBaseController
 
             return response()->json([
                 'status' => 'error',
-                'message' => 'Something went wrong while editing.',
+                'message' => $th->getMessage(),
             ]);
         }
 
@@ -934,12 +938,12 @@ class SalesRiskPolicyController extends AccountBaseController
             // ---------------------- end milestone calculation ------------------------------- //
 
             // ---------------------- threat calculation --------------------------------//
-            $question = SalesPolicyQuestion::where('key', 'threat')->orderBy('sequence')->first();
+            $questions = SalesPolicyQuestion::where('key', 'threat')->orderBy('sequence')->get();
 
-            if ($questions) {
+            if (count($questions)) {
 
                 $questionValue = PolicyQuestionValue::where([
-                    'question_id' => $question->id,
+                    'question_id' => $questions[0]->id,
                     'deal_id' => $deal_id
                 ])->first();
 
@@ -954,7 +958,7 @@ class SalesRiskPolicyController extends AccountBaseController
 
 
                 // get question policy
-                $policy = SalesRiskPolicy::where('parent_id', $question->policy_id)->first();
+                $policy = SalesRiskPolicy::where('parent_id', $questions[0]->policy_id)->first();
                 $policyValue = json_decode($policy->value);
 
                 if ($value == 'yes') {
@@ -965,10 +969,32 @@ class SalesRiskPolicyController extends AccountBaseController
                     $pointValue = $policyValue->no->point;
                 }
 
-                $pointData['threat']['questionAnswer'][] = ['id' => $question->id, 'title' => $question->title, 'value' => $value, 'parent_id' => $question->parent_id];
+                $pointData['threat']['questionAnswer'][] = ['id' => $questions[0]->id, 'title' => $questions[0]->title, 'value' => $value, 'parent_id' => $questions[0]->parent_id];
                 $pointData['threat']['points'] = $pointValue;
 
+                if($questions[1])
+                {
+                    $questionValue = PolicyQuestionValue::where([
+                        'question_id' => $questions[1]->id,
+                        'deal_id' => $deal_id
+                    ])->first();
+
+                    // safety check
+                    if ($questionValue)
+                        $value = $questionValue->value;
+                    else
+                    {
+                        goto endThreat;
+                    }
+
+                    $pointData['threat']['questionAnswer'][] = ['id' => $questions[1]->id, 'title' => $questions[1]->title, 'value' => $value, 'parent_id' => $questions[1]->parent_id];
+                }
+
                 endThreat:
+            }
+            else
+            {
+                $message[] = 'Threat question value is not added.';
             }
 
             // ---------------------- end threat calculation --------------------------------//
@@ -1091,7 +1117,7 @@ class SalesRiskPolicyController extends AccountBaseController
             $policy = SalesRiskPolicy::where('key', 'clientCountry')->first();
 
             if (! $policy) {
-                $message = 'Client\'s Country policy not found.';
+                $message[] = 'Client\'s Country policy not found.';
                 goto endClientCountry;
             }
 
@@ -1170,7 +1196,7 @@ class SalesRiskPolicyController extends AccountBaseController
                 $data ? $pointData['projectDeadline']['questionAnswer'][] = $data : '';
             }
             else
-                $message = 'Project Deadline policy not found.';
+                $message[] = 'Project Deadline policy not found.';
 
             // --------------------------------- end projectDeadline -------------------------- //
 
