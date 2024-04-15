@@ -250,6 +250,10 @@ const TaskEditForm = ({ isOpen, close, row, table }) => {
         setState(value);
     };
 
+    // console.log("first", imgOrVidForWork?.length < 1 && !workableUrl);
+    // console.log(imgOrVidForWork?.length < 1)
+    // console.log(!workableUrl)
+
     // check validation
     const isValid = () => {
         let err = new Object();
@@ -335,26 +339,27 @@ const TaskEditForm = ({ isOpen, close, row, table }) => {
             }
         }
 
-        // if (typeOfGraphicsCategory?.id === 2 || typeOfGraphicsCategory?.id === 3 || typeOfGraphicsCategory?.id === 4) {
-        //     if (!textForDesign) {
-        //         err.textForDesign = "The text for design field is required";
-        //         errCount++;
-        //     }
-        // }
-
-        // if (typeOfGraphicsCategory?.id === 5 || typeOfGraphicsCategory?.id === 6) {
-        //     if (!imageForDesigner) {
-        //         err.imageForDesigner = "Image is required for designer";
-        //         errCount++;
-        //     }
-        // }
-
-        if (typeOfGraphicsCategory?.id === 8) {
-            if (!imgOrVidForWork) {
-                err.imgOrVidForWork = "Images/videos is requiredn for work";
+        if (typeOfGraphicsCategory?.id === 2 || typeOfGraphicsCategory?.id === 3 || typeOfGraphicsCategory?.id === 4) {
+            if (textForDesign?.length < 1 && !workableUrl) {
+                err.textForDesign = "The text for design field is required";
                 errCount++;
             }
         }
+
+        if (typeOfGraphicsCategory?.id === 5 || typeOfGraphicsCategory?.id === 6) {
+            if (imageForDesigner?.length < 1 && !workableUrl) {
+                err.imageForDesigner = "Image is required for designer";
+                errCount++;
+            }
+        }
+
+        if (typeOfGraphicsCategory?.id === 8) {
+            if (imgOrVidForWork?.length < 1 && !workableUrl) {
+                err.imgOrVidForWork = "Images/videos is required for work";
+                errCount++;
+            }
+        }
+
 
         if (typeOfGraphicsCategory?.id === 7) {
             if (illustration === "") {
@@ -1044,7 +1049,11 @@ const TaskEditForm = ({ isOpen, close, row, table }) => {
                                                             />
                                                         </div>
                                                     }
-
+                                                    {formError?.textForDesign && (
+                                                        <div style={{ color: "red" }}>
+                                                            {formError?.textForDesign}
+                                                        </div>
+                                                    )}
                                                 </div>
                                             </div>
                                         </>
@@ -1091,6 +1100,11 @@ const TaskEditForm = ({ isOpen, close, row, table }) => {
                                                             />
                                                         </div>
                                                     }
+                                                    {formError?.imageForDesigner && (
+                                                        <div style={{ color: "red" }}>
+                                                            {formError?.imageForDesigner}
+                                                        </div>
+                                                    )}
                                                 </div>
                                             </div>
                                         </>
@@ -1109,13 +1123,22 @@ const TaskEditForm = ({ isOpen, close, row, table }) => {
                                                         Images/videos that will be used for the work
                                                         <sup className='f-14 mr-1'>*</sup>
                                                     </label>
-                                                    <div   >
-                                                        <UploadFilesInLine
-                                                            files={imgOrVidForWork}
-                                                            setFiles={setImgOrVidForWork}
+                                                    <div>
+                                                        <FileUploadWithInput
+                                                            inputType="url"
+                                                            placeholder="Enter the URL"
+                                                            inputUrl={workableUrl}
+                                                            setInputUrl={setWorkableUrl}
+                                                            inputFiles={imgOrVidForWork}
+                                                            setInputFiles={setImgOrVidForWork}
                                                             previous={defaultImgOrVidForWork}
                                                             onPreviousFileDelete={handleDeletedefaultImgOrVidForWorkFile}
                                                         />
+                                                        {formError?.imgOrVidForWork && (
+                                                            <div style={{ color: "red" }}>
+                                                                {formError?.imgOrVidForWork}
+                                                            </div>
+                                                        )}
                                                     </div>
                                                 </div>
                                             </div>

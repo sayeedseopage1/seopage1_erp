@@ -84,6 +84,8 @@ const Guideline = ({ text, task, type = "", editorContainerClass, workEnv, singl
         defaultBrandGuidelineFiles = graphic_task_files?.filter((item) => item?.file_type == 4)
     }
 
+    console.log("defaultImgOrVidForWork: ", defaultImgOrVidForWork)
+
     const handleExpend = (e) => {
         e.preventDefault();
         setExpend(!expend);
@@ -168,7 +170,7 @@ const Guideline = ({ text, task, type = "", editorContainerClass, workEnv, singl
                                             </div>
                                         }
                                         {
-                                            defaultTextForDesign && <div>
+                                            defaultTextForDesign?.length > 0 && <div>
                                                 <span style={{ fontSize: "10px", fontWeight: "500" }}>{defaultTextForDesign?.length > 1 ? "Files" : "File"}</span>: <br />
                                                 <FileUploader>
                                                     {_.map(
@@ -220,7 +222,7 @@ const Guideline = ({ text, task, type = "", editorContainerClass, workEnv, singl
                                             </div>
                                         }
                                         {
-                                            defaultImageForDesigner && <div>
+                                            defaultImageForDesigner?.length > 0 && <div>
                                                 <span style={{ fontSize: "10px", fontWeight: "500" }}>{defaultImageForDesigner?.length > 1 ? "Files" : "File"}</span>: <br />
 
                                                 <FileUploader>
@@ -272,7 +274,7 @@ const Guideline = ({ text, task, type = "", editorContainerClass, workEnv, singl
                                             </div>
                                         }
                                         {
-                                            defaultImgOrVidForWork && <div>
+                                            defaultImgOrVidForWork?.length > 0 && <div>
                                                 <span style={{ fontSize: "10px", fontWeight: "500" }}>{defaultImgOrVidForWork?.length > 1 ? "Files" : "File"}</span>: <br />
 
                                                 <FileUploader>

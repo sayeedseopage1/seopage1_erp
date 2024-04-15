@@ -235,10 +235,10 @@ const TaskCreationForm = ({ handleRefresh, isOpen, close, onSuccess }) => {
             //     toast.warn("You have to provide a valid font URL");
             //     errCount++;
             // }
-            if (!brandGuideline) {
-                err.brandGuideline = "Brand guideline is required";
-                errCount++;
-            }
+            // if (!brandGuideline) {
+            //     err.brandGuideline = "Brand guideline is required";
+            //     errCount++;
+            // }
         }
 
         if (typeOfGraphicsCategory?.id === 1) {
@@ -260,23 +260,23 @@ const TaskCreationForm = ({ handleRefresh, isOpen, close, onSuccess }) => {
             }
         }
 
-        // if (typeOfGraphicsCategory?.id === 2 || typeOfGraphicsCategory?.id === 3 || typeOfGraphicsCategory?.id === 4) {
-        //     if (!textForDesign) {
-        //         err.textForDesign = "The text for design field is required";
-        //         errCount++;
-        //     }
-        // }
+        if (typeOfGraphicsCategory?.id === 2 || typeOfGraphicsCategory?.id === 3 || typeOfGraphicsCategory?.id === 4) {
+            if (textForDesign?.length < 1 && !workableUrl) {
+                err.textForDesign = "The text for design field is required";
+                errCount++;
+            }
+        }
 
-        // if (typeOfGraphicsCategory?.id === 5 || typeOfGraphicsCategory?.id === 6) {
-        //     if (!imageForDesigner) {
-        //         err.imageForDesigner = "Image is required for designer";
-        //         errCount++;
-        //     }
-        // }
+        if (typeOfGraphicsCategory?.id === 5 || typeOfGraphicsCategory?.id === 6) {
+            if (imageForDesigner?.length < 1 && !workableUrl) {
+                err.imageForDesigner = "Image is required for designer";
+                errCount++;
+            }
+        }
 
         if (typeOfGraphicsCategory?.id === 8) {
-            if (!imgOrVidForWork) {
-                err.imgOrVidForWork = "Images/videos is requiredn for work";
+            if (imgOrVidForWork?.length < 1 && !workableUrl) {
+                err.imgOrVidForWork = "Images/videos is required for work";
                 errCount++;
             }
         }
@@ -960,6 +960,11 @@ const TaskCreationForm = ({ handleRefresh, isOpen, close, onSuccess }) => {
                                                             inputFiles={textForDesign}
                                                             setInputFiles={setTextForDesign}
                                                         />
+                                                        {formError?.textForDesign && (
+                                                            <div style={{ color: "red" }}>
+                                                                {formError?.textForDesign}
+                                                            </div>
+                                                        )}
                                                     </div>
                                                 </div>
                                             </>
@@ -987,6 +992,11 @@ const TaskCreationForm = ({ handleRefresh, isOpen, close, onSuccess }) => {
                                                             inputFiles={imageForDesigner}
                                                             setInputFiles={setImageForDesigner}
                                                         />
+                                                        {formError?.imageForDesigner && (
+                                                            <div style={{ color: "red" }}>
+                                                                {formError?.imageForDesigner}
+                                                            </div>
+                                                        )}
                                                     </div>
                                                 </div>
                                             </>
@@ -1013,10 +1023,11 @@ const TaskCreationForm = ({ handleRefresh, isOpen, close, onSuccess }) => {
                                                             inputFiles={imgOrVidForWork}
                                                             setInputFiles={setImgOrVidForWork}
                                                         />
-                                                        {/* <UploadFilesInLine
-                                                            files={imgOrVidForWork}
-                                                            setFiles={setImgOrVidForWork}
-                                                        /> */}
+                                                        {formError?.imgOrVidForWork && (
+                                                            <div style={{ color: "red" }}>
+                                                                {formError?.imgOrVidForWork}
+                                                            </div>
+                                                        )}
                                                     </div>
                                                 </div>
                                             </>
@@ -1201,12 +1212,6 @@ const TaskCreationForm = ({ handleRefresh, isOpen, close, onSuccess }) => {
                                                     files={brandGuideline}
                                                     setFiles={setBrandGuideline}
                                                 />
-                                                {/* <div className="custom-file" style={fileInputStyle}>
-                                                    <input type="file" className="custom-file-input" id="brandGuideline" multiple error={formError?.brandGuideline} onChange={(e) =>
-                                                        handleChange(e, setBrandGuideline)
-                                                    } />
-                                                    <label className="custom-file-label" htmlFor="brandGuideline">Choose file</label>
-                                                </div> */}
                                             </div>
                                         </div>
 

@@ -364,22 +364,22 @@ const TaskEditForm = ({ task, singleTask: row, onSubmit, isLoading, onClose }) =
         }
 
         if (typeOfGraphicsCategory?.id === 2 || typeOfGraphicsCategory?.id === 3 || typeOfGraphicsCategory?.id === 4) {
-            if (!textForDesign) {
+            if (textForDesign?.length < 1 && !workableUrl) {
                 err.textForDesign = "The text for design field is required";
                 count++;
             }
         }
 
         if (typeOfGraphicsCategory?.id === 5 || typeOfGraphicsCategory?.id === 6) {
-            if (!imageForDesigner) {
+            if (imageForDesigner?.length < 1 && !workableUrl) {
                 err.imageForDesigner = "Image is required for designer";
                 count++;
             }
         }
 
         if (typeOfGraphicsCategory?.id === 8) {
-            if (!imgOrVidForWork) {
-                err.imgOrVidForWork = "Images/videos is requiredn for work";
+            if (imgOrVidForWork?.length < 1 && !workableUrl) {
+                err.imgOrVidForWork = "Images/videos is required for work";
                 count++;
             }
         }
@@ -1065,6 +1065,11 @@ const TaskEditForm = ({ task, singleTask: row, onSubmit, isLoading, onClose }) =
                                                     />
                                                 </div>
                                             }
+                                            {error?.textForDesign && (
+                                                <div style={{ color: "red" }}>
+                                                    {error?.textForDesign}
+                                                </div>
+                                            )}
 
                                         </div>
                                     </div>
@@ -1112,6 +1117,11 @@ const TaskEditForm = ({ task, singleTask: row, onSubmit, isLoading, onClose }) =
                                                     />
                                                 </div>
                                             }
+                                            {error?.imageForDesigner && (
+                                                <div style={{ color: "red" }}>
+                                                    {error?.imageForDesigner}
+                                                </div>
+                                            )}
                                         </div>
                                     </div>
                                 </>
@@ -1130,13 +1140,22 @@ const TaskEditForm = ({ task, singleTask: row, onSubmit, isLoading, onClose }) =
                                                 Images/videos that will be used for the work
                                                 <sup className='f-14 mr-1'>*</sup>
                                             </label>
-                                            <div   >
-                                                <UploadFilesInLine
-                                                    files={imgOrVidForWork}
-                                                    setFiles={setImgOrVidForWork}
+                                            <div>
+                                                <FileUploadWithInput
+                                                    inputType="url"
+                                                    placeholder="Enter the URL"
+                                                    inputUrl={workableUrl}
+                                                    setInputUrl={setWorkableUrl}
+                                                    inputFiles={imgOrVidForWork}
+                                                    setInputFiles={setImgOrVidForWork}
                                                     previous={defaultImgOrVidForWork}
                                                     onPreviousFileDelete={handleDeletedefaultImgOrVidForWorkFile}
                                                 />
+                                                {error?.imgOrVidForWork && (
+                                                    <div style={{ color: "red" }}>
+                                                        {error?.imgOrVidForWork}
+                                                    </div>
+                                                )}
                                             </div>
                                         </div>
                                     </div>

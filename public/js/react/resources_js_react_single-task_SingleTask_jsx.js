@@ -2467,7 +2467,7 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
 
 var Guideline = function Guideline(_ref) {
-  var _graphicOptions$find, _singleTask$category, _defaultTextForDesign, _defaultImageForDesig, _defaultImgOrVidForWo, _defaultBrandGuidelin, _defaultSecondaryColo, _defaultSecondaryColo2, _singleTask$category2, _singleTask$category3, _singleTask$category4;
+  var _graphicOptions$find, _singleTask$category, _defaultTextForDesign, _defaultTextForDesign2, _defaultImageForDesig, _defaultImageForDesig2, _defaultImgOrVidForWo, _defaultImgOrVidForWo2, _defaultBrandGuidelin, _defaultSecondaryColo, _defaultSecondaryColo2, _singleTask$category2, _singleTask$category3, _singleTask$category4;
   var text = _ref.text,
     task = _ref.task,
     _ref$type = _ref.type,
@@ -2557,6 +2557,7 @@ var Guideline = function Guideline(_ref) {
       return (item === null || item === void 0 ? void 0 : item.file_type) == 4;
     });
   }
+  console.log("defaultImgOrVidForWork: ", defaultImgOrVidForWork);
   var handleExpend = function handleExpend(e) {
     e.preventDefault();
     setExpend(!expend);
@@ -2684,13 +2685,13 @@ var Guideline = function Guideline(_ref) {
                     target: "_blank",
                     children: workable_url
                   })]
-                }), defaultTextForDesign && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsxs)("div", {
+                }), ((_defaultTextForDesign = defaultTextForDesign) === null || _defaultTextForDesign === void 0 ? void 0 : _defaultTextForDesign.length) > 0 && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsxs)("div", {
                   children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)("span", {
                     style: {
                       fontSize: "10px",
                       fontWeight: "500"
                     },
-                    children: ((_defaultTextForDesign = defaultTextForDesign) === null || _defaultTextForDesign === void 0 ? void 0 : _defaultTextForDesign.length) > 1 ? "Files" : "File"
+                    children: ((_defaultTextForDesign2 = defaultTextForDesign) === null || _defaultTextForDesign2 === void 0 ? void 0 : _defaultTextForDesign2.length) > 1 ? "Files" : "File"
                   }), ": ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)("br", {}), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)(_file_upload_FileUploader__WEBPACK_IMPORTED_MODULE_4__["default"], {
                     children: lodash__WEBPACK_IMPORTED_MODULE_2___default().map(defaultTextForDesign, function (attachment) {
                       var file_icon = attachment === null || attachment === void 0 ? void 0 : attachment.filename.split(".").pop();
@@ -2729,13 +2730,13 @@ var Guideline = function Guideline(_ref) {
                     target: "_blank",
                     children: workable_url
                   })]
-                }), defaultImageForDesigner && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsxs)("div", {
+                }), ((_defaultImageForDesig = defaultImageForDesigner) === null || _defaultImageForDesig === void 0 ? void 0 : _defaultImageForDesig.length) > 0 && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsxs)("div", {
                   children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)("span", {
                     style: {
                       fontSize: "10px",
                       fontWeight: "500"
                     },
-                    children: ((_defaultImageForDesig = defaultImageForDesigner) === null || _defaultImageForDesig === void 0 ? void 0 : _defaultImageForDesig.length) > 1 ? "Files" : "File"
+                    children: ((_defaultImageForDesig2 = defaultImageForDesigner) === null || _defaultImageForDesig2 === void 0 ? void 0 : _defaultImageForDesig2.length) > 1 ? "Files" : "File"
                   }), ": ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)("br", {}), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)(_file_upload_FileUploader__WEBPACK_IMPORTED_MODULE_4__["default"], {
                     children: lodash__WEBPACK_IMPORTED_MODULE_2___default().map(defaultImageForDesigner, function (attachment) {
                       var file_icon = attachment === null || attachment === void 0 ? void 0 : attachment.filename.split(".").pop();
@@ -2774,13 +2775,13 @@ var Guideline = function Guideline(_ref) {
                     target: "_blank",
                     children: workable_url
                   })]
-                }), defaultImgOrVidForWork && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsxs)("div", {
+                }), ((_defaultImgOrVidForWo = defaultImgOrVidForWork) === null || _defaultImgOrVidForWo === void 0 ? void 0 : _defaultImgOrVidForWo.length) > 0 && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsxs)("div", {
                   children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)("span", {
                     style: {
                       fontSize: "10px",
                       fontWeight: "500"
                     },
-                    children: ((_defaultImgOrVidForWo = defaultImgOrVidForWork) === null || _defaultImgOrVidForWo === void 0 ? void 0 : _defaultImgOrVidForWo.length) > 1 ? "Files" : "File"
+                    children: ((_defaultImgOrVidForWo2 = defaultImgOrVidForWork) === null || _defaultImgOrVidForWo2 === void 0 ? void 0 : _defaultImgOrVidForWo2.length) > 1 ? "Files" : "File"
                   }), ": ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)("br", {}), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)(_file_upload_FileUploader__WEBPACK_IMPORTED_MODULE_4__["default"], {
                     children: lodash__WEBPACK_IMPORTED_MODULE_2___default().map(defaultImgOrVidForWork, function (attachment) {
                       var file_icon = attachment === null || attachment === void 0 ? void 0 : attachment.filename.split(".").pop();
@@ -14901,20 +14902,20 @@ var TaskEditForm = function TaskEditForm(_ref2) {
       }
     }
     if ((typeOfGraphicsCategory === null || typeOfGraphicsCategory === void 0 ? void 0 : typeOfGraphicsCategory.id) === 2 || (typeOfGraphicsCategory === null || typeOfGraphicsCategory === void 0 ? void 0 : typeOfGraphicsCategory.id) === 3 || (typeOfGraphicsCategory === null || typeOfGraphicsCategory === void 0 ? void 0 : typeOfGraphicsCategory.id) === 4) {
-      if (!textForDesign) {
+      if ((textForDesign === null || textForDesign === void 0 ? void 0 : textForDesign.length) < 1 && !workableUrl) {
         err.textForDesign = "The text for design field is required";
         count++;
       }
     }
     if ((typeOfGraphicsCategory === null || typeOfGraphicsCategory === void 0 ? void 0 : typeOfGraphicsCategory.id) === 5 || (typeOfGraphicsCategory === null || typeOfGraphicsCategory === void 0 ? void 0 : typeOfGraphicsCategory.id) === 6) {
-      if (!imageForDesigner) {
+      if ((imageForDesigner === null || imageForDesigner === void 0 ? void 0 : imageForDesigner.length) < 1 && !workableUrl) {
         err.imageForDesigner = "Image is required for designer";
         count++;
       }
     }
     if ((typeOfGraphicsCategory === null || typeOfGraphicsCategory === void 0 ? void 0 : typeOfGraphicsCategory.id) === 8) {
-      if (!imgOrVidForWork) {
-        err.imgOrVidForWork = "Images/videos is requiredn for work";
+      if ((imgOrVidForWork === null || imgOrVidForWork === void 0 ? void 0 : imgOrVidForWork.length) < 1 && !workableUrl) {
+        err.imgOrVidForWork = "Images/videos is required for work";
         count++;
       }
     }
@@ -15577,6 +15578,11 @@ var TaskEditForm = function TaskEditForm(_ref2) {
                   }), {}, {
                     onPreviousFileDelete: handleDeleteTextForDesignCompanyProfile
                   }))
+                }), (error === null || error === void 0 ? void 0 : error.textForDesign) && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_28__.jsx)("div", {
+                  style: {
+                    color: "red"
+                  },
+                  children: error === null || error === void 0 ? void 0 : error.textForDesign
                 })]
               })
             })
@@ -15619,6 +15625,11 @@ var TaskEditForm = function TaskEditForm(_ref2) {
                   } : {}), {}, {
                     onPreviousFileDelete: handleDeleteImgBgForDesigner
                   }))
+                }), (error === null || error === void 0 ? void 0 : error.imageForDesigner) && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_28__.jsx)("div", {
+                  style: {
+                    color: "red"
+                  },
+                  children: error === null || error === void 0 ? void 0 : error.imageForDesigner
                 })]
               })
             })
@@ -15635,13 +15646,22 @@ var TaskEditForm = function TaskEditForm(_ref2) {
                     className: "f-14 mr-1",
                     children: "*"
                   })]
-                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_28__.jsx)("div", {
-                  children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_28__.jsx)(_file_upload_UploadFilesInLine__WEBPACK_IMPORTED_MODULE_3__["default"], {
-                    files: imgOrVidForWork,
-                    setFiles: setImgOrVidForWork,
+                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_28__.jsxs)("div", {
+                  children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_28__.jsx)(_projects_components_ui_FileUploadWithInput__WEBPACK_IMPORTED_MODULE_27__["default"], {
+                    inputType: "url",
+                    placeholder: "Enter the URL",
+                    inputUrl: workableUrl,
+                    setInputUrl: setWorkableUrl,
+                    inputFiles: imgOrVidForWork,
+                    setInputFiles: setImgOrVidForWork,
                     previous: defaultImgOrVidForWork,
                     onPreviousFileDelete: handleDeletedefaultImgOrVidForWorkFile
-                  })
+                  }), (error === null || error === void 0 ? void 0 : error.imgOrVidForWork) && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_28__.jsx)("div", {
+                    style: {
+                      color: "red"
+                    },
+                    children: error === null || error === void 0 ? void 0 : error.imgOrVidForWork
+                  })]
                 })]
               })
             })
