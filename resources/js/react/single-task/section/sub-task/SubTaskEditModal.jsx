@@ -30,6 +30,7 @@ import FileUploader from "../../../file-upload/FileUploader";
 import { useGetSubTasksQuery } from "../../../services/api/tasksApiSlice";
 import FileUploadWithInput from "../../../projects/components/ui/FileUploadWithInput";
 import CustomFileUpload from "../../../projects/components/ui/CustomFileUpload";
+import FileExtensionMultiSelect from "../../../projects/components/graphics-design-forms/FileExtensionMultiSelect";
 
 const dayjs = new CompareDate();
 
@@ -116,6 +117,7 @@ const SubTaskEditModal = ({ task, singleTask: taskDetails, onSubmit, isLoading, 
     // set default value for files and colors for graphic design start
     let defaultSecondaryColors;
     let defaultFileTypesNeeded;
+    let defaultFileExtension;
     // files
     let defaultTextForDesign;
     let defaultImageForDesigner;
@@ -123,9 +125,10 @@ const SubTaskEditModal = ({ task, singleTask: taskDetails, onSubmit, isLoading, 
     let defaultBrandGuidelineFiles;
     let defaultRefFiles;
 
-    if (graphicWorkDetails?.secondary_colors || graphicWorkDetails?.file_types_needed) {
+    if (graphicWorkDetails?.secondary_colors || graphicWorkDetails?.file_types_needed || graphicWorkDetails?.file_extensions) {
         defaultSecondaryColors = JSON.parse(graphicWorkDetails?.secondary_colors)
         defaultFileTypesNeeded = JSON.parse(graphicWorkDetails?.file_types_needed)
+        defaultFileExtension = JSON.parse(graphicWorkDetails?.file_extensions)
     }
     if (graphicWorkDetails?.graphic_task_files) {
         defaultTextForDesign = graphicWorkDetails?.graphic_task_files?.filter((item) => item?.file_type == 1)
@@ -186,6 +189,7 @@ const SubTaskEditModal = ({ task, singleTask: taskDetails, onSubmit, isLoading, 
     const [primaryColorDescription, setPrimaryColorDescription] =
         React.useState("");
     const [secondaryColors, setSecondaryColors] = React.useState([]);
+    const [fileExtension, setFileExtension] = React.useState([]);
     //state for graphic designer end
 
     // state for ui/ux start
@@ -216,6 +220,7 @@ const SubTaskEditModal = ({ task, singleTask: taskDetails, onSubmit, isLoading, 
         setReferenceFile(defaultRefFiles)
         setSecondaryColors(defaultSecondaryColors)
         setWorkableUrl(graphicWorkDetails?.workable_url)
+        setFileExtension(defaultFileExtension)
     }, [taskDetails, graphicWorkDetails]);
 
     useEffect(() => {
@@ -860,6 +865,29 @@ const SubTaskEditModal = ({ task, singleTask: taskDetails, onSubmit, isLoading, 
                             </div>
 
                             {/* end color schema */}
+
+                            <div className="col-12 col-md-6">
+                                <div className={`form-group my-3 w-100`}>
+                                    <label
+                                        htmlFor={'fileExtension'}
+                                        className={`f-14 text-dark-gray mb-1`}
+                                        data-label="true"
+                                    >
+                                        Required File Extension
+                                        <sup className='f-14 mr-1'>*</sup>
+                                    </label>
+                                    <div>
+                                        <FileExtensionMultiSelect
+                                            className={`form-control height-35 w-100 f-14`}
+                                            id='fileExtension'
+                                            fileExtension={fileExtension}
+                                            setFileExtension={setFileExtension}
+                                            multiple
+                                            readOnly={true}
+                                        />
+                                    </div>
+                                </div>
+                            </div>
                         </>
                     }
 

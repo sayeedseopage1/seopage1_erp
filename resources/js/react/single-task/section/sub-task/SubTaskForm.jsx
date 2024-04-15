@@ -37,6 +37,7 @@ import { ColorItem } from "../../components/PMGuideline";
 import FileUploader from "../../../file-upload/FileUploader";
 import FileUploadWithInput from "../../../projects/components/ui/FileUploadWithInput";
 import CustomFileUpload from "../../../projects/components/ui/CustomFileUpload";
+import FileExtensionMultiSelect from "../../../projects/components/graphics-design-forms/FileExtensionMultiSelect";
 
 const fileInputStyle = {
     height: "39px",
@@ -56,15 +57,17 @@ const SubTaskForm = ({ close, isDesignerTask }) => {
 
     let defaultSecondaryColors;
     let defaultFileTypesNeeded;
+    let defaultFileExtension;
     // files
     let defaultTextForDesign;
     let defaultImageForDesigner;
     let defaultImgOrVidForWork;
     let defaultBrandGuidelineFiles;
     let defaultRefFiles;
-    if (graphicWorkDetails?.secondary_colors || graphicWorkDetails?.file_types_needed || graphicWorkDetails?.graphic_task_files) {
+    if (graphicWorkDetails?.secondary_colors || graphicWorkDetails?.file_types_needed || graphicWorkDetails?.file_extensions || graphicWorkDetails?.graphic_task_files) {
         defaultSecondaryColors = JSON.parse(graphicWorkDetails?.secondary_colors)
         defaultFileTypesNeeded = JSON.parse(graphicWorkDetails?.file_types_needed)
+        defaultFileExtension = JSON.parse(graphicWorkDetails?.file_extensions)
         defaultTextForDesign = graphicWorkDetails?.graphic_task_files?.filter((item) => item?.file_type == 1)
         defaultImageForDesigner = graphicWorkDetails?.graphic_task_files?.filter((item) => item?.file_type == 2)
         defaultImgOrVidForWork = graphicWorkDetails?.graphic_task_files?.filter((item) => item?.file_type == 3)
@@ -116,6 +119,7 @@ const SubTaskForm = ({ close, isDesignerTask }) => {
     const [primaryColorDescription, setPrimaryColorDescription] =
         React.useState("");
     const [secondaryColors, setSecondaryColors] = React.useState(defaultSecondaryColors);
+    const [fileExtension, setFileExtension] = React.useState(defaultFileExtension);
     //state for graphic designer end
 
     // state for ui/ux start
@@ -389,6 +393,7 @@ const SubTaskForm = ({ close, isDesignerTask }) => {
         fd.append("primary_color", primaryColor ?? "");
         fd.append("primary_color_description", primaryColorDescription ?? "");
         fd.append("secondary_colors", JSON.stringify(secondaryColors) ?? "");
+        fd.append("file_extensions", JSON.stringify(fileExtension ?? ""));
         // graphics end
 
         // ui/ux start
@@ -1065,6 +1070,29 @@ const SubTaskForm = ({ close, isDesignerTask }) => {
                             </div>
                         </div>
                         {/* end color schema */}
+
+                        <div className="col-12 col-md-6">
+                            <div className={`form-group my-3 w-100`}>
+                                <label
+                                    htmlFor={'fileExtension'}
+                                    className={`f-14 text-dark-gray mb-1`}
+                                    data-label="true"
+                                >
+                                    Required File Extension
+                                    <sup className='f-14 mr-1'>*</sup>
+                                </label>
+                                <div>
+                                    <FileExtensionMultiSelect
+                                        className={`form-control height-35 w-100 f-14`}
+                                        id='fileExtension'
+                                        fileExtension={fileExtension}
+                                        setFileExtension={setFileExtension}
+                                        multiple
+                                        readOnly={true}
+                                    />
+                                </div>
+                            </div>
+                        </div>
                     </>
                 }
 

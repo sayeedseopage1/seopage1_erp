@@ -71,13 +71,14 @@ const Guideline = ({ text, task, type = "", editorContainerClass, workEnv, singl
 
     let defaultSecondaryColors;
     let defaultFileTypesNeeded;
+    let defaultFileExtension;
     // files
     let defaultTextForDesign;
     let defaultImageForDesigner;
     let defaultImgOrVidForWork;
     let defaultBrandGuidelineFiles;
     let defaultRefFiles;
-    let defaultFileExtension;
+
     if (secondary_colors || file_types_needed || graphic_task_files) {
         defaultSecondaryColors = JSON.parse(secondary_colors)
         defaultFileTypesNeeded = JSON.parse(file_types_needed)
@@ -156,7 +157,6 @@ const Guideline = ({ text, task, type = "", editorContainerClass, workEnv, singl
                             <span><strong>Required File Extension</strong>: <br /> {defaultFileExtension.join(", ")}</span>
                         </div>
                     }
-
                     {
                         referenceList && <div className="col-12 mb-2 word-break">
                             <strong>Reference</strong>: <br />

@@ -43,7 +43,7 @@ const AssginedToSelection = ({ selected, onSelect, taskCategory, isDesignerTask 
     return (
         <Combobox value={selected} onChange={onSelect} disabled={isDesignerTask}>
             <div className="form-group position-relative my-3">
-                <label htmlFor="">Assigned To</label>
+                <label htmlFor="" className={`f-14 text-dark-gray mb-1`}>Assigned To</label>
                 <Combobox.Button className="d-flex align-items-center w-100 sp1-selection-display-button">
                     <Combobox.Input
                         onChange={(e) => setQuery(e.target.value)}
