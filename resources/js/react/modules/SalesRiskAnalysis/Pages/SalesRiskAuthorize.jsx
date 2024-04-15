@@ -22,7 +22,6 @@ import { useAuth } from "../../../hooks/useAuth";
 import Switch from "../components/Switch";
 
 // constants
-import { DummyHeaderData, DummyQuestionsPoints } from "../constant";
 import { Placeholder } from "../../../global/Placeholder";
 
 // api
@@ -30,6 +29,9 @@ import {
     useSaleRiskQuestionDealReportQuery,
     useSaleRiskAnalysisActionsMutation,
 } from "../../../services/api/salesRiskAnalysisSlice";
+
+// loader
+import SaleRiskAuthorizeHeaderLoader from "../components/loader/SaleRiskAuthorizeHeaderLoader";
 
 const SalesRiskAuthorize = () => {
     const [status, setStatus] = useState("");
@@ -64,6 +66,7 @@ const SalesRiskAuthorize = () => {
     const [saleRiskAnalysisActionHandler, { isLoading: isActionLoading }] =
         useSaleRiskAnalysisActionsMutation();
 
+    // handle authorize and deny
     const handleAuthorize = async (status) => {
         try {
             setStatus(status);
@@ -88,15 +91,30 @@ const SalesRiskAuthorize = () => {
     return (
         <section>
             <Switch>
-                <Switch.Case condition={auth.getRoleId() === 1}>
+                <Switch.Case condition={isLoading}>
+                    <SaleRiskAuthorizeHeaderLoader />
+                </Switch.Case>
+                <Switch.Case
+                    condition={
+                        auth.getRoleId() === 1 &&
+                        metaInfo?.deal?.status === "pending" &&
+                        !isLoading
+                    }
+                >
                     <SaleRiskAuthorizeHeader
                         headerData={metaInfo}
                         isLoading={isLoading}
                     />
                 </Switch.Case>
-                <Switch.Case condition={auth.getRoleId() === 7}>
+                <Switch.Case
+                    condition={
+                        auth.getRoleId() === 1 &&
+                        metaInfo?.deal?.status !== "pending" &&
+                        !isLoading
+                    }
+                >
                     <SaleRiskAuthorizeHeaderForUser
-                        headerData={DummyHeaderData}
+                        headerData={metaInfo}
                         isLoading={isLoading}
                     />
                 </Switch.Case>
@@ -141,7 +159,12 @@ const SalesRiskAuthorize = () => {
 
                     {/* Sale risk authorize button */}
                     <Switch>
-                        <Switch.Case condition={auth.getRoleId() === 1}>
+                        <Switch.Case
+                            condition={
+                                auth.getRoleId() === 1 &&
+                                metaInfo?.deal?.status === "pending"
+                            }
+                        >
                             <div className="d-flex justify-content-center align-items-center">
                                 <SaleRiskAuthorizeButton
                                     color="#1492E6"

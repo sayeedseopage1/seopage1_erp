@@ -48,7 +48,10 @@ const SaleRiskQuestionsInputContainer = ({
         }
     };
 
-    console.log(questions, isChild);
+    const getBooleanValue = (question) => {
+        return question?.questions?.length ? true : false;
+    };
+
     return (
         <motion.div
             initial={{ opacity: 0 }}
@@ -92,7 +95,7 @@ const SaleRiskQuestionsInputContainer = ({
                                 <Switch.Case
                                     condition={
                                         getItsFocused(question) &&
-                                        question.questions?.length
+                                        getBooleanValue(question)
                                     }
                                 >
                                     <SaleRiskQuestionsInputContainer
@@ -131,7 +134,7 @@ const SaleRiskQuestionsInputContainer = ({
                                 />
                                 <Switch.Case
                                     condition={
-                                        question?.questions?.length &&
+                                        getBooleanValue(question) &&
                                         handleActiveData(question)
                                     }
                                 >
@@ -190,7 +193,7 @@ const SaleRiskQuestionsInputContainer = ({
                                 <Switch.Case
                                     condition={
                                         getItsFocused(question) &&
-                                        question.questions?.length
+                                        getBooleanValue(question)
                                     }
                                 >
                                     <SaleRiskQuestionsInputContainer
@@ -217,7 +220,11 @@ const SaleRiskQuestionsInputContainer = ({
                                     }`}
                                     comment={question.comment}
                                     isChild={isChild}
-                                    accordionData={question.value}
+                                    accordionData={
+                                        question.type === "list"
+                                            ? question.value
+                                            : []
+                                    }
                                     placeholder={question?.placeholder}
                                     onChange={(value) => {
                                         setListItem(value);
@@ -234,7 +241,7 @@ const SaleRiskQuestionsInputContainer = ({
                                 <Switch.Case
                                     condition={
                                         !_.isEmpty(listItem) &&
-                                        question.questions?.length
+                                        getBooleanValue(question)
                                     }
                                 >
                                     <SaleRiskQuestionsInputContainer
@@ -292,7 +299,7 @@ const SaleRiskQuestionsInputContainer = ({
                                 <Switch.Case
                                     condition={
                                         getItsFocused(question) &&
-                                        question.questions?.length
+                                        getBooleanValue(question)
                                     }
                                 >
                                     <SaleRiskQuestionsInputContainer

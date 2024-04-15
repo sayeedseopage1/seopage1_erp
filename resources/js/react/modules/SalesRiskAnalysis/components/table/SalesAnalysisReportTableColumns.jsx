@@ -10,11 +10,7 @@ export const SalesAnalysisReportTableColumns = [
         cell: ({ row }) => {
             console.log(row);
             const data = row?.original;
-            return (
-                <p className="multiline-ellipsis">
-                    {row.index + 1 }
-                </p>
-            );
+            return <p className="multiline-ellipsis">{row.index + 1}</p>;
         },
     },
     {
@@ -195,16 +191,7 @@ export const SalesAnalysisReportTableColumns = [
         accessorKey: "action",
         cell: ({ row }) => {
             const data = row?.original;
-            return (
-                <p className="multiline-ellipsis">
-                    <a
-                        href={`/account/sales-analysis-reports`}
-                        className="btn btn-sm btn-primary text-white"
-                    >
-                        View
-                    </a>
-                </p>
-            );
+            return <button className="btn btn-sm btn-primary py-1" >View</button>;
         },
     },
 ];

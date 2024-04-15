@@ -1,9 +1,21 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import InfoIcon from "../components/ui/InfoIcon";
 
 const SaleSRiskQuestionNotice = () => {
-    const handleSaveQuestionAnswer = () => {}
     const isLoading = false;
+    const [redirectUrl, setRedirectUrl] = useState("");
+
+    useEffect(() => {
+        const getAttribute = document.getElementById("salePolicyData");
+        const salePolicyData = getAttribute.getAttribute("data-redirect-url");
+        setRedirectUrl(salePolicyData);
+    }, []);
+
+    // move to next page
+    const handleSaveQuestionAnswer = () => {
+        window.location.href = redirectUrl;
+    };
+
     return (
         <div
             className="d-flex align-items-center justify-content-center flex-column py-4 px-3 px-md-5"

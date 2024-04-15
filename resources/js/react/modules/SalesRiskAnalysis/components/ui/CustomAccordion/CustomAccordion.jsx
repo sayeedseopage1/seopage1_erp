@@ -160,6 +160,6 @@ CustomAccordion.propTypes = {
     headingStyle: PropTypes.object,
     isChild: PropTypes.bool,
     onChange: PropTypes.func,
-    value: PropTypes.object,
+    value: PropTypes.string,
     isSubmitting: PropTypes.bool,
 }
