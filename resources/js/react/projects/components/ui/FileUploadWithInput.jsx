@@ -3,7 +3,7 @@ import { AiOutlineUpload } from "react-icons/ai";
 import { TiDelete } from "react-icons/ti";
 import { getFileIcon, shortenFileName, validateUrl } from '../../utils';
 
-function FileUploadWithInput({ inputType, placeholder, inputUrl, setInputUrl, inputFiles, setInputFiles, previous, onPreviousFileDelete }) {
+function FileUploadWithInput({ inputType, placeholder, inputUrl, setInputUrl, inputFiles, setInputFiles, previous, onPreviousFileDelete, readOnly }) {
 
     const handleUrlChange = (event) => {
         setInputUrl(event.target.value);
@@ -27,17 +27,21 @@ function FileUploadWithInput({ inputType, placeholder, inputUrl, setInputUrl, in
                     style={{ width: '80%' }}
                     placeholder={placeholder}
                     className={`form-control height-35 w-100 f-14`}
+                    readOnly={readOnly}
                 />
-                <input
+                {!readOnly && <input
                     type="file"
                     onChange={handleFileChange}
                     style={{ display: 'none' }}
                     id="fileInput"
                     multiple
-                />
-                <label title='Upload File' htmlFor="fileInput" className='ml-1 mb-0 bg-light p-2 rounded' style={{ cursor: 'pointer' }}>
-                    <AiOutlineUpload size={20} />
-                </label>
+                />}
+
+                {
+                    !readOnly && <label title='Upload File' htmlFor="fileInput" className='ml-1 mb-0 bg-light p-2 rounded' style={{ cursor: 'pointer' }}>
+                        <AiOutlineUpload size={20} />
+                    </label>
+                }
             </div>
             {(inputUrl && inputType === 'url') && !validateUrl(inputUrl) && (
                 <div style={{ color: "red" }}>Please enter a valid URL</div>
@@ -63,10 +67,11 @@ function FileUploadWithInput({ inputType, placeholder, inputUrl, setInputUrl, in
                             <a href={file?.file_url} target="_blank" rel="noopener noreferrer">
                                 <div>{getFileIcon(file?.filename.split('.').pop())} {shortenFileName(file?.filename)}</div>
                             </a>
-                            <span className='text-danger' style={{ cursor: 'pointer', marginLeft: '5px' }} onClick={(e) => onPreviousFileDelete(e, file, previous)} >
-                                <TiDelete size={20} />
-                            </span>
-
+                            {
+                                !readOnly && <span className='text-danger' style={{ cursor: 'pointer', marginLeft: '5px' }} onClick={(e) => onPreviousFileDelete(e, file, previous)} >
+                                    <TiDelete size={20} />
+                                </span>
+                            }
                         </div>
                     ))
                 }

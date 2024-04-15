@@ -1006,6 +1006,7 @@ const TaskEditForm = ({ isOpen, close, row, table }) => {
                                                         data-label="true"
                                                     >
                                                         Attach text that will be used for the design
+                                                        <sup className='f-14 mr-1'>*</sup>
                                                     </label>
                                                     {
                                                         typeOfGraphicsCategory?.id === 2 && <div   >
@@ -1032,6 +1033,7 @@ const TaskEditForm = ({ isOpen, close, row, table }) => {
                                                                 setInputFiles={setTextForDesign}
                                                                 {...(defaultTextForDesignBrochure && { previous: defaultTextForDesignBrochure })}
                                                                 onPreviousFileDelete={handleDeleteTextForDesignBrochure}
+                                                                readOnly={true}
                                                             />
                                                         </div>
                                                     }
