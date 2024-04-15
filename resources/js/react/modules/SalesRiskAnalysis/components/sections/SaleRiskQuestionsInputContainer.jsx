@@ -48,6 +48,7 @@ const SaleRiskQuestionsInputContainer = ({
         }
     };
 
+    console.log(questions, isChild);
     return (
         <motion.div
             initial={{ opacity: 0 }}

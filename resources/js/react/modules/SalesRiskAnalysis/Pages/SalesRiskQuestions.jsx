@@ -23,8 +23,8 @@ import { isArrayObjectEmpty } from "../../../utils/stateValidation";
 
 // Api
 import {
-    useSaleAnalysisQuestionsListQuery,
     useSaleRiskQuestionAnswerSaveMutation,
+    useSalesRiskDealsQuestionListQuery,
 } from "../../../services/api/salesRiskAnalysisSlice";
 
 const SalesRiskQuestions = () => {
@@ -49,12 +49,7 @@ const SalesRiskQuestions = () => {
         return new URLSearchParams(queryObject).toString();
     };
     // fetch policy questions
-    const { data, isLoading } = useSaleAnalysisQuestionsListQuery(
-        queryString({
-            page: pageIndex + 1,
-            limit: pageSize,
-        })
-    );
+    const { data, isLoading } = useSalesRiskDealsQuestionListQuery();
 
     const [saleAnalysisQuestionSave, { isLoading: isSaving }] =
         useSaleRiskQuestionAnswerSaveMutation();
@@ -67,8 +62,8 @@ const SalesRiskQuestions = () => {
                 const nestedQuestions = item?.questions || [];
                 return [item, ...flattenArray(nestedQuestions)];
             });
-        if (questions?.data?.length > 0) {
-            const copyArray = [...questions?.data];
+        if (questions?.length > 0) {
+            const copyArray = [...questions];
             const flattenedArray = flattenArray(copyArray);
             setAllQuestions(flattenedArray);
             const addInputFiled = flattenedArray
@@ -111,10 +106,13 @@ const SalesRiskQuestions = () => {
 
             setInputsData([...addInputFiled, ...addChildInputField]);
         }
-    }, [questions?.data]);
+    }, [questions]);
 
+    // handle submit
     const handleSubmit = async () => {
-        const skipKey = ["is_Active_YesNo", "parent_id"]
+        // skip key
+        const skipKey = ["is_Active_YesNo", "parent_id"];
+        // check if all inputs are empty
         const isEmpty = isArrayObjectEmpty(inputsData, skipKey);
         if (isEmpty) {
             setIsSubmitting(true);
@@ -130,28 +128,33 @@ const SalesRiskQuestions = () => {
                 const res = await saleAnalysisQuestionSave(payload);
                 if (res?.data?.status === "success") {
                     toast.success("Successfully saved");
+                    // check if point is less than 0 then show modal else reload page
                     if (res?.data?.data?.point < 0) {
                         setQuestionModalOpen(true);
                         setIsSubmitting(false);
                         setRedirectUrl(res?.data?.redirect_url);
                     } else {
-                        window.location.reload();
+                        window.location.href = res?.data?.redirect_url;
                     }
                 } else {
-                    toast.error("Something went wrong");
+                    toast.error(res.error?.data?.message);
                     setIsSubmitting(false);
                 }
             } catch (error) {
-                console.log(error);toast.error("Something went wrong");
+                console.log(error);
+                toast.error("Something went wrong");
             }
         }
     };
 
+    // handle redirect url
     const handleSaveQuestionAnswer = async () => {
         window.location.href = redirect;
     };
 
+    // handle question focus
     const handleQuestionFocus = (question) => {
+        // check if question already exists
         setFocusedQuestion((prev) => {
             if (prev.some((item) => item.id === question.id)) {
                 return prev;
@@ -160,19 +163,24 @@ const SalesRiskQuestions = () => {
         });
 
         const isChild = question.parent_id !== null;
+        // check if question already exists
         const alreadyExists = inputsData.some(
             (item) => item.id === question.id
         );
 
+        // check if question is child and already exists
         if (isChild && alreadyExists) {
             const hasChildQuestions = question.questions?.length;
             if (hasChildQuestions) {
+                // get all child questions
                 const childQuestions = allQuestions.filter(
                     (item) => item.parent_id === question.id
                 );
+                // get existing child questions
                 const existingChildQuestions = inputsData.filter(
                     (item) => item.parent_id === question.id
                 );
+                // get new child questions
                 const newChildQuestions = childQuestions.filter(
                     (item) =>
                         !existingChildQuestions.some(
@@ -180,7 +188,9 @@ const SalesRiskQuestions = () => {
                         )
                 );
 
+                // add new child questions
                 if (!existingChildQuestions.length) {
+                    // add new child questions
                     const newInputs = newChildQuestions.map((item) => ({
                         id: item.id,
                         questions: item.questions,
@@ -195,16 +205,17 @@ const SalesRiskQuestions = () => {
         }
     };
 
+    // get its focused inputs
     const getItsFocused = (question) => {
         const isExit = focusedQuestion?.find((item) => item.id === question.id);
         return !_.isEmpty(isExit);
     };
 
+    // get yes no question value
     const getYesNoQuestionValue = (question) => {
         const getYesNoValue = inputsData?.find(
             (item) => item.id === question.id
         );
-        console.log(getYesNoValue);
         return getYesNoValue[`question_${question.id}`] ? true : false;
     };
 
@@ -270,7 +281,7 @@ const SalesRiskQuestions = () => {
                         ) : (
                             <SaleRiskQuestionsInputContainer
                                 isChild={false}
-                                questions={questions?.data}
+                                questions={questions}
                                 inputsData={inputsData}
                                 allQuestions={allQuestions}
                                 isSubmitting={isSubmitting}

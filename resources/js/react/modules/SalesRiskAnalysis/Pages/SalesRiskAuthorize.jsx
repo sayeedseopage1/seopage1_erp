@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { toast } from "react-toastify";
 
 // Section component
 import SaleRiskAuthorizeHeader from "../components/sections/SaleRiskAuthorizeHeader";
@@ -25,9 +26,13 @@ import { DummyHeaderData, DummyQuestionsPoints } from "../constant";
 import { Placeholder } from "../../../global/Placeholder";
 
 // api
-import { useSaleRiskQuestionDealReportQuery } from "../../../services/api/salesRiskAnalysisSlice";
+import {
+    useSaleRiskQuestionDealReportQuery,
+    useSaleRiskAnalysisActionsMutation,
+} from "../../../services/api/salesRiskAnalysisSlice";
 
 const SalesRiskAuthorize = () => {
+    const [status, setStatus] = useState("");
     const [answersPoint, setAnswersPoint] = useState([]);
     const [metaInfo, setMetaInfo] = useState({});
     const pathnames = window.location.pathname.split("/");
@@ -54,6 +59,31 @@ const SalesRiskAuthorize = () => {
             setAnswersPoint(formatData);
         }
     }, [data?.data, isLoading]);
+
+    // project extend images Api call
+    const [saleRiskAnalysisActionHandler, { isLoading: isActionLoading }] =
+        useSaleRiskAnalysisActionsMutation();
+
+    const handleAuthorize = async (status) => {
+        try {
+            setStatus(status);
+            let payload = {
+                deal_id: deal_id,
+                status: status,
+            };
+            const res = await saleRiskAnalysisActionHandler(payload);
+            if (res?.data) {
+                // show success message
+                if (status === 1) {
+                    toast.success("Sale Risk Analysis Authorized Successfully");
+                } else {
+                    toast.success("Sale Risk Analysis Denied Successfully");
+                }
+            }
+        } catch (error) {
+            toast.error("Something went wrong");
+        }
+    };
 
     return (
         <section>
@@ -113,15 +143,29 @@ const SalesRiskAuthorize = () => {
                     <Switch>
                         <Switch.Case condition={auth.getRoleId() === 1}>
                             <div className="d-flex justify-content-center align-items-center">
-                                <SaleRiskAuthorizeButton color="#1492E6">
-                                    Authorize
+                                <SaleRiskAuthorizeButton
+                                    color="#1492E6"
+                                    onClick={() => {
+                                        handleAuthorize(1);
+                                    }}
+                                    disabled={isActionLoading}
+                                >
+                                    {isActionLoading && status === 1
+                                        ? "Authorizing.."
+                                        : "Authorize"}
                                 </SaleRiskAuthorizeButton>
                                 <SaleRiskAuthorizeButton
                                     className="ml-2"
                                     border="1px solid #F66"
                                     textColor="#F66"
+                                    onClick={() => {
+                                        handleAuthorize(0);
+                                    }}
+                                    disabled={isActionLoading}
                                 >
-                                    Deny
+                                    {isActionLoading && status === 0
+                                        ? "Saving.."
+                                        : "Deny"}
                                 </SaleRiskAuthorizeButton>
                             </div>
                         </Switch.Case>

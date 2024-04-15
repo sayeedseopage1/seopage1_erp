@@ -66,6 +66,7 @@ class SalesRiskPolicyController extends AccountBaseController
             Route::put('deals/authorize-deny/{deal_id}/{status}', 'authorizeDenyDeal')->name('deal.authorize-deny');
         });
 
+        // question render for sales person
         Route::get('account/deals/risk-analysis/{deal_id}', [self::class, 'salesPolicyQuestionRender'])->name('account.sale-risk-policies.risk-analysis');
         Route::get('account/deals/risk-analysis/question/list', [self::class, 'renderQuestionList'])->name('account.sale-risk-policies.risk-analysis.question-list');
         Route::get('account/sales-analysis-reports', [self::class, 'salesRiskReportList'])->name('account.sale-risk-policies.report-list');
@@ -632,6 +633,8 @@ class SalesRiskPolicyController extends AccountBaseController
 
         $data = $this->data;
         $data['addedBefore'] = PolicyQuestionValue::where('deal_id', $deal_id)->count() > 0;
+        $data['dealStatus'] = Deal::find($deal_id) ? Deal::find($deal_id)->status : null;
+        $data['redirectUrl'] = route('dealDetails', $deal_id);
         // Note: big form route : route('dealDetails', $deal->id)
 
         return view('deals.sales-questions-render', $data);
@@ -639,50 +642,25 @@ class SalesRiskPolicyController extends AccountBaseController
 
     function renderQuestionList(Request $req)
     {
-        $itemsPaginated = SalesPolicyQuestion::from('sales_policy_questions as sq')->join('sales_risk_policies as sp', 'policy_id', 'sp.id')
-        ->where(function ($query) use ($req) {
-            $query->whereNull('sq.parent_id');
-            $query->where('status', '1');
+        $data = SalesPolicyQuestion::parent()
+        ->get()->filter(fn($item) => SalesRiskPolicy::find($item->policy_id)->status)
+        ->map(function ($item) {
 
-            if ($req->policy_id)
-                $query->where('policy_id', $req->policy_id);
-            if($req->page > 2)
-                $query->offset($req->input('limit', 10) * $req->page);
-        })
-        ->paginate($req->input('limit', 10));
+            return [
+                'id' => $item->id,
+                'title' => $item->title,
+                'key' => $item->key,
+                'type' => $item->type,
+                'value' => json_decode($item->value) ? json_decode($item->value) : $item->value,
+                'placeholder' => $item->placeholder,
+                'parent_id' => $item->parent_id,
+                'policy_id' => $item->policy_id,
+                'policy_title' => SalesRiskPolicy::find($item->policy_id)->title,
+                'questions' => self::questionListChild($item->id)
+            ];
+        })->toArray();
 
-        $itemsTransformed = $itemsPaginated
-            ->getCollection()
-            ->map(function ($item) {
-
-                return [
-                    'id' => $item->id,
-                    'title' => $item->title,
-                    'key' => $item->key,
-                    'type' => $item->type,
-                    'value' => json_decode($item->value) ? json_decode($item->value) : $item->value,
-                    'placeholder' => $item->placeholder,
-                    'parent_id' => $item->parent_id,
-                    'policy_id' => $item->policy_id,
-                    'policy_title' => SalesRiskPolicy::find($item->policy_id)->title,
-                    'questions' => self::questionListChild($item->id)
-                ];
-            })->toArray();
-
-            $data = new \Illuminate\Pagination\LengthAwarePaginator(
-                $itemsTransformed,
-                $itemsPaginated->total(),
-                $itemsPaginated->perPage(),
-                $itemsPaginated->currentPage(),
-                [
-                    'path' => FacadesRequest::url(),
-                    'query' => [
-                        'page' => $itemsPaginated->currentPage()
-                    ]
-                ]
-            );
-
-        return response()->json(['status' => 'success', 'data' =>  $data]);
+        return response()->json(['status' => 'success', 'data' =>  array_values($data)]);
     }
 
     function questionValueSave(Request $req)
@@ -729,6 +707,13 @@ class SalesRiskPolicyController extends AccountBaseController
 
             if ($calculation['points'] === null) {
                 return response()->json(['status' => 'error', 'message' => $calculation['error']], 500);
+            }
+
+            if ($calculation['points'] >= 0) {
+                $dealStage = DealStage::where('lead_id', $deal->lead_id)->first();
+                $dealStage->won_lost = 'Yes';
+                $dealStage->deal_status = 'accepted';
+                $deal->status = 'accepted';
             }
 
             return response()->json([
@@ -902,9 +887,14 @@ class SalesRiskPolicyController extends AccountBaseController
                     'deal_id' => $deal_id
                 ])->first()->value;
 
-                $data[] = ['id' => $questions[2]->id, 'title' => $questions[2]->title, 'value' => $value, 'parent_id' => $questions[2]->parent_id];
+                $list = json_decode($questions[2]->value);
 
-                
+                foreach ($list as $item) {
+                    if ($value == $item->id) {
+                        $data[] = ['id' => $questions[2]->id, 'title' => $questions[2]->title, 'value' => $item->title, 'parent_id' => $questions[2]->parent_id];
+                        break;
+                    }
+                }
                 /**
                  * NOTE:  when saving list policy id is used for prefix
                  * this is because policy id is is fixed for a question
@@ -1250,8 +1240,6 @@ class SalesRiskPolicyController extends AccountBaseController
         $message = $calculation['message'];
 
         $deal = Deal::find($deal_id);
-        $projectName = $deal->project_name;
-        $client_name = $deal->client_name;
         $user = User::whereId($deal->added_by)->first(['id', 'name']);
 
         //get Date diff as intervals
@@ -1274,7 +1262,7 @@ class SalesRiskPolicyController extends AccountBaseController
          * projectBudget
          */
 
-        return response()->json(['status' => 'success', 'data' => compact('points', 'pointData', 'message', 'projectName', 'user', 'client_name', 'deadline')]);
+        return response()->json(['status' => 'success', 'data' => compact('deal', 'points', 'pointData', 'message', 'user', 'deadline')]);
     }
 
     function salesRiskReportList(Request $req)
@@ -1351,12 +1339,12 @@ class SalesRiskPolicyController extends AccountBaseController
         if($status == '1')
         {
             $dealStage->won_lost = 'Yes';
-            $dealStage->status = 'accepted';
+            $dealStage->deal_status = 'accepted';
             $deal->status = 'accepted';
         }
         elseif ($status == '0')
         {
-            $dealStage->status = 'denied';
+            $dealStage->deal_status = 'denied';
             $deal->status = 'denied';
         }
 
