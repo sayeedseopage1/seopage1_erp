@@ -2467,7 +2467,7 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
 
 var Guideline = function Guideline(_ref) {
-  var _graphicOptions$find, _singleTask$category, _defaultTextForDesign, _defaultTextForDesign2, _defaultBrandGuidelin, _defaultSecondaryColo, _defaultSecondaryColo2, _singleTask$category2, _singleTask$category3, _singleTask$category4;
+  var _graphicOptions$find, _singleTask$category, _defaultTextForDesign, _defaultImageForDesig, _defaultImgOrVidForWo, _defaultBrandGuidelin, _defaultSecondaryColo, _defaultSecondaryColo2, _singleTask$category2, _singleTask$category3, _singleTask$category4;
   var text = _ref.text,
     task = _ref.task,
     _ref$type = _ref.type,
@@ -2614,29 +2614,6 @@ var Guideline = function Guideline(_ref) {
               }), ": ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)("br", {}), " ", defaultFileTypesNeeded.join(", ")]
             })
           })]
-        }), type_of_graphic_work_id === 8 && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.Fragment, {
-          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)("div", {
-            className: "col-12 mb-2 word-break",
-            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsxs)("div", {
-              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)("strong", {
-                children: "Images/videos that will be used for the work"
-              }), ": ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)("br", {}), " ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)(_file_upload_FileUploader__WEBPACK_IMPORTED_MODULE_4__["default"], {
-                children: lodash__WEBPACK_IMPORTED_MODULE_2___default().map(defaultImgOrVidForWork, function (attachment) {
-                  var file_icon = attachment === null || attachment === void 0 ? void 0 : attachment.filename.split(".").pop();
-                  return attachment !== null && attachment !== void 0 && attachment.filename ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)(_file_upload_FileUploader__WEBPACK_IMPORTED_MODULE_4__["default"].Preview, {
-                    fileName: attachment === null || attachment === void 0 ? void 0 : attachment.filename,
-                    downloadAble: true,
-                    deleteAble: false,
-                    downloadUrl: attachment === null || attachment === void 0 ? void 0 : attachment.file_url,
-                    previewUrl: attachment === null || attachment === void 0 ? void 0 : attachment.file_url,
-                    fileType: lodash__WEBPACK_IMPORTED_MODULE_2___default().includes(["png", "jpeg", "jpg", "svg", "webp", "gif"], file_icon) ? "images" : "others",
-                    classname: "comment_file",
-                    ext: file_icon
-                  }, attachment === null || attachment === void 0 ? void 0 : attachment.id) : null;
-                })
-              })]
-            })
-          })
         }), (type_of_graphic_work_id === 7 || type_of_graphic_work_id === 9) && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.Fragment, {
           children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)("div", {
             className: "col-12 col-lg-6 col-xl-4 mb-2 word-break",
@@ -2758,9 +2735,54 @@ var Guideline = function Guideline(_ref) {
                       fontSize: "10px",
                       fontWeight: "500"
                     },
-                    children: ((_defaultTextForDesign2 = defaultTextForDesign) === null || _defaultTextForDesign2 === void 0 ? void 0 : _defaultTextForDesign2.length) > 1 ? "Files" : "File"
+                    children: ((_defaultImageForDesig = defaultImageForDesigner) === null || _defaultImageForDesig === void 0 ? void 0 : _defaultImageForDesig.length) > 1 ? "Files" : "File"
                   }), ": ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)("br", {}), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)(_file_upload_FileUploader__WEBPACK_IMPORTED_MODULE_4__["default"], {
                     children: lodash__WEBPACK_IMPORTED_MODULE_2___default().map(defaultImageForDesigner, function (attachment) {
+                      var file_icon = attachment === null || attachment === void 0 ? void 0 : attachment.filename.split(".").pop();
+                      return attachment !== null && attachment !== void 0 && attachment.filename ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)(_file_upload_FileUploader__WEBPACK_IMPORTED_MODULE_4__["default"].Preview, {
+                        fileName: attachment === null || attachment === void 0 ? void 0 : attachment.filename,
+                        downloadAble: true,
+                        deleteAble: false,
+                        downloadUrl: attachment === null || attachment === void 0 ? void 0 : attachment.file_url,
+                        previewUrl: attachment === null || attachment === void 0 ? void 0 : attachment.file_url,
+                        fileType: lodash__WEBPACK_IMPORTED_MODULE_2___default().includes(["png", "jpeg", "jpg", "svg", "webp", "gif"], file_icon) ? "images" : "others",
+                        classname: "comment_file",
+                        ext: file_icon
+                      }, attachment === null || attachment === void 0 ? void 0 : attachment.id) : null;
+                    })
+                  })]
+                })]
+              })]
+            })
+          })
+        }), type_of_graphic_work_id === 8 && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.Fragment, {
+          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)("div", {
+            className: "col-12 mb-2 word-break",
+            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsxs)("div", {
+              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)("strong", {
+                children: "Images/videos that will be used for the work"
+              }), ": ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)("br", {}), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsxs)("div", {
+                children: [workable_url && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsxs)("div", {
+                  children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)("span", {
+                    style: {
+                      fontSize: "10px",
+                      fontWeight: "500"
+                    },
+                    children: "URL"
+                  }), ": ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)("br", {}), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)("a", {
+                    href: workable_url,
+                    target: "_blank",
+                    children: workable_url
+                  })]
+                }), defaultImgOrVidForWork && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsxs)("div", {
+                  children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)("span", {
+                    style: {
+                      fontSize: "10px",
+                      fontWeight: "500"
+                    },
+                    children: ((_defaultImgOrVidForWo = defaultImgOrVidForWork) === null || _defaultImgOrVidForWo === void 0 ? void 0 : _defaultImgOrVidForWo.length) > 1 ? "Files" : "File"
+                  }), ": ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)("br", {}), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)(_file_upload_FileUploader__WEBPACK_IMPORTED_MODULE_4__["default"], {
+                    children: lodash__WEBPACK_IMPORTED_MODULE_2___default().map(defaultImgOrVidForWork, function (attachment) {
                       var file_icon = attachment === null || attachment === void 0 ? void 0 : attachment.filename.split(".").pop();
                       return attachment !== null && attachment !== void 0 && attachment.filename ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)(_file_upload_FileUploader__WEBPACK_IMPORTED_MODULE_4__["default"].Preview, {
                         fileName: attachment === null || attachment === void 0 ? void 0 : attachment.filename,

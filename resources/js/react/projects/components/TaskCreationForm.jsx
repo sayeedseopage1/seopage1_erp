@@ -950,6 +950,7 @@ const TaskCreationForm = ({ handleRefresh, isOpen, close, onSuccess }) => {
                                                             data-label="true"
                                                         >
                                                             Attach text that will be used for the design
+                                                            <sup className='f-14 mr-1'>*</sup>
                                                         </label>
                                                         <FileUploadWithInput
                                                             inputType="url"
@@ -976,6 +977,7 @@ const TaskCreationForm = ({ handleRefresh, isOpen, close, onSuccess }) => {
                                                             data-label="true"
                                                         >
                                                             Image where the designer will work
+                                                            <sup className='f-14 mr-1'>*</sup>
                                                         </label>
                                                         <FileUploadWithInput
                                                             inputType="url"
@@ -985,10 +987,6 @@ const TaskCreationForm = ({ handleRefresh, isOpen, close, onSuccess }) => {
                                                             inputFiles={imageForDesigner}
                                                             setInputFiles={setImageForDesigner}
                                                         />
-                                                        {/* <UploadFilesInLine
-                                                            files={imageForDesigner}
-                                                            setFiles={setImageForDesigner}
-                                                        /> */}
                                                     </div>
                                                 </div>
                                             </>
@@ -1007,10 +1005,18 @@ const TaskCreationForm = ({ handleRefresh, isOpen, close, onSuccess }) => {
                                                             Images/videos that will be used for the work
                                                             <sup className='f-14 mr-1'>*</sup>
                                                         </label>
-                                                        <UploadFilesInLine
+                                                        <FileUploadWithInput
+                                                            inputType="url"
+                                                            placeholder="Enter the URL"
+                                                            inputUrl={workableUrl}
+                                                            setInputUrl={setWorkableUrl}
+                                                            inputFiles={imgOrVidForWork}
+                                                            setInputFiles={setImgOrVidForWork}
+                                                        />
+                                                        {/* <UploadFilesInLine
                                                             files={imgOrVidForWork}
                                                             setFiles={setImgOrVidForWork}
-                                                        />
+                                                        /> */}
                                                     </div>
                                                 </div>
                                             </>
@@ -1148,23 +1154,6 @@ const TaskCreationForm = ({ handleRefresh, isOpen, close, onSuccess }) => {
                                             </div>
                                         </div>
                                         }
-                                        {/* <div className="col-12 col-md-6">
-                                            <Input
-                                                id="reference"
-                                                label="Reference"
-                                                type="text"
-                                                placeholder="Enter a task reference"
-                                                name="reference"
-                                                required={true}
-                                                value={reference}
-                                                error={formError?.reference}
-                                                onChange={(e) =>
-                                                    handleChange(e, setReference)
-                                                }
-                                            />
-                                            
-
-                                        </div> */}
 
                                         {/* Font name */}
                                         <div className="col-12 col-md-6">

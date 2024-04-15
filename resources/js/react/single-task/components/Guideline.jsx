@@ -126,43 +126,6 @@ const Guideline = ({ text, task, type = "", editorContainerClass, workEnv, singl
                     }
 
                     {
-                        type_of_graphic_work_id === 8 && <>
-                            <div className="col-12 mb-2 word-break"  >
-                                <div>
-                                    <strong>Images/videos that will be used for the work</strong>: <br /> <FileUploader>
-                                        {_.map(
-                                            defaultImgOrVidForWork,
-                                            (attachment) => {
-                                                const file_icon = attachment?.filename.split(".").pop();
-
-                                                return attachment?.filename ? (
-                                                    <FileUploader.Preview
-                                                        key={attachment?.id}
-                                                        fileName={attachment?.filename}
-                                                        downloadAble={true}
-                                                        deleteAble={false}
-                                                        downloadUrl={attachment?.file_url}
-                                                        previewUrl={attachment?.file_url}
-                                                        fileType={
-                                                            _.includes(
-                                                                ["png", "jpeg", "jpg", "svg", "webp", "gif"],
-                                                                file_icon
-                                                            )
-                                                                ? "images"
-                                                                : "others"
-                                                        }
-                                                        classname="comment_file"
-                                                        ext={file_icon}
-                                                    />
-                                                ) : null;
-                                            }
-                                        )}
-                                    </FileUploader>
-                                </div>
-                            </div>
-                        </>
-                    }
-                    {
                         (type_of_graphic_work_id === 7 || type_of_graphic_work_id === 9) && <>
                             <div className="col-12 col-lg-6 col-xl-4 mb-2 word-break">
                                 <div>
@@ -258,7 +221,7 @@ const Guideline = ({ text, task, type = "", editorContainerClass, workEnv, singl
                                         }
                                         {
                                             defaultImageForDesigner && <div>
-                                                <span style={{ fontSize: "10px", fontWeight: "500" }}>{defaultTextForDesign?.length > 1 ? "Files" : "File"}</span>: <br />
+                                                <span style={{ fontSize: "10px", fontWeight: "500" }}>{defaultImageForDesigner?.length > 1 ? "Files" : "File"}</span>: <br />
 
                                                 <FileUploader>
                                                     {_.map(
@@ -292,6 +255,59 @@ const Guideline = ({ text, task, type = "", editorContainerClass, workEnv, singl
                                             </div>
                                         }
                                     </div>
+                                </div>
+                            </div>
+                        </>
+                    }
+                    {
+                        type_of_graphic_work_id === 8 && <>
+                            <div className="col-12 mb-2 word-break"  >
+                                <div>
+                                    <strong>Images/videos that will be used for the work</strong>: <br />
+                                    <div>
+                                        {
+                                            workable_url && <div>
+                                                <span style={{ fontSize: "10px", fontWeight: "500" }}>URL</span>: <br />
+                                                <a href={workable_url} target="_blank">{workable_url}</a>
+                                            </div>
+                                        }
+                                        {
+                                            defaultImgOrVidForWork && <div>
+                                                <span style={{ fontSize: "10px", fontWeight: "500" }}>{defaultImgOrVidForWork?.length > 1 ? "Files" : "File"}</span>: <br />
+
+                                                <FileUploader>
+                                                    {_.map(
+                                                        defaultImgOrVidForWork,
+                                                        (attachment) => {
+                                                            const file_icon = attachment?.filename.split(".").pop();
+
+                                                            return attachment?.filename ? (
+                                                                <FileUploader.Preview
+                                                                    key={attachment?.id}
+                                                                    fileName={attachment?.filename}
+                                                                    downloadAble={true}
+                                                                    deleteAble={false}
+                                                                    downloadUrl={attachment?.file_url}
+                                                                    previewUrl={attachment?.file_url}
+                                                                    fileType={
+                                                                        _.includes(
+                                                                            ["png", "jpeg", "jpg", "svg", "webp", "gif"],
+                                                                            file_icon
+                                                                        )
+                                                                            ? "images"
+                                                                            : "others"
+                                                                    }
+                                                                    classname="comment_file"
+                                                                    ext={file_icon}
+                                                                />
+                                                            ) : null;
+                                                        }
+                                                    )}
+                                                </FileUploader>
+                                            </div>
+                                        }
+                                    </div>
+
                                 </div>
                             </div>
                         </>

@@ -1063,36 +1063,35 @@ const TaskEditForm = ({ isOpen, close, row, table }) => {
                                                         Image where the designer will work
                                                         <sup className='f-14 mr-1'>*</sup>
                                                     </label>
+                                                    {
+                                                        typeOfGraphicsCategory?.id === 5 && <div   >
+                                                            <FileUploadWithInput
+                                                                inputType="url"
+                                                                placeholder="Enter the URL"
+                                                                inputUrl={workableUrl}
+                                                                setInputUrl={setWorkableUrl}
+                                                                inputFiles={imageForDesigner}
+                                                                setInputFiles={setImageForDesigner}
+                                                                {...(defaultImageForDesignerRetouching ? { previous: defaultImageForDesignerRetouching } : {})}
+                                                                onPreviousFileDelete={handleDeleteImgForDesigner}
+                                                            />
+                                                        </div>
+                                                    }
+                                                    {
+                                                        typeOfGraphicsCategory?.id === 6 && <div   >
+                                                            <FileUploadWithInput
+                                                                inputType="url"
+                                                                placeholder="Enter the URL"
+                                                                inputUrl={workableUrl}
+                                                                setInputUrl={setWorkableUrl}
+                                                                inputFiles={imageForDesigner}
+                                                                setInputFiles={setImageForDesigner}
+                                                                {...(defaultImageForDesignerBgRemoval ? { previous: defaultImageForDesignerBgRemoval } : {})}
+                                                                onPreviousFileDelete={handleDeleteImgBgForDesigner}
+                                                            />
+                                                        </div>
+                                                    }
                                                 </div>
-                                                {
-                                                    typeOfGraphicsCategory?.id === 5 && <div   >
-                                                        <FileUploadWithInput
-                                                            inputType="url"
-                                                            placeholder="Enter the URL"
-                                                            inputUrl={workableUrl}
-                                                            setInputUrl={setWorkableUrl}
-                                                            inputFiles={imageForDesigner}
-                                                            setInputFiles={setImageForDesigner}
-                                                            {...(defaultImageForDesignerRetouching ? { previous: defaultImageForDesignerRetouching } : {})}
-                                                            onPreviousFileDelete={handleDeleteImgForDesigner}
-                                                        />
-                                                    </div>
-                                                }
-                                                {
-
-                                                    typeOfGraphicsCategory?.id === 6 && <div   >
-                                                        <FileUploadWithInput
-                                                            inputType="url"
-                                                            placeholder="Enter the URL"
-                                                            inputUrl={workableUrl}
-                                                            setInputUrl={setWorkableUrl}
-                                                            inputFiles={imageForDesigner}
-                                                            setInputFiles={setImageForDesigner}
-                                                            {...(defaultImageForDesignerBgRemoval ? { previous: defaultImageForDesignerBgRemoval } : {})}
-                                                            onPreviousFileDelete={handleDeleteImgBgForDesigner}
-                                                        />
-                                                    </div>
-                                                }
                                             </div>
                                         </>
                                     }

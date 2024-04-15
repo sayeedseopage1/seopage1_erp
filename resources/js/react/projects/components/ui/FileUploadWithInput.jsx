@@ -43,13 +43,13 @@ function FileUploadWithInput({ inputType, placeholder, inputUrl, setInputUrl, in
                 <div style={{ color: "red" }}>Please enter a valid URL</div>
             )}
             <div className='d-flex align-items-center flex-wrap' style={{ gap: '10px' }}>
-                {inputFiles.map((file, index) => (
+                {inputFiles?.map((file, index) => (
                     <div title={file?.name} style={{ width: "150px" }} key={index} className='p-1 text-center mt-2 bg-light rounded d-flex align-items-center justify-content-between'>
                         <div>{getFileIcon(file?.name.split('.').pop())} {shortenFileName(file?.name)}</div>
 
                         <span className='text-danger' style={{ cursor: 'pointer', marginLeft: '5px' }} onClick={() => {
                             const newFiles = [...inputFiles];
-                            newFiles.splice(index, 1);
+                            newFiles?.splice(index, 1);
                             setInputFiles(newFiles);
                         }} >
                             <TiDelete size={20} />
@@ -58,7 +58,7 @@ function FileUploadWithInput({ inputType, placeholder, inputUrl, setInputUrl, in
                     </div>
                 ))}
                 {
-                    previous && previous.map((file, index) => (
+                    previous && previous?.map((file, index) => (
                         <div title={file?.filename} style={{ width: "150px" }} key={index} className='p-1 text-center mt-2 bg-light rounded d-flex align-items-center justify-content-between'>
                             <a href={file?.file_url} target="_blank" rel="noopener noreferrer">
                                 <div>{getFileIcon(file?.filename.split('.').pop())} {shortenFileName(file?.filename)}</div>
