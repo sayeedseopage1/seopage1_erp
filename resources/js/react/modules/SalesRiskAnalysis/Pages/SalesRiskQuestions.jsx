@@ -130,18 +130,16 @@ const SalesRiskQuestions = () => {
                     toast.success("Successfully saved");
                     // check if point is less than 0 then show modal else reload page
                     if (res?.data?.data?.points < 0) {
-                        setQuestionModalOpen(true);
                         setIsSubmitting(false);
                         window.location.reload();
                     } else {
-                        window.location.href = res?.data?.data.redirect_url;
+                        window.location.href = res?.data?.redirectUrl;
                     }
                 } else {
                     toast.error(res.error?.data?.message);
                     setIsSubmitting(false);
                 }
             } catch (error) {
-                console.log(error);
                 toast.error("Something went wrong");
             }
         }
