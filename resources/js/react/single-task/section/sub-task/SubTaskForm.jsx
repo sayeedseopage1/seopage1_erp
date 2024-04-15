@@ -36,6 +36,7 @@ import FileTypesNeeded from "../../../projects/components/graphics-design-forms/
 import { ColorItem } from "../../components/PMGuideline";
 import FileUploader from "../../../file-upload/FileUploader";
 import FileUploadWithInput from "../../../projects/components/ui/FileUploadWithInput";
+import CustomFileUpload from "../../../projects/components/ui/CustomFileUpload";
 
 const fileInputStyle = {
     height: "39px",
@@ -60,6 +61,7 @@ const SubTaskForm = ({ close, isDesignerTask }) => {
     let defaultImageForDesigner;
     let defaultImgOrVidForWork;
     let defaultBrandGuidelineFiles;
+    let defaultRefFiles;
     if (graphicWorkDetails?.secondary_colors || graphicWorkDetails?.file_types_needed || graphicWorkDetails?.graphic_task_files) {
         defaultSecondaryColors = JSON.parse(graphicWorkDetails?.secondary_colors)
         defaultFileTypesNeeded = JSON.parse(graphicWorkDetails?.file_types_needed)
@@ -67,6 +69,7 @@ const SubTaskForm = ({ close, isDesignerTask }) => {
         defaultImageForDesigner = graphicWorkDetails?.graphic_task_files?.filter((item) => item?.file_type == 2)
         defaultImgOrVidForWork = graphicWorkDetails?.graphic_task_files?.filter((item) => item?.file_type == 3)
         defaultBrandGuidelineFiles = graphicWorkDetails?.graphic_task_files?.filter((item) => item?.file_type == 4)
+        defaultRefFiles = graphicWorkDetails?.graphic_task_files?.filter((item) => item?.file_type == 5)
     }
 
     // const [defaultBrandGuidelineFiles, setDefaultBrandGuidelineFiles] = useState(graphicWorkDetails?.graphic_task_files?.filter((item) => item?.file_type == 4))
@@ -99,6 +102,7 @@ const SubTaskForm = ({ close, isDesignerTask }) => {
     const [brandName, setBrandName] = useState("");
     const [numOfVersions, setNumOfVersions] = useState(null);
     const [referenceList, setReferenceList] = useState([{ reference: "" }]);
+    const [referenceFile, setReferenceFile] = useState(defaultRefFiles);
     const [fileTypesNeeded, setFileTypesNeeded] = React.useState(defaultFileTypesNeeded);
     const [textForDesign, setTextForDesign] = useState(defaultTextForDesign);
     const [imageForDesigner, setImageForDesigner] = useState(defaultImageForDesigner);
@@ -945,6 +949,12 @@ const SubTaskForm = ({ close, isDesignerTask }) => {
 
                                     />)
                                 }
+                                <div>
+                                    <CustomFileUpload
+                                        previous={referenceFile}
+                                        readOnly={true}
+                                    />
+                                </div>
                             </div>
                         </div>
 

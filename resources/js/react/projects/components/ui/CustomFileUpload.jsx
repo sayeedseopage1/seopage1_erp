@@ -24,10 +24,11 @@ const CustomFileUpload = ({ refInputFiles, setRefInputFiles, previous, onPreviou
                     multiple
                 />
 
-                <label title='Upload File' htmlFor="fileInputRef" className='mb-1 bg-light p-2 rounded w-100 d-flex align-items-center justify-content-center' style={{ cursor: 'pointer' }}>
-                    <span className='mr-2'>Upload File</span> <AiOutlineUpload size={20} />
-                </label>
-
+                {
+                    !readOnly && <label title='Upload File' htmlFor="fileInputRef" className='mb-1 p-2 rounded w-100 d-flex align-items-center justify-content-center' style={{ cursor: 'pointer', backgroundColor: '#F1F3F5' }}>
+                        <span className='mr-2'>Upload File</span> <AiOutlineUpload size={20} />
+                    </label>
+                }
             </div>
             <div className='d-flex align-items-center flex-wrap mb-1' style={{ gap: '10px' }}>
                 {

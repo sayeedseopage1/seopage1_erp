@@ -20,15 +20,27 @@ function FileUploadWithInput({ inputType, placeholder, inputUrl, setInputUrl, in
     return (
         <div>
             <div className="d-flex align-items-center">
-                <input
-                    type={inputType}
-                    value={inputUrl}
-                    onChange={handleUrlChange}
-                    style={{ width: '80%' }}
-                    placeholder={placeholder}
-                    className={`form-control height-35 w-100 f-14`}
-                    readOnly={readOnly}
-                />
+                {
+                    !readOnly && <input
+                        type={inputType}
+                        value={inputUrl}
+                        onChange={handleUrlChange}
+                        style={{ width: '80%' }}
+                        placeholder={placeholder}
+                        className={`form-control height-35 w-100 f-14`}
+                    />
+                }
+                {
+                    (readOnly && inputUrl) && <input
+                        type={inputType}
+                        value={inputUrl}
+                        onChange={handleUrlChange}
+                        style={{ width: '80%' }}
+                        placeholder={placeholder}
+                        className={`form-control height-35 w-100 f-14`}
+                        readOnly={readOnly}
+                    />
+                }
                 {!readOnly && <input
                     type="file"
                     onChange={handleFileChange}

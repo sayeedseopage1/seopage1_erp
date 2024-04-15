@@ -1133,7 +1133,7 @@ const TaskEditForm = ({ isOpen, close, row, table }) => {
                                                             setInputUrl={setWorkableUrl}
                                                             inputFiles={imgOrVidForWork}
                                                             setInputFiles={setImgOrVidForWork}
-                                                            previous={defaultImgOrVidForWork}
+                                                            {...(defaultImgOrVidForWork && { previous: defaultImgOrVidForWork })}
                                                             onPreviousFileDelete={handleDeletedefaultImgOrVidForWorkFile}
                                                         />
                                                         {formError?.imgOrVidForWork && (
