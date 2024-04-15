@@ -10,9 +10,9 @@
                 @else
                 <div id="salePolicyQuestionNotice" data-status="{{ $dealStatus }}"></div>
                 @endif
-                <div id="data"
+
+                <div id="salePolicyData"
                 data-redirect-Url="{{ $redirectUrl }}"
-                
                 ></div>
             </div>
             <!-- Task Box End -->
