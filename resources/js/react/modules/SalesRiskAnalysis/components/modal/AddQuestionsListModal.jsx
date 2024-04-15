@@ -31,7 +31,6 @@ import { QuestionsTypes } from "../../constant";
 import {
     useEditQuestionSalesRiskAnalysisMutation,
     useGetSinglePolicySalesRiskAnalysisQuery,
-    useQuestionAddonPolicyMutation,
     useSaleAnalysisQuestionSaveMutation,
 } from "../../../../services/api/salesRiskAnalysisSlice";
 
@@ -68,7 +67,6 @@ const AddQuestionsListModal = ({
         placeholder: false,
         isSubmitting: false,
     });
-
 
     const [editSinglePolicySalesRiskAnalysis] =
         useEditQuestionSalesRiskAnalysisMutation();
@@ -174,6 +172,14 @@ const AddQuestionsListModal = ({
         return false;
     };
 
+    const showToastHandler = (isQuestionUpdating) => {
+        if (isQuestionUpdating) {
+            toast.success("Question Updated Successfully");
+        } else {
+            toast.success("Question Added Successfully");
+        }
+    };
+
     // Add Question or Update Question Handler Function on Submit
     const handleAddQuestion = async () => {
         const validation = getValidFields(
@@ -225,8 +231,6 @@ const AddQuestionsListModal = ({
             payload.value = JSON.stringify(updateId);
         }
 
-        // console.log(payload);
-
         try {
             // Condition for Update Question
             const res = isQuestionUpdating
@@ -234,11 +238,7 @@ const AddQuestionsListModal = ({
                 : await saleAnalysisQuestionSave(payload).unwrap();
 
             if (res.status === "success") {
-                toast.success(
-                    isQuestionUpdating
-                        ? "Question Updated Successfully"
-                        : "Question Added Successfully"
-                );
+                showToastHandler(isQuestionUpdating);
                 handleCloseAddQuestionsModal();
                 refetchSaleRiskAnalysis();
             }
@@ -251,18 +251,6 @@ const AddQuestionsListModal = ({
             } else {
                 toast.error("Something went wrong");
             }
-        }
-    };
-
-    // Scroll to Bottom
-    const handleScrollToBottom = () => {
-        const scrollTarget = document.getElementById("scrollTarget");
-        if (scrollTarget) {
-            scrollTarget.scrollIntoView({
-                behavior: "smooth",
-                block: "start",
-                inline: "nearest",
-            });
         }
     };
 
@@ -310,6 +298,20 @@ const AddQuestionsListModal = ({
             case "longText":
                 return "Describe Here";
         }
+    };
+
+    const handleButtonTernary = (
+        isSaleAnalysisQuestionSaveLoading,
+        isQuestionUpdating
+    ) => {
+        if (isSaleAnalysisQuestionSaveLoading) {
+            return "Saving...";
+        }
+        if (isQuestionUpdating) {
+            return "Update Question";
+        }
+
+        return "Save Question";
     };
 
     // Set Placeholder
@@ -659,11 +661,10 @@ const AddQuestionsListModal = ({
                     </div>
                     <Flex gap="10px" justifyContent="center">
                         <ModalButton onClick={handleAddQuestion} width="200px">
-                            {isSaleAnalysisQuestionSaveLoading
-                                ? "Saving..."
-                                : isQuestionUpdating
-                                ? "Update Question"
-                                : "Save Question"}
+                            {handleButtonTernary(
+                                isSaleAnalysisQuestionSaveLoading,
+                                isQuestionUpdating
+                            )}
                         </ModalButton>
                         <ModalButton
                             onClick={handleCloseAddQuestionsModal}

@@ -10,10 +10,7 @@ const WithoutDraggableColumnHeader = ({
     isNewRuleModal,
     ...props
 }) => {
-    const { getState, setColumnOrder } = table;
-    const { columnOrder } = getState();
     const { column } = header;
-    const { tableName } = table.getState();
 
     // Define column styles
     const columnStyles = {
@@ -38,7 +35,6 @@ const WithoutDraggableColumnHeader = ({
         authorize_points: "end",
         policy_key: "center",
         default: "flex-start",
-
     };
 
     const columnStyle = columnStyles[column.id] || {};
@@ -46,64 +42,61 @@ const WithoutDraggableColumnHeader = ({
         columnJustifyContent[column.id] || columnJustifyContent.default;
 
     return (
-        <>
-            <th
-                colSpan={header.colSpan}
+        <th
+            colSpan={header.colSpan}
+            style={{
+                ...columnStyle,
+                padding: "15px 0",
+            }}
+            className={`sp1_tasks_th sp1_tasks_th--${column.id} ${className}`}
+            {...props}
+        >
+            <div
                 style={{
-                    ...columnStyle,
-                    padding: "15px 0",
+                    justifyContent,
+                    paddingRight:
+                        column.id === "applicable_points" ? "10px" : "0",
+                    paddingLeft:
+                        column.id === "policy_name" ||
+                        (column.id === "policy_rules" && isNewRuleModal)
+                            ? "10px"
+                            : "0",
                 }}
-                className={`sp1_tasks_th sp1_tasks_th--${column.id} ${className}`}
-                {...props}
+                className={`d-flex align-items-start`}
             >
-                <div
-                    style={{
-                        justifyContent,
-                        paddingRight:
-                            column.id === "applicable_points" ? "10px" : "0",
-                        paddingLeft:
-                            column.id === "policy_name" ||
-                            (column.id === "policy_rules" && isNewRuleModal)
-                                ? "10px"
-                                : "0",
-                    }}
-                    className={`d-flex align-items-start`}
-                >
+                <div>
                     <div>
-                        <div>
-                            {header.isPlaceholder
-                                ? null
-                                : flexRender(
-                                      header.column.columnDef.header,
-                                      header.getContext()
-                                  )}
-                        </div>
+                        {header.isPlaceholder
+                            ? null
+                            : flexRender(
+                                  header.column.columnDef.header,
+                                  header.getContext()
+                              )}
                     </div>
-                    {column.id !== "expend" && column.id !== "action" && (
-                        <button
-                            {...{
-                                onClick:
-                                    header.column.getToggleSortingHandler(),
-                                className: "sp1_tasks_column_sort_btn pl-1",
-                            }}
-                        >
-                            {header.column.getIsSorted() ? (
-                                {
-                                    asc: (
-                                        <span className="table_asc_dec asc"></span>
-                                    ),
-                                    desc: (
-                                        <span className="table_asc_dec dec"></span>
-                                    ),
-                                }[header.column.getIsSorted()] ?? null
-                            ) : (
-                                <span className="table_asc_dec"></span>
-                            )}
-                        </button>
-                    )}
                 </div>
-            </th>
-        </>
+                {column.id !== "expend" && column.id !== "action" && (
+                    <button
+                        {...{
+                            onClick: header.column.getToggleSortingHandler(),
+                            className: "sp1_tasks_column_sort_btn pl-1",
+                        }}
+                    >
+                        {header.column.getIsSorted() ? (
+                            {
+                                asc: (
+                                    <span className="table_asc_dec asc"></span>
+                                ),
+                                desc: (
+                                    <span className="table_asc_dec dec"></span>
+                                ),
+                            }[header.column.getIsSorted()] ?? null
+                        ) : (
+                            <span className="table_asc_dec"></span>
+                        )}
+                    </button>
+                )}
+            </div>
+        </th>
     );
 };
 

@@ -1,4 +1,4 @@
-import React, { forwardRef } from "react";
+import React from "react";
 import _ from "lodash";
 import PropTypes from "prop-types";
 import {
@@ -33,7 +33,6 @@ const QuestionsModalTable = ({
     const [sorting, setSorting] = React.useState([]);
     const [expanded, setExpanded] = React.useState({});
     const [data, setData] = React.useState(tableData || []);
-    const [globalFilter, setGlobalFilter] = React.useState("");
     const [skipPageReset, setSkipPageReset] = React.useState(false);
 
     // sales risk analysis rules data
@@ -50,7 +49,7 @@ const QuestionsModalTable = ({
     // default columns
     const defaultColumns = React.useMemo(() => [...tableColumns]);
     // columns
-    const [columns, setColumns] = React.useState([...defaultColumns]);
+    const [columns] = React.useState([...defaultColumns]);
 
     const [columnOrder, setColumnOrder] = React.useState(_.map(columns, "id"));
     const table = useReactTable({
@@ -62,7 +61,6 @@ const QuestionsModalTable = ({
             columnOrder,
             tableName,
         },
-        onGlobalFilterChange: setGlobalFilter,
         autoResetPageIndex: !skipPageReset,
         onSortingChange: setSorting,
         onExpandedChange: setExpanded,
@@ -94,88 +92,83 @@ const QuestionsModalTable = ({
         },
     });
 
-
-
     return (
-        <React.Fragment>
-            <div
-                className="sp1_tasks_table_wrapper"
-                style={{
-                    height: "100%",
-                    maxHeight: "100%",
-                    width: "100%",
-                }}
-            >
-                <table className="sp1_tasks_table">
-                    {/* table Header */}
-                    <thead
-                        className="sp1_tasks_thead"
-                        style={{
-                            zIndex: 0,
-                        }}
-                    >
-                        {table.getHeaderGroups().map((headerGroup) => (
-                            <tr key={headerGroup.id} className="sp1_tasks_tr">
-                                {headerGroup.headers.map((header) => {
-                                    return (
-                                        <WithoutDraggableColumnHeader
-                                            header={header}
-                                            table={table}
-                                            key={header.id}
-                                            isNewRuleModal={true}
-                                        />
-                                    );
-                                })}
-                            </tr>
-                        ))}
-                    </thead>
-                    {/* table Body */}
-                    <tbody className="sp1_tasks_tbody">
-                        {(isLoading || isFetching) ? (
-                            <QuestionsModalTableLoader
-                                prevItemLength={tableData?.length}
-                            />
-                        ) : (
-                            table.getRowModel().rows.map((row) => {
+        <div
+            className="sp1_tasks_table_wrapper"
+            style={{
+                height: "100%",
+                maxHeight: "100%",
+                width: "100%",
+            }}
+        >
+            <table className="sp1_tasks_table">
+                {/* table Header */}
+                <thead
+                    className="sp1_tasks_thead"
+                    style={{
+                        zIndex: 0,
+                    }}
+                >
+                    {table.getHeaderGroups().map((headerGroup) => (
+                        <tr key={headerGroup.id} className="sp1_tasks_tr">
+                            {headerGroup.headers.map((header) => {
                                 return (
-                                    <tr
-                                        className={`sp1_tasks_tr ${
-                                            row.parentId !== undefined
-                                                ? "expended_row"
-                                                : ""
-                                        } ${
-                                            row.getIsExpanded()
-                                                ? "expended_parent_row"
-                                                : ""
-                                        }`}
-                                        key={row.id}
-                                    >
-                                        {row.getVisibleCells().map((cell) => {
-                                            return (
-                                                <td
-                                                    key={cell.id}
-                                                    className="px-2 sp1_tasks_td"
-                                                >
-                                                    {flexRender(
-                                                        cell.column.columnDef
-                                                            .cell,
-                                                        cell.getContext()
-                                                    )}
-                                                </td>
-                                            );
-                                        })}
-                                    </tr>
+                                    <WithoutDraggableColumnHeader
+                                        header={header}
+                                        table={table}
+                                        key={header.id}
+                                        isNewRuleModal={true}
+                                    />
                                 );
-                            })
-                        )}
-                    </tbody>
-                </table>
-                {(!isLoading || !isFetching) &&
-                    _.size(table.getRowModel().rows) === 0 && (
-                        <EmptyTable height="18vh" />
+                            })}
+                        </tr>
+                    ))}
+                </thead>
+                {/* table Body */}
+                <tbody className="sp1_tasks_tbody">
+                    {isLoading || isFetching ? (
+                        <QuestionsModalTableLoader
+                            prevItemLength={tableData?.length}
+                        />
+                    ) : (
+                        table.getRowModel().rows.map((row) => {
+                            return (
+                                <tr
+                                    className={`sp1_tasks_tr ${
+                                        row.parentId !== undefined
+                                            ? "expended_row"
+                                            : ""
+                                    } ${
+                                        row.getIsExpanded()
+                                            ? "expended_parent_row"
+                                            : ""
+                                    }`}
+                                    key={row.id}
+                                >
+                                    {row.getVisibleCells().map((cell) => {
+                                        return (
+                                            <td
+                                                key={cell.id}
+                                                className="px-2 sp1_tasks_td"
+                                            >
+                                                {flexRender(
+                                                    cell.column.columnDef.cell,
+                                                    cell.getContext()
+                                                )}
+                                            </td>
+                                        );
+                                    })}
+                                </tr>
+                            );
+                        })
                     )}
-            </div>
-        </React.Fragment>
+                </tbody>
+            </table>
+            {(!isLoading || !isFetching) &&
+                _.size(table.getRowModel().rows) === 0 && (
+                    <EmptyTable height="18vh" />
+                )}
+        </div>
     );
 };
 export default QuestionsModalTable;

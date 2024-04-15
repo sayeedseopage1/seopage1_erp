@@ -26,7 +26,6 @@ const SalesRiskAuthorizeTable = ({
     // Table State
     const [sorting, setSorting] = React.useState([]);
     const [expanded, setExpanded] = React.useState({});
-    const [globalFilter, setGlobalFilter] = React.useState("");
     const [skipPageReset, setSkipPageReset] = React.useState(false);
     const [data, setData] = React.useState(tableData || []);
     // default columns
@@ -50,7 +49,7 @@ const SalesRiskAuthorizeTable = ({
         }
     }, [data]);
     // columns
-    const [columns, setColumns] = React.useState([...defaultColumns]);
+    const [columns] = React.useState([...defaultColumns]);
 
     const [columnOrder, setColumnOrder] = React.useState(_.map(columns, "id"));
 
@@ -64,7 +63,6 @@ const SalesRiskAuthorizeTable = ({
             tableName,
             globalFilter: _.trim(search),
         },
-        onGlobalFilterChange: setGlobalFilter,
         autoResetPageIndex: !skipPageReset,
         onSortingChange: setSorting,
         onExpandedChange: setExpanded,

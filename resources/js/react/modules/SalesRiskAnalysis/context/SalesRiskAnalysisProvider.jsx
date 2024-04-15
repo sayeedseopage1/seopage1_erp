@@ -19,7 +19,7 @@ export const SalesRiskAnalysisContext = createContext();
 
 const SalesRiskAnalysisProvider = ({ children }) => {
     const dispatch = useDispatch();
-    const { departments, countries } = useSelector(
+    const { departments } = useSelector(
         (state) => state.filterOptions
     );
     const [questionsAnswerType, setQuestionsAnswerType] = React.useState({});

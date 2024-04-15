@@ -34,8 +34,6 @@ import {
     useSingleRuleStatusUpdateMutation,
 } from "../../../../services/api/salesRiskAnalysisSlice";
 
-// constants
-import { PolicyTypeItemValuesType, PolicyTypeItems } from "../../constant";
 
 // helper function
 import {
@@ -46,8 +44,9 @@ import {
     formatSingleRuleData,
 } from "../../helper/formatEditPolicyData";
 import { addNewRulesValidation } from "../../helper/createFromValidation";
-import { FormatJsonCountry, getYesNoValue } from "../../helper/countriesFormat";
 import { generateUniqueString } from "../../../../utils/customUidGenerate";
+
+// context
 import { SalesRiskAnalysisContext } from "../../context/SalesRiskAnalysisProvider";
 
 const SalesRiskAnalysisTable = ({
@@ -69,7 +68,6 @@ const SalesRiskAnalysisTable = ({
     const [sorting, setSorting] = React.useState([]);
     const [expanded, setExpanded] = React.useState({});
     const [data, setData] = React.useState(tableData?.data || []);
-    const [globalFilter, setGlobalFilter] = React.useState("");
     const [skipPageReset, setSkipPageReset] = React.useState(false);
     const [{ pageIndex, pageSize }, setPagination] = React.useState({
         pageIndex: 0,
@@ -165,7 +163,7 @@ const SalesRiskAnalysisTable = ({
     const defaultColumns = React.useMemo(() => [...tableColumns]);
 
     // columns
-    const [columns, setColumns] = React.useState([...defaultColumns]);
+    const [columns] = React.useState([...defaultColumns]);
 
     const [columnOrder, setColumnOrder] = React.useState(_.map(columns, "id"));
 
@@ -209,7 +207,6 @@ const SalesRiskAnalysisTable = ({
             filter,
             globalFilter: _.trim(search),
         },
-        onGlobalFilterChange: setGlobalFilter,
         autoResetPageIndex: !skipPageReset,
         onSortingChange: setSorting,
         onExpandedChange: setExpanded,
@@ -274,6 +271,9 @@ const SalesRiskAnalysisTable = ({
                 setEditRuleData(payload);
                 setEditCountryListModalOpen(true);
             },
+            handleSendPolicyType: () => {
+                return policyKeys
+            }
         },
     });
 
@@ -425,7 +425,6 @@ const SalesRiskAnalysisTable = ({
         }
     };
 
-    console.log("editPolicyData", editPolicyDefaultData);
 
     // reset form for policy on close
     const resetFormForPolicy = (single) => {

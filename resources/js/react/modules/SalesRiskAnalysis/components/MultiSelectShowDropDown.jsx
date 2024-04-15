@@ -53,7 +53,6 @@ const MultiSelectShowDropDown = ({
                             onClick={handleEditCountryList}
                             className="d-flex align-items-center"
                             style={{ cursor: "pointer" }}
-                            role="button"
                             onKeyDown={handleEditCountryList}
                         >
                             <i className="fa-solid fa-plus mr-2 text-primary"></i> {' '}

@@ -8,8 +8,6 @@ export const SalesAnalysisReportTableColumns = [
         header: "#",
         accessorKey: "id",
         cell: ({ row }) => {
-            console.log(row);
-            const data = row?.original;
             return <p className="multiline-ellipsis">{row.index + 1}</p>;
         },
     },
@@ -190,7 +188,6 @@ export const SalesAnalysisReportTableColumns = [
         header: "Action",
         accessorKey: "action",
         cell: ({ row }) => {
-            const data = row?.original;
             return <button className="btn btn-sm btn-primary py-1" >View</button>;
         },
     },

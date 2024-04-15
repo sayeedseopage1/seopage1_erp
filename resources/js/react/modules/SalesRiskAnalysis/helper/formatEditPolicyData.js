@@ -2,11 +2,26 @@ import _ from "lodash";
 import { PolicyTypeItemValuesType, PolicyTypeItems, QuestionsTypes } from "../constant";
 import { FormatJsonCountry, getYesNoValue } from "./countriesFormat";
 
+const formatValueType = (item) => {
+  if (item.type === "yesNo") {
+    return "";
+  } else if (item.type === "list") {
+    return {
+      id: 1,
+      label: "Countries",
+      name: "countries",
+    };
+  } else {
+    return PolicyTypeItemValuesType?.data?.regularTypes?.data.find(
+      (item) => item?.name === item?.value_type
+    );
+  }
+
+}
+
 export const formatEditPolicyData = (data) => {
 
   let policies = []
-
-  const valueTypes = PolicyTypeItemValuesType?.data?.regularTypes?.data
 
   data.ruleList.map((item) => {
     let payload = {
@@ -16,12 +31,7 @@ export const formatEditPolicyData = (data) => {
       comment: item.comment,
       policyType: PolicyTypeItems?.data?.find((policy) => policy.name === item.type),
       title: item.title,
-      valueType: item.type === 'yesNo' ? "" : item.type === 'list' ? {
-        id: 1,
-        label: "Countries",
-        name: "countries",
-      } : valueTypes?.find((type) => type.name === item.
-        value_type),
+      valueType: formatValueType(item),
       value: !_.includes(
         ["range", "yesNo", "list"],
         item.type
@@ -49,9 +59,6 @@ export const formatEditPolicyData = (data) => {
 
 
 export const formatEditRuleData = (data, selectedRow) => {
-
-  const formatCountry = FormatJsonCountry(selectedRow?.value)
-  let updatedCountry = [...formatCountry]
 
   const payload = {
     id: selectedRow.id,
@@ -309,6 +316,14 @@ const helperSingleQuestions = (item) => {
 
 }
 
+
+const formatParentQuestion = (parentQuestion, item) => {
+  if (parentQuestion.type === "yesNo" || parentQuestion.type === "list") {
+    return item.value
+  }
+  return ""
+}
+
 /**
  * Formats a single question item by setting its parent question and other properties.
  * @param {Object} item - The question item to format.
@@ -326,8 +341,7 @@ const formatSingleQuestions = (item) => {
     type: QuestionsTypes.data.find((type) => type?.name === item?.type),
     placeholder: item?.placeholder,
     parent_question: _.isEmpty(parentQuestion) ? null : helperSingleQuestions(parentQuestion),
-    parent_question_for:
-      parentQuestion?.type === "yesNo" ? item?.value : parentQuestion?.type === "list" ? item?.value : "",
+    parent_question_for: formatParentQuestion(parentQuestion, item),
     parent_id: item?.parent_id,
     ruleList: item?.rule_list,
     comment: item?.comment,

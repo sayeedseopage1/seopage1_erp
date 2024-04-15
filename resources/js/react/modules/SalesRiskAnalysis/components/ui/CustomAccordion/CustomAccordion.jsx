@@ -37,6 +37,28 @@ const CustomAccordion = ({
         return String.fromCharCode(65 + index); // Convert index to alphabetic character
     };
 
+
+    const handleTernary = () => {
+
+        if(!expendable) { 
+            return null;
+        }
+
+        if(expend) {
+            return (
+                <span className="__icon customAccordion__Icon">
+                    <i className="fa-solid fa-chevron-up"></i>
+                </span>
+            );
+        } else {
+            return (
+                <span className="__icon customAccordion__Icon">
+                    <i className="fa-solid fa-chevron-down"></i>
+                </span>
+            );
+        }
+    }
+
     return (
         <div className="d-flex flex-column">
             <CustomInputsLabel
@@ -80,17 +102,7 @@ const CustomAccordion = ({
                     >
                         {" "}
                         {!_.isEmpty(active) ? active?.title : props?.placeholder}
-                        {expendable ? (
-                            expend ? (
-                                <span className="__icon customAccordion__Icon">
-                                    <i className="fa-solid fa-chevron-up"></i>
-                                </span>
-                            ) : (
-                                <span className="__icon customAccordion__Icon">
-                                    <i className="fa-solid fa-chevron-down"></i>
-                                </span>
-                            )
-                        ) : null}
+                        {handleTernary()}
                     </div>
                 </div>
 
@@ -162,5 +174,5 @@ CustomAccordion.propTypes = {
     onChange: PropTypes.func,
     value: PropTypes.string,
     isSubmitting: PropTypes.bool,
-    props: PropTypes.any,
+    props: PropTypes.object,
 }

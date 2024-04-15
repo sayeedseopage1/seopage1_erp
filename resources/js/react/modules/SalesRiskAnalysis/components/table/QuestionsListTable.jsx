@@ -41,7 +41,6 @@ const QuestionsListTable = ({
     const [sorting, setSorting] = React.useState([]);
     const [expanded, setExpanded] = React.useState({});
     const [data, setData] = React.useState(tableData?.data || []);
-    const [globalFilter, setGlobalFilter] = React.useState("");
     const [skipPageReset, setSkipPageReset] = React.useState(false);
     const [{ pageIndex, pageSize }, setPagination] = React.useState({
         pageIndex: 0,
@@ -65,7 +64,7 @@ const QuestionsListTable = ({
     // default columns
     const defaultColumns = React.useMemo(() => [...tableColumns]);
     // columns
-    const [columns, setColumns] = React.useState([...defaultColumns]);
+    const [columns] = React.useState([...defaultColumns]);
 
     const [columnOrder, setColumnOrder] = React.useState(_.map(columns, "id"));
 
@@ -92,12 +91,6 @@ const QuestionsListTable = ({
         onPageChange(paginate);
     };
 
-    // pagination
-    const pagination = React.useMemo(
-        () => ({ pageIndex, pageSize }),
-        [pageIndex, pageSize]
-    );
-
     const table = useReactTable({
         data,
         columns,
@@ -107,7 +100,6 @@ const QuestionsListTable = ({
             columnOrder,
             tableName,
         },
-        onGlobalFilterChange: setGlobalFilter,
         autoResetPageIndex: !skipPageReset,
         onSortingChange: setSorting,
         onExpandedChange: setExpanded,

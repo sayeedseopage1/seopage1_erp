@@ -3,7 +3,12 @@ import PropTypes from "prop-types";
 import ReactPaginate from "react-paginate";
 import styles from "../Styles/paginate.module.css";
 
-const SalesRiskAnalysisTablePagination = ({ handlePageSizeChange, handlePageChange, tableData, pageSize }) => {
+const SalesRiskAnalysisTablePagination = ({
+    handlePageSizeChange,
+    handlePageChange,
+    tableData,
+    pageSize,
+}) => {
     return (
         <div className="cnx__table_footer mt-3">
             <div className="__show_entries">
@@ -22,27 +27,28 @@ const SalesRiskAnalysisTablePagination = ({ handlePageSizeChange, handlePageChan
             </div>
 
             <div className="__total_entries">
-                Showing {tableData?.from} to {tableData?.to} of {tableData?.total} entries
+                Showing {tableData?.from} to {tableData?.to} of{" "}
+                {tableData?.total} entries
             </div>
 
             {/* pagination */}
-            <React.Fragment>
-                <ReactPaginate
-                    breakLabel="..."
-                    onPageChange={handlePageChange}
-                    previousLabel="Previous"
-                    nextLabel="Next"
-                    pageRangeDisplayed={3}
-                    marginPagesDisplayed={1}
-                    pageCount={tableData?.last_page ?? 1}
-                    renderOnZeroPageCount={null}
-                    containerClassName={styles.containerClassName}
-                    pageLinkClassName={styles.pageLinkClassName}
-                    activeLinkClassName={styles.activeLinkClassName}
-                    previousLinkClassName={styles.pageLinkClassName}
-                    nextLinkClassName={styles.pageLinkClassName}
-                />
-            </React.Fragment>
+
+            <ReactPaginate
+                breakLabel="..."
+                onPageChange={handlePageChange}
+                previousLabel="Previous"
+                nextLabel="Next"
+                pageRangeDisplayed={3}
+                marginPagesDisplayed={1}
+                pageCount={tableData?.last_page ?? 1}
+                renderOnZeroPageCount={null}
+                containerClassName={styles.containerClassName}
+                pageLinkClassName={styles.pageLinkClassName}
+                activeLinkClassName={styles.activeLinkClassName}
+                previousLinkClassName={styles.pageLinkClassName}
+                nextLinkClassName={styles.pageLinkClassName}
+            />
+
             {/* end pagination */}
         </div>
     );
