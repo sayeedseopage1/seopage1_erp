@@ -26,10 +26,10 @@ class SalesRiskPolicyController extends AccountBaseController
     public function __construct()
     {
         parent::__construct();
-        $this->pageTitle = 'Sales Risk Policy';
+        $this->pageTitle = 'Sales Risk Policies';
         // $this->activeSettingMenu = 'sales_risk_policies';
         $this->middleware(function ($request, $next) {
-            if (in_array(auth()->user()->role_id, [1, 8])) /* admin and sale */ {
+            if (in_array(auth()->user()->role_id, [1, 7, 8])) /* admin and sale */ {
                 return $next($request);
             }
             abort_403(user()->permission('manage_company_setting') !== 'all');
