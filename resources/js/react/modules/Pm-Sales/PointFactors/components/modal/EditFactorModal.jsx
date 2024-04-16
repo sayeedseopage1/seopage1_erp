@@ -119,6 +119,44 @@ const EditFactorModal = ({
                             </div>
                         }
 
+                        {/* limit type  *****required****** */}
+                        {
+                            singleDefaultFactor?.limit_type && <div className="row mb-4 align-items-center">
+                                <ModalInputLabel className="col-4">
+                                    Limit Type <sup>*</sup>:{" "}
+                                </ModalInputLabel>
+                                <div className="col-8 px-0">
+                                    <CheckboxContainer className="mr-3">
+                                        <StyledInput
+                                            type="checkbox"
+                                            id="rangeType"
+                                            name="limit_type"
+                                            onChange={handleChange}
+                                            checked={limit_type == 1}
+                                            value={1}
+                                        />
+                                        <StyledLabel htmlFor="rangeType">Range</StyledLabel>
+                                    </CheckboxContainer>
+                                    <CheckboxContainer>
+                                        <StyledInput
+                                            type="checkbox"
+                                            id="booleanType"
+                                            name="limit_type"
+                                            onChange={handleChange}
+                                            checked={limit_type == 2}
+                                            value={2}
+                                        />
+                                        <StyledLabel htmlFor="booleanType">Boolean</StyledLabel>
+                                    </CheckboxContainer>
+                                    {editFactorDataValidation?.limit_type && (
+                                        <p className="text-danger">
+                                            Limit type is required
+                                        </p>
+                                    )}
+                                </div>
+                            </div>
+                        }
+
                         {/* Lower Limit  *****required****** */}
                         {
                             singleDefaultFactor?.lower_limit && <div className="row mb-4 align-items-center">
@@ -162,44 +200,6 @@ const EditFactorModal = ({
                                     {editFactorDataValidation?.upper_limit && (
                                         <p className="text-danger">
                                             Upper Limit is required
-                                        </p>
-                                    )}
-                                </div>
-                            </div>
-                        }
-
-                        {/* limit type  *****required****** */}
-                        {
-                            singleDefaultFactor?.limit_type && <div className="row mb-4 align-items-center">
-                                <ModalInputLabel className="col-4">
-                                    Limit Type <sup>*</sup>:{" "}
-                                </ModalInputLabel>
-                                <div className="col-8 px-0">
-                                    <CheckboxContainer className="mr-3">
-                                        <StyledInput
-                                            type="checkbox"
-                                            id="staticType"
-                                            name="limit_type"
-                                            onChange={handleChange}
-                                            checked={limit_type == 1}
-                                            value={1}
-                                        />
-                                        <StyledLabel htmlFor="staticType">Static</StyledLabel>
-                                    </CheckboxContainer>
-                                    <CheckboxContainer>
-                                        <StyledInput
-                                            type="checkbox"
-                                            id="percentageType"
-                                            name="limit_type"
-                                            onChange={handleChange}
-                                            checked={limit_type == 2}
-                                            value={2}
-                                        />
-                                        <StyledLabel htmlFor="percentageType">Percentage</StyledLabel>
-                                    </CheckboxContainer>
-                                    {editFactorDataValidation?.limit_type && (
-                                        <p className="text-danger">
-                                            Limit type is required
                                         </p>
                                     )}
                                 </div>

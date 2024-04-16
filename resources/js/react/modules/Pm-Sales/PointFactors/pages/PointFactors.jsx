@@ -71,11 +71,6 @@ const PointFactors = () => {
             })
         );
 
-    console.log(queryString({
-        page: pageIndex + 1,
-        limit: pageSize,
-        project_type: tab
-    }))
     // pm point factors data
     const pmPointFactorsData = data?.data;
 
