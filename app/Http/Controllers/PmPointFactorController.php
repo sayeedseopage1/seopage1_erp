@@ -20,7 +20,7 @@ class PmPointFactorController extends AccountBaseController
     {
         return response()->json([
             'status'=> 200,
-            'data' => Criteria::with('factors')->get()
+            'data' => Criteria::with('factors')->whereHas('factors')->get()
         ]);
     }
 
