@@ -15970,7 +15970,7 @@ var TaskEditForm = function TaskEditForm(_ref2) {
                 children: "Color Schema"
               }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_30__.jsxs)((react__WEBPACK_IMPORTED_MODULE_1___default().Fragment), {
                 children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_30__.jsx)("div", {
-                  className: "mt-3 mx-3 p-3",
+                  className: "mt-3 p-3",
                   style: {
                     background: "#F9F9F9",
                     borderRadius: "10px"
@@ -16040,7 +16040,7 @@ var TaskEditForm = function TaskEditForm(_ref2) {
                     })]
                   })
                 }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_30__.jsx)("div", {
-                  className: "mt-3 mx-3 p-3",
+                  className: "mt-3 p-3",
                   style: {
                     background: "#F9F9F9",
                     borderRadius: "10px"

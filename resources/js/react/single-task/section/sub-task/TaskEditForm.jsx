@@ -1396,7 +1396,7 @@ const TaskEditForm = ({ task, singleTask: row, onSubmit, isLoading, onClose }) =
                                     <React.Fragment>
 
                                         <div
-                                            className="mt-3 mx-3 p-3"
+                                            className="mt-3 p-3"
                                             style={{
                                                 background: "#F9F9F9",
                                                 borderRadius: "10px",
@@ -1483,7 +1483,7 @@ const TaskEditForm = ({ task, singleTask: row, onSubmit, isLoading, onClose }) =
                                         </div>
 
                                         <div
-                                            className="mt-3 mx-3 p-3"
+                                            className="mt-3 p-3"
                                             style={{
                                                 background: "#F9F9F9",
                                                 borderRadius: "10px",

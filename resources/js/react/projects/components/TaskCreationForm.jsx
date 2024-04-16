@@ -1248,7 +1248,7 @@ const TaskCreationForm = ({ handleRefresh, isOpen, close, onSuccess }) => {
                                                 <React.Fragment>
                                                     {/* primary color */}
                                                     <div
-                                                        className="mt-3 mx-3 p-3"
+                                                        className="mt-3 p-3"
                                                         style={{
                                                             background: "#F9F9F9",
                                                             borderRadius: "10px",
@@ -1354,7 +1354,7 @@ const TaskCreationForm = ({ handleRefresh, isOpen, close, onSuccess }) => {
 
                                                     {/* secondary color */}
                                                     <div
-                                                        className="mt-3 mx-3 p-3"
+                                                        className="mt-3 p-3"
                                                         style={{
                                                             background: "#F9F9F9",
                                                             borderRadius: "10px",
