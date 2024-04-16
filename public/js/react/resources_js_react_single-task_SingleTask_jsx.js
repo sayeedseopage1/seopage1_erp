@@ -11747,17 +11747,6 @@ var SubTaskEditModal = function SubTaskEditModal(_ref2) {
               })
             }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_26__.jsx)("div", {
               className: "col-12 col-md-6",
-              children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_26__.jsx)(_components_form_Input__WEBPACK_IMPORTED_MODULE_8__["default"], {
-                id: "numOfVersions",
-                label: "Number of Versions",
-                type: "number",
-                placeholder: "Enter Number of versions",
-                name: "numOfVersions",
-                defaultValue: numOfVersions,
-                readOnly: true
-              })
-            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_26__.jsx)("div", {
-              className: "col-12 col-md-6",
               children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_26__.jsxs)("div", {
                 className: "form-group my-3 w-100",
                 children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_26__.jsxs)("label", {
@@ -11778,6 +11767,17 @@ var SubTaskEditModal = function SubTaskEditModal(_ref2) {
                     readOnly: true
                   })
                 })]
+              })
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_26__.jsx)("div", {
+              className: "col-12 col-md-6",
+              children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_26__.jsx)(_components_form_Input__WEBPACK_IMPORTED_MODULE_8__["default"], {
+                id: "numOfVersions",
+                label: "Number of Versions",
+                type: "number",
+                placeholder: "Enter Number of versions",
+                name: "numOfVersions",
+                defaultValue: numOfVersions,
+                readOnly: true
               })
             })]
           }), ((typeOfGraphicsCategory === null || typeOfGraphicsCategory === void 0 ? void 0 : typeOfGraphicsCategory.id) === 2 || (typeOfGraphicsCategory === null || typeOfGraphicsCategory === void 0 ? void 0 : typeOfGraphicsCategory.id) === 3 || (typeOfGraphicsCategory === null || typeOfGraphicsCategory === void 0 ? void 0 : typeOfGraphicsCategory.id) === 4) && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_26__.jsx)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_26__.Fragment, {
@@ -13141,18 +13141,6 @@ var SubTaskForm = function SubTaskForm(_ref) {
             })
           }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_27__.jsx)("div", {
             className: "col-12 col-md-6",
-            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_27__.jsx)(_components_form_Input__WEBPACK_IMPORTED_MODULE_4__["default"], {
-              id: "numOfVersions",
-              label: "Number of Versions",
-              type: "number",
-              placeholder: "Enter Number of versions",
-              name: "numOfVersions",
-              defaultValue: numOfVersions,
-              error: err === null || err === void 0 ? void 0 : err.numOfVersions,
-              readOnly: true
-            })
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_27__.jsx)("div", {
-            className: "col-12 col-md-6",
             children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_27__.jsxs)("div", {
               className: "form-group my-3 w-100",
               children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_27__.jsxs)("label", {
@@ -13173,6 +13161,18 @@ var SubTaskForm = function SubTaskForm(_ref) {
                   readOnly: true
                 })
               })]
+            })
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_27__.jsx)("div", {
+            className: "col-12 col-md-6",
+            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_27__.jsx)(_components_form_Input__WEBPACK_IMPORTED_MODULE_4__["default"], {
+              id: "numOfVersions",
+              label: "Number of Versions",
+              type: "number",
+              placeholder: "Enter Number of versions",
+              name: "numOfVersions",
+              defaultValue: numOfVersions,
+              error: err === null || err === void 0 ? void 0 : err.numOfVersions,
+              readOnly: true
             })
           })]
         }), ((typeOfGraphicsCategory === null || typeOfGraphicsCategory === void 0 ? void 0 : typeOfGraphicsCategory.id) === 2 || (typeOfGraphicsCategory === null || typeOfGraphicsCategory === void 0 ? void 0 : typeOfGraphicsCategory.id) === 3 || (typeOfGraphicsCategory === null || typeOfGraphicsCategory === void 0 ? void 0 : typeOfGraphicsCategory.id) === 4) && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_27__.jsx)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_27__.Fragment, {
@@ -15585,21 +15585,6 @@ var TaskEditForm = function TaskEditForm(_ref2) {
               })
             }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_30__.jsx)("div", {
               className: "col-12 col-md-6",
-              children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_30__.jsx)(_components_form_Input__WEBPACK_IMPORTED_MODULE_8__["default"], {
-                id: "numOfVersions",
-                label: "Number of Versions",
-                type: "number",
-                placeholder: "Enter Number of versions",
-                name: "numOfVersions",
-                required: true,
-                value: numOfVersions,
-                error: error === null || error === void 0 ? void 0 : error.numOfVersions,
-                onChange: function onChange(e) {
-                  return handleChange(e, setNumOfVersions);
-                }
-              })
-            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_30__.jsx)("div", {
-              className: "col-12 col-md-6",
               children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_30__.jsxs)("div", {
                 className: "form-group my-3 w-100",
                 children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_30__.jsxs)("label", {
@@ -15654,6 +15639,21 @@ var TaskEditForm = function TaskEditForm(_ref2) {
                     children: "Add"
                   })]
                 })]
+              })
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_30__.jsx)("div", {
+              className: "col-12 col-md-6",
+              children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_30__.jsx)(_components_form_Input__WEBPACK_IMPORTED_MODULE_8__["default"], {
+                id: "numOfVersions",
+                label: "Number of Versions",
+                type: "number",
+                placeholder: "Enter Number of versions",
+                name: "numOfVersions",
+                required: true,
+                value: numOfVersions,
+                error: error === null || error === void 0 ? void 0 : error.numOfVersions,
+                onChange: function onChange(e) {
+                  return handleChange(e, setNumOfVersions);
+                }
               })
             })]
           }), ((typeOfGraphicsCategory === null || typeOfGraphicsCategory === void 0 ? void 0 : typeOfGraphicsCategory.id) === 2 || (typeOfGraphicsCategory === null || typeOfGraphicsCategory === void 0 ? void 0 : typeOfGraphicsCategory.id) === 3 || (typeOfGraphicsCategory === null || typeOfGraphicsCategory === void 0 ? void 0 : typeOfGraphicsCategory.id) === 4) && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_30__.jsx)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_30__.Fragment, {

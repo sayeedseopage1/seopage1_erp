@@ -886,21 +886,7 @@ const TaskCreationForm = ({ handleRefresh, isOpen, close, onSuccess }) => {
                                                         }
                                                     />
                                                 </div>
-                                                <div className="col-12 col-md-6">
-                                                    <Input
-                                                        id="numOfVersions"
-                                                        label="Number of Versions"
-                                                        type="number"
-                                                        placeholder="Enter Number of versions"
-                                                        name="numOfVersions"
-                                                        required={true}
-                                                        value={numOfVersions}
-                                                        error={formError?.numOfVersions}
-                                                        onChange={(e) =>
-                                                            handleChange(e, setNumOfVersions)
-                                                        }
-                                                    />
-                                                </div>
+
                                                 <div className="col-12 col-md-6">
                                                     <div className={`form-group my-3 w-100`}>
                                                         <label
@@ -950,6 +936,21 @@ const TaskCreationForm = ({ handleRefresh, isOpen, close, onSuccess }) => {
                                                         </div>
                                                     </div>
                                                 }
+                                                <div className="col-12 col-md-6">
+                                                    <Input
+                                                        id="numOfVersions"
+                                                        label="Number of Versions"
+                                                        type="number"
+                                                        placeholder="Enter Number of versions"
+                                                        name="numOfVersions"
+                                                        required={true}
+                                                        value={numOfVersions}
+                                                        error={formError?.numOfVersions}
+                                                        onChange={(e) =>
+                                                            handleChange(e, setNumOfVersions)
+                                                        }
+                                                    />
+                                                </div>
                                             </>
                                         }
                                         {/* for Banner, Brochure or company profile */}
