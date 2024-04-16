@@ -892,7 +892,7 @@ const TaskEditForm = ({ isOpen, close, row, table }) => {
                                     <input
                                         className={`form-control height-35 f-14`}
                                         readOnly
-                                        defaultValue={milestone?.deliverable_type ?? ''}
+                                        defaultValue={milestone?.deliverable_title}
                                     />
                                 </div>
                             </div>
