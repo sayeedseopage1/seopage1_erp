@@ -45,15 +45,15 @@
 
           <!-- CARD BODY START -->
           <div class="card-body">
-             
+
                 <h5>Deal Details</h5>
-           
+
             <hr>
             <?php
             $url= url('/');
              ?>
               <div class="invoice-table-wrapper">
-               
+
 
                 <div class="row">
                     <div class="col-sm-12">
@@ -693,14 +693,22 @@
                           <div class="row">
                             <div class="col-md-12">
                                 <div class="form-check">
+
+                                    @if (in_array($deal->status, ['pending', 'analysis']))
+                                    <input class="form-check-input" type="checkbox" value="1" name="is_drafted" id="is_drafted" checked disabled>
+                                    <label class="form-check-label m-1" for="flexCheckDefault">
+                                        Keep it as draft <b>(Awaiting for admin authorization)</b>
+                                    </label>
+                                    @else
                                     <input class="form-check-input" type="checkbox" value="1" name="is_drafted" id="is_drafted">
                                     <label class="form-check-label m-1" for="flexCheckDefault">
                                         Keep it as draft
                                     </label>
+                                    @endif
                                 </div>
                               </div>
                           </div>
-                          
+
                           <br>
                           <div class="d-flex justify-content-center">
                               <button class="btn btn-primary" type="submit" id="createDeal"><span class="btn-txt">Complete Deal Creation</span></button>
@@ -709,7 +717,7 @@
 
                     </div>
                 </div>
-               
+
               </div>
 
               <div class="d-flex flex-column">
