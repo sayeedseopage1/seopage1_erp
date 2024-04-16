@@ -54,8 +54,9 @@ const SingleTaskPage = () => {
     const [totalTime, setTotalTime] = React.useState("");
     const taskId = task?.id;
 
-    const { data: taskForTime } = useGetTaskForTotalTimeQuery(taskId);
-
+    const { data: taskForTime } = useGetTaskForTotalTimeQuery(taskId, {
+        skip: !taskId
+    });
     useEffect(() => {
         setTaskForTimeLog(taskForTime);
     }, [taskForTime]);

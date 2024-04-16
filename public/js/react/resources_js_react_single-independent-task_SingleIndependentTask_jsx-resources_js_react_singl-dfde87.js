@@ -851,13 +851,14 @@ var useSingleTask = function useSingleTask() {
       return _regeneratorRuntime().wrap(function _callee$(_context) {
         while (1) switch (_context.prev = _context.next) {
           case 0:
-            _context.prev = 0;
-            _context.next = 3;
+            debugger;
+            _context.prev = 1;
+            _context.next = 4;
             return getTaskDetails("/".concat(taskId, "/json?mode=basic")).unwrap();
-          case 3:
+          case 4:
             res = _context.sent;
             if (!res) {
-              _context.next = 7;
+              _context.next = 8;
               break;
             }
             task = _objectSpread(_objectSpread({}, res.task), {}, {
@@ -871,18 +872,18 @@ var useSingleTask = function useSingleTask() {
               taskSubTask: res.Sub_Tasks
             });
             return _context.abrupt("return", task);
-          case 7:
-            _context.next = 12;
+          case 8:
+            _context.next = 13;
             break;
-          case 9:
-            _context.prev = 9;
-            _context.t0 = _context["catch"](0);
+          case 10:
+            _context.prev = 10;
+            _context.t0 = _context["catch"](1);
             console.log(_context.t0);
-          case 12:
+          case 13:
           case "end":
             return _context.stop();
         }
-      }, _callee, null, [[0, 9]]);
+      }, _callee, null, [[1, 10]]);
     }));
     return function getTaskById(_x) {
       return _ref.apply(this, arguments);

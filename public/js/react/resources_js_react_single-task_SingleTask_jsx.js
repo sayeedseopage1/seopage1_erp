@@ -851,13 +851,14 @@ var useSingleTask = function useSingleTask() {
       return _regeneratorRuntime().wrap(function _callee$(_context) {
         while (1) switch (_context.prev = _context.next) {
           case 0:
-            _context.prev = 0;
-            _context.next = 3;
+            debugger;
+            _context.prev = 1;
+            _context.next = 4;
             return getTaskDetails("/".concat(taskId, "/json?mode=basic")).unwrap();
-          case 3:
+          case 4:
             res = _context.sent;
             if (!res) {
-              _context.next = 7;
+              _context.next = 8;
               break;
             }
             task = _objectSpread(_objectSpread({}, res.task), {}, {
@@ -871,18 +872,18 @@ var useSingleTask = function useSingleTask() {
               taskSubTask: res.Sub_Tasks
             });
             return _context.abrupt("return", task);
-          case 7:
-            _context.next = 12;
+          case 8:
+            _context.next = 13;
             break;
-          case 9:
-            _context.prev = 9;
-            _context.t0 = _context["catch"](0);
+          case 10:
+            _context.prev = 10;
+            _context.t0 = _context["catch"](1);
             console.log(_context.t0);
-          case 12:
+          case 13:
           case "end":
             return _context.stop();
         }
-      }, _callee, null, [[0, 9]]);
+      }, _callee, null, [[1, 10]]);
     }));
     return function getTaskById(_x) {
       return _ref.apply(this, arguments);
@@ -1280,7 +1281,9 @@ var SingleTaskPage = function SingleTaskPage() {
     totalTime = _React$useState4[0],
     setTotalTime = _React$useState4[1];
   var taskId = task === null || task === void 0 ? void 0 : task.id;
-  var _useGetTaskForTotalTi = (0,_services_api_tasksApiSlice__WEBPACK_IMPORTED_MODULE_30__.useGetTaskForTotalTimeQuery)(taskId),
+  var _useGetTaskForTotalTi = (0,_services_api_tasksApiSlice__WEBPACK_IMPORTED_MODULE_30__.useGetTaskForTotalTimeQuery)(taskId, {
+      skip: !taskId
+    }),
     taskForTime = _useGetTaskForTotalTi.data;
   (0,react__WEBPACK_IMPORTED_MODULE_1__.useEffect)(function () {
     setTaskForTimeLog(taskForTime);
@@ -2497,11 +2500,11 @@ var Guideline = function Guideline(_ref) {
   var graphicSubTaskDetails = new Object(subTasks === null || subTasks === void 0 ? void 0 : subTasks.sub_task_details_graphic_work);
   // sub task details ui/uix 
   var _useGetTaskDetailsQue = (0,_services_api_SingleTaskPageApi__WEBPACK_IMPORTED_MODULE_5__.useGetTaskDetailsQuery)("/".concat(singleTask === null || singleTask === void 0 ? void 0 : singleTask.dependent_task_id, "/json?mode=basic"), {
-      skip: !(singleTask !== null && singleTask !== void 0 && singleTask.dependent_task_id),
-      staleTime: 0,
+      skip: !singleTask,
       refetchOnMountOrArgChange: true
     }),
     mainTask = _useGetTaskDetailsQue.data;
+  // debugger
   var subUiUixDetails = new Object(mainTask === null || mainTask === void 0 ? void 0 : mainTask.task);
   // **************sub task details end**********
 

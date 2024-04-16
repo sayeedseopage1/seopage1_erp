@@ -29,12 +29,11 @@ const Guideline = ({ text, task, type = "", editorContainerClass, workEnv, singl
     const { data: mainTask } = useGetTaskDetailsQuery(
         `/${singleTask?.dependent_task_id}/json?mode=basic`,
         {
-            skip: !singleTask?.dependent_task_id,
-            staleTime: 0,
+            skip: !singleTask,
             refetchOnMountOrArgChange: true,
         }
     );
-
+    // debugger
     const subUiUixDetails = new Object(mainTask?.task)
     // **************sub task details end**********
 
