@@ -9,7 +9,7 @@ use Illuminate\Contracts\Validation\Validator;
 
 class ProjectManagerPointLogic
 {
-    public static function distribute($criteriaId, $projectId, $comparable_value)
+    public static function distribute($criteriaId, $projectId, $comparable_value, $points = null)
     {
         $criteria = Criteria::with('factors')->find($criteriaId);
         if(!$criteria->factors->count()) return false;
@@ -31,6 +31,7 @@ class ProjectManagerPointLogic
             }
         }
         
+        $earned_points = $points ? $points : $earned_points;
         if($earned_points==0) return false;
 
         try {
