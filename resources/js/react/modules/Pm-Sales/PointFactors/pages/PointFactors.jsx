@@ -67,40 +67,21 @@ const PointFactors = () => {
             queryString({
                 page: pageIndex + 1,
                 limit: pageSize,
-
+                project_type: tab
             })
         );
+
+    console.log(queryString({
+        page: pageIndex + 1,
+        limit: pageSize,
+        project_type: tab
+    }))
     // pm point factors data
     const pmPointFactorsData = data?.data;
 
-    // filter by fixed and hourly 
     const [mainTableData, setMainTableData] = useState([]);
-    const [fixedTableData, setFixedTableData] = useState([])
-    const [hourlyTableData, setHourlyTableData] = useState([])
-    useEffect(() => {
-        if (tab == 1) {
-            const fixedData = pmPointFactorsData?.map(item => {
-                return {
-                    ...item,
-                    factors: item.factors.filter(d => d.project_type == 1)
-                }
-            })
-            setFixedTableData(fixedData)
-            setMainTableData(fixedData)
-        }
-        else if (tab == 2) {
-            const hourlyData = pmPointFactorsData?.map(item => {
-                return {
-                    ...item,
-                    factors: item.factors.filter(d => d.project_type == 2)
-                }
-            })
-            setHourlyTableData(hourlyData)
-            setMainTableData(hourlyData)
-        }
-    }, [tab, pmPointFactorsData])
 
-    // search functionality
+    // // search functionality
     useEffect(() => {
         const filterData = (data) => {
             return data?.filter((item) => {
@@ -113,15 +94,14 @@ const PointFactors = () => {
                 return isTitleMatch || isFactorTitleMatch;
             });
         };
-
         let searchRes;
-        if (tab === 1) {
-            searchRes = filterData(fixedTableData);
-        } else if (tab === 2) {
-            searchRes = filterData(hourlyTableData);
+        searchRes = filterData(pmPointFactorsData)
+        if (search) {
+            setMainTableData(searchRes);
+        } else {
+            setMainTableData(pmPointFactorsData);
         }
-        setMainTableData(searchRes);
-    }, [search, fixedTableData, hourlyTableData, tab]);
+    }, [search, pmPointFactorsData]);
 
 
     const resetFormState = () => {
@@ -283,15 +263,6 @@ const PointFactors = () => {
             setMainColumns(PointFactorsColumns);
         }
     }, [tab, PointFactorsColumns])
-
-    // const tableHeaderFilterByTab = PointFactorsColumns.filter(item => {
-    //     if (tab === "hourly") {
-    //         return item.accessorKey !== 'criteria';
-    //     }
-    //     return true
-    // });
-
-    // console.log(tableHeaderFilterByTab)
 
     // add new factor validation on change
     useEffect(() => {
