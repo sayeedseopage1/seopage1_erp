@@ -22,6 +22,7 @@ const SalesRiskAuthorizeTable = ({
     tableName,
     search,
     isLoading = false,
+    isFetching = false,
 }) => {
     // Table State
     const [sorting, setSorting] = React.useState([]);
@@ -108,6 +109,7 @@ const SalesRiskAuthorizeTable = ({
                     {/* table Body */}
                     <tbody className="sp1_tasks_tbody">
                         {!isLoading &&
+                            !isFetching &&
                             table.getRowModel().rows.map((row) => {
                                 return (
                                     <tr
@@ -148,7 +150,7 @@ const SalesRiskAuthorizeTable = ({
                                 );
                             })}
                         {/* Loading Table */}
-                        {isLoading && (
+                        {(isLoading || isFetching) && (
                             <SalesRiskAuthorizeTableLoader
                                 prevItemLength={data?.length}
                             />
@@ -156,9 +158,9 @@ const SalesRiskAuthorizeTable = ({
                     </tbody>
                 </table>
                 {/* Table for empty */}
-                {!isLoading && _.size(table.getRowModel().rows) === 0 && (
-                    <EmptyTable />
-                )}
+                {!isLoading &&
+                    !isFetching &&
+                    _.size(table.getRowModel().rows) === 0 && <EmptyTable />}
             </div>
         </div>
     );

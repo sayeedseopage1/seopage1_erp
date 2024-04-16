@@ -175,17 +175,18 @@ const salesRiskAnalysisApiSlice = apiSlice.injectEndpoints({
         saleAnalysisQuestionByPolicyId: build.query({
             query: (policy_id) => `account/sales-risk-policies/question/list?policy_id=${policy_id}`,
         }),
-        saleRiskQuestionDealReport: build.query({
-            query: (deal_id) => `account/sales-risk-policies/deals/report/${deal_id}`,
-        }),
         salesRiskDealsQuestionList: build.query({
-            query: (query) => `account/deals/risk-analysis/question/list`,
+            query: () => `account/deals/risk-analysis/question/list`,
         }),
         salesRiskDealsQuestionListByPolicyId: build.query({
             query: (policy_id) => `account/deals/risk-analysis/question/list?policy_id=${policy_id}`,
         }),
         saleRiskAnalysisReportTableData: build.query({
             query: (query) => `account/sales-analysis-reports/data?${query}`,
+        }),
+        saleRiskQuestionDealReport: build.query({
+            query: (deal_id) => `account/sales-risk-policies/deals/report/${deal_id}`,
+            providesTags: ["GET_SALES_RISK_ANALYSIS_QUESTION_LIST_BY_DEAL_ID"],
         }),
         saleRiskAnalysisActions: build.mutation({
             query: (body) => ({
@@ -196,6 +197,12 @@ const salesRiskAnalysisApiSlice = apiSlice.injectEndpoints({
                     "X-CSRF-TOKEN": _token,
                 },
             }),
+            invalidatesTags: (result, error, arg) => {
+                if (result && !error) {
+                    console.log("result", result, error, arg)
+                    return [{ type: "GET_SALES_RISK_ANALYSIS_QUESTION_LIST_BY_DEAL_ID" }];
+                }
+            }
         })
     })
 });

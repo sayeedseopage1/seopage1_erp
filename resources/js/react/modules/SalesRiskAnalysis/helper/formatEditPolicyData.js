@@ -3,18 +3,21 @@ import { PolicyTypeItemValuesType, PolicyTypeItems, QuestionsTypes } from "../co
 import { FormatJsonCountry, getYesNoValue } from "./countriesFormat";
 
 const formatValueType = (item) => {
-  if (item.type === "yesNo") {
+  if (item?.type
+    === "yesNo") {
     return "";
-  } else if (item.type === "list") {
+  } else if (item.type
+    === "list") {
     return {
       id: 1,
       label: "Countries",
       name: "countries",
     };
   } else {
-    return PolicyTypeItemValuesType?.data?.regularTypes?.data.find(
-      (item) => item?.name === item?.value_type
-    );
+    const valueType = PolicyTypeItemValuesType?.data?.regularTypes?.data.find(
+      (value) => value?.name === item?.value_type
+    )
+    return valueType
   }
 
 }

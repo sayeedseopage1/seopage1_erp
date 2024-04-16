@@ -4,8 +4,7 @@ import Avatar from "../../../../global/Avatar";
 import Tooltip from "../Tooltip";
 
 // styles
-import style from "../Styles/SalesAnalysisReportTableColumns.module.css";
-import { color } from "framer-motion";
+import { GrView } from "react-icons/gr";
 
 export const SalesAnalysisReportTableColumns = [
     {
@@ -227,13 +226,25 @@ export const SalesAnalysisReportTableColumns = [
         header: "Action",
         accessorKey: "action",
         cell: ({ row }) => {
+            const data = row?.original;
             return (
-                <button
+                <a
+                    href={`/account/contracts/${data.deal_id}?tab=sales-analysis-report`}
+                    className={`multine-ellipsis btn btn-sm btn-primary`}
                     style={viewBtnStyle}
-                    className="btn btn-sm btn-primary py-1"
+                    ref={(node) => {
+                        if (node) {
+                            node.style.setProperty(
+                                "color",
+                                "white",
+                                "important"
+                            );
+                        }
+                    }}
                 >
-                    View
-                </button>
+                    <GrView />
+                    <span className="ml-2">View Report</span>
+                </a>
             );
         },
     },

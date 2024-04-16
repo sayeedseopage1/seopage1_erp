@@ -250,6 +250,7 @@ const SalesRiskAnalysisTable = ({
             handleEditPolicy: (data) => {
                 // function to format data
                 const updateData = formatEditPolicyData(data);
+                console.log(updateData)
                 setEditPolicyInputData(updateData);
                 setEditPolicyDefaultData({
                     policyName: data.title,

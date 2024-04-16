@@ -107,7 +107,7 @@ const EditApplicableRulesModal = ({
 
                     <div className="row mb-4 align-items-center">
                         <ModalInputLabel className="col-4">
-                            Policy Type<sup>*</sup>{" "}
+                            Rule Type<sup>*</sup>{" "}
                         </ModalInputLabel>
                         <div className="col-8 px-0 flex-column">
                             <ModalSelectContainer>

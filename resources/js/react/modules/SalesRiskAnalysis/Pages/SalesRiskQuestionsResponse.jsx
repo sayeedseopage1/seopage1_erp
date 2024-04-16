@@ -116,6 +116,7 @@ const SalesRiskQuestionsResponse = () => {
                 });
 
                 const res = await saleAnalysisQuestionSave(payload);
+
                 if (res?.data?.status === "success") {
                     toast.success("Successfully saved");
                     // check if point is less than 0 then show modal else reload page
