@@ -11903,20 +11903,26 @@ var SubTaskEditModal = function SubTaskEditModal(_ref2) {
                   className: "f-14 mr-1",
                   children: "*"
                 })]
-              }), referenceList === null || referenceList === void 0 ? void 0 : referenceList.map(function (singleReference, index) {
-                return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_26__.jsx)("input", {
-                  type: "url",
-                  name: "reference",
-                  className: "form-control height-35 f-14 ".concat(index !== 0 && 'mt-2'),
-                  placeholder: 'Enter Task Reference',
-                  value: singleReference.reference,
-                  readOnly: true
-                }, index);
-              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_26__.jsx)("div", {
-                children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_26__.jsx)(_projects_components_ui_CustomFileUpload__WEBPACK_IMPORTED_MODULE_24__["default"], {
-                  previous: referenceFile,
-                  readOnly: true
-                })
+              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_26__.jsxs)("div", {
+                style: {
+                  maxHeight: '200px',
+                  overflow: 'auto'
+                },
+                children: [referenceList === null || referenceList === void 0 ? void 0 : referenceList.map(function (singleReference, index) {
+                  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_26__.jsx)("input", {
+                    type: "url",
+                    name: "reference",
+                    className: "form-control height-35 f-14 ".concat(index !== 0 && 'mt-2'),
+                    placeholder: 'Enter Task Reference',
+                    value: singleReference.reference,
+                    readOnly: true
+                  }, index);
+                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_26__.jsx)("div", {
+                  children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_26__.jsx)(_projects_components_ui_CustomFileUpload__WEBPACK_IMPORTED_MODULE_24__["default"], {
+                    previous: referenceFile,
+                    readOnly: true
+                  })
+                })]
               })]
             })
           }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_26__.jsx)("div", {
@@ -11953,7 +11959,7 @@ var SubTaskEditModal = function SubTaskEditModal(_ref2) {
                 children: "Brand guideline"
               }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_26__.jsx)("div", {
                 style: {
-                  maxHeight: "300px",
+                  maxHeight: "200px",
                   overflowY: "auto"
                 },
                 children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_26__.jsx)(_file_upload_FileUploader__WEBPACK_IMPORTED_MODULE_21__["default"], {
@@ -13292,20 +13298,26 @@ var SubTaskForm = function SubTaskForm(_ref) {
                 className: "f-14 mr-1",
                 children: "*"
               })]
-            }), referenceList === null || referenceList === void 0 ? void 0 : referenceList.map(function (singleReference, index) {
-              return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_27__.jsx)("input", {
-                type: "url",
-                name: "reference",
-                className: "form-control height-35 f-14 ".concat(index !== 0 && 'mt-2'),
-                placeholder: 'Enter Task Reference',
-                value: singleReference.reference,
-                readOnly: true
-              }, index);
-            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_27__.jsx)("div", {
-              children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_27__.jsx)(_projects_components_ui_CustomFileUpload__WEBPACK_IMPORTED_MODULE_25__["default"], {
-                previous: referenceFile,
-                readOnly: true
-              })
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_27__.jsxs)("div", {
+              style: {
+                maxHeight: '200px',
+                overflow: 'auto'
+              },
+              children: [referenceList === null || referenceList === void 0 ? void 0 : referenceList.map(function (singleReference, index) {
+                return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_27__.jsx)("input", {
+                  type: "url",
+                  name: "reference",
+                  className: "form-control height-35 f-14 ".concat(index !== 0 && 'mt-2'),
+                  placeholder: 'Enter Task Reference',
+                  value: singleReference.reference,
+                  readOnly: true
+                }, index);
+              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_27__.jsx)("div", {
+                children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_27__.jsx)(_projects_components_ui_CustomFileUpload__WEBPACK_IMPORTED_MODULE_25__["default"], {
+                  previous: referenceFile,
+                  readOnly: true
+                })
+              })]
             })]
           })
         }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_27__.jsx)("div", {
@@ -13343,7 +13355,7 @@ var SubTaskForm = function SubTaskForm(_ref) {
               children: "Brand guideline"
             }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_27__.jsx)("div", {
               style: {
-                maxHeight: "300px",
+                maxHeight: "200px",
                 overflowY: "auto"
               },
               children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_27__.jsx)(_file_upload_FileUploader__WEBPACK_IMPORTED_MODULE_23__["default"], {
@@ -15853,62 +15865,68 @@ var TaskEditForm = function TaskEditForm(_ref2) {
                   className: "f-14 mr-1",
                   children: "*"
                 })]
-              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_30__.jsx)("div", {
-                children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_30__.jsx)(_projects_components_ui_CustomFileUpload__WEBPACK_IMPORTED_MODULE_28__["default"], _objectSpread(_objectSpread({
-                  refInputFiles: referenceFile,
-                  setRefInputFiles: setReferenceFile
-                }, defaultRefFiles ? {
-                  previous: defaultRefFiles
-                } : {}), {}, {
-                  onPreviousFileDelete: handleDeleteRefFiles
-                }))
-              }), referenceList === null || referenceList === void 0 ? void 0 : referenceList.map(function (singleReference, index) {
-                return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_30__.jsxs)("div", {
-                  children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_30__.jsxs)("div", {
-                    className: "d-flex align-items-start justify-content-between w-100 ".concat(index !== 0 && 'mt-2'),
+              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_30__.jsxs)("div", {
+                style: {
+                  maxHeight: '200px',
+                  overflow: 'auto'
+                },
+                children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_30__.jsx)("div", {
+                  children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_30__.jsx)(_projects_components_ui_CustomFileUpload__WEBPACK_IMPORTED_MODULE_28__["default"], _objectSpread(_objectSpread({
+                    refInputFiles: referenceFile,
+                    setRefInputFiles: setReferenceFile
+                  }, defaultRefFiles ? {
+                    previous: defaultRefFiles
+                  } : {}), {}, {
+                    onPreviousFileDelete: handleDeleteRefFiles
+                  }))
+                }), referenceList === null || referenceList === void 0 ? void 0 : referenceList.map(function (singleReference, index) {
+                  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_30__.jsxs)("div", {
                     children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_30__.jsxs)("div", {
-                      className: "d-flex flex-column justify-content-start align-items-start w-100",
-                      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_30__.jsx)("input", {
-                        type: "url",
-                        name: "reference",
-                        className: "form-control height-35 f-14",
-                        placeholder: 'Enter Task Reference',
-                        value: singleReference.reference,
-                        onChange: function onChange(e) {
-                          return handleReferenceChange(e, index);
-                        }
-                      }), (singleReference === null || singleReference === void 0 ? void 0 : singleReference.reference) && !(0,_projects_utils__WEBPACK_IMPORTED_MODULE_26__.validateUrl)(singleReference === null || singleReference === void 0 ? void 0 : singleReference.reference) && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_30__.jsx)("div", {
-                        style: {
-                          color: "red"
-                        },
-                        children: "Please enter a valid URL"
+                      className: "d-flex align-items-start justify-content-between w-100 ".concat(index !== 0 && 'mt-2'),
+                      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_30__.jsxs)("div", {
+                        className: "d-flex flex-column justify-content-start align-items-start w-100",
+                        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_30__.jsx)("input", {
+                          type: "url",
+                          name: "reference",
+                          className: "form-control height-35 f-14",
+                          placeholder: 'Enter Task Reference',
+                          value: singleReference.reference,
+                          onChange: function onChange(e) {
+                            return handleReferenceChange(e, index);
+                          }
+                        }), (singleReference === null || singleReference === void 0 ? void 0 : singleReference.reference) && !(0,_projects_utils__WEBPACK_IMPORTED_MODULE_26__.validateUrl)(singleReference === null || singleReference === void 0 ? void 0 : singleReference.reference) && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_30__.jsx)("div", {
+                          style: {
+                            color: "red"
+                          },
+                          children: "Please enter a valid URL"
+                        })]
+                      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_30__.jsx)("div", {
+                        className: "",
+                        children: (referenceList === null || referenceList === void 0 ? void 0 : referenceList.length) !== 1 && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_30__.jsx)("button", {
+                          type: "button",
+                          onClick: function onClick() {
+                            return handleReferenceRemove(index);
+                          },
+                          className: "btn btn-outline-danger btn-sm ",
+                          style: {
+                            marginLeft: '10px',
+                            height: '39px'
+                          },
+                          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_30__.jsx)(react_icons_ri__WEBPACK_IMPORTED_MODULE_34__.RiDeleteBinLine, {})
+                        })
                       })]
                     }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_30__.jsx)("div", {
-                      className: "",
-                      children: (referenceList === null || referenceList === void 0 ? void 0 : referenceList.length) !== 1 && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_30__.jsx)("button", {
+                      children: (referenceList === null || referenceList === void 0 ? void 0 : referenceList.length) - 1 === index && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_30__.jsx)("button", {
                         type: "button",
-                        onClick: function onClick() {
-                          return handleReferenceRemove(index);
-                        },
-                        className: "btn btn-outline-danger btn-sm ",
-                        style: {
-                          marginLeft: '10px',
-                          height: '39px'
-                        },
-                        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_30__.jsx)(react_icons_ri__WEBPACK_IMPORTED_MODULE_34__.RiDeleteBinLine, {})
+                        onClick: handleReferenceAdd,
+                        className: "btn btn-success btn-sm mt-2",
+                        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_30__.jsx)("span", {
+                          children: "+"
+                        })
                       })
                     })]
-                  }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_30__.jsx)("div", {
-                    children: (referenceList === null || referenceList === void 0 ? void 0 : referenceList.length) - 1 === index && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_30__.jsx)("button", {
-                      type: "button",
-                      onClick: handleReferenceAdd,
-                      className: "btn btn-success btn-sm mt-2",
-                      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_30__.jsx)("span", {
-                        children: "+"
-                      })
-                    })
-                  })]
-                }, index);
+                  }, index);
+                })]
               })]
             })
           }), (error === null || error === void 0 ? void 0 : error.reference) && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_30__.jsx)("div", {
@@ -15955,6 +15973,10 @@ var TaskEditForm = function TaskEditForm(_ref2) {
                 "data-label": "true",
                 children: "Brand guideline"
               }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_30__.jsx)("div", {
+                style: {
+                  maxHeight: '200px',
+                  overflow: 'auto'
+                },
                 children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_30__.jsx)(_file_upload_UploadFilesInLine__WEBPACK_IMPORTED_MODULE_3__["default"], {
                   files: brandGuideline,
                   setFiles: setBrandGuideline,

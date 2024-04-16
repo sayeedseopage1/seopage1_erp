@@ -942,24 +942,27 @@ const SubTaskForm = ({ close, isDesignerTask }) => {
                                     Reference
                                     <sup className='f-14 mr-1'>*</sup>
                                 </label>
-                                {
-                                    referenceList?.map((singleReference, index) => <input
-                                        key={index}
-                                        type="url"
-                                        name="reference"
-                                        className={`form-control height-35 f-14 ${index !== 0 && 'mt-2'}`}
-                                        placeholder={'Enter Task Reference'}
-                                        value={singleReference.reference}
-                                        readOnly={true}
+                                <div style={{ maxHeight: '200px', overflow: 'auto' }}>
+                                    {
+                                        referenceList?.map((singleReference, index) => <input
+                                            key={index}
+                                            type="url"
+                                            name="reference"
+                                            className={`form-control height-35 f-14 ${index !== 0 && 'mt-2'}`}
+                                            placeholder={'Enter Task Reference'}
+                                            value={singleReference.reference}
+                                            readOnly={true}
 
-                                    />)
-                                }
-                                <div>
-                                    <CustomFileUpload
-                                        previous={referenceFile}
-                                        readOnly={true}
-                                    />
+                                        />)
+                                    }
+                                    <div>
+                                        <CustomFileUpload
+                                            previous={referenceFile}
+                                            readOnly={true}
+                                        />
+                                    </div>
                                 </div>
+
                             </div>
                         </div>
 
@@ -1005,7 +1008,7 @@ const SubTaskForm = ({ close, isDesignerTask }) => {
                                     >
                                         Brand guideline
                                     </label>
-                                    <div style={{ maxHeight: "300px", overflowY: "auto" }}>
+                                    <div style={{ maxHeight: "200px", overflowY: "auto" }}>
                                         <FileUploader>
                                             {_.map(
                                                 brandGuideline,

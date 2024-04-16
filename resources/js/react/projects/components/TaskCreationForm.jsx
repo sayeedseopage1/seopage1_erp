@@ -1126,61 +1126,63 @@ const TaskCreationForm = ({ handleRefresh, isOpen, close, onSuccess }) => {
                                                     Reference
                                                     <sup className='f-14 mr-1'>*</sup>
                                                 </label>
-                                                <div>
-                                                    <CustomFileUpload
-                                                        refInputFiles={referenceFile}
-                                                        setRefInputFiles={setReferenceFile}
-                                                    />
-                                                </div>
-                                                {referenceList.map((singleReference, index) => (
-                                                    <div key={index}>
-                                                        <div className={`d-flex align-items-start justify-content-between w-100 ${index !== 0 && 'mt-2'}`}>
-                                                            <div className="d-flex flex-column justify-content-start align-items-start w-100">
-                                                                <input
-                                                                    type="url"
-                                                                    name="reference"
-                                                                    className={`form-control height-35 f-14`}
-                                                                    placeholder={'Enter Task Reference'}
-                                                                    value={singleReference.reference}
-                                                                    onChange={(e) => handleReferenceChange(e, index)}
+                                                <div style={{ maxHeight: '200px', overflow: 'auto' }}>
+                                                    <div>
+                                                        <CustomFileUpload
+                                                            refInputFiles={referenceFile}
+                                                            setRefInputFiles={setReferenceFile}
+                                                        />
+                                                    </div>
+                                                    {referenceList.map((singleReference, index) => (
+                                                        <div key={index}>
+                                                            <div className={`d-flex align-items-start justify-content-between w-100 ${index !== 0 && 'mt-2'}`}>
+                                                                <div className="d-flex flex-column justify-content-start align-items-start w-100">
+                                                                    <input
+                                                                        type="url"
+                                                                        name="reference"
+                                                                        className={`form-control height-35 f-14`}
+                                                                        placeholder={'Enter Task Reference'}
+                                                                        value={singleReference.reference}
+                                                                        onChange={(e) => handleReferenceChange(e, index)}
 
-                                                                />
-                                                                {singleReference.reference && !validateUrl(singleReference.reference) && (
-                                                                    <div style={{ color: "red" }}>Please enter a valid URL</div>
-                                                                )}
+                                                                    />
+                                                                    {singleReference.reference && !validateUrl(singleReference.reference) && (
+                                                                        <div style={{ color: "red" }}>Please enter a valid URL</div>
+                                                                    )}
+                                                                </div>
+                                                                <div className="">
+                                                                    {referenceList.length !== 1 && (
+                                                                        <button
+                                                                            type="button"
+                                                                            onClick={() => handleReferenceRemove(index)}
+                                                                            className="btn btn-outline-danger btn-sm "
+                                                                            style={{ marginLeft: '10px', height: '39px' }}
+                                                                        >
+                                                                            <RiDeleteBinLine />
+                                                                        </button>
+                                                                    )}
+                                                                </div>
+
                                                             </div>
-                                                            <div className="">
-                                                                {referenceList.length !== 1 && (
+                                                            <div>
+                                                                {referenceList.length - 1 === index && (
                                                                     <button
                                                                         type="button"
-                                                                        onClick={() => handleReferenceRemove(index)}
-                                                                        className="btn btn-outline-danger btn-sm "
-                                                                        style={{ marginLeft: '10px', height: '39px' }}
+                                                                        onClick={handleReferenceAdd}
+                                                                        className="btn btn-success btn-sm mt-2"
                                                                     >
-                                                                        <RiDeleteBinLine />
+                                                                        <span>+</span>
                                                                     </button>
                                                                 )}
                                                             </div>
-
                                                         </div>
-                                                        <div>
-                                                            {referenceList.length - 1 === index && (
-                                                                <button
-                                                                    type="button"
-                                                                    onClick={handleReferenceAdd}
-                                                                    className="btn btn-success btn-sm mt-2"
-                                                                >
-                                                                    <span>+</span>
-                                                                </button>
-                                                            )}
+                                                    ))}
+                                                    {formError?.reference && (
+                                                        <div style={{ color: "red" }}>
+                                                            {formError?.reference}
                                                         </div>
-                                                    </div>
-                                                ))}
-                                                {formError?.reference && (
-                                                    <div style={{ color: "red" }}>
-                                                        {formError?.reference}
-                                                    </div>
-                                                )}
+                                                    )}
+                                                </div>
                                             </div>
                                         </div>
                                         }
@@ -1228,10 +1230,13 @@ const TaskCreationForm = ({ handleRefresh, isOpen, close, onSuccess }) => {
                                                 >
                                                     Brand guideline
                                                 </label>
-                                                <UploadFilesInLine
-                                                    files={brandGuideline}
-                                                    setFiles={setBrandGuideline}
-                                                />
+                                                <div style={{ maxHeight: '200px', overflow: 'auto' }}>
+                                                    <UploadFilesInLine
+                                                        files={brandGuideline}
+                                                        setFiles={setBrandGuideline}
+                                                    />
+                                                </div>
+
                                             </div>
                                         </div>
 
