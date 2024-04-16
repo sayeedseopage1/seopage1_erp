@@ -1294,8 +1294,6 @@ var SingleIndependentTask = function SingleIndependentTask() {
   var task = new _utils_single_task__WEBPACK_IMPORTED_MODULE_9__.SingleTask(Task); // task instance
   var loggedUser = new _utils_user_details__WEBPACK_IMPORTED_MODULE_10__.User((_window = window) === null || _window === void 0 || (_window = _window.Laravel) === null || _window === void 0 ? void 0 : _window.user); // logged users data
 
-  // console.log(task);
-
   (0,react__WEBPACK_IMPORTED_MODULE_2__.useEffect)(function () {
     _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
       var CurrentTask, _task, hasPermission;

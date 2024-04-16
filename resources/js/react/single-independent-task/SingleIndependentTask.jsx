@@ -66,8 +66,6 @@ const SingleIndependentTask = () => {
     const task = new SingleTask(Task); // task instance
     const loggedUser = new User(window?.Laravel?.user); // logged users data
 
-    // console.log(task);
-
     useEffect(() => {
         (async () => {
             const CurrentTask = {};
