@@ -82,10 +82,16 @@ const Guideline = ({ text, task, type = "", editorContainerClass, workEnv, singl
     let defaultBrandGuidelineFiles;
     let defaultRefFiles;
 
-    if (secondary_colors || file_types_needed || graphic_task_files) {
-        defaultSecondaryColors = JSON.parse(secondary_colors)
-        defaultFileTypesNeeded = JSON.parse(file_types_needed)
-        defaultFileExtension = JSON.parse(file_extensions)
+    if (secondary_colors || file_types_needed || file_extensions || graphic_task_files) {
+        if (secondary_colors) {
+            defaultSecondaryColors = JSON.parse(secondary_colors)
+        }
+        if (file_types_needed) {
+            defaultFileTypesNeeded = JSON.parse(file_types_needed)
+        }
+        if (file_extensions) {
+            defaultFileExtension = JSON.parse(file_extensions)
+        }
         defaultTextForDesign = graphic_task_files?.filter((item) => item?.file_type == 1)
         defaultImageForDesigner = graphic_task_files?.filter((item) => item?.file_type == 2)
         defaultImgOrVidForWork = graphic_task_files?.filter((item) => item?.file_type == 3)

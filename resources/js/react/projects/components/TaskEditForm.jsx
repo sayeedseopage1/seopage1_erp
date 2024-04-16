@@ -66,14 +66,20 @@ const TaskEditForm = ({ isOpen, close, row, table }) => {
     const [defaultImgOrVidForWork, setDefaultImgOrVidForWork] = useState(graphicWorkDetails?.graphic_task_files?.filter((item) => item?.file_type == 3))
 
 
-    if (graphicWorkDetails?.secondary_colors || graphicWorkDetails?.file_types_needed || graphicWorkDetails?.file_extensions) {
-        defaultSecondaryColors = JSON.parse(graphicWorkDetails?.secondary_colors)
-        defaultFileTypesNeeded = JSON.parse(graphicWorkDetails?.file_types_needed)
-        defaultFileExtension = JSON.parse(graphicWorkDetails?.file_extensions)
-        // defaultTextForDesign = graphicWorkDetails?.graphic_task_files?.filter((item) => item?.file_type == 1)
-        // defaultImageForDesigner = graphicWorkDetails?.graphic_task_files?.filter((item) => item?.file_type == 2)
-        // defaultImgOrVidForWork = graphicWorkDetails?.graphic_task_files?.filter((item) => item?.file_type == 3)
-        // setDefaultBrandGuidelineFiles(graphicWorkDetails?.graphic_task_files?.filter((item) => item?.file_type == 4))
+    if (
+        graphicWorkDetails?.secondary_colors ||
+        graphicWorkDetails?.file_types_needed ||
+        graphicWorkDetails?.file_extensions
+    ) {
+        if (graphicWorkDetails?.secondary_colors) {
+            defaultSecondaryColors = JSON.parse(graphicWorkDetails?.secondary_colors);
+        }
+        if (graphicWorkDetails?.file_types_needed) {
+            defaultFileTypesNeeded = JSON.parse(graphicWorkDetails?.file_types_needed);
+        }
+        if (graphicWorkDetails?.file_extensions) {
+            defaultFileExtension = JSON.parse(graphicWorkDetails?.file_extensions);
+        }
     }
 
     //state for graphic designer start

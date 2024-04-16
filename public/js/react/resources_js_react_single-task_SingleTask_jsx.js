@@ -2548,10 +2548,16 @@ var Guideline = function Guideline(_ref) {
   var defaultImgOrVidForWork;
   var defaultBrandGuidelineFiles;
   var defaultRefFiles;
-  if (secondary_colors || file_types_needed || graphic_task_files) {
-    defaultSecondaryColors = JSON.parse(secondary_colors);
-    defaultFileTypesNeeded = JSON.parse(file_types_needed);
-    defaultFileExtension = JSON.parse(file_extensions);
+  if (secondary_colors || file_types_needed || file_extensions || graphic_task_files) {
+    if (secondary_colors) {
+      defaultSecondaryColors = JSON.parse(secondary_colors);
+    }
+    if (file_types_needed) {
+      defaultFileTypesNeeded = JSON.parse(file_types_needed);
+    }
+    if (file_extensions) {
+      defaultFileExtension = JSON.parse(file_extensions);
+    }
     defaultTextForDesign = graphic_task_files === null || graphic_task_files === void 0 ? void 0 : graphic_task_files.filter(function (item) {
       return (item === null || item === void 0 ? void 0 : item.file_type) == 1;
     });
@@ -14689,13 +14695,15 @@ var TaskEditForm = function TaskEditForm(_ref2) {
     defaultImgOrVidForWork = _useState32[0],
     setDefaultImgOrVidForWork = _useState32[1];
   if (graphicWorkDetails !== null && graphicWorkDetails !== void 0 && graphicWorkDetails.secondary_colors || graphicWorkDetails !== null && graphicWorkDetails !== void 0 && graphicWorkDetails.file_types_needed || graphicWorkDetails !== null && graphicWorkDetails !== void 0 && graphicWorkDetails.file_extensions) {
-    defaultSecondaryColors = JSON.parse(graphicWorkDetails === null || graphicWorkDetails === void 0 ? void 0 : graphicWorkDetails.secondary_colors);
-    defaultFileTypesNeeded = JSON.parse(graphicWorkDetails === null || graphicWorkDetails === void 0 ? void 0 : graphicWorkDetails.file_types_needed);
-    defaultFileExtension = JSON.parse(graphicWorkDetails === null || graphicWorkDetails === void 0 ? void 0 : graphicWorkDetails.file_extensions);
-    // defaultTextForDesign = graphicWorkDetails?.graphic_task_files?.filter((item) => item?.file_type == 1)
-    // defaultImageForDesigner = graphicWorkDetails?.graphic_task_files?.filter((item) => item?.file_type == 2)
-    // defaultImgOrVidForWork = graphicWorkDetails?.graphic_task_files?.filter((item) => item?.file_type == 3)
-    // setDefaultBrandGuidelineFiles(graphicWorkDetails?.graphic_task_files?.filter((item) => item?.file_type == 4))
+    if (graphicWorkDetails !== null && graphicWorkDetails !== void 0 && graphicWorkDetails.secondary_colors) {
+      defaultSecondaryColors = JSON.parse(graphicWorkDetails === null || graphicWorkDetails === void 0 ? void 0 : graphicWorkDetails.secondary_colors);
+    }
+    if (graphicWorkDetails !== null && graphicWorkDetails !== void 0 && graphicWorkDetails.file_types_needed) {
+      defaultFileTypesNeeded = JSON.parse(graphicWorkDetails === null || graphicWorkDetails === void 0 ? void 0 : graphicWorkDetails.file_types_needed);
+    }
+    if (graphicWorkDetails !== null && graphicWorkDetails !== void 0 && graphicWorkDetails.file_extensions) {
+      defaultFileExtension = JSON.parse(graphicWorkDetails === null || graphicWorkDetails === void 0 ? void 0 : graphicWorkDetails.file_extensions);
+    }
   }
 
   //state for graphic designer start
