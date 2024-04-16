@@ -331,10 +331,7 @@ const TaskEditForm = ({ task, singleTask: row, onSubmit, isLoading, onClose }) =
                 err.typeOfGraphicsCategory = "You have to select Type of graphic work";
                 count++;
             }
-            // if (!referenceList[0].reference && !graphicWorkDetails?.reference && _.isEmpty(referenceFile && !defaultRefFiles)) {
-            //     err.reference = "The reference field is required";
-            //     count++;
-            // }
+
             if (!referenceList[0].reference &&
                 JSON.parse(graphicWorkDetails?.reference)[0]?.reference == '' &&
                 _.isEmpty(referenceFile) &&
@@ -384,21 +381,21 @@ const TaskEditForm = ({ task, singleTask: row, onSubmit, isLoading, onClose }) =
         }
 
         if (typeOfGraphicsCategory?.id === 2 || typeOfGraphicsCategory?.id === 3 || typeOfGraphicsCategory?.id === 4) {
-            if (textForDesign?.length < 1 && !workableUrl) {
+            if (_.isEmpty(textForDesign) && !workableUrl) {
                 err.textForDesign = "The text for design field is required";
                 count++;
             }
         }
 
         if (typeOfGraphicsCategory?.id === 5 || typeOfGraphicsCategory?.id === 6) {
-            if (imageForDesigner?.length < 1 && !workableUrl) {
+            if (_.isEmpty(imageForDesigner) && !workableUrl) {
                 err.imageForDesigner = "Image is required for designer";
                 count++;
             }
         }
 
         if (typeOfGraphicsCategory?.id === 8) {
-            if (imgOrVidForWork?.length < 1 && !workableUrl) {
+            if (_.isEmpty(imgOrVidForWork) && !workableUrl) {
                 err.imgOrVidForWork = "Images/videos is required for work";
                 count++;
             }

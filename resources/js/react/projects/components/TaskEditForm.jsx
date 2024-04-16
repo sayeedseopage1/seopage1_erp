@@ -342,21 +342,21 @@ const TaskEditForm = ({ isOpen, close, row, table }) => {
         }
 
         if (typeOfGraphicsCategory?.id === 2 || typeOfGraphicsCategory?.id === 3 || typeOfGraphicsCategory?.id === 4) {
-            if (textForDesign?.length < 1 && !workableUrl) {
+            if (_.isEmpty(textForDesign) && !workableUrl) {
                 err.textForDesign = "The text for design field is required";
                 errCount++;
             }
         }
 
         if (typeOfGraphicsCategory?.id === 5 || typeOfGraphicsCategory?.id === 6) {
-            if (imageForDesigner?.length < 1 && !workableUrl) {
+            if (_.isEmpty(imageForDesigner) && !workableUrl) {
                 err.imageForDesigner = "Image is required for designer";
                 errCount++;
             }
         }
 
         if (typeOfGraphicsCategory?.id === 8) {
-            if (imgOrVidForWork?.length < 1 && !workableUrl) {
+            if (_.isEmpty(imgOrVidForWork) && !workableUrl) {
                 err.imgOrVidForWork = "Images/videos is required for work";
                 errCount++;
             }

@@ -14962,10 +14962,6 @@ var TaskEditForm = function TaskEditForm(_ref2) {
         err.typeOfGraphicsCategory = "You have to select Type of graphic work";
         count++;
       }
-      // if (!referenceList[0].reference && !graphicWorkDetails?.reference && _.isEmpty(referenceFile && !defaultRefFiles)) {
-      //     err.reference = "The reference field is required";
-      //     count++;
-      // }
       if (!referenceList[0].reference && ((_JSON$parse$ = JSON.parse(graphicWorkDetails === null || graphicWorkDetails === void 0 ? void 0 : graphicWorkDetails.reference)[0]) === null || _JSON$parse$ === void 0 ? void 0 : _JSON$parse$.reference) == '' && lodash__WEBPACK_IMPORTED_MODULE_0___default().isEmpty(referenceFile) && lodash__WEBPACK_IMPORTED_MODULE_0___default().isEmpty(defaultRefFiles)) {
         err.reference = "The reference field is required";
         count++;
@@ -15008,19 +15004,19 @@ var TaskEditForm = function TaskEditForm(_ref2) {
       }
     }
     if ((typeOfGraphicsCategory === null || typeOfGraphicsCategory === void 0 ? void 0 : typeOfGraphicsCategory.id) === 2 || (typeOfGraphicsCategory === null || typeOfGraphicsCategory === void 0 ? void 0 : typeOfGraphicsCategory.id) === 3 || (typeOfGraphicsCategory === null || typeOfGraphicsCategory === void 0 ? void 0 : typeOfGraphicsCategory.id) === 4) {
-      if ((textForDesign === null || textForDesign === void 0 ? void 0 : textForDesign.length) < 1 && !workableUrl) {
+      if (lodash__WEBPACK_IMPORTED_MODULE_0___default().isEmpty(textForDesign) && !workableUrl) {
         err.textForDesign = "The text for design field is required";
         count++;
       }
     }
     if ((typeOfGraphicsCategory === null || typeOfGraphicsCategory === void 0 ? void 0 : typeOfGraphicsCategory.id) === 5 || (typeOfGraphicsCategory === null || typeOfGraphicsCategory === void 0 ? void 0 : typeOfGraphicsCategory.id) === 6) {
-      if ((imageForDesigner === null || imageForDesigner === void 0 ? void 0 : imageForDesigner.length) < 1 && !workableUrl) {
+      if (lodash__WEBPACK_IMPORTED_MODULE_0___default().isEmpty(imageForDesigner) && !workableUrl) {
         err.imageForDesigner = "Image is required for designer";
         count++;
       }
     }
     if ((typeOfGraphicsCategory === null || typeOfGraphicsCategory === void 0 ? void 0 : typeOfGraphicsCategory.id) === 8) {
-      if ((imgOrVidForWork === null || imgOrVidForWork === void 0 ? void 0 : imgOrVidForWork.length) < 1 && !workableUrl) {
+      if (lodash__WEBPACK_IMPORTED_MODULE_0___default().isEmpty(imgOrVidForWork) && !workableUrl) {
         err.imgOrVidForWork = "Images/videos is required for work";
         count++;
       }
