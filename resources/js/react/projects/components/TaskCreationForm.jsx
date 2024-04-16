@@ -1222,7 +1222,7 @@ const TaskCreationForm = ({ handleRefresh, isOpen, close, onSuccess }) => {
                                         </div>
 
                                         {/* Brand guideline */}
-                                        <div className="col-12 col-md-6">
+                                        <div className="col-12">
                                             <div className={`form-group my-3 w-100`}>
                                                 <label
                                                     htmlFor={'brandGuideline'}

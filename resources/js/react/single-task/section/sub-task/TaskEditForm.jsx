@@ -381,21 +381,21 @@ const TaskEditForm = ({ task, singleTask: row, onSubmit, isLoading, onClose }) =
         }
 
         if (typeOfGraphicsCategory?.id === 2 || typeOfGraphicsCategory?.id === 3 || typeOfGraphicsCategory?.id === 4) {
-            if (_.isEmpty(textForDesign) && !workableUrl) {
+            if (_.isEmpty(textForDesign) && (_.isEmpty(defaultTextForDesignBanner) && _.isEmpty(defaultTextForDesignBrochure) && _.isEmpty(defaultTextForDesignCompanyProfile)) && !workableUrl && !graphicWorkDetails?.workable_url) {
                 err.textForDesign = "The text for design field is required";
                 count++;
             }
         }
 
         if (typeOfGraphicsCategory?.id === 5 || typeOfGraphicsCategory?.id === 6) {
-            if (_.isEmpty(imageForDesigner) && !workableUrl) {
+            if (_.isEmpty(imageForDesigner) && (_.isEmpty(defaultImageForDesignerRetouching) && _.isEmpty(defaultImageForDesignerBgRemoval)) && !workableUrl && !graphicWorkDetails?.workable_url) {
                 err.imageForDesigner = "Image is required for designer";
                 count++;
             }
         }
 
         if (typeOfGraphicsCategory?.id === 8) {
-            if (_.isEmpty(imgOrVidForWork) && !workableUrl) {
+            if (_.isEmpty(imgOrVidForWork) && _.isEmpty(defaultImgOrVidForWork) && !workableUrl && !graphicWorkDetails?.workable_url) {
                 err.imgOrVidForWork = "Images/videos is required for work";
                 count++;
             }
@@ -1368,7 +1368,7 @@ const TaskEditForm = ({ task, singleTask: row, onSubmit, isLoading, onClose }) =
                                 />
                             </div>
                             {/* Brand guideline */}
-                            <div className="col-12 col-md-6">
+                            <div className="col-12">
                                 <div className={`form-group my-3 w-100`}>
                                     <label
                                         htmlFor={'brandGuideline'}

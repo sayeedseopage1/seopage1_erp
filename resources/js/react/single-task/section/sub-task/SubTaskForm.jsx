@@ -1001,7 +1001,7 @@ const SubTaskForm = ({ close, isDesignerTask }) => {
 
                         {/* Brand guideline */}
                         {
-                            !_.isEmpty(brandGuideline) && <div className="col-12 col-md-6">
+                            !_.isEmpty(brandGuideline) && <div className="col-12">
                                 <div className={`form-group my-3 w-100`}>
                                     <label
                                         htmlFor={'brandGuideline'}

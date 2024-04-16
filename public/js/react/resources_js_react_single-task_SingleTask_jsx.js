@@ -11949,7 +11949,7 @@ var SubTaskEditModal = function SubTaskEditModal(_ref2) {
               readOnly: true
             })
           }), !lodash__WEBPACK_IMPORTED_MODULE_0___default().isEmpty(brandGuideline) && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_26__.jsx)("div", {
-            className: "col-12 col-md-6",
+            className: "col-12",
             children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_26__.jsxs)("div", {
               className: "form-group my-3 w-100",
               children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_26__.jsx)("label", {
@@ -13345,7 +13345,7 @@ var SubTaskForm = function SubTaskForm(_ref) {
             readOnly: true
           })
         }), !lodash__WEBPACK_IMPORTED_MODULE_9___default().isEmpty(brandGuideline) && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_27__.jsx)("div", {
-          className: "col-12 col-md-6",
+          className: "col-12",
           children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_27__.jsxs)("div", {
             className: "form-group my-3 w-100",
             children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_27__.jsx)("label", {
@@ -15019,19 +15019,19 @@ var TaskEditForm = function TaskEditForm(_ref2) {
       }
     }
     if ((typeOfGraphicsCategory === null || typeOfGraphicsCategory === void 0 ? void 0 : typeOfGraphicsCategory.id) === 2 || (typeOfGraphicsCategory === null || typeOfGraphicsCategory === void 0 ? void 0 : typeOfGraphicsCategory.id) === 3 || (typeOfGraphicsCategory === null || typeOfGraphicsCategory === void 0 ? void 0 : typeOfGraphicsCategory.id) === 4) {
-      if (lodash__WEBPACK_IMPORTED_MODULE_0___default().isEmpty(textForDesign) && !workableUrl) {
+      if (lodash__WEBPACK_IMPORTED_MODULE_0___default().isEmpty(textForDesign) && lodash__WEBPACK_IMPORTED_MODULE_0___default().isEmpty(defaultTextForDesignBanner) && lodash__WEBPACK_IMPORTED_MODULE_0___default().isEmpty(defaultTextForDesignBrochure) && lodash__WEBPACK_IMPORTED_MODULE_0___default().isEmpty(defaultTextForDesignCompanyProfile) && !workableUrl && !(graphicWorkDetails !== null && graphicWorkDetails !== void 0 && graphicWorkDetails.workable_url)) {
         err.textForDesign = "The text for design field is required";
         count++;
       }
     }
     if ((typeOfGraphicsCategory === null || typeOfGraphicsCategory === void 0 ? void 0 : typeOfGraphicsCategory.id) === 5 || (typeOfGraphicsCategory === null || typeOfGraphicsCategory === void 0 ? void 0 : typeOfGraphicsCategory.id) === 6) {
-      if (lodash__WEBPACK_IMPORTED_MODULE_0___default().isEmpty(imageForDesigner) && !workableUrl) {
+      if (lodash__WEBPACK_IMPORTED_MODULE_0___default().isEmpty(imageForDesigner) && lodash__WEBPACK_IMPORTED_MODULE_0___default().isEmpty(defaultImageForDesignerRetouching) && lodash__WEBPACK_IMPORTED_MODULE_0___default().isEmpty(defaultImageForDesignerBgRemoval) && !workableUrl && !(graphicWorkDetails !== null && graphicWorkDetails !== void 0 && graphicWorkDetails.workable_url)) {
         err.imageForDesigner = "Image is required for designer";
         count++;
       }
     }
     if ((typeOfGraphicsCategory === null || typeOfGraphicsCategory === void 0 ? void 0 : typeOfGraphicsCategory.id) === 8) {
-      if (lodash__WEBPACK_IMPORTED_MODULE_0___default().isEmpty(imgOrVidForWork) && !workableUrl) {
+      if (lodash__WEBPACK_IMPORTED_MODULE_0___default().isEmpty(imgOrVidForWork) && lodash__WEBPACK_IMPORTED_MODULE_0___default().isEmpty(defaultImgOrVidForWork) && !workableUrl && !(graphicWorkDetails !== null && graphicWorkDetails !== void 0 && graphicWorkDetails.workable_url)) {
         err.imgOrVidForWork = "Images/videos is required for work";
         count++;
       }
@@ -15964,7 +15964,7 @@ var TaskEditForm = function TaskEditForm(_ref2) {
               }
             })
           }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_30__.jsx)("div", {
-            className: "col-12 col-md-6",
+            className: "col-12",
             children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_30__.jsxs)("div", {
               className: "form-group my-3 w-100",
               children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_30__.jsx)("label", {
