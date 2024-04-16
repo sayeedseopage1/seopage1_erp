@@ -84,6 +84,26 @@ return new class extends Migration
                 [
                     'id' => 16,
                     'title' => "For every revision due to Pm's own fault (where in revision calculator, he is held responsible. Partial ones will also count)"
+                ],
+                [
+                    'id' => 17,
+                    'title' => "Billable hours per week"
+                ],
+                [
+                    'id' => 18,
+                    'title' => "Billed amount every week"
+                ],
+                [
+                    'id' => 19,
+                    'title' => "First submission"
+                ],
+                [
+                    'id' => 20,
+                    'title' => "Missing goals"
+                ],
+                [
+                    'id' => 21,
+                    'title' => "Revision due to Pm's fault"
                 ]
             ]);
     }
