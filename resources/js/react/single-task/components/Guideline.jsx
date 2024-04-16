@@ -27,8 +27,12 @@ const Guideline = ({ text, task, type = "", editorContainerClass, workEnv, singl
     const graphicSubTaskDetails = new Object(subTasks?.sub_task_details_graphic_work)
     // sub task details ui/uix 
     const { data: mainTask } = useGetTaskDetailsQuery(
-        `/${isSubTask}/json?mode=basic`,
-        { refetchOnMountOrArgChange: true }
+        `/${singleTask?.dependent_task_id}/json?mode=basic`,
+        {
+            skip: !singleTask?.dependent_task_id,
+            staleTime: 0,
+            refetchOnMountOrArgChange: true,
+        }
     );
 
     const subUiUixDetails = new Object(mainTask?.task)

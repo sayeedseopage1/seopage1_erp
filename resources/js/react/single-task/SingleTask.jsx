@@ -43,8 +43,7 @@ const SingleTaskPage = () => {
     const params = useParams();
     const { data, isFetching } = useGetTaskDetailsQuery(
         `/${params?.taskId}/json?mode=basic`,
-        { refetchOnMountOrArgChange: true },
-        { skip: !params?.taskId }
+        { refetchOnMountOrArgChange: true, skip: !params?.taskId }
     );
 
     const { data: taskStatus } = useGetTaskStatusQuery(params?.taskId, { skip: !params?.taskId });

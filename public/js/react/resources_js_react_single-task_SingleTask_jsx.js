@@ -1260,8 +1260,7 @@ var SingleTaskPage = function SingleTaskPage() {
   var dispatch = (0,react_redux__WEBPACK_IMPORTED_MODULE_2__.useDispatch)();
   var params = (0,react_router_dom__WEBPACK_IMPORTED_MODULE_33__.useParams)();
   var _useGetTaskDetailsQue = (0,_services_api_SingleTaskPageApi__WEBPACK_IMPORTED_MODULE_7__.useGetTaskDetailsQuery)("/".concat(params === null || params === void 0 ? void 0 : params.taskId, "/json?mode=basic"), {
-      refetchOnMountOrArgChange: true
-    }, {
+      refetchOnMountOrArgChange: true,
       skip: !(params !== null && params !== void 0 && params.taskId)
     }),
     data = _useGetTaskDetailsQue.data,
@@ -2497,7 +2496,9 @@ var Guideline = function Guideline(_ref) {
   // sub task details graphic
   var graphicSubTaskDetails = new Object(subTasks === null || subTasks === void 0 ? void 0 : subTasks.sub_task_details_graphic_work);
   // sub task details ui/uix 
-  var _useGetTaskDetailsQue = (0,_services_api_SingleTaskPageApi__WEBPACK_IMPORTED_MODULE_5__.useGetTaskDetailsQuery)("/".concat(isSubTask, "/json?mode=basic"), {
+  var _useGetTaskDetailsQue = (0,_services_api_SingleTaskPageApi__WEBPACK_IMPORTED_MODULE_5__.useGetTaskDetailsQuery)("/".concat(singleTask === null || singleTask === void 0 ? void 0 : singleTask.dependent_task_id, "/json?mode=basic"), {
+      skip: !(singleTask !== null && singleTask !== void 0 && singleTask.dependent_task_id),
+      staleTime: 0,
       refetchOnMountOrArgChange: true
     }),
     mainTask = _useGetTaskDetailsQue.data;
@@ -11183,8 +11184,7 @@ var SubTaskEditModal = function SubTaskEditModal(_ref2) {
     }),
     subTasks = _useGetSubTasksQuery.data;
   var _useGetTaskDetailsQue = (0,_services_api_SingleTaskPageApi__WEBPACK_IMPORTED_MODULE_15__.useGetTaskDetailsQuery)("/".concat(isSubTask, "/json?mode=basic"), {
-      refetchOnMountOrArgChange: true
-    }, {
+      refetchOnMountOrArgChange: true,
       skip: !isSubTask
     }),
     mainTask = _useGetTaskDetailsQue.data;
