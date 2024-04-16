@@ -36,11 +36,9 @@ export const NewRulesModalTableColumnsData = [
                                 <span className="ml-2">
                                     {" "}
                                     {data?.ruleComment ? (
-                                        <>
-                                            <Tooltip text={data?.ruleComment}>
-                                                <i className="fa-solid fa-circle-info"></i>
-                                            </Tooltip>
-                                        </>
+                                        <Tooltip text={data?.ruleComment}>
+                                            <i className="fa-solid fa-circle-info"></i>
+                                        </Tooltip>
                                     ) : (
                                         ""
                                     )}
@@ -61,11 +59,9 @@ export const NewRulesModalTableColumnsData = [
                                 {data.title}
                                 <span className="ml-2">
                                     {data?.ruleComment ? (
-                                        <>
-                                            <Tooltip text={data?.ruleComment}>
-                                                <i className="fa-solid fa-circle-info"></i>
-                                            </Tooltip>
-                                        </>
+                                        <Tooltip text={data?.ruleComment}>
+                                            <i className="fa-solid fa-circle-info"></i>
+                                        </Tooltip>
                                     ) : (
                                         ""
                                     )}
@@ -87,13 +83,9 @@ export const NewRulesModalTableColumnsData = [
                                     Yes{" "}
                                     <span className="ml-2">
                                         {data?.yesComment ? (
-                                            <>
-                                                <Tooltip
-                                                    text={data?.yesComment}
-                                                >
-                                                    <i className="fa-solid fa-circle-info"></i>
-                                                </Tooltip>
-                                            </>
+                                            <Tooltip text={data?.yesComment}>
+                                                <i className="fa-solid fa-circle-info"></i>
+                                            </Tooltip>
                                         ) : (
                                             ""
                                         )}
@@ -109,11 +101,9 @@ export const NewRulesModalTableColumnsData = [
                                     No{" "}
                                     <span className="ml-2">
                                         {data?.noComment ? (
-                                            <>
-                                                <Tooltip text={data?.noComment}>
-                                                    <i className="fa-solid fa-circle-info"></i>
-                                                </Tooltip>
-                                            </>
+                                            <Tooltip text={data?.noComment}>
+                                                <i className="fa-solid fa-circle-info"></i>
+                                            </Tooltip>
                                         ) : (
                                             ""
                                         )}
@@ -136,13 +126,9 @@ export const NewRulesModalTableColumnsData = [
                                     {data.title}
                                     <span className="ml-2">
                                         {data?.ruleComment ? (
-                                            <>
-                                                <Tooltip
-                                                    text={data?.ruleComment}
-                                                >
-                                                    <i className="fa-solid fa-circle-info"></i>
-                                                </Tooltip>
-                                            </>
+                                            <Tooltip text={data?.ruleComment}>
+                                                <i className="fa-solid fa-circle-info"></i>
+                                            </Tooltip>
                                         ) : (
                                             ""
                                         )}

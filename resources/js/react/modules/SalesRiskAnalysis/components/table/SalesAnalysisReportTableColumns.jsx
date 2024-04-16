@@ -8,8 +8,6 @@ export const SalesAnalysisReportTableColumns = [
         header: "#",
         accessorKey: "id",
         cell: ({ row }) => {
-            console.log(row);
-            const data = row?.original;
             return <p className="multiline-ellipsis">{row.index + 1}</p>;
         },
     },
@@ -63,10 +61,10 @@ export const SalesAnalysisReportTableColumns = [
                             href={`/account/contracts/${data?.deal_id}`}
                             className="hover-underline multine-ellipsis"
                         >
-                            {data?.deal_name ?? "N/A"}{" "}
+                            View Deal
                         </a>
                     ) : (
-                        <p className="multiline-ellipsis">N/A</p>
+                        <p className="multiline-ellipsis">Not Available Yet</p>
                     )}
                 </>
             );
@@ -79,7 +77,12 @@ export const SalesAnalysisReportTableColumns = [
         cell: ({ row }) => {
             const data = row?.original;
             return (
-                <p className="multiline-ellipsis">{data?.lead_id ?? "N/A"}</p>
+                <a
+                    href={`/account/leads/${data?.lead_id}`}
+                    className="hover-underline multine-ellipsis"
+                >
+                    View Lead
+                </a>
             );
         },
     },
@@ -91,7 +94,7 @@ export const SalesAnalysisReportTableColumns = [
             const data = row?.original;
             return (
                 <p className="multiline-ellipsis">
-                    {data?.project_budget ?? "N/A"}
+                    {data?.project_budget ?? "Not Available Yet"}
                 </p>
             );
         },
@@ -103,7 +106,9 @@ export const SalesAnalysisReportTableColumns = [
         cell: ({ row }) => {
             const data = row?.original;
             return (
-                <p className="multiline-ellipsis">{data?.country ?? "N/A"}</p>
+                <p className="multiline-ellipsis">
+                    {data?.country ?? "Not Available Yet"}
+                </p>
             );
         },
     },
@@ -115,7 +120,7 @@ export const SalesAnalysisReportTableColumns = [
             const data = row?.original;
             return (
                 <p className="multiline-ellipsis">
-                    {data?.award_time ?? "N/A"}
+                    {data?.award_time ?? "Not Available Yet"}
                 </p>
             );
         },
@@ -127,7 +132,9 @@ export const SalesAnalysisReportTableColumns = [
         cell: ({ row }) => {
             const data = row?.original;
             return (
-                <p className="multiline-ellipsis">{data?.points ?? "N/A"}</p>
+                <p className="multiline-ellipsis">
+                    {data?.points ?? "Not Available Yet"}
+                </p>
             );
         },
     },
@@ -155,7 +162,7 @@ export const SalesAnalysisReportTableColumns = [
                             <span>{data?.authorize_by_name}</span>
                         </CreatedBy>
                     ) : (
-                        <p>N/A</p>
+                        <p>Not Available Yet</p>
                     )}
                 </>
             );
@@ -169,7 +176,7 @@ export const SalesAnalysisReportTableColumns = [
             const data = row?.original;
             return (
                 <p className="multiline-ellipsis">
-                    {data?.authorized_on ?? "N/A"}
+                    {data?.authorized_on ?? "Not Available Yet"}
                 </p>
             );
         },
@@ -181,7 +188,9 @@ export const SalesAnalysisReportTableColumns = [
         cell: ({ row }) => {
             const data = row?.original;
             return (
-                <p className="multiline-ellipsis">{data?.status ?? "N/A"}</p>
+                <p className="multiline-ellipsis">
+                    {data?.status ?? "Not Available Yet"}
+                </p>
             );
         },
     },
@@ -190,8 +199,9 @@ export const SalesAnalysisReportTableColumns = [
         header: "Action",
         accessorKey: "action",
         cell: ({ row }) => {
-            const data = row?.original;
-            return <button className="btn btn-sm btn-primary py-1" >View</button>;
+            return (
+                <button className="btn btn-sm btn-primary py-1">View</button>
+            );
         },
     },
 ];

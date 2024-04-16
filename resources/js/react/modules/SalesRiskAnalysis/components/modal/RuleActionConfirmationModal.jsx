@@ -14,6 +14,13 @@ const RuleActionConfirmationModal = ({
     handleStatusUpdate,
     isLoading,
 }) => {
+    const handleTernaryForStatus = () => {
+        if (statusActionData.status === "0") {
+            return "Enable";
+        } else {
+            return "Disable";
+        }
+    };
     return (
         <CustomModal
             open={open}
@@ -41,9 +48,7 @@ const RuleActionConfirmationModal = ({
                                 }`}
                             >
                                 {" "}
-                                {statusActionData.status === "0"
-                                    ? "Enable"
-                                    : "Disable"}
+                                {handleTernaryForStatus()}
                             </span>{" "}
                             this {statusActionData.modalType}?
                         </ModalInputLabel>
@@ -58,11 +63,7 @@ const RuleActionConfirmationModal = ({
                             {isLoading
                                 ? "Updating..."
                                 : `Yes,
-                            ${
-                                statusActionData.status === "0"
-                                    ? "Enable"
-                                    : "Disable"
-                            }`}
+                            ${handleTernaryForStatus()}`}
                         </button>
                         <button
                             className="btn btn-warning ml-2 text-white"

@@ -8,10 +8,8 @@ import JqueryDateRangePicker from "../../../sales/leads/components/JqueryDateRan
 import Button from "../Button";
 import SearchBox from "../SearchBox";
 
-
 // hooks
 import UserFilter from "../UserFilter";
-
 
 const SaleAnalysisReportTableFilterBar = ({ setFilter }) => {
     const { width } = useWindowSize();
@@ -20,7 +18,6 @@ const SaleAnalysisReportTableFilterBar = ({ setFilter }) => {
     const [startDate, setStartDate] = React.useState(null);
     const [endDate, setEndDate] = React.useState(null);
     const [search, setSearch] = React.useState("");
-
 
     const searchText = React.useDeferredValue(search);
 
@@ -42,85 +39,82 @@ const SaleAnalysisReportTableFilterBar = ({ setFilter }) => {
     }, [searchText]);
 
     return ReactDOM.createPortal(
-        <React.Fragment>
-            <div className="sp1_task_filter_bar">
-                <JqueryDateRangePicker
-                    startDate={startDate}
-                    endDate={endDate}
-                    setStartDate={setStartDate}
-                    setEndDate={setEndDate}
-                    onApply={() => {}}
-                />
-                <HDivider />
+        <div className="sp1_task_filter_bar">
+            <JqueryDateRangePicker
+                startDate={startDate}
+                endDate={endDate}
+                setStartDate={setStartDate}
+                setEndDate={setEndDate}
+                onApply={() => {}}
+            />
+            <HDivider />
 
-                {width > 1400 && (
-                    <React.Fragment>
-                        <UserFilter
-                            title="Client"
-                            state={client}
-                            setState={setClient}
-                            roleIds={null}
-                        />
-                        <HDivider />
-                        <div style={{ maxWidth: "256px" }}>
-                            <SearchBox value={search} onChange={setSearch} />
+            {width > 1400 && (
+                <React.Fragment>
+                    <UserFilter
+                        title="Client"
+                        state={client}
+                        setState={setClient}
+                        roleIds={null}
+                    />
+                    <HDivider />
+                    <div style={{ maxWidth: "256px" }}>
+                        <SearchBox value={search} onChange={setSearch} />
+                    </div>
+                </React.Fragment>
+            )}
+            {width < 1400 && (
+                <React.Fragment>
+                    <HDivider className="ml-auto" />
+                    <div>
+                        <div
+                            className="sp1_filter_button"
+                            onClick={() => setIsOpen(true)}
+                            style={{ gap: "10px" }}
+                            role="button"
+                            tabIndex={0}
+                            onKeyDown={() => setIsOpen(true)}
+                        >
+                            <i className="fa-solid fa-filter"></i>
+                            <span>Filter</span>
                         </div>
-                    </React.Fragment>
-                )}
-                {width < 1400 && (
-                    <React.Fragment>
-                        <HDivider className="ml-auto" />
-                        <div>
-                            <div
-                                className="sp1_filter_button"
-                                onClick={() => setIsOpen(true)}
-                                style={{ gap: "10px" }}
-                                role="button"
-                                tabIndex={0}
-                                onKeyDown={() => setIsOpen(true)}
-                            >
 
-                                <i className="fa-solid fa-filter"></i>
-                                <span>Filter</span>
-                            </div>
-
-                            {isOpen && (
-                                <div className="sp1_filter_sidebar">
-                                    <div className="sp1_filter_sidebar_header">
-                                        <h4>Filter</h4>
-                                        <Button
-                                            variant="tertiary"
-                                            onClick={() => setIsOpen(false)}
-                                        >
-                                            <i className="fa-solid fa-xmark" />
-                                        </Button>
-                                    </div>
-
-                                    <div
-                                        className="p-3 d-flex flex-column"
-                                        style={{ gap: "10px" }}
+                        {isOpen && (
+                            <div className="sp1_filter_sidebar">
+                                <div className="sp1_filter_sidebar_header">
+                                    <h4>Filter</h4>
+                                    <Button
+                                        variant="tertiary"
+                                        onClick={() => setIsOpen(false)}
                                     >
-                                        <UserFilter
-                                            title="Client"
-                                            state={client}
-                                            setState={setClient}
-                                            roleIds={null}
-                                            sidebarIsOpen={true}
+                                        <i className="fa-solid fa-xmark" />
+                                    </Button>
+                                </div>
+
+                                <div
+                                    className="p-3 d-flex flex-column"
+                                    style={{ gap: "10px" }}
+                                >
+                                    <UserFilter
+                                        title="Client"
+                                        state={client}
+                                        setState={setClient}
+                                        roleIds={null}
+                                        sidebarIsOpen={true}
+                                    />
+                                    <div style={{ maxWidth: "256px" }}>
+                                        <SearchBox
+                                            value={search}
+                                            onChange={setSearch}
                                         />
-                                        <div style={{ maxWidth: "256px" }}>
-                                            <SearchBox
-                                                value={search}
-                                                onChange={setSearch}
-                                            />
-                                        </div>
                                     </div>
                                 </div>
-                            )}
-                        </div>
-                    </React.Fragment>
-                )}
-            </div>
-        </React.Fragment>,
+                            </div>
+                        )}
+                    </div>
+                </React.Fragment>
+            )}
+        </div>,
         document.getElementById("salesAnalysisReportTableFilter")
     );
 };
@@ -131,11 +125,10 @@ const HDivider = ({ className = "" }) => {
     return <div className={`filter_divider ${className}`} />;
 };
 
-
 SaleAnalysisReportTableFilterBar.propTypes = {
     setFilter: PropTypes.func,
-}
+};
 
 HDivider.propTypes = {
-    className: PropTypes.string
-}
+    className: PropTypes.string,
+};

@@ -1,14 +1,12 @@
 // table columns
-import { ExpandTask } from "../ExpandTable";
+import { ExpandQuestion } from "../ExpandTable";
 
 // ui components
 import Tooltip from "../Tooltip";
-import EditIcon from "../ui/EditIcon";
 import Popover from "../Popover";
 import Switch from "../Switch";
 
 // styles
-import style from "../styles/questionModalTableColumns.module.css";
 import popoverStyle from "../popover.module.css";
 import { camelToFlat } from "../../../../utils/utils";
 
@@ -18,7 +16,7 @@ export const QuestionsModalTableColumns = [
         header: "",
         cell: ({ row, table }) => {
             const { pageIndex } = table.getState();
-            return <ExpandTask row={row} table={table} pageIndex={pageIndex} />;
+            return <ExpandQuestion row={row} table={table} pageIndex={pageIndex} />;
         },
     },
     {
@@ -87,7 +85,6 @@ export const QuestionsModalTableColumns = [
         accessorKey: "type",
         cell: ({ row, table }) => {
             const data = row?.original;
-            const action = table.options.meta;
             return (
                 <div className="multiline-ellipsis d-flex justify-content-end align-items-end">
                     <Switch>
@@ -129,19 +126,7 @@ export const QuestionsModalTableColumns = [
                             </Popover>
                         </Switch.Case>
                     </Switch>
-                    {/* <div
-                        onClick={() => {
-                            action.editSingleQuestion(data);
-                        }}
-                        role="button"
-                        tabIndex="0"
-                        className="ml-2"
-                        onKeyDown={() => {
-                            action.editSingleQuestion(data);
-                        }}
-                    >
-                        <EditIcon />
-                    </div> */}
+                    
                 </div>
             );
         },

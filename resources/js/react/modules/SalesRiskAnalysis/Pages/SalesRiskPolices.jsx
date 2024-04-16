@@ -24,7 +24,7 @@ import { addNewRulesValidation } from "../helper/createFromValidation";
 // styles
 import "../components/Styles/SalesRiskAnalysis.css";
 
-const SalesRiskAnalysis = () => {
+const SalesRiskPolices = () => {
     const [{ pageIndex, pageSize }, setPagination] = React.useState({
         pageIndex: 0,
         pageSize: 10,
@@ -347,7 +347,22 @@ const SalesRiskAnalysis = () => {
             countries: [],
             points: "",
         });
+        setNewPolicyDataValidation({
+            policyName: false,
+            department: false,
+            policyType: false,
+            valueType: false,
+            value: false,
+            from: false,
+            to: false,
+            yes: false,
+            no: false,
+            countries: false,
+            points: false,
+            isSubmitting: false,
+        });
         setIsRuleUpdating(false);
+        
     };
 
     // add title on change
@@ -413,7 +428,7 @@ const SalesRiskAnalysis = () => {
                             }}
                         >
                             <i
-                                class="fa-solid fa-circle-question mr-2"
+                                className="fa-solid fa-circle-question mr-2"
                                 aria-hidden="true"
                             ></i>{" "}
                             Questions List
@@ -468,4 +483,4 @@ const SalesRiskAnalysis = () => {
     );
 };
 
-export default SalesRiskAnalysis;
+export default SalesRiskPolices;

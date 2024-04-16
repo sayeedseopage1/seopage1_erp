@@ -13,7 +13,7 @@ const AddQuestionTypeListInputs = ({
     setSingleQuestion,
     isListEmpty,
 }) => {
-    let list = [...singleQuestion?.listItem];
+    let list = [...singleQuestion?.listItem ?? []];
 
     return (
         <div className="row mb-4 align-items-start">

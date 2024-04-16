@@ -8,8 +8,6 @@ import RefreshButton from "../components/RefreshButton";
 import SalesAnalysisReportTable from "../components/table/SalesAnalysisReportTable";
 import { SalesAnalysisReportTableColumns } from "../components/table/SalesAnalysisReportTableColumns";
 
-// constant
-import { DummyPolicyReportData } from "../constant";
 
 // sections
 import SaleAnalysisReportTableFilterBar from "../components/sections/SaleAnalysisReportTableFilterBar";

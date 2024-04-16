@@ -23,7 +23,8 @@ const CustomAccordion = ({
     onChange,
     value,
     isSubmitting,
-    ...props
+    comment,
+    placeholder
 }) => {
     const [expend, setExpend] = React.useState(false);
     const [active, setActive] = React.useState({});
@@ -37,6 +38,28 @@ const CustomAccordion = ({
         return String.fromCharCode(65 + index); // Convert index to alphabetic character
     };
 
+
+    const handleTernary = () => {
+
+        if(!expendable) { 
+            return null;
+        }
+
+        if(expend) {
+            return (
+                <span className="__icon customAccordion__Icon">
+                    <i className="fa-solid fa-chevron-up"></i>
+                </span>
+            );
+        } else {
+            return (
+                <span className="__icon customAccordion__Icon">
+                    <i className="fa-solid fa-chevron-down"></i>
+                </span>
+            );
+        }
+    }
+
     return (
         <div className="d-flex flex-column">
             <CustomInputsLabel
@@ -44,9 +67,9 @@ const CustomAccordion = ({
                 color={isChild ? "#b1b1b1" : "#000000"}
             >
                 {label}{" "}
-                {props?.comment && (
+                {comment && (
                     <span className="ml-2">
-                        <Tooltip text={props?.comment}>
+                        <Tooltip text={comment}>
                             {" "}
                             <i
                                 className="fa-solid fa-circle-info "
@@ -79,18 +102,8 @@ const CustomAccordion = ({
                         }`}
                     >
                         {" "}
-                        {!_.isEmpty(active) ? active?.title : props?.placeholder}
-                        {expendable ? (
-                            expend ? (
-                                <span className="__icon customAccordion__Icon">
-                                    <i className="fa-solid fa-chevron-up"></i>
-                                </span>
-                            ) : (
-                                <span className="__icon customAccordion__Icon">
-                                    <i className="fa-solid fa-chevron-down"></i>
-                                </span>
-                            )
-                        ) : null}
+                        {!_.isEmpty(active) ? active?.title : placeholder}
+                        {handleTernary()}
                     </div>
                 </div>
 
@@ -162,4 +175,7 @@ CustomAccordion.propTypes = {
     onChange: PropTypes.func,
     value: PropTypes.string,
     isSubmitting: PropTypes.bool,
+    comment: PropTypes.string,
+    placeholder: PropTypes.string
+
 }

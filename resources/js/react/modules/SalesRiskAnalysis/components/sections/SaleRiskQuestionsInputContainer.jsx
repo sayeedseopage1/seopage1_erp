@@ -1,6 +1,6 @@
 import _ from "lodash";
 import React, { useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
 import PropTypes from "prop-types";
 
 // Ui components
@@ -52,6 +52,13 @@ const SaleRiskQuestionsInputContainer = ({
         return question?.questions?.length ? true : false;
     };
 
+    const addNumberOnTitle = (index, title, isChild) => {
+        if (isChild) {
+            return title;
+        }
+        return `${index + 1}. ${title}`;
+    };
+
     return (
         <motion.div
             initial={{ opacity: 0 }}
@@ -68,9 +75,11 @@ const SaleRiskQuestionsInputContainer = ({
                                     type={"text"}
                                     isChild={isChild}
                                     placeholder={question?.placeholder}
-                                    label={`${isChild ? "" : `${index + 1}. `}${
-                                        question?.title
-                                    }`}
+                                    label={addNumberOnTitle(
+                                        index,
+                                        question?.title,
+                                        isChild
+                                    )}
                                     isSubmitting={isSubmitting}
                                     value={getInputValue(question.id)}
                                     onChange={(e) => {
@@ -117,9 +126,11 @@ const SaleRiskQuestionsInputContainer = ({
                             </Switch.Case>
                             <Switch.Case condition={question.type === "yesNo"}>
                                 <CustomButtons
-                                    label={`${isChild ? "" : `${index + 1}. `}${
-                                        question.title
-                                    }`}
+                                    label={addNumberOnTitle(
+                                        index,
+                                        question?.title,
+                                        isChild
+                                    )}
                                     isChild={isChild}
                                     comment={question.comment}
                                     onChange={(value) => {
@@ -169,9 +180,11 @@ const SaleRiskQuestionsInputContainer = ({
                                     isSubmitting={isSubmitting}
                                     value={getInputValue(question.id)}
                                     placeholder={question?.placeholder}
-                                    label={`${isChild ? "" : `${index + 1}. `}${
-                                        question.title
-                                    }`}
+                                    label={addNumberOnTitle(
+                                        index,
+                                        question?.title,
+                                        isChild
+                                    )}
                                     onFocus={() => {
                                         handleQuestionFocus(question);
                                     }}
@@ -215,9 +228,11 @@ const SaleRiskQuestionsInputContainer = ({
                             </Switch.Case>
                             <Switch.Case condition={question.type === "list"}>
                                 <CustomAccordion
-                                    label={`${isChild ? "" : `${index + 1}. `}${
-                                        question.title
-                                    }`}
+                                    label={addNumberOnTitle(
+                                        index,
+                                        question?.title,
+                                        isChild
+                                    )}
                                     comment={question.comment}
                                     isChild={isChild}
                                     accordionData={
@@ -275,9 +290,11 @@ const SaleRiskQuestionsInputContainer = ({
                                     isSubmitting={isSubmitting}
                                     value={getInputValue(question.id)}
                                     placeholder={question?.placeholder}
-                                    label={`${isChild ? "" : `${index + 1}. `}${
-                                        question.title
-                                    }`}
+                                    label={addNumberOnTitle(
+                                        index,
+                                        question?.title,
+                                        isChild
+                                    )}
                                     onFocus={() => {
                                         handleQuestionFocus(question);
                                     }}

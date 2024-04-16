@@ -7,7 +7,6 @@ import React, { useContext, useEffect, useRef, useState } from "react";
 import Switch from "../Switch";
 import CustomDropDown from "../CustomDropDown";
 import QuestionsSelect from "../QuestionsSelect";
-import RuleMultiSelect from "../RuleMultiSelect";
 import CustomModal from "../ui/CustomModal/CustomModal";
 
 // sections components
@@ -32,17 +31,13 @@ import { QuestionsTypes } from "../../constant";
 import {
     useEditQuestionSalesRiskAnalysisMutation,
     useGetSinglePolicySalesRiskAnalysisQuery,
-    usePolicyQuestionsListByPolicyIdQuery,
-    useQuestionAddonPolicyMutation,
     useSaleAnalysisQuestionSaveMutation,
-    useSinglePolicyQuestionsQuery,
 } from "../../../../services/api/salesRiskAnalysisSlice";
 
 // helper functions
 import { getValidFields } from "../../helper/createFromValidation";
 import { generateUniqueString } from "../../../../utils/customUidGenerate";
 import { formatAPIErrors } from "../../../../utils/formatAPIErrors";
-import { formatQuestionData } from "../../helper/formatEditPolicyData";
 
 // table components
 
@@ -72,11 +67,6 @@ const AddQuestionsListModal = ({
         placeholder: false,
         isSubmitting: false,
     });
-
-    const [
-        submitQuestionAddonPolicy,
-        { isLoading, isFetching: isQuestionAddonPolicyFetching },
-    ] = useQuestionAddonPolicyMutation();
 
     const [editSinglePolicySalesRiskAnalysis] =
         useEditQuestionSalesRiskAnalysisMutation();
@@ -182,6 +172,14 @@ const AddQuestionsListModal = ({
         return false;
     };
 
+    const showToastHandler = (isQuestionUpdating) => {
+        if (isQuestionUpdating) {
+            toast.success("Question Updated Successfully");
+        } else {
+            toast.success("Question Added Successfully");
+        }
+    };
+
     // Add Question or Update Question Handler Function on Submit
     const handleAddQuestion = async () => {
         const validation = getValidFields(
@@ -233,8 +231,6 @@ const AddQuestionsListModal = ({
             payload.value = JSON.stringify(updateId);
         }
 
-        // console.log(payload);
-
         try {
             // Condition for Update Question
             const res = isQuestionUpdating
@@ -242,11 +238,7 @@ const AddQuestionsListModal = ({
                 : await saleAnalysisQuestionSave(payload).unwrap();
 
             if (res.status === "success") {
-                toast.success(
-                    isQuestionUpdating
-                        ? "Question Updated Successfully"
-                        : "Question Added Successfully"
-                );
+                showToastHandler(isQuestionUpdating);
                 handleCloseAddQuestionsModal();
                 refetchSaleRiskAnalysis();
             }
@@ -259,18 +251,6 @@ const AddQuestionsListModal = ({
             } else {
                 toast.error("Something went wrong");
             }
-        }
-    };
-
-    // Scroll to Bottom
-    const handleScrollToBottom = () => {
-        const scrollTarget = document.getElementById("scrollTarget");
-        if (scrollTarget) {
-            scrollTarget.scrollIntoView({
-                behavior: "smooth",
-                block: "start",
-                inline: "nearest",
-            });
         }
     };
 
@@ -318,6 +298,20 @@ const AddQuestionsListModal = ({
             case "longText":
                 return "Describe Here";
         }
+    };
+
+    const handleButtonTernary = (
+        isSaleAnalysisQuestionSaveLoading,
+        isQuestionUpdating
+    ) => {
+        if (isSaleAnalysisQuestionSaveLoading) {
+            return "Saving...";
+        }
+        if (isQuestionUpdating) {
+            return "Update Question";
+        }
+
+        return "Save Question";
     };
 
     // Set Placeholder
@@ -667,11 +661,10 @@ const AddQuestionsListModal = ({
                     </div>
                     <Flex gap="10px" justifyContent="center">
                         <ModalButton onClick={handleAddQuestion} width="200px">
-                            {isLoading || isSaleAnalysisQuestionSaveLoading
-                                ? "Saving..."
-                                : isQuestionUpdating
-                                ? "Update Question"
-                                : "Save Question"}
+                            {handleButtonTernary(
+                                isSaleAnalysisQuestionSaveLoading,
+                                isQuestionUpdating
+                            )}
                         </ModalButton>
                         <ModalButton
                             onClick={handleCloseAddQuestionsModal}
@@ -695,7 +688,9 @@ AddQuestionsListModal.propTypes = {
     open: PropTypes.bool,
     closeModal: PropTypes.func,
     addQuestionsData: PropTypes.object,
-    singlePolicyQuestions: PropTypes.array,
     setAddQuestionsData: PropTypes.func,
     refetchSaleRiskAnalysis: PropTypes.func,
+    isQuestionUpdating: PropTypes.bool,
+    singleQuestion: PropTypes.object,
+    setSingleQuestion: PropTypes.func,
 };

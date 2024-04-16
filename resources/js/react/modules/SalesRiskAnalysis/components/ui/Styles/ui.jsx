@@ -1,4 +1,3 @@
-import { color } from "framer-motion";
 import styled from "styled-components";
 
 export const SalesRiskAnalysisContainer = styled.section`

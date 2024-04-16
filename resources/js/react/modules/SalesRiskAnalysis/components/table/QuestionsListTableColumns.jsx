@@ -1,5 +1,5 @@
 // table columns
-import { ExpandTask } from "../ExpandTable";
+import { ExpandQuestion } from "../ExpandTable";
 
 // ui components
 import Tooltip from "../Tooltip";
@@ -18,7 +18,9 @@ export const QuestionsListTableColumns = [
         header: "",
         cell: ({ row, table }) => {
             const { pageIndex } = table.getState();
-            return <ExpandTask row={row} table={table} pageIndex={pageIndex} />;
+            return (
+                <ExpandQuestion row={row} table={table} pageIndex={pageIndex} />
+            );
         },
     },
     {
@@ -124,7 +126,10 @@ export const QuestionsListTableColumns = [
                                             <ol className="d-flex flex-column justify-content-start align-items-start">
                                                 {data?.value?.map(
                                                     (item, index) => (
-                                                        <li key={item.id} className="py-1">
+                                                        <li
+                                                            key={item.id}
+                                                            className="py-1"
+                                                        >
                                                             {index + 1}.{" "}
                                                             {item?.title}
                                                         </li>

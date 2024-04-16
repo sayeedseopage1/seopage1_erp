@@ -1,6 +1,6 @@
 export const PolicyTypeItems = {
   label: 'Policy Type',
-  emptyOptionsLabel: 'Select Policy Type',
+  emptyOptionsLabel: 'Select Rule Type',
   id: 'policyType',
   data: [
     {

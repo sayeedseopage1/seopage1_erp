@@ -1,7 +1,4 @@
-import React, { useContext, useEffect } from "react";
-
-// local styled components
-import { SalesRiskAnalysisContainer } from "../components/ui/Styles/ui";
+import React, {  useEffect } from "react";
 
 // ui components
 import RefreshButton from "../components/RefreshButton";
@@ -12,8 +9,10 @@ import AddQuestionsListModal from "../components/modal/AddQuestionsListModal";
 // table components
 import QuestionsListTable from "../components/table/QuestionsListTable";
 import { QuestionsListTableColumns } from "../components/table/QuestionsListTableColumns";
+
+//APi services
 import { useSaleAnalysisQuestionsListQuery } from "../../../services/api/salesRiskAnalysisSlice";
-import { setWith } from "lodash";
+
 
 const SalesRiskQuestionList = () => {
     const [{ pageIndex, pageSize }, setPagination] = React.useState({
@@ -57,10 +56,15 @@ const SalesRiskQuestionList = () => {
         })
     );
 
+    // questions list data
     const questionsList = data?.data;
 
-    const handleScrollToBottom = () => {};
 
+    const handleOpenAddQuestionsModal = () => {
+        setAddQuestionsModalOpen(true);
+    }
+
+    // close modal
     const handleCloseAddQuestionsModal = () => {
         setAddQuestionsModalOpen(false);
     };
@@ -69,6 +73,8 @@ const SalesRiskQuestionList = () => {
     const onPageChange = (paginate) => {
         setPagination(paginate);
     };
+
+
 
     useEffect(() => {
         if (questionsList?.data?.length > 0) {
@@ -119,11 +125,8 @@ const SalesRiskQuestionList = () => {
                         isLoading={isQuestionsListLoading}
                         setAllQuestions={setAllQuestions}
                         allQuestions={allQuestions}
-                        handleScrollToBottom={handleScrollToBottom}
                         onPageChange={onPageChange}
-                        handleOpenAddQuestionsModal={() => {
-                            setAddQuestionsModalOpen(true);
-                        }}
+                        handleOpenAddQuestionsModal={handleOpenAddQuestionsModal}
                     />
                 </div>
             </div>

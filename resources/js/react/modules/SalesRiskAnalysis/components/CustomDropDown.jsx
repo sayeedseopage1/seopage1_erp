@@ -93,4 +93,5 @@ CustomDropDown.propTypes = {
     sidebarItem: PropTypes.bool,
     className: PropTypes.string,
     filedName: PropTypes.string,
+    isDisableUse: PropTypes.bool,
 };

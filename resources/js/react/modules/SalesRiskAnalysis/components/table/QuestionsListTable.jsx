@@ -13,7 +13,6 @@ import {
 
 // ui components
 import WithoutDraggableColumnHeader from "./WithoutDraggableColumnHeader";
-import QuestionsModalTableLoader from "../loader/QuestionsModalTableLoader";
 
 // Table components
 import EmptyTable from "../../../../global/EmptyTable";
@@ -42,7 +41,6 @@ const QuestionsListTable = ({
     const [sorting, setSorting] = React.useState([]);
     const [expanded, setExpanded] = React.useState({});
     const [data, setData] = React.useState(tableData?.data || []);
-    const [globalFilter, setGlobalFilter] = React.useState("");
     const [skipPageReset, setSkipPageReset] = React.useState(false);
     const [{ pageIndex, pageSize }, setPagination] = React.useState({
         pageIndex: 0,
@@ -66,11 +64,10 @@ const QuestionsListTable = ({
     // default columns
     const defaultColumns = React.useMemo(() => [...tableColumns]);
     // columns
-    const [columns, setColumns] = React.useState([...defaultColumns]);
+    const [columns] = React.useState([...defaultColumns]);
 
     const [columnOrder, setColumnOrder] = React.useState(_.map(columns, "id"));
 
-    // on pagination
     const handlePageChange = ({ selected }) => {
         const paginate = {
             pageIndex: selected,
@@ -81,10 +78,8 @@ const QuestionsListTable = ({
         onPageChange(paginate);
     };
 
-    // handle page size change
     const handlePageSizeChange = (e) => {
         e.preventDefault();
-
         const paginate = {
             pageIndex,
             pageSize: e.target.value,
@@ -93,7 +88,6 @@ const QuestionsListTable = ({
         onPageChange(paginate);
     };
 
-    // pagination
     const pagination = React.useMemo(
         () => ({ pageIndex, pageSize }),
         [pageIndex, pageSize]
@@ -106,9 +100,9 @@ const QuestionsListTable = ({
             sorting,
             expanded,
             columnOrder,
+            pagination,
             tableName,
         },
-        onGlobalFilterChange: setGlobalFilter,
         autoResetPageIndex: !skipPageReset,
         onSortingChange: setSorting,
         onExpandedChange: setExpanded,
@@ -119,11 +113,12 @@ const QuestionsListTable = ({
         getFilteredRowModel: getFilteredRowModel(),
         getExpandedRowModel: getExpandedRowModel(),
         getSortedRowModel: getSortedRowModel(),
+        paginateExpandedRows: false,
         meta: {
             editSingleQuestion: (row) => {
                 setIsQuestionUpdating(true);
                 handleOpenAddQuestionsModal();
-                
+
                 const parent_question = allQuestions.find(
                     (item) => item?.id === row?.parent_id
                 );
@@ -160,15 +155,11 @@ const QuestionsListTable = ({
         },
     });
 
+    console.log(table)
     return (
         <React.Fragment>
             <div
-                className="sp1_tasks_table_wrapper"
-                style={{
-                    height: "100%",
-                    maxHeight: "100%",
-                    width: "100%",
-                }}
+                className="sp1_tasks_table_wrapper w-100"
             >
                 <table className="sp1_tasks_table">
                     {/* table Header */}
@@ -254,15 +245,14 @@ const QuestionsListTable = ({
 export default QuestionsListTable;
 
 QuestionsListTable.propTypes = {
-    tableData: PropTypes.object,
-    tableColumns: PropTypes.array,
-    tableName: PropTypes.string,
+    tableData: PropTypes.object.isRequired,
+    tableColumns: PropTypes.array.isRequired,
+    tableName: PropTypes.string.isRequired,
     isLoading: PropTypes.bool,
     isFetching: PropTypes.bool,
-    handleScrollToBottom: PropTypes.func,
-    setAllQuestions: PropTypes.func,
     allQuestions: PropTypes.array,
     setSingleQuestion: PropTypes.func,
     setIsQuestionUpdating: PropTypes.func,
     onPageChange: PropTypes.func,
+    handleOpenAddQuestionsModal: PropTypes.func,
 };

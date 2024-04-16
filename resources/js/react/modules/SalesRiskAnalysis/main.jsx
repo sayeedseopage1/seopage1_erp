@@ -13,8 +13,8 @@ import { DndProvider, useDragLayer } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 
 // Page components
-import SalesRiskAnalysis from "./Pages/SalesRiskAnalysis";
-import SalesRiskQuestions from "./Pages/SalesRiskQuestions";
+import SalesRiskPolices from "./Pages/SalesRiskPolices";
+import SalesRiskQuestionsResponse from "./Pages/SalesRiskQuestionsResponse";
 import SalesRiskAuthorize from "./Pages/SalesRiskAuthorize";
 import SalesRiskReport from "./Pages/SalesRiskReport";
 import SalesRiskQuestionList from "./Pages/SalesRiskQuestionList";
@@ -86,7 +86,7 @@ if (container) {
                     <BrowserRouter basename="/account/sales-risk-policies">
                         <Routes>
                             <Route path="/" element={<Content />}>
-                                <Route index element={<SalesRiskAnalysis />} />
+                                <Route index element={<SalesRiskPolices />} />
                             </Route>
                         </Routes>
                     </BrowserRouter>
@@ -109,7 +109,7 @@ if (containerSalePolicyQuestion) {
                         <Route path="/" element={<Content />}>
                             <Route
                                 path="account/deals/risk-analysis/:deal_id"
-                                element={<SalesRiskQuestions />}
+                                element={<SalesRiskQuestionsResponse />}
                             />
                         </Route>
                     </Routes>
@@ -120,7 +120,6 @@ if (containerSalePolicyQuestion) {
 }
 
 // Sales Risk Analysis Question Answer Notice Page will show when point below 0
-
 const containerSalePolicyQuestionNotice = document.getElementById(
     "salePolicyQuestionNotice"
 );

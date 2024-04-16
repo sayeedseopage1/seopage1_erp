@@ -1,4 +1,3 @@
-import _ from "lodash";
 import React, { useContext } from "react";
 import PropTypes from "prop-types";
 
@@ -45,7 +44,7 @@ const EditApplicableRulesModal = ({
     ...props
 }) => {
     const { policyKeys } = useContext(SalesRiskAnalysisContext);
-    const { data: singlePolicyData, isLoading: isLoadingSinglePolicyData } =
+    const { data: singlePolicyData} =
         useGetSinglePolicySalesRiskAnalysisQuery(editRuleData?.policyId, {
             skip: !editRuleData?.policyId,
             staleTime: 0,

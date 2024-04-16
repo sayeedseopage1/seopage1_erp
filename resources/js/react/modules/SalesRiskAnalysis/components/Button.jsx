@@ -32,7 +32,9 @@ const Button = ({
     } ${sizeObject[size]} ${className}`;
 
     const handleOnClick = (e) => {
-        onClick && onClick(e);
+        if(onClick){
+            onClick(e);
+        }
     };
 
     return (

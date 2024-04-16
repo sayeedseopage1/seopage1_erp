@@ -36,7 +36,7 @@ export const getValidFields = (listFields, newPolicyDataValidation) => {
 export const addNewRulesValidation = (inputsData, newPolicyDataValidation) => {
   switch (inputsData?.policyType?.name) {
     // less than
-    case "lessThan":
+    case "lessThan": {
       const lessThenFields = {
         title: inputsData.title,
         valueType: inputsData.valueType,
@@ -47,9 +47,10 @@ export const addNewRulesValidation = (inputsData, newPolicyDataValidation) => {
         key: inputsData.key
       }
       const lessThenValidation = getValidFields(lessThenFields, newPolicyDataValidation);
-     
       return lessThenValidation;
-    case "greaterThan":
+    }
+
+    case "greaterThan": {
       const greaterThenFields = {
         title: inputsData.title,
         valueType: inputsData.valueType,
@@ -61,7 +62,8 @@ export const addNewRulesValidation = (inputsData, newPolicyDataValidation) => {
       }
       const greaterThenValidation = getValidFields(greaterThenFields, newPolicyDataValidation);
       return greaterThenValidation;
-    case "fixed":
+    }
+    case "fixed": {
       const fixedFields = {
         title: inputsData.title,
         valueType: inputsData.valueType,
@@ -71,17 +73,11 @@ export const addNewRulesValidation = (inputsData, newPolicyDataValidation) => {
         department: inputsData.department,
         key: inputsData.key
       }
-      // const fixedFieldsValidation = markEmptyFieldsValidation(fixedFields);
-      // const prevFixedNewPolicyDataValidation = { ...newPolicyDataValidation };
-      // Object.entries(fixedFieldsValidation).forEach(([key, value]) => {
-      //   if (Object.keys(prevFixedNewPolicyDataValidation).includes(key)) {
-      //     prevFixedNewPolicyDataValidation[key] = value;
-      //   }
-      // });
-      // return prevFixedNewPolicyDataValidation;
       const fixedFieldsValidation = getValidFields(fixedFields, newPolicyDataValidation);
       return fixedFieldsValidation;
-    case "range":
+    }
+
+    case "range": {
       const rangeFields = {
         title: inputsData.title,
         valueType: inputsData.valueType,
@@ -94,7 +90,9 @@ export const addNewRulesValidation = (inputsData, newPolicyDataValidation) => {
       }
       const rangeFieldsValidation = getValidFields(rangeFields, newPolicyDataValidation);
       return rangeFieldsValidation;
-    case "yesNo":
+    }
+
+    case "yesNo": {
       const yesNoFields = {
         title: inputsData.title,
         yes: inputsData.yes,
@@ -105,7 +103,8 @@ export const addNewRulesValidation = (inputsData, newPolicyDataValidation) => {
       }
       const yesNoFieldsValidation = getValidFields(yesNoFields, newPolicyDataValidation);
       return yesNoFieldsValidation;
-    case "list":
+    }
+    case "list": {
       const listFields = {
         title: inputsData.title,
         valueType: inputsData.valueType,
@@ -117,6 +116,8 @@ export const addNewRulesValidation = (inputsData, newPolicyDataValidation) => {
       }
       const listFieldsValidation = getValidFields(listFields, newPolicyDataValidation);
       return listFieldsValidation;
+    }
+
     default:
       break;
   }

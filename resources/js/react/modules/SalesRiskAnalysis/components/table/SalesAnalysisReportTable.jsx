@@ -12,9 +12,13 @@ import PropTypes from "prop-types";
 // table components
 import { DraggableColumnHeader } from "./DraggableColumnHeader";
 import EmptyTable from "../../../../global/EmptyTable";
-import SalesRiskAnalysisTableLoader from "../loader/SalesRiskAnalysisTableLoader";
+
+// pagination component
 import SalesRiskAnalysisTablePagination from "./SalesRiskAnalysisTablePagination";
+
+// loader components
 import SalesAnalysisReportTableLoader from "../loader/SalesAnalysisReportTableLoader";
+
 
 const SalesAnalysisReportTable = ({
     tableData,
@@ -30,7 +34,6 @@ const SalesAnalysisReportTable = ({
     const [sorting, setSorting] = React.useState([]);
     const [expanded, setExpanded] = React.useState({});
     const [data, setData] = React.useState(tableData?.data || []);
-    const [globalFilter, setGlobalFilter] = React.useState("");
     const [skipPageReset, setSkipPageReset] = React.useState(false);
     const [{ pageIndex, pageSize }, setPagination] = React.useState({
         pageIndex: 0,
@@ -62,7 +65,7 @@ const SalesAnalysisReportTable = ({
     const defaultColumns = React.useMemo(() => [...tableColumns]);
 
     // columns
-    const [columns, setColumns] = React.useState([...defaultColumns]);
+    const [columns] = React.useState([...defaultColumns]);
 
     const [columnOrder, setColumnOrder] = React.useState(_.map(columns, "id"));
 
@@ -107,7 +110,6 @@ const SalesAnalysisReportTable = ({
             filter,
             globalFilter: _.trim(search),
         },
-        onGlobalFilterChange: setGlobalFilter,
         autoResetPageIndex: !skipPageReset,
         onSortingChange: setSorting,
         onExpandedChange: setExpanded,
@@ -220,4 +222,5 @@ SalesAnalysisReportTable.propTypes = {
     onPageChange: PropTypes.func,
     filter: PropTypes.object,
     search: PropTypes.string,
+    isFetching: PropTypes.bool,
 };
