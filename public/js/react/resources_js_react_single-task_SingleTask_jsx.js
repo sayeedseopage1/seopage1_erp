@@ -14957,13 +14957,18 @@ var TaskEditForm = function TaskEditForm(_ref2) {
 
     // graphics design fields validation
     if ((taskCategory === null || taskCategory === void 0 ? void 0 : taskCategory.category_name) === "Graphic Design") {
+      var _JSON$parse$;
       if (!typeOfGraphicsCategory) {
         err.typeOfGraphicsCategory = "You have to select Type of graphic work";
         count++;
       }
-      if (!referenceList[0].reference) {
+      // if (!referenceList[0].reference && !graphicWorkDetails?.reference && _.isEmpty(referenceFile && !defaultRefFiles)) {
+      //     err.reference = "The reference field is required";
+      //     count++;
+      // }
+      if (!referenceList[0].reference && ((_JSON$parse$ = JSON.parse(graphicWorkDetails === null || graphicWorkDetails === void 0 ? void 0 : graphicWorkDetails.reference)[0]) === null || _JSON$parse$ === void 0 ? void 0 : _JSON$parse$.reference) == '' && lodash__WEBPACK_IMPORTED_MODULE_0___default().isEmpty(referenceFile) && lodash__WEBPACK_IMPORTED_MODULE_0___default().isEmpty(defaultRefFiles)) {
         err.reference = "The reference field is required";
-        errCount++;
+        count++;
       }
       if (!fontName) {
         err.fontName = "Font name is required";
@@ -14971,7 +14976,7 @@ var TaskEditForm = function TaskEditForm(_ref2) {
       }
       if (!fileExtension) {
         err.fileExtension = "File extension is required";
-        errCount++;
+        count++;
       }
       // if (!checkIsURL(fontUrl)) {
       //     err.fontUrl = "You have to provide a valid font URL";

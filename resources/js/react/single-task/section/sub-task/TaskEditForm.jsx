@@ -289,7 +289,6 @@ const TaskEditForm = ({ task, singleTask: row, onSubmit, isLoading, onClose }) =
         setAttachedFiles(attachments)
     }, [])
 
-
     // check validation
     const isValid = () => {
         let count = 0;
@@ -332,10 +331,18 @@ const TaskEditForm = ({ task, singleTask: row, onSubmit, isLoading, onClose }) =
                 err.typeOfGraphicsCategory = "You have to select Type of graphic work";
                 count++;
             }
-            if (!referenceList[0].reference) {
+            // if (!referenceList[0].reference && !graphicWorkDetails?.reference && _.isEmpty(referenceFile && !defaultRefFiles)) {
+            //     err.reference = "The reference field is required";
+            //     count++;
+            // }
+            if (!referenceList[0].reference &&
+                JSON.parse(graphicWorkDetails?.reference)[0]?.reference == '' &&
+                _.isEmpty(referenceFile) &&
+                _.isEmpty(defaultRefFiles)) {
                 err.reference = "The reference field is required";
-                errCount++;
+                count++;
             }
+
 
             if (!fontName) {
                 err.fontName = "Font name is required";
@@ -344,7 +351,7 @@ const TaskEditForm = ({ task, singleTask: row, onSubmit, isLoading, onClose }) =
 
             if (!fileExtension) {
                 err.fileExtension = "File extension is required";
-                errCount++;
+                count++;
             }
             // if (!checkIsURL(fontUrl)) {
             //     err.fontUrl = "You have to provide a valid font URL";

@@ -294,7 +294,10 @@ const TaskEditForm = ({ isOpen, close, row, table }) => {
                 err.typeOfGraphicsCategory = "You have to select Type of graphic work";
                 errCount++;
             }
-            if (!referenceList[0].reference) {
+            if (!referenceList[0].reference &&
+                JSON.parse(graphicWorkDetails?.reference)[0]?.reference == '' &&
+                _.isEmpty(referenceFile) &&
+                _.isEmpty(defaultRefFiles)) {
                 err.reference = "The reference field is required";
                 errCount++;
             }
