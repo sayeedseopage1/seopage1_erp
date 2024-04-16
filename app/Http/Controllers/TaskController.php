@@ -2393,7 +2393,7 @@ class TaskController extends AccountBaseController
 
             // return Reply::successWithData(__('messages.taskCreatedSuccessfully'), ['redirectUrl' => $redirectUrl, 'taskID' => $task->id]);
         } catch (\Throwable $th) {
-            //throw $th;
+            // throw $th;
             DB::rollBack();
             return response()->json([
                 'status' => 400,

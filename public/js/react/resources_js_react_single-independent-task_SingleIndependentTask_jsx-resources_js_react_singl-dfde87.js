@@ -851,13 +851,14 @@ var useSingleTask = function useSingleTask() {
       return _regeneratorRuntime().wrap(function _callee$(_context) {
         while (1) switch (_context.prev = _context.next) {
           case 0:
-            _context.prev = 0;
-            _context.next = 3;
+            debugger;
+            _context.prev = 1;
+            _context.next = 4;
             return getTaskDetails("/".concat(taskId, "/json?mode=basic")).unwrap();
-          case 3:
+          case 4:
             res = _context.sent;
             if (!res) {
-              _context.next = 7;
+              _context.next = 8;
               break;
             }
             task = _objectSpread(_objectSpread({}, res.task), {}, {
@@ -871,18 +872,18 @@ var useSingleTask = function useSingleTask() {
               taskSubTask: res.Sub_Tasks
             });
             return _context.abrupt("return", task);
-          case 7:
-            _context.next = 12;
+          case 8:
+            _context.next = 13;
             break;
-          case 9:
-            _context.prev = 9;
-            _context.t0 = _context["catch"](0);
+          case 10:
+            _context.prev = 10;
+            _context.t0 = _context["catch"](1);
             console.log(_context.t0);
-          case 12:
+          case 13:
           case "end":
             return _context.stop();
         }
-      }, _callee, null, [[0, 9]]);
+      }, _callee, null, [[1, 10]]);
     }));
     return function getTaskById(_x) {
       return _ref.apply(this, arguments);
@@ -1270,7 +1271,9 @@ var SingleIndependentTask = function SingleIndependentTask() {
   var params = (0,react_router_dom__WEBPACK_IMPORTED_MODULE_29__.useParams)();
 
   // lazily get task details
-  var _useLazyGetTaskDetail = (0,_services_api_SingleTaskPageApi__WEBPACK_IMPORTED_MODULE_7__.useLazyGetTaskDetailsQuery)(),
+  var _useLazyGetTaskDetail = (0,_services_api_SingleTaskPageApi__WEBPACK_IMPORTED_MODULE_7__.useLazyGetTaskDetailsQuery)({
+      skip: !(params !== null && params !== void 0 && params.taskId)
+    }),
     _useLazyGetTaskDetail2 = _slicedToArray(_useLazyGetTaskDetail, 2),
     getTaskDetails = _useLazyGetTaskDetail2[0],
     _useLazyGetTaskDetail3 = _useLazyGetTaskDetail2[1],
@@ -1290,8 +1293,6 @@ var SingleIndependentTask = function SingleIndependentTask() {
     isWorkingEnvLoading = _useLazyGetWorkingEnv3.isLoading;
   var task = new _utils_single_task__WEBPACK_IMPORTED_MODULE_9__.SingleTask(Task); // task instance
   var loggedUser = new _utils_user_details__WEBPACK_IMPORTED_MODULE_10__.User((_window = window) === null || _window === void 0 || (_window = _window.Laravel) === null || _window === void 0 ? void 0 : _window.user); // logged users data
-
-  // console.log(task);
 
   (0,react__WEBPACK_IMPORTED_MODULE_2__.useEffect)(function () {
     _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
@@ -11937,7 +11938,6 @@ var SubTaskSection = function SubTaskSection(_ref) {
   // },[data])
 
   var Task = new _utils_single_task__WEBPACK_IMPORTED_MODULE_12__.SingleTask(task);
-  console.log("Task", Task);
   return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_16__.jsxs)("div", {
     className: "sp1_task_right_card mb-3",
     ref: setSubtaskModalToggleRef,
@@ -12405,7 +12405,9 @@ var TaskEditForm = function TaskEditForm(_ref2) {
     _useState28 = _slicedToArray(_useState27, 2),
     error = _useState28[0],
     setError = _useState28[1];
-  var _useGetTaskDetailsQue = (0,_services_api_SingleTaskPageApi__WEBPACK_IMPORTED_MODULE_14__.useGetTaskDetailsQuery)("/".concat(task.id, "/json?mode=estimation_time")),
+  var _useGetTaskDetailsQue = (0,_services_api_SingleTaskPageApi__WEBPACK_IMPORTED_MODULE_14__.useGetTaskDetailsQuery)("/".concat(task === null || task === void 0 ? void 0 : task.id, "/json?mode=estimation_time"), {
+      skip: !(task !== null && task !== void 0 && task.id)
+    }),
     estimation = _useGetTaskDetailsQue.data,
     isFetching = _useGetTaskDetailsQue.isFetching;
   var required_error = (error === null || error === void 0 ? void 0 : error.status) === 422 ? error === null || error === void 0 ? void 0 : error.data : null;
@@ -17494,7 +17496,6 @@ var StartTimerConfirmationModal = function StartTimerConfirmationModal(_ref) {
     var timeIntervelId = setInterval(function () {
       setCountDown(count--);
     }, 1000);
-    console.log("time", count);
     var timeOutId = setTimeout(function () {
       setButtonVisible(true);
       clearInterval(timeIntervelId);

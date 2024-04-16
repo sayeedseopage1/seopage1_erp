@@ -502,6 +502,18 @@ const singleTaskPageApiSlice = apiSlice.injectEndpoints({
                 method: "GET",
             }),
         }),
+
+        getTypesOfGraphicWorks: build.query({
+            query: () => `/type-of-graphic-works`,
+        }),
+
+        deleteGraphicsTaskFile: build.mutation({
+            query: (fileId) => ({
+                url: `/account/graphic-task-file/delete/${fileId}`,
+                method: "GET",
+            }),
+            // invalidatesTags: ["TASKS"],
+        }),
     }),
 });
 
@@ -557,4 +569,6 @@ export const {
     useGetWorkingEnvironmentQuery,
     useLazyGetWorkingEnvironmentQuery,
     useCheckWorkingReportMutation,
+    useGetTypesOfGraphicWorksQuery,
+    useDeleteGraphicsTaskFileMutation,
 } = singleTaskPageApiSlice;
