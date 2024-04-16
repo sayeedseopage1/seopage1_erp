@@ -230,8 +230,6 @@ class SalesRiskPolicyController extends AccountBaseController
                 'message' => $th->getMessage(),
             ]);
         }
-
-        return response()->json();
     }
 
     function editSingle(Request $req, $id): JsonResponse
@@ -290,7 +288,7 @@ class SalesRiskPolicyController extends AccountBaseController
             }
 
 
-            $itemsPaginated = SalesRiskPolicy::where('parent_id', null)->offset($req->input('limit', 10) * $req->input('page', 1))->paginate($req->input('limit', 10));
+            $itemsPaginated = SalesRiskPolicy::where('parent_id', null)->offset($req->input('limit', 10) * ($req->input('page', 1) -1) )->paginate($req->input('limit', 10));
             $itemsTransformed = $itemsPaginated
                 ->getCollection()
                 ->map(function ($item) {
@@ -714,6 +712,8 @@ class SalesRiskPolicyController extends AccountBaseController
             $calculation = self::calculatePolicyPoint($dealId);
 
             if ($calculation['points'] === null) {
+                // if error then delete previous records
+                PolicyQuestionValue::where('deal_id', $dealId)->delete();
                 return response()->json(['status' => 'error', 'message' => $calculation['error']], 500);
             }
 
@@ -723,9 +723,14 @@ class SalesRiskPolicyController extends AccountBaseController
                 $dealStage->won_lost = 'Yes';
                 $dealStage->deal_status = 'accepted';
                 $deal->status = 'auto-accepted';
-                $dealStage->save();
-                $deal->save();
+
             }
+            else {
+                $deal->status = 'analysis';
+            }
+
+            $dealStage->save();
+            $deal->save();
 
             return response()->json([
                 'status' => 'success',
@@ -855,7 +860,7 @@ class SalesRiskPolicyController extends AccountBaseController
                         break;
                 }
             }
-
+            $message[] = 'Hourly rate ('. $hourlyRate .') not matched with any conditions';
             endHourlyRate:
 
             // --------------------- end hourly rate calculation ------------------ //
@@ -1250,7 +1255,7 @@ class SalesRiskPolicyController extends AccountBaseController
 
         $calculation = self::calculatePolicyPoint($deal_id);
 
-        if ($calculation['points'] == null) {
+        if ($calculation['points'] === null) {
             return response()->json(['status' => 'error', 'message' => $calculation['error'], 'data' => ['points' => null]]);
         }
 
