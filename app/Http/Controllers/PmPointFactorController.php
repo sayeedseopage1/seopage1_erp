@@ -16,11 +16,17 @@ class PmPointFactorController extends AccountBaseController
         $this->pageTitle = 'app.menu.factor';
     } 
 
-    public function index()
+    public function index(Request $request)
     {
+        $filter = function($factor) use ($request){
+            $factor->when($request->project_type, function($query) use ($request) {
+                $query->where('project_type', $request->project_type);
+            });
+        };
+        
         return response()->json([
             'status'=> 200,
-            'data' => Criteria::with('factors')->whereHas('factors')->get()
+            'data' => Criteria::with(['factors' => $filter])->whereHas('factors', $filter)->get()
         ]);
     }
 
