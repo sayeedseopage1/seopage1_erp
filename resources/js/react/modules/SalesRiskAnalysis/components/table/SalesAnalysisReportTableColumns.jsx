@@ -79,7 +79,12 @@ export const SalesAnalysisReportTableColumns = [
             return (
                 <a
                     href={`/account/leads/${data?.lead_id}`}
-                    className="hover-underline multine-ellipsis"
+                    className="hover-underline multine-ellipsis btn btn-info text-white"
+                    style={{
+                        padding: "4px 12px",
+                        width: "fit-content",
+                        fontSize: "13px",
+                    }}
                 >
                     View Lead
                 </a>

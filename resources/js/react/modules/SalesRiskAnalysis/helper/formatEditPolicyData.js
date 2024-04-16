@@ -318,7 +318,7 @@ const helperSingleQuestions = (item) => {
 
 
 const formatParentQuestion = (parentQuestion, item) => {
-  if (parentQuestion.type === "yesNo" || parentQuestion.type === "list") {
+  if (parentQuestion?.type === "yesNo" || parentQuestion?.type === "list") {
     return item.value
   }
   return ""
