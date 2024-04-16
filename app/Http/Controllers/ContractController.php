@@ -1273,7 +1273,7 @@ class ContractController extends AccountBaseController
             $client->name = $request->client_name;
             $client->save();
 
-        if(!$request->is_drafted){
+        if(!$request->is_drafted && in_array($deal->status, ['accepted', 'auto-accepted'])){
             $lead_developer_id = RoleUser::where('role_id', 6)->get();
             //dd($lead_developer_id);
             foreach ($lead_developer_id as $lead) {
