@@ -156,7 +156,7 @@ export const DataTableColumns = [
 
     {
         id: "action",
-        header: "Evaluation",
+        header: "Status",
         accessorKey: "action",
 
         cell: ({ row }) => {

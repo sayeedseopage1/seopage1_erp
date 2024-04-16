@@ -35,6 +35,7 @@ import {
     useStoreTeamLeadReviewMutation,
     useStoreAdminRejectedMutation,
     useStoreAdminAuthorizedMutation,
+    useStoreAdminExtendedMutation,
 } from "../../../services/api/EvaluationApiSlice";
 import { useEffect } from "react";
 import FormatDate from "../../../UI/comments/utils/FormatDate";
@@ -48,11 +49,18 @@ const EvaluationModal = ({
     const [teamLeadReview, setTeamLeadReview] = useState("");
     const [adminComment, setAdminComment] = useState("");
 
-    const [taskRatingFinalSubmission] =
-        useStoreTaskRatingFinalSubmissionMutation();
-    const [teamLeadSubmission] = useStoreTeamLeadReviewMutation();
-    const [adminRejection] = useStoreAdminRejectedMutation();
-    const [adminAuthorization] = useStoreAdminAuthorizedMutation();
+    const [
+        taskRatingFinalSubmission,
+        { isLoading: isLoadingLeadDevFinalSubmission },
+    ] = useStoreTaskRatingFinalSubmissionMutation();
+    const [teamLeadSubmission, { isLoading: isLoadingTeamLeadReview }] =
+        useStoreTeamLeadReviewMutation();
+    const [adminRejection, { isLoading: isAdminRejecting }] =
+        useStoreAdminRejectedMutation();
+    const [adminAuthorization, { isLoading: isLoadingAdminAuthorization }] =
+        useStoreAdminAuthorizedMutation();
+    const [adminExtended, { isLoading: isLoadingAdminExtended }] =
+        useStoreAdminExtendedMutation();
 
     const { data, isLoading, isFetching } = useGetTaskListQuery(
         singleEvaluation?.user_id
@@ -84,85 +92,102 @@ const EvaluationModal = ({
     };
 
     const handleLeadDevFinalSubmission = async () => {
-        try {
-            await taskRatingFinalSubmission({
-                user_id: singleEvaluation?.user_id,
-                confirm_submission: "lead_dev_submitted",
-                _token: document
-                    .querySelector("meta[name='csrf-token']")
-                    .getAttribute("content"),
+        await taskRatingFinalSubmission({
+            user_id: singleEvaluation?.user_id,
+            confirm_submission: "lead_dev_submitted",
+            _token: document
+                .querySelector("meta[name='csrf-token']")
+                .getAttribute("content"),
+        })
+            .unwrap()
+            .then(() => {
+                toast.success("Final Rating submission Successful!");
+                setIsEvaluationModal(false);
+            })
+            .catch((error) => {
+                toast.error("Final submission failed. Please try again later.");
             });
-            toast.success("Final Rating submission Successful!");
-            setIsEvaluationModal(false);
-        } catch (error) {
-            toast.error("Final submission failed. Please try again later.");
-        }
     };
 
     const handleTeamLeadComment = async (e) => {
-        try {
-            await teamLeadSubmission({
-                team_lead_cmnt: teamLeadReview,
-                user_id: singleEvaluation.user_id,
-                _token: document
-                    .querySelector("meta[name='csrf-token']")
-                    .getAttribute("content"),
+        await teamLeadSubmission({
+            team_lead_cmnt: teamLeadReview,
+            user_id: singleEvaluation.user_id,
+            _token: document
+                .querySelector("meta[name='csrf-token']")
+                .getAttribute("content"),
+        })
+            .unwrap()
+            .then(() => {
+                toast.success("Review submission Successful!");
+                setIsEvaluationModal(false);
+            })
+            .catch((error) => {
+                toast.error(
+                    "Review submission failed. Please try again later."
+                );
             });
-            toast.success("Review submission Successful!");
-            setIsEvaluationModal(false);
-        } catch (error) {
-            toast.error("Review submission failed. Please try again later.");
-        }
     };
+
     const handleAdminAuthorization = async () => {
-        try {
-            await adminAuthorization({
-                status: "authorize",
-                user_id: singleEvaluation.user_id,
-                managements_cmnt: adminComment,
-                _token: document
-                    .querySelector("meta[name='csrf-token']")
-                    .getAttribute("content"),
+        await adminAuthorization({
+            status: "authorize",
+            user_id: singleEvaluation.user_id,
+            managements_cmnt: adminComment,
+            _token: document
+                .querySelector("meta[name='csrf-token']")
+                .getAttribute("content"),
+        })
+            .unwrap()
+            .then(() => {
+                toast.success("Employee Authorization Successful!");
+                setIsEvaluationModal(false);
+            })
+            .catch((error) => {
+                toast.error(
+                    "Employee Authorization failed. Please try again later."
+                );
             });
-            toast.success("Employee Authorization Successful!");
-            setIsEvaluationModal(false);
-        } catch (error) {
-            toast.error(
-                "Employee Authorization failed. Please try again later."
-            );
-        }
     };
 
     const handleAdminRejection = async (e) => {
-        try {
-            await adminAuthorization({
-                status: "reject",
-                user_id: singleEvaluation.user_id,
-                managements_cmnt: adminComment,
-                _token: document
-                    .querySelector("meta[name='csrf-token']")
-                    .getAttribute("content"),
+        await adminRejection({
+            status: "reject",
+            user_id: singleEvaluation.user_id,
+            managements_cmnt: adminComment,
+            _token: document
+                .querySelector("meta[name='csrf-token']")
+                .getAttribute("content"),
+        })
+            .unwrap()
+            .then(() => {
+                toast.success("Employee Rejection Successful!");
+                setIsEvaluationModal(false);
+            })
+            .catch((error) => {
+                toast.error(
+                    "Employee Rejection failed. Please try again later."
+                );
             });
-            toast.success("Employee Rejection Successful!");
-            setIsEvaluationModal(false);
-        } catch (error) {
-            toast.error("Employee Rejection failed. Please try again later.");
-        }
     };
     const handleAdminExtention = async (e) => {
-        try {
-            await adminAuthorization({
-                user_id: singleEvaluation.user_id,
-                managements_cmnt: adminComment,
-                _token: document
-                    .querySelector("meta[name='csrf-token']")
-                    .getAttribute("content"),
+        await adminExtended({
+            user_id: singleEvaluation.user_id,
+            managements_cmnt: adminComment,
+            _token: document
+                .querySelector("meta[name='csrf-token']")
+                .getAttribute("content"),
+        })
+            .unwrap()
+            .then(() => {
+                toast.success("Employee Extension Successful!");
+                setIsEvaluationModal(false);
+            })
+            .catch((error) => {
+                toast.error(
+                    "Employee Extention failed. Please try again later."
+                );
             });
-            toast.success("Employee Rejection Successful!");
-            setIsEvaluationModal(false);
-        } catch (error) {
-            toast.error("Employee Rejection failed. Please try again later.");
-        }
     };
     return (
         <ReactModal
@@ -217,39 +242,8 @@ const EvaluationModal = ({
                 </div>
             )}
 
-            {auth.roleId === 8 && singleEvaluation.team_lead_status === 1 && (
-                <section>
-                    <SectionFlex>
-                        <HorizontalLineLeftTL />
-                        <ReviewTitleTL>Team Leader's Review</ReviewTitleTL>
-                        <HorizontalLineRightTL />
-                    </SectionFlex>
-
-                    <ReviewContent>
-                        <div
-                            dangerouslySetInnerHTML={{
-                                __html: singleEvaluation.team_lead_cmnt,
-                            }}
-                        />
-
-                        <ReviewFooter>
-                            By{" "}
-                            <a href="www.teamLead.com" target="_blank">
-                                Mohammad Sayeed Ullah
-                            </a>{" "}
-                            on{" "}
-                            <span>
-                                {FormatDate(singleEvaluation.updated_at)}
-                            </span>
-                        </ReviewFooter>
-                    </ReviewContent>
-                </section>
-            )}
-            {/* //team lead comment end */}
-
-            {/* admin view section start */}
-            {auth.roleId === 1 && (
-                <div>
+            {(auth.roleId === 8 || auth.roleId === 1) &&
+                singleEvaluation.team_lead_status === 1 && (
                     <section>
                         <SectionFlex>
                             <HorizontalLineLeftTL />
@@ -260,7 +254,7 @@ const EvaluationModal = ({
                         <ReviewContent>
                             <div
                                 dangerouslySetInnerHTML={{
-                                    __html: singleEvaluation?.team_lead_cmnt,
+                                    __html: singleEvaluation.team_lead_cmnt,
                                 }}
                             />
 
@@ -271,13 +265,18 @@ const EvaluationModal = ({
                                 </a>{" "}
                                 on{" "}
                                 <span>
-                                    {FormatDate(singleEvaluation?.updated_at)}
+                                    {FormatDate(singleEvaluation.updated_at)}
                                 </span>
                             </ReviewFooter>
                         </ReviewContent>
                     </section>
+                )}
+            {/* //team lead comment end */}
 
-                    {singleEvaluation.managements_decision === null ? (
+            {/* admin view section start */}
+            {auth.roleId === 1 &&
+                singleEvaluation.managements_decision === null && (
+                    <div>
                         <section>
                             <SectionFlex>
                                 <HorizontalLineLeftA />
@@ -298,41 +297,42 @@ const EvaluationModal = ({
                                 />
                             </CommentContentA>
                         </section>
-                    ) : (
-                        <section>
-                            <SectionFlex>
-                                <HorizontalLineLeftTL />
-                                <ReviewTitleTL>
-                                    Top Management's Authorization
-                                </ReviewTitleTL>
-                                <HorizontalLineRightTL />
-                            </SectionFlex>
+                    </div>
+                )}
 
-                            <ReviewContent>
-                                <div
-                                    dangerouslySetInnerHTML={{
-                                        __html: singleEvaluation?.managements_cmnt,
-                                    }}
-                                />
+            {(auth.roleId === 1 || auth.roleId === 8 || auth.roleId === 6) &&
+                singleEvaluation.managements_decision !== null && (
+                    <section>
+                        <SectionFlex>
+                            <HorizontalLineLeftTL />
+                            <ReviewTitleTL>
+                                Top Management's Authorization
+                            </ReviewTitleTL>
+                            <HorizontalLineRightTL />
+                        </SectionFlex>
 
-                                <ReviewFooter>
-                                    By{" "}
-                                    <a href="www.teamLead.com" target="_blank">
-                                        {singleEvaluation?.managements_name}
-                                    </a>{" "}
-                                    on{" "}
-                                    <span>
-                                        {FormatDate(
-                                            singleEvaluation?.managements_auth_at
-                                        )}
-                                    </span>
-                                </ReviewFooter>
-                            </ReviewContent>
-                        </section>
-                    )}
-                </div>
-            )}
+                        <ReviewContent>
+                            <div
+                                dangerouslySetInnerHTML={{
+                                    __html: singleEvaluation?.managements_cmnt,
+                                }}
+                            />
 
+                            <ReviewFooter>
+                                By{" "}
+                                <a href="www.teamLead.com" target="_blank">
+                                    {singleEvaluation?.managements_name}
+                                </a>{" "}
+                                on{" "}
+                                <span>
+                                    {FormatDate(
+                                        singleEvaluation?.managements_auth_at
+                                    )}
+                                </span>
+                            </ReviewFooter>
+                        </ReviewContent>
+                    </section>
+                )}
             {/* admin view section end */}
 
             {/* Buttons start */}
@@ -354,14 +354,15 @@ const EvaluationModal = ({
                         className="ml-2"
                         disabled={
                             !allTasksReviewed ||
-                            singleEvaluation.ld_submission_status === 1
+                            singleEvaluation.ld_submission_status === 1 ||
+                            isLoadingLeadDevFinalSubmission
                         }
                     >
-                        {singleEvaluation.ld_submission_status === 1 ? (
-                            <div> submitted </div>
-                        ) : (
-                            <div> Confirm Submission</div>
-                        )}
+                        {isLoadingLeadDevFinalSubmission
+                            ? "Submitting..."
+                            : singleEvaluation.ld_submission_status === 1
+                            ? "Submitted"
+                            : "Confirm Submission"}
                     </Button>
                 )}
 
@@ -375,8 +376,11 @@ const EvaluationModal = ({
                             onClick={handleTeamLeadComment}
                             size="md"
                             className="ml-2"
+                            disabled={isLoadingTeamLeadReview}
                         >
-                            Submit Review
+                            {isLoadingTeamLeadReview
+                                ? "Submitting..."
+                                : "Submit Review"}
                         </Button>
                     )}
 
@@ -390,24 +394,31 @@ const EvaluationModal = ({
                                 onClick={handleAdminAuthorization}
                                 size="md"
                                 className="ml-2"
+                                disabled={isLoadingAdminAuthorization}
                             >
-                                Authorize
+                                {isLoadingAdminAuthorization
+                                    ? "Authorizing..."
+                                    : "Authorize"}
                             </Button>
                             <Button
                                 variant="info"
                                 onClick={handleAdminExtention}
                                 size="md"
                                 className="ml-2"
+                                disabled={isLoadingAdminExtended}
                             >
-                                Continue this trial for 1 more week!
+                                {isLoadingAdminExtended
+                                    ? "extending..."
+                                    : "Continue this trial for 1 more week!"}
                             </Button>
                             <Button
                                 variant="danger"
                                 onClick={handleAdminRejection}
                                 size="md"
                                 className="ml-2"
+                                disabled={isAdminRejecting}
                             >
-                                Reject
+                                {isAdminRejecting ? "Rejecting..." : "Reject"}
                             </Button>
                         </Flex>
                     )}
