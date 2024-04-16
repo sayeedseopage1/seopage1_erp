@@ -1,6 +1,11 @@
+// ui components
 import { CreatedBy } from "../../../../ProjectStatus/components/table/ui";
 import Avatar from "../../../../global/Avatar";
 import Tooltip from "../Tooltip";
+
+// styles
+import style from "../Styles/SalesAnalysisReportTableColumns.module.css";
+import { color } from "framer-motion";
 
 export const SalesAnalysisReportTableColumns = [
     {
@@ -59,7 +64,15 @@ export const SalesAnalysisReportTableColumns = [
                     {data?.deal_name ? (
                         <a
                             href={`/account/contracts/${data?.deal_id}`}
-                            className="hover-underline multine-ellipsis"
+                            className={`multine-ellipsis btn btn-info`}
+                            style={viewBtnStyle}
+                            ref={(node) =>
+                                node?.style.setProperty(
+                                    "color",
+                                    "white",
+                                    "important"
+                                )
+                            }
                         >
                             View Deal
                         </a>
@@ -79,11 +92,21 @@ export const SalesAnalysisReportTableColumns = [
             return (
                 <a
                     href={`/account/leads/${data?.lead_id}`}
-                    className="hover-underline multine-ellipsis btn btn-info text-white"
-                    style={{
-                        padding: "4px 12px",
-                        width: "fit-content",
-                        fontSize: "13px",
+                    className={`multine-ellipsis btn btn-info`}
+                    style={viewBtnStyle}
+                    ref={(node) => {
+                        if (node) {
+                            node.style.setProperty(
+                                "color",
+                                "white",
+                                "important"
+                            );
+                            node.style.setProperty(
+                                "background-color",
+                                "#1492d2",
+                                "important"
+                            );
+                        }
                     }}
                 >
                     View Lead
@@ -205,8 +228,20 @@ export const SalesAnalysisReportTableColumns = [
         accessorKey: "action",
         cell: ({ row }) => {
             return (
-                <button className="btn btn-sm btn-primary py-1">View</button>
+                <button
+                    style={viewBtnStyle}
+                    className="btn btn-sm btn-primary py-1"
+                >
+                    View
+                </button>
             );
         },
     },
 ];
+
+const viewBtnStyle = {
+    padding: "4px 11px",
+    width: "fit-content",
+    fontSize: "13px",
+    color: "#fff !important",
+};
