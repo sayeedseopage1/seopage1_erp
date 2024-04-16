@@ -15136,7 +15136,9 @@ var TaskEditForm = function TaskEditForm(_ref2) {
       fd.append("reference_files[]", file);
     });
     fd.append("workable_url", workableUrl !== null && workableUrl !== void 0 ? workableUrl : "");
-    fd.append("reference", (_JSON$stringify2 = JSON.stringify(referenceList)) !== null && _JSON$stringify2 !== void 0 ? _JSON$stringify2 : "");
+    fd.append("reference", (_JSON$stringify2 = JSON.stringify(referenceList === null || referenceList === void 0 ? void 0 : referenceList.filter(function (ref) {
+      return (ref === null || ref === void 0 ? void 0 : ref.reference) !== "";
+    }))) !== null && _JSON$stringify2 !== void 0 ? _JSON$stringify2 : "");
     fd.append("font_name", fontName !== null && fontName !== void 0 ? fontName : "");
     fd.append("font_url", fontUrl !== null && fontUrl !== void 0 ? fontUrl : "");
     fd.append("primary_color", primaryColor !== null && primaryColor !== void 0 ? primaryColor : "");

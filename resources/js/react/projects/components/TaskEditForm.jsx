@@ -466,7 +466,7 @@ const TaskEditForm = ({ isOpen, close, row, table }) => {
         });
 
         fd.append("workable_url", workableUrl ?? "")
-        fd.append("reference", JSON.stringify(referenceList) ?? "");
+        fd.append("reference", JSON.stringify(referenceList?.filter(ref => ref?.reference !== "")) ?? "");
         fd.append("font_name", fontName ?? "");
         fd.append("font_url", fontUrl ?? "");
         fd.append("primary_color", primaryColor ?? "");

@@ -386,7 +386,7 @@ const TaskCreationForm = ({ handleRefresh, isOpen, close, onSuccess }) => {
         fd.append("brand_name", brandName ?? "");
         fd.append("number_of_versions", numOfVersions ?? "");
         fd.append("file_types_needed", JSON.stringify([...(fileTypesNeeded?.filter(type => type !== 'Others'))]) ?? "");
-        fd.append("reference", JSON.stringify(referenceList) ?? "");
+        fd.append("reference", JSON.stringify(referenceList?.filter(ref => ref?.reference !== "")) ?? "");
         fd.append("font_name", fontName ?? "");
         fd.append("font_url", fontUrl ?? "");
         fd.append("design_instruction", (illustration || others) ?? "");
