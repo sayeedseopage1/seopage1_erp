@@ -785,18 +785,7 @@ const SubTaskForm = ({ close, isDesignerTask }) => {
                                         readOnly={true}
                                     />
                                 </div>
-                                <div className="col-12 col-md-6">
-                                    <Input
-                                        id="numOfVersions"
-                                        label="Number of Versions"
-                                        type="number"
-                                        placeholder="Enter Number of versions"
-                                        name="numOfVersions"
-                                        defaultValue={numOfVersions}
-                                        error={err?.numOfVersions}
-                                        readOnly={true}
-                                    />
-                                </div>
+
                                 <div className="col-12 col-md-6">
                                     <div className={`form-group my-3 w-100`}>
                                         <label
@@ -818,6 +807,19 @@ const SubTaskForm = ({ close, isDesignerTask }) => {
                                             />
                                         </div>
                                     </div>
+                                </div>
+
+                                <div className="col-12 col-md-6">
+                                    <Input
+                                        id="numOfVersions"
+                                        label="Number of Versions"
+                                        type="number"
+                                        placeholder="Enter Number of versions"
+                                        name="numOfVersions"
+                                        defaultValue={numOfVersions}
+                                        error={err?.numOfVersions}
+                                        readOnly={true}
+                                    />
                                 </div>
                             </>
                         }
@@ -999,7 +1001,7 @@ const SubTaskForm = ({ close, isDesignerTask }) => {
 
                         {/* Brand guideline */}
                         {
-                            !_.isEmpty(brandGuideline) && <div className="col-12 col-md-6">
+                            !_.isEmpty(brandGuideline) && <div className="col-12">
                                 <div className={`form-group my-3 w-100`}>
                                     <label
                                         htmlFor={'brandGuideline'}

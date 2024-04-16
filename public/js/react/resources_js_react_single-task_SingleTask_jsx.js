@@ -11747,17 +11747,6 @@ var SubTaskEditModal = function SubTaskEditModal(_ref2) {
               })
             }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_26__.jsx)("div", {
               className: "col-12 col-md-6",
-              children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_26__.jsx)(_components_form_Input__WEBPACK_IMPORTED_MODULE_8__["default"], {
-                id: "numOfVersions",
-                label: "Number of Versions",
-                type: "number",
-                placeholder: "Enter Number of versions",
-                name: "numOfVersions",
-                defaultValue: numOfVersions,
-                readOnly: true
-              })
-            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_26__.jsx)("div", {
-              className: "col-12 col-md-6",
               children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_26__.jsxs)("div", {
                 className: "form-group my-3 w-100",
                 children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_26__.jsxs)("label", {
@@ -11778,6 +11767,17 @@ var SubTaskEditModal = function SubTaskEditModal(_ref2) {
                     readOnly: true
                   })
                 })]
+              })
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_26__.jsx)("div", {
+              className: "col-12 col-md-6",
+              children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_26__.jsx)(_components_form_Input__WEBPACK_IMPORTED_MODULE_8__["default"], {
+                id: "numOfVersions",
+                label: "Number of Versions",
+                type: "number",
+                placeholder: "Enter Number of versions",
+                name: "numOfVersions",
+                defaultValue: numOfVersions,
+                readOnly: true
               })
             })]
           }), ((typeOfGraphicsCategory === null || typeOfGraphicsCategory === void 0 ? void 0 : typeOfGraphicsCategory.id) === 2 || (typeOfGraphicsCategory === null || typeOfGraphicsCategory === void 0 ? void 0 : typeOfGraphicsCategory.id) === 3 || (typeOfGraphicsCategory === null || typeOfGraphicsCategory === void 0 ? void 0 : typeOfGraphicsCategory.id) === 4) && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_26__.jsx)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_26__.Fragment, {
@@ -11949,7 +11949,7 @@ var SubTaskEditModal = function SubTaskEditModal(_ref2) {
               readOnly: true
             })
           }), !lodash__WEBPACK_IMPORTED_MODULE_0___default().isEmpty(brandGuideline) && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_26__.jsx)("div", {
-            className: "col-12 col-md-6",
+            className: "col-12",
             children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_26__.jsxs)("div", {
               className: "form-group my-3 w-100",
               children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_26__.jsx)("label", {
@@ -13141,18 +13141,6 @@ var SubTaskForm = function SubTaskForm(_ref) {
             })
           }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_27__.jsx)("div", {
             className: "col-12 col-md-6",
-            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_27__.jsx)(_components_form_Input__WEBPACK_IMPORTED_MODULE_4__["default"], {
-              id: "numOfVersions",
-              label: "Number of Versions",
-              type: "number",
-              placeholder: "Enter Number of versions",
-              name: "numOfVersions",
-              defaultValue: numOfVersions,
-              error: err === null || err === void 0 ? void 0 : err.numOfVersions,
-              readOnly: true
-            })
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_27__.jsx)("div", {
-            className: "col-12 col-md-6",
             children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_27__.jsxs)("div", {
               className: "form-group my-3 w-100",
               children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_27__.jsxs)("label", {
@@ -13173,6 +13161,18 @@ var SubTaskForm = function SubTaskForm(_ref) {
                   readOnly: true
                 })
               })]
+            })
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_27__.jsx)("div", {
+            className: "col-12 col-md-6",
+            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_27__.jsx)(_components_form_Input__WEBPACK_IMPORTED_MODULE_4__["default"], {
+              id: "numOfVersions",
+              label: "Number of Versions",
+              type: "number",
+              placeholder: "Enter Number of versions",
+              name: "numOfVersions",
+              defaultValue: numOfVersions,
+              error: err === null || err === void 0 ? void 0 : err.numOfVersions,
+              readOnly: true
             })
           })]
         }), ((typeOfGraphicsCategory === null || typeOfGraphicsCategory === void 0 ? void 0 : typeOfGraphicsCategory.id) === 2 || (typeOfGraphicsCategory === null || typeOfGraphicsCategory === void 0 ? void 0 : typeOfGraphicsCategory.id) === 3 || (typeOfGraphicsCategory === null || typeOfGraphicsCategory === void 0 ? void 0 : typeOfGraphicsCategory.id) === 4) && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_27__.jsx)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_27__.Fragment, {
@@ -13345,7 +13345,7 @@ var SubTaskForm = function SubTaskForm(_ref) {
             readOnly: true
           })
         }), !lodash__WEBPACK_IMPORTED_MODULE_9___default().isEmpty(brandGuideline) && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_27__.jsx)("div", {
-          className: "col-12 col-md-6",
+          className: "col-12",
           children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_27__.jsxs)("div", {
             className: "form-group my-3 w-100",
             children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_27__.jsx)("label", {
@@ -15019,19 +15019,19 @@ var TaskEditForm = function TaskEditForm(_ref2) {
       }
     }
     if ((typeOfGraphicsCategory === null || typeOfGraphicsCategory === void 0 ? void 0 : typeOfGraphicsCategory.id) === 2 || (typeOfGraphicsCategory === null || typeOfGraphicsCategory === void 0 ? void 0 : typeOfGraphicsCategory.id) === 3 || (typeOfGraphicsCategory === null || typeOfGraphicsCategory === void 0 ? void 0 : typeOfGraphicsCategory.id) === 4) {
-      if (lodash__WEBPACK_IMPORTED_MODULE_0___default().isEmpty(textForDesign) && !workableUrl) {
+      if (lodash__WEBPACK_IMPORTED_MODULE_0___default().isEmpty(textForDesign) && lodash__WEBPACK_IMPORTED_MODULE_0___default().isEmpty(defaultTextForDesignBanner) && lodash__WEBPACK_IMPORTED_MODULE_0___default().isEmpty(defaultTextForDesignBrochure) && lodash__WEBPACK_IMPORTED_MODULE_0___default().isEmpty(defaultTextForDesignCompanyProfile) && !workableUrl && !(graphicWorkDetails !== null && graphicWorkDetails !== void 0 && graphicWorkDetails.workable_url)) {
         err.textForDesign = "The text for design field is required";
         count++;
       }
     }
     if ((typeOfGraphicsCategory === null || typeOfGraphicsCategory === void 0 ? void 0 : typeOfGraphicsCategory.id) === 5 || (typeOfGraphicsCategory === null || typeOfGraphicsCategory === void 0 ? void 0 : typeOfGraphicsCategory.id) === 6) {
-      if (lodash__WEBPACK_IMPORTED_MODULE_0___default().isEmpty(imageForDesigner) && !workableUrl) {
+      if (lodash__WEBPACK_IMPORTED_MODULE_0___default().isEmpty(imageForDesigner) && lodash__WEBPACK_IMPORTED_MODULE_0___default().isEmpty(defaultImageForDesignerRetouching) && lodash__WEBPACK_IMPORTED_MODULE_0___default().isEmpty(defaultImageForDesignerBgRemoval) && !workableUrl && !(graphicWorkDetails !== null && graphicWorkDetails !== void 0 && graphicWorkDetails.workable_url)) {
         err.imageForDesigner = "Image is required for designer";
         count++;
       }
     }
     if ((typeOfGraphicsCategory === null || typeOfGraphicsCategory === void 0 ? void 0 : typeOfGraphicsCategory.id) === 8) {
-      if (lodash__WEBPACK_IMPORTED_MODULE_0___default().isEmpty(imgOrVidForWork) && !workableUrl) {
+      if (lodash__WEBPACK_IMPORTED_MODULE_0___default().isEmpty(imgOrVidForWork) && lodash__WEBPACK_IMPORTED_MODULE_0___default().isEmpty(defaultImgOrVidForWork) && !workableUrl && !(graphicWorkDetails !== null && graphicWorkDetails !== void 0 && graphicWorkDetails.workable_url)) {
         err.imgOrVidForWork = "Images/videos is required for work";
         count++;
       }
@@ -15136,7 +15136,9 @@ var TaskEditForm = function TaskEditForm(_ref2) {
       fd.append("reference_files[]", file);
     });
     fd.append("workable_url", workableUrl !== null && workableUrl !== void 0 ? workableUrl : "");
-    fd.append("reference", (_JSON$stringify2 = JSON.stringify(referenceList)) !== null && _JSON$stringify2 !== void 0 ? _JSON$stringify2 : "");
+    fd.append("reference", (_JSON$stringify2 = JSON.stringify(referenceList === null || referenceList === void 0 ? void 0 : referenceList.filter(function (ref) {
+      return (ref === null || ref === void 0 ? void 0 : ref.reference) !== "";
+    }))) !== null && _JSON$stringify2 !== void 0 ? _JSON$stringify2 : "");
     fd.append("font_name", fontName !== null && fontName !== void 0 ? fontName : "");
     fd.append("font_url", fontUrl !== null && fontUrl !== void 0 ? fontUrl : "");
     fd.append("primary_color", primaryColor !== null && primaryColor !== void 0 ? primaryColor : "");
@@ -15585,21 +15587,6 @@ var TaskEditForm = function TaskEditForm(_ref2) {
               })
             }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_30__.jsx)("div", {
               className: "col-12 col-md-6",
-              children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_30__.jsx)(_components_form_Input__WEBPACK_IMPORTED_MODULE_8__["default"], {
-                id: "numOfVersions",
-                label: "Number of Versions",
-                type: "number",
-                placeholder: "Enter Number of versions",
-                name: "numOfVersions",
-                required: true,
-                value: numOfVersions,
-                error: error === null || error === void 0 ? void 0 : error.numOfVersions,
-                onChange: function onChange(e) {
-                  return handleChange(e, setNumOfVersions);
-                }
-              })
-            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_30__.jsx)("div", {
-              className: "col-12 col-md-6",
               children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_30__.jsxs)("div", {
                 className: "form-group my-3 w-100",
                 children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_30__.jsxs)("label", {
@@ -15654,6 +15641,21 @@ var TaskEditForm = function TaskEditForm(_ref2) {
                     children: "Add"
                   })]
                 })]
+              })
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_30__.jsx)("div", {
+              className: "col-12 col-md-6",
+              children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_30__.jsx)(_components_form_Input__WEBPACK_IMPORTED_MODULE_8__["default"], {
+                id: "numOfVersions",
+                label: "Number of Versions",
+                type: "number",
+                placeholder: "Enter Number of versions",
+                name: "numOfVersions",
+                required: true,
+                value: numOfVersions,
+                error: error === null || error === void 0 ? void 0 : error.numOfVersions,
+                onChange: function onChange(e) {
+                  return handleChange(e, setNumOfVersions);
+                }
               })
             })]
           }), ((typeOfGraphicsCategory === null || typeOfGraphicsCategory === void 0 ? void 0 : typeOfGraphicsCategory.id) === 2 || (typeOfGraphicsCategory === null || typeOfGraphicsCategory === void 0 ? void 0 : typeOfGraphicsCategory.id) === 3 || (typeOfGraphicsCategory === null || typeOfGraphicsCategory === void 0 ? void 0 : typeOfGraphicsCategory.id) === 4) && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_30__.jsx)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_30__.Fragment, {
@@ -15964,7 +15966,7 @@ var TaskEditForm = function TaskEditForm(_ref2) {
               }
             })
           }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_30__.jsx)("div", {
-            className: "col-12 col-md-6",
+            className: "col-12",
             children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_30__.jsxs)("div", {
               className: "form-group my-3 w-100",
               children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_30__.jsx)("label", {

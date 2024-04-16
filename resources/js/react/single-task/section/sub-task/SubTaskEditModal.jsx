@@ -580,17 +580,7 @@ const SubTaskEditModal = ({ task, singleTask: taskDetails, onSubmit, isLoading, 
                                             readOnly={true}
                                         />
                                     </div>
-                                    <div className="col-12 col-md-6">
-                                        <Input
-                                            id="numOfVersions"
-                                            label="Number of Versions"
-                                            type="number"
-                                            placeholder="Enter Number of versions"
-                                            name="numOfVersions"
-                                            defaultValue={numOfVersions}
-                                            readOnly={true}
-                                        />
-                                    </div>
+
                                     <div className="col-12 col-md-6">
                                         <div className={`form-group my-3 w-100`}>
                                             <label
@@ -612,6 +602,18 @@ const SubTaskEditModal = ({ task, singleTask: taskDetails, onSubmit, isLoading, 
                                                 />
                                             </div>
                                         </div>
+                                    </div>
+
+                                    <div className="col-12 col-md-6">
+                                        <Input
+                                            id="numOfVersions"
+                                            label="Number of Versions"
+                                            type="number"
+                                            placeholder="Enter Number of versions"
+                                            name="numOfVersions"
+                                            defaultValue={numOfVersions}
+                                            readOnly={true}
+                                        />
                                     </div>
                                 </>
                             }
@@ -792,7 +794,7 @@ const SubTaskEditModal = ({ task, singleTask: taskDetails, onSubmit, isLoading, 
 
                             {/* Brand guideline */}
                             {
-                                !_.isEmpty(brandGuideline) && <div className="col-12 col-md-6">
+                                !_.isEmpty(brandGuideline) && <div className="col-12">
                                     <div className={`form-group my-3 w-100`}>
                                         <label
                                             htmlFor={'brandGuideline'}
