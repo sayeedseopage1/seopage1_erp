@@ -27,7 +27,7 @@ import {
     useSalesRiskDealsQuestionListQuery,
 } from "../../../services/api/salesRiskAnalysisSlice";
 
-const SalesRiskQuestions = () => {
+const SalesRiskQuestionsResponse = () => {
     const [focusedQuestion, setFocusedQuestion] = React.useState([]);
     const [inputsData, setInputsData] = React.useState([]);
     const [allQuestions, setAllQuestions] = React.useState([]);
@@ -325,4 +325,4 @@ const SalesRiskQuestions = () => {
     );
 };
 
-export default SalesRiskQuestions;
+export default SalesRiskQuestionsResponse;

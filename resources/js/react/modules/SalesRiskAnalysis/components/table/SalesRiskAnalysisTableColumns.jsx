@@ -47,11 +47,6 @@ export const SalesRiskAnalysisTableColumns = [
                                 onClick={() => {
                                     action.handlePolicyStatus(data);
                                 }}
-                                onKeyDown={() => {
-                                    action.handlePolicyStatus(data);
-                                }}
-                                
-                                tabIndex={0}
                                 style={{
                                     cursor: "pointer",
                                 }}

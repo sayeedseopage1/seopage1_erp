@@ -65,4 +65,4 @@ ExpandQuestion.propTypes = {
     row: PropTypes.object,
     table: PropTypes.object,
     pageIndex: PropTypes.number,
-}
+};

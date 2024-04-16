@@ -59,6 +59,11 @@ const SalesRiskQuestionList = () => {
     // questions list data
     const questionsList = data?.data;
 
+
+    const handleOpenAddQuestionsModal = () => {
+        setAddQuestionsModalOpen(true);
+    }
+
     // close modal
     const handleCloseAddQuestionsModal = () => {
         setAddQuestionsModalOpen(false);
@@ -68,6 +73,8 @@ const SalesRiskQuestionList = () => {
     const onPageChange = (paginate) => {
         setPagination(paginate);
     };
+
+
 
     useEffect(() => {
         if (questionsList?.data?.length > 0) {
@@ -119,9 +126,7 @@ const SalesRiskQuestionList = () => {
                         setAllQuestions={setAllQuestions}
                         allQuestions={allQuestions}
                         onPageChange={onPageChange}
-                        handleOpenAddQuestionsModal={() => {
-                            setAddQuestionsModalOpen(true);
-                        }}
+                        handleOpenAddQuestionsModal={handleOpenAddQuestionsModal}
                     />
                 </div>
             </div>

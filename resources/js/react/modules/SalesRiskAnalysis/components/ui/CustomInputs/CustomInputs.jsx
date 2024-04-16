@@ -29,13 +29,8 @@ const CustomInputs = ({
     ...props
 }) => {
     const handleOnkeypress = (e) => {
-        const keyCode = e.keyCode || e.which;
-        if (
-            (keyCode < 48 || keyCode > 57) && // 0-9
-            keyCode !== 8 && // Backspace
-            keyCode !== 37 && // Left arrow
-            keyCode !== 39 // Right arrow
-        ) {
+        const allowedKeys = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'Backspace', 'ArrowLeft', 'ArrowRight'];
+        if (!allowedKeys.includes(e.key)) {
             e.preventDefault();
         }
     };

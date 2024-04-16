@@ -68,7 +68,6 @@ const QuestionsListTable = ({
 
     const [columnOrder, setColumnOrder] = React.useState(_.map(columns, "id"));
 
-    // on pagination
     const handlePageChange = ({ selected }) => {
         const paginate = {
             pageIndex: selected,
@@ -79,10 +78,8 @@ const QuestionsListTable = ({
         onPageChange(paginate);
     };
 
-    // handle page size change
     const handlePageSizeChange = (e) => {
         e.preventDefault();
-
         const paginate = {
             pageIndex,
             pageSize: e.target.value,
@@ -91,6 +88,11 @@ const QuestionsListTable = ({
         onPageChange(paginate);
     };
 
+    const pagination = React.useMemo(
+        () => ({ pageIndex, pageSize }),
+        [pageIndex, pageSize]
+    );
+
     const table = useReactTable({
         data,
         columns,
@@ -98,6 +100,7 @@ const QuestionsListTable = ({
             sorting,
             expanded,
             columnOrder,
+            pagination,
             tableName,
         },
         autoResetPageIndex: !skipPageReset,
@@ -110,11 +113,12 @@ const QuestionsListTable = ({
         getFilteredRowModel: getFilteredRowModel(),
         getExpandedRowModel: getExpandedRowModel(),
         getSortedRowModel: getSortedRowModel(),
+        paginateExpandedRows: false,
         meta: {
             editSingleQuestion: (row) => {
                 setIsQuestionUpdating(true);
                 handleOpenAddQuestionsModal();
-                
+
                 const parent_question = allQuestions.find(
                     (item) => item?.id === row?.parent_id
                 );
@@ -151,15 +155,11 @@ const QuestionsListTable = ({
         },
     });
 
+    console.log(table)
     return (
         <React.Fragment>
             <div
-                className="sp1_tasks_table_wrapper"
-                style={{
-                    height: "100%",
-                    maxHeight: "100%",
-                    width: "100%",
-                }}
+                className="sp1_tasks_table_wrapper w-100"
             >
                 <table className="sp1_tasks_table">
                     {/* table Header */}
@@ -245,9 +245,9 @@ const QuestionsListTable = ({
 export default QuestionsListTable;
 
 QuestionsListTable.propTypes = {
-    tableData: PropTypes.object,
-    tableColumns: PropTypes.array,
-    tableName: PropTypes.string,
+    tableData: PropTypes.object.isRequired,
+    tableColumns: PropTypes.array.isRequired,
+    tableName: PropTypes.string.isRequired,
     isLoading: PropTypes.bool,
     isFetching: PropTypes.bool,
     allQuestions: PropTypes.array,

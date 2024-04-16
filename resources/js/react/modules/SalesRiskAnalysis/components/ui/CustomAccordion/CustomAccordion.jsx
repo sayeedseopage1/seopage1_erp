@@ -23,7 +23,8 @@ const CustomAccordion = ({
     onChange,
     value,
     isSubmitting,
-    ...props
+    comment,
+    placeholder
 }) => {
     const [expend, setExpend] = React.useState(false);
     const [active, setActive] = React.useState({});
@@ -66,9 +67,9 @@ const CustomAccordion = ({
                 color={isChild ? "#b1b1b1" : "#000000"}
             >
                 {label}{" "}
-                {props?.comment && (
+                {comment && (
                     <span className="ml-2">
-                        <Tooltip text={props?.comment}>
+                        <Tooltip text={comment}>
                             {" "}
                             <i
                                 className="fa-solid fa-circle-info "
@@ -101,7 +102,7 @@ const CustomAccordion = ({
                         }`}
                     >
                         {" "}
-                        {!_.isEmpty(active) ? active?.title : props?.placeholder}
+                        {!_.isEmpty(active) ? active?.title : placeholder}
                         {handleTernary()}
                     </div>
                 </div>
@@ -174,5 +175,7 @@ CustomAccordion.propTypes = {
     onChange: PropTypes.func,
     value: PropTypes.string,
     isSubmitting: PropTypes.bool,
-    props: PropTypes.object,
+    comment: PropTypes.string,
+    placeholder: PropTypes.string
+
 }

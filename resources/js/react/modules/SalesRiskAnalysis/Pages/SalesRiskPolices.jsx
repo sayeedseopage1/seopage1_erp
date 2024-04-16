@@ -24,7 +24,7 @@ import { addNewRulesValidation } from "../helper/createFromValidation";
 // styles
 import "../components/Styles/SalesRiskAnalysis.css";
 
-const SalesRiskAnalysis = () => {
+const SalesRiskPolices = () => {
     const [{ pageIndex, pageSize }, setPagination] = React.useState({
         pageIndex: 0,
         pageSize: 10,
@@ -483,4 +483,4 @@ const SalesRiskAnalysis = () => {
     );
 };
 
-export default SalesRiskAnalysis;
+export default SalesRiskPolices;

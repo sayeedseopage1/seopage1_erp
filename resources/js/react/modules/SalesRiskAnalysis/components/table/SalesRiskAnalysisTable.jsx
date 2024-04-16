@@ -226,7 +226,6 @@ const SalesRiskAnalysisTable = ({
                 const getIndex = row.ruleList.findIndex(
                     (item) => item.id === selectedRule.id
                 );
-                console.log("getIndex", getIndex);
                 setEditRuleData(payload);
                 setEditRuleModalOpen(true);
             },
