@@ -106,7 +106,7 @@ class SalesRiskPolicyController extends AccountBaseController
         $validator = Validator::make($req->all(), [
             'title' => 'required',
             'department' => 'required',
-            'key' => 'nullable',
+            'key' => 'required',
             'comment' => 'nullable',
             'ruleList' => 'required|array|min:1',
             'ruleList.*.policyType' => 'in:' . implode(',', SalesRiskPolicy::$types),
@@ -138,7 +138,8 @@ class SalesRiskPolicyController extends AccountBaseController
 
                 $rule = self::policyRuleDataFormat($item, [
                     'department' => $req->department,
-                    'parent_id' => $policy->id
+                    'parent_id' => $policy->id,
+                    'sequence' => SalesRiskPolicy::where('parent_id', $policy->id)->count() + 1,
                 ]);
 
                 SalesRiskPolicy::create($rule);
@@ -164,7 +165,7 @@ class SalesRiskPolicyController extends AccountBaseController
         $validator = Validator::make($req->all(), [
             'title' => 'required',
             'department' => 'required',
-            'key' => 'nullable',
+            'key' => 'required',
             'comment' => 'nullable',
             'ruleList' => 'required|array|min:1',
             'ruleList.*.policyType' => 'in:' . implode(',', SalesRiskPolicy::$types),
@@ -228,7 +229,7 @@ class SalesRiskPolicyController extends AccountBaseController
             return response()->json([
                 'status' => 'error',
                 'message' => $th->getMessage(),
-            ]);
+            ], 500);
         }
     }
 
@@ -357,7 +358,7 @@ class SalesRiskPolicyController extends AccountBaseController
             return response()->json(['status' => 'success', 'message' => 'Policy status changed.']);
         } catch (\Throwable $th) {
             // throw $th;
-            return response()->json(['status' => 'error', 'message' => 'Data not saved correctly.']);
+            return response()->json(['status' => 'error', 'message' => 'Data not saved correctly.'], 500);
         }
     }
 
@@ -463,7 +464,7 @@ class SalesRiskPolicyController extends AccountBaseController
                 'comment' => $req->comment
             ]);
         } catch (\Throwable $th) {
-            return response()->json(['status' => 'error', 'message' => 'Data not saved correctly.']);
+            return response()->json(['status' => 'error', 'message' => 'Data not saved correctly.'], 500);
         }
 
         return response()->json(['status' => 'success', 'message' => 'Question added successfully']);
@@ -503,7 +504,7 @@ class SalesRiskPolicyController extends AccountBaseController
             return response()->json(['status' => 'success', 'message' => 'Question Edited successfully']);
         } catch (\Throwable $th) {
             //throw $th;
-            return response()->json(['status' => 'error', 'message' => 'Data not saved correctly.']);
+            return response()->json(['status' => 'error', 'message' => 'Data not saved correctly.'], 500);
         }
     }
 
@@ -694,7 +695,7 @@ class SalesRiskPolicyController extends AccountBaseController
         if (PolicyQuestionValue::where('deal_id', $dealId)->count() > 0) {
             return response()->json(['status' => 'error', 'message' => 'Deal question values are already added.'], 500);
         }
-
+        // self::policyHistoryStore($dealId);
         DB::beginTransaction();
         try {
             foreach ($req->all() as $item) {
@@ -837,6 +838,7 @@ class SalesRiskPolicyController extends AccountBaseController
                         if ($hourlyRate < $item->value) {
                             $points += $item->points;
                             $pointData['hourlyRate']['points'] = [$item->points, $hourlyRate];
+                            $pointData['hourlyRate']['policy_id'] = $item->id;
                             goto endHourlyRate;
                             break;
                         }
@@ -846,6 +848,7 @@ class SalesRiskPolicyController extends AccountBaseController
                         if ($hourlyRate >= $value[0] && $hourlyRate <= $value[1]) {
                             $points += $item->points;
                             $pointData['hourlyRate']['points'] = [$item->points, $hourlyRate];
+                            $pointData['hourlyRate']['policy_id'] = $item->id;
                             goto endHourlyRate;
                             break;
                         }
@@ -854,6 +857,7 @@ class SalesRiskPolicyController extends AccountBaseController
                         if ($hourlyRate > $item->value) {
                             $points += $item->points;
                             $pointData['hourlyRate']['points'] = [$item->points, $hourlyRate];
+                            $pointData['hourlyRate']['policy_id'] = $item->id;
                             goto endHourlyRate;
                             break;
                         }
@@ -863,14 +867,17 @@ class SalesRiskPolicyController extends AccountBaseController
             $message[] = 'Hourly rate ('. $hourlyRate .') not matched with any conditions';
             endHourlyRate:
 
+
             // --------------------- end hourly rate calculation ------------------ //
 
             // ---------------------- milestone calculation ------------------------------- //
             $questions = SalesPolicyQuestion::where('key', 'milestone')->orderBy('sequence')->get();
             if (count($questions) < 3) {
-                $message[] = 'All milestone questions are not added.';
+                $message[] = '3 milestone questions are expected, '. count($questions) .' found.';
                 goto endMilestone;
             }
+            $policy = SalesRiskPolicy::where('parent_id', $questions[0]->policy_id)->orderBy('sequence')->get();
+
             $data = [];
 
             $questionValue = PolicyQuestionValue::where([
@@ -898,6 +905,9 @@ class SalesRiskPolicyController extends AccountBaseController
                     'question_id' => $questions[1]->id,
                     'deal_id' => $deal_id
                 ])->first()->value;
+
+                // percentage calculation
+
                 $data[] = ['id' => $questions[1]->id, 'title' => $questions[1]->title, 'value' => $value, 'parent_id' => $questions[1]->parent_id];
 
                 // get selection value
@@ -1247,6 +1257,15 @@ class SalesRiskPolicyController extends AccountBaseController
         }
     }
 
+    function policyHistoryStore($deal_id)
+    {
+        $data = [];
+        SalesRiskPolicy::get()->each(function($item) use(&$data){
+            $data[$item->id] = $item->toArray();
+        });
+        dd($data);
+    }
+
     function questionValueReport($deal_id)
     {
         if (auth()->user()->role_id != 1) {
@@ -1264,6 +1283,7 @@ class SalesRiskPolicyController extends AccountBaseController
         $data['message'] = $calculation['message'];
         $data['deal'] = $deal =  Deal::find($deal_id);
         $data['user'] = User::whereId($deal->added_by)->first(['id', 'name']);
+        $data['authorizeBy'] = User::whereId($deal->authorize_by)->first(['id', 'name']);
 
         //get Date diff as intervals
         $d1 = new DateTime("$deal->start_date 00:00:00");
@@ -1366,6 +1386,7 @@ class SalesRiskPolicyController extends AccountBaseController
             $deal->status = 'denied';
         }
 
+        $deal->authorize_by = auth()->user()->id;
         $deal->save();
         $dealStage->save();
 

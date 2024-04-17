@@ -25,6 +25,7 @@ return new class extends Migration
             $table->float('points')->default('0');
             $table->string('department');
             $table->enum('status', ['0', '1'])->default('1')->comment('0 => Disabled, 1=> Enabled');
+            $table->tinyInteger('sequence')->default('1');
             $table->text('comment')->nullable();
             $table->timestamps();
         });

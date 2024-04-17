@@ -518,7 +518,7 @@ class ContractController extends AccountBaseController
             $deal->deal_stage = $deal_stage->deal_stage;
             $deal->comments = $deal_stage->comments;
             // $deal->won_lost = 'Yes';
-            $deal->status = 'analysis';
+            $deal->status = 'pending';
             $deal->save();
             //$lead_id = Lead::where('id', $request->lead_id)->first();
             if (Auth::id() != null) {

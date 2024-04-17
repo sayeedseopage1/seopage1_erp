@@ -26,8 +26,8 @@
 
         <style>
             /**
-                                        * FilePond Custom Styles
-                                        */
+                                                                * FilePond Custom Styles
+                                                                */
             .uploadFile {
                 width: 30%;
                 border: none;
@@ -356,15 +356,15 @@
 
 
             /* .sbinfo ul li:nth-child(2) {
-                                                padding-right: 0px;
-                                                padding-left: 5px;
-                                                width: 60px;
-                                            }
-                                            .sbinfo ul li:nth-child(3) {
-                                                padding-right: 0px;
-                                                padding-left: 5px;
-                                                width: 60px;
-                                            } */
+                                                                        padding-right: 0px;
+                                                                        padding-left: 5px;
+                                                                        width: 60px;
+                                                                    }
+                                                                    .sbinfo ul li:nth-child(3) {
+                                                                        padding-right: 0px;
+                                                                        padding-left: 5px;
+                                                                        width: 60px;
+                                                                    } */
 
             .custom_scroling_seo {
                 width: 100%;
@@ -423,9 +423,9 @@
             }
 
             /* .comments-section .btn-default:hover {
-                                                background-color: #111;
-                                                color: #fff;
-                                            } */
+                                                                        background-color: #111;
+                                                                        color: #fff;
+                                                                    } */
 
             .comment_btn {
                 display: inline-block;
@@ -608,8 +608,8 @@
 
 
             /**
-                                        * File  Custom Styles
-                                        */
+                                                                * File  Custom Styles
+                                                                */
 
             .btn-file {
                 position: relative;
@@ -759,7 +759,8 @@
                 <div class="col-md-4 text-center">
                     <div class="deal_item ">
                         <h3>Deal Status</h3><br>
-                        @if ($deal->status == 'analysis')
+                        <input type="hidden" value="{{ $deal->id }}">
+                        @if ($salesDeal->status == 'analysis')
                             @if (auth()->user()->role_id == 1)
                                 <div class="sp1_deal-stage-wrapper">
                                     <h2 style="color:rgb(62, 146, 214);"><a class="btn btn-info"
@@ -771,7 +772,15 @@
                                     <h2 style="color:rgb(62, 146, 214);">In Analysis</h2>
                                 </div>
                             @endif
-                        @elseif ($deal->status == 'denied')
+                        @elseif (in_array($salesDeal->status, ['accepted', 'auto-accepted']))
+                            <div class="sp1_deal-stage-wrapper">
+                                <h2 style="color:rgb(62, 146, 214);">
+                                    <a class="btn btn-info" href="{{ route('dealDetails', $salesDeal->id) }}">
+                                        Update Deal Details
+                                    </a>
+                                </h2>
+                            </div>
+                        @elseif ($salesDeal->status == 'denied')
                             <div class="text-center">
                                 <h2 style="color:red;">Denied</h2>
                             </div>
@@ -967,16 +976,16 @@
                                                     </div>
 
                                                     <!-- <div class="wrapper">
-                                                                               <input type="file" id="file-input" name="attach[]" multiple>
-                                                                               <label for="file-input">
+                                                                                           <input type="file" id="file-input" name="attach[]" multiple>
+                                                                                           <label for="file-input">
 
-                                                                                 <i class="fa fa-paperclip fa-2x"></i>
-                                                                                 <span></span>
-                                                                               </label>
+                                                                                             <i class="fa fa-paperclip fa-2x"></i>
+                                                                                             <span></span>
+                                                                                           </label>
 
-                                                                               <i class="fa fa-times-circle remove"></i>
-                                                                               <input type="submit" class="btn btn-default pull-right comment_btn text-end" value="Comment">
-                                                                             </div> -->
+                                                                                           <i class="fa fa-times-circle remove"></i>
+                                                                                           <input type="submit" class="btn btn-default pull-right comment_btn text-end" value="Comment">
+                                                                                         </div> -->
 
 
 
@@ -1131,16 +1140,16 @@
                                                     </div>
 
                                                     <!-- <div class="wrapper">
-                                                                               <input type="file" id="file-input" name="attach[]" multiple>
-                                                                               <label for="file-input">
+                                                                                           <input type="file" id="file-input" name="attach[]" multiple>
+                                                                                           <label for="file-input">
 
-                                                                                 <i class="fa fa-paperclip fa-2x"></i>
-                                                                                 <span></span>
-                                                                               </label>
+                                                                                             <i class="fa fa-paperclip fa-2x"></i>
+                                                                                             <span></span>
+                                                                                           </label>
 
-                                                                               <i class="fa fa-times-circle remove"></i>
-                                                                               <input type="submit" class="btn btn-default pull-right comment_btn text-end" value="Comment">
-                                                                             </div> -->
+                                                                                           <i class="fa fa-times-circle remove"></i>
+                                                                                           <input type="submit" class="btn btn-default pull-right comment_btn text-end" value="Comment">
+                                                                                         </div> -->
 
 
 
@@ -1267,16 +1276,16 @@
                                                         </div>
                                                     </div>
                                                     <!-- <div class="wrapper">
-                                                                               <input type="file" id="file-input" name="attach[]" multiple>
-                                                                               <label for="file-input">
+                                                                                           <input type="file" id="file-input" name="attach[]" multiple>
+                                                                                           <label for="file-input">
 
-                                                                                 <i class="fa fa-paperclip fa-2x"></i>
-                                                                                 <span></span>
-                                                                               </label>
+                                                                                             <i class="fa fa-paperclip fa-2x"></i>
+                                                                                             <span></span>
+                                                                                           </label>
 
-                                                                               <i class="fa fa-times-circle remove"></i>
-                                                                               <input type="submit" class="btn btn-default pull-right comment_btn text-end" value="Comment">
-                                                                             </div> -->
+                                                                                           <i class="fa fa-times-circle remove"></i>
+                                                                                           <input type="submit" class="btn btn-default pull-right comment_btn text-end" value="Comment">
+                                                                                         </div> -->
 
 
 
@@ -1410,16 +1419,16 @@
                                                         </div>
                                                     </div>
                                                     <!-- <div class="wrapper">
-                                                                               <input type="file" id="file-input" name="attach[]" multiple>
-                                                                               <label for="file-input">
+                                                                                           <input type="file" id="file-input" name="attach[]" multiple>
+                                                                                           <label for="file-input">
 
-                                                                                 <i class="fa fa-paperclip fa-2x"></i>
-                                                                                 <span></span>
-                                                                               </label>
+                                                                                             <i class="fa fa-paperclip fa-2x"></i>
+                                                                                             <span></span>
+                                                                                           </label>
 
-                                                                               <i class="fa fa-times-circle remove"></i>
-                                                                               <input type="submit" class="btn btn-default pull-right comment_btn text-end" value="Comment">
-                                                                             </div> -->
+                                                                                           <i class="fa fa-times-circle remove"></i>
+                                                                                           <input type="submit" class="btn btn-default pull-right comment_btn text-end" value="Comment">
+                                                                                         </div> -->
 
 
 
@@ -1557,16 +1566,16 @@
                                                     </div>
 
                                                     <!-- <div class="wrapper">
-                                                                               <input type="file" id="file-input" name="attach[]" multiple>
-                                                                               <label for="file-input">
+                                                                                           <input type="file" id="file-input" name="attach[]" multiple>
+                                                                                           <label for="file-input">
 
-                                                                                 <i class="fa fa-paperclip fa-2x"></i>
-                                                                                 <span></span>
-                                                                               </label>
+                                                                                             <i class="fa fa-paperclip fa-2x"></i>
+                                                                                             <span></span>
+                                                                                           </label>
 
-                                                                               <i class="fa fa-times-circle remove"></i>
-                                                                               <input type="submit" class="btn btn-default pull-right comment_btn text-end" value="Comment">
-                                                                             </div> -->
+                                                                                           <i class="fa fa-times-circle remove"></i>
+                                                                                           <input type="submit" class="btn btn-default pull-right comment_btn text-end" value="Comment">
+                                                                                         </div> -->
 
 
 
@@ -1697,16 +1706,16 @@
                                                     </div>
 
                                                     <!-- <div class="wrapper">
-                                                                              <input type="file" id="file-input" name="attach[]" multiple>
-                                                                              <label for="file-input">
+                                                                                          <input type="file" id="file-input" name="attach[]" multiple>
+                                                                                          <label for="file-input">
 
-                                                                                <i class="fa fa-paperclip fa-2x"></i>
-                                                                                <span></span>
-                                                                              </label>
+                                                                                            <i class="fa fa-paperclip fa-2x"></i>
+                                                                                            <span></span>
+                                                                                          </label>
 
-                                                                              <i class="fa fa-times-circle remove"></i>
-                                                                              <input type="submit" class="btn btn-default pull-right comment_btn text-end" value="Comment">
-                                                                            </div> -->
+                                                                                          <i class="fa fa-times-circle remove"></i>
+                                                                                          <input type="submit" class="btn btn-default pull-right comment_btn text-end" value="Comment">
+                                                                                        </div> -->
 
 
 
