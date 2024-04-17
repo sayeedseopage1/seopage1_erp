@@ -479,6 +479,14 @@ class ContractController extends AccountBaseController
             // 'current_time' => 'date|date_format:d-m-Y H:i A',
             'award_time' => 'required|date|before:' . $current_time,
         ]);
+
+        if ($request->project_type != 'hourly') {
+            $request->validate([
+                'deadline' => 'required|date',
+            ]);
+        }
+
+
         //  dd($request);
         $to = Carbon::parse($current_time);
         $from = Carbon::parse($request->award_time);
@@ -545,7 +553,7 @@ class ContractController extends AccountBaseController
         $existing_client = User::where('user_name', $request->user_name)->first();
         $chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ01234567890123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
         $suffle = substr(str_shuffle($chars), 0, 6);
-        $deal = new Deal();
+        $deal = $deal ? Deal::where('lead_id', $deal->lead_id)->first() : new Deal();
         $deal->deal_id = $request->deal_id;
         $deal->project_name = $request->project_name;
         $deal->profile_link = $request->profile_link;
@@ -579,8 +587,17 @@ class ContractController extends AccountBaseController
         } else {
             $deal->client_badge = 'new client';
         }
+
+        if ($deal->project_type == 'hourly') {
+            $today = \Carbon\Carbon::now();
+            $deadline = $today->addYear();
+            $deal->deadline = $deadline;
+        } else {
+            $deal->deadline = $request->deadline;
+        }
+
         $deal->save();
-       // dd($deal);
+        // dd($deal);
         //$lead_con_id = Lead::where('id', $request->lead_id)->first();
         if (Auth::id() != null) {
             $agent_id = SalesCount::where('user_id', Auth::id())->first();
@@ -634,33 +651,33 @@ class ContractController extends AccountBaseController
 
         $deal_client = Deal::find($deal->id);
         $deal_client->client_id = $user->id;
-        $deal->submission_status= 'Submitted';
+        $deal->submission_status = 'Submitted';
 
-        $client_details= ClientForm::where('client_username',$user->user_name)->first();
+        $client_details = ClientForm::where('client_username', $user->user_name)->first();
         // /dd($client_details);
         if ($client_details != null) {
             $deal_client->submission_status = 'Submitted';
 
-            $new_client_form= new ClientForm();
+            $new_client_form = new ClientForm();
             $new_client_form->deal_id = $deal->id;
-            $new_client_form->client_username= $client_details->client_username;
-            $new_client_form->client_email= $client_details->client_email;
-            $new_client_form->client_phone =$client_details->client_phone;
-            $new_client_form->client_whatsapp= $client_details->client_whatsapp;
-            $new_client_form->client_skype= $client_details->client_skype;
-            $new_client_form->client_telegram= $client_details->client_telegram;
-            $new_client_form->client_messenger =$client_details->client_messenger;
-            $new_client_form->client_imo= $client_details->client_imo;
-            $new_client_form->message= $client_details->message;
-            $new_client_form->timezone= $client_details->timezone;
-            $new_client_form->day= $client_details->day;
-            $new_client_form->checklist= $client_details->checklist;
+            $new_client_form->client_username = $client_details->client_username;
+            $new_client_form->client_email = $client_details->client_email;
+            $new_client_form->client_phone = $client_details->client_phone;
+            $new_client_form->client_whatsapp = $client_details->client_whatsapp;
+            $new_client_form->client_skype = $client_details->client_skype;
+            $new_client_form->client_telegram = $client_details->client_telegram;
+            $new_client_form->client_messenger = $client_details->client_messenger;
+            $new_client_form->client_imo = $client_details->client_imo;
+            $new_client_form->message = $client_details->message;
+            $new_client_form->timezone = $client_details->timezone;
+            $new_client_form->day = $client_details->day;
+            $new_client_form->checklist = $client_details->checklist;
             $new_client_form->save();
         }
-       // dd($new_client_form);
+        // dd($new_client_form);
         $deal_client->save();
 
-        $contract = new Contract();
+        $contract = Contract::find($deal->id) ?: new Contract();
         $contract->id = $deal->id;
         $contract->deal_id = $deal->id;
         $contract->subject = $request->project_name;
@@ -692,7 +709,7 @@ class ContractController extends AccountBaseController
         $project->deliverable_authorization = 0;
         $currency = Currency::where('id', $request->original_currency_id)->first();
         //dd($currency);
-        $project->project_budget = (($request->amount) + ($request->upsell_amount) )/ $currency->exchange_rate;
+        $project->project_budget = (($request->amount) + ($request->upsell_amount)) / $currency->exchange_rate;
         $project->due = $deal->amount + $deal->upsell_amount;
 
         $project->completion_percent = 0;
@@ -701,7 +718,7 @@ class ContractController extends AccountBaseController
         $project->status = 'not started';
         $project->public = 0;
         $project->save();
-     //   dd($project);
+        //   dd($project);
 
         // dd($existing_client);
         if ($existing_client != null) {
