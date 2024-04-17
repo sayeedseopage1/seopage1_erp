@@ -44,8 +44,8 @@ const PointFactors = () => {
             project_type: false,
             lower_limit: false,
             upper_limit: false,
-            infiniteValueDown: false,
-            infiniteValueUp: false,
+            // infiniteValueDown: false,
+            // infiniteValueUp: false,
             limit_type: false,
             limit_unit: false,
             point_type: false,
@@ -119,8 +119,8 @@ const PointFactors = () => {
             project_type: false,
             lower_limit: false,
             upper_limit: false,
-            infiniteValueDown: false,
-            infiniteValueUp: false,
+            // infiniteValueDown: false,
+            // infiniteValueUp: false,
             limit_type: false,
             limit_unit: false,
             point_type: false,
@@ -145,8 +145,8 @@ const PointFactors = () => {
                     project_type: false,
                     lower_limit: false,
                     upper_limit: false,
-                    infiniteValueDown: false,
-                    infiniteValueUp: false,
+                    // infiniteValueDown: false,
+                    // infiniteValueUp: false,
                     limit_type: false,
                     limit_unit: false,
                     point_type: false,
@@ -156,6 +156,12 @@ const PointFactors = () => {
             }
         }
     }
+
+    useEffect(() => {
+        if (newFactorData?.limit_type == 2) {
+            setNewFactorData({ ...newFactorData, lower_limit: 1, upper_limit: 1 })
+        }
+    }, [newFactorData?.limit_type])
 
     const [{ pageIndex, pageSize }, setPagination] = useState({
         pageIndex: 0,
@@ -177,13 +183,15 @@ const PointFactors = () => {
     const [createPmPointFactor, { isLoading: isLoadingAddPmFactors }] = useCreatePmPointFactorMutation()
 
     const handleFactorsAdded = async () => {
+        console.log("inside handler 0")
         if (_.isEmpty(newFactorData?.criteria)) {
             toast.error("Please add a criteria first");
             return;
         }
-
-        const validation = validationFormator(newFactorData, activeFactorFields, newFactorDataValidation)
-
+        console.log("inside handler 1")
+        const validation = validationFormator(newFactorData, newFactorDataValidation)
+        console.log("inside handler 2")
+        console.log(validation)
         if (
             Object.entries(validation).some(
                 ([key, value]) => key !== "isSubmitting" && value === true
@@ -195,19 +203,19 @@ const PointFactors = () => {
             });
             return;
         }
-
+        console.log("inside handler 3")
         try {
             const lowerLimitCondition = newFactorData?.infiniteValueDown ? newFactorData?.infiniteValueDown : newFactorData?.limit_type == 2 ? "==" : "<"
             const upperLimitCondition = newFactorData?.infiniteValueUp ? newFactorData?.infiniteValueUp : newFactorData?.limit_type == 2 ? "==" : ">="
-            const lowerLimit = newFactorData?.limit_type == 2 ? 1 : parseInt(newFactorData?.lower_limit)
-            const upperLimit = newFactorData?.limit_type == 2 ? 1 : parseInt(newFactorData?.upper_limit)
+            // const lowerLimit = newFactorData?.limit_type == 2 ? 1 : parseInt(newFactorData?.lower_limit)
+            // const upperLimit = newFactorData?.limit_type == 2 ? 1 : parseInt(newFactorData?.upper_limit)
 
             const payload = {
                 criteria_id: parseInt(newFactorData?.criteria?.name),
                 title: newFactorData?.title ?? null,
                 project_type: parseInt(newFactorData?.project_type) ?? null,
-                lower_limit: lowerLimit ?? null,
-                upper_limit: upperLimit ?? null,
+                lower_limit: parseInt(newFactorData?.lower_limit) ?? null,
+                upper_limit: parseInt(newFactorData?.upper_limit) ?? null,
                 limit_type: parseInt(newFactorData?.limit_type) ?? null,
                 limit_unit: parseInt(newFactorData?.limit_unit?.name) ?? null,
                 lower_limit_condition: lowerLimitCondition ?? null,
@@ -216,7 +224,7 @@ const PointFactors = () => {
                 points: parseFloat(newFactorData?.points) ?? null,
                 status: parseInt(newFactorData?.status) ?? null,
             }
-
+            console.log("inside handler 4")
             console.log(payload)
             const response = await createPmPointFactor(payload).unwrap();
             if (response?.status == 200) {

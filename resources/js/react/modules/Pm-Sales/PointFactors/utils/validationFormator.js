@@ -1,11 +1,7 @@
 import { emptyFieldsValidation } from "./stateValidation";
 
-export const validationFormator = (
-    mainState,
-    activeFields,
-    validationState
-) => {
-    const fieldsValidation = emptyFieldsValidation(mainState, activeFields);
+export const validationFormator = (mainState, validationState) => {
+    const fieldsValidation = emptyFieldsValidation(mainState);
 
     const prevNewPolicyDataValidation = { ...validationState };
     Object.entries(fieldsValidation).forEach(([key, value]) => {
