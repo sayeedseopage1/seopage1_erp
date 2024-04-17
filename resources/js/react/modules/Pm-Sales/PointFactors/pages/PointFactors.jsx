@@ -27,10 +27,10 @@ const PointFactors = () => {
         project_type: "",
         lower_limit: "",
         upper_limit: "",
+        infiniteValueDown: "",
+        infiniteValueUp: "",
         limit_type: "",
         limit_unit: {},
-        lower_limit_condition: {},
-        upper_limit_condition: {},
         point_type: "",
         points: "",
         point_depend_on_model: "", //(optional)
@@ -46,10 +46,10 @@ const PointFactors = () => {
             project_type: false,
             lower_limit: false,
             upper_limit: false,
+            infiniteValueDown: false,
+            infiniteValueUp: false,
             limit_type: false,
             limit_unit: false,
-            lower_limit_condition: false,
-            upper_limit_condition: false,
             point_type: false,
             points: false,
             isSubmitting: false,
@@ -106,10 +106,10 @@ const PointFactors = () => {
             project_type: "",
             lower_limit: "",
             upper_limit: "",
+            infiniteValueDown: "",
+            infiniteValueUp: "",
             limit_type: "",
             limit_unit: {},
-            lower_limit_condition: {},
-            upper_limit_condition: {},
             point_type: "",
             points: "",
             point_depend_on_model: "",
@@ -123,10 +123,10 @@ const PointFactors = () => {
             project_type: false,
             lower_limit: false,
             upper_limit: false,
+            infiniteValueDown: false,
+            infiniteValueUp: false,
             limit_type: false,
             limit_unit: false,
-            lower_limit_condition: false,
-            upper_limit_condition: false,
             point_type: false,
             points: false,
             isSubmitting: false,
@@ -149,10 +149,10 @@ const PointFactors = () => {
                     project_type: false,
                     lower_limit: false,
                     upper_limit: false,
+                    infiniteValueDown: false,
+                    infiniteValueUp: false,
                     limit_type: false,
                     limit_unit: false,
-                    lower_limit_condition: false,
-                    upper_limit_condition: false,
                     point_type: false,
                     points: false,
                     isSubmitting: false,
@@ -160,26 +160,6 @@ const PointFactors = () => {
             }
         }
     }
-    useEffect(() => {
-        // Update state with only the criteria property set and other properties empty
-        setNewFactorData({
-            ...newFactorData,
-            title: "",
-            project_type: "",
-            lower_limit: "",
-            upper_limit: "",
-            limit_type: "",
-            limit_unit: {},
-            lower_limit_condition: {},
-            upper_limit_condition: {},
-            point_type: "",
-            points: "",
-            point_depend_on_model: "",
-            point_depend_on_field: "",
-            // status: ""
-        });
-
-    }, [newFactorData?.criteria]);
 
     const [{ pageIndex, pageSize }, setPagination] = useState({
         pageIndex: 0,
@@ -221,28 +201,35 @@ const PointFactors = () => {
         }
 
         try {
+            const lowerLimitCondition = newFactorData?.infiniteValueDown ? newFactorData?.infiniteValueDown : newFactorData?.limit_type == 2 ? "==" : "<"
+            const upperLimitCondition = newFactorData?.infiniteValueUp ? newFactorData?.infiniteValueUp : newFactorData?.limit_type == 2 ? "==" : ">="
+            const lowerLimit = newFactorData?.limit_type == 2 ? 1 : parseInt(newFactorData?.lower_limit)
+            const upperLimit = newFactorData?.limit_type == 2 ? 1 : parseInt(newFactorData?.upper_limit)
+
             const payload = {
                 criteria_id: parseInt(newFactorData?.criteria?.name),
                 title: newFactorData?.title ?? null,
                 project_type: parseInt(newFactorData?.project_type) ?? null,
-                lower_limit: parseInt(newFactorData?.lower_limit) ?? null,
-                upper_limit: parseInt(newFactorData?.upper_limit) ?? null,
+                lower_limit: lowerLimit ?? null,
+                upper_limit: upperLimit ?? null,
                 limit_type: parseInt(newFactorData?.limit_type) ?? null,
                 limit_unit: parseInt(newFactorData?.limit_unit?.name) ?? null,
-                lower_limit_condition: newFactorData?.lower_limit_condition?.name ?? null,
-                upper_limit_condition: newFactorData?.upper_limit_condition?.name ?? null,
+                lower_limit_condition: lowerLimitCondition ?? null,
+                upper_limit_condition: upperLimitCondition ?? null,
                 point_type: parseInt(newFactorData?.point_type) ?? null,
                 points: parseFloat(newFactorData?.points) ?? null,
                 point_depend_on_model: newFactorData?.point_depend_on_model ?? null,
                 point_depend_on_field: newFactorData?.point_depend_on_field ?? null,
                 status: parseInt(newFactorData?.status) ?? null,
             }
-            const response = await createPmPointFactor(payload).unwrap();
-            if (response?.status == 200) {
-                toast.success(response.message);
-                handleAddNewItemModal();
-                resetFormState();
-            }
+
+            console.log(payload)
+            // const response = await createPmPointFactor(payload).unwrap();
+            // if (response?.status == 200) {
+            //     toast.success(response.message);
+            //     handleAddNewItemModal();
+            //     resetFormState();
+            // }
         } catch (error) {
             toast.error("Failed to add new item");
         }
