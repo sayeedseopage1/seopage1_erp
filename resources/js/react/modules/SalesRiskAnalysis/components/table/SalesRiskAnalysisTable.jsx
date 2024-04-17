@@ -402,13 +402,9 @@ const SalesRiskAnalysisTable = ({
                 [name]: value,
             });
         } else if (name === "policyType") {
-            const getValueType =
-                editPolicyInputData?.length > 0
-                    ? editPolicyInputData[0]?.valueType
-                    : {};
             setEditPolicyData({
                 ...editPolicyData,
-                valueType: getValueType,
+                valueType: {},
                 value: "",
                 from: "",
                 to: "",
@@ -512,6 +508,7 @@ const SalesRiskAnalysisTable = ({
         if (isExist) {
             const updatedData = editPolicyInputData.map((item) => {
                 if (item.id === editPolicyData.id) {
+
                     return {
                         ...item,
                         ...editPolicyData,
@@ -534,6 +531,7 @@ const SalesRiskAnalysisTable = ({
         }
     };
 
+
     // handle Edit Policy Update on server
     const handleEditPolicyUpdate = async () => {
         const payload = formatEditPolicyDataPayload(
@@ -541,6 +539,7 @@ const SalesRiskAnalysisTable = ({
             editPolicyInputData,
             editPolicyDeleteData
         );
+
         try {
             const res = await submitPolicyData(payload);
             if (res.data) {
