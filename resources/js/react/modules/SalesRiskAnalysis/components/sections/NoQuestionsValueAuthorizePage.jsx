@@ -12,7 +12,12 @@ const NoQuestionsValueAuthorizePage = () => {
                 <button
                     className="btn btn-primary py-1 d-flex justify-content-center align-items-center"
                     onClick={() => {
-                        window.history.back();
+                        if (window.history.length === 1) {
+                            window.location.href =
+                                "/account/sales-analysis-reports";
+                        } else {
+                            window.history.back();
+                        }
                     }}
                 >
                     <MdOutlineKeyboardBackspace className="mr-2" />

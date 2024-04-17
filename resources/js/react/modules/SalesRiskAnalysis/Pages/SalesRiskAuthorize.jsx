@@ -126,6 +126,8 @@ const SalesRiskAuthorize = () => {
         setIsSaleRiskAuthorizeModalOpen(false);
     };
 
+    console.log(window.history);
+
     return (
         <React.Fragment>
             <Switch>
@@ -169,7 +171,11 @@ const SalesRiskAuthorize = () => {
                                 <button
                                     className="btn btn-primary py-1 d-flex justify-content-center align-items-center"
                                     onClick={() => {
-                                        window.history.back();
+                                        if (window.history.length === 1) {
+                                            window.location.href = "/account/sales-analysis-reports";
+                                        } else {
+                                            window.history.back();
+                                        }
                                     }}
                                 >
                                     <MdOutlineKeyboardBackspace className="mr-2" />
@@ -253,8 +259,12 @@ const SalesRiskAuthorize = () => {
                                         <Switch.Case
                                             condition={
                                                 auth.getRoleId() === 1 &&
-                                                metaInfo?.deal?.status ===
-                                                    "pending"
+                                                [
+                                                    "pending",
+                                                    "analysis",
+                                                ].includes(
+                                                    metaInfo?.deal?.status
+                                                )
                                             }
                                         >
                                             <div className="d-flex justify-content-center align-items-center">
@@ -293,8 +303,12 @@ const SalesRiskAuthorize = () => {
                                         <Switch.Case
                                             condition={
                                                 auth.getRoleId() === 1 &&
-                                                metaInfo?.deal?.status !==
-                                                    "pending"
+                                                ![
+                                                    "pending",
+                                                    "analysis",
+                                                ].includes(
+                                                    metaInfo?.deal?.status
+                                                )
                                             }
                                         >
                                             <div className="d-flex justify-content-center align-items-center">

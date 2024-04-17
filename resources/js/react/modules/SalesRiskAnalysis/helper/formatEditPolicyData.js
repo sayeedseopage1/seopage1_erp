@@ -177,7 +177,7 @@ export const formatEditPolicyDataPayload = (editPolicyDefaultData, editPolicyInp
         rule.valueType = item.valueType.name;
       if (item.from) rule.from = item.from;
       if (item.to) rule.to = item.to;
-      if (item.points) rule.points = item.points;
+      if (item.points !== undefined || item.points !== "") rule.points = item.points;
       if (item.yes && item.no) {
         rule.value = {
           yes: {
