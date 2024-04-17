@@ -1144,7 +1144,7 @@ class SalesRiskPolicyController extends AccountBaseController
                         $points += (float) json_decode($policy[0]->value)->no->point;
                         $pointData[$item]['points'] = json_decode($policy[0]->value)->no->point;
                     }
-                    $policyIdList[$policy->id] = $value;
+                    $policyIdList[$policy[0]->id] = $value;
 
                     $pointData[$item]['questionAnswer'][] = ['id' => $questions[0]->id, 'title' => $questions[0]->title, 'value' => $value, 'parent_id' => $questions[0]->parent_id];
 
@@ -1395,7 +1395,7 @@ class SalesRiskPolicyController extends AccountBaseController
     function salesRiskReportList(Request $req)
     {
         if (url()->current() == route('account.sale-risk-policies.report-data')) {
-            $itemsPaginated = Deal::whereIn('status', ['pending', 'accepted', 'denied'])
+            $itemsPaginated = Deal::whereIn('status', ['analysis', 'accepted', 'auto-accepted', 'denied'])
                 ->where(function ($query) use ($req) {
                     if ($req->start_date) {
                         $query->whereDate('created_at', '>=', $req->start_date);
