@@ -4,6 +4,7 @@ namespace App\Helper;
 
 use App\Models\CashPoint;
 use App\Models\Criteria;
+use App\Models\Factor;
 use App\Models\Project;
 use Illuminate\Contracts\Validation\Validator;
 
@@ -11,9 +12,11 @@ class ProjectManagerPointLogic
 {
     public static function distribute($criteriaId, $projectId, $comparable_value, $points = null)
     {
-        $criteria = Criteria::with('factors')->find($criteriaId);
+        $project = Project::with('deal:id,project_type')->find($projectId);
+        $criteria = Criteria::with(['factors' => function($factor) use ($project){
+            return $factor->where('project_type', $project->deal->project_type == 'fixed' ? 1 : 2);
+        }])->find($criteriaId);
         if(!$criteria->factors->count()) return false;
-        $project = Project::find($projectId);
         $earned_points = 0;
         $factor_id = null;
 
