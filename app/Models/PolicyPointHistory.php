@@ -8,4 +8,6 @@ use Illuminate\Database\Eloquent\Model;
 class PolicyPointHistory extends Model
 {
     use HasFactory;
+
+    protected $fillable = ['deal_id', 'policy'];
 }
