@@ -6,6 +6,7 @@ use App\Models\Country;
 use App\Models\Deal;
 use App\Models\DealStage;
 use App\Models\Lead;
+use App\Models\PolicyPointHistory;
 use App\Models\PolicyQuestionValue;
 use App\Models\SalesPolicyQuestion;
 use App\Models\SalesRiskPolicy;
@@ -150,7 +151,7 @@ class SalesRiskPolicyController extends AccountBaseController
             // throw $th;
             return response()->json([
                 'status' => 'error',
-                'message' => $th->getMessage()
+                'message' => 'Data did not save properly.'
             ]);
         }
 
@@ -289,7 +290,7 @@ class SalesRiskPolicyController extends AccountBaseController
             }
 
 
-            $itemsPaginated = SalesRiskPolicy::where('parent_id', null)->offset($req->input('limit', 10) * ($req->input('page', 1) -1) )->paginate($req->input('limit', 10));
+            $itemsPaginated = SalesRiskPolicy::where('parent_id', null)->offset($req->input('limit', 10) * ($req->input('page', 1) - 1))->paginate($req->input('limit', 10));
             $itemsTransformed = $itemsPaginated
                 ->getCollection()
                 ->map(function ($item) {
@@ -695,7 +696,7 @@ class SalesRiskPolicyController extends AccountBaseController
         if (PolicyQuestionValue::where('deal_id', $dealId)->count() > 0) {
             return response()->json(['status' => 'error', 'message' => 'Deal question values are already added.'], 500);
         }
-        // self::policyHistoryStore($dealId);
+
         DB::beginTransaction();
         try {
             foreach ($req->all() as $item) {
@@ -718,19 +719,21 @@ class SalesRiskPolicyController extends AccountBaseController
                 return response()->json(['status' => 'error', 'message' => $calculation['error']], 500);
             }
 
+            // store policy histroy
+            self::policyHistoryStore($dealId);
+
             // deals table status change
             if ($calculation['points'] >= 0) {
                 $dealStage = DealStage::where('lead_id', $deal->lead_id)->first();
                 $dealStage->won_lost = 'Yes';
                 $dealStage->deal_status = 'accepted';
-                $deal->status = 'auto-accepted';
+                $dealStage->save();
 
-            }
-            else {
+                $deal->status = 'auto-accepted';
+            } else {
                 $deal->status = 'analysis';
             }
 
-            $dealStage->save();
             $deal->save();
 
             return response()->json([
@@ -741,14 +744,14 @@ class SalesRiskPolicyController extends AccountBaseController
             ]);
         } catch (\Throwable $th) {
             DB::rollBack();
+            // if error then delete previous records
+            PolicyQuestionValue::where('deal_id', $dealId)->delete();
+
             // throw $th;
             return response()->json(['status' => 'error', 'message' => 'Data did not stored successfully.'], 500);
         }
     }
 
-    /**
-     *
-     */
     function calculatePolicyPoint($deal_id)
     {
         // $dealStage = DealStage::find($deal_id);
@@ -864,7 +867,7 @@ class SalesRiskPolicyController extends AccountBaseController
                         break;
                 }
             }
-            $message[] = 'Hourly rate ('. $hourlyRate .') not matched with any conditions';
+            $message[] = 'Hourly rate (' . $hourlyRate . ') not matched with any conditions';
             endHourlyRate:
 
 
@@ -873,7 +876,7 @@ class SalesRiskPolicyController extends AccountBaseController
             // ---------------------- milestone calculation ------------------------------- //
             $questions = SalesPolicyQuestion::where('key', 'milestone')->orderBy('sequence')->get();
             if (count($questions) < 3) {
-                $message[] = '3 milestone questions are expected, '. count($questions) .' found.';
+                $message[] = '3 milestone questions are expected, ' . count($questions) . ' found.';
                 goto endMilestone;
             }
             $policy = SalesRiskPolicy::where('parent_id', $questions[0]->policy_id)->orderBy('sequence')->get();
@@ -1259,11 +1262,22 @@ class SalesRiskPolicyController extends AccountBaseController
 
     function policyHistoryStore($deal_id)
     {
-        $data = [];
-        SalesRiskPolicy::get()->each(function($item) use(&$data){
-            $data[$item->id] = $item->toArray();
-        });
-        dd($data);
+        $data = SalesRiskPolicy::where('parent_id', null)->get()
+            ->map(function ($item) {
+                return [
+                    'id' => $item->id,
+                    'title' => $item->title,
+                    'key' => $item->key,
+                    'ruleList' => SalesRiskPolicy::where('parent_id', $item->id)->get(['id', 'title',  'type', 'parent_id', 'value_type', 'value', 'points', 'status', 'comment']),
+                    'department' => $item->department,
+                    'status' => $item->status,
+                    'comment' => $item->comment
+                ];
+            });
+        PolicyPointHistory::updateOrCreate(
+            ['deal_id' => $deal_id],
+            ['policy' => json_encode($data)]
+        );
     }
 
     function questionValueReport($deal_id)
@@ -1273,39 +1287,46 @@ class SalesRiskPolicyController extends AccountBaseController
         }
 
         $calculation = self::calculatePolicyPoint($deal_id);
+        // self::policyHistoryStore($deal_id);
 
         if ($calculation['points'] === null) {
             return response()->json(['status' => 'error', 'message' => $calculation['error'], 'data' => ['points' => null]]);
         }
 
-        $data['points'] = $calculation['points'];
-        $data['pointData'] = $calculation['pointData'];
-        $data['message'] = $calculation['message'];
-        $data['deal'] = $deal =  Deal::find($deal_id);
-        $data['user'] = User::whereId($deal->added_by)->first(['id', 'name']);
-        $data['authorizeBy'] = User::whereId($deal->authorize_by)->first(['id', 'name']);
+        try {
+            $data['points'] = $calculation['points'];
+            $data['pointData'] = $calculation['pointData'];
+            $data['message'] = $calculation['message'];
+            $data['deal'] = $deal =  Deal::find($deal_id);
+            $data['user'] = User::whereId($deal->added_by)->first(['id', 'name']);
+            $data['authorizeBy'] = $deal->authorize_by ? User::whereId($deal->authorize_by)->first(['id', 'name']) : null;
+            $data['policyHistory'] = json_decode(PolicyPointHistory::where('deal_id', $deal->id)->firstOrFail()->policy);
 
-        //get Date diff as intervals
-        $d1 = new DateTime("$deal->start_date 00:00:00");
-        $d2 = new DateTime("$deal->deadline 23:59:59");
-        $interval = $d1->diff($d2);
-        $data['deadline'] = $interval->d;
+            //get Date diff as intervals
+            $d1 = new DateTime("$deal->start_date 00:00:00");
+            $d2 = new DateTime("$deal->deadline 23:59:59");
+            $interval = $d1->diff($d2);
+            $data['deadline'] = $interval->d;
 
-        /**
-         * hourlyRate
-         * milestone
-         * threat
-         * doneByElse
-         * routeWork
-         * availableWeekend
-         * firstSubmission
-         * acceptPriceProposal
-         * clientCountry
-         * projectDeadline
-         * projectBudget
-         */
-        // compact('deal', 'points', 'pointData', 'message', 'user', 'deadline')
-        return response()->json(['status' => 'success', 'data' => $data]);
+            /**
+             * hourlyRate
+             * milestone
+             * threat
+             * doneByElse
+             * routeWork
+             * availableWeekend
+             * firstSubmission
+             * acceptPriceProposal
+             * clientCountry
+             * projectDeadline
+             * projectBudget
+             */
+            // compact('deal', 'points', 'pointData', 'message', 'user', 'deadline')
+            return response()->json(['status' => 'success', 'data' => $data]);
+        } catch (\Throwable $th) {
+            //throw $th;
+            return response()->json(['status' => 'error', 'message' => 'Internal error occured'], 500);
+        }
     }
 
     function salesRiskReportList(Request $req)
