@@ -62,6 +62,7 @@ export const PointFactorsColumns = [
                                     key={factor?.id}
                                     style={textStyle}
                                     className="py-3"
+                                    title={factor?.title}
                                 >
                                     {factor?.title}
                                 </p>

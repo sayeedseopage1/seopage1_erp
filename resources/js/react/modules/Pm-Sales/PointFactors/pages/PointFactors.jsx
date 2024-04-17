@@ -158,7 +158,10 @@ const PointFactors = () => {
     }
 
     useEffect(() => {
-        setNewFactorData({ ...newFactorData, lower_limit: "", upper_limit: "" })
+        setNewFactorData({
+            ...newFactorData, lower_limit: "", upper_limit: "", infiniteValueDown: "",
+            infiniteValueUp: ""
+        })
         if (newFactorData?.limit_type == 2) {
             setNewFactorData({ ...newFactorData, lower_limit: 1, upper_limit: 1 })
         }
