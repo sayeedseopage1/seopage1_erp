@@ -1412,19 +1412,21 @@ class SalesRiskPolicyController extends AccountBaseController
                 ->map(function ($item) {
 
                     $lead = Lead::find($item->lead_id);
+                    $user = $item->authorize_by ?  User::find($item->authorize_by): null;
                     return [
                         'client_id' => $item->client_id,
                         'client_name' => $item->client_name,
                         'deal_id' => $item->id,
                         'deal_name' => $item->deal_id,
+                        'status' => $item->status,
                         'project_name' => $item->project_name,
                         'project_budget' => $item->actual_amount,
                         'lead_id' => $item->lead_id,
                         'country' => $lead ? $lead->country : '',
                         'award_time' => $item->award_time,
-                        'authorize_by_id' => '',
-                        'authorize_by_name' => '',
-                        'authorize_by_photo' => '',
+                        'authorize_by_id' => $item->authorize_by,
+                        'authorize_by_name' => $item->authorize_by ? $user->name : null,
+                        'authorize_by_photo' => $item->authorize_by ? $user->image : null,
                         'points' => self::calculatePolicyPoint($item->id)['points']
                     ];
                 })->toArray();
