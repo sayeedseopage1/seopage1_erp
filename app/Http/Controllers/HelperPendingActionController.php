@@ -1836,7 +1836,7 @@ class HelperPendingActionController extends AccountBaseController
                         'button_color' => 'primary',
                         'button_type' => 'redirect_url',
                         'button_url' => route('employee-evaluation.index'),
-                        'button_url' => route('employee-evaluation.index', ['modal_type' => 'new_dev_evaluation', 'user_id' => $new_dev->id]),
+                        'button_url' => route('employee-evaluation.index', ['user_id' => $new_dev->id, 'show' => 'all']),
                     ],
 
                 ];
@@ -1872,7 +1872,7 @@ class HelperPendingActionController extends AccountBaseController
                         'button_color' => 'primary',
                         'button_type' => 'redirect_url',
                         'button_url' => route('employee-evaluation.index'),
-                        'button_url' => route('employee-evaluation.index', ['modal_type' => 'new_dev_evaluation', 'user_id' => $new_dev->id]),
+                        'button_url' => route('employee-evaluation.index', ['user_id' => $new_dev->id, 'show' => 'all']),
                     ],
 
                 ];
@@ -1909,14 +1909,14 @@ class HelperPendingActionController extends AccountBaseController
                         'button_color' => 'primary',
                         'button_type' => 'redirect_url',
                         'button_url' => route('employee-evaluation.index'),
-                        'button_url' => route('employee-evaluation.index', ['modal_type' => 'new_dev_evaluation', 'user_id' => $new_dev->id]),
+                        'button_url' => route('employee-evaluation.index', ['user_id' => $new_dev->id, 'show' => 'all']),
                     ],
                     [
                         'button_name' => 'Continue this trial for 1 more week!',
                         'button_color' => 'primary',
                         'button_type' => 'redirect_url',
                         'button_url' => route('employee-evaluation.index'),
-                        'button_url' => route('employee-evaluation.index', ['modal_type' => 'new_dev_evaluation', 'user_id' => $new_dev->id]),
+                        'button_url' => route('employee-evaluation.index', ['user_id' => $new_dev->id, 'show' => 'all']),
                     ],
 
                 ];
