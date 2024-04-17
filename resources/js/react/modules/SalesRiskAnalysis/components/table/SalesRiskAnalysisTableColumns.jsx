@@ -315,6 +315,7 @@ export const SalesRiskAnalysisTableColumns = [
                                             }
                                             rowDetails={rule}
                                             multiple
+                                            isShow={true}
                                             handleEditCountryList={() => {
                                                 action.handleEditCountryList(
                                                     data,

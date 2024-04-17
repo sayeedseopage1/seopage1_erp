@@ -368,6 +368,8 @@ const SalesRiskAuthorize = () => {
                 <SaleRiskAuthorizePolicesModal
                     open={isSaleRiskAuthorizeModalOpen}
                     closeModal={handleCloseAuthorizeModal}
+                    salesRiskAnalysisRules={metaInfo?.policyHistory}
+                    isLoading={isLoading}
                 />
             )}
         </React.Fragment>

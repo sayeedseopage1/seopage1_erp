@@ -13,6 +13,7 @@ const MultiSelectShowDropDown = ({
     sidebarItem = false,
     className,
     handleEditCountryList,
+    isShow,
 }) => {
     const _Options = data;
     return (
@@ -49,15 +50,17 @@ const MultiSelectShowDropDown = ({
                 >
                     <div className="d-flex justify-content-between">
                         <p>Country list ({_Options?.length})</p>
-                        <p
-                            onClick={handleEditCountryList}
-                            className="d-flex align-items-center"
-                            style={{ cursor: "pointer" }}
-                            onKeyDown={handleEditCountryList}
-                        >
-                            <i className="fa-solid fa-plus mr-2 text-primary"></i> {' '}
-                            Add More
-                        </p>
+                        {isShow && (
+                            <p
+                                onClick={handleEditCountryList}
+                                className="d-flex align-items-center"
+                                style={{ cursor: "pointer" }}
+                                onKeyDown={handleEditCountryList}
+                            >
+                                <i className="fa-solid fa-plus mr-2 text-primary"></i>{" "}
+                                Add More
+                            </p>
+                        )}
                     </div>
                     {_Options.map((item) => (
                         <Dropdown.Item
@@ -94,4 +97,5 @@ MultiSelectShowDropDown.propTypes = {
     sidebarItem: PropTypes.bool,
     className: PropTypes.string,
     handleEditCountryList: PropTypes.func,
-}
+    isShow: PropTypes.bool,
+};
