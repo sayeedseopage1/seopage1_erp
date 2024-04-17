@@ -32,7 +32,8 @@ const SingleEvaluationModal = ({
     const { evaluationObject } = useEmployeeEvaluation();
     const [storeTaskRating, { isLoading: isLoadingReview }] =
         useStoreTaskRatingMutation();
-    const [updateTaskRating] = useUpdateTaskRatingSubmissionMutation();
+    const [updateTaskRating, { isLoading: isLoadingUpdateTaskRating }] =
+        useUpdateTaskRatingSubmissionMutation();
     const [averageRating, setAverageRating] = useState(
         evaluationObject.lead_dev_avg_rating
     );
@@ -473,15 +474,21 @@ const SingleEvaluationModal = ({
                                     : "Submit Evaluation"}
                             </Button>
                         ) : (
-                            <button
+                            <Button
                                 className="mr-2 btn btn-primary "
                                 onClick={handleEdit}
+                                disabled={isLoadingUpdateTaskRating}
                             >
                                 <div>
                                     <BiSolidEditAlt />
-                                    <span> Update Rating</span>
+                                    <span>
+                                        {" "}
+                                        {isLoadingUpdateTaskRating
+                                            ? "Updating"
+                                            : "Update Rating"}
+                                    </span>
                                 </div>
-                            </button>
+                            </Button>
                         ))}
                     <Button
                         size="md"

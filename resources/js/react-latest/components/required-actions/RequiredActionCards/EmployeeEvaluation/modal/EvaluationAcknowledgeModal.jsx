@@ -45,7 +45,6 @@ const EvaluationAcknowledgeModal = ({
         DecisionColor[singleEvaluation?.managements_decision] ||
         DecisionColor["default"];
 
-    console.log("decisionColor", decisionColor);
     const auth = useAuth();
     const { setEvaluationObject } = useEmployeeEvaluation();
     const evaluationId = 2580;
