@@ -48,6 +48,42 @@ import { generateUniqueString } from "../../../../utils/customUidGenerate";
 // context
 import { SalesRiskAnalysisContext } from "../../context/SalesRiskAnalysisProvider";
 
+const inputSateData = {
+    inputState: {
+        policyName: "",
+        department: "",
+        valueType: {},
+        policyType: {},
+        value: "",
+        from: "",
+        to: "",
+        yes: "",
+        no: "",
+        comment: "",
+        yesComment: "",
+        noComment: "",
+        ruleComment: "",
+        countries: [],
+        points: "",
+        id: "",
+    },
+    inputValidation: {
+        isSubmitting: false,
+        policyName: false,
+        department: false,
+        policyType: false,
+        valueType: false,
+        value: false,
+        from: false,
+        to: false,
+        yes: false,
+        no: false,
+        countries: false,
+        key: false,
+        points: false,
+    },
+};
+
 const SalesRiskAnalysisTable = ({
     isLoading,
     filter,
@@ -92,37 +128,11 @@ const SalesRiskAnalysisTable = ({
     );
     const [editPolicyDeleteData, setEditPolicyDeleteData] = React.useState([]);
     const [editPolicyInputData, setEditPolicyInputData] = React.useState([]);
-    const [editRuleDataValidation, setEditRuleDataValidation] = React.useState({
-        isSubmitting: false,
-        policyName: false,
-        department: false,
-        policyType: false,
-        valueType: false,
-        key: false,
-        value: false,
-        from: false,
-        to: false,
-        yes: false,
-        no: false,
-        countries: false,
-        points: false,
-    });
+    const [editRuleDataValidation, setEditRuleDataValidation] = React.useState(
+        inputSateData?.inputValidation
+    );
     const [editPolicyDataValidation, setEditPolicyDataValidation] =
-        React.useState({
-            isSubmitting: false,
-            policyName: false,
-            department: false,
-            policyType: false,
-            valueType: false,
-            value: false,
-            from: false,
-            key: false,
-            to: false,
-            yes: false,
-            no: false,
-            countries: false,
-            points: false,
-        });
+        React.useState(inputSateData?.inputValidation);
 
     // sales risk analysis rules data
     const _salesRiskAnalysis = React.useMemo(
@@ -221,9 +231,6 @@ const SalesRiskAnalysisTable = ({
                     row,
                     selectedRule,
                     policyKeys
-                );
-                const getIndex = row.ruleList.findIndex(
-                    (item) => item.id === selectedRule.id
                 );
                 setEditRuleData(payload);
                 setEditRuleModalOpen(true);
@@ -327,25 +334,6 @@ const SalesRiskAnalysisTable = ({
         }
     };
 
-    // reset form for rule on close
-    const resetFormForRule = () => {
-        setEditRuleData({});
-        setEditRuleDataValidation({
-            isSubmitting: false,
-            policyName: false,
-            department: false,
-            policyType: false,
-            valueType: false,
-            value: false,
-            from: false,
-            to: false,
-            yes: false,
-            no: false,
-            countries: false,
-            points: false,
-        });
-    };
-
     // handle change on input
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -360,6 +348,7 @@ const SalesRiskAnalysisTable = ({
                 no: "",
                 countries: [],
                 points: "",
+                
                 [name]: value,
             });
         } else {
@@ -372,19 +361,7 @@ const SalesRiskAnalysisTable = ({
     const handleCancelRuleOnPolicy = () => {
         setEditPolicyData({
             ...editPolicyData,
-            valueType: {},
-            policyType: {},
-            value: "",
-            from: "",
-            to: "",
-            yes: "",
-            no: "",
-            comment: "",
-            yesComment: "",
-            noComment: "",
-            ruleComment: "",
-            countries: [],
-            points: "",
+            ...inputSateData.inputState,
         });
         setIsRuleUpdating(false);
     };
@@ -419,61 +396,28 @@ const SalesRiskAnalysisTable = ({
         }
     };
 
-    // reset form for policy on close
-    const resetFormForPolicy = (single) => {
-        if (single === "single") {
-            setEditPolicyData({
-                policyName: "",
-                department: "",
-                valueType: {},
-                policyType: {},
-                value: "",
-                from: "",
-                to: "",
-                yes: "",
-                no: "",
-                comment: "",
-                yesComment: "",
-                noComment: "",
-                ruleComment: "",
-                countries: [],
-                points: "",
-                id: "",
-            });
-            setEditPolicyDataValidation({
-                isSubmitting: false,
-                policyName: false,
-                department: false,
-                policyType: false,
-                valueType: false,
-                value: false,
-                from: false,
-                hey: false,
-                to: false,
-                yes: false,
-                no: false,
-                countries: false,
-                points: false,
-            });
-        } else {
-            setEditPolicyData([]);
-            setEditPolicyDefaultData([]);
-            setEditPolicyDataValidation({
-                isSubmitting: false,
-                policyName: false,
-                department: false,
-                policyType: false,
-                valueType: false,
-                value: false,
-                from: false,
-                hey: false,
-                to: false,
-                yes: false,
-                no: false,
-                countries: false,
-                points: false,
-            });
-            setEditPolicyDeleteData([]);
+    // reset form for policy and rule
+    const resetFormForPolicy = (type) => {
+        if (["single", "all"].includes(type)) {
+            setEditPolicyData(inputSateData.inputState);
+            setEditPolicyDataValidation(inputSateData.inputValidation);
+        }
+        switch (type) {
+            case "all":
+                setEditPolicyDeleteData([]);
+                setEditPolicyDefaultData([]);
+            
+                break;
+            case "ruleInputs":
+                setEditRuleData({});
+                setEditRuleDataValidation(inputSateData.inputValidation);
+                break;
+            case "rolePolicy":
+                setEditRuleData({});
+                setEditPolicyDataValidation(inputSateData.inputValidation);
+                break;
+            default:
+                break;
         }
     };
 
@@ -499,16 +443,13 @@ const SalesRiskAnalysisTable = ({
             });
             return;
         }
-
         // check if policy rule already exist
         const isExist = editPolicyInputData.find(
             (item) => item?.id === editPolicyData?.id
         );
-
         if (isExist) {
             const updatedData = editPolicyInputData.map((item) => {
                 if (item.id === editPolicyData.id) {
-
                     return {
                         ...item,
                         ...editPolicyData,
@@ -531,7 +472,6 @@ const SalesRiskAnalysisTable = ({
         }
     };
 
-
     // handle Edit Policy Update on server
     const handleEditPolicyUpdate = async () => {
         const payload = formatEditPolicyDataPayload(
@@ -539,13 +479,12 @@ const SalesRiskAnalysisTable = ({
             editPolicyInputData,
             editPolicyDeleteData
         );
-
         try {
             const res = await submitPolicyData(payload);
             if (res.data) {
                 toast.success("Policy updated successfully");
                 handleCloseEditPolicyModal();
-                resetFormForPolicy();
+                resetFormForPolicy("all");
             }
         } catch (error) {
             toast.error("Something went wrong");
@@ -555,7 +494,7 @@ const SalesRiskAnalysisTable = ({
     // modal Close Handler
     const handleCloseEditRuleModal = () => {
         setEditRuleModalOpen(false);
-        resetFormForRule();
+        resetFormForPolicy("ruleInputs");
     };
     const handleCloseStatusActionModal = () => {
         setRuleActionModalOpen(false);
@@ -566,26 +505,11 @@ const SalesRiskAnalysisTable = ({
     };
     const handleCloseEditPolicyModal = () => {
         setEditPolicyModalOpen(false);
-        resetFormForPolicy();
+        resetFormForPolicy("all");
     };
     const handleCloseEditCountryListModal = () => {
         setEditCountryListModalOpen(false);
-        setEditRuleData({});
-        setEditPolicyDataValidation({
-            isSubmitting: false,
-            policyName: false,
-            department: false,
-            policyType: false,
-            valueType: false,
-            value: false,
-            from: false,
-            hey: false,
-            to: false,
-            yes: false,
-            no: false,
-            countries: false,
-            points: false,
-        });
+        resetFormForPolicy("rolePolicy");
     };
 
     // auto generate title

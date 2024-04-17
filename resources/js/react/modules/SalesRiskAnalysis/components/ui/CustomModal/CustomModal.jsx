@@ -18,13 +18,17 @@ const CustomModal = ({
     return (
         <ReactModal
             style={{
-                customStyles,
+                overlay: {
+                    ...customStyles.overlay,
+                    zIndex: props.zIndex || 99999999999,
+                },
                 content: {
                     ...customStyles.content,
                     // width: width || "600px",
                     maxWidth: width || "600px",
                     height: props.height || "fit-content",
                     maxHeight: props.maxHeight || "600px",
+                    paddingTop: props.paddingTop || "20px",
                 },
             }}
             isOpen={open}
@@ -52,7 +56,7 @@ export default CustomModal;
 
 const customStyles = {
     overlay: {
-        zIndex: 99999998,
+        zIndex: 99999999999,
         backgroundColor: "rgba(0, 0, 0, 0.5)",
         margin: "auto auto",
         padding: "20px",

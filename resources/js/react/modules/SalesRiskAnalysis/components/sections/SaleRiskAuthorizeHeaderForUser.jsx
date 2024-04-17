@@ -28,7 +28,7 @@ const SaleRiskAuthorizeHeaderForUser = ({ headerData, isLoading }) => {
                         {" "}
                         Authorize By :{" "}
                         <span className="ml-1">
-                            {headerData.authorizer ?? "-"}
+                            {headerData?.authorizeBy?.name ?? "-"}
                         </span>
                     </p>
                 </div>

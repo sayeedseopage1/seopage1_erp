@@ -128,16 +128,18 @@ if (containerSalePolicyQuestionNotice) {
     ReactDOM.createRoot(containerSalePolicyQuestionNotice).render(
         <React.StrictMode>
             <Provider store={store}>
-                <BrowserRouter>
-                    <Routes>
-                        <Route path="/" element={<Content />}>
-                            <Route
-                                path="account/deals/risk-analysis/:deal_id" 
-                                element={<SaleSRiskQuestionNotice />}
-                            />
-                        </Route>
-                    </Routes>
-                </BrowserRouter>
+                <SalesRiskAnalysisProvider>
+                    <BrowserRouter>
+                        <Routes>
+                            <Route path="/" element={<Content />}>
+                                <Route
+                                    path="account/deals/risk-analysis/:deal_id"
+                                    element={<SaleSRiskQuestionNotice />}
+                                />
+                            </Route>
+                        </Routes>
+                    </BrowserRouter>
+                </SalesRiskAnalysisProvider>
             </Provider>
         </React.StrictMode>
     );
@@ -152,18 +154,20 @@ if (containerSalesAnalysisReport) {
     ReactDOM.createRoot(containerSalesAnalysisReport).render(
         <React.StrictMode>
             <Provider store={store}>
-                <BrowserRouter>
-                    <Routes>
-                        <Route
-                            path="/account/contracts/:id"
-                            element={<SalesRiskAuthorize />}
-                        />
-                        <Route
-                            path="/account/projects/:id"
-                            element={<SalesRiskAuthorize />}
-                        />
-                    </Routes>
-                </BrowserRouter>
+                <SalesRiskAnalysisProvider>
+                    <BrowserRouter>
+                        <Routes>
+                            <Route
+                                path="/account/contracts/:id"
+                                element={<SalesRiskAuthorize />}
+                            />
+                            <Route
+                                path="/account/projects/:id"
+                                element={<SalesRiskAuthorize />}
+                            />
+                        </Routes>
+                    </BrowserRouter>
+                </SalesRiskAnalysisProvider>
             </Provider>
         </React.StrictMode>
     );
@@ -179,18 +183,20 @@ if (containerSalesAnalysisReportTable) {
     ReactDOM.createRoot(containerSalesAnalysisReportTable).render(
         <React.StrictMode>
             <Provider store={store}>
-                <DndProvider backend={HTML5Backend}>
-                    <BrowserRouter>
-                        <Routes>
-                            <Route path="/" element={<ContentWithDrag />}>
-                                <Route
-                                    path="/account/sales-analysis-reports"
-                                    element={<SalesRiskReport />}
-                                />
-                            </Route>
-                        </Routes>
-                    </BrowserRouter>
-                </DndProvider>
+                <SalesRiskAnalysisProvider>
+                    <DndProvider backend={HTML5Backend}>
+                        <BrowserRouter>
+                            <Routes>
+                                <Route path="/" element={<ContentWithDrag />}>
+                                    <Route
+                                        path="/account/sales-analysis-reports"
+                                        element={<SalesRiskReport />}
+                                    />
+                                </Route>
+                            </Routes>
+                        </BrowserRouter>
+                    </DndProvider>
+                </SalesRiskAnalysisProvider>
             </Provider>
         </React.StrictMode>
     );

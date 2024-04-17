@@ -35,6 +35,8 @@ import {
 // loader
 import SaleRiskAuthorizeHeaderLoader from "../components/loader/SaleRiskAuthorizeHeaderLoader";
 import Loader from "../components/Loader";
+
+// modal
 import SaleRiskAuthorizePolicesModal from "../components/modal/SaleRiskAuthorizePolicesModal";
 
 const SalesRiskAuthorize = () => {
@@ -46,7 +48,6 @@ const SalesRiskAuthorize = () => {
         message: "",
         points: "",
     });
-
     const pathnames = window.location.pathname.split("/");
     const deal_id = pathnames[pathnames?.length - 1];
     const auth = useAuth();
@@ -88,8 +89,7 @@ const SalesRiskAuthorize = () => {
                     points: data?.data?.points,
                 });
             }
-        } else {
-        }
+        } 
     }, [data?.data, isLoading]);
 
     // project extend images Api call
@@ -118,15 +118,26 @@ const SalesRiskAuthorize = () => {
         }
     };
 
+    // handle open and close modal
     const handleOpenAuthorizeModal = () => {
         setIsSaleRiskAuthorizeModalOpen(true);
     };
-
     const handleCloseAuthorizeModal = () => {
         setIsSaleRiskAuthorizeModalOpen(false);
     };
 
-    console.log(window.history);
+    /**
+     * Checks if the given status is either "pending" or "analysis".
+     *
+     * @param {string} status - The status to check.
+     * @param {boolean} [shouldExcludePendingAndAnalysis=false] - If true, the function returns true for statuses other than "pending" or "analysis".
+     * @returns {boolean} Returns true if the status is "pending" or "analysis" (or the opposite if `shouldExcludePendingAndAnalysis` is true), false otherwise.
+     */
+    const getDealStatus = (status, shouldExcludePendingAndAnalysis = false) => {
+        return shouldExcludePendingAndAnalysis
+            ? !["pending", "analysis"].includes(status)
+            : ["pending", "analysis"].includes(status);
+    };
 
     return (
         <React.Fragment>
@@ -172,7 +183,8 @@ const SalesRiskAuthorize = () => {
                                     className="btn btn-primary py-1 d-flex justify-content-center align-items-center"
                                     onClick={() => {
                                         if (window.history.length === 1) {
-                                            window.location.href = "/account/sales-analysis-reports";
+                                            window.location.href =
+                                                "/account/sales-analysis-reports";
                                         } else {
                                             window.history.back();
                                         }
@@ -186,10 +198,14 @@ const SalesRiskAuthorize = () => {
                                 <Switch.Case condition={isLoading}>
                                     <SaleRiskAuthorizeHeaderLoader />
                                 </Switch.Case>
+
+                                {/* 
+                                    Sale Risk Analysis Header for before authorize and deny
+                                */}
                                 <Switch.Case
                                     condition={
                                         auth.getRoleId() === 1 &&
-                                        metaInfo?.deal?.status === "pending" &&
+                                        getDealStatus(metaInfo?.deal?.status) &&
                                         !isLoading
                                     }
                                 >
@@ -201,10 +217,16 @@ const SalesRiskAuthorize = () => {
                                         }
                                     />
                                 </Switch.Case>
+                                {/* 
+                                    Sale Risk Analysis Header for User after authorize and deny
+                                */}
                                 <Switch.Case
                                     condition={
                                         auth.getRoleId() === 1 &&
-                                        metaInfo?.deal?.status !== "pending" &&
+                                        getDealStatus(
+                                            metaInfo?.deal?.status,
+                                            true
+                                        ) &&
                                         !isLoading
                                     }
                                 >
@@ -214,6 +236,9 @@ const SalesRiskAuthorize = () => {
                                     />
                                 </Switch.Case>
                             </Switch>
+
+                            {/* Sale Risk Analysis Table */}
+
                             <div className="sp1_tlr_container">
                                 <div className="sp1_tlr_tbl_container mx-0 py-3">
                                     {/* sales risk analysis table */}
@@ -224,6 +249,9 @@ const SalesRiskAuthorize = () => {
                                         isLoading={isLoading}
                                         isFetching={isFetching}
                                     />
+
+                                    {/* Total points achieved container */}
+
                                     <SaleRiskAuthorizeTotalPointContainer
                                         className="mb-4"
                                         background="#FFDCDC"
@@ -259,10 +287,7 @@ const SalesRiskAuthorize = () => {
                                         <Switch.Case
                                             condition={
                                                 auth.getRoleId() === 1 &&
-                                                [
-                                                    "pending",
-                                                    "analysis",
-                                                ].includes(
+                                                getDealStatus(
                                                     metaInfo?.deal?.status
                                                 )
                                             }
@@ -303,11 +328,9 @@ const SalesRiskAuthorize = () => {
                                         <Switch.Case
                                             condition={
                                                 auth.getRoleId() === 1 &&
-                                                ![
-                                                    "pending",
-                                                    "analysis",
-                                                ].includes(
-                                                    metaInfo?.deal?.status
+                                                getDealStatus(
+                                                    metaInfo?.deal?.status,
+                                                    true
                                                 )
                                             }
                                         >
@@ -345,6 +368,8 @@ const SalesRiskAuthorize = () => {
                 <SaleRiskAuthorizePolicesModal
                     open={isSaleRiskAuthorizeModalOpen}
                     closeModal={handleCloseAuthorizeModal}
+                    salesRiskAnalysisRules={metaInfo?.policyHistory}
+                    isLoading={isLoading}
                 />
             )}
         </React.Fragment>
