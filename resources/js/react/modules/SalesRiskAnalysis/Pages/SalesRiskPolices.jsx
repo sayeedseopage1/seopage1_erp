@@ -24,6 +24,42 @@ import { addNewRulesValidation } from "../helper/createFromValidation";
 // styles
 import "../components/Styles/SalesRiskAnalysis.css";
 
+const inputSateData = {
+    inputState: {
+        policyName: "",
+        department: "",
+        valueType: {},
+        policyType: {},
+        value: "",
+        from: "",
+        to: "",
+        yes: "",
+        no: "",
+        comment: "",
+        yesComment: "",
+        noComment: "",
+        ruleComment: "",
+        countries: [],
+        points: "",
+        id: "",
+    },
+    inputValidation: {
+        isSubmitting: false,
+        policyName: false,
+        department: false,
+        policyType: false,
+        valueType: false,
+        key: false,
+        value: false,
+        from: false,
+        to: false,
+        yes: false,
+        no: false,
+        countries: false,
+        points: false,
+    },
+};
+
 const SalesRiskPolices = () => {
     const [{ pageIndex, pageSize }, setPagination] = React.useState({
         pageIndex: 0,
@@ -36,42 +72,12 @@ const SalesRiskPolices = () => {
         React.useState(false);
     const [newPolicyInputData, setNewPolicyInputData] = React.useState([]);
     // modal state data
-    const [newPolicyData, setNewPolicyData] = React.useState({
-        policyName: "",
-        department: {},
-        policyType: {},
-        key: {},
-        title: "",
-        valueType: {},
-        value: "",
-        from: "",
-        to: "",
-        yes: "",
-        no: "",
-        comment: "",
-        yesComment: "",
-        noComment: "",
-        ruleComment: "",
-        countries: [],
-        points: "",
-    });
+    const [newPolicyData, setNewPolicyData] = React.useState(
+        inputSateData.inputState
+    );
     // modal state validation
     const [newPolicyDataValidation, setNewPolicyDataValidation] =
-        React.useState({
-            policyName: false,
-            department: false,
-            policyType: false,
-            valueType: false,
-            key: false,
-            value: false,
-            from: false,
-            to: false,
-            yes: false,
-            no: false,
-            countries: false,
-            points: false,
-            isSubmitting: false,
-        });
+        React.useState(inputSateData.inputValidation);
 
     // make query string
     const queryString = (object) => {
@@ -93,66 +99,40 @@ const SalesRiskPolices = () => {
     const [submitData, { isLoading: isLoadingAddSalesRiskAnalysisRule }] =
         useAddSalesRiskAnalysisRuleMutation();
 
-    // reset form state
-    const resetFormState = (type) => {
-        // reset form data
-        if (type === "all") {
-            setNewPolicyData({
-                policyName: "",
-                department: {},
-                policyType: {},
-                title: "",
-                valueType: {},
-                value: "",
-                from: "",
-                key: {},
-                to: "",
-                comment: "",
-                yesComment: "",
-                noComment: "",
-                ruleComment: "",
-                yes: "",
-                no: "",
-                countries: [],
-                points: "",
-                id: "",
-            });
-        } else {
-            setNewPolicyData({
-                ...newPolicyData,
-                policyType: {},
-                title: "",
-                valueType: {},
-
-                value: "",
-                from: "",
-                to: "",
-                yes: "",
-                no: "",
-                yesComment: "",
-                noComment: "",
-                ruleComment: "",
-                countries: [],
-                points: "",
-                id: "",
-            });
+    const resetFormForPolicy = (type) => {
+        switch (type) {
+            case "single":
+                setNewPolicyData({
+                    ...newPolicyData,
+                    policyType: {},
+                    valueType: {},
+                    value: "",
+                    from: "",
+                    to: "",
+                    yes: "",
+                    no: "",
+                    yesComment: "",
+                    noComment: "",
+                    ruleComment: "",
+                    countries: [],
+                    points: "",
+                });
+                setNewPolicyDataValidation(inputSateData.inputValidation);
+                break;
+            case "all":
+                setNewPolicyData(inputSateData.inputState);
+                setNewPolicyDataValidation(inputSateData.inputValidation);
+                setNewPolicyInputData([]);
+                break;
+            default:
+                break;
         }
-        // reset validation
-        setNewPolicyDataValidation({
-            policyName: false,
-            department: false,
-            policyType: false,
-            valueType: false,
-            value: false,
-            from: false,
-            to: false,
-            key: false,
-            yes: false,
-            no: false,
-            countries: false,
-            points: false,
-            isSubmitting: false,
-        });
+    };
+
+    // handle cancel rule on policy
+    const handleCancelRuleOnPolicy = () => {
+        resetFormForPolicy("single");
+        setIsRuleUpdating(false);
     };
 
     // handle input change
@@ -163,13 +143,9 @@ const SalesRiskPolices = () => {
             setNewPolicyData({ ...newPolicyData, [name]: value });
         } else if (name === "policyType") {
             // add default value for valueType on policy type change when if have any rules data on the form
-            const getValueType =
-                newPolicyInputData?.length > 0
-                    ? newPolicyInputData[0]?.valueType
-                    : {};
             setNewPolicyData({
                 ...newPolicyData,
-                valueType: getValueType,
+                valueType: {},
                 value: "",
                 from: "",
                 to: "",
@@ -256,7 +232,7 @@ const SalesRiskPolices = () => {
                 },
             ]);
         }
-        resetFormState();
+        resetFormForPolicy("single");
     };
 
     // handle add new policy  with rules data to the server
@@ -311,6 +287,7 @@ const SalesRiskPolices = () => {
                 toast.success("New policy added successfully");
                 handleAddNewPolicyModal();
                 setNewPolicyInputData([]);
+                resetFormForPolicy("all");
             }
         } catch (error) {
             if (error?.status === 403) {
@@ -325,44 +302,7 @@ const SalesRiskPolices = () => {
     // handle modal open close
     const handleAddNewPolicyModal = () => {
         setAddNewPolicyModalOpen(!addNewPolicyModalOpen);
-        resetFormState("all");
-        setNewPolicyInputData([]);
-    };
-
-    // handle cancel rule on policy
-    const handleCancelRuleOnPolicy = () => {
-        setNewPolicyData({
-            ...newPolicyData,
-            valueType: {},
-            policyType: {},
-            value: "",
-            from: "",
-            to: "",
-            yes: "",
-            no: "",
-            comment: "",
-            yesComment: "",
-            noComment: "",
-            ruleComment: "",
-            countries: [],
-            points: "",
-        });
-        setNewPolicyDataValidation({
-            policyName: false,
-            department: false,
-            policyType: false,
-            valueType: false,
-            value: false,
-            from: false,
-            to: false,
-            yes: false,
-            no: false,
-            countries: false,
-            points: false,
-            isSubmitting: false,
-        });
-        setIsRuleUpdating(false);
-        
+        resetFormForPolicy("all");
     };
 
     // add title on change

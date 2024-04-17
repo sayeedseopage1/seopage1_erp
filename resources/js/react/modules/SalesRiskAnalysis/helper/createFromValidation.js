@@ -34,6 +34,7 @@ export const getValidFields = (listFields, newPolicyDataValidation) => {
 
 
 export const addNewRulesValidation = (inputsData, newPolicyDataValidation) => {
+  debugger
   switch (inputsData?.policyType?.name) {
     // less than
     case "lessThan": {
