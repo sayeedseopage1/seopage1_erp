@@ -29,9 +29,18 @@ const AddNewItemsModal = ({
 
     useEffect(() => {
         if ((newFactorData?.infiniteValueUp && !newFactorData?.infiniteValueDown)) {
+            console.log('inside the condition 1')
             setNewFactorData({ ...newFactorData, upper_limit: newFactorData?.lower_limit })
+            console.log(newFactorData, "1")
         }
     }, [newFactorData?.infiniteValueUp])
+
+    useEffect(() => {
+        if ((!newFactorData?.infiniteValueUp && newFactorData?.infiniteValueDown)) {
+            console.log('inside the condition')
+            setNewFactorData({ ...newFactorData, lower_limit: newFactorData?.upper_limit })
+        }
+    }, [newFactorData?.infiniteValueDown])
 
     return (
         <CustomModal
@@ -180,6 +189,7 @@ const AddNewItemsModal = ({
                                     value={newFactorData?.lower_limit}
                                     onChange={handleChange}
                                     placeholder="Write Here"
+                                    disabled={(!newFactorData?.infiniteValueUp && newFactorData?.infiniteValueDown)}
                                 />
                                 {newFactorDataValidation?.lower_limit && (
                                     <p className="text-danger">
@@ -218,8 +228,8 @@ const AddNewItemsModal = ({
                                     value={newFactorData?.upper_limit}
                                     onChange={handleChange}
                                     placeholder="Write Here"
-                                    title={newFactorData?.lower_limit ? "Upper limit must be greater than lower limit" : "Please enter lower limit first"}
-                                    disabled={!newFactorData?.lower_limit || (newFactorData?.infiniteValueUp && !newFactorData?.infiniteValueDown)}
+                                    // title={newFactorData?.lower_limit ? "Upper limit must be greater than lower limit" : "Please enter lower limit first"}
+                                    disabled={(newFactorData?.infiniteValueUp && !newFactorData?.infiniteValueDown)}
                                 />
                                 {newFactorDataValidation?.upper_limit && (
                                     <p className="text-danger">

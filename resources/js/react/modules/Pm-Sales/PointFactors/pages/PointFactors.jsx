@@ -33,8 +33,6 @@ const PointFactors = () => {
         limit_unit: {},
         point_type: "",
         points: "",
-        point_depend_on_model: "", //(optional)
-        point_depend_on_field: "", //(optional)
         status: "1" //(optional)
     });
     const { activeFactorFields } = useActiveFactorFields({ newFactorData })
@@ -112,8 +110,6 @@ const PointFactors = () => {
             limit_unit: {},
             point_type: "",
             points: "",
-            point_depend_on_model: "",
-            point_depend_on_field: "",
             status: "1"
         })
 
@@ -218,18 +214,16 @@ const PointFactors = () => {
                 upper_limit_condition: upperLimitCondition ?? null,
                 point_type: parseInt(newFactorData?.point_type) ?? null,
                 points: parseFloat(newFactorData?.points) ?? null,
-                point_depend_on_model: newFactorData?.point_depend_on_model ?? null,
-                point_depend_on_field: newFactorData?.point_depend_on_field ?? null,
                 status: parseInt(newFactorData?.status) ?? null,
             }
 
             console.log(payload)
-            // const response = await createPmPointFactor(payload).unwrap();
-            // if (response?.status == 200) {
-            //     toast.success(response.message);
-            //     handleAddNewItemModal();
-            //     resetFormState();
-            // }
+            const response = await createPmPointFactor(payload).unwrap();
+            if (response?.status == 200) {
+                toast.success(response.message);
+                handleAddNewItemModal();
+                resetFormState();
+            }
         } catch (error) {
             toast.error("Failed to add new item");
         }
