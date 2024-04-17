@@ -14234,6 +14234,120 @@ var DailySubmissionControl = function DailySubmissionControl() {
 
 /***/ }),
 
+/***/ "./resources/js/react/single-independent-task/section/task-actions/ExpiredTimeModalForNewEmployee.jsx":
+/*!************************************************************************************************************!*\
+  !*** ./resources/js/react/single-independent-task/section/task-actions/ExpiredTimeModalForNewEmployee.jsx ***!
+  \************************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var react_modal__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react-modal */ "./node_modules/react-modal/lib/index.js");
+/* harmony import */ var react_modal__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react_modal__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
+
+
+
+
+var ExpiredTimeModalForNewEmployee = function ExpiredTimeModalForNewEmployee(_ref) {
+  var showExpirationWarningModal = _ref.showExpirationWarningModal,
+    setShowExpirationWarningModal = _ref.setShowExpirationWarningModal,
+    timeLeft = _ref.timeLeft,
+    setTimeLeft = _ref.setTimeLeft,
+    taskRunning = _ref.taskRunning,
+    task = _ref.task,
+    timerStatusForWarningModal = _ref.timerStatusForWarningModal,
+    setTimerStatusForWarningModal = _ref.setTimerStatusForWarningModal;
+  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(function () {
+    var timer = setInterval(function () {
+      setTimeLeft(function (prevTime) {
+        return prevTime - 1;
+      });
+      // setTimerStatusForWarningModal(task?.ranningTimer?.status);
+      // console.log("timer status inside", timerStatusForWarningModal);
+    }, 1000);
+    return function () {
+      return clearInterval(timer);
+    };
+  }, []);
+  console.log("timer status outside", timerStatusForWarningModal);
+  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(function () {
+    var interval = setInterval(function () {
+      if (timeLeft <= 360000) {
+        setShowExpirationWarningModal(true);
+      }
+    }, 60000);
+    return function () {
+      return clearInterval(interval);
+    };
+  }, []);
+
+  // useEffect(() => {
+  //     console.log("timer status", timerStatusForWarningModal);
+  // }, [timerStatusForWarningModal]);
+
+  var closeModal = function closeModal() {
+    setShowExpirationWarningModal(false);
+  };
+  var minutes = Math.floor(timeLeft / 60);
+  var seconds = timeLeft % 60;
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)((react_modal__WEBPACK_IMPORTED_MODULE_1___default()), {
+    isOpen: showExpirationWarningModal,
+    onRequestClose: closeModal,
+    contentLabel: "Expired Time Modal",
+    shouldCloseOnOverlayClick: false,
+    style: {
+      overlay: {
+        backgroundColor: "rgba(0, 0, 0, 0.5)",
+        zIndex: 9999999998
+      },
+      content: {
+        width: "400px",
+        height: "fit-content",
+        margin: "auto",
+        padding: "20px",
+        borderRadius: "8px",
+        textAlign: "center",
+        Index: 9999999999
+      }
+    },
+    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("h2", {
+      style: {
+        marginBottom: "20px"
+      },
+      children: "Your timer will be stopped by the system after"
+    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("h3", {
+      style: {
+        marginBottom: "20px"
+      },
+      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("span", {
+        style: {
+          color: "red"
+        },
+        children: minutes
+      }), " minutes", " ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("span", {
+        style: {
+          color: "red"
+        },
+        children: seconds
+      }), " seconds."]
+    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("h6", {
+      children: "Please complete your task, stop the timer yourself and submit your work"
+    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("button", {
+      onClick: closeModal,
+      className: "btn btn-danger mt-4",
+      children: "Close"
+    })]
+  });
+};
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (ExpiredTimeModalForNewEmployee);
+
+/***/ }),
+
 /***/ "./resources/js/react/single-independent-task/section/task-actions/MarkAsComplete.jsx":
 /*!********************************************************************************************!*\
   !*** ./resources/js/react/single-independent-task/section/task-actions/MarkAsComplete.jsx ***!
@@ -17586,9 +17700,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _services_features_subTaskSlice__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../../../services/features/subTaskSlice */ "./resources/js/react/services/features/subTaskSlice.js");
 /* harmony import */ var _stop_timer_LessTrackTimerModal__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./stop-timer/LessTrackTimerModal */ "./resources/js/react/single-independent-task/section/task-actions/stop-timer/LessTrackTimerModal.jsx");
 /* harmony import */ var _utils_user_details__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ../../../utils/user-details */ "./resources/js/react/utils/user-details.js");
-/* harmony import */ var react_router_dom__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router/dist/index.js");
+/* harmony import */ var react_router_dom__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router/dist/index.js");
 /* harmony import */ var _helper_timer_start_working_report_error_toaster__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ../helper/timer-start-working-report-error-toaster */ "./resources/js/react/single-independent-task/section/helper/timer-start-working-report-error-toaster.js");
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
+/* harmony import */ var _ExpiredTimeModalForNewEmployee__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ./ExpiredTimeModalForNewEmployee */ "./resources/js/react/single-independent-task/section/task-actions/ExpiredTimeModalForNewEmployee.jsx");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
 function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) { return typeof o; } : function (o) { return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o; }, _typeof(o); }
 function _regeneratorRuntime() { "use strict"; /*! regenerator-runtime -- Copyright (c) 2014-present, Facebook, Inc. -- license (MIT): https://github.com/facebook/regenerator/blob/main/LICENSE */ _regeneratorRuntime = function _regeneratorRuntime() { return e; }; var t, e = {}, r = Object.prototype, n = r.hasOwnProperty, o = Object.defineProperty || function (t, e, r) { t[e] = r.value; }, i = "function" == typeof Symbol ? Symbol : {}, a = i.iterator || "@@iterator", c = i.asyncIterator || "@@asyncIterator", u = i.toStringTag || "@@toStringTag"; function define(t, e, r) { return Object.defineProperty(t, e, { value: r, enumerable: !0, configurable: !0, writable: !0 }), t[e]; } try { define({}, ""); } catch (t) { define = function define(t, e, r) { return t[e] = r; }; } function wrap(t, e, r, n) { var i = e && e.prototype instanceof Generator ? e : Generator, a = Object.create(i.prototype), c = new Context(n || []); return o(a, "_invoke", { value: makeInvokeMethod(t, r, c) }), a; } function tryCatch(t, e, r) { try { return { type: "normal", arg: t.call(e, r) }; } catch (t) { return { type: "throw", arg: t }; } } e.wrap = wrap; var h = "suspendedStart", l = "suspendedYield", f = "executing", s = "completed", y = {}; function Generator() {} function GeneratorFunction() {} function GeneratorFunctionPrototype() {} var p = {}; define(p, a, function () { return this; }); var d = Object.getPrototypeOf, v = d && d(d(values([]))); v && v !== r && n.call(v, a) && (p = v); var g = GeneratorFunctionPrototype.prototype = Generator.prototype = Object.create(p); function defineIteratorMethods(t) { ["next", "throw", "return"].forEach(function (e) { define(t, e, function (t) { return this._invoke(e, t); }); }); } function AsyncIterator(t, e) { function invoke(r, o, i, a) { var c = tryCatch(t[r], t, o); if ("throw" !== c.type) { var u = c.arg, h = u.value; return h && "object" == _typeof(h) && n.call(h, "__await") ? e.resolve(h.__await).then(function (t) { invoke("next", t, i, a); }, function (t) { invoke("throw", t, i, a); }) : e.resolve(h).then(function (t) { u.value = t, i(u); }, function (t) { return invoke("throw", t, i, a); }); } a(c.arg); } var r; o(this, "_invoke", { value: function value(t, n) { function callInvokeWithMethodAndArg() { return new e(function (e, r) { invoke(t, n, e, r); }); } return r = r ? r.then(callInvokeWithMethodAndArg, callInvokeWithMethodAndArg) : callInvokeWithMethodAndArg(); } }); } function makeInvokeMethod(e, r, n) { var o = h; return function (i, a) { if (o === f) throw new Error("Generator is already running"); if (o === s) { if ("throw" === i) throw a; return { value: t, done: !0 }; } for (n.method = i, n.arg = a;;) { var c = n.delegate; if (c) { var u = maybeInvokeDelegate(c, n); if (u) { if (u === y) continue; return u; } } if ("next" === n.method) n.sent = n._sent = n.arg;else if ("throw" === n.method) { if (o === h) throw o = s, n.arg; n.dispatchException(n.arg); } else "return" === n.method && n.abrupt("return", n.arg); o = f; var p = tryCatch(e, r, n); if ("normal" === p.type) { if (o = n.done ? s : l, p.arg === y) continue; return { value: p.arg, done: n.done }; } "throw" === p.type && (o = s, n.method = "throw", n.arg = p.arg); } }; } function maybeInvokeDelegate(e, r) { var n = r.method, o = e.iterator[n]; if (o === t) return r.delegate = null, "throw" === n && e.iterator["return"] && (r.method = "return", r.arg = t, maybeInvokeDelegate(e, r), "throw" === r.method) || "return" !== n && (r.method = "throw", r.arg = new TypeError("The iterator does not provide a '" + n + "' method")), y; var i = tryCatch(o, e.iterator, r.arg); if ("throw" === i.type) return r.method = "throw", r.arg = i.arg, r.delegate = null, y; var a = i.arg; return a ? a.done ? (r[e.resultName] = a.value, r.next = e.nextLoc, "return" !== r.method && (r.method = "next", r.arg = t), r.delegate = null, y) : a : (r.method = "throw", r.arg = new TypeError("iterator result is not an object"), r.delegate = null, y); } function pushTryEntry(t) { var e = { tryLoc: t[0] }; 1 in t && (e.catchLoc = t[1]), 2 in t && (e.finallyLoc = t[2], e.afterLoc = t[3]), this.tryEntries.push(e); } function resetTryEntry(t) { var e = t.completion || {}; e.type = "normal", delete e.arg, t.completion = e; } function Context(t) { this.tryEntries = [{ tryLoc: "root" }], t.forEach(pushTryEntry, this), this.reset(!0); } function values(e) { if (e || "" === e) { var r = e[a]; if (r) return r.call(e); if ("function" == typeof e.next) return e; if (!isNaN(e.length)) { var o = -1, i = function next() { for (; ++o < e.length;) if (n.call(e, o)) return next.value = e[o], next.done = !1, next; return next.value = t, next.done = !0, next; }; return i.next = i; } } throw new TypeError(_typeof(e) + " is not iterable"); } return GeneratorFunction.prototype = GeneratorFunctionPrototype, o(g, "constructor", { value: GeneratorFunctionPrototype, configurable: !0 }), o(GeneratorFunctionPrototype, "constructor", { value: GeneratorFunction, configurable: !0 }), GeneratorFunction.displayName = define(GeneratorFunctionPrototype, u, "GeneratorFunction"), e.isGeneratorFunction = function (t) { var e = "function" == typeof t && t.constructor; return !!e && (e === GeneratorFunction || "GeneratorFunction" === (e.displayName || e.name)); }, e.mark = function (t) { return Object.setPrototypeOf ? Object.setPrototypeOf(t, GeneratorFunctionPrototype) : (t.__proto__ = GeneratorFunctionPrototype, define(t, u, "GeneratorFunction")), t.prototype = Object.create(g), t; }, e.awrap = function (t) { return { __await: t }; }, defineIteratorMethods(AsyncIterator.prototype), define(AsyncIterator.prototype, c, function () { return this; }), e.AsyncIterator = AsyncIterator, e.async = function (t, r, n, o, i) { void 0 === i && (i = Promise); var a = new AsyncIterator(wrap(t, r, n, o), i); return e.isGeneratorFunction(r) ? a : a.next().then(function (t) { return t.done ? t.value : a.next(); }); }, defineIteratorMethods(g), define(g, u, "Generator"), define(g, a, function () { return this; }), define(g, "toString", function () { return "[object Generator]"; }), e.keys = function (t) { var e = Object(t), r = []; for (var n in e) r.push(n); return r.reverse(), function next() { for (; r.length;) { var t = r.pop(); if (t in e) return next.value = t, next.done = !1, next; } return next.done = !0, next; }; }, e.values = values, Context.prototype = { constructor: Context, reset: function reset(e) { if (this.prev = 0, this.next = 0, this.sent = this._sent = t, this.done = !1, this.delegate = null, this.method = "next", this.arg = t, this.tryEntries.forEach(resetTryEntry), !e) for (var r in this) "t" === r.charAt(0) && n.call(this, r) && !isNaN(+r.slice(1)) && (this[r] = t); }, stop: function stop() { this.done = !0; var t = this.tryEntries[0].completion; if ("throw" === t.type) throw t.arg; return this.rval; }, dispatchException: function dispatchException(e) { if (this.done) throw e; var r = this; function handle(n, o) { return a.type = "throw", a.arg = e, r.next = n, o && (r.method = "next", r.arg = t), !!o; } for (var o = this.tryEntries.length - 1; o >= 0; --o) { var i = this.tryEntries[o], a = i.completion; if ("root" === i.tryLoc) return handle("end"); if (i.tryLoc <= this.prev) { var c = n.call(i, "catchLoc"), u = n.call(i, "finallyLoc"); if (c && u) { if (this.prev < i.catchLoc) return handle(i.catchLoc, !0); if (this.prev < i.finallyLoc) return handle(i.finallyLoc); } else if (c) { if (this.prev < i.catchLoc) return handle(i.catchLoc, !0); } else { if (!u) throw new Error("try statement without catch or finally"); if (this.prev < i.finallyLoc) return handle(i.finallyLoc); } } } }, abrupt: function abrupt(t, e) { for (var r = this.tryEntries.length - 1; r >= 0; --r) { var o = this.tryEntries[r]; if (o.tryLoc <= this.prev && n.call(o, "finallyLoc") && this.prev < o.finallyLoc) { var i = o; break; } } i && ("break" === t || "continue" === t) && i.tryLoc <= e && e <= i.finallyLoc && (i = null); var a = i ? i.completion : {}; return a.type = t, a.arg = e, i ? (this.method = "next", this.next = i.finallyLoc, y) : this.complete(a); }, complete: function complete(t, e) { if ("throw" === t.type) throw t.arg; return "break" === t.type || "continue" === t.type ? this.next = t.arg : "return" === t.type ? (this.rval = this.arg = t.arg, this.method = "return", this.next = "end") : "normal" === t.type && e && (this.next = e), y; }, finish: function finish(t) { for (var e = this.tryEntries.length - 1; e >= 0; --e) { var r = this.tryEntries[e]; if (r.finallyLoc === t) return this.complete(r.completion, r.afterLoc), resetTryEntry(r), y; } }, "catch": function _catch(t) { for (var e = this.tryEntries.length - 1; e >= 0; --e) { var r = this.tryEntries[e]; if (r.tryLoc === t) { var n = r.completion; if ("throw" === n.type) { var o = n.arg; resetTryEntry(r); } return o; } } throw new Error("illegal catch attempt"); }, delegateYield: function delegateYield(e, r, n) { return this.delegate = { iterator: values(e), resultName: r, nextLoc: n }, "next" === this.method && (this.arg = t), y; } }, e; }
 function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
@@ -17612,6 +17727,7 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
 
 
+
 // component
 
 
@@ -17621,26 +17737,60 @@ var TimerControl = function TimerControl(_ref) {
     timerStart = _ref.timerStart,
     setTimerStart = _ref.setTimerStart,
     auth = _ref.auth;
-  var _useState = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(null),
+  //new employee timer hiding and warning modal showing
+  var _useState = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(""),
     _useState2 = _slicedToArray(_useState, 2),
-    timerId = _useState2[0],
-    setTimerId = _useState2[1];
+    timerStatusForWarningModal = _useState2[0],
+    setTimerStatusForWarningModal = _useState2[1];
   var _useState3 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(0),
     _useState4 = _slicedToArray(_useState3, 2),
-    seconds = _useState4[0],
-    setSeconds = _useState4[1];
+    timeLeft = _useState4[0],
+    setTimeLeft = _useState4[1];
   var _useState5 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false),
     _useState6 = _slicedToArray(_useState5, 2),
-    isOpenConfirmationModal = _useState6[0],
-    setIsOpenConfirmationModal = _useState6[1];
+    showExpirationWarningModal = _useState6[0],
+    setShowExpirationWarningModal = _useState6[1];
+  var _useState7 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false),
+    _useState8 = _slicedToArray(_useState7, 2),
+    expiredTimerForNewEmployee = _useState8[0],
+    setExpiredTimerForNewEmployee = _useState8[1];
+  var _useState9 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(null),
+    _useState10 = _slicedToArray(_useState9, 2),
+    timerId = _useState10[0],
+    setTimerId = _useState10[1];
+  var _useState11 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(0),
+    _useState12 = _slicedToArray(_useState11, 2),
+    seconds = _useState12[0],
+    setSeconds = _useState12[1];
+  var _useState13 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false),
+    _useState14 = _slicedToArray(_useState13, 2),
+    isOpenConfirmationModal = _useState14[0],
+    setIsOpenConfirmationModal = _useState14[1];
   var dispatch = (0,react_redux__WEBPACK_IMPORTED_MODULE_6__.useDispatch)();
   var dayjs = new _utils_dateController__WEBPACK_IMPORTED_MODULE_4__.CompareDate();
   var loggedUser = new _utils_user_details__WEBPACK_IMPORTED_MODULE_9__.User((_window = window) === null || _window === void 0 || (_window = _window.Laravel) === null || _window === void 0 ? void 0 : _window.user);
-  var navigate = (0,react_router_dom__WEBPACK_IMPORTED_MODULE_12__.useNavigate)();
+  var navigate = (0,react_router_dom__WEBPACK_IMPORTED_MODULE_13__.useNavigate)();
   var timerStatus = task === null || task === void 0 || (_task$ranningTimer = task.ranningTimer) === null || _task$ranningTimer === void 0 ? void 0 : _task$ranningTimer.status;
   var taskRunning = (0,react__WEBPACK_IMPORTED_MODULE_0__.useMemo)(function () {
     return timerStatus;
   }, [timerStatus]);
+
+  //expired time check and state change for new employee / Trainee
+
+  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(function () {
+    var expireDateForTrainer = localStorage.getItem("expireDateForTrainer");
+
+    // Calculate time difference in milliseconds
+    if (expireDateForTrainer) {
+      var expireDate = new Date(expireDateForTrainer);
+      var currentTime = new Date();
+      var timeDifference = expireDate.getTime() - currentTime.getTime();
+      setTimeLeft(Math.max(0, Math.floor(timeDifference / 1000)));
+      if (currentTime >= expireDate) {
+        setExpiredTimerForNewEmployee(true);
+      }
+    }
+  }, [timerStart]);
 
   // check timer is already running
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(function () {
@@ -17746,13 +17896,14 @@ var TimerControl = function TimerControl(_ref) {
                 setTimerStart(true);
                 setTimerId(res === null || res === void 0 ? void 0 : res.id);
                 dispatch((0,_services_features_subTaskSlice__WEBPACK_IMPORTED_MODULE_7__.setTaskStatus)(res === null || res === void 0 ? void 0 : res.task_status));
+                localStorage.setItem("expireDateForTrainer", res === null || res === void 0 ? void 0 : res.evaluation);
                 Toast.fire({
-                  icon: 'success',
+                  icon: "success",
                   title: lodash__WEBPACK_IMPORTED_MODULE_5___default().startCase(res === null || res === void 0 ? void 0 : res.message)
                 });
               } else {
                 Toast.fire({
-                  icon: 'warning',
+                  icon: "warning",
                   title: lodash__WEBPACK_IMPORTED_MODULE_5___default().startCase(res === null || res === void 0 ? void 0 : res.message)
                 });
               }
@@ -17794,7 +17945,7 @@ var TimerControl = function TimerControl(_ref) {
 
   // stop timer
   var stopTimer = function stopTimer() {
-    //navigate(`/account/tasks/${task?.id}?modal=daily-submission&trigger=stop-button`); 
+    //navigate(`/account/tasks/${task?.id}?modal=daily-submission&trigger=stop-button`);
     stopTimerApi({
       timeId: timerId
     }).unwrap().then(function (res) {
@@ -17808,7 +17959,7 @@ var TimerControl = function TimerControl(_ref) {
         timerId(null);
       } else {
         Toast.fire({
-          icon: 'warning',
+          icon: "warning",
           title: lodash__WEBPACK_IMPORTED_MODULE_5___default().startCase(res === null || res === void 0 ? void 0 : res.message)
         });
       }
@@ -17819,24 +17970,24 @@ var TimerControl = function TimerControl(_ref) {
     getUserTrackTime = _useLazyGetUserTrackT2[0],
     trackTimerFetcing = _useLazyGetUserTrackT2[1].isFetching;
 
-  // handle stop timer 
+  // handle stop timer
   var handleStopTimer = function handleStopTimer() {
     // fetch data
     getUserTrackTime(loggedUser === null || loggedUser === void 0 ? void 0 : loggedUser.getId()).unwrap().then(function (res) {
       if (res) {
         var currentTime = dayjs.dayjs(res.current_time);
-        var target = currentTime.set('hour', 16).set('minute', 45).set('second', 0);
+        var target = currentTime.set("hour", 16).set("minute", 45).set("second", 0);
         var isSaturday = currentTime.day() === 6;
         if (isSaturday) {
-          target = currentTime.set('hour', 13).set('minute', 0).set('second', 0);
+          target = currentTime.set("hour", 13).set("minute", 0).set("second", 0);
         }
         var check = dayjs.dayjs(currentTime).isBefore(target);
         var isDev = lodash__WEBPACK_IMPORTED_MODULE_5___default().includes([5, 9, 10], Number(auth === null || auth === void 0 ? void 0 : auth.getRoleId()));
         if (!check && isDev) {
           res.tracked_times < res.target_time ? dispatch((0,_services_features_subTaskSlice__WEBPACK_IMPORTED_MODULE_7__.setLessTrackModal)({
             show: true,
-            type: 'STOP_TIMER',
-            date: 'Today'
+            type: "STOP_TIMER",
+            date: "Today"
           })) : stopTimer();
         } else {
           stopTimer();
@@ -17855,75 +18006,86 @@ var TimerControl = function TimerControl(_ref) {
       document.getElementsByTagName("body")[0].style.cursor = "default";
     }
   }, [startTimerFirstCheckIsFetching, timerStartStatusIsLoading]);
-  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsxs)((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), {
-    children: [!timerStart ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsxs)((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), {
-      children: [!timerStartStatusIsLoading && !startTimerFirstCheckIsFetching ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsxs)(_components_Button__WEBPACK_IMPORTED_MODULE_1__["default"], {
-        variant: "tertiary",
-        onClick: startTimer,
-        className: "d-flex align-items-center btn-outline-dark text-dark",
-        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)("i", {
-          className: "fa-solid fa-circle-play"
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)("span", {
-          children: "Start Timer"
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsxs)((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), {
+    children: [!expiredTimerForNewEmployee && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), {
+      children: !timerStart ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsxs)((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), {
+        children: [!timerStartStatusIsLoading && !startTimerFirstCheckIsFetching ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsxs)(_components_Button__WEBPACK_IMPORTED_MODULE_1__["default"], {
+          variant: "tertiary",
+          onClick: startTimer,
+          className: "d-flex align-items-center btn-outline-dark text-dark",
+          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)("i", {
+            className: "fa-solid fa-circle-play"
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)("span", {
+            children: "Start Timer"
+          })]
+        }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsxs)(_components_Button__WEBPACK_IMPORTED_MODULE_1__["default"], {
+          className: "cursor-processing mr-2",
+          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)("div", {
+            className: "spinner-border text-white",
+            role: "status",
+            style: {
+              width: "18px",
+              height: "18px"
+            }
+          }), "Starting..."]
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)(_StartTimerConfirmationModal__WEBPACK_IMPORTED_MODULE_2__["default"], {
+          isOpen: isOpenConfirmationModal,
+          onConfirm: startTimerControl
         })]
-      }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsxs)(_components_Button__WEBPACK_IMPORTED_MODULE_1__["default"], {
-        className: "cursor-processing mr-2",
-        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)("div", {
-          className: "spinner-border text-white",
-          role: "status",
-          style: {
-            width: "18px",
-            height: "18px"
-          }
-        }), "Starting..."]
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)(_StartTimerConfirmationModal__WEBPACK_IMPORTED_MODULE_2__["default"], {
-        isOpen: isOpenConfirmationModal,
-        onConfirm: startTimerControl
-      })]
-    }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsxs)((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), {
-      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsxs)(_components_Button__WEBPACK_IMPORTED_MODULE_1__["default"], {
-        variant: "tertiary",
-        className: "d-flex align-items-center btn-outline-dark text-dark",
-        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)("i", {
-          className: "fa-solid fa-stopwatch"
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)("span", {
-          className: "d-inline ml-1",
-          children: timer()
+      }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsxs)((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), {
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsxs)(_components_Button__WEBPACK_IMPORTED_MODULE_1__["default"], {
+          variant: "tertiary",
+          className: "d-flex align-items-center btn-outline-dark text-dark",
+          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)("i", {
+            className: "fa-solid fa-stopwatch"
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)("span", {
+            className: "d-inline ml-1",
+            children: timer()
+          })]
+        }), trackTimerFetcing ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsxs)(_components_Button__WEBPACK_IMPORTED_MODULE_1__["default"], {
+          className: "cursor-processing",
+          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)("div", {
+            className: "spinner-border text-white",
+            role: "status",
+            style: {
+              width: "18px",
+              height: "18px"
+            }
+          }), "Processing..."]
+        }) : !timerStopStatusIsLoading ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsxs)(_components_Button__WEBPACK_IMPORTED_MODULE_1__["default"], {
+          variant: "tertiary",
+          onClick: handleStopTimer,
+          className: "d-flex align-items-center btn-outline-dark text-dark",
+          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)("i", {
+            className: "fa-solid fa-pause"
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)("span", {
+            className: "d-inline ml-1",
+            children: "Stop Timer"
+          })]
+        }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsxs)(_components_Button__WEBPACK_IMPORTED_MODULE_1__["default"], {
+          className: "cursor-processing",
+          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)("div", {
+            className: "spinner-border text-white",
+            role: "status",
+            style: {
+              width: "18px",
+              height: "18px"
+            }
+          }), "Stopping..."]
         })]
-      }), trackTimerFetcing ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsxs)(_components_Button__WEBPACK_IMPORTED_MODULE_1__["default"], {
-        className: "cursor-processing",
-        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)("div", {
-          className: "spinner-border text-white",
-          role: "status",
-          style: {
-            width: "18px",
-            height: "18px"
-          }
-        }), "Processing..."]
-      }) : !timerStopStatusIsLoading ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsxs)(_components_Button__WEBPACK_IMPORTED_MODULE_1__["default"], {
-        variant: "tertiary",
-        onClick: handleStopTimer,
-        className: "d-flex align-items-center btn-outline-dark text-dark",
-        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)("i", {
-          className: "fa-solid fa-pause"
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)("span", {
-          className: "d-inline ml-1",
-          children: "Stop Timer"
-        })]
-      }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsxs)(_components_Button__WEBPACK_IMPORTED_MODULE_1__["default"], {
-        className: "cursor-processing",
-        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)("div", {
-          className: "spinner-border text-white",
-          role: "status",
-          style: {
-            width: "18px",
-            height: "18px"
-          }
-        }), "Stopping..."]
-      })]
-    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)(_stop_timer_LessTrackTimerModal__WEBPACK_IMPORTED_MODULE_8__["default"], {
+      })
+    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)(_stop_timer_LessTrackTimerModal__WEBPACK_IMPORTED_MODULE_8__["default"], {
       stopTimer: stopTimer,
       startTimer: startTimerControl
+    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)(_ExpiredTimeModalForNewEmployee__WEBPACK_IMPORTED_MODULE_11__["default"], {
+      showExpirationWarningModal: showExpirationWarningModal,
+      setShowExpirationWarningModal: setShowExpirationWarningModal,
+      timeLeft: timeLeft,
+      setTimeLeft: setTimeLeft,
+      taskRunning: taskRunning,
+      task: task,
+      timerStatusForWarningModal: timerStatusForWarningModal,
+      setTimerStatusForWarningModal: setTimerStatusForWarningModal
     })]
   });
 };
