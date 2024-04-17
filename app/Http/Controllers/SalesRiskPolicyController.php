@@ -203,7 +203,8 @@ class SalesRiskPolicyController extends AccountBaseController
 
                     $rule = self::policyRuleDataFormat($item, [
                         'department' => $policy->department,
-                        'parent_id' => $policy->id
+                        'parent_id' => $policy->id,
+                        'sequence' => SalesRiskPolicy::where('parent_id', $policy->id)->count() + 1,
                     ]);
 
                     SalesRiskPolicy::create($rule);
@@ -272,14 +273,14 @@ class SalesRiskPolicyController extends AccountBaseController
                             'id' => $item->id,
                             'title' => $item->title,
                             'key' => $item->key,
-                            'ruleList' => SalesRiskPolicy::where('parent_id', $item->id)->get(['id', 'title',  'type', 'parent_id', 'value_type', 'value', 'points', 'status', 'comment']),
+                            'ruleList' => SalesRiskPolicy::where('parent_id', $item->id)->orderBy('sequence')->get(['id', 'title',  'type', 'parent_id', 'value_type', 'value', 'points', 'status', 'comment']),
                             'department' => [
                                 'id' => $item->department,
                                 'name' => Team::with('childs')->find($item->department)->team_name
                             ],
                             'status' => $item->status,
                             'comment' => $item->comment,
-                            'questionCount' => SalesPolicyQuestion::where('policy_id', $item->id)->count()
+                            'questionCount' => SalesPolicyQuestion::parent()->where('policy_id', $item->id)->count()
                         ];
                     });
 
@@ -298,14 +299,14 @@ class SalesRiskPolicyController extends AccountBaseController
                         'id' => $item->id,
                         'title' => $item->title,
                         'key' => $item->key,
-                        'ruleList' => SalesRiskPolicy::where('parent_id', $item->id)->get(['id', 'title',  'type', 'parent_id', 'value_type', 'value', 'points', 'status', 'comment']),
+                        'ruleList' => SalesRiskPolicy::where('parent_id', $item->id)->orderBy('sequence')->get(['id', 'title',  'type', 'parent_id', 'value_type', 'value', 'points', 'status', 'comment']),
                         'department' => [
                             'id' => $item->department,
                             'name' => Team::with('childs')->find($item->department)->team_name
                         ],
                         'status' => $item->status,
                         'comment' => $item->comment,
-                        'questionCount' => SalesPolicyQuestion::where('policy_id', $item->id)->count()
+                        'questionCount' => SalesPolicyQuestion::parent()->where('policy_id', $item->id)->count()
                     ];
                 })->toArray();
 
@@ -772,6 +773,7 @@ class SalesRiskPolicyController extends AccountBaseController
             $pointData = [];
             $points = (float) 0;
             $message = [];
+            $policyIdList = [];
 
             // --------------------- hourly rate calculation ------------------ //
             // calculate first question key value (hourlyRate)
@@ -841,9 +843,8 @@ class SalesRiskPolicyController extends AccountBaseController
                         if ($hourlyRate < $item->value) {
                             $points += $item->points;
                             $pointData['hourlyRate']['points'] = [$item->points, $hourlyRate];
-                            $pointData['hourlyRate']['policy_id'] = $item->id;
+                            $policyIdList[$item->id] = $item->id;
                             goto endHourlyRate;
-                            break;
                         }
                         break;
                     case 'range':
@@ -851,18 +852,24 @@ class SalesRiskPolicyController extends AccountBaseController
                         if ($hourlyRate >= $value[0] && $hourlyRate <= $value[1]) {
                             $points += $item->points;
                             $pointData['hourlyRate']['points'] = [$item->points, $hourlyRate];
-                            $pointData['hourlyRate']['policy_id'] = $item->id;
+                            $policyIdList[$item->id] = $item->id;
                             goto endHourlyRate;
-                            break;
                         }
                         break;
                     case 'greaterThan':
                         if ($hourlyRate > $item->value) {
                             $points += $item->points;
                             $pointData['hourlyRate']['points'] = [$item->points, $hourlyRate];
-                            $pointData['hourlyRate']['policy_id'] = $item->id;
+                            $policyIdList[$item->id] = $item->id;
                             goto endHourlyRate;
-                            break;
+                        }
+                        break;
+                    case 'fixed':
+                        if ($hourlyRate == $item->value) {
+                            $points += $item->points;
+                            $pointData['hourlyRate']['points'] = [$item->points, $hourlyRate];
+                            $policyIdList[$item->id] = $item->id;
+                            goto endHourlyRate;
                         }
                         break;
                 }
@@ -879,7 +886,12 @@ class SalesRiskPolicyController extends AccountBaseController
                 $message[] = '3 milestone questions are expected, ' . count($questions) . ' found.';
                 goto endMilestone;
             }
+
             $policy = SalesRiskPolicy::where('parent_id', $questions[0]->policy_id)->orderBy('sequence')->get();
+            if (count($policy) < 2) {
+                $message[] = '2 milestone policies are expected, ' . count($policy) . ' found.';
+                goto endMilestone;
+            }
 
             $data = [];
 
@@ -899,19 +911,59 @@ class SalesRiskPolicyController extends AccountBaseController
             // check first question is yes
             if ($value == 'yes') {
                 $points += 1;
+                $pointValue = (float) $policy[0]->points;
+                $policyIdList[$policy[0]->id] = $policy[0]->id;
+
                 $data[] = ['id' => $questions[0]->id, 'title' =>  $questions[0]->title, 'value' => 'yes', 'parent_id' => $questions[0]->parent_id];
-                $pointValue = 1;
             } else {
 
-                // get comment
+                // percentage calculation
                 $value = PolicyQuestionValue::where([
                     'question_id' => $questions[1]->id,
                     'deal_id' => $deal_id
                 ])->first()->value;
 
-                // percentage calculation
+                $percentage = $value / $deal->actual_amount * 100;
+                $data[] = ['id' => $questions[1]->id, 'title' => $questions[1]->title, 'value' => $value . '(' . number_format($percentage, 2) . '%)', 'parent_id' => $questions[1]->parent_id];
 
-                $data[] = ['id' => $questions[1]->id, 'title' => $questions[1]->title, 'value' => $value, 'parent_id' => $questions[1]->parent_id];
+                // unseting first yes/no policy
+                unset($policy[0]);
+                foreach ($policy as $item) {
+                    switch ($item->type) {
+                        case 'lessThan':
+                            if ($percentage < $item->value) {
+                                $points += $item->points;
+                                $points += 1;
+                                $policyIdList[$item->id] = $item->id;
+                                goto check1Milestone;
+                            }
+                            break;
+                        case 'range':
+                            $value = explode(',', $item->value);
+                            if ($percentage >= $value[0] && $percentage <= $value[1]) {
+                                $points += $item->points;
+                                $policyIdList[$item->id] = $item->id;
+                                goto check1Milestone;
+                            }
+                            break;
+                        case 'greaterThan':
+                            if ($percentage > $item->value) {
+                                $points += $item->points;
+                                $policyIdList[$item->id] = $item->id;
+                                goto check1Milestone;
+                            }
+                            break;
+                        case 'fixed':
+                            if ($percentage == $item->value) {
+                                $points += $item->points;
+                                $policyIdList[$item->id] = $item->id;
+                                goto check1Milestone;
+                            }
+                            break;
+                    }
+                }
+
+                check1Milestone:
 
                 // get selection value
                 $value = PolicyQuestionValue::where([
@@ -981,6 +1033,7 @@ class SalesRiskPolicyController extends AccountBaseController
                 // get question policy
                 $policy = SalesRiskPolicy::where('parent_id', $questions[0]->policy_id)->first();
                 $policyValue = json_decode($policy->value);
+                $policyIdList[$policy->id] = $value;
 
                 if ($value == 'yes') {
                     $points += (float) $policyValue->yes->point;
@@ -1017,7 +1070,7 @@ class SalesRiskPolicyController extends AccountBaseController
 
             if (count($questions) > 2) {
                 $data = [];
-                $policy = SalesRiskPolicy::where('parent_id', $questions[0]->policy_id)->get();
+                $policy = SalesRiskPolicy::where('parent_id', $questions[0]->policy_id)->orderBy('sequence')->get();
 
                 $questionValue = PolicyQuestionValue::where([
                     'question_id' => $questions[0]->id,
@@ -1035,6 +1088,7 @@ class SalesRiskPolicyController extends AccountBaseController
                 if ($value == 'no') {
                     $points += (float) json_decode($policy[0]->value)->no->point;
                     $pointValue = json_decode($policy[0]->value)->no->point;
+                    $policyIdList[$policy[0]->id] = 'no';
                     $data[] = ['id' => $questions[0]->id, 'title' => $questions[0]->title, 'value' => 'No', 'parent_id' => $questions[0]->parent_id];
                 } else {
                     $value = PolicyQuestionValue::where([
@@ -1051,6 +1105,7 @@ class SalesRiskPolicyController extends AccountBaseController
                         $pointValue = json_decode($policy[1]->value)->no->point;
                         $data[] = ['id' => $questions[1]->id, 'title' => $questions[1]->title, 'value' => 'No', 'parent_id' => $questions[1]->parent_id];
                     }
+                    $policyIdList[$policy[1]->id] = $value;
                 }
 
                 $pointData['doneByElse']['points'] = $pointValue;
@@ -1089,6 +1144,7 @@ class SalesRiskPolicyController extends AccountBaseController
                         $points += (float) json_decode($policy[0]->value)->no->point;
                         $pointData[$item]['points'] = json_decode($policy[0]->value)->no->point;
                     }
+                    $policyIdList[$policy->id] = $value;
 
                     $pointData[$item]['questionAnswer'][] = ['id' => $questions[0]->id, 'title' => $questions[0]->title, 'value' => $value, 'parent_id' => $questions[0]->parent_id];
 
@@ -1135,6 +1191,7 @@ class SalesRiskPolicyController extends AccountBaseController
                         $points += $item->points;
                         $pointData['clientCountry']['questionAnswer'][] = ['title' => 'From which country does the client originate?', 'value' => array_values($country)[0], 'parent_id' => null];
                         $pointData['clientCountry']['points'] = $item->points;
+                        $policyIdList[$item->id] = $item->id;
                         goto endClientCountry;
                     }
                 }
@@ -1162,6 +1219,7 @@ class SalesRiskPolicyController extends AccountBaseController
                         case 'lessThan':
                             if ($deadline < $item->value) {
                                 $pointValue = $item->points;
+                                $policyIdList[$item->id] = $item->id;
                                 $data = ['title' => 'Less Then', 'value' => $item->value, 'parent_id' => 'question_id'];
                                 goto endProjectDeadline;
                             }
@@ -1169,6 +1227,7 @@ class SalesRiskPolicyController extends AccountBaseController
                         case 'greaterThan':
                             if ($deadline > $item->value) {
                                 $pointValue = $item->points;
+                                $policyIdList[$item->id] = $item->id;
                                 $data = ['title' => 'Greater Then', 'value' => $item->value, 'parent_id' => 'question_id'];
                                 goto endProjectDeadline;
                             }
@@ -1176,6 +1235,7 @@ class SalesRiskPolicyController extends AccountBaseController
                         case 'fixed':
                             if ($deadline == $item->value) {
                                 $pointValue = $item->points;
+                                $policyIdList[$item->id] = $item->id;
                                 $data = ['title' => 'Fixed', 'value' => $item->value, 'parent_id' => 'question_id'];
                                 goto endProjectDeadline;
                             }
@@ -1184,6 +1244,7 @@ class SalesRiskPolicyController extends AccountBaseController
                             $value = explode(',', $item->value);
                             if ($deadline >= $value[0] && $deadline <= $value[1]) {
                                 $pointValue = $item->points;
+                                $policyIdList[$item->id] = $item->id;
                                 $data = ['title' => 'Range', 'value' => $value[0] . ' - ' . $value[1], 'parent_id' => 'question_id'];
                                 goto endProjectDeadline;
                             }
@@ -1214,6 +1275,7 @@ class SalesRiskPolicyController extends AccountBaseController
                         case 'lessThan':
                             if ($deal->amount < $item->value) {
                                 $pointValue = $item->points;
+                                $policyIdList[$item->id] = $item->id;
                                 $data = ['title' => 'Less Then', 'value' => $item->value];
                                 goto endProjectBudget;
                             }
@@ -1221,6 +1283,7 @@ class SalesRiskPolicyController extends AccountBaseController
                         case 'greaterThan':
                             if ($deal->amount > $item->value) {
                                 $pointValue = $item->points;
+                                $policyIdList[$item->id] = $item->id;
                                 $data = ['title' => 'Greater Then', 'value' => $item->value];
                                 goto endProjectBudget;
                             }
@@ -1228,6 +1291,7 @@ class SalesRiskPolicyController extends AccountBaseController
                         case 'fixed':
                             if ($deal->amount == $item->value) {
                                 $pointValue = $item->points;
+                                $policyIdList[$item->id] = $item->id;
                                 $data = ['title' => 'Fixed', 'value' => $item->value];
                                 goto endProjectBudget;
                             }
@@ -1236,6 +1300,7 @@ class SalesRiskPolicyController extends AccountBaseController
                             $value = explode(',', $item->value);
                             if ($deal->amount >= $value[0] && $deal->amount <= $value[1]) {
                                 $pointValue = $item->points;
+                                $policyIdList[$item->id] = $item->id;
                                 $data = ['title' => 'Range', 'value' => $value[0] . ' - ' . $value[1], 'parent_id' => 'question_id'];
                                 goto endProjectBudget;
                             }
@@ -1252,7 +1317,7 @@ class SalesRiskPolicyController extends AccountBaseController
                 $message[] = "Project Budget policy is not added.";
             // -------------------------------- end projectBudget -------------------------------------- //
 
-            return ['points' => $points, 'pointData' => $pointData, 'message' => $message];
+            return ['points' => $points, 'pointData' => $pointData, 'policyIdList' => $policyIdList, 'message' => $message];
         } catch (\Throwable $th) {
 
             // throw $th;
@@ -1294,13 +1359,11 @@ class SalesRiskPolicyController extends AccountBaseController
         }
 
         try {
-            $data['points'] = $calculation['points'];
-            $data['pointData'] = $calculation['pointData'];
-            $data['message'] = $calculation['message'];
             $data['deal'] = $deal =  Deal::find($deal_id);
             $data['user'] = User::whereId($deal->added_by)->first(['id', 'name']);
             $data['authorizeBy'] = $deal->authorize_by ? User::whereId($deal->authorize_by)->first(['id', 'name']) : null;
-            $data['policyHistory'] = json_decode(PolicyPointHistory::where('deal_id', $deal->id)->firstOrFail()->policy);
+            $data['policyHistory'] = PolicyPointHistory::where('deal_id', $deal->id)->first();
+            $data['policyHistory'] = $data['policyHistory'] ? json_decode($data['policyHistory']->policy) : null;
 
             //get Date diff as intervals
             $d1 = new DateTime("$deal->start_date 00:00:00");
@@ -1322,9 +1385,9 @@ class SalesRiskPolicyController extends AccountBaseController
              * projectBudget
              */
             // compact('deal', 'points', 'pointData', 'message', 'user', 'deadline')
-            return response()->json(['status' => 'success', 'data' => $data]);
+            return response()->json(['status' => 'success', 'data' => array_merge($calculation, $data)]);
         } catch (\Throwable $th) {
-            //throw $th;
+            throw $th;
             return response()->json(['status' => 'error', 'message' => 'Internal error occured'], 500);
         }
     }
