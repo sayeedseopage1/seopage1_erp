@@ -141,6 +141,44 @@ class PmPointFactorController extends AccountBaseController
             'status' => 'nullable'
         ]);
 
+        $lowerLimitRefValue = $this->checkableValue($validated['lower_limit'], $validated['lower_limit_condition']);
+        $upperLimitRefValue = $this->checkableValue($validated['upper_limit'], $validated['upper_limit_condition']);
+        
+        $criteria = Criteria::with(['factors' => function($factor) use ($validated){
+            return $factor->where('project_type', $validated['project_type']);
+        }])->find($validated['criteria_id']);
+
+        foreach ($criteria->factors as $factor) {
+            if($validated['criteria_id']==2) break;
+            if($factor->id == $id) continue;
+
+            if(eval("return \$factor->lower_limit $factor->lower_limit_condition \$lowerLimitRefValue;") && eval("return \$factor->upper_limit $factor->upper_limit_condition \$lowerLimitRefValue;"))
+            {
+                return response()->json([
+                    'status'=> 400,
+                    'message' => 'The lower limit may conflict!'
+                ]);
+            }elseif($factor->lower_limit_condition == '>' && $factor->upper_limit_condition == '<=' && (eval("return \$factor->lower_limit $factor->lower_limit_condition \$lowerLimitRefValue;") || eval("return \$factor->upper_limit $factor->upper_limit_condition \$lowerLimitRefValue;"))){
+                return response()->json([
+                    'status'=> 400,
+                    'message' => 'The lower limit may conflict!'
+                ]);
+            }
+
+            if(eval("return \$factor->lower_limit $factor->lower_limit_condition \$upperLimitRefValue;") && eval("return \$factor->upper_limit $factor->upper_limit_condition \$upperLimitRefValue;"))
+            {
+                return response()->json([
+                    'status'=> 400,
+                    'message' => 'The upper limit may conflict!'
+                ]);
+            }elseif($factor->lower_limit_condition == '>' && $factor->upper_limit_condition == '<=' && (eval("return \$factor->lower_limit $factor->lower_limit_condition \$upperLimitRefValue;") || eval("return \$factor->upper_limit $factor->upper_limit_condition \$upperLimitRefValue;"))){
+                return response()->json([
+                    'status'=> 400,
+                    'message' => 'The upper limit may conflict!'
+                ]);
+            }
+        }
+
         try {
             Factor::find($id)->update($validated);
             return response()->json([
