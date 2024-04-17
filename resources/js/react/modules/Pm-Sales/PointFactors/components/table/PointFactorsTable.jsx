@@ -204,7 +204,7 @@ const PointFactorsTable = ({
     const [updatePmPointfactor, { isLoading: isUpdatePmPointfactorLoading }] = useUpdatePmPointfactorMutation()
 
     const handleUpdateFactor = async () => {
-        const validation = validationFormator(editFactorData, editFactorData, editFactorDataValidation)
+        const validation = validationFormator(editFactorData, editFactorDataValidation)
 
         if (
             Object.entries(validation).some(

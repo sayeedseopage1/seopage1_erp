@@ -184,15 +184,13 @@ const PointFactors = () => {
     const [createPmPointFactor, { isLoading: isLoadingAddPmFactors }] = useCreatePmPointFactorMutation()
 
     const handleFactorsAdded = async () => {
-        console.log("inside handler 0")
         if (_.isEmpty(newFactorData?.criteria)) {
             toast.error("Please add a criteria first");
             return;
         }
-        console.log("inside handler 1")
+
         const validation = validationFormator(newFactorData, newFactorDataValidation)
-        console.log("inside handler 2")
-        console.log(validation)
+
         if (
             Object.entries(validation).some(
                 ([key, value]) => key !== "isSubmitting" && value === true
@@ -204,12 +202,10 @@ const PointFactors = () => {
             });
             return;
         }
-        console.log("inside handler 3")
+
         try {
             const lowerLimitCondition = newFactorData?.infiniteValueDown ? newFactorData?.infiniteValueDown : newFactorData?.limit_type == 2 ? "==" : "<"
             const upperLimitCondition = newFactorData?.infiniteValueUp ? newFactorData?.infiniteValueUp : newFactorData?.limit_type == 2 ? "==" : ">="
-            // const lowerLimit = newFactorData?.limit_type == 2 ? 1 : parseInt(newFactorData?.lower_limit)
-            // const upperLimit = newFactorData?.limit_type == 2 ? 1 : parseInt(newFactorData?.upper_limit)
 
             const payload = {
                 criteria_id: parseInt(newFactorData?.criteria?.name),

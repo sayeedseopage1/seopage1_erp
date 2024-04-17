@@ -27,7 +27,7 @@ const EditFactorModal = ({
 
     const singleDefaultFactor = singleFactorData?.data
 
-    const { title, project_type, lower_limit, upper_limit, limit_type, limit_unit, lower_limit_condition, upper_limit_condition, point_type, points, point_depend_on_model, point_depend_on_field, status } = editFactorData || {}
+    const { title, project_type, lower_limit, upper_limit, limit_type, limit_unit, point_type, points, point_depend_on_model, point_depend_on_field, status } = editFactorData || {}
 
     return (
         <CustomModal
@@ -107,7 +107,7 @@ const EditFactorModal = ({
 
                         {/* Lower Limit  *****required****** */}
                         {
-                            singleDefaultFactor?.lower_limit && <div className="row mb-4 align-items-center">
+                            limit_type == 1 && <div className="row mb-4 align-items-center">
                                 <ModalInputLabel className="col-4">
                                     Lower Limit <sup>*</sup>:{" "}
                                 </ModalInputLabel>
@@ -132,7 +132,7 @@ const EditFactorModal = ({
 
                         {/* Upper Limit  *****required****** */}
                         {
-                            singleDefaultFactor?.upper_limit && <div className="row mb-4 align-items-center">
+                            limit_type == 1 && <div className="row mb-4 align-items-center">
                                 <ModalInputLabel className="col-4">
                                     Upper Limit <sup>*</sup>:{" "}
                                 </ModalInputLabel>
