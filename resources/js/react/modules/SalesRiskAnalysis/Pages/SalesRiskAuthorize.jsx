@@ -89,8 +89,7 @@ const SalesRiskAuthorize = () => {
                     points: data?.data?.points,
                 });
             }
-        } else {
-        }
+        } 
     }, [data?.data, isLoading]);
 
     // project extend images Api call
