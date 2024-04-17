@@ -1928,13 +1928,13 @@ class HelperPendingActionController extends AccountBaseController
         public function evaluationAuthForAdmin($evaluation_task)
         {
             $evaluation_task = EmployeeEvaluationTask::where('id',$evaluation_task)->first(); 
-            $new_dev = User::where('id',$evaluation_task->user_id)->first(); 
+            $new_dev = User::where('id',$evaluation_task->user_id)->first();
             $lead_dev = User::where('id',$evaluation_task->lead_dev_id)->first(); 
             $evaluation = EmployeeEvaluation::where('user_id',$evaluation_task->user_id)->first(); 
-            $top_management = User::where('id',$evaluation_task->managements_id)->first(); 
+            $top_management = User::where('id',Auth::user()->id)->first(); 
             $team_lead = User::where('id',$evaluation->team_lead_id)->first();
             $task = Task::where('id',$evaluation_task->task_id)->first();
-            $authorizers = User::whereIn('role_id', [1, 6])->get();
+            $authorizers = User::whereIn('role_id', [8, 6])->get();
             $updated_at = Carbon::parse($evaluation_task->updated_at);
             $formatted_date_time = $updated_at->format('d F Y \a\t g:i A');
             foreach ($authorizers as $key => $authorizer) {
@@ -1951,7 +1951,7 @@ class HelperPendingActionController extends AccountBaseController
                 $action->authorization_for= $authorizer->id;
                 $button = [
                     [
-                        'button_name' => 'Ackhowledge It',
+                        'button_name' => 'Acknowledge It',
                         'button_color' => 'primary',
                         'button_type' => 'modal',
                         'button_url' => '',
@@ -1969,10 +1969,10 @@ class HelperPendingActionController extends AccountBaseController
             $new_dev = User::where('id',$evaluation_task->user_id)->first(); 
             $lead_dev = User::where('id',$evaluation_task->lead_dev_id)->first(); 
             $evaluation = EmployeeEvaluation::where('user_id',$evaluation_task->user_id)->first(); 
-            $top_management = User::where('id',$evaluation_task->managements_id)->first(); 
+            $top_management = User::where('id',Auth::user()->id)->first(); 
             $team_lead = User::where('id',$evaluation->team_lead_id)->first();
             $task = Task::where('id',$evaluation_task->task_id)->first();
-            $authorizers = User::whereIn('role_id', [1, 6])->get();
+            $authorizers = User::whereIn('role_id', [8, 6])->get();
             $updated_at = Carbon::parse($evaluation_task->updated_at);
             $formatted_date_time = $updated_at->format('d F Y \a\t g:i A');
             foreach ($authorizers as $key => $authorizer) {
@@ -1989,7 +1989,7 @@ class HelperPendingActionController extends AccountBaseController
                 $action->authorization_for= $authorizer->id;
                 $button = [
                     [
-                        'button_name' => 'Ackhowledge It',
+                        'button_name' => 'Acknowledge It',
                         'button_color' => 'primary',
                         'button_type' => 'modal',
                         'button_url' => '',
@@ -2007,10 +2007,10 @@ class HelperPendingActionController extends AccountBaseController
             $new_dev = User::where('id',$evaluation_task->user_id)->first(); 
             $lead_dev = User::where('id',$evaluation_task->lead_dev_id)->first(); 
             $evaluation = EmployeeEvaluation::where('user_id',$evaluation_task->user_id)->first(); 
-            $top_management = User::where('id',$evaluation_task->managements_id)->first(); 
+            $top_management = User::where('id',Auth::user()->id)->first(); 
             $team_lead = User::where('id',$evaluation->team_lead_id)->first();
             $task = Task::where('id',$evaluation_task->task_id)->first();
-            $authorizers = User::whereIn('role_id', [1, 6])->get();
+            $authorizers = User::whereIn('role_id', [8, 6])->get();
             $updated_at = Carbon::parse($evaluation_task->updated_at);
             $formatted_date_time = $updated_at->format('d F Y \a\t g:i A');
             foreach ($authorizers as $key => $authorizer) {
@@ -2027,7 +2027,7 @@ class HelperPendingActionController extends AccountBaseController
                 $action->authorization_for= $authorizer->id;
                 $button = [
                     [
-                        'button_name' => 'Ackhowledge It',
+                        'button_name' => 'Acknowledge It',
                         'button_color' => 'primary',
                         'button_type' => 'modal',
                         'button_url' => '',

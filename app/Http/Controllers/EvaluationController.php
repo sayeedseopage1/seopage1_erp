@@ -243,7 +243,7 @@ class EvaluationController extends AccountBaseController
                     'button_color' => 'primary',
                     'button_type' => 'redirect_url',
                     'button_url' => route('employee-evaluation.index'),
-                    'button_url' => route('employee-evaluation.index', ['modal_type' => 'new_dev_evaluation', 'user_id' => $dev->id]),
+                    'button_url' => route('employee-evaluation.index', ['user_id' => $dev->id,'show' => 'all']),
                 ],
             ];
             $past_action->button = json_encode($button);
@@ -339,7 +339,7 @@ class EvaluationController extends AccountBaseController
                     'button_color' => 'primary',
                     'button_type' => 'redirect_url',
                     'button_url' => route('employee-evaluation.index'),
-                    'button_url' => route('employee-evaluation.index', ['modal_type' => 'new_dev_evaluation', 'user_id' => $dev->id]),
+                    'button_url' => route('employee-evaluation.index', ['user_id' => $dev->id,'show' => 'all']),
                 ],
             ];
             $past_action->button = json_encode($button);
@@ -355,6 +355,7 @@ class EvaluationController extends AccountBaseController
     }
     public function storeAuthorization(Request $request)
     {
+        // DB::beginTransaction();
         if($request->status == 'authorize')
         {
             $evaluation = EmployeeEvaluation::where('user_id',$request->user_id)->first();
@@ -406,7 +407,7 @@ class EvaluationController extends AccountBaseController
                         'button_color' => 'primary',
                         'button_type' => 'redirect_url',
                         'button_url' => route('employee-evaluation.index'),
-                        'button_url' => route('employee-evaluation.index', ['modal_type' => 'new_dev_evaluation', 'user_id' => $dev->id]),
+                        'button_url' => route('employee-evaluation.index', ['user_id' => $dev->id,'show' => 'all']),
                     ],
                 ];
                 $past_action->button = json_encode($button);
@@ -467,7 +468,7 @@ class EvaluationController extends AccountBaseController
                         'button_color' => 'primary',
                         'button_type' => 'redirect_url',
                         'button_url' => route('employee-evaluation.index'),
-                        'button_url' => route('employee-evaluation.index', ['modal_type' => 'new_dev_evaluation', 'user_id' => $dev->id]),
+                        'button_url' => route('employee-evaluation.index', ['user_id' => $dev->id,'show' => 'all']),
                     ],
                 ];
                 $past_action->button = json_encode($button);
@@ -528,7 +529,7 @@ class EvaluationController extends AccountBaseController
                         'button_color' => 'primary',
                         'button_type' => 'redirect_url',
                         'button_url' => route('employee-evaluation.index'),
-                        'button_url' => route('employee-evaluation.index', ['modal_type' => 'new_dev_evaluation', 'user_id' => $dev->id]),
+                        'button_url' => route('employee-evaluation.index', ['user_id' => $dev->id, 'show' => 'all']),
                     ],
                 ];
                 $past_action->button = json_encode($button);
@@ -599,7 +600,7 @@ class EvaluationController extends AccountBaseController
                     'button_color' => 'primary',
                     'button_type' => 'redirect_url',
                     'button_url' => route('employee-evaluation.index'),
-                    'button_url' => route('employee-evaluation.index', ['modal_type' => 'new_dev_evaluation', 'user_id' => $dev->id]),
+                    'button_url' => route('employee-evaluation.index', ['user_id' => $dev->id,'show' => 'all']),
                 ],
             ];
             $past_action->button = json_encode($button);
