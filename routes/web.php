@@ -1668,7 +1668,8 @@ Route::put('/projects/update-niche-category/{id}', [ProjectController::class, 'u
 //add project cms
 Route::get('/projects/view-cms', [ProjectController::class, 'viewCms'])->name('project-view-cms');
 Route::post('/projects/add-cms', [ProjectController::class, 'storeCms'])->name('add-cms');
-Route::put('/projects/update-cms/{id}', [ProjectController::class, 'updateCms']);
+Route::get('/project/cms/edit', [ProjectController::class, 'editCms'])->name('edit-cms');
+Route::post('/projects/update-cms', [ProjectController::class, 'updateCms'])->name('update-cms');
 
 //add project website type
 Route::get('/projects/view-website-type', [ProjectController::class, 'viewWebsiteType'])->name('project-view-website-type');

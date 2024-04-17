@@ -57,6 +57,7 @@ use App\DataTables\ProjectNotesDataTable;
 use App\Http\Requests\Project\StoreProject;
 use App\DataTables\ArchiveProjectsDataTable;
 use App\DataTables\ArchiveTasksDataTable;
+use App\DataTables\ProjectCmsDataTable;
 use App\Http\Requests\Project\UpdateProject;
 use Maatwebsite\Excel\Imports\HeadingRowFormatter;
 use App\Http\Requests\Admin\Employee\ImportRequest;
@@ -3959,11 +3960,10 @@ class ProjectController extends AccountBaseController
         //        route('dealDetails', $deal->id)
 
     }
-    public function viewCms()
+    public function viewCms(ProjectCmsDataTable $dataTable)
     {
         $this->pageTitle = 'CMS';
-        $this->all_cms = DB::table('project_cms')->orderBy('id', 'desc')->paginate(10);
-        return view('projects.cms.index', $this->data);
+        return $dataTable->render('projects.cms.index',$this->data);
     }
     public function storeCms(Request $request)
     {
@@ -3977,9 +3977,14 @@ class ProjectController extends AccountBaseController
         $cms->save();
         return response()->json(['status' => 200]);
     }
-    public function updateCms(Request $request, $id)
+    public function editCms(Request $request)
     {
-        $cms = ProjectCms::find($id);
+        $this->id = $request->id;
+        return view('projects.modals.editcmsmodal', $this->data);
+    }
+    public function updateCms(Request $request)
+    {
+        $cms = ProjectCms::find($request->cms_id);
         $cms->cms_name = $request->cms_name;
         $cms->save();
 
