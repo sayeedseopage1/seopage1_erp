@@ -25,7 +25,7 @@ import ExpiredTimeModalForNewEmployee from "./ExpiredTimeModalForNewEmployee";
 const TimerControl = ({ task, timerStart, setTimerStart, auth }) => {
     //new employee timer hiding and warning modal showing
     const [timerStatusForWarningModal, setTimerStatusForWarningModal] =
-        useState("");
+        useState(true);
     const [timeLeft, setTimeLeft] = useState(0);
     const [showExpirationWarningModal, setShowExpirationWarningModal] =
         useState(false);
@@ -249,7 +249,7 @@ const TimerControl = ({ task, timerStart, setTimerStart, auth }) => {
     // start timer function
     const startTimer = (e) => {
         e.preventDefault();
-
+        setTimerStatusForWarningModal(true);
         startTimerFirstCheck(
             `/${task?.id}/json?mode=developer_first_task_check&project_id=${task?.projectId}`
         )
@@ -266,6 +266,7 @@ const TimerControl = ({ task, timerStart, setTimerStart, auth }) => {
     // stop timer
     const stopTimer = () => {
         //navigate(`/account/tasks/${task?.id}?modal=daily-submission&trigger=stop-button`);
+        setTimerStatusForWarningModal(false);
         stopTimerApi({ timeId: timerId })
             .unwrap()
             .then((res) => {
@@ -343,7 +344,7 @@ const TimerControl = ({ task, timerStart, setTimerStart, auth }) => {
 
     return (
         <React.Fragment>
-            {!expiredTimerForNewEmployee && (
+            {!expiredTimerForNewEmployee ? (
                 <React.Fragment>
                     {!timerStart ? (
                         <React.Fragment>
@@ -429,6 +430,18 @@ const TimerControl = ({ task, timerStart, setTimerStart, auth }) => {
                         </React.Fragment>
                     )}
                 </React.Fragment>
+            ) : (
+                <Button
+                    variant="danger"
+                    className="d-flex align-items-center  "
+                >
+                    <i
+                        className="fa-solid fa-circle-play"
+                        style={{ color: "white" }}
+                    />
+
+                    <span>Time Expired</span>
+                </Button>
             )}
             {/* LessTrackTimerModal */}
             <LessTrackTimerModal
@@ -443,7 +456,6 @@ const TimerControl = ({ task, timerStart, setTimerStart, auth }) => {
                 taskRunning={taskRunning}
                 task={task}
                 timerStatusForWarningModal={timerStatusForWarningModal}
-                setTimerStatusForWarningModal={setTimerStatusForWarningModal}
             />
         </React.Fragment>
     );

@@ -7,34 +7,31 @@ const ExpiredTimeModalForNewEmployee = ({
     setShowExpirationWarningModal,
     timeLeft,
     setTimeLeft,
-    taskRunning,
-    task,
     timerStatusForWarningModal,
-    setTimerStatusForWarningModal,
 }) => {
+    const [toggleModal, setToggleModal] = useState(false); // State to trigger re-render every minute
+
     useEffect(() => {
         const timer = setInterval(() => {
             setTimeLeft((prevTime) => prevTime - 1);
-            // setTimerStatusForWarningModal(task?.ranningTimer?.status);
-            // console.log("timer status inside", timerStatusForWarningModal);
         }, 1000);
 
         return () => clearInterval(timer);
     }, []);
-    console.log("timer status outside", timerStatusForWarningModal);
+
     useEffect(() => {
         const interval = setInterval(() => {
-            if (timeLeft <= 360000) {
-                setShowExpirationWarningModal(true);
-            }
-        }, 60000);
+            setToggleModal((prevToggle) => !prevToggle); // Toggle state every 15 minute
+        }, 900000); // 15 minute in milliseconds
 
         return () => clearInterval(interval);
     }, []);
 
-    // useEffect(() => {
-    //     console.log("timer status", timerStatusForWarningModal);
-    // }, [timerStatusForWarningModal]);
+    useEffect(() => {
+        if (toggleModal && timeLeft <= 360000 && timerStatusForWarningModal) {
+            setShowExpirationWarningModal(true);
+        }
+    }, [toggleModal]);
 
     const closeModal = () => {
         setShowExpirationWarningModal(false);
@@ -43,6 +40,7 @@ const ExpiredTimeModalForNewEmployee = ({
     const minutes = Math.floor(timeLeft / 60);
     const seconds = timeLeft % 60;
 
+    // console.log("timer status", timerStatusForWarningModal);
     return (
         <ReactModal
             isOpen={showExpirationWarningModal}

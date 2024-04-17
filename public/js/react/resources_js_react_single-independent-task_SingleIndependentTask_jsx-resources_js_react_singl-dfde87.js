@@ -14249,6 +14249,12 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react_modal__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react-modal */ "./node_modules/react-modal/lib/index.js");
 /* harmony import */ var react_modal__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react_modal__WEBPACK_IMPORTED_MODULE_1__);
 /* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
+function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
+function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
+function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) arr2[i] = arr[i]; return arr2; }
+function _iterableToArrayLimit(r, l) { var t = null == r ? null : "undefined" != typeof Symbol && r[Symbol.iterator] || r["@@iterator"]; if (null != t) { var e, n, i, u, a = [], f = !0, o = !1; try { if (i = (t = t.call(r)).next, 0 === l) { if (Object(t) !== t) return; f = !1; } else for (; !(f = (e = i.call(t)).done) && (a.push(e.value), a.length !== l); f = !0); } catch (r) { o = !0, n = r; } finally { try { if (!f && null != t["return"] && (u = t["return"](), Object(u) !== u)) return; } finally { if (o) throw n; } } return a; } }
+function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
 
 
@@ -14258,43 +14264,45 @@ var ExpiredTimeModalForNewEmployee = function ExpiredTimeModalForNewEmployee(_re
     setShowExpirationWarningModal = _ref.setShowExpirationWarningModal,
     timeLeft = _ref.timeLeft,
     setTimeLeft = _ref.setTimeLeft,
-    taskRunning = _ref.taskRunning,
-    task = _ref.task,
-    timerStatusForWarningModal = _ref.timerStatusForWarningModal,
-    setTimerStatusForWarningModal = _ref.setTimerStatusForWarningModal;
+    timerStatusForWarningModal = _ref.timerStatusForWarningModal;
+  var _useState = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false),
+    _useState2 = _slicedToArray(_useState, 2),
+    toggleModal = _useState2[0],
+    setToggleModal = _useState2[1]; // State to trigger re-render every minute
+
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(function () {
     var timer = setInterval(function () {
       setTimeLeft(function (prevTime) {
         return prevTime - 1;
       });
-      // setTimerStatusForWarningModal(task?.ranningTimer?.status);
-      // console.log("timer status inside", timerStatusForWarningModal);
     }, 1000);
     return function () {
       return clearInterval(timer);
     };
   }, []);
-  console.log("timer status outside", timerStatusForWarningModal);
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(function () {
     var interval = setInterval(function () {
-      if (timeLeft <= 360000) {
-        setShowExpirationWarningModal(true);
-      }
-    }, 60000);
+      setToggleModal(function (prevToggle) {
+        return !prevToggle;
+      }); // Toggle state every 15 minute
+    }, 900000); // 15 minute in milliseconds
+
     return function () {
       return clearInterval(interval);
     };
   }, []);
-
-  // useEffect(() => {
-  //     console.log("timer status", timerStatusForWarningModal);
-  // }, [timerStatusForWarningModal]);
-
+  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(function () {
+    if (toggleModal && timeLeft <= 360000 && timerStatusForWarningModal) {
+      setShowExpirationWarningModal(true);
+    }
+  }, [toggleModal]);
   var closeModal = function closeModal() {
     setShowExpirationWarningModal(false);
   };
   var minutes = Math.floor(timeLeft / 60);
   var seconds = timeLeft % 60;
+
+  // console.log("timer status", timerStatusForWarningModal);
   return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)((react_modal__WEBPACK_IMPORTED_MODULE_1___default()), {
     isOpen: showExpirationWarningModal,
     onRequestClose: closeModal,
@@ -17738,7 +17746,7 @@ var TimerControl = function TimerControl(_ref) {
     setTimerStart = _ref.setTimerStart,
     auth = _ref.auth;
   //new employee timer hiding and warning modal showing
-  var _useState = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(""),
+  var _useState = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(true),
     _useState2 = _slicedToArray(_useState, 2),
     timerStatusForWarningModal = _useState2[0],
     setTimerStatusForWarningModal = _useState2[1];
@@ -17934,6 +17942,7 @@ var TimerControl = function TimerControl(_ref) {
   // start timer function
   var startTimer = function startTimer(e) {
     e.preventDefault();
+    setTimerStatusForWarningModal(true);
     startTimerFirstCheck("/".concat(task === null || task === void 0 ? void 0 : task.id, "/json?mode=developer_first_task_check&project_id=").concat(task === null || task === void 0 ? void 0 : task.projectId)).unwrap().then(function (res) {
       if (res.is_first_task) {
         setIsOpenConfirmationModal(true);
@@ -17946,6 +17955,7 @@ var TimerControl = function TimerControl(_ref) {
   // stop timer
   var stopTimer = function stopTimer() {
     //navigate(`/account/tasks/${task?.id}?modal=daily-submission&trigger=stop-button`);
+    setTimerStatusForWarningModal(false);
     stopTimerApi({
       timeId: timerId
     }).unwrap().then(function (res) {
@@ -18007,7 +18017,7 @@ var TimerControl = function TimerControl(_ref) {
     }
   }, [startTimerFirstCheckIsFetching, timerStartStatusIsLoading]);
   return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsxs)((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), {
-    children: [!expiredTimerForNewEmployee && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), {
+    children: [!expiredTimerForNewEmployee ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), {
       children: !timerStart ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsxs)((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), {
         children: [!timerStartStatusIsLoading && !startTimerFirstCheckIsFetching ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsxs)(_components_Button__WEBPACK_IMPORTED_MODULE_1__["default"], {
           variant: "tertiary",
@@ -18074,6 +18084,17 @@ var TimerControl = function TimerControl(_ref) {
           }), "Stopping..."]
         })]
       })
+    }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsxs)(_components_Button__WEBPACK_IMPORTED_MODULE_1__["default"], {
+      variant: "danger",
+      className: "d-flex align-items-center  ",
+      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)("i", {
+        className: "fa-solid fa-circle-play",
+        style: {
+          color: "white"
+        }
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)("span", {
+        children: "Time Expired"
+      })]
     }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)(_stop_timer_LessTrackTimerModal__WEBPACK_IMPORTED_MODULE_8__["default"], {
       stopTimer: stopTimer,
       startTimer: startTimerControl
@@ -18084,8 +18105,7 @@ var TimerControl = function TimerControl(_ref) {
       setTimeLeft: setTimeLeft,
       taskRunning: taskRunning,
       task: task,
-      timerStatusForWarningModal: timerStatusForWarningModal,
-      setTimerStatusForWarningModal: setTimerStatusForWarningModal
+      timerStatusForWarningModal: timerStatusForWarningModal
     })]
   });
 };
