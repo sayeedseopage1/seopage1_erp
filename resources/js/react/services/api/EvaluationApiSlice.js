@@ -61,6 +61,15 @@ const evaluationApiSlice = apiSlice.injectEndpoints({
             }),
             invalidatesTags: ["ALL_EVALUATION"],
         }),
+        storeAdminExtended: build.mutation({
+            query: (data) => ({
+                url: `/account/employee-evaluation-authorization`,
+                method: "POST",
+                body: data,
+                formData: true,
+            }),
+            invalidatesTags: ["ALL_EVALUATION"],
+        }),
 
         finalTaskSubmissionStatus: build.mutation({
             query: (assignToId) => ({
@@ -82,6 +91,7 @@ export const {
     useStoreTeamLeadReviewMutation,
     useStoreAdminAuthorizedMutation,
     useStoreAdminRejectedMutation,
+    useStoreAdminExtendedMutation,
     useUpdateTaskRatingSubmissionMutation,
     useStoreTaskRatingFinalSubmissionMutation,
     useFinalTaskSubmissionStatusMutation,

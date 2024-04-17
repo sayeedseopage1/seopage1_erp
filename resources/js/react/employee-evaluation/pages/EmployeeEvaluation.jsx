@@ -123,17 +123,23 @@ export default EmployeeEvaluation;
 const Tabs = (props) => {
     const [searchParams, setSearchParams] = useSearchParams();
     const data = props.data;
-
     // useEffect(() => {
     //     setSearchParams({ show: "pending" });
     // }, []);
 
     const handleRouteChange = (e, params) => {
         e.preventDefault();
+
+        // Create a new URLSearchParams object with the new parameters
+        const newSearchParams = new URLSearchParams();
+
+        // Set new parameters
         for (const [key, value] of Object.entries(params)) {
-            searchParams.set(key, value);
+            newSearchParams.set(key, value);
         }
-        setSearchParams(searchParams);
+
+        // Update the searchParams state with the new URLSearchParams object
+        setSearchParams(newSearchParams);
     };
 
     const badge = (type) => {

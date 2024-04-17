@@ -3,7 +3,9 @@ import ActionDropdownDataTable from "./ActionDropDownDataTable";
 import Person from "./Person";
 
 import CommentModal from "./CommentModal";
-
+import { User } from "../../../utils/user-details";
+import FormatDate from "../../../utils/FormateDate";
+const auth = new User(window.Laravel.user);
 export const DataTableColumns = [
     // {
     //     header: "#",
@@ -38,7 +40,7 @@ export const DataTableColumns = [
         accessorKey: "join_date",
         cell: ({ row }) => {
             const data = row.original;
-            return <div>{data?.join_date}</div>;
+            return <div>{FormatDate(data?.join_date)}</div>;
         },
     },
     {
@@ -47,7 +49,7 @@ export const DataTableColumns = [
         accessorKey: "first_task_assign_on",
         cell: ({ row }) => {
             const data = row.original;
-            return <div>{data?.first_task_assign_on}</div>;
+            return <div>{FormatDate(data?.first_task_assign_on)}</div>;
         },
     },
     {
@@ -56,7 +58,7 @@ export const DataTableColumns = [
         accessorKey: "started_working_on",
         cell: ({ row }) => {
             const data = row.original;
-            return <div>{data?.started_working_on}</div>;
+            return <div>{FormatDate(data?.started_working_on)}</div>;
         },
     },
     {
@@ -119,9 +121,14 @@ export const DataTableColumns = [
         cell: ({ row }) => {
             const data = row.original;
 
-            return <CommentModal comment={data?.team_lead_cmnt} />;
+            if (auth.roleId !== 6) {
+                return <CommentModal comment={data?.team_lead_cmnt} />;
+            } else {
+                return <div style={{ marginLeft: "50px" }}>N/A</div>;
+            }
         },
     },
+
     {
         id: "managements_cmnt",
         header: "Managements Comment",
@@ -150,7 +157,7 @@ export const DataTableColumns = [
 
     {
         id: "action",
-        header: "Evaluation",
+        header: "Status",
         accessorKey: "action",
 
         cell: ({ row }) => {

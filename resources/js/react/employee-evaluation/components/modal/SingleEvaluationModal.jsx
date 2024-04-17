@@ -11,7 +11,7 @@ import { toast } from "react-toastify";
 import { BiSolidEditAlt } from "react-icons/bi";
 
 import ReusableSectionTeamLeadAndAdmin from "./ReusableSectionTeamLeadAndAdmin";
-import Button from "../../../global/Button";
+
 import CKEditorComponent from "../../../ckeditor";
 useStoreTaskRatingMutation;
 import { useAuth } from "../../../hooks/useAuth";
@@ -21,17 +21,19 @@ import {
     useUpdateTaskRatingSubmissionMutation,
 } from "../../../services/api/EvaluationApiSlice";
 import FormatDate from "../../../UI/comments/utils/FormatDate";
+import { Button } from "react-bootstrap";
 
 const SingleEvaluationModal = ({
     toggleSingleEvaluationModal,
     isSingleEvaluationModalOpen,
     data,
 }) => {
-    const [userIdFromUrl, setUserIdFromUrl] = useState(null);
     const auth = useAuth();
     const { evaluationObject } = useEmployeeEvaluation();
-    const [storeTaskRating] = useStoreTaskRatingMutation();
-    const [updateTaskRating] = useUpdateTaskRatingSubmissionMutation();
+    const [storeTaskRating, { isLoading: isLoadingReview }] =
+        useStoreTaskRatingMutation();
+    const [updateTaskRating, { isLoading: isLoadingUpdateTaskRating }] =
+        useUpdateTaskRatingSubmissionMutation();
     const [averageRating, setAverageRating] = useState(
         evaluationObject.lead_dev_avg_rating
     );
@@ -227,7 +229,7 @@ const SingleEvaluationModal = ({
                 .getAttribute("content"),
         })
             .unwrap()
-            .then((response) => {
+            .then(() => {
                 toast.success("Rating submitted");
                 toggleSingleEvaluationModal();
             })
@@ -461,22 +463,32 @@ const SingleEvaluationModal = ({
                     {auth.roleId === 6 &&
                         evaluationObject.ld_submission_status === 0 &&
                         (data?.avg_rating === null ? (
-                            <button
-                                className="mr-2 btn btn-primary "
+                            <Button
                                 onClick={handleSubmit}
+                                size="md"
+                                className="ml-2"
+                                disabled={isLoadingReview}
                             >
-                                Submit Evaluation
-                            </button>
+                                {isLoadingReview
+                                    ? "Submitting"
+                                    : "Submit Evaluation"}
+                            </Button>
                         ) : (
-                            <button
+                            <Button
                                 className="mr-2 btn btn-primary "
                                 onClick={handleEdit}
+                                disabled={isLoadingUpdateTaskRating}
                             >
                                 <div>
                                     <BiSolidEditAlt />
-                                    <span> Update Rating</span>
+                                    <span>
+                                        {" "}
+                                        {isLoadingUpdateTaskRating
+                                            ? "Updating"
+                                            : "Update Rating"}
+                                    </span>
                                 </div>
-                            </button>
+                            </Button>
                         ))}
                     <Button
                         size="md"

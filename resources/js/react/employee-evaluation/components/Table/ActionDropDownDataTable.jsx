@@ -9,12 +9,21 @@ import { Tooltip } from "react-tooltip";
 import useEmployeeEvaluation from "../../../zustand/store";
 
 const ActionDropdownDataTable = ({ data, table }) => {
+    const [isEvaluationModal, setIsEvaluationModal] = useState(false);
     const { setEvaluationObject } = useEmployeeEvaluation();
     const location = useLocation();
-    const queryParams = new URLSearchParams(location.search);
+    const userIdFromParam = new URLSearchParams(location.search).get("user_id");
 
+    React.useEffect(() => {
+        // console.log("userIdFromParam:", userIdFromParam);
+        // console.log("data.user_id:", data.user_id);
+        if (userIdFromParam == data.user_id) {
+            setIsEvaluationModal(true);
+        }
+    }, [userIdFromParam]);
+
+    // console.log("is evaluation modal", isEvaluationModal);
     const auth = useAuth();
-    const [isEvaluationModal, setIsEvaluationModal] = React.useState(false);
     const [toolTipTeamLead, setToolTipTeamLead] = React.useState("");
     const [toolTipAdmin, setToolTipAdmin] = React.useState("");
     const [buttonVariant, setButtonVariant] = React.useState("");
@@ -43,6 +52,13 @@ const ActionDropdownDataTable = ({ data, table }) => {
         }
     }, [data]);
 
+    React.useEffect(() => {
+        if (data?.lead_dev_avg_rating !== null) {
+            setButtonVariant("success");
+        } else if (data?.lead_dev_avg_rating === null) {
+            setButtonVariant("primary");
+        }
+    }, [data]);
     React.useEffect(() => {
         if (data?.lead_dev_avg_rating !== null) {
             setButtonVariant("success");
