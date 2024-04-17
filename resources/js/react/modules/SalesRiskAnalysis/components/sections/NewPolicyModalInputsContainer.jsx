@@ -135,7 +135,7 @@ const NewPolicyModalInputsContainer = ({
                                         selected={newPolicyData?.valueType}
                                         setSelected={handleChange}
                                         filedName="valueType"
-                                        isDisableUse={handleTernary()}
+                                        isDisableUse={false}
                                     />
                                 </ModalSelectContainer>
                                 {newPolicyDataValidation?.valueType && (

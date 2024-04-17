@@ -34,7 +34,6 @@ import {
     useSingleRuleStatusUpdateMutation,
 } from "../../../../services/api/salesRiskAnalysisSlice";
 
-
 // helper function
 import {
     formatEditPolicyData,
@@ -250,7 +249,6 @@ const SalesRiskAnalysisTable = ({
             handleEditPolicy: (data) => {
                 // function to format data
                 const updateData = formatEditPolicyData(data);
-                console.log(updateData)
                 setEditPolicyInputData(updateData);
                 setEditPolicyDefaultData({
                     policyName: data.title,
@@ -272,8 +270,8 @@ const SalesRiskAnalysisTable = ({
                 setEditCountryListModalOpen(true);
             },
             handleSendPolicyType: () => {
-                return policyKeys
-            }
+                return policyKeys;
+            },
         },
     });
 
@@ -405,7 +403,7 @@ const SalesRiskAnalysisTable = ({
             });
         } else if (name === "policyType") {
             const getValueType =
-            editPolicyInputData?.length > 0
+                editPolicyInputData?.length > 0
                     ? editPolicyInputData[0]?.valueType
                     : {};
             setEditPolicyData({
@@ -424,7 +422,6 @@ const SalesRiskAnalysisTable = ({
             setEditPolicyData({ ...editPolicyData, [name]: value });
         }
     };
-
 
     // reset form for policy on close
     const resetFormForPolicy = (single) => {
@@ -447,10 +444,39 @@ const SalesRiskAnalysisTable = ({
                 points: "",
                 id: "",
             });
+            setEditPolicyDataValidation({
+                isSubmitting: false,
+                policyName: false,
+                department: false,
+                policyType: false,
+                valueType: false,
+                value: false,
+                from: false,
+                hey: false,
+                to: false,
+                yes: false,
+                no: false,
+                countries: false,
+                points: false,
+            });
         } else {
             setEditPolicyData([]);
             setEditPolicyDefaultData([]);
-            setEditPolicyDataValidation({});
+            setEditPolicyDataValidation({
+                isSubmitting: false,
+                policyName: false,
+                department: false,
+                policyType: false,
+                valueType: false,
+                value: false,
+                from: false,
+                hey: false,
+                to: false,
+                yes: false,
+                no: false,
+                countries: false,
+                points: false,
+            });
             setEditPolicyDeleteData([]);
         }
     };
@@ -491,18 +517,7 @@ const SalesRiskAnalysisTable = ({
                         ...editPolicyData,
                     };
                 }
-                if (editPolicyData.index === 0) {
-                    return {
-                        ...item,
-                        title: autoGenerateTitle({
-                            ...item,
-                            valueType: editPolicyData.valueType,
-                        }),
-                        valueType: editPolicyData.valueType,
-                    };
-                } else {
-                    return item;
-                }
+                return item;
             });
             setIsRuleUpdating(false);
             setEditPolicyInputData(updatedData);
@@ -534,7 +549,6 @@ const SalesRiskAnalysisTable = ({
                 resetFormForPolicy();
             }
         } catch (error) {
-            console.log("error", error);
             toast.error("Something went wrong");
         }
     };
@@ -624,7 +638,7 @@ const SalesRiskAnalysisTable = ({
         }
     }, [editRuleData]);
     useEffect(() => {
-        if (editPolicyDataValidation.isSubmitting) {
+        if (editPolicyDataValidation?.isSubmitting) {
             const validation = addNewRulesValidation(
                 {
                     ...editPolicyData,
