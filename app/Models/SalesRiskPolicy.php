@@ -19,6 +19,7 @@ class SalesRiskPolicy extends Model
         'value_type',
         'value',
         'points',
+        'sequence',
         'comment'
     ];
 
