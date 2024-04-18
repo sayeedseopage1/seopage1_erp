@@ -47,12 +47,8 @@ const TimerControl = ({ task, timerStart, setTimerStart, auth }) => {
 
     //expired time check and state change for new employee / Trainee
 
+    const expireDateForTrainer = localStorage.getItem("expireDateForTrainer");
     useEffect(() => {
-        const expireDateForTrainer = localStorage.getItem(
-            "expireDateForTrainer"
-        );
-
-        // Calculate time difference in milliseconds
         if (expireDateForTrainer) {
             const expireDate = new Date(expireDateForTrainer);
             const currentTime = new Date();
@@ -61,10 +57,13 @@ const TimerControl = ({ task, timerStart, setTimerStart, auth }) => {
 
             if (currentTime >= expireDate) {
                 setExpiredTimerForNewEmployee(true);
+                stopTimer();
             }
         }
-    }, [timerStart]);
-
+    }, [expireDateForTrainer]);
+    // console.log("timeleft", timeLeft);
+    // console.log("expire date outside", expireDateForTrainer);
+    // console.log("set expired timer", expiredTimerForNewEmployee);
     // check timer is already running
     useEffect(() => {
         if (taskRunning === "running") {
@@ -344,12 +343,12 @@ const TimerControl = ({ task, timerStart, setTimerStart, auth }) => {
 
     return (
         <React.Fragment>
-            {!expiredTimerForNewEmployee ? (
+            {!timerStart ? (
                 <React.Fragment>
-                    {!timerStart ? (
-                        <React.Fragment>
-                            {!timerStartStatusIsLoading &&
-                            !startTimerFirstCheckIsFetching ? (
+                    {!timerStartStatusIsLoading &&
+                    !startTimerFirstCheckIsFetching ? (
+                        <div>
+                            {!expiredTimerForNewEmployee ? (
                                 <Button
                                     variant="tertiary"
                                     onClick={startTimer}
@@ -359,95 +358,86 @@ const TimerControl = ({ task, timerStart, setTimerStart, auth }) => {
                                     <span>Start Timer</span>
                                 </Button>
                             ) : (
-                                <Button className="cursor-processing mr-2">
-                                    <div
-                                        className="spinner-border text-white"
-                                        role="status"
-                                        style={{
-                                            width: "18px",
-                                            height: "18px",
-                                        }}
-                                    ></div>
-                                    Starting...
+                                <Button
+                                    variant="danger"
+                                    className="d-flex align-items-center  "
+                                >
+                                    <i
+                                        className="fa-solid fa-circle-play"
+                                        style={{ color: "white" }}
+                                    />
+
+                                    <span>Time Expired</span>
                                 </Button>
                             )}
-                            <StartTimerConfirmationModal
-                                isOpen={isOpenConfirmationModal}
-                                onConfirm={startTimerControl}
-                            />
-                        </React.Fragment>
+                        </div>
                     ) : (
-                        <React.Fragment>
-                            <Button
-                                variant="tertiary"
-                                className="d-flex align-items-center btn-outline-dark text-dark"
-                            >
-                                <i className="fa-solid fa-stopwatch" />
-                                <span className="d-inline ml-1">{timer()}</span>
-                            </Button>
+                        <Button className="cursor-processing mr-2">
+                            <div
+                                className="spinner-border text-white"
+                                role="status"
+                                style={{ width: "18px", height: "18px" }}
+                            ></div>
+                            Starting...
+                        </Button>
+                    )}
+                    <StartTimerConfirmationModal
+                        isOpen={isOpenConfirmationModal}
+                        onConfirm={startTimerControl}
+                    />
+                </React.Fragment>
+            ) : (
+                <React.Fragment>
+                    <Button
+                        variant="tertiary"
+                        className="d-flex align-items-center btn-outline-dark text-dark"
+                    >
+                        <i className="fa-solid fa-stopwatch" />
+                        <span className="d-inline ml-1">{timer()}</span>
+                    </Button>
 
-                            {/* <StopTimerControl
+                    {/* <StopTimerControl
                         stopTimer={stopTimer}
                         timerStopStatusIsLoading={timerStopStatusIsLoading}
                     /> */}
 
-                            {trackTimerFetcing ? (
-                                <Button className="cursor-processing">
-                                    <div
-                                        className="spinner-border text-white"
-                                        role="status"
-                                        style={{
-                                            width: "18px",
-                                            height: "18px",
-                                        }}
-                                    />
-                                    Processing...
-                                </Button>
-                            ) : !timerStopStatusIsLoading ? (
-                                <Button
-                                    variant="tertiary"
-                                    onClick={handleStopTimer}
-                                    className="d-flex align-items-center btn-outline-dark text-dark"
-                                >
-                                    <i className="fa-solid fa-pause" />
-                                    <span className="d-inline ml-1">
-                                        Stop Timer
-                                    </span>
-                                </Button>
-                            ) : (
-                                <Button className="cursor-processing">
-                                    <div
-                                        className="spinner-border text-white"
-                                        role="status"
-                                        style={{
-                                            width: "18px",
-                                            height: "18px",
-                                        }}
-                                    />
-                                    Stopping...
-                                </Button>
-                            )}
-                        </React.Fragment>
+                    {trackTimerFetcing ? (
+                        <Button className="cursor-processing">
+                            <div
+                                className="spinner-border text-white"
+                                role="status"
+                                style={{ width: "18px", height: "18px" }}
+                            />
+                            Processing...
+                        </Button>
+                    ) : !timerStopStatusIsLoading ? (
+                        <Button
+                            variant="tertiary"
+                            onClick={handleStopTimer}
+                            className="d-flex align-items-center btn-outline-dark text-dark"
+                        >
+                            <i className="fa-solid fa-pause" />
+                            <span className="d-inline ml-1">Stop Timer</span>
+                        </Button>
+                    ) : (
+                        <Button className="cursor-processing">
+                            <div
+                                className="spinner-border text-white"
+                                role="status"
+                                style={{ width: "18px", height: "18px" }}
+                            />
+                            Stopping...
+                        </Button>
                     )}
                 </React.Fragment>
-            ) : (
-                <Button
-                    variant="danger"
-                    className="d-flex align-items-center  "
-                >
-                    <i
-                        className="fa-solid fa-circle-play"
-                        style={{ color: "white" }}
-                    />
-
-                    <span>Time Expired</span>
-                </Button>
             )}
+
             {/* LessTrackTimerModal */}
             <LessTrackTimerModal
                 stopTimer={stopTimer}
                 startTimer={startTimerControl}
             />
+
             <ExpiredTimeModalForNewEmployee
                 showExpirationWarningModal={showExpirationWarningModal}
                 setShowExpirationWarningModal={setShowExpirationWarningModal}
