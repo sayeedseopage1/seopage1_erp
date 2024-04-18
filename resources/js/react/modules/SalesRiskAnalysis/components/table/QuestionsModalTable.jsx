@@ -73,7 +73,6 @@ const QuestionsModalTable = ({
         getSortedRowModel: getSortedRowModel(),
         meta: {
             editSingleQuestion: (row) => {
-                console.log("editSingleQuestion", row);
                 handleScrollToBottom();
                 setAllQuestions([]);
                 setIsQuestionUpdating(true);

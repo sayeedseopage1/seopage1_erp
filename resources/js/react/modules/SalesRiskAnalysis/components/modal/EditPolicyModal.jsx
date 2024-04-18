@@ -41,6 +41,7 @@ const EditPolicyModal = ({
     editPolicyDataValidation,
     editPolicyDefaultData,
     editPolicyAction,
+    setIsFocusedOnTitleInput
 }) => {
     const {
         setEditPolicyData,
@@ -204,6 +205,7 @@ const EditPolicyModal = ({
                         selectedCountries={allSelectedCountries.flat()}
                         handleMultiSelectChange={setEditPolicyData}
                         newPolicyDataValidation={editPolicyDataValidation}
+                        setIsFocusedOnTitleInput={setIsFocusedOnTitleInput}
                     />
 
                     <div className="d-flex justify-content-end">
@@ -261,4 +263,5 @@ EditPolicyModal.propTypes = {
     editPolicyDataValidation: PropTypes.object,
     editPolicyDefaultData: PropTypes.object,
     editPolicyAction: PropTypes.object,
+    setIsFocusedOnTitleInput: PropTypes.func
 };

@@ -23,6 +23,7 @@ import { addNewRulesValidation } from "../helper/createFromValidation";
 
 // styles
 import "../components/Styles/SalesRiskAnalysis.css";
+import AddQuestionsListModal from "../components/modal/AddQuestionsListModal";
 
 const inputSateData = {
     inputState: {
@@ -57,6 +58,17 @@ const inputSateData = {
         countries: false,
         points: false,
     },
+    singleQuestion: {
+        title: "",
+        type: {},
+        placeholder: "",
+        question_key: {},
+        parent_question: {},
+        parent_question_for: "",
+        listItem: [],
+        comment: "",
+        policy_id: {},
+    },
 };
 
 const SalesRiskPolices = () => {
@@ -65,14 +77,22 @@ const SalesRiskPolices = () => {
         pageSize: 10,
     });
     const [isRuleUpdating, setIsRuleUpdating] = React.useState(false);
+    const [isQuestionUpdating, setIsQuestionUpdating] = React.useState(false);
+    const [isFocusedOnTitleInput, setIsFocusedOnTitleInput] =
+        React.useState(false);
 
     // modal open close state
     const [addNewPolicyModalOpen, setAddNewPolicyModalOpen] =
+        React.useState(false);
+    const [addQuestionsModalOpen, setAddQuestionsModalOpen] =
         React.useState(false);
     const [newPolicyInputData, setNewPolicyInputData] = React.useState([]);
     // modal state data
     const [newPolicyData, setNewPolicyData] = React.useState(
         inputSateData.inputState
+    );
+    const [singleQuestion, setSingleQuestion] = React.useState(
+        inputSateData.singleQuestion
     );
     // modal state validation
     const [newPolicyDataValidation, setNewPolicyDataValidation] =
@@ -118,10 +138,12 @@ const SalesRiskPolices = () => {
                     id: "",
                 });
                 setNewPolicyDataValidation(inputSateData.inputValidation);
+                setIsFocusedOnTitleInput(false);
                 break;
             case "all":
                 setNewPolicyData(inputSateData.inputState);
                 setNewPolicyDataValidation(inputSateData.inputValidation);
+                setIsFocusedOnTitleInput(false);
                 setNewPolicyInputData([]);
                 break;
             default:
@@ -199,7 +221,7 @@ const SalesRiskPolices = () => {
             (item) => item?.id === newPolicyData?.id
         );
         if (isExist && isExist.id !== "") {
-            console.log(isExist.id)
+            console.log(isExist.id);
             const updatedData = newPolicyInputData.map((item) => {
                 if (item.id === newPolicyData.id) {
                     return {
@@ -210,6 +232,7 @@ const SalesRiskPolices = () => {
                 return item;
             });
             setIsRuleUpdating(false);
+            setIsFocusedOnTitleInput(false);
             setNewPolicyInputData(updatedData);
         } else {
             setNewPolicyInputData([
@@ -293,19 +316,19 @@ const SalesRiskPolices = () => {
         resetFormForPolicy("all");
     };
 
+    const handleOpenAddQuestionsModal = () => {
+        setAddQuestionsModalOpen(true);
+    };
+    const handleCloseAddQuestionsModal = () => {
+        setAddQuestionsModalOpen(false);
+        setIsFocusedOnTitleInput(false);
+    };
+
     // add title on change
     useMemo(() => {
         setNewPolicyData({
             ...newPolicyData,
-            title: `${newPolicyData?.policyType?.label} ${
-                newPolicyData?.valueType?.name === "currency" ? "$" : ""
-            }${newPolicyData?.value}${newPolicyData.from}${
-                newPolicyData?.from && newPolicyData?.to ? "-" : ""
-            }${newPolicyData.to}${
-                newPolicyData?.valueType?.name === "percentage" ? "%" : ""
-            }${newPolicyData?.valueType?.name === "hourly" ? "hr" : ""}${
-                newPolicyData?.valueType?.name === "days" ? "days" : ""
-            }`,
+            title: autoGenerateTitle(newPolicyData),
         });
     }, [
         newPolicyData?.policyType?.name,
@@ -346,9 +369,21 @@ const SalesRiskPolices = () => {
                             Add New Policy
                         </button>
                         <button
+                            onClick={handleOpenAddQuestionsModal}
+                            className="btn btn-info ml-3"
+                            style={{
+                                padding: "9px 12px",
+                            }}
+                        >
+                            <i className="fa fa-plus mr-2" aria-hidden="true" />{" "}
+                            Add New Question
+                        </button>
+                        <button
                             onClick={() => {
-                                window.location.href =
-                                    "/account/sales-risk-policies/question";
+                                window.open(
+                                    "/account/sales-risk-policies/question",
+                                    "_blank"
+                                );
                             }}
                             className="btn btn-info ml-3"
                             style={{
@@ -404,7 +439,22 @@ const SalesRiskPolices = () => {
                         handleAddRuleOnPolicy,
                         setNewPolicyInputData,
                         handleCancelRuleOnPolicy,
+                        setIsFocusedOnTitleInput
                     }}
+                />
+            )}
+
+            {addQuestionsModalOpen && (
+                <AddQuestionsListModal
+                    open={addQuestionsModalOpen}
+                    closeModal={handleCloseAddQuestionsModal}
+                    addQuestionsData={singleQuestion}
+                    singleQuestion={singleQuestion}
+                    setSingleQuestion={setSingleQuestion}
+                    isTableShow={false}
+                    isQuestionUpdating={isQuestionUpdating}
+                    setAddQuestionsData={setSingleQuestion}
+                    refetchSaleRiskAnalysis={refetch}
                 />
             )}
         </React.Fragment>

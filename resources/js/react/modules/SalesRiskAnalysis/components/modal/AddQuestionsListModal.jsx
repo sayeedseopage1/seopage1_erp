@@ -65,6 +65,7 @@ const AddQuestionsListModal = ({
         type: false,
         question_key: false,
         placeholder: false,
+        policy_id: false,
         isSubmitting: false,
     });
 
@@ -249,6 +250,7 @@ const AddQuestionsListModal = ({
                     toast.error(errorMessage);
                 });
             } else {
+                console.log(error)
                 toast.error("Something went wrong");
             }
         }
@@ -366,14 +368,10 @@ const AddQuestionsListModal = ({
             maxWidth="1200px"
             height={
                 questions.length > 0 || !_.isEmpty(singleQuestion?.type)
-                    ? "650px"
-                    : "550px"
+                    ? "75vh"
+                    : "58vh"
             }
-            maxHeight={
-                questions.length > 0 || !_.isEmpty(singleQuestion?.type)
-                    ? "650px"
-                    : "550px"
-            }
+            maxHeight="85vh"
             isCloseButtonShow={true}
         >
             {/* Modal Content */}
@@ -608,7 +606,7 @@ const AddQuestionsListModal = ({
                             </Switch.Case>
                             <div className="row mb-4 align-items-first">
                                 <ModalInputLabel className="col-4">
-                                    Policy Name
+                                    Policy Name<sup>*</sup>{" "}
                                 </ModalInputLabel>
                                 <div className="col-8 px-0 flex-column">
                                     <ModalSelectContainer>
@@ -620,6 +618,11 @@ const AddQuestionsListModal = ({
                                             isDisableUse={false}
                                         />
                                     </ModalSelectContainer>
+                                    {singleQuestionValidation?.policy_id && (
+                                        <p className="text-danger py-1">
+                                            Policy Name is required
+                                        </p>
+                                    )}
                                 </div>
                             </div>
                             <div className="row mb-4 align-items-first">

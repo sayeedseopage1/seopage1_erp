@@ -22,6 +22,7 @@ const NewPolicyModalInputsContainer = ({
     handleMultiSelectChange,
     newPolicyDataValidation,
     allPolicyData,
+    setIsFocusedOnTitleInput
 }) => {
     const { countries } = useSelector((state) => state?.filterOptions);
 
@@ -257,6 +258,35 @@ const NewPolicyModalInputsContainer = ({
                         </div>
                     </div>
                 </Switch.Case>
+                 {/* conditionally show only  "list",*/}
+                 <Switch.Case
+                    condition={_.includes(
+                        ["list"],
+                        newPolicyData?.policyType?.name
+                    )}
+                >
+                    <div className="row mb-4 align-items-center">
+                        <ModalInputLabel fontSize="16px" className="col-4">
+                            Type <sup>*</sup>{" "}
+                        </ModalInputLabel>
+                        <div className="px-0 col-8 flex-column">
+                            <ModalSelectContainer>
+                                <CustomDropDown
+                                    data={validPolicyTypesOptions()}
+                                    selected={newPolicyData?.valueType}
+                                    setSelected={handleChange}
+                                    filedName="valueType"
+                                    isDisableUse={false}
+                                />
+                            </ModalSelectContainer>
+                            {newPolicyDataValidation?.valueType && (
+                                <p className="text-danger py-1">
+                                    Type is required
+                                </p>
+                            )}
+                        </div>
+                    </div>
+                </Switch.Case>
                 <div className="row mb-4 align-items-center">
                     <ModalInputLabel className="col-4">
                         Title<sup>*</sup>{" "}
@@ -269,6 +299,7 @@ const NewPolicyModalInputsContainer = ({
                             value={newPolicyData?.title}
                             onChange={handleChange}
                             placeholder="Write Here"
+                            onFocus={() => setIsFocusedOnTitleInput(true)}
                         />
                         {newPolicyDataValidation?.title && (
                             <p className="text-danger py-1">
@@ -395,27 +426,6 @@ const NewPolicyModalInputsContainer = ({
                         newPolicyData?.policyType?.name
                     )}
                 >
-                    <div className="row mb-4 align-items-center">
-                        <ModalInputLabel fontSize="16px" className="col-4">
-                            Type <sup>*</sup>{" "}
-                        </ModalInputLabel>
-                        <div className="px-0 col-8 flex-column">
-                            <ModalSelectContainer>
-                                <CustomDropDown
-                                    data={validPolicyTypesOptions()}
-                                    selected={newPolicyData?.valueType}
-                                    setSelected={handleChange}
-                                    filedName="valueType"
-                                    isDisableUse={false}
-                                />
-                            </ModalSelectContainer>
-                            {newPolicyDataValidation?.valueType && (
-                                <p className="text-danger py-1">
-                                    Type is required
-                                </p>
-                            )}
-                        </div>
-                    </div>
                     <Switch.Case
                         condition={
                             newPolicyData?.valueType?.name === "countries"
@@ -503,4 +513,5 @@ NewPolicyModalInputsContainer.propTypes = {
     selectedCountries: PropTypes.array,
     handleMultiSelectChange: PropTypes.func,
     allPolicyData: PropTypes.array,
+    setIsFocusedOnTitleInput: PropTypes.func
 };

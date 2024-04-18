@@ -47,6 +47,7 @@ import { generateUniqueString } from "../../../../utils/customUidGenerate";
 
 // context
 import { SalesRiskAnalysisContext } from "../../context/SalesRiskAnalysisProvider";
+import { is } from "immutable";
 
 const inputSateData = {
     inputState: {
@@ -115,6 +116,8 @@ const SalesRiskAnalysisTable = ({
         React.useState(false);
     const [editPolicyModalOpen, setEditPolicyModalOpen] = React.useState(false);
     const [editCountryListModalOpen, setEditCountryListModalOpen] =
+        React.useState(false);
+    const [isFocusedOnTitleInput, setIsFocusedOnTitleInput] =
         React.useState(false);
 
     // modal state data
@@ -307,6 +310,7 @@ const SalesRiskAnalysisTable = ({
                 toast.success("Rules updated successfully");
                 handleCloseEditRuleModal();
                 handleCloseEditCountryListModal();
+                setIsFocusedOnTitleInput(false);
                 setEditRuleData({});
             }
         } catch (error) {
@@ -328,6 +332,7 @@ const SalesRiskAnalysisTable = ({
                 );
                 handleCloseStatusActionModal();
                 setStatusActionData({});
+                setIsFocusedOnTitleInput(false);
             }
         } catch (error) {
             toast.error("Something went wrong");
@@ -348,7 +353,7 @@ const SalesRiskAnalysisTable = ({
                 no: "",
                 countries: [],
                 points: "",
-                
+
                 [name]: value,
             });
         } else {
@@ -364,6 +369,7 @@ const SalesRiskAnalysisTable = ({
             ...inputSateData.inputState,
         });
         setIsRuleUpdating(false);
+        setIsFocusedOnTitleInput(false);
     };
 
     const handlePolicyEditChange = (e) => {
@@ -391,8 +397,10 @@ const SalesRiskAnalysisTable = ({
                 points: "",
                 [name]: value,
             });
+            setIsFocusedOnTitleInput(true)
         } else {
             setEditPolicyData({ ...editPolicyData, [name]: value });
+            setIsFocusedOnTitleInput(true)
         }
     };
 
@@ -401,20 +409,23 @@ const SalesRiskAnalysisTable = ({
         if (["single", "all"].includes(type)) {
             setEditPolicyData(inputSateData.inputState);
             setEditPolicyDataValidation(inputSateData.inputValidation);
+            setIsFocusedOnTitleInput(false);
         }
         switch (type) {
             case "all":
                 setEditPolicyDeleteData([]);
                 setEditPolicyDefaultData([]);
-            
+                setIsFocusedOnTitleInput(false);
                 break;
             case "ruleInputs":
                 setEditRuleData({});
                 setEditRuleDataValidation(inputSateData.inputValidation);
+                setIsFocusedOnTitleInput(false);
                 break;
             case "rolePolicy":
                 setEditRuleData({});
                 setEditPolicyDataValidation(inputSateData.inputValidation);
+                setIsFocusedOnTitleInput(false);
                 break;
             default:
                 break;
@@ -514,13 +525,17 @@ const SalesRiskAnalysisTable = ({
 
     // auto generate title
     const autoGenerateTitle = (data) => {
-        return `${data?.policyType?.label} ${
-            data?.valueType?.name === "currency" ? "$" : ""
-        }${data?.value}${data.from}${data?.from && data?.to ? "-" : ""}${
-            data.to
-        }${data?.valueType?.name === "percentage" ? "%" : ""}${
-            data?.valueType?.name === "hourly" ? "hr" : ""
-        }${data?.valueType?.name === "days" ? "days" : ""}`;
+        if (isRuleUpdating && !isFocusedOnTitleInput) {
+            return data.title;
+        } else {
+            return `${data?.policyType?.label} ${
+                data?.valueType?.name === "currency" ? "$" : ""
+            }${data?.value}${data.from}${data?.from && data?.to ? "-" : ""}${
+                data.to
+            }${data?.valueType?.name === "percentage" ? "%" : ""}${
+                data?.valueType?.name === "hourly" ? "hr" : ""
+            }${data?.valueType?.name === "days" ? "days" : ""}`;
+        }
     };
 
     // add title on change for single rule
@@ -538,10 +553,13 @@ const SalesRiskAnalysisTable = ({
     ]);
     //
     useMemo(() => {
-        setEditPolicyData({
-            ...editPolicyData,
-            title: autoGenerateTitle(editPolicyData),
-        });
+        if (editPolicyData?.policyType?.label) {
+            console.log(editPolicyData);
+            setEditPolicyData({
+                ...editPolicyData,
+                title: autoGenerateTitle(editPolicyData),
+            });
+        }
     }, [
         editPolicyData?.policyType?.name,
         editPolicyData?.valueType?.name,
@@ -573,7 +591,6 @@ const SalesRiskAnalysisTable = ({
             setEditPolicyDataValidation(validation);
         }
     }, [editPolicyData]);
-
     return (
         <React.Fragment>
             <div
@@ -696,6 +713,7 @@ const SalesRiskAnalysisTable = ({
                     editPolicyDefaultData={editPolicyDefaultData}
                     editPolicyInputData={editPolicyInputData}
                     editPolicyDataValidation={editPolicyDataValidation}
+                    setIsFocusedOnTitleInput={setIsFocusedOnTitleInput}
                     isRuleUpdating={isRuleUpdating}
                     isLoading={isLoadingEditSalesRiskAnalysisPolicy}
                     editPolicyAction={{

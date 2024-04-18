@@ -2,13 +2,20 @@ import React from "react";
 import PropTypes from "prop-types";
 
 // Ui components
-import { SaleRiskAuthorizeHeaderWrapper } from "../ui/Styles/ui";
+import {
+    SaleRiskAuthorizeHeaderButton,
+    SaleRiskAuthorizeHeaderWrapper,
+} from "../ui/Styles/ui";
 import Popover from "../Popover";
 
 // styles
 import popoverStyle from "../popover.module.css";
 
-const SaleRiskAuthorizeHeaderForUser = ({ headerData, isLoading }) => {
+const SaleRiskAuthorizeHeaderForUser = ({
+    headerData,
+    isLoading,
+    handleOpenAuthorizeModal,
+}) => {
     return (
         <div
             className="row d-flex align-items-center flex-column flex-md-row"
@@ -16,7 +23,7 @@ const SaleRiskAuthorizeHeaderForUser = ({ headerData, isLoading }) => {
                 margin: "20px 0",
             }}
         >
-            <SaleRiskAuthorizeHeaderWrapper className="col-12 d-flex flex-column flex-md-row">
+            <SaleRiskAuthorizeHeaderWrapper className="col-12 col-md-12 col-lg-10 d-flex flex-column flex-md-row">
                 <div className="col-12 col-md-3 px-0">
                     <p className="singleline-ellipsis d-flex align-items-center">
                         Sales Person :{" "}
@@ -57,6 +64,15 @@ const SaleRiskAuthorizeHeaderForUser = ({ headerData, isLoading }) => {
                     </Popover>
                 </div>
             </SaleRiskAuthorizeHeaderWrapper>
+            <div className="col-12 ol-md-2 col-lg-2 d-flex">
+                <div className="col-12 px-0 pl-md-0 pl-lg-3 pr-md-0">
+                    <SaleRiskAuthorizeHeaderButton
+                        onClick={handleOpenAuthorizeModal}
+                    >
+                        Polices History
+                    </SaleRiskAuthorizeHeaderButton>
+                </div>
+            </div>
         </div>
     );
 };
@@ -66,4 +82,5 @@ export default SaleRiskAuthorizeHeaderForUser;
 SaleRiskAuthorizeHeaderForUser.propTypes = {
     headerData: PropTypes.object,
     isLoading: PropTypes.bool,
+    handleOpenAuthorizeModal: PropTypes.func,
 };

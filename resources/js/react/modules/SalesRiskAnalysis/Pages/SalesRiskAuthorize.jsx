@@ -233,6 +233,7 @@ const SalesRiskAuthorize = () => {
                                     <SaleRiskAuthorizeHeaderForUser
                                         headerData={metaInfo}
                                         isLoading={isLoading}
+                                        handleOpenAuthorizeModal={handleOpenAuthorizeModal}
                                     />
                                 </Switch.Case>
                             </Switch>
@@ -254,7 +255,10 @@ const SalesRiskAuthorize = () => {
 
                                     <SaleRiskAuthorizeTotalPointContainer
                                         className="mb-4"
-                                        background="#FFDCDC"
+                                        background={`${metaInfo?.points >=
+                                            0
+                                                ? "#bcf5a1"
+                                                : "#FFDCDC "}`}
                                     >
                                         <p>Total Points Achieved :</p>
                                         <span>

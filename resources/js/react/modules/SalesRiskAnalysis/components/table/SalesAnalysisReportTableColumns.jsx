@@ -1,6 +1,8 @@
 // ui components
+
 import { CreatedBy } from "../../../../ProjectStatus/components/table/ui";
 import Avatar from "../../../../global/Avatar";
+import Switch from "../Switch";
 import Tooltip from "../Tooltip";
 
 // styles
@@ -170,28 +172,92 @@ export const SalesAnalysisReportTableColumns = [
         header: "Authorized By",
         accessorKey: "authorized_by",
         cell: ({ row }) => {
-            const data = row?.original;
+            let statusData = {};
+
+            const {
+                authorize_by_name,
+                authorize_by_id,
+                authorize_by_photo,
+                status,
+            } = row?.original;
+            const dealStatusByAdmin = ["accepted", "Denied", "denied"];
+            const dealStatusBySystem = ["auto-accepted"];
+
+            if (
+                authorize_by_id &&
+                dealStatusByAdmin.includes(status.toLowerCase())
+            ) {
+                statusData = {
+                    isSystemTakeAction: false,
+                    isAuthorizedOrDenied: true,
+                };
+            } else if (
+                !authorize_by_id &&
+                dealStatusBySystem.includes(status.toLowerCase())
+            ) {
+                statusData = {
+                    isSystemTakeAction: true,
+                    isAuthorizedOrDenied: true,
+                };
+            } else {
+                statusData = {
+                    isSystemTakeAction: false,
+                    isAuthorizedOrDenied: false,
+                };
+            }
+
             return (
-                <>
-                    {data?.authorized_by ? (
+                <Switch>
+                    <Switch.Case
+                        condition={
+                            statusData.isAuthorizedOrDenied &&
+                            !statusData.isSystemTakeAction
+                        }
+                    >
                         <CreatedBy
-                            href={`/account/employees/${data.authorize_by_id}`}
+                            href={`/account/employees/${authorize_by_id}`}
                         >
                             <Avatar
                                 type="circle"
-                                name={data?.authorized_by}
+                                name={authorize_by_name}
                                 src={
-                                    data?.authorized_by_image
-                                        ? `/user-uploads/avatar/${data?.authorize_by_photo}`
+                                    authorize_by_photo
+                                        ? `/user-uploads/avatar/${authorize_by_photo}`
                                         : null
                                 }
                             />
-                            <span>{data?.authorize_by_name}</span>
+                            <span>{authorize_by_name}</span>
                         </CreatedBy>
-                    ) : (
-                        <p>Not Available Yet</p>
-                    )}
-                </>
+                    </Switch.Case>
+                    <Switch.Case
+                        condition={
+                            statusData.isAuthorizedOrDenied &&
+                            statusData.isSystemTakeAction
+                        }
+                    >
+                        <p
+                            style={{
+                                ...customStyle.authorizeBySystem,
+                            }}
+                        >
+                            Authorized by System
+                        </p>
+                    </Switch.Case>
+                    <Switch.Case
+                        condition={
+                            !statusData.isAuthorizedOrDenied &&
+                            !statusData.isSystemTakeAction
+                        }
+                    >
+                        <p
+                            style={{
+                                ...customStyle.notAuthorizeYet,
+                            }}
+                        >
+                            Not Available Yet
+                        </p>
+                    </Switch.Case>
+                </Switch>
             );
         },
     },
@@ -214,10 +280,79 @@ export const SalesAnalysisReportTableColumns = [
         accessorKey: "status",
         cell: ({ row }) => {
             const data = row?.original;
+            const formattedStatus = _.capitalize(
+                data?.status?.replaceAll("-", " ")
+            );
+
             return (
-                <p className="multiline-ellipsis">
-                    {data?.status ?? "Not Available Yet"}
-                </p>
+                <Switch>
+                    <Switch.Case
+                        condition={formattedStatus.toLowerCase() === "analysis"}
+                    >
+                        <div className="d-flex justify-content-start align-items-center">
+                            <div
+                                style={{
+                                    ...customStyle.statusDot,
+                                    backgroundColor: "#00b5ff",
+                                }}
+                            />
+                            <p className="multiline-ellipsis">
+                                In {formattedStatus}
+                            </p>
+                        </div>
+                    </Switch.Case>
+                    <Switch.Case
+                        condition={["auto accepted", "accepted"].includes(
+                            formattedStatus.toLowerCase()
+                        )}
+                    >
+                        <div className="d-flex justify-content-start align-items-center">
+                            <div
+                                style={{
+                                    ...customStyle.statusDot,
+                                    backgroundColor: "rgb(24 239 24)",
+                                }}
+                            />
+                            <p className="multiline-ellipsis">
+                                {formattedStatus}
+                            </p>
+                        </div>
+                    </Switch.Case>
+                    <Switch.Case
+                        condition={formattedStatus.toLowerCase() === "denied"}
+                    >
+                        <div className="d-flex justify-content-start align-items-center">
+                            <div
+                                style={{
+                                    ...customStyle.statusDot,
+                                    backgroundColor: "#FF0000",
+                                }}
+                            />
+                            <p className="multiline-ellipsis">
+                                {formattedStatus}
+                            </p>
+                        </div>
+                    </Switch.Case>
+                    <Switch.Case
+                        condition={
+                            !["denied", "auto accepted", "analysis", "accepted"].includes(
+                                formattedStatus.toLowerCase()
+                            )
+                        }
+                    >
+                        <div className="d-flex justify-content-start align-items-center">
+                            <div
+                                style={{
+                                    ...customStyle.statusDot,
+                                    backgroundColor: "#3277f7",
+                                }}
+                            />
+                            <p className="multiline-ellipsis">
+                                {formattedStatus}
+                            </p>
+                        </div>
+                    </Switch.Case>
+                </Switch>
             );
         },
     },
@@ -255,4 +390,26 @@ const viewBtnStyle = {
     width: "fit-content",
     fontSize: "13px",
     color: "#fff !important",
+};
+
+const customStyle = {
+    authorizeBySystem: {
+        padding: "2px 12px",
+        backgroundColor: "#4df14da8",
+        borderRadius: "12px",
+        width: "fit-content",
+    },
+    notAuthorizeYet: {
+        padding: "2px 12px",
+        backgroundColor: "#FCBD01",
+        borderRadius: "12px",
+        width: "fit-content",
+    },
+    statusDot: {
+        padding: "5px 5px",
+        borderRadius: "12px",
+        width: "10px",
+        height: "10px",
+        marginRight: "5px",
+    },
 };

@@ -101,7 +101,7 @@ const SalesRiskQuestionsResponse = () => {
     // handle submit
     const handleSubmit = async () => {
         // skip key
-        const skipKey = ["is_Active_YesNo", "parent_id"];
+        const skipKey = ["is_Active_YesNo", "parent_id", "placeholder"];
         // check if all inputs are empty
         const isEmpty = isArrayObjectEmpty(inputsData, skipKey);
         if (isEmpty) {

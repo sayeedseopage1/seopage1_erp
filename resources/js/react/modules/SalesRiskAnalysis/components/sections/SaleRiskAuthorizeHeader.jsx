@@ -103,12 +103,11 @@ const SaleRiskAuthorizeHeader = ({
                         Modify points
                     </SaleRiskAuthorizeHeaderButton>
                 </div>
-
                 <div className="col-6 px-0 pl-md-0 pl-lg-3 pr-md-0">
                     <SaleRiskAuthorizeHeaderButton
                         onClick={handleOpenAuthorizeModal}
                     >
-                        Polices
+                        Polices History
                     </SaleRiskAuthorizeHeaderButton>
                 </div>
             </div>
