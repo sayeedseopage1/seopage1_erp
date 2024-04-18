@@ -4,6 +4,8 @@ import Switch from "../Switch";
 import Tooltip from "../Tooltip";
 import { SalesPointsContainer } from "../ui/Styles/ui";
 import "../Styles/salesRiskAnalysisTableColumns.css";
+import { MdHeight } from "react-icons/md";
+import { right } from "@popperjs/core";
 
 export const SaleRiskAuthorizePolicesModalTableColumns = [
     {
@@ -45,7 +47,7 @@ export const SaleRiskAuthorizePolicesModalTableColumns = [
         accessorKey: "department_name",
         cell: ({ row }) => {
             const data = row?.original;
-            console.log(data);
+
             return (
                 <div className="d-flex justify-content-center align-items-center">
                     <span
@@ -108,35 +110,24 @@ export const SaleRiskAuthorizePolicesModalTableColumns = [
                     value: "",
                     id: "",
                 };
-                const findActiveRule = Object.entries(activeRule).find(
-                    ([key, value]) => {
-                        if (key === id) {
-                            statusData = {
-                                status: true,
-                                value: value,
-                                id: id,
-                            };
-                        } else {
-                            statusData = {
-                                status: false,
-                                value: "",
-                                id: "",
-                            };
-                        }
+                Object.entries(activeRule).forEach(([key, value]) => {
+                    if (Number(key) === id) {
+                        statusData = {
+                            status: true,
+                            value: value,
+                            id: id,
+                        };
+                        return true;
                     }
-                );
-
-                if(activeRule[id]){
-                    console.log("inside d")
-                }
-
+                    return false;
+                });
                 return statusData;
             };
 
             return (
                 <div className="d-flex justify-content-center align-items-center flex-column">
-                    {data?.ruleList?.map((rule, index) => {
-                        console.log(getStatus);
+                    {data?.ruleList?.map((rule) => {
+                        const activeStatus = getStatus(rule?.id);
                         return (
                             <Switch key={rule?.id}>
                                 <Switch.Case condition={rule?.type === "yesNo"}>
@@ -195,6 +186,17 @@ export const SaleRiskAuthorizePolicesModalTableColumns = [
                                                     ""
                                                 )}
                                             </span>
+                                            {activeStatus?.status &&
+                                                activeStatus.value ===
+                                                    "yes" && (
+                                                    <abbr
+                                                        style={{
+                                                            ...customStyles.active,
+                                                        }}
+                                                    >
+                                                        Active
+                                                    </abbr>
+                                                )}
                                         </li>
                                         <li
                                             style={{
@@ -224,6 +226,16 @@ export const SaleRiskAuthorizePolicesModalTableColumns = [
                                                     ""
                                                 )}
                                             </span>
+                                            {activeStatus?.status &&
+                                                activeStatus.value === "no" && (
+                                                    <abbr
+                                                        style={{
+                                                            ...customStyles.active,
+                                                        }}
+                                                    >
+                                                        Active
+                                                    </abbr>
+                                                )}
                                         </li>
                                     </ul>
                                 </Switch.Case>
@@ -250,24 +262,35 @@ export const SaleRiskAuthorizePolicesModalTableColumns = [
                                                 ""
                                             )}
                                         </p>
-                                        <MultiSelectShowDropDown
-                                            data={
-                                                rule.type === "list"
-                                                    ? FormatJsonCountry(
-                                                          rule?.value
-                                                      )
-                                                    : []
-                                            }
-                                            rowDetails={rule}
-                                            multiple
-                                            isShow={false}
-                                            handleEditCountryList={() => {
-                                                action.handleEditCountryList(
-                                                    data,
-                                                    rule
-                                                );
-                                            }}
-                                        />
+                                        <div className="d-flex align-items-center">
+                                            <MultiSelectShowDropDown
+                                                data={
+                                                    rule.type === "list"
+                                                        ? FormatJsonCountry(
+                                                              rule?.value
+                                                          )
+                                                        : []
+                                                }
+                                                rowDetails={rule}
+                                                multiple
+                                                isShow={false}
+                                                handleEditCountryList={() => {
+                                                    action.handleEditCountryList(
+                                                        data,
+                                                        rule
+                                                    );
+                                                }}
+                                            />
+                                            {activeStatus?.status && (
+                                                <abbr
+                                                    style={{
+                                                        ...customStyles.active,
+                                                    }}
+                                                >
+                                                    Active
+                                                </abbr>
+                                            )}
+                                        </div>
                                     </div>
                                 </Switch.Case>
                                 <Switch.Case
@@ -285,7 +308,16 @@ export const SaleRiskAuthorizePolicesModalTableColumns = [
                                         className="py-3 d-flex align-items-center"
                                     >
                                         <span className="mr-2">
-                                            {rule.title}
+                                            {rule.title}{" "}
+                                            {activeStatus?.status && (
+                                                <abbr
+                                                    style={{
+                                                        ...customStyles.active,
+                                                    }}
+                                                >
+                                                    Active
+                                                </abbr>
+                                            )}
                                         </span>
                                         {rule?.comment ? (
                                             <Tooltip text={rule?.comment}>
@@ -309,7 +341,6 @@ export const SaleRiskAuthorizePolicesModalTableColumns = [
         accessorKey: "applicable_points",
         cell: ({ row, table }) => {
             const data = row?.original;
-
             return (
                 <div className="d-flex justify-content-end flex-column align-items-end">
                     {data?.ruleList?.map((rule, index) => {
@@ -331,7 +362,11 @@ export const SaleRiskAuthorizePolicesModalTableColumns = [
                                         rule?.type
                                     )}
                                 >
-                                    <div className="d-flex py-3"></div>
+                                    <div
+                                        style={{
+                                            height: "56px",
+                                        }}
+                                    ></div>
                                     <ul>
                                         <li
                                             style={{
@@ -380,3 +415,17 @@ export const SaleRiskAuthorizePolicesModalTableColumns = [
         },
     },
 ];
+
+const customStyles = {
+    active: {
+        color: "#000000",
+        backgroundColor: "#8df2ab",
+        width: "fit-content",
+        fontSize: "12px",
+        fontFamily: "Poppins",
+        borderRadius: "13px",
+        padding: "1px 8px",
+        marginLeft: "10px",
+        height: "20px",
+    },
+};

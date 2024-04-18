@@ -80,7 +80,7 @@ const SaleRiskAuthorizePolicesModalTable = ({
                 return policyKeys;
             },
             handlerSendActiveRuleOnThisRecord: () => {
-                const activeRule = tableData?.activeRule;
+                const activeRule = tableData?.policyIdList;
                 return activeRule;
             }
         },

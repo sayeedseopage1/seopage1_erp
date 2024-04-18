@@ -15,6 +15,7 @@ export const SalesRiskAuthorizeColumns = [
                             <Switch key={question.id}>
                                 <Switch.Case
                                     condition={question?.parent_id !== null}
+                                    key={question?.id}
                                 >
                                     <div
                                         key={question?.id}
@@ -27,6 +28,7 @@ export const SalesRiskAuthorizeColumns = [
                                 </Switch.Case>
                                 <Switch.Case
                                     condition={question?.parent_id === null}
+                                    key={question?.id}
                                 >
                                     <div key={question?.id} className="py-3">
                                         <p style={customStyles.mainQuestion}>
