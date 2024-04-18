@@ -1428,6 +1428,7 @@ class SalesRiskPolicyController extends AccountBaseController
                         'country' => $lead ? $lead->country : '',
                         'award_time' => $item->award_time,
                         'authorize_by_id' => $item->authorize_by,
+                        'authorize_on' => $item->authorize_on,
                         'authorize_by_name' => $item->authorize_by ? $user->name : null,
                         'authorize_by_photo' => $item->authorize_by ? $user->image : null,
                         'points' => self::calculatePolicyPoint($item->id)['points']
