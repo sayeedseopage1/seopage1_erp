@@ -17,6 +17,7 @@ return new class extends Migration
             $table->id();
             $table->bigInteger('deal_id');
             $table->json('policy');
+            $table->json('point_report');
             $table->timestamps();
         });
     }
