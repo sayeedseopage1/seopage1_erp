@@ -21,10 +21,11 @@ import { useCommentStore } from "../../../../../../../react/UI/comments/zustand/
 import { setPendingActionId } from "../../../../../../services/features/pendingActionSlice";
 import CommentsBodyWithoutSendBox from "../../../../../../../react/UI/comments/CommentBodyWithoutSendBox";
 import EvaluationAcknowledgeModal from "../../../EmployeeEvaluation/modal/EvaluationAcknowledgeModal";
+import { usePendingActionStore } from "../../../../../Zustand/store";
 
 const ActionsButton = ({ data }) => {
     const dispatch = useDispatch();
-
+    const { setPendingAction } = usePendingActionStore();
     const { commentState } = useCommentStore();
     const [fullScreenView, setFullScreenView] = React.useState(false);
     const [viewCommentModal, setViewCommentModal] = React.useState(false);
@@ -33,7 +34,7 @@ const ActionsButton = ({ data }) => {
     const [acknowledgement, setAcknowledgement] = React.useState(false);
     const { width } = useWindowSize();
     const taskId = data?.task_id;
-
+    const developerId = data?.developer_id;
     const {
         data: comments,
         isFetching,
@@ -110,6 +111,27 @@ const ActionsButton = ({ data }) => {
                             )}
                         </div>
                     );
+                } else if (
+                    btn.button_type === "modal" &&
+                    data?.code === "EAFA"
+                ) {
+                    return (
+                        <div>
+                            {btn.button_name === "Acknowledge It" && (
+                                <button
+                                    key={i}
+                                    onClick={() => {
+                                        setPendingAction(data);
+                                        setAcknowledgement((prev) => !prev);
+                                        dispatch(setPendingActionId(data?.id));
+                                    }}
+                                    className={`${style.action_btn}`}
+                                >
+                                    Acknowledge It
+                                </button>
+                            )}
+                        </div>
+                    );
                 } else if (btn.button_type === "modal") {
                     return (
                         <ModalWithBtnTemplate
@@ -138,15 +160,6 @@ const ActionsButton = ({ data }) => {
             })}
 
             {/* mitul work start */}
-
-            {data?.task_id && (
-                <button
-                    onClick={() => setAcknowledgement((prev) => !prev)}
-                    className={`${style.action_btn}`}
-                >
-                    Acknowledge it
-                </button>
-            )}
 
             {/* this modal is for live view and reply button  */}
             <CommentContainerDecider
@@ -200,6 +213,7 @@ const ActionsButton = ({ data }) => {
             />
 
             <EvaluationAcknowledgeModal
+                developerId={developerId}
                 setAcknowledgement={setAcknowledgement}
                 acknowledgement={acknowledgement}
             />

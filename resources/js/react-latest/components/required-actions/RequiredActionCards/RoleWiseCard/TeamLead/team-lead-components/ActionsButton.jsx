@@ -30,7 +30,7 @@ const ActionsButton = ({ data }) => {
     const [acknowledgement, setAcknowledgement] = React.useState(false);
     const { width } = useWindowSize();
     const taskId = data?.task_id;
-
+    const developerId = data?.developer_id;
     const {
         data: comments,
         isFetching,
@@ -60,6 +60,26 @@ const ActionsButton = ({ data }) => {
                         >
                             {btn.button_name}
                         </button>
+                    );
+                } else if (
+                    btn.button_type === "modal" &&
+                    data?.code === "EAFA"
+                ) {
+                    return (
+                        <div>
+                            {btn.button_name === "Acknowledge It" && (
+                                <button
+                                    key={i}
+                                    onClick={() => {
+                                        setAcknowledgement((prev) => !prev);
+                                        dispatch(setPendingActionId(data?.id));
+                                    }}
+                                    className={`${style.action_btn}`}
+                                >
+                                    Acknowledge It
+                                </button>
+                            )}
+                        </div>
                     );
                 } else if (btn.button_type === "modal") {
                     return (
@@ -102,15 +122,6 @@ const ActionsButton = ({ data }) => {
                     );
                 }
             })}
-
-            {data?.task_id && (
-                <button
-                    onClick={() => setAcknowledgement((prev) => !prev)}
-                    className={`${style.action_btn}`}
-                >
-                    Acknowledge it
-                </button>
-            )}
 
             {/* this modal is for view and reply button  */}
             <CommentContainerDecider
@@ -164,6 +175,7 @@ const ActionsButton = ({ data }) => {
             />
 
             <EvaluationAcknowledgeModal
+                developerId={developerId}
                 setAcknowledgement={setAcknowledgement}
                 acknowledgement={acknowledgement}
             />
