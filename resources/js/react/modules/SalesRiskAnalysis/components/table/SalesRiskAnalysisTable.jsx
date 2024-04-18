@@ -694,6 +694,10 @@ const SalesRiskAnalysisTable = ({
                     statusActionData={statusActionData}
                     handleStatusUpdate={handleStatusUpdate}
                     isLoading={isLoadingSingleRuleStatusUpdate}
+                    modalContent={{
+                        0: "Enable",
+                        1: "Disable",
+                    }}
                 />
             )}
             {addQuestionsModalOpen && (

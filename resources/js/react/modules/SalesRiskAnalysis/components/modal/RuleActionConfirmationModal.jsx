@@ -13,12 +13,23 @@ const RuleActionConfirmationModal = ({
     statusActionData,
     handleStatusUpdate,
     isLoading,
+    modalContent,
 }) => {
     const handleTernaryForStatus = () => {
         if (statusActionData.status === "0") {
-            return "Enable";
+            return modalContent[0];
         } else {
-            return "Disable";
+            return modalContent[1];
+        }
+    };
+
+    const handleColorForStatus = () => {
+        if (statusActionData.modalType === "Deal") {
+            return statusActionData.status === "0"
+                ? "text-danger"
+                : "text-success";
+        } else {
+            statusActionData.status === "0" ? "text-success" : "text-danger";
         }
     };
     return (
@@ -40,13 +51,7 @@ const RuleActionConfirmationModal = ({
                     <div className="row mb-5 align-items-center">
                         <ModalInputLabel className="col-12 text-center">
                             Are you sure you want to{" "}
-                            <span
-                                className={`${
-                                    statusActionData.status === "0"
-                                        ? "text-success"
-                                        : "text-danger"
-                                }`}
-                            >
+                            <span className={`${handleColorForStatus()}`}>
                                 {" "}
                                 {handleTernaryForStatus()}
                             </span>{" "}
@@ -86,4 +91,5 @@ RuleActionConfirmationModal.propTypes = {
     statusActionData: PropTypes.object,
     handleStatusUpdate: PropTypes.func,
     isLoading: PropTypes.bool,
+    modalContent: PropTypes.object,
 };
