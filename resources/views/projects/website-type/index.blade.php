@@ -97,9 +97,9 @@
     <script>
         var deadLineStartDate = '';
         var deadLineEndDate = '';
-        $('#project-cms-table').on('preXhr.dt', function(e, settings, data) {
+        $('#project-website-type-table').on('preXhr.dt', function(e, settings, data) {
 
-            var searchText = $('#search-text-field').val();   console.log(searchText);
+            var searchText = $('#search-text-field').val();
 
             @if (request('deadLineStartDate') && request('deadLineEndDate'))
                 deadLineStartDate = '{{ request("deadLineStartDate") }}';
@@ -127,7 +127,7 @@
         });
 
         const showTable = () => {
-            window.LaravelDataTables["project-cms-table"].draw();
+            window.LaravelDataTables["project-website-type-table"].draw();
         }
 
 
