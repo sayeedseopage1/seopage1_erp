@@ -352,7 +352,7 @@ const TaskEditForm = ({ task, singleTask: row, onSubmit, isLoading, onClose }) =
                 count++;
             }
 
-            if (!fileExtension) {
+            if (_.isEmpty(fileExtension)) {
                 err.fileExtension = "File extension is required";
                 count++;
             }
@@ -380,7 +380,7 @@ const TaskEditForm = ({ task, singleTask: row, onSubmit, isLoading, onClose }) =
                 err.numOfVersions = "Number of versions is required";
                 count++;
             }
-            if (!fileTypesNeeded) {
+            if (_.isEmpty(fileTypesNeeded)) {
                 err.fileTypesNeeded = "File types is required";
                 count++;
             }

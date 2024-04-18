@@ -14993,7 +14993,7 @@ var TaskEditForm = function TaskEditForm(_ref2) {
         err.fontName = "Font name is required";
         count++;
       }
-      if (!fileExtension) {
+      if (lodash__WEBPACK_IMPORTED_MODULE_0___default().isEmpty(fileExtension)) {
         err.fileExtension = "File extension is required";
         count++;
       }
@@ -15021,7 +15021,7 @@ var TaskEditForm = function TaskEditForm(_ref2) {
         err.numOfVersions = "Number of versions is required";
         count++;
       }
-      if (!fileTypesNeeded) {
+      if (lodash__WEBPACK_IMPORTED_MODULE_0___default().isEmpty(fileTypesNeeded)) {
         err.fileTypesNeeded = "File types is required";
         count++;
       }

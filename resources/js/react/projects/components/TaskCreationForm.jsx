@@ -219,8 +219,6 @@ const TaskCreationForm = ({ handleRefresh, isOpen, close, onSuccess }) => {
             errCount++;
         }
 
-        // TODO: active it , when new field is added 
-
         if (taskCategory?.category_name === "Graphic Design") {
             if (!typeOfGraphicsCategory) {
                 err.typeOfGraphicsCategory = "You have to select Type of graphic work";
@@ -235,7 +233,7 @@ const TaskCreationForm = ({ handleRefresh, isOpen, close, onSuccess }) => {
                 err.fontName = "Font name is required";
                 errCount++;
             }
-            if (!fileExtension) {
+            if (_.isEmpty(fileExtension)) {
                 err.fileExtension = "File extension is required";
                 errCount++;
             }
@@ -263,7 +261,7 @@ const TaskCreationForm = ({ handleRefresh, isOpen, close, onSuccess }) => {
                 err.numOfVersions = "Number of versions is required";
                 errCount++;
             }
-            if (!fileTypesNeeded) {
+            if (_.isEmpty(fileTypesNeeded)) {
                 err.fileTypesNeeded = "File types is required";
                 errCount++;
             }
@@ -1575,21 +1573,6 @@ const TaskCreationForm = ({ handleRefresh, isOpen, close, onSuccess }) => {
                                                 </div>
                                             )}
                                         </div>
-                                        {/* <div className="col-12 col-md-6">
-                                            <Input
-                                                id="cms"
-                                                label="CMS"
-                                                type="text"
-                                                placeholder="Enter a CMS"
-                                                name="cms"
-                                                required={true}
-                                                value={cms}
-                                                error={formError?.cms}
-                                                onChange={(e) =>
-                                                    handleChange(e, setCms)
-                                                }
-                                            />
-                                        </div> */}
                                         <div className="col-12 col-md-6">
                                             <ThemeTypeSelect
                                                 selected={themeType}
