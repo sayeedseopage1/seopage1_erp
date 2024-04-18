@@ -3968,19 +3968,25 @@ class ProjectController extends AccountBaseController
     public function storeCms(Request $request)
     {
         $validated = $request->validate([
-            'cms_name' => 'required',
+            'cms_name' => 'required|unique:project_cms',
         ], [
             'cms_name.required' => 'This field is required!!',
+            'cms_name.unique' => 'The CMS name must be unique!',
         ]);
         $cms = new ProjectCms();
         $cms->cms_name = $request->cms_name;
         $cms->save();
-        return response()->json(['status' => 200]);
+        return response()->json(['status' => 200, 'cms' => $cms]);
     }
     public function editCms(Request $request)
     {
         $this->id = $request->id;
         return view('projects.modals.editcmsmodal', $this->data);
+    }
+    public function checkCMS(Request $request)
+    {
+        $data = ProjectCMS::where('cms_name', 'LIKE', "%{$request->cms_name}%")->pluck('cms_name');
+        return response()->json($data);
     }
     public function updateCms(Request $request)
     {
