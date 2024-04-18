@@ -10781,7 +10781,7 @@ var SubTaskForm = function SubTaskForm(_ref) {
     _useLazyGetTaskDetail3 = _useLazyGetTaskDetail2[1],
     estimation = _useLazyGetTaskDetail3.data,
     isFetching = _useLazyGetTaskDetail3.isFetching;
-  var _React$useState19 = react__WEBPACK_IMPORTED_MODULE_0___default().useState(true),
+  var _React$useState19 = react__WEBPACK_IMPORTED_MODULE_0___default().useState(false),
     _React$useState20 = _slicedToArray(_React$useState19, 2),
     showForm = _React$useState20[0],
     setShowForm = _React$useState20[1];
@@ -11043,9 +11043,13 @@ var SubTaskForm = function SubTaskForm(_ref) {
           task: task,
           onSubmit: function onSubmit() {
             refetchTask();
-            setShowForm(true);
           },
           close: close
+        }), isWorkingEnvironmentSubmit && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_21__.jsx)(_LeadConfirmationModal__WEBPACK_IMPORTED_MODULE_18__["default"], {
+          isOpen: !showForm,
+          onConfirm: function onConfirm() {
+            return setShowForm(true);
+          }
         }), showForm && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_21__.jsxs)("div", {
           className: "sp1-subtask-form --form row",
           children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_21__.jsx)("div", {
@@ -14273,7 +14277,12 @@ var ExpiredTimeModalForNewEmployee = function ExpiredTimeModalForNewEmployee(_re
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(function () {
     var timer = setInterval(function () {
       setTimeLeft(function (prevTime) {
-        return prevTime - 1;
+        if (prevTime >= 0) {
+          return prevTime - 1;
+        } else {
+          clearInterval(timer);
+          return prevTime;
+        }
       });
     }, 1000);
     return function () {
@@ -14282,9 +14291,13 @@ var ExpiredTimeModalForNewEmployee = function ExpiredTimeModalForNewEmployee(_re
   }, []);
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(function () {
     var interval = setInterval(function () {
-      setToggleModal(function (prevToggle) {
-        return !prevToggle;
-      }); // Toggle state every 15 minute
+      if (timeLeft > 0 && timeLeft < 3600000) {
+        setToggleModal(function (prevToggle) {
+          return !prevToggle;
+        });
+      } else {
+        return 0;
+      }
     }, 900000); // 15 minute in milliseconds
 
     return function () {
@@ -14292,13 +14305,14 @@ var ExpiredTimeModalForNewEmployee = function ExpiredTimeModalForNewEmployee(_re
     };
   }, []);
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(function () {
-    if (toggleModal && timeLeft <= 360000 && timerStatusForWarningModal) {
+    if (toggleModal && timeLeft <= 3600000 && timeLeft > 0 && timerStatusForWarningModal) {
       setShowExpirationWarningModal(true);
     }
   }, [toggleModal]);
   var closeModal = function closeModal() {
     setShowExpirationWarningModal(false);
   };
+  // console.log("timeleft", timeLeft);
   var minutes = Math.floor(timeLeft / 60);
   var seconds = timeLeft % 60;
 
@@ -17785,10 +17799,8 @@ var TimerControl = function TimerControl(_ref) {
 
   //expired time check and state change for new employee / Trainee
 
+  var expireDateForTrainer = localStorage.getItem("expireDateForTrainer");
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(function () {
-    var expireDateForTrainer = localStorage.getItem("expireDateForTrainer");
-
-    // Calculate time difference in milliseconds
     if (expireDateForTrainer) {
       var expireDate = new Date(expireDateForTrainer);
       var currentTime = new Date();
@@ -17796,10 +17808,13 @@ var TimerControl = function TimerControl(_ref) {
       setTimeLeft(Math.max(0, Math.floor(timeDifference / 1000)));
       if (currentTime >= expireDate) {
         setExpiredTimerForNewEmployee(true);
+        stopTimer();
       }
     }
-  }, [timerStart]);
-
+  }, [expireDateForTrainer]);
+  // console.log("timeleft", timeLeft);
+  // console.log("expire date outside", expireDateForTrainer);
+  // console.log("set expired timer", expiredTimerForNewEmployee);
   // check timer is already running
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(function () {
     if (taskRunning === "running") {
@@ -18017,9 +18032,9 @@ var TimerControl = function TimerControl(_ref) {
     }
   }, [startTimerFirstCheckIsFetching, timerStartStatusIsLoading]);
   return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsxs)((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), {
-    children: [!expiredTimerForNewEmployee ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), {
-      children: !timerStart ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsxs)((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), {
-        children: [!timerStartStatusIsLoading && !startTimerFirstCheckIsFetching ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsxs)(_components_Button__WEBPACK_IMPORTED_MODULE_1__["default"], {
+    children: [!timerStart ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsxs)((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), {
+      children: [!timerStartStatusIsLoading && !startTimerFirstCheckIsFetching ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)("div", {
+        children: !expiredTimerForNewEmployee ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsxs)(_components_Button__WEBPACK_IMPORTED_MODULE_1__["default"], {
           variant: "tertiary",
           onClick: startTimer,
           className: "d-flex align-items-center btn-outline-dark text-dark",
@@ -18029,71 +18044,71 @@ var TimerControl = function TimerControl(_ref) {
             children: "Start Timer"
           })]
         }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsxs)(_components_Button__WEBPACK_IMPORTED_MODULE_1__["default"], {
-          className: "cursor-processing mr-2",
-          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)("div", {
-            className: "spinner-border text-white",
-            role: "status",
-            style: {
-              width: "18px",
-              height: "18px"
-            }
-          }), "Starting..."]
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)(_StartTimerConfirmationModal__WEBPACK_IMPORTED_MODULE_2__["default"], {
-          isOpen: isOpenConfirmationModal,
-          onConfirm: startTimerControl
-        })]
-      }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsxs)((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), {
-        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsxs)(_components_Button__WEBPACK_IMPORTED_MODULE_1__["default"], {
-          variant: "tertiary",
-          className: "d-flex align-items-center btn-outline-dark text-dark",
+          variant: "danger",
+          className: "d-flex align-items-center  ",
           children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)("i", {
-            className: "fa-solid fa-stopwatch"
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)("span", {
-            className: "d-inline ml-1",
-            children: timer()
-          })]
-        }), trackTimerFetcing ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsxs)(_components_Button__WEBPACK_IMPORTED_MODULE_1__["default"], {
-          className: "cursor-processing",
-          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)("div", {
-            className: "spinner-border text-white",
-            role: "status",
+            className: "fa-solid fa-circle-play",
             style: {
-              width: "18px",
-              height: "18px"
+              color: "white"
             }
-          }), "Processing..."]
-        }) : !timerStopStatusIsLoading ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsxs)(_components_Button__WEBPACK_IMPORTED_MODULE_1__["default"], {
-          variant: "tertiary",
-          onClick: handleStopTimer,
-          className: "d-flex align-items-center btn-outline-dark text-dark",
-          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)("i", {
-            className: "fa-solid fa-pause"
           }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)("span", {
-            className: "d-inline ml-1",
-            children: "Stop Timer"
+            children: "Time Expired"
           })]
-        }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsxs)(_components_Button__WEBPACK_IMPORTED_MODULE_1__["default"], {
-          className: "cursor-processing",
-          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)("div", {
-            className: "spinner-border text-white",
-            role: "status",
-            style: {
-              width: "18px",
-              height: "18px"
-            }
-          }), "Stopping..."]
+        })
+      }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsxs)(_components_Button__WEBPACK_IMPORTED_MODULE_1__["default"], {
+        className: "cursor-processing mr-2",
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)("div", {
+          className: "spinner-border text-white",
+          role: "status",
+          style: {
+            width: "18px",
+            height: "18px"
+          }
+        }), "Starting..."]
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)(_StartTimerConfirmationModal__WEBPACK_IMPORTED_MODULE_2__["default"], {
+        isOpen: isOpenConfirmationModal,
+        onConfirm: startTimerControl
+      })]
+    }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsxs)((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), {
+      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsxs)(_components_Button__WEBPACK_IMPORTED_MODULE_1__["default"], {
+        variant: "tertiary",
+        className: "d-flex align-items-center btn-outline-dark text-dark",
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)("i", {
+          className: "fa-solid fa-stopwatch"
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)("span", {
+          className: "d-inline ml-1",
+          children: timer()
         })]
-      })
-    }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsxs)(_components_Button__WEBPACK_IMPORTED_MODULE_1__["default"], {
-      variant: "danger",
-      className: "d-flex align-items-center  ",
-      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)("i", {
-        className: "fa-solid fa-circle-play",
-        style: {
-          color: "white"
-        }
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)("span", {
-        children: "Time Expired"
+      }), trackTimerFetcing ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsxs)(_components_Button__WEBPACK_IMPORTED_MODULE_1__["default"], {
+        className: "cursor-processing",
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)("div", {
+          className: "spinner-border text-white",
+          role: "status",
+          style: {
+            width: "18px",
+            height: "18px"
+          }
+        }), "Processing..."]
+      }) : !timerStopStatusIsLoading ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsxs)(_components_Button__WEBPACK_IMPORTED_MODULE_1__["default"], {
+        variant: "tertiary",
+        onClick: handleStopTimer,
+        className: "d-flex align-items-center btn-outline-dark text-dark",
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)("i", {
+          className: "fa-solid fa-pause"
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)("span", {
+          className: "d-inline ml-1",
+          children: "Stop Timer"
+        })]
+      }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsxs)(_components_Button__WEBPACK_IMPORTED_MODULE_1__["default"], {
+        className: "cursor-processing",
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)("div", {
+          className: "spinner-border text-white",
+          role: "status",
+          style: {
+            width: "18px",
+            height: "18px"
+          }
+        }), "Stopping..."]
       })]
     }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)(_stop_timer_LessTrackTimerModal__WEBPACK_IMPORTED_MODULE_8__["default"], {
       stopTimer: stopTimer,
