@@ -22,20 +22,25 @@ import {
 } from "../../../services/api/EvaluationApiSlice";
 import FormatDate from "../../../UI/comments/utils/FormatDate";
 import { Button } from "react-bootstrap";
+import axios from "axios";
 
 const SingleEvaluationModal = ({
     toggleSingleEvaluationModal,
     isSingleEvaluationModalOpen,
     data,
 }) => {
+    const { evaluationObject, setEvaluationObject } = useEmployeeEvaluation();
+    const [evaluations, setEvaluations] = useState([]);
+
+    const userIdFromParam = new URLSearchParams(location.search).get("user_id");
+
     const auth = useAuth();
-    const { evaluationObject } = useEmployeeEvaluation();
     const [storeTaskRating, { isLoading: isLoadingReview }] =
         useStoreTaskRatingMutation();
     const [updateTaskRating, { isLoading: isLoadingUpdateTaskRating }] =
         useUpdateTaskRatingSubmissionMutation();
     const [averageRating, setAverageRating] = useState(
-        evaluationObject.lead_dev_avg_rating
+        evaluationObject?.lead_dev_avg_rating
     );
 
     const [formData, setFormData] = useState({
@@ -51,6 +56,23 @@ const SingleEvaluationModal = ({
         obedience: data.obedience ?? 0,
         lead_dev_cmnt: data.lead_dev_cmnt ?? "",
     });
+
+    useEffect(() => {
+        const fetchData = async () => {
+            if (!userIdFromParam) return;
+            try {
+                const response = await axios.get(
+                    `/account/employee-evaluation-user/${userIdFromParam}`
+                );
+
+                setEvaluationObject(response.data.data);
+            } catch (error) {
+                console.error("Error fetching evaluations:", error);
+            }
+        };
+
+        fetchData();
+    }, [userIdFromParam]);
 
     useEffect(() => {
         const calculateAverageRating = (formData) => {
@@ -283,7 +305,7 @@ const SingleEvaluationModal = ({
         >
             <EvalTableTitle>
                 <span>New Developer Evaluation :</span>
-                <span>{evaluationObject.user_name ?? "Tanvir Mitul"}</span>
+                <span>{evaluationObject?.user_name}</span>
             </EvalTableTitle>
             <div className={styles.tableContainer}>
                 <table className={styles.table}>
@@ -321,8 +343,10 @@ const SingleEvaluationModal = ({
                                     )}
                             </td>
                             <td>{data.revision_number}</td>
-                            {evaluationObject.lead_dev_avg_rating ? (
-                                <td>{evaluationObject.lead_dev_avg_rating} </td>
+                            {evaluationObject?.lead_dev_avg_rating ? (
+                                <td>
+                                    {evaluationObject?.lead_dev_avg_rating}{" "}
+                                </td>
                             ) : (
                                 <td>{averageRating ?? "N/A"}</td>
                             )}
@@ -334,11 +358,11 @@ const SingleEvaluationModal = ({
             <div>
                 <div className={styles.rating_container}>
                     {auth.roleId === 6 &&
-                        (evaluationObject.ld_submission_status === 0
+                        (evaluationObject?.ld_submission_status === 0
                             ? formFields.map((field, index) => (
                                   <ReusableSection key={index} {...field} />
                               ))
-                            : evaluationObject.ld_submission_status === 1 &&
+                            : evaluationObject?.ld_submission_status === 1 &&
                               formFields.map((field, index) => (
                                   <ReusableSectionTeamLeadAndAdmin
                                       key={index}
@@ -371,7 +395,7 @@ const SingleEvaluationModal = ({
                     }}
                 >
                     {auth.roleId === 6 &&
-                        (evaluationObject.ld_submission_status === 0 ? (
+                        (evaluationObject?.ld_submission_status === 0 ? (
                             <CKEditorComponent
                                 placeholder="Write your comment here"
                                 data={formData?.lead_dev_cmnt}
@@ -413,7 +437,7 @@ const SingleEvaluationModal = ({
                                         target="_blank"
                                         rel="noopener noreferrer"
                                     >
-                                        {evaluationObject.added_by_name}
+                                        {evaluationObject?.added_by_name}
                                     </a>{" "}
                                     on{" "}
                                     <span>{FormatDate(data?.updated_at)}</span>
@@ -452,7 +476,7 @@ const SingleEvaluationModal = ({
                                     target="_blank"
                                     rel="noopener noreferrer"
                                 >
-                                    {evaluationObject.added_by_name}
+                                    {evaluationObject?.added_by_name}
                                 </a>{" "}
                                 on <span>{FormatDate(data?.updated_at)}</span>
                             </div>
@@ -461,7 +485,7 @@ const SingleEvaluationModal = ({
                 </div>
                 <div className="d-flex justify-content-center">
                     {auth.roleId === 6 &&
-                        evaluationObject.ld_submission_status === 0 &&
+                        evaluationObject?.ld_submission_status === 0 &&
                         (data?.avg_rating === null ? (
                             <Button
                                 onClick={handleSubmit}
