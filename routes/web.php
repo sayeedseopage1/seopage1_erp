@@ -1689,7 +1689,9 @@ Route::get('/check-website-theme', [ProjectController::class, 'checkWebsiteTheme
 //add project website plugin
 Route::get('/projects/view-website-plugin', [ProjectController::class, 'viewWebsitePlugin'])->name('project-view-website-plugin');
 Route::post('/projects/add-website-plugin', [ProjectController::class, 'storeWebsitePlugin'])->name('add-website-plugin');
-Route::put('/projects/update-website-plugin/{id}', [ProjectController::class, 'updateWebsitePlugin']);
+Route::get('/project/edit-website-plugin', [ProjectController::class, 'editWebsitePlugin'])->name('edit-website-plugin');
+Route::post('/projects/update-website-plugin', [ProjectController::class, 'updateWebsitePlugin'])->name('update-website-plugin');
+Route::get('/check-website-plugin', [ProjectController::class, 'checkWebsitePlugin'])->name('check-website-plugin');
 
 
 //Cross Departmental Work

@@ -58,6 +58,7 @@ use App\Http\Requests\Project\StoreProject;
 use App\DataTables\ArchiveProjectsDataTable;
 use App\DataTables\ArchiveTasksDataTable;
 use App\DataTables\ProjectCmsDataTable;
+use App\DataTables\WebsitePluginDataTable;
 use App\DataTables\WebsiteThemeDataTable;
 use App\DataTables\WebsiteTypeDataTable;
 use App\Http\Requests\Project\UpdateProject;
@@ -4078,11 +4079,15 @@ class ProjectController extends AccountBaseController
     }
 
     // VIEW PROJECT WEBSITE PLUGIN SECTION
-    public function viewWebsitePlugin()
+    public function viewWebsitePlugin(WebsitePluginDataTable $dataTable)
     {
         $this->pageTitle = 'Website Plugin';
-        $this->website_plugins = DB::table('project_website_plugins')->orderBy('id', 'desc')->paginate(10);
-        return view('projects.website-plugin.index', $this->data);
+        return $dataTable->render('projects.website-plugin.index', $this->data);
+    }
+    public function checkWebsitePlugin(Request $request)
+    {
+        $data = ProjectWebsitePlugin::where('plugin_name', 'LIKE', "%{$request->plugin_name}%")->pluck('plugin_name');
+        return response()->json($data);
     }
     public function storeWebsitePlugin(Request $request)
     {
@@ -4094,9 +4099,14 @@ class ProjectController extends AccountBaseController
         }
         return response()->json(['status' => 200]);
     }
-    public function updateWebsitePlugin(Request $request, $id)
+    public function editWebsitePlugin(Request $request)
     {
-        $project_website_plugin = ProjectWebsitePlugin::find($id);
+        $this->id = $request->id;
+        return view('projects.modals.editwebsitepluginmodal', $this->data);
+    }
+    public function updateWebsitePlugin(Request $request)
+    {
+        $project_website_plugin = ProjectWebsitePlugin::find($request->id);
         $project_website_plugin->plugin_name = $request->plugin_name;
         $project_website_plugin->plugin_url = $request->plugin_url;
         $project_website_plugin->save();
