@@ -57,6 +57,7 @@ use App\DataTables\ProjectNotesDataTable;
 use App\Http\Requests\Project\StoreProject;
 use App\DataTables\ArchiveProjectsDataTable;
 use App\DataTables\ArchiveTasksDataTable;
+use App\DataTables\NicheCategoryDataTable;
 use App\DataTables\ProjectCmsDataTable;
 use App\DataTables\WebsitePluginDataTable;
 use App\DataTables\WebsiteThemeDataTable;
@@ -4115,11 +4116,16 @@ class ProjectController extends AccountBaseController
     }
 
     // VIEW PROJECT CATEGORY SECTION
-    public function viewCategory()
+    public function viewCategory(NicheCategoryDataTable $dataTable)
     {
         $this->pageTitle = 'Categories';
-        $this->categories = ProjectNiche::with('parent', 'child')->paginate(10);
-        return view('projects.category.index', $this->data);
+        return $dataTable->render('projects.category.index', $this->data);
+    }
+    
+    public function editCategory(Request $request)
+    {
+        $this->id = $request->id;
+        return view('projects.modals.editnichemodal', $this->data);
     }
 
     public function parentCategoryId($id)
