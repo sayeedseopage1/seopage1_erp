@@ -41,7 +41,6 @@ const inputSateData = {
         ruleComment: "",
         countries: [],
         points: "",
-        id: "",
     },
     inputValidation: {
         isSubmitting: false,
@@ -116,6 +115,7 @@ const SalesRiskPolices = () => {
                     ruleComment: "",
                     countries: [],
                     points: "",
+                    id: "",
                 });
                 setNewPolicyDataValidation(inputSateData.inputValidation);
                 break;
@@ -198,8 +198,8 @@ const SalesRiskPolices = () => {
         const isExist = newPolicyInputData.find(
             (item) => item?.id === newPolicyData?.id
         );
-
-        if (isExist) {
+        if (isExist && isExist.id !== "") {
+            console.log(isExist.id)
             const updatedData = newPolicyInputData.map((item) => {
                 if (item.id === newPolicyData.id) {
                     return {
@@ -207,20 +207,8 @@ const SalesRiskPolices = () => {
                         ...newPolicyData,
                     };
                 }
-                if (newPolicyData.index === 0) {
-                    return {
-                        ...item,
-                        title: autoGenerateTitle({
-                            ...item,
-                            valueType: newPolicyData.valueType,
-                        }),
-                        valueType: newPolicyData.valueType,
-                    };
-                } else {
-                    return item;
-                }
+                return item;
             });
-
             setIsRuleUpdating(false);
             setNewPolicyInputData(updatedData);
         } else {

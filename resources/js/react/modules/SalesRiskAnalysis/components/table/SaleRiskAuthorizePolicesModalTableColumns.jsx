@@ -339,8 +339,9 @@ export const SaleRiskAuthorizePolicesModalTableColumns = [
         id: "applicable_points",
         header: "Applicable Points",
         accessorKey: "applicable_points",
-        cell: ({ row, table }) => {
+        cell: ({ row }) => {
             const data = row?.original;
+            console.log(row)
             return (
                 <div className="d-flex justify-content-end flex-column align-items-end">
                     {data?.ruleList?.map((rule, index) => {
@@ -354,7 +355,11 @@ export const SaleRiskAuthorizePolicesModalTableColumns = [
                                     <SalesPointsContainer
                                         key={rule?.id}
                                         className="py-3"
-                                    ></SalesPointsContainer>
+                                    >
+                                        {
+                                            rule?.points
+                                        }
+                                    </SalesPointsContainer>
                                 </Switch.Case>
                                 <Switch.Case
                                     condition={_.includes(
