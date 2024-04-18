@@ -58,6 +58,7 @@ use App\Http\Requests\Project\StoreProject;
 use App\DataTables\ArchiveProjectsDataTable;
 use App\DataTables\ArchiveTasksDataTable;
 use App\DataTables\ProjectCmsDataTable;
+use App\DataTables\WebsiteTypeDataTable;
 use App\Http\Requests\Project\UpdateProject;
 use Maatwebsite\Excel\Imports\HeadingRowFormatter;
 use App\Http\Requests\Admin\Employee\ImportRequest;
@@ -3997,27 +3998,37 @@ class ProjectController extends AccountBaseController
         return response()->json(['status' => 200]);
     }
     // VIEW PROJECT WEBSITE SECTION
-    public function viewWebsiteType()
+    public function viewWebsiteType(WebsiteTypeDataTable $dataTable)
     {
         $this->pageTitle = 'Website Type';
-        $this->website_types = DB::table('project_website_types')->orderBy('id', 'desc')->paginate(10);
-        return view('projects.website-type.index', $this->data);
+        return $dataTable->render('projects.website-type.index', $this->data);
+    }
+    public function checkWebsiteType(Request $request)
+    {
+        $data = ProjectWebsiteType::where('website_type', 'LIKE', "%{$request->website_type}%")->pluck('website_type');
+        return response()->json($data);
     }
     public function storeWebsiteType(Request $request)
     {
         $validated = $request->validate([
-            'website_type' => 'required',
+            'website_type' => 'required|unique:project_website_types',
         ], [
             'website_type.required' => 'This field is required!!',
+            'website_type.unique' => 'The website type must be unique!',
         ]);
         $project_website_type = new ProjectWebsiteType();
         $project_website_type->website_type = $request->website_type;
         $project_website_type->save();
         return response()->json(['status' => 200]);
     }
-    public function updateWebsiteType(Request $request, $id)
+    public function editWebsiteType(Request $request)
     {
-        $project_website_type = ProjectWebsiteType::find($id);
+        $this->id = $request->id;
+        return view('projects.modals.editwebsitetypemodal', $this->data);
+    }
+    public function updateWebsiteType(Request $request)
+    {
+        $project_website_type = ProjectWebsiteType::find($request->id);
         $project_website_type->website_type = $request->website_type;
         $project_website_type->save();
 

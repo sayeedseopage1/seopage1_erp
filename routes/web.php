@@ -1675,7 +1675,9 @@ Route::get('/check-cms', [ProjectController::class, 'checkCms'])->name('check-cm
 //add project website type
 Route::get('/projects/view-website-type', [ProjectController::class, 'viewWebsiteType'])->name('project-view-website-type');
 Route::post('/projects/add-website-type', [ProjectController::class, 'storeWebsiteType'])->name('add-website-type');
-Route::put('/projects/update-website-type/{id}', [ProjectController::class, 'updateWebsiteType']);
+Route::get('/project/edit-website-type', [ProjectController::class, 'editWebsiteType'])->name('edit-website-type');
+Route::post('/projects/update-website-type', [ProjectController::class, 'updateWebsiteType'])->name('update-website-type');
+Route::get('/check-website-type', [ProjectController::class, 'checkWebsiteType'])->name('check-website-type');
 
 //add project website theme
 Route::get('/projects/view-website-theme', [ProjectController::class, 'viewWebsiteTheme'])->name('project-view-website-theme');

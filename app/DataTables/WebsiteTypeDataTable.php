@@ -5,13 +5,13 @@ namespace App\DataTables;
 use App\DataTables\BaseDataTable;
 use Carbon\Carbon;
 use App\Models\Project;
-use App\Models\ProjectCms;
+use App\Models\ProjectWebsiteType;
 use Yajra\DataTables\Html\Button;
 use Yajra\DataTables\Html\Column;
 use Illuminate\Support\Facades\DB;
 use Yajra\DataTables\EloquentDataTable;
 
-class ProjectCmsDataTable extends BaseDataTable
+class WebsiteTypeDataTable extends BaseDataTable
 {
     /**
      * Build DataTable class.
@@ -35,7 +35,7 @@ class ProjectCmsDataTable extends BaseDataTable
                             <i class="icon-options-vertical icons"></i>
                         </a>
                         <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuLink-' . $row->id . '" tabindex="0">';
-                        $action .= '<a data-project-cms-id="' . $row->id . '" class="dropdown-item project-cms-modal" href="javascript:;"><i class="fa fa-edit mr-2"></i>' . __('Edit') . '</a>';
+                        $action .= '<a data-project-website-type-id="' . $row->id . '" class="dropdown-item project-website-type-modal" href="javascript:;"><i class="fa fa-edit mr-2"></i>' . __('Edit') . '</a>';
                         
 
                 $action .= '</div>
@@ -44,21 +44,21 @@ class ProjectCmsDataTable extends BaseDataTable
     
                 return $action;
             })
-            ->addColumn('cms_name', function ($row) {
-                return $row->cms_name;
+            ->addColumn('website_type', function ($row) {
+                return $row->website_type;
             })
             ->addIndexColumn()
             ->smart(false)
             ->setRowId(function ($row) {
                 return 'row-' . $row->id;
             })
-            ->rawColumns(['action' ,'cms_name', 'check']);
+            ->rawColumns(['action' ,'website_type', 'check']);
     }
     /**
      * @param Project $model
      * @return \Illuminate\Database\Eloquent\Builder
      */
-    public function query(ProjectCms $model)
+    public function query(ProjectWebsiteType $model)
     {
         $request = $this->request();
         $model = $model->newQuery()->orderBy('id', 'desc');
@@ -69,14 +69,14 @@ class ProjectCmsDataTable extends BaseDataTable
             $endDate = Carbon::createFromFormat($this->global->date_format, $request->endDate)->toDateString();
             
             $model->where(function ($query) use ($startDate, $endDate) {
-                $query->whereBetween(DB::raw('DATE(project_cms.created_at)'), [$startDate, $endDate]);
-                $query->orWhereBetween(DB::raw('DATE(project_cms.updated_at)'), [$startDate, $endDate]);
+                $query->whereBetween(DB::raw('DATE(project_website_types.created_at)'), [$startDate, $endDate]);
+                $query->orWhereBetween(DB::raw('DATE(project_website_types.updated_at)'), [$startDate, $endDate]);
             });
         }
 
         if ($request->searchText !== '') {
             $model->where(function ($query) use ($request) {
-                $query->where('project_cms.cms_name', 'like', '%' . $request->searchText . '%');
+                $query->where('project_website_types.website_type', 'like', '%' . $request->searchText . '%');
             });
         }
 
@@ -91,7 +91,7 @@ class ProjectCmsDataTable extends BaseDataTable
     public function html()
     {
         return $this->builder()
-            ->setTableId('project-cms-table')
+            ->setTableId('project-website-type-table')
             ->columns($this->getColumns())
             ->minifiedAjax()
             // ->orderBy(1)
@@ -104,7 +104,7 @@ class ProjectCmsDataTable extends BaseDataTable
             ->language(__('app.datatable'))
             ->parameters([
                 'initComplete' => 'function () {
-                    window.LaravelDataTables["project-cms-table"].buttons().container()
+                    window.LaravelDataTables["project-website-type-table"].buttons().container()
                      .appendTo( "#table-actions")
                  }',
                 'fnDrawCallback' => 'function( oSettings ) {
@@ -135,7 +135,7 @@ class ProjectCmsDataTable extends BaseDataTable
             ],
             
             '#' => ['data' => 'DT_RowIndex', 'orderable' => false, 'searchable' => false, 'visible' => false],
-            __('cms_name') => ['data' => 'cms_name', 'name' => 'cms_name', 'title' => __('CMS Name')],
+            __('website_type') => ['data' => 'website_type', 'name' => 'website_type', 'title' => __('Name')],
             Column::computed('action', __('app.action'))
             ->exportable(false)
             ->printable(false)
