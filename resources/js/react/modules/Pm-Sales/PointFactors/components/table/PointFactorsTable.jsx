@@ -173,8 +173,6 @@ const PointFactorsTable = ({
             upper_limit: false,
             limit_type: false,
             limit_unit: false,
-            lower_limit_condition: false,
-            upper_limit_condition: false,
             point_type: false,
             points: false,
             isSubmitting: false,
@@ -206,7 +204,7 @@ const PointFactorsTable = ({
     const [updatePmPointfactor, { isLoading: isUpdatePmPointfactorLoading }] = useUpdatePmPointfactorMutation()
 
     const handleUpdateFactor = async () => {
-        const validation = validationFormator(editFactorData, editFactorData, editFactorDataValidation)
+        const validation = validationFormator(editFactorData, editFactorDataValidation)
 
         if (
             Object.entries(validation).some(
@@ -233,8 +231,6 @@ const PointFactorsTable = ({
                 upper_limit_condition: editFactorData?.upper_limit_condition?.name ?? null,
                 point_type: parseInt(editFactorData?.point_type) ?? null,
                 points: parseFloat(editFactorData?.points) ?? null,
-                point_depend_on_model: editFactorData?.point_depend_on_model ?? null,
-                point_depend_on_field: editFactorData?.point_depend_on_field ?? null,
                 status: parseInt(editFactorData?.status) ?? null,
             }
 

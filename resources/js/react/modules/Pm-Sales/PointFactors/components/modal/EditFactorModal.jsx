@@ -27,7 +27,7 @@ const EditFactorModal = ({
 
     const singleDefaultFactor = singleFactorData?.data
 
-    const { title, project_type, lower_limit, upper_limit, limit_type, limit_unit, lower_limit_condition, upper_limit_condition, point_type, points, point_depend_on_model, point_depend_on_field, status } = editFactorData || {}
+    const { title, project_type, lower_limit, upper_limit, limit_type, limit_unit, point_type, points, point_depend_on_model, point_depend_on_field, status } = editFactorData || {}
 
     return (
         <CustomModal
@@ -87,35 +87,9 @@ const EditFactorModal = ({
                                 <ModalInputLabel className="col-4">
                                     Project Type <sup>*</sup>:{" "}
                                 </ModalInputLabel>
-                                <div className="col-8 px-0">
-                                    <CheckboxContainer className="mr-3">
-                                        <StyledInput
-                                            type="checkbox"
-                                            id="fixedType"
-                                            name="project_type"
-                                            onChange={handleChange}
-                                            checked={project_type == 1}
-                                            value={1}
-                                        />
-                                        <StyledLabel htmlFor="fixedType">Fixed</StyledLabel>
-                                    </CheckboxContainer>
-                                    <CheckboxContainer>
-                                        <StyledInput
-                                            type="checkbox"
-                                            id="hourlyType"
-                                            name="project_type"
-                                            onChange={handleChange}
-                                            checked={project_type == 2}
-                                            value={2}
-                                        />
-                                        <StyledLabel htmlFor="hourlyType">Hourly</StyledLabel>
-                                    </CheckboxContainer>
-                                    {editFactorDataValidation?.project_type && (
-                                        <p className="text-danger">
-                                            Project Type is required
-                                        </p>
-                                    )}
-                                </div>
+                                <ModalInputLabel className="col-8" color="#8F8F8F">
+                                    {project_type == 1 ? "Fixed" : "Hourly"}
+                                </ModalInputLabel>
                             </div>
                         }
 
@@ -125,41 +99,15 @@ const EditFactorModal = ({
                                 <ModalInputLabel className="col-4">
                                     Limit Type <sup>*</sup>:{" "}
                                 </ModalInputLabel>
-                                <div className="col-8 px-0">
-                                    <CheckboxContainer className="mr-3">
-                                        <StyledInput
-                                            type="checkbox"
-                                            id="rangeType"
-                                            name="limit_type"
-                                            onChange={handleChange}
-                                            checked={limit_type == 1}
-                                            value={1}
-                                        />
-                                        <StyledLabel htmlFor="rangeType">Range</StyledLabel>
-                                    </CheckboxContainer>
-                                    <CheckboxContainer>
-                                        <StyledInput
-                                            type="checkbox"
-                                            id="booleanType"
-                                            name="limit_type"
-                                            onChange={handleChange}
-                                            checked={limit_type == 2}
-                                            value={2}
-                                        />
-                                        <StyledLabel htmlFor="booleanType">Boolean</StyledLabel>
-                                    </CheckboxContainer>
-                                    {editFactorDataValidation?.limit_type && (
-                                        <p className="text-danger">
-                                            Limit type is required
-                                        </p>
-                                    )}
-                                </div>
+                                <ModalInputLabel className="col-8" color="#8F8F8F">
+                                    {limit_type == 1 ? "Range" : "Boolean"}
+                                </ModalInputLabel>
                             </div>
                         }
 
                         {/* Lower Limit  *****required****** */}
                         {
-                            singleDefaultFactor?.lower_limit && <div className="row mb-4 align-items-center">
+                            limit_type == 1 && <div className="row mb-4 align-items-center">
                                 <ModalInputLabel className="col-4">
                                     Lower Limit <sup>*</sup>:{" "}
                                 </ModalInputLabel>
@@ -184,7 +132,7 @@ const EditFactorModal = ({
 
                         {/* Upper Limit  *****required****** */}
                         {
-                            singleDefaultFactor?.upper_limit && <div className="row mb-4 align-items-center">
+                            limit_type == 1 && <div className="row mb-4 align-items-center">
                                 <ModalInputLabel className="col-4">
                                     Upper Limit <sup>*</sup>:{" "}
                                 </ModalInputLabel>
@@ -230,89 +178,15 @@ const EditFactorModal = ({
                             </div>
                         }
 
-                        {/* Lower limit condition  *****required****** */}
-                        {
-                            singleDefaultFactor?.lower_limit_condition && <div className="row mb-4 align-items-center">
-                                <ModalInputLabel className="col-4">
-                                    Lower Limit Condition<sup>*</sup>:{" "}
-                                </ModalInputLabel>
-                                <div className="col-8 px-0 flex-column">
-                                    <ModalSelectContainer>
-                                        <CustomDropDown
-                                            filedName="lower_limit_condition"
-                                            data={LimitConditions}
-                                            selected={lower_limit_condition}
-                                            setSelected={handleChange}
-                                        />
-                                    </ModalSelectContainer>
-                                    {editFactorDataValidation?.lower_limit_condition && (
-                                        <p className="text-danger">
-                                            Lower Limit Condition is required
-                                        </p>
-                                    )}
-                                </div>
-                            </div>
-                        }
-
-                        {/* Upper limit condition  *****required****** */}
-                        {
-                            singleDefaultFactor?.upper_limit_condition && <div className="row mb-4 align-items-center">
-                                <ModalInputLabel className="col-4">
-                                    Upper Limit Condition<sup>*</sup>:{" "}
-                                </ModalInputLabel>
-                                <div className="col-8 px-0 flex-column">
-                                    <ModalSelectContainer>
-                                        <CustomDropDown
-                                            filedName="upper_limit_condition"
-                                            data={LimitConditions}
-                                            selected={upper_limit_condition}
-                                            setSelected={handleChange}
-                                        />
-                                    </ModalSelectContainer>
-                                    {editFactorDataValidation?.upper_limit_condition && (
-                                        <p className="text-danger">
-                                            Upper Limit Condition is required
-                                        </p>
-                                    )}
-                                </div>
-                            </div>
-                        }
-
                         {/* point type  *****required****** */}
                         {
                             singleDefaultFactor?.point_type && <div className="row mb-4 align-items-center">
                                 <ModalInputLabel className="col-4">
                                     Point Type <sup>*</sup>:{" "}
                                 </ModalInputLabel>
-                                <div className="col-8 px-0">
-                                    <CheckboxContainer className="mr-3">
-                                        <StyledInput
-                                            type="checkbox"
-                                            id="staticType"
-                                            name="point_type"
-                                            onChange={handleChange}
-                                            checked={point_type == 1}
-                                            value={1}
-                                        />
-                                        <StyledLabel htmlFor="staticType">Static</StyledLabel>
-                                    </CheckboxContainer>
-                                    <CheckboxContainer>
-                                        <StyledInput
-                                            type="checkbox"
-                                            id="percentageType"
-                                            name="point_type"
-                                            onChange={handleChange}
-                                            checked={point_type == 2}
-                                            value={2}
-                                        />
-                                        <StyledLabel htmlFor="percentageType">Percentage</StyledLabel>
-                                    </CheckboxContainer>
-                                    {editFactorDataValidation?.point_type && (
-                                        <p className="text-danger">
-                                            Point type is required
-                                        </p>
-                                    )}
-                                </div>
+                                <ModalInputLabel className="col-8" color="#8F8F8F">
+                                    {point_type == 1 ? "Static" : "Percentage"}
+                                </ModalInputLabel>
                             </div>
                         }
 
