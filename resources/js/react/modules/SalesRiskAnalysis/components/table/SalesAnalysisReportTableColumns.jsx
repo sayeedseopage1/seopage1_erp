@@ -262,14 +262,14 @@ export const SalesAnalysisReportTableColumns = [
         },
     },
     {
-        id: "authorized_on",
+        id: "authorize_on",
         header: "Authorized On",
-        accessorKey: "authorized_on",
+        accessorKey: "authorize_on",
         cell: ({ row }) => {
             const data = row?.original;
             return (
                 <p className="multiline-ellipsis">
-                    {data?.authorized_on ?? "Not Available Yet"}
+                    {data?.authorize_on ?? "Not Available Yet"}
                 </p>
             );
         },

@@ -339,9 +339,8 @@ export const SaleRiskAuthorizePolicesModalTableColumns = [
         id: "applicable_points",
         header: "Applicable Points",
         accessorKey: "applicable_points",
-        cell: ({ row }) => {
+        cell: ({ row, table }) => {
             const data = row?.original;
-            console.log(row)
             return (
                 <div className="d-flex justify-content-end flex-column align-items-end">
                     {data?.ruleList?.map((rule, index) => {

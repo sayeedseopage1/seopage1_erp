@@ -1,0 +1,9 @@
+.activeRule {
+  color: #000000;
+  background-color: #8df2ab;
+  width: fit-content;
+  font-size: 12px;
+  font-family: Poppins;
+  border-radius: 13px;
+  padding: 1px 8px;
+}

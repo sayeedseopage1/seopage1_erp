@@ -38,6 +38,7 @@ import Loader from "../components/Loader";
 
 // modal
 import SaleRiskAuthorizePolicesModal from "../components/modal/SaleRiskAuthorizePolicesModal";
+import RuleActionConfirmationModal from "../components/modal/RuleActionConfirmationModal";
 
 const SalesRiskAuthorize = () => {
     const [status, setStatus] = useState("");
@@ -55,6 +56,10 @@ const SalesRiskAuthorize = () => {
     // modal state
     const [isSaleRiskAuthorizeModalOpen, setIsSaleRiskAuthorizeModalOpen] =
         useState(false);
+
+    const [saleRiskActionModalOpen, setSaleRiskActionModalOpen] =
+        useState(false);
+    const [statusActionData, setStatusActionData] = React.useState({});
 
     // fetch data
     const { data, isLoading, isSuccess, isFetching } =
@@ -89,7 +94,7 @@ const SalesRiskAuthorize = () => {
                     points: data?.data?.points,
                 });
             }
-        } 
+        }
     }, [data?.data, isLoading]);
 
     // project extend images Api call
@@ -97,17 +102,16 @@ const SalesRiskAuthorize = () => {
         useSaleRiskAnalysisActionsMutation();
 
     // handle authorize and deny
-    const handleAuthorize = async (status) => {
+    const handleAuthorize = async () => {
         try {
-            setStatus(status);
             let payload = {
                 deal_id: deal_id,
-                status: status,
+                status: Number(statusActionData.status),
             };
             const res = await saleRiskAnalysisActionHandler(payload);
             if (res?.data) {
                 // show success message
-                if (status === 1) {
+                if (statusActionData.status === "1") {
                     toast.success("Sale Risk Analysis Authorized Successfully");
                 } else {
                     toast.success("Sale Risk Analysis Denied Successfully");
@@ -118,12 +122,28 @@ const SalesRiskAuthorize = () => {
         }
     };
 
+    const handleAuthorizeAndDeny = (status) => {
+        setStatusActionData({
+            status: status,
+            modalType: "Deal",
+        });
+        handleOpenSaleRiskActionModal();
+    };
+
     // handle open and close modal
     const handleOpenAuthorizeModal = () => {
         setIsSaleRiskAuthorizeModalOpen(true);
     };
     const handleCloseAuthorizeModal = () => {
         setIsSaleRiskAuthorizeModalOpen(false);
+    };
+
+    const handleOpenSaleRiskActionModal = () => {
+        setSaleRiskActionModalOpen(true);
+    };
+
+    const handleCloseSaleRiskActionModal = () => {
+        setSaleRiskActionModalOpen(false);
     };
 
     /**
@@ -233,7 +253,9 @@ const SalesRiskAuthorize = () => {
                                     <SaleRiskAuthorizeHeaderForUser
                                         headerData={metaInfo}
                                         isLoading={isLoading}
-                                        handleOpenAuthorizeModal={handleOpenAuthorizeModal}
+                                        handleOpenAuthorizeModal={
+                                            handleOpenAuthorizeModal
+                                        }
                                     />
                                 </Switch.Case>
                             </Switch>
@@ -255,10 +277,11 @@ const SalesRiskAuthorize = () => {
 
                                     <SaleRiskAuthorizeTotalPointContainer
                                         className="mb-4"
-                                        background={`${metaInfo?.points >=
-                                            0
+                                        background={`${
+                                            metaInfo?.points >= 0
                                                 ? "#bcf5a1"
-                                                : "#FFDCDC "}`}
+                                                : "#FFDCDC "
+                                        }`}
                                     >
                                         <p>Total Points Achieved :</p>
                                         <span>
@@ -300,28 +323,26 @@ const SalesRiskAuthorize = () => {
                                                 <SaleRiskAuthorizeButton
                                                     color="#1492E6"
                                                     onClick={() => {
-                                                        handleAuthorize(1);
+                                                        handleAuthorizeAndDeny(
+                                                            "1"
+                                                        );
                                                     }}
                                                     disabled={isActionLoading}
                                                 >
-                                                    {isActionLoading &&
-                                                    status == 1
-                                                        ? "Authorizing.."
-                                                        : "Authorize"}
+                                                    Authorize
                                                 </SaleRiskAuthorizeButton>
                                                 <SaleRiskAuthorizeButton
                                                     className="ml-2"
                                                     border="1px solid #F66"
                                                     textColor="#F66"
                                                     onClick={() => {
-                                                        handleAuthorize(0);
+                                                        handleAuthorizeAndDeny(
+                                                            "0"
+                                                        );
                                                     }}
                                                     disabled={isActionLoading}
                                                 >
-                                                    {isActionLoading &&
-                                                    status == 0
-                                                        ? "Denying.."
-                                                        : "Deny"}
+                                                    Deny
                                                 </SaleRiskAuthorizeButton>
                                             </div>
                                         </Switch.Case>
@@ -374,6 +395,20 @@ const SalesRiskAuthorize = () => {
                     closeModal={handleCloseAuthorizeModal}
                     salesRiskAnalysisRules={metaInfo}
                     isLoading={isLoading}
+                />
+            )}
+
+            {saleRiskActionModalOpen && (
+                <RuleActionConfirmationModal
+                    open={saleRiskActionModalOpen}
+                    closeModal={handleCloseSaleRiskActionModal}
+                    statusActionData={statusActionData}
+                    handleStatusUpdate={handleAuthorize}
+                    isLoading={isActionLoading}
+                    modalContent={{
+                        0: "Deny",
+                        1: "Authorize",
+                    }}
                 />
             )}
         </React.Fragment>
