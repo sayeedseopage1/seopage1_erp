@@ -3,28 +3,18 @@ import ReactModal from "react-modal";
 import styles from "./SingleEvaluation.module.css";
 import { EvalTableTitle } from "../Table/ui";
 
-import { useEffect, useState } from "react";
+import React, { useState } from "react";
 
 import Button from "../../../../../../react/global/Button";
-import ReusableSection from "./ReusableSection";
-import CKEditorComponent from "../../../../../ui/ckeditor";
-import useEmployeeEvaluation from "../../../../../../react/zustand/store";
-import { BiSolidEditAlt } from "react-icons/bi";
-import { useAuth } from "../../../../../../react/hooks/useAuth";
+
 import ReusableSectionTeamLeadAndAdmin from "./ReusableSectionTeamLeadAndAdmin";
 import FormatDate from "../../../../../../react/UI/comments/utils/FormatDate";
 const SingleEvaluationModal = ({
     toggleSingleEvaluationModal,
     isSingleEvaluationModalOpen,
     data,
+    singleEvaluation,
 }) => {
-    const auth = useAuth();
-    const { evaluationObject } = useEmployeeEvaluation();
-
-    const [averageRating, setAverageRating] = useState(
-        evaluationObject.lead_dev_avg_rating
-    );
-
     const [formData, setFormData] = useState({
         qw_first_chance: data.qw_first_chance ?? 0,
         qw_first_revision: data.qw_first_revision ?? 0,
@@ -38,6 +28,7 @@ const SingleEvaluationModal = ({
         obedience: data.obedience ?? 0,
         lead_dev_cmnt: data.lead_dev_cmnt ?? "",
     });
+
     const formFields = [
         {
             label: "Quality of work (in the first chance)",
@@ -163,8 +154,8 @@ const SingleEvaluationModal = ({
             onRequestClose={() => toggleSingleEvaluationModal()}
         >
             <EvalTableTitle>
-                <span>New Developer Evaluation :</span>
-                <span>{evaluationObject.user_name ?? "Tanvir Mitul"}</span>
+                <span>New Developer Evaluation </span>
+                {/* <span>{singleEvaluation?.user_name}</span> */}
             </EvalTableTitle>
             <div className={styles.tableContainer}>
                 <table className={styles.table}>
@@ -183,7 +174,7 @@ const SingleEvaluationModal = ({
                         <tr>
                             <td>{data?.task_name}</td>
                             <td>{data?.assign_date}</td>
-                            <td>{data.submission_date}</td>
+                            <td>{data?.submission_date}</td>
                             <td>
                                 {" "}
                                 {`${data?.total_hours || 0} hr ${
@@ -201,12 +192,9 @@ const SingleEvaluationModal = ({
                                         )
                                     )}
                             </td>
-                            <td>{data.revision_number}</td>
-                            {evaluationObject.lead_dev_avg_rating ? (
-                                <td>{evaluationObject.lead_dev_avg_rating} </td>
-                            ) : (
-                                <td>{averageRating ?? "N/A"}</td>
-                            )}
+                            <td>{data?.revision_number}</td>
+
+                            <td>{data?.avg_rating} </td>
                         </tr>
                     </tbody>
                 </table>
@@ -214,26 +202,12 @@ const SingleEvaluationModal = ({
 
             <div>
                 <div className={styles.rating_container}>
-                    {auth.roleId === 6 &&
-                        (evaluationObject.ld_submission_status === 0
-                            ? formFields.map((field, index) => (
-                                  <ReusableSection key={index} {...field} />
-                              ))
-                            : evaluationObject.ld_submission_status === 1 &&
-                              formFields.map((field, index) => (
-                                  <ReusableSectionTeamLeadAndAdmin
-                                      key={index}
-                                      {...field}
-                                  />
-                              )))}
-
-                    {(auth.roleId === 8 || auth.roleId === 1) &&
-                        formFields.map((field, index) => (
-                            <ReusableSectionTeamLeadAndAdmin
-                                key={index}
-                                {...field}
-                            />
-                        ))}
+                    {formFields.map((field, index) => (
+                        <ReusableSectionTeamLeadAndAdmin
+                            key={index}
+                            {...field}
+                        />
+                    ))}
                 </div>
 
                 <div
@@ -251,116 +225,43 @@ const SingleEvaluationModal = ({
                         marginTop: "10px",
                     }}
                 >
-                    {auth.roleId === 6 &&
-                        (evaluationObject.ld_submission_status === 0 ? (
-                            <CKEditorComponent
-                                placeholder="Write your comment here"
-                                data={formData?.lead_dev_cmnt}
-                                onChange={(e, editor) => {
-                                    const data = editor.getData();
-                                    setFormData((prev) => ({
-                                        ...prev,
-                                        lead_dev_cmnt: data,
-                                    }));
-                                }}
-                            />
-                        ) : (
-                            <section
-                                style={{
-                                    height: "auto",
-                                    position: "relative",
-                                    width: "100%",
-                                    padding: "10px",
-                                    paddingBottom: "40px",
-                                }}
-                            >
-                                <div
-                                    dangerouslySetInnerHTML={{
-                                        __html: data?.lead_dev_cmnt,
-                                    }}
-                                ></div>
-                                <div
-                                    style={{
-                                        position: "absolute",
-                                        bottom: "10px",
-                                        right: "10px",
-                                        padding: "3px",
-                                        border: "1px solid grey",
-                                    }}
-                                >
-                                    By{" "}
-                                    <a
-                                        href="www.LeadDevId.com"
-                                        target="_blank"
-                                        rel="noopener noreferrer"
-                                    >
-                                        {evaluationObject.added_by_name}
-                                    </a>{" "}
-                                    on{" "}
-                                    <span>{FormatDate(data?.updated_at)}</span>
-                                </div>
-                            </section>
-                        ))}
-
-                    {(auth.roleId === 8 || auth.roleId === 1) && (
-                        <section
+                    <section
+                        style={{
+                            height: "auto",
+                            position: "relative",
+                            width: "100%",
+                            padding: "10px",
+                            paddingBottom: "40px",
+                        }}
+                    >
+                        <div
+                            dangerouslySetInnerHTML={{
+                                __html: data?.lead_dev_cmnt,
+                            }}
+                        ></div>
+                        <div
                             style={{
-                                height: "auto",
-                                position: "relative",
-                                width: "100%",
-                                padding: "10px",
-                                paddingBottom: "40px",
+                                position: "absolute",
+                                bottom: "10px",
+                                right: "10px",
+                                padding: "3px",
+                                border: "1px solid grey",
                             }}
                         >
-                            <div
-                                dangerouslySetInnerHTML={{
-                                    __html: data?.lead_dev_cmnt,
-                                }}
-                            ></div>
-
-                            <div
-                                style={{
-                                    position: "absolute",
-                                    bottom: "10px",
-                                    right: "10px",
-                                    padding: "3px",
-                                    border: "1px solid grey",
-                                }}
+                            By{" "}
+                            <a
+                                href="www.LeadDevId.com"
+                                target="_blank"
+                                rel="noopener noreferrer"
                             >
-                                By{" "}
-                                <a
-                                    href="www.LeadDevId.com"
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                >
-                                    {evaluationObject.added_by_name}
-                                </a>{" "}
-                                on <span>{FormatDate(data?.updated_at)}</span>
-                            </div>
-                        </section>
-                    )}
+                                {singleEvaluation?.added_by_name ??
+                                    "Hasnain Islam Dolon"}
+                            </a>{" "}
+                            on <span>{FormatDate(data?.updated_at)}</span>
+                        </div>
+                    </section>
                 </div>
                 <div className="d-flex justify-content-center">
-                    {auth.roleId === 6 &&
-                        evaluationObject.ld_submission_status === 0 &&
-                        (data?.avg_rating === null ? (
-                            <button
-                                className="mr-2 btn btn-primary "
-                                onClick={handleSubmit}
-                            >
-                                Submit Evaluation
-                            </button>
-                        ) : (
-                            <button
-                                className="mr-2 btn btn-primary "
-                                onClick={handleEdit}
-                            >
-                                <div>
-                                    <BiSolidEditAlt />
-                                    <span> Update Rating</span>
-                                </div>
-                            </button>
-                        ))}
                     <Button
                         size="md"
                         onClick={() => toggleSingleEvaluationModal()}

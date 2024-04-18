@@ -1,8 +1,6 @@
 //mitul work start
 
 import ReactModal from "react-modal";
-
-import { EvaluationTableColumns } from "../Table/EvaluationTableColumns";
 import React, { useEffect, useState } from "react";
 import {
     EvalTableSubTitle,
@@ -12,7 +10,7 @@ import {
     ReviewTableSubTitleDate,
     FooterButtons,
 } from "../Table/ui";
-
+import { useSelector } from "react-redux";
 import Button from "../../../../../ui/Button";
 
 import { useAuth } from "../../../../../../react/hooks/useAuth";
@@ -31,10 +29,20 @@ import axios from "axios";
 import FormatDate from "../../../../../../react/UI/comments/utils/FormatDate";
 import useEmployeeEvaluation from "../../../../../../react/zustand/store";
 
+import ActionDropdown from "../Table/ActionDropdown";
+import useCounterStore from "../../../../Zustand/store";
+import { usePendingActionsIdMutation } from "../../../../../services/api/pendingActionsApiSlice";
+import { toast } from "react-toastify";
 const EvaluationAcknowledgeModal = ({
     acknowledgement,
     setAcknowledgement,
+    developerId,
 }) => {
+    const pendingActionId = useSelector(
+        (state) => state.pendingActions.pendingActionId
+    );
+    const { increaseCount } = useCounterStore();
+    const [updatePendingAction] = usePendingActionsIdMutation();
     const DecisionColor = {
         Accepted: "green",
         Rejected: "red",
@@ -47,7 +55,7 @@ const EvaluationAcknowledgeModal = ({
 
     const auth = useAuth();
     const { setEvaluationObject } = useEmployeeEvaluation();
-    const evaluationId = 2580;
+
     const [evaluations, setEvaluations] = useState([]);
     const [singleEvaluation, setSingleEvaluation] = useState(null);
     const [tasks, setTasks] = useState([]);
@@ -69,7 +77,7 @@ const EvaluationAcknowledgeModal = ({
         if (!evaluations.length) return;
 
         const singleEv = evaluations.find(
-            (evaluation) => evaluation.user_id === evaluationId
+            (evaluation) => evaluation.user_id === developerId
         );
         setSingleEvaluation(singleEv || null);
         setEvaluationObject(singleEv || null);
@@ -80,7 +88,7 @@ const EvaluationAcknowledgeModal = ({
             setIsLoading(true);
             try {
                 const response = await axios.get(
-                    `/account/employee-evaluation-task/${evaluationId}`
+                    `/account/employee-evaluation-task/${developerId}`
                 );
                 setTasks(response.data.data);
             } catch (error) {
@@ -91,7 +99,7 @@ const EvaluationAcknowledgeModal = ({
         };
 
         fetchTasks();
-    }, [evaluationId]);
+    }, [developerId]);
 
     const [sorting, setSorting] = useState([]);
 
@@ -103,6 +111,120 @@ const EvaluationAcknowledgeModal = ({
     const onPageChange = (paginate) => {
         setPagination(paginate);
     };
+
+    const handleAcknowledgedIt = () => {
+        updatePendingAction({
+            id: pendingActionId,
+        });
+
+        toast.success("Acknowledge successfully!");
+        setAcknowledgement(false);
+        increaseCount();
+    };
+
+    const EvaluationTableColumns = [
+        // {
+        //     header: "#",
+        //     accessorKey: "id",
+        //     cell: ({ row }) => {
+        //         const data = row.original;
+
+        //         return <ColumnContent>{data?.id}</ColumnContent>;
+        //     },
+        // },
+        {
+            id: "task_name",
+            header: "Task Name",
+            accessorKey: "task_name",
+            cell: ({ row }) => {
+                const data = row.original;
+
+                return <div>{data?.task_name}</div>;
+            },
+        },
+        {
+            id: "assign_date",
+            header: "Assign Date",
+            accessorKey: "assign_date",
+            cell: ({ row }) => {
+                const data = row.original;
+                return <div>{data?.assign_date}</div>;
+            },
+        },
+        {
+            id: "submission_date",
+            header: "Submission Date",
+            accessorKey: "submission_date",
+            cell: ({ row }) => {
+                const data = row.original;
+                return <div>{data?.submission_date}</div>;
+            },
+        },
+        {
+            id: "completed_work",
+            header: "Completed Work Link",
+            accessorKey: "completed_work",
+            cell: ({ row }) => {
+                const data = row.original;
+                if (data?.completed_work) {
+                    return JSON.parse(data.completed_work).map((data) => (
+                        <div>
+                            <a href={data}>{data}</a>
+                            <br />
+                        </div>
+                    ));
+                } else {
+                    return "--";
+                }
+            },
+        },
+        {
+            id: "total_hours",
+            header: "Total Hours Tracked",
+            accessorKey: "total_hours",
+            cell: ({ row }) => {
+                const data = row.original;
+                return (
+                    <div>
+                        {`${data?.total_hours || 0} hr ${
+                            data?.total_min || 0
+                        } min`}
+                    </div>
+                );
+            },
+        },
+
+        {
+            id: "revision_number",
+            header: "Revisions Needed",
+            accessorKey: "revision_number",
+            cell: ({ row }) => {
+                const data = row.original;
+
+                return (
+                    <div style={{ marginLeft: "30%" }}>
+                        {data?.revision_number}
+                    </div>
+                );
+            },
+        },
+
+        {
+            header: "Ratings",
+            accessorKey: "action",
+
+            cell: ({ row }) => {
+                const data = row.original;
+
+                return (
+                    <ActionDropdown
+                        data={data}
+                        singleEvaluation={singleEvaluation}
+                    />
+                );
+            },
+        },
+    ];
 
     return (
         <ReactModal
@@ -236,7 +358,7 @@ const EvaluationAcknowledgeModal = ({
                 </Button>
 
                 <Button
-                    // onClick={handleLeadDevFinalSubmission}
+                    onClick={handleAcknowledgedIt}
                     size="md"
                     className="ml-2"
                 >
