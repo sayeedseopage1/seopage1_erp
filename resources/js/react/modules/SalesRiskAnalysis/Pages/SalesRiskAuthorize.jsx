@@ -111,6 +111,8 @@ const SalesRiskAuthorize = () => {
             const res = await saleRiskAnalysisActionHandler(payload);
             if (res?.data) {
                 // show success message
+                handleCloseSaleRiskActionModal()
+                setStatusActionData({})
                 if (statusActionData.status === "1") {
                     toast.success("Sale Risk Analysis Authorized Successfully");
                 } else {
@@ -141,7 +143,6 @@ const SalesRiskAuthorize = () => {
     const handleOpenSaleRiskActionModal = () => {
         setSaleRiskActionModalOpen(true);
     };
-
     const handleCloseSaleRiskActionModal = () => {
         setSaleRiskActionModalOpen(false);
     };
