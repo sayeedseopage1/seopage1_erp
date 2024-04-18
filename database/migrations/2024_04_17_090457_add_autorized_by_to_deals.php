@@ -15,6 +15,7 @@ return new class extends Migration
     {
         Schema::table('deals', function (Blueprint $table) {
             $table->bigInteger('authorize_by')->nullable()->after('authorization_status');
+            $table->dateTime('authorize_on')->nullable()->after('authorize_by');
         });
     }
 
