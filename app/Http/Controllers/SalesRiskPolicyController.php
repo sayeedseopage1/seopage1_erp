@@ -720,9 +720,6 @@ class SalesRiskPolicyController extends AccountBaseController
                 return response()->json(['status' => 'error', 'message' => $calculation['error']], 500);
             }
 
-            // store policy histroy
-            self::policyHistoryStore($dealId);
-
             // deals table status change
             if ($calculation['points'] >= 0) {
                 $dealStage = DealStage::where('lead_id', $deal->lead_id)->first();
@@ -731,6 +728,7 @@ class SalesRiskPolicyController extends AccountBaseController
                 $dealStage->save();
 
                 $deal->status = 'auto-accepted';
+                $deal->authorize_on = date('Y-m-d h:i:s');
             } else {
                 $deal->status = 'analysis';
             }
@@ -1311,13 +1309,17 @@ class SalesRiskPolicyController extends AccountBaseController
                 endProjectBudget:
                 $points += (float) $pointValue;
                 $pointData['projectBudget']['points'] = $pointValue;
-                $pointData['projectBudget']['questionAnswer'][] = ['title' => 'What is the budget for this project?', 'value' => $deal->amount, 'parent_id' => null];
+                $pointData['projectBudget']['questionAnswer'][] = ['title' => 'What is the budget for this project?', 'value' => number_format($deal->amount,2), 'parent_id' => null];
                 $data ? $pointData['projectBudget']['questionAnswer'][] = $data : '';
             } else
                 $message[] = "Project Budget policy is not added.";
             // -------------------------------- end projectBudget -------------------------------------- //
 
-            return ['points' => $points, 'pointData' => $pointData, 'policyIdList' => $policyIdList, 'message' => $message];
+            $calculationData = ['points' => $points, 'pointData' => $pointData, 'policyIdList' => $policyIdList, 'message' => $message];
+            // store policy histroy
+            self::policyHistoryStore($deal->id, $calculationData);
+
+            return $calculationData;
         } catch (\Throwable $th) {
 
             // throw $th;
@@ -1325,9 +1327,9 @@ class SalesRiskPolicyController extends AccountBaseController
         }
     }
 
-    function policyHistoryStore($deal_id)
+    function policyHistoryStore($deal_id, $calculationData)
     {
-        $data = SalesRiskPolicy::where('parent_id', null)->get()
+        $data = SalesRiskPolicy::where('parent_id', null)->where('status','1')->get()
             ->map(function ($item) {
                 return [
                     'id' => $item->id,
@@ -1344,7 +1346,10 @@ class SalesRiskPolicyController extends AccountBaseController
             });
         PolicyPointHistory::updateOrCreate(
             ['deal_id' => $deal_id],
-            ['policy' => json_encode($data)]
+            [
+                'policy' => json_encode($data),
+                'point_report' => json_encode($calculationData)
+            ]
         );
     }
 
@@ -1390,7 +1395,7 @@ class SalesRiskPolicyController extends AccountBaseController
             // compact('deal', 'points', 'pointData', 'message', 'user', 'deadline')
             return response()->json(['status' => 'success', 'data' => array_merge($calculation, $data)]);
         } catch (\Throwable $th) {
-            throw $th;
+            // throw $th;
             return response()->json(['status' => 'error', 'message' => 'Internal error occured'], 500);
         }
     }
