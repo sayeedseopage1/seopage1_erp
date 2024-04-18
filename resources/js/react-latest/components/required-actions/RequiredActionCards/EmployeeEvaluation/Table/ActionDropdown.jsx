@@ -5,7 +5,7 @@ import ButtonStyles from "./ActionButton.module.css";
 import SingleEvaluationModal from "../modal/SingleEvaluationModal";
 import { useAuth } from "../../../../../../react/hooks/useAuth";
 
-const ActionDropdown = ({ data }) => {
+const ActionDropdown = ({ data, singleEvaluation }) => {
     const auth = useAuth();
     const [isSingleEvaluationModalOpen, setSingleEvaluationModalOpen] =
         useState(false);
@@ -53,6 +53,7 @@ const ActionDropdown = ({ data }) => {
             <SingleEvaluationModal
                 isSingleEvaluationModalOpen={isSingleEvaluationModalOpen}
                 toggleSingleEvaluationModal={toggleSingleEvaluationModal}
+                singleEvaluation={singleEvaluation}
                 data={data}
             />
         </React.Fragment>
