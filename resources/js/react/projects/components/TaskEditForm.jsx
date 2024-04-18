@@ -686,7 +686,7 @@ const TaskEditForm = ({ isOpen, close, row, table }) => {
         setSecondaryColors([...newColors]);
     };
 
-    // color schema
+    // color scheme
     const onChange = (e, setState) => {
         setState(e.target.value);
     };
@@ -1375,7 +1375,7 @@ const TaskEditForm = ({ isOpen, close, row, table }) => {
                                                 className={`f-14 text-dark-gray mb-2`}
                                                 data-label="true"
                                             >
-                                                Color Schema
+                                                Color Scheme
                                             </label>
                                             <React.Fragment>
                                                 {/* primary color */}

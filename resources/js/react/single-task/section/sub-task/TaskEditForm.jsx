@@ -1396,7 +1396,7 @@ const TaskEditForm = ({ task, singleTask: row, onSubmit, isLoading, onClose }) =
                             </div>
 
 
-                            {/* color schema */}
+                            {/* color scheme */}
                             <div className="col-12">
                                 <div className="form-group">
                                     <label
@@ -1404,7 +1404,7 @@ const TaskEditForm = ({ task, singleTask: row, onSubmit, isLoading, onClose }) =
                                         className={`f-14 text-dark-gray mb-2`}
                                         data-label="true"
                                     >
-                                        Color Schema
+                                        Color Scheme
                                     </label>
                                     <React.Fragment>
 

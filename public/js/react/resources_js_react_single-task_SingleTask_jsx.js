@@ -16003,7 +16003,7 @@ var TaskEditForm = function TaskEditForm(_ref2) {
                 htmlFor: "",
                 className: "f-14 text-dark-gray mb-2",
                 "data-label": "true",
-                children: "Color Schema"
+                children: "Color Scheme"
               }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_30__.jsxs)((react__WEBPACK_IMPORTED_MODULE_1___default().Fragment), {
                 children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_30__.jsx)("div", {
                   className: "mt-3 p-3",

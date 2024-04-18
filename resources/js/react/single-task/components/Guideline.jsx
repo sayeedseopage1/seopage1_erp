@@ -412,7 +412,7 @@ const Guideline = ({ text, task, type = "", editorContainerClass, workEnv, singl
                         </div>
                     }
                 </div>
-                {/* color schema */}
+                {/* color scheme */}
                 {
                     (primary_color || defaultSecondaryColors) && <div className="row">
                         <div className="col-12">

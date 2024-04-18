@@ -582,7 +582,7 @@ const TaskCreationForm = ({ handleRefresh, isOpen, close, onSuccess }) => {
         setSecondaryColors([...newColors]);
     };
 
-    // color schema
+    // color scheme
     const onChange = (e, setState) => {
         setState(e.target.value);
     };
@@ -1241,7 +1241,7 @@ const TaskCreationForm = ({ handleRefresh, isOpen, close, onSuccess }) => {
                                             </div>
                                         </div>
 
-                                        {/* color schema */}
+                                        {/* color scheme */}
                                         <div className="col-12">
                                             <div className="form-group">
                                                 <label
@@ -1249,7 +1249,7 @@ const TaskCreationForm = ({ handleRefresh, isOpen, close, onSuccess }) => {
                                                     className={`f-14 text-dark-gray mb-2`}
                                                     data-label="true"
                                                 >
-                                                    Color Schema
+                                                    Color Scheme
                                                 </label>
                                                 <React.Fragment>
                                                     {/* primary color */}
@@ -1525,7 +1525,7 @@ const TaskCreationForm = ({ handleRefresh, isOpen, close, onSuccess }) => {
 
                                             </div>
                                         </div>
-                                        {/* end color schema */}
+                                        {/* end color scheme */}
 
                                         {/* required file extension */}
                                         <div className="col-12 col-md-6">
