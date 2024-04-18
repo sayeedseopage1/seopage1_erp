@@ -368,7 +368,7 @@ const SalesRiskAuthorize = () => {
                 <SaleRiskAuthorizePolicesModal
                     open={isSaleRiskAuthorizeModalOpen}
                     closeModal={handleCloseAuthorizeModal}
-                    salesRiskAnalysisRules={metaInfo?.policyHistory}
+                    salesRiskAnalysisRules={metaInfo}
                     isLoading={isLoading}
                 />
             )}

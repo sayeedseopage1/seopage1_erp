@@ -28,11 +28,11 @@ const SaleRiskAuthorizePolicesModalTable = ({
     // Table State
     const [sorting, setSorting] = React.useState([]);
     const [expanded, setExpanded] = React.useState({});
-    const [data, setData] = React.useState(tableData || []);
+    const [data, setData] = React.useState(tableData.policyHistory || []);
     const [skipPageReset, setSkipPageReset] = React.useState(false);
 
     // sales risk analysis rules data
-    const _salesRiskAnalysis = React.useMemo(() => tableData, [tableData]);
+    const _salesRiskAnalysis = React.useMemo(() => tableData.policyHistory, [tableData.policyHistory]);
     React.useEffect(() => {
         if (_.size(_salesRiskAnalysis) === _.size(data)) {
             setSkipPageReset(true);
@@ -79,6 +79,10 @@ const SaleRiskAuthorizePolicesModalTable = ({
             handleSendPolicyType: () => {
                 return policyKeys;
             },
+            handlerSendActiveRuleOnThisRecord: () => {
+                const activeRule = tableData?.activeRule;
+                return activeRule;
+            }
         },
     });
 
@@ -158,7 +162,7 @@ const SaleRiskAuthorizePolicesModalTable = ({
 export default SaleRiskAuthorizePolicesModalTable;
 
 SaleRiskAuthorizePolicesModalTable.PropTypes = {
-    tableData: PropTypes.array,
+    tableData: PropTypes.object,
     tableColumns: PropTypes.array,
     tableName: PropTypes.string,
     isLoading: PropTypes.bool,

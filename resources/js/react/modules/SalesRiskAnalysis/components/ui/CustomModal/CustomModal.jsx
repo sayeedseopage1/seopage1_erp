@@ -20,7 +20,7 @@ const CustomModal = ({
             style={{
                 overlay: {
                     ...customStyles.overlay,
-                    zIndex: props.zIndex || 99999999999,
+                    zIndex: props.zIndex || 999,
                 },
                 content: {
                     ...customStyles.content,

@@ -45,7 +45,7 @@ export const SaleRiskAuthorizePolicesModalTableColumns = [
         accessorKey: "department_name",
         cell: ({ row }) => {
             const data = row?.original;
-            console.log(data)
+            console.log(data);
             return (
                 <div className="d-flex justify-content-center align-items-center">
                     <span
@@ -66,7 +66,7 @@ export const SaleRiskAuthorizePolicesModalTableColumns = [
         header: "Policy Key",
         accessorKey: "policy_key",
         cell: ({ row, table }) => {
-           const policyKeys = table?.options?.meta?.handleSendPolicyType();
+            const policyKeys = table?.options?.meta?.handleSendPolicyType();
             const data = row?.original;
             const policyKey = policyKeys?.data?.find(
                 (key) => key.name === data?.key
@@ -94,7 +94,7 @@ export const SaleRiskAuthorizePolicesModalTableColumns = [
         cell: ({ row, table }) => {
             const data = row?.original;
             const action = table?.options?.meta;
-
+            const activeRule = action?.handlerSendActiveRuleOnThisRecord();
             const validPolicyTypes = [
                 "lessThan",
                 "greaterThan",
@@ -102,9 +102,41 @@ export const SaleRiskAuthorizePolicesModalTableColumns = [
                 "range",
             ];
 
+            const getStatus = (id) => {
+                let statusData = {
+                    status: false,
+                    value: "",
+                    id: "",
+                };
+                const findActiveRule = Object.entries(activeRule).find(
+                    ([key, value]) => {
+                        if (key === id) {
+                            statusData = {
+                                status: true,
+                                value: value,
+                                id: id,
+                            };
+                        } else {
+                            statusData = {
+                                status: false,
+                                value: "",
+                                id: "",
+                            };
+                        }
+                    }
+                );
+
+                if(activeRule[id]){
+                    console.log("inside d")
+                }
+
+                return statusData;
+            };
+
             return (
                 <div className="d-flex justify-content-center align-items-center flex-column">
                     {data?.ruleList?.map((rule, index) => {
+                        console.log(getStatus);
                         return (
                             <Switch key={rule?.id}>
                                 <Switch.Case condition={rule?.type === "yesNo"}>
@@ -291,9 +323,7 @@ export const SaleRiskAuthorizePolicesModalTableColumns = [
                                     <SalesPointsContainer
                                         key={rule?.id}
                                         className="py-3"
-                                    >
-                                        
-                                    </SalesPointsContainer>
+                                    ></SalesPointsContainer>
                                 </Switch.Case>
                                 <Switch.Case
                                     condition={_.includes(
@@ -301,9 +331,7 @@ export const SaleRiskAuthorizePolicesModalTableColumns = [
                                         rule?.type
                                     )}
                                 >
-                                    <div className="d-flex py-3">
-                                       
-                                    </div>
+                                    <div className="d-flex py-3"></div>
                                     <ul>
                                         <li
                                             style={{

@@ -72,6 +72,6 @@ export default SaleRiskAuthorizePolicesModal;
 SaleRiskAuthorizePolicesModal.PropTypes = {
     open: PropTypes.bool,
     closeModal: PropTypes.func,
-    salesRiskAnalysisRules: PropTypes.array,
+    salesRiskAnalysisRules: PropTypes.object,
     isLoading: PropTypes.bool,
 };

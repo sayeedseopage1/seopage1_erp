@@ -72,6 +72,8 @@ const EditApplicableRulesModal = ({
             open={open}
             isCloseButtonShow
             width="700px"
+            height="75vh"
+            maxHeight="85vh"
         >
             {/* Modal Content */}
             <div className="d-flex flex-column">

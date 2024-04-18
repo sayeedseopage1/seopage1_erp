@@ -68,8 +68,8 @@ const EditPolicyModal = ({
             closeModal={closeModal}
             contentLabel="Add New Policy"
             width="700px"
-            height="550px"
-            maxHeight="550px"
+            height="70vh"
+            maxHeight="85vh"
             isCloseButtonShow={true}
         >
             <div className="d-flex flex-column">

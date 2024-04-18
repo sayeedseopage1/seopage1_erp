@@ -71,8 +71,8 @@ const AddNewPolicyModal = ({
             closeModal={closeModal}
             contentLabel="Add New Policy"
             width="700px"
-            height="550px"
-            maxHeight="550px"
+            height="70vh"
+            maxHeight="85vh"
             isCloseButtonShow={true}
         >
             {/* Modal Content */}
