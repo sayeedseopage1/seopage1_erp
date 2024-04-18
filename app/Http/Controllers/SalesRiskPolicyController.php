@@ -1476,6 +1476,7 @@ class SalesRiskPolicyController extends AccountBaseController
         }
 
         $deal->authorize_by = auth()->user()->id;
+        $deal->authorize_on = date('Y-m-d h:i:s');
         $deal->save();
         $dealStage->save();
 
