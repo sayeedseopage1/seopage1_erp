@@ -13,7 +13,14 @@ const ExpiredTimeModalForNewEmployee = ({
 
     useEffect(() => {
         const timer = setInterval(() => {
-            setTimeLeft((prevTime) => prevTime - 1);
+            setTimeLeft((prevTime) => {
+                if (prevTime >= 0) {
+                    return prevTime - 1;
+                } else {
+                    clearInterval(timer);
+                    return prevTime;
+                }
+            });
         }, 1000);
 
         return () => clearInterval(timer);
@@ -21,14 +28,23 @@ const ExpiredTimeModalForNewEmployee = ({
 
     useEffect(() => {
         const interval = setInterval(() => {
-            setToggleModal((prevToggle) => !prevToggle); // Toggle state every 15 minute
+            if (timeLeft > 0 && timeLeft < 3600000) {
+                setToggleModal((prevToggle) => !prevToggle);
+            } else {
+                return 0;
+            }
         }, 900000); // 15 minute in milliseconds
 
         return () => clearInterval(interval);
     }, []);
 
     useEffect(() => {
-        if (toggleModal && timeLeft <= 360000 && timerStatusForWarningModal) {
+        if (
+            toggleModal &&
+            timeLeft <= 3600000 &&
+            timeLeft > 0 &&
+            timerStatusForWarningModal
+        ) {
             setShowExpirationWarningModal(true);
         }
     }, [toggleModal]);
@@ -36,7 +52,7 @@ const ExpiredTimeModalForNewEmployee = ({
     const closeModal = () => {
         setShowExpirationWarningModal(false);
     };
-
+    // console.log("timeleft", timeLeft);
     const minutes = Math.floor(timeLeft / 60);
     const seconds = timeLeft % 60;
 
