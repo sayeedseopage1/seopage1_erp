@@ -126,8 +126,8 @@ const UploadFilesInLine = ({ onPreviousFileDelete, previous, files, setFiles, mo
         <div
           key={file.id}
           className={`sp1_sub-task-file-upload ${fileWrapperClass}`}
-          data-toggle="tooltip"
-          data-placement="bottom"
+        // data-toggle="tooltip"
+        // data-placement="bottom"
         // title={file?.name}
         >
 
@@ -136,8 +136,8 @@ const UploadFilesInLine = ({ onPreviousFileDelete, previous, files, setFiles, mo
               href={file?.file_url}
               download={true}
               className='file-download-preview d-flex align-items-center justify-content-center'
-              data-toggle="tooltip"
-              data-placement='top'
+              // data-toggle="tooltip"
+              // data-placement='top'
               title='Click to Download!'
             >
               {file?.icon === 'images' ?
@@ -182,8 +182,8 @@ const UploadFilesInLine = ({ onPreviousFileDelete, previous, files, setFiles, mo
         <div
           key={i}
           className={`sp1_sub-task-file-upload ${fileWrapperClass}`}
-          data-toggle="tooltip"
-          data-placement="bottom"
+          // data-toggle="tooltip"
+          // data-placement="bottom"
           title={file?.name}
         >
           {file?.type.startsWith('image/') ?

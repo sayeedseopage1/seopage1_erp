@@ -52,19 +52,21 @@ const FileExtensionMultiSelect = ({ fileExtension, setFileExtension, multiple, r
                         <i className="fa-solid fa-xmark" />
                     </button> */}
                 </Dropdown.Toggle>
-                <Dropdown.Menu className={`cnx_select_box_options ${style.multiSelectOptions}`}>
-                    <div className='cnx_select_box_search'>
-                        <SearchBox autoFocus={true} value={search} onChange={setSearch} className="cnx_select_box_search_input" />
-                    </div>
-                    {options()?.filter(f => f?.includes(search))?.map(option => (
-                        <Dropdown.Item key={`${option}-${Math.random()}`}
-                            onClick={() => onSelected(option)}
-                            className={`cnx_select_box_option ${multiple ? fileExtension?.includes(option) && 'active' : fileExtension === option ? 'active' : ''}`}> {option}
-                            {fileExtension?.includes(option) &&
-                                <i className="fa-solid fa-check" />}
-                        </Dropdown.Item>
-                    ))}
-                </Dropdown.Menu>
+                {
+                    !readOnly && <Dropdown.Menu className={`cnx_select_box_options ${style.multiSelectOptions}`}>
+                        <div className='cnx_select_box_search'>
+                            <SearchBox autoFocus={true} value={search} onChange={setSearch} className="cnx_select_box_search_input" />
+                        </div>
+                        {options()?.filter(f => f?.includes(search))?.map(option => (
+                            <Dropdown.Item key={`${option}-${Math.random()}`}
+                                onClick={() => onSelected(option)}
+                                className={`cnx_select_box_option ${multiple ? fileExtension?.includes(option) && 'active' : fileExtension === option ? 'active' : ''}`}> {option}
+                                {fileExtension?.includes(option) &&
+                                    <i className="fa-solid fa-check" />}
+                            </Dropdown.Item>
+                        ))}
+                    </Dropdown.Menu>
+                }
             </Dropdown>
         </React.Fragment>
     )

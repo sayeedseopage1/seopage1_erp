@@ -66,14 +66,20 @@ const TaskEditForm = ({ isOpen, close, row, table }) => {
     const [defaultImgOrVidForWork, setDefaultImgOrVidForWork] = useState(graphicWorkDetails?.graphic_task_files?.filter((item) => item?.file_type == 3))
 
 
-    if (graphicWorkDetails?.secondary_colors || graphicWorkDetails?.file_types_needed || graphicWorkDetails?.file_extensions) {
-        defaultSecondaryColors = JSON.parse(graphicWorkDetails?.secondary_colors)
-        defaultFileTypesNeeded = JSON.parse(graphicWorkDetails?.file_types_needed)
-        defaultFileExtension = JSON.parse(graphicWorkDetails?.file_extensions)
-        // defaultTextForDesign = graphicWorkDetails?.graphic_task_files?.filter((item) => item?.file_type == 1)
-        // defaultImageForDesigner = graphicWorkDetails?.graphic_task_files?.filter((item) => item?.file_type == 2)
-        // defaultImgOrVidForWork = graphicWorkDetails?.graphic_task_files?.filter((item) => item?.file_type == 3)
-        // setDefaultBrandGuidelineFiles(graphicWorkDetails?.graphic_task_files?.filter((item) => item?.file_type == 4))
+    if (
+        graphicWorkDetails?.secondary_colors ||
+        graphicWorkDetails?.file_types_needed ||
+        graphicWorkDetails?.file_extensions
+    ) {
+        if (graphicWorkDetails?.secondary_colors) {
+            defaultSecondaryColors = JSON.parse(graphicWorkDetails?.secondary_colors);
+        }
+        if (graphicWorkDetails?.file_types_needed) {
+            defaultFileTypesNeeded = JSON.parse(graphicWorkDetails?.file_types_needed);
+        }
+        if (graphicWorkDetails?.file_extensions) {
+            defaultFileExtension = JSON.parse(graphicWorkDetails?.file_extensions);
+        }
     }
 
     //state for graphic designer start
@@ -307,7 +313,7 @@ const TaskEditForm = ({ isOpen, close, row, table }) => {
                 errCount++;
             }
 
-            if (!fileExtension) {
+            if (_.isEmpty(fileExtension)) {
                 err.fileExtension = "File extension is required";
                 errCount++;
             }
@@ -335,7 +341,7 @@ const TaskEditForm = ({ isOpen, close, row, table }) => {
                 err.numOfVersions = "Number of versions is required";
                 errCount++;
             }
-            if (!fileTypesNeeded) {
+            if (_.isEmpty(fileTypesNeeded)) {
                 err.fileTypesNeeded = "File types is required";
                 errCount++;
             }
@@ -680,7 +686,7 @@ const TaskEditForm = ({ isOpen, close, row, table }) => {
         setSecondaryColors([...newColors]);
     };
 
-    // color schema
+    // color scheme
     const onChange = (e, setState) => {
         setState(e.target.value);
     };
@@ -1369,7 +1375,7 @@ const TaskEditForm = ({ isOpen, close, row, table }) => {
                                                 className={`f-14 text-dark-gray mb-2`}
                                                 data-label="true"
                                             >
-                                                Color Schema
+                                                Color Scheme
                                             </label>
                                             <React.Fragment>
                                                 {/* primary color */}

@@ -33,7 +33,7 @@ const TaskCategorySelectionBox = ({ selected, onSelect, taskId, isDesignerTask }
     return (
         <Combobox value={selected} disabled={isDesignerTask} onChange={onSelect}>
             <div className="form-group position-relative my-3">
-                <label className='f-14 text-dark-gray mb-1' htmlFor="">Task category<sup>*</sup></label>
+                <label className='f-14 text-dark-gray mb-1' htmlFor="">Task Category<sup>*</sup></label>
                 <Combobox.Button className="d-flex align-items-center w-100 sp1-selection-display-button">
                     <Combobox.Input
                         onChange={e => setQuery(e.target.value)}
