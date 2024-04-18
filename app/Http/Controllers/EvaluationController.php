@@ -608,5 +608,14 @@ class EvaluationController extends AccountBaseController
             }
         }
     }
+    public function getEmployeeUser($id)
+    {
+        $evaluationUser = EmployeeEvaluation::where('user_id',$id)->first();
+
+        return response()->json([
+            'data' => $evaluationUser,
+            'status' => 200
+        ]);
+    }
 
 }
