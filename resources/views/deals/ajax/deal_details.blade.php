@@ -759,7 +759,7 @@
                 <div class="col-md-4 text-center">
                     <div class="deal_item ">
                         <h3>Deal Status</h3><br>
-                        <input type="hidden" value="{{ $deal->id }}">
+                        <input type="hidden" value="{{ $salesDeal ? $salesDeal->id : null}}">
                         @if ($salesDeal->status == 'analysis')
                             @if (auth()->user()->role_id == 1)
                                 <div class="sp1_deal-stage-wrapper">
