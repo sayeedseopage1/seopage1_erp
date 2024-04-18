@@ -43,7 +43,7 @@
 @section('content')
     <!-- CONTENT WRAPPER START -->
     <div class="content-wrapper">
-        <button type="button" class="btn-primary rounded f-14 mt-5" data-toggle="modal" data-target="#addwebsitetypemodal">
+        <button type="button" class="btn-primary rounded f-14" data-toggle="modal" data-target="#addwebsitetypemodal">
             <i class="fa fa-plus mr-1"></i>Add Website Type
         </button>
         <div class="d-flex flex-column w-tables rounded mt-3 bg-white">

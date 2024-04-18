@@ -9,14 +9,14 @@
                 @csrf
                 <div class="modal-body">
                     <div class="form-group">
-                        <label class="f-14 text-dark-grey mb-12" data-label="true" for="theme_name">Theme Name
+                        <label class="f-14 text-dark-grey mb-12" data-label="true" for="theme_name">Chose Website Theme Name
                             <sup class="f-14 mr-1">*</sup>
                         </label>
-                        <input type="text" class="form-control height-35 f-14 search-website-theme" placeholder="Type website theme name" name="theme_name" id="theme_name" autocomplete="off" aria-invalid="true">
+                        <input type="text" class="form-control height-35 f-14 error" placeholder="Type website theme name" name="theme_name" id="theme_name" autocomplete="off" aria-invalid="true">
                         <label id="theme_nameError" class="text-danger" for="theme_name"></label>
                     </div>
                     <div class="form-group">
-                        <label class="f-14 text-dark-grey mb-12" data-label="true" for="theme_url">Theme URL
+                        <label class="f-14 text-dark-grey mb-12" data-label="true" for="theme_url">Chose Website Theme URL
                             <sup class="f-14 mr-1">*</sup>
                         </label>
                         <input type="url" class="form-control height-35 f-14 error" placeholder="Type website theme url" name="theme_url" id="theme_url" autocomplete="off" aria-invalid="true">
@@ -31,16 +31,7 @@
         </div>
     </div>
 </div>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-3-typeahead/4.0.2/bootstrap3-typeahead.min.js"></script>
 <script>
-    var path = "{{ route('check-website-theme') }}";
-    $('input.search-website-theme').typeahead({
-        source: function(theme_name, process){
-            return $.get(path, {theme_name: theme_name}, function(data){
-                return process(data)
-            })
-        }
-    });
     $('#add_theme_name').click(function(e){
         // alert('ok');
         e.preventDefault();

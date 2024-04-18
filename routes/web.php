@@ -1682,7 +1682,9 @@ Route::get('/check-website-type', [ProjectController::class, 'checkWebsiteType']
 //add project website theme
 Route::get('/projects/view-website-theme', [ProjectController::class, 'viewWebsiteTheme'])->name('project-view-website-theme');
 Route::post('/projects/add-website-theme', [ProjectController::class, 'storeWebsiteTheme'])->name('add-website-theme');
-Route::put('/projects/update-website-theme/{id}', [ProjectController::class, 'updateWebsiteTheme']);
+Route::get('/project/edit-website-theme', [ProjectController::class, 'editWebsiteTheme'])->name('edit-website-theme');
+Route::post('/projects/update-website-theme', [ProjectController::class, 'updateWebsiteTheme'])->name('update-website-theme');
+Route::get('/check-website-theme', [ProjectController::class, 'checkWebsiteTheme'])->name('check-website-theme');
 
 //add project website plugin
 Route::get('/projects/view-website-plugin', [ProjectController::class, 'viewWebsitePlugin'])->name('project-view-website-plugin');

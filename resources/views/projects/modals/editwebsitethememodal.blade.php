@@ -1,86 +1,73 @@
-<div class="modal fade" id="editwebsitethememodal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog d-flex justify-content-center align-items-center modal-lg">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="modelHeading">Edit Website Theme</h5>
-                <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
+@php
+    $websiteTheme = App\Models\ProjectWebsiteTheme::find($id);
+@endphp
+<div class="modal-header">
+    <h5 class="modal-title" id="modelHeading">Edit Website Theme</h5>
+    <button type="button"  class="close" data-dismiss="modal" aria-label="Close"><span
+            aria-hidden="true">×</span></button>
+</div>
+<div class="modal-body">
+    <form action="">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="form-group">
+                    <label for="current_deadline">Theme Name</label>
+                    <input type="text" class="form-control height-35 f-14" placeholder="Enter a theme name" name="theme_name" id="theme_name2" value="{{$websiteTheme->theme_name}}">
+                    <span id="theme_name_error" class="text-danger"></span>
+                </div>
             </div>
-            <form method="post"  autocomplete="off">
-                @csrf
-                @method('PUT')
-                <input type="hidden" id="id">
-                <div class="modal-body">
-                    <div class="row border-top-grey">
-                        <div class="col-sm-12">
-                            <div class="form-group my-3">
-                                <label class="f-14 text-dark-grey mb-12" data-label="true" for="category_name">Chose Website Theme Name</label>
-                                <input type="text" class="form-control height-35 f-14" placeholder="Enter a theme name" name="theme_name2" id="theme_name2">
-                            </div>
-                        </div>
-                        <div class="col-sm-12">
-                            <div class="form-group my-3">
-                                <label class="f-14 text-dark-grey mb-12" data-label="true" for="category_name">Chose Website Theme URL</label>
-                                <input type="url" class="form-control height-35 f-14" placeholder="Enter a theme url" name="theme_url2" id="theme_url2">
-                            </div>
-                        </div>
-                    </div>
+            <div class="col-md-12">
+                <div class="form-group">
+                    <label for="current_deadline">Theme Url</label>
+                    <input type="text" class="form-control height-35 f-14" placeholder="Enter a theme url" name="theme_url" id="theme_url2" value="{{$websiteTheme->theme_url}}">
+                    <span id="theme_url_error" class="text-danger"></span>
                 </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary" id="update_website_theme">Submit</button>
-                </div>
-            </form>
+            </div>
         </div>
-    </div>
+        <button type="button" class="btn btn-primary mt-3" id="update_website_theme">Submit</button>
+    </form>
+</div>
+<div class="modal-footer">
+    <x-forms.button-cancel data-dismiss="modal" class="border-0 mr-3">@lang('app.close')</x-forms.button-cancel>
 </div>
 <script>
-    $(document).on('click', '.update_website_theme_form', function() {
-        let id = $(this).data('id');
-        let theme_name = $(this).data('name');
-        let theme_url = $(this).data('url');
-
-        $('#id').val(id);
-        $('#theme_name2').val(theme_name);
-        $('#theme_url2').val(theme_url);
-    });
-
-    $(document).on('click', '#update_website_theme', function(e) {
+    $('#update_website_theme').click(function(e){
         e.preventDefault();
         $('#update_website_theme').attr("disabled", true);
         $('#update_website_theme').html("Processing...");
-        let id = $('#id').val();
-        let theme_name = $('#theme_name2').val();
-        let theme_url = $('#theme_url2').val();
-
+        var data= {
+            '_token': "{{ csrf_token() }}",
+            'theme_name': document.getElementById("theme_name2").value,
+            'theme_url': document.getElementById("theme_url2").value,
+            'id': {{$websiteTheme->id}},
+        }
         $.ajaxSetup({
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             }
         });
-
         $.ajax({
-            url: '/projects/update-website-theme/'+id,
-            method: 'put',
-            data: {
-                id: id,
-                theme_name: theme_name,
-                theme_url: theme_url,
+            type: "POST",
+            url: "{{route('update-website-theme')}}",
+            data: data,
+            dataType: "json",
+            success: function (response) {
+                toastr.success('Submit Successfully');
+                window.location.reload();
+                $('#update_website_theme').attr("disabled", false);
+                $('#update_website_theme').html("Submit");
             },
-            success: function(res) {
-                if (res.status == 200) {
-                    $('#update_website_theme').attr("disabled", false);
-                    $('#update_website_theme').html("Submit");
-                    window.location.reload();
-                    Swal.fire({
-                        position: 'top-end',
-                        icon: 'success',
-                        title: 'Website Theme Update Successfully',
-                        showConfirmButton: false,
-                        timer: 1500
-                    })
+            error: function(error) {
+                if(error.responseJSON.errors.theme_name){
+                    $('#theme_name_error').text(error.responseJSON.errors.theme_name);
+                }else{
+                    $('#theme_name_error').text('');
                 }
-            },
-            error: function(err) {
+                if(error.responseJSON.errors.theme_url){
+                    $('#theme_url_error').text(error.responseJSON.errors.theme_url);
+                }else{
+                    $('#theme_url_error').text('');
+                }
                 $('#update_website_theme').attr("disabled", false);
                 $('#update_website_theme').html("Submit");
             }

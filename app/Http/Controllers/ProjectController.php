@@ -58,6 +58,7 @@ use App\Http\Requests\Project\StoreProject;
 use App\DataTables\ArchiveProjectsDataTable;
 use App\DataTables\ArchiveTasksDataTable;
 use App\DataTables\ProjectCmsDataTable;
+use App\DataTables\WebsiteThemeDataTable;
 use App\DataTables\WebsiteTypeDataTable;
 use App\Http\Requests\Project\UpdateProject;
 use Maatwebsite\Excel\Imports\HeadingRowFormatter;
@@ -4035,20 +4036,25 @@ class ProjectController extends AccountBaseController
         return response()->json(['status' => 200]);
     }
     // VIEW PROJECT WEBSITE THEME SECTION
-    public function viewWebsiteTheme()
+    public function viewWebsiteTheme(WebsiteThemeDataTable $dataTable)
     {
         $this->pageTitle = 'Website Theme';
-        $this->website_themes = DB::table('project_website_themes')->orderBy('id', 'desc')->paginate(10);
-        return view('projects.website-theme.index', $this->data);
+        return $dataTable->render('projects.website-theme.index', $this->data);
+    }
+    public function checkWebsiteTheme(Request $request)
+    {
+        $data = ProjectWebsiteTheme::where('theme_name', 'LIKE', "%{$request->theme_name}%")->pluck('theme_name');
+        return response()->json($data);
     }
     public function storeWebsiteTheme(Request $request)
     {
         $validated = $request->validate([
-            'theme_name' => 'required',
+            'theme_name' => 'required|unique:project_website_themes',
             'theme_url' => 'required|url',
         ], [
             'theme_name.required' => 'This field is required!!',
             'theme_url.required' => 'This field is required!!',
+            'theme_name.unique' => 'The theme name must be unique!',
         ]);
         $project_website_theme = new ProjectWebsiteTheme();
         $project_website_theme->theme_name = $request->theme_name;
@@ -4056,9 +4062,14 @@ class ProjectController extends AccountBaseController
         $project_website_theme->save();
         return response()->json(['status' => 200]);
     }
-    public function updateWebsiteTheme(Request $request, $id)
+    public function editWebsiteTheme(Request $request)
     {
-        $project_website_theme = ProjectWebsiteTheme::find($id);
+        $this->id = $request->id;
+        return view('projects.modals.editwebsitethememodal', $this->data);
+    }
+    public function updateWebsiteTheme(Request $request)
+    {
+        $project_website_theme = ProjectWebsiteTheme::find($request->id);
         $project_website_theme->theme_name = $request->theme_name;
         $project_website_theme->theme_url = $request->theme_url;
         $project_website_theme->save();
