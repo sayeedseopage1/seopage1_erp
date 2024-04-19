@@ -25,17 +25,7 @@ const AddNewItemsModal = ({
     const { CriteriaConstList } = useCriteriaList()
     // get acticve factor fields from api 
 
-    useEffect(() => {
-        if ((newFactorData?.infiniteValueUp && !newFactorData?.infiniteValueDown)) {
-            setNewFactorData({ ...newFactorData, upper_limit: newFactorData?.lower_limit })
-        }
-    }, [newFactorData?.infiniteValueUp])
 
-    useEffect(() => {
-        if ((!newFactorData?.infiniteValueUp && newFactorData?.infiniteValueDown)) {
-            setNewFactorData({ ...newFactorData, lower_limit: newFactorData?.upper_limit })
-        }
-    }, [newFactorData?.infiniteValueDown])
 
     return (
         <CustomModal

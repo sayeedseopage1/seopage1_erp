@@ -131,7 +131,7 @@ const PointFactors = () => {
 
     // handle input change
     const handleChange = (e) => {
-        console.log(newFactorData)
+
         const { name, value } = e.target;
         if (newFactorData[name] === value) {
             // If yes, clear the value from the state
@@ -227,12 +227,12 @@ const PointFactors = () => {
             }
             console.log("inside handler 4")
             console.log(payload)
-            // const response = await createPmPointFactor(payload).unwrap();
-            // if (response?.status == 200) {
-            //     toast.success(response.message);
-            //     handleAddNewItemModal();
-            //     resetFormState();
-            // }
+            const response = await createPmPointFactor(payload).unwrap();
+            if (response?.status == 200) {
+                toast.success(response.message);
+                handleAddNewItemModal();
+                resetFormState();
+            }
         } catch (error) {
             toast.error("Failed to add new item");
         }
@@ -256,6 +256,25 @@ const PointFactors = () => {
             setNewFactorDataValidation(validation);
         }
     }, [newFactorData]);
+
+
+
+    useEffect(() => {
+        if (newFactorData?.infiniteValueDown) {
+            if (newFactorData?.lower_limit && !newFactorData?.infiniteValueUp && !newFactorData?.upper_limit) {
+                setNewFactorData(prev => ({ ...prev, lower_limit: newFactorData.lower_limit }));
+            }
+            if (newFactorData?.upper_limit && !newFactorData?.infiniteValueUp) {
+                setNewFactorData(prev => ({ ...prev, lower_limit: newFactorData.upper_limit }));
+            }
+        }
+        if (newFactorData?.infiniteValueUp && newFactorData?.lower_limit && !newFactorData?.infiniteValueDown) {
+            setNewFactorData(prev => ({ ...prev, upper_limit: newFactorData.lower_limit }));
+        }
+    }, [newFactorData?.infiniteValueUp, newFactorData?.infiniteValueDown, newFactorData?.lower_limit, newFactorData?.upper_limit]);
+
+
+
 
     return (
         <section>

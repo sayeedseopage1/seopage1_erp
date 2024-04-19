@@ -30,8 +30,6 @@ const EditFactorModal = ({
 
     const { title, project_type, lower_limit, upper_limit, lower_limit_condition, upper_limit_condition, limit_type, limit_unit, point_type, points, status, infiniteValueDown, infiniteValueUp } = editFactorData || {}
 
-    console.log("infiniteValueUp", infiniteValueUp)
-    console.log("infiniteValueDown", infiniteValueDown)
 
     useEffect(() => {
         if ((infiniteValueUp && !infiniteValueDown)) {
