@@ -2,20 +2,21 @@
 
 namespace App\Models;
 
-use App\Observers\ProjectObserver;
-use App\Traits\CustomFieldsTrait;
 use Carbon\Carbon;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
-use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\Relations\HasOne;
-use Illuminate\Database\Eloquent\SoftDeletes;
 use App\Models\Deal;
 use App\Models\User;
-use App\Models\ProjectCategory;
 use App\Models\ProjectStatus;
+use App\Models\ProjectCategory;
+use App\Traits\CustomFieldsTrait;
+use App\Observers\ProjectObserver;
+use App\Helper\ProjectManagerPointLogic;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use App\Models\ProjectDeliverablesClientDisagree;
+use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 /**
  * App\Models\Project
@@ -125,6 +126,33 @@ class Project extends BaseModel
 {
     use CustomFieldsTrait, HasFactory;
     use SoftDeletes;
+
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::updated(function ($project) {
+            if ($project->isDirty('status') && in_array($project->status, ['finished', 'partially finished'])) {
+                $projects = \App\Models\Project::with('times:id,project_id,total_minutes,total_hours')
+                ->select('projects.id')
+                ->selectRaw('SUM(project_deliverables.estimation_time) * 60 as total_estimate_minutes')
+                ->join('project_milestones', function($join) {
+                    $join->on('projects.id', '=', 'project_milestones.project_id')
+                        ->where('project_milestones.status', '=', 'complete');
+                })
+                ->join('project_deliverables', 'project_milestones.id', '=', 'project_deliverables.milestone_id')
+                ->groupBy('projects.id')
+                ->find($project->id);
+
+                $totalLoggedMinutes = array_reduce($projects->times->toArray(), function($carry, $item) {
+                    return $carry + intval($item['total_minutes']);
+                }, 0);
+
+                // Project Manager Point Distribution
+                if($percentage = round(($totalLoggedMinutes / $projects->total_estimate_minutes) * 100, 2)) ProjectManagerPointLogic::distribute(2, $project->id, $percentage);
+            }
+        });
+    }
 
     protected $dates = ['start_date', 'deadline'];
 
@@ -425,4 +453,6 @@ class Project extends BaseModel
             return false;
         }
     }
+
+    
 }
