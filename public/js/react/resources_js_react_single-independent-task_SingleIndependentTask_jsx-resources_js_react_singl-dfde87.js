@@ -14272,12 +14272,11 @@ var ExpiredTimeModalForNewEmployee = function ExpiredTimeModalForNewEmployee(_re
   var _useState = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false),
     _useState2 = _slicedToArray(_useState, 2),
     toggleModal = _useState2[0],
-    setToggleModal = _useState2[1]; // State to trigger re-render every minute
-
+    setToggleModal = _useState2[1];
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(function () {
     var timer = setInterval(function () {
       setTimeLeft(function (prevTime) {
-        if (prevTime >= 0) {
+        if (prevTime > 0) {
           return prevTime - 1;
         } else {
           clearInterval(timer);
@@ -14293,9 +14292,8 @@ var ExpiredTimeModalForNewEmployee = function ExpiredTimeModalForNewEmployee(_re
     var interval = setInterval(function () {
       setToggleModal(function (prevToggle) {
         return !prevToggle;
-      }); // Toggle state every minute
-    }, 900000); // 1 minute in milliseconds
-
+      });
+    }, 900000);
     return function () {
       return clearInterval(interval);
     };
@@ -14314,11 +14312,8 @@ var ExpiredTimeModalForNewEmployee = function ExpiredTimeModalForNewEmployee(_re
   var closeModal = function closeModal() {
     setShowExpirationWarningModal(false);
   };
-  // console.log("timeleft", timeLeft);
   var minutes = Math.floor(timeLeft / 60);
   var seconds = timeLeft % 60;
-
-  // console.log("timer status", timerStatusForWarningModal);
   return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)((react_modal__WEBPACK_IMPORTED_MODULE_1___default()), {
     isOpen: showExpirationWarningModal,
     onRequestClose: closeModal,
@@ -17770,7 +17765,7 @@ var TimerControl = function TimerControl(_ref) {
     _useState4 = _slicedToArray(_useState3, 2),
     timeLeft = _useState4[0],
     setTimeLeft = _useState4[1];
-  var _useState5 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false),
+  var _useState5 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(true),
     _useState6 = _slicedToArray(_useState5, 2),
     showExpirationWarningModal = _useState6[0],
     setShowExpirationWarningModal = _useState6[1];
@@ -17814,10 +17809,6 @@ var TimerControl = function TimerControl(_ref) {
       }
     }
   }, [expireDateForTrainer]);
-  // console.log("timeleft", timeLeft);
-  // console.log("expire date outside", expireDateForTrainer);
-  // console.log("set expired timer", expiredTimerForNewEmployee);
-  // check timer is already running
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(function () {
     if (taskRunning === "running") {
       var _task$ranningTimer2, _task$ranningTimer3;

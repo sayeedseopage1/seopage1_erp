@@ -28,7 +28,7 @@ const TimerControl = ({ task, timerStart, setTimerStart, auth }) => {
         useState(true);
     const [timeLeft, setTimeLeft] = useState(0);
     const [showExpirationWarningModal, setShowExpirationWarningModal] =
-        useState(false);
+        useState(true);
     const [expiredTimerForNewEmployee, setExpiredTimerForNewEmployee] =
         useState(false);
 
@@ -61,10 +61,7 @@ const TimerControl = ({ task, timerStart, setTimerStart, auth }) => {
             }
         }
     }, [expireDateForTrainer]);
-    // console.log("timeleft", timeLeft);
-    // console.log("expire date outside", expireDateForTrainer);
-    // console.log("set expired timer", expiredTimerForNewEmployee);
-    // check timer is already running
+
     useEffect(() => {
         if (taskRunning === "running") {
             let serverTime = task?.ranningTimer?.time;

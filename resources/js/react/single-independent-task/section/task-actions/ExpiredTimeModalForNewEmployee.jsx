@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-
 import ReactModal from "react-modal";
 
 const ExpiredTimeModalForNewEmployee = ({
@@ -9,12 +8,12 @@ const ExpiredTimeModalForNewEmployee = ({
     setTimeLeft,
     timerStatusForWarningModal,
 }) => {
-    const [toggleModal, setToggleModal] = useState(false); // State to trigger re-render every minute
+    const [toggleModal, setToggleModal] = useState(false);
 
     useEffect(() => {
         const timer = setInterval(() => {
             setTimeLeft((prevTime) => {
-                if (prevTime >= 0) {
+                if (prevTime > 0) {
                     return prevTime - 1;
                 } else {
                     clearInterval(timer);
@@ -28,8 +27,8 @@ const ExpiredTimeModalForNewEmployee = ({
 
     useEffect(() => {
         const interval = setInterval(() => {
-            setToggleModal((prevToggle) => !prevToggle); // Toggle state every minute
-        }, 900000); // 1 minute in milliseconds
+            setToggleModal((prevToggle) => !prevToggle);
+        }, 900000);
 
         return () => clearInterval(interval);
     }, []);
@@ -53,11 +52,10 @@ const ExpiredTimeModalForNewEmployee = ({
     const closeModal = () => {
         setShowExpirationWarningModal(false);
     };
-    // console.log("timeleft", timeLeft);
+
     const minutes = Math.floor(timeLeft / 60);
     const seconds = timeLeft % 60;
 
-    // console.log("timer status", timerStatusForWarningModal);
     return (
         <ReactModal
             isOpen={showExpirationWarningModal}
