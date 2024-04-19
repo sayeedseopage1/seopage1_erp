@@ -61,10 +61,7 @@ const ActionsButton = ({ data }) => {
                             {btn.button_name}
                         </button>
                     );
-                } else if (
-                    btn.button_type === "modal" &&
-                    data?.code === "EAFA"
-                ) {
+                } else if (btn.button_type === "modal") {
                     return (
                         <div>
                             {btn.button_name === "Acknowledge It" && (
