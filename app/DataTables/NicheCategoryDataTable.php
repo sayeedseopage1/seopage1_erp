@@ -73,8 +73,7 @@ class NicheCategoryDataTable extends BaseDataTable
     public function query(ProjectNiche $model)
     {
         $request = $this->request();
-        $model = $model->newQuery();
-        // $model = $model->newQuery()->orderBy('id', 'desc');
+        $model = $model->newQuery()->orderBy('id', 'desc');
 
 
         if ($request->startDate !== null && $request->endDate !== null) {
