@@ -15,12 +15,10 @@ return new class extends Migration
     {
         Schema::create('policy_question_values', function (Blueprint $table) {
             $table->id();
-            $table->bigInteger('question_id')->unsigned();
-            $table->text('value');
             $table->bigInteger('deal_id')->unsigned();
+            $table->text('values');
             $table->timestamps();
 
-            $table->foreign('question_id')->references('id')->on('sales_policy_questions')->onUpdate('no action')->onDelete('no action');
             $table->foreign('deal_id')->references('id')->on('deals')->onUpdate('no action')->onDelete('no action');
         });
     }

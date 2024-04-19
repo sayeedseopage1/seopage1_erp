@@ -9,5 +9,5 @@ class PolicyPointHistory extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['deal_id', 'policy', 'point_report'];
+    protected $fillable = ['deal_id', 'policy', 'points', 'point_report'];
 }

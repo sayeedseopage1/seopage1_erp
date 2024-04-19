@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Country;
+use App\Models\Currency;
 use App\Models\Deal;
 use App\Models\DealStage;
 use App\Models\Lead;
@@ -14,11 +15,13 @@ use App\Models\Team;
 use App\Models\User;
 use DateTime;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Request as FacadesRequest;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\Validator;
 
 class SalesRiskPolicyController extends AccountBaseController
@@ -35,6 +38,36 @@ class SalesRiskPolicyController extends AccountBaseController
             }
             abort_403(user()->permission('manage_company_setting') !== 'all');
         });
+
+        /* TODO: this code will be removed */
+        Schema::table('policy_question_values', function (Blueprint $table) {
+
+            if (Schema::hasColumn('policy_question_values', 'question_id')) {
+                $table->dropForeign(['question_id']);
+                $table->dropColumn('question_id');
+            }
+            if (Schema::hasColumn('policy_question_values', 'value')) {
+                $table->dropColumn('value');
+            }
+            if (!Schema::hasColumn('policy_question_values', 'values')) {
+                $table->text('values');
+            }
+        });
+
+        if (!Schema::hasColumn('deals', 'sales_analysis_status')) {
+            Schema::table('deals', function (Blueprint $table) {
+                $table->enum('sales_analysis_status', ['pending', 'analysis', 'authorized', 'auto-authorized', 'denied'])->default('pending')->after('authorization_status');
+                $table->bigInteger('sale_authorize_by')->nullable()->after('sales_analysis_status');
+                $table->dateTime('sale_authorize_on')->nullable()->after('sale_authorize_by');
+            });
+        }
+
+        if (!Schema::hasColumn('policy_point_histories', 'points')) {
+            Schema::table('policy_point_histories', function (Blueprint $table) {
+                $table->float('points', 8, 2)->after('policy')->comment('actual gained points after calculation');
+            });
+        }
+        /*  end */
     }
 
     public static function Routes()
@@ -636,7 +669,7 @@ class SalesRiskPolicyController extends AccountBaseController
         $req->session()->put('deal_id', $deal_id);
 
         $deal = Deal::find($deal_id);
-        if (in_array($deal->status, ['accepted', 'auto-accepted'])) {
+        if (in_array($deal->status, ['authorized', 'auto-authorized'])) {
             return redirect()->route('dealDetails', $deal_id);
         }
 
@@ -668,8 +701,15 @@ class SalesRiskPolicyController extends AccountBaseController
                     'questions' => self::questionListChild($item->id)
                 ];
             })->toArray();
+        $deal = Deal::find($req->session()->get('deal_id'));
+        $currency = Currency::find($deal->currency_id);
 
-        return response()->json(['status' => 'success', 'data' =>  array_values($data)]);
+        $data['currency'] = [$currency->currency_code, $currency->currency_name];
+
+        $question = SalesPolicyQuestion::where('key', 'milestone')->first();
+        $question = $question ? SalesPolicyQuestion::where('parent_id', $question->id)->first() : null;
+        $data['currency_question_id'] = $question ? $question->id : null;
+        return response()->json(['status' => 'success', 'data' =>  $data]);
     }
 
     function questionValueSave(Request $req)
@@ -688,31 +728,23 @@ class SalesRiskPolicyController extends AccountBaseController
         }
 
         $dealId = $req->session()->get('deal_id');
-
-        $deal = Deal::find($dealId);
-        if (!$deal) {
+        if (!$deal = Deal::find($dealId)) {
             return response()->json(['status' => 'error', 'message' => 'Deal is not valid.'], 500);
         }
 
-        if (PolicyQuestionValue::where('deal_id', $dealId)->count() > 0) {
+        if ($questionValues = PolicyQuestionValue::where('deal_id', $dealId)->first()) {
             return response()->json(['status' => 'error', 'message' => 'Deal question values are already added.'], 500);
         }
 
-        DB::beginTransaction();
         try {
-            foreach ($req->all() as $item) {
-                $item = (object) $item;
-                PolicyQuestionValue::create([
-                    'question_id' => $item->id,
-                    'value' => $item->value,
-                    'deal_id' => $dealId
-                ]);
-            }
 
-            DB::commit();
+            PolicyQuestionValue::create([
+                'deal_id' => $dealId,
+                'values' => json_encode($req->all()),
+            ]);
 
             // calculate point
-            $calculation = self::calculatePolicyPoint($dealId);
+            $calculation = self::calculatePolicyPoint($dealId, $questionValues);
 
             if ($calculation['points'] === null) {
                 // if error then delete previous records
@@ -724,11 +756,10 @@ class SalesRiskPolicyController extends AccountBaseController
             if ($calculation['points'] >= 0) {
                 $dealStage = DealStage::where('lead_id', $deal->lead_id)->first();
                 $dealStage->won_lost = 'Yes';
-                $dealStage->deal_status = 'accepted';
                 $dealStage->save();
 
-                $deal->status = 'auto-accepted';
-                $deal->authorize_on = date('Y-m-d h:i:s');
+                $deal->sales_analysis_status = 'auto-authorized';
+                $deal->sale_authorize_on = date('Y-m-d h:i:s');
             } else {
                 $deal->status = 'analysis';
             }
@@ -742,37 +773,40 @@ class SalesRiskPolicyController extends AccountBaseController
                 'data' => ['points' => $calculation['points']]
             ]);
         } catch (\Throwable $th) {
-            DB::rollBack();
+
             // if error then delete previous records
             PolicyQuestionValue::where('deal_id', $dealId)->delete();
 
-            // throw $th;
+            throw $th;
             return response()->json(['status' => 'error', 'message' => 'Data did not stored successfully.'], 500);
         }
     }
 
-    function calculatePolicyPoint($deal_id)
+    function calculatePolicyPoint($deal_id, $questionValues = null)
     {
         // $dealStage = DealStage::find($deal_id);
         // dd($dealStage);
-        $deal = Deal::find($deal_id);
-        if (!$deal) {
+
+        if (!$deal = Deal::find($deal_id)) {
             return ['points' => null, 'error' => 'Deal not found'];
         }
 
-        if (!PolicyQuestionValue::where('deal_id', $deal_id)->first()) {
-            return ['points' => null, 'error' => 'Policy question value not found'];
-        }
-
         // check point history exist
-        $pointHistory = PolicyPointHistory::where('deal_id', $deal_id)->first();
-        if ($pointHistory) {
+        if ($pointHistory = PolicyPointHistory::where('deal_id', $deal_id)->first()) {
             return json_decode($pointHistory->point_report, true);
         }
 
-        // dd($deal);
-        try {
+        if (!$questionValues) {
+            if (!$questionValues = PolicyQuestionValue::where('deal_id', $deal_id)->first()) {
+                return ['points' => null, 'error' => 'Policy question value not found'];
+            }
+        }
 
+        // format qustions values with index
+        $questionAns = [];
+        foreach (json_decode($questionValues->values) as $item) $questionAns[$item->id] = $item->value;
+
+        try {
             // get rules id and calculate point
             $pointData = [];
             $points = (float) 0;
@@ -783,14 +817,10 @@ class SalesRiskPolicyController extends AccountBaseController
             // calculate first question key value (hourlyRate)
 
             $policy = SalesRiskPolicy::where('key', 'hourlyRate')->first();
-            if (!$policy || $policy->status == '0') {
-                goto endHourlyRate;
-            }
+            if (!$policy || $policy->status == '0') goto endHourlyRate;
 
             $questions = SalesPolicyQuestion::where('key', 'hourlyRate')->orderBy('sequence')->get();
-            if (count($questions) < 1) {
-                goto endHourlyRate;
-            }
+            if (count($questions) < 1) goto endHourlyRate;
 
             $rules = SalesRiskPolicy::where('parent_id', $policy->id)->get();
 
@@ -802,16 +832,9 @@ class SalesRiskPolicyController extends AccountBaseController
                 $data['title'] = $item->title;
                 $data['parent_id'] = $item->parent_id;
 
-                $questionValue = PolicyQuestionValue::where([
-                    'question_id' => $item->id,
-                    'deal_id' => $deal_id
-                ])->first();
+                if (!isset($questionAns[$item->id])) continue;
 
-                // safety check
-                if ($questionValue)
-                    $value = $questionValue->value;
-                else
-                    continue;
+                $value = $questionAns[$item->id];
 
                 switch ($item->sequence) {
                     case '1': /* need homepage */
@@ -881,7 +904,6 @@ class SalesRiskPolicyController extends AccountBaseController
             $message[] = 'Hourly rate (' . $hourlyRate . ') not matched with any conditions';
             endHourlyRate:
 
-
             // --------------------- end hourly rate calculation ------------------ //
 
             // ---------------------- milestone calculation ------------------------------- //
@@ -899,14 +921,9 @@ class SalesRiskPolicyController extends AccountBaseController
 
             $data = [];
 
-            $questionValue = PolicyQuestionValue::where([
-                'question_id' => $questions[0]->id,
-                'deal_id' => $deal_id
-            ])->first();
-
             // safety check
-            if ($questionValue)
-                $value = $questionValue->value;
+            if (isset($questionAns[$questions[0]->id]))
+                $value = $questionAns[$questions[0]->id];
             else {
                 $message[] = 'All milestone questions values are not defined.';
                 goto endMilestone;
@@ -921,11 +938,14 @@ class SalesRiskPolicyController extends AccountBaseController
                 $data[] = ['id' => $questions[0]->id, 'title' =>  $questions[0]->title, 'value' => 'yes', 'parent_id' => $questions[0]->parent_id];
             } else {
 
-                // percentage calculation
-                $value = PolicyQuestionValue::where([
-                    'question_id' => $questions[1]->id,
-                    'deal_id' => $deal_id
-                ])->first()->value;
+                // ------------------- percentage calculation
+
+                if (isset($questionAns[$questions[1]->id]))
+                    $value = $questionAns[$questions[1]->id];
+                else {
+                    $message[] = 'Milestone total amount not found.';
+                    goto endMilestone;
+                }
 
                 $percentage = $value / $deal->actual_amount * 100;
                 $data[] = ['id' => $questions[1]->id, 'title' => $questions[1]->title, 'value' => $value . '(' . number_format($percentage, 2) . '%)', 'parent_id' => $questions[1]->parent_id];
@@ -975,6 +995,13 @@ class SalesRiskPolicyController extends AccountBaseController
                     'deal_id' => $deal_id
                 ])->first()->value;
 
+                if (isset($questionAns[$questions[2]->id]))
+                    $value = $questionAns[$questions[2]->id];
+                else {
+                    $message[] = 'Milestone selected list data not found.';
+                    goto endMilestone;
+                }
+
                 $list = json_decode($questions[2]->value);
 
                 foreach ($list as $item) {
@@ -1020,14 +1047,8 @@ class SalesRiskPolicyController extends AccountBaseController
 
             if (count($questions)) {
 
-                $questionValue = PolicyQuestionValue::where([
-                    'question_id' => $questions[0]->id,
-                    'deal_id' => $deal_id
-                ])->first();
-
-                // safety check
-                if ($questionValue)
-                    $value = $questionValue->value;
+                if (isset($questionAns[$questions[0]->id]))
+                    $value = $questionAns[$questions[0]->id];
                 else {
                     $message[] = 'Threat question value is not added.';
                     goto endThreat;
@@ -1049,21 +1070,14 @@ class SalesRiskPolicyController extends AccountBaseController
                 $pointData['threat']['questionAnswer'][] = ['id' => $questions[0]->id, 'title' => $questions[0]->title, 'value' => $value, 'parent_id' => $questions[0]->parent_id];
                 $pointData['threat']['points'] = $pointValue;
 
-                if ($questions[1]) {
-                    $questionValue = PolicyQuestionValue::where([
-                        'question_id' => $questions[1]->id,
-                        'deal_id' => $deal_id
-                    ])->first();
-
-                    // safety check
-                    if ($questionValue)
-                        $pointData['threat']['questionAnswer'][] = ['id' => $questions[1]->id, 'title' => $questions[1]->title, 'value' => $questionValue->value, 'parent_id' => $questions[1]->parent_id];
+                if ($questions[1] && isset($questionAns[$questions[1]->id])) {
+                    $pointData['threat']['questionAnswer'][] = ['id' => $questions[1]->id, 'title' => $questions[1]->title, 'value' => $questionAns[$questions[1]->id], 'parent_id' => $questions[1]->parent_id];
                 }
-
-                endThreat:
             } else {
                 $message[] = 'Threat question value is not added.';
             }
+
+            endThreat:
 
             // ---------------------- end threat calculation --------------------------------//
 
@@ -1075,14 +1089,8 @@ class SalesRiskPolicyController extends AccountBaseController
                 $data = [];
                 $policy = SalesRiskPolicy::where('parent_id', $questions[0]->policy_id)->orderBy('sequence')->get();
 
-                $questionValue = PolicyQuestionValue::where([
-                    'question_id' => $questions[0]->id,
-                    'deal_id' => $deal_id
-                ])->first();
-
-                // safety check
-                if ($questionValue)
-                    $value = $questionValue->value;
+                if (isset($questionAns[$questions[0]->id]))
+                    $value = $questionAns[$questions[0]->id];
                 else {
                     $message[] = 'Done By Else section question value is not added.';
                     goto endDoneByElse;
@@ -1094,29 +1102,30 @@ class SalesRiskPolicyController extends AccountBaseController
                     $policyIdList[$policy[0]->id] = 'no';
                     $data[] = ['id' => $questions[0]->id, 'title' => $questions[0]->title, 'value' => 'No', 'parent_id' => $questions[0]->parent_id];
                 } else {
-                    $value = PolicyQuestionValue::where([
-                        'question_id' => $questions[1]->id,
-                        'deal_id' => $deal_id
-                    ])->first()->value;
+
+                    if (isset($questionAns[$questions[1]->id])) $value = $questionAns[$questions[1]->id];
+                    else {
+                        $message[] = 'Done By Else 2nd section question value is not added.';
+                        goto endDoneByElse;
+                    }
 
                     if ($value == 'yes') {
                         $points += (float) json_decode($policy[1]->value)->yes->point;
                         $pointValue = json_decode($policy[1]->value)->yes->point;
-                        $data[] = ['id' => $questions[1]->id, 'title' => $questions[1]->title, 'value' => 'Yes', 'parent_id' => $questions[1]->parent_id];
                     } else {
                         $points += (float) json_decode($policy[1]->value)->no->point;
                         $pointValue = json_decode($policy[1]->value)->no->point;
-                        $data[] = ['id' => $questions[1]->id, 'title' => $questions[1]->title, 'value' => 'No', 'parent_id' => $questions[1]->parent_id];
                     }
+
+                    $data[] = ['id' => $questions[1]->id, 'title' => $questions[1]->title, 'value' => $value, 'parent_id' => $questions[1]->parent_id];
                     $policyIdList[$policy[1]->id] = $value;
                 }
 
                 $pointData['doneByElse']['points'] = $pointValue;
                 $pointData['doneByElse']['questionAnswer'] = $data;
+            } else $message[] = 'Done By Else section questions are not added.';
 
-                endDoneByElse:
-            } else
-                $message[] = 'All Done By Else section question are not added.';
+            endDoneByElse:
 
             // ----------------------------- end doneByElse ------------------------- //
 
@@ -1128,13 +1137,8 @@ class SalesRiskPolicyController extends AccountBaseController
 
                     $policy = SalesRiskPolicy::where('parent_id', $questions[0]->policy_id)->get();
 
-                    $questionValue = PolicyQuestionValue::where([
-                        'question_id' => $questions[0]->id,
-                        'deal_id' => $deal_id
-                    ])->first();
-
-                    if ($questionValue)
-                        $value = $questionValue->value;
+                    if (isset($questionAns[$questions[0]->id]))
+                        $value = $questionAns[$questions[0]->id];
                     else {
                         $message[] = "$item value is not added.";
                         continue;
@@ -1151,18 +1155,11 @@ class SalesRiskPolicyController extends AccountBaseController
 
                     $pointData[$item]['questionAnswer'][] = ['id' => $questions[0]->id, 'title' => $questions[0]->title, 'value' => $value, 'parent_id' => $questions[0]->parent_id];
 
-                    if (isset($questions[1])) {
-                        $questionValue = PolicyQuestionValue::where([
-                            'question_id' => $questions[1]->id,
-                            'deal_id' => $deal_id
-                        ])->first();
-
-                        if ($questionValue) {
-                            $pointData[$item]['questionAnswer'][] = ['id' => $questions[1]->id, 'title' => $questions[1]->title, 'value' => $questionValue->value, 'parent_id' => $questions[1]->parent_id];
-                        } else {
-                            $message[] = "$item value is not added.";
-                            continue;
-                        }
+                    if (isset($questions[1]) && isset($questionAns[$questions[1]->id]))
+                        $pointData[$item]['questionAnswer'][] = ['id' => $questions[1]->id, 'title' => $questions[1]->title, 'value' => $questionAns[$questions[1]->id], 'parent_id' => $questions[1]->parent_id];
+                    else {
+                        $message[] = "$item value is not added.";
+                        continue;
                     }
                 } else {
                     $message[] = "$item questions are not added.";
@@ -1314,19 +1311,19 @@ class SalesRiskPolicyController extends AccountBaseController
                 endProjectBudget:
                 $points += (float) $pointValue;
                 $pointData['projectBudget']['points'] = $pointValue;
-                $pointData['projectBudget']['questionAnswer'][] = ['title' => 'What is the budget for this project?', 'value' => number_format($deal->amount,2), 'parent_id' => null];
+                $pointData['projectBudget']['questionAnswer'][] = ['title' => 'What is the budget for this project?', 'value' => number_format($deal->amount, 2), 'parent_id' => null];
                 $data ? $pointData['projectBudget']['questionAnswer'][] = $data : '';
             } else
                 $message[] = "Project Budget policy is not added.";
             // -------------------------------- end projectBudget -------------------------------------- //
 
             $calculationData = ['points' => $points, 'pointData' => $pointData, 'policyIdList' => $policyIdList, 'message' => $message];
+
             // store policy histroy
             self::policyHistoryStore($deal->id, $calculationData);
 
             return $calculationData;
         } catch (\Throwable $th) {
-
             // throw $th;
             return ['points' => null, 'error' => $th->getMessage()];
         }
@@ -1334,7 +1331,7 @@ class SalesRiskPolicyController extends AccountBaseController
 
     function policyHistoryStore($deal_id, $calculationData)
     {
-        $data = SalesRiskPolicy::where('parent_id', null)->where('status','1')->get()
+        $data = SalesRiskPolicy::where('parent_id', null)->where('status', '1')->get()
             ->map(function ($item) {
                 return [
                     'id' => $item->id,
@@ -1354,6 +1351,7 @@ class SalesRiskPolicyController extends AccountBaseController
             ['deal_id' => $deal_id],
             [
                 'policy' => json_encode($data),
+                'points' => $calculationData['points'],
                 'point_report' => json_encode($calculationData)
             ]
         );
@@ -1375,7 +1373,7 @@ class SalesRiskPolicyController extends AccountBaseController
         try {
             $data['deal'] = $deal =  Deal::find($deal_id);
             $data['user'] = User::whereId($deal->added_by)->first(['id', 'name']);
-            $data['authorizeBy'] = $deal->authorize_by ? User::whereId($deal->authorize_by)->first(['id', 'name']) : null;
+            $data['authorizeBy'] = $deal->sale_authorize_by ? User::whereId($deal->sale_authorize_by)->first(['id', 'name']) : null;
             $data['policyHistory'] = PolicyPointHistory::where('deal_id', $deal->id)->first();
             $data['policyHistory'] = $data['policyHistory'] ? json_decode($data['policyHistory']->policy) : null;
 
@@ -1409,7 +1407,7 @@ class SalesRiskPolicyController extends AccountBaseController
     function salesRiskReportList(Request $req)
     {
         if (url()->current() == route('account.sale-risk-policies.report-data')) {
-            $itemsPaginated = Deal::whereIn('status', ['analysis', 'accepted', 'auto-accepted', 'denied'])
+            $itemsPaginated = Deal::whereIn('sales_analysis_status', ['analysis', 'authorized', 'auto-authorized', 'denied'])
                 ->where(function ($query) use ($req) {
                     if ($req->start_date) {
                         $query->whereDate('created_at', '>=', $req->start_date);
@@ -1426,7 +1424,7 @@ class SalesRiskPolicyController extends AccountBaseController
                 ->map(function ($item) {
 
                     $lead = Lead::find($item->lead_id);
-                    $user = $item->authorize_by ?  User::find($item->authorize_by): null;
+                    $user = $item->authorize_by ?  User::find($item->authorize_by) : null;
                     return [
                         'client_id' => $item->client_id,
                         'client_name' => $item->client_name,
@@ -1438,10 +1436,10 @@ class SalesRiskPolicyController extends AccountBaseController
                         'lead_id' => $item->lead_id,
                         'country' => $lead ? $lead->country : '',
                         'award_time' => $item->award_time,
-                        'authorize_by_id' => $item->authorize_by,
-                        'authorize_on' => $item->authorize_on,
-                        'authorize_by_name' => $item->authorize_by ? $user->name : null,
-                        'authorize_by_photo' => $item->authorize_by ? $user->image : null,
+                        'authorize_by_id' => $item->sale_authorize_by,
+                        'authorize_on' => $item->sale_authorize_on,
+                        'authorize_by_name' => $item->sale_authorize_by ? $user->name : null,
+                        'authorize_by_photo' => $item->sale_authorize_by ? $user->image : null,
                         'points' => self::calculatePolicyPoint($item->id)['points']
                     ];
                 })->toArray();
@@ -1480,15 +1478,13 @@ class SalesRiskPolicyController extends AccountBaseController
         $dealStage = DealStage::where('lead_id', $deal->lead_id)->first();
         if ($status == '1') {
             $dealStage->won_lost = 'Yes';
-            $dealStage->deal_status = 'accepted';
-            $deal->status = 'accepted';
+            $deal->sales_analysis_status = 'authorized';
         } elseif ($status == '0') {
-            $dealStage->deal_status = 'denied';
-            $deal->status = 'denied';
+            $deal->sales_analysis_status = 'denied';
         }
 
-        $deal->authorize_by = auth()->user()->id;
-        $deal->authorize_on = date('Y-m-d h:i:s');
+        $deal->sale_authorize_by = auth()->user()->id;
+        $deal->sale_authorize_on = date('Y-m-d h:i:s');
         $deal->save();
         $dealStage->save();
 
