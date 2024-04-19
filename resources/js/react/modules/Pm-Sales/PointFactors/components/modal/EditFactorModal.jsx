@@ -43,15 +43,6 @@ const EditFactorModal = ({
         }
     }, [infiniteValueDown])
 
-    // console.log("lower limit disable", !infiniteValueUp && infiniteValueDown)
-    // console.log("upper limit disable", infiniteValueUp && !infiniteValueDown)
-
-    // console.log("lower_limit_condition", lower_limit_condition)
-    // console.log("upper_limit_condition", upper_limit_condition)
-
-    // const lowerLimitConditionVal = editFactorData?.infiniteValueDown ? editFactorData?.infiniteValueDown : editFactorData?.limit_type == 2 ? "==" : "<"
-    // const upperLimitConditionVal = editFactorData?.infiniteValueUp ? editFactorData?.infiniteValueUp : editFactorData?.limit_type == 2 ? "==" : ">="
-
     return (
         <CustomModal
             open={open}

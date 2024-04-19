@@ -255,6 +255,22 @@ const PointFactorsTable = ({
         }
     }, [editFactorData]);
 
+
+
+    useEffect(() => {
+        if (editFactorData?.infiniteValueDown) {
+            if (editFactorData?.lower_limit && !editFactorData?.infiniteValueUp && !editFactorData?.upper_limit) {
+                setEditFactorData(prev => ({ ...prev, lower_limit: editFactorData.lower_limit }));
+            }
+            if (editFactorData?.upper_limit && !editFactorData?.infiniteValueUp) {
+                setEditFactorData(prev => ({ ...prev, lower_limit: editFactorData.upper_limit }));
+            }
+        }
+        if (editFactorData?.infiniteValueUp && editFactorData?.lower_limit && !editFactorData?.infiniteValueDown) {
+            setEditFactorData(prev => ({ ...prev, upper_limit: editFactorData.lower_limit }));
+        }
+    }, [editFactorData?.infiniteValueUp, editFactorData?.infiniteValueDown, editFactorData?.lower_limit, editFactorData?.upper_limit]);
+
     return (
         <React.Fragment>
             <div
