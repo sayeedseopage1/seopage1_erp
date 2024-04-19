@@ -117,7 +117,7 @@ const EvaluationAcknowledgeModal = ({
             id: pendingActionId,
         });
 
-        toast.success("Acknowledge successfully!");
+        toast.success("Acknowledge successful!");
         setAcknowledgement(false);
         increaseCount();
     };
