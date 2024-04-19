@@ -4121,7 +4121,11 @@ class ProjectController extends AccountBaseController
         $this->pageTitle = 'Categories';
         return $dataTable->render('projects.category.index', $this->data);
     }
-    
+    public function checkCategory(Request $request)
+    {
+        $data = ProjectNiche::where('category_name', 'LIKE', "%{$request->category_name}%")->pluck('category_name');
+        return response()->json($data);
+    }    
     public function editCategory(Request $request)
     {
         $this->id = $request->id;
@@ -5391,9 +5395,10 @@ public function updatePmBasicSEO(Request $request){
     {
         //        dd($request->all());
         $request->validate([
-            'category_name' => 'required',
+            'category_name' => 'required|unique:project_niches',
         ], [
             'category_name.required' => 'Please enter the category name!',
+            'category_name.unique' => 'The category name must be unique!',
         ]);
         $category = new ProjectNiche();
         $category->category_name = $request->category_name;
@@ -5406,9 +5411,9 @@ public function updatePmBasicSEO(Request $request){
             'message' => 'Category Added Successfully',
         ]);
     }
-    public function updateCategory(Request $request, $id)
+    public function updateCategory(Request $request)
     {
-        $update_category = ProjectNiche::find($id);
+        $update_category = ProjectNiche::find($request->id);
         $update_category->category_name = $request->category_name;
         $update_category->parent_category_id = $request->parent_category_id;
         $update_category->save();

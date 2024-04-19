@@ -1664,7 +1664,8 @@ Route::get('/project-deadline-ext-view', [ProjectController::class, 'pDExtension
 Route::get('/projects/view-category', [ProjectController::class, 'viewCategory'])->name('project-view-category');
 Route::get('/projects/get-sub-category/{id}', [ProjectController::class, 'parentCategoryId']);
 Route::get('/project/edit/category', [ProjectController::class, 'editCategory'])->name('edit-niche-category');
-Route::put('/projects/update-niche-category/{id}', [ProjectController::class, 'updateCategory']);
+Route::post('/projects/update-niche-category', [ProjectController::class, 'updateCategory'])->name('update-niche-category');
+Route::get('/check-niche-category', [ProjectController::class, 'checkCategory'])->name('check-niche-category');
 
 //add project cms
 Route::get('/projects/view-cms', [ProjectController::class, 'viewCms'])->name('project-view-cms');

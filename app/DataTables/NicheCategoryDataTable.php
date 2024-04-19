@@ -45,7 +45,11 @@ class NicheCategoryDataTable extends BaseDataTable
                 return $action;
             })
             ->addColumn('category_name', function ($row) {
-                return $row->category_name;
+                if($row->parent_category_id){
+                    return $row->category_name . '<span style="font-size: 10px;"><i class="fa fa-long-arrow-alt-left mx-1" style="color: #28313c; font-size: 10px;"></i>'.$row->parent->category_name.'</span>';
+                }else{
+                    return $row->category_name;
+                }
             })
             ->addColumn('parent_category_id', function ($row) {
                 if($row->parent_category_id != null){
