@@ -14305,7 +14305,7 @@ var ExpiredTimeModalForNewEmployee = function ExpiredTimeModalForNewEmployee(_re
   // console.log("timer status for warning", timerStatusForWarningModal);
 
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(function () {
-    if (toggleModal && timeLeft <= 3600000 && timeLeft > 0 && timerStatusForWarningModal) {
+    if (toggleModal && timeLeft <= 3600 && timeLeft > 0 && timerStatusForWarningModal) {
       setShowExpirationWarningModal(true);
     }
   }, [toggleModal]);
