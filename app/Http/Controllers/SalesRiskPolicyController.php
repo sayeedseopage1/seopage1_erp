@@ -764,6 +764,12 @@ class SalesRiskPolicyController extends AccountBaseController
             return ['points' => null, 'error' => 'Policy question value not found'];
         }
 
+        // check point history exist
+        $pointHistory = PolicyPointHistory::where('deal_id', $deal_id)->first();
+        if ($pointHistory) {
+            return json_decode($pointHistory->point_report, true);
+        }
+
         // dd($deal);
         try {
 
