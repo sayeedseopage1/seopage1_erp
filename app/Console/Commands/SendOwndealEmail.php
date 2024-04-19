@@ -32,7 +32,7 @@ class SendOwndealEmail extends Command
      */
     public function handle()
     {
-        $deals = Deal::where('authorization_status', 2)->get()->pluck('id');
+        $deals = Deal::where('authorization_status', 1)->whereNull('email_send_status')->get()->pluck('id');
         dd($deals);
         foreach($deals as $deal){
             $user = User::where('id', $deal->pm_id)->first();
