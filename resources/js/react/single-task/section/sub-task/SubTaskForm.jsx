@@ -789,26 +789,14 @@ const SubTaskForm = ({ close, isDesignerTask }) => {
                                 </div>
 
                                 <div className="col-12 col-md-6">
-                                    <div className={`form-group my-3 w-100`}>
-                                        <label
-                                            htmlFor={'fileTypesNeeded'}
-                                            className={`f-14 text-dark-gray mb-1`}
-                                            data-label="true"
-                                        >
-                                            File Types Needed
-                                            <sup className='f-14 mr-1'>*</sup>
-                                        </label>
-                                        <div>
-                                            <FileTypesNeeded
-                                                className={`form-control height-35 w-100 f-14`}
-                                                id='fileTypesNeeded'
-                                                fileTypesNeeded={fileTypesNeeded}
-                                                setFileTypesNeeded={setFileTypesNeeded}
-                                                multiple
-                                                readOnly={true}
-                                            />
-                                        </div>
-                                    </div>
+                                    <Input
+                                        id="fileTypesNeeded"
+                                        label="File Types Needed"
+                                        type="text"
+                                        name="fileTypesNeeded"
+                                        value={fileTypesNeeded?.join(", ")}
+                                        readOnly={true}
+                                    />
                                 </div>
 
                                 <div className="col-12 col-md-6">
@@ -1065,7 +1053,7 @@ const SubTaskForm = ({ close, isDesignerTask }) => {
                                         <ColorItem color={primaryColor} desc={primaryColorDescription} />
                                     </div>
                                     {
-                                        (defaultSecondaryColors[0].color || defaultSecondaryColors[0].description) &&
+                                        defaultSecondaryColors && (defaultSecondaryColors[0].color || defaultSecondaryColors[0].description) &&
                                         <div className='col-12 col-md-6 px-0'>
                                             <p className='font-weight-bold mr-2 mb-2'>
                                                 {
@@ -1088,26 +1076,14 @@ const SubTaskForm = ({ close, isDesignerTask }) => {
                         {/* end color schema */}
 
                         <div className="col-12 col-md-6">
-                            <div className={`form-group my-3 w-100`}>
-                                <label
-                                    htmlFor={'fileExtension'}
-                                    className={`f-14 text-dark-gray mb-1`}
-                                    data-label="true"
-                                >
-                                    Required File Extension
-                                    <sup className='f-14 mr-1'>*</sup>
-                                </label>
-                                <div>
-                                    <FileExtensionMultiSelect
-                                        className={`form-control height-35 w-100 f-14`}
-                                        id='fileExtension'
-                                        fileExtension={fileExtension}
-                                        setFileExtension={setFileExtension}
-                                        multiple
-                                        readOnly={true}
-                                    />
-                                </div>
-                            </div>
+                            <Input
+                                id="fileExtension"
+                                label="Required File Extension"
+                                type="url"
+                                name="fileExtension"
+                                value={fileExtension?.join(", ")}
+                                readOnly={true}
+                            />
                         </div>
                     </>
                 }

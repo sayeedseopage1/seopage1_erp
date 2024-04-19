@@ -48,6 +48,7 @@ const FileExtensionMultiSelect = ({ fileExtension, setFileExtension, multiple, r
                         )) : "Select File Extension"}
                     </div>
 
+                    {/* here is rendering a caret icon,svg, how can i remove it when readonly is true */}
                     {/* <button aria-label='close' onMouseDown={() => removeAll()}>
                         <i className="fa-solid fa-xmark" />
                     </button> */}
