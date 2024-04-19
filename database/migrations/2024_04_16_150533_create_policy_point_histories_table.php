@@ -17,6 +17,7 @@ return new class extends Migration
             $table->id();
             $table->bigInteger('deal_id');
             $table->text('policy');
+            $table->float('points', 8,2)->comment('actual gained points after calculation');
             $table->text('point_report');
             $table->timestamps();
         });

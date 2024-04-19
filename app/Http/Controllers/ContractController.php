@@ -3022,7 +3022,8 @@ public function getAllContracts(Request $request){
     ->leftJoin('users as pm', 'pm.id', 'deals.pm_id')
     ->leftJoin('users as client', 'client.id', 'deals.client_id')
     ->leftJoin('p_m_projects', 'deals.id', 'p_m_projects.deal_id')
-    ->where('deals.dept_status','WD');
+    ->where('deals.dept_status','WD')
+    ->whereIn('deals.sales_analysis_status',['analysis', 'authorized', 'auto-authorized']);
 
     if ($startDate !== null && $endDate !== null) {
         $dealsQuery->where(function ($q) use ($startDate, $endDate) {
