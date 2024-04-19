@@ -25,13 +25,16 @@ const RuleActionConfirmationModal = ({
 
     const handleColorForStatus = () => {
         if (statusActionData.modalType === "Deal") {
-            return statusActionData.status === "0"
+            return statusActionData.status == "0"
                 ? "text-danger"
                 : "text-success";
         } else {
-            statusActionData.status === "0" ? "text-success" : "text-danger";
+            return statusActionData.status == "0"
+                ? "text-success"
+                : "text-danger";
         }
     };
+
     return (
         <CustomModal
             open={open}

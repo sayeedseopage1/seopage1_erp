@@ -194,7 +194,7 @@ export const SaleRiskAuthorizePolicesModalTableColumns = [
                                                             ...customStyles.active,
                                                         }}
                                                     >
-                                                        Active
+                                                        Applied
                                                     </abbr>
                                                 )}
                                         </li>
@@ -233,7 +233,7 @@ export const SaleRiskAuthorizePolicesModalTableColumns = [
                                                             ...customStyles.active,
                                                         }}
                                                     >
-                                                        Active
+                                                        Applied
                                                     </abbr>
                                                 )}
                                         </li>
@@ -287,7 +287,7 @@ export const SaleRiskAuthorizePolicesModalTableColumns = [
                                                         ...customStyles.active,
                                                     }}
                                                 >
-                                                    Active
+                                                    Applied
                                                 </abbr>
                                             )}
                                         </div>
@@ -315,7 +315,7 @@ export const SaleRiskAuthorizePolicesModalTableColumns = [
                                                         ...customStyles.active,
                                                     }}
                                                 >
-                                                    Active
+                                                    Applied
                                                 </abbr>
                                             )}
                                         </span>

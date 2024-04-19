@@ -83,17 +83,6 @@ const NewPolicyModalInputsContainer = ({
         return true;
     };
 
-    const handleTernary = () => {
-        if (!allPolicyData?.length) {
-            return false;
-        }
-        if (newPolicyData?.index === 0) {
-            return false;
-        } else {
-            return true;
-        }
-    };
-
     return (
         <Switch>
             {/* conditional showing Fields */}

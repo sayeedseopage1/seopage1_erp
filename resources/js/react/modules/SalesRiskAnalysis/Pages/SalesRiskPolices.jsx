@@ -77,9 +77,7 @@ const SalesRiskPolices = () => {
         pageSize: 10,
     });
     const [isRuleUpdating, setIsRuleUpdating] = React.useState(false);
-    const [isQuestionUpdating, setIsQuestionUpdating] = React.useState(false);
-    const [isFocusedOnTitleInput, setIsFocusedOnTitleInput] =
-        React.useState(false);
+    const [setIsFocusedOnTitleInput] = React.useState(false);
 
     // modal open close state
     const [addNewPolicyModalOpen, setAddNewPolicyModalOpen] =
@@ -439,7 +437,6 @@ const SalesRiskPolices = () => {
                         handleAddRuleOnPolicy,
                         setNewPolicyInputData,
                         handleCancelRuleOnPolicy,
-                        setIsFocusedOnTitleInput
                     }}
                 />
             )}
@@ -452,7 +449,6 @@ const SalesRiskPolices = () => {
                     singleQuestion={singleQuestion}
                     setSingleQuestion={setSingleQuestion}
                     isTableShow={false}
-                    isQuestionUpdating={isQuestionUpdating}
                     setAddQuestionsData={setSingleQuestion}
                     refetchSaleRiskAnalysis={refetch}
                 />

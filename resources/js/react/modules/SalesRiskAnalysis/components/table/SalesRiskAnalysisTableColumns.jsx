@@ -1,12 +1,17 @@
-import { FormatJsonCountry, getYesNoValue } from "../../helper/countriesFormat";
+// icons
+import EditIcon from "../ui/EditIcon";
+
+// ui components
+import { SalesPointsContainer } from "../ui/Styles/ui";
 import MultiSelectShowDropDown from "../MultiSelectShowDropDown";
 import Switch from "../Switch";
 import Tooltip from "../Tooltip";
-import EditIcon from "../ui/EditIcon";
-import { SalesPointsContainer } from "../ui/Styles/ui";
+
+// styles
 import "../Styles/salesRiskAnalysisTableColumns.css";
-import { useContext } from "react";
-import { SalesRiskAnalysisContext } from "../../context/SalesRiskAnalysisProvider";
+
+// helper
+import { FormatJsonCountry, getYesNoValue } from "../../helper/countriesFormat";
 
 export const SalesRiskAnalysisTableColumns = [
     {
@@ -16,6 +21,7 @@ export const SalesRiskAnalysisTableColumns = [
         cell: ({ row, table }) => {
             const data = row?.original;
             const action = table.options.meta;
+
             return (
                 <div className="d-flex flex-column">
                     <div className="d-flex align-items-center mb-2">
@@ -27,30 +33,32 @@ export const SalesRiskAnalysisTableColumns = [
                         >
                             <input
                                 type="checkbox"
-                                checked={data?.status === "1" ? true : false}
+                                checked={data?.status == "1" ? true : false}
                                 readOnly
-                                className="custom-control-input"
                                 id="customSwitch1"
+                                className="custom-control-input"
                             />
                             <label
                                 className={`custom-control-label ${
-                                    data?.status === "1"
+                                    data?.status == "1"
                                         ? "sales_risk_status_toggle_checked"
                                         : "sales_risk_status_toggle_not_checked"
                                 }`}
-                                htmlFor="customSwitch1"
                                 title={
                                     data?.status === "1"
                                         ? "Disable Now"
                                         : "Enable Now"
                                 }
+                                htmlFor="customSwitch1"
                                 onClick={() => {
                                     action.handlePolicyStatus(data);
                                 }}
                                 style={{
                                     cursor: "pointer",
                                 }}
-                            />{" "}
+                            >
+                                {/* Empty string as label */}
+                            </label>{" "}
                         </div>
                         <div
                             onClick={() => {
@@ -153,7 +161,7 @@ export const SalesRiskAnalysisTableColumns = [
         header: "Policy Key",
         accessorKey: "policy_key",
         cell: ({ row, table }) => {
-           const policyKeys = table?.options?.meta?.handleSendPolicyType();
+            const policyKeys = table?.options?.meta?.handleSendPolicyType();
             const data = row?.original;
             const policyKey = policyKeys?.data?.find(
                 (key) => key.name === data?.key

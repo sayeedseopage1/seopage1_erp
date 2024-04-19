@@ -51,15 +51,18 @@ const MultiSelectShowDropDown = ({
                     <div className="d-flex justify-content-between">
                         <p>Country list ({_Options?.length})</p>
                         {isShow && (
-                            <p
+                            <button
                                 onClick={handleEditCountryList}
                                 className="d-flex align-items-center"
-                                style={{ cursor: "pointer" }}
+                                style={{
+                                    cursor: "pointer",
+                                    backgroundColor: "transparent",
+                                }}
                                 onKeyDown={handleEditCountryList}
                             >
                                 <i className="fa-solid fa-plus mr-2 text-primary"></i>{" "}
                                 Add More
-                            </p>
+                            </button>
                         )}
                     </div>
                     {_Options.map((item) => (

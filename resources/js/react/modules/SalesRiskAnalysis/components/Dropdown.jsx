@@ -11,17 +11,19 @@ const DropdownProvider = ({ children }) => {
     const [element, setElement] = React.useState(null);
     const [reference, setReference] = React.useState(null);
 
+    const dropDownData = React.useMemo(() => {
+        return {
+            isOpen,
+            setIsOpen,
+            reference,
+            setReference,
+            element,
+            setElement,
+        };
+    });
+
     return (
-        <DropdownContext.Provider
-            value={{
-                element,
-                setElement,
-                reference,
-                setReference,
-                isOpen,
-                setIsOpen,
-            }}
-        >
+        <DropdownContext.Provider value={dropDownData}>
             {children}
         </DropdownContext.Provider>
     );

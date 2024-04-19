@@ -11,19 +11,21 @@ export const TooltipProvider = ({ children }) => {
     const [reference, setReference] = React.useState(null);
     const [arrow, setArrow] = React.useState(null);
 
+    const toolTipValue = React.useMemo(() => {
+        return {
+            element,
+            setElement,
+            reference,
+            setReference,
+            arrow,
+            setArrow,
+            isOpen,
+            setIsOpen,
+        };
+    });
+
     return (
-        <TooltipContext.Provider
-            value={{
-                element,
-                setElement,
-                reference,
-                setReference,
-                arrow,
-                setArrow,
-                isOpen,
-                setIsOpen,
-            }}
-        >
+        <TooltipContext.Provider value={toolTipValue}>
             {children}
         </TooltipContext.Provider>
     );
