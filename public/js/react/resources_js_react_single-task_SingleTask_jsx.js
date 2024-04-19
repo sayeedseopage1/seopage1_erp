@@ -2904,7 +2904,7 @@ var Guideline = function Guideline(_ref) {
                   color: primary_color,
                   desc: primary_color_description
                 })]
-              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsxs)("div", {
+              }), (defaultSecondaryColors[0].color || defaultSecondaryColors[0].description) && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsxs)("div", {
                 className: "col-12 col-md-6 px-0",
                 children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)("p", {
                   className: "font-weight-bold mr-2 mb-2",
@@ -12004,14 +12004,19 @@ var SubTaskEditModal = function SubTaskEditModal(_ref2) {
                 },
                 children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_26__.jsxs)("div", {
                   className: "col-12 col-md-6 px-0",
-                  children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_26__.jsx)("p", {
+                  children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_26__.jsxs)("label", {
+                    htmlFor: "primaryColor",
                     className: "font-weight-bold mr-2 mb-2",
-                    children: "Primary Color: "
+                    "data-label": "true",
+                    children: ["Primary Color", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_26__.jsx)("sup", {
+                      className: "f-14 mr-1",
+                      children: "*"
+                    })]
                   }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_26__.jsx)(_components_PMGuideline__WEBPACK_IMPORTED_MODULE_17__.ColorItem, {
                     color: primaryColor,
                     desc: primaryColorDescription
                   })]
-                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_26__.jsxs)("div", {
+                }), (defaultSecondaryColors[0].color || defaultSecondaryColors[0].description) && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_26__.jsxs)("div", {
                   className: "col-12 col-md-6 px-0",
                   children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_26__.jsx)("p", {
                     className: "font-weight-bold mr-2 mb-2",
@@ -12962,6 +12967,7 @@ var SubTaskForm = function SubTaskForm(_ref) {
     setPageTypePriority("");
     setPageTypeName("");
   }, [pageType]);
+  console.log("defaultSecondaryColors: ", defaultSecondaryColors);
   return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_27__.jsx)("form", {
     onSubmit: handleSubmit,
     children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_27__.jsxs)("div", {
@@ -13400,14 +13406,19 @@ var SubTaskForm = function SubTaskForm(_ref) {
               },
               children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_27__.jsxs)("div", {
                 className: "col-12 col-md-6 px-0",
-                children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_27__.jsx)("p", {
+                children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_27__.jsxs)("label", {
+                  htmlFor: "primaryColor",
                   className: "font-weight-bold mr-2 mb-2",
-                  children: "Primary Color: "
+                  "data-label": "true",
+                  children: ["Primary Color", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_27__.jsx)("sup", {
+                    className: "f-14 mr-1",
+                    children: "*"
+                  })]
                 }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_27__.jsx)(_components_PMGuideline__WEBPACK_IMPORTED_MODULE_22__.ColorItem, {
                   color: primaryColor,
                   desc: primaryColorDescription
                 })]
-              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_27__.jsxs)("div", {
+              }), (defaultSecondaryColors[0].color || defaultSecondaryColors[0].description) && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_27__.jsxs)("div", {
                 className: "col-12 col-md-6 px-0",
                 children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_27__.jsx)("p", {
                   className: "font-weight-bold mr-2 mb-2",
@@ -14997,11 +15008,18 @@ var TaskEditForm = function TaskEditForm(_ref2) {
         err.fileExtension = "File extension is required";
         count++;
       }
-      // if (!checkIsURL(fontUrl)) {
-      //     err.fontUrl = "You have to provide a valid font URL";
-      //     toast.warn("You have to provide a valid font URL");
-      //     count++;
-      // }
+      if (fontUrl) {
+        if (!(0,_utils_check_is_url__WEBPACK_IMPORTED_MODULE_24__.checkIsURL)(fontUrl)) {
+          err.fontUrl = "You have to provide a valid font URL";
+          react_toastify__WEBPACK_IMPORTED_MODULE_14__.toast.warn("You have to provide a valid font URL");
+          count++;
+        }
+      }
+      if (!primaryColor) {
+        err.primaryColor = "Primary color is required";
+        react_toastify__WEBPACK_IMPORTED_MODULE_14__.toast.warn("You have to provide a primary color");
+        count++;
+      }
       // if (!brandGuideline) {
       //     err.brandGuideline = "Brand guideline is required";
       //     count++;
@@ -16033,8 +16051,8 @@ var TaskEditForm = function TaskEditForm(_ref2) {
                         children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_30__.jsx)("input", {
                           type: "text",
                           className: "form-control",
-                          placeholder: "Recipient's username",
-                          "aria-label": "Recipient's username",
+                          placeholder: "Type color code",
+                          "aria-label": "Type color code",
                           "aria-describedby": "basic-addon2",
                           value: primaryColor,
                           onChange: function onChange(e) {
@@ -16090,9 +16108,7 @@ var TaskEditForm = function TaskEditForm(_ref2) {
                         fontWeight: 600,
                         color: "#777"
                       },
-                      children: ["2. Secondary Color", " ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_30__.jsx)("sup", {
-                        children: "*"
-                      }), " "]
+                      children: ["2. Secondary Color", " "]
                     }), lodash__WEBPACK_IMPORTED_MODULE_0___default().map(secondaryColors, function (item, index) {
                       return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_30__.jsxs)("div", {
                         className: "p-3",
@@ -16110,8 +16126,8 @@ var TaskEditForm = function TaskEditForm(_ref2) {
                               children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_30__.jsx)("input", {
                                 type: "text",
                                 className: "form-control",
-                                placeholder: "Recipient's username",
-                                "aria-label": "Recipient's username",
+                                placeholder: "Type color code",
+                                "aria-label": "Type color code",
                                 "aria-describedby": "basic-addon2",
                                 value: item === null || item === void 0 ? void 0 : item.color,
                                 onChange: function onChange(e) {

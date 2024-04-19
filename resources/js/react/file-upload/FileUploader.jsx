@@ -18,8 +18,8 @@ const RenderIcon = ({ filename, size }) => {
     return (
         <div
             className="uploaded-file-preview"
-            data-toggle="tooltip"
-            data-placement="top"
+            // data-toggle="tooltip"
+            // data-placement="top"
             title={filename}
         >
             <div className="__icon">

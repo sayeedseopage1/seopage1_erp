@@ -237,13 +237,27 @@ const TaskCreationForm = ({ handleRefresh, isOpen, close, onSuccess }) => {
                 err.fileExtension = "File extension is required";
                 errCount++;
             }
-            // if (!checkIsURL(fontUrl)) {
-            //     err.fontUrl = "You have to provide a valid font URL";
-            //     toast.warn("You have to provide a valid font URL");
-            //     errCount++;
-            // }
             // if (!brandGuideline) {
             //     err.brandGuideline = "Brand guideline is required";
+            //     errCount++;
+            // }
+
+            if (fontUrl) {
+                if (!checkIsURL(fontUrl)) {
+                    err.fontUrl = "You have to provide a valid font URL";
+                    // toast.warn("You have to provide a valid font URL");
+                    errCount++;
+                }
+            }
+
+            if (!primaryColor) {
+                err.primaryColor = "Primary color is required"
+                toast.warn("You have to provide a primary color");
+                errCount++;
+            }
+            // if (!secondaryColors[0]?.color) {
+            //     err.primaryColor = "Secondary color is required"
+            //     toast.warn("You have to provide at least one secondary color");
             //     errCount++;
             // }
         }
@@ -1279,8 +1293,8 @@ const TaskCreationForm = ({ handleRefresh, isOpen, close, onSuccess }) => {
                                                                     <input
                                                                         type="text"
                                                                         className="form-control"
-                                                                        placeholder="Recipient's username"
-                                                                        aria-label="Recipient's username"
+                                                                        placeholder="Type color code"
+                                                                        aria-label="Type color code"
                                                                         aria-describedby="basic-addon2"
                                                                         value={
                                                                             primaryColor
@@ -1374,7 +1388,7 @@ const TaskCreationForm = ({ handleRefresh, isOpen, close, onSuccess }) => {
                                                                 }}
                                                             >
                                                                 2. Secondary Color{" "}
-                                                                <sup>*</sup>{" "}
+                                                                {/* <sup>*</sup>{" "} */}
                                                             </label>
 
                                                             {_.map(
@@ -1399,8 +1413,8 @@ const TaskCreationForm = ({ handleRefresh, isOpen, close, onSuccess }) => {
                                                                                     <input
                                                                                         type="text"
                                                                                         className="form-control"
-                                                                                        placeholder="Recipient's username"
-                                                                                        aria-label="Recipient's username"
+                                                                                        placeholder="Type color code"
+                                                                                        aria-label="Type color code"
                                                                                         aria-describedby="basic-addon2"
                                                                                         value={
                                                                                             item.color

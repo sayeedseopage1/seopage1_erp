@@ -845,25 +845,34 @@ const SubTaskEditModal = ({ task, singleTask: taskDetails, onSubmit, isLoading, 
                                 <div className='mb-3 rounded'>
                                     <div className='row' style={{ marginLeft: "0px" }}>
                                         <div className='col-12 col-md-6 px-0'>
-                                            <p className='font-weight-bold mr-2 mb-2'>Primary Color: </p>
+                                            <label
+                                                htmlFor='primaryColor'
+                                                className={`font-weight-bold mr-2 mb-2`}
+                                                data-label="true"
+                                            >
+                                                Primary Color
+                                                <sup className='f-14 mr-1'>*</sup>
+                                            </label>
                                             <ColorItem color={primaryColor} desc={primaryColorDescription} />
                                         </div>
-
-                                        <div className='col-12 col-md-6 px-0'>
-                                            <p className='font-weight-bold mr-2 mb-2'>
+                                        {
+                                            (defaultSecondaryColors[0].color || defaultSecondaryColors[0].description) && <div className='col-12 col-md-6 px-0'>
+                                                <p className='font-weight-bold mr-2 mb-2'>
+                                                    {
+                                                        defaultSecondaryColors?.length > 1
+                                                            ? "Secondary Colors: "
+                                                            : "Secondary Color: "
+                                                    }
+                                                </p>
                                                 {
-                                                    defaultSecondaryColors?.length > 1
-                                                        ? "Secondary Colors: "
-                                                        : "Secondary Color: "
+                                                    defaultSecondaryColors?.map((color, i) => (
+                                                        <ColorItem key={i + color} color={color?.color}
+                                                            desc={color?.description} />
+                                                    ))
                                                 }
-                                            </p>
-                                            {
-                                                defaultSecondaryColors?.map((color, i) => (
-                                                    <ColorItem key={i + color} color={color?.color}
-                                                        desc={color?.description} />
-                                                ))
-                                            }
-                                        </div>
+                                            </div>
+                                        }
+
                                     </div>
                                 </div>
                             </div>
