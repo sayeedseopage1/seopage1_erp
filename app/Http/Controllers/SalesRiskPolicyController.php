@@ -1416,7 +1416,7 @@ class SalesRiskPolicyController extends AccountBaseController
                 ->map(function ($item) {
 
                     $lead = Lead::find($item->lead_id);
-                    $user = $item->authorize_by ?  User::find($item->authorize_by) : null;
+                    $user = $item->sale_authorize_by ?  User::find($item->sale_authorize_by) : null;
                     return [
                         'client_id' => $item->client_id,
                         'client_name' => $item->client_name,
