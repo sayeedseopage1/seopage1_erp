@@ -1,3 +1,4 @@
+import { convertTime } from "../../../utils/converTime";
 import ActionDropdown from "./ActionDropdown";
 export const EvaluationTableColumns = [
     // {
@@ -61,11 +62,7 @@ export const EvaluationTableColumns = [
         accessorKey: "total_hours",
         cell: ({ row }) => {
             const data = row.original;
-            return (
-                <div>
-                    {`${data?.total_hours || 0} hr ${data?.total_min || 0} min`}
-                </div>
-            );
+            return <div>{convertTime(data?.total_min)}</div>;
         },
     },
 

@@ -23,6 +23,7 @@ import {
 import FormatDate from "../../../UI/comments/utils/FormatDate";
 import { Button } from "react-bootstrap";
 import axios from "axios";
+import { convertTime } from "../../../utils/converTime";
 
 const SingleEvaluationModal = ({
     toggleSingleEvaluationModal,
@@ -325,12 +326,7 @@ const SingleEvaluationModal = ({
                             <td>{data?.task_name}</td>
                             <td>{data?.assign_date}</td>
                             <td>{data.submission_date}</td>
-                            <td>
-                                {" "}
-                                {`${data?.total_hours || 0} hr ${
-                                    data?.total_min || 0
-                                }min`}
-                            </td>
+                            <td>{convertTime(data?.total_min)}</td>
                             <td>
                                 {data?.completed_work &&
                                     JSON.parse(data?.completed_work).map(

@@ -5,6 +5,7 @@ import Person from "./Person";
 import CommentModal from "./CommentModal";
 import { User } from "../../../utils/user-details";
 import FormatDate from "../../../utils/FormateDate";
+import { convertTime } from "../../../utils/converTime";
 const auth = new User(window.Laravel.user);
 export const DataTableColumns = [
     // {
@@ -80,15 +81,15 @@ export const DataTableColumns = [
         },
     },
     {
-        id: "total_hours",
+        id: "total_minutes",
         header: "Total Hours Tracked",
-        accessorKey: "total_hours",
+        accessorKey: "total_minutes",
         cell: ({ row }) => {
-            const data = row.original;
+            const data = row?.original;
             return (
-                <div
-                    style={{ marginLeft: "50px" }}
-                >{`${data?.total_hours} hr ${data?.total_minutes} min`}</div>
+                <div style={{ marginLeft: "50px" }}>
+                    {convertTime(data?.total_minutes)}
+                </div>
             );
         },
     },
