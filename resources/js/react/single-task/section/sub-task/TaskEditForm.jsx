@@ -356,11 +356,19 @@ const TaskEditForm = ({ task, singleTask: row, onSubmit, isLoading, onClose }) =
                 err.fileExtension = "File extension is required";
                 count++;
             }
-            // if (!checkIsURL(fontUrl)) {
-            //     err.fontUrl = "You have to provide a valid font URL";
-            //     toast.warn("You have to provide a valid font URL");
-            //     count++;
-            // }
+            if (fontUrl) {
+                if (!checkIsURL(fontUrl)) {
+                    err.fontUrl = "You have to provide a valid font URL";
+                    toast.warn("You have to provide a valid font URL");
+                    count++;
+                }
+            }
+
+            if (!primaryColor) {
+                err.primaryColor = "Primary color is required"
+                toast.warn("You have to provide a primary color");
+                count++;
+            }
             // if (!brandGuideline) {
             //     err.brandGuideline = "Brand guideline is required";
             //     count++;
@@ -1436,8 +1444,8 @@ const TaskEditForm = ({ task, singleTask: row, onSubmit, isLoading, onClose }) =
                                                         <input
                                                             type="text"
                                                             className="form-control"
-                                                            placeholder="Recipient's username"
-                                                            aria-label="Recipient's username"
+                                                            placeholder="Type color code"
+                                                            aria-label="Type color code"
                                                             aria-describedby="basic-addon2"
                                                             value={
                                                                 primaryColor
@@ -1512,7 +1520,7 @@ const TaskEditForm = ({ task, singleTask: row, onSubmit, isLoading, onClose }) =
                                                     }}
                                                 >
                                                     2. Secondary Color{" "}
-                                                    <sup>*</sup>{" "}
+                                                    {/* <sup>*</sup>{" "} */}
                                                 </label>
 
                                                 {_.map(
@@ -1537,8 +1545,8 @@ const TaskEditForm = ({ task, singleTask: row, onSubmit, isLoading, onClose }) =
                                                                         <input
                                                                             type="text"
                                                                             className="form-control"
-                                                                            placeholder="Recipient's username"
-                                                                            aria-label="Recipient's username"
+                                                                            placeholder="Type color code"
+                                                                            aria-label="Type color code"
                                                                             aria-describedby="basic-addon2"
                                                                             value={
                                                                                 item?.color

@@ -423,22 +423,24 @@ const Guideline = ({ text, task, type = "", editorContainerClass, workEnv, singl
                                         <p className='font-weight-bold mr-2 mb-2'>Primary Color: </p>
                                         <ColorItem color={primary_color} desc={primary_color_description} />
                                     </div>
-
-                                    <div className='col-12 col-md-6 px-0'>
-                                        <p className='font-weight-bold mr-2 mb-2'>
+                                    {
+                                        (defaultSecondaryColors[0].color || defaultSecondaryColors[0].description) && <div className='col-12 col-md-6 px-0'>
+                                            <p className='font-weight-bold mr-2 mb-2'>
+                                                {
+                                                    defaultSecondaryColors?.length > 1
+                                                        ? "Secondary Colors: "
+                                                        : "Secondary Color: "
+                                                }
+                                            </p>
                                             {
-                                                defaultSecondaryColors?.length > 1
-                                                    ? "Secondary Colors: "
-                                                    : "Secondary Color: "
+                                                defaultSecondaryColors?.map((color, i) => (
+                                                    <ColorItem key={i + color} color={color?.color}
+                                                        desc={color?.description} />
+                                                ))
                                             }
-                                        </p>
-                                        {
-                                            defaultSecondaryColors?.map((color, i) => (
-                                                <ColorItem key={i + color} color={color?.color}
-                                                    desc={color?.description} />
-                                            ))
-                                        }
-                                    </div>
+                                        </div>
+                                    }
+
                                 </div>
                             </div>
                         </div>

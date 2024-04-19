@@ -317,11 +317,20 @@ const TaskEditForm = ({ isOpen, close, row, table }) => {
                 err.fileExtension = "File extension is required";
                 errCount++;
             }
-            // if (!checkIsURL(fontUrl)) {
-            //     err.fontUrl = "You have to provide a valid font URL";
-            //     toast.warn("You have to provide a valid font URL");
-            //     errCount++;
-            // }
+            if (fontUrl) {
+                if (!checkIsURL(fontUrl)) {
+                    err.fontUrl = "You have to provide a valid font URL";
+                    toast.warn("You have to provide a valid font URL");
+                    errCount++;
+                }
+            }
+
+            if (!primaryColor) {
+                err.primaryColor = "Primary color is required"
+                toast.warn("You have to provide a primary color");
+                errCount++;
+            }
+
             // if (!brandGuideline) {
             //     err.brandGuideline = "Brand guideline is required";
             //     errCount++;
@@ -1407,8 +1416,8 @@ const TaskEditForm = ({ isOpen, close, row, table }) => {
                                                                 <input
                                                                     type="text"
                                                                     className="form-control"
-                                                                    placeholder="Recipient's username"
-                                                                    aria-label="Recipient's username"
+                                                                    placeholder="Type color code"
+                                                                    aria-label="Type color code"
                                                                     aria-describedby="basic-addon2"
                                                                     value={
                                                                         primaryColor
@@ -1503,7 +1512,7 @@ const TaskEditForm = ({ isOpen, close, row, table }) => {
                                                             }}
                                                         >
                                                             2. Secondary Color{" "}
-                                                            <sup>*</sup>{" "}
+                                                            {/* <sup>*</sup>{" "} */}
                                                         </label>
 
                                                         {_.map(
@@ -1528,8 +1537,8 @@ const TaskEditForm = ({ isOpen, close, row, table }) => {
                                                                                 <input
                                                                                     type="text"
                                                                                     className="form-control"
-                                                                                    placeholder="Recipient's username"
-                                                                                    aria-label="Recipient's username"
+                                                                                    placeholder="Type color code"
+                                                                                    aria-label="Type color code"
                                                                                     aria-describedby="basic-addon2"
                                                                                     value={
                                                                                         item.color
