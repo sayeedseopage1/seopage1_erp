@@ -16,7 +16,8 @@ return new class extends Migration
         Schema::create('policy_point_histories', function (Blueprint $table) {
             $table->id();
             $table->bigInteger('deal_id');
-            $table->json('policy');
+            $table->text('policy');
+            $table->text('point_report');
             $table->timestamps();
         });
     }

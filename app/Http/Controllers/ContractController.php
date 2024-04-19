@@ -553,7 +553,7 @@ class ContractController extends AccountBaseController
         $existing_client = User::where('user_name', $request->user_name)->first();
         $chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ01234567890123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
         $suffle = substr(str_shuffle($chars), 0, 6);
-        $deal = $deal ? Deal::where('lead_id', $deal->lead_id)->first() : new Deal();
+        $deal = $deal ? Deal::where('lead_id', $deal->lead_id)->first() ?: new Deal() : new Deal();
         $deal->deal_id = $request->deal_id;
         $deal->project_name = $request->project_name;
         $deal->profile_link = $request->profile_link;

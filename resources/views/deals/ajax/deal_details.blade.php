@@ -12,7 +12,6 @@
 @endphp
 
 @section('content')
-
     @push('styles')
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css"
             integrity="sha512-xh6O/CkQoPOWDdYTDqeRdPCVd1SpvCA9XXcUnZS2FmJNp1coAFzvtCN9BmamE+4aHK8yyUHUSCcJHgXloTyT2A=="
@@ -26,8 +25,8 @@
 
         <style>
             /**
-                                                                * FilePond Custom Styles
-                                                                */
+                                                                                * FilePond Custom Styles
+                                                                                */
             .uploadFile {
                 width: 30%;
                 border: none;
@@ -356,15 +355,15 @@
 
 
             /* .sbinfo ul li:nth-child(2) {
-                                                                        padding-right: 0px;
-                                                                        padding-left: 5px;
-                                                                        width: 60px;
-                                                                    }
-                                                                    .sbinfo ul li:nth-child(3) {
-                                                                        padding-right: 0px;
-                                                                        padding-left: 5px;
-                                                                        width: 60px;
-                                                                    } */
+                                                                                        padding-right: 0px;
+                                                                                        padding-left: 5px;
+                                                                                        width: 60px;
+                                                                                    }
+                                                                                    .sbinfo ul li:nth-child(3) {
+                                                                                        padding-right: 0px;
+                                                                                        padding-left: 5px;
+                                                                                        width: 60px;
+                                                                                    } */
 
             .custom_scroling_seo {
                 width: 100%;
@@ -423,9 +422,9 @@
             }
 
             /* .comments-section .btn-default:hover {
-                                                                        background-color: #111;
-                                                                        color: #fff;
-                                                                    } */
+                                                                                        background-color: #111;
+                                                                                        color: #fff;
+                                                                                    } */
 
             .comment_btn {
                 display: inline-block;
@@ -608,8 +607,8 @@
 
 
             /**
-                                                                * File  Custom Styles
-                                                                */
+                                                                                * File  Custom Styles
+                                                                                */
 
             .btn-file {
                 position: relative;
@@ -759,31 +758,33 @@
                 <div class="col-md-4 text-center">
                     <div class="deal_item ">
                         <h3>Deal Status</h3><br>
-                        <input type="hidden" value="{{ $salesDeal ? $salesDeal->id : null}}">
-                        @if ($salesDeal->status == 'analysis')
-                            @if (auth()->user()->role_id == 1)
+                        @if ($salesDeal)
+                            <input type="hidden" value="{{ $salesDeal ? $salesDeal->id : null }}">
+                            @if ($salesDeal->status == 'analysis')
+                                @if (auth()->user()->role_id == 1)
+                                    <div class="sp1_deal-stage-wrapper">
+                                        <h2 style="color:rgb(62, 146, 214);"><a class="btn btn-info"
+                                                href="{{ route('contracts.show', [$salesDeal->id, 'tab' => 'sales-analysis-report']) }}">Analysis
+                                                Page</a></h2>
+                                    </div>
+                                @else
+                                    <div class="text-center">
+                                        <h2 style="color:rgb(62, 146, 214);">In Analysis</h2>
+                                    </div>
+                                @endif
+                            @elseif (in_array($salesDeal->status, ['accepted', 'auto-accepted']))
                                 <div class="sp1_deal-stage-wrapper">
-                                    <h2 style="color:rgb(62, 146, 214);"><a class="btn btn-info"
-                                            href="{{ route('contracts.show', [$salesDeal->id, 'tab' => 'sales-analysis-report']) }}">Analysis
-                                            Page</a></h2>
+                                    <h2 style="color:rgb(62, 146, 214);">
+                                        <a class="btn btn-info" href="{{ route('dealDetails', $salesDeal->id) }}">
+                                            Update Deal Details
+                                        </a>
+                                    </h2>
                                 </div>
-                            @else
+                            @elseif ($salesDeal->status == 'denied')
                                 <div class="text-center">
-                                    <h2 style="color:rgb(62, 146, 214);">In Analysis</h2>
+                                    <h2 style="color:red;">Denied</h2>
                                 </div>
                             @endif
-                        @elseif (in_array($salesDeal->status, ['accepted', 'auto-accepted']))
-                            <div class="sp1_deal-stage-wrapper">
-                                <h2 style="color:rgb(62, 146, 214);">
-                                    <a class="btn btn-info" href="{{ route('dealDetails', $salesDeal->id) }}">
-                                        Update Deal Details
-                                    </a>
-                                </h2>
-                            </div>
-                        @elseif ($salesDeal->status == 'denied')
-                            <div class="text-center">
-                                <h2 style="color:red;">Denied</h2>
-                            </div>
                         @elseif ($deal->won_lost == null)
                             @if ($deal->deal_stage == 5)
                                 <div class="row mx-auto">
@@ -798,10 +799,12 @@
                                         <div class="sp1_deal-stage-wrapper">
                                             <a href="#" data-bs-toggle="modal"
                                                 data-bs-target="#clientDealaddStageModal" data-bs-whatever="@mdo"
-                                                class="btn btn-success wons w-40" onclick="event.preventDefault()">Won The
+                                                class="btn btn-success wons w-40" onclick="event.preventDefault()">Won
+                                                The
                                                 Deal</a>
                                             <div class="sp1_deal-stage-content text-left">
-                                                <p>If the deal was won during your shift (When you were on duty), then click
+                                                <p>If the deal was won during your shift (When you were on duty), then
+                                                    click
                                                     on it and complete the next processes.</p>
                                             </div>
                                         </div>
@@ -814,24 +817,28 @@
                                                     class="btn btn-success wons deal-modal-toggle w-40"
                                                     onclick="event.preventDefault()">Won The Deal</a>
                                                 <div class="sp1_deal-stage-content text-left">
-                                                    <p>If the deal was won during your shift (When you were on duty), then
+                                                    <p>If the deal was won during your shift (When you were on duty),
+                                                        then
                                                         click on it and complete the next processes.</p>
                                                 </div>
                                             </div>
                                             <a href="#" data-bs-toggle="modal" data-bs-target="#dm-lostmodal"
-                                                data-bs-whatever="@mdo" class="btn btn-danger loss w-40">Lost The Deal</a>
+                                                data-bs-whatever="@mdo" class="btn btn-danger loss w-40">Lost The
+                                                Deal</a>
                                         @else
                                             <div class="sp1_deal-stage-wrapper">
                                                 <a href="#" data-toggle="dealModal" data-target="#dealaddstagemodal"
                                                     class="btn btn-success wons deal-modal-toggle w-40"
                                                     onclick="event.preventDefault()">Won The Deal</a>
                                                 <div class="sp1_deal-stage-content text-left">
-                                                    <p>If the deal was won during your shift (When you were on duty), then
+                                                    <p>If the deal was won during your shift (When you were on duty),
+                                                        then
                                                         click on it and complete the next processes.</p>
                                                 </div>
                                             </div>
                                             <a href="#" data-bs-toggle="modal" data-bs-target="#lostmodal"
-                                                data-bs-whatever="@mdo" class="btn btn-danger loss w-40">Lost The Deal</a>
+                                                data-bs-whatever="@mdo" class="btn btn-danger loss w-40">Lost The
+                                                Deal</a>
                                         @endif
                                         {{-- WHEN DEGITAL MERKITING IS TRUE  --}}
                                     @endif
@@ -976,16 +983,16 @@
                                                     </div>
 
                                                     <!-- <div class="wrapper">
-                                                                                           <input type="file" id="file-input" name="attach[]" multiple>
-                                                                                           <label for="file-input">
+                                                                                                   <input type="file" id="file-input" name="attach[]" multiple>
+                                                                                                   <label for="file-input">
 
-                                                                                             <i class="fa fa-paperclip fa-2x"></i>
-                                                                                             <span></span>
-                                                                                           </label>
+                                                                                                     <i class="fa fa-paperclip fa-2x"></i>
+                                                                                                     <span></span>
+                                                                                                   </label>
 
-                                                                                           <i class="fa fa-times-circle remove"></i>
-                                                                                           <input type="submit" class="btn btn-default pull-right comment_btn text-end" value="Comment">
-                                                                                         </div> -->
+                                                                                                   <i class="fa fa-times-circle remove"></i>
+                                                                                                   <input type="submit" class="btn btn-default pull-right comment_btn text-end" value="Comment">
+                                                                                                 </div> -->
 
 
 
@@ -1140,16 +1147,16 @@
                                                     </div>
 
                                                     <!-- <div class="wrapper">
-                                                                                           <input type="file" id="file-input" name="attach[]" multiple>
-                                                                                           <label for="file-input">
+                                                                                                   <input type="file" id="file-input" name="attach[]" multiple>
+                                                                                                   <label for="file-input">
 
-                                                                                             <i class="fa fa-paperclip fa-2x"></i>
-                                                                                             <span></span>
-                                                                                           </label>
+                                                                                                     <i class="fa fa-paperclip fa-2x"></i>
+                                                                                                     <span></span>
+                                                                                                   </label>
 
-                                                                                           <i class="fa fa-times-circle remove"></i>
-                                                                                           <input type="submit" class="btn btn-default pull-right comment_btn text-end" value="Comment">
-                                                                                         </div> -->
+                                                                                                   <i class="fa fa-times-circle remove"></i>
+                                                                                                   <input type="submit" class="btn btn-default pull-right comment_btn text-end" value="Comment">
+                                                                                                 </div> -->
 
 
 
@@ -1276,16 +1283,16 @@
                                                         </div>
                                                     </div>
                                                     <!-- <div class="wrapper">
-                                                                                           <input type="file" id="file-input" name="attach[]" multiple>
-                                                                                           <label for="file-input">
+                                                                                                   <input type="file" id="file-input" name="attach[]" multiple>
+                                                                                                   <label for="file-input">
 
-                                                                                             <i class="fa fa-paperclip fa-2x"></i>
-                                                                                             <span></span>
-                                                                                           </label>
+                                                                                                     <i class="fa fa-paperclip fa-2x"></i>
+                                                                                                     <span></span>
+                                                                                                   </label>
 
-                                                                                           <i class="fa fa-times-circle remove"></i>
-                                                                                           <input type="submit" class="btn btn-default pull-right comment_btn text-end" value="Comment">
-                                                                                         </div> -->
+                                                                                                   <i class="fa fa-times-circle remove"></i>
+                                                                                                   <input type="submit" class="btn btn-default pull-right comment_btn text-end" value="Comment">
+                                                                                                 </div> -->
 
 
 
@@ -1419,16 +1426,16 @@
                                                         </div>
                                                     </div>
                                                     <!-- <div class="wrapper">
-                                                                                           <input type="file" id="file-input" name="attach[]" multiple>
-                                                                                           <label for="file-input">
+                                                                                                   <input type="file" id="file-input" name="attach[]" multiple>
+                                                                                                   <label for="file-input">
 
-                                                                                             <i class="fa fa-paperclip fa-2x"></i>
-                                                                                             <span></span>
-                                                                                           </label>
+                                                                                                     <i class="fa fa-paperclip fa-2x"></i>
+                                                                                                     <span></span>
+                                                                                                   </label>
 
-                                                                                           <i class="fa fa-times-circle remove"></i>
-                                                                                           <input type="submit" class="btn btn-default pull-right comment_btn text-end" value="Comment">
-                                                                                         </div> -->
+                                                                                                   <i class="fa fa-times-circle remove"></i>
+                                                                                                   <input type="submit" class="btn btn-default pull-right comment_btn text-end" value="Comment">
+                                                                                                 </div> -->
 
 
 
@@ -1566,16 +1573,16 @@
                                                     </div>
 
                                                     <!-- <div class="wrapper">
-                                                                                           <input type="file" id="file-input" name="attach[]" multiple>
-                                                                                           <label for="file-input">
+                                                                                                   <input type="file" id="file-input" name="attach[]" multiple>
+                                                                                                   <label for="file-input">
 
-                                                                                             <i class="fa fa-paperclip fa-2x"></i>
-                                                                                             <span></span>
-                                                                                           </label>
+                                                                                                     <i class="fa fa-paperclip fa-2x"></i>
+                                                                                                     <span></span>
+                                                                                                   </label>
 
-                                                                                           <i class="fa fa-times-circle remove"></i>
-                                                                                           <input type="submit" class="btn btn-default pull-right comment_btn text-end" value="Comment">
-                                                                                         </div> -->
+                                                                                                   <i class="fa fa-times-circle remove"></i>
+                                                                                                   <input type="submit" class="btn btn-default pull-right comment_btn text-end" value="Comment">
+                                                                                                 </div> -->
 
 
 
@@ -1706,16 +1713,16 @@
                                                     </div>
 
                                                     <!-- <div class="wrapper">
-                                                                                          <input type="file" id="file-input" name="attach[]" multiple>
-                                                                                          <label for="file-input">
+                                                                                                  <input type="file" id="file-input" name="attach[]" multiple>
+                                                                                                  <label for="file-input">
 
-                                                                                            <i class="fa fa-paperclip fa-2x"></i>
-                                                                                            <span></span>
-                                                                                          </label>
+                                                                                                    <i class="fa fa-paperclip fa-2x"></i>
+                                                                                                    <span></span>
+                                                                                                  </label>
 
-                                                                                          <i class="fa fa-times-circle remove"></i>
-                                                                                          <input type="submit" class="btn btn-default pull-right comment_btn text-end" value="Comment">
-                                                                                        </div> -->
+                                                                                                  <i class="fa fa-times-circle remove"></i>
+                                                                                                  <input type="submit" class="btn btn-default pull-right comment_btn text-end" value="Comment">
+                                                                                                </div> -->
 
 
 
@@ -1744,11 +1751,6 @@
 
         </div>
     </section>
-
-
-
-
-
 @endsection
 
 
