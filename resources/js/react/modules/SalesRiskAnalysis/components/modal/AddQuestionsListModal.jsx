@@ -52,6 +52,7 @@ const AddQuestionsListModal = ({
     setAddQuestionsData,
     refetchSaleRiskAnalysis,
     isQuestionUpdating,
+    setIsQuestionUpdating,
 }) => {
     const modalRef = useRef(null);
     const { questionsAnswerType, policies, allQuestions } = useContext(
@@ -69,8 +70,10 @@ const AddQuestionsListModal = ({
         isSubmitting: false,
     });
 
-    const [editSinglePolicySalesRiskAnalysis] =
-        useEditQuestionSalesRiskAnalysisMutation();
+    const [
+        editSinglePolicySalesRiskAnalysis,
+        { isLoading: isEditSinglePolicySalesRiskAnalysisLoading },
+    ] = useEditQuestionSalesRiskAnalysisMutation();
 
     const { data: singlePolicyData, isLoading: isLoadingSinglePolicyData } =
         useGetSinglePolicySalesRiskAnalysisQuery(addQuestionsData?.id, {
@@ -242,6 +245,7 @@ const AddQuestionsListModal = ({
                 showToastHandler(isQuestionUpdating);
                 handleCloseAddQuestionsModal();
                 refetchSaleRiskAnalysis();
+                setIsQuestionUpdating(false);
             }
         } catch (error) {
             if (error.status === 403) {
@@ -250,7 +254,6 @@ const AddQuestionsListModal = ({
                     toast.error(errorMessage);
                 });
             } else {
-                console.log(error)
                 toast.error("Something went wrong");
             }
         }
@@ -306,7 +309,7 @@ const AddQuestionsListModal = ({
         isSaleAnalysisQuestionSaveLoading,
         isQuestionUpdating
     ) => {
-        if (isSaleAnalysisQuestionSaveLoading) {
+        if (isSaleAnalysisQuestionSaveLoading || isEditSinglePolicySalesRiskAnalysisLoading) {
             return "Saving...";
         }
         if (isQuestionUpdating) {
@@ -315,6 +318,7 @@ const AddQuestionsListModal = ({
 
         return "Save Question";
     };
+
 
     // Set Placeholder
     useEffect(() => {
@@ -696,4 +700,5 @@ AddQuestionsListModal.propTypes = {
     isQuestionUpdating: PropTypes.bool,
     singleQuestion: PropTypes.object,
     setSingleQuestion: PropTypes.func,
+    setIsQuestionUpdating: PropTypes.func,
 };
