@@ -28,7 +28,7 @@ const TimerControl = ({ task, timerStart, setTimerStart, auth }) => {
         useState(true);
     const [timeLeft, setTimeLeft] = useState(0);
     const [showExpirationWarningModal, setShowExpirationWarningModal] =
-        useState(true);
+        useState(false);
     const [expiredTimerForNewEmployee, setExpiredTimerForNewEmployee] =
         useState(false);
 
