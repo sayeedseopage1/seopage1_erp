@@ -8661,7 +8661,7 @@ var AssginedToSelection = function AssginedToSelection(_ref) {
       return Number(d.role_id) === 5 || Number(d.role_id) === 14;
     });
   }
-  console.log("employees", employees);
+  // console.log("employees", employees);
   var filteredData = query === "" ? employees : (_employees = employees) === null || _employees === void 0 ? void 0 : _employees.filter(function (employee) {
     return employee === null || employee === void 0 ? void 0 : employee.name.toLowerCase().includes(query.toLowerCase());
   });
@@ -14291,19 +14291,21 @@ var ExpiredTimeModalForNewEmployee = function ExpiredTimeModalForNewEmployee(_re
   }, []);
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(function () {
     var interval = setInterval(function () {
-      if (timeLeft > 0 && timeLeft < 3600000) {
-        setToggleModal(function (prevToggle) {
-          return !prevToggle;
-        });
-      } else {
-        return 0;
-      }
-    }, 900000); // 15 minute in milliseconds
+      setToggleModal(function (prevToggle) {
+        return !prevToggle;
+      }); // Toggle state every minute
+    }, 900000); // 1 minute in milliseconds
 
     return function () {
       return clearInterval(interval);
     };
   }, []);
+
+  // console.log("toggle modal", toggleModal);
+  // console.log("time left less then 3600000", timeLeft <= 3600000);
+  // console.log("time left greater then 0", timeLeft > 0);
+  // console.log("timer status for warning", timerStatusForWarningModal);
+
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(function () {
     if (toggleModal && timeLeft <= 3600000 && timeLeft > 0 && timerStatusForWarningModal) {
       setShowExpirationWarningModal(true);
