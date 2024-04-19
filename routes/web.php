@@ -1844,22 +1844,5 @@ Route::get('test-point/{factorId}/{projectId}/{comparable_value}', function($fac
 });
 
 Route::get('test-calculation/{factorId}/{projectId}', function ($factorId, $projectId){
-
-    return \App\Models\Project::with('milestones')->find($projectId);
-    return Project::select('projects.*')->leftJoin('project_milestones', 'projects.id', '=', 'project_milestones.project_id')->find($projectId);
-
-    return $projects = \App\Models\Project::select('projects.*')
-    ->selectRaw('SUM(project_deliverables.estimate_time) as total_estimate_time')
-    ->join('project_milestones', 'projects.id', '=', 'project_milestones.project_id')
-    ->join('project_deliverables', 'project_milestones.id', '=', 'project_deliverables.milestone_id')
-    ->where('project_milestones.status', '=', 'active')
-    ->groupBy('projects.id')
-    ->find($projectId);
-
-    return $project = \App\Models\Project::select('id','hours_allocated')->with(['milestones' => function($milestone){
-        return $milestone->select('id','project_id','status')->withSum('deliverables','estimation_time')->where('status', 'complete');
-    }, 'milestones.deliverables', 'times'])->find($projectId);
-    $stimatedMinutes = ($project->hours_allocated??0)*60;
-    $loggedMinutes = \App\Models\ProjectTimeLog::where('project_id', $project->id)->sum('total_minutes');
-    return $stimatedMinutes.'--'.$loggedMinutes;
+    dd('Hello');
 });
