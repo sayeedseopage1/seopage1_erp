@@ -31,8 +31,9 @@ import useEmployeeEvaluation from "../../../../../../react/zustand/store";
 
 import ActionDropdown from "../Table/ActionDropdown";
 import useCounterStore from "../../../../Zustand/store";
-import { usePendingActionsIdMutation } from "../../../../../services/api/pendingActionsApiSlice";
+
 import { toast } from "react-toastify";
+import { useAcknowledgePendingActionsPastMutation } from "../../../../../services/api/pendingActionsApiSlice";
 const EvaluationAcknowledgeModal = ({
     acknowledgement,
     setAcknowledgement,
@@ -42,7 +43,7 @@ const EvaluationAcknowledgeModal = ({
         (state) => state.pendingActions.pendingActionId
     );
     const { increaseCount } = useCounterStore();
-    const [updatePendingAction] = usePendingActionsIdMutation();
+    const [updatePendingAction] = useAcknowledgePendingActionsPastMutation();
     const DecisionColor = {
         Accepted: "green",
         Rejected: "red",
@@ -113,9 +114,17 @@ const EvaluationAcknowledgeModal = ({
     };
 
     const handleAcknowledgedIt = () => {
-        updatePendingAction({
-            id: pendingActionId,
-        });
+        if (auth.roleId === 6) {
+            updatePendingAction({
+                acknowledged: "lead_dev",
+                user_id: singleEvaluation?.user_id,
+            });
+        }
+        if (auth.roleId === 8) {
+            updatePendingAction({
+                user_id: singleEvaluation?.user_id,
+            });
+        }
 
         toast.success("Acknowledge successful!");
         setAcknowledgement(false);
