@@ -139,6 +139,7 @@ const SalesRiskQuestionList = () => {
                     setSingleQuestion={setSingleQuestion}
                     isTableShow={false}
                     isQuestionUpdating={isQuestionUpdating}
+                    setIsQuestionUpdating={setIsQuestionUpdating}
                     setAddQuestionsData={setSingleQuestion}
                     refetchSaleRiskAnalysis={refetch}
                 />

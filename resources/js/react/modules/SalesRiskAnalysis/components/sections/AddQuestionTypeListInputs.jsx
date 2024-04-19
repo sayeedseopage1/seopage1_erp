@@ -15,6 +15,8 @@ const AddQuestionTypeListInputs = ({
 }) => {
     let list = [...singleQuestion?.listItem ?? []];
 
+
+
     return (
         <div className="row mb-4 align-items-start">
             <ModalInputLabel className="col-4">

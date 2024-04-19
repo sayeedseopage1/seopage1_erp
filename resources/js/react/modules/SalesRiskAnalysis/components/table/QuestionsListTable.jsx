@@ -139,7 +139,9 @@ const QuestionsListTable = ({
                         label: row?.policy_title,
                     },
                     parent_question_for: row?.value,
+                    listItem: row.type === "list" ? row?.value : [],
                 };
+             
                 if (row?.parent_question?.type === "list") {
                     setSingleQuestion({
                         ...payload,
@@ -155,7 +157,6 @@ const QuestionsListTable = ({
         },
     });
 
-    console.log(table)
     return (
         <React.Fragment>
             <div
