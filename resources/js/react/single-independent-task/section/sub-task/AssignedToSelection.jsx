@@ -34,7 +34,7 @@ const AssginedToSelection = ({ selected, onSelect, taskCategory }) => {
             (d) => Number(d.role_id) === 5 || Number(d.role_id) === 14
         );
     }
-    console.log("employees", employees);
+    // console.log("employees", employees);
     const filteredData =
         query === ""
             ? employees

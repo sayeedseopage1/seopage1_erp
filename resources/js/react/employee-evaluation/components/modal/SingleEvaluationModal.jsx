@@ -30,8 +30,6 @@ const SingleEvaluationModal = ({
     data,
 }) => {
     const { evaluationObject, setEvaluationObject } = useEmployeeEvaluation();
-    const [evaluations, setEvaluations] = useState([]);
-
     const userIdFromParam = new URLSearchParams(location.search).get("user_id");
 
     const auth = useAuth();
@@ -73,6 +71,8 @@ const SingleEvaluationModal = ({
 
         fetchData();
     }, [userIdFromParam]);
+
+    // console.log("evaluation object", evaluationObject);
 
     useEffect(() => {
         const calculateAverageRating = (formData) => {
