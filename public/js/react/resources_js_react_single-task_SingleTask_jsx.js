@@ -14921,7 +14921,7 @@ var TaskEditForm = function TaskEditForm(_ref2) {
     if (graphicWorkDetails) {
       setBrandName(graphicWorkDetails === null || graphicWorkDetails === void 0 ? void 0 : graphicWorkDetails.brand_name);
       setNumOfVersions(graphicWorkDetails === null || graphicWorkDetails === void 0 ? void 0 : graphicWorkDetails.number_of_versions);
-      setReferenceList(JSON.parse(graphicWorkDetails === null || graphicWorkDetails === void 0 ? void 0 : graphicWorkDetails.reference));
+      // setReferenceList(JSON.parse(graphicWorkDetails?.reference));
       setFontName(graphicWorkDetails === null || graphicWorkDetails === void 0 ? void 0 : graphicWorkDetails.font_name);
       setFontUrl(graphicWorkDetails === null || graphicWorkDetails === void 0 ? void 0 : graphicWorkDetails.font_url);
       setPrimaryColor(graphicWorkDetails === null || graphicWorkDetails === void 0 ? void 0 : graphicWorkDetails.primary_color);
@@ -14929,6 +14929,13 @@ var TaskEditForm = function TaskEditForm(_ref2) {
       setIllustration(graphicWorkDetails === null || graphicWorkDetails === void 0 ? void 0 : graphicWorkDetails.design_instruction);
       setOthers(graphicWorkDetails === null || graphicWorkDetails === void 0 ? void 0 : graphicWorkDetails.design_instruction);
       setWorkableUrl(graphicWorkDetails === null || graphicWorkDetails === void 0 ? void 0 : graphicWorkDetails.workable_url);
+      if (graphicWorkDetails !== null && graphicWorkDetails !== void 0 && graphicWorkDetails.reference) {
+        if (lodash__WEBPACK_IMPORTED_MODULE_0___default().isEmpty(JSON.parse(graphicWorkDetails === null || graphicWorkDetails === void 0 ? void 0 : graphicWorkDetails.reference))) {
+          setReferenceList([].concat(_toConsumableArray(referenceList), _toConsumableArray(JSON.parse(graphicWorkDetails === null || graphicWorkDetails === void 0 ? void 0 : graphicWorkDetails.reference))));
+        } else {
+          setReferenceList(JSON.parse(graphicWorkDetails === null || graphicWorkDetails === void 0 ? void 0 : graphicWorkDetails.reference));
+        }
+      }
     }
   }, [graphicWorkDetails]);
   var _useGetTaskDetailsQue = (0,_services_api_SingleTaskPageApi__WEBPACK_IMPORTED_MODULE_15__.useGetTaskDetailsQuery)("/".concat(task === null || task === void 0 ? void 0 : task.id, "/json?mode=estimation_time"), {

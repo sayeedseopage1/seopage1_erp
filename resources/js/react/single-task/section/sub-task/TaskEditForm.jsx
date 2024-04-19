@@ -256,7 +256,7 @@ const TaskEditForm = ({ task, singleTask: row, onSubmit, isLoading, onClose }) =
         if (graphicWorkDetails) {
             setBrandName(graphicWorkDetails?.brand_name);
             setNumOfVersions(graphicWorkDetails?.number_of_versions);
-            setReferenceList(JSON.parse(graphicWorkDetails?.reference));
+            // setReferenceList(JSON.parse(graphicWorkDetails?.reference));
             setFontName(graphicWorkDetails?.font_name);
             setFontUrl(graphicWorkDetails?.font_url);
             setPrimaryColor(graphicWorkDetails?.primary_color);
@@ -264,6 +264,14 @@ const TaskEditForm = ({ task, singleTask: row, onSubmit, isLoading, onClose }) =
             setIllustration(graphicWorkDetails?.design_instruction);
             setOthers(graphicWorkDetails?.design_instruction);
             setWorkableUrl(graphicWorkDetails?.workable_url);
+
+            if (graphicWorkDetails?.reference) {
+                if (_.isEmpty(JSON.parse(graphicWorkDetails?.reference))) {
+                    setReferenceList([...referenceList, ...JSON.parse(graphicWorkDetails?.reference)]);
+                } else {
+                    setReferenceList(JSON.parse(graphicWorkDetails?.reference));
+                }
+            }
         }
     }, [graphicWorkDetails]);
 
@@ -850,8 +858,6 @@ const TaskEditForm = ({ task, singleTask: row, onSubmit, isLoading, onClose }) =
                             </div>
                         </div>
                     )} */}
-
-
 
                     <div className="col-6">
 

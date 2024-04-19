@@ -234,7 +234,11 @@ const TaskEditForm = ({ isOpen, close, row, table }) => {
             setNumOfVersions(graphicWorkDetails?.number_of_versions);
 
             if (graphicWorkDetails?.reference) {
-                setReferenceList(JSON.parse(graphicWorkDetails?.reference));
+                if (_.isEmpty(JSON.parse(graphicWorkDetails?.reference))) {
+                    setReferenceList([...referenceList, ...JSON.parse(graphicWorkDetails?.reference)]);
+                } else {
+                    setReferenceList(JSON.parse(graphicWorkDetails?.reference));
+                }
             }
 
             setFontName(graphicWorkDetails?.font_name);
@@ -600,7 +604,6 @@ const TaskEditForm = ({ isOpen, close, row, table }) => {
         setAttachedFiles(previousFile);
     }
 
-    // TODO: delete files for graphics design section here
     const [deleteGraphicsTaskFile] = useDeleteGraphicsTaskFileMutation()
 
     const handleDeleteBrandFile = (e, file, prev) => {
