@@ -1027,7 +1027,6 @@ class SalesRiskPolicyController extends AccountBaseController
                     goto endThreat;
                 }
 
-
                 // get question policy
                 $policy = SalesRiskPolicy::where('parent_id', $questions[0]->policy_id)->first();
                 $policyValue = json_decode($policy->value);
@@ -1344,6 +1343,7 @@ class SalesRiskPolicyController extends AccountBaseController
                     'comment' => $item->comment
                 ];
             });
+
         PolicyPointHistory::updateOrCreate(
             ['deal_id' => $deal_id],
             [
