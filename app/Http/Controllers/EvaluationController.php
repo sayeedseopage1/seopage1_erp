@@ -610,7 +610,11 @@ class EvaluationController extends AccountBaseController
     }
     public function getEmployeeUser($id)
     {
-        $evaluationUser = EmployeeEvaluation::where('user_id',$id)->first();
+        $evaluationUser = EmployeeEvaluation::select('employee_evaluations.*','employee_evaluation_tasks.lead_dev_id','users.id as assign_by_id','users.name as assign_by_name','users.image as assign_by_img')
+                        ->leftJoin('employee_evaluation_tasks','employee_evaluations.user_id','employee_evaluation_tasks.user_id')
+                        ->leftJoin('users','employee_evaluation_tasks.lead_dev_id','users.id')
+                        ->where('employee_evaluations.user_id',$id)
+                        ->first();
 
         return response()->json([
             'data' => $evaluationUser,

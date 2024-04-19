@@ -4482,6 +4482,7 @@ class TaskController extends AccountBaseController
             $data = User::where('role_id', 5)
             ->orWhere('role_id',9)
             ->orWhere('role_id',10) 
+            ->orWhere('role_id',14) 
             ->get()
             ->map(function ($row) {
                 $task_assign = Task::select('tasks.*')
