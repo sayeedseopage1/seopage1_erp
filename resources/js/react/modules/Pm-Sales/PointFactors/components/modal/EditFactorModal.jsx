@@ -1,11 +1,11 @@
-import React from "react";
+import React, { useEffect } from "react";
 import PropTypes from "prop-types";
 import { Flex } from "../../../../../global/styled-component/Flex";
 // ui components
 import CustomModal from "../Styles/ui/CustomModal/CustomModal";
 import { CheckboxContainer, ModalButton, ModalInput, ModalInputLabel, ModalSelectContainer, ModalTitle, StyledInput, StyledLabel } from "../Styles/ui/ui";
 import CustomDropDown from "../CustomDropdown";
-import { LimitConditions, LimitUnits } from "../../constant";
+import { LimitUnits } from "../../constant";
 import { useGetSinglePmPointFactorQuery } from "../../../../../services/api/pmSalesApiSlice";
 import Spinner from "../loader/Spinner";
 
@@ -16,7 +16,8 @@ const EditFactorModal = ({
     handleChange,
     handleUpdateFactor,
     isUpdatePmPointfactorLoading,
-    editFactorDataValidation
+    editFactorDataValidation,
+    setEditFactorData
 }) => {
     const { data: singleFactorData, isLoading: isLoadingSingleFactorData } =
         useGetSinglePmPointFactorQuery(editFactorData?.id, {
@@ -27,7 +28,31 @@ const EditFactorModal = ({
 
     const singleDefaultFactor = singleFactorData?.data
 
-    const { title, project_type, lower_limit, upper_limit, limit_type, limit_unit, point_type, points, point_depend_on_model, point_depend_on_field, status } = editFactorData || {}
+    const { title, project_type, lower_limit, upper_limit, lower_limit_condition, upper_limit_condition, limit_type, limit_unit, point_type, points, status, infiniteValueDown, infiniteValueUp } = editFactorData || {}
+
+    console.log("infiniteValueUp", infiniteValueUp)
+    console.log("infiniteValueDown", infiniteValueDown)
+
+    useEffect(() => {
+        if ((infiniteValueUp && !infiniteValueDown)) {
+            setEditFactorData({ ...editFactorData, upper_limit: lower_limit })
+        }
+    }, [infiniteValueUp])
+
+    useEffect(() => {
+        if ((!infiniteValueUp && infiniteValueDown)) {
+            setEditFactorData({ ...editFactorData, lower_limit: upper_limit })
+        }
+    }, [infiniteValueDown])
+
+    // console.log("lower limit disable", !infiniteValueUp && infiniteValueDown)
+    // console.log("upper limit disable", infiniteValueUp && !infiniteValueDown)
+
+    // console.log("lower_limit_condition", lower_limit_condition)
+    // console.log("upper_limit_condition", upper_limit_condition)
+
+    // const lowerLimitConditionVal = editFactorData?.infiniteValueDown ? editFactorData?.infiniteValueDown : editFactorData?.limit_type == 2 ? "==" : "<"
+    // const upperLimitConditionVal = editFactorData?.infiniteValueUp ? editFactorData?.infiniteValueUp : editFactorData?.limit_type == 2 ? "==" : ">="
 
     return (
         <CustomModal
@@ -107,7 +132,7 @@ const EditFactorModal = ({
 
                         {/* Lower Limit  *****required****** */}
                         {
-                            limit_type == 1 && <div className="row mb-4 align-items-center">
+                            limit_type == 1 && <div className="row mb-4 align-items-start">
                                 <ModalInputLabel className="col-4">
                                     Lower Limit <sup>*</sup>:{" "}
                                 </ModalInputLabel>
@@ -119,12 +144,29 @@ const EditFactorModal = ({
                                         value={lower_limit}
                                         onChange={handleChange}
                                         placeholder="Write Here"
+                                    // disabled={(!infiniteValueUp && infiniteValueDown)}
                                     />
                                     {editFactorDataValidation?.lower_limit && (
                                         <p className="text-danger">
                                             Lower Limit is required
                                         </p>
                                     )}
+
+                                    {
+                                        lower_limit < 0 && <p className="text-danger">Lower limit can not less than 0</p>
+                                    }
+
+                                    <CheckboxContainer className="mt-2">
+                                        <StyledInput
+                                            type="checkbox"
+                                            id="infiniteValueDown"
+                                            name="infiniteValueDown"
+                                            onChange={handleChange}
+                                            defaultChecked={lower_limit_condition == '>'}
+                                            value={">"}
+                                        />
+                                        <StyledLabel htmlFor="infiniteValueDown"><small style={{ fontSize: '12px', fontWeight: "500" }}>Smaller than lower limit</small></StyledLabel>
+                                    </CheckboxContainer>
                                 </div>
                             </div>
                         }
@@ -132,7 +174,7 @@ const EditFactorModal = ({
 
                         {/* Upper Limit  *****required****** */}
                         {
-                            limit_type == 1 && <div className="row mb-4 align-items-center">
+                            limit_type == 1 && <div className="row mb-4 align-items-start">
                                 <ModalInputLabel className="col-4">
                                     Upper Limit <sup>*</sup>:{" "}
                                 </ModalInputLabel>
@@ -144,12 +186,29 @@ const EditFactorModal = ({
                                         value={upper_limit}
                                         onChange={handleChange}
                                         placeholder="Write Here"
+                                    // disabled={(infiniteValueUp && !infiniteValueDown)}
                                     />
                                     {editFactorDataValidation?.upper_limit && (
                                         <p className="text-danger">
                                             Upper Limit is required
                                         </p>
                                     )}
+
+                                    {
+                                        lower_limit && (parseFloat(upper_limit) < parseFloat(lower_limit)) && <p className="text-danger">Upper limit must be greater than lower limit</p>
+                                    }
+
+                                    <CheckboxContainer className="mt-2">
+                                        <StyledInput
+                                            type="checkbox"
+                                            id="infiniteValueUp"
+                                            name="infiniteValueUp"
+                                            onChange={handleChange}
+                                            defaultChecked={upper_limit_condition == '<'}
+                                            value={"<"}
+                                        />
+                                        <StyledLabel htmlFor="infiniteValueUp"><small style={{ fontSize: '12px', fontWeight: "500" }}>Mark as infinity</small></StyledLabel>
+                                    </CheckboxContainer>
                                 </div>
                             </div>
                         }
@@ -210,44 +269,6 @@ const EditFactorModal = ({
                                             Points is required
                                         </p>
                                     )}
-                                </div>
-                            </div>
-                        }
-
-                        {/* point depend on model *****Optional******  */}
-                        {
-                            singleDefaultFactor?.point_depend_on_model && <div className="row mb-4 align-items-center">
-                                <ModalInputLabel className="col-4">
-                                    Point Depend on Model:{" "}
-                                </ModalInputLabel>
-                                <div className="col-8 flex-column px-0">
-                                    <ModalInput
-                                        type="text"
-                                        className="w-100"
-                                        name="point_depend_on_model"
-                                        value={point_depend_on_model}
-                                        onChange={handleChange}
-                                        placeholder="Write Here"
-                                    />
-                                </div>
-                            </div>
-                        }
-
-                        {/* point depend on field *****Optional****** */}
-                        {
-                            singleDefaultFactor?.point_depend_on_field && <div className="row mb-4 align-items-center">
-                                <ModalInputLabel className="col-4">
-                                    Point Depend on Field:{" "}
-                                </ModalInputLabel>
-                                <div className="col-8 flex-column px-0">
-                                    <ModalInput
-                                        type="text"
-                                        className="w-100"
-                                        name="point_depend_on_field"
-                                        value={point_depend_on_field}
-                                        onChange={handleChange}
-                                        placeholder="Write Here"
-                                    />
                                 </div>
                             </div>
                         }

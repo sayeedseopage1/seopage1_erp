@@ -33,7 +33,7 @@ const PointFactors = () => {
         limit_unit: {},
         point_type: "",
         points: "",
-        status: "1" //(optional)
+        status: "1"
     });
     const { activeFactorFields } = useActiveFactorFields({ newFactorData })
 
@@ -131,6 +131,7 @@ const PointFactors = () => {
 
     // handle input change
     const handleChange = (e) => {
+        console.log(newFactorData)
         const { name, value } = e.target;
         if (newFactorData[name] === value) {
             // If yes, clear the value from the state
@@ -226,12 +227,12 @@ const PointFactors = () => {
             }
             console.log("inside handler 4")
             console.log(payload)
-            const response = await createPmPointFactor(payload).unwrap();
-            if (response?.status == 200) {
-                toast.success(response.message);
-                handleAddNewItemModal();
-                resetFormState();
-            }
+            // const response = await createPmPointFactor(payload).unwrap();
+            // if (response?.status == 200) {
+            //     toast.success(response.message);
+            //     handleAddNewItemModal();
+            //     resetFormState();
+            // }
         } catch (error) {
             toast.error("Failed to add new item");
         }

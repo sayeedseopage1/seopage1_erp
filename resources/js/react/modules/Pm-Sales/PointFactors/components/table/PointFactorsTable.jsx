@@ -35,7 +35,7 @@ import PointFactorsTablePagination from "./PointFactorsTablePagination";
 import { useState } from "react";
 import PmPointFactorsTableLoader from "../loader/PmPointFactorsTableLoader";
 import EditFactorModal from "../modal/EditFactorModal";
-import { LimitConditions, LimitUnits } from "../../constant";
+import { LimitUnits } from "../../constant";
 import { useUpdatePmPointfactorMutation } from "../../../../../services/api/pmSalesApiSlice";
 import { validationFormator } from "../../utils/validationFormator";
 
@@ -59,8 +59,6 @@ const PointFactorsTable = ({
         pageIndex: 0,
         pageSize: 10,
     });
-
-    // console.log(tableData)
 
     // modal open close state
     const [editFactorModalOpen, setEditFactorModalOpen] = React.useState(false);
@@ -154,16 +152,16 @@ const PointFactorsTable = ({
             handleEditFactor: (factorData) => {
                 // find default value for dropdown options 
                 const limit_unit = LimitUnits?.data?.find(unit => unit?.name == factorData?.limit_unit)
-                const lower_limit_condition = LimitConditions?.data?.find(unit => unit?.name == factorData?.lower_limit_condition)
-                const upper_limit_condition = LimitConditions?.data?.find(unit => unit?.name == factorData?.upper_limit_condition)
 
                 // set editor data
-                setEditFactorData({ ...factorData, limit_unit, lower_limit_condition, upper_limit_condition });
+                setEditFactorData({
+                    ...factorData, limit_unit
+                });
                 setEditFactorModalOpen(true);
             },
         }
     })
-
+    console.log(editFactorData)
 
     const [editFactorDataValidation, setEditFactorDataValidation] =
         useState({
@@ -180,6 +178,7 @@ const PointFactorsTable = ({
 
     // handle change on input
     const handleChange = (e) => {
+        // console.log(editFactorData)
         const { name, value } = e.target;
         setEditFactorData({ ...editFactorData, [name]: value });
         /*  if (editFactorData[name] === value) {
@@ -191,9 +190,6 @@ const PointFactorsTable = ({
          } */
     }
 
-    // Edit Policy
-    // handle cancel rule on policy
-
     // modal Close Handler
     const handleCloseEditFactorModal = () => {
         setEditFactorModalOpen(false);
@@ -204,8 +200,10 @@ const PointFactorsTable = ({
     const [updatePmPointfactor, { isLoading: isUpdatePmPointfactorLoading }] = useUpdatePmPointfactorMutation()
 
     const handleUpdateFactor = async () => {
+        // console.log("inside handler for update 1")
         const validation = validationFormator(editFactorData, editFactorDataValidation)
-
+        // console.log("inside handler for update 2")
+        // console.log(validation)
         if (
             Object.entries(validation).some(
                 ([key, value]) => key !== "isSubmitting" && value === true
@@ -217,8 +215,11 @@ const PointFactorsTable = ({
             });
             return;
         }
-
+        // console.log("inside handler for update 3")
         try {
+            const lowerLimitCondition = editFactorData?.infiniteValueDown ? editFactorData?.infiniteValueDown : editFactorData?.limit_type == 2 ? "==" : "<"
+            const upperLimitCondition = editFactorData?.infiniteValueUp ? editFactorData?.infiniteValueUp : editFactorData?.limit_type == 2 ? "==" : ">="
+
             const payload = {
                 criteria_id: parseInt(editFactorData?.criteria_id),
                 title: editFactorData?.title ?? null,
@@ -227,18 +228,20 @@ const PointFactorsTable = ({
                 upper_limit: parseInt(editFactorData?.upper_limit) ?? null,
                 limit_type: parseInt(editFactorData?.limit_type) ?? null,
                 limit_unit: parseInt(editFactorData?.limit_unit?.name) ?? null,
-                lower_limit_condition: editFactorData?.lower_limit_condition?.name ?? null,
-                upper_limit_condition: editFactorData?.upper_limit_condition?.name ?? null,
+                lower_limit_condition: lowerLimitCondition ?? null,
+                upper_limit_condition: upperLimitCondition ?? null,
                 point_type: parseInt(editFactorData?.point_type) ?? null,
                 points: parseFloat(editFactorData?.points) ?? null,
                 status: parseInt(editFactorData?.status) ?? null,
             }
 
-            const response = await updatePmPointfactor({ id: editFactorData?.id, payload }).unwrap();
-            if (response?.status == 200) {
-                toast.success(response.message);
-                handleCloseEditFactorModal();
-            }
+            console.log(payload)
+
+            // const response = await updatePmPointfactor({ id: editFactorData?.id, payload }).unwrap();
+            // if (response?.status == 200) {
+            //     toast.success(response.message);
+            //     handleCloseEditFactorModal();
+            // }
         } catch (error) {
             toast.error("Failed to update item");
         }
