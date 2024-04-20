@@ -668,12 +668,12 @@ class SalesRiskPolicyController extends AccountBaseController
         $req->session()->put('deal_id', $deal_id);
 
         $deal = Deal::find($deal_id);
-        if (in_array($deal->status, ['authorized', 'auto-authorized'])) {
+        if (in_array($deal->sale_analysis_status, ['authorized', 'auto-authorized'])) {
             return redirect()->route('dealDetails', $deal_id);
         }
 
         $data = $this->data;
-        $data['dealStatus'] = $deal->status;
+        $data['dealStatus'] = $deal->sale_analysis_status;
         $data['addedBefore'] = PolicyQuestionValue::where('deal_id', $deal_id)->count() > 0;
         $data['redirectUrl'] = route('dealDetails', $deal_id);
         // Note: big form route : route('dealDetails', $deal->id)
@@ -746,6 +746,7 @@ class SalesRiskPolicyController extends AccountBaseController
                 PolicyQuestionValue::where('deal_id', $dealId)->delete();
                 return response()->json(['status' => 'error', 'message' => $calculation['error']], 500);
             }
+
 
             // deals table status change
             if ($calculation['points'] >= 0) {
@@ -1407,7 +1408,7 @@ class SalesRiskPolicyController extends AccountBaseController
                     }
                 })
                 ->offset($req->input('limit', 10) * ($req->input('page', 1) - 1))
-                // ->latest('updated_at')
+                ->latest('updated_at')
                 ->paginate($req->input('limit', 10));
 
             $itemsTransformed = $itemsPaginated
@@ -1421,7 +1422,7 @@ class SalesRiskPolicyController extends AccountBaseController
                         'client_name' => $item->client_name,
                         'deal_id' => $item->id,
                         'deal_name' => $item->deal_id,
-                        'status' => $item->status,
+                        'status' => $item->sale_analysis_status,
                         'project_name' => $item->project_name,
                         'project_budget' => $item->actual_amount,
                         'lead_id' => $item->lead_id,
