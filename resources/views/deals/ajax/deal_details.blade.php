@@ -784,6 +784,14 @@
                                 <div class="text-center">
                                     <h2 style="color:red;">Denied</h2>
                                 </div>
+                            @elseif ($salesDeal->client_name)
+                            <div class="sp1_deal-stage-wrapper">
+                                <h2 style="color:rgb(62, 146, 214);">
+                                    <a class="btn btn-info" href="{{ route('account.sale-risk-policies.risk-analysis', $salesDeal->id) }}">
+                                        Add Quesiton Answer
+                                    </a>
+                                </h2>
+                            </div>
                             @endif
                         @elseif ($deal->won_lost == null)
                             @if ($deal->deal_stage == 5)
