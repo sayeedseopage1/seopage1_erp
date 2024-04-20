@@ -756,7 +756,7 @@ class SalesRiskPolicyController extends AccountBaseController
                 $deal->sale_analysis_status = 'auto-authorized';
                 $deal->sale_authorize_on = date('Y-m-d h:i:s');
             } else {
-                $deal->status = 'analysis';
+                $deal->sale_analysis_status = 'analysis';
             }
 
             $deal->save();
@@ -772,7 +772,7 @@ class SalesRiskPolicyController extends AccountBaseController
             // if error then delete previous records
             PolicyQuestionValue::where('deal_id', $dealId)->delete();
 
-            throw $th;
+            // throw $th;
             return response()->json(['status' => 'error', 'message' => 'Data did not stored successfully.'], 500);
         }
     }
@@ -985,11 +985,6 @@ class SalesRiskPolicyController extends AccountBaseController
                 check1Milestone:
 
                 // get selection value
-                $value = PolicyQuestionValue::where([
-                    'question_id' => $questions[2]->id,
-                    'deal_id' => $deal_id
-                ])->first()->value;
-
                 if (isset($questionAns[$questions[2]->id]))
                     $value = $questionAns[$questions[2]->id];
                 else {
@@ -1412,6 +1407,7 @@ class SalesRiskPolicyController extends AccountBaseController
                     }
                 })
                 ->offset($req->input('limit', 10) * ($req->input('page', 1) - 1))
+                // ->latest('updated_at')
                 ->paginate($req->input('limit', 10));
 
             $itemsTransformed = $itemsPaginated
