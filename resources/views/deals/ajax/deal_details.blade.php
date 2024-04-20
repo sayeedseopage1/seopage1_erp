@@ -760,7 +760,7 @@
                         <h3>Deal Status</h3><br>
                         @if ($salesDeal)
                             <input type="hidden" value="{{ $salesDeal ? $salesDeal->id : null }}">
-                            @if ($salesDeal->sales_analysis_status == 'analysis')
+                            @if ($salesDeal->sale_analysis_status == 'analysis')
                                 @if (auth()->user()->role_id == 1)
                                     <div class="sp1_deal-stage-wrapper">
                                         <h2 style="color:rgb(62, 146, 214);"><a class="btn btn-info"
@@ -772,7 +772,7 @@
                                         <h2 style="color:rgb(62, 146, 214);">In Analysis</h2>
                                     </div>
                                 @endif
-                            @elseif (in_array($salesDeal->sales_analysis_status, ['accepted', 'auto-accepted']))
+                            @elseif (in_array($salesDeal->sale_analysis_status, ['accepted', 'auto-accepted']))
                                 <div class="sp1_deal-stage-wrapper">
                                     <h2 style="color:rgb(62, 146, 214);">
                                         <a class="btn btn-info" href="{{ route('dealDetails', $salesDeal->id) }}">
@@ -780,10 +780,18 @@
                                         </a>
                                     </h2>
                                 </div>
-                            @elseif ($salesDeal->sales_analysis_status == 'denied')
+                            @elseif ($salesDeal->sale_analysis_status == 'denied')
                                 <div class="text-center">
                                     <h2 style="color:red;">Denied</h2>
                                 </div>
+                            @elseif ($salesDeal->client_name)
+                            <div class="sp1_deal-stage-wrapper">
+                                <h2 style="color:rgb(62, 146, 214);">
+                                    <a class="btn btn-info" href="{{ route('account.sale-risk-policies.risk-analysis', $salesDeal->id) }}">
+                                        Add Quesiton Answer
+                                    </a>
+                                </h2>
+                            </div>
                             @endif
                         @elseif ($deal->won_lost == null)
                             @if ($deal->deal_stage == 5)

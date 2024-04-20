@@ -25,8 +25,8 @@ return new class extends Migration
         /*  end */
 
         Schema::table('deals', function (Blueprint $table) {
-            $table->enum('sales_analysis_status', ['pending', 'analysis', 'authorized', 'auto-authorized', 'denied'])->default('pending')->after('authorization_status');
-            $table->bigInteger('sale_authorize_by')->nullable()->after('sales_analysis_status');
+            $table->enum('sale_analysis_status', ['pending', 'analysis', 'authorized', 'auto-authorized', 'denied'])->default('pending')->after('authorization_status');
+            $table->bigInteger('sale_authorize_by')->nullable()->after('sale_analysis_status');
             $table->dateTime('sale_authorize_on')->nullable()->after('sale_authorize_by');
         });
 
@@ -40,7 +40,7 @@ return new class extends Migration
     public function down()
     {
         Schema::table('deals', function (Blueprint $table) {
-            $table->dropColumn('sales_analysis_status', 'sale_authorize_by', 'sale_authorize_on');
+            $table->dropColumn('sale_analysis_status', 'sale_authorize_by', 'sale_authorize_on');
         });
     }
 };

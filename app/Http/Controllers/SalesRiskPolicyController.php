@@ -54,14 +54,6 @@ class SalesRiskPolicyController extends AccountBaseController
             }
         });
 
-        if (!Schema::hasColumn('deals', 'sales_analysis_status')) {
-            Schema::table('deals', function (Blueprint $table) {
-                $table->enum('sales_analysis_status', ['pending', 'analysis', 'authorized', 'auto-authorized', 'denied'])->default('pending')->after('authorization_status');
-                $table->bigInteger('sale_authorize_by')->nullable()->after('sales_analysis_status');
-                $table->dateTime('sale_authorize_on')->nullable()->after('sale_authorize_by');
-            });
-        }
-
         if (!Schema::hasColumn('policy_point_histories', 'points')) {
             Schema::table('policy_point_histories', function (Blueprint $table) {
                 $table->float('points', 8, 2)->after('policy')->comment('actual gained points after calculation');
@@ -758,7 +750,7 @@ class SalesRiskPolicyController extends AccountBaseController
                 $dealStage->won_lost = 'Yes';
                 $dealStage->save();
 
-                $deal->sales_analysis_status = 'auto-authorized';
+                $deal->sale_analysis_status = 'auto-authorized';
                 $deal->sale_authorize_on = date('Y-m-d h:i:s');
             } else {
                 $deal->status = 'analysis';
@@ -1407,7 +1399,7 @@ class SalesRiskPolicyController extends AccountBaseController
     function salesRiskReportList(Request $req)
     {
         if (url()->current() == route('account.sale-risk-policies.report-data')) {
-            $itemsPaginated = Deal::whereIn('sales_analysis_status', ['analysis', 'authorized', 'auto-authorized', 'denied'])
+            $itemsPaginated = Deal::whereIn('sale_analysis_status', ['analysis', 'authorized', 'auto-authorized', 'denied'])
                 ->where(function ($query) use ($req) {
                     if ($req->start_date) {
                         $query->whereDate('created_at', '>=', $req->start_date);
@@ -1424,7 +1416,7 @@ class SalesRiskPolicyController extends AccountBaseController
                 ->map(function ($item) {
 
                     $lead = Lead::find($item->lead_id);
-                    $user = $item->authorize_by ?  User::find($item->authorize_by) : null;
+                    $user = $item->sale_authorize_by ?  User::find($item->sale_authorize_by) : null;
                     return [
                         'client_id' => $item->client_id,
                         'client_name' => $item->client_name,
@@ -1478,9 +1470,9 @@ class SalesRiskPolicyController extends AccountBaseController
         $dealStage = DealStage::where('lead_id', $deal->lead_id)->first();
         if ($status == '1') {
             $dealStage->won_lost = 'Yes';
-            $deal->sales_analysis_status = 'authorized';
+            $deal->sale_analysis_status = 'authorized';
         } elseif ($status == '0') {
-            $deal->sales_analysis_status = 'denied';
+            $deal->sale_analysis_status = 'denied';
         }
 
         $deal->sale_authorize_by = auth()->user()->id;
