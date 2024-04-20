@@ -878,3 +878,9 @@
   background-color: #17A2B8;
   border-color: #17A2B8;
 }
+
+.customConfirmButton{
+  padding-top: 10px !important ;
+  padding-bottom: 10px !important ;
+  
+}
