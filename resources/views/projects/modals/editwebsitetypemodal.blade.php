@@ -1,76 +1,60 @@
-<div class="modal fade" id="editwebsitetypemodal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog d-flex justify-content-center align-items-center modal-lg">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="modelHeading">Edit Website Type</h5>
-                <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
+@php
+    $websiteType = App\Models\ProjectWebsiteType::find($id);
+@endphp
+<div class="modal-header">
+    <h5 class="modal-title" id="modelHeading">Edit Website Type</h5>
+    <button type="button"  class="close" data-dismiss="modal" aria-label="Close"><span
+            aria-hidden="true">×</span></button>
+</div>
+<div class="modal-body">
+    <form action="">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="form-group">
+                    <label for="current_deadline">Chose Website Type</label>
+                    <input type="text" class="form-control height-35 f-14" placeholder="Enter a cms name" name="website_type" id="website_type2" value="{{$websiteType->website_type}}">
+                    <span id="website_type_error" class="text-danger"></span>
+                </div>
             </div>
-            <form method="post"  autocomplete="off">
-                @csrf
-                @method('PUT')
-                <input type="hidden" id="id">
-                <div class="modal-body">
-                    <div class="row border-top-grey">
-                        <div class="col-sm-12">
-                            <div class="form-group my-3">
-                                <label class="f-14 text-dark-grey mb-12" data-label="true" for="category_name">Chose Website Type</label>
-                                <input type="text" class="form-control height-35 f-14" placeholder="Enter a cms name" name="website_type2" id="website_type2">
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary" id="update_website_type">Submit</button>
-                </div>
-            </form>
         </div>
-    </div>
+        <button type="button" class="btn btn-primary mt-3" id="update_website_type">Submit</button>
+    </form>
+</div>
+<div class="modal-footer">
+    <x-forms.button-cancel data-dismiss="modal" class="border-0 mr-3">@lang('app.close')</x-forms.button-cancel>
 </div>
 <script>
-    $(document).on('click', '.update_website_type_form', function() {
-        let id = $(this).data('id');
-        let website_type = $(this).data('name');
-
-        $('#id').val(id);
-        $('#website_type2').val(website_type);
-    });
-
-    $(document).on('click', '#update_website_type', function(e) {
+    $('#update_website_type').click(function(e){
         e.preventDefault();
         $('#update_website_type').attr("disabled", true);
         $('#update_website_type').html("Processing...");
-        let id = $('#id').val();
-        let website_type = $('#website_type2').val();
-
+        var data= {
+            '_token': "{{ csrf_token() }}",
+            'website_type': document.getElementById("website_type2").value,
+            'id': {{$websiteType->id}},
+        }
         $.ajaxSetup({
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             }
         });
-
         $.ajax({
-            url: '/projects/update-website-type/'+id,
-            method: 'put',
-            data: {
-                id: id,
-                website_type: website_type,
+            type: "POST",
+            url: "{{route('update-website-type')}}",
+            data: data,
+            dataType: "json",
+            success: function (response) {
+                toastr.success('Submit Successfully');
+                window.location.reload();
+                $('#update_website_type').attr("disabled", false);
+                $('#update_website_type').html("Submit");
             },
-            success: function(res) {
-                if (res.status == 200) {
-                    $('#update_website_type').attr("disabled", false);
-                    $('#update_website_type').html("Submit");
-                    window.location.reload();
-                    Swal.fire({
-                        position: 'top-end',
-                        icon: 'success',
-                        title: 'Website Type Update Successfully',
-                        showConfirmButton: false,
-                        timer: 1500
-                    })
+            error: function(error) {
+                if(error.responseJSON.errors.website_type){
+                    $('#website_type_error').text(error.responseJSON.errors.website_type);
+                }else{
+                    $('#website_type_error').text('');
                 }
-            },
-            error: function(err) {
                 $('#update_website_type').attr("disabled", false);
                 $('#update_website_type').html("Submit");
             }

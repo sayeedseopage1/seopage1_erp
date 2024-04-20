@@ -14,7 +14,7 @@
                         <label class="f-14 text-dark-grey mb-12" data-label="true" for="category_name">Category Name
                             <sup class="f-14 mr-1">*</sup>
                         </label>
-                        <input type="text" class="form-control height-35 f-14" placeholder="Enter a category name" name="category_name" id="category_name">
+                        <input type="text" class="form-control height-35 f-14 search-niche-category" placeholder="Enter a category name" name="category_name" id="category_name">
                         <span id="category_nameError" class="text-danger mt-2"></span>
                     </div>
                 </div>
@@ -33,16 +33,6 @@
                     </div>
                 </div>
             </div>
-{{--              <div class="row">--}}
-{{--                  <div class="col-sm-12">--}}
-{{--                      <div class="form-group my-3">--}}
-{{--                          <label class="f-14 text-dark-grey mb-12" data-label="true" for="category_name">Select Sub Category</label>--}}
-{{--                          <select name="sub_category_id" id="sub_category" class="form-control height-35 f-14">--}}
-{{--                              <option value="" selected>--</option>--}}
-{{--                          </select>--}}
-{{--                      </div>--}}
-{{--                  </div>--}}
-{{--              </div>--}}
           </div>
           <div class="modal-footer">
               <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -53,7 +43,16 @@
   </div>
 </div>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-3-typeahead/4.0.2/bootstrap3-typeahead.min.js"></script>
 <script>
+    var path = "{{ route('check-niche-category') }}";
+    $('input.search-niche-category').typeahead({
+        source: function(category_name, process){
+            return $.get(path, {category_name: category_name}, function(data){
+                return process(data)
+            })
+        }
+    });
     $(document).ready(function() {
         $('#parent_category').on('change', function() {
             var parentCategoryId = $(this).val();

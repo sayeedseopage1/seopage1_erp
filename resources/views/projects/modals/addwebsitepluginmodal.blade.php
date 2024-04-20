@@ -14,7 +14,7 @@
                                 <div class="col-md-4">
                                     <div class="form-group">
                                         <label for="plugin_name">Plugin Name</label>
-                                        <input type="text" id="plugin_name" class="form-control height-35 f-14" placeholder="Type official plugin name" name="plugin_name[]"/>
+                                        <input type="text" id="plugin_name" class="form-control height-35 f-14 search-website-plugin" placeholder="Type official plugin name" name="plugin_name[]"/>
                                         <span id="plugin_name_error" class="text-danger"></span>
                                     </div>
                                 </div>
@@ -44,7 +44,16 @@
         </div>
     </div>
 </div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-3-typeahead/4.0.2/bootstrap3-typeahead.min.js"></script>
 <script>
+    var path = "{{ route('check-website-plugin') }}";
+    $('input.search-website-plugin').typeahead({
+        source: function(plugin_name, process){
+            return $.get(path, {plugin_name: plugin_name}, function(data){
+                return process(data)
+            })
+        }
+    });
     $('#add_plugin').click(function(e){
         // alert('ok');
         e.preventDefault();

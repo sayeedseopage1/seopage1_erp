@@ -1676,27 +1676,37 @@ Route::get('/project-deadline-ext-view', [ProjectController::class, 'pDExtension
 //add project niche
 Route::get('/projects/view-category', [ProjectController::class, 'viewCategory'])->name('project-view-category');
 Route::get('/projects/get-sub-category/{id}', [ProjectController::class, 'parentCategoryId']);
-Route::put('/projects/update-niche-category/{id}', [ProjectController::class, 'updateCategory']);
+Route::get('/project/edit/category', [ProjectController::class, 'editCategory'])->name('edit-niche-category');
+Route::post('/projects/update-niche-category', [ProjectController::class, 'updateCategory'])->name('update-niche-category');
+Route::get('/check-niche-category', [ProjectController::class, 'checkCategory'])->name('check-niche-category');
 
 //add project cms
 Route::get('/projects/view-cms', [ProjectController::class, 'viewCms'])->name('project-view-cms');
 Route::post('/projects/add-cms', [ProjectController::class, 'storeCms'])->name('add-cms');
-Route::put('/projects/update-cms/{id}', [ProjectController::class, 'updateCms']);
+Route::get('/project/cms/edit', [ProjectController::class, 'editCms'])->name('edit-cms');
+Route::post('/projects/update-cms', [ProjectController::class, 'updateCms'])->name('update-cms');
+Route::get('/check-cms', [ProjectController::class, 'checkCms'])->name('check-cms');
 
 //add project website type
 Route::get('/projects/view-website-type', [ProjectController::class, 'viewWebsiteType'])->name('project-view-website-type');
 Route::post('/projects/add-website-type', [ProjectController::class, 'storeWebsiteType'])->name('add-website-type');
-Route::put('/projects/update-website-type/{id}', [ProjectController::class, 'updateWebsiteType']);
+Route::get('/project/edit-website-type', [ProjectController::class, 'editWebsiteType'])->name('edit-website-type');
+Route::post('/projects/update-website-type', [ProjectController::class, 'updateWebsiteType'])->name('update-website-type');
+Route::get('/check-website-type', [ProjectController::class, 'checkWebsiteType'])->name('check-website-type');
 
 //add project website theme
 Route::get('/projects/view-website-theme', [ProjectController::class, 'viewWebsiteTheme'])->name('project-view-website-theme');
 Route::post('/projects/add-website-theme', [ProjectController::class, 'storeWebsiteTheme'])->name('add-website-theme');
-Route::put('/projects/update-website-theme/{id}', [ProjectController::class, 'updateWebsiteTheme']);
+Route::get('/project/edit-website-theme', [ProjectController::class, 'editWebsiteTheme'])->name('edit-website-theme');
+Route::post('/projects/update-website-theme', [ProjectController::class, 'updateWebsiteTheme'])->name('update-website-theme');
+Route::get('/check-website-theme', [ProjectController::class, 'checkWebsiteTheme'])->name('check-website-theme');
 
 //add project website plugin
 Route::get('/projects/view-website-plugin', [ProjectController::class, 'viewWebsitePlugin'])->name('project-view-website-plugin');
 Route::post('/projects/add-website-plugin', [ProjectController::class, 'storeWebsitePlugin'])->name('add-website-plugin');
-Route::put('/projects/update-website-plugin/{id}', [ProjectController::class, 'updateWebsitePlugin']);
+Route::get('/project/edit-website-plugin', [ProjectController::class, 'editWebsitePlugin'])->name('edit-website-plugin');
+Route::post('/projects/update-website-plugin', [ProjectController::class, 'updateWebsitePlugin'])->name('update-website-plugin');
+Route::get('/check-website-plugin', [ProjectController::class, 'checkWebsitePlugin'])->name('check-website-plugin');
 
 
 //Cross Departmental Work
