@@ -84,9 +84,12 @@ const SaleRiskQuestionsInputContainer = ({
                                     label={addNumberOnTitle(
                                         index,
                                         question?.title,
-                                        isChild,
+                                        isChild
                                     )}
-                                    isCurrencyHave={question?.currency}
+                                    isCurrencyHave={{
+                                        status: question?.currency,
+                                        currency: currencyData,
+                                    }}
                                     isSubmitting={isSubmitting}
                                     value={getInputValue(question.id)}
                                     onChange={(e) => {
@@ -137,10 +140,12 @@ const SaleRiskQuestionsInputContainer = ({
                                     label={addNumberOnTitle(
                                         index,
                                         question?.title,
-                                        isChild,
-                                    
+                                        isChild
                                     )}
-                                    isCurrencyHave={question?.currency}
+                                    isCurrencyHave={{
+                                        status: question?.currency,
+                                        currency: currencyData,
+                                    }}
                                     isChild={isChild}
                                     comment={question.comment}
                                     onChange={(value) => {
@@ -194,10 +199,12 @@ const SaleRiskQuestionsInputContainer = ({
                                     label={addNumberOnTitle(
                                         index,
                                         question?.title,
-                                        isChild,
-                                        
+                                        isChild
                                     )}
-                                    isCurrencyHave={question?.currency}
+                                    isCurrencyHave={{
+                                        status: question?.currency,
+                                        currency: currencyData,
+                                    }}
                                     onFocus={() => {
                                         handleQuestionFocus(question);
                                     }}
@@ -245,10 +252,12 @@ const SaleRiskQuestionsInputContainer = ({
                                     label={addNumberOnTitle(
                                         index,
                                         question?.title,
-                                        isChild,
-                                        
+                                        isChild
                                     )}
-                                    isCurrencyHave={question?.currency}
+                                    isCurrencyHave={{
+                                        status: question?.currency,
+                                        currency: currencyData,
+                                    }}
                                     comment={question.comment}
                                     isChild={isChild}
                                     accordionData={
@@ -312,7 +321,10 @@ const SaleRiskQuestionsInputContainer = ({
                                         question?.title,
                                         isChild
                                     )}
-                                    isCurrencyHave={question?.currency}
+                                    isCurrencyHave={{
+                                        status: question?.currency,
+                                        currency: currencyData,
+                                    }}
                                     onFocus={() => {
                                         handleQuestionFocus(question);
                                     }}

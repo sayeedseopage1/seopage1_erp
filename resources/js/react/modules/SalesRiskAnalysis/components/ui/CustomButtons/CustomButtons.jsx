@@ -1,4 +1,3 @@
-
 import PropTypes from "prop-types";
 
 // ui components
@@ -24,11 +23,33 @@ const CustomButtons = ({
     isCurrencyHave,
     ...props
 }) => {
+    const { currency } = isCurrencyHave;
+    const getCurrencySymbol = () => {
+        if (currency?.length) {
+            return `${currency[2]} ${currency[0]}`;
+        }
+    };
     return (
         <div className="d-flex flex-column mb-4">
             {label && (
                 <CustomInputsLabel color={isChild ? "#b1b1b1" : "#000000"}>
                     {label}{" "}
+                    {isCurrencyHave.status && (
+                        <span
+                            className="ml-2"
+                            style={{
+                                color: "#000000",
+                                backgroundColor: "#c4de95",
+                                padding: "2px 12px",
+                                borderRadius: "4px",
+                                fontSize: "14px",
+                                alignItems: "center",
+                                display: "flex",
+                            }}
+                        >
+                            Currency in {getCurrencySymbol()}
+                        </span>
+                    )}
                     {props?.comment && (
                         <span className="ml-2">
                             <Tooltip text={props?.comment}>
@@ -51,7 +72,6 @@ const CustomButtons = ({
                             ? style.customBtn_primary_active
                             : style.customBtn_primary
                     } `}
-               
                     onClick={() => onChange("yes")}
                     value={value}
                 >
@@ -63,7 +83,6 @@ const CustomButtons = ({
                             ? style.customBtn_secondary_active
                             : style.customBtn_secondary
                     } `}
-                    
                     onClick={() => onChange("no")}
                     value={value}
                 >
@@ -71,7 +90,9 @@ const CustomButtons = ({
                 </button>
             </div>
             {isSubmitting && !value && (
-                <span style={{ color: "red", fontSize: "14px" , marginTop: "8px" }}>
+                <span
+                    style={{ color: "red", fontSize: "14px", marginTop: "8px" }}
+                >
                     This field is required
                 </span>
             )}
@@ -80,7 +101,6 @@ const CustomButtons = ({
 };
 
 export default CustomButtons;
-
 
 CustomButtons.propTypes = {
     label: PropTypes.string,
@@ -99,5 +119,5 @@ CustomButtons.propTypes = {
     props: PropTypes.object,
     isSubmitting: PropTypes.bool,
     comment: PropTypes.string,
-    isCurrencyHave: PropTypes.bool,
-}
+    isCurrencyHave: PropTypes.object,
+};

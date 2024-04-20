@@ -11,6 +11,7 @@ import { CustomInputsLabel } from "../Styles/ui";
 
 // ui components
 import Tooltip from "../../Tooltip";
+import { SalesRiskAnalysisContext } from "../../../context/SalesRiskAnalysisProvider";
 
 const CustomAccordion = ({
     expendable = true,
@@ -25,8 +26,9 @@ const CustomAccordion = ({
     isSubmitting,
     comment,
     placeholder,
-    isCurrencyHave
+    isCurrencyHave,
 }) => {
+    const { currency } = isCurrencyHave;
     const [expend, setExpend] = React.useState(false);
     const [active, setActive] = React.useState({});
     const toggle = () => {
@@ -39,14 +41,12 @@ const CustomAccordion = ({
         return String.fromCharCode(65 + index); // Convert index to alphabetic character
     };
 
-
     const handleTernary = () => {
-
-        if(!expendable) { 
+        if (!expendable) {
             return null;
         }
 
-        if(expend) {
+        if (expend) {
             return (
                 <span className="__icon customAccordion__Icon">
                     <i className="fa-solid fa-chevron-up"></i>
@@ -59,7 +59,13 @@ const CustomAccordion = ({
                 </span>
             );
         }
-    }
+    };
+
+    const getCurrencySymbol = () => {
+        if (currency?.length) {
+            return `${currency[2]} ${currency[0]}`;
+        }
+    };
 
     return (
         <div className="d-flex flex-column">
@@ -68,6 +74,22 @@ const CustomAccordion = ({
                 color={isChild ? "#b1b1b1" : "#000000"}
             >
                 {label}{" "}
+                {isCurrencyHave.status && (
+                    <span
+                        className="ml-2"
+                        style={{
+                            color: "#000000",
+                            backgroundColor: "#c4de95",
+                            padding: "2px 12px",
+                            borderRadius: "4px",
+                            fontSize: "14px",
+                            alignItems: "center",
+                            display: "flex",
+                        }}
+                    >
+                        Currency in {getCurrencySymbol()}
+                    </span>
+                )}
                 {comment && (
                     <span className="ml-2">
                         <Tooltip text={comment}>
@@ -95,7 +117,6 @@ const CustomAccordion = ({
                     onKeyDown={() => (expendable ? toggle() : null)}
                     role="button"
                     tabIndex={0}
-                    
                 >
                     <div
                         className={`d-flex justify-content-between align-items-center w-100 ${
@@ -163,8 +184,6 @@ const CustomAccordion = ({
 
 export default CustomAccordion;
 
-
-
 CustomAccordion.propTypes = {
     expendable: PropTypes.bool,
     children: PropTypes.node,
@@ -178,6 +197,5 @@ CustomAccordion.propTypes = {
     isSubmitting: PropTypes.bool,
     comment: PropTypes.string,
     placeholder: PropTypes.string,
-    isCurrencyHave: PropTypes.bool,
-
-}
+    isCurrencyHave: PropTypes.object,
+};

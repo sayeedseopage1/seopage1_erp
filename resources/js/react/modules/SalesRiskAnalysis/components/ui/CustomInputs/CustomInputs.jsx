@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 import PropTypes from "prop-types";
 
 // Ui components
@@ -29,10 +29,31 @@ const CustomInputs = ({
     isCurrencyHave,
     ...props
 }) => {
+    const { currency } = isCurrencyHave;
     const handleOnkeypress = (e) => {
-        const allowedKeys = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'Backspace', 'ArrowLeft', 'ArrowRight'];
+        const allowedKeys = [
+            "0",
+            "1",
+            "2",
+            "3",
+            "4",
+            "5",
+            "6",
+            "7",
+            "8",
+            "9",
+            "Backspace",
+            "ArrowLeft",
+            "ArrowRight",
+        ];
         if (!allowedKeys.includes(e.key)) {
             e.preventDefault();
+        }
+    };
+
+    const getCurrencySymbol = () => {
+        if (currency?.length) {
+            return `${currency[2]} ${currency[0]}`;
         }
     };
 
@@ -40,6 +61,22 @@ const CustomInputs = ({
         <div className="d-flex flex-column mb-4">
             <CustomInputsLabel color={isChild ? "#b1b1b1" : "#000000"}>
                 {label}{" "}
+                {isCurrencyHave.status && (
+                    <span
+                        className="ml-2"
+                        style={{
+                            color: "#000000",
+                            backgroundColor: "#c4de95",
+                            padding: "2px 12px",
+                            borderRadius: "4px",
+                            fontSize: "14px",
+                            alignItems: "center",
+                            display: "flex",
+                        }}
+                    >
+                        Currency in {getCurrencySymbol()}
+                    </span>
+                )}
                 {props?.comment && (
                     <span className="ml-2">
                         <Tooltip text={props?.comment}>
@@ -107,7 +144,9 @@ const CustomInputs = ({
                 </Switch.Case>
             </Switch>
             {isSubmitting && !value && (
-                <span style={{ color: "red", fontSize: "14px" , marginTop: "8px" }}>
+                <span
+                    style={{ color: "red", fontSize: "14px", marginTop: "8px" }}
+                >
                     This field is required
                 </span>
             )}
@@ -134,5 +173,5 @@ CustomInputs.propTypes = {
     isChild: PropTypes.bool,
     comment: PropTypes.string,
     isSubmitting: PropTypes.bool,
-    isCurrencyHave: PropTypes.bool,
+    isCurrencyHave: PropTypes.object,
 };

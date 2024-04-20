@@ -1,4 +1,4 @@
-export const currencySymbol = {
+export const CurrencySymbol = {
   "USD": {
     "symbol": "$",
     "name": "US Dollar",

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 import { toast } from "react-toastify";
 
 // Ui components
@@ -27,6 +27,7 @@ import {
     useSalesRiskDealsQuestionListQuery,
 } from "../../../services/api/salesRiskAnalysisSlice";
 
+
 const SalesRiskQuestionsResponse = () => {
     const [focusedQuestion, setFocusedQuestion] = React.useState([]);
     const [inputsData, setInputsData] = React.useState([]);
@@ -47,6 +48,7 @@ const SalesRiskQuestionsResponse = () => {
     const questions = data?.data;
     const questionList = questions?.questionList;
     const currencyData = questions?.currency;
+
 
     React.useEffect(() => {
         const flattenArray = (arr) =>

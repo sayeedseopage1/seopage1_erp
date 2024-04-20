@@ -14,12 +14,13 @@ import {
 } from "../../../services/features/filterOptionSlice";
 
 // Constants
-import { currencySymbol } from "../constant/currencySymbol";
+import { CurrencySymbol } from "../constant/CurrencySymbol";
 
+export const SalesRiskAnalysisContext = createContext({});
 
-export const SalesRiskAnalysisContext = createContext();
 
 const SalesRiskAnalysisProvider = ({ children }) => {
+
     const dispatch = useDispatch();
     const { departments } = useSelector((state) => state.filterOptions);
     const [questionsAnswerType, setQuestionsAnswerType] = React.useState({});
@@ -131,13 +132,13 @@ const SalesRiskAnalysisProvider = ({ children }) => {
         }
     }, [questionFieldsData, isQuestionType]);
 
+
     const SalesRiskAnalysisValue = React.useMemo(() => {
         return {
             questionsAnswerType,
             policies,
             allQuestions,
             policyKeys,
-            currencySymbol,
             isSalesRiskInputsLoading,
         };
     });

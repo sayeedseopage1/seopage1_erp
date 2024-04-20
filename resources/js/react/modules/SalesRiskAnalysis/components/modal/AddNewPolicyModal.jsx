@@ -29,8 +29,7 @@ import { NewRulesModalTableColumnsData } from "../table/NewRulesModalTableColumn
 // sections components
 import NewPolicyModalInputsContainer from "../sections/NewPolicyModalInputsContainer";
 
-// context data
-import { SalesRiskAnalysisContext } from "../../context/SalesRiskAnalysisProvider";
+
 
 const AddNewPolicyModal = ({
     open,
