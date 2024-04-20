@@ -63,7 +63,6 @@ const SaleRiskQuestionsInputContainer = ({
         return `${index + 1}. ${title}`;
     };
 
-    console.log(currencyData);
 
     return (
         <motion.div

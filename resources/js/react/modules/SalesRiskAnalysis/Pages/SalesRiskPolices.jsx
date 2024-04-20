@@ -216,7 +216,6 @@ const SalesRiskPolices = () => {
             (item) => item?.id === newPolicyData?.id
         );
         if (isExist && isExist.id !== "") {
-            console.log(isExist.id);
             const updatedData = newPolicyInputData.map((item) => {
                 if (item.id === newPolicyData.id) {
                     return {

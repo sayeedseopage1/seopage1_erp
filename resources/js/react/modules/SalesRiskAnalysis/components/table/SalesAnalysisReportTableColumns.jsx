@@ -173,14 +173,15 @@ export const SalesAnalysisReportTableColumns = [
         accessorKey: "authorized_by",
         cell: ({ row }) => {
             let statusData = {};
+            // pending', 'analysis', 'authorized', 'auto-authorized', 'denied
             const {
                 authorize_by_name,
                 authorize_by_id,
                 authorize_by_photo,
                 status,
             } = row?.original ?? {};
-            const dealStatusByAdmin = ["accepted", "Denied", "denied"];
-            const dealStatusBySystem = ["auto-accepted"];
+            const dealStatusByAdmin = ["authorized", "Denied", "denied"];
+            const dealStatusBySystem = ["auto-authorized"];
 
             if (
                 authorize_by_id &&
@@ -301,7 +302,8 @@ export const SalesAnalysisReportTableColumns = [
                         </div>
                     </Switch.Case>
                     <Switch.Case
-                        condition={["auto accepted", "accepted"].includes(
+                        // here we are checking if the status is auto authorized or authorized (case insensitive and with space)
+                        condition={["auto authorized", "authorized"].includes(
                             formattedStatus.toLowerCase()
                         )}
                     >
@@ -333,12 +335,13 @@ export const SalesAnalysisReportTableColumns = [
                         </div>
                     </Switch.Case>
                     <Switch.Case
+                        // here we are checking if the status is not denied, auto authorized, analysis, authorized (case insensitive and with space)
                         condition={
                             ![
                                 "denied",
-                                "auto accepted",
+                                "auto authorized",
                                 "analysis",
-                                "accepted",
+                                "authorized",
                             ].includes(formattedStatus.toLowerCase())
                         }
                     >
