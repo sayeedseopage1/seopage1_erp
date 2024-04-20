@@ -24,7 +24,8 @@ const CustomAccordion = ({
     value,
     isSubmitting,
     comment,
-    placeholder
+    placeholder,
+    isCurrencyHave
 }) => {
     const [expend, setExpend] = React.useState(false);
     const [active, setActive] = React.useState({});
@@ -176,6 +177,7 @@ CustomAccordion.propTypes = {
     value: PropTypes.string,
     isSubmitting: PropTypes.bool,
     comment: PropTypes.string,
-    placeholder: PropTypes.string
+    placeholder: PropTypes.string,
+    isCurrencyHave: PropTypes.bool,
 
 }

@@ -69,7 +69,7 @@ const SaleRiskAuthorizePolicesModal = ({
 
 export default SaleRiskAuthorizePolicesModal;
 
-SaleRiskAuthorizePolicesModal.PropTypes = {
+SaleRiskAuthorizePolicesModal.propTypes = {
     open: PropTypes.bool,
     closeModal: PropTypes.func,
     salesRiskAnalysisRules: PropTypes.object,

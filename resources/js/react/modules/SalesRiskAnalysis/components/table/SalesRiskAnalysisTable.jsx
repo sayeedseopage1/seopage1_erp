@@ -47,7 +47,6 @@ import { generateUniqueString } from "../../../../utils/customUidGenerate";
 
 // context
 import { SalesRiskAnalysisContext } from "../../context/SalesRiskAnalysisProvider";
-import { is } from "immutable";
 
 const inputSateData = {
     inputState: {
@@ -96,7 +95,7 @@ const SalesRiskAnalysisTable = ({
     refetch,
 }) => {
     // context (for Policy key Add )
-    const { isSalesRiskInputsLoading, policyKeys } = useContext(
+    const { isSalesRiskInputsLoading , policyKeys } = useContext(
         SalesRiskAnalysisContext
     );
 

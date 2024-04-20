@@ -174,4 +174,5 @@ SalesRiskAuthorizeTable.propTypes = {
     tableName: PropTypes.string,
     search: PropTypes.string,
     isLoading: PropTypes.bool,
+    isFetching: PropTypes.bool,
 };

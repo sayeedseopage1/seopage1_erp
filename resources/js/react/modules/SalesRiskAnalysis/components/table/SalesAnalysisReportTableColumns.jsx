@@ -173,13 +173,12 @@ export const SalesAnalysisReportTableColumns = [
         accessorKey: "authorized_by",
         cell: ({ row }) => {
             let statusData = {};
-
             const {
                 authorize_by_name,
                 authorize_by_id,
                 authorize_by_photo,
                 status,
-            } = row?.original;
+            } = row?.original ?? {};
             const dealStatusByAdmin = ["accepted", "Denied", "denied"];
             const dealStatusBySystem = ["auto-accepted"];
 
@@ -335,9 +334,12 @@ export const SalesAnalysisReportTableColumns = [
                     </Switch.Case>
                     <Switch.Case
                         condition={
-                            !["denied", "auto accepted", "analysis", "accepted"].includes(
-                                formattedStatus.toLowerCase()
-                            )
+                            ![
+                                "denied",
+                                "auto accepted",
+                                "analysis",
+                                "accepted",
+                            ].includes(formattedStatus.toLowerCase())
                         }
                     >
                         <div className="d-flex justify-content-start align-items-center">

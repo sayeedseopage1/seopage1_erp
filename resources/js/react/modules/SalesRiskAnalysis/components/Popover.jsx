@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useMemo, useState } from "react";
 import PropTypes from "prop-types";
 import ReactDOM from "react-dom";
 import styles from "./popover.module.css";
@@ -14,12 +14,8 @@ const usePopover = () => React.useContext(PopoverCtx);
 // popover Panel
 
 const Panel = ({ children, className, placement = "auto", ...props }) => {
-    const {
-        isVisible,
-        refElement,
-        popperElement,
-        setPopperElement,
-    } = usePopover();
+    const { isVisible, refElement, popperElement, setPopperElement } =
+        usePopover();
 
     // generate random id for dropdown menu
     const [dom, setDom] = useState(null);
@@ -76,7 +72,7 @@ const Panel = ({ children, className, placement = "auto", ...props }) => {
 };
 
 // popover toggle
-const Toggle = ({ children, className,  ...props }) => {
+const Toggle = ({ children, className, ...props }) => {
     const { setRefElement, isVisible, setIsVisible } = usePopover();
     return (
         <div
@@ -84,7 +80,9 @@ const Toggle = ({ children, className,  ...props }) => {
             className={`${css.popover_toggle} ${className}`}
             onMouseOver={() => {
                 setIsVisible(true);
-                
+            }}
+            onMouseUp={() => {
+                setIsVisible(true);
             }}
             tabIndex={0}
             onKeyDown={() => {
@@ -105,19 +103,21 @@ const Popover = ({ children }) => {
     const [popperElement, setPopperElement] = useState(null);
     const [arrowElement, setArrowElement] = useState(null);
 
+    const popoverValue = useMemo(() => {
+        return {
+            isVisible,
+            setIsVisible,
+            refElement,
+            setRefElement,
+            popperElement,
+            setPopperElement,
+            arrowElement,
+            setArrowElement,
+        };
+    });
+
     return (
-        <PopoverCtx.Provider
-            value={{
-                isVisible,
-                setIsVisible,
-                refElement,
-                setRefElement,
-                popperElement,
-                setPopperElement,
-                arrowElement,
-                setArrowElement,
-            }}
-        >
+        <PopoverCtx.Provider value={popoverValue}>
             <div
                 onMouseLeave={() => setIsVisible(false)}
                 tabIndex={0}

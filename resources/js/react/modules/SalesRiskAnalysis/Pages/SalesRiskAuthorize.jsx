@@ -41,7 +41,6 @@ import SaleRiskAuthorizePolicesModal from "../components/modal/SaleRiskAuthorize
 import RuleActionConfirmationModal from "../components/modal/RuleActionConfirmationModal";
 
 const SalesRiskAuthorize = () => {
-    const [status, setStatus] = useState("");
     const [answersPoint, setAnswersPoint] = useState([]);
     const [metaInfo, setMetaInfo] = useState({});
     const [isReportGenerated, setIsReportGenerated] = useState({

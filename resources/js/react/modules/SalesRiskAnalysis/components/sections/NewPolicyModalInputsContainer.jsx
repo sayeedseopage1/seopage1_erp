@@ -56,7 +56,7 @@ const NewPolicyModalInputsContainer = ({
         }
 
         // Define regular expressions
-        const digitRegex = /[0-9]/;
+        const digitRegex =/\d/;
         const minusRegex = /-/;
         const decimalRegex = /\./;
 
@@ -81,17 +81,6 @@ const NewPolicyModalInputsContainer = ({
             return false;
         }
         return true;
-    };
-
-    const handleTernary = () => {
-        if (!allPolicyData?.length) {
-            return false;
-        }
-        if (newPolicyData?.index === 0) {
-            return false;
-        } else {
-            return true;
-        }
     };
 
     return (

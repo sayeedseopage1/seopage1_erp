@@ -26,6 +26,7 @@ const CustomInputs = ({
     id,
     isChild,
     isSubmitting,
+    isCurrencyHave,
     ...props
 }) => {
     const handleOnkeypress = (e) => {
@@ -133,4 +134,5 @@ CustomInputs.propTypes = {
     isChild: PropTypes.bool,
     comment: PropTypes.string,
     isSubmitting: PropTypes.bool,
+    isCurrencyHave: PropTypes.bool,
 };

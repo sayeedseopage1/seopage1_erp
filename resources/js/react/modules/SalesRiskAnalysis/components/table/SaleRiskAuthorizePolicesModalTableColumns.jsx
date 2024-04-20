@@ -4,8 +4,6 @@ import Switch from "../Switch";
 import Tooltip from "../Tooltip";
 import { SalesPointsContainer } from "../ui/Styles/ui";
 import "../Styles/salesRiskAnalysisTableColumns.css";
-import { MdHeight } from "react-icons/md";
-import { right } from "@popperjs/core";
 
 export const SaleRiskAuthorizePolicesModalTableColumns = [
     {
@@ -194,7 +192,7 @@ export const SaleRiskAuthorizePolicesModalTableColumns = [
                                                             ...customStyles.active,
                                                         }}
                                                     >
-                                                        Active
+                                                        Applied
                                                     </abbr>
                                                 )}
                                         </li>
@@ -233,7 +231,7 @@ export const SaleRiskAuthorizePolicesModalTableColumns = [
                                                             ...customStyles.active,
                                                         }}
                                                     >
-                                                        Active
+                                                        Applied
                                                     </abbr>
                                                 )}
                                         </li>
@@ -287,7 +285,7 @@ export const SaleRiskAuthorizePolicesModalTableColumns = [
                                                         ...customStyles.active,
                                                     }}
                                                 >
-                                                    Active
+                                                    Applied
                                                 </abbr>
                                             )}
                                         </div>
@@ -315,7 +313,7 @@ export const SaleRiskAuthorizePolicesModalTableColumns = [
                                                         ...customStyles.active,
                                                     }}
                                                 >
-                                                    Active
+                                                    Applied
                                                 </abbr>
                                             )}
                                         </span>

@@ -11,19 +11,21 @@ export const TooltipProvider = ({ children }) => {
     const [reference, setReference] = React.useState(null);
     const [arrow, setArrow] = React.useState(null);
 
+    const toolTipValue = React.useMemo(() => {
+        return {
+            element,
+            setElement,
+            reference,
+            setReference,
+            arrow,
+            setArrow,
+            isOpen,
+            setIsOpen,
+        };
+    });
+
     return (
-        <TooltipContext.Provider
-            value={{
-                element,
-                setElement,
-                reference,
-                setReference,
-                arrow,
-                setArrow,
-                isOpen,
-                setIsOpen,
-            }}
-        >
+        <TooltipContext.Provider value={toolTipValue}>
             {children}
         </TooltipContext.Provider>
     );
@@ -127,6 +129,7 @@ const TooltipComponent = ({ children, disabled, text, ...props }) => {
                 ref={setReference}
                 onMouseOver={() => setIsOpen(true)}
                 onMouseLeave={() => setIsOpen(false)}
+                onFocus={() => setIsOpen(true)}
                 style={{ width: "fit-content", ...props.style }}
                 {...props}
                 role="button"
@@ -158,6 +161,7 @@ TooltipComponent.propTypes = {
     text: PropTypes.any,
     children: PropTypes.any,
     disabled: PropTypes.bool,
+    style: PropTypes.object,
     props: PropTypes.any,
 };
 
@@ -165,6 +169,7 @@ Tooltip.propTypes = {
     text: PropTypes.any,
     children: PropTypes.any,
     disabled: PropTypes.bool,
+    
     props: PropTypes.any,
 };
 

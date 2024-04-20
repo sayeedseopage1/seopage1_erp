@@ -1,12 +1,17 @@
-import { FormatJsonCountry, getYesNoValue } from "../../helper/countriesFormat";
+// icons
+import EditIcon from "../ui/EditIcon";
+
+// ui components
+import { SalesPointsContainer } from "../ui/Styles/ui";
 import MultiSelectShowDropDown from "../MultiSelectShowDropDown";
 import Switch from "../Switch";
 import Tooltip from "../Tooltip";
-import EditIcon from "../ui/EditIcon";
-import { SalesPointsContainer } from "../ui/Styles/ui";
+
+// styles
 import "../Styles/salesRiskAnalysisTableColumns.css";
-import { useContext } from "react";
-import { SalesRiskAnalysisContext } from "../../context/SalesRiskAnalysisProvider";
+
+// helper
+import { FormatJsonCountry, getYesNoValue } from "../../helper/countriesFormat";
 
 export const SalesRiskAnalysisTableColumns = [
     {
@@ -16,6 +21,7 @@ export const SalesRiskAnalysisTableColumns = [
         cell: ({ row, table }) => {
             const data = row?.original;
             const action = table.options.meta;
+
             return (
                 <div className="d-flex flex-column">
                     <div className="d-flex align-items-center mb-2">
@@ -27,54 +33,53 @@ export const SalesRiskAnalysisTableColumns = [
                         >
                             <input
                                 type="checkbox"
-                                checked={data?.status === "1" ? true : false}
+                                checked={data?.status == "1"}
                                 readOnly
-                                className="custom-control-input"
                                 id="customSwitch1"
+                                className="custom-control-input"
                             />
                             <label
                                 className={`custom-control-label ${
-                                    data?.status === "1"
+                                    data?.status == "1"
                                         ? "sales_risk_status_toggle_checked"
                                         : "sales_risk_status_toggle_not_checked"
                                 }`}
-                                htmlFor="customSwitch1"
                                 title={
                                     data?.status === "1"
                                         ? "Disable Now"
                                         : "Enable Now"
                                 }
+                                htmlFor="customSwitch1"
                                 onClick={() => {
                                     action.handlePolicyStatus(data);
                                 }}
                                 style={{
                                     cursor: "pointer",
                                 }}
-                            />{" "}
+                            >
+                                {/* Empty string as label */}
+                            </label>{" "}
                         </div>
-                        <div
+                        <button
                             onClick={() => {
                                 action.handleEditPolicy(data);
                             }}
-                            role="button"
-                            tabIndex={0}
-                            className="d-flex align-items-center"
+                            
+                            className="d-flex align-items-center bg-transparent"
                         >
                             <Tooltip text={`Edit Policy`}>
                                 <EditIcon />
                             </Tooltip>
-                        </div>
-                        <div
+                        </button>
+                        <button
                             onClick={() => {
                                 action.handleAddQuestions(data);
                             }}
-                            tabIndex={0}
-                            className="mx-2"
+                            className="mx-2 bg-transparent"
                             style={{
                                 cursor: "pointer",
                                 position: "relative",
                             }}
-                            role="button"
                         >
                             <Tooltip
                                 className="d-flex align-items-center"
@@ -102,7 +107,7 @@ export const SalesRiskAnalysisTableColumns = [
                                     {data?.questionCount}
                                 </span>
                             </Tooltip>
-                        </div>
+                        </button>
                         <span
                             style={{
                                 color: "#000000",
@@ -153,7 +158,7 @@ export const SalesRiskAnalysisTableColumns = [
         header: "Policy Key",
         accessorKey: "policy_key",
         cell: ({ row, table }) => {
-           const policyKeys = table?.options?.meta?.handleSendPolicyType();
+            const policyKeys = table?.options?.meta?.handleSendPolicyType();
             const data = row?.original;
             const policyKey = policyKeys?.data?.find(
                 (key) => key.name === data?.key
@@ -382,15 +387,14 @@ export const SalesRiskAnalysisTableColumns = [
                                     >
                                         <div className="d-flex align-items-center justify-content-end">
                                             <p>{rule?.points}</p>
-                                            <div
+                                            <button
                                                 onClick={() => {
                                                     action.handleEditApplicableRule(
                                                         data,
                                                         rule
                                                     );
                                                 }}
-                                                tabIndex={0}
-                                                role="button"
+                                                className="bg-transparent"
                                             >
                                                 <Tooltip
                                                     text={`Edit Policy Rule
@@ -398,7 +402,7 @@ export const SalesRiskAnalysisTableColumns = [
                                                 >
                                                     <EditIcon />
                                                 </Tooltip>
-                                            </div>
+                                            </button>
                                             <button
                                                 className={`btn ${
                                                     rule.status === "0"
@@ -439,7 +443,7 @@ export const SalesRiskAnalysisTableColumns = [
                                     )}
                                 >
                                     <div className="d-flex py-3">
-                                        <div
+                                        <button
                                             onClick={() => {
                                                 action.handleEditApplicableRule(
                                                     data,
@@ -447,14 +451,13 @@ export const SalesRiskAnalysisTableColumns = [
                                                     "no"
                                                 );
                                             }}
-                                            tabIndex={0}
-                                            role="button"
-                                            className="d-flex align-items-center"
+                                           
+                                            className="d-flex align-items-center bg-transparent"
                                         >
                                             <Tooltip text={`Edit Policy Rule`}>
                                                 <EditIcon />
                                             </Tooltip>
-                                        </div>
+                                        </button>
                                         <button
                                             className={`btn ${
                                                 rule.status === "0"

@@ -1,11 +1,9 @@
 import PropTypes from "prop-types";
-import React, { useEffect,createContext } from "react";
+import React, { useEffect, createContext } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 // Api services
-import {
-    useGetAllFilterOptionQuery,
-} from "../../../services/api/FilterBarOptionsApiSlice";
+import { useGetAllFilterOptionQuery } from "../../../services/api/FilterBarOptionsApiSlice";
 import {
     useGetSalesRiskAnalysisInputsQuery,
     useSaleRiskQuestionsListFiledTypeQuery,
@@ -15,13 +13,15 @@ import {
     setFilterOptionsState,
 } from "../../../services/features/filterOptionSlice";
 
+// Constants
+import { currencySymbol } from "../constant/currencySymbol";
+
+
 export const SalesRiskAnalysisContext = createContext();
 
 const SalesRiskAnalysisProvider = ({ children }) => {
     const dispatch = useDispatch();
-    const { departments } = useSelector(
-        (state) => state.filterOptions
-    );
+    const { departments } = useSelector((state) => state.filterOptions);
     const [questionsAnswerType, setQuestionsAnswerType] = React.useState({});
     const [policies, setPolicies] = React.useState({});
     const [policyKeys, setPolicyKeys] = React.useState({});
@@ -131,16 +131,19 @@ const SalesRiskAnalysisProvider = ({ children }) => {
         }
     }, [questionFieldsData, isQuestionType]);
 
+    const SalesRiskAnalysisValue = React.useMemo(() => {
+        return {
+            questionsAnswerType,
+            policies,
+            allQuestions,
+            policyKeys,
+            currencySymbol,
+            isSalesRiskInputsLoading,
+        };
+    });
+
     return (
-        <SalesRiskAnalysisContext.Provider
-            value={{
-                questionsAnswerType,
-                policies,
-                allQuestions,
-                policyKeys,
-                isSalesRiskInputsLoading,
-            }}
-        >
+        <SalesRiskAnalysisContext.Provider value={SalesRiskAnalysisValue}>
             {children}
         </SalesRiskAnalysisContext.Provider>
     );
