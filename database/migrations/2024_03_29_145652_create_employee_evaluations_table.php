@@ -27,10 +27,12 @@ return new class extends Migration
             $table->integer('managements_id')->nullable();
             $table->string('managements_name')->nullable();
             $table->dateTime('managements_auth_at')->nullable();
-            $table->dateTime('accept_rejected')->nullable();
+            $table->string('accept_rejected')->nullable();
             $table->dateTime('pending_action_sending_time')->nullable();
             $table->integer('ld_submission_status')->default(0);
             $table->integer('team_lead_id')->nullable();
+            $table->integer('lead_dev_acknowledged')->default(0);
+            $table->integer('team_lead_acknowledged')->default(0);
             $table->dateTime('team_lead_cmnt_at')->nullable();
             $table->integer('team_lead_status')->default(0);
             $table->integer('employee_status')->default(0);

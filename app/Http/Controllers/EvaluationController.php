@@ -579,7 +579,7 @@ class EvaluationController extends AccountBaseController
                 $past_action->message = 'Top Management <a href="'.route('employees.show',$authorize_by->id).'">'.$authorize_by->name.'</a> has authorized New Developer <a href="'.route('employees.show',$dev->id).'">'.$dev->name.'</a> for real work from ';
             }elseif($evaluation->employee_status == 2)
             {
-                $past_action->heading= 'Top Management'.$top_management->name.' has extended the trial period for New Developer '.$dev->name.'!';
+                $past_action->heading= 'Top Management '.$top_management->name.' has extended the trial period for New Developer '.$dev->name.'!';
                 $past_action->message = 'Top Management <a href="'.route('employees.show',$top_management->id).'">'.$top_management->name.'</a> has extended the trial period one more week for New Developer <a href="'.route('employees.show',$dev->id).'">'.$dev->name.'</a> from ';
             }else{
                 $past_action->heading= 'New Developer '.$dev->name.' was rejected for real work by Top Management '.$top_management->name.'!';
