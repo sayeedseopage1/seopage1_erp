@@ -79,6 +79,8 @@ use App\Models\TaskDisputeQuestion;
 use App\Models\TaskRevisionDispute;
 use App\Models\TaskType;
 use App\Models\DailySubmission;
+use App\Models\EmployeeEvaluation;
+use App\Models\EmployeeEvaluationTask;
 use App\Models\PendingParentTaskConversation;
 use App\Models\PendingParentTasks;
 use App\Notifications\PendingParentTasksNotification;
@@ -780,8 +782,8 @@ class TaskController extends AccountBaseController
 
     public function TaskReview(Request $request)
     {
-
-        // / DB::beginTransaction();
+        // dd($request->all());
+        //  DB::beginTransaction();
         $validator = Validator::make($request->input(), [
             'link' => 'required|array',
             'link.*' => 'required|url|min:1',
@@ -925,16 +927,37 @@ class TaskController extends AccountBaseController
 
 
         $task_id = Task::where('id', $task->id)->first();
-
         $user = User::where('id', $task->added_by)->first();
         $sender = User::where('id', $request->user_id)->first();
         // need pending action
+        if($task_id->project_id != null){
         $helper = new HelperPendingActionController();
 
 
         $helper->TaskApproveAction($task_id,$sender);
+        }
 
         //need pending action
+
+        /**EMPLOYEE EVALUATION START */
+        $taskFind = Task::where('id',$request->task_id)->where('u_id',null)->where('independent_task_status',1)->first(); //Find SubTask
+        $total_hours = ProjectTimeLog::where('task_id',$taskFind->id)->pluck('total_hours')->first();
+        $total_minutes = ProjectTimeLog::where('task_id',$taskFind->id)->pluck('total_minutes')->first();
+        $task_revision_count = TaskRevision::where('task_id',$taskFind->id)->count();
+        if($taskFind != null){
+            $evaluation = EmployeeEvaluationTask::where('task_id',$taskFind->id)->first();
+            if($evaluation !=null)
+            {
+                $evaluation->submission_date = $task_submit->created_at;
+                $evaluation->total_hours = $total_hours;
+                $evaluation->total_min = $total_minutes;
+                $evaluation->completed_work = json_encode($request->link);
+                $evaluation->revision_number = $task_revision_count;
+                $evaluation->status = 1; // IF STATUS 1 THAT MEANS EVALUTE DISPLAY
+                $evaluation->save();
+            }
+        }
+        /**EMPLOYEE EVALUATION END */
 
         $text = Auth::user()->name . ' mark task complete';
         $link = '<a href="' . route('tasks.show', $task->id) . '">' . $text . '</a>';
@@ -949,7 +972,6 @@ class TaskController extends AccountBaseController
             'body' => Auth::user()->name . ' mark task complete',
             'redirectUrl' => route('tasks.show', $task->id)
         ]);
-        //dd("hdbjasdbjasd");
 
         Notification::send($user, new TaskSubmitNotification($task_id, $sender));
 
@@ -967,7 +989,6 @@ class TaskController extends AccountBaseController
 
     public function TaskApprove(Request $request)
     {
-        //  dd($request);
         $request->validate([
             'rating' => 'required',
             'rating2' => 'required',
@@ -4461,6 +4482,7 @@ class TaskController extends AccountBaseController
             $data = User::where('role_id', 5)
             ->orWhere('role_id',9)
             ->orWhere('role_id',10) 
+            ->orWhere('role_id',14) 
             ->get()
             ->map(function ($row) {
                 $task_assign = Task::select('tasks.*')
@@ -4810,7 +4832,7 @@ class TaskController extends AccountBaseController
             $data = TaskReply::where('comment_id', $id)->get();
             return response()->json($data);
         } elseif ($request->mode == 'comment_store') {
-             //  DB::beginTransaction();
+            //   DB::beginTransaction();
             $data = new TaskComment();
             $data->comment = $request->comment;
             $data->user_id = $this->user->id;
@@ -4823,10 +4845,10 @@ class TaskController extends AccountBaseController
 
             $data->save();
             //need pedning action
-            // $helper = new HelperPendingActionController();
+             $helper = new HelperPendingActionController();
 
 
-            // $helper->NewCommentAdded($data->task_id,$data->user_id);
+            $helper->NewCommentAdded($data->task_id,$data->user_id);
 
             //need pending action
             $taskID = Task::where('id', $request->task_id)->first();
@@ -4966,7 +4988,6 @@ class TaskController extends AccountBaseController
     }
     public function DeveloperStopTask(Request $request)
     {
-
         $currentDateTime = Carbon::now();
         $desiredTime = Carbon::createFromTime(16, 45, 0); // 4:29 PM
         $current_day = Carbon::now();

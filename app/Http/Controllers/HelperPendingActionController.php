@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Models\Deal;
+use App\Models\EmployeeEvaluation;
+use App\Models\EmployeeEvaluationTask;
 use App\Models\PendingAction;
 use App\Models\Project;
 use App\Models\User;
@@ -904,7 +906,7 @@ class HelperPendingActionController extends AccountBaseController
     $project= Project::where('id',$task->project_id)->first();
     $client= User::where('id',$project->client_id)->first();
     $task_revision = TaskRevision::where('task_id',$task->id)->orderBy('id','desc')->first();
-    $project_manager= User::where('id',$project->pm_id)->first();
+    // $project_manager= User::where('id',$project->pm_id)->first();
     $authorizers= User::where('id',$task->added_by)->get();
        foreach ($authorizers as $key => $authorizer) {
         $action = new PendingAction();
@@ -915,6 +917,7 @@ class HelperPendingActionController extends AccountBaseController
             $action->item_name= 'Revision submitted by '.$user_role->name;
             $action->heading= 'Revision submitted by '.$user_role->name;
             $action->message = 'Review the revision submitted by '.$user_role->name.': <a href="'.route('employees.show',$sender->id).'">'.$sender->name.'</a> for project <a href="'.route('projects.show',$project->id).'">'.$project->project_name.'</a> from Client <a href="'.route('clients.show',$client->id).'">'.$client->name.'</a>';
+            
 
         }else
         {
@@ -1108,120 +1111,174 @@ class HelperPendingActionController extends AccountBaseController
     if($task->independent_task_status == 0)
     {
         $project= Project::where('id',$task->project_id)->first();
-    $client= User::where('id',$project->client_id)->first();
+        $client= User::where('id',$project->client_id)->first();
+        $commentor= User::where('id',$commentor)->first();
+        $task_user= Taskuser::where('task_id',$task->id)->first();
+        $top_managements = User::where('role_id',1)->orWhere('role_id',8)->where('id', '!=', Auth::id())->pluck('id')->toArray();
+        $pm = User::where('id',$project->pm_id)->where('id', '!=', Auth::id())->pluck('id')->toArray();
+        $assigned_by = User::where('id',$task->added_by)->where('id', '!=', Auth::id())->pluck('id')->toArray();
+        $assigned_to = User::where('id',$task_user->user_id)->where('id', '!=', Auth::id())->pluck('id')->toArray();
+        $allUsers = '';
+        if($task->subtask_id ==null){
+            $allUsers = array_unique(array_merge($top_managements, $pm, $assigned_by, $assigned_to));
+        }else{
+            $allUsers = array_unique(array_merge($top_managements, $assigned_by, $assigned_to));
+        }
 
-    $commentor= User::where('id',$commentor)->first();
+        $pending_action = PendingAction::where('task_id',$task->id)->where('code','TCOA')->count();
+// dd($pending_action);
+        if(! $pending_action){
+        foreach ($allUsers as $key => $authorizer) {
+            $action = new PendingAction();
+            $action->code = 'TCOA';
+            $action->serial = 'TCOA'.'x'.$key;
+            $action->item_name= 'New comment';
+            $action->heading= 'A new comment has been added!';      
+            $action->message = 'A new comment has been added by <a href="'.route('employees.show',$commentor->id).'">'.$commentor->name.'</a> in task <a href="'.route('tasks.show',$task->id).'">'.$task->heading.'</a> for Client <a href="'.route('clients.show',$client->id).'">'.$client->name.'</a>';
+            $action->timeframe= 12;
+            $action->project_id = $project->id;
+            $action->client_id = $client->id;
+            $action->task_id = $task->id;
+            $action->authorization_for= $authorizer;
+            $button = [
+                [
+                    'button_name' => 'View and Reply',
+                    'button_color' => 'primary',
+                    'button_type' => 'modal',
+                    'button_url' => '',
+                    'modal_form'=> false,
+                ],
+                [
+                    'button_name' => 'Not relevant to me',
+                    'button_color' => 'primary',
+                    'button_type' => 'modal',
+                    'button_url' => '',
+                    'modal_form'=> true,
+                    'form'=> [
+                        [
+                            'type'=> 'textarea',
+                            'label'=>'Are you sure this comment is not relevant to you?',
+                            'name'=>'confirmation',
+                            'required'=> true,
+                        ],
+                        [
+                            'type'=> 'hidden',
+                            'value'=> $task->id,
+                            'readonly'=> true,
 
-        $authorizers= ProjectMember::where('project_id',$task->project_id)->where('user_id','!=',Auth::id())->groupBy('user_id')->get();
-       // dd($authorizers);
+                            'name'=>'project_id',
+                            'required'=> true,
+                        ],
+                        [
+                            'type'=> 'hidden',
+                            'value'=> $action->id,
+                            'readonly'=> true,
 
+                            'name'=>'authorization_id',
 
-   // dd($authorizers);
+                            'required'=> true,
 
+                        ],
 
-    foreach ($authorizers as $key => $authorizer) {
-     $action = new PendingAction();
-     $action->code = 'TCOA';
-     $action->serial = 'TCOA'.'x'.$key;
-     $action->item_name= 'New comment';
-     $action->heading= 'A new comment has been added!';
-     $action->message = 'A new comment has been added by <a href="'.route('employees.show',$commentor->id).'">'.$commentor->name.'</a> in task <a href="'.route('tasks.show',$task->id).'">'.$task->heading.'</a> for Client <a href="'.route('clients.show',$client->id).'">'.$client->name.'</a>';
-     $action->timeframe= 12;
-     $action->project_id = $project->id;
-     $action->client_id = $client->id;
-     $action->task_id = $task->id;
-     $action->authorization_for= $authorizer->user_id;
-     $button = [
-         [
-             'button_name' => 'View and Reply',
-             'button_color' => 'primary',
-             'button_type' => 'modal',
-             'button_url' => '',
-             'modal_form'=> false,
-            //  'form'=> [
-            //      [
-            //          'type'=> 'textarea',
-            //          'label'=>'Write a reply',
-            //          'name'=>'reply',
-            //          'required'=> true,
-            //      ],
-            //      [
-            //          'type'=> 'hidden',
-            //           'value'=> $task->id,
-            //           'readonly'=> true,
+                    ],
+                    'form_action'=> [
+                        [
+                            'type'=> 'button',
+                            'method'=>'POST',
+                            'label'=> 'Confirm',
+                            'color'=> 'success',
+                            'url'=> '',
 
-            //          'name'=>'project_id',
-            //          'required'=> true,
-            //      ],
-            //       [
-            //          'type'=> 'hidden',
-            //          'value'=> $action->id,
-            //          'readonly'=> true,
-
-            //          'name'=>'authorization_id',
-
-            //          'required'=> true,
-
-            //      ],
-
-            //  ],
-
-         ],
-         [
-            'button_name' => 'Not relevant to me',
-            'button_color' => 'primary',
-            'button_type' => 'modal',
-             'button_url' => '',
-             'modal_form'=> true,
-             'form'=> [
-                 [
-                     'type'=> 'textarea',
-                     'label'=>'Are you sure this comment is not relevant to you?',
-                     'name'=>'confirmation',
-                     'required'=> true,
-                 ],
-                 [
-                     'type'=> 'hidden',
-                      'value'=> $task->id,
-                      'readonly'=> true,
-
-                     'name'=>'project_id',
-                     'required'=> true,
-                 ],
-                  [
-                     'type'=> 'hidden',
-                     'value'=> $action->id,
-                     'readonly'=> true,
-
-                     'name'=>'authorization_id',
-
-                     'required'=> true,
-
-                 ],
-
-             ],
-             'form_action'=> [
-                 [
-                     'type'=> 'button',
-                     'method'=>'POST',
-                     'label'=> 'Confirm',
-                     'color'=> 'success',
-                     'url'=> '',
-
-                 ],
+                        ],
 
 
-             ]
-        ],
+                    ]
+                ],
 
-     ];
-     $action->button = json_encode($button);
-     $action->save();
-    //dd($action);
-//    dd(json_decode($action->button));
-
-    }
-
+            ];
+            $action->button = json_encode($button);
+            $action->save();
+            }
+        }else{
+            foreach ($allUsers as $key => $authorizer) {
+                $active_action = PendingAction::where('task_id',$task->id)->where('code','TCOA')->where('authorization_for', $authorizer)->where('past_status',0)->first();
+                if($active_action){ 
+                    $active_action->created_at = Carbon::now();
+                    $active_action->updated_at = Carbon::now();
+                    $active_action->save();
+                }else{
+                    $action = new PendingAction();
+                    $action->code = 'TCOA';
+                    $action->serial = 'TCOA'.'x'.$key;
+                    $action->item_name= 'New comment';
+                    $action->heading= 'A new comment has been added!';      
+                    $action->message = 'A new comment has been added by <a href="'.route('employees.show',$commentor->id).'">'.$commentor->name.'</a> in task <a href="'.route('tasks.show',$task->id).'">'.$task->heading.'</a> for Client <a href="'.route('clients.show',$client->id).'">'.$client->name.'</a>';
+                    $action->timeframe= 12;
+                    $action->project_id = $project->id;
+                    $action->client_id = $client->id;
+                    $action->task_id = $task->id;
+                    $action->authorization_for= $authorizer;
+                    $button = [
+                        [
+                            'button_name' => 'View and Reply',
+                            'button_color' => 'primary',
+                            'button_type' => 'modal',
+                            'button_url' => '',
+                            'modal_form'=> false,
+                        ],
+                        [
+                            'button_name' => 'Not relevant to me',
+                            'button_color' => 'primary',
+                            'button_type' => 'modal',
+                            'button_url' => '',
+                            'modal_form'=> true,
+                            'form'=> [
+                                [
+                                    'type'=> 'textarea',
+                                    'label'=>'Are you sure this comment is not relevant to you?',
+                                    'name'=>'confirmation',
+                                    'required'=> true,
+                                ],
+                                [
+                                    'type'=> 'hidden',
+                                    'value'=> $task->id,
+                                    'readonly'=> true,
+        
+                                    'name'=>'project_id',
+                                    'required'=> true,
+                                ],
+                                [
+                                    'type'=> 'hidden',
+                                    'value'=> $action->id,
+                                    'readonly'=> true,
+        
+                                    'name'=>'authorization_id',
+        
+                                    'required'=> true,
+        
+                                ],
+        
+                            ],
+                            'form_action'=> [
+                                [
+                                    'type'=> 'button',
+                                    'method'=>'POST',
+                                    'label'=> 'Confirm',
+                                    'color'=> 'success',
+                                    'url'=> '',
+        
+                                ],
+        
+        
+                            ]
+                        ],
+        
+                    ];
+                    $action->button = json_encode($button);
+                    $action->save();
+                }
+            }
+        }
     }
 
    }
@@ -1755,6 +1812,232 @@ class HelperPendingActionController extends AccountBaseController
 
         }
 
+        public function NewDeveloperEvaluation($user)
+        {
+            $new_dev = User::where('id',$user)->first(); 
+            $evaluation_task = EmployeeEvaluationTask::where('user_id',$new_dev->id)->first(); 
+            $task = Task::where('id',$evaluation_task->task_id)->first();
+            $authorizers= User::where('role_id',6)->get();
+            foreach ($authorizers as $key => $authorizer) {
+                $action = new PendingAction();
+                $action->code = 'NDPE';
+                $action->serial = 'NDPE'.'x'.$key;
+                $action->item_name= 'New developer\'s performance evaluation!';
+                $action->heading= 'New developer\'s performance evaluation!';
+                $action->message = 'Fill out initial performance evaluation from for the dedeloper <a href="'.route('employees.show',$new_dev->id).'">'.$new_dev->name.'</a>!';
+                $action->timeframe= 24;
+                $action->client_id = $task->id;
+               $action->task_id = $task->id;
+               $action->developer_id = $new_dev->id;
+                $action->authorization_for= $authorizer->id;
+                $button = [
+                    [
+                        'button_name' => 'Evaluate',
+                        'button_color' => 'primary',
+                        'button_type' => 'redirect_url',
+                        'button_url' => route('employee-evaluation.index'),
+                        'button_url' => route('employee-evaluation.index', ['user_id' => $new_dev->id, 'show' => 'all']),
+                    ],
 
+                ];
+                $action->button = json_encode($button);
+                $action->save();
+            }
+        }
+
+        public function leadDevSubmittedNewDevEvaluation($evaluation_task)
+        {
+            $evaluation_task = EmployeeEvaluationTask::where('id',$evaluation_task)->first(); 
+            $new_dev = User::where('id',$evaluation_task->user_id)->first(); 
+            $lead_dev = User::where('id',$evaluation_task->lead_dev_id)->first(); 
+            $task = Task::where('id',$evaluation_task->task_id)->first();
+            $authorizers= User::where('role_id',8)->get();
+            $updated_at = Carbon::parse($evaluation_task->updated_at);
+            $formatted_date_time = $updated_at->format('d F Y \a\t g:i A');
+            foreach ($authorizers as $key => $authorizer) {
+                $action = new PendingAction();
+                $action->code = 'LDSEND';
+                $action->serial = 'LDSEND'.'x'.$key;
+                $action->item_name= 'New developer\'s evaluation!';
+                $action->heading= 'Lead Dedeloper '.$lead_dev->name.' has submitted evaluations for New Developer '.$new_dev->name.'!';
+                $action->message = 'Lead Dedeloper <a href="'.route('employees.show',$lead_dev->id).'">'.$lead_dev->name.'</a> has evaluated New Developer <a href="'.route('employees.show',$new_dev->id).'">'.$new_dev->name.'</a> on '.$formatted_date_time.'';
+                $action->timeframe= 24;
+                $action->client_id = $task->client_id;
+               $action->task_id = $task->id;
+               $action->developer_id = $new_dev->id;
+                $action->authorization_for= $authorizer->id;
+                $button = [
+                    [
+                        'button_name' => 'Review',
+                        'button_color' => 'primary',
+                        'button_type' => 'redirect_url',
+                        'button_url' => route('employee-evaluation.index'),
+                        'button_url' => route('employee-evaluation.index', ['user_id' => $new_dev->id, 'show' => 'all']),
+                    ],
+
+                ];
+                $action->button = json_encode($button);
+                $action->save();
+            }
+        }
+        public function teamLeadSubmittedNewDevEvaluation($evaluation_task)
+        {
+            $evaluation_task = EmployeeEvaluationTask::where('id',$evaluation_task)->first(); 
+            $new_dev = User::where('id',$evaluation_task->user_id)->first(); 
+            $lead_dev = User::where('id',$evaluation_task->lead_dev_id)->first(); 
+            $evaluation = EmployeeEvaluation::where('user_id',$evaluation_task->user_id)->first(); 
+            $team_lead = User::where('id',$evaluation->team_lead_id)->first();
+            $task = Task::where('id',$evaluation_task->task_id)->first();
+            $authorizers= User::where('role_id',1)->get();
+            $updated_at = Carbon::parse($evaluation_task->updated_at);
+            $formatted_date_time = $updated_at->format('d F Y \a\t g:i A');
+            foreach ($authorizers as $key => $authorizer) {
+                $action = new PendingAction();
+                $action->code = 'TLSDE';
+                $action->serial = 'TLSDE'.'x'.$key;
+                $action->item_name= 'Team leader submission!';
+                $action->heading= 'Team Leader '.$team_lead->name.'\'s Lead Developer '.$lead_dev->name.'\'s evaluation on Employee '.$new_dev->name.'!';
+                $action->message = 'Team Leader <a href="'.route('employees.show',$team_lead->id).'">'.$team_lead->name.'</a> has reviewed Lead Developer <a href="'.route('employees.show',$lead_dev->id).'">'.$lead_dev->name.'\'s</a> evaluations  on New Developer on '.$formatted_date_time.'';
+                $action->timeframe= 24;
+                $action->client_id = $task->client_id;
+               $action->task_id = $task->id;
+               $action->developer_id = $new_dev->id;
+                $action->authorization_for= $authorizer->id;
+                $button = [
+                    [
+                        'button_name' => 'Authorize',
+                        'button_color' => 'primary',
+                        'button_type' => 'redirect_url',
+                        'button_url' => route('employee-evaluation.index'),
+                        'button_url' => route('employee-evaluation.index', ['user_id' => $new_dev->id, 'show' => 'all']),
+                    ],
+                    [
+                        'button_name' => 'Continue this trial for 1 more week!',
+                        'button_color' => 'primary',
+                        'button_type' => 'redirect_url',
+                        'button_url' => route('employee-evaluation.index'),
+                        'button_url' => route('employee-evaluation.index', ['user_id' => $new_dev->id, 'show' => 'all']),
+                    ],
+
+                ];
+                $action->button = json_encode($button);
+                $action->save();
+            }
+        }
+
+        public function evaluationAuthForAdmin($evaluation_task)
+        {
+            $evaluation_task = EmployeeEvaluationTask::where('id',$evaluation_task)->first(); 
+            $new_dev = User::where('id',$evaluation_task->user_id)->first();
+            $lead_dev = User::where('id',$evaluation_task->lead_dev_id)->first(); 
+            $evaluation = EmployeeEvaluation::where('user_id',$evaluation_task->user_id)->first(); 
+            $top_management = User::where('id',Auth::user()->id)->first(); 
+            $team_lead = User::where('id',$evaluation->team_lead_id)->first();
+            $task = Task::where('id',$evaluation_task->task_id)->first();
+            $authorizers = User::whereIn('role_id', [8, 6])->get();
+            $updated_at = Carbon::parse($evaluation_task->updated_at);
+            $formatted_date_time = $updated_at->format('d F Y \a\t g:i A');
+            foreach ($authorizers as $key => $authorizer) {
+                $action = new PendingAction();
+                $action->code = 'EAFA';
+                $action->serial = 'EAFA'.'x'.$key;
+                $action->item_name= 'Evaluation auth for admin!';
+                $action->heading= 'New Developer '.$new_dev->name.' was authorize for real work by Top Management '.$top_management->name.'!';
+                $action->message = 'Top Management <a href="'.route('employees.show',$top_management->id).'">'.$top_management->name.'</a> has authorized New Developer <a href="'.route('employees.show',$new_dev->id).'">'.$new_dev->name.'</a> for real work from '.$formatted_date_time.'';
+                $action->timeframe= 24;
+                $action->client_id = $task->client_id;
+               $action->task_id = $task->id;
+               $action->developer_id = $new_dev->id;
+                $action->authorization_for= $authorizer->id;
+                $button = [
+                    [
+                        'button_name' => 'Acknowledge It',
+                        'button_color' => 'primary',
+                        'button_type' => 'modal',
+                        'button_url' => '',
+                        'modal_form'=> false,
+                    ],
+
+                ];
+                $action->button = json_encode($button);
+                $action->save();
+            }
+        }
+        public function evaluationRejectForAdmin($evaluation_task)
+        {
+            $evaluation_task = EmployeeEvaluationTask::where('id',$evaluation_task)->first(); 
+            $new_dev = User::where('id',$evaluation_task->user_id)->first(); 
+            $lead_dev = User::where('id',$evaluation_task->lead_dev_id)->first(); 
+            $evaluation = EmployeeEvaluation::where('user_id',$evaluation_task->user_id)->first(); 
+            $top_management = User::where('id',Auth::user()->id)->first(); 
+            $team_lead = User::where('id',$evaluation->team_lead_id)->first();
+            $task = Task::where('id',$evaluation_task->task_id)->first();
+            $authorizers = User::whereIn('role_id', [8, 6])->get();
+            $updated_at = Carbon::parse($evaluation_task->updated_at);
+            $formatted_date_time = $updated_at->format('d F Y \a\t g:i A');
+            foreach ($authorizers as $key => $authorizer) {
+                $action = new PendingAction();
+                $action->code = 'ERFA';
+                $action->serial = 'ERFA'.'x'.$key;
+                $action->item_name= 'Evaluation reject for admin!';
+                $action->heading= 'New Developer '.$new_dev->name.' was rejected for real work by Top Management '.$top_management->name.'!';
+                $action->message = 'Top Management <a href="'.route('employees.show',$top_management->id).'">'.$top_management->name.'</a> has rejected New Developer <a href="'.route('employees.show',$new_dev->id).'">'.$new_dev->name.'</a> for real work from '.$formatted_date_time.'';
+                $action->timeframe= 24;
+                $action->client_id = $task->client_id;
+               $action->task_id = $task->id;
+               $action->developer_id = $new_dev->id;
+                $action->authorization_for= $authorizer->id;
+                $button = [
+                    [
+                        'button_name' => 'Acknowledge It',
+                        'button_color' => 'primary',
+                        'button_type' => 'modal',
+                        'button_url' => '',
+                        'modal_form'=> false,
+                    ],
+
+                ];
+                $action->button = json_encode($button);
+                $action->save();
+            }
+        }
+        public function evaluationExtendForAdmin($evaluation_task)
+        {
+            $evaluation_task = EmployeeEvaluationTask::where('id',$evaluation_task)->first(); 
+            $new_dev = User::where('id',$evaluation_task->user_id)->first(); 
+            $lead_dev = User::where('id',$evaluation_task->lead_dev_id)->first(); 
+            $evaluation = EmployeeEvaluation::where('user_id',$evaluation_task->user_id)->first(); 
+            $top_management = User::where('id',Auth::user()->id)->first(); 
+            $team_lead = User::where('id',$evaluation->team_lead_id)->first();
+            $task = Task::where('id',$evaluation_task->task_id)->first();
+            $authorizers = User::whereIn('role_id', [8, 6])->get();
+            $updated_at = Carbon::parse($evaluation_task->updated_at);
+            $formatted_date_time = $updated_at->format('d F Y \a\t g:i A');
+            foreach ($authorizers as $key => $authorizer) {
+                $action = new PendingAction();
+                $action->code = 'EEFA';
+                $action->serial = 'EEFA'.'x'.$key;
+                $action->item_name= 'Evaluation extend for admin!';
+                $action->heading= 'Top Management '.$top_management->name.' has extended the trial period for New Developer '.$new_dev->name.'!';
+                $action->message = 'Top Management <a href="'.route('employees.show',$top_management->id).'">'.$top_management->name.'</a> has extended the trial period for one more week for New Developer <a href="'.route('employees.show',$new_dev->id).'">'.$new_dev->name.'</a> from '.$formatted_date_time.'';
+                $action->timeframe= 24;
+                $action->client_id = $task->client_id;
+               $action->task_id = $task->id;
+               $action->developer_id = $new_dev->id;
+                $action->authorization_for= $authorizer->id;
+                $button = [
+                    [
+                        'button_name' => 'Acknowledge It',
+                        'button_color' => 'primary',
+                        'button_type' => 'modal',
+                        'button_url' => '',
+                        'modal_form'=> false,
+                    ],
+
+                ];
+                $action->button = json_encode($button);
+                $action->save();
+            }
+        }
 
 }

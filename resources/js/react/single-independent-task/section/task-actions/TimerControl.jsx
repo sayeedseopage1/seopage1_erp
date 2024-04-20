@@ -6,39 +6,62 @@ import {
     useLazyGetTaskDetailsQuery,
     useLazyGetUserTrackTimeQuery,
     useStartTimerApiMutation,
-    useStopTimerApiMutation
+    useStopTimerApiMutation,
 } from "../../../services/api/SingleTaskPageApi";
 import { CompareDate } from "../../../utils/dateController";
 import _ from "lodash";
 import { useDispatch } from "react-redux";
-import { setLessTrackModal, setTaskStatus } from "../../../services/features/subTaskSlice";
+import {
+    setLessTrackModal,
+    setTaskStatus,
+} from "../../../services/features/subTaskSlice";
 import LessTrackTimerModal from "./stop-timer/LessTrackTimerModal";
 import { User } from "../../../utils/user-details";
 import { useNavigate } from "react-router-dom";
 import { workingReportError } from "../helper/timer-start-working-report-error-toaster";
-
-
-
+import ExpiredTimeModalForNewEmployee from "./ExpiredTimeModalForNewEmployee";
 
 // component
 const TimerControl = ({ task, timerStart, setTimerStart, auth }) => {
+    //new employee timer hiding and warning modal showing
+    const [timerStatusForWarningModal, setTimerStatusForWarningModal] =
+        useState(true);
+    const [timeLeft, setTimeLeft] = useState(0);
+    const [showExpirationWarningModal, setShowExpirationWarningModal] =
+        useState(false);
+    const [expiredTimerForNewEmployee, setExpiredTimerForNewEmployee] =
+        useState(false);
+
     const [timerId, setTimerId] = useState(null);
     const [seconds, setSeconds] = useState(0);
     const [isOpenConfirmationModal, setIsOpenConfirmationModal] =
-        useState(false); 
+        useState(false);
 
-    const dispatch = useDispatch(); 
-    const dayjs = new CompareDate(); 
+    const dispatch = useDispatch();
+    const dayjs = new CompareDate();
     const loggedUser = new User(window?.Laravel?.user);
     const navigate = useNavigate();
 
-
     const timerStatus = task?.ranningTimer?.status;
-    const taskRunning = useMemo(() => timerStatus, [timerStatus])
+    const taskRunning = useMemo(() => timerStatus, [timerStatus]);
 
+    //expired time check and state change for new employee / Trainee
 
+    const expireDateForTrainer = localStorage.getItem("expireDateForTrainer");
+    useEffect(() => {
+        if (expireDateForTrainer) {
+            const expireDate = new Date(expireDateForTrainer);
+            const currentTime = new Date();
+            const timeDifference = expireDate.getTime() - currentTime.getTime();
+            setTimeLeft(Math.max(0, Math.floor(timeDifference / 1000)));
 
-    // check timer is already running
+            if (currentTime >= expireDate) {
+                setExpiredTimerForNewEmployee(true);
+                stopTimer();
+            }
+        }
+    }, [expireDateForTrainer]);
+
     useEffect(() => {
         if (taskRunning === "running") {
             let serverTime = task?.ranningTimer?.time;
@@ -99,56 +122,59 @@ const TimerControl = ({ task, timerStart, setTimerStart, auth }) => {
     // stop timer api slice
     const [stopTimerApi, { isLoading: timerStopStatusIsLoading }] =
         useStopTimerApiMutation();
-    
+
     const [checkWorkReport] = useCheckWorkingReportMutation();
 
     // timer start control
-    const startTimerControl = async() => {
+    const startTimerControl = async () => {
         setIsOpenConfirmationModal(false);
 
         // check is developer submit their daily working report on previous day
 
         try {
-           // check 
-           const workReport = await checkWorkReport().unwrap();
+            // check
+            const workReport = await checkWorkReport().unwrap();
 
-           // if submit all required report start timer
-           if(
-                workReport&&
+            // if submit all required report start timer
+            if (
+                workReport &&
                 workReport.data &&
                 workReport.data.check_in_check_out.check_in_status &&
                 workReport.data.daily_task_report.daily_submission_status &&
                 workReport.data.hours_log_report.hours_log_report_status
-           ){
+            ) {
                 await startTimerApi({
                     task_id: task?.id,
                     project_id: task?.projectId,
                     memo: task?.title,
                     user_id: window?.Laravel?.user?.id,
                 })
-                .unwrap()
-                .then(res => {
-                    if (res?.status === "success" || res?.status === 200) {
-                        setTimerStart(true);
-                        setTimerId(res?.id);
-                        dispatch(setTaskStatus(res?.task_status));
-                        Toast.fire({
-                            icon: 'success',
-                            title: _.startCase(res?.message),
-                        });
-                    } else {
-                        Toast.fire({
-                            icon: 'warning',
-                            title: _.startCase(res?.message),
-                        });
-                    }
-                }) 
-           }else{
-            workingReportError();
-           }
-
+                    .unwrap()
+                    .then((res) => {
+                        if (res?.status === "success" || res?.status === 200) {
+                            setTimerStart(true);
+                            setTimerId(res?.id);
+                            dispatch(setTaskStatus(res?.task_status));
+                            localStorage.setItem(
+                                "expireDateForTrainer",
+                                res?.evaluation
+                            );
+                            Toast.fire({
+                                icon: "success",
+                                title: _.startCase(res?.message),
+                            });
+                        } else {
+                            Toast.fire({
+                                icon: "warning",
+                                title: _.startCase(res?.message),
+                            });
+                        }
+                    });
+            } else {
+                workingReportError();
+            }
         } catch (error) {
-          console.log(error);  
+            console.log(error);
         }
 
         /*
@@ -219,7 +245,7 @@ const TimerControl = ({ task, timerStart, setTimerStart, auth }) => {
     // start timer function
     const startTimer = (e) => {
         e.preventDefault();
-        
+        setTimerStatusForWarningModal(true);
         startTimerFirstCheck(
             `/${task?.id}/json?mode=developer_first_task_check&project_id=${task?.projectId}`
         )
@@ -228,16 +254,15 @@ const TimerControl = ({ task, timerStart, setTimerStart, auth }) => {
                 if (res.is_first_task) {
                     setIsOpenConfirmationModal(true);
                 } else startTimerControl();
-            })
+            });
     };
-
-    
 
     /*********** End of Start Timer control ***************/
 
     // stop timer
-    const stopTimer = () => { 
-        //navigate(`/account/tasks/${task?.id}?modal=daily-submission&trigger=stop-button`); 
+    const stopTimer = () => {
+        //navigate(`/account/tasks/${task?.id}?modal=daily-submission&trigger=stop-button`);
+        setTimerStatusForWarningModal(false);
         stopTimerApi({ timeId: timerId })
             .unwrap()
             .then((res) => {
@@ -251,43 +276,58 @@ const TimerControl = ({ task, timerStart, setTimerStart, auth }) => {
                     timerId(null);
                 } else {
                     Toast.fire({
-                        icon: 'warning',
+                        icon: "warning",
                         title: _.startCase(res?.message),
                     });
                 }
             });
-    }; 
-    const [getUserTrackTime, {
-        isFetching: trackTimerFetcing
-    }] = useLazyGetUserTrackTimeQuery();
+    };
+    const [getUserTrackTime, { isFetching: trackTimerFetcing }] =
+        useLazyGetUserTrackTimeQuery();
 
-    // handle stop timer 
+    // handle stop timer
     const handleStopTimer = () => {
         // fetch data
         getUserTrackTime(loggedUser?.getId())
-        .unwrap()
-        .then(res => { 
-            if(res){
-                let currentTime = dayjs.dayjs(res.current_time);
-                let target = currentTime.set('hour', 16).set('minute', 45).set('second', 0);
-                const isSaturday = currentTime.day() === 6;
+            .unwrap()
+            .then((res) => {
+                if (res) {
+                    let currentTime = dayjs.dayjs(res.current_time);
+                    let target = currentTime
+                        .set("hour", 16)
+                        .set("minute", 45)
+                        .set("second", 0);
+                    const isSaturday = currentTime.day() === 6;
 
-                if(isSaturday){
-                    target = currentTime.set('hour', 13).set('minute', 0).set('second', 0);
-                }
+                    if (isSaturday) {
+                        target = currentTime
+                            .set("hour", 13)
+                            .set("minute", 0)
+                            .set("second", 0);
+                    }
 
-                let check = dayjs.dayjs(currentTime).isBefore(target);
-                let isDev = _.includes([5, 9 , 10], Number(auth?.getRoleId()));
-                if(!check && isDev){
-                    res.tracked_times < res.target_time ?  dispatch(setLessTrackModal({show: true, type: 'STOP_TIMER', date: 'Today'})) : stopTimer()
-                }else{
-                    stopTimer();
+                    let check = dayjs.dayjs(currentTime).isBefore(target);
+                    let isDev = _.includes(
+                        [5, 9, 10],
+                        Number(auth?.getRoleId())
+                    );
+                    if (!check && isDev) {
+                        res.tracked_times < res.target_time
+                            ? dispatch(
+                                  setLessTrackModal({
+                                      show: true,
+                                      type: "STOP_TIMER",
+                                      date: "Today",
+                                  })
+                              )
+                            : stopTimer();
+                    } else {
+                        stopTimer();
+                    }
                 }
-            }
-            
-        })
-        .catch(err => console.log(err))
-    }
+            })
+            .catch((err) => console.log(err));
+    };
 
     // control loading states...
     useEffect(() => {
@@ -304,14 +344,30 @@ const TimerControl = ({ task, timerStart, setTimerStart, auth }) => {
                 <React.Fragment>
                     {!timerStartStatusIsLoading &&
                     !startTimerFirstCheckIsFetching ? (
-                        <Button
-                            variant="tertiary"
-                            onClick={startTimer}
-                            className="d-flex align-items-center btn-outline-dark text-dark"
-                        >
-                            <i className="fa-solid fa-circle-play" />
-                            <span>Start Timer</span> 
-                        </Button>
+                        <div>
+                            {!expiredTimerForNewEmployee ? (
+                                <Button
+                                    variant="tertiary"
+                                    onClick={startTimer}
+                                    className="d-flex align-items-center btn-outline-dark text-dark"
+                                >
+                                    <i className="fa-solid fa-circle-play" />
+                                    <span>Start Timer</span>
+                                </Button>
+                            ) : (
+                                <Button
+                                    variant="danger"
+                                    className="d-flex align-items-center  "
+                                >
+                                    <i
+                                        className="fa-solid fa-circle-play"
+                                        style={{ color: "white" }}
+                                    />
+
+                                    <span>Time Expired</span>
+                                </Button>
+                            )}
+                        </div>
                     ) : (
                         <Button className="cursor-processing mr-2">
                             <div
@@ -342,48 +398,54 @@ const TimerControl = ({ task, timerStart, setTimerStart, auth }) => {
                         timerStopStatusIsLoading={timerStopStatusIsLoading}
                     /> */}
 
-                    {
-                        trackTimerFetcing ? 
-                        (
-                            <Button className="cursor-processing">
-                                <div
-                                    className="spinner-border text-white"
-                                    role="status"
-                                    style={{ width: "18px", height: "18px" }}
-                                />
-                                Processing...
-                            </Button>
-                        ):
-
-                        !timerStopStatusIsLoading ? (
-                            <Button
-                                variant="tertiary"
-                                onClick={handleStopTimer}
-                                className="d-flex align-items-center btn-outline-dark text-dark"
-                            >
-                                <i className="fa-solid fa-pause" />
-                                <span className="d-inline ml-1">Stop Timer</span>
-                            </Button>
-                        ) : (
-                            <Button className="cursor-processing">
-                                <div
-                                    className="spinner-border text-white"
-                                    role="status"
-                                    style={{ width: "18px", height: "18px" }}
-                                />
-                                Stopping...
-                            </Button>
-                        )
-                    } 
+                    {trackTimerFetcing ? (
+                        <Button className="cursor-processing">
+                            <div
+                                className="spinner-border text-white"
+                                role="status"
+                                style={{ width: "18px", height: "18px" }}
+                            />
+                            Processing...
+                        </Button>
+                    ) : !timerStopStatusIsLoading ? (
+                        <Button
+                            variant="tertiary"
+                            onClick={handleStopTimer}
+                            className="d-flex align-items-center btn-outline-dark text-dark"
+                        >
+                            <i className="fa-solid fa-pause" />
+                            <span className="d-inline ml-1">Stop Timer</span>
+                        </Button>
+                    ) : (
+                        <Button className="cursor-processing">
+                            <div
+                                className="spinner-border text-white"
+                                role="status"
+                                style={{ width: "18px", height: "18px" }}
+                            />
+                            Stopping...
+                        </Button>
+                    )}
                 </React.Fragment>
             )}
 
-
             {/* LessTrackTimerModal */}
-            <LessTrackTimerModal stopTimer={stopTimer} startTimer={startTimerControl} />
+            <LessTrackTimerModal
+                stopTimer={stopTimer}
+                startTimer={startTimerControl}
+            />
 
+            <ExpiredTimeModalForNewEmployee
+                showExpirationWarningModal={showExpirationWarningModal}
+                setShowExpirationWarningModal={setShowExpirationWarningModal}
+                timeLeft={timeLeft}
+                setTimeLeft={setTimeLeft}
+                taskRunning={taskRunning}
+                task={task}
+                timerStatusForWarningModal={timerStatusForWarningModal}
+            />
         </React.Fragment>
     );
 };
 
-export default TimerControl
+export default TimerControl;

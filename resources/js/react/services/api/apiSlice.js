@@ -34,6 +34,8 @@ export const apiSlice = createApi({
         "WON_DEALS",
         "GET_PROJECT_STATUS",
         "GET_PM_GOAL",
+        "ALL_TASKS",
+        "ALL_EVALUATION",
     ],
     endpoints: () => ({}),
 });

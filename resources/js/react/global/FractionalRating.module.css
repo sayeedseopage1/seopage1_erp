@@ -1,0 +1,5 @@
+.rating{
+  display: flex !important;
+  gap:8px;
+  align-items: center;
+}

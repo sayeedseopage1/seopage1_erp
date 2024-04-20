@@ -537,6 +537,7 @@ const SubTaskForm = ({ close, isFirstSubtask = false }) => {
                                 <AssginedToSelection
                                     selected={assignedTo}
                                     onSelect={setAssignedTo}
+                                    taskCategory={taskCategory}
                                 />
 
                                 {err?.assignedTo && (
