@@ -274,7 +274,7 @@
                             <label id="awardTimeError" class="text-danger" for=""></label>
                         </div>
 
-                        @if($deal->project_type == 'fixed')
+                        @if($deal->project_type != 'hourly')
                         <div class="mt-3" id="timerss">
 
                             <h2><strong>Deadline <span style="color:red;">*<span></strong>
