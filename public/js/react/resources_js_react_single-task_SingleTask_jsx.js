@@ -11174,7 +11174,7 @@ var EditFormProvider = function EditFormProvider(_ref) {
 };
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (EditFormProvider);
 var SubTaskEditModal = function SubTaskEditModal(_ref2) {
-  var _required_error$title, _task$category, _required_error$start, _required_error$start2, _required_error$due_d, _required_error$due_d2, _task$category2, _defaultSecondaryColo, _defaultSecondaryColo2, _task$category3;
+  var _required_error$title, _task$category, _required_error$start, _required_error$start2, _required_error$due_d, _required_error$due_d2, _task$category2, _defaultSecondaryColo, _defaultSecondaryColo2, _defaultSecondaryColo3, _defaultSecondaryColo4, _task$category3;
   var task = _ref2.task,
     taskDetails = _ref2.singleTask,
     onSubmit = _ref2.onSubmit,
@@ -11753,26 +11753,13 @@ var SubTaskEditModal = function SubTaskEditModal(_ref2) {
               })
             }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_26__.jsx)("div", {
               className: "col-12 col-md-6",
-              children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_26__.jsxs)("div", {
-                className: "form-group my-3 w-100",
-                children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_26__.jsxs)("label", {
-                  htmlFor: 'fileTypesNeeded',
-                  className: "f-14 text-dark-gray mb-1",
-                  "data-label": "true",
-                  children: ["File Types Needed", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_26__.jsx)("sup", {
-                    className: "f-14 mr-1",
-                    children: "*"
-                  })]
-                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_26__.jsx)("div", {
-                  children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_26__.jsx)(_projects_components_graphics_design_forms_FileTypesNeeded__WEBPACK_IMPORTED_MODULE_18__["default"], {
-                    className: "form-control height-35 w-100 f-14",
-                    id: "fileTypesNeeded",
-                    fileTypesNeeded: fileTypesNeeded,
-                    setFileTypesNeeded: setFileTypesNeeded,
-                    multiple: true,
-                    readOnly: true
-                  })
-                })]
+              children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_26__.jsx)(_components_form_Input__WEBPACK_IMPORTED_MODULE_8__["default"], {
+                id: "fileTypesNeeded",
+                label: "File Types Needed",
+                type: "text",
+                name: "fileTypesNeeded",
+                value: fileTypesNeeded === null || fileTypesNeeded === void 0 ? void 0 : fileTypesNeeded.join(", "),
+                readOnly: true
               })
             }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_26__.jsx)("div", {
               className: "col-12 col-md-6",
@@ -12016,12 +12003,12 @@ var SubTaskEditModal = function SubTaskEditModal(_ref2) {
                     color: primaryColor,
                     desc: primaryColorDescription
                   })]
-                }), (defaultSecondaryColors[0].color || defaultSecondaryColors[0].description) && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_26__.jsxs)("div", {
+                }), defaultSecondaryColors && (((_defaultSecondaryColo = defaultSecondaryColors[0]) === null || _defaultSecondaryColo === void 0 ? void 0 : _defaultSecondaryColo.color) || ((_defaultSecondaryColo2 = defaultSecondaryColors[0]) === null || _defaultSecondaryColo2 === void 0 ? void 0 : _defaultSecondaryColo2.description)) && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_26__.jsxs)("div", {
                   className: "col-12 col-md-6 px-0",
                   children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_26__.jsx)("p", {
                     className: "font-weight-bold mr-2 mb-2",
-                    children: ((_defaultSecondaryColo = defaultSecondaryColors) === null || _defaultSecondaryColo === void 0 ? void 0 : _defaultSecondaryColo.length) > 1 ? "Secondary Colors: " : "Secondary Color: "
-                  }), (_defaultSecondaryColo2 = defaultSecondaryColors) === null || _defaultSecondaryColo2 === void 0 ? void 0 : _defaultSecondaryColo2.map(function (color, i) {
+                    children: ((_defaultSecondaryColo3 = defaultSecondaryColors) === null || _defaultSecondaryColo3 === void 0 ? void 0 : _defaultSecondaryColo3.length) > 1 ? "Secondary Colors: " : "Secondary Color: "
+                  }), (_defaultSecondaryColo4 = defaultSecondaryColors) === null || _defaultSecondaryColo4 === void 0 ? void 0 : _defaultSecondaryColo4.map(function (color, i) {
                     return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_26__.jsx)(_components_PMGuideline__WEBPACK_IMPORTED_MODULE_17__.ColorItem, {
                       color: color === null || color === void 0 ? void 0 : color.color,
                       desc: color === null || color === void 0 ? void 0 : color.description
@@ -12032,26 +12019,13 @@ var SubTaskEditModal = function SubTaskEditModal(_ref2) {
             })]
           }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_26__.jsx)("div", {
             className: "col-12 col-md-6",
-            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_26__.jsxs)("div", {
-              className: "form-group my-3 w-100",
-              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_26__.jsxs)("label", {
-                htmlFor: 'fileExtension',
-                className: "f-14 text-dark-gray mb-1",
-                "data-label": "true",
-                children: ["Required File Extension", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_26__.jsx)("sup", {
-                  className: "f-14 mr-1",
-                  children: "*"
-                })]
-              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_26__.jsx)("div", {
-                children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_26__.jsx)(_projects_components_graphics_design_forms_FileExtensionMultiSelect__WEBPACK_IMPORTED_MODULE_25__["default"], {
-                  className: "form-control height-35 w-100 f-14",
-                  id: "fileExtension",
-                  fileExtension: fileExtension,
-                  setFileExtension: setFileExtension,
-                  multiple: true,
-                  readOnly: true
-                })
-              })]
+            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_26__.jsx)(_components_form_Input__WEBPACK_IMPORTED_MODULE_8__["default"], {
+              id: "fileExtension",
+              label: "Required File Extension",
+              type: "text",
+              name: "fileExtension",
+              value: fileExtension === null || fileExtension === void 0 ? void 0 : fileExtension.join(", "),
+              readOnly: true
             })
           })]
         }),
@@ -13153,26 +13127,13 @@ var SubTaskForm = function SubTaskForm(_ref) {
             })
           }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_27__.jsx)("div", {
             className: "col-12 col-md-6",
-            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_27__.jsxs)("div", {
-              className: "form-group my-3 w-100",
-              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_27__.jsxs)("label", {
-                htmlFor: 'fileTypesNeeded',
-                className: "f-14 text-dark-gray mb-1",
-                "data-label": "true",
-                children: ["File Types Needed", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_27__.jsx)("sup", {
-                  className: "f-14 mr-1",
-                  children: "*"
-                })]
-              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_27__.jsx)("div", {
-                children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_27__.jsx)(_projects_components_graphics_design_forms_FileTypesNeeded__WEBPACK_IMPORTED_MODULE_21__["default"], {
-                  className: "form-control height-35 w-100 f-14",
-                  id: "fileTypesNeeded",
-                  fileTypesNeeded: fileTypesNeeded,
-                  setFileTypesNeeded: setFileTypesNeeded,
-                  multiple: true,
-                  readOnly: true
-                })
-              })]
+            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_27__.jsx)(_components_form_Input__WEBPACK_IMPORTED_MODULE_4__["default"], {
+              id: "fileTypesNeeded",
+              label: "File Types Needed",
+              type: "text",
+              name: "fileTypesNeeded",
+              value: fileTypesNeeded === null || fileTypesNeeded === void 0 ? void 0 : fileTypesNeeded.join(", "),
+              readOnly: true
             })
           }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_27__.jsx)("div", {
             className: "col-12 col-md-6",
@@ -13418,7 +13379,7 @@ var SubTaskForm = function SubTaskForm(_ref) {
                   color: primaryColor,
                   desc: primaryColorDescription
                 })]
-              }), (defaultSecondaryColors[0].color || defaultSecondaryColors[0].description) && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_27__.jsxs)("div", {
+              }), defaultSecondaryColors && (defaultSecondaryColors[0].color || defaultSecondaryColors[0].description) && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_27__.jsxs)("div", {
                 className: "col-12 col-md-6 px-0",
                 children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_27__.jsx)("p", {
                   className: "font-weight-bold mr-2 mb-2",
@@ -13434,26 +13395,13 @@ var SubTaskForm = function SubTaskForm(_ref) {
           })]
         }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_27__.jsx)("div", {
           className: "col-12 col-md-6",
-          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_27__.jsxs)("div", {
-            className: "form-group my-3 w-100",
-            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_27__.jsxs)("label", {
-              htmlFor: 'fileExtension',
-              className: "f-14 text-dark-gray mb-1",
-              "data-label": "true",
-              children: ["Required File Extension", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_27__.jsx)("sup", {
-                className: "f-14 mr-1",
-                children: "*"
-              })]
-            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_27__.jsx)("div", {
-              children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_27__.jsx)(_projects_components_graphics_design_forms_FileExtensionMultiSelect__WEBPACK_IMPORTED_MODULE_26__["default"], {
-                className: "form-control height-35 w-100 f-14",
-                id: "fileExtension",
-                fileExtension: fileExtension,
-                setFileExtension: setFileExtension,
-                multiple: true,
-                readOnly: true
-              })
-            })]
+          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_27__.jsx)(_components_form_Input__WEBPACK_IMPORTED_MODULE_4__["default"], {
+            id: "fileExtension",
+            label: "Required File Extension",
+            type: "url",
+            name: "fileExtension",
+            value: fileExtension === null || fileExtension === void 0 ? void 0 : fileExtension.join(", "),
+            readOnly: true
           })
         })]
       }),
