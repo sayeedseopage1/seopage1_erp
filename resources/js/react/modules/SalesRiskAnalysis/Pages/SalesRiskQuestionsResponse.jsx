@@ -45,6 +45,8 @@ const SalesRiskQuestionsResponse = () => {
         useSaleRiskQuestionAnswerSaveMutation();
 
     const questions = data?.data;
+    const questionList = questions?.questionList;
+    const currencyData = questions?.currency;
 
     React.useEffect(() => {
         const flattenArray = (arr) =>
@@ -52,8 +54,8 @@ const SalesRiskQuestionsResponse = () => {
                 const nestedQuestions = item?.questions || [];
                 return [item, ...flattenArray(nestedQuestions)];
             });
-        if (questions?.length > 0) {
-            const copyArray = [...questions];
+        if (questionList?.length > 0) {
+            const copyArray = [...questionList];
             const flattenedArray = flattenArray(copyArray);
             setAllQuestions(flattenedArray);
             const addInputFiled = flattenedArray
@@ -96,7 +98,7 @@ const SalesRiskQuestionsResponse = () => {
 
             setInputsData([...addInputFiled, ...addChildInputField]);
         }
-    }, [questions]);
+    }, [questionList]);
 
     // handle submit
     const handleSubmit = async () => {
@@ -270,7 +272,8 @@ const SalesRiskQuestionsResponse = () => {
                         ) : (
                             <SaleRiskQuestionsInputContainer
                                 isChild={false}
-                                questions={questions}
+                                questions={questionList}
+                                currencyData={currencyData}
                                 inputsData={inputsData}
                                 allQuestions={allQuestions}
                                 isSubmitting={isSubmitting}

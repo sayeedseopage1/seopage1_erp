@@ -85,4 +85,6 @@ CustomModal.propTypes = {
     height: PropTypes.string,
     maxHeight: PropTypes.string,
     scroLlBottom: PropTypes.bool,
+    zIndex: PropTypes.number,
+    paddingTop: PropTypes.string
 };

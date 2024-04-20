@@ -129,6 +129,7 @@ const TooltipComponent = ({ children, disabled, text, ...props }) => {
                 ref={setReference}
                 onMouseOver={() => setIsOpen(true)}
                 onMouseLeave={() => setIsOpen(false)}
+                onFocus={() => setIsOpen(true)}
                 style={{ width: "fit-content", ...props.style }}
                 {...props}
                 role="button"
@@ -160,6 +161,7 @@ TooltipComponent.propTypes = {
     text: PropTypes.any,
     children: PropTypes.any,
     disabled: PropTypes.bool,
+    style: PropTypes.object,
     props: PropTypes.any,
 };
 
@@ -167,6 +169,7 @@ Tooltip.propTypes = {
     text: PropTypes.any,
     children: PropTypes.any,
     disabled: PropTypes.bool,
+    
     props: PropTypes.any,
 };
 

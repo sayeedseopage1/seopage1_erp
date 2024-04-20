@@ -17,6 +17,7 @@ const SaleRiskQuestionsInputContainer = ({
     allQuestions,
     focusedQuestion,
     inputContainerActions,
+    currencyData,
 }) => {
     const {
         setInputsData,
@@ -28,6 +29,7 @@ const SaleRiskQuestionsInputContainer = ({
 
     const [listItem, setListItem] = useState(null);
 
+    // Get input value from inputsData array by question id and return it or empty string
     const getInputValue = (questionId) => {
         if (inputsData?.length) {
             const data = inputsData?.find((item) => item.id === questionId);
@@ -40,7 +42,7 @@ const SaleRiskQuestionsInputContainer = ({
             return "";
         }
     };
-
+    // Check if question is active and return boolean value
     const handleActiveData = (question) => {
         const getQuestion = inputsData?.find((item) => item.id === question.id);
         if (!_.isEmpty(getQuestion)) {
@@ -48,16 +50,20 @@ const SaleRiskQuestionsInputContainer = ({
         }
     };
 
+    // Check if question is active and return boolean value
     const getBooleanValue = (question) => {
         return question?.questions?.length ? true : false;
     };
 
+    // Add number on title if question is not child
     const addNumberOnTitle = (index, title, isChild) => {
         if (isChild) {
             return title;
         }
         return `${index + 1}. ${title}`;
     };
+
+    console.log(currencyData);
 
     return (
         <motion.div
@@ -78,8 +84,9 @@ const SaleRiskQuestionsInputContainer = ({
                                     label={addNumberOnTitle(
                                         index,
                                         question?.title,
-                                        isChild
+                                        isChild,
                                     )}
+                                    isCurrencyHave={question?.currency}
                                     isSubmitting={isSubmitting}
                                     value={getInputValue(question.id)}
                                     onChange={(e) => {
@@ -114,6 +121,7 @@ const SaleRiskQuestionsInputContainer = ({
                                         isSubmitting={isSubmitting}
                                         allQuestions={allQuestions}
                                         focusedQuestion={focusedQuestion}
+                                        currencyData={currencyData}
                                         inputContainerActions={{
                                             getItsFocused,
                                             handleQuestionFocus,
@@ -129,8 +137,10 @@ const SaleRiskQuestionsInputContainer = ({
                                     label={addNumberOnTitle(
                                         index,
                                         question?.title,
-                                        isChild
+                                        isChild,
+                                    
                                     )}
+                                    isCurrencyHave={question?.currency}
                                     isChild={isChild}
                                     comment={question.comment}
                                     onChange={(value) => {
@@ -160,6 +170,7 @@ const SaleRiskQuestionsInputContainer = ({
                                         isSubmitting={isSubmitting}
                                         allQuestions={allQuestions}
                                         focusedQuestion={focusedQuestion}
+                                        currencyData={currencyData}
                                         inputContainerActions={{
                                             getItsFocused,
                                             handleQuestionFocus,
@@ -183,8 +194,10 @@ const SaleRiskQuestionsInputContainer = ({
                                     label={addNumberOnTitle(
                                         index,
                                         question?.title,
-                                        isChild
+                                        isChild,
+                                        
                                     )}
+                                    isCurrencyHave={question?.currency}
                                     onFocus={() => {
                                         handleQuestionFocus(question);
                                     }}
@@ -216,6 +229,7 @@ const SaleRiskQuestionsInputContainer = ({
                                         isSubmitting={isSubmitting}
                                         allQuestions={allQuestions}
                                         focusedQuestion={focusedQuestion}
+                                        currencyData={currencyData}
                                         inputContainerActions={{
                                             getItsFocused,
                                             handleQuestionFocus,
@@ -231,8 +245,10 @@ const SaleRiskQuestionsInputContainer = ({
                                     label={addNumberOnTitle(
                                         index,
                                         question?.title,
-                                        isChild
+                                        isChild,
+                                        
                                     )}
+                                    isCurrencyHave={question?.currency}
                                     comment={question.comment}
                                     isChild={isChild}
                                     accordionData={
@@ -270,6 +286,7 @@ const SaleRiskQuestionsInputContainer = ({
                                         isSubmitting={isSubmitting}
                                         allQuestions={allQuestions}
                                         focusedQuestion={focusedQuestion}
+                                        currencyData={currencyData}
                                         inputContainerActions={{
                                             getItsFocused,
                                             handleQuestionFocus,
@@ -295,6 +312,7 @@ const SaleRiskQuestionsInputContainer = ({
                                         question?.title,
                                         isChild
                                     )}
+                                    isCurrencyHave={question?.currency}
                                     onFocus={() => {
                                         handleQuestionFocus(question);
                                     }}
@@ -326,6 +344,7 @@ const SaleRiskQuestionsInputContainer = ({
                                         isSubmitting={isSubmitting}
                                         allQuestions={allQuestions}
                                         focusedQuestion={focusedQuestion}
+                                        currencyData={currencyData}
                                         inputContainerActions={{
                                             getItsFocused,
                                             handleQuestionFocus,
@@ -354,4 +373,5 @@ SaleRiskQuestionsInputContainer.propTypes = {
     allQuestions: PropTypes.array,
     focusedQuestion: PropTypes.array,
     inputContainerActions: PropTypes.object,
+    currencyData: PropTypes.array,
 };

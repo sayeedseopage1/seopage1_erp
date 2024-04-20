@@ -56,7 +56,7 @@ const NewPolicyModalInputsContainer = ({
         }
 
         // Define regular expressions
-        const digitRegex = /[0-9]/;
+        const digitRegex =/\d/;
         const minusRegex = /-/;
         const decimalRegex = /\./;
 

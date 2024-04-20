@@ -64,7 +64,6 @@ const AddNewPolicyModal = ({
         }
     });
 
-    console.log("newPolicyData", newPolicyData);
 
     return (
         <CustomModal

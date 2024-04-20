@@ -21,6 +21,7 @@ const CustomButtons = ({
     className,
     id,
     isSubmitting,
+    isCurrencyHave,
     ...props
 }) => {
     return (
@@ -98,4 +99,5 @@ CustomButtons.propTypes = {
     props: PropTypes.object,
     isSubmitting: PropTypes.bool,
     comment: PropTypes.string,
+    isCurrencyHave: PropTypes.bool,
 }

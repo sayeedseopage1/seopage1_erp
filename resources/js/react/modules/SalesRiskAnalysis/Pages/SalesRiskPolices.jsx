@@ -28,7 +28,7 @@ import AddQuestionsListModal from "../components/modal/AddQuestionsListModal";
 const inputSateData = {
     inputState: {
         policyName: "",
-        department: "",
+        department: {},
         valueType: {},
         policyType: {},
         value: "",
@@ -77,7 +77,6 @@ const SalesRiskPolices = () => {
         pageSize: 10,
     });
     const [isRuleUpdating, setIsRuleUpdating] = React.useState(false);
-    const [setIsFocusedOnTitleInput] = React.useState(false);
 
     // modal open close state
     const [addNewPolicyModalOpen, setAddNewPolicyModalOpen] =
@@ -136,12 +135,10 @@ const SalesRiskPolices = () => {
                     id: "",
                 });
                 setNewPolicyDataValidation(inputSateData.inputValidation);
-                setIsFocusedOnTitleInput(false);
                 break;
             case "all":
                 setNewPolicyData(inputSateData.inputState);
                 setNewPolicyDataValidation(inputSateData.inputValidation);
-                setIsFocusedOnTitleInput(false);
                 setNewPolicyInputData([]);
                 break;
             default:
@@ -230,7 +227,6 @@ const SalesRiskPolices = () => {
                 return item;
             });
             setIsRuleUpdating(false);
-            setIsFocusedOnTitleInput(false);
             setNewPolicyInputData(updatedData);
         } else {
             setNewPolicyInputData([
@@ -242,6 +238,41 @@ const SalesRiskPolices = () => {
             ]);
         }
         resetFormForPolicy("single");
+    };
+
+    const formatRuleForPayload = (item) => {
+        const rule = {
+            policyType: item.policyType?.name,
+            title: item.title,
+        };
+
+        const optionalFields = ["value", "from", "to", "points", "ruleComment"];
+        optionalFields.forEach((field) => {
+            if (item[field]) rule[field] = item[field];
+        });
+
+        if (!_.isEmpty(item.valueType)) rule.valueType = item.valueType.name;
+
+        if (item.yes && item.no) {
+            rule.value = {
+                yes: {
+                    point: item.yes,
+                    comment: item.yesComment,
+                },
+                no: {
+                    point: item.no,
+                    comment: item.noComment,
+                },
+            };
+        }
+
+        if (item.countries?.length > 0) {
+            rule.countries = item.countries.map((country) => ({
+                [country.iso]: country.niceName,
+            }));
+        }
+
+        return rule;
     };
 
     // handle add new policy  with rules data to the server
@@ -257,39 +288,11 @@ const SalesRiskPolices = () => {
                 department: newPolicyInputData[0]?.department?.id,
                 comment: newPolicyInputData[0]?.comment,
                 key: newPolicyInputData[0]?.key?.name,
-                ruleList: newPolicyInputData.map((item) => {
-                    const rule = {
-                        policyType: item.policyType?.name,
-                        title: item.title,
-                    };
-                    if (item.value) rule.value = item.value;
-                    if (!_.isEmpty(item.valueType))
-                        rule.valueType = item.valueType.name;
-                    if (item.from) rule.from = item.from;
-                    if (item.to) rule.to = item.to;
-
-                    if (item.points) rule.points = item.points;
-                    if (item.yes && item.no) {
-                        rule.value = {
-                            yes: {
-                                point: item.yes,
-                                comment: item.yesComment,
-                            },
-                            no: {
-                                point: item.no,
-                                comment: item.noComment,
-                            },
-                        };
-                    }
-                    if (item.countries?.length > 0) {
-                        rule.countries = item.countries.map((country) => ({
-                            [country.iso]: country.niceName,
-                        }));
-                    }
-                    if (item.ruleComment) rule.comment = item.ruleComment;
-                    return rule;
-                }),
+                ruleList: newPolicyInputData.map((item) =>
+                    formatRuleForPayload(item)
+                ),
             };
+
 
             const response = await submitData(payload);
             if (response?.data) {
@@ -319,7 +322,6 @@ const SalesRiskPolices = () => {
     };
     const handleCloseAddQuestionsModal = () => {
         setAddQuestionsModalOpen(false);
-        setIsFocusedOnTitleInput(false);
     };
 
     // add title on change

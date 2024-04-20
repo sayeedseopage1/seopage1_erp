@@ -13,6 +13,10 @@ import {
     setFilterOptionsState,
 } from "../../../services/features/filterOptionSlice";
 
+// Constants
+import { currencySymbol } from "../constant/currencySymbol";
+
+
 export const SalesRiskAnalysisContext = createContext();
 
 const SalesRiskAnalysisProvider = ({ children }) => {
@@ -133,9 +137,10 @@ const SalesRiskAnalysisProvider = ({ children }) => {
             policies,
             allQuestions,
             policyKeys,
+            currencySymbol,
             isSalesRiskInputsLoading,
         };
-    }, []);
+    });
 
     return (
         <SalesRiskAnalysisContext.Provider value={SalesRiskAnalysisValue}>
