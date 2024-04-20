@@ -584,8 +584,11 @@ class SalesRiskPolicyController extends AccountBaseController
         $list = SalesPolicyQuestion::where('parent_id', $parentId)->get();
 
         if (count($list)) {
-            $list = $list->map(function ($item) {
-                return [
+            $question = SalesPolicyQuestion::where('key', 'milestone')->first();
+            $question = $question ? SalesPolicyQuestion::where('parent_id', $question->id)->first() : null;
+
+            $list = $list->map(function ($item) use($question) {
+                $data =[
                     'id' => $item->id,
                     'title' => $item->title,
                     'key' => $item->key,
@@ -597,6 +600,10 @@ class SalesRiskPolicyController extends AccountBaseController
                     'policy_title' => SalesRiskPolicy::find($item->policy_id)->title,
                     'questions' => self::questionListChild($item->id)
                 ];
+
+                if($question && $question->id == $item->id) $data['currency'] = true;
+
+                return $data;
             });
         }
         return $list;
@@ -693,15 +700,11 @@ class SalesRiskPolicyController extends AccountBaseController
                     'questions' => self::questionListChild($item->id)
                 ];
             })->toArray();
+
         $deal = Deal::find($req->session()->get('deal_id'));
         $currency = Currency::find($deal->currency_id);
 
-        $data['currency'] = [$currency->currency_code, $currency->currency_name];
-
-        $question = SalesPolicyQuestion::where('key', 'milestone')->first();
-        $question = $question ? SalesPolicyQuestion::where('parent_id', $question->id)->first() : null;
-        $data['currency_question_id'] = $question ? $question->id : null;
-        return response()->json(['status' => 'success', 'data' =>  $data]);
+        return response()->json(['status' => 'success', 'data' => array_values($data), 'currency' => [$currency->currency_code, $currency->currency_name]]);
     }
 
     function questionValueSave(Request $req)
