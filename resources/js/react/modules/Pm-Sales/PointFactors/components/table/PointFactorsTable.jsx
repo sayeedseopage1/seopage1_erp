@@ -36,7 +36,7 @@ import { useState } from "react";
 import PmPointFactorsTableLoader from "../loader/PmPointFactorsTableLoader";
 import EditFactorModal from "../modal/EditFactorModal";
 import { LimitUnits } from "../../constant";
-import { useUpdatePmPointfactorMutation } from "../../../../../services/api/pmSalesApiSlice";
+import { useGetSinglePmPointFactorQuery, useUpdatePmPointfactorMutation } from "../../../../../services/api/pmSalesApiSlice";
 import { validationFormator } from "../../utils/validationFormator";
 
 const PointFactorsTable = ({
@@ -88,11 +88,9 @@ const PointFactorsTable = ({
 
     // default columns
     const defaultColumns = useMemo(() => [...tableColumns]);
-    // console.log("80", defaultColumns)
 
     // columns
     const [columns, setColumns] = useState([...defaultColumns]);
-    // console.log("84", columns)
 
     const [columnOrder, setColumnOrder] = useState(_.map(columns, "id"));
 
@@ -107,10 +105,13 @@ const PointFactorsTable = ({
         onPageChange(paginate);
     };
 
+
+
+
+
     // handle page size change
     const handlePageSizeChange = (e) => {
         e.preventDefault();
-
         const paginate = {
             pageIndex,
             pageSize: e.target.value,
@@ -161,7 +162,6 @@ const PointFactorsTable = ({
             },
         }
     })
-    console.log(editFactorData)
 
     const [editFactorDataValidation, setEditFactorDataValidation] =
         useState({
@@ -178,16 +178,15 @@ const PointFactorsTable = ({
 
     // handle change on input
     const handleChange = (e) => {
-        // console.log(editFactorData)
         const { name, value } = e.target;
-        setEditFactorData({ ...editFactorData, [name]: value });
-        /*  if (editFactorData[name] === value) {
-             // If yes, clear the value from the state
-             setEditFactorData({ ...editFactorData, [name]: "" });
-         } else {
-             // Otherwise, set the clicked checkbox's value in the state
-             setEditFactorData({ ...editFactorData, [name]: value });
-         } */
+        // setEditFactorData({ ...editFactorData, [name]: value });
+        if (editFactorData[name] === value) {
+            // If yes, clear the value from the state
+            setEditFactorData({ ...editFactorData, [name]: "" });
+        } else {
+            // Otherwise, set the clicked checkbox's value in the state
+            setEditFactorData({ ...editFactorData, [name]: value });
+        }
     }
 
     // modal Close Handler
@@ -200,10 +199,7 @@ const PointFactorsTable = ({
     const [updatePmPointfactor, { isLoading: isUpdatePmPointfactorLoading }] = useUpdatePmPointfactorMutation()
 
     const handleUpdateFactor = async () => {
-        // console.log("inside handler for update 1")
         const validation = validationFormator(editFactorData, editFactorDataValidation)
-        // console.log("inside handler for update 2")
-        // console.log(validation)
         if (
             Object.entries(validation).some(
                 ([key, value]) => key !== "isSubmitting" && value === true
@@ -215,7 +211,6 @@ const PointFactorsTable = ({
             });
             return;
         }
-        // console.log("inside handler for update 3")
         try {
             const lowerLimitCondition = editFactorData?.infiniteValueDown ? editFactorData?.infiniteValueDown : editFactorData?.limit_type == 2 ? "==" : "<"
             const upperLimitCondition = editFactorData?.infiniteValueUp ? editFactorData?.infiniteValueUp : editFactorData?.limit_type == 2 ? "==" : ">="
@@ -235,13 +230,11 @@ const PointFactorsTable = ({
                 status: parseInt(editFactorData?.status) ?? null,
             }
 
-            console.log(payload)
-
-            // const response = await updatePmPointfactor({ id: editFactorData?.id, payload }).unwrap();
-            // if (response?.status == 200) {
-            //     toast.success(response.message);
-            //     handleCloseEditFactorModal();
-            // }
+            const response = await updatePmPointfactor({ id: editFactorData?.id, payload }).unwrap();
+            if (response?.status == 200) {
+                toast.success(response.message);
+                handleCloseEditFactorModal();
+            }
         } catch (error) {
             toast.error("Failed to update item");
         }

@@ -19,6 +19,7 @@ const EditFactorModal = ({
     editFactorDataValidation,
     setEditFactorData
 }) => {
+
     const { data: singleFactorData, isLoading: isLoadingSingleFactorData } =
         useGetSinglePmPointFactorQuery(editFactorData?.id, {
             skip: !editFactorData?.id,
@@ -28,20 +29,32 @@ const EditFactorModal = ({
 
     const singleDefaultFactor = singleFactorData?.data
 
+
+    useEffect(() => {
+        if (singleDefaultFactor) {
+            const { limit_unit } = singleDefaultFactor
+            const limit_unit_obj = LimitUnits?.data?.find(unit => unit?.name == limit_unit)
+            const infinite_value_up = singleDefaultFactor?.upper_limit_condition == "<" && "<"
+            const infinite_value_down = singleDefaultFactor?.upper_limit_condition == ">" && ">"
+            setEditFactorData({ ...singleDefaultFactor, limit_unit: limit_unit_obj, infiniteValueUp: infinite_value_up, infiniteValueDown: infinite_value_down })
+        }
+
+    }, [singleDefaultFactor]);
+
     const { title, project_type, lower_limit, upper_limit, lower_limit_condition, upper_limit_condition, limit_type, limit_unit, point_type, points, status, infiniteValueDown, infiniteValueUp } = editFactorData || {}
 
 
-    useEffect(() => {
-        if ((infiniteValueUp && !infiniteValueDown)) {
-            setEditFactorData({ ...editFactorData, upper_limit: lower_limit })
-        }
-    }, [infiniteValueUp])
+    // useEffect(() => {
+    //     if ((infiniteValueUp && !infiniteValueDown)) {
+    //         setEditFactorData({ ...editFactorData, upper_limit: lower_limit })
+    //     }
+    // }, [infiniteValueUp])
 
-    useEffect(() => {
-        if ((!infiniteValueUp && infiniteValueDown)) {
-            setEditFactorData({ ...editFactorData, lower_limit: upper_limit })
-        }
-    }, [infiniteValueDown])
+    // useEffect(() => {
+    //     if ((!infiniteValueUp && infiniteValueDown)) {
+    //         setEditFactorData({ ...editFactorData, lower_limit: upper_limit })
+    //     }
+    // }, [infiniteValueDown])
 
     return (
         <CustomModal
@@ -67,13 +80,13 @@ const EditFactorModal = ({
                                 Criteria:
                             </ModalInputLabel>
                             <ModalInputLabel className="col-8" color="#8F8F8F">
-                                {singleDefaultFactor?.criteria?.title}
+                                {editFactorData?.criteria?.title}
                             </ModalInputLabel>
                         </div>
 
                         {/* title  *****required****** */}
                         {
-                            singleDefaultFactor?.title && <div className="row mb-4 align-items-center">
+                            editFactorData?.title && <div className="row mb-4 align-items-center">
                                 <ModalInputLabel className="col-4">
                                     Title <sup>*</sup>:{" "}
                                 </ModalInputLabel>
@@ -109,7 +122,7 @@ const EditFactorModal = ({
 
                         {/* limit type  *****required****** */}
                         {
-                            singleDefaultFactor?.limit_type && <div className="row mb-4 align-items-center">
+                            editFactorData?.limit_type && <div className="row mb-4 align-items-center">
                                 <ModalInputLabel className="col-4">
                                     Limit Type <sup>*</sup>:{" "}
                                 </ModalInputLabel>
@@ -133,7 +146,7 @@ const EditFactorModal = ({
                                         value={lower_limit}
                                         onChange={handleChange}
                                         placeholder="Write Here"
-                                    // disabled={(!infiniteValueUp && infiniteValueDown)}
+                                        disabled={(!infiniteValueUp && infiniteValueDown)}
                                     />
                                     {editFactorDataValidation?.lower_limit && (
                                         <p className="text-danger">
@@ -175,7 +188,7 @@ const EditFactorModal = ({
                                         value={upper_limit}
                                         onChange={handleChange}
                                         placeholder="Write Here"
-                                    // disabled={(infiniteValueUp && !infiniteValueDown)}
+                                        disabled={(infiniteValueUp && !infiniteValueDown)}
                                     />
                                     {editFactorDataValidation?.upper_limit && (
                                         <p className="text-danger">
@@ -204,7 +217,7 @@ const EditFactorModal = ({
 
                         {/* limit unit  *****required****** */}
                         {
-                            singleDefaultFactor?.limit_unit && <div className="row mb-4 align-items-center">
+                            editFactorData?.limit_unit && <div className="row mb-4 align-items-center">
                                 <ModalInputLabel className="col-4">
                                     Limit Unit<sup>*</sup>:{" "}
                                 </ModalInputLabel>
@@ -228,7 +241,7 @@ const EditFactorModal = ({
 
                         {/* point type  *****required****** */}
                         {
-                            singleDefaultFactor?.point_type && <div className="row mb-4 align-items-center">
+                            editFactorData?.point_type && <div className="row mb-4 align-items-center">
                                 <ModalInputLabel className="col-4">
                                     Point Type <sup>*</sup>:{" "}
                                 </ModalInputLabel>
@@ -240,7 +253,7 @@ const EditFactorModal = ({
 
                         {/* points *****required****** */}
                         {
-                            singleDefaultFactor?.points && <div className="row mb-4 align-items-center">
+                            editFactorData?.points && <div className="row mb-4 align-items-center">
                                 <ModalInputLabel className="col-4">
                                     Points <sup>*</sup>:{" "}
                                 </ModalInputLabel>
@@ -264,7 +277,7 @@ const EditFactorModal = ({
 
                         {/* status *****Optional****** */}
                         {
-                            singleDefaultFactor?.status != null && <div className="row mb-4 align-items-center">
+                            editFactorData?.status != null && <div className="row mb-4 align-items-center">
                                 <ModalInputLabel className="col-4">
                                     Status <sup>*</sup>:{" "}
                                 </ModalInputLabel>

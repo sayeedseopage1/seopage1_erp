@@ -225,8 +225,6 @@ const PointFactors = () => {
                 points: parseFloat(newFactorData?.points) ?? null,
                 status: parseInt(newFactorData?.status) ?? null,
             }
-            console.log("inside handler 4")
-            console.log(payload)
             const response = await createPmPointFactor(payload).unwrap();
             if (response?.status == 200) {
                 toast.success(response.message);
@@ -272,9 +270,6 @@ const PointFactors = () => {
             setNewFactorData(prev => ({ ...prev, upper_limit: newFactorData.lower_limit }));
         }
     }, [newFactorData?.infiniteValueUp, newFactorData?.infiniteValueDown, newFactorData?.lower_limit, newFactorData?.upper_limit]);
-
-
-
 
     return (
         <section>
