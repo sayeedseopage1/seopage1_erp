@@ -34,8 +34,8 @@ const EditFactorModal = ({
         if (singleDefaultFactor) {
             const { limit_unit } = singleDefaultFactor
             const limit_unit_obj = LimitUnits?.data?.find(unit => unit?.name == limit_unit)
-            const infinite_value_up = singleDefaultFactor?.upper_limit_condition == "<" && "<"
-            const infinite_value_down = singleDefaultFactor?.upper_limit_condition == ">" && ">"
+            const infinite_value_up = singleDefaultFactor?.upper_limit_condition == "<" ? "<" : ""
+            const infinite_value_down = singleDefaultFactor?.lower_limit_condition == ">" ? ">" : ""
             setEditFactorData({ ...singleDefaultFactor, limit_unit: limit_unit_obj, infiniteValueUp: infinite_value_up, infiniteValueDown: infinite_value_down })
         }
 

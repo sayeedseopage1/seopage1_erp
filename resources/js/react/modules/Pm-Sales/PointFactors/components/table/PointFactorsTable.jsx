@@ -248,8 +248,6 @@ const PointFactorsTable = ({
         }
     }, [editFactorData]);
 
-
-
     useEffect(() => {
         if (editFactorData?.infiniteValueDown) {
             if (editFactorData?.lower_limit && !editFactorData?.infiniteValueUp && !editFactorData?.upper_limit) {
