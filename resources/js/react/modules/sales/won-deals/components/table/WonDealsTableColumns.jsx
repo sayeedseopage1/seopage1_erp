@@ -2,6 +2,7 @@ import dayjs from "dayjs";
 import { CreatedAt, CreatedBy, EmptySpace } from "./ui";
 import Avatar from "../../../../../global/Avatar";
 import ActionDropdown from "./ActionDropdown";
+import PersonAvatar from "../PersonAvatar";
 
 export const WonDealsTableColumns = [
     {
@@ -103,7 +104,11 @@ export const WonDealsTableColumns = [
 
             return (
                 <CreatedBy href={`/account/employees/${data.pm_id}`}>
-                    <Avatar
+                    <PersonAvatar
+                        name={data?.pm_name}
+                        avatar={data?.pm_avatar}
+                    />
+                    {/* <Avatar
                         type="circle"
                         name={data?.pm_name}
                         src={
@@ -111,8 +116,7 @@ export const WonDealsTableColumns = [
                                 ? `/user-uploads/avatar/${data?.pm_avatar}`
                                 : null
                         }
-                    />
-
+                    /> */}
                     <span>{data?.pm_name}</span>
                 </CreatedBy>
             );
