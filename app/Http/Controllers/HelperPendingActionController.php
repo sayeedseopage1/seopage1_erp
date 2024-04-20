@@ -1824,7 +1824,7 @@ class HelperPendingActionController extends AccountBaseController
                 $action->serial = 'NDPE'.'x'.$key;
                 $action->item_name= 'New developer\'s performance evaluation!';
                 $action->heading= 'New developer\'s performance evaluation!';
-                $action->message = 'Fill out initial performance evaluation from for the dedeloper <a href="'.route('employees.show',$new_dev->id).'">'.$new_dev->name.'</a>!';
+                $action->message = 'Fill out initial performance evaluation from for the developer <a href="'.route('employees.show',$new_dev->id).'">'.$new_dev->name.'</a>!';
                 $action->timeframe= 24;
                 $action->client_id = $task->id;
                $action->task_id = $task->id;
