@@ -763,4 +763,47 @@ class PendingActionController extends AccountBaseController
             # code...
         }
     }
+    public function pastAction(Request $request)
+    {
+        // dd($request->all());
+        $action = PendingAction::where('id',$request->id)->first();
+        $task= Task::where('id',$action->task_id)->first();
+        $project= Project::where('id',$task->project_id)->first();
+        $action->authorized_by= Auth::id();
+        $action->authorized_at= Carbon::now();
+        $action->past_status = 1;
+        $action->save();
+        $project_manager= User::where('id',$project->pm_id)->first();
+        $client= User::where('id',$project->client_id)->first();
+        $authorize_by= User::where('id',$action->authorized_by)->first();
+
+        $past_action= new PendingActionPast();
+        $past_action->item_name = $action->item_name;
+        $past_action->code = $action->code;
+        $past_action->serial = $action->serial;
+        $past_action->action_id = $action->id;
+        $past_action->heading = $action->heading;
+        $past_action->message = $action->message .'was resolved by '.$authorize_by->name;
+        $past_action->timeframe = $action->timeframe;
+        $past_action->authorization_for = $action->authorization_for;
+        $past_action->authorized_by = $action->authorized_by;
+        $past_action->authorized_at = $action->authorized_at;
+        $past_action->expired_status = $action->expired_status;
+        $past_action->past_status = $action->past_status;
+        $past_action->project_id = $action->project_id;
+        $past_action->task_id = $action->task_id;
+        $past_action->client_id = $action->client_id;
+        $button = [
+            [
+                'button_name' => 'View',
+                'button_color' => 'primary',
+                'button_type' => 'modal',
+                'button_url' => '',
+                'modal_form'=> false,
+            ]
+        ];
+        $past_action->button = json_encode($button);
+        $past_action->save();
+    }
 }
+

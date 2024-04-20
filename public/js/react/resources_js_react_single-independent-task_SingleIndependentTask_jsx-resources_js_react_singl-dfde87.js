@@ -1,158 +1,6 @@
 "use strict";
 (self["webpackChunk"] = self["webpackChunk"] || []).push([["resources_js_react_single-independent-task_SingleIndependentTask_jsx-resources_js_react_singl-dfde87"],{
 
-/***/ "./resources/js/react/UI/comments/CommentContainerDecider.jsx":
-/*!********************************************************************!*\
-  !*** ./resources/js/react/UI/comments/CommentContainerDecider.jsx ***!
-  \********************************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
-/* harmony export */ });
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _components_Modal__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./components/Modal */ "./resources/js/react/UI/comments/components/Modal.jsx");
-/* harmony import */ var _components_CustomModal__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./components/CustomModal */ "./resources/js/react/UI/comments/components/CustomModal.jsx");
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
-
-
-
-
-var CommentContainerDecider = function CommentContainerDecider(_ref) {
-  var fullScreenView = _ref.fullScreenView,
-    toggleRef = _ref.toggleRef,
-    width = _ref.width,
-    isOpen = _ref.isOpen,
-    children = _ref.children;
-  // console.log(width);
-  var handleContainer = function handleContainer(children) {
-    if (fullScreenView && width <= 991) {
-      return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)(_components_Modal__WEBPACK_IMPORTED_MODULE_1__["default"], {
-        isOpen: isOpen,
-        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("div", {
-          // className="position-relative"
-          style: {
-            position: "absolute",
-            top: "80px",
-            left: "-10px",
-            padding: "75px 23px 18px 25px",
-            height: "100vh",
-            width: "100vw"
-          },
-          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("div", {
-            className: "sp1_task_comment_modal",
-            style: {
-              position: "absolute",
-              top: "80px",
-              left: "-10px",
-              height: "100%",
-              width: "100%",
-              maxHeight: "100vh"
-            },
-            children: children
-          })
-        })
-      });
-    } else if (!fullScreenView && width <= 991) {
-      return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)(_components_Modal__WEBPACK_IMPORTED_MODULE_1__["default"], {
-        isOpen: isOpen,
-        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("div", {
-          className: "position-relative",
-          style: {
-            padding: "75px 23px 18px 25px",
-            height: "100vh",
-            width: "100vw"
-          },
-          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("div", {
-            className: "sp1_task_comment_modal",
-            style: {
-              height: "100%",
-              width: "100%",
-              maxHeight: "100vh"
-            },
-            children: children
-          })
-        })
-      });
-    } else if (fullScreenView && width > 991) {
-      return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)(_components_Modal__WEBPACK_IMPORTED_MODULE_1__["default"], {
-        isOpen: isOpen,
-        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("div", {
-          // className="position-relative"
-          style: {
-            position: "absolute",
-            top: "80px",
-            left: "-10px",
-            padding: "79px 41px 21px 261px",
-            height: "100vh",
-            width: "100vw"
-          },
-          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("div", {
-            className: "sp1_task_comment_modal",
-            style: {
-              position: "absolute",
-              top: "80px",
-              left: "-10px",
-              height: "100%",
-              width: "100%",
-              maxHeight: "100vh"
-            },
-            children: children
-          })
-        })
-      });
-    } else if (!fullScreenView && width > 991) {
-      return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)(_components_Modal__WEBPACK_IMPORTED_MODULE_1__["default"], {
-        isOpen: isOpen,
-        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("div", {
-          className: "position-relative",
-          style: {
-            paddingTop: "50px"
-          },
-          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("div", {
-            style: {
-              margin: "auto"
-            },
-            className: "sp1_task_comment_modal",
-            children: children
-          })
-        })
-      });
-    }
-    // else if (width <= 1200) {
-    //     return (
-    //         <Modal isOpen={isOpen}>
-    //             <div className="position-relative">
-    //                 <div className="sp1_task_comment_modal --small-device">
-    //                     {/* modal body (start) */}
-    //                     {children}
-    //                     {/* modal body (end) */}
-    //                 </div>
-    //             </div>
-    //         </Modal>
-    //     );
-    // }
-    else {
-      return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)(_components_Modal__WEBPACK_IMPORTED_MODULE_1__["default"], {
-        isOpen: isOpen,
-        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("div", {
-          className: "position-relative",
-          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("div", {
-            className: "sp1_task_comment_modal --small-device",
-            children: children
-          })
-        })
-      });
-    }
-  };
-  return handleContainer(children);
-};
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (CommentContainerDecider);
-
-/***/ }),
-
 /***/ "./resources/js/react/UI/comments/CommentsContainer.jsx":
 /*!**************************************************************!*\
   !*** ./resources/js/react/UI/comments/CommentsContainer.jsx ***!
@@ -453,103 +301,6 @@ function commentDemoData() {
 
 /***/ }),
 
-/***/ "./resources/js/react/UI/comments/components/CustomModal.jsx":
-/*!*******************************************************************!*\
-  !*** ./resources/js/react/UI/comments/components/CustomModal.jsx ***!
-  \*******************************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
-/* harmony export */ });
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var react_dom__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react-dom */ "./node_modules/react-dom/index.js");
-/* harmony import */ var react_popper__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! react-popper */ "./node_modules/react-popper/lib/esm/usePopper.js");
-/* harmony import */ var framer_motion__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! framer-motion */ "./node_modules/framer-motion/dist/es/components/AnimatePresence/index.mjs");
-/* harmony import */ var framer_motion__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! framer-motion */ "./node_modules/framer-motion/dist/es/render/dom/motion.mjs");
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
-function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) { return typeof o; } : function (o) { return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o; }, _typeof(o); }
-function ownKeys(e, r) { var t = Object.keys(e); if (Object.getOwnPropertySymbols) { var o = Object.getOwnPropertySymbols(e); r && (o = o.filter(function (r) { return Object.getOwnPropertyDescriptor(e, r).enumerable; })), t.push.apply(t, o); } return t; }
-function _objectSpread(e) { for (var r = 1; r < arguments.length; r++) { var t = null != arguments[r] ? arguments[r] : {}; r % 2 ? ownKeys(Object(t), !0).forEach(function (r) { _defineProperty(e, r, t[r]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys(Object(t)).forEach(function (r) { Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r)); }); } return e; }
-function _defineProperty(obj, key, value) { key = _toPropertyKey(key); if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
-function _toPropertyKey(arg) { var key = _toPrimitive(arg, "string"); return _typeof(key) === "symbol" ? key : String(key); }
-function _toPrimitive(input, hint) { if (_typeof(input) !== "object" || input === null) return input; var prim = input[Symbol.toPrimitive]; if (prim !== undefined) { var res = prim.call(input, hint || "default"); if (_typeof(res) !== "object") return res; throw new TypeError("@@toPrimitive must return a primitive value."); } return (hint === "string" ? String : Number)(input); }
-function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
-function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
-function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
-function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) arr2[i] = arr[i]; return arr2; }
-function _iterableToArrayLimit(r, l) { var t = null == r ? null : "undefined" != typeof Symbol && r[Symbol.iterator] || r["@@iterator"]; if (null != t) { var e, n, i, u, a = [], f = !0, o = !1; try { if (i = (t = t.call(r)).next, 0 === l) { if (Object(t) !== t) return; f = !1; } else for (; !(f = (e = i.call(t)).done) && (a.push(e.value), a.length !== l); f = !0); } catch (r) { o = !0, n = r; } finally { try { if (!f && null != t["return"] && (u = t["return"](), Object(u) !== u)) return; } finally { if (o) throw n; } } return a; } }
-function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
-
-
-
-
-
-
-var CustomModal = function CustomModal(_ref) {
-  var _ref$toggleRef = _ref.toggleRef,
-    toggleRef = _ref$toggleRef === void 0 ? null : _ref$toggleRef,
-    isOpen = _ref.isOpen,
-    close = _ref.close,
-    children = _ref.children;
-  var _React$useState = react__WEBPACK_IMPORTED_MODULE_0__.useState(null),
-    _React$useState2 = _slicedToArray(_React$useState, 2),
-    modalRef = _React$useState2[0],
-    setModalRef = _React$useState2[1];
-  var _usePopper = (0,react_popper__WEBPACK_IMPORTED_MODULE_3__.usePopper)(toggleRef, modalRef, {
-      placement: 'left-start',
-      modifiers: [{
-        name: 'offset',
-        options: {
-          offset: [0, 0]
-        }
-      }]
-    }),
-    styles = _usePopper.styles,
-    attributes = _usePopper.attributes;
-  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("div", _objectSpread(_objectSpread({
-    ref: setModalRef,
-    style: _objectSpread(_objectSpread({}, styles.popper), {}, {
-      pointerEvents: isOpen ? 'all' : 'none',
-      zIndex: 99
-    })
-  }, attributes.popper), {}, {
-    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)(framer_motion__WEBPACK_IMPORTED_MODULE_4__.AnimatePresence, {
-      children: isOpen && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)(framer_motion__WEBPACK_IMPORTED_MODULE_5__.motion.div, {
-        initial: {
-          opacity: 0
-        },
-        animate: {
-          opacity: 1
-        },
-        exit: {
-          opacity: 0
-        },
-        className: "",
-        children: [children, /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)(Shadow, {})]
-      })
-    })
-  }));
-};
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (CustomModal);
-var Shadow = function Shadow() {
-  return /*#__PURE__*/react_dom__WEBPACK_IMPORTED_MODULE_1__.createPortal( /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("div", {
-    style: {
-      width: '100vw',
-      height: '100vh',
-      position: 'fixed',
-      top: 0,
-      left: 0,
-      zIndex: 90,
-      background: 'rgba(0,0,0,.1)'
-    }
-  }), document.querySelector('#sp1SingleTaskPageModal'));
-};
-
-/***/ }),
-
 /***/ "./resources/js/react/UI/form/Cheeckbox.jsx":
 /*!**************************************************!*\
   !*** ./resources/js/react/UI/form/Cheeckbox.jsx ***!
@@ -714,7 +465,8 @@ __webpack_require__.r(__webpack_exports__);
 
 var useRevision = function useRevision(task) {
   var _task$category;
-  var taskType = lodash__WEBPACK_IMPORTED_MODULE_0___default().includes([5, 7], task === null || task === void 0 || (_task$category = task.category) === null || _task$category === void 0 ? void 0 : _task$category.id) ? 'design' : 'development';
+  var taskType = lodash__WEBPACK_IMPORTED_MODULE_0___default().includes([5, 7], task === null || task === void 0 || (_task$category = task.category) === null || _task$category === void 0 ? void 0 : _task$category.id) ? "design" : "development";
+  var isIndependent = task === null || task === void 0 ? void 0 : task.isIndependentTask;
 
   // project menager acknowladgement options
   var getProjectManagerAcknowladgementOptions = function getProjectManagerAcknowladgementOptions() {
@@ -722,27 +474,46 @@ var useRevision = function useRevision(task) {
     if (isAlreadyAccepted) {
       return [];
     }
+    if (isIndependent) {
+      return [{
+        id: "PLRx01",
+        revision: "My instruction was incomplete/incorrect and I have to make some changes in the instruction now to make it right",
+        isDeniable: false
+      }, {
+        id: "PLRx02",
+        revision: "The work done is aligned with my instruction, but after seeing it, I want to give some minor changes",
+        isDeniable: false
+      }, {
+        id: "PLRx3",
+        revision: "The Lead ".concat(taskType === "design" ? "designer" : "developer", "/project coordinator\u2019s delivered work doesn\u2019t match my shared requirement"),
+        isDeniable: true
+      }, {
+        id: "PLRx04",
+        revision: "The instruction was followed, but the lead ".concat(taskType === "design" ? "designer" : "developer", " missed out some default/basic things or best practices which are not essential to write in instruction"),
+        isDeniable: true
+      }];
+    }
     return [{
-      id: 'PLRx01',
+      id: "PLRx01",
       revision: "My instruction was incomplete/incorrect and I have to make some changes in the instruction now to make it right",
       isDeniable: false
     }, {
-      id: 'PLRx02',
+      id: "PLRx02",
       revision: "The work done is aligned with my instruction, but after seeing it, I want to give some minor changes",
       isDeniable: false
     }, {
-      id: 'PLRx3',
-      revision: "The Lead ".concat(taskType === 'design' ? 'designer' : 'developer', "/project coordinator\u2019s delivered work doesn\u2019t match my shared requirement"),
+      id: "PLRx3",
+      revision: "The Lead ".concat(taskType === "design" ? "designer" : "developer", "/project coordinator\u2019s delivered work doesn\u2019t match my shared requirement"),
       isDeniable: true
     }, {
-      id: 'PLRx04',
-      revision: "The instruction was followed, but the lead ".concat(taskType === 'design' ? 'designer' : 'developer', " missed out some default/basic things or best practices which are not essential to write in instruction"),
+      id: "PLRx04",
+      revision: "The instruction was followed, but the lead ".concat(taskType === "design" ? "designer" : "developer", " missed out some default/basic things or best practices which are not essential to write in instruction"),
       isDeniable: true
     }, {
-      id: 'PLRx05',
+      id: "PLRx05",
       revision: "I have some general revisions",
       isDeniable: false,
-      type: 'GENERAL_REVISION'
+      type: "GENERAL_REVISION"
     }];
   };
 
@@ -754,20 +525,20 @@ var useRevision = function useRevision(task) {
       return [];
     } else {
       return [{
-        id: 'LDRx1',
-        revision: "The concerned ".concat(taskType === 'design' ? 'designer’s' : 'developer’s', "  delivered work doesn\u2019t match my shared requirement"),
+        id: "LDRx1",
+        revision: "The concerned ".concat(taskType === "design" ? "designer’s" : "developer’s", "  delivered work doesn\u2019t match my shared requirement"),
         isDeniable: true
       }, {
-        id: 'LDRx2',
+        id: "LDRx2",
         revision: "My instruction was incomplete/incorrect and I have to make some changes in the instruction now to make it right.",
         isDeniable: false
       }, {
-        id: 'LDRx3',
+        id: "LDRx3",
         revision: "The work done is aligned with my instruction but after seeing it, I want to give some minor changes.",
         isDeniable: false
       }, {
-        id: 'LDRx4',
-        revision: "The instruction was followed but the ".concat(taskType === 'design' ? 'designer' : 'developer', " missed out on some default/basic things or best practices which are not essential to mention in instruction."),
+        id: "LDRx4",
+        revision: "The instruction was followed but the ".concat(taskType === "design" ? "designer" : "developer", " missed out on some default/basic things or best practices which are not essential to mention in instruction."),
         isDeniable: true
       }];
     }
@@ -2708,9 +2479,13 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _Insights_ui_Modal__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../Insights/ui/Modal */ "./resources/js/react/Insights/ui/Modal.jsx");
-/* harmony import */ var react_use__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! react-use */ "./node_modules/react-use/esm/useClickAway.js");
+/* harmony import */ var react_use__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! react-use */ "./node_modules/react-use/esm/useClickAway.js");
 /* harmony import */ var _Button__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./Button */ "./resources/js/react/single-independent-task/components/Button.jsx");
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
+/* harmony import */ var dayjs__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! dayjs */ "./node_modules/dayjs/dayjs.min.js");
+/* harmony import */ var dayjs__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(dayjs__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var _hooks_useUsers__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../hooks/useUsers */ "./resources/js/react/hooks/useUsers.jsx");
+/* harmony import */ var _utils_user_details__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../utils/user-details */ "./resources/js/react/utils/user-details.js");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
 function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
 function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
 function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
@@ -2723,138 +2498,214 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
 
 
+
+
+// const RevisionText = ({text, index, date, time, revision}) => {
+//     const [expend, setExpend] = React.useState(false);
+//     const ref = React.useRef();
+
+//     let isLong = text?.length > 800;
+//     const showText = isLong ? text?.slice(0, 800) + '...' : text;
+
+//     const toggleModal = (e) => {
+//         e.preventDefault();
+//         setExpend(!expend)
+//     }
+
+//     useClickAway(ref, () => {
+//         setExpend(false)
+//     })
+
+//   return (
+//     <div className="sp1_task_card--sub-card" style={{minHeight: '110px'}}>
+//         <div className="sp1_tc_sc-inx">
+//             <h2>{index}</h2>
+//             <span className="d-block"><strong>Date</strong> {date} </span>
+//             <span className="d-block"><strong>Time</strong>: {time}</span>
+//         </div>
+//         <div className="">
+//             {revision?.revisionAcknowledgement ?
+//                 <span className='d-block mb-2'>
+//                     <span className='font-weight-bold text-danger'> <strong>Reason: </strong>  </span>
+//                     {revision?.revisionAcknowledgement} {" "}
+//                     {revision?.isDeny ? <span className='badge badge-danger'>Rejected By Developer</span> : null}
+//                     {revision?.isAccept ? <span className='badge badge-success'>Accepted By Developer</span> : null}
+//                 </span>
+//             : null}
+//             <div>
+//                 <span className='font-weight-bold text-success'>Statement:</span>
+//                 <div className='sp1_ck_content' style={{textIndent: '2rem'}} dangerouslySetInnerHTML={{__html: showText}} />
+//             </div>
+
+//             {isLong ? <a href="#" className='ml-2' onClick={toggleModal}>Read full guideline</a> : ''}
+
+//             <Modal className="sp1_task_card--sub-card-modal" isOpen={expend}>
+//                 <div ref={ref} className='sp1_task_card--sub-card-modal-content'>
+//                     <div className='d-flex align-items-center justify-content-between __header'>
+//                         <button onClick={() => setExpend(false)}>
+//                         <i className="fa-solid fa-xmark"></i>
+//                         </button>
+//                     </div>
+//                     <div className='__content'>
+//                         <div className="sp1_tc_sc-inx">
+//                             <h2>{index}</h2>
+//                             <span className="d-block"><strong>Date</strong> {date} </span>
+//                             <span className="d-block"><strong>Time</strong>: {time}</span>
+//                         </div>
+//                         <div>
+//                         <span className='d-block mb-2'> <span className='font-weight-bold text-danger'><strong>Reason: </strong></span> {revision?.revisionAcknowledgement}</span>
+//                             <span className='font-weight-bold text-success'>Commitment:</span>
+//                             <div className='sp1_ck_content' style={{textIndent: '2rem'}} dangerouslySetInnerHTML={{__html: text}} />
+//                         </div>
+//                     </div>
+
+//                     <div className=' __footer'>
+//                         <button className='btn btn-sm py-1 btn-primary ml-auto' onClick={() => setExpend(false)}>
+//                             Close
+//                         </button>
+//                     </div>
+//                 </div>
+//             </Modal>
+//         </div>
+
+//     </div>
+//   )
+// }
+
+
 var RevisionText = function RevisionText(_ref) {
-  var text = _ref.text,
-    index = _ref.index,
-    date = _ref.date,
-    time = _ref.time,
+  var index = _ref.index,
     revision = _ref.revision;
   var _React$useState = react__WEBPACK_IMPORTED_MODULE_0__.useState(false),
     _React$useState2 = _slicedToArray(_React$useState, 2),
     expend = _React$useState2[0],
     setExpend = _React$useState2[1];
   var ref = react__WEBPACK_IMPORTED_MODULE_0__.useRef();
-  var isLong = (text === null || text === void 0 ? void 0 : text.length) > 800;
-  var showText = isLong ? (text === null || text === void 0 ? void 0 : text.slice(0, 800)) + '...' : text;
+  console.log("revision", revision);
   var toggleModal = function toggleModal(e) {
     e.preventDefault();
     setExpend(!expend);
   };
-  (0,react_use__WEBPACK_IMPORTED_MODULE_4__["default"])(ref, function () {
+  (0,react_use__WEBPACK_IMPORTED_MODULE_7__["default"])(ref, function () {
     setExpend(false);
   });
-  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)("div", {
+  var getComment = function getComment(key) {
+    switch (key) {
+      case "PLR":
+        return revision === null || revision === void 0 ? void 0 : revision.pmComment;
+      case "SPR":
+        return revision === null || revision === void 0 ? void 0 : revision.pmComment;
+      case "CPR":
+        return revision === null || revision === void 0 ? void 0 : revision.pmComment;
+      case "LDR":
+        return revision === null || revision === void 0 ? void 0 : revision.leadComment;
+      default:
+        return (revision === null || revision === void 0 ? void 0 : revision.pmComment) || (revision === null || revision === void 0 ? void 0 : revision.leadComment);
+    }
+  };
+  var text = getComment(revision === null || revision === void 0 ? void 0 : revision.disputeBetween);
+  var isLong = (text === null || text === void 0 ? void 0 : text.length) > 800;
+  var showText = isLong ? (text === null || text === void 0 ? void 0 : text.slice(0, 800)) + "..." : text;
+  var date = dayjs__WEBPACK_IMPORTED_MODULE_3___default()(revision === null || revision === void 0 ? void 0 : revision.createdAt).format("MMM DD, YYYY");
+  var time = dayjs__WEBPACK_IMPORTED_MODULE_3___default()(revision === null || revision === void 0 ? void 0 : revision.createdAt).format("hh:mm A");
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("div", {
     className: "sp1_task_card--sub-card",
     style: {
-      minHeight: '110px'
+      minHeight: "110px"
     },
-    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)("div", {
+    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("div", {
       className: "sp1_tc_sc-inx",
-      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("h2", {
-        children: index
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)("span", {
+      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("h2", {
+        children: index < 10 ? "0".concat(index) : index
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("span", {
         className: "d-block",
-        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("strong", {
-          children: "Date"
-        }), " ", date, " "]
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)("span", {
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("strong", {
+          children: "Date: "
+        }), date]
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("span", {
         className: "d-block",
-        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("strong", {
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("strong", {
           children: "Time"
         }), ": ", time]
       })]
-    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)("div", {
-      className: "",
-      children: [revision !== null && revision !== void 0 && revision.revisionAcknowledgement ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)("span", {
+    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("div", {
+      className: "px-3",
+      children: [revision !== null && revision !== void 0 && revision.revisionAcknowledgement ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("span", {
         className: "d-block mb-2",
-        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)("span", {
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("span", {
           className: "font-weight-bold text-danger",
-          children: [" ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("strong", {
+          children: [" ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("strong", {
             children: "Reason: "
-          }), "  "]
-        }), revision === null || revision === void 0 ? void 0 : revision.revisionAcknowledgement, " ", " ", revision !== null && revision !== void 0 && revision.isDeny ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("span", {
+          }), " "]
+        }), revision === null || revision === void 0 ? void 0 : revision.revisionAcknowledgement, revision !== null && revision !== void 0 && revision.isDeny ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("span", {
           className: "badge badge-danger",
           children: "Rejected By Developer"
-        }) : null, revision !== null && revision !== void 0 && revision.isAccept ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("span", {
+        }) : null, revision !== null && revision !== void 0 && revision.isAccept ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("span", {
           className: "badge badge-success",
           children: "Accepted By Developer"
         }) : null]
-      }) : null, /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)("div", {
-        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("span", {
+      }) : null, /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("div", {
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("span", {
           className: "font-weight-bold text-success",
           children: "Statement:"
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("div", {
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("div", {
           className: "sp1_ck_content",
-          style: {
-            textIndent: '2rem'
-          },
           dangerouslySetInnerHTML: {
             __html: showText
           }
         })]
-      }), isLong ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("a", {
+      }), isLong ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("a", {
         href: "#",
         className: "ml-2",
         onClick: toggleModal,
-        children: "Read full guideline"
-      }) : '', /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)(_Insights_ui_Modal__WEBPACK_IMPORTED_MODULE_1__["default"], {
+        children: "View more"
+      }) : "", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(_Insights_ui_Modal__WEBPACK_IMPORTED_MODULE_1__["default"], {
         className: "sp1_task_card--sub-card-modal",
         isOpen: expend,
-        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)("div", {
+        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("div", {
           ref: ref,
           className: "sp1_task_card--sub-card-modal-content",
-          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("div", {
+          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("div", {
             className: "d-flex align-items-center justify-content-between __header",
-            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("button", {
+            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("button", {
               onClick: function onClick() {
                 return setExpend(false);
               },
-              children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("i", {
+              children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("i", {
                 className: "fa-solid fa-xmark"
               })
             })
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)("div", {
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("div", {
             className: "__content",
-            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)("div", {
+            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("div", {
               className: "sp1_tc_sc-inx",
-              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("h2", {
+              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("h2", {
                 children: index
-              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)("span", {
+              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("span", {
                 className: "d-block",
-                children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("strong", {
-                  children: "Date"
-                }), " ", date, " "]
-              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)("span", {
+                children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("strong", {
+                  children: "Date: "
+                }), " ", date]
+              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("span", {
                 className: "d-block",
-                children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("strong", {
+                children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("strong", {
                   children: "Time"
                 }), ": ", time]
               })]
-            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)("div", {
-              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)("span", {
-                className: "d-block mb-2",
-                children: [" ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("span", {
-                  className: "font-weight-bold text-danger",
-                  children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("strong", {
-                    children: "Reason: "
-                  })
-                }), " ", revision === null || revision === void 0 ? void 0 : revision.revisionAcknowledgement]
-              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("span", {
-                className: "font-weight-bold text-success",
-                children: "Commitment:"
-              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("div", {
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("div", {
+              children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("div", {
                 className: "sp1_ck_content",
                 style: {
-                  textIndent: '2rem'
+                  textIndent: "2rem"
                 },
                 dangerouslySetInnerHTML: {
                   __html: text
                 }
-              })]
+              })
             })]
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("div", {
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("div", {
             className: " __footer",
-            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("button", {
+            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("button", {
               className: "btn btn-sm py-1 btn-primary ml-auto",
               onClick: function onClick() {
                 return setExpend(false);
@@ -11837,7 +11688,6 @@ var SubTaskSection = function SubTaskSection(_ref) {
   // },[data])
 
   var Task = new _utils_single_task__WEBPACK_IMPORTED_MODULE_12__.SingleTask(task);
-  console.log("Task", Task);
   return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_16__.jsxs)("div", {
     className: "sp1_task_right_card mb-3",
     ref: setSubtaskModalToggleRef,
@@ -16577,7 +16427,8 @@ var RevisionControl = function RevisionControl(_ref) {
     _useState2 = _slicedToArray(_useState, 2),
     revisionModal = _useState2[0],
     setRevisionModal = _useState2[1];
-  var singleTask = new _utils_single_task__WEBPACK_IMPORTED_MODULE_3__.SingleTask(task);
+  // const singleTask = new SingleTask(task)
+
   return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), {
     children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)(_components_Button__WEBPACK_IMPORTED_MODULE_1__["default"], {
       variant: "tertiary",
@@ -16598,7 +16449,7 @@ var RevisionControl = function RevisionControl(_ref) {
         className: "sp1_single_task--modal-panerl-wrapper",
         children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(_RevisionCreationModal__WEBPACK_IMPORTED_MODULE_4__["default"], {
           auth: auth,
-          task: singleTask,
+          task: task,
           close: function close() {
             return setRevisionModal(false);
           }
@@ -16675,7 +16526,7 @@ var RevisionCreationModal = function RevisionCreationModal(_ref) {
     isDeniable = _useState10[0],
     setIsDeniable = _useState10[1];
   var dispatch = (0,react_redux__WEBPACK_IMPORTED_MODULE_1__.useDispatch)();
-  var _useRevision = (0,_hooks_useRevision__WEBPACK_IMPORTED_MODULE_3__.useRevision)(),
+  var _useRevision = (0,_hooks_useRevision__WEBPACK_IMPORTED_MODULE_3__.useRevision)(task),
     getLeadDeveloperAcknowladgementOptions = _useRevision.getLeadDeveloperAcknowladgementOptions,
     getProjectManagerAcknowladgementOptions = _useRevision.getProjectManagerAcknowladgementOptions;
   var _useLocation = (0,react_router_dom__WEBPACK_IMPORTED_MODULE_9__.useLocation)(),
