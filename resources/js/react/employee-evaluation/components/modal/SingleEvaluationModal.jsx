@@ -38,9 +38,7 @@ const SingleEvaluationModal = ({
         useStoreTaskRatingMutation();
     const [updateTaskRating, { isLoading: isLoadingUpdateTaskRating }] =
         useUpdateTaskRatingSubmissionMutation();
-    const [averageRating, setAverageRating] = useState(
-        evaluationObject?.lead_dev_avg_rating
-    );
+    const [averageRating, setAverageRating] = useState(data?.avg_rating);
 
     const [formData, setFormData] = useState({
         qw_first_chance: data.qw_first_chance ?? 0,
@@ -74,6 +72,8 @@ const SingleEvaluationModal = ({
     }, [userIdFromParam]);
 
     // console.log("evaluation object", evaluationObject);
+    // console.log("average rating", averageRating);
+    // console.log("data", data);
 
     useEffect(() => {
         const calculateAverageRating = (formData) => {
@@ -82,11 +82,20 @@ const SingleEvaluationModal = ({
             );
             if (ratings.length === 0) return 0;
             const sum = ratings.reduce((acc, curr) => acc + curr, 0);
-            return sum / ratings.length;
+            return (sum / ratings.length).toFixed(2);
         };
 
-        setAverageRating(calculateAverageRating(formData).toFixed(2));
-    }, [formData]);
+        // Calculate average rating based on form data initially
+        let newAverageRating = calculateAverageRating(formData);
+
+        // If data.avg_rating is available and greater than zero, consider the form submitted
+        if (data.avg_rating && data.avg_rating > 0) {
+            newAverageRating = data.avg_rating;
+        }
+
+        // Update the state with the new average rating
+        setAverageRating(newAverageRating);
+    }, [formData, data.avg_rating]);
 
     const formFields = [
         {
@@ -339,13 +348,8 @@ const SingleEvaluationModal = ({
                                     )}
                             </td>
                             <td>{data.revision_number}</td>
-                            {evaluationObject?.lead_dev_avg_rating ? (
-                                <td>
-                                    {evaluationObject?.lead_dev_avg_rating}{" "}
-                                </td>
-                            ) : (
-                                <td>{averageRating ?? "N/A"}</td>
-                            )}
+
+                            <td>{averageRating ?? "N/A"}</td>
                         </tr>
                     </tbody>
                 </table>

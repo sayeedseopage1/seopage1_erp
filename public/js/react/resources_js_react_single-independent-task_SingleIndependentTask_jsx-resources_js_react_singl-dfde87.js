@@ -14297,11 +14297,12 @@ var ExpiredTimeModalForNewEmployee = function ExpiredTimeModalForNewEmployee(_re
       return clearInterval(interval);
     };
   }, []);
-  console.log("time left", timeLeft);
-  console.log("toggle modal", toggleModal);
-  console.log("time left less then 3600000", timeLeft <= 3600000);
-  console.log("time left greater then 0", timeLeft > 0);
-  console.log("timer status for warning", timerStatusForWarningModal);
+  // console.log("time left", timeLeft);
+  // console.log("toggle modal", toggleModal);
+  // console.log("time left less then 3600000", timeLeft <= 3600000);
+  // console.log("time left greater then 0", timeLeft > 0);
+  // console.log("timer status for warning", timerStatusForWarningModal);
+
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(function () {
     if (toggleModal && timeLeft <= 4200 &&
     // 70 minutes
