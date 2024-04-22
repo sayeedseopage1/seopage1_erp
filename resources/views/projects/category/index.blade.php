@@ -56,12 +56,8 @@
 
 @push('scripts')
     @include('sections.datatable_js')
-    <script src="{{ asset('vendor/jquery/daterangepicker.min.js') }}"></script>
-
 
     <script>
-        var deadLineStartDate = '';
-        var deadLineEndDate = '';
         $('#project-niche-table').on('preXhr.dt', function(e, settings, data) {
 
             var searchText = $('#search-text-field').val();
