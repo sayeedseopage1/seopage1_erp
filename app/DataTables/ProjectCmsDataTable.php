@@ -63,7 +63,7 @@ class ProjectCmsDataTable extends BaseDataTable
         $request = $this->request();
         $model = $model->newQuery()->orderBy('id', 'desc');
 
-        if ($request->searchText !== '') {
+        if ($request->searchText != null) {
             $model->where(function ($query) use ($request) {
                 $query->where('project_cms.cms_name', 'like', '%' . $request->searchText . '%');
             });
