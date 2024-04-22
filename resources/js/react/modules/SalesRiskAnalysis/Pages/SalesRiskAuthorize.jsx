@@ -110,8 +110,8 @@ const SalesRiskAuthorize = () => {
             const res = await saleRiskAnalysisActionHandler(payload);
             if (res?.data) {
                 // show success message
-                handleCloseSaleRiskActionModal()
-                setStatusActionData({})
+                handleCloseSaleRiskActionModal();
+                setStatusActionData({});
                 if (statusActionData.status === "1") {
                     toast.success("Sale Risk Analysis Authorized Successfully");
                 } else {
@@ -202,12 +202,8 @@ const SalesRiskAuthorize = () => {
                                 <button
                                     className="btn btn-primary py-1 d-flex justify-content-center align-items-center"
                                     onClick={() => {
-                                        if (window.history.length === 1) {
-                                            window.location.href =
-                                                "/account/sales-analysis-reports";
-                                        } else {
-                                            window.history.back();
-                                        }
+                                        window.location.href =
+                                            "/account/sales-analysis-reports";
                                     }}
                                 >
                                     <MdOutlineKeyboardBackspace className="mr-2" />
@@ -225,7 +221,9 @@ const SalesRiskAuthorize = () => {
                                 <Switch.Case
                                     condition={
                                         auth.getRoleId() === 1 &&
-                                        getDealStatus(metaInfo?.deal?.sale_analysis_status) &&
+                                        getDealStatus(
+                                            metaInfo?.deal?.sale_analysis_status
+                                        ) &&
                                         !isLoading
                                     }
                                 >
@@ -244,7 +242,8 @@ const SalesRiskAuthorize = () => {
                                     condition={
                                         auth.getRoleId() === 1 &&
                                         getDealStatus(
-                                            metaInfo?.deal?.sale_analysis_status,
+                                            metaInfo?.deal
+                                                ?.sale_analysis_status,
                                             true
                                         ) &&
                                         !isLoading
@@ -315,7 +314,8 @@ const SalesRiskAuthorize = () => {
                                             condition={
                                                 auth.getRoleId() === 1 &&
                                                 getDealStatus(
-                                                    metaInfo?.deal?.sale_analysis_status
+                                                    metaInfo?.deal
+                                                        ?.sale_analysis_status
                                                 )
                                             }
                                         >
@@ -354,7 +354,8 @@ const SalesRiskAuthorize = () => {
                                             condition={
                                                 auth.getRoleId() === 1 &&
                                                 getDealStatus(
-                                                    metaInfo?.deal?.sale_analysis_status,
+                                                    metaInfo?.deal
+                                                        ?.sale_analysis_status,
                                                     true
                                                 )
                                             }
@@ -378,7 +379,10 @@ const SalesRiskAuthorize = () => {
                                                             : "#F66"
                                                     }
                                                 >
-                                                    {metaInfo?.deal?.sale_analysis_status}
+                                                    {
+                                                        metaInfo?.deal
+                                                            ?.sale_analysis_status
+                                                    }
                                                 </SaleRiskAuthorizeButton>
                                             </div>
                                         </Switch.Case>

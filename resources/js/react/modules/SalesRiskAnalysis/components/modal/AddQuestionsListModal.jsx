@@ -248,6 +248,7 @@ const AddQuestionsListModal = ({
                 setIsQuestionUpdating(false);
             }
         } catch (error) {
+            console.log(error)
             if (error.status === 403) {
                 const errorMessages = formatAPIErrors(error?.data?.data);
                 errorMessages.forEach((errorMessage) => {
@@ -373,7 +374,7 @@ const AddQuestionsListModal = ({
             height={
                 questions.length > 0 || !_.isEmpty(singleQuestion?.type)
                     ? "75vh"
-                    : "58vh"
+                    : "60vh"
             }
             maxHeight="85vh"
             isCloseButtonShow={true}
