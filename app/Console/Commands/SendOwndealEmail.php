@@ -32,8 +32,32 @@ class SendOwndealEmail extends Command
      */
     public function handle()
     {
-        $deals = Deal::where('authorization_status', 1)->whereNull('email_send_status')->get()->pluck('id');
-        dd($deals);
+        $now = \Carbon\Carbon::now()->toDateTimeString();
+        $deals = Deal::whereNull('email_send_status')->where('is_drafted', 0)
+            ->where('authorization_status', 2)
+            ->where(function ($innerSubquery) use ($now) {
+                $innerSubquery->whereRaw('
+                    (
+                        (
+                            (TIME(released_at) >= "23:30" OR TIME(released_at) < "07:00")
+                            AND (DATE(released_at) < CURDATE())
+                        )
+                        OR
+                        (
+                            (TIME(released_at) >= "23:30" OR TIME(released_at) < "07:00")
+                            AND TIME(?) >= "10:00"
+                        )
+                        OR
+                        (
+                            TIME(released_at) >= "07:00" AND TIME(released_at) < "23:30"
+                            AND TIMESTAMPDIFF(SECOND, released_at, ?) > ?
+                        )
+                    )
+                ', [$now, $now, (180 * 60)]);
+            });
+        
+        // dd($deals->count());
+            
         foreach($deals as $deal){
             $user = User::where('id', $deal->pm_id)->first();
             if ($deal->project_type == 'fixed') {
@@ -59,6 +83,9 @@ class SendOwndealEmail extends Command
             // foreach ($users as $key => $user) {
             //     Notification::send($user, new DealAuthorizationSendNotification($deal, Auth::user()));
             // }
+
+            $deal->email_send_status = 1;
+            $deal->save();
         }
         
     }
