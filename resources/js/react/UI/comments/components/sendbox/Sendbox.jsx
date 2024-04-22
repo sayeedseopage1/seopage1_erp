@@ -293,13 +293,13 @@ const EditorComponent = ({ setScroll, taskId, setIsLoading, onSubmit }) => {
             <EditorWrapperWithImageAndToolbar>
                 {mentionedComment && <MentionedComment />}
 
-                {/* mitul progressbar add */}
+                {/* mitul progress bar add start */}
 
                 {files?.length > 0 ? (
                     <FilesContainer>
                         {files?.map((file, index) => (
                             <FileItem key={index}>
-                                {/* not clickble when loading */}
+                                {/* not clickable when loading */}
                                 {isFetching ? (
                                     <div
                                         style={{
@@ -374,7 +374,7 @@ const EditorComponent = ({ setScroll, taskId, setIsLoading, onSubmit }) => {
                         )}
                     </FilesContainer>
                 ) : null}
-                {/* mitul progressbar add */}
+                {/* tanvir mitul progress bar add end*/}
 
                 {/* toolbar container */}
                 {expend ? (

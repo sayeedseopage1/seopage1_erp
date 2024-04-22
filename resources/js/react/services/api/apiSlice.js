@@ -37,7 +37,9 @@ export const apiSlice = createApi({
         "GET_SALES_RISK_ANALYSIS_RULES",
         "GET_SALES_RISK_ANALYSIS_QUESTION_LIST",
         "GET_SALES_RISK_ANALYSIS_QUESTION_FIELDS_TYPE",
-        "GET_SALES_RISK_ANALYSIS_QUESTION_LIST_BY_DEAL_ID"
+        "GET_SALES_RISK_ANALYSIS_QUESTION_LIST_BY_DEAL_ID",
+        "All_TASKS",
+        "All_EVALUATION",
     ],
     endpoints: () => ({}),
 });
