@@ -77,7 +77,7 @@ class NicheCategoryDataTable extends BaseDataTable
 
         if ($request->searchText != null) {
             $model->where(function ($query) use ($request) {
-                $query->where('project_niches.category_name',  $request->searchText);
+                $query->where('project_niches.category_name', 'like', '%' . $request->searchText . '%');
             });
         }
 

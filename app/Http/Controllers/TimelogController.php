@@ -764,7 +764,7 @@ class TimelogController extends AccountBaseController
                     $evaluation = EmployeeEvaluation::where('user_id',$user->id)->first();
                     if($evaluation->start_date == null){
                         $evaluation->start_date = $timeLog->start_time;
-                        $evaluation->exp_date = Carbon::parse($timeLog->start_time)->addDays(7);
+                        $evaluation->exp_date = Carbon::parse($timeLog->start_time)->addHours(2);
                         $evaluation->save();
                     }
                     return response()->json([
