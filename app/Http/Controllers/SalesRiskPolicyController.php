@@ -1406,6 +1406,9 @@ class SalesRiskPolicyController extends AccountBaseController
                     if ($req->end_date) {
                         $query->whereDate('created_at', '<=', $req->end_date);
                     }
+                    if ($req->client_id) {
+                        $query->where('client_id', $req->client_id);
+                    }
                 })
                 ->offset($req->input('limit', 10) * ($req->input('page', 1) - 1))
                 ->latest('updated_at')
