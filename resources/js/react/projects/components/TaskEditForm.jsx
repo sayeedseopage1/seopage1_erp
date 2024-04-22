@@ -305,7 +305,7 @@ const TaskEditForm = ({ isOpen, close, row, table }) => {
                 errCount++;
             }
             if (!referenceList[0].reference &&
-                JSON.parse(graphicWorkDetails?.reference)[0]?.reference == '' &&
+                !JSON.parse(graphicWorkDetails?.reference)[0]?.reference &&
                 _.isEmpty(referenceFile) &&
                 _.isEmpty(defaultRefFiles)) {
                 err.reference = "The reference field is required";
@@ -377,6 +377,24 @@ const TaskEditForm = ({ isOpen, close, row, table }) => {
         if (typeOfGraphicsCategory?.id === 8) {
             if (_.isEmpty(imgOrVidForWork) && _.isEmpty(defaultImgOrVidForWork) && !workableUrl && !graphicWorkDetails?.workable_url) {
                 err.imgOrVidForWork = "Images/videos is required for work";
+                errCount++;
+            }
+        }
+
+        if (fontUrl) {
+            if (!checkIsURL(fontUrl)) {
+                errCount++;
+            }
+        }
+
+        if (workableUrl) {
+            if (!checkIsURL(workableUrl)) {
+                errCount++;
+            }
+        }
+
+        if (referenceList[0]?.reference) {
+            if (!checkIsURL(referenceList[0]?.reference)) {
                 errCount++;
             }
         }
@@ -1356,6 +1374,9 @@ const TaskEditForm = ({ isOpen, close, row, table }) => {
                                                 handleChange(e, setFontUrl)
                                             }
                                         />
+                                        {fontUrl && !validateUrl(fontUrl) && (
+                                            <div style={{ color: "red" }}>Please enter a valid URL</div>
+                                        )}
                                     </div>
                                     {/* Brand guideline */}
                                     <div className="col-12">

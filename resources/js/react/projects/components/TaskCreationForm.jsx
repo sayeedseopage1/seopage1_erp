@@ -189,6 +189,7 @@ const TaskCreationForm = ({ handleRefresh, isOpen, close, onSuccess }) => {
         setState(value);
     };
 
+
     // check validation
     const isValid = () => {
         let err = new Object();
@@ -242,14 +243,6 @@ const TaskCreationForm = ({ handleRefresh, isOpen, close, onSuccess }) => {
             //     errCount++;
             // }
 
-            if (fontUrl) {
-                if (!checkIsURL(fontUrl)) {
-                    err.fontUrl = "You have to provide a valid font URL";
-                    // toast.warn("You have to provide a valid font URL");
-                    errCount++;
-                }
-            }
-
             if (!primaryColor) {
                 err.primaryColor = "Primary color is required"
                 toast.warn("You have to provide a primary color");
@@ -298,6 +291,24 @@ const TaskCreationForm = ({ handleRefresh, isOpen, close, onSuccess }) => {
         if (typeOfGraphicsCategory?.id === 8) {
             if (_.isEmpty(imgOrVidForWork) && !workableUrl) {
                 err.imgOrVidForWork = "Images/videos is required for work";
+                errCount++;
+            }
+        }
+
+        if (fontUrl) {
+            if (!checkIsURL(fontUrl)) {
+                errCount++;
+            }
+        }
+
+        if (workableUrl) {
+            if (!checkIsURL(workableUrl)) {
+                errCount++;
+            }
+        }
+
+        if (referenceList[0]?.reference) {
+            if (!checkIsURL(referenceList[0]?.reference)) {
                 errCount++;
             }
         }
@@ -1159,7 +1170,7 @@ const TaskCreationForm = ({ handleRefresh, isOpen, close, onSuccess }) => {
                                                                         onChange={(e) => handleReferenceChange(e, index)}
 
                                                                     />
-                                                                    {singleReference.reference && !validateUrl(singleReference.reference) && (
+                                                                    {singleReference?.reference && !validateUrl(singleReference?.reference) && (
                                                                         <div style={{ color: "red" }}>Please enter a valid URL</div>
                                                                     )}
                                                                 </div>
@@ -1230,7 +1241,11 @@ const TaskCreationForm = ({ handleRefresh, isOpen, close, onSuccess }) => {
                                                 onChange={(e) =>
                                                     handleChange(e, setFontUrl)
                                                 }
+                                                style={{ marginBottom: "0px" }}
                                             />
+                                            {fontUrl && !validateUrl(fontUrl) && (
+                                                <div style={{ color: "red" }}>Please enter a valid URL</div>
+                                            )}
                                         </div>
 
                                         {/* Brand guideline */}
