@@ -15964,7 +15964,8 @@ var TaskEditForm = function TaskEditForm(_ref2) {
               }
             }), fontUrl && !(0,_projects_utils__WEBPACK_IMPORTED_MODULE_26__.validateUrl)(fontUrl) && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_30__.jsx)("div", {
               style: {
-                color: "red"
+                color: "red",
+                marginTop: "-13px"
               },
               children: "Please enter a valid URL"
             })]

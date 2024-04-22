@@ -1375,7 +1375,7 @@ const TaskEditForm = ({ isOpen, close, row, table }) => {
                                             }
                                         />
                                         {fontUrl && !validateUrl(fontUrl) && (
-                                            <div style={{ color: "red" }}>Please enter a valid URL</div>
+                                            <div style={{ color: "red", marginTop: "-13px" }}>Please enter a valid URL</div>
                                         )}
                                     </div>
                                     {/* Brand guideline */}
