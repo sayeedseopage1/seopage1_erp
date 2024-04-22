@@ -66,18 +66,7 @@ class WebsitePluginDataTable extends BaseDataTable
         $request = $this->request();
         $model = $model->newQuery()->orderBy('id', 'desc');
 
-
-        if ($request->startDate !== null && $request->endDate !== null) {
-            $startDate = Carbon::createFromFormat($this->global->date_format, $request->startDate)->toDateString();
-            $endDate = Carbon::createFromFormat($this->global->date_format, $request->endDate)->toDateString();
-            
-            $model->where(function ($query) use ($startDate, $endDate) {
-                $query->whereBetween(DB::raw('DATE(project_website_plugins.created_at)'), [$startDate, $endDate]);
-                $query->orWhereBetween(DB::raw('DATE(project_website_plugins.updated_at)'), [$startDate, $endDate]);
-            });
-        }
-
-        if ($request->searchText !== '') {
+        if ($request->searchText != null) {
             $model->where(function ($query) use ($request) {
                 $query->where('project_website_plugins.plugin_name', 'like', '%' . $request->searchText . '%')
                 ->orWhere('project_website_plugins.plugin_url', 'like', '%' . $request->searchText . '%');
