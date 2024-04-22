@@ -1,0 +1,14 @@
+.custom-confirm-button {
+  background-color: #28a745; /* Green */
+  color: white;
+}
+
+.custom-deny-button {
+  background-color: #dc3545; /* Red */
+  color: white;
+}
+
+.custom-cancel-button {
+  background-color: #007bff; /* Blue */
+  color: white;
+}

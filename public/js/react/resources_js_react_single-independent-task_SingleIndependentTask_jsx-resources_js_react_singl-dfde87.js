@@ -14290,27 +14290,29 @@ var ExpiredTimeModalForNewEmployee = function ExpiredTimeModalForNewEmployee(_re
   }, []);
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(function () {
     var interval = setInterval(function () {
-      setToggleModal(function (prevToggle) {
-        return !prevToggle;
-      });
-    }, 900000);
+      setToggleModal(true);
+    }, 600000); //10 minutes
+
     return function () {
       return clearInterval(interval);
     };
   }, []);
-
+  // console.log("time left", timeLeft);
   // console.log("toggle modal", toggleModal);
   // console.log("time left less then 3600000", timeLeft <= 3600000);
   // console.log("time left greater then 0", timeLeft > 0);
   // console.log("timer status for warning", timerStatusForWarningModal);
 
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(function () {
-    if (toggleModal && timeLeft <= 3600 && timeLeft > 0 && timerStatusForWarningModal) {
+    if (toggleModal && timeLeft <= 4200 &&
+    // 70 minutes
+    timeLeft > 0 && timerStatusForWarningModal) {
       setShowExpirationWarningModal(true);
     }
   }, [toggleModal]);
   var closeModal = function closeModal() {
     setShowExpirationWarningModal(false);
+    setToggleModal(false);
   };
   var minutes = Math.floor(timeLeft / 60);
   var seconds = timeLeft % 60;

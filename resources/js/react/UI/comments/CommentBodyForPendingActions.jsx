@@ -38,7 +38,7 @@ import SingleChatForPendingActions from "./components/SIngleChatForPendingAction
 import { useSelector } from "react-redux";
 import { usePendingActionsIdMutation } from "../../../react-latest/services/api/pendingActionsApiSlice";
 import useCounterStore from "../../../react-latest/components/Zustand/store";
-
+import "./styles/customSwalButtons.css";
 const CommentContext = createContext({
     setScroll: () => {},
     selectedComments: [],
@@ -727,9 +727,9 @@ const CommentBodyForPendingActions = ({
                                     icon: "question",
                                     title: "Would you like to add any more comments?",
                                     html: `
-    <p style="margin-top: 5px; text-align: justify;">If you click <span style="padding: 4px;font-size:12px; border-radius: 5px; background-color: #007bff; color: white;">Yes</span>, you can add more comments. If you click <span style="padding: 4px;font-size:12px; border-radius: 5px; background-color: #dc3545; color: white;">No</span>, this pending action will be marked as completed and moved to the past.</p>
-     <p style="margin-top: 10px; text-align: justify;"> If you click <span style="padding: 4px;font-size:12px; border-radius: 5px; background-color: #17A2B8; color: white;">Back to Pending Action</span>, this comment window will close and you'll return to the pending action page.</p>
-  `,
+                                        <p style="margin-top: 5px; text-align: justify;">If you click <span style="padding: 4px;font-size:12px; border-radius: 5px; background-color: #7066E0; color: white;">Yes</span>, you can add more comments. If you click <span style="padding: 4px;font-size:12px; border-radius: 5px; background-color: #DC3741; color: white;">No</span>, this pending action will be marked as completed and moved to the past.</p>
+                                        <p style="margin-top: 10px; text-align: justify;"> If you click <span style="padding: 4px;font-size:12px; border-radius: 5px; background-color: #6E7881; color: white;">Back to Pending Action</span>, this comment window will close and you'll return to the pending action page.</p>
+                                    `,
                                     allowOutsideClick: false,
                                     showCancelButton: true,
                                     cancelButtonText: "Back to Pending Action",
@@ -737,30 +737,23 @@ const CommentBodyForPendingActions = ({
                                     confirmButtonText: "Yes",
                                     showDenyButton: true,
                                     denyButtonText: "No",
-                                    customClass: {
-                                        confirmButton: "btn btn-primary",
-                                        cancelButton: `${style.customInfoButton}`,
-                                    },
+                                    // customClass: {
+                                    //     confirmButton: "btn btn-primary",
+                                    //     cancelButton: "btn btn-info",
+                                    //     denyButton: "btn btn-danger",
+                                    // },
                                 }).then((result) => {
+                                    console.log("swal fire result", result);
                                     if (result.isConfirmed) {
-                                        console.log("You clicked 'Yes'");
+                                        Swal.close();
                                     } else if (result.isDenied) {
-                                        console.log("You clicked 'No'");
                                         updatePendingAction({
                                             id: pendingActionId,
-                                        })
-                                            .unwrap()
-                                            .then((res) => {
-                                                increaseCount();
-                                                close();
-                                            })
-                                            .catch((err) => {
-                                                console.log(err);
-                                            });
-                                    } else {
-                                        console.log(
-                                            "You clicked 'Back to Pending Action'"
-                                        );
+                                        });
+
+                                        increaseCount();
+                                        close();
+                                    } else if (result.isDismissed) {
                                         close();
                                     }
                                 });

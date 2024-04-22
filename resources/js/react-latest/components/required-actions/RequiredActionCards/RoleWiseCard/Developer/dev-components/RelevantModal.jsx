@@ -23,15 +23,20 @@ const RelevantModal = ({ isRelevantModal, setIsRelevantModal }) => {
 
         updatePendingAction({
             id: pendingActionId,
-        })
-            .unwrap()
-            .then((res) => {
-                setIsRelevantModal(false);
-                increaseCount();
-            })
-            .catch((err) => {
-                console.log(err);
-            });
+        });
+        // .unwrap()
+        // .then((res) => {
+        //     setIsRelevantModal(false);
+        //     increaseCount();
+        // })
+        // .catch((err) => {
+        //     console.log(err);
+        // });
+
+        setIsRelevantModal(false);
+
+        //increase count is rerendering pending actions page
+        increaseCount();
     };
     return (
         <ReactModal
