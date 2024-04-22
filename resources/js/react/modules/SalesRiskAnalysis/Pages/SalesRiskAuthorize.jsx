@@ -225,7 +225,7 @@ const SalesRiskAuthorize = () => {
                                 <Switch.Case
                                     condition={
                                         auth.getRoleId() === 1 &&
-                                        getDealStatus(metaInfo?.deal?.status) &&
+                                        getDealStatus(metaInfo?.deal?.sale_analysis_status) &&
                                         !isLoading
                                     }
                                 >
@@ -244,7 +244,7 @@ const SalesRiskAuthorize = () => {
                                     condition={
                                         auth.getRoleId() === 1 &&
                                         getDealStatus(
-                                            metaInfo?.deal?.status,
+                                            metaInfo?.deal?.sale_analysis_status,
                                             true
                                         ) &&
                                         !isLoading
@@ -315,7 +315,7 @@ const SalesRiskAuthorize = () => {
                                             condition={
                                                 auth.getRoleId() === 1 &&
                                                 getDealStatus(
-                                                    metaInfo?.deal?.status
+                                                    metaInfo?.deal?.sale_analysis_status
                                                 )
                                             }
                                         >
@@ -354,7 +354,7 @@ const SalesRiskAuthorize = () => {
                                             condition={
                                                 auth.getRoleId() === 1 &&
                                                 getDealStatus(
-                                                    metaInfo?.deal?.status,
+                                                    metaInfo?.deal?.sale_analysis_status,
                                                     true
                                                 )
                                             }
@@ -363,22 +363,22 @@ const SalesRiskAuthorize = () => {
                                                 <SaleRiskAuthorizeButton
                                                     className="ml-2 text-uppercase"
                                                     border={`1px solid ${
-                                                        metaInfo?.deal?.status?.includes(
-                                                            "accept"
+                                                        metaInfo?.deal?.sale_analysis_status?.includes(
+                                                            "authorized"
                                                         )
                                                             ? "#218838"
                                                             : "#F66"
                                                     }`}
                                                     textColor="#fff"
                                                     color={
-                                                        metaInfo?.deal?.status?.includes(
-                                                            "accept"
+                                                        metaInfo?.deal?.sale_analysis_status?.includes(
+                                                            "authorized"
                                                         )
                                                             ? "#218838"
                                                             : "#F66"
                                                     }
                                                 >
-                                                    {metaInfo?.deal?.status}
+                                                    {metaInfo?.deal?.sale_analysis_status}
                                                 </SaleRiskAuthorizeButton>
                                             </div>
                                         </Switch.Case>

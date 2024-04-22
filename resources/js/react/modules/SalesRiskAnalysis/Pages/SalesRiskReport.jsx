@@ -46,7 +46,7 @@ const SalesRiskReport = () => {
         setPagination(paginate);
     };
 
-    console.log(saleAnalysisReportTableData)
+    
 
     return (
         <div>
