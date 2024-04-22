@@ -451,6 +451,7 @@ const SalesRiskPolices = () => {
                     setSingleQuestion={setSingleQuestion}
                     isTableShow={false}
                     setAddQuestionsData={setSingleQuestion}
+                    setIsQuestionUpdating={() => {}}
                     refetchSaleRiskAnalysis={refetch}
                 />
             )}
