@@ -11,7 +11,6 @@ import { CustomInputsLabel } from "../Styles/ui";
 
 // ui components
 import Tooltip from "../../Tooltip";
-import { SalesRiskAnalysisContext } from "../../../context/SalesRiskAnalysisProvider";
 
 const CustomAccordion = ({
     expendable = true,

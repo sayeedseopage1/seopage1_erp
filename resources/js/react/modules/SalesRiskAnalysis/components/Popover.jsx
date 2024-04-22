@@ -84,10 +84,16 @@ const Toggle = ({ children, className, ...props }) => {
             onMouseUp={() => {
                 setIsVisible(true);
             }}
-            tabIndex={0}
+            onFocus={() => {
+                setIsVisible(true);
+            }}
+            onKeyUp={() => {
+                setIsVisible(true);
+            }}
             onKeyDown={() => {
                 setIsVisible(true);
             }}
+            tabIndex={0}
             role="button"
             {...props}
         >

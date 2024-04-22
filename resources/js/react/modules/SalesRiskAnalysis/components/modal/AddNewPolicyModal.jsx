@@ -28,6 +28,7 @@ import { NewRulesModalTableColumnsData } from "../table/NewRulesModalTableColumn
 
 // sections components
 import NewPolicyModalInputsContainer from "../sections/NewPolicyModalInputsContainer";
+import { SalesRiskAnalysisContext } from "../../context/SalesRiskAnalysisProvider";
 
 
 
