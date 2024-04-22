@@ -17,6 +17,7 @@ import { storeSubTasks } from "../../services/features/tasksSlice";
 import { useDispatch, useSelector } from "react-redux";
 import Switch from "../../global/Switch";
 import { User } from "../../utils/user-details";
+import PersonAvatar from "../../global/PersonAvatar";
 
 const compareDate = new CompareDate();
 
@@ -184,7 +185,7 @@ export const SubTasksTableColumns = [
       const data = row?.original;
       return (
         data?.project_manager_id ?
-          <Person
+          <PersonAvatar
             url={`/account/employees/${data?.project_manager_id}`}
             name={data?.pm_id_name}
             avatar={data?.pm_id_avatar}
@@ -328,7 +329,7 @@ export const SubTasksTableColumns = [
   {
     id: 'estimated_time',
     header: 'Estimated Time',
-    accessorFn: row => ((Number(row?.estimate_hours)* 60) + Number(row?.estimate_minutes)),
+    accessorFn: row => ((Number(row?.estimate_hours) * 60) + Number(row?.estimate_minutes)),
     cell: ({ row }) => {
       const data = row?.original;
       return (
@@ -360,7 +361,7 @@ export const SubTasksTableColumns = [
     cell: ({ row }) => {
       const data = row?.original;
       return (
-        <Person
+        <PersonAvatar
           url={`/account/employees/${data?.added_by}`}
           avatar={data?.added_by_avatar}
           name={data?.added_by_name}
@@ -375,7 +376,7 @@ export const SubTasksTableColumns = [
     cell: ({ row }) => {
       const data = row?.original;
       return (
-        <Person
+        <PersonAvatar
           url={`/account/employees/${data?.assigned_to_id}`}
           avatar={data?.assigned_to_avatar}
           name={data?.assigned_to_name}
