@@ -2,7 +2,7 @@ import dayjs from "dayjs";
 import { CreatedAt, CreatedBy, EmptySpace } from "./ui";
 import Avatar from "../../../../../global/Avatar";
 import ActionDropdown from "./ActionDropdown";
-import PersonAvatar from "../PersonAvatar";
+import PersonAvatar from "../../../../../global/PersonAvatar";
 
 export const WonDealsTableColumns = [
     {
