@@ -2,12 +2,14 @@
 
 namespace App\Console\Commands;
 
+use Auth;
 use Notification;
 use App\Models\Deal;
 use App\Models\User;
 use Illuminate\Console\Command;
 use App\Notifications\WonDealNotification;
 use App\Notifications\HourlyDealNotification;
+use App\Notifications\DealAuthorizationSendNotification;
 
 class SendOwndealEmail extends Command
 {
@@ -32,9 +34,11 @@ class SendOwndealEmail extends Command
      */
     public function handle()
     {
+
+
         $now = \Carbon\Carbon::now()->toDateTimeString();
         $deals = Deal::whereNull('email_send_status')->where('is_drafted', 0)
-            ->where('authorization_status', 2)
+            ->where('authorization_status', 1)
             ->where(function ($innerSubquery) use ($now) {
                 $innerSubquery->whereRaw('
                     (
@@ -54,11 +58,12 @@ class SendOwndealEmail extends Command
                         )
                     )
                 ', [$now, $now, (180 * 60)]);
-            });
+            })->get();
         
-        // dd($deals->count());
-            
         foreach($deals as $deal){
+            $user = User::where('role_id', 8)->first();
+            Notification::send($user, new DealAuthorizationSendNotification($deal, $deal->addedBy));
+dd('success');
             $user = User::where('id', $deal->pm_id)->first();
             if ($deal->project_type == 'fixed') {
                 Notification::send($user, new WonDealNotification($deal));
