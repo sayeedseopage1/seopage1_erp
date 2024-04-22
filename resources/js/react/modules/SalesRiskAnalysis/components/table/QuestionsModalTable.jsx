@@ -49,7 +49,7 @@ const QuestionsModalTable = ({
     // default columns
     const defaultColumns = React.useMemo(() => [...tableColumns]);
     // columns
-    const [columns] = React.useState([...defaultColumns]);
+    const columns = [...defaultColumns];
 
     const [columnOrder, setColumnOrder] = React.useState(_.map(columns, "id"));
     const table = useReactTable({

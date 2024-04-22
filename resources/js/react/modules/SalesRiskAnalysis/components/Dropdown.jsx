@@ -73,6 +73,7 @@ const DropdownItem = ({
             role="button"
             tabIndex={0}
             onKeyDown={handleClick}
+            onKeyPress={handleClick}
             {...props}
         >
             {children}

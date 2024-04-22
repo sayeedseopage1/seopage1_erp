@@ -53,9 +53,15 @@ export const SalesRiskAnalysisTableColumns = [
                                 onClick={() => {
                                     action.handlePolicyStatus(data);
                                 }}
+                                onKeyDown={(event) => {
+                                    if (event.key === 'Enter') {
+                                        action.handlePolicyStatus(data);
+                                    }
+                                }}
                                 style={{
                                     cursor: "pointer",
                                 }}
+                                tabIndex={0}
                             >
                                 {/* Empty string as label */}
                             </label>{" "}

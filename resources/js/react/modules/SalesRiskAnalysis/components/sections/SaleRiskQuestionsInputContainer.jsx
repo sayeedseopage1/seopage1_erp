@@ -46,13 +46,13 @@ const SaleRiskQuestionsInputContainer = ({
     const handleActiveData = (question) => {
         const getQuestion = inputsData?.find((item) => item.id === question.id);
         if (!_.isEmpty(getQuestion)) {
-            return getQuestion.is_Active_YesNo ? true : false;
+            return getQuestion.is_Active_YesNo;
         }
     };
 
     // Check if question is active and return boolean value
     const getBooleanValue = (question) => {
-        return question?.questions?.length ? true : false;
+        return question?.questions?.length
     };
 
     // Add number on title if question is not child

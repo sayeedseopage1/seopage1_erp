@@ -13,8 +13,6 @@ import {
     setFilterOptionsState,
 } from "../../../services/features/filterOptionSlice";
 
-// Constants
-import { CurrencySymbol } from "../constant/CurrencySymbol";
 
 export const SalesRiskAnalysisContext = createContext({});
 
