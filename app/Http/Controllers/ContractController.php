@@ -1473,17 +1473,17 @@ class ContractController extends AccountBaseController
 
 
             //  Mail::to($test->email)->send(new WonDealMail($project));
-            if ($deal->project_type == 'fixed') {
-                $users = User::where('role_id', 1)->get();
-                foreach ($users as $usr) {
-                    Notification::send($usr, new WonDealNotification($deal));
-                }
-            }else{
-                $users = User::where('role_id', 1)->get();
-                foreach ($users as $usr) {
-                    Notification::send($usr, new HourlyDealNotification($deal));
-                }
-            }
+            // if ($deal->project_type == 'fixed') {
+            //     $users = User::where('role_id', 1)->get();
+            //     foreach ($users as $usr) {
+            //         Notification::send($usr, new WonDealNotification($deal));
+            //     }
+            // }else{
+            //     $users = User::where('role_id', 1)->get();
+            //     foreach ($users as $usr) {
+            //         Notification::send($usr, new HourlyDealNotification($deal));
+            //     }
+            // }
             // $check_new_pm= User::where('id',$deal->pm_id)->first();
             // $new_pm = EmployeeDetails::where('user_id',$check_new_pm->id)->first();
             // $to = Carbon::createFromFormat('Y-m-d H:s:i', Carbon::now());
