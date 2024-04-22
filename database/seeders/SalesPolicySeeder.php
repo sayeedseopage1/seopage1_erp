@@ -368,7 +368,7 @@ class SalesPolicySeeder extends Seeder
             ],
             [
                 "id" => 26,
-                "title" => "List",
+                "title" => "Asia Tear",
                 "parent_id" => 25,
                 "type" => "list",
                 "value_type" => "countries",
@@ -382,7 +382,7 @@ class SalesPolicySeeder extends Seeder
             ],
             [
                 "id" => 27,
-                "title" => "List",
+                "title" => "Africa Tear",
                 "parent_id" => 25,
                 "type" => "list",
                 "value_type" => "countries",
@@ -396,7 +396,7 @@ class SalesPolicySeeder extends Seeder
             ],
             [
                 "id" => 28,
-                "title" => "List",
+                "title" => "UK US AU CA Tear",
                 "parent_id" => 25,
                 "type" => "list",
                 "value_type" => "countries",

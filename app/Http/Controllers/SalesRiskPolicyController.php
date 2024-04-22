@@ -1080,10 +1080,10 @@ class SalesRiskPolicyController extends AccountBaseController
                 $data = [];
                 $policy = SalesRiskPolicy::where('parent_id', $questions[0]->policy_id)->orderBy('sequence')->get();
 
-                if (isset($questionAns[$questions[0]->id]))
+                if (isset($questionAns[$questions[0]->id]) && isset($policy[0]))
                     $value = $questionAns[$questions[0]->id];
                 else {
-                    $message[] = 'Done By Else section question value is not added.';
+                    $message[] = 'Done By Else section policy or question value is not added.';
                     goto endDoneByElse;
                 }
 
@@ -1094,9 +1094,9 @@ class SalesRiskPolicyController extends AccountBaseController
                     $data[] = ['id' => $questions[0]->id, 'title' => $questions[0]->title, 'value' => 'No', 'parent_id' => $questions[0]->parent_id];
                 } else {
 
-                    if (isset($questionAns[$questions[1]->id])) $value = $questionAns[$questions[1]->id];
+                    if (isset($questionAns[$questions[1]->id]) && isset($policy[1])) $value = $questionAns[$questions[1]->id];
                     else {
-                        $message[] = 'Done By Else 2nd section question value is not added.';
+                        $message[] = 'Done By Else section: 2nd Policy or 2nd Question value is not added.';
                         goto endDoneByElse;
                     }
 
