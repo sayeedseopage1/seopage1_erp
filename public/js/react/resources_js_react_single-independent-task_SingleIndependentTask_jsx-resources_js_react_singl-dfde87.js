@@ -16326,7 +16326,6 @@ var DeveloperRevisionView = function DeveloperRevisionView(_ref) {
       }
     } else return "Revision By Lead Developer";
   };
-  console.log("revision", revision);
   return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), {
     children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsxs)("div", {
       className: "sp1_single_task--modal-panel",
@@ -16921,7 +16920,7 @@ var RevisionView = function RevisionView(_ref) {
   var getComment = function getComment() {
     if (auth !== null && auth !== void 0 && auth.isHasRolePermission(6) || auth !== null && auth !== void 0 && auth.isHasRolePermission(13)) {
       return revision === null || revision === void 0 ? void 0 : revision.pm_comment;
-    } else if (auth !== null && auth !== void 0 && auth.isHasRolePermission(9) || auth !== null && auth !== void 0 && auth.isHasRolePermission(10) || auth !== null && auth !== void 0 && auth.isHasRolePermission(5)) {
+    } else if (auth !== null && auth !== void 0 && auth.isHasRolePermission(9) || auth !== null && auth !== void 0 && auth.isHasRolePermission(10) || auth !== null && auth !== void 0 && auth.isHasRolePermission(14) || auth !== null && auth !== void 0 && auth.isHasRolePermission(5)) {
       if ((revision === null || revision === void 0 ? void 0 : revision.revision_status) === "Project Manager Revision" || (revision === null || revision === void 0 ? void 0 : revision.revision_status) === "Client Has Revision") {
         return revision === null || revision === void 0 ? void 0 : revision.pm_comment;
       } else {
