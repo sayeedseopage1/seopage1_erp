@@ -2474,7 +2474,6 @@ class ContractController extends AccountBaseController
 
     public function authorization_submit(Request $request)
     {
-        dd($request);
         $request->validate([
             'price_authorization' => 'required',
             'requirment_define' => 'required',
@@ -2565,6 +2564,7 @@ class ContractController extends AccountBaseController
             $qualified_sale->save();
         }
 
+        
         if(!$request->denyDeal){
             $user = User::where('id', $deal->pm_id)->first();
             if ($deal->project_type == 'fixed') {
@@ -2573,23 +2573,7 @@ class ContractController extends AccountBaseController
                 Notification::send($user, new HourlyDealNotification($deal));
             }
 
-            if ($deal->project_type == 'fixed') {
-                $users = User::where('role_id', 1)->get();
-                foreach ($users as $usr) {
-                    Notification::send($usr, new WonDealNotification($deal));
-                }
-            }else{
-                $users = User::where('role_id', 1)->get();
-                foreach ($users as $usr) {
-                    Notification::send($usr, new HourlyDealNotification($deal));
-                }
-            }
-
-            $users = User::where('role_id', 8)->get();
-
-            foreach ($users as $key => $user) {
-                Notification::send($user, new DealAuthorizationSendNotification($deal, Auth::user()));
-            }
+            $deal->email_send_status = 1;
         }
 
         if ($deal->save()) {
