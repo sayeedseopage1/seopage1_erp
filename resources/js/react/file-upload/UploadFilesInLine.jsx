@@ -1,8 +1,8 @@
 import * as React from 'react'
 import Button from './Button'
 
-const UploadFilesInLine = ({onPreviousFileDelete, previous, files, setFiles, mode="", uploadInputClass='', fileWrapperClass=''}) => {
-    const [previews, setPreviews] = React.useState([]);
+const UploadFilesInLine = ({ onPreviousFileDelete, previous, files, setFiles, mode = "", uploadInputClass = '', fileWrapperClass = '' }) => {
+  const [previews, setPreviews] = React.useState([]);
 
 
   const handleFileUpload = (e) => {
@@ -37,44 +37,63 @@ const UploadFilesInLine = ({onPreviousFileDelete, previous, files, setFiles, mod
   };
 
 
-  const RenderIcon = ({_file, type=''}) => { 
-    if(type === 'previous' && !_file?.filename){
-        throw new Error('Filename not found on provided files');
+  // const RenderIcon = ({_file, type=''}) => { 
+  //   if(type === 'previous' && !_file?.filename){
+  //       throw new Error('Filename not found on provided files');
+  //   }
+  //   // console.log({_file})
+  //   let filename ='';
+  //   let file = {};
+  //   if(type === 'previous'){
+  //     let name = _file?.filename;
+  //     let arr = _file?.filename.split('.');
+  //     file.ext = arr[arr.length -1];
+  //     filename = name?.slice(0, 3) + '...' + name?.slice(name.length - 10, name?.length);
+  //   }else{
+  //     let name = _file?.name;
+  //     filename = name?.slice(0, 3) + '...' + name?.slice(name.length - 10, name?.length);
+  //     file = {..._file}
+  //   }
+
+  const RenderIcon = ({ _file, type = '' }) => {
+    // console.log("file", _file)
+    if (type === 'previous' && !_file?.filename) {
+      throw new Error('Filename not found on provided files');
     }
-    // console.log({_file})
-    let filename ='';
+
+    let filename = '';
     let file = {};
-    if(type === 'previous'){
+    if (type === 'previous') {
       let name = _file?.filename;
       let arr = _file?.filename.split('.');
-      file.ext = arr[arr.length -1];
+      file.ext = arr[arr.length - 1];
       filename = name?.slice(0, 3) + '...' + name?.slice(name.length - 10, name?.length);
-    }else{
+    } else {
       let name = _file?.name;
       filename = name?.slice(0, 3) + '...' + name?.slice(name.length - 10, name?.length);
-      file = {..._file}
+      file = { ..._file }
     }
 
 
-    return(
+    return (
       <div className='uploaded-file-preview'>
-          <div className='__icon'>
+        <div className='__icon'>
 
-              <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="52"
-                  height="52"
-                  fill="currentColor"
-                  viewBox="0 0 16 16"
-              >
-                  <path d="M14 4.5V14a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2h5.5L14 4.5zm-3 0A1.5 1.5 0 0 1 9.5 3V1H4a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1V4.5h-2z" />
-              </svg>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="52"
+            height="52"
+            fill="currentColor"
+            viewBox="0 0 16 16"
+          >
+            <path d="M14 4.5V14a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2h5.5L14 4.5zm-3 0A1.5 1.5 0 0 1 9.5 3V1H4a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1V4.5h-2z" />
+          </svg>
 
-              <span className="uploaded-file-ext">
-                  {file?.ext?.slice(0, 6)}
-              </span>
-          </div>
-          <span className="d-block mt-3">{filename}</span>
+          <span className="uploaded-file-ext">
+            {file?.ext?.slice(0, 6)}
+          </span>
+        </div>
+        <span className="d-block mt-3">{filename}</span>
       </div>
     )
   }
@@ -90,92 +109,96 @@ const UploadFilesInLine = ({onPreviousFileDelete, previous, files, setFiles, mod
     setPreviews(updatePreview)
   }
 
+  const getFileFormate = (file) => {
+    return { ...file, filename: file?.filename ? file?.filename : file?.name }
+  }
+
   return (
-    <div className='d-flex align-items-center flex-wrap' style={{gap: '10px'}}>
+    <div className='d-flex align-items-center flex-wrap' style={{ gap: '10px' }}>
 
-        {mode !== 'preview' &&  <div className={`sp1_sub-task-file-upload ${uploadInputClass}`}>
-            <i className="fa-solid fa-cloud-arrow-up"></i>
-            <span>Upload Files</span>
-            <input type="file" multiple onChange={handleFileUpload}/>
-        </div> }
+      {mode !== 'preview' && <div className={`sp1_sub-task-file-upload ${uploadInputClass}`}>
+        <i className="fa-solid fa-cloud-arrow-up"></i>
+        <span>Upload Files</span>
+        <input type="file" multiple onChange={handleFileUpload} />
+      </div>}
 
-        {previous?.map((file) => (
-          <div
-              key={file.id}
-              className={`sp1_sub-task-file-upload ${fileWrapperClass}`}
-              data-toggle="tooltip"
-              data-placement="bottom"
-              title={file?.name}
-          >
+      {previous?.map((file) => (
+        <div
+          key={file.id}
+          className={`sp1_sub-task-file-upload ${fileWrapperClass}`}
+        // data-toggle="tooltip"
+        // data-placement="bottom"
+        // title={file?.name}
+        >
 
           {mode === 'preview' ? (
             <a
               href={file?.file_url}
               download={true}
               className='file-download-preview d-flex align-items-center justify-content-center'
-              data-toggle="tooltip"
-              data-placement='top'
+              // data-toggle="tooltip"
+              // data-placement='top'
               title='Click to Download!'
             >
-              {file?.icon ==='images' ?
-            <img
-              src={file?.file_url}
-              alt=""
-              style={{
-                width: '100%',
-                height:'100%',
-                objectFit: 'fill'
-              }}
-            />
-            :  <RenderIcon _file={file} type='previous'/> }
+              {file?.icon === 'images' ?
+                <img
+                  src={file?.file_url}
+                  alt=""
+                  style={{
+                    width: '100%',
+                    height: '100%',
+                    objectFit: 'fill'
+                  }}
+                />
+                : <RenderIcon _file={getFileFormate(file)} type='previous' />}
             </a>
-          ):
-          file?.icon ==='images' ?
-            <img
-              src={file?.file_url}
-              alt=""
-              style={{
-                width: '100%',
-                height:'100%',
-                objectFit: 'fill'
-              }}
-            />
-            :  <RenderIcon _file={file} type='previous'/>
-      }
+          ) :
+            file?.icon === 'images' ?
+              <img
+                src={file?.file_url}
+                alt=""
+                style={{
+                  width: '100%',
+                  height: '100%',
+                  objectFit: 'fill'
+                }}
+              />
+              : <RenderIcon _file={getFileFormate(file)} type='previous' />
+          }
 
-            {
-                mode !== 'preview' &&
-                <Button
-                  onClick={(e) => onPreviousFileDelete(e, file) }
-                  className='__remove--btn'
-                >
-                  <i className="fa-regular fa-trash-can"></i>
-                </Button>
-            }
-      </div>
-        ))}
-
-        {previews?.map((file, i) => (
-            <div
-                key={i}
-                className={`sp1_sub-task-file-upload ${fileWrapperClass}`}
-                data-toggle="tooltip"
-                data-placement="bottom"
-                title={file?.name}
+          {
+            mode !== 'preview' &&
+            <Button
+              onClick={(e) => onPreviousFileDelete(e, file, previous)}
+              className='__remove--btn'
             >
-                {file?.type.startsWith('image/') ?
-                    <img src={file?.preview} alt="" style={{width: '100%', height:'100%', objectFit: 'fill'}} />
-                    :  <RenderIcon _file={file} type="" />
-                }
+              <i className="fa-regular fa-trash-can"></i>
+            </Button>
+          }
+        </div>
+      ))}
 
-                    <Button
-                      onClick={(e) => handleRemoveFile(e, i)}
-                      className='__remove--btn'
-                    >
-                      <i className="fa-regular fa-trash-can"></i>
-                    </Button>
-            </div>
-        ))}
+      {previews?.map((file, i) => (
+        <div
+          key={i}
+          className={`sp1_sub-task-file-upload ${fileWrapperClass}`}
+          // data-toggle="tooltip"
+          // data-placement="bottom"
+          title={file?.name}
+        >
+          {file?.type.startsWith('image/') ?
+            <img src={file?.preview} alt="" style={{ width: '100%', height: '100%', objectFit: 'fill' }} />
+            : <RenderIcon _file={getFileFormate(file)} type="" />
+          }
+
+          <Button
+            onClick={(e) => handleRemoveFile(e, i)}
+            className='__remove--btn'
+          >
+            <i className="fa-regular fa-trash-can"></i>
+          </Button>
+        </div>
+      ))}
     </div>
   )
 }

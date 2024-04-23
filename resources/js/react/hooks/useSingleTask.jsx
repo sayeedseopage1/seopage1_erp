@@ -15,13 +15,14 @@ export const useSingleTask = () => {
     /* ********* Get Task by task ID ********* */
     const [
         getTaskDetails,
-        {isFetching: taskDetailsIsFetching}
+        { isFetching: taskDetailsIsFetching }
     ] = useLazyGetTaskDetailsQuery();
 
     const getTaskById = async (taskId) => {
-        try{
+        debugger
+        try {
             const res = await getTaskDetails(`/${taskId}/json?mode=basic`).unwrap();
-            if(res){
+            if (res) {
                 const task = {
                     ...res.task,
                     taskFiles: res?.taskFiles,
@@ -35,26 +36,26 @@ export const useSingleTask = () => {
                 }
                 return task;
             }
-        }catch(err) {
+        } catch (err) {
             console.log(err)
         }
     }
 
 
-     /* *************************************************** */
+    /* *************************************************** */
     /* ********* Get Task submittion Information ********* */
 
-    const [getSubmittedTask, {isFetching: submittionInfoIsFetching} ] = useLazyGetSubmittedTaskQuery();
+    const [getSubmittedTask, { isFetching: submittionInfoIsFetching }] = useLazyGetSubmittedTaskQuery();
 
     // method
     const getSubmittionInfo = async (taskId) => {
-        try{
+        try {
             const res = await getSubmittedTask(taskId).unwrap();
-            if(res){
+            if (res) {
                 let data = _.orderBy(res, ['task_id', 'submission_no'], ['desc', 'desc']);
                 return data;
             }
-        }catch(err) {
+        } catch (err) {
             console.log(err)
         }
     }
@@ -64,17 +65,17 @@ export const useSingleTask = () => {
     /* ********* Approved Task ********* */
     const [
         approveSubmittedTask,
-        {isLoading: approveTaskLoadingStatus}
+        { isLoading: approveTaskLoadingStatus }
     ] = useApproveSubmittedTaskMutation();
 
     // method
     const approveTask = async (data, callback) => {
-        if(!data || _.isEmpty(data)) return;
-        try{
+        if (!data || _.isEmpty(data)) return;
+        try {
             const res = await approveSubmittedTask(data).unwrap();
 
-            if(res){
-                callback &&callback();
+            if (res) {
+                callback && callback();
                 const Toast = Swal.mixin({
                     toast: true,
                     position: 'top-end',
@@ -88,7 +89,7 @@ export const useSingleTask = () => {
                     title: 'Task Approved Successfully'
                 })
             }
-        }catch(err){ console.log(err) }
+        } catch (err) { console.log(err) }
     }
 
 
