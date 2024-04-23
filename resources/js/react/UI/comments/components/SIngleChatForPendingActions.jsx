@@ -22,6 +22,7 @@ import getFormattedTime, { checkSameDay } from "../utils/getFormattedTime";
 import { TiCancel } from "react-icons/ti";
 import { IoEyeOffOutline, IoEyeOutline } from "react-icons/io5";
 import "../styles/single-comment.css";
+import HandleFileIconForPendingActions from "../utils/handleFileIconForPendingActions";
 
 const currentUser = new User(window.Laravel.user);
 
@@ -1001,7 +1002,7 @@ const FileView = ({
                             key={i}
                             className={`${style.chatInput_filePreview__file} shadow-sm`}
                         >
-                            <HandleFileIcon
+                            <HandleFileIconForPendingActions
                                 fileName={
                                     comment.original_files
                                         ? comment.original_files[i]
