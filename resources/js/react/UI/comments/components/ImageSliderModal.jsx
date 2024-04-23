@@ -9,7 +9,7 @@ import {
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import Slider from "react-slick";
-import { useCommentContext } from "../CommentsBody";
+import { useCommentContext } from "../CommentBodyForPendingActions";
 import getImageList from "../utils/getImageList";
 import "swiper/css";
 import "swiper/css/free-mode";
@@ -224,7 +224,11 @@ const ImageSlider = ({ imgFileList = [], targetIndex }) => {
                 <Swiper
                     onSwiper={setThumbsSwiper}
                     spaceBetween={0}
-                    slidesPerView={[...imgFileList].length<4?[...imgFileList].length:4}
+                    slidesPerView={
+                        [...imgFileList].length < 4
+                            ? [...imgFileList].length
+                            : 4
+                    }
                     freeMode={true}
                     watchSlidesProgress={true}
                     modules={[FreeMode, Navigation, Thumbs]}

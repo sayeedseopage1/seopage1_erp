@@ -37,7 +37,6 @@ const SingleChatForPendingActions = ({
     selectMentionIndex,
     setSelectMentionIndex,
 }) => {
-    // console.log("comment in single chat", comment);
     const {
         setContextHolder,
         setMentionedComment,
@@ -597,7 +596,7 @@ const SingleChatForPendingActions = ({
                                                                                     left: "0",
                                                                                 }}
                                                                             />
-                                                                            <HandleFileIcon
+                                                                            <HandleFileIconForPendingActions
                                                                                 fileName={
                                                                                     comment
                                                                                         ?.mention
@@ -682,11 +681,11 @@ const SingleChatForPendingActions = ({
                                         {comment?.files_data?.length ? (
                                             <FileView
                                                 comment={comment}
-                                                // onContextMenu={(e) => {
-                                                //     onContextMenu(e);
-                                                //     setContextHolder(comment);
-                                                // }}
-                                                // onKeyDown={onKeyDown}
+                                                onContextMenu={(e) => {
+                                                    onContextMenu(e);
+                                                    setContextHolder(comment);
+                                                }}
+                                                onKeyDown={onKeyDown}
                                                 isCurrentUser={isCurrentUser(
                                                     comment?.user?.id
                                                 )}
@@ -840,7 +839,7 @@ const SingleChatForPendingActions = ({
                                                                                 left: "0",
                                                                             }}
                                                                         />
-                                                                        <HandleFileIcon
+                                                                        <HandleFileIconForPendingActions
                                                                             fileName={
                                                                                 comment
                                                                                     ?.mention
