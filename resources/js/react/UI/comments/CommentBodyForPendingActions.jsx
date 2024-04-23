@@ -744,16 +744,22 @@ const CommentBodyForPendingActions = ({
                                     //     denyButton: "btn btn-danger",
                                     // },
                                 }).then((result) => {
-                                    console.log("swal fire result", result);
                                     if (result.isConfirmed) {
                                         Swal.close();
                                     } else if (result.isDenied) {
                                         updatePendingAction({
                                             id: pendingActionId,
-                                        });
-
-                                        increaseCount();
-                                        close();
+                                        })
+                                            .unwrap()
+                                            .then(() => {
+                                                close();
+                                                increaseCount();
+                                            })
+                                            .catch(() => {
+                                                console.log(
+                                                    "past action failed"
+                                                );
+                                            });
                                     } else if (result.isDismissed) {
                                         close();
                                     }
