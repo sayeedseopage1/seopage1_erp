@@ -1996,6 +1996,19 @@ class ContractController extends AccountBaseController
                 // }else{
                 //     Notification::send($user, new HourlyDealNotification($deal));
                 // }
+
+                if ($deal->project_type == 'fixed') {
+                    $users = User::where('role_id', 1)->get();
+                    foreach ($users as $usr) {
+                        Notification::send($usr, new WonDealNotification($deal));
+                    }
+                }else{
+                    $users = User::where('role_id', 1)->get();
+                    foreach ($users as $usr) {
+                        Notification::send($usr, new HourlyDealNotification($deal));
+                    }
+                }
+                
                 $users = User::where('role_id', 8)->get();
 
                 foreach ($users as $key => $user) {
