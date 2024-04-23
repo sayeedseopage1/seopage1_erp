@@ -38,28 +38,6 @@ class SalesRiskPolicyController extends AccountBaseController
             }
             abort_403(user()->permission('manage_company_setting') !== 'all');
         });
-
-        /* TODO: this code will be removed */
-        Schema::table('policy_question_values', function (Blueprint $table) {
-
-            if (Schema::hasColumn('policy_question_values', 'question_id')) {
-                $table->dropForeign(['question_id']);
-                $table->dropColumn('question_id');
-            }
-            if (Schema::hasColumn('policy_question_values', 'value')) {
-                $table->dropColumn('value');
-            }
-            if (!Schema::hasColumn('policy_question_values', 'values')) {
-                $table->text('values');
-            }
-        });
-
-        if (!Schema::hasColumn('policy_point_histories', 'points')) {
-            Schema::table('policy_point_histories', function (Blueprint $table) {
-                $table->float('points', 8, 2)->after('policy')->comment('actual gained points after calculation');
-            });
-        }
-        /*  end */
     }
 
     public static function Routes()

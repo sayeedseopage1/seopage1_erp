@@ -275,7 +275,7 @@
                         </div>
 
                         @if($deal->project_type != 'hourly')
-                        <div class="mt-3" id="timerss">
+                        <div class="mt-3 deadline-div" id="timerss" >
 
                             <h2><strong>Deadline <span style="color:red;">*<span></strong>
                                 <i class="fa fa-question-circle" data-toggle="popover" data-placement="top" data-content="Project Deadline" data-html="true" data-trigger="hover"></i>
@@ -495,5 +495,12 @@
             disableButtonRemove();
             enableButtonAdd();
         });
+    });
+
+    // deadline hide for hourly
+    $('input[name="deal_type"]').change(function()
+    {
+        if ($(this).val() == 'hourly') $('.deadline-div').hide();
+        else $('.deadline-div').show();
     });
 </script>
