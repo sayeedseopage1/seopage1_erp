@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands;
 
+use App\Http\Controllers\HelperPendingActionController;
 use Illuminate\Console\Command;
 use App\Models\User;
 use App\Models\Task;
@@ -13,6 +14,7 @@ use App\Models\ProjectDeliverable;
 use DB;
 use App\Models\Payment;
 use App\Models\ProjectMilestone;
+use App\Notifications\PmGoalBeforeExpireNotification;
 use App\Notifications\PmGoalMissNotification;
 use Notification;
 
@@ -40,8 +42,8 @@ class PMGoal extends Command
     public function handle()
     {
       
-        $goals= ProjectPmGoal::where('goal_status',0)->where('description',null)->get();
-      //  dd($goals);
+        $goals= ProjectPmGoal::where('goal_status',0)->get();
+    //    dd($goals);
         foreach ($goals as $goal) {
             $current_date = Carbon::now();
             if($goal->extended_goal_end_day == null)
@@ -59,8 +61,6 @@ class PMGoal extends Command
                // dd($deliverable_sign);
                 $task_count= Task::where('project_id',$goal->project_id)->count();
                 $deliverables_count = ProjectDeliverable::where('project_id',$goal->project_id)->count();
-              //  dd($deliverables_count -$task_count);
-                // $goal_count= ProjectPmGoal::where('project_id',$goal->project_id)->count();
                 // $goal_met_count= ProjectPmGoal::where('project_id',$goal->project_id)->count();
                 if($deliverable_sign == null && $deliverables_count > 0 &&  $task_count > 0)
                 {
@@ -81,6 +81,8 @@ class PMGoal extends Command
                 {
                     $goal_update->description = 'Deliverables is not signed and tasks has not been created properly';
                 }
+                
+                $goal_update->expired_status = 1;
                 $goal_update->updated_at = Carbon::now();
                 $goal_update->save();
               //  dd($goal_update);
@@ -96,6 +98,8 @@ class PMGoal extends Command
                 {
                     $goal_update= ProjectPmGoal::where('id',$goal->id)->first();
                     $goal_update->description = 'The first submission has not been completed and it is not ready for submission to the client';
+                    $goal_update->goal_progress = 100;
+                    $goal_update->expired_status = 1;
                     $goal_update->updated_at = Carbon::now();
                     $goal_update->save();
 
@@ -115,6 +119,7 @@ class PMGoal extends Command
                 {
                     $goal_update= ProjectPmGoal::where('id',$goal->id)->first();
                     $goal_update->description = $complete_milestones . ' out of '.$total_milestones. ' milestones could not be released in this week';
+                    $goal_update->expired_status = 1;
                     $goal_update->updated_at = Carbon::now();
                     $goal_update->save();
 
@@ -136,6 +141,7 @@ class PMGoal extends Command
                 {
                     $goal_update= ProjectPmGoal::where('id',$goal->id)->first();
                     $goal_update->description = $complete_milestones . ' out of '.$required_to_complete. ' milestones could not be released in this week';
+                    $goal_update->expired_status = 1;
                     $goal_update->updated_at = Carbon::now();
                     $goal_update->save();
 
@@ -156,6 +162,7 @@ class PMGoal extends Command
                 {
                     $goal_update= ProjectPmGoal::where('id',$goal->id)->first();
                     $goal_update->description = $complete_milestones . ' out of '.$required_to_complete. ' milestones could not be released in this week';
+                    $goal_update->expired_status = 1;
                     $goal_update->updated_at = Carbon::now();
                     $goal_update->save();
 
@@ -176,6 +183,7 @@ class PMGoal extends Command
                 {
                     $goal_update= ProjectPmGoal::where('id',$goal->id)->first();
                     $goal_update->description = $complete_milestones . ' out of '.$required_to_complete. ' milestones could not be released in this week';
+                    $goal_update->expired_status = 1;
                     $goal_update->updated_at = Carbon::now();
                     $goal_update->save();
 
@@ -194,6 +202,7 @@ class PMGoal extends Command
                 {
                     $goal_update= ProjectPmGoal::where('id',$goal->id)->first();
                     $goal_update->description = $complete_milestones . ' out of 1 milestones could not be released in this week';
+                    $goal_update->expired_status = 1;
                     $goal_update->updated_at = Carbon::now();
                     $goal_update->save();
 
@@ -203,20 +212,39 @@ class PMGoal extends Command
 
 
             $goal_check = ProjectPmGoal::where('id',$goal->id)->first();
+            /** WHEN GOAL DEADLINE EXPIRE IN NEXT 24 HOURS */
+            $currentTime = Carbon::now();
+            
+            $goal_end_date = Carbon::parse($goal_check->goal_end_date)->subDays(1);
+            $goal_ext_end_date = Carbon::parse($goal_check->extended_goal_end_day)->subDays(1);
+            if($goal_check->goal_end_date >= $currentTime && $goal_end_date <=$currentTime || $goal_check->extended_goal_end_day >= $currentTime && $goal_ext_end_date <=$currentTime){
+                $difference_in_hours = $currentTime->diffInHours($goal_end_date);
+                $difference_in_hours = $currentTime->diffInHours($goal_ext_end_date);
+                if( $difference_in_hours <= 24)
+                {
+                    if($goal_check->mail_status == 0){
+                        $helper = new HelperPendingActionController();
+                        $helper->PmGoalBeforeExpireCheck($goal_check, $difference_in_hours);
+                        $user  = User::where('id',$goal_check->pm_id)->first();
+                        Notification::send($user, new PmGoalBeforeExpireNotification($goal_check));
+                    }
+                }
+            }
+            /**WHEN GOAL DEADLINE OVER*/
             $current_date = now();
             if($goal_check->extended_goal_end_day ==null){
                 $goal_end_date = Carbon::parse($goal_check->goal_end_date)->addHours(24);
             }else{
                 $goal_end_date = Carbon::parse($goal_check->extended_goal_end_day)->addHours(24);
             }
-            if($goal_check->goal_status ==0 && $goal_check->goal_end_date >= $current_date){
-            $pm = $goal_check->pm_id;
-            $users = User::where('id',$pm)->get();
-                foreach ($users as $user) {
+            if($goal_check->goal_status ==0 && $goal_check->goal_end_date <= $current_date){
+                if($goal_check->mail_status == 1 || $goal_check->mail_status == 0){
+                    $helper = new HelperPendingActionController();
+                    $helper->PmGoalDeadlineCheck(ProjectPmGoal::where('id',$goal->id)->first());
+                    $user = User::where('id',$goal_check->pm_id)->get();
                     Notification::send($user, new PmGoalMissNotification($goal_check));
                 }
             }
-
             
         }
   

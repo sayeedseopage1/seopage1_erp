@@ -39,15 +39,7 @@ $addPermission = user()->permission('add_holiday');
                 <a href="{{ route('project-status-calendar') }}" class="btn btn-secondary f-14" data-toggle="tooltip"
                     data-original-title="@lang('app.menu.calendar')"><i class="side-icon bi bi-calendar"></i></a>
             </div>
-        </div>
-        
-        {{-- <!-- holiday table Box Start -->
-            <div class="d-flex flex-column w-tables rounded mt-3 bg-white">
-                
-                {!! $dataTable->table(['class' => 'table table-hover border-0 w-100']) !!}
-            </div>
-            <!-- leave table End --> --}}
-            
+        </div>       
             
             
         </div>

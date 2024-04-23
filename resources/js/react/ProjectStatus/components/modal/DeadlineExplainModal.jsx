@@ -9,7 +9,8 @@ const DeadlineExplainModal = ({
     projectDetails,
     isModalTwoOpen,
     closeModalTwo,
-    refetchPmGoal
+    refetchPmGoal,
+    deadlineExplanationData
 }) => {
     return (
         <ReactModal
@@ -52,6 +53,7 @@ const DeadlineExplainModal = ({
                 projectPmGoalId={projectPmGoalId}
                 projectDetails={projectDetails}
                 refetchPmGoal={refetchPmGoal}
+                deadlineExplanationData={deadlineExplanationData}
             />
         </ReactModal>
     );
@@ -69,7 +71,7 @@ const customStyles = {
     content: {
         zIndex: 99999999,
         maxWidth: "600px",
-        maxHeight: "fit-content",
+        height: "fit-content",
         margin: "auto auto",
         padding: "20px",
     },

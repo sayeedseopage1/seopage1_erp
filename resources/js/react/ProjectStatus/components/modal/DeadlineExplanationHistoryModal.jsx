@@ -10,9 +10,10 @@ const DeadlineExplanationHistoryModal = ({
   closeModal,
   projectDetails,
   isLoading,
-  refetchPmGoal,
-  deadlineExplanationHistoryData
+  goalExpiredHistory,
+  refetchGoalExtensionHistory
 }) => {
+  // filter the table header based on the user role
   const tableHeaderFilterByUser = DeadlineEHColumn.filter(item => {
     if (window?.Laravel?.user.role_id !== 1) {
         return item.accessorKey !== 'client_communication_rating' && item.accessorKey !== 'negligence_pm_rating';
@@ -37,7 +38,7 @@ const DeadlineExplanationHistoryModal = ({
           gap: "10px"
         }}>
           <RefreshButton
-          onClick={refetchPmGoal}
+          onClick={refetchGoalExtensionHistory}
           isLoading={isLoading}
           />
            <button
@@ -66,7 +67,7 @@ const DeadlineExplanationHistoryModal = ({
         projectDetails={projectDetails}
         closeModal={closeModal}     
         tableColumns={tableHeaderFilterByUser}
-        deadlineExplanationHistoryData={GoalExtentionHistoryTableData}
+        goalExpiredHistory={goalExpiredHistory}
         isLoading={isLoading}
       
       />
