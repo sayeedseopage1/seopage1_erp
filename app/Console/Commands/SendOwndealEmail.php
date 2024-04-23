@@ -59,8 +59,6 @@ class SendOwndealEmail extends Command
             })->get();
         
         foreach($deals as $deal){
-            $user = User::where('role_id', 8)->first();
-            Notification::send($user, new DealAuthorizationSendNotification($deal, $deal->addedBy));
             $user = User::where('id', $deal->pm_id)->first();
             if ($deal->project_type == 'fixed') {
                 Notification::send($user, new WonDealNotification($deal));
