@@ -226,7 +226,7 @@ class ContractController extends AccountBaseController
             return $next($request);
         });
         $deal = Deal::where('id', $id)->first();
-        if($deal->status!='pending') abort_403(true);
+        if(Auth::user()->role_id!=1 && $deal->status!='pending') abort_403(true);
         return view('contracts.editdealdetails', $this->data, compact('deal'));
     }
 //storing new deals

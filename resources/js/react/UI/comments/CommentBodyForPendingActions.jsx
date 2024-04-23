@@ -2,20 +2,10 @@ import React, { createContext, useContext, useEffect } from "react";
 import style from "./styles/comments.module.css";
 import "./editor.style.css";
 import { AiOutlineFullscreen, AiOutlineFullscreenExit } from "react-icons/ai";
-import {
-    IoIosArrowDown,
-    IoIosArrowUp,
-    IoMdCloseCircle,
-    IoCustomRefresh,
-} from "react-icons/io";
-import commentRefresh from "./media/comment_refresh.svg";
-import commentSearch from "./media/comment_search.svg";
-// import commentClose from './media/comment_close.svg';
+import { IoIosArrowDown, IoIosArrowUp } from "react-icons/io";
+
 import commentBg from "./media/comments_body_bg.svg";
-import commentBgPng from "./media/comments_body_bg.png";
-import { GiCancel } from "react-icons/gi";
-import SingleChat from "./components/SingleChat";
-import ChatInput from "./components/ChatInput";
+
 import { useState } from "react";
 import { useRef } from "react";
 import { useCallback } from "react";
@@ -40,10 +30,15 @@ import { useDeleteCommentsMutation } from "../../services/api/commentsApiSlice";
 import { useParams } from "react-router-dom";
 import ImageSliderModal from "./components/ImageSliderModal";
 import { isHasPermissionForWriteComment } from "./utils/isHasPermissionForWriteComment";
-import Sendbox from "./components/sendbox/Sendbox";
+
 import axios from "axios";
 import { useCommentStore } from "./zustand/store";
-
+import SendboxForPendingActions from "./components/sendbox/SendboxForPendingActions";
+import SingleChatForPendingActions from "./components/SIngleChatForPendingActions";
+import { useSelector } from "react-redux";
+import { usePendingActionsIdMutation } from "../../../react-latest/services/api/pendingActionsApiSlice";
+import useCounterStore from "../../../react-latest/components/Zustand/store";
+import "./styles/customSwalButtons.css";
 const CommentContext = createContext({
     setScroll: () => {},
     selectedComments: [],
@@ -64,7 +59,7 @@ export function useCommentContext() {
     return useContext(CommentContext);
 }
 
-const CommentsBody = ({
+const CommentBodyForPendingActions = ({
     fullScreenView,
     setFullScreenView,
     isOpen,
@@ -82,6 +77,12 @@ const CommentsBody = ({
     showSearchBtn = true,
     onSubmit = async () => null,
 }) => {
+    const { increaseCount } = useCounterStore();
+    const pendingActionId = useSelector(
+        (state) => state.pendingActions.pendingActionId
+    );
+
+    const [updatePendingAction] = usePendingActionsIdMutation();
     const { allComments, setAllComments } = useCommentStore();
     const param = useParams();
     const [deleteComments, { isLoading: deleteLoading }] =
@@ -121,7 +122,7 @@ const CommentsBody = ({
         setAllComments(comments);
     }, [comments]);
 
-    const hnadleSelectComment = useCallback(() => {
+    const handleSelectComment = useCallback(() => {
         setSecletedComments((prev) => ({
             ...prev,
             [contextHolder.id]: contextHolder,
@@ -140,7 +141,7 @@ const CommentsBody = ({
             </ContextMenuItem>
             <ContextMenuItem
                 onSelect={() => {
-                    hnadleSelectComment();
+                    handleSelectComment();
                 }}
             >
                 <TbMessage2Check className={`context_icons`} />
@@ -169,6 +170,35 @@ const CommentsBody = ({
         </>
     );
 
+    useEffect(() => {
+        // console.log("searchText :", searchText);
+        if (searchText) {
+            const filteredComments = [...comments].filter((comment) => {
+                return (
+                    !comment?.is_deleted &&
+                    htmlToString(comment?.comment)
+                        .toLowerCase()
+                        .includes(searchText.toLowerCase())
+                );
+                // const textContent = getTextContent(comment.comment).toLowerCase();
+                // console.log(textContent);
+                // return true;
+            });
+            setSearchIndexes(
+                filteredComments.map((comment) => {
+                    return comment?.id;
+                })
+            );
+            setCommentIndex(0);
+            setAllComments(filteredComments);
+        } else {
+            // setScroll((prev) => !prev);
+            setSearchIndexes([]);
+            setCommentIndex(0);
+            setAllComments(comments);
+        }
+    }, [searchText]);
+
     // scroll to bottom feature
     useEffect(() => {
         let timer = setTimeout(() => {
@@ -186,6 +216,14 @@ const CommentsBody = ({
         setSearchText("");
     }, [showSearchBar]);
 
+    // useEffect(() => {
+    //     console.log({ contextHolder });
+    // }, [contextHolder]);
+
+    // useEffect(() => {
+    //     console.log({ mentionedComment });
+    // }, [mentionedComment]);
+
     // scrolling to linked comment of search result
     useEffect(() => {
         if (commentIndex) {
@@ -200,6 +238,7 @@ const CommentsBody = ({
         } else {
             setScroll((prev) => !prev);
         }
+        // console.log(searchIndexes.length - commentIndex,searchIndexes[searchIndexes.length - commentIndex]);
     }, [commentIndex]);
 
     // scroll to the mention comment according to selection
@@ -228,7 +267,7 @@ const CommentsBody = ({
             ["id"],
             ["asc"]
         );
-
+        // console.log({ allSelectedComments });
         const allSelectedCommentsString = allSelectedComments.reduce(
             (total, comment, i, arr) => {
                 total += `${htmlToPreservedText(comment?.comment)}\n${
@@ -244,7 +283,7 @@ const CommentsBody = ({
             },
             ``
         );
-
+        // console.log({ allSelectedCommentsString });
         window.navigator.clipboard
             .writeText(allSelectedCommentsString)
             .then(() => {
@@ -276,7 +315,9 @@ const CommentsBody = ({
         const commentsId = Object.values({ ...selectedComments }).map(
             (comment) => comment.id
         );
-
+        // console.log({ commentsId,selectedComments });
+        // return;
+        // setIsLoading(true),
         const deleteComments = async ({ commentsId }) => {
             await deleteComments({ commentsId })
                 .then(() => {
@@ -332,7 +373,7 @@ const CommentsBody = ({
                 "MMM DD, YYYY, hh:mm A"
             )} `;
         }
-
+        // console.log({ allSelectedCommentsString });
         window.navigator.clipboard
             .writeText(SelectedCommentsString)
             .then(() => {
@@ -343,7 +384,8 @@ const CommentsBody = ({
                     showConfirmButton: true,
                     timerProgressBar: true,
                 });
-
+                // setSecletedComments({});
+                // setScroll(prev=>!prev);
                 setContextHolder(null);
             })
             .catch(() => {
@@ -355,10 +397,14 @@ const CommentsBody = ({
                     timerProgressBar: true,
                 });
             })
-            .finally(() => {});
+            .finally(() => {
+                //   setIsLoading(false);
+            });
     };
 
     const handleDeleteSingleComment = (comment) => {
+        // console.log({ id: comment.id });
+        // return;
         const deleteComment = async (commentId) => {
             await deleteComments({ commentsId: [commentId] })
                 .then((res) => {
@@ -434,7 +480,6 @@ const CommentsBody = ({
                 setAllComments(allComments);
             } else {
                 // Handle the case where allComments is not an array
-                console.error("allComments is not an array");
             }
         }
     };
@@ -528,7 +573,7 @@ const CommentsBody = ({
                         </svg>
                     </span>
 
-                    {!param?.taskId ? (
+                    {!param?.taskId || !taskId ? (
                         <span
                             onClick={() =>
                                 window.open(
@@ -620,7 +665,7 @@ const CommentsBody = ({
                     )}
 
                     {/* search btn */}
-                    {param?.taskId && showSearchBtn ? (
+                    {(param?.taskId || taskId) && showSearchBtn ? (
                         <span
                             onClick={() => {
                                 if (showSearchBar) {
@@ -654,7 +699,7 @@ const CommentsBody = ({
                     )}
 
                     {/* full screen btn */}
-                    {param?.taskId && showFullScreenBtn ? (
+                    {(param?.taskId || taskId) && showFullScreenBtn ? (
                         !fullScreenView ? (
                             <AiOutlineFullscreen
                                 onClick={() => setFullScreenView(true)}
@@ -677,7 +722,41 @@ const CommentsBody = ({
                                 if (setFullScreenView) {
                                     setFullScreenView(false);
                                 }
-                                close();
+
+                                Swal.fire({
+                                    icon: "question",
+                                    title: "Would you like to add any more comments?",
+                                    html: `
+                                        <p style="margin-top: 5px; text-align: justify;">If you click <span style="padding: 4px;font-size:12px; border-radius: 5px; background-color: #7066E0; color: white;">Yes</span>, you can add more comments. If you click <span style="padding: 4px;font-size:12px; border-radius: 5px; background-color: #DC3741; color: white;">No</span>, this pending action will be marked as completed and moved to the past.</p>
+                                        <p style="margin-top: 10px; text-align: justify;"> If you click <span style="padding: 4px;font-size:12px; border-radius: 5px; background-color: #6E7881; color: white;">Back to Pending Action</span>, this comment window will close and you'll return to the pending action page.</p>
+                                    `,
+                                    allowOutsideClick: false,
+                                    showCancelButton: true,
+                                    cancelButtonText: "Back to Pending Action",
+                                    showConfirmButton: true,
+                                    confirmButtonText: "Yes",
+                                    showDenyButton: true,
+                                    denyButtonText: "No",
+                                    // customClass: {
+                                    //     confirmButton: "btn btn-primary",
+                                    //     cancelButton: "btn btn-info",
+                                    //     denyButton: "btn btn-danger",
+                                    // },
+                                }).then((result) => {
+                                    console.log("swal fire result", result);
+                                    if (result.isConfirmed) {
+                                        Swal.close();
+                                    } else if (result.isDenied) {
+                                        updatePendingAction({
+                                            id: pendingActionId,
+                                        });
+
+                                        increaseCount();
+                                        close();
+                                    } else if (result.isDismissed) {
+                                        close();
+                                    }
+                                });
                             }}
                             className={`${style.commentsBody_header_btn}`}
                         >
@@ -754,7 +833,7 @@ const CommentsBody = ({
                         <>
                             {allComments?.map((comment, i) => {
                                 return (
-                                    <SingleChat
+                                    <SingleChatForPendingActions
                                         idMatch={
                                             comment?.id ===
                                             searchIndexes[
@@ -817,7 +896,7 @@ const CommentsBody = ({
                     assignBy: thisTask?.create_by,
                 }) ? (
                     <footer className={`${style.commentsBody_inputField}`}>
-                        <Sendbox
+                        <SendboxForPendingActions
                             onSubmit={onSubmit}
                             taskId={taskId}
                             setScroll={setScroll}
@@ -918,4 +997,4 @@ const CommentsBody = ({
     );
 };
 
-export default CommentsBody;
+export default CommentBodyForPendingActions;
