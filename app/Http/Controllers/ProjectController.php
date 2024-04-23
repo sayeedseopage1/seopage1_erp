@@ -947,7 +947,7 @@ class ProjectController extends AccountBaseController
     public function update(UpdateProject $request, $id)
     {
 
-
+dd('asda');
         //kpi distribution start from here
       //  DB::beginTransaction();
         $find_project_id = Project::where('id', $id)->first();
