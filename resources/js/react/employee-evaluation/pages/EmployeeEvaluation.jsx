@@ -39,8 +39,10 @@ const EmployeeEvaluation = () => {
         { refetchOnMountOrArgChange: true, skip: !filter?.start_date }
     );
 
+    const mainData = data?.data;
     const Evaluations = data?.data.data;
 
+    console.log("maindata", mainData);
     // console.log("evaluations", Evaluations);
     // filter data
     const getData = (type) => {
@@ -105,6 +107,7 @@ const EmployeeEvaluation = () => {
 
                 <DataTable
                     data={tableData(searchParams.get("show"))}
+                    mainData={mainData}
                     columns={[...DataTableColumns]}
                     isLoading={isLoading}
                     isFetching={isFetching}
