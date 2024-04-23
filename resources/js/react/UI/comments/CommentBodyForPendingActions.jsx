@@ -39,6 +39,7 @@ import { useSelector } from "react-redux";
 import { usePendingActionsIdMutation } from "../../../react-latest/services/api/pendingActionsApiSlice";
 import useCounterStore from "../../../react-latest/components/Zustand/store";
 import "./styles/customSwalButtons.css";
+import ImageSliderModalForPendingActions from "./components/ImageSliderModalForPendingActions";
 const CommentContext = createContext({
     setScroll: () => {},
     selectedComments: [],
@@ -884,7 +885,7 @@ const CommentBodyForPendingActions = ({
                         }}
                         ref={chatbottom_ref}
                     />
-                    <ImageSliderModal
+                    <ImageSliderModalForPendingActions
                         isOpen={isImageModalOpen}
                         close={() => setIsImageModalOpen(false)}
                         selectedImgUrl={imageModalCurrentFileUrl}

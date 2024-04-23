@@ -9,7 +9,7 @@ import {
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import Slider from "react-slick";
-import { useCommentContext } from "../CommentBodyForPendingActions";
+import { useCommentContext } from "../CommentsBody";
 import getImageList from "../utils/getImageList";
 import "swiper/css";
 import "swiper/css/free-mode";
