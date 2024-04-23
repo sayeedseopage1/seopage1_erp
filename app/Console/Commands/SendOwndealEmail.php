@@ -34,8 +34,6 @@ class SendOwndealEmail extends Command
      */
     public function handle()
     {
-
-
         $now = \Carbon\Carbon::now()->toDateTimeString();
         $deals = Deal::whereNull('email_send_status')->where('is_drafted', 0)
             ->where('authorization_status', 1)
@@ -63,7 +61,6 @@ class SendOwndealEmail extends Command
         foreach($deals as $deal){
             $user = User::where('role_id', 8)->first();
             Notification::send($user, new DealAuthorizationSendNotification($deal, $deal->addedBy));
-dd('success');
             $user = User::where('id', $deal->pm_id)->first();
             if ($deal->project_type == 'fixed') {
                 Notification::send($user, new WonDealNotification($deal));
@@ -71,22 +68,16 @@ dd('success');
                 Notification::send($user, new HourlyDealNotification($deal));
             }
     
-            if ($deal->project_type == 'fixed') {
-                $users = User::where('role_id', 1)->get();
-                foreach ($users as $usr) {
-                    Notification::send($usr, new WonDealNotification($deal));
-                }
-            }else{
-                $users = User::where('role_id', 1)->get();
-                foreach ($users as $usr) {
-                    Notification::send($usr, new HourlyDealNotification($deal));
-                }
-            }
-    
-            // $users = User::where('role_id', 8)->get();
-    
-            // foreach ($users as $key => $user) {
-            //     Notification::send($user, new DealAuthorizationSendNotification($deal, Auth::user()));
+            // if ($deal->project_type == 'fixed') {
+            //     $users = User::where('role_id', 1)->get();
+            //     foreach ($users as $usr) {
+            //         Notification::send($usr, new WonDealNotification($deal));
+            //     }
+            // }else{
+            //     $users = User::where('role_id', 1)->get();
+            //     foreach ($users as $usr) {
+            //         Notification::send($usr, new HourlyDealNotification($deal));
+            //     }
             // }
 
             $deal->email_send_status = 1;
