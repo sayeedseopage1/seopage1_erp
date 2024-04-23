@@ -1,8 +1,11 @@
 import ReactModal from "react-modal";
 import PropTypes from "prop-types";
-import { ModalCloseButton } from "../Styles/ui";
 import { IoClose } from "react-icons/io5";
 
+// Styles
+import { ModalCloseButton } from "../Styles/ui";
+
+//import css
 
 const CustomModal = ({
     open,
@@ -14,7 +17,6 @@ const CustomModal = ({
     scroLlBottom = false,
     ...props
 }) => {
-    
     return (
         <ReactModal
             style={{
@@ -29,6 +31,9 @@ const CustomModal = ({
                     height: props.height || "fit-content",
                     maxHeight: props.maxHeight || "600px",
                     paddingTop: props.paddingTop || "20px",
+                    scrollbarWidth: "none",
+                    msOverflowStyle: "none",
+                    overflow: "auto",
                 },
             }}
             isOpen={open}
@@ -86,5 +91,5 @@ CustomModal.propTypes = {
     maxHeight: PropTypes.string,
     scroLlBottom: PropTypes.bool,
     zIndex: PropTypes.number,
-    paddingTop: PropTypes.string
+    paddingTop: PropTypes.string,
 };

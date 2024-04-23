@@ -117,6 +117,15 @@ export const addNewRulesValidation = (inputsData, newPolicyDataValidation) => {
       const listFieldsValidation = getValidFields(listFields, newPolicyDataValidation);
       return listFieldsValidation;
     }
+    case "mainDetails": {
+      const mainDetailsFields = {
+        policyName: inputsData.policyName,
+        department: inputsData.department,
+        key: inputsData.key
+      }
+      const mainDetailsFieldsValidation = getValidFields(mainDetailsFields, newPolicyDataValidation);
+      return mainDetailsFieldsValidation;
+    }
 
     default:
       break;

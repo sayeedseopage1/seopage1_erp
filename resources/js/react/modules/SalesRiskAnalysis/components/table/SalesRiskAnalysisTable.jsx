@@ -95,7 +95,7 @@ const SalesRiskAnalysisTable = ({
     refetch,
 }) => {
     // context (for Policy key Add )
-    const { isSalesRiskInputsLoading , policyKeys } = useContext(
+    const { isSalesRiskInputsLoading, policyKeys } = useContext(
         SalesRiskAnalysisContext
     );
 
@@ -396,10 +396,10 @@ const SalesRiskAnalysisTable = ({
                 points: "",
                 [name]: value,
             });
-            setIsFocusedOnTitleInput(true)
+            setIsFocusedOnTitleInput(true);
         } else {
             setEditPolicyData({ ...editPolicyData, [name]: value });
-            setIsFocusedOnTitleInput(true)
+            setIsFocusedOnTitleInput(true);
         }
     };
 
@@ -484,6 +484,30 @@ const SalesRiskAnalysisTable = ({
 
     // handle Edit Policy Update on server
     const handleEditPolicyUpdate = async () => {
+        const payloadForMainDataValidation = {
+            ...editPolicyDefaultData,
+            policyType: {
+                name: "mainDetails",
+            },
+        };
+        const validation = addNewRulesValidation(
+            payloadForMainDataValidation,
+            editPolicyDataValidation
+        );
+
+
+        if (
+            Object.entries(validation).some(
+                ([key, value]) => key !== "isSubmitting" && value === true
+            )
+        ) {
+            setEditPolicyDataValidation({
+                ...validation,
+                isSubmitting: true,
+            });
+            return;
+        }
+
         const payload = formatEditPolicyDataPayload(
             editPolicyDefaultData,
             editPolicyInputData,
@@ -553,7 +577,6 @@ const SalesRiskAnalysisTable = ({
     //
     useMemo(() => {
         if (editPolicyData?.policyType?.label) {
-            console.log(editPolicyData);
             setEditPolicyData({
                 ...editPolicyData,
                 title: autoGenerateTitle(editPolicyData),
@@ -579,11 +602,28 @@ const SalesRiskAnalysisTable = ({
     }, [editRuleData]);
     useEffect(() => {
         if (editPolicyDataValidation?.isSubmitting) {
+            const payloadForMainDataValidation = {
+                ...editPolicyDefaultData,
+                policyType: {
+                    name: "mainDetails",
+                },
+            };
+            const validation = addNewRulesValidation(
+                payloadForMainDataValidation,
+                editPolicyDataValidation
+            );
+            setEditPolicyDataValidation(validation);
+        }
+    }, [editPolicyDefaultData]);
+
+    useEffect(() => {
+        if (editPolicyDataValidation?.isSubmitting) {
             const validation = addNewRulesValidation(
                 {
                     ...editPolicyData,
                     policyName: editPolicyDefaultData?.policyName,
                     department: editPolicyDefaultData?.department,
+                    key: editPolicyDefaultData?.key,
                 },
                 editPolicyDataValidation
             );

@@ -37,7 +37,7 @@ const SaleRiskAuthorizePolicesModal = ({
                         padding: "10px 10px",
                         borderRadius: "10px",
                         backdropFilter: "blur(30px)",
-                        backgroundColor: "rgba(65, 65, 65, 0.308)",
+                        backgroundColor: "#e9e9e9",
                         border: "1px solid rgba(255, 255, 255, 0.089)",
                         cursor: "pointer",
                     }}

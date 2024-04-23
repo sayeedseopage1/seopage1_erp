@@ -141,11 +141,6 @@ const CustomAccordion = ({
                                     {accordionData.map((item, index) => (
                                         <li
                                             key={item.id}
-                                            onClick={() => {
-                                                setActive(item);
-                                                onChange(item);
-                                                toggle();
-                                            }}
                                             className={`${
                                                 index !==
                                                 accordionData.length - 1
@@ -156,10 +151,20 @@ const CustomAccordion = ({
                                                     ? "activeItem"
                                                     : ""
                                             }`}
+                                           
                                         >
-                                            {`${getAlphabeticIndex(index)}. ${
-                                                item.title
-                                            }`}
+                                            <button
+                                                onClick={() => {
+                                                    setActive(item);
+                                                    onChange(item);
+                                                    toggle();
+                                                }}
+                                                
+                                            >
+                                                {`${getAlphabeticIndex(
+                                                    index
+                                                )}. ${item.title}`}
+                                            </button>
                                         </li>
                                     ))}
                                 </ul>

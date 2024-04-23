@@ -36,6 +36,9 @@ export const SalesRiskAnalysisTableColumns = [
                                 checked={data?.status == "1"}
                                 readOnly
                                 id="customSwitch1"
+                                onClick={() => {
+                                    action.handlePolicyStatus(data);
+                                }}
                                 className="custom-control-input"
                             />
                             <label
@@ -50,18 +53,10 @@ export const SalesRiskAnalysisTableColumns = [
                                         : "Enable Now"
                                 }
                                 htmlFor="customSwitch1"
-                                onClick={() => {
-                                    action.handlePolicyStatus(data);
-                                }}
-                                onKeyDown={(event) => {
-                                    if (event.key === 'Enter') {
-                                        action.handlePolicyStatus(data);
-                                    }
-                                }}
                                 style={{
                                     cursor: "pointer",
                                 }}
-                                tabIndex={0}
+                            
                             >
                                 {/* Empty string as label */}
                             </label>{" "}

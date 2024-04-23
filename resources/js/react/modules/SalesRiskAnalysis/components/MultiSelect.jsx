@@ -24,12 +24,17 @@ const MultiSelect = ({
         const filterCountries = data?.filter(
             (item) => !selectedCountries?.includes(item)
         );
-        _Options = _.filter(filterCountries, (item) =>
-            _.includes(_.lowerCase(item?.name), _.lowerCase(search))
+        _Options = _.filter(
+            filterCountries, (item) => 
+            _.includes(_.lowerCase(item?.iso), _.lowerCase(search)) ||
+                _.includes(_.lowerCase(item?.name), _.lowerCase(search))
         );
     } else {
-        _Options = _.filter(data, (item) =>
-            _.includes(_.lowerCase(item?.name), _.lowerCase(search))
+        _Options = _.filter(
+            data,
+            (item) =>
+                _.includes(_.lowerCase(item?.iso), _.lowerCase(search)) ||
+                _.includes(_.lowerCase(item?.name), _.lowerCase(search))
         );
     }
 
@@ -46,12 +51,16 @@ const MultiSelect = ({
     }, [search]);
 
     const onSelected = (option) => {
-        if (newPolicyData?.countries?.some((selectedItem) => _.isEqual(selectedItem, option))) {
+        if (
+            newPolicyData?.countries?.some((selectedItem) =>
+                _.isEqual(selectedItem, option)
+            )
+        ) {
             let newPolicyDataCopy = { ...newPolicyData };
             let updateCountry = newPolicyDataCopy?.countries?.filter(
                 (country) => country.name !== option.name
             );
-    
+
             setSelected({
                 ...newPolicyDataCopy,
                 [filedName]: updateCountry,
@@ -59,7 +68,7 @@ const MultiSelect = ({
         } else if (newPolicyData?.countries?.length) {
             setSelected({
                 ...newPolicyData,
-                [filedName]: [...newPolicyData?.countries ?? [] , option],
+                [filedName]: [...(newPolicyData?.countries ?? []), option],
             });
         } else {
             setSelected({

@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import { MdOutlineKeyboardBackspace } from "react-icons/md";
+import dayjs from "dayjs";
 
 // Section component
 import SaleRiskAuthorizeHeader from "../components/sections/SaleRiskAuthorizeHeader";
@@ -361,29 +362,129 @@ const SalesRiskAuthorize = () => {
                                             }
                                         >
                                             <div className="d-flex justify-content-center align-items-center">
-                                                <SaleRiskAuthorizeButton
-                                                    className="ml-2 text-uppercase"
-                                                    border={`1px solid ${
-                                                        metaInfo?.deal?.sale_analysis_status?.includes(
+                                                <Switch>
+                                                    <Switch.Case
+                                                        condition={
+                                                            metaInfo?.deal
+                                                                ?.sale_analysis_status ==
+                                                            "auto-authorized"
+                                                        }
+                                                    >
+                                                        <SaleRiskAuthorizeButton
+                                                            className="ml-2 text-uppercase"
+                                                            border={`1px solid ${
+                                                                metaInfo?.deal?.sale_analysis_status?.includes(
+                                                                    "authorized"
+                                                                )
+                                                                    ? "#218838"
+                                                                    : "#F66"
+                                                            }`}
+                                                            textColor="#fff"
+                                                            color={
+                                                                metaInfo?.deal?.sale_analysis_status?.includes(
+                                                                    "authorized"
+                                                                )
+                                                                    ? "#218838"
+                                                                    : "#F66"
+                                                            }
+                                                        >
+                                                            {
+                                                                metaInfo?.deal
+                                                                    ?.sale_analysis_status
+                                                            }
+                                                        </SaleRiskAuthorizeButton>
+                                                    </Switch.Case>
+                                                    <Switch.Case
+                                                        condition={
+                                                            metaInfo?.deal
+                                                                ?.sale_analysis_status ===
                                                             "authorized"
-                                                        )
-                                                            ? "#218838"
-                                                            : "#F66"
-                                                    }`}
-                                                    textColor="#fff"
-                                                    color={
-                                                        metaInfo?.deal?.sale_analysis_status?.includes(
-                                                            "authorized"
-                                                        )
-                                                            ? "#218838"
-                                                            : "#F66"
-                                                    }
-                                                >
-                                                    {
-                                                        metaInfo?.deal
-                                                            ?.sale_analysis_status
-                                                    }
-                                                </SaleRiskAuthorizeButton>
+                                                        }
+                                                    >
+                                                        <div className="alert alert-success text-center">
+                                                            This Deal is
+                                                            Authorized by{" "}
+                                                            <a
+                                                                href={`/account/employees/${metaInfo?.authorizeBy?.id}`}
+                                                                className="badge badge-success"
+                                                                style={{
+                                                                    color: "#fff !important",
+                                                                }}
+                                                            >
+                                                                {
+                                                                    metaInfo
+                                                                        ?.authorizeBy
+                                                                        ?.name
+                                                                }
+                                                            </a>{" "}
+                                                            on{" "}
+                                                            <span className="badge badge-success">
+                                                                {dayjs(
+                                                                    metaInfo
+                                                                        ?.deal
+                                                                        ?.sale_authorize_on
+                                                                ).format(
+                                                                    "MMM DD, YYYY"
+                                                                )}
+                                                            </span>{" "}
+                                                            at{" "}
+                                                            <span className="badge badge-success">
+                                                                {dayjs(
+                                                                    metaInfo
+                                                                        ?.deal
+                                                                        ?.sale_authorize_on
+                                                                ).format(
+                                                                    "hh:mm A"
+                                                                )}
+                                                            </span>{" "}
+                                                        </div>
+                                                    </Switch.Case>
+                                                    <Switch.Case
+                                                        condition={
+                                                            metaInfo?.deal
+                                                                ?.sale_analysis_status ===
+                                                            "denied"
+                                                        }
+                                                    >
+                                                        <div className="alert alert-danger text-center">
+                                                            This Deal is Denied
+                                                            by{" "}
+                                                            <a
+                                                                href={`/account/employees/${metaInfo?.authorizeBy?.id}`}
+                                                                className="badge badge-danger"
+                                                                style={{
+                                                                    color: "#fff !important",
+                                                                }}
+                                                            >
+                                                                {
+                                                                    metaInfo
+                                                                        ?.authorizeBy
+                                                                        ?.name
+                                                                }
+                                                            </a>{" "}
+                                                            on{" "}
+                                                            <span className="badge badge-danger">
+                                                                {dayjs(
+                                                                    metaInfo
+                                                                        ?.deal
+                                                                        ?.sale_authorize_on
+                                                                ).format(
+                                                                    "MMM DD, YYYY"
+                                                                )}
+                                                            </span>{" "}
+                                                            at{" "}
+                                                            <span className="badge badge-danger">
+                                                                {dayjs(
+                                                                    metaInfo
+                                                                        ?.deal
+                                                                        ?.sale_authorize_on
+                                                                ).format(
+                                                                    "hh:mm A"
+                                                                )}
+                                                            </span>{" "}
+                                                        </div>
+                                                    </Switch.Case>
+                                                </Switch>
                                             </div>
                                         </Switch.Case>
                                     </Switch>

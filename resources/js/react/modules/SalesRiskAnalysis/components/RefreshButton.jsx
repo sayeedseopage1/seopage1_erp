@@ -9,6 +9,7 @@ export default function RefreshButton({ onClick, isLoading, ...rest }) {
             loaderTitle="Refreshing..."
             {...rest}
         >
+            <i className="fa-solid fa-rotate-right"/> {" "}
             Refresh
         </Button>
     );
