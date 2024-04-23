@@ -1,6 +1,7 @@
 @php
     $pmGoal = App\Models\ProjectPmGoal::where('id',$project_status)->first();
     $project = App\Models\Project::where('id',$pmGoal->project_id)->first();
+    $client = App\Models\User::where('id',$pmGoal->client_id)->first();
 @endphp
 <div id="holiday-detail-section">
     <div class="row">
@@ -43,12 +44,15 @@
                         <p class="mb-0 text-lightest f-14 w-30 text-capitalize">Project Name</p>
                         <div class="mb-0 text-dark-grey f-14 w-70 text-wrap p-0"><a href="{{route('projects.show',$project->id)}}">{{$project->project_name}}</a></div>
                     </div>
+                    <div class="col-12 px-0 pb-3 d-lg-flex d-md-flex d-block">
+                        <p class="mb-0 text-lightest f-14 w-30 text-capitalize">Client</p>
+                        <div class="mb-0 text-dark-grey f-14 w-70 text-wrap p-0"><a href="{{route('clients.show',$client->id)}}">{{$client->name}}</a></div>
+                    </div>
                     <x-cards.data-row :label="__('Goal Name')" :value="$pmGoal->goal_name" html="true" />
                     <x-cards.data-row :label="__('Goal Start Date')" :value="$pmGoal->goal_start_date" html="true" />
                     <x-cards.data-row :label="__('Goal Deadline')" :value="$pmGoal->goal_end_date" html="true" />
                     <x-cards.data-row :label="__('Duration')" :value="$pmGoal->duration . ' Days'" html="true" />
-                    {{-- <x-cards.data-row :label="__('Reason')" :value="$pmGoal->reason??'--'" html="true" />
-                    <x-cards.data-row :label="__('Suggestion')" :value="$pmGoal->suggestion??'--'" html="true" /> --}}
+                    {{-- <x-cards.data-row :label="__('Suggestion')" :value="$pmGoal->suggestion??'--'" html="true" /> --}}
                 </div>
             </div>
         </div>
