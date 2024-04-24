@@ -11,13 +11,31 @@ use Auth;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Models\ProjectMilestone;
+use DateTime;
 
 class HelperPmProjectStatusController extends AccountBaseController
 {
-    public function ProjectPmGoalCreation($pmGoalSetting,$findDeal, $findProject){
-        $pm_project = PMProject::where('project_id',$findProject->id)->first();
-        $milestone_count= ProjectMilestone::where('project_id',$findProject->id)->count();
-        if($pmGoalSetting->name == 'Regular'){
+    public function ProjectPmGoalCreation($pmGoalSetting, $findDeal, $findProject)
+    {
+
+        $milestone_count = ProjectMilestone::where('project_id', $findProject->id)->count();
+
+        // check if deadline is short
+        $d1 = new DateTime("$findDeal->start_date 00:00:00");
+        $d2 = new DateTime("$findDeal->deadline 23:59:59");
+        $interval = $d1->diff($d2);
+        $totalProjectDays = $interval->d;
+        $totalRequiedDayes = self::calculateProjectRequiedDays(strtolower($pmGoalSetting->name), $milestone_count);
+
+        if ($totalRequiedDayes !== 0 && $totalRequiedDayes > $totalProjectDays) {
+            self::createShortDeadlinePmGoals();
+            return;
+        }
+        // check end
+
+        $pm_project = PMProject::where('project_id', $findProject->id)->first();
+
+        if ($pmGoalSetting->name == 'Regular') {
             $p_pm_regular_goal = new ProjectPmGoal();
             $p_pm_regular_goal->project_id = $findProject->id;
             $p_pm_regular_goal->client_id = $findDeal->client_id;
@@ -62,8 +80,7 @@ class HelperPmProjectStatusController extends AccountBaseController
             $p_pm_regular_goal->duration = 12;
             $p_pm_regular_goal->added_by = Auth::user()->id;
             $p_pm_regular_goal->save();
-            if($milestone_count > 1)
-            {
+            if ($milestone_count > 1) {
                 $p_pm_regular_goal = new ProjectPmGoal();
                 $p_pm_regular_goal->project_id = $findProject->id;
                 $p_pm_regular_goal->client_id = $findDeal->client_id;
@@ -78,10 +95,8 @@ class HelperPmProjectStatusController extends AccountBaseController
                 $p_pm_regular_goal->duration = 15;
                 $p_pm_regular_goal->added_by = Auth::user()->id;
                 $p_pm_regular_goal->save();
-
             }
-            if($milestone_count > 2)
-            {
+            if ($milestone_count > 2) {
                 $p_pm_regular_goal = new ProjectPmGoal();
                 $p_pm_regular_goal->project_id = $findProject->id;
                 $p_pm_regular_goal->client_id = $findDeal->client_id;
@@ -96,31 +111,25 @@ class HelperPmProjectStatusController extends AccountBaseController
                 $p_pm_regular_goal->duration = 22;
                 $p_pm_regular_goal->added_by = Auth::user()->id;
                 $p_pm_regular_goal->save();
-                
             }
-            if($milestone_count > 3)
-            {
-                
-            $p_pm_regular_goal = new ProjectPmGoal();
-            $p_pm_regular_goal->project_id = $findProject->id;
-            $p_pm_regular_goal->client_id = $findDeal->client_id;
-            $p_pm_regular_goal->pm_id = $findDeal->pm_id;
-            $p_pm_regular_goal->project_type = $findDeal->project_type;
-            $p_pm_regular_goal->project_category = 'Regular';
-            $p_pm_regular_goal->goal_code = 'LM';
-            $p_pm_regular_goal->goal_name = 'This 1 more milestone need to be released until the completion of the project following every 7 days';
-            $p_pm_regular_goal->goal_type = 'last_milestone';
-            $p_pm_regular_goal->goal_start_date = $pm_project->created_at;
-            $p_pm_regular_goal->goal_end_date = Carbon::parse($pm_project->created_at)->addDay(29);
-            $p_pm_regular_goal->duration = 29;
-            $p_pm_regular_goal->added_by = Auth::user()->id;
-            $p_pm_regular_goal->save();
+            if ($milestone_count > 3) {
 
-
+                $p_pm_regular_goal = new ProjectPmGoal();
+                $p_pm_regular_goal->project_id = $findProject->id;
+                $p_pm_regular_goal->client_id = $findDeal->client_id;
+                $p_pm_regular_goal->pm_id = $findDeal->pm_id;
+                $p_pm_regular_goal->project_type = $findDeal->project_type;
+                $p_pm_regular_goal->project_category = 'Regular';
+                $p_pm_regular_goal->goal_code = 'LM';
+                $p_pm_regular_goal->goal_name = 'This 1 more milestone need to be released until the completion of the project following every 7 days';
+                $p_pm_regular_goal->goal_type = 'last_milestone';
+                $p_pm_regular_goal->goal_start_date = $pm_project->created_at;
+                $p_pm_regular_goal->goal_end_date = Carbon::parse($pm_project->created_at)->addDay(29);
+                $p_pm_regular_goal->duration = 29;
+                $p_pm_regular_goal->added_by = Auth::user()->id;
+                $p_pm_regular_goal->save();
             }
-               
-
-        }elseif($pmGoalSetting->name == 'Priority'){
+        } elseif ($pmGoalSetting->name == 'Priority') {
             $pPmPriorityGoal = new ProjectPmGoal();
             $pPmPriorityGoal->project_id = $findProject->id;
             $pPmPriorityGoal->client_id = $findDeal->client_id;
@@ -165,8 +174,7 @@ class HelperPmProjectStatusController extends AccountBaseController
             $pPmPriorityGoal->duration = 7;
             $pPmPriorityGoal->added_by = Auth::user()->id;
             $pPmPriorityGoal->save();
-            if($milestone_count > 1)
-            {
+            if ($milestone_count > 1) {
                 $pPmPriorityGoal = new ProjectPmGoal();
                 $pPmPriorityGoal->project_id = $findProject->id;
                 $pPmPriorityGoal->client_id = $findDeal->client_id;
@@ -181,11 +189,8 @@ class HelperPmProjectStatusController extends AccountBaseController
                 $pPmPriorityGoal->duration = 12;
                 $pPmPriorityGoal->added_by = Auth::user()->id;
                 $pPmPriorityGoal->save();
-    
-
             }
-            if($milestone_count > 2)
-            {
+            if ($milestone_count > 2) {
                 $pPmPriorityGoal = new ProjectPmGoal();
                 $pPmPriorityGoal->project_id = $findProject->id;
                 $pPmPriorityGoal->client_id = $findDeal->client_id;
@@ -200,10 +205,8 @@ class HelperPmProjectStatusController extends AccountBaseController
                 $pPmPriorityGoal->duration = 15;
                 $pPmPriorityGoal->added_by = Auth::user()->id;
                 $pPmPriorityGoal->save();
-
             }
-            if($milestone_count > 3)
-            {
+            if ($milestone_count > 3) {
                 $pPmPriorityGoal = new ProjectPmGoal();
                 $pPmPriorityGoal->project_id = $findProject->id;
                 $pPmPriorityGoal->client_id = $findDeal->client_id;
@@ -218,11 +221,8 @@ class HelperPmProjectStatusController extends AccountBaseController
                 $pPmPriorityGoal->duration = 22;
                 $pPmPriorityGoal->added_by = Auth::user()->id;
                 $pPmPriorityGoal->save();
-
             }
-           
-
-        }elseif($pmGoalSetting->name == 'High-priority'){
+        } elseif ($pmGoalSetting->name == 'High-priority') {
             $pPmHPGoal = new ProjectPmGoal();
             $pPmHPGoal->project_id = $findProject->id;
             $pPmHPGoal->client_id = $findDeal->client_id;
@@ -267,8 +267,7 @@ class HelperPmProjectStatusController extends AccountBaseController
             $pPmHPGoal->duration = 7;
             $pPmHPGoal->added_by = Auth::user()->id;
             $pPmHPGoal->save();
-            if($milestone_count > 1)
-            {
+            if ($milestone_count > 1) {
                 $pPmHPGoal = new ProjectPmGoal();
                 $pPmHPGoal->project_id = $findProject->id;
                 $pPmHPGoal->client_id = $findDeal->client_id;
@@ -283,10 +282,8 @@ class HelperPmProjectStatusController extends AccountBaseController
                 $pPmHPGoal->duration = 12;
                 $pPmHPGoal->added_by = Auth::user()->id;
                 $pPmHPGoal->save();
-
             }
-            if($milestone_count > 2)
-            {
+            if ($milestone_count > 2) {
                 $pPmHPGoal = new ProjectPmGoal();
                 $pPmHPGoal->project_id = $findProject->id;
                 $pPmHPGoal->client_id = $findDeal->client_id;
@@ -301,11 +298,8 @@ class HelperPmProjectStatusController extends AccountBaseController
                 $pPmHPGoal->duration = 15;
                 $pPmHPGoal->added_by = Auth::user()->id;
                 $pPmHPGoal->save();
-    
-
             }
-            if($milestone_count > 3)
-            {
+            if ($milestone_count > 3) {
                 $pPmHPGoal = new ProjectPmGoal();
                 $pPmHPGoal->project_id = $findProject->id;
                 $pPmHPGoal->client_id = $findDeal->client_id;
@@ -320,11 +314,8 @@ class HelperPmProjectStatusController extends AccountBaseController
                 $pPmHPGoal->duration = 22;
                 $pPmHPGoal->added_by = Auth::user()->id;
                 $pPmHPGoal->save();
-    
-                
             }
-
-        }elseif($pmGoalSetting->name == 'Top most priority'){
+        } elseif ($pmGoalSetting->name == 'Top most priority') {
             $pPmTMPGoal = new ProjectPmGoal();
             $pPmTMPGoal->project_id = $findProject->id;
             $pPmTMPGoal->client_id = $findDeal->client_id;
@@ -369,8 +360,7 @@ class HelperPmProjectStatusController extends AccountBaseController
             $pPmTMPGoal->duration = 7;
             $pPmTMPGoal->added_by = Auth::user()->id;
             $pPmTMPGoal->save();
-            if($milestone_count > 1)
-            {
+            if ($milestone_count > 1) {
                 $pPmTMPGoal = new ProjectPmGoal();
                 $pPmTMPGoal->project_id = $findProject->id;
                 $pPmTMPGoal->client_id = $findDeal->client_id;
@@ -379,16 +369,14 @@ class HelperPmProjectStatusController extends AccountBaseController
                 $pPmTMPGoal->project_category = 'Top most priority';
                 $pPmTMPGoal->goal_code = 'MPMR';
                 $pPmTMPGoal->goal_name = 'One more milestone has to be released between 7-12 th days';
-                $pPmTMPGoal->goal_type = 'more_milestone_released'; 
+                $pPmTMPGoal->goal_type = 'more_milestone_released';
                 $pPmTMPGoal->goal_start_date = $pm_project->created_at;
                 $pPmTMPGoal->goal_end_date = Carbon::parse($pm_project->created_at)->addDay(12);
                 $pPmTMPGoal->duration = 12;
                 $pPmTMPGoal->added_by = Auth::user()->id;
                 $pPmTMPGoal->save();
-
             }
-            if($milestone_count > 2)
-            {
+            if ($milestone_count > 2) {
                 $pPmTMPGoal = new ProjectPmGoal();
                 $pPmTMPGoal->project_id = $findProject->id;
                 $pPmTMPGoal->client_id = $findDeal->client_id;
@@ -403,30 +391,25 @@ class HelperPmProjectStatusController extends AccountBaseController
                 $pPmTMPGoal->duration = 15;
                 $pPmTMPGoal->added_by = Auth::user()->id;
                 $pPmTMPGoal->save();
-
             }
-            if($milestone_count > 3)
-            {
-                
-            $pPmTMPGoal = new ProjectPmGoal();
-            $pPmTMPGoal->project_id = $findProject->id;
-            $pPmTMPGoal->client_id = $findDeal->client_id;
-            $pPmTMPGoal->pm_id = $findDeal->pm_id;
-            $pPmTMPGoal->project_type = $findDeal->project_type;
-            $pPmTMPGoal->project_category = 'Top most priority';
-            $pPmTMPGoal->goal_code = 'LM';
-            $pPmTMPGoal->goal_name = 'At least 1 more milestone released between 12-15 days';
-            $pPmTMPGoal->goal_type = 'last_milestone';
-            $pPmTMPGoal->goal_start_date = $pm_project->created_at;
-            $pPmTMPGoal->goal_end_date = Carbon::parse($pm_project->created_at)->addDay(22);
-            $pPmTMPGoal->duration = 22;
-            $pPmTMPGoal->added_by = Auth::user()->id;
-            $pPmTMPGoal->save();
+            if ($milestone_count > 3) {
 
+                $pPmTMPGoal = new ProjectPmGoal();
+                $pPmTMPGoal->project_id = $findProject->id;
+                $pPmTMPGoal->client_id = $findDeal->client_id;
+                $pPmTMPGoal->pm_id = $findDeal->pm_id;
+                $pPmTMPGoal->project_type = $findDeal->project_type;
+                $pPmTMPGoal->project_category = 'Top most priority';
+                $pPmTMPGoal->goal_code = 'LM';
+                $pPmTMPGoal->goal_name = 'At least 1 more milestone released between 12-15 days';
+                $pPmTMPGoal->goal_type = 'last_milestone';
+                $pPmTMPGoal->goal_start_date = $pm_project->created_at;
+                $pPmTMPGoal->goal_end_date = Carbon::parse($pm_project->created_at)->addDay(22);
+                $pPmTMPGoal->duration = 22;
+                $pPmTMPGoal->added_by = Auth::user()->id;
+                $pPmTMPGoal->save();
             }
- 
-
-        }else{
+        } else {
             $pPmCSGoal = new ProjectPmGoal();
             $pPmCSGoal->project_id = $findProject->id;
             $pPmCSGoal->client_id = $findDeal->client_id;
@@ -471,8 +454,7 @@ class HelperPmProjectStatusController extends AccountBaseController
             $pPmCSGoal->duration = 7;
             $pPmCSGoal->added_by = Auth::user()->id;
             $pPmCSGoal->save();
-            if($milestone_count > 1)
-            {
+            if ($milestone_count > 1) {
                 $pPmCSGoal = new ProjectPmGoal();
                 $pPmCSGoal->project_id = $findProject->id;
                 $pPmCSGoal->client_id = $findDeal->client_id;
@@ -487,11 +469,9 @@ class HelperPmProjectStatusController extends AccountBaseController
                 $pPmCSGoal->duration = 12;
                 $pPmCSGoal->added_by = Auth::user()->id;
                 $pPmCSGoal->save();
-
             }
-           
-            if($milestone_count > 2)
-            {
+
+            if ($milestone_count > 2) {
                 $pPmCSGoal = new ProjectPmGoal();
                 $pPmCSGoal->project_id = $findProject->id;
                 $pPmCSGoal->client_id = $findDeal->client_id;
@@ -506,11 +486,9 @@ class HelperPmProjectStatusController extends AccountBaseController
                 $pPmCSGoal->duration = 15;
                 $pPmCSGoal->added_by = Auth::user()->id;
                 $pPmCSGoal->save();
-
             }
-           
-            if($milestone_count > 3)
-            {
+
+            if ($milestone_count > 3) {
                 $pPmCSGoal = new ProjectPmGoal();
                 $pPmCSGoal->project_id = $findProject->id;
                 $pPmCSGoal->client_id = $findDeal->client_id;
@@ -525,16 +503,15 @@ class HelperPmProjectStatusController extends AccountBaseController
                 $pPmCSGoal->duration = 22;
                 $pPmCSGoal->added_by = Auth::user()->id;
                 $pPmCSGoal->save();
-
             }
-           
         }
     }
-    public function HourlyProjectPmGoalCreation($findDeal, $findProject){
-        $pm_project = PMProject::where('project_id',$findProject->id)->first();
-        $project = Project::where('id',$pm_project->project_id)->first();
-        if($project->status != 'finished'){
-            if($findDeal->hourly_rate <=20 ){
+    public function HourlyProjectPmGoalCreation($findDeal, $findProject)
+    {
+        $pm_project = PMProject::where('project_id', $findProject->id)->first();
+        $project = Project::where('id', $pm_project->project_id)->first();
+        if ($project->status != 'finished') {
+            if ($findDeal->hourly_rate <= 20) {
                 $p_pm_regular_goal = new ProjectPmGoal();
                 $p_pm_regular_goal->project_id = $findProject->id;
                 $p_pm_regular_goal->client_id = $findDeal->client_id;
@@ -609,8 +586,7 @@ class HelperPmProjectStatusController extends AccountBaseController
                 $p_pm_regular_goal->duration = 7;
                 $p_pm_regular_goal->added_by = Auth::user()->id;
                 $p_pm_regular_goal->save();
-
-            }elseif($findDeal->hourly_rate >=21 && $findDeal->hourly_rate <=30){
+            } elseif ($findDeal->hourly_rate >= 21 && $findDeal->hourly_rate <= 30) {
                 $p_pm_regular_goal = new ProjectPmGoal();
                 $p_pm_regular_goal->project_id = $findProject->id;
                 $p_pm_regular_goal->client_id = $findDeal->client_id;
@@ -685,8 +661,7 @@ class HelperPmProjectStatusController extends AccountBaseController
                 $p_pm_regular_goal->duration = 7;
                 $p_pm_regular_goal->added_by = Auth::user()->id;
                 $p_pm_regular_goal->save();
-
-            }elseif($findDeal->hourly_rate >=31 && $findDeal->hourly_rate <=40){
+            } elseif ($findDeal->hourly_rate >= 31 && $findDeal->hourly_rate <= 40) {
                 $p_pm_regular_goal = new ProjectPmGoal();
                 $p_pm_regular_goal->project_id = $findProject->id;
                 $p_pm_regular_goal->client_id = $findDeal->client_id;
@@ -761,8 +736,7 @@ class HelperPmProjectStatusController extends AccountBaseController
                 $p_pm_regular_goal->duration = 7;
                 $p_pm_regular_goal->added_by = Auth::user()->id;
                 $p_pm_regular_goal->save();
-
-            }elseif($findDeal->hourly_rate >=41 && $findDeal->hourly_rate <=50){
+            } elseif ($findDeal->hourly_rate >= 41 && $findDeal->hourly_rate <= 50) {
                 $p_pm_regular_goal = new ProjectPmGoal();
                 $p_pm_regular_goal->project_id = $findProject->id;
                 $p_pm_regular_goal->client_id = $findDeal->client_id;
@@ -837,8 +811,7 @@ class HelperPmProjectStatusController extends AccountBaseController
                 $p_pm_regular_goal->duration = 7;
                 $p_pm_regular_goal->added_by = Auth::user()->id;
                 $p_pm_regular_goal->save();
-
-            }else{
+            } else {
                 $p_pm_regular_goal = new ProjectPmGoal();
                 $p_pm_regular_goal->project_id = $findProject->id;
                 $p_pm_regular_goal->client_id = $findDeal->client_id;
@@ -913,8 +886,43 @@ class HelperPmProjectStatusController extends AccountBaseController
                 $p_pm_regular_goal->duration = 7;
                 $p_pm_regular_goal->added_by = Auth::user()->id;
                 $p_pm_regular_goal->save();
-
             }
         }
+    }
+
+    function calculateProjectRequiedDays($priority, $milestoneCount)
+    {
+        if ($milestoneCount <= 0 ||
+        ! in_array($priority, ['regular', 'priority', 'highPriority', 'topMost', 'criticallySensitive'])
+        ) {
+            return 0;
+        }
+
+        $priority = in_array($priority, ['highPriority', 'topMost', 'criticallySensitive']) ? 'priority' : $priority;
+
+        $timeMatrix = [
+            'regular' => [
+                '1' => 12,
+                '2' => 15,
+                '3' => 22,
+                '4' => 29,
+                '5' => 36
+            ],
+            'priority' => [
+                '1' => 7,
+                '2' => 12,
+                '3' => 15,
+                '4' => 22,
+                '5' => 29,
+            ]
+        ];
+        if ($milestoneCount > 5) return $timeMatrix[$priority]['5'] + (($milestoneCount - 5) * 7);
+
+        return $timeMatrix[$priority][$milestoneCount];
+    }
+
+    function createShortDeadlinePmGoals()
+    {
+
     }
 }
