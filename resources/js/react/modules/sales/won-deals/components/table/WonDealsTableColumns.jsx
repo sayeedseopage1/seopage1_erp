@@ -77,7 +77,7 @@ export const WonDealsTableColumns = [
             const data = row.original;
             return (
                 <CreatedBy href={`/account/clients/${data.client_id}`}>
-                    <Avatar
+                    {/* <Avatar
                         type="circle"
                         name={data?.client_name}
                         src={
@@ -85,6 +85,11 @@ export const WonDealsTableColumns = [
                                 ? `/user-uploads/avatar/${data?.client_avatar}`
                                 : null
                         }
+                    /> */}
+
+                    <PersonAvatar
+                        name={data?.client_name}
+                        avatar={data?.client_avatar}
                     />
 
                     <span>{data?.client_name}</span>
@@ -182,7 +187,7 @@ export const WonDealsTableColumns = [
 
             return (
                 <CreatedBy href={`/account/employees/${data.added_by}`}>
-                    <Avatar
+                    {/* <Avatar
                         type="circle"
                         name={data?.added_by_name}
                         src={
@@ -190,6 +195,10 @@ export const WonDealsTableColumns = [
                                 ? `/user-uploads/avatar/${data?.added_by_avatar}`
                                 : null
                         }
+                    /> */}
+                    <PersonAvatar
+                        name={data?.added_by_name}
+                        avatar={data?.added_by_avatar}
                     />
 
                     <span>{data?.added_by_name}</span>
