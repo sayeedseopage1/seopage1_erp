@@ -16,27 +16,22 @@ const RelevantModal = ({ isRelevantModal, setIsRelevantModal }) => {
         (state) => state.pendingActions.pendingActionId
     );
 
-    const [updatePendingAction] = usePendingActionsIdMutation();
+    const [updatePendingAction, { isLoading }] = usePendingActionsIdMutation();
 
     const submitHandler = (e) => {
         e.preventDefault();
 
         updatePendingAction({
             id: pendingActionId,
-        });
-        // .unwrap()
-        // .then((res) => {
-        //     setIsRelevantModal(false);
-        //     increaseCount();
-        // })
-        // .catch((err) => {
-        //     console.log(err);
-        // });
-
-        setIsRelevantModal(false);
-
-        //increase count is rerendering pending actions page
-        increaseCount();
+        })
+            .unwrap()
+            .then((res) => {
+                setIsRelevantModal(false);
+                increaseCount();
+            })
+            .catch((err) => {
+                console.log(err);
+            });
     };
     return (
         <ReactModal
@@ -126,8 +121,9 @@ const RelevantModal = ({ isRelevantModal, setIsRelevantModal }) => {
                         type="button"
                         class="btn btn-primary"
                         onClick={submitHandler}
+                        disabled={isLoading}
                     >
-                        Yes
+                        {isLoading ? "processing.." : "Yes"}
                     </button>
                 </Flex>
             </div>
