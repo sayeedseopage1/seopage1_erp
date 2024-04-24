@@ -62,7 +62,11 @@ export const EvaluationTableColumns = [
         accessorKey: "total_hours",
         cell: ({ row }) => {
             const data = row.original;
-            return <div>{convertTime(data?.total_min)}</div>;
+            return (
+                <div style={{ marginLeft: "50px" }}>
+                    {convertTime(data?.total_min)}
+                </div>
+            );
         },
     },
 
