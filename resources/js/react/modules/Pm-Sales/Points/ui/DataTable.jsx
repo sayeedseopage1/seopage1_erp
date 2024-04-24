@@ -141,8 +141,7 @@ const DataTable = ({ data, defaultColumns, isLoading }) => {
                         {!isLoading &&
                             <React.Fragment>
                                 {
-                                    // TODO: this sorting can remove later
-                                    currentPageData.length > 0 ? currentPageData?.sort((a, b) => a.id - b.id)?.map((data) => (
+                                    currentPageData?.length > 0 ? currentPageData?.map((data) => (
                                         <div key={data.id} className="cnx__table_tr sp1__pp_table_tr">
                                             {columns.map(d => (
                                                 <div key={d.id} className={`cnx__table_td sp1__pp_table_td sp1__pp_table_col_${d.id}`}>
