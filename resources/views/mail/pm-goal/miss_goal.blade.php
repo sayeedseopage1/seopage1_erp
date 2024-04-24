@@ -28,7 +28,7 @@
 @lang('Add an explanation as to why this goal was not met!')
 @endcomponent
 
-@lang('Please remember that meeting goals is essential for fulfilling our commitments to the client and also keeping your performance metrics good.'),<br><br>
+@lang('Please remember that meeting goals is essential for fulfilling our commitments to the client and also keeping your performance metrics good.')<br><br>
 @lang('email.regards'),<br>
 {{ config('app.name') }}
 @endcomponent

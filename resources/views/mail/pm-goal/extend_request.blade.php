@@ -25,10 +25,10 @@
 
 
 @component('mail::button', ['url' => $url])
-@lang('Add your ratings')
+@lang('Extend')
 @endcomponent
 
-@lang('Additionally, if needed, have a session with the concerned project manager to understand how justified the goal extension request is.'),<br><br>
+@lang('Additionally, if needed, have a session with the concerned project manager to understand how justified the goal extension request is.')<br><br>
 @lang('email.regards'),<br>
 {{ config('app.name') }}
 @endcomponent

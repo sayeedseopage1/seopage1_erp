@@ -1896,8 +1896,8 @@ class HelperPendingActionController extends AccountBaseController
                 $action = new PendingAction();
                 $action->code = 'PMGE';
                 $action->serial = 'PMGE'.'x0';
-                $action->item_name= 'Goal expire in 24 hours';
-                $action->heading= 'Goal expire in 24 hours!';
+                $action->item_name= 'Goal Expire in 24 hours';
+                $action->heading= 'Goal Expire in 24 hours!';
                 $action->message = 'Goal ('.$goal->goal_name.') for project <a href="'.route('projects.show',$project->id).'">'.$project->project_name.'</a> from client <a href="'.route('clients.show',$client->id).'">'.$client->name.'</a> will expire in ';
                 if($difference_in_hours > 0)
                 {
@@ -1918,6 +1918,12 @@ class HelperPendingActionController extends AccountBaseController
                         'button_color' => 'primary',
                         'button_type' => 'redirect_url',
                         'button_url' => route('project-status.index', ['modal_type' => 'filtered_goal_details','goal_id' => $goal->id,'project_id' => $project->id]),
+                    ],
+                    [
+                        'button_name' => 'Complete goal',
+                        'button_color' => 'primary',
+                        'button_type' => 'redirect_url',
+                        'button_url' => route('projects.show', ['project' => $project->id, 'tab' => 'milestones']),
                     ],
 
                 ];
@@ -1973,7 +1979,7 @@ class HelperPendingActionController extends AccountBaseController
                 $action->serial = 'PMRE'.'x'.$key;
                 $action->item_name= 'Review Goal missing explanation';
                 $action->heading= 'Review Goal missing explanation!';
-                $action->message = 'Review explanation given by PM on missing goal'.$goal->goal_name.' ('.$goal->description.') for project <a href="'.route('projects.show',$project->id).'">'.$project->project_name.'</a> from client <a href="'.route('clients.show',$client->id).'">'.$client->name.'</a> !';
+                $action->message = 'Review explanation given by PM on missing goal ' . $goal->goal_name .' ('. $goal->description .') for project <a href="'.route('projects.show',$project->id).'">'.$project->project_name.'</a> from client <a href="'.route('clients.show',$client->id).'">'.$client->name.'</a> !';
                 $action->timeframe= 24;
                 $action->goal_id = $goal->id;
                 $action->project_id = $project->id;
@@ -2029,7 +2035,7 @@ class HelperPendingActionController extends AccountBaseController
                 $action->authorization_for= $authorizer->id; 
                 $button = [
                     [
-                        'button_name' => 'Review explanation and add your ratings!',
+                        'button_name' => 'Extend',
                         'button_color' => 'primary',
                         'button_type' => 'redirect_url',
                         'button_url' => route('project-status.index', ['modal_type' => 'filtered_goal_details', 'goal_id' => $pm_goal->id, 'project_id' => $project->id]),

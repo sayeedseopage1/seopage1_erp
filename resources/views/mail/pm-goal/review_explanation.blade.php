@@ -29,7 +29,7 @@
 @endcomponent
 
 @lang('missing goals and can add their comments and ratings!'),<br><br>
-@lang('Additionally, if needed, have a session with the concerned project manager to explain the lackings he had here so he can meet his goals in the future.'),<br><br>
+@lang('Additionally, if needed, have a session with the concerned project manager to explain the lackings he had here so he can meet his goals in the future.')<br><br>
 @lang('email.regards'),<br>
 {{ config('app.name') }}
 @endcomponent

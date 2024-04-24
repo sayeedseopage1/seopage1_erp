@@ -95,7 +95,7 @@ class PmGoalExtendRequestNotification extends Notification
         </p>'
         .
         '<p>
-            <b style="color: black">' . __('Extension requested') . ': '.'</b>' . '<span>'.$goal->extended_day. 'Days'.'</span>'. '
+            <b style="color: black">' . __('Extension requested') . ': '.'</b>' . '<span>'.$goal->extended_day. ' Days'.'</span>'. '
         </p>'
         .
         '<p>

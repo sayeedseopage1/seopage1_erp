@@ -291,7 +291,7 @@ class ProjectStatusController extends AccountBaseController
                     $past_action->serial = $action->serial;
                     $past_action->action_id = $action->id;
                     $past_action->heading = $action->heading;
-                    $past_action->message = 'Explanation submitted for missed Goal '.$pm_goal->goal_name.' ('.$pm_goal->description.') from client <a href="'.route('clients.show',$client->id).'">'.$client->name.'</a>  by PM <a href="'.route('employees.show',$project_manager->id).'">'.$project_manager->name.'</a> !';
+                    $past_action->message = 'Explanation given by PM on missing goal '. $pm_goal->goal_name .' ('. $pm_goal->description .') for project <a href="'.route('projects.show',$project->id).'">'.$project->project_name.'</a> from client <a href="'.route('clients.show',$client->id).'">'.$client->name.'</a>  was reviewed by Admin <a href="'.route('employees.show',$authorize_by->id).'">'.$authorize_by->name.'</a> !';
                     $past_action->timeframe = $action->timeframe;
                     $past_action->authorization_for = $action->authorization_for;
                     $past_action->authorized_by = $action->authorized_by;
@@ -499,9 +499,24 @@ class ProjectStatusController extends AccountBaseController
                     $action->authorized_at= Carbon::now();
                     $action->past_status = 1;
                     $action->save();
-                    // $project_manager= User::where('id',$pm_goal->pm_id)->first();
+
+                    $pm= User::where('id',$pm_goal->pm_id)->first();
                     $client= User::where('id',$pm_goal->client_id)->first();
                     $authorize_by= User::where('id',$action->authorized_by)->first();
+                    $goal_count = '';
+                    if($pm_goal->duration ==3){
+                        $goal_count = '1st';
+                    }elseif($pm_goal->duration ==7){
+                        $goal_count = '2nd';
+                    }elseif($pm_goal->duration ==12){
+                        $goal_count = '3rd';
+                    }elseif($pm_goal->duration ==15){
+                        $goal_count = '4th';
+                    }elseif($pm_goal->duration ==22){
+                        $goal_count = '5th';
+                    }else{
+                        $goal_count = '6th';
+                    }
                     
                     $past_action= new PendingActionPast();
                     $past_action->item_name = $action->item_name;
@@ -509,7 +524,12 @@ class ProjectStatusController extends AccountBaseController
                     $past_action->serial = $action->serial;
                     $past_action->action_id = $action->id;
                     $past_action->heading = $action->heading;
-                    $past_action->message = 'Explanation given by PM on missing goal '.$pm_goal->goal_name.' ('.$pm_goal->description.') for project <a href="'.route('projects.show',$project->id).'">'.$project->project_name.'</a> from client <a href="'.route('clients.show',$client->id).'">'.$client->project_name.'</a>  was reviewed by admin <a href="'.route('employees.show',$authorize_by->id).'">'.$authorize_by->name.'</a>!';
+                    if($pm_goal->extended_request_status == 2){
+                        $past_action->message = 'Goal ('. $goal_count .') (Name: '. $pm_goal->goal_name .') extension request PM <a href="'. route('employees.show', $pm->id) .'">'. $pm->name .'</a> for project (<a href="'. route('projects.show', $project->id) .'">'. $project->project_name .'</a>) from client (<a href="'. route('clients.show', $client->id) .'">'. $client->name .'</a>) was accepted by Admin <a href="'. route('employees.show', $authorize_by->id) .'">'. $authorize_by->name .'</a>!';
+                    }
+                    if($pm_goal->extended_request_status == 3){
+                        $past_action->message = 'Goal ('. $goal_count .') (Name: '. $pm_goal->goal_name .') extension request PM <a href="'. route('employees.show', $pm->id) .'">'. $pm->name .'</a> for project (<a href="'. route('projects.show', $project->id) .'">'. $project->project_name .'</a>) from client (<a href="'. route('clients.show', $client->id) .'">'. $client->name .'</a>) was rejected by Admin <a href="'. route('employees.show', $authorize_by->id) .'">'. $authorize_by->name .'</a>!';
+                    }
                     $past_action->timeframe = $action->timeframe;
                     $past_action->authorization_for = $action->authorization_for;
                     $past_action->authorized_by = $action->authorized_by;

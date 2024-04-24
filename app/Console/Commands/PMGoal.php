@@ -220,6 +220,7 @@ class PMGoal extends Command
             if($goal_check->goal_end_date >= $currentTime && $goal_end_date <=$currentTime || $goal_check->extended_goal_end_day >= $currentTime && $goal_ext_end_date <=$currentTime){
                 $difference_in_hours = $currentTime->diffInHours($goal_end_date);
                 $difference_in_hours = $currentTime->diffInHours($goal_ext_end_date);
+                $difference_in_hours += 1;
                 if( $difference_in_hours <= 24)
                 {
                     if($goal_check->mail_status == 0){

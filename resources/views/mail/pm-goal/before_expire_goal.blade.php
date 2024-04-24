@@ -28,7 +28,7 @@
 @lang('View')
 @endcomponent
 
-@lang('Please do your best to meet the goal before it will expire to keep your performance metrics good!'),<br><br>
+@lang('Please do your best to meet the goal before it will expire to keep your performance metrics good!')<br><br>
 @lang('email.regards'),<br>
 {{ config('app.name') }}
 @endcomponent
