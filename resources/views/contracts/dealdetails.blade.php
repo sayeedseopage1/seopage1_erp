@@ -694,7 +694,7 @@
                             <div class="col-md-12">
                                 <div class="form-check">
 
-                                    @if (in_array($deal->status, ['pending', 'analysis']))
+                                    @if (in_array($deal->sale_analysis_status, ['pending', 'analysis']))
                                     <input class="form-check-input" type="checkbox" value="1" name="is_drafted" id="is_drafted" checked disabled>
                                     <label class="form-check-label m-1" for="flexCheckDefault">
                                         Keep it as draft <b>(Awaiting for admin authorization)</b>

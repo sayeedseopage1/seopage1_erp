@@ -13,7 +13,7 @@ class Deal extends Model
     use HasFactory;
     protected $table = 'deals';
 
-    static $saleAnalysisStatus = ['pending', 'analysis', 'authorized', 'auto-authorized', 'denied'];
+    static $saleAnalysisStatus = ['privious-won', 'privious-denied', 'pending', 'analysis', 'authorized', 'auto-authorized', 'denied'];
 
     public function original_currency()
     {
