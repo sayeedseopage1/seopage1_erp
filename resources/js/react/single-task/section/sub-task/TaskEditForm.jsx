@@ -347,7 +347,7 @@ const TaskEditForm = ({ task, singleTask: row, onSubmit, isLoading, onClose }) =
             }
 
             if (!referenceList[0].reference &&
-                JSON.parse(graphicWorkDetails?.reference)[0]?.reference == '' &&
+                !JSON.parse(graphicWorkDetails?.reference)[0]?.reference &&
                 _.isEmpty(referenceFile) &&
                 _.isEmpty(defaultRefFiles)) {
                 err.reference = "The reference field is required";
@@ -419,6 +419,24 @@ const TaskEditForm = ({ task, singleTask: row, onSubmit, isLoading, onClose }) =
         if (typeOfGraphicsCategory?.id === 8) {
             if (_.isEmpty(imgOrVidForWork) && _.isEmpty(defaultImgOrVidForWork) && !workableUrl && !graphicWorkDetails?.workable_url) {
                 err.imgOrVidForWork = "Images/videos is required for work";
+                count++;
+            }
+        }
+
+        if (fontUrl) {
+            if (!checkIsURL(fontUrl)) {
+                count++;
+            }
+        }
+
+        if (workableUrl) {
+            if (!checkIsURL(workableUrl)) {
+                count++;
+            }
+        }
+
+        if (referenceList[0]?.reference) {
+            if (!checkIsURL(referenceList[0]?.reference)) {
                 count++;
             }
         }
@@ -1386,6 +1404,9 @@ const TaskEditForm = ({ task, singleTask: row, onSubmit, isLoading, onClose }) =
                                         handleChange(e, setFontUrl)
                                     }
                                 />
+                                {fontUrl && !validateUrl(fontUrl) && (
+                                    <div style={{ color: "red", marginTop: "-13px" }}>Please enter a valid URL</div>
+                                )}
                             </div>
                             {/* Brand guideline */}
                             <div className="col-12">

@@ -14667,6 +14667,7 @@ var TaskEditForm = function TaskEditForm(_ref2) {
 
   // check validation
   var isValid = function isValid() {
+    var _referenceList$;
     var count = 0;
     var err = new Object();
     var errorMessages = {
@@ -14702,7 +14703,7 @@ var TaskEditForm = function TaskEditForm(_ref2) {
         err.typeOfGraphicsCategory = "You have to select Type of graphic work";
         count++;
       }
-      if (!referenceList[0].reference && ((_JSON$parse$ = JSON.parse(graphicWorkDetails === null || graphicWorkDetails === void 0 ? void 0 : graphicWorkDetails.reference)[0]) === null || _JSON$parse$ === void 0 ? void 0 : _JSON$parse$.reference) == '' && lodash__WEBPACK_IMPORTED_MODULE_0___default().isEmpty(referenceFile) && lodash__WEBPACK_IMPORTED_MODULE_0___default().isEmpty(defaultRefFiles)) {
+      if (!referenceList[0].reference && !((_JSON$parse$ = JSON.parse(graphicWorkDetails === null || graphicWorkDetails === void 0 ? void 0 : graphicWorkDetails.reference)[0]) !== null && _JSON$parse$ !== void 0 && _JSON$parse$.reference) && lodash__WEBPACK_IMPORTED_MODULE_0___default().isEmpty(referenceFile) && lodash__WEBPACK_IMPORTED_MODULE_0___default().isEmpty(defaultRefFiles)) {
         err.reference = "The reference field is required";
         count++;
       }
@@ -14765,6 +14766,22 @@ var TaskEditForm = function TaskEditForm(_ref2) {
     if ((typeOfGraphicsCategory === null || typeOfGraphicsCategory === void 0 ? void 0 : typeOfGraphicsCategory.id) === 8) {
       if (lodash__WEBPACK_IMPORTED_MODULE_0___default().isEmpty(imgOrVidForWork) && lodash__WEBPACK_IMPORTED_MODULE_0___default().isEmpty(defaultImgOrVidForWork) && !workableUrl && !(graphicWorkDetails !== null && graphicWorkDetails !== void 0 && graphicWorkDetails.workable_url)) {
         err.imgOrVidForWork = "Images/videos is required for work";
+        count++;
+      }
+    }
+    if (fontUrl) {
+      if (!(0,_utils_check_is_url__WEBPACK_IMPORTED_MODULE_24__.checkIsURL)(fontUrl)) {
+        count++;
+      }
+    }
+    if (workableUrl) {
+      if (!(0,_utils_check_is_url__WEBPACK_IMPORTED_MODULE_24__.checkIsURL)(workableUrl)) {
+        count++;
+      }
+    }
+    if ((_referenceList$ = referenceList[0]) !== null && _referenceList$ !== void 0 && _referenceList$.reference) {
+      var _referenceList$2;
+      if (!(0,_utils_check_is_url__WEBPACK_IMPORTED_MODULE_24__.checkIsURL)((_referenceList$2 = referenceList[0]) === null || _referenceList$2 === void 0 ? void 0 : _referenceList$2.reference)) {
         count++;
       }
     }
@@ -15683,9 +15700,9 @@ var TaskEditForm = function TaskEditForm(_ref2) {
                 return handleChange(e, setFontName);
               }
             })
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_30__.jsx)("div", {
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_30__.jsxs)("div", {
             className: "col-12 col-md-6",
-            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_30__.jsx)(_components_form_Input__WEBPACK_IMPORTED_MODULE_8__["default"], {
+            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_30__.jsx)(_components_form_Input__WEBPACK_IMPORTED_MODULE_8__["default"], {
               id: "fontUrl",
               label: "Font Url",
               type: "url",
@@ -15696,7 +15713,13 @@ var TaskEditForm = function TaskEditForm(_ref2) {
               onChange: function onChange(e) {
                 return handleChange(e, setFontUrl);
               }
-            })
+            }), fontUrl && !(0,_projects_utils__WEBPACK_IMPORTED_MODULE_26__.validateUrl)(fontUrl) && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_30__.jsx)("div", {
+              style: {
+                color: "red",
+                marginTop: "-13px"
+              },
+              children: "Please enter a valid URL"
+            })]
           }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_30__.jsx)("div", {
             className: "col-12",
             children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_30__.jsxs)("div", {
