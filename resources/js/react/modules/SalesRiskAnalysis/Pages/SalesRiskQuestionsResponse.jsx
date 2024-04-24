@@ -180,7 +180,6 @@ const SalesRiskQuestionsResponse = () => {
                             (child) => child.id === item.id
                         )
                 );
-
                 // add new child questions
                 if (!existingChildQuestions.length) {
                     // add new child questions

@@ -67,17 +67,15 @@ const SaleAnalysisReportTableFilterBar = ({ setFilter }) => {
                 <React.Fragment>
                     <HDivider className="ml-auto" />
                     <div>
-                        <div
+                        <button
                             className="sp1_filter_button"
                             onClick={() => setIsOpen(true)}
-                            style={{ gap: "10px" }}
-                            role="button"
-                            tabIndex={0}
+                            style={{ gap: "10px", backgroundColor: "transparent"}}
                             onKeyDown={() => setIsOpen(true)}
                         >
                             <i className="fa-solid fa-filter"></i>
                             <span>Filter</span>
-                        </div>
+                        </button>
 
                         {isOpen && (
                             <div className="sp1_filter_sidebar">

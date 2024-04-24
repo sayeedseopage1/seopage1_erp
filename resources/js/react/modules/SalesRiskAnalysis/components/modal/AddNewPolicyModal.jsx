@@ -53,7 +53,6 @@ const AddNewPolicyModal = ({
         handleAddRuleOnPolicy,
         setNewPolicyInputData,
         handleCancelRuleOnPolicy,
-        setIsFocusedOnTitleInput
     } = handlerAction;
     const { departments } = useSelector((state) => state.filterOptions);
     let allSelectedCountries = [];
@@ -206,7 +205,7 @@ const AddNewPolicyModal = ({
                         selectedCountries={allSelectedCountries.flat()}
                         handleMultiSelectChange={setNewPolicyData}
                         newPolicyDataValidation={newPolicyDataValidation}
-                        setIsFocusedOnTitleInput={setIsFocusedOnTitleInput}
+                        setIsFocusedOnTitleInput={() => {}}
                     />
 
                     <div className="d-flex justify-content-end">

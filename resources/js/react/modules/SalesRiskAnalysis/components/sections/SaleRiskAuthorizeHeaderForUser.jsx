@@ -13,9 +13,9 @@ import popoverStyle from "../popover.module.css";
 
 const SaleRiskAuthorizeHeaderForUser = ({
     headerData,
-    isLoading,
     handleOpenAuthorizeModal,
 }) => {
+    console.log(headerData.deal.sale_analysis_status === "auto-authorized");
     return (
         <div
             className="row d-flex align-items-center flex-column flex-md-row"
@@ -35,7 +35,10 @@ const SaleRiskAuthorizeHeaderForUser = ({
                         {" "}
                         Authorize By :{" "}
                         <span className="ml-1">
-                            {headerData?.authorizeBy?.name ?? "-"}
+                            {headerData.deal.sale_analysis_status ===
+                            "auto-authorized"
+                                ? "System (Auto)"
+                                : headerData?.authorizeBy?.name}
                         </span>
                     </p>
                 </div>
@@ -81,6 +84,5 @@ export default SaleRiskAuthorizeHeaderForUser;
 
 SaleRiskAuthorizeHeaderForUser.propTypes = {
     headerData: PropTypes.object,
-    isLoading: PropTypes.bool,
     handleOpenAuthorizeModal: PropTypes.func,
 };

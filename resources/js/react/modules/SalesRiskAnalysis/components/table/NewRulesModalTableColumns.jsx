@@ -1,9 +1,11 @@
 import _ from "lodash";
 import Switch from "../Switch";
 import EditIcon from "../ui/EditIcon";
-import { SalesPointsContainer } from "../ui/Styles/ui";
-import MultiSelectShowDropDown from "../MultiSelectShowDropDown";
+
+// ui components
 import Tooltip from "../Tooltip";
+import MultiSelectShowDropDown from "../MultiSelectShowDropDown";
+import { SalesPointsContainer } from "../ui/Styles/ui";
 
 const validPolicyTypes = ["lessThan", "greaterThan", "fixed", "range"];
 
@@ -316,34 +318,32 @@ export const NewRulesModalTableColumnsData = [
                         >
                             <SalesPointsContainer className="py-3">
                                 <p>{data?.points}</p>
-                                <div
+                                <button
                                     onClick={() => {
                                         action.editSingleRules({
                                             ...data,
                                             index: row?.index,
                                         });
                                     }}
-                                    className=" d-flex"
-                                    role="button"
-                                    tabIndex={0}
+                                    className="d-flex bg-transparent border-none"
                                     onKeyDown={() => {
                                         action.editSingleRules({
                                             ...data,
                                             index: row?.index,
                                         });
                                     }}
+                                    
                                 >
                                     <EditIcon />
-                                </div>
-                                <div
+                                </button>
+                                <button
                                     onClick={() => {
                                         action.deleteSingleRules(data);
                                     }}
-                                    role="button"
-                                    tabIndex="0"
                                     onKeyDown={() => {
                                         action.deleteSingleRules(data);
                                     }}
+                                    className="d-flex bg-transparent border-none items-center"
                                 >
                                     <i
                                         className="fa-solid fa-trash ml-2"
@@ -351,7 +351,7 @@ export const NewRulesModalTableColumnsData = [
                                             fontSize: "20px",
                                         }}
                                     ></i>
-                                </div>
+                                </button>
                             </SalesPointsContainer>
                         </Switch.Case>
                         <Switch.Case
@@ -359,27 +359,25 @@ export const NewRulesModalTableColumnsData = [
                         >
                             <SalesPointsContainer className="py-3 flex-column">
                                 <div className="py-3 d-flex">
-                                    <div
+                                    <button
                                         onClick={() => {
                                             action.editSingleRules(data);
                                         }}
                                         onKeyDown={() => {
                                             action.editSingleRules(data);
                                         }}
-                                        tabIndex="0"
-                                        role="button"
+                                        className="bg-transparent border-none"
                                     >
                                         <EditIcon />
-                                    </div>
-                                    <div
+                                    </button>
+                                    <button
                                         onClick={() => {
                                             action.deleteSingleRules(data);
                                         }}
                                         onKeyDown={() => {
                                             action.deleteSingleRules(data);
                                         }}
-                                        role="button"
-                                        tabIndex="0"
+                                        className="d-flex bg-transparent border-none items-center"
                                     >
                                         <i
                                             className="fa-solid fa-trash ml-2"
@@ -387,7 +385,7 @@ export const NewRulesModalTableColumnsData = [
                                                 fontSize: "20px",
                                             }}
                                         ></i>
-                                    </div>
+                                    </button>
                                 </div>
                                 <ul>
                                     <li

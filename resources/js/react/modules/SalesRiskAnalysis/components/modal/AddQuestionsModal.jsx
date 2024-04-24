@@ -203,7 +203,7 @@ const AddQuestionsModal = ({
 
     return (
         <CustomModal
-            id="addQuestionsModal"
+            id="saleRiskAddQuestionsModal"
             scroLlBottom={isQuestionUpdating}
             open={open}
             closeModal={handleCloseAddQuestionsModal}

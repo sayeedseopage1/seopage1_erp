@@ -50,13 +50,21 @@
 }
 
 .customAccordionCardBodyUL li {
-  padding: 16px 0;
   color: #8F8F8F;
   font-family: Poppins, sans-serif;
   font-size: 16px;
   font-style: normal;
   font-weight: 400;
   line-height: normal;
+}
+.customAccordionCardBodyUL button {
+  background-color: transparent;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  padding: 16px 0;
+  text-align: left;
+  width: 100%;
 }
 
 .customAccordionCardBodyUL li:hover {

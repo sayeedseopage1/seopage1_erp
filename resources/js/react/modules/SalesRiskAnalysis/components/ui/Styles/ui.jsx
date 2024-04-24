@@ -353,3 +353,15 @@ export const SaleRiskAuthorizeButton = styled.button`
     font-weight: 500;
     line-height: normal;
 `;
+
+export const SaleRiskAuthorizeInfoContainer = styled.div`
+    border-radius: 8px;
+    background-color: ${(props) => props.color || "transparent"};
+    padding: 13px 20px;
+    border: ${(props) => props.border || "none"};
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+    width: fit-content;
+`

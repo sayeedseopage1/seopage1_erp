@@ -26,6 +26,12 @@ import "../components/Styles/SalesRiskAnalysis.css";
 import AddQuestionsListModal from "../components/modal/AddQuestionsListModal";
 
 const inputSateData = {
+    mainDetails: {
+        policyName: "",
+        department: {},
+        key: {},
+        comment: "",
+    },
     inputState: {
         policyName: "",
         department: {},
@@ -88,6 +94,9 @@ const SalesRiskPolices = () => {
     const [newPolicyData, setNewPolicyData] = React.useState(
         inputSateData.inputState
     );
+    const [newPolicyMainDetails, setNewPolicyMainDetails] = React.useState(
+        inputSateData.mainDetails
+    );
     const [singleQuestion, setSingleQuestion] = React.useState(
         inputSateData.singleQuestion
     );
@@ -139,6 +148,7 @@ const SalesRiskPolices = () => {
             case "all":
                 setNewPolicyData(inputSateData.inputState);
                 setNewPolicyDataValidation(inputSateData.inputValidation);
+                setNewPolicyMainDetails(inputSateData.mainDetails);
                 setNewPolicyInputData([]);
                 break;
             default:
@@ -156,8 +166,17 @@ const SalesRiskPolices = () => {
     const handleChange = (e) => {
         const { name, value } = e.target;
         // for testing
-        if (name === "department" || name === "policyName") {
+        if (
+            name === "department" ||
+            name === "policyName" ||
+            name === "key" ||
+            name === "comment"
+        ) {
             setNewPolicyData({ ...newPolicyData, [name]: value });
+            setNewPolicyMainDetails({
+                ...newPolicyMainDetails,
+                [name]: value,
+            });
         } else if (name === "policyType") {
             // add default value for valueType on policy type change when if have any rules data on the form
             setNewPolicyData({
@@ -280,18 +299,41 @@ const SalesRiskPolices = () => {
             toast.error("Please add a policy first");
             return;
         }
+
+        const formatPayloadForMainDetailsValidation = {
+            ...newPolicyMainDetails,
+            policyType: {
+                name: "mainDetails",
+            },
+        };
+        const validation = addNewRulesValidation(
+            formatPayloadForMainDetailsValidation,
+            newPolicyDataValidation
+        );
+
+        if (
+            Object.entries(validation).some(
+                ([key, value]) => key !== "isSubmitting" && value === true
+            )
+        ) {
+            setNewPolicyDataValidation({
+                ...validation,
+                isSubmitting: true,
+            });
+            return;
+        }
+
         try {
             // prepare payload for api
             const payload = {
-                title: newPolicyInputData[0]?.policyName,
-                department: newPolicyInputData[0]?.department?.id,
-                comment: newPolicyInputData[0]?.comment,
-                key: newPolicyInputData[0]?.key?.name,
+                title: newPolicyMainDetails.policyName,
+                department: newPolicyMainDetails.department?.id,
+                comment: newPolicyMainDetails.comment,
+                key: newPolicyMainDetails.key?.name,
                 ruleList: newPolicyInputData.map((item) =>
                     formatRuleForPayload(item)
                 ),
             };
-
 
             const response = await submitData(payload);
             if (response?.data) {
@@ -347,6 +389,21 @@ const SalesRiskPolices = () => {
             setNewPolicyDataValidation(validation);
         }
     }, [newPolicyData]);
+    useEffect(() => {
+        if (newPolicyDataValidation?.isSubmitting) {
+            const formatPayloadForMainDetailsValidation = {
+                ...newPolicyMainDetails,
+                policyType: {
+                    name: "mainDetails",
+                },
+            };
+            const validation = addNewRulesValidation(
+                formatPayloadForMainDetailsValidation,
+                newPolicyDataValidation
+            );
+            setNewPolicyDataValidation(validation);
+        }
+    }, [newPolicyMainDetails]);
 
     // main Table page change
 

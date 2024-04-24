@@ -34,7 +34,6 @@ const SalesRiskAnalysisProvider = ({ children }) => {
         });
 
     // fetch all countries
-
     const {
         data: salesRiskInputs,
         isFetching: isSalesRiskInputsFetching,
