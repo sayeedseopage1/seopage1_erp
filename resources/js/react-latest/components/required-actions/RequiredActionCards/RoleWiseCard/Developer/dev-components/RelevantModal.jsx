@@ -8,7 +8,7 @@ import { useSelector } from "react-redux";
 import { usePendingActionsIdMutation } from "../../../../../../services/api/pendingActionsApiSlice";
 import { useEffect, useState } from "react";
 import React from "react";
-import useCounterStore from "../../../../../Zustand/store";
+import useCounterStore from "../../../../../../Zustand/store.js";
 
 const RelevantModal = ({ isRelevantModal, setIsRelevantModal }) => {
     const { increaseCount } = useCounterStore();
