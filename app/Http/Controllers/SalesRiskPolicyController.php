@@ -1341,10 +1341,20 @@ class SalesRiskPolicyController extends AccountBaseController
 
         if (auth()->user()->role_id != 1) {
 
+            if (!$questionValues = PolicyQuestionValue::where('deal_id', $deal_id)->first()) {
+                return response()->json(['status' => 'error', 'message' => 'Question value not found'], 500);
+            }
 
+            $questionData = [];
+            foreach (json_decode($questionValues->values) as $item) {
+                $qsion = SalesPolicyQuestion::find($item->id);
+                if($qsion) $questionData[] = ['id' => $item->id, 'title' => $qsion->title, 'value' => $item->value, 'key' => $qsion->key];
+            }
 
-            return response()->json(['status' => 'error', 'message' => 'Not authorized.']);
+            $data['questionData'] = $questionData;
+            return response()->json(['status' => 'success', 'data' => $data]);
         }
+
         try {
 
             $calculation = self::calculatePolicyPoint($deal_id);
