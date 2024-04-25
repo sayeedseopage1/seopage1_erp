@@ -1447,10 +1447,9 @@ class ContractController extends AccountBaseController
             //$qualified_sale->actual_amount= $deal->actual_amount . $currency->currency_code;
             
             $qualified_sale->save();
-            $helper = new HelperPendingActionController();
 
-
-            $helper->WonDealAcceptAuthorization($project,$qualified_sale->pm_id);
+            // $helper = new HelperPendingActionController();
+            // $helper->WonDealAcceptAuthorization($project,$qualified_sale->pm_id);
 
 
 
@@ -1982,10 +1981,10 @@ class ContractController extends AccountBaseController
                 $qualified_sale->amount = $deal->amount;
 
                 $qualified_sale->save();
-                $helper = new HelperPendingActionController();
 
+                // $helper = new HelperPendingActionController();
+                // $helper->WonDealAcceptAuthorization($project,$qualified_sale->pm_id);
 
-                $helper->WonDealAcceptAuthorization($project,$qualified_sale->pm_id);
                 // /dd($qualified_sale);
 
 
@@ -2587,6 +2586,10 @@ class ContractController extends AccountBaseController
             }
 
             $deal->email_send_status = 1;
+
+            $project = Project::where('deal_id', $deal->id)->first();
+            $helper = new HelperPendingActionController();
+            $helper->WonDealAcceptAuthorization($project, $project->pm_id);
         }
 
         if ($deal->save()) {

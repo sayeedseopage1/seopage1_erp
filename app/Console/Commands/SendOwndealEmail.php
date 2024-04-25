@@ -9,6 +9,8 @@ use App\Models\User;
 use Illuminate\Console\Command;
 use App\Notifications\WonDealNotification;
 use App\Notifications\HourlyDealNotification;
+use App\Http\Controllers\HelperPendingActionController;
+use App\Models\Project;
 use App\Notifications\DealAuthorizationSendNotification;
 
 class SendOwndealEmail extends Command
@@ -66,6 +68,10 @@ class SendOwndealEmail extends Command
                 Notification::send($user, new HourlyDealNotification($deal));
             }
     
+            $project = Project::where('deal_id', $deal->id)->first();
+            $helper = new HelperPendingActionController();
+            $helper->WonDealAcceptAuthorization($project, $project->pm_id);
+
             // if ($deal->project_type == 'fixed') {
             //     $users = User::where('role_id', 1)->get();
             //     foreach ($users as $usr) {
