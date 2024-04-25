@@ -29,7 +29,7 @@ const PointFactors = () => {
         upper_limit: "",
         infiniteValueDown: "",
         infiniteValueUp: "",
-        limit_type: "",
+        limit_type: 1,
         limit_unit: {},
         point_type: "",
         points: "",
@@ -44,8 +44,6 @@ const PointFactors = () => {
             project_type: false,
             lower_limit: false,
             upper_limit: false,
-            // infiniteValueDown: false,
-            // infiniteValueUp: false,
             limit_type: false,
             limit_unit: false,
             point_type: false,
@@ -106,7 +104,7 @@ const PointFactors = () => {
             upper_limit: "",
             infiniteValueDown: "",
             infiniteValueUp: "",
-            limit_type: "",
+            limit_type: 1,
             limit_unit: {},
             point_type: "",
             points: "",
@@ -119,8 +117,6 @@ const PointFactors = () => {
             project_type: false,
             lower_limit: false,
             upper_limit: false,
-            // infiniteValueDown: false,
-            // infiniteValueUp: false,
             limit_type: false,
             limit_unit: false,
             point_type: false,
@@ -223,7 +219,7 @@ const PointFactors = () => {
                 upper_limit_condition: upperLimitCondition ?? null,
                 point_type: parseInt(newFactorData?.point_type) ?? null,
                 points: parseFloat(newFactorData?.points) ?? null,
-                status: parseInt(newFactorData?.status) ?? null,
+                status: parseInt(newFactorData?.status) ?? 1,
             }
             const response = await createPmPointFactor(payload).unwrap();
             if (response?.status == 200) {
@@ -250,7 +246,7 @@ const PointFactors = () => {
     // add new factor validation on change
     useEffect(() => {
         if (newFactorDataValidation?.isSubmitting) {
-            const validation = validationFormator(newFactorData, activeFactorFields, newFactorDataValidation)
+            const validation = validationFormator(newFactorData, newFactorDataValidation)
             setNewFactorDataValidation(validation);
         }
     }, [newFactorData]);
