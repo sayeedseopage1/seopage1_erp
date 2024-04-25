@@ -1844,5 +1844,8 @@ Route::get('test-point/{factorId}/{projectId}/{comparable_value}', function($fac
 });
 
 Route::get('test-calculation/{factorId}/{projectId}', function ($factorId, $projectId){
-    dd('Hello');
+    $project = Project::find($projectId);
+    $project->status = $project->status=='finished' ? 'partially finished' : 'finished';
+    $project->save();
+    dd('Success');
 });
