@@ -131,9 +131,9 @@ class Project extends BaseModel
     {
         parent::boot();
 
-        static::updated(function ($project) {
-            if ($project->isDirty('status') && in_array($project->status, ['finished', 'partially finished'])) {
-                $projects = \App\Models\Project::with('times:id,project_id,total_minutes,total_hours')
+        static::updated(function ($item) {
+            if ($item->isDirty('status') && in_array($item->status, ['finished', 'partially finished'])) {
+                $project = \App\Models\Project::with('times:id,project_id,total_minutes,total_hours,revision_id,revision_status')
                 ->select('projects.id')
                 ->selectRaw('SUM(project_deliverables.estimation_time) * 60 as total_estimate_minutes')
                 ->join('project_milestones', function($join) {
@@ -142,14 +142,23 @@ class Project extends BaseModel
                 })
                 ->join('project_deliverables', 'project_milestones.id', '=', 'project_deliverables.milestone_id')
                 ->groupBy('projects.id')
-                ->find($project->id);
+                ->find($item->id);
 
-                $totalLoggedMinutes = array_reduce($projects->times->toArray(), function($carry, $item) {
-                    return $carry + intval($item['total_minutes']);
-                }, 0);
-
-                // Project Manager Point Distribution
-                if($percentage = round(($totalLoggedMinutes / $projects->total_estimate_minutes) * 100, 2)) ProjectManagerPointLogic::distribute(2, $project->id, $percentage);
+                if($project){
+                    $totalLoggedMinutes = array_reduce($project->times->toArray(), function($carry, $item) {
+                        return $carry + intval($item['total_minutes']);
+                    }, 0);
+    
+                    $totalRevisionLoggedMinutes = array_reduce($project->times->toArray(), function($carry, $item) {
+                        return $carry + ($item['revision_id'] ? intval($item['total_minutes']) : 0);
+                    }, 0);
+    
+                    // Project Manager Point Distribution (Estimated vs logged hours)
+                    if($percentage = round(($totalLoggedMinutes / $project->total_estimate_minutes) * 100, 2)) ProjectManagerPointLogic::distribute(2, $item->id, $percentage);
+    
+                    // Project Manager Point Distribution (Amount of revisions)
+                    if($totalRevisionLoggedMinutes > 60 && $percentage = round(($totalRevisionLoggedMinutes / $project->total_estimate_minutes) * 100, 2)) ProjectManagerPointLogic::distribute(3, $item->id, $percentage);
+                }
             }
         });
     }
