@@ -554,7 +554,7 @@ const SubTaskForm = ({ close, isFirstSubtask = false }) => {
                                             assignedTo?.gender === "male"
                                                 ? "He "
                                                 : "She "
-                                        } has more than 10 Submittable tasks.`}
+                                        } has more than 4 Submittable tasks.`}
                                     </div>
                                 )}
                             </div>
