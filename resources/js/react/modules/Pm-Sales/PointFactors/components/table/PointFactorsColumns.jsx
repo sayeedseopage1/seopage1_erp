@@ -12,7 +12,7 @@ export const PointFactorsColumns = [
         cell: ({ row }) => {
             const data = row?.original;
             return (
-                <div className="d-flex justify-content-start align-items-center" style={{ flex: 1 }}>
+                <div className="d-flex justify-content-start align-items-center" style={{ width: "260px", flex: "1" }}>
                     <span
                         style={{
                             color: "#000",
@@ -49,7 +49,7 @@ export const PointFactorsColumns = [
             const data = row?.original;
             return (
                 // FIXME: this style can be changed
-                <div className="d-flex flex-column justify-content-start align-items-start" style={{ width: "450px" }}>
+                <div className="d-flex flex-column justify-content-start align-items-start" style={{ width: "500px" }}>
                     {
                         _.map(data?.factors, (factor) => {
                             const textStyle = {
@@ -60,7 +60,7 @@ export const PointFactorsColumns = [
                                 whiteSpace: "nowrap",
                                 overflow: "hidden",
                                 textOverflow: "ellipsis",
-                                maxWidth: "450px",
+                                maxWidth: "500px",
                             };
                             return (
                                 <p
@@ -100,14 +100,12 @@ export const PointFactorsColumns = [
                                     <div className="d-flex align-items-center justify-content-end">
                                         <div style={textStyle}>
                                             <Switch key={factor?.id}>
-                                            // FIXME: this style can be changed
                                                 <Switch.Case condition={factor?.point_type === 1}>
                                                     <p className={`${factor?.points < 0 && 'text-danger'}`} style={{ whiteSpace: "nowrap", }}>
                                                         {factor?.points} {(factor?.points == 1 || factor?.points == -1 || factor?.points == 0) ? 'Point' : 'Points'}
                                                     </p>
                                                 </Switch.Case>
                                                 <Switch.Case condition={factor?.point_type === 2}>
-                                                // FIXME: this style can be changed
                                                     <p className={`${factor?.points < 0 && 'text-danger'}`} style={{ whiteSpace: "nowrap", }}>
                                                         {factor?.points}% of the project budget
                                                     </p>
