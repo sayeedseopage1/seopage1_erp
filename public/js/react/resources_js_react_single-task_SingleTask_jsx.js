@@ -15056,7 +15056,7 @@ var TaskEditForm = function TaskEditForm(_ref2) {
       return item.id === id ? {
         id: id,
         color: e.target.value,
-        description: ""
+        description: item === null || item === void 0 ? void 0 : item.description
       } : item;
     });
     setSecondaryColors(_toConsumableArray(newColors));

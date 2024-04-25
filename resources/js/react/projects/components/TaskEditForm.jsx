@@ -695,7 +695,7 @@ const TaskEditForm = ({ isOpen, close, row, table }) => {
     const handleSecondaryColorChange = (e, id) => {
         let newColors = _.map(secondaryColors, (item) =>
             item.id === id
-                ? { id, color: e.target.value, description: "" }
+                ? { id, color: e.target.value, description: item?.description }
                 : item
         );
         setSecondaryColors([...newColors]);
