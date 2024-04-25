@@ -231,9 +231,12 @@ const PointFactorsTable = ({
             }
 
             const response = await updatePmPointfactor({ id: editFactorData?.id, payload }).unwrap();
+
             if (response?.status == 200) {
                 toast.success(response.message);
                 handleCloseEditFactorModal();
+            } else {
+                toast.warning(response.message);
             }
         } catch (error) {
             toast.error("Failed to update item");

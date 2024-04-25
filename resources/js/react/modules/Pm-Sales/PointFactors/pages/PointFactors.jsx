@@ -223,10 +223,13 @@ const PointFactors = () => {
                 status: parseInt(newFactorData?.status) ?? 1,
             }
             const response = await createPmPointFactor(payload).unwrap();
+
             if (response?.status == 200) {
                 toast.success(response.message);
                 handleAddNewItemModal();
                 resetFormState();
+            } else {
+                toast.warning(response.message);
             }
         } catch (error) {
             toast.error("Failed to add new item");
