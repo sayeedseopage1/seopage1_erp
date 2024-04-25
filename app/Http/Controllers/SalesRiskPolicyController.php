@@ -565,8 +565,8 @@ class SalesRiskPolicyController extends AccountBaseController
             $question = SalesPolicyQuestion::where('key', 'milestone')->first();
             $question = $question ? SalesPolicyQuestion::where('parent_id', $question->id)->first() : null;
 
-            $list = $list->map(function ($item) use($question) {
-                $data =[
+            $list = $list->map(function ($item) use ($question) {
+                $data = [
                     'id' => $item->id,
                     'title' => $item->title,
                     'key' => $item->key,
@@ -579,7 +579,7 @@ class SalesRiskPolicyController extends AccountBaseController
                     'questions' => self::questionListChild($item->id)
                 ];
 
-                if($question && $question->id == $item->id) $data['currency'] = true;
+                if ($question && $question->id == $item->id) $data['currency'] = true;
 
                 return $data;
             });
@@ -682,7 +682,7 @@ class SalesRiskPolicyController extends AccountBaseController
         $deal = Deal::find($req->session()->get('deal_id'));
         $currency = Currency::find($deal->currency_id);
 
-        return response()->json(['status' => 'success', 'data' => [ 'questionList' => array_values($data), 'currency' => [$currency->currency_code, $currency->currency_name, $currency->currency_symbol]]]);
+        return response()->json(['status' => 'success', 'data' => ['questionList' => array_values($data), 'currency' => [$currency->currency_code, $currency->currency_name, $currency->currency_symbol]]]);
     }
 
     function questionValueSave(Request $req)
@@ -1328,7 +1328,20 @@ class SalesRiskPolicyController extends AccountBaseController
 
     function questionValueReport($deal_id)
     {
+        $data['deal'] = $deal =  Deal::find($deal_id);
+        $data['user'] = User::whereId($deal->added_by)->first(['id', 'name']);
+        $data['authorizeBy'] = $deal->sale_authorize_by ? User::whereId($deal->sale_authorize_by)->first(['id', 'name']) : null;
+
+        //get Date diff as intervals
+        $d1 = new DateTime("$deal->start_date 00:00:00");
+        $d2 = new DateTime("$deal->deadline 23:59:59");
+        $interval = $d1->diff($d2);
+        $data['deadline'] = $interval->d;
+
         if (auth()->user()->role_id != 1) {
+
+
+
             return response()->json(['status' => 'error', 'message' => 'Not authorized.']);
         }
 
@@ -1398,7 +1411,7 @@ class SalesRiskPolicyController extends AccountBaseController
 
                     $lead = Lead::find($item->lead_id);
                     $user = $item->sale_authorize_by ?  User::find($item->sale_authorize_by) : null;
-                    return [
+                    $data = [
                         'client_id' => $item->client_id,
                         'client_name' => $item->client_name,
                         'deal_id' => $item->id,
@@ -1413,8 +1426,13 @@ class SalesRiskPolicyController extends AccountBaseController
                         'authorize_on' => $item->sale_authorize_on,
                         'authorize_by_name' => $item->sale_authorize_by ? $user->name : null,
                         'authorize_by_photo' => $item->sale_authorize_by ? $user->image : null,
-                        'points' => self::calculatePolicyPoint($item->id)['points']
                     ];
+
+                    if (auth()->user()->role_id == 1) {
+                        $data['points'] = self::calculatePolicyPoint($item->id)['points'];
+                    }
+
+                    return $data;
                 })->toArray();
 
             $data = new \Illuminate\Pagination\LengthAwarePaginator(
