@@ -4,16 +4,16 @@ import { PointFactorsColumns } from '../components/table/PointFactorsColumns';
 import TopSection from '../components/sectionComponents/TopSection';
 import { AddButton, AddNewSectionCointainer } from '../components/Styles/ui/ui';
 import AddNewItemsModal from '../components/modal/AddNewItemsModal';
-import { useCreatePmPointFactorMutation, useGetPmPointFactorsQuery } from '../../../../services/api/pmSalesApiSlice';
+import { useCreatePmPointFactorMutation, useGetFactorsFieldsByCriteriaQuery, useGetPmPointFactorsQuery } from '../../../../services/api/pmSalesApiSlice';
 import { useEffect } from 'react';
 import _ from 'lodash';
 import { toast } from 'react-toastify';
 import useActiveFactorFields from '../hooks/useActiveFactorFields';
 import { validationFormator } from '../utils/validationFormator';
+import { filterNullValues } from '../utils/removeNull';
 // import { HourlyPointFactorsColumns } from '../components/table/HourlyPointFactorsColumns';
 
 const PointFactors = () => {
-
     // top section states 
     const [tab, setTab] = useState(1);
     const [search, setSearch] = useState("");
@@ -35,7 +35,8 @@ const PointFactors = () => {
         points: "",
         status: "1"
     });
-    const { activeFactorFields } = useActiveFactorFields({ newFactorData })
+    const { activeFactorFields, setActiveCriteria } = useActiveFactorFields({ newFactorData })
+    console.log(activeFactorFields)
 
     // modal state validation
     const [newFactorDataValidation, setNewFactorDataValidation] =
@@ -72,7 +73,7 @@ const PointFactors = () => {
 
     const [mainTableData, setMainTableData] = useState([]);
 
-    // // search functionality
+    // search functionality
     useEffect(() => {
         const filterData = (data) => {
             return data?.filter((item) => {
@@ -178,6 +179,7 @@ const PointFactors = () => {
     const handleAddNewItemModal = () => {
         setAddNewItemModalOpen(!addNewItemModalOpen);
         resetFormState();
+        setActiveCriteria(1)
     };
 
     // add pm point factors mutation
