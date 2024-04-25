@@ -4,16 +4,16 @@ import { PointFactorsColumns } from '../components/table/PointFactorsColumns';
 import TopSection from '../components/sectionComponents/TopSection';
 import { AddButton, AddNewSectionCointainer } from '../components/Styles/ui/ui';
 import AddNewItemsModal from '../components/modal/AddNewItemsModal';
-import { useCreatePmPointFactorMutation, useGetPmPointFactorsQuery } from '../../../../services/api/pmSalesApiSlice';
+import { useCreatePmPointFactorMutation, useGetFactorsFieldsByCriteriaQuery, useGetPmPointFactorsQuery } from '../../../../services/api/pmSalesApiSlice';
 import { useEffect } from 'react';
 import _ from 'lodash';
 import { toast } from 'react-toastify';
 import useActiveFactorFields from '../hooks/useActiveFactorFields';
 import { validationFormator } from '../utils/validationFormator';
+import { filterNullValues } from '../utils/removeNull';
 // import { HourlyPointFactorsColumns } from '../components/table/HourlyPointFactorsColumns';
 
 const PointFactors = () => {
-
     // top section states 
     const [tab, setTab] = useState(1);
     const [search, setSearch] = useState("");
@@ -29,13 +29,13 @@ const PointFactors = () => {
         upper_limit: "",
         infiniteValueDown: "",
         infiniteValueUp: "",
-        limit_type: "",
+        limit_type: 1,
         limit_unit: {},
         point_type: "",
         points: "",
         status: "1"
     });
-    const { activeFactorFields } = useActiveFactorFields({ newFactorData })
+    const { activeFactorFields, setActiveCriteria } = useActiveFactorFields({ newFactorData })
 
     // modal state validation
     const [newFactorDataValidation, setNewFactorDataValidation] =
@@ -44,8 +44,6 @@ const PointFactors = () => {
             project_type: false,
             lower_limit: false,
             upper_limit: false,
-            // infiniteValueDown: false,
-            // infiniteValueUp: false,
             limit_type: false,
             limit_unit: false,
             point_type: false,
@@ -74,7 +72,7 @@ const PointFactors = () => {
 
     const [mainTableData, setMainTableData] = useState([]);
 
-    // // search functionality
+    // search functionality
     useEffect(() => {
         const filterData = (data) => {
             return data?.filter((item) => {
@@ -106,7 +104,7 @@ const PointFactors = () => {
             upper_limit: "",
             infiniteValueDown: "",
             infiniteValueUp: "",
-            limit_type: "",
+            limit_type: 1,
             limit_unit: {},
             point_type: "",
             points: "",
@@ -119,8 +117,6 @@ const PointFactors = () => {
             project_type: false,
             lower_limit: false,
             upper_limit: false,
-            // infiniteValueDown: false,
-            // infiniteValueUp: false,
             limit_type: false,
             limit_unit: false,
             point_type: false,
@@ -182,6 +178,7 @@ const PointFactors = () => {
     const handleAddNewItemModal = () => {
         setAddNewItemModalOpen(!addNewItemModalOpen);
         resetFormState();
+        setActiveCriteria(1)
     };
 
     // add pm point factors mutation
@@ -223,7 +220,7 @@ const PointFactors = () => {
                 upper_limit_condition: upperLimitCondition ?? null,
                 point_type: parseInt(newFactorData?.point_type) ?? null,
                 points: parseFloat(newFactorData?.points) ?? null,
-                status: parseInt(newFactorData?.status) ?? null,
+                status: parseInt(newFactorData?.status) ?? 1,
             }
             const response = await createPmPointFactor(payload).unwrap();
             if (response?.status == 200) {
@@ -250,7 +247,7 @@ const PointFactors = () => {
     // add new factor validation on change
     useEffect(() => {
         if (newFactorDataValidation?.isSubmitting) {
-            const validation = validationFormator(newFactorData, activeFactorFields, newFactorDataValidation)
+            const validation = validationFormator(newFactorData, newFactorDataValidation)
             setNewFactorDataValidation(validation);
         }
     }, [newFactorData]);

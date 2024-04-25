@@ -19,13 +19,12 @@ const AddNewItemsModal = ({
     handleFactorsAdded,
     newFactorDataValidation,
     isLoadingAddPmFactors,
+    activeFactorFields
 }) => {
 
     // criteria list data from api
     const { CriteriaConstList } = useCriteriaList()
     // get acticve factor fields from api 
-
-
 
     return (
         <CustomModal
@@ -57,6 +56,11 @@ const AddNewItemsModal = ({
                                     setSelected={handleChange}
                                 />
                             </ModalSelectContainer>
+                            {
+                                activeFactorFields?.limit_type == "2" && <p className="text-danger">
+                                    This criteria does not allow for the creation of any factors.
+                                </p>
+                            }
                         </div>
                     </div>
 
@@ -74,6 +78,8 @@ const AddNewItemsModal = ({
                                     value={newFactorData?.title}
                                     onChange={handleChange}
                                     placeholder="Write Here"
+                                    disabled={activeFactorFields?.limit_type == "2"}
+
                                 />
                                 {newFactorDataValidation?.title && (
                                     <p className="text-danger">
@@ -99,6 +105,7 @@ const AddNewItemsModal = ({
                                         onChange={handleChange}
                                         checked={newFactorData?.project_type == 1}
                                         value={1}
+                                        disabled={activeFactorFields?.limit_type == "2"}
                                     />
                                     <StyledLabel htmlFor="fixedType">Fixed</StyledLabel>
                                 </CheckboxContainer>
@@ -110,6 +117,7 @@ const AddNewItemsModal = ({
                                         onChange={handleChange}
                                         checked={newFactorData?.project_type == 2}
                                         value={2}
+                                        disabled={activeFactorFields?.limit_type == "2"}
                                     />
                                     <StyledLabel htmlFor="hourlyType">Hourly</StyledLabel>
                                 </CheckboxContainer>
@@ -124,45 +132,45 @@ const AddNewItemsModal = ({
 
                     {/* limit type  *****required****** */}
                     {
-                        <div className="row mb-4 align-items-center">
-                            <ModalInputLabel className="col-4">
-                                Limit Type <sup>*</sup>:{" "}
-                            </ModalInputLabel>
-                            <div className="col-8 px-0">
-                                <CheckboxContainer className="mr-3">
-                                    <StyledInput
-                                        type="checkbox"
-                                        id="rangeType"
-                                        name="limit_type"
-                                        onChange={handleChange}
-                                        checked={newFactorData?.limit_type === '1'}
-                                        value="1"
-                                    />
-                                    <StyledLabel htmlFor="rangeType">Range</StyledLabel>
-                                </CheckboxContainer>
-                                <CheckboxContainer>
-                                    <StyledInput
-                                        type="checkbox"
-                                        id="booleanType"
-                                        name="limit_type"
-                                        onChange={handleChange}
-                                        checked={newFactorData?.limit_type === '2'}
-                                        value="2"
-                                    />
-                                    <StyledLabel htmlFor="booleanType">Boolean</StyledLabel>
-                                </CheckboxContainer>
-                                {newFactorDataValidation?.limit_type && (
-                                    <p className="text-danger">
-                                        Limit type is required
-                                    </p>
-                                )}
-                            </div>
-                        </div>
+                        // <div className="row mb-4 align-items-center">
+                        //     <ModalInputLabel className="col-4">
+                        //         Limit Type <sup>*</sup>:{" "}
+                        //     </ModalInputLabel>
+                        //     <div className="col-8 px-0">
+                        //         <CheckboxContainer className="mr-3">
+                        //             <StyledInput
+                        //                 type="checkbox"
+                        //                 id="rangeType"
+                        //                 name="limit_type"
+                        //                 onChange={handleChange}
+                        //                 checked={newFactorData?.limit_type === '1'}
+                        //                 value="1"
+                        //             />
+                        //             <StyledLabel htmlFor="rangeType">Range</StyledLabel>
+                        //         </CheckboxContainer>
+                        //         <CheckboxContainer>
+                        //             <StyledInput
+                        //                 type="checkbox"
+                        //                 id="booleanType"
+                        //                 name="limit_type"
+                        //                 onChange={handleChange}
+                        //                 checked={newFactorData?.limit_type === '2'}
+                        //                 value="2"
+                        //             />
+                        //             <StyledLabel htmlFor="booleanType">Boolean</StyledLabel>
+                        //         </CheckboxContainer>
+                        //         {newFactorDataValidation?.limit_type && (
+                        //             <p className="text-danger">
+                        //                 Limit type is required
+                        //             </p>
+                        //         )}
+                        //     </div>
+                        // </div>
                     }
 
                     {/* Lower Limit  *****required****** */}
                     {
-                        newFactorData?.limit_type === '1' && <div className="row mb-4 align-items-start">
+                        activeFactorFields?.limit_type == '1' && <div className="row mb-4 align-items-start">
                             <ModalInputLabel className="col-4">
                                 Lower Limit <sup>*</sup>:{" "}
                             </ModalInputLabel>
@@ -201,7 +209,7 @@ const AddNewItemsModal = ({
 
                     {/* Upper Limit  *****required****** */}
                     {
-                        newFactorData?.limit_type === '1' && <div className="row mb-4 align-items-start">
+                        activeFactorFields?.limit_type == '1' && <div className="row mb-4 align-items-start">
                             <ModalInputLabel className="col-4">
                                 Upper Limit <sup>*</sup>:{" "}
                             </ModalInputLabel>
@@ -253,6 +261,7 @@ const AddNewItemsModal = ({
                                         data={LimitUnits}
                                         selected={newFactorData?.limit_unit}
                                         setSelected={handleChange}
+                                        disabled={activeFactorFields?.limit_type == '2'}
                                     />
                                 </ModalSelectContainer>
                                 {newFactorDataValidation?.limit_unit && (
@@ -279,6 +288,7 @@ const AddNewItemsModal = ({
                                         onChange={handleChange}
                                         checked={newFactorData?.point_type === '1'}
                                         value="1"
+                                        disabled={activeFactorFields?.limit_type == '2'}
                                     />
                                     <StyledLabel htmlFor="staticType">Static</StyledLabel>
                                 </CheckboxContainer>
@@ -290,6 +300,7 @@ const AddNewItemsModal = ({
                                         onChange={handleChange}
                                         checked={newFactorData?.point_type === '2'}
                                         value="2"
+                                        disabled={activeFactorFields?.limit_type == '2'}
                                     />
                                     <StyledLabel htmlFor="percentageType">Percentage</StyledLabel>
                                 </CheckboxContainer>
@@ -316,6 +327,7 @@ const AddNewItemsModal = ({
                                     value={newFactorData?.points}
                                     onChange={handleChange}
                                     placeholder="Write Here"
+                                    disabled={activeFactorFields?.limit_type == '2'}
                                 />
                                 {newFactorDataValidation?.points && (
                                     <p className="text-danger">
@@ -341,6 +353,7 @@ const AddNewItemsModal = ({
                                         onChange={handleChange}
                                         checked={newFactorData?.status === '1'}
                                         value="1"
+                                        disabled={activeFactorFields?.limit_type == '2'}
                                     />
                                     <StyledLabel htmlFor="activeType">Active</StyledLabel>
                                 </CheckboxContainer>
@@ -352,6 +365,7 @@ const AddNewItemsModal = ({
                                         onChange={handleChange}
                                         checked={newFactorData?.status === '0'}
                                         value="0"
+                                        disabled={activeFactorFields?.limit_type == '2'}
                                     />
                                     <StyledLabel htmlFor="deactiveType">Deactive</StyledLabel>
                                 </CheckboxContainer>
@@ -361,7 +375,7 @@ const AddNewItemsModal = ({
                 </div>
 
                 <Flex gap="10px" justifyContent="center">
-                    <ModalButton onClick={handleFactorsAdded} width="177px">
+                    <ModalButton disabled={activeFactorFields?.limit_type == '2' || isLoadingAddPmFactors} onClick={handleFactorsAdded} width="177px">
                         {isLoadingAddPmFactors
                             ? "Loading..."
                             : "Save"}

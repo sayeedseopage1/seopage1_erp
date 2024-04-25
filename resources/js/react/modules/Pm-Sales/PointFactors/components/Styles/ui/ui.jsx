@@ -151,6 +151,10 @@ export const ModalButton = styled.button`
     border: ${(props) => props.border || "none"};
     cursor: pointer;
     width: ${(props) => props.width || "auto"};
+
+    &:disabled {
+        cursor: not-allowed;
+    }
 `;
 
 export const ModalSelectContainer = styled.div`
@@ -218,6 +222,10 @@ export const StyledInput = styled.input`
     height: 20px;
     border: 2px solid #1492E6;
     border-radius: 4px; */
+
+    &:disabled {
+        cursor: not-allowed;
+    }
 `;
 
 export const StyledLabel = styled.label`

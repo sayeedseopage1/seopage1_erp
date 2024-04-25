@@ -12,7 +12,8 @@ const CustomDropDown = ({
     sidebarItem = false,
     className,
     filedName,
-    register
+    register,
+    disabled
 }) => {
     // set selected value from data (because this dropdown reused in multiple places with different data)
     const _Options = data?.data;
@@ -48,31 +49,34 @@ const CustomDropDown = ({
                         </span>
                     </Tooltip>
                 </Dropdown.Toggle>
-                <Dropdown.Menu id={`cnx_dropdown__menu_open--${data?.id}`} >
-                    <div className="sp1_filter--users">
-                        {_Options?.map((item) => (
-                            <Dropdown.Item
-                                title={item?.label}
-                                key={item.id}
-                                className={
-                                    selected?.id === item.id
-                                        ? "sp1__pp_filter_dd_item active"
-                                        : "sp1__pp_filter_dd_item"
-                                }
-                                onClick={(e) => {
-                                    setSelected({
-                                        target: {
-                                            name: filedName,
-                                            value: item,
-                                        },
-                                    });
-                                }}
-                            >
-                                {item?.label?.length > 50 ? `${item?.label?.slice(0, 50)}...` : item?.label}
-                            </Dropdown.Item>
-                        ))}
-                    </div>
-                </Dropdown.Menu>
+                {
+                    !disabled && <Dropdown.Menu id={`cnx_dropdown__menu_open--${data?.id}`} >
+                        <div className="sp1_filter--users">
+                            {_Options?.map((item) => (
+                                <Dropdown.Item
+                                    title={item?.label}
+                                    key={item.id}
+                                    className={
+                                        selected?.id === item.id
+                                            ? "sp1__pp_filter_dd_item active"
+                                            : "sp1__pp_filter_dd_item"
+                                    }
+                                    onClick={(e) => {
+                                        setSelected({
+                                            target: {
+                                                name: filedName,
+                                                value: item,
+                                            },
+                                        });
+                                    }}
+                                >
+                                    {item?.label?.length > 50 ? `${item?.label?.slice(0, 50)}...` : item?.label}
+                                </Dropdown.Item>
+                            ))}
+                        </div>
+                    </Dropdown.Menu>
+                }
+
             </Dropdown>
         </div>
     );
