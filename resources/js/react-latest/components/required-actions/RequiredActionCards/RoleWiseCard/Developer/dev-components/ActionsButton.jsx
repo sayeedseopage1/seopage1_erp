@@ -76,6 +76,7 @@ const ActionsButton = ({ data }) => {
                                         dispatch(setPendingActionId(data?.id));
                                     }}
                                     className={`${style.action_btn}`}
+                                    disabled={handleBtnDisable(5)}
                                 >
                                     View & Reply
                                 </button>
@@ -89,6 +90,7 @@ const ActionsButton = ({ data }) => {
                                         dispatch(setPendingActionId(data?.id));
                                     }}
                                     className={`${style.action_btn}`}
+                                    disabled={handleBtnDisable(5)}
                                 >
                                     Not Relevant to me
                                 </button>
@@ -99,6 +101,7 @@ const ActionsButton = ({ data }) => {
                                         setViewModal((prev) => !prev)
                                     }
                                     className={`${style.action_btn}`}
+                                    disabled={handleBtnDisable(5)}
                                 >
                                     View
                                 </button>
