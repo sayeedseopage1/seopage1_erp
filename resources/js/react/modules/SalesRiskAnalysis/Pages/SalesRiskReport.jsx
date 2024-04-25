@@ -8,12 +8,13 @@ import RefreshButton from "../components/RefreshButton";
 import SalesAnalysisReportTable from "../components/table/SalesAnalysisReportTable";
 import { SalesAnalysisReportTableColumns } from "../components/table/SalesAnalysisReportTableColumns";
 
-
 // sections
 import SaleAnalysisReportTableFilterBar from "../components/sections/SaleAnalysisReportTableFilterBar";
 import { useSaleRiskAnalysisReportTableDataQuery } from "../../../services/api/salesRiskAnalysisSlice";
+import { useAuth } from "../../../hooks/useAuth";
 
 const SalesRiskReport = () => {
+    const auth = useAuth();
     const [{ pageIndex, pageSize }, setPagination] = React.useState({
         pageIndex: 0,
         pageSize: 10,
@@ -46,12 +47,37 @@ const SalesRiskReport = () => {
         setPagination(paginate);
     };
 
-    
+    // filter table columns by role
+    const filterTableColumnsByRole = () => {
+        if (auth.getRoleId() === 1) {
+            return SalesAnalysisReportTableColumns;
+        }
+        return SalesAnalysisReportTableColumns.filter(
+            (column) => column.id !== "gained_points"
+        );
+    };
 
     return (
         <div>
             <SaleAnalysisReportTableFilterBar setFilter={setFilter} />
-            <Flex justifyContent="end" className="mb-3">
+            <Flex
+                justifyContent="space-between"
+                alignItem="center"
+                className="mb-3"
+            >
+                <div className="d-flex">
+                    <button className="btn btn-primary py-1">All</button>
+                    <button className="btn btn-warning ml-2 py-1">
+                        In Analysis
+                    </button>
+                    <button className="btn btn-success ml-2 py-1">
+                        Authorized
+                    </button>
+                    <button className="btn btn-info ml-2 py-1">
+                        Auto Authorized
+                    </button>
+                    <button className="btn btn-danger ml-2 py-1">Denied</button>
+                </div>
                 {/* refresh */}
                 <RefreshButton
                     onClick={refetch}
@@ -62,7 +88,7 @@ const SalesRiskReport = () => {
             <div className="sp1_tlr_container">
                 <div className="sp1_tlr_tbl_container mx-0 py-3">
                     <SalesAnalysisReportTable
-                        tableColumns={SalesAnalysisReportTableColumns}
+                        tableColumns={filterTableColumnsByRole()}
                         tableData={saleAnalysisReportTableData}
                         isLoading={isQuestionsListLoading}
                         tableName="Sales Analysis Report"

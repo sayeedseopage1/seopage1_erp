@@ -15,6 +15,7 @@ import EmptyTable from "../../../../global/EmptyTable";
 
 // loader
 import SalesRiskAuthorizeTableLoader from "../loader/SalesRiskAuthorizeTableLoader";
+import { end } from "@popperjs/core";
 
 const SalesRiskAuthorizeTable = ({
     tableColumns,
@@ -128,7 +129,7 @@ const SalesRiskAuthorizeTable = ({
                                             return (
                                                 <td
                                                     key={cell.id}
-                                                    className="px-2 sp1_tasks_td"
+                                                    className={`px-2 sp1_tasks_td`}
                                                     style={{
                                                         verticalAlign:
                                                             cell.id.includes(

@@ -2,6 +2,7 @@
 
 import { CreatedBy } from "../../../../ProjectStatus/components/table/ui";
 import Avatar from "../../../../global/Avatar";
+import { useAuth } from "../../../../hooks/useAuth";
 import Switch from "../Switch";
 import Tooltip from "../Tooltip";
 
@@ -369,7 +370,7 @@ export const SalesAnalysisReportTableColumns = [
             const data = row?.original;
             return (
                 <a
-                    href={`/account/contracts/${data.deal_id}?tab=sales-analysis-report`}
+                    href={`/account/sales-analysis-report/${data.deal_id}`}
                     className={`multine-ellipsis btn btn-sm btn-primary`}
                     style={viewBtnStyle}
                     ref={(node) => {

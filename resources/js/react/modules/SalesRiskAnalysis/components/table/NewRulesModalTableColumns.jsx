@@ -56,7 +56,7 @@ export const NewRulesModalTableColumnsData = [
                                     fontSize: "14px",
                                     fontFamily: "Poppins",
                                 }}
-                                className="py-3 d-flex align-items-cente"
+                                className="py-3 d-flex align-items-center"
                             >
                                 {data.title}
                                 <span className="ml-2">

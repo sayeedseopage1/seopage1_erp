@@ -9,7 +9,7 @@ export const SalesRiskAuthorizeColumns = [
         cell: ({ row }) => {
             const data = row.original;
             return (
-                <div className="d-flex flex-column justify-content-center align-items-start">
+                <table className="d-flex flex-column justify-content-center align-items-start">
                     {data?.questionAnswer?.map((question) => {
                         return (
                             <Switch key={question.id}>
@@ -17,29 +17,35 @@ export const SalesRiskAuthorizeColumns = [
                                     condition={question?.parent_id !== null}
                                     key={question?.id}
                                 >
-                                    <div
+                                    <td
                                         key={question?.id}
                                         className="ml-2 py-3"
                                     >
-                                        <p style={customStyles.subQuestion}>
+                                        <p
+                                            className="multine-ellipsis"
+                                            style={customStyles.subQuestion}
+                                        >
                                             {question?.title}
                                         </p>
-                                    </div>
+                                    </td>
                                 </Switch.Case>
                                 <Switch.Case
                                     condition={question?.parent_id === null}
                                     key={question?.id}
                                 >
-                                    <div key={question?.id} className="py-3">
-                                        <p style={customStyles.mainQuestion}>
+                                    <td key={question?.id} className="py-3 ">
+                                        <p
+                                            className="multine-ellipsis"
+                                            style={customStyles.mainQuestion}
+                                        >
                                             {question?.title}
                                         </p>
-                                    </div>
+                                    </td>
                                 </Switch.Case>
                             </Switch>
                         );
                     })}
-                </div>
+                </table>
             );
         },
     },
@@ -50,18 +56,18 @@ export const SalesRiskAuthorizeColumns = [
         cell: ({ row }) => {
             const data = row.original;
             return (
-                <div className="d-flex flex-column justify-content-center align-items-center">
+                <table className="d-flex flex-column justify-content-center align-items-center">
                     {data?.questionAnswer?.map((question) => (
-                        <div key={question?.id} className="py-3">
+                        <td key={question?.id} className="py-3">
                             <p
                                 className="text-center"
                                 style={customStyles.subQuestion}
                             >
                                 {question?.value ?? "-"}
                             </p>
-                        </div>
+                        </td>
                     ))}
-                </div>
+                </table>
             );
         },
     },

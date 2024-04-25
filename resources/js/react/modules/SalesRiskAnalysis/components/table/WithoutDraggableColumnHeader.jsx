@@ -34,7 +34,9 @@ const WithoutDraggableColumnHeader = ({
         answered_sales_person: "center",
         authorize_points: "end",
         policy_key: "center",
+        answered_sales_person_for_user: "end",
         default: "flex-start",
+
     };
 
     const columnStyle = columnStyles[column.id] || {};

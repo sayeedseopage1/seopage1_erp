@@ -6,7 +6,6 @@ import dayjs from "dayjs";
 // Section component
 import SaleRiskAuthorizeHeader from "../components/sections/SaleRiskAuthorizeHeader";
 import SaleRiskAuthorizeHeaderForUser from "../components/sections/SaleRiskAuthorizeHeaderForUser";
-import NoQuestionsValueAuthorizePage from "../components/sections/NoQuestionsValueAuthorizePage";
 
 // ui components
 import {
@@ -31,27 +30,24 @@ import { Placeholder } from "../../../global/Placeholder";
 import {
     useSaleRiskQuestionDealReportQuery,
     useSaleRiskAnalysisActionsMutation,
+    useSaleRiskQuestionDealReportDataQuery,
 } from "../../../services/api/salesRiskAnalysisSlice";
-
-// loader
-import SaleRiskAuthorizeHeaderLoader from "../components/loader/SaleRiskAuthorizeHeaderLoader";
-import Loader from "../components/Loader";
 
 // modal
 import SaleRiskAuthorizePolicesModal from "../components/modal/SaleRiskAuthorizePolicesModal";
 import RuleActionConfirmationModal from "../components/modal/RuleActionConfirmationModal";
+import { SalesRiskAuthorizeTableColumnsForUser } from "../components/table/SalesRiskAuthorizeTableColumnsForUser";
 
 const SalesRiskAuthorize = () => {
     const [answersPoint, setAnswersPoint] = useState([]);
     const [metaInfo, setMetaInfo] = useState({});
-    const [isReportGenerated, setIsReportGenerated] = useState({
-        isGenerated: "",
-        message: "",
-        points: "",
-    });
     const pathnames = window.location.pathname.split("/");
     const deal_id = pathnames[pathnames?.length - 1];
     const auth = useAuth();
+
+    const pathWiseApiCall = pathnames.includes("contracts")
+        ? useSaleRiskQuestionDealReportQuery
+        : useSaleRiskQuestionDealReportDataQuery;
 
     // modal state
     const [isSaleRiskAuthorizeModalOpen, setIsSaleRiskAuthorizeModalOpen] =
@@ -62,19 +58,11 @@ const SalesRiskAuthorize = () => {
     const [statusActionData, setStatusActionData] = React.useState({});
 
     // fetch data
-    const { data, isLoading, isSuccess, isFetching } =
-        useSaleRiskQuestionDealReportQuery(deal_id);
+    const { data, isLoading, isSuccess, isFetching } = pathWiseApiCall(deal_id);
     useEffect(() => {
         if (data?.data && !isLoading) {
-            if (data?.status === "error" && data?.data.points === null) {
-                setIsReportGenerated({
-                    isGenerated: "pending",
-                    message: data?.message,
-                    points: data?.data?.points,
-                });
-                return;
-            } else {
-                const { pointData, ...rest } = data?.data ?? {};
+            const { pointData, questionData, ...rest } = data?.data ?? {};
+            if (auth.getRoleId() === 1) {
                 const formatData = Object.entries(data?.data?.pointData).map(
                     ([key, value]) => {
                         return {
@@ -84,16 +72,15 @@ const SalesRiskAuthorize = () => {
                         };
                     }
                 );
-                setMetaInfo({
-                    ...rest,
-                });
+
                 setAnswersPoint(formatData);
-                setIsReportGenerated({
-                    isGenerated: "completed",
-                    message: data?.message,
-                    points: data?.data?.points,
-                });
+            } else {
+                setAnswersPoint(questionData);
             }
+            setMetaInfo({
+                ...rest,
+                role: auth.getRoleId(),
+            });
         }
     }, [data?.data, isLoading]);
 
@@ -160,340 +147,339 @@ const SalesRiskAuthorize = () => {
             : ["pending", "analysis"].includes(status);
     };
 
+    const FilterSaleRiskTableColumnByRole = () => {
+        if (auth.getRoleId() === 1) {
+            return SalesRiskAuthorizeColumns;
+        } else {
+            return SalesRiskAuthorizeTableColumnsForUser;
+        }
+    };
+
     return (
         <React.Fragment>
-            <Switch>
-                {/* 
-                for loading state
-
-            */}
-                <Switch.Case condition={isLoading && !isSuccess}>
-                    <div
-                        className="d-flex justify-content-center align-items-center"
-                        style={{
-                            height: "calc(100vh - 275px)",
+            <section>
+                <div className="d-flex justify-content-start align-items-center">
+                    <button
+                        className="btn btn-primary py-1 d-flex justify-content-center align-items-center"
+                        onClick={() => {
+                            window.location.href =
+                                "/account/sales-analysis-reports";
                         }}
                     >
-                        <Loader width="50px" height="50px" title="" />
-                    </div>
-                </Switch.Case>
-                {/* 
-                show questions and answers
-            */}
-                <Switch.Case condition={!isLoading && isSuccess}>
+                        <MdOutlineKeyboardBackspace className="mr-2" />
+                        <span>Back</span>
+                    </button>
+                </div>
+                <Switch>
                     {/* 
-                    if no questions available
+                    Sale Risk Analysis Header for before authorize and deny
                 */}
-                    <Switch.Case
-                        condition={isReportGenerated.isGenerated === "pending"}
-                    >
-                        <NoQuestionsValueAuthorizePage />
+                    <Switch.Case condition={auth.getRoleId() === 1}>
+                        <SaleRiskAuthorizeHeader
+                            headerData={metaInfo}
+                            isLoading={isLoading}
+                            handleOpenAuthorizeModal={handleOpenAuthorizeModal}
+                        />
                     </Switch.Case>
-
                     {/* 
-                    if questions available
+                    Sale Risk Analysis Header for User after authorize and deny
                 */}
-                    <Switch.Case
-                        condition={
-                            isReportGenerated.isGenerated === "completed"
-                        }
-                    >
-                        <section>
-                            <div className="d-flex justify-content-start align-items-center">
-                                <button
-                                    className="btn btn-primary py-1 d-flex justify-content-center align-items-center"
+                    <Switch.Case condition={auth.getRoleId() === 8}>
+                        <SaleRiskAuthorizeHeaderForUser
+                            headerData={metaInfo}
+                            isLoading={isLoading}
+                        />
+                    </Switch.Case>
+                </Switch>
+                {/* Sale Risk Analysis Table */}
+                <div className="sp1_tlr_container">
+                    <div className="sp1_tlr_tbl_container mx-0 py-3">
+                        {/* sales risk analysis table */}
+                        <SalesRiskAuthorizeTable
+                            tableColumns={FilterSaleRiskTableColumnByRole()}
+                            tableName="SalesRiskAuthorizeTable"
+                            tableData={answersPoint}
+                            isLoading={isLoading}
+                            isFetching={isFetching}
+                        />
+
+                        {/* Total points achieved container */}
+
+                        <Switch.Case condition={auth.getRoleId() === 1}>
+                            <SaleRiskAuthorizeTotalPointContainer
+                                background={`${
+                                    metaInfo?.points >= 0
+                                        ? "#bcf5a1"
+                                        : "#FFDCDC "
+                                }`}
+                            >
+                                <p>Total Points Achieved :</p>
+                                <span>
+                                    {isLoading ? (
+                                        <div className="d-flex justify-content-end flex-column align-items-end mr-2">
+                                            <Placeholder
+                                                width="50px"
+                                                height="15px"
+                                                className="mb-1"
+                                            />
+                                        </div>
+                                    ) : (
+                                        <span
+                                            style={{
+                                                color:
+                                                    metaInfo?.points >= 0
+                                                        ? "#000"
+                                                        : "#F66 ",
+                                            }}
+                                        >
+                                            {metaInfo?.points}
+                                        </span>
+                                    )}
+                                </span>
+                            </SaleRiskAuthorizeTotalPointContainer>
+                        </Switch.Case>
+
+                        {/* Sale risk authorize button */}
+
+                        <Switch.Case
+                            condition={
+                                auth.getRoleId() === 1 &&
+                                getDealStatus(
+                                    metaInfo?.deal?.sale_analysis_status
+                                )
+                            }
+                        >
+                            <div className="d-flex justify-content-center align-items-center mt-4">
+                                <SaleRiskAuthorizeButton
+                                    color="#1492E6"
                                     onClick={() => {
-                                        window.location.href =
-                                            "/account/sales-analysis-reports";
+                                        handleAuthorizeAndDeny("1");
+                                    }}
+                                    disabled={isActionLoading}
+                                >
+                                    Authorize
+                                </SaleRiskAuthorizeButton>
+                                <SaleRiskAuthorizeButton
+                                    className="ml-2"
+                                    border="1px solid #F66"
+                                    textColor="#F66"
+                                    onClick={() => {
+                                        handleAuthorizeAndDeny("0");
+                                    }}
+                                    disabled={isActionLoading}
+                                >
+                                    Deny
+                                </SaleRiskAuthorizeButton>
+                            </div>
+                        </Switch.Case>
+                        <Switch.Case
+                            condition={
+                                auth.getRoleId() === 8 &&
+                                getDealStatus(
+                                    metaInfo?.deal?.sale_analysis_status
+                                )
+                            }
+                        >
+                            <div className="d-flex justify-content-center align-items-center mt-4">
+                                <p
+                                    style={{
+                                        width: "20%",
+                                        backgroundColor: "#28a745",
+                                        color: "#fff",
+                                        cursor: "pointer",
+                                        padding: "9px 11px",
+                                        borderRadius: "0.25rem",
+                                        textAlign: "center",
+                                        textTransform: "uppercase",
                                     }}
                                 >
-                                    <MdOutlineKeyboardBackspace className="mr-2" />
-                                    <span>Back</span>
-                                </button>
+                                    in {metaInfo?.deal?.sale_analysis_status}
+                                </p>
                             </div>
-                            <Switch>
-                                <Switch.Case condition={isLoading}>
-                                    <SaleRiskAuthorizeHeaderLoader />
-                                </Switch.Case>
+                        </Switch.Case>
 
-                                {/* 
-                                    Sale Risk Analysis Header for before authorize and deny
-                                */}
-                                <Switch.Case
-                                    condition={
-                                        auth.getRoleId() === 1 &&
-                                        getDealStatus(
-                                            metaInfo?.deal?.sale_analysis_status
-                                        ) &&
-                                        !isLoading
-                                    }
-                                >
-                                    <SaleRiskAuthorizeHeader
-                                        headerData={metaInfo}
-                                        isLoading={isLoading}
-                                        handleOpenAuthorizeModal={
-                                            handleOpenAuthorizeModal
-                                        }
-                                    />
-                                </Switch.Case>
-                                {/* 
-                                    Sale Risk Analysis Header for User after authorize and deny
-                                */}
-                                <Switch.Case
-                                    condition={
-                                        auth.getRoleId() === 1 &&
-                                        getDealStatus(
+                        {/*  after authorize or den*/}
+                        <Switch.Case
+                            condition={getDealStatus(
+                                metaInfo?.deal?.sale_analysis_status,
+                                true
+                            )}
+                        >
+                            <div className="d-flex justify-content-center align-items-center mt-4">
+                                <Switch>
+                                    <Switch.Case
+                                        condition={
                                             metaInfo?.deal
-                                                ?.sale_analysis_status,
-                                            true
-                                        ) &&
-                                        !isLoading
-                                    }
-                                >
-                                    <SaleRiskAuthorizeHeaderForUser
-                                        headerData={metaInfo}
-                                        isLoading={isLoading}
-                                        handleOpenAuthorizeModal={
-                                            handleOpenAuthorizeModal
+                                                ?.sale_analysis_status ==
+                                            "auto-authorized"
                                         }
-                                    />
-                                </Switch.Case>
-                            </Switch>
-
-                            {/* Sale Risk Analysis Table */}
-
-                            <div className="sp1_tlr_container">
-                                <div className="sp1_tlr_tbl_container mx-0 py-3">
-                                    {/* sales risk analysis table */}
-                                    <SalesRiskAuthorizeTable
-                                        tableColumns={SalesRiskAuthorizeColumns}
-                                        tableName="SalesRiskAuthorizeTable"
-                                        tableData={answersPoint}
-                                        isLoading={isLoading}
-                                        isFetching={isFetching}
-                                    />
-
-                                    {/* Total points achieved container */}
-
-                                    <SaleRiskAuthorizeTotalPointContainer
-                                        className="mb-4"
-                                        background={`${
-                                            metaInfo?.points >= 0
-                                                ? "#bcf5a1"
-                                                : "#FFDCDC "
-                                        }`}
                                     >
-                                        <p>Total Points Achieved :</p>
-                                        <span>
-                                            {isLoading ? (
-                                                <div className="d-flex justify-content-end flex-column align-items-end mr-2">
-                                                    <Placeholder
-                                                        width="50px"
-                                                        height="15px"
-                                                        className="mb-1"
-                                                    />
-                                                </div>
-                                            ) : (
-                                                <span
+                                        <div className="d-flex flex-column justify-content-center">
+                                            <div className="d-flex justify-content-center mb-3">
+                                                <p
                                                     style={{
-                                                        color:
-                                                            metaInfo?.points >=
-                                                            0
-                                                                ? "#000"
-                                                                : "#F66 ",
+                                                        width: "50%",
+                                                        backgroundColor:
+                                                            "#28a745",
+                                                        color: "#fff",
+                                                        cursor: "pointer",
+                                                        padding: "9px 11px",
+                                                        borderRadius: "0.25rem",
+                                                        textAlign: "center",
+                                                        textTransform:
+                                                            "uppercase",
                                                     }}
                                                 >
-                                                    {metaInfo?.points}
-                                                </span>
-                                            )}
-                                        </span>
-                                    </SaleRiskAuthorizeTotalPointContainer>
-
-                                    {/* Sale risk authorize button */}
-                                    <Switch>
-                                        <Switch.Case
-                                            condition={
-                                                auth.getRoleId() === 1 &&
-                                                getDealStatus(
-                                                    metaInfo?.deal
-                                                        ?.sale_analysis_status
-                                                )
-                                            }
-                                        >
-                                            <div className="d-flex justify-content-center align-items-center">
-                                                <SaleRiskAuthorizeButton
-                                                    color="#1492E6"
-                                                    onClick={() => {
-                                                        handleAuthorizeAndDeny(
-                                                            "1"
-                                                        );
-                                                    }}
-                                                    disabled={isActionLoading}
-                                                >
-                                                    Authorize
-                                                </SaleRiskAuthorizeButton>
-                                                <SaleRiskAuthorizeButton
-                                                    className="ml-2"
-                                                    border="1px solid #F66"
-                                                    textColor="#F66"
-                                                    onClick={() => {
-                                                        handleAuthorizeAndDeny(
-                                                            "0"
-                                                        );
-                                                    }}
-                                                    disabled={isActionLoading}
-                                                >
-                                                    Deny
-                                                </SaleRiskAuthorizeButton>
+                                                    {
+                                                        metaInfo?.deal
+                                                            ?.sale_analysis_status
+                                                    }
+                                                </p>
                                             </div>
-                                        </Switch.Case>
-                                        {/* 
-                                    
-                                        Sale Risk Analysis Action Button for User
-                                    */}
-                                        <Switch.Case
-                                            condition={
-                                                auth.getRoleId() === 1 &&
-                                                getDealStatus(
-                                                    metaInfo?.deal
-                                                        ?.sale_analysis_status,
-                                                    true
-                                                )
-                                            }
-                                        >
-                                            <div className="d-flex justify-content-center align-items-center">
-                                                <Switch>
-                                                    <Switch.Case
-                                                        condition={
-                                                            metaInfo?.deal
-                                                                ?.sale_analysis_status ==
-                                                            "auto-authorized"
-                                                        }
-                                                    >
-                                                        <SaleRiskAuthorizeButton
-                                                            className="ml-2 text-uppercase"
-                                                            border={`1px solid ${
-                                                                metaInfo?.deal?.sale_analysis_status?.includes(
-                                                                    "authorized"
-                                                                )
-                                                                    ? "#218838"
-                                                                    : "#F66"
-                                                            }`}
-                                                            textColor="#fff"
-                                                            color={
-                                                                metaInfo?.deal?.sale_analysis_status?.includes(
-                                                                    "authorized"
-                                                                )
-                                                                    ? "#218838"
-                                                                    : "#F66"
-                                                            }
-                                                        >
-                                                            {
-                                                                metaInfo?.deal
-                                                                    ?.sale_analysis_status
-                                                            }
-                                                        </SaleRiskAuthorizeButton>
-                                                    </Switch.Case>
-                                                    <Switch.Case
-                                                        condition={
-                                                            metaInfo?.deal
-                                                                ?.sale_analysis_status ===
-                                                            "authorized"
-                                                        }
-                                                    >
-                                                        <div className="alert alert-success text-center">
-                                                            This Deal is
-                                                            Authorized by{" "}
-                                                            <a
-                                                                href={`/account/employees/${metaInfo?.authorizeBy?.id}`}
-                                                                className="badge badge-success"
-                                                                style={{
-                                                                    color: "#fff !important",
-                                                                }}
-                                                            >
-                                                                {
-                                                                    metaInfo
-                                                                        ?.authorizeBy
-                                                                        ?.name
-                                                                }
-                                                            </a>{" "}
-                                                            on{" "}
-                                                            <span className="badge badge-success">
-                                                                {dayjs(
-                                                                    metaInfo
-                                                                        ?.deal
-                                                                        ?.sale_authorize_on
-                                                                ).format(
-                                                                    "MMM DD, YYYY"
-                                                                )}
-                                                            </span>{" "}
-                                                            at{" "}
-                                                            <span className="badge badge-success">
-                                                                {dayjs(
-                                                                    metaInfo
-                                                                        ?.deal
-                                                                        ?.sale_authorize_on
-                                                                ).format(
-                                                                    "hh:mm A"
-                                                                )}
-                                                            </span>{" "}
-                                                        </div>
-                                                    </Switch.Case>
-                                                    <Switch.Case
-                                                        condition={
-                                                            metaInfo?.deal
-                                                                ?.sale_analysis_status ===
-                                                            "denied"
-                                                        }
-                                                    >
-                                                        <div className="alert alert-danger text-center">
-                                                            This Deal is Denied
-                                                            by{" "}
-                                                            <a
-                                                                href={`/account/employees/${metaInfo?.authorizeBy?.id}`}
-                                                                className="badge badge-danger"
-                                                                style={{
-                                                                    color: "#fff !important",
-                                                                }}
-                                                            >
-                                                                {
-                                                                    metaInfo
-                                                                        ?.authorizeBy
-                                                                        ?.name
-                                                                }
-                                                            </a>{" "}
-                                                            on{" "}
-                                                            <span className="badge badge-danger">
-                                                                {dayjs(
-                                                                    metaInfo
-                                                                        ?.deal
-                                                                        ?.sale_authorize_on
-                                                                ).format(
-                                                                    "MMM DD, YYYY"
-                                                                )}
-                                                            </span>{" "}
-                                                            at{" "}
-                                                            <span className="badge badge-danger">
-                                                                {dayjs(
-                                                                    metaInfo
-                                                                        ?.deal
-                                                                        ?.sale_authorize_on
-                                                                ).format(
-                                                                    "hh:mm A"
-                                                                )}
-                                                            </span>{" "}
-                                                        </div>
-                                                    </Switch.Case>
-                                                </Switch>
+                                            <div className="alert alert-success text-center">
+                                                This won deal was{" "}
+                                                <a
+                                                    href={`/account/employees/${metaInfo?.authorizeBy?.id}`}
+                                                    className="badge badge-success"
+                                                    style={{
+                                                        color: "#fff !important",
+                                                    }}
+                                                >
+                                                    Automatically Authorized
+                                                </a>{" "}
+                                                on{" "}
+                                                <span className="badge badge-success">
+                                                    {dayjs(
+                                                        metaInfo?.deal
+                                                            ?.sale_authorize_on
+                                                    ).format("MMM DD, YYYY")}
+                                                </span>{" "}
+                                                at{" "}
+                                                <span className="badge badge-success">
+                                                    {dayjs(
+                                                        metaInfo?.deal
+                                                            ?.sale_authorize_on
+                                                    ).format("hh:mm A")}
+                                                </span>{" "}
                                             </div>
-                                        </Switch.Case>
-                                    </Switch>
-                                </div>
+                                        </div>
+                                    </Switch.Case>
+                                    <Switch.Case
+                                        condition={
+                                            metaInfo?.deal
+                                                ?.sale_analysis_status ===
+                                            "authorized"
+                                        }
+                                    >
+                                        <div className="d-flex flex-column justify-content-center">
+                                            <div className="d-flex justify-content-center mb-3">
+                                                <div
+                                                    style={{
+                                                        width: "50%",
+                                                        backgroundColor:
+                                                            "#28a745",
+                                                        color: "#fff",
+                                                        cursor: "pointer",
+                                                        padding: "9px 11px",
+                                                        borderRadius: "0.25rem",
+                                                        textAlign: "center",
+                                                    }}
+                                                >
+                                                    Authorized
+                                                </div>
+                                            </div>
+                                            <div className="alert alert-success text-center">
+                                                This won deal is Authorized by{" "}
+                                                <a
+                                                    href={`/account/employees/${metaInfo?.authorizeBy?.id}`}
+                                                    className="badge badge-success"
+                                                    style={{
+                                                        color: "#fff !important",
+                                                    }}
+                                                >
+                                                    {
+                                                        metaInfo?.authorizeBy
+                                                            ?.name
+                                                    }
+                                                </a>{" "}
+                                                on{" "}
+                                                <span className="badge badge-success">
+                                                    {dayjs(
+                                                        metaInfo?.deal
+                                                            ?.sale_authorize_on
+                                                    ).format("MMM DD, YYYY")}
+                                                </span>{" "}
+                                                at{" "}
+                                                <span className="badge badge-success">
+                                                    {dayjs(
+                                                        metaInfo?.deal
+                                                            ?.sale_authorize_on
+                                                    ).format("hh:mm A")}
+                                                </span>{" "}
+                                            </div>
+                                        </div>
+                                    </Switch.Case>
+                                    <Switch.Case
+                                        condition={
+                                            metaInfo?.deal
+                                                ?.sale_analysis_status ===
+                                            "denied"
+                                        }
+                                    >
+                                        <div className="d-flex flex-column justify-content-center">
+                                            <div className="d-flex justify-content-center mb-3">
+                                                <div
+                                                    style={{
+                                                        width: "50%",
+                                                        backgroundColor:
+                                                            "#D30000",
+                                                        color: "#fff",
+                                                        cursor: "pointer",
+                                                        padding: "9px 11px",
+                                                        borderRadius: "0.25rem",
+                                                        textAlign: "center",
+                                                    }}
+                                                >
+                                                    Denied
+                                                </div>
+                                            </div>
+                                            <div className="alert alert-danger text-center">
+                                                This Deal is Denied by{" "}
+                                                <a
+                                                    href={`/account/employees/${metaInfo?.authorizeBy?.id}`}
+                                                    className="badge badge-danger"
+                                                    style={{
+                                                        color: "#fff !important",
+                                                    }}
+                                                >
+                                                    {
+                                                        metaInfo?.authorizeBy
+                                                            ?.name
+                                                    }
+                                                </a>{" "}
+                                                on{" "}
+                                                <span className="badge badge-danger">
+                                                    {dayjs(
+                                                        metaInfo?.deal
+                                                            ?.sale_authorize_on
+                                                    ).format("MMM DD, YYYY")}
+                                                </span>{" "}
+                                                at{" "}
+                                                <span className="badge badge-danger">
+                                                    {dayjs(
+                                                        metaInfo?.deal
+                                                            ?.sale_authorize_on
+                                                    ).format("hh:mm A")}
+                                                </span>{" "}
+                                            </div>
+                                        </div>
+                                    </Switch.Case>
+                                </Switch>
                             </div>
-                        </section>
-                    </Switch.Case>
-                </Switch.Case>
-            </Switch>
+                        </Switch.Case>
+                    </div>
+                </div>
+            </section>
             {isSaleRiskAuthorizeModalOpen && (
                 <SaleRiskAuthorizePolicesModal
                     open={isSaleRiskAuthorizeModalOpen}
@@ -502,7 +488,6 @@ const SalesRiskAuthorize = () => {
                     isLoading={isLoading}
                 />
             )}
-
             {saleRiskActionModalOpen && (
                 <RuleActionConfirmationModal
                     open={saleRiskActionModalOpen}

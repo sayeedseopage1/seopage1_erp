@@ -6,7 +6,7 @@ import { Placeholder } from "../../../../global/Placeholder";
 
 const SaleRiskAuthorizeHeaderLoader = () => {
     return (
-        <SaleRiskAuthorizeHeaderWrapper className="row d-flex flex-column flex-md-row mb-3 mb-md-3 mb-lg-0">
+        <SaleRiskAuthorizeHeaderWrapper className="col-12 d-flex flex-column flex-md-row">
             <div className="col-12 col-md-3 px-0 ">
                 <div className="singleline-ellipsis d-flex align-items-center">
                     Project name:{" "}

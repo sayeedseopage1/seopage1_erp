@@ -60,7 +60,7 @@ const SaleAnalysisReportTableFilterBar = ({ setFilter }) => {
                     <HDivider />
                     <div style={{ maxWidth: "256px" }}>
                         <SearchBox value={search} onChange={setSearch} />
-                    </div>
+                </div>
                 </React.Fragment>
             )}
             {width < 1400 && (

@@ -23,6 +23,7 @@ import SaleSRiskQuestionNotice from "./Pages/SaleSRiskQuestionNotice";
 // Context
 import SalesRiskAnalysisProvider from "./context/SalesRiskAnalysisProvider";
 
+
 // custom drag layer
 const DragLayer = () => {
     const { item, itemType, currentOffset } = useDragLayer((monitor) => ({
@@ -163,6 +164,10 @@ if (containerSalesAnalysisReport) {
                             />
                             <Route
                                 path="/account/projects/:id"
+                                element={<SalesRiskAuthorize />}
+                            />
+                            <Route
+                                path="/account/sales-analysis-report/:id"
                                 element={<SalesRiskAuthorize />}
                             />
                         </Routes>
