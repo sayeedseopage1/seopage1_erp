@@ -36,7 +36,6 @@ const PointFactors = () => {
         status: "1"
     });
     const { activeFactorFields, setActiveCriteria } = useActiveFactorFields({ newFactorData })
-    console.log(activeFactorFields)
 
     // modal state validation
     const [newFactorDataValidation, setNewFactorDataValidation] =
