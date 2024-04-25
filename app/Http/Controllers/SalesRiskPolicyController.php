@@ -75,6 +75,7 @@ class SalesRiskPolicyController extends AccountBaseController
         Route::get('account/deals/risk-analysis/question/list', [self::class, 'renderQuestionList'])->name('account.sale-risk-policies.risk-analysis.question-list');
         Route::get('account/sales-analysis-reports', [self::class, 'salesRiskReportList'])->name('account.sale-risk-policies.report-list');
         Route::get('account/sales-analysis-reports/data', [self::class, 'salesRiskReportList'])->name('account.sale-risk-policies.report-data');
+        Route::get('account/contracts/sales-analysis-report/{dead_id}', [self::class, 'salesAnalysisReport'])->name('account.sales-analysis-report');
     }
 
     function index()
@@ -1344,40 +1345,18 @@ class SalesRiskPolicyController extends AccountBaseController
 
             return response()->json(['status' => 'error', 'message' => 'Not authorized.']);
         }
-
-        $calculation = self::calculatePolicyPoint($deal_id);
-        // self::policyHistoryStore($deal_id);
-
-        if ($calculation['points'] === null) {
-            return response()->json(['status' => 'error', 'message' => $calculation['error'], 'data' => ['points' => null]]);
-        }
-
         try {
-            $data['deal'] = $deal =  Deal::find($deal_id);
-            $data['user'] = User::whereId($deal->added_by)->first(['id', 'name']);
-            $data['authorizeBy'] = $deal->sale_authorize_by ? User::whereId($deal->sale_authorize_by)->first(['id', 'name']) : null;
+
+            $calculation = self::calculatePolicyPoint($deal_id);
+            // self::policyHistoryStore($deal_id);
+
+            if ($calculation['points'] === null) {
+                return response()->json(['status' => 'error', 'message' => $calculation['error'], 'data' => ['points' => null]]);
+            }
+
             $data['policyHistory'] = PolicyPointHistory::where('deal_id', $deal->id)->first();
             $data['policyHistory'] = $data['policyHistory'] ? json_decode($data['policyHistory']->policy) : null;
 
-            //get Date diff as intervals
-            $d1 = new DateTime("$deal->start_date 00:00:00");
-            $d2 = new DateTime("$deal->deadline 23:59:59");
-            $interval = $d1->diff($d2);
-            $data['deadline'] = $interval->d;
-
-            /**
-             * hourlyRate
-             * milestone
-             * threat
-             * doneByElse
-             * routeWork
-             * availableWeekend
-             * firstSubmission
-             * acceptPriceProposal
-             * clientCountry
-             * projectDeadline
-             * projectBudget
-             */
             // compact('deal', 'points', 'pointData', 'message', 'user', 'deadline')
             return response()->json(['status' => 'success', 'data' => array_merge($calculation, $data)]);
         } catch (\Throwable $th) {
@@ -1480,5 +1459,14 @@ class SalesRiskPolicyController extends AccountBaseController
         $dealStage->save();
 
         return response()->json(['status' => 'successful', 'message' => 'Deal status updated.']);
+    }
+
+    function salesAnalysisReport(Request $req, $deal_id)
+    {
+        if (in_array('data', array_keys($req->query())) ) {
+            return self::questionValueReport($deal_id);
+        }
+        
+        return view('sales-risk-policies.salesAnalysisReport', $this->data);
     }
 }
