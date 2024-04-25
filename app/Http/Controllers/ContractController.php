@@ -2340,6 +2340,7 @@ class ContractController extends AccountBaseController
                 $this->view = 'contracts.ajax.renew';
                 break;
             case 'sales-analysis-report':
+                if (auth()->user()->role_id != 1) return redirect()->route('contracts.show', $id);
                 $this->view = 'contracts.ajax.salesAnalysisReport';
                 break;
             default:

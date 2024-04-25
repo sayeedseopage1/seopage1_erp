@@ -75,7 +75,7 @@ class SalesRiskPolicyController extends AccountBaseController
         Route::get('account/deals/risk-analysis/question/list', [self::class, 'renderQuestionList'])->name('account.sale-risk-policies.risk-analysis.question-list');
         Route::get('account/sales-analysis-reports', [self::class, 'salesRiskReportList'])->name('account.sale-risk-policies.report-list');
         Route::get('account/sales-analysis-reports/data', [self::class, 'salesRiskReportList'])->name('account.sale-risk-policies.report-data');
-        Route::get('account/contracts/sales-analysis-report/{deal_id}', [self::class, 'salesAnalysisReport'])->name('account.sales-analysis-report');
+        Route::get('account/sales-analysis-report/{deal_id}', [self::class, 'salesAnalysisReport'])->name('account.sales-analysis-report');
     }
 
     function index()
