@@ -5,8 +5,6 @@ import Button from '../../../../Insights/ui/Button';
 
 const Pagination = ({ data, setCurrentPageData, numOfPerPageRow = 10, sortConfig, sortedData, currentPage = 1, setCurrentPage }) => {
 
-    console.log(data)
-
     const [renderButtons, setRenderButtons] = React.useState([]);
     const [totalPages, setTotalPages] = React.useState(1);
 
@@ -15,9 +13,11 @@ const Pagination = ({ data, setCurrentPageData, numOfPerPageRow = 10, sortConfig
     const isTotalPagesChange = React.useMemo(() => totalPages, [totalPages]);
 
     const paginate = (data, currentPage, nPaginate) => {
-        if (data.length <= nPaginate) return data;
+        // TODO: this sorting can remove later
+        if (data.length <= nPaginate) return data?.sort((a, b) => a.id - b.id);
         const startIndex = (currentPage - 1) * nPaginate;
-        return data.slice(startIndex, startIndex + nPaginate);
+        // TODO: this sorting can remove later
+        return data?.sort((a, b) => a.id - b.id).slice(startIndex, startIndex + nPaginate);
     };
 
     const sortData = (data) => {

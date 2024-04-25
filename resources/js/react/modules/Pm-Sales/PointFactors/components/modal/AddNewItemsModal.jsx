@@ -1,15 +1,14 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import PropTypes from "prop-types";
 import { Flex } from "../../../../../global/styled-component/Flex";
 // ui components
 import CustomModal from "../Styles/ui/CustomModal/CustomModal";
 import { CheckboxContainer, ModalButton, ModalInput, ModalInputLabel, ModalSelectContainer, ModalTitle, StyledInput, StyledLabel } from "../Styles/ui/ui";
 import CustomDropDown from "../CustomDropdown";
-import { LimitConditions, LimitUnits } from "../../constant";
+import { LimitUnits } from "../../constant";
 import useCriteriaList from "../../hooks/useCriteriaList";
-import useActiveFactorFields from "../../hooks/useActiveFactorFields";
 import _, { upperCase } from "lodash";
-import Switch from "../../../../../global/Switch";
+
 
 const AddNewItemsModal = ({
     open,
@@ -20,27 +19,13 @@ const AddNewItemsModal = ({
     handleFactorsAdded,
     newFactorDataValidation,
     isLoadingAddPmFactors,
-    activeFactorFields
 }) => {
 
     // criteria list data from api
     const { CriteriaConstList } = useCriteriaList()
     // get acticve factor fields from api 
 
-    useEffect(() => {
-        if ((newFactorData?.infiniteValueUp && !newFactorData?.infiniteValueDown)) {
-            console.log('inside the condition 1')
-            setNewFactorData({ ...newFactorData, upper_limit: newFactorData?.lower_limit })
-            console.log(newFactorData, "1")
-        }
-    }, [newFactorData?.infiniteValueUp])
 
-    useEffect(() => {
-        if ((!newFactorData?.infiniteValueUp && newFactorData?.infiniteValueDown)) {
-            console.log('inside the condition')
-            setNewFactorData({ ...newFactorData, lower_limit: newFactorData?.upper_limit })
-        }
-    }, [newFactorData?.infiniteValueDown])
 
     return (
         <CustomModal
@@ -237,7 +222,7 @@ const AddNewItemsModal = ({
                                     </p>
                                 )}
                                 {
-                                    newFactorData?.lower_limit && parseFloat(newFactorData?.upper_limit) < parseFloat(newFactorData?.lower_limit) && <p className="text-danger">Upper limit must be greater than lower limit</p>
+                                    newFactorData?.lower_limit && (parseFloat(newFactorData?.upper_limit) < parseFloat(newFactorData?.lower_limit)) && <p className="text-danger">Upper limit must be greater than lower limit</p>
                                 }
                                 <CheckboxContainer className="mt-2">
                                     <StyledInput

@@ -35,8 +35,8 @@ import PointFactorsTablePagination from "./PointFactorsTablePagination";
 import { useState } from "react";
 import PmPointFactorsTableLoader from "../loader/PmPointFactorsTableLoader";
 import EditFactorModal from "../modal/EditFactorModal";
-import { LimitConditions, LimitUnits } from "../../constant";
-import { useUpdatePmPointfactorMutation } from "../../../../../services/api/pmSalesApiSlice";
+import { LimitUnits } from "../../constant";
+import { useGetSinglePmPointFactorQuery, useUpdatePmPointfactorMutation } from "../../../../../services/api/pmSalesApiSlice";
 import { validationFormator } from "../../utils/validationFormator";
 
 const PointFactorsTable = ({
@@ -59,8 +59,6 @@ const PointFactorsTable = ({
         pageIndex: 0,
         pageSize: 10,
     });
-
-    // console.log(tableData)
 
     // modal open close state
     const [editFactorModalOpen, setEditFactorModalOpen] = React.useState(false);
@@ -90,11 +88,9 @@ const PointFactorsTable = ({
 
     // default columns
     const defaultColumns = useMemo(() => [...tableColumns]);
-    // console.log("80", defaultColumns)
 
     // columns
     const [columns, setColumns] = useState([...defaultColumns]);
-    // console.log("84", columns)
 
     const [columnOrder, setColumnOrder] = useState(_.map(columns, "id"));
 
@@ -109,10 +105,13 @@ const PointFactorsTable = ({
         onPageChange(paginate);
     };
 
+
+
+
+
     // handle page size change
     const handlePageSizeChange = (e) => {
         e.preventDefault();
-
         const paginate = {
             pageIndex,
             pageSize: e.target.value,
@@ -154,16 +153,15 @@ const PointFactorsTable = ({
             handleEditFactor: (factorData) => {
                 // find default value for dropdown options 
                 const limit_unit = LimitUnits?.data?.find(unit => unit?.name == factorData?.limit_unit)
-                const lower_limit_condition = LimitConditions?.data?.find(unit => unit?.name == factorData?.lower_limit_condition)
-                const upper_limit_condition = LimitConditions?.data?.find(unit => unit?.name == factorData?.upper_limit_condition)
 
                 // set editor data
-                setEditFactorData({ ...factorData, limit_unit, lower_limit_condition, upper_limit_condition });
+                setEditFactorData({
+                    ...factorData, limit_unit
+                });
                 setEditFactorModalOpen(true);
             },
         }
     })
-
 
     const [editFactorDataValidation, setEditFactorDataValidation] =
         useState({
@@ -181,18 +179,15 @@ const PointFactorsTable = ({
     // handle change on input
     const handleChange = (e) => {
         const { name, value } = e.target;
-        setEditFactorData({ ...editFactorData, [name]: value });
-        /*  if (editFactorData[name] === value) {
-             // If yes, clear the value from the state
-             setEditFactorData({ ...editFactorData, [name]: "" });
-         } else {
-             // Otherwise, set the clicked checkbox's value in the state
-             setEditFactorData({ ...editFactorData, [name]: value });
-         } */
+        // setEditFactorData({ ...editFactorData, [name]: value });
+        if (editFactorData[name] === value) {
+            // If yes, clear the value from the state
+            setEditFactorData({ ...editFactorData, [name]: "" });
+        } else {
+            // Otherwise, set the clicked checkbox's value in the state
+            setEditFactorData({ ...editFactorData, [name]: value });
+        }
     }
-
-    // Edit Policy
-    // handle cancel rule on policy
 
     // modal Close Handler
     const handleCloseEditFactorModal = () => {
@@ -205,7 +200,6 @@ const PointFactorsTable = ({
 
     const handleUpdateFactor = async () => {
         const validation = validationFormator(editFactorData, editFactorDataValidation)
-
         if (
             Object.entries(validation).some(
                 ([key, value]) => key !== "isSubmitting" && value === true
@@ -217,8 +211,10 @@ const PointFactorsTable = ({
             });
             return;
         }
-
         try {
+            const lowerLimitCondition = editFactorData?.infiniteValueDown ? editFactorData?.infiniteValueDown : editFactorData?.limit_type == 2 ? "==" : "<"
+            const upperLimitCondition = editFactorData?.infiniteValueUp ? editFactorData?.infiniteValueUp : editFactorData?.limit_type == 2 ? "==" : ">="
+
             const payload = {
                 criteria_id: parseInt(editFactorData?.criteria_id),
                 title: editFactorData?.title ?? null,
@@ -227,8 +223,8 @@ const PointFactorsTable = ({
                 upper_limit: parseInt(editFactorData?.upper_limit) ?? null,
                 limit_type: parseInt(editFactorData?.limit_type) ?? null,
                 limit_unit: parseInt(editFactorData?.limit_unit?.name) ?? null,
-                lower_limit_condition: editFactorData?.lower_limit_condition?.name ?? null,
-                upper_limit_condition: editFactorData?.upper_limit_condition?.name ?? null,
+                lower_limit_condition: lowerLimitCondition ?? null,
+                upper_limit_condition: upperLimitCondition ?? null,
                 point_type: parseInt(editFactorData?.point_type) ?? null,
                 points: parseFloat(editFactorData?.points) ?? null,
                 status: parseInt(editFactorData?.status) ?? null,
@@ -251,6 +247,20 @@ const PointFactorsTable = ({
             setEditFactorDataValidation(validation);
         }
     }, [editFactorData]);
+
+    useEffect(() => {
+        if (editFactorData?.infiniteValueDown) {
+            if (editFactorData?.lower_limit && !editFactorData?.infiniteValueUp && !editFactorData?.upper_limit) {
+                setEditFactorData(prev => ({ ...prev, lower_limit: editFactorData.lower_limit }));
+            }
+            if (editFactorData?.upper_limit && !editFactorData?.infiniteValueUp) {
+                setEditFactorData(prev => ({ ...prev, lower_limit: editFactorData.upper_limit }));
+            }
+        }
+        if (editFactorData?.infiniteValueUp && editFactorData?.lower_limit && !editFactorData?.infiniteValueDown) {
+            setEditFactorData(prev => ({ ...prev, upper_limit: editFactorData.lower_limit }));
+        }
+    }, [editFactorData?.infiniteValueUp, editFactorData?.infiniteValueDown, editFactorData?.lower_limit, editFactorData?.upper_limit]);
 
     return (
         <React.Fragment>
