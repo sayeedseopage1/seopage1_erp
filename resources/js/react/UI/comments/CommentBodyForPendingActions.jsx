@@ -760,6 +760,8 @@ const CommentBodyForPendingActions = ({
                                                 console.log(
                                                     "past action failed"
                                                 );
+                                                close();
+                                                increaseCount();
                                             });
                                     } else if (result.isDismissed) {
                                         close();
