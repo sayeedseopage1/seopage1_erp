@@ -30,7 +30,9 @@ const RelevantModal = ({ isRelevantModal, setIsRelevantModal }) => {
                 increaseCount();
             })
             .catch((err) => {
-                console.log(err);
+                console.log("pending action failed");
+                setIsRelevantModal(false);
+                increaseCount();
             });
     };
     return (
