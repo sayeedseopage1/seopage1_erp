@@ -1290,7 +1290,7 @@ class ContractController extends AccountBaseController
             $client->name = $request->client_name;
             $client->save();
 
-        if(!$request->is_drafted && in_array($deal->status, ['accepted', 'auto-accepted'])){
+        if(!$request->is_drafted && in_array($deal->sale_analysis_status, ['authorized','auto-authorized'])){
             $lead_developer_id = RoleUser::where('role_id', 6)->get();
             //dd($lead_developer_id);
             foreach ($lead_developer_id as $lead) {
@@ -3024,7 +3024,7 @@ public function getAllContracts(Request $request){
     ->leftJoin('users as client', 'client.id', 'deals.client_id')
     ->leftJoin('p_m_projects', 'deals.id', 'p_m_projects.deal_id')
     ->where('deals.dept_status','WD')
-    ->whereIn('deals.sale_analysis_status',['analysis', 'authorized', 'auto-authorized']);
+    ->whereIn('deals.sale_analysis_status',['privious-won','privious-denied', 'authorized', 'auto-authorized']);
 
     if ($startDate !== null && $endDate !== null) {
         $dealsQuery->where(function ($q) use ($startDate, $endDate) {
