@@ -1,4 +1,4 @@
-import React, { useMemo } from "react";
+import React, { useEffect, useMemo } from "react";
 
 // Ui components
 import { Flex } from "../../../global/styled-component/Flex";
@@ -33,14 +33,14 @@ export const SalesRiskReportStatus = [
         count: 0,
     },
     {
-        id: "approved",
+        id: "authorized",
         name: "Authorized",
         className: `${styles.saleRiskReportBtn} ${styles.saleRiskReportApprovedBtn} ml-2`,
         activeClass: `${styles.saleRiskReportBtn} ${styles.saleRiskReportActiveApprovedBtn} ml-2`,
         count: 0,
     },
     {
-        id: "rejected",
+        id: "denied",
         name: "Denied",
         className: `${styles.saleRiskReportBtn} ${styles.saleRiskReportRejectedBtn} ml-2`,
         activeClass: `${styles.saleRiskReportBtn} ${styles.saleRiskReportActiveRejectedBtn} ml-2`,
@@ -50,6 +50,9 @@ export const SalesRiskReportStatus = [
 
 const SalesRiskReport = () => {
     const auth = useAuth();
+    const [salesRiskReportStatus, setSalesRiskReportStatus] = React.useState(
+        SalesRiskReportStatus
+    );
     const [reportStatus, setReportStatus] = React.useState("all");
     const [{ pageIndex, pageSize }, setPagination] = React.useState({
         pageIndex: 0,
@@ -72,7 +75,7 @@ const SalesRiskReport = () => {
         queryString({
             page: pageIndex + 1,
             limit: pageSize,
-            type: reportStatus,
+            status: reportStatus === "all" ? undefined : reportStatus,
             ...filter,
         })
     );
@@ -100,6 +103,20 @@ const SalesRiskReport = () => {
         refetch();
     }, [reportStatus]);
 
+    useEffect(() => {
+        if (
+            saleAnalysisReportTableData &&
+            !isFetching &&
+            !isQuestionsListLoading
+        ) {
+            const statusCount = saleAnalysisReportTableData?.counts;
+            SalesRiskReportStatus.forEach((item) => {
+                item.count = statusCount[item.id] || 0;
+            });
+            setSalesRiskReportStatus([...salesRiskReportStatus]);
+        }
+    }, [data]);
+
     return (
         <div>
             <SaleAnalysisReportTableFilterBar setFilter={setFilter} />
@@ -109,7 +126,7 @@ const SalesRiskReport = () => {
                 className="mb-3"
             >
                 <div className="d-flex">
-                    {SalesRiskReportStatus.map((item) => (
+                    {salesRiskReportStatus.map((item) => (
                         <button
                             key={item.id}
                             className={` ${
