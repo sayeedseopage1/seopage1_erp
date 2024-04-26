@@ -460,7 +460,7 @@
                         </div>
                         {{-- <x-sub-menu-item :link="route('project.manager.point.factors')" :text="'Point Factors'" />
                         <x-sub-menu-item :link="route('project.manager.points')" :text="'Points'" /> --}}
-                        <x-sub-menu-item :link="'#'" :text="'Incentive'" />
+                        <x-sub-menu-item :link="route('project.manager.incentives')" :text="'Incentive'" />
                     </div>
                 </x-menu-item>
                 @endif
