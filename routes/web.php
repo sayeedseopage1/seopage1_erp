@@ -211,6 +211,7 @@ use App\Http\Controllers\EmployeeShiftChangeRequestController;
 use App\Http\Controllers\PointIncentive\GetPmCashPointController;
 use App\Http\Controllers\PointIncentive\GetPmPointCriteriaController;
 use App\Http\Controllers\PointIncentive\GetCriteriaWiseFactorController;
+use App\Http\Controllers\PointIncentive\PmIncentiveViewController;
 
 /*
 |--------------------------------------------------------------------------
@@ -1554,6 +1555,8 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
     Route::get('get-criteria-wise-factor/{id}', GetCriteriaWiseFactorController::class)->name('get.criteria.wise.factor');
     Route::resource('pm-point-criteria', CriteriaController::class)->only(['index']);
     Route::get('get-pm-cashpoint', GetPmCashPointController::class)->name('get.pm.cashpoint');
+    Route::get('pm-incentives', PmIncentiveViewController::class)->name('project.manager.incentives');
+
 
   //  Route::any('tasks/{any?}', [TaskController::class, 'home'])->where('any', '.*');
 });
@@ -1844,5 +1847,8 @@ Route::get('test-point/{factorId}/{projectId}/{comparable_value}', function($fac
 });
 
 Route::get('test-calculation/{factorId}/{projectId}', function ($factorId, $projectId){
-    dd('Hello');
+    $project = Project::find($projectId);
+    $project->status = $project->status=='finished' ? 'partially finished' : 'finished';
+    $project->save();
+    dd('Success');
 });
