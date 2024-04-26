@@ -1,0 +1,84 @@
+import ActionDropdown from "./ActionDropdown";
+export const EvaluationTableColumns = [
+    // {
+    //     header: "#",
+    //     accessorKey: "id",
+    //     cell: ({ row }) => {
+    //         const data = row.original;
+
+    //         return <ColumnContent>{data?.id}</ColumnContent>;
+    //     },
+    // },
+    {
+        header: "Task Name",
+        accessorKey: "taskName",
+        cell: ({ row }) => {
+            const data = row.original;
+
+            return <div>{data?.taskName}</div>;
+        },
+    },
+    {
+        header: "Assign Date",
+        accessorKey: "assignDate",
+        cell: ({ row }) => {
+            const data = row.original;
+            return <div>{data?.assignDate}</div>;
+        },
+    },
+    {
+        header: "Submission Date",
+        accessorKey: "submissionDate",
+        cell: ({ row }) => {
+            const data = row.original;
+            return <div>{data?.submissionDate}</div>;
+        },
+    },
+    {
+        header: "Completed Work Link",
+        accessorKey: "completedWorkLink",
+        cell: ({ row }) => {
+            const data = row.original;
+            return (
+                <a href={data.completedWorkLink}>{data?.completedWorkLink}</a>
+            );
+        },
+    },
+    {
+        header: "Total Hours Tracked",
+        accessorKey: "totalHoursTracked",
+        cell: ({ row }) => {
+            const data = row.original;
+            return (
+                <div style={{ marginLeft: "30%" }}>
+                    {data?.totalHoursTracked}
+                </div>
+            );
+        },
+    },
+
+    {
+        header: "Revisions Needed",
+        accessorKey: "numberOfRevisions",
+        cell: ({ row }) => {
+            const data = row.original;
+
+            return (
+                <div style={{ marginLeft: "30%" }}>
+                    {data?.numberOfRevisions}
+                </div>
+            );
+        },
+    },
+
+    {
+        header: "Ratings",
+        accessorKey: "action",
+
+        cell: ({ row }) => {
+            const data = row.original;
+
+            return <ActionDropdown data={data} />;
+        },
+    },
+];

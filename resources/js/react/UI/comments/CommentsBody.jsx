@@ -479,7 +479,6 @@ const CommentsBody = ({
                 setAllComments(allComments);
             } else {
                 // Handle the case where allComments is not an array
-                console.error("allComments is not an array");
             }
         }
     };
@@ -573,7 +572,7 @@ const CommentsBody = ({
                         </svg>
                     </span>
 
-                    {!param?.taskId ? (
+                    {!param?.taskId || !taskId ? (
                         <span
                             onClick={() =>
                                 window.open(
@@ -665,7 +664,7 @@ const CommentsBody = ({
                     )}
 
                     {/* search btn */}
-                    {param?.taskId && showSearchBtn ? (
+                    {(param?.taskId || taskId) && showSearchBtn ? (
                         <span
                             onClick={() => {
                                 if (showSearchBar) {
@@ -699,7 +698,7 @@ const CommentsBody = ({
                     )}
 
                     {/* full screen btn */}
-                    {param?.taskId && showFullScreenBtn ? (
+                    {(param?.taskId || taskId) && showFullScreenBtn ? (
                         !fullScreenView ? (
                             <AiOutlineFullscreen
                                 onClick={() => setFullScreenView(true)}
