@@ -8,7 +8,7 @@ const ExpiredTimeModalForNewEmployee = ({
     setTimeLeft,
     timerStatusForWarningModal,
 }) => {
-    const [toggleModal, setToggleModal] = useState(false);
+    const [toggleModal, setToggleModal] = useState(true);
 
     useEffect(() => {
         const timer = setInterval(() => {
@@ -32,9 +32,10 @@ const ExpiredTimeModalForNewEmployee = ({
 
         return () => clearInterval(interval);
     }, []);
+    // console.log("show warning modal", showExpirationWarningModal);
     // console.log("time left", timeLeft);
-    // console.log("toggle modal", toggleModal);
-    // console.log("time left less then 3600000", timeLeft <= 3600000);
+    // console.log(" toggle modal warning modal", toggleModal);
+    // console.log("time left less then 4200 seconds", timeLeft <= 4200);
     // console.log("time left greater then 0", timeLeft > 0);
     // console.log("timer status for warning", timerStatusForWarningModal);
 
@@ -47,7 +48,7 @@ const ExpiredTimeModalForNewEmployee = ({
         ) {
             setShowExpirationWarningModal(true);
         }
-    }, [toggleModal]);
+    }, [toggleModal, timeLeft]);
 
     const closeModal = () => {
         setShowExpirationWarningModal(false);

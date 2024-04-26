@@ -14269,7 +14269,7 @@ var ExpiredTimeModalForNewEmployee = function ExpiredTimeModalForNewEmployee(_re
     timeLeft = _ref.timeLeft,
     setTimeLeft = _ref.setTimeLeft,
     timerStatusForWarningModal = _ref.timerStatusForWarningModal;
-  var _useState = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false),
+  var _useState = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(true),
     _useState2 = _slicedToArray(_useState, 2),
     toggleModal = _useState2[0],
     setToggleModal = _useState2[1];
@@ -14297,9 +14297,10 @@ var ExpiredTimeModalForNewEmployee = function ExpiredTimeModalForNewEmployee(_re
       return clearInterval(interval);
     };
   }, []);
+  // console.log("show warning modal", showExpirationWarningModal);
   // console.log("time left", timeLeft);
-  // console.log("toggle modal", toggleModal);
-  // console.log("time left less then 3600000", timeLeft <= 3600000);
+  // console.log(" toggle modal warning modal", toggleModal);
+  // console.log("time left less then 4200 seconds", timeLeft <= 4200);
   // console.log("time left greater then 0", timeLeft > 0);
   // console.log("timer status for warning", timerStatusForWarningModal);
 
@@ -14309,7 +14310,7 @@ var ExpiredTimeModalForNewEmployee = function ExpiredTimeModalForNewEmployee(_re
     timeLeft > 0 && timerStatusForWarningModal) {
       setShowExpirationWarningModal(true);
     }
-  }, [toggleModal]);
+  }, [toggleModal, timeLeft]);
   var closeModal = function closeModal() {
     setShowExpirationWarningModal(false);
     setToggleModal(false);
