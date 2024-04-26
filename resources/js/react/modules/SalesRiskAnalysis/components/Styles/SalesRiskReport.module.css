@@ -10,7 +10,7 @@
 }
 
 .saleRiskReportAllBtn {
-  background-color: #e9f8fa;
+  background-color: #dbf6fa;
   color: #24b8cf;
 }
 
@@ -24,7 +24,7 @@
   color: #fff;
 }
 
-.saleRiskReportPendingBtn {
+.saleRiskReportActivePendingBtn {
   background-color: rgb(255, 145, 20);
   color: #fff;
 }
@@ -40,7 +40,7 @@
 }
 
 .saleRiskReportPendingBtn {
-  background-color: rgb(255, 238, 219);
+  background-color: rgb(247 220 190);
   color: rgb(255, 145, 20);
 }
 
@@ -50,7 +50,7 @@
 }
 
 .saleRiskReportApprovedBtn {
-  background-color: #e7f5e7;
+  background-color: #daf8da;
   color: #119911;
 }
 

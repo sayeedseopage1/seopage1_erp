@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useMemo } from "react";
 
 // Ui components
 import { Flex } from "../../../global/styled-component/Flex";
@@ -29,21 +29,21 @@ export const SalesRiskReportStatus = [
         id: "pending",
         name: "Pending",
         className: `${styles.saleRiskReportBtn} ${styles.saleRiskReportPendingBtn} ml-2`,
-        activeClass: `${styles.saleRiskReportBtn} ${styles.saleRiskReportPendingBtn}`,
+        activeClass: `${styles.saleRiskReportBtn} ${styles.saleRiskReportActivePendingBtn} ml-2`,
         count: 0,
     },
     {
         id: "approved",
         name: "Authorized",
         className: `${styles.saleRiskReportBtn} ${styles.saleRiskReportApprovedBtn} ml-2`,
-        activeClass: `${styles.saleRiskReportBtn} ${styles.saleRiskReportActiveApprovedBtn}`,
+        activeClass: `${styles.saleRiskReportBtn} ${styles.saleRiskReportActiveApprovedBtn} ml-2`,
         count: 0,
     },
     {
         id: "rejected",
         name: "Denied",
         className: `${styles.saleRiskReportBtn} ${styles.saleRiskReportRejectedBtn} ml-2`,
-        activeClass: `${styles.saleRiskReportBtn} ${styles.saleRiskReportActiveRejectedBtn}`,
+        activeClass: `${styles.saleRiskReportBtn} ${styles.saleRiskReportActiveRejectedBtn} ml-2`,
         count: 0,
     },
 ];
@@ -72,6 +72,7 @@ const SalesRiskReport = () => {
         queryString({
             page: pageIndex + 1,
             limit: pageSize,
+            type: reportStatus,
             ...filter,
         })
     );
@@ -93,6 +94,12 @@ const SalesRiskReport = () => {
         );
     };
 
+    // when satatus change then refetch data
+
+    React.useEffect(() => {
+        refetch();
+    }, [reportStatus]);
+
     return (
         <div>
             <SaleAnalysisReportTableFilterBar setFilter={setFilter} />
@@ -110,9 +117,10 @@ const SalesRiskReport = () => {
                                     ? item.activeClass
                                     : item.className
                             } `}
+                            onClick={() => setReportStatus(item.id)}
                         >
                             {item.name}{" "}
-                            <span className="bg-white text-dark px-1 rounded">
+                            <span className="badge badge-light">
                                 {" "}
                                 {item.count}
                             </span>
