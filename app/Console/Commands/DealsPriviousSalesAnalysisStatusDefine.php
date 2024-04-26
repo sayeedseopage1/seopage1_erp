@@ -42,7 +42,7 @@ class DealsPriviousSalesAnalysisStatusDefine extends Command
             }
 
         });
-
+        echo "Deals table updated sale_analysis_status column updated.";
         return Command::SUCCESS;
     }
 }

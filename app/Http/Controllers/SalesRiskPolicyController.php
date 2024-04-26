@@ -1389,6 +1389,9 @@ class SalesRiskPolicyController extends AccountBaseController
                     if ($req->client_id) {
                         $query->where('client_id', $req->client_id);
                     }
+                    if ($req->status) {
+                        $query->where('sale_analysis_status', $req->status);
+                    }
                 })
                 ->offset($req->input('limit', 10) * ($req->input('page', 1) - 1))
                 ->latest('updated_at')
@@ -1424,6 +1427,7 @@ class SalesRiskPolicyController extends AccountBaseController
                     return $data;
                 })->toArray();
 
+
             $data = new \Illuminate\Pagination\LengthAwarePaginator(
                 $itemsTransformed,
                 $itemsPaginated->total(),
@@ -1436,6 +1440,9 @@ class SalesRiskPolicyController extends AccountBaseController
                     ]
                 ]
             );
+
+            $extra = collect(['counts' => ['pending' => 0]]);
+            $data = $extra->merge($data);
 
             return response()->json(['data' => $data]);
         }
