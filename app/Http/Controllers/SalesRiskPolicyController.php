@@ -681,7 +681,7 @@ class SalesRiskPolicyController extends AccountBaseController
             })->toArray();
 
         $deal = Deal::find($req->session()->get('deal_id'));
-        $currency = Currency::find($deal->currency_id);
+        $currency = Currency::find($deal->original_currency_id);
 
         return response()->json(['status' => 'success', 'data' => ['questionList' => array_values($data), 'currency' => [$currency->currency_code, $currency->currency_name, $currency->currency_symbol]]]);
     }
