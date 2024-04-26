@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Models\Country;
 use App\Models\Currency;
 use App\Models\Deal;
-use App\Models\DealStage;
 use App\Models\Lead;
 use App\Models\PolicyPointHistory;
 use App\Models\PolicyQuestionValue;
@@ -729,10 +728,6 @@ class SalesRiskPolicyController extends AccountBaseController
 
             // deals table status change
             if ($calculation['points'] >= 0) {
-                $dealStage = DealStage::where('lead_id', $deal->lead_id)->first();
-                $dealStage->won_lost = 'Yes';
-                $dealStage->save();
-
                 $deal->sale_analysis_status = 'auto-authorized';
                 $deal->sale_authorize_on = date('Y-m-d h:i:s');
             } else {
@@ -1348,7 +1343,7 @@ class SalesRiskPolicyController extends AccountBaseController
             $questionData = [];
             foreach (json_decode($questionValues->values) as $item) {
                 $qsion = SalesPolicyQuestion::find($item->id);
-                if($qsion) $questionData[] = ['id' => $item->id, 'title' => $qsion->title, 'value' => $item->value, 'key' => $qsion->key];
+                if ($qsion) $questionData[] = ['id' => $item->id, 'title' => $qsion->title, 'value' => $item->value, 'key' => $qsion->key];
             }
 
             $data['questionData'] = $questionData;
@@ -1445,7 +1440,8 @@ class SalesRiskPolicyController extends AccountBaseController
                 COUNT(IF( sale_analysis_status = 'pending', 1, null)) as pending,
                 COUNT(IF( sale_analysis_status = 'authorized', 1, null)) as authorized,
                 COUNT(IF( sale_analysis_status = 'denied', 1, null)) as denied
-                "))->first();
+                "
+            ))->first();
 
             $extra = collect(['counts' => $counts]);
             $data = $extra->merge($data);
@@ -1468,9 +1464,7 @@ class SalesRiskPolicyController extends AccountBaseController
             return ['points' => null, 'error' => 'Deal not found'];
         }
 
-        $dealStage = DealStage::where('lead_id', $deal->lead_id)->first();
         if ($status == '1') {
-            $dealStage->won_lost = 'Yes';
             $deal->sale_analysis_status = 'authorized';
         } elseif ($status == '0') {
             $deal->sale_analysis_status = 'denied';
@@ -1479,14 +1473,13 @@ class SalesRiskPolicyController extends AccountBaseController
         $deal->sale_authorize_by = auth()->user()->id;
         $deal->sale_authorize_on = date('Y-m-d h:i:s');
         $deal->save();
-        $dealStage->save();
 
         return response()->json(['status' => 'successful', 'message' => 'Deal status updated.']);
     }
 
     function salesAnalysisReport(Request $req, $deal_id)
     {
-        if (in_array('data', array_keys($req->query())) ) {
+        if (in_array('data', array_keys($req->query()))) {
             return self::questionValueReport($deal_id);
         }
 

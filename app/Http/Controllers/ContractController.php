@@ -525,7 +525,7 @@ class ContractController extends AccountBaseController
         } else {
             $deal->deal_stage = $deal_stage->deal_stage;
             $deal->comments = $deal_stage->comments;
-            // $deal->won_lost = 'Yes';
+            $deal->won_lost = 'Yes';
             $deal->status = 'pending';
             $deal->save();
             //$lead_id = Lead::where('id', $request->lead_id)->first();
