@@ -1,5 +1,6 @@
 import React from "react";
 import Switch from "../Switch";
+import Tooltip from "../Tooltip";
 
 export const SalesRiskAuthorizeColumns = [
     {
@@ -17,16 +18,20 @@ export const SalesRiskAuthorizeColumns = [
                                     condition={question?.parent_id !== null}
                                     key={question?.id}
                                 >
-                                    <td
-                                        key={question?.id}
-                                        className="ml-2 py-3"
-                                    >
-                                        <p
-                                            className="multine-ellipsis"
-                                            style={customStyles.subQuestion}
+                                    <td key={question?.id} className="py-3 ">
+                                        <Tooltip
+                                            className="d-flex align-items-center"
+                                            text={question?.title}
                                         >
-                                            {question?.title}
-                                        </p>
+                                            <p
+                                                className="singleline-ellipsis"
+                                                style={
+                                                    customStyles.mainQuestion
+                                                }
+                                            >
+                                                {question?.title}
+                                            </p>
+                                        </Tooltip>
                                     </td>
                                 </Switch.Case>
                                 <Switch.Case
@@ -34,12 +39,19 @@ export const SalesRiskAuthorizeColumns = [
                                     key={question?.id}
                                 >
                                     <td key={question?.id} className="py-3 ">
-                                        <p
-                                            className="multine-ellipsis"
-                                            style={customStyles.mainQuestion}
+                                        <Tooltip
+                                            className="d-flex align-items-center"
+                                            text={question?.title}
                                         >
-                                            {question?.title}
-                                        </p>
+                                            <p
+                                                className="singleline-ellipsis"
+                                                style={
+                                                    customStyles.mainQuestion
+                                                }
+                                            >
+                                                {question?.title}
+                                            </p>
+                                        </Tooltip>
                                     </td>
                                 </Switch.Case>
                             </Switch>

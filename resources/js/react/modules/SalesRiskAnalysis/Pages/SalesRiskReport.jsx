@@ -13,8 +13,44 @@ import SaleAnalysisReportTableFilterBar from "../components/sections/SaleAnalysi
 import { useSaleRiskAnalysisReportTableDataQuery } from "../../../services/api/salesRiskAnalysisSlice";
 import { useAuth } from "../../../hooks/useAuth";
 
+//style
+
+import styles from "../components/Styles/SalesRiskReport.module.css";
+
+export const SalesRiskReportStatus = [
+    {
+        id: "all",
+        name: "All",
+        className: `${styles.saleRiskReportBtn} ${styles.saleRiskReportAllBtn}`,
+        activeClass: `${styles.saleRiskReportBtn} ${styles.saleRiskReportActiveAllBtn}`,
+        count: 0,
+    },
+    {
+        id: "pending",
+        name: "Pending",
+        className: `${styles.saleRiskReportBtn} ${styles.saleRiskReportPendingBtn} ml-2`,
+        activeClass: `${styles.saleRiskReportBtn} ${styles.saleRiskReportPendingBtn}`,
+        count: 0,
+    },
+    {
+        id: "approved",
+        name: "Authorized",
+        className: `${styles.saleRiskReportBtn} ${styles.saleRiskReportApprovedBtn} ml-2`,
+        activeClass: `${styles.saleRiskReportBtn} ${styles.saleRiskReportActiveApprovedBtn}`,
+        count: 0,
+    },
+    {
+        id: "rejected",
+        name: "Denied",
+        className: `${styles.saleRiskReportBtn} ${styles.saleRiskReportRejectedBtn} ml-2`,
+        activeClass: `${styles.saleRiskReportBtn} ${styles.saleRiskReportActiveRejectedBtn}`,
+        count: 0,
+    },
+];
+
 const SalesRiskReport = () => {
     const auth = useAuth();
+    const [reportStatus, setReportStatus] = React.useState("all");
     const [{ pageIndex, pageSize }, setPagination] = React.useState({
         pageIndex: 0,
         pageSize: 10,
@@ -66,17 +102,22 @@ const SalesRiskReport = () => {
                 className="mb-3"
             >
                 <div className="d-flex">
-                    <button className="btn btn-primary py-1">All</button>
-                    <button className="btn btn-warning ml-2 py-1">
-                        In Analysis
-                    </button>
-                    <button className="btn btn-success ml-2 py-1">
-                        Authorized
-                    </button>
-                    <button className="btn btn-info ml-2 py-1">
-                        Auto Authorized
-                    </button>
-                    <button className="btn btn-danger ml-2 py-1">Denied</button>
+                    {SalesRiskReportStatus.map((item) => (
+                        <button
+                            key={item.id}
+                            className={` ${
+                                reportStatus === item.id
+                                    ? item.activeClass
+                                    : item.className
+                            } `}
+                        >
+                            {item.name}{" "}
+                            <span className="bg-white text-dark px-1 rounded">
+                                {" "}
+                                {item.count}
+                            </span>
+                        </button>
+                    ))}
                 </div>
                 {/* refresh */}
                 <RefreshButton

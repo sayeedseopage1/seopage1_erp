@@ -1,0 +1,70 @@
+.saleRiskReportBtn {
+  padding: 5px 10px;
+  border-radius: 4px;
+  font-weight: 500;
+  font-size: 14px;
+  transition: all 0.2s ease-in-out;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.saleRiskReportAllBtn {
+  background-color: #e9f8fa;
+  color: #24b8cf;
+}
+
+.saleRiskReportAllBtn:hover {
+  background-color: #24b8cf;
+  color: #fff;
+}
+
+.saleRiskReportActiveAllBtn {
+  background-color: #24b8cf;
+  color: #fff;
+}
+
+.saleRiskReportPendingBtn {
+  background-color: rgb(255, 145, 20);
+  color: #fff;
+}
+
+.saleRiskReportActiveApprovedBtn {
+  background-color: #119911;
+  color: #fff;
+}
+
+.saleRiskReportActiveRejectedBtn {
+  background-color: rgb(240, 51, 44);
+  color: #fff;
+}
+
+.saleRiskReportPendingBtn {
+  background-color: rgb(255, 238, 219);
+  color: rgb(255, 145, 20);
+}
+
+.saleRiskReportPendingBtn:hover {
+  background-color: rgb(255, 145, 20);
+  color: #fff;
+}
+
+.saleRiskReportApprovedBtn {
+  background-color: #e7f5e7;
+  color: #119911;
+}
+
+.saleRiskReportApprovedBtn:hover {
+  background-color: #119911;
+  color: #fff;
+}
+
+.saleRiskReportRejectedBtn {
+  background-color: rgb(250, 221, 220);
+  color: rgb(240, 51, 44);
+}
+
+.saleRiskReportRejectedBtn:hover {
+  background-color: rgb(240, 51, 44);
+  color: #fff;
+}
