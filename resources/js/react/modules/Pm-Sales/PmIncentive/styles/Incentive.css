@@ -1,0 +1,68 @@
+.incentive_wrapper {
+    background: #F7FAFF;
+    padding: 0px 35px;
+    /* padding-bottom: 69.78px; */
+}
+
+.incentive_inner_wrapper {
+    background: #FFFFFF;
+    padding: 35px;
+    border-radius: 16px;
+}
+
+.section_title {
+    font-weight: 500;
+    font-size: 20px;
+    line-height: 32px;
+    letter-spacing: -0.4px;
+    margin-bottom: 23px;
+}
+
+.filter_bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    padding: 36px 0px;
+}
+
+.filter_bar_left,
+.filter_bar_right {
+    display: flex;
+    gap: 1.5rem;
+    justify-content: center;
+    align-items: center;
+}
+
+.point_banner {
+    display: flex;
+    align-items: center;
+    padding: 22px 29px;
+    color: #FFFFFF;
+    border-radius: 16px;
+    gap: 28px;
+    background-color: #F2F9FE;
+}
+
+.point_card {
+    background-color: #1492E6;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 12px;
+    width: 100%;
+    border-radius: 9px;
+    padding: 24px;
+}
+
+.point_card_image_wrapper {
+    padding: 8px;
+    background-color: #4CA7E8;
+    border-radius: 6px;
+}
+
+.point_details_wrapper {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}

@@ -4,7 +4,8 @@ import { BrowserRouter, Routes, Route, Outlet } from "react-router-dom";
 import { Provider } from "react-redux";
 import { store } from "../../../services/store";
 import Toaster from "../../../global/Toaster";
-import Incentive from "./pages/Incentive/Incentive";
+import Incentive from "./pages/Incentive";
+import './styles/Incentive.css';
 
 
 const Content = () => {
