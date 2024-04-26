@@ -1375,17 +1375,13 @@ class SalesRiskPolicyController extends AccountBaseController
         if (url()->current() == route('account.sale-risk-policies.report-data')) {
             $itemsPaginated = Deal::whereIn('sale_analysis_status', ['analysis', 'authorized', 'auto-authorized', 'denied'])
                 ->where(function ($query) use ($req) {
-                    if ($req->start_date) {
-                        $query->whereDate('created_at', '>=', $req->start_date);
-                    }
-                    if ($req->end_date) {
-                        $query->whereDate('created_at', '<=', $req->end_date);
-                    }
-                    if ($req->client_id) {
-                        $query->where('client_id', $req->client_id);
-                    }
+
+                    if ($req->start_date) $query->whereDate('created_at', '>=', $req->start_date);
+                    if ($req->end_date) $query->whereDate('created_at', '<=', $req->end_date);
+                    if ($req->client_id) $query->where('client_id', $req->client_id);
                     if ($req->status) {
-                        $query->where('sale_analysis_status', $req->status);
+                        if ($req->status == 'authorized') $query->whereIn('sale_analysis_status', ['authorized', 'auto-authorized']);
+                        else $query->where('sale_analysis_status', $req->status);
                     }
                 })
                 ->offset($req->input('limit', 10) * ($req->input('page', 1) - 1))
