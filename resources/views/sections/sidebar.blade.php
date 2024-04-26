@@ -370,9 +370,10 @@
                                     </x-slot>
                                 </x-sub-menu-item>
                                 <x-sub-menu-item :link="route('deals.index')" :text="'Deals'" />
-                                <x-sub-menu-item :link="route('contracts.index')" :text="'Won Deals'" />
 
                                 <x-sub-menu-item :link="route('account.sale-risk-policies.report-list')" :text="'Sales Analysis Reports'" />
+
+                                <x-sub-menu-item :link="route('contracts.index')" :text="'Won Deals'" />
 
                                 @if ($user->role_id == 1 || Auth::user()->role_id == 7 || Auth::user()->role_id == 8)
                                     <x-sub-menu-item :link="route('qualified-sales.index')" :text="'Qualified Sales'" />

@@ -901,15 +901,17 @@ class SalesRiskPolicyController extends AccountBaseController
 
             // check first question is yes
             if ($value == 'yes') {
-                $points += 1;
+                $points += (float) $policy[0]->points;
                 $pointValue = (float) $policy[0]->points;
                 $policyIdList[$policy[0]->id] = $policy[0]->id;
 
                 $data[] = ['id' => $questions[0]->id, 'title' =>  $questions[0]->title, 'value' => 'yes', 'parent_id' => $questions[0]->parent_id];
             } else {
 
-                // ------------------- percentage calculation
+                // unseting first yes/no policy
+                $policyIdList[$policy[0]->id] = $policy[0]->id;
 
+                // ------------------- percentage calculation
                 if (isset($questionAns[$questions[1]->id]))
                     $value = $questionAns[$questions[1]->id];
                 else {
@@ -918,46 +920,9 @@ class SalesRiskPolicyController extends AccountBaseController
                 }
 
                 $percentage = $value / $deal->actual_amount * 100;
+                // ------------------- end percentage calculation
+
                 $data[] = ['id' => $questions[1]->id, 'title' => $questions[1]->title, 'value' => $value . '(' . number_format($percentage, 2) . '%)', 'parent_id' => $questions[1]->parent_id];
-
-                // unseting first yes/no policy
-                unset($policy[0]);
-                foreach ($policy as $item) {
-                    switch ($item->type) {
-                        case 'lessThan':
-                            if ($percentage < $item->value) {
-                                $points += $item->points;
-                                $points += 1;
-                                $policyIdList[$item->id] = $item->id;
-                                goto check1Milestone;
-                            }
-                            break;
-                        case 'range':
-                            $value = explode(',', $item->value);
-                            if ($percentage >= $value[0] && $percentage <= $value[1]) {
-                                $points += $item->points;
-                                $policyIdList[$item->id] = $item->id;
-                                goto check1Milestone;
-                            }
-                            break;
-                        case 'greaterThan':
-                            if ($percentage > $item->value) {
-                                $points += $item->points;
-                                $policyIdList[$item->id] = $item->id;
-                                goto check1Milestone;
-                            }
-                            break;
-                        case 'fixed':
-                            if ($percentage == $item->value) {
-                                $points += $item->points;
-                                $policyIdList[$item->id] = $item->id;
-                                goto check1Milestone;
-                            }
-                            break;
-                    }
-                }
-
-                check1Milestone:
 
                 // get selection value
                 if (isset($questionAns[$questions[2]->id]))
@@ -991,15 +956,28 @@ class SalesRiskPolicyController extends AccountBaseController
                         $pointValue = 0;
                         break;
                     case $questions[0]->policy_id . '_3':
-                        $points += -2;
-                        $pointValue = -2;
+                        if ($percentage < 50) {
+                            $points += -2;
+                            $pointValue = -2;
+                        }
+                        else{
+                            $points += -1;
+                            $pointValue = -1;
+                        }
                         break;
                     case $questions[0]->policy_id . '_4':
-                        $points += -1;
-                        $pointValue = -1;
+                        if ($percentage < 50) {
+                            $points += -1;
+                            $pointValue = -1;
+                        }
+                        else{
+                            $points += -0.5;
+                            $pointValue = -0.5;
+                        }
                         break;
                 }
             }
+
             $pointData['milestone']['questionAnswer'] = $data;
             $pointData['milestone']['points'] = $pointValue;
 
