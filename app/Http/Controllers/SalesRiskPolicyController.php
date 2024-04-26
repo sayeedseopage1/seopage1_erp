@@ -1434,7 +1434,7 @@ class SalesRiskPolicyController extends AccountBaseController
             $counts = Deal::select(DB::raw(
                 "COUNT(*) as 'all',
                 COUNT(IF( sale_analysis_status = 'pending', 1, null)) as pending,
-                COUNT(IF( sale_analysis_status = 'authorized', 1, null)) as authorized,
+                COUNT(IF( sale_analysis_status = 'authorized', 1, IF( sale_analysis_status = 'auto-authorized', 1, null))) as authorized,
                 COUNT(IF( sale_analysis_status = 'denied', 1, null)) as denied
                 "
             ))->first();
