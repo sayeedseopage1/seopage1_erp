@@ -884,7 +884,8 @@ class SalesRiskPolicyController extends AccountBaseController
             }
 
             $policy = SalesRiskPolicy::where('parent_id', $questions[0]->policy_id)->orderBy('sequence')->get();
-            if (count($policy) < 2) {
+
+            if (count($policy) < 1) {
                 $message[] = '2 milestone policies are expected, ' . count($policy) . ' found.';
                 goto endMilestone;
             }
@@ -901,8 +902,8 @@ class SalesRiskPolicyController extends AccountBaseController
 
             // check first question is yes
             if ($value == 'yes') {
-                $points += (float) $policy[0]->points;
-                $pointValue = (float) $policy[0]->points;
+                $points += (float) json_decode($policy[0]->value)? json_decode($policy[0]->value)->yes->point : 0;
+                $pointValue = json_decode($policy[0]->value) ? json_decode($policy[0]->value)->yes->point : 0;
                 $policyIdList[$policy[0]->id] = $policy[0]->id;
 
                 $data[] = ['id' => $questions[0]->id, 'title' =>  $questions[0]->title, 'value' => 'yes', 'parent_id' => $questions[0]->parent_id];
