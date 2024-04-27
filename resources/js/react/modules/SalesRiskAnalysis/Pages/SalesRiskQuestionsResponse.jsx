@@ -27,7 +27,6 @@ import {
     useSalesRiskDealsQuestionListQuery,
 } from "../../../services/api/salesRiskAnalysisSlice";
 
-
 const SalesRiskQuestionsResponse = () => {
     const [focusedQuestion, setFocusedQuestion] = React.useState([]);
     const [inputsData, setInputsData] = React.useState([]);
@@ -38,7 +37,6 @@ const SalesRiskQuestionsResponse = () => {
     // modal open close state
     const [questionModalOpen, setQuestionModalOpen] = React.useState(false);
 
-
     // fetch policy questions
     const { data, isLoading } = useSalesRiskDealsQuestionListQuery();
 
@@ -48,7 +46,6 @@ const SalesRiskQuestionsResponse = () => {
     const questions = data?.data;
     const questionList = questions?.questionList;
     const currencyData = questions?.currency;
-
 
     React.useEffect(() => {
         const flattenArray = (arr) =>
@@ -107,6 +104,7 @@ const SalesRiskQuestionsResponse = () => {
         // skip key
         const skipKey = ["is_Active_YesNo", "parent_id", "placeholder"];
         // check if all inputs are empty
+
         const isEmpty = isArrayObjectEmpty(inputsData, skipKey);
         if (isEmpty) {
             setIsSubmitting(true);
@@ -212,7 +210,7 @@ const SalesRiskQuestionsResponse = () => {
     };
 
     const handleListYesNoQuestion = (question, value, type) => {
-        const getValue = () => {
+        const getQuestionValue = () => {
             if (type === "list") {
                 return value.id;
             }
@@ -221,7 +219,16 @@ const SalesRiskQuestionsResponse = () => {
         const removeAlreadyExistChild = inputsData.filter(
             (item) => item.parent_id !== question.id
         );
-        const addSelectValue = removeAlreadyExistChild.map((item) => {
+        const idSet = new Set(inputsData.map((item) => item.id));
+        const removeChildIfParentNotExists = removeAlreadyExistChild.filter((item) => {
+            // If item has no parent_id, include it
+            if (!item.parent_id) {
+                return true;
+            }
+            return idSet.has(item.parent_id);
+        });
+
+        const addSelectValue = removeChildIfParentNotExists.map((item) => {
             if (item.id === question.id) {
                 let is_Active_YesNo;
 
@@ -234,7 +241,7 @@ const SalesRiskQuestionsResponse = () => {
                 return {
                     ...item,
                     is_Active_YesNo,
-                    [`question_${question.id}`]: getValue(),
+                    [`question_${question.id}`]: getQuestionValue(),
                 };
             }
             return item;
@@ -243,7 +250,7 @@ const SalesRiskQuestionsResponse = () => {
         if (question.questions?.length) {
             const getChildWithSelectedValue = allQuestions.filter(
                 (item) =>
-                    item.parent_id === question.id && item.value === getValue()
+                    item.parent_id === question.id && item.value === getQuestionValue()
             );
             const addInputFiled = getChildWithSelectedValue.map((item) => ({
                 id: item?.id,
@@ -259,6 +266,8 @@ const SalesRiskQuestionsResponse = () => {
 
         return setInputsData(addSelectValue);
     };
+
+    // console.log(inputsData);
 
     return (
         <section>
