@@ -35,8 +35,8 @@ class DealsPriviousSalesAnalysisStatusDefine extends Command
 
         Deal::get()->each(function ($item) use($salesTableCreateDate) {
             if (strtotime($item->created_at) < strtotime($salesTableCreateDate->created_at)) {
-                if ($item->status == 'Accepted') $item->sale_analysis_status = 'privious-won';
-                else if ($item->status == 'Denied') $item->sale_analysis_status = 'privious-denied';
+                if ($item->status == 'Accepted') $item->sale_analysis_status = 'previous-won';
+                else if ($item->status == 'Denied') $item->sale_analysis_status = 'previous-denied';
 
                 $item->save();
             }

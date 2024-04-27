@@ -1359,8 +1359,9 @@ class SalesRiskPolicyController extends AccountBaseController
                     if ($req->end_date) $query->whereDate('created_at', '<=', $req->end_date);
                     if ($req->client_id) $query->where('client_id', $req->client_id);
                     if ($req->status) {
-                        if ($req->status == 'authorized') $query->whereIn('sale_analysis_status', ['authorized', 'auto-authorized']);
-                        else $query->where('sale_analysis_status', $req->status);
+                        if ($req->status == 'pending') $query->where('sale_analysis_status', 'analysis');
+                        elseif ($req->status == 'authorized') $query->whereIn('sale_analysis_status', ['previous-won', 'authorized', 'auto-authorized']);
+                        elseif ($req->status == 'denied') $query->whereIn('sale_analysis_status', ['previous-denied', 'denied']);
                     }
                 })
                 ->offset($req->input('limit', 10) * ($req->input('page', 1) - 1))
