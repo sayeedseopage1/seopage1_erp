@@ -884,7 +884,8 @@ class SalesRiskPolicyController extends AccountBaseController
             }
 
             $policy = SalesRiskPolicy::where('parent_id', $questions[0]->policy_id)->orderBy('sequence')->get();
-            if (count($policy) < 2) {
+
+            if (count($policy) < 1) {
                 $message[] = '2 milestone policies are expected, ' . count($policy) . ' found.';
                 goto endMilestone;
             }
@@ -901,8 +902,8 @@ class SalesRiskPolicyController extends AccountBaseController
 
             // check first question is yes
             if ($value == 'yes') {
-                $points += (float) $policy[0]->points;
-                $pointValue = (float) $policy[0]->points;
+                $pointValue = json_decode($policy[0]->value) ? json_decode($policy[0]->value)->yes->point : 0;
+                $points += (float) $pointValue;
                 $policyIdList[$policy[0]->id] = $policy[0]->id;
 
                 $data[] = ['id' => $questions[0]->id, 'title' =>  $questions[0]->title, 'value' => 'yes', 'parent_id' => $questions[0]->parent_id];
@@ -1358,8 +1359,9 @@ class SalesRiskPolicyController extends AccountBaseController
                     if ($req->end_date) $query->whereDate('created_at', '<=', $req->end_date);
                     if ($req->client_id) $query->where('client_id', $req->client_id);
                     if ($req->status) {
-                        if ($req->status == 'authorized') $query->whereIn('sale_analysis_status', ['authorized', 'auto-authorized']);
-                        else $query->where('sale_analysis_status', $req->status);
+                        if ($req->status == 'pending') $query->where('sale_analysis_status', 'analysis');
+                        elseif ($req->status == 'authorized') $query->whereIn('sale_analysis_status', ['previous-won', 'authorized', 'auto-authorized']);
+                        elseif ($req->status == 'denied') $query->whereIn('sale_analysis_status', ['previous-denied', 'denied']);
                     }
                 })
                 ->offset($req->input('limit', 10) * ($req->input('page', 1) - 1))
