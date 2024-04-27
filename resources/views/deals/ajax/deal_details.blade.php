@@ -774,6 +774,13 @@
                                     <div class="text-center">
                                         <h2 style="color:rgb(62, 146, 214);">In Analysis</h2>
                                     </div>
+                                    <div class="sp1_deal-stage-wrapper">
+                                        <h2 style="color:rgb(62, 146, 214);">
+                                            <a class="btn btn-info" href="{{ route('dealDetails', $salesDeal->id) }}">
+                                                Update Deal Details
+                                            </a>
+                                        </h2>
+                                    </div>
                                 @endif
                             @elseif (in_array($salesDeal->sale_analysis_status, ['authorized', 'auto-authorized']))
                                 <div class="sp1_deal-stage-wrapper">

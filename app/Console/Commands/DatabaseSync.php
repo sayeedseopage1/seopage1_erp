@@ -32,13 +32,45 @@ class DatabaseSync extends Command
     public function handle()
     {
 
-        Schema::table('sales_policy_questions',function(Blueprint $table){
-            $table->string('title',300)->change();
+        $table = 'sales_policy_questions';
+        echo "Changing title column length in $table";
+        Schema::table('sales_policy_questions', function (Blueprint $table) {
+            $table->string('title', 300)->change();
         });
+        echo "\nend";
 
-        DB::statement("ALTER TABLE `deals` CHANGE COLUMN `sale_analysis_status` `sale_analysis_status` ENUM('previous-won','previous-denied','pending','analysis','authorized','auto-authorized','denied') NOT NULL DEFAULT 'pending' AFTER `authorization_status`;
+        $table = 'deals';
+        echo "\nChanging sale_analysis_status column enum list in $table";
+        DB::statement("ALTER TABLE `deals` CHANGE COLUMN `sale_analysis_status`
+        `sale_analysis_status` ENUM('previous-won','previous-denied','pending','analysis','authorized','auto-authorized','denied')
+        NOT NULL DEFAULT 'pending'
+        AFTER `authorization_status`;
         ");
+        echo "\nend";
 
+        echo "\nChanging previous sales_risk_policies status";
+        $salesTableCreateDate = DB::table('migrations')->where('migration', '2024_03_04_151733_create_sales_risk_policies_table')->first() ?: (object)['created_at' => '2024-04-24 00:00:00'];
+        Deal::get()->each(function ($item) use($salesTableCreateDate) {
+            if (strtotime($item->created_at) < strtotime($salesTableCreateDate->created_at)) {
+                if ($item->status == 'Accepted') $item->sale_analysis_status = 'previous-won';
+                else if ($item->status == 'Denied') $item->sale_analysis_status = 'previous-denied';
+
+                $item->save();
+            }
+
+        });
+        echo "\nend";
+
+        $table = 'policy_question_values';
+        if(! Schema::hasColumn($table, 'question_list')){
+            echo "\nAdding policy_question_values in $table";
+            Schema::table($table, function () {
+                DB::statement("ALTER TABLE `policy_question_values`
+                ADD COLUMN `question_list` TEXT NOT NULL AFTER `values`;");
+            });
+            echo "\nend";
+        }
+        
         return Command::SUCCESS;
     }
 }
