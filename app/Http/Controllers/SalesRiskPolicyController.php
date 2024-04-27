@@ -902,8 +902,8 @@ class SalesRiskPolicyController extends AccountBaseController
 
             // check first question is yes
             if ($value == 'yes') {
-                $points += (float) json_decode($policy[0]->value)? json_decode($policy[0]->value)->yes->point : 0;
                 $pointValue = json_decode($policy[0]->value) ? json_decode($policy[0]->value)->yes->point : 0;
+                $points += (float) $pointValue;
                 $policyIdList[$policy[0]->id] = $policy[0]->id;
 
                 $data[] = ['id' => $questions[0]->id, 'title' =>  $questions[0]->title, 'value' => 'yes', 'parent_id' => $questions[0]->parent_id];

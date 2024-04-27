@@ -17,7 +17,7 @@ return new class extends Migration
     {
         Schema::create('sales_policy_questions', function (Blueprint $table) {
             $table->id();
-            $table->string('title');
+            $table->string('title',300);
             $table->enum('type', array_keys(SalesPolicyQuestion::$types));
             $table->enum('key', array_keys(SalesRiskPolicy::$keys));
             $table->text('value')->nullable();
