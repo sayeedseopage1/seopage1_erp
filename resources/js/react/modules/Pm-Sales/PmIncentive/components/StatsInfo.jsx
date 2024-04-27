@@ -1,5 +1,6 @@
 import React from 'react';
 import StatsInfoProgressCard from './StatsInfoProgressCard';
+import pointIcon from '../assets/pointIcon.svg'
 
 const StatsInfo = () => {
     return (
