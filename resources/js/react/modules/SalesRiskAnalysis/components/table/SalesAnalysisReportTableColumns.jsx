@@ -183,29 +183,39 @@ export const SalesAnalysisReportTableColumns = [
             } = row?.original ?? {};
             const dealStatusByAdmin = ["authorized", "Denied", "denied"];
             const dealStatusBySystem = ["auto-authorized"];
+            const oldSystemStatus = ["previous-won", "previous-denied"];
 
-            if (
-                authorize_by_id &&
-                dealStatusByAdmin.includes(status.toLowerCase())
-            ) {
-                statusData = {
-                    isSystemTakeAction: false,
-                    isAuthorizedOrDenied: true,
-                };
-            } else if (
-                !authorize_by_id &&
-                dealStatusBySystem.includes(status.toLowerCase())
-            ) {
-                statusData = {
-                    isSystemTakeAction: true,
-                    isAuthorizedOrDenied: true,
-                };
+
+            if(!oldSystemStatus.includes(status.toLowerCase())) {
+                if (authorize_by_id && dealStatusByAdmin.includes(status.toLowerCase())) {
+                    statusData = {
+                        isSystemTakeAction: false,
+                        isAuthorizedOrDenied: true,
+                        isOldSystemStatus: false,
+                    };
+                } else if (!authorize_by_id && dealStatusBySystem.includes(status.toLowerCase())) {
+                    statusData = {
+                        isSystemTakeAction: true,
+                        isAuthorizedOrDenied: true,
+                        isOldSystemStatus: false,
+                    };
+                } else {
+
+                    statusData = {
+                        isSystemTakeAction: false,
+                        isAuthorizedOrDenied: false,
+                        isOldSystemStatus: false,
+                    };
+                }
             } else {
                 statusData = {
                     isSystemTakeAction: false,
-                    isAuthorizedOrDenied: false,
+                    isAuthorizedOrDenied: true,
+                    isOldSystemStatus: true,
                 };
             }
+ 
+           
 
             return (
                 <Switch>
