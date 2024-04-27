@@ -95,7 +95,7 @@ const WonDeals = () => {
                                 className={styles.authorize_task}
                             >
                                 <i className="fa-solid fa-hourglass-end" />
-                                Authorization Need
+                                Authorization Needed
                                 <span className="badge badge-light">
                                     {authNeedWonDeals?.length ?? 0}
                                 </span>
@@ -148,7 +148,7 @@ const WonDeals = () => {
             >
                 <Card>
                     <Card.Head onClose={() => setIsAuthNeedModalOpen(false)}>
-                        <span>Authorization Need </span>
+                        <span>Authorization Needed </span>
                     </Card.Head>
                 </Card>
                 <Card.Body>

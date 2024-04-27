@@ -70,7 +70,7 @@ const AuthNeedActionDropdown = ({ ...rest }) => {
                             style={{ marginRight: "5px" }}
                             className="fa-regular fa-user"
                         />
-                        Authorization Need
+                        Authorize
                     </button>
                 )}
         </React.Fragment>
