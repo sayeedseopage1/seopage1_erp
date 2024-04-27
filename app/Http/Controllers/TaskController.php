@@ -4763,7 +4763,7 @@ class TaskController extends AccountBaseController
 
             //  dd($left_minutes);
 
-            $left_in_hours = round($left_minutes / 60, 0);
+            $left_in_hours = (int) ($left_minutes / 60);
             $left_in_minutes = $left_minutes % 60;
 
             return response()->json([
