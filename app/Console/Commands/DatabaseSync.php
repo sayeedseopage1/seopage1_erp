@@ -70,7 +70,7 @@ class DatabaseSync extends Command
             });
             echo "\nend";
         }
-        
+
         return Command::SUCCESS;
     }
 }

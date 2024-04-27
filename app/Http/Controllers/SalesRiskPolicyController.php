@@ -732,7 +732,7 @@ class SalesRiskPolicyController extends AccountBaseController
             PolicyQuestionValue::create([
                 'deal_id' => $dealId,
                 'values' => json_encode($req->all()),
-                'qestion_list' => json_encode($questionList)
+                'question_list' => json_encode($questionList)
             ]);
 
             // calculate point
@@ -766,7 +766,7 @@ class SalesRiskPolicyController extends AccountBaseController
             // if error then delete previous records
             PolicyQuestionValue::where('deal_id', $dealId)->delete();
 
-            // throw $th;
+            throw $th;
             return response()->json(['status' => 'error', 'message' => 'Data did not stored successfully.'], 500);
         }
     }
