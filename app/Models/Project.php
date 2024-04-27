@@ -159,6 +159,9 @@ class Project extends BaseModel
                     // Project Manager Point Distribution ( Amount of revisions )
                     if($totalRevisionLoggedMinutes > 60 && $percentage = round(($totalRevisionLoggedMinutes / $project->total_estimate_minutes) * 100, 2)) ProjectManagerPointLogic::distribute(3, $item->id, $percentage);
                 }
+
+                // Project Manager Point Distribution ( Project completion )
+                ProjectManagerPointLogic::distribute(5, $item->id, 1);
             }
         });
     }
