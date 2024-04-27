@@ -11836,6 +11836,11 @@ var SubTaskEditModal = function SubTaskEditModal(_ref2) {
     if (minErr) errText += minErr;
     return errText;
   };
+
+  // FIXME: taskDetails time and estimation time inconsistent 
+  // console.log(estimation)
+  // console.log(taskDetails)
+
   return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_26__.jsx)((react__WEBPACK_IMPORTED_MODULE_1___default().Fragment), {
     children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_26__.jsxs)("div", {
       className: "sp1-subtask-form --modal-panel-body position-relative",
@@ -13143,7 +13148,7 @@ var SubTaskForm = function SubTaskForm(_ref) {
               if ((task === null || task === void 0 || (_task$category8 = task.category) === null || _task$category8 === void 0 ? void 0 : _task$category8.name) !== "Graphic Design") {
                 primaryPageConfirmation();
                 /* eslint-disable */
-                (_console = console).log.apply(_console, _toConsumableArray(oo_oo("874094513_540_16_540_41_4", "clicked!!!")));
+                (_console = console).log.apply(_console, _toConsumableArray(oo_oo("3073249222_540_16_540_41_4", "clicked!!!")));
               }
             }
           case 53:
@@ -13193,6 +13198,11 @@ var SubTaskForm = function SubTaskForm(_ref) {
     setPageTypePriority("");
     setPageTypeName("");
   }, [pageType]);
+
+  // FIXME: taskDetails time and estimation time inconsistent 
+  // console.log(estimation)
+  // console.log(taskDetails)
+
   return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_27__.jsx)("form", {
     onSubmit: handleSubmit,
     children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_27__.jsxs)("div", {

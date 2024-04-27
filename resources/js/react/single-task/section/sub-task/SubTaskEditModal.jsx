@@ -397,6 +397,10 @@ const SubTaskEditModal = ({ task, singleTask: taskDetails, onSubmit, isLoading, 
         return errText;
     };
 
+    // FIXME: taskDetails time and estimation time inconsistent 
+    // console.log(estimation)
+    // console.log(taskDetails)
+
     return (
         <React.Fragment>
             <div className="sp1-subtask-form --modal-panel-body position-relative">

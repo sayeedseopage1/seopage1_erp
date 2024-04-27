@@ -586,6 +586,10 @@ const SubTaskForm = ({ close, isDesignerTask }) => {
         setPageTypeName("");
     }, [pageType]);
 
+    // FIXME: taskDetails time and estimation time inconsistent 
+    // console.log(estimation)
+    // console.log(taskDetails)
+
     return (
         <form onSubmit={handleSubmit}>
             <div className="sp1-subtask-form --form row">
