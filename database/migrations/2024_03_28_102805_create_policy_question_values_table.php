@@ -17,6 +17,7 @@ return new class extends Migration
             $table->id();
             $table->bigInteger('deal_id')->unsigned();
             $table->text('values');
+            $table->text('question_list');
             $table->timestamps();
 
             $table->foreign('deal_id')->references('id')->on('deals')->onUpdate('no action')->onDelete('no action');

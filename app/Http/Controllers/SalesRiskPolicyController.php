@@ -711,9 +711,28 @@ class SalesRiskPolicyController extends AccountBaseController
 
         try {
 
+            $questionList = SalesPolicyQuestion::parent()
+            ->get()->filter(fn ($item) => SalesRiskPolicy::find($item->policy_id)->status)
+            ->map(function ($item) {
+
+                return [
+                    'id' => $item->id,
+                    'title' => $item->title,
+                    'key' => $item->key,
+                    'type' => $item->type,
+                    'value' => json_decode($item->value) ? json_decode($item->value) : $item->value,
+                    'placeholder' => $item->placeholder,
+                    'parent_id' => $item->parent_id,
+                    'policy_id' => $item->policy_id,
+                    'policy_title' => SalesRiskPolicy::find($item->policy_id)->title,
+                    'questions' => self::questionListChild($item->id)
+                ];
+            });
+
             PolicyQuestionValue::create([
                 'deal_id' => $dealId,
                 'values' => json_encode($req->all()),
+                'qestion_list' => json_encode($questionList)
             ]);
 
             // calculate point
