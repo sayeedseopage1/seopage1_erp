@@ -169,17 +169,24 @@ const SubTaskForm = ({ close, isDesignerTask }) => {
     React.useEffect(() => {
         setBrandName(graphicWorkDetails?.brand_name)
         setNumOfVersions(graphicWorkDetails?.number_of_versions);
-        setReferenceList(JSON.parse(graphicWorkDetails?.reference));
         setFontName(graphicWorkDetails?.font_name);
         setFontUrl(graphicWorkDetails?.font_url);
         setPrimaryColor(graphicWorkDetails?.primary_color);
         setPrimaryColorDescription(graphicWorkDetails?.primary_color_description);
         setIllustration(graphicWorkDetails?.design_instruction);
         setOthers(graphicWorkDetails?.design_instruction);
-        setCms(taskDetails?.cms)
-        setThemeName(taskDetails?.theme_name)
-        setThemeTemplate(taskDetails?.theme_template_library_link)
-    }, [taskDetails, graphicWorkDetails]);
+        if (graphicWorkDetails?.reference) {
+            setReferenceList(JSON.parse(graphicWorkDetails?.reference));
+        }
+    }, [graphicWorkDetails]);
+
+    useEffect(() => {
+        if (taskDetails) {
+            setCms(taskDetails?.cms)
+            setThemeName(taskDetails?.theme_name)
+            setThemeTemplate(taskDetails?.theme_template_library_link)
+        }
+    }, [taskDetails])
 
     React.useEffect(() => {
         getTaskDetails(`/${task?.id}/json?mode=estimation_time`).unwrap();
@@ -578,8 +585,6 @@ const SubTaskForm = ({ close, isDesignerTask }) => {
         setPageTypePriority("");
         setPageTypeName("");
     }, [pageType]);
-
-    console.log("defaultSecondaryColors: ", defaultSecondaryColors);
 
     return (
         <form onSubmit={handleSubmit}>
@@ -1599,6 +1604,11 @@ const SubTaskForm = ({ close, isDesignerTask }) => {
                             {estimateError(required_error)}
                         </div>
 
+                        {/* <div style={{ color: "#F73B12" }}>
+                            Estimation time can't exceed{" "}
+                            {taskDetails?.estimate_hours} hours{" "}
+                            {taskDetails?.estimate_minutes} minutes
+                        </div> */}
                         <div style={{ color: "#F73B12" }}>
                             Estimation time can't exceed{" "}
                             {estimation?.hours_left} hours{" "}

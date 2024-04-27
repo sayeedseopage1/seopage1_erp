@@ -985,6 +985,11 @@ const SubTaskEditModal = ({ task, singleTask: taskDetails, onSubmit, isLoading, 
                                 {estimation?.hours_left} hours{" "}
                                 {estimation?.minutes_left} minutes
                             </div>
+                            {/* <div style={{ color: "#F73B12" }}>
+                                Estimation time can't exceed{" "}
+                                {taskDetails?.estimate_hours} hours{" "}
+                                {taskDetails?.estimate_minutes} minutes
+                            </div> */}
                         </div>
                     </div>
 

@@ -19,7 +19,6 @@ export const useSingleTask = () => {
     ] = useLazyGetTaskDetailsQuery();
 
     const getTaskById = async (taskId) => {
-        debugger
         try {
             const res = await getTaskDetails(`/${taskId}/json?mode=basic`).unwrap();
             if (res) {
