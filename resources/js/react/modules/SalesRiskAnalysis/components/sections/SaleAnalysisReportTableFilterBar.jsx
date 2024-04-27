@@ -58,10 +58,10 @@ const SaleAnalysisReportTableFilterBar = ({ setFilter }) => {
                         setState={setClient}
                         roleIds={null}
                     />
-                    <HDivider />
+                    {/* <HDivider />
                     <div style={{ maxWidth: "256px" }}>
                         <SearchBox value={search} onChange={setSearch} />
-                </div>
+                </div> */}
                 </React.Fragment>
             )}
             {width < 1400 && (
@@ -101,12 +101,12 @@ const SaleAnalysisReportTableFilterBar = ({ setFilter }) => {
                                         roleIds={null}
                                         sidebarIsOpen={true}
                                     />
-                                    <div style={{ maxWidth: "256px" }}>
+                                    {/* <div style={{ maxWidth: "256px" }}>
                                         <SearchBox
                                             value={search}
                                             onChange={setSearch}
                                         />
-                                    </div>
+                                    </div> */}
                                 </div>
                             </div>
                         )}

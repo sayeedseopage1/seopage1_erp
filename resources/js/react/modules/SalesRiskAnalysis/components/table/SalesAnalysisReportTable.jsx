@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useMemo } from "react";
 import {
     useReactTable,
     getCoreRowModel,
@@ -19,7 +19,6 @@ import SalesRiskAnalysisTablePagination from "./SalesRiskAnalysisTablePagination
 // loader components
 import SalesAnalysisReportTableLoader from "../loader/SalesAnalysisReportTableLoader";
 
-
 const SalesAnalysisReportTable = ({
     tableData,
     tableColumns,
@@ -29,6 +28,7 @@ const SalesAnalysisReportTable = ({
     filter,
     search,
     isFetching,
+    reportStatus,
 }) => {
     // table state
     const [sorting, setSorting] = React.useState([]);
@@ -75,7 +75,6 @@ const SalesAnalysisReportTable = ({
             pageIndex: selected,
             pageSize,
         };
-
         setPagination({ ...paginate, pageIndex: 0 });
         onPageChange(paginate);
     };
@@ -83,7 +82,6 @@ const SalesAnalysisReportTable = ({
     // handle page size change
     const handlePageSizeChange = (e) => {
         e.preventDefault();
-
         const paginate = {
             pageIndex,
             pageSize: e.target.value,
@@ -120,6 +118,11 @@ const SalesAnalysisReportTable = ({
         getExpandedRowModel: getExpandedRowModel(),
         getSortedRowModel: getSortedRowModel(),
     });
+
+    useMemo(() => {
+        handlePageChange({ selected: 0 });
+        console.log("useMemo", tableData);
+    }, [reportStatus]);
 
     return (
         <React.Fragment>
@@ -207,6 +210,7 @@ const SalesAnalysisReportTable = ({
                 handlePageSizeChange={handlePageSizeChange}
                 handlePageChange={handlePageChange}
                 pageSize={pageSize}
+                reportStatus={reportStatus}
             />
         </React.Fragment>
     );
@@ -223,4 +227,5 @@ SalesAnalysisReportTable.propTypes = {
     filter: PropTypes.object,
     search: PropTypes.string,
     isFetching: PropTypes.bool,
+    reportStatus: PropTypes.string,
 };

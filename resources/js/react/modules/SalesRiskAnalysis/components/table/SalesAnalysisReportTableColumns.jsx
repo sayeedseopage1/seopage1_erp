@@ -162,9 +162,28 @@ export const SalesAnalysisReportTableColumns = [
         cell: ({ row }) => {
             const data = row?.original;
             return (
-                <p className="multiline-ellipsis">
-                    {data?.points ?? "Not Available Yet"}
-                </p>
+                <Switch>
+                    <Switch.Case condition={data?.points}>
+                        <p className="multiline-ellipsis">{data?.points}</p>
+                    </Switch.Case>
+                    <Switch.Case condition={!data?.points}>
+                        {["previous-won", "previous-denied"].includes(
+                            data?.status.toLowerCase()
+                        ) ? (
+                            <p
+                                style={{
+                                    ...customStyle.previousAuthorized,
+                                }}
+                            >
+                                Previous Report
+                            </p>
+                        ) : (
+                            <p className="multiline-ellipsis">
+                                Not Available Yet
+                            </p>
+                        )}
+                    </Switch.Case>
+                </Switch>
             );
         },
     },
@@ -185,22 +204,26 @@ export const SalesAnalysisReportTableColumns = [
             const dealStatusBySystem = ["auto-authorized"];
             const oldSystemStatus = ["previous-won", "previous-denied"];
 
-
-            if(!oldSystemStatus.includes(status.toLowerCase())) {
-                if (authorize_by_id && dealStatusByAdmin.includes(status.toLowerCase())) {
+            if (!oldSystemStatus.includes(status.toLowerCase())) {
+                if (
+                    authorize_by_id &&
+                    dealStatusByAdmin.includes(status.toLowerCase())
+                ) {
                     statusData = {
                         isSystemTakeAction: false,
                         isAuthorizedOrDenied: true,
                         isOldSystemStatus: false,
                     };
-                } else if (!authorize_by_id && dealStatusBySystem.includes(status.toLowerCase())) {
+                } else if (
+                    !authorize_by_id &&
+                    dealStatusBySystem.includes(status.toLowerCase())
+                ) {
                     statusData = {
                         isSystemTakeAction: true,
                         isAuthorizedOrDenied: true,
                         isOldSystemStatus: false,
                     };
                 } else {
-
                     statusData = {
                         isSystemTakeAction: false,
                         isAuthorizedOrDenied: false,
@@ -214,15 +237,14 @@ export const SalesAnalysisReportTableColumns = [
                     isOldSystemStatus: true,
                 };
             }
- 
-           
 
             return (
                 <Switch>
                     <Switch.Case
                         condition={
                             statusData.isAuthorizedOrDenied &&
-                            !statusData.isSystemTakeAction
+                            !statusData.isSystemTakeAction &&
+                            !statusData.isOldSystemStatus
                         }
                     >
                         <CreatedBy
@@ -243,7 +265,8 @@ export const SalesAnalysisReportTableColumns = [
                     <Switch.Case
                         condition={
                             statusData.isAuthorizedOrDenied &&
-                            statusData.isSystemTakeAction
+                            statusData.isSystemTakeAction &&
+                            !statusData.isOldSystemStatus
                         }
                     >
                         <p
@@ -257,7 +280,8 @@ export const SalesAnalysisReportTableColumns = [
                     <Switch.Case
                         condition={
                             !statusData.isAuthorizedOrDenied &&
-                            !statusData.isSystemTakeAction
+                            !statusData.isSystemTakeAction &&
+                            !statusData.isOldSystemStatus
                         }
                     >
                         <p
@@ -266,6 +290,21 @@ export const SalesAnalysisReportTableColumns = [
                             }}
                         >
                             Not Available Yet
+                        </p>
+                    </Switch.Case>
+                    <Switch.Case
+                        condition={
+                            statusData.isAuthorizedOrDenied &&
+                            !statusData.isSystemTakeAction &&
+                            statusData.isOldSystemStatus
+                        }
+                    >
+                        <p
+                            style={{
+                                ...customStyle.previousAuthorized,
+                            }}
+                        >
+                            Previous Report
                         </p>
                     </Switch.Case>
                 </Switch>
@@ -279,9 +318,30 @@ export const SalesAnalysisReportTableColumns = [
         cell: ({ row }) => {
             const data = row?.original;
             return (
-                <p className="multiline-ellipsis">
-                    {data?.authorize_on ?? "Not Available Yet"}
-                </p>
+                <Switch>
+                    <Switch.Case condition={data?.authorize_on}>
+                        <p className="multiline-ellipsis">
+                            {data?.authorize_on}
+                        </p>
+                    </Switch.Case>
+                    <Switch.Case condition={!data?.authorize_on}>
+                        {["previous-won", "previous-denied"].includes(
+                            data?.status.toLowerCase()
+                        ) ? (
+                            <p
+                                style={{
+                                    ...customStyle.previousAuthorized,
+                                }}
+                            >
+                                Previous Report
+                            </p>
+                        ) : (
+                            <p className="multiline-ellipsis">
+                                Not Available Yet
+                            </p>
+                        )}
+                    </Switch.Case>
+                </Switch>
             );
         },
     },
@@ -294,7 +354,6 @@ export const SalesAnalysisReportTableColumns = [
             const formattedStatus = _.capitalize(
                 data?.status?.replaceAll("-", " ")
             );
-
             return (
                 <Switch>
                     <Switch.Case
@@ -314,9 +373,11 @@ export const SalesAnalysisReportTableColumns = [
                     </Switch.Case>
                     <Switch.Case
                         // here we are checking if the status is auto authorized or authorized (case insensitive and with space)
-                        condition={["auto authorized", "authorized"].includes(
-                            formattedStatus.toLowerCase()
-                        )}
+                        condition={[
+                            "auto authorized",
+                            "authorized",
+                            "previous won",
+                        ].includes(formattedStatus.toLowerCase())}
                     >
                         <div className="d-flex justify-content-start align-items-center">
                             <div
@@ -331,7 +392,9 @@ export const SalesAnalysisReportTableColumns = [
                         </div>
                     </Switch.Case>
                     <Switch.Case
-                        condition={formattedStatus.toLowerCase() === "denied"}
+                        condition={["denied", "previous denied"].includes(
+                            formattedStatus.toLowerCase()
+                        )}
                     >
                         <div className="d-flex justify-content-start align-items-center">
                             <div
@@ -353,6 +416,8 @@ export const SalesAnalysisReportTableColumns = [
                                 "auto authorized",
                                 "analysis",
                                 "authorized",
+                                "previous won",
+                                "previous denied",
                             ].includes(formattedStatus.toLowerCase())
                         }
                     >
@@ -427,5 +492,12 @@ const customStyle = {
         width: "10px",
         height: "10px",
         marginRight: "5px",
+    },
+    previousAuthorized: {
+        padding: "2px 6px",
+        backgroundColor: "#6cf7b2c5",
+        borderRadius: "12px",
+        width: "fit-content",
+        fontSize: "12px",
     },
 };
