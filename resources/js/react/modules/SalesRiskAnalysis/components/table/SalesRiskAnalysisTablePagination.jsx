@@ -8,6 +8,7 @@ const SalesRiskAnalysisTablePagination = ({
     handlePageChange,
     tableData,
     pageSize,
+    reportStatus,
 }) => {
     return (
         <div className="cnx__table_footer mt-3">
