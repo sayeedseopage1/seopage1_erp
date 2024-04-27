@@ -153,10 +153,10 @@ class Project extends BaseModel
                         return $carry + ($item['revision_id'] ? intval($item['total_minutes']) : 0);
                     }, 0);
     
-                    // Project Manager Point Distribution (Estimated vs logged hours)
+                    // Project Manager Point Distribution ( Estimated vs logged hours )
                     if($percentage = round(($totalLoggedMinutes / $project->total_estimate_minutes) * 100, 2)) ProjectManagerPointLogic::distribute(2, $item->id, $percentage);
     
-                    // Project Manager Point Distribution (Amount of revisions)
+                    // Project Manager Point Distribution ( Amount of revisions )
                     if($totalRevisionLoggedMinutes > 60 && $percentage = round(($totalRevisionLoggedMinutes / $project->total_estimate_minutes) * 100, 2)) ProjectManagerPointLogic::distribute(3, $item->id, $percentage);
                 }
             }
