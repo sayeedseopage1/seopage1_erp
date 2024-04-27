@@ -308,6 +308,17 @@ const SubTaskEditModal = ({ task, singleTask: taskDetails, onSubmit, isLoading, 
 
         if (!description) showError('description');
 
+        if (estimation) {
+            let estimateTimeMinFromInput = Number(estimateTimeHour) * 60 + Number(estimateTimeMin)
+            let estimateTimeMinFromAPi = estimation?.hours_left * 60 + estimation?.minutes_left
+
+            if (estimateTimeMinFromInput > estimateTimeMinFromAPi) {
+                // err.estimateTime = 'The estimate time cannot be greater than the remaining time.'
+                // toast.warn("The estimate time cannot be greater than the remaining time.");
+                count++
+            }
+        }
+
         setError(error);
         return count === 0;
 
@@ -396,10 +407,6 @@ const SubTaskEditModal = ({ task, singleTask: taskDetails, onSubmit, isLoading, 
         if (minErr) errText += minErr;
         return errText;
     };
-
-    // FIXME: taskDetails time and estimation time inconsistent 
-    // console.log(estimation)
-    // console.log(taskDetails)
 
     return (
         <React.Fragment>
