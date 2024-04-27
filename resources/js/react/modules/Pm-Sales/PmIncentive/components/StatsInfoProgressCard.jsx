@@ -2,7 +2,7 @@ import React from 'react';
 import GradientProgressBar from './GradientProgressBar';
 
 const StatsInfoProgressCard = () => {
-    let value = 0;
+    let value = 80;
     return (
         <div className="progress_card_wrapper">
             <div className="progress_card_desc_wrapper">

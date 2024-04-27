@@ -131,3 +131,36 @@
     font-size: 12px;
     font-weight: 500;
 }
+
+.stats_score_child {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    gap: 12px;
+}
+
+.stats_info_icon_wrapper {
+    padding: 8px;
+    background: #CEEBFF;
+    border-radius: 6px;
+}
+
+.stats_info_desc {
+    font-size: 16px;
+    font-weight: 500;
+    color: #000000;
+}
+
+.stats_info_link {
+    font-size: 16px;
+    font-weight: 600;
+    text-decoration: underline;
+    cursor: pointer;
+    color: #FF6666;
+}
+
+.stats_info_note {
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 21px;
+}
