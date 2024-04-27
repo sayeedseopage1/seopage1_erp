@@ -1352,11 +1352,10 @@ class SalesRiskPolicyController extends AccountBaseController
     function salesRiskReportList(Request $req)
     {
         if (url()->current() == route('account.sale-risk-policies.report-data')) {
-            $itemsPaginated = Deal::whereIn('sale_analysis_status', ['analysis', 'authorized', 'auto-authorized', 'denied'])
+            $itemsPaginated = Deal::whereIn('sale_analysis_status', ['previous-won', 'previous-denied', 'analysis', 'authorized', 'auto-authorized', 'denied'])
                 ->where(function ($query) use ($req) {
-
-                    if ($req->start_date) $query->whereDate('created_at', '>=', $req->start_date);
-                    if ($req->end_date) $query->whereDate('created_at', '<=', $req->end_date);
+                    // dd($req->all());
+                    if ($req->start_date && $req->end_date) $query->whereBetween('created_at', [$req->start_date, $req->end_date]);
                     if ($req->client_id) $query->where('client_id', $req->client_id);
                     if ($req->status) {
                         if ($req->status == 'pending') $query->where('sale_analysis_status', 'analysis');
@@ -1367,6 +1366,7 @@ class SalesRiskPolicyController extends AccountBaseController
                 ->offset($req->input('limit', 10) * ($req->input('page', 1) - 1))
                 ->latest('updated_at')
                 ->paginate($req->input('limit', 10));
+
 
             $itemsTransformed = $itemsPaginated
                 ->getCollection()
