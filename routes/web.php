@@ -69,6 +69,7 @@ use App\Http\Controllers\CreditNoteController;
 use App\Http\Controllers\DepartmentController;
 use App\Http\Controllers\DiscussionController;
 use App\Http\Controllers\DMContractController;
+use App\Http\Controllers\EvaluationController;
 use App\Http\Controllers\GoogleAuthController;
 use App\Http\Controllers\KpiSettingController;
 use App\Http\Controllers\StickyNoteController;
@@ -193,8 +194,8 @@ use App\Http\Controllers\Payment\FlutterwaveController;
 use App\Http\Controllers\ProjectManagerPointController;
 use App\Http\Controllers\ProjectTemplateTaskController;
 use App\Http\Controllers\ProjectTimelogBreakController;
-use App\Http\Controllers\NonCashPointSettingsController;
 
+use App\Http\Controllers\NonCashPointSettingsController;
 use App\Http\Controllers\TicketReplyTemplatesController;
 use App\Http\Controllers\DatabaseBackupSettingController;
 use App\Http\Controllers\EmployeeShiftScheduleController;
@@ -209,9 +210,9 @@ use App\Http\Controllers\PointIncentive\CriteriaController;
 use App\Http\Controllers\PaymentGatewayCredentialController;
 use App\Http\Controllers\EmployeeShiftChangeRequestController;
 use App\Http\Controllers\PointIncentive\GetPmCashPointController;
+use App\Http\Controllers\PointIncentive\PmIncentiveViewController;
 use App\Http\Controllers\PointIncentive\GetPmPointCriteriaController;
 use App\Http\Controllers\PointIncentive\GetCriteriaWiseFactorController;
-use App\Http\Controllers\PointIncentive\PmIncentiveViewController;
 
 /*
 |--------------------------------------------------------------------------
@@ -1849,9 +1850,9 @@ Route::get('test-point/{factorId}/{projectId}/{comparable_value}', function($fac
     return ProjectManagerPointLogic::distribute($factorId, $projectId, $comparable_value) ? 'Point distributed successfully' : 'The condition does not satisfied or something went wrong!';
 });
 
-Route::get('test-calculation/{factorId}/{projectId}', function ($factorId, $projectId){
-    $project = Project::find($projectId);
-    $project->status = $project->status=='finished' ? 'partially finished' : 'finished';
-    $project->save();
+Route::get('test-calculation/{taskId}', function ($taskId){
+    $task = \App\Models\Task::find($taskId);
+    $task->board_column_id = $task->board_column_id == 6 ? 8 : 6;
+    $task->save();
     dd('Success');
 });

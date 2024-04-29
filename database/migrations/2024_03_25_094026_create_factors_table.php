@@ -326,7 +326,7 @@ return new class extends Migration
                 'criteria_id' => 8,
                 'title' => "If a PM doesn't submit a task to the client / give revision within 36 hours after it was submitted by the lead developer",
                 'project_type' => 1,
-                'lower_limit' => 0,
+                'lower_limit' => 36,
                 'upper_limit' => 36,
                 'limit_type' => 1,
                 'limit_unit' => 1,
