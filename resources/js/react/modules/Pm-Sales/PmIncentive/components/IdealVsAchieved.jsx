@@ -2,6 +2,7 @@ import React from 'react';
 import '../styles/IdealVsAchieved.css'
 import IncentiveBarChart from './Charts/IncentiveBarChart';
 import { idealVsAchievedChartData } from '../constants';
+import IncentiveThickChart from './Charts/IncentiveThickChart';
 
 const IdealVsAchieved = () => {
     return (
@@ -17,7 +18,7 @@ const IdealVsAchieved = () => {
                     </div>
                     {/* Achieved */}
                     <div className="chart_wrapper">
-                        <IncentiveBarChart chartData={item.achieved} />
+                        <IncentiveThickChart chartData={item.achieved} />
                     </div>
                 </div>
             )}

@@ -6,14 +6,6 @@ import arrow2 from '../../assets/arrow-2.svg'
 const IncentiveBarChart = ({ chartData }) => {
     const chartRef = useRef(null);
 
-    const series = [
-        {
-            name: "Revision vs task ratio",
-
-            data: [100, 80, 50, 10, 10, 10, 10],
-        },
-    ];
-
     const options = {
         title: {
             text: chartData.title,
@@ -29,6 +21,7 @@ const IncentiveBarChart = ({ chartData }) => {
                 show: false,
             },
         },
+        grid: { show: !0, strokeDashArray: 3, position: "back" },
         xaxis: {
             categories: chartData.categories,
             labels: {
@@ -42,16 +35,6 @@ const IncentiveBarChart = ({ chartData }) => {
                     colors: ["#000000"],
                 },
             },
-            // title: {
-            //     text: "----------> Revision vs task ratio <----------",
-            //     style: {
-            //         fontSize: 12,
-            //         fontWeight: 500,
-            //         fontFamily: "Poppins",
-            //         color: "#1492E6",
-            //     },
-            // },
-            // tickPlacement: "on",
         },
         yaxis: {
             labels: {
@@ -66,15 +49,6 @@ const IncentiveBarChart = ({ chartData }) => {
                 },
             },
             stepSize: 20
-            // title: {
-            //     text: "-----> Incentive percentage  <-----",
-            //     style: {
-            //         fontSize: 12,
-            //         fontWeight: 500,
-            //         fontFamily: "Poppins",
-            //         color: "#1492E6",
-            //     },
-            // },
         },
 
         dataLabels: {
