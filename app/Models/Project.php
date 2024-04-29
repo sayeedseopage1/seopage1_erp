@@ -162,6 +162,10 @@ class Project extends BaseModel
 
                 // Project Manager Point Distribution ( Project completion )
                 ProjectManagerPointLogic::distribute(5, $item->id, 1);
+
+                $projectDeadlineItem = ProjectDeadlineExtension::where('project_id', $item->id)->first();
+                // Project Manager Point Distribution ( Meeting the deadline )
+                if (Carbon::parse($projectDeadlineItem ? $projectDeadlineItem->old_deadline : $item->deadline)->greaterThanOrEqualTo(Carbon::today())) ProjectManagerPointLogic::distribute(7, $item->id, 1);
             }
         });
     }
