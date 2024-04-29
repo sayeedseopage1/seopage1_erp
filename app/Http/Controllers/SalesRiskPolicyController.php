@@ -1429,9 +1429,9 @@ class SalesRiskPolicyController extends AccountBaseController
                 ]
             );
             $counts = Deal::select(DB::raw(
-                "COUNT(*) as 'all',
+                "COUNT(IF( sale_analysis_status IN ('analysis', 'authorized', 'auto-authorized','denied'), 1, null)) as 'all',
                 COUNT(IF( sale_analysis_status = 'analysis', 1, null)) as pending,
-                COUNT(IF( sale_analysis_status = 'authorized', 1, IF( sale_analysis_status = 'auto-authorized', 1, null))) as authorized,
+                COUNT(IF( sale_analysis_status IN ('authorized', 'auto-authorized'), 1, null)) as authorized,
                 COUNT(IF( sale_analysis_status = 'denied', 1, null)) as denied
                 "
             ))->whereBetween('created_at', [$req->start_date, $req->end_date])->first();
