@@ -711,28 +711,10 @@ class SalesRiskPolicyController extends AccountBaseController
 
         try {
 
-            $questionList = SalesPolicyQuestion::parent()
-                ->get()->filter(fn ($item) => SalesRiskPolicy::find($item->policy_id)->status)
-                ->map(function ($item) {
-
-                    return [
-                        'id' => $item->id,
-                        'title' => $item->title,
-                        'key' => $item->key,
-                        'type' => $item->type,
-                        'value' => json_decode($item->value) ? json_decode($item->value) : $item->value,
-                        'placeholder' => $item->placeholder,
-                        'parent_id' => $item->parent_id,
-                        'policy_id' => $item->policy_id,
-                        'policy_title' => SalesRiskPolicy::find($item->policy_id)->title,
-                        'questions' => self::questionListChild($item->id)
-                    ];
-                });
-
             PolicyQuestionValue::create([
                 'deal_id' => $dealId,
                 'values' => json_encode($req->all()),
-                'question_list' => json_encode($questionList)
+                'question_list' => json_encode(SalesPolicyQuestion::get())
             ]);
 
             // calculate point
@@ -743,7 +725,6 @@ class SalesRiskPolicyController extends AccountBaseController
                 PolicyQuestionValue::where('deal_id', $dealId)->delete();
                 return response()->json(['status' => 'error', 'message' => $calculation['error']], 500);
             }
-
 
             // deals table status change
             if ($calculation['points'] >= 0) {
@@ -1336,10 +1317,21 @@ class SalesRiskPolicyController extends AccountBaseController
                 return response()->json(['status' => 'error', 'message' => 'Question value not found'], 500);
             }
 
+            $questionList = json_decode($questionValues->question_list);
+            $questionList = collect($questionList);
             $questionData = [];
             foreach (json_decode($questionValues->values) as $item) {
-                $qsion = SalesPolicyQuestion::find($item->id);
-                if ($qsion) $questionData[] = ['id' => $item->id, 'title' => $qsion->title, 'value' => $item->value, 'key' => $qsion->key];
+
+                $qsion = $questionList->firstWhere('id', $item->id);
+                if ($qsion) {
+                    if($qsion->key == 'milestone' && $qsion->type == 'list')
+                    {
+                        $listItem = collect(json_decode($qsion->value));
+                        $listItem = $listItem->firstWhere('id', $item->value);
+                        $questionData[] = ['id' => $item->id, 'title' => $qsion->title, 'value' => $listItem->title, 'key' => $qsion->key];
+                    }
+                    else $questionData[] = ['id' => $item->id, 'title' => $qsion->title, 'value' => $item->value, 'key' => $qsion->key];
+                }
             }
 
             $data['questionData'] = $questionData;

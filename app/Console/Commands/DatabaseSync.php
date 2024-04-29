@@ -3,6 +3,8 @@
 namespace App\Console\Commands;
 
 use App\Models\Deal;
+use App\Models\PolicyQuestionValue;
+use App\Models\SalesPolicyQuestion;
 use Illuminate\Console\Command;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\DB;
@@ -71,6 +73,16 @@ class DatabaseSync extends Command
             echo "\nend";
         }
 
+        // $questionList = PolicyQuestionValue::get() ?? [];
+        echo "\nFilling question_list column in $table";
+        foreach ((object) PolicyQuestionValue::get() as $item) {
+            if(! $item->question_list){
+                $item->question_list = json_encode(SalesPolicyQuestion::get());
+                $item->save();
+            }
+        }
+        echo "\nend";
+        
         return Command::SUCCESS;
     }
 }
