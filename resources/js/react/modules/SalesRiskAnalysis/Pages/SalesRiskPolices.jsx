@@ -416,17 +416,17 @@ const SalesRiskPolices = () => {
             <SalesRiskAnalysisContainer>
                 {/* refresh button */}
                 <div className="d-flex justify-content-between align-items-center">
-                    <div className="d-flex flex-column flex-md-row align-items-center">
+                    <div className="d-flex flex-column flex-md-row align-items-start align-items-md-center">
                         <button
                             onClick={handleAddNewPolicyModal}
-                            className="btn btn-primary"
+                            className="btn btn-primary mb-3 mb-md-0"
                         >
                             <i className="fa fa-plus mr-2" aria-hidden="true" />{" "}
                             Add New Policy
                         </button>
                         <button
                             onClick={handleOpenAddQuestionsModal}
-                            className="btn btn-info ml-3"
+                            className="btn btn-info ml-0 mb-3 mb-md-0 ml-md-3"
                             style={{
                                 padding: "9px 12px",
                             }}
@@ -441,7 +441,7 @@ const SalesRiskPolices = () => {
                                     "_blank"
                                 );
                             }}
-                            className="btn btn-info ml-3"
+                            className="btn btn-info ml-0 mb-3 mb-md-0 ml-md-3"
                             style={{
                                 padding: "9px 12px",
                             }}
