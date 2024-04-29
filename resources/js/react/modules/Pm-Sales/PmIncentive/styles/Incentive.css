@@ -1,13 +1,23 @@
+/* ******************************
+    Common starts here
+ ********************************* */
+
 .incentive_wrapper {
     background: #F7FAFF;
     padding: 0px 35px;
     /* padding-bottom: 69.78px; */
+    font-family: 'Poppins', sans-serif;
 }
 
 .incentive_inner_wrapper {
     background: #FFFFFF;
     padding: 35px;
     border-radius: 16px;
+}
+
+.title_wrapper {
+    padding-left: 28px;
+    margin-top: 50px;
 }
 
 .section_title {
@@ -18,6 +28,25 @@
     margin-bottom: 23px;
 }
 
+.clickable_link {
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+.custom_divider {
+    height: 39px;
+    width: 1px;
+    background: #D8D8D8;
+}
+
+/* ******************************
+    Common ends here
+ ********************************* */
+
+
+/* ********************************************
+    Filter bar and point card starts here
+ ********************************************** */
 .filter_bar {
     display: flex;
     justify-content: space-between;
@@ -61,20 +90,75 @@
     border-radius: 6px;
 }
 
+.secondary_point_card_image_wrapper {
+    padding: 8px;
+    background-color: #CEEBFF;
+    border-radius: 6px;
+}
+
 .point_details_wrapper {
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: 6px;
 }
 
+/* ********************************************
+    Filter bar and point card ends here
+ ********************************************** */
+
+/* ********************************************
+    Ideal Vs Achieved starts here
+ ********************************************** */
+
+.ideal_vs_achieved_wrapper {
+    padding: 22px 29px;
+    margin-top: 32px;
+    border-radius: 16px;
+    background-color: #F2F9FE;
+}
+
+.chart_section_wrapper {
+    padding: 22px 29px;
+    margin-top: 20px;
+    border-radius: 16px;
+    background-color: #F2F9FE;
+}
+
+.chart_row_wrapper {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 28px;
+    margin-bottom: 27px;
+}
+
+.chart_wrapper {
+    background-color: #ffffff;
+    border-radius: 15px;
+    padding: 25px;
+    width: 50%;
+}
+
+.secondary_chart_wrapper {
+    background-color: #E1F3FF;
+    border-radius: 15px;
+    padding: 25px;
+    width: 50%;
+}
+
+/* ********************************************
+    Ideal Vs Achieved ends here
+ ********************************************** */
 
 
-/* stats info  */
+/* ******************************
+    stats info  starts here
+ ********************************* */
 .stats_info_wrapper {
     background-color: #F2F9FE;
     padding: 22px 29px;
     border-radius: 16px;
-    margin-top: 32px;
+    margin-top: 50px;
     display: flex;
     justify-content: space-between;
 }
@@ -164,3 +248,38 @@
     font-weight: 500;
     line-height: 21px;
 }
+
+/* ******************************
+    stats info ends here
+ ********************************* */
+
+/* ******************************
+ upSale/cross sale start here
+********************************* */
+
+.secondary_point_banner {
+    display: flex;
+    justify-content: space-between;
+    padding: 22px 29px;
+    color: #FFFFFF;
+    border-radius: 10px;
+    /* gap: 28px; */
+    background-color: #E1F3FF;
+}
+
+.secondary_point_card_wrapper {
+    width: 49.5%;
+    display: flex;
+    justify-content: center;
+}
+
+.secondary_point_card {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    gap: 12px;
+}
+
+/* ******************************
+ upSale/cross sale ends here
+********************************* */

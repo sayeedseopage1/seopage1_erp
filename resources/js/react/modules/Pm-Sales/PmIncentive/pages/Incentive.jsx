@@ -4,6 +4,7 @@ import FilterBar from '../components/Filterbar';
 import PointBanner from '../components/PointBanner';
 import IdealVsAchieved from '../components/IdealVsAchieved';
 import StatsInfo from '../components/StatsInfo';
+import UpsaleCrossSale from '../components/UpsaleCrossSale';
 
 const Incentive = () => {
     const [data, setData] = useState([]);
@@ -31,6 +32,7 @@ const Incentive = () => {
                     <PointBanner />
                     <IdealVsAchieved />
                     <StatsInfo />
+                    <UpsaleCrossSale />
                 </div>
             </div>
         </div>
