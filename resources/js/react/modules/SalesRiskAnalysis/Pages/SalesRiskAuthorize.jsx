@@ -246,7 +246,7 @@ const SalesRiskAuthorize = () => {
                                 auth.getRoleId() === 1 &&
                                 getDealStatus(
                                     metaInfo?.deal?.sale_analysis_status
-                                )
+                                ) && !isLoading && !isFetching
                             }
                         >
                             <div className="d-flex justify-content-center align-items-center mt-4">

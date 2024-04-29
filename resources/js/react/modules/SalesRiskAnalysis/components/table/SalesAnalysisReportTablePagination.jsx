@@ -15,9 +15,6 @@ const SalesAnalysisReportTablePagination = ({
         setPage(0);
     }, [reportStatus]);
 
-
-    console.log(tableData)
-    console.log(pageSize)
     return (
         <div className="cnx__table_footer mt-3">
             <div className="__show_entries">

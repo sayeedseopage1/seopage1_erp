@@ -45,7 +45,7 @@ const SaleAnalysisReportTableFilterBar = ({ setFilter }) => {
                 endDate={endDate}
                 setStartDate={setStartDate}
                 setEndDate={setEndDate}
-                customDayRange={60}
+                customDayRange={61}
                 onApply={() => {}}
             />
             <HDivider />
