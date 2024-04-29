@@ -14,10 +14,7 @@ import { useSaleRiskAnalysisReportTableDataQuery } from "../../../services/api/s
 import { useAuth } from "../../../hooks/useAuth";
 
 //style
-
 import styles from "../components/Styles/SalesRiskReport.module.css";
-import Popover from "../components/Popover";
-import popoverStyle from "../components/popover.module.css";
 
 export const SalesRiskReportStatus = [
     {
@@ -50,81 +47,6 @@ export const SalesRiskReportStatus = [
     },
 ];
 
-const SaleRiskAllStatus = [
-    {
-        id: "all",
-        name: "All",
-        color: "#24b8cf",
-        description:
-            "All Sales Risk Analysis Reports are shown here, including, Previous Won,Previous Denied  Pending, Authorized, Denied, and Expired.",
-    },
-    {
-        id: "pending",
-        name: "Pending",
-        color: "rgb(247 220 190)",
-        description:
-            "Sales Risk Analysis Reports that are pending for approval are shown here.",
-        tags: [
-            {
-                name: "Not Available Yet",
-                color: "rgb(252, 189, 1)",
-            },
-        ],
-    },
-    {
-        id: "authorized",
-        name: "Authorized",
-        color: "#b2fab2",
-        description:
-            "Sales Risk Analysis Reports that are authorized are shown here.",
-    },
-    {
-        id: "auto authorized",
-        name: "Auto Authorized",
-        color: "#b2fab2",
-        description:
-            "Sales Risk Analysis Reports that are system auto Authorized are shown here.",
-        tags: [
-            {
-                name: "Authorized by System",
-                color: "#28a745",
-            },
-        ],
-    },
-    {
-        id: "denied",
-        name: "Denied",
-        color: "rgb(252, 200, 198)",
-        description:
-            "Sales Risk Analysis Reports that are denied are shown here.",
-    },
-    {
-        id: "previous_won",
-        name: "Previous Won",
-        color: "#b2fab2",
-        description:
-            "Sales Risk Analysis Reports that are previous won are shown here.",
-        tags: [
-            {
-                name: "Previous Report",
-                color: "rgba(108, 247, 178, 0.773)",
-            },
-        ],
-    },
-    {
-        id: "previous_denied",
-        name: "Previous Denied",
-        color: "rgb(252, 200, 198)",
-        description:
-            "Sales Risk Analysis Reports that are previous denied are shown here.",
-        tags: [
-            {
-                name: "Previous Report",
-                color: "rgba(108, 247, 178, 0.773)",
-            },
-        ],
-    },
-];
 
 const SalesRiskReport = () => {
     const auth = useAuth();
@@ -137,7 +59,6 @@ const SalesRiskReport = () => {
         pageSize: 10,
     });
     const [filter, setFilter] = React.useState({});
-
     // make query string
     const queryString = (object) => {
         const queryObject = _.pickBy(object, Boolean);
@@ -159,12 +80,10 @@ const SalesRiskReport = () => {
     );
 
     const saleAnalysisReportTableData = data?.data;
-
     // main Table page change
     const onPageChange = (paginate) => {
         setPagination(paginate);
     };
-
     // filter table columns by role
     const filterTableColumnsByRole = () => {
         if (auth.getRoleId() === 1) {
@@ -174,9 +93,7 @@ const SalesRiskReport = () => {
             (column) => column.id !== "gained_points"
         );
     };
-
     // when satatus change then refetch data
-
     React.useEffect(() => {
         refetch();
     }, [reportStatus]);
@@ -194,6 +111,8 @@ const SalesRiskReport = () => {
             setSalesRiskReportStatus([...salesRiskReportStatus]);
         }
     }, [data]);
+
+    console.log(pageIndex)
 
     return (
         <div>
@@ -224,63 +143,6 @@ const SalesRiskReport = () => {
                             </span>
                         </button>
                     ))}
-                    <Popover>
-                        <Popover.Button className="d-flex justify-content-center align-items-center ml-2 h-100">
-                            <i
-                                class="fa fa-info-circle"
-                                aria-hidden="true"
-                                style={{
-                                    fontSize: "1.3rem",
-                                    color: "#6c757d",
-                                }}
-                            ></i>
-                        </Popover.Button>
-                        <Popover.Panel placement="bottom-start">
-                            <div
-                                className={`${popoverStyle.questionModal_popover_panel}`}
-                            >
-                                {SaleRiskAllStatus.map((item) => (
-                                    <div key={item.id} className="mb-2">
-                                        <div className="d-flex align-items-center mb-2">
-                                            <div
-                                                className="rounded-circle"
-                                                style={{
-                                                    width: "10px",
-                                                    height: "10px",
-                                                    backgroundColor: item.color,
-                                                    marginRight: "5px",
-                                                }}
-                                            ></div>
-                                            <h6 className="mb-0">
-                                                {item.name}
-                                            </h6>
-                                            <div className="ml-2">
-                                                {item?.tags?.map((tag) => (
-                                                    <p
-                                                        style={{
-                                                            padding: "1px 8px",
-                                                            backgroundColor:
-                                                                tag.color,
-                                                            borderRadius:
-                                                                "12px",
-                                                            width: "fit-content",
-                                                            fontSize: "12px",
-                                                        }}
-                                                        key={tag.name}
-                                                    >
-                                                        {tag.name}
-                                                    </p>
-                                                ))}
-                                            </div>
-                                        </div>
-                                        <div>
-                                            <p>{item.description}</p>
-                                        </div>
-                                    </div>
-                                ))}
-                            </div>
-                        </Popover.Panel>
-                    </Popover>
                 </div>
                 {/* refresh */}
                 <RefreshButton

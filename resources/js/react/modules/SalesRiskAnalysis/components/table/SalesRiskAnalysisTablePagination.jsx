@@ -8,8 +8,9 @@ const SalesRiskAnalysisTablePagination = ({
     handlePageChange,
     tableData,
     pageSize,
-    reportStatus,
 }) => {
+
+
     return (
         <div className="cnx__table_footer mt-3">
             <div className="__show_entries">
@@ -49,7 +50,6 @@ const SalesRiskAnalysisTablePagination = ({
                 previousLinkClassName={styles.pageLinkClassName}
                 nextLinkClassName={styles.pageLinkClassName}
             />
-
             {/* end pagination */}
         </div>
     );

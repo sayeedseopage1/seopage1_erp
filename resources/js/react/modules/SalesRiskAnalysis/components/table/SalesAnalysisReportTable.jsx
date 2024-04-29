@@ -18,6 +18,7 @@ import SalesRiskAnalysisTablePagination from "./SalesRiskAnalysisTablePagination
 
 // loader components
 import SalesAnalysisReportTableLoader from "../loader/SalesAnalysisReportTableLoader";
+import SalesAnalysisReportTablePagination from "./SalesAnalysisReportTablePagination";
 
 const SalesAnalysisReportTable = ({
     tableData,
@@ -119,11 +120,6 @@ const SalesAnalysisReportTable = ({
         getSortedRowModel: getSortedRowModel(),
     });
 
-    useMemo(() => {
-        handlePageChange({ selected: 0 });
-        console.log("useMemo", tableData);
-    }, [reportStatus]);
-
     return (
         <React.Fragment>
             {/* table */}
@@ -205,7 +201,7 @@ const SalesAnalysisReportTable = ({
                     _.size(table.getRowModel().rows) === 0 && <EmptyTable />}
             </div>
             {/* pagination */}
-            <SalesRiskAnalysisTablePagination
+            <SalesAnalysisReportTablePagination
                 tableData={tableData}
                 handlePageSizeChange={handlePageSizeChange}
                 handlePageChange={handlePageChange}
