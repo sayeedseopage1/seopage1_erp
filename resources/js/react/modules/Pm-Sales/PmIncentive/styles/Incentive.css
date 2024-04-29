@@ -126,33 +126,40 @@
     Ideal Vs Achieved starts here
  ********************************************** */
 
-.ideal_vs_achieved_wrapper {
+.ideal_vs_achieved_container {
     padding: 22px 29px;
     margin-top: 32px;
     border-radius: 16px;
     background-color: #F2F9FE;
 }
 
-.chart_section_wrapper {
+.chart_parent {
+    display: flex;
+    gap: 28px;
+    flex-direction: row;
+    margin-bottom: 28px;
+}
+
+.chart_section_container {
     padding: 22px 29px;
     margin-top: 20px;
     border-radius: 16px;
     background-color: #F2F9FE;
 }
 
-.chart_row_wrapper {
+/* .chart_row_wrapper {
     display: flex;
-    justify-content: space-between;
-    align-items: center;
+    flex-direction: column;
     gap: 28px;
-    margin-bottom: 27px;
-}
+    width: 50%;
+} */
 
 .chart_wrapper {
     background-color: #ffffff;
     border-radius: 15px;
     padding: 25px;
     width: 50%;
+    position: relative;
 }
 
 .secondary_chart_wrapper {
@@ -160,7 +167,58 @@
     border-radius: 15px;
     padding: 25px;
     width: 50%;
+    position: relative;
 }
+
+.chart_wrapper_inner {
+    width: 100%;
+    position: relative;
+}
+
+.chart_button {
+    position: absolute;
+    top: 0;
+    right: 0;
+    font-size: 16px;
+    font-weight: 500;
+    color: #1492E6;
+    background-color: #F2F9FE;
+    border-radius: 5px;
+    padding: 5px 30px;
+    letter-spacing: -0.32px;
+}
+
+.y_axis_arrow {
+    transform: rotate(-90deg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    position: absolute;
+    top: 44%;
+    left: -30%;
+}
+
+.chart_axis_title {
+    font-size: 12px;
+    font-weight: 500;
+    line-height: 32px;
+    text-align: center;
+    color: #1492E6;
+}
+
+.chart_axis_icon {
+    width: 20%;
+}
+
+.x_axis_arrow {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+
 
 /* ********************************************
     Ideal Vs Achieved ends here
@@ -281,6 +339,7 @@
     border-radius: 10px;
     gap: 15px;
     background-color: #E1F3FF;
+    margin-top: 28px;
 }
 
 .secondary_point_card_wrapper {

@@ -9,15 +9,15 @@ const UpsaleCrossSale = () => {
                     Upsale/cross sale amount
                 </p>
             </div>
-            <div className='chart_section_wrapper'>
-                <div className="chart_row_wrapper">
+            <div className='chart_section_container'>
+                <div className='chart_parent'>
                     {/* chart 1  */}
                     <div className="secondary_chart_wrapper">
-                        UpdateCrossSaleBar
+                        Chart 1
                     </div>
-                    {/* chart 2  */}
+                    {/* chart 1  */}
                     <div className="secondary_chart_wrapper">
-                        chart 2
+                        Chart 1
                     </div>
                 </div>
                 <UpsaleCrossSalePointBanner />
