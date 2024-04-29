@@ -75,7 +75,10 @@ const SalesRiskAuthorize = () => {
 
                 setAnswersPoint(formatData);
             } else {
-                setAnswersPoint(questionData);
+                const sortData = [...questionData]?.sort(
+                    (a, b) => Number(a.id) - Number(b.id)
+                );
+                setAnswersPoint(sortData);
             }
             setMetaInfo({
                 ...rest,
@@ -246,7 +249,9 @@ const SalesRiskAuthorize = () => {
                                 auth.getRoleId() === 1 &&
                                 getDealStatus(
                                     metaInfo?.deal?.sale_analysis_status
-                                ) && !isLoading && !isFetching
+                                ) &&
+                                !isLoading &&
+                                !isFetching
                             }
                         >
                             <div className="d-flex justify-content-center align-items-center mt-4">
