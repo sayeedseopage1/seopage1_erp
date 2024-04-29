@@ -20,6 +20,16 @@ const BonusPoints = () => {
                         chart 2
                     </div>
                 </div>
+                <div className="chart_row_wrapper">
+                    {/* chart 1  */}
+                    <div className="secondary_chart_wrapper">
+                        chart 3
+                    </div>
+                    {/* chart 2  */}
+                    <div className="secondary_chart_wrapper">
+                        chart 4
+                    </div>
+                </div>
                 <BonusPointsPointBanner />
             </div>
         </>

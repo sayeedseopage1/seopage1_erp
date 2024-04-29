@@ -11,11 +11,77 @@ const IdealVsAchieved = () => {
             <div className="chart_row_wrapper">
                 {/* chart 1  */}
                 <div className="chart_wrapper">
-                    Revision Task Bar Chart will added here
+                    chart 1
                 </div>
                 {/* chart 2  */}
                 <div className="chart_wrapper">
-                    Revision Task Thik Chart will added here
+                    hart 2
+                </div>
+            </div>
+            {/* revesion task ratio */}
+            <div className="chart_row_wrapper">
+                {/* chart 1  */}
+                <div className="chart_wrapper">
+                    chart 1
+                </div>
+                {/* chart 2  */}
+                <div className="chart_wrapper">
+                    hart 2
+                </div>
+            </div>
+            {/* revesion task ratio */}
+            <div className="chart_row_wrapper">
+                {/* chart 1  */}
+                <div className="chart_wrapper">
+                    chart 1
+                </div>
+                {/* chart 2  */}
+                <div className="chart_wrapper">
+                    hart 2
+                </div>
+            </div>
+            {/* revesion task ratio */}
+            <div className="chart_row_wrapper">
+                {/* chart 1  */}
+                <div className="chart_wrapper">
+                    chart 1
+                </div>
+                {/* chart 2  */}
+                <div className="chart_wrapper">
+                    hart 2
+                </div>
+            </div>
+            {/* revesion task ratio */}
+            <div className="chart_row_wrapper">
+                {/* chart 1  */}
+                <div className="chart_wrapper">
+                    chart 1
+                </div>
+                {/* chart 2  */}
+                <div className="chart_wrapper">
+                    hart 2
+                </div>
+            </div>
+            {/* revesion task ratio */}
+            <div className="chart_row_wrapper">
+                {/* chart 1  */}
+                <div className="chart_wrapper">
+                    chart 1
+                </div>
+                {/* chart 2  */}
+                <div className="chart_wrapper">
+                    hart 2
+                </div>
+            </div>
+            {/* revesion task ratio */}
+            <div className="chart_row_wrapper">
+                {/* chart 1  */}
+                <div className="chart_wrapper">
+                    chart 1
+                </div>
+                {/* chart 2  */}
+                <div className="chart_wrapper">
+                    hart 2
                 </div>
             </div>
         </div>
