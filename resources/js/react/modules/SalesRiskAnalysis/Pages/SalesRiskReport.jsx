@@ -34,19 +34,18 @@ export const SalesRiskReportStatus = [
     {
         id: "authorized",
         name: "Authorized",
-        className: `${styles.saleRiskReportBtn} ${styles.saleRiskReportApprovedBtn} ml-2`,
-        activeClass: `${styles.saleRiskReportBtn} ${styles.saleRiskReportActiveApprovedBtn} ml-2`,
+        className: `${styles.saleRiskReportBtn} ${styles.saleRiskReportApprovedBtn} ml-2 mt-2 mt-md-0`,
+        activeClass: `${styles.saleRiskReportBtn} ${styles.saleRiskReportActiveApprovedBtn} ml-2 mt-2 mt-md-0`,
         count: 0,
     },
     {
         id: "denied",
         name: "Denied",
-        className: `${styles.saleRiskReportBtn} ${styles.saleRiskReportRejectedBtn} ml-2`,
-        activeClass: `${styles.saleRiskReportBtn} ${styles.saleRiskReportActiveRejectedBtn} ml-2`,
+        className: `${styles.saleRiskReportBtn} ${styles.saleRiskReportRejectedBtn} ml-2 mt-2 mt-md-0`,
+        activeClass: `${styles.saleRiskReportBtn} ${styles.saleRiskReportActiveRejectedBtn} ml-2 mt-2 mt-md-0`,
         count: 0,
     },
 ];
-
 
 const SalesRiskReport = () => {
     const auth = useAuth();
@@ -112,47 +111,49 @@ const SalesRiskReport = () => {
         }
     }, [data]);
 
-    console.log(pageIndex)
-
     return (
         <div>
             <SaleAnalysisReportTableFilterBar setFilter={setFilter} />
-            <Flex
-                justifyContent="space-between"
-                alignItem="center"
-                className="mb-3"
-            >
-                <div className="d-flex">
-                    {salesRiskReportStatus.map((item) => (
-                        <button
-                            key={item.id}
-                            className={` ${
-                                reportStatus === item.id
-                                    ? item.activeClass
-                                    : item.className
-                            } `}
-                            onClick={() => {
-                                setReportStatus(item.id);
-                                setPagination({ pageIndex: 0, pageSize: 10 });
-                            }}
-                        >
-                            {item.name}{" "}
-                            <span className="badge badge-light">
-                                {" "}
-                                {item.count}
-                            </span>
-                        </button>
-                    ))}
-                </div>
-                {/* refresh */}
-                <RefreshButton
-                    onClick={refetch}
-                    isLoading={isFetching}
-                    className="font-weight-normal"
-                />
-            </Flex>
+
             <div className="sp1_tlr_container">
                 <div className="sp1_tlr_tbl_container mx-0 py-3">
+                    <Flex
+                        justifyContent="space-between"
+                        alignItem="center"
+                        className="mb-3"
+                    >
+                        <div className="d-flex flex-wrap flex-md-nowrap">
+                            {salesRiskReportStatus.map((item) => (
+                                <button
+                                    key={item.id}
+                                    className={` ${
+                                        reportStatus === item.id
+                                            ? item.activeClass
+                                            : item.className
+                                    } `}
+                                    onClick={() => {
+                                        setReportStatus(item.id);
+                                        setPagination({
+                                            pageIndex: 0,
+                                            pageSize: 10,
+                                        });
+                                    }}
+                                >
+                                    {item.name}{" "}
+                                    <span className="badge badge-light">
+                                        {" "}
+                                        {item.count}
+                                    </span>
+                                </button>
+                            ))}
+                        </div>
+                        {/* refresh */}
+                        <RefreshButton
+                            onClick={refetch}
+                            isLoading={isFetching}
+                            className="font-weight-normal"
+                        />
+                    </Flex>
                     <SalesAnalysisReportTable
                         tableColumns={filterTableColumnsByRole()}
                         tableData={saleAnalysisReportTableData}
