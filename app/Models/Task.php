@@ -2,19 +2,22 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
+use App\Models\Subtask;
+use App\Models\TaskSubmission;
+use App\Models\TaskBoardColumn;
 use App\Observers\TaskObserver;
+use App\Models\ProjectMilestone;
 use App\Traits\CustomFieldsTrait;
+use App\Models\Scopes\OrderByDesc;
+use Illuminate\Support\Facades\Auth;
+use App\Helper\ProjectManagerPointLogic;
+use Illuminate\Notifications\Notifiable;
+use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
-use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\Relations\HasOne;
-use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Notifications\Notifiable;
-use App\Models\Subtask;
-use App\Models\ProjectMilestone;
-use App\Models\TaskBoardColumn;
-use App\Models\Scopes\OrderByDesc;
-use App\Models\TaskSubmission;
 
 /**
  * App\Models\Task
@@ -141,6 +144,22 @@ class Task extends BaseModel
     protected $appends = ['due_on', 'create_on'];
     protected $guarded = ['id'];
     public $customFieldModel = 'App\Models\Task';
+
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::updated(function ($item) {
+            if ($item->isDirty('board_column_id') && in_array($item->board_column_id, [8, 1]) && $item->getOriginal('board_column_id') === 6) {
+                if(!$item->subtask_id && Auth::user()->role_id == 4 && $lastSubmission = TaskSubmission::where('task_id', $item->id)->orderBy('id', 'desc')->first()){
+                    $hoursDifference = Carbon::parse($lastSubmission->created_at)->diffInHours(Carbon::now());
+                    
+                    // Project Manager Point Distribution ( Reviewing the work )
+                    ProjectManagerPointLogic::distribute(8, $item->project_id, $hoursDifference);
+                }
+            }
+        });
+    }
 
     protected static function booted()
     {
