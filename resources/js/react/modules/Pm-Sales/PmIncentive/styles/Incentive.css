@@ -39,6 +39,12 @@
     background: #D8D8D8;
 }
 
+.custom_divider_two {
+    width: 1px;
+    background-color: #ffffff;
+    height: 100px;
+}
+
 /* ******************************
     Common ends here
  ********************************* */
@@ -292,4 +298,54 @@
 
 /* ******************************
  upSale/cross sale ends here
+********************************* */
+
+
+/* ******************************
+ Final incentive value banner start here
+********************************* */
+.final_incentive_banner_wrapper {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-radius: 13px;
+    padding: 20px 30px;
+    margin-top: 21px;
+    background-color: #1492E6;
+    gap: 10px;
+}
+
+.incentive_amount_card {
+    width: 280px;
+    background-color: #ffffff;
+    border-radius: 13px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    padding: 30px
+}
+
+.incentive_amount_details {
+    color: #ffffff;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    max-width: 1127px;
+    font-size: 14px;
+}
+
+.incentive_amount_list {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+    max-width: 320px;
+}
+
+
+/* ******************************
+  Final incentive value banner ends here
 ********************************* */
