@@ -712,22 +712,22 @@ class SalesRiskPolicyController extends AccountBaseController
         try {
 
             $questionList = SalesPolicyQuestion::parent()
-            ->get()->filter(fn ($item) => SalesRiskPolicy::find($item->policy_id)->status)
-            ->map(function ($item) {
+                ->get()->filter(fn ($item) => SalesRiskPolicy::find($item->policy_id)->status)
+                ->map(function ($item) {
 
-                return [
-                    'id' => $item->id,
-                    'title' => $item->title,
-                    'key' => $item->key,
-                    'type' => $item->type,
-                    'value' => json_decode($item->value) ? json_decode($item->value) : $item->value,
-                    'placeholder' => $item->placeholder,
-                    'parent_id' => $item->parent_id,
-                    'policy_id' => $item->policy_id,
-                    'policy_title' => SalesRiskPolicy::find($item->policy_id)->title,
-                    'questions' => self::questionListChild($item->id)
-                ];
-            });
+                    return [
+                        'id' => $item->id,
+                        'title' => $item->title,
+                        'key' => $item->key,
+                        'type' => $item->type,
+                        'value' => json_decode($item->value) ? json_decode($item->value) : $item->value,
+                        'placeholder' => $item->placeholder,
+                        'parent_id' => $item->parent_id,
+                        'policy_id' => $item->policy_id,
+                        'policy_title' => SalesRiskPolicy::find($item->policy_id)->title,
+                        'questions' => self::questionListChild($item->id)
+                    ];
+                });
 
             PolicyQuestionValue::create([
                 'deal_id' => $dealId,
@@ -766,7 +766,7 @@ class SalesRiskPolicyController extends AccountBaseController
             // if error then delete previous records
             PolicyQuestionValue::where('deal_id', $dealId)->delete();
 
-            throw $th;
+            // throw $th;
             return response()->json(['status' => 'error', 'message' => 'Data did not stored successfully.'], 500);
         }
     }
@@ -979,8 +979,7 @@ class SalesRiskPolicyController extends AccountBaseController
                         if ($percentage < 50) {
                             $points += -2;
                             $pointValue = -2;
-                        }
-                        else{
+                        } else {
                             $points += -1;
                             $pointValue = -1;
                         }
@@ -989,8 +988,7 @@ class SalesRiskPolicyController extends AccountBaseController
                         if ($percentage < 50) {
                             $points += -1;
                             $pointValue = -1;
-                        }
-                        else{
+                        } else {
                             $points += -0.5;
                             $pointValue = -0.5;
                         }
@@ -1371,15 +1369,15 @@ class SalesRiskPolicyController extends AccountBaseController
     function salesRiskReportList(Request $req)
     {
         if (url()->current() == route('account.sale-risk-policies.report-data')) {
-            $itemsPaginated = Deal::whereIn('sale_analysis_status', ['previous-won', 'previous-denied', 'analysis', 'authorized', 'auto-authorized', 'denied'])
+            $itemsPaginated = Deal::whereIn('sale_analysis_status', ['analysis', 'authorized', 'auto-authorized', 'denied'])
                 ->where(function ($query) use ($req) {
                     // dd($req->all());
                     if ($req->start_date && $req->end_date) $query->whereBetween('created_at', [$req->start_date, $req->end_date]);
                     if ($req->client_id) $query->where('client_id', $req->client_id);
                     if ($req->status) {
                         if ($req->status == 'pending') $query->where('sale_analysis_status', 'analysis');
-                        elseif ($req->status == 'authorized') $query->whereIn('sale_analysis_status', ['previous-won', 'authorized', 'auto-authorized']);
-                        elseif ($req->status == 'denied') $query->whereIn('sale_analysis_status', ['previous-denied', 'denied']);
+                        elseif ($req->status == 'authorized') $query->whereIn('sale_analysis_status', ['authorized', 'auto-authorized']);
+                        elseif ($req->status == 'denied') $query->where('sale_analysis_status', 'denied');
                     }
                 })
                 ->offset($req->input('limit', 10) * ($req->input('page', 1) - 1))
@@ -1433,12 +1431,10 @@ class SalesRiskPolicyController extends AccountBaseController
             $counts = Deal::select(DB::raw(
                 "COUNT(*) as 'all',
                 COUNT(IF( sale_analysis_status = 'analysis', 1, null)) as pending,
-                COUNT(IF( sale_analysis_status = 'authorized', 1, IF( sale_analysis_status = 'auto-authorized', 1, IF( sale_analysis_status = 'previous-won', 1, null)))) as authorized,
-                COUNT(IF( sale_analysis_status = 'denied', 1, IF( sale_analysis_status = 'previous-denied', 1, null))) as denied
+                COUNT(IF( sale_analysis_status = 'authorized', 1, IF( sale_analysis_status = 'auto-authorized', 1, null))) as authorized,
+                COUNT(IF( sale_analysis_status = 'denied', 1, null)) as denied
                 "
-            ))
-            ->whereBetween('created_at', [$req->start_date, $req->end_date])
-            ->first();
+            ))->whereBetween('created_at', [$req->start_date, $req->end_date])->first();
 
             $extra = collect(['counts' => $counts]);
             $data = $extra->merge($data);
