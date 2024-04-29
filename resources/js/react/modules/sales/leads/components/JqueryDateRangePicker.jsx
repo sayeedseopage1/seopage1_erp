@@ -6,7 +6,7 @@ const JqueryDateRangePicker = ({
     startDate,
     endDate,
     setStartDate,
-    setEndDate, 
+    setEndDate,
     customDayRange = 7,
 }) => {
     const handleTimePicker = () => {
@@ -17,7 +17,8 @@ const JqueryDateRangePicker = ({
 
             $(function () {
                 let start = moment().subtract(customDayRange, "day");
-                let end = moment();
+                let end =
+                    customDayRange > 7 ? moment().add(1, "day") : moment();
 
                 // if(today > 20){
                 //     end = moment().add(1, 'months').date(20);
