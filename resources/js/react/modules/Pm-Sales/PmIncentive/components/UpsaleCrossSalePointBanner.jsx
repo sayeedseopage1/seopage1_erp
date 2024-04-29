@@ -11,8 +11,8 @@ const UpsaleCrossSalePointBanner = () => {
                         <img src={pointIconDark} alt="pointIcon" />
                     </span>
                     <div className="point_details_wrapper">
-                        <p style={{ fontWeight: "500", fontSize: "16px", color: "#000000" }}>Your upsale/cross sales points:</p>
-                        <span className='clickable_link' style={{ fontWeight: "600", fontSize: "20px", color: "#1492E6" }}>
+                        <p className='point_title' style={{ color: "#000000" }}>Your upsale/cross sales points:</p>
+                        <span className='point_score clickable_link' style={{ color: "#1492E6" }}>
                             60.05pt
                         </span>
                         {/* <UpsaleCrossSaleModal /> */}
@@ -28,10 +28,10 @@ const UpsaleCrossSalePointBanner = () => {
                         <img src={cashBag} style={{ width: "24px", height: "24px" }} alt="taka" />
                     </span>
                     <div className="point_details_wrapper">
-                        <p style={{ fontWeight: "500", fontSize: "16px", color: "#000000" }}>
+                        <p className='point_title' style={{ color: "#000000" }}>
                             Cash value of every upsale/cross sale point:
                         </p>
-                        <span style={{ fontWeight: "600", fontSize: "20px", color: "#1492E6" }}>
+                        <span className='point_score' style={{ color: "#1492E6" }}>
                             100 Taka
                         </span>
                     </div>

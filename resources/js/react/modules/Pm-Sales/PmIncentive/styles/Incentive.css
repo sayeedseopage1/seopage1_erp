@@ -4,14 +4,14 @@
 
 .incentive_wrapper {
     background: #F7FAFF;
-    padding: 0px 35px;
+    padding: 0px 30px;
     /* padding-bottom: 69.78px; */
     font-family: 'Poppins', sans-serif;
 }
 
 .incentive_inner_wrapper {
     background: #FFFFFF;
-    padding: 35px;
+    padding: 30px;
     border-radius: 16px;
 }
 
@@ -100,6 +100,16 @@
     display: flex;
     align-items: center;
     gap: 6px;
+}
+
+.point_title {
+    font-weight: 500;
+    font-size: 16px;
+}
+
+.point_score {
+    font-weight: 600;
+    font-size: 20px;
 }
 
 /* ********************************************
@@ -260,10 +270,10 @@
 .secondary_point_banner {
     display: flex;
     justify-content: space-between;
-    padding: 22px 29px;
+    padding: 22px;
     color: #FFFFFF;
     border-radius: 10px;
-    /* gap: 28px; */
+    gap: 15px;
     background-color: #E1F3FF;
 }
 

@@ -27,8 +27,8 @@ const PointBanner = () => {
                             <img src={`${item?.value_type == 'point' ? pointIcon : takaIcon}`} style={{ width: "24px", height: "24px" }} alt="pointIcon" />
                         </span>
                         <div className="point_details_wrapper">
-                            <p style={{ fontWeight: "500", fontSize: "18px" }}>{item?.title}:</p>
-                            <span style={{ fontWeight: "600", fontSize: "20px" }}>{item?.value} {item?.value_type == 'point' ? 'pt' : 'Taka'}</span>
+                            <p className='point_title'>{item?.title}:</p>
+                            <span className='point_score'>{item?.value} {item?.value_type == 'point' ? 'pt' : 'Taka'}</span>
                         </div>
                     </div>
                 ))

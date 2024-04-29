@@ -5,6 +5,7 @@ import PointBanner from '../components/PointBanner';
 import IdealVsAchieved from '../components/IdealVsAchieved';
 import StatsInfo from '../components/StatsInfo';
 import UpsaleCrossSale from '../components/UpsaleCrossSale';
+import BonusPoints from '../components/BonusPoints';
 
 const Incentive = () => {
     const [data, setData] = useState([]);
@@ -33,6 +34,7 @@ const Incentive = () => {
                     <IdealVsAchieved />
                     <StatsInfo />
                     <UpsaleCrossSale />
+                    <BonusPoints />
                 </div>
             </div>
         </div>
