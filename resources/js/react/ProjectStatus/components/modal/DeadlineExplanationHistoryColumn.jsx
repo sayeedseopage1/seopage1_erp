@@ -62,7 +62,7 @@ export const DeadlineEHColumn = [
                     dangerouslySetInnerHTML={{ __html: data?.description }}
                 />
             ) : (
-                "--"
+                <span>--</span>
             );
         },
     },
