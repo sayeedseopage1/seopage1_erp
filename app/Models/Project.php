@@ -133,6 +133,11 @@ class Project extends BaseModel
 
         static::updated(function ($item) {
             if ($item->isDirty('status') && in_array($item->status, ['finished', 'partially finished'])) {
+                // The project_completion_time will be updated when a project is finished
+                $project = Project::where('id', $item->id)->update([
+                    'project_completion_time' => now()
+                ]);
+
                 $project = \App\Models\Project::with('times:id,project_id,total_minutes,total_hours,revision_id,revision_status')
                 ->select('projects.id')
                 ->selectRaw('SUM(project_deliverables.estimation_time) * 60 as total_estimate_minutes')
