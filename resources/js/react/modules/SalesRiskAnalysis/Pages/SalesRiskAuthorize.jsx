@@ -44,6 +44,7 @@ const SalesRiskAuthorize = () => {
     const pathnames = window.location.pathname.split("/");
     const deal_id = pathnames[pathnames?.length - 1];
     const auth = useAuth();
+    const [authorizeComment, setAuthorizeComment] = useState("");
 
     const pathWiseApiCall = pathnames.includes("contracts")
         ? useSaleRiskQuestionDealReportQuery
@@ -98,6 +99,9 @@ const SalesRiskAuthorize = () => {
                 deal_id: deal_id,
                 status: Number(statusActionData.status),
             };
+            if (authorizeComment) {
+                payload.comment = authorizeComment;
+            }
             const res = await saleRiskAnalysisActionHandler(payload);
             if (res?.data) {
                 // show success message
@@ -500,6 +504,8 @@ const SalesRiskAuthorize = () => {
                     statusActionData={statusActionData}
                     handleStatusUpdate={handleAuthorize}
                     isLoading={isActionLoading}
+                    isInputShow={true}
+                    setInputValue={setAuthorizeComment}
                     modalContent={{
                         0: "Deny",
                         1: "Authorize",

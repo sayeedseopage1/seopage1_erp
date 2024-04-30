@@ -1,4 +1,6 @@
+
 import React from "react";
+import _ from "lodash";
 import Switch from "../Switch";
 import Tooltip from "../Tooltip";
 
@@ -75,7 +77,7 @@ export const SalesRiskAuthorizeColumns = [
                                 className="text-center"
                                 style={customStyles.subQuestion}
                             >
-                                {question?.value ?? "-"}
+                                { _.capitalize(question?.value) ?? "-"}
                             </p>
                         </td>
                     ))}

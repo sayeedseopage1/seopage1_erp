@@ -45,6 +45,8 @@ export const ModalInputLabel = styled.label`
     padding: 0px !important;
 `;
 
+
+
 export const ModalButton = styled.button`
     padding: 13px 20px;
     border-radius: 8px;
@@ -71,6 +73,22 @@ export const ModalInput = styled.input`
     background-color: #f8f8f8;
     color: ${(props) => (props.value ? "#000000" : "#8F8F8F")};
     outline: none;
+    border: 1px solid #b1b1b1;
+    border-radius: 9px;
+    width: ${(props) => props.width || "auto"};
+`;
+export const ModalTextArea = styled.textarea`
+    padding: 13px 18px;
+    border-radius: 8px;
+    font-family: Poppins;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+    background-color: #f8f8f8;
+    color: ${(props) => (props.value ? "#000000" : "#8F8F8F")};
+    outline: none;
+    resize: none;
     border: 1px solid #b1b1b1;
     border-radius: 9px;
     width: ${(props) => props.width || "auto"};

@@ -5,7 +5,7 @@ import PropTypes from "prop-types";
 import CustomModal from "../ui/CustomModal/CustomModal";
 
 // local styled components
-import { ModalInputLabel, ModalTitle } from "../ui/Styles/ui";
+import { ModalInputLabel, ModalTextArea, ModalTitle } from "../ui/Styles/ui";
 
 const RuleActionConfirmationModal = ({
     open,
@@ -14,6 +14,8 @@ const RuleActionConfirmationModal = ({
     handleStatusUpdate,
     isLoading,
     modalContent,
+    isInputShow = false,
+    setInputValue,
 }) => {
     const handleTernaryForStatus = () => {
         if (statusActionData.status === "0") {
@@ -51,7 +53,7 @@ const RuleActionConfirmationModal = ({
                     <ModalTitle>Confirmation</ModalTitle>
                 </div>
                 <div className="d-flex flex-column mb-4 px-3  w-100">
-                    <div className="row mb-5 align-items-center">
+                    <div className="row mb-3 align-items-center">
                         <ModalInputLabel className="col-12 text-center">
                             Are you sure you want to{" "}
                             <span className={`${handleColorForStatus()}`}>
@@ -61,6 +63,23 @@ const RuleActionConfirmationModal = ({
                             this {statusActionData.modalType}?
                         </ModalInputLabel>
                     </div>
+                    {isInputShow && (
+                        <div
+                            className="row mb-3 align-items-center"
+                            style={{
+                                padding: "0 25px",
+                            }}
+                        >
+                            <ModalTextArea
+                                rows={5}
+                                cols={4}
+                                width="100%"
+                                onChange={(e) => {
+                                    setInputValue(e.target.value);
+                                }}
+                            />
+                        </div>
+                    )}
                     <div className="d-flex justify-content-end align-items-center">
                         <button
                             className="btn btn-success"
@@ -95,4 +114,6 @@ RuleActionConfirmationModal.propTypes = {
     handleStatusUpdate: PropTypes.func,
     isLoading: PropTypes.bool,
     modalContent: PropTypes.object,
+    isInputShow: PropTypes.bool,
+    setInputValue: PropTypes.func,
 };
