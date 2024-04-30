@@ -944,6 +944,7 @@ class DealController extends AccountBaseController
                     $dealQuery->where('deal_stages.deal_stage', $request->status);
                 }
             }
+
             $deals_data = $dealQuery
                 ->orderBy('id', 'desc')
                 ->paginate($limit);
@@ -1002,6 +1003,13 @@ class DealController extends AccountBaseController
                     $item->deal_stages_converted_by_image = null;
                 }
             }
+
+
+            $counts = Deal::select(DB::raw("COUNT(IF(sale_analysis_status = 'pending', 1, null)) as pending"))
+            ->whereBetween('created_at', [$startDate, $endDate])->first();
+
+            $extra = collect($counts);
+            $deals_data = $extra->merge($deals_data);
 
         return response()->json([
             'status'=> 200,
