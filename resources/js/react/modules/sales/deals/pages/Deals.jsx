@@ -73,15 +73,15 @@ const Deals = () => {
                             className="btn btn-warning"
                             style={{
                                 fontSize: "14px",
-                                padding: "6px 12px",
+                                padding: "5px 12px",
                                 backgroundColor:
                                     convertStatus?.id === "pending"
-                                        ? "#FCBD01"
-                                        : "#ffdd78",
+                                        ? "rgb(255, 145, 20)"
+                                        : "rgb(247 220 190)",
                                 border: "none",
                                 color: convertStatus?.id === "pending"
                                 ? "white"
-                                : "black",
+                                : "rgb(255, 145, 20)",
 
                             }}
                             onClick={() =>
@@ -91,7 +91,7 @@ const Deals = () => {
                                 })
                             }
                         >
-                            Pending{" "}
+                            Pending Sales Analysis{" "}
                             <span className="badge badge-light ml-1">
                                 {" "}
                                 {deals?.pending ?? 0}

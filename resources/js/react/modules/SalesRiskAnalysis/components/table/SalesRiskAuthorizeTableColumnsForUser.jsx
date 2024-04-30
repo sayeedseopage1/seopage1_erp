@@ -1,5 +1,5 @@
 import React from "react";
-import Switch from "../Switch";
+import _ from "lodash";
 
 export const SalesRiskAuthorizeTableColumnsForUser = [
     {
@@ -26,7 +26,7 @@ export const SalesRiskAuthorizeTableColumnsForUser = [
             const data = row.original;
             return (
                 <p className="text-right mr-3 py-3" style={customStyles.subQuestion}>
-                    {data?.value ?? "-"}
+                    {_.capitalize(data?.value) ?? "-"}
                 </p>
             );
         },
