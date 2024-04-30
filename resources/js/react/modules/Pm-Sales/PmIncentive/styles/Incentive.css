@@ -218,6 +218,34 @@
     gap: 8px;
 }
 
+.chart_ratio {
+    color: #000;
+    text-align: center;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 14px;
+    letter-spacing: -0.28px;
+}
+
+.chart_ratio_value_pos {
+    color: #70CA62;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: 14px;
+    letter-spacing: -0.28px;
+}
+
+.chart_ratio_value_neg {
+    color: #FF0000;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: 14px;
+    letter-spacing: -0.28px;
+}
+
 
 
 /* ********************************************

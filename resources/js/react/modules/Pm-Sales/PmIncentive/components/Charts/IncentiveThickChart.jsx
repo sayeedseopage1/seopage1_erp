@@ -1,10 +1,19 @@
-import { useRef } from "react";
+import { useMemo, useRef } from "react";
 import Chart from "react-apexcharts";
 import arrow1 from '../../assets/arrow-1.svg'
 import arrow2 from '../../assets/arrow-2.svg'
 
 const IncentiveThickChart = ({ chartData }) => {
     const chartRef = useRef(null);
+
+    // Function to check if all values are zero
+    const allValuesAreZero = () => {
+        return chartData.series.every(series => {
+            return series.data.every(value => value === 0);
+        });
+    };
+
+    const isAllZero = allValuesAreZero();
 
     const options = {
         title: {
@@ -27,6 +36,7 @@ const IncentiveThickChart = ({ chartData }) => {
         chart: { toolbar: { show: !1 } },
         grid: { show: !0, strokeDashArray: 3, position: "back" },
         xaxis: {
+            tickPlacement: "on",
             categories: chartData == null ? 0 : chartData.categories,
             labels: {
                 formatter: (g) => `${g}`,
@@ -61,6 +71,7 @@ const IncentiveThickChart = ({ chartData }) => {
                     fontFamily: "poppins",
                     fontWeight: 500,
                     colors: ["#000000"]
+
                 }
             },
         },
@@ -68,6 +79,12 @@ const IncentiveThickChart = ({ chartData }) => {
             enabled: true,
             // enabledOnSeries: void 0,
             formatter: function (val, opts) {
+                console.log("abcd", opts)
+                // Apply special case for the first bar when all values are zero
+                if (isAllZero && opts.dataPointIndex === 0) {
+                    return '⬤';
+                }
+                // return val ? `${chartData?.ratio}%, ${val}%` : "";
                 return val ? `${opts.w.globals.labels[opts.dataPointIndex]}, ${val}%` : "";
             },
             // textAnchor: "middle",
@@ -78,7 +95,7 @@ const IncentiveThickChart = ({ chartData }) => {
                 fontSize: "14px",
                 fontFamily: "poppins",
                 fontWeight: 500,
-                colors: ["#1492E6"]
+                colors: isAllZero ? ['#FF0000'] : ["#1492E6"]
             },
         },
         plotOptions: {
@@ -98,7 +115,7 @@ const IncentiveThickChart = ({ chartData }) => {
                     ],
                 },
                 dataLabels: {
-                    position: "right",
+                    position: "top",
                     maxItems: 100,
                     color: "#00A0EE",
                     hideOverflowingLabels: !0,
@@ -132,106 +149,6 @@ const IncentiveThickChart = ({ chartData }) => {
         },
     }
 
-    // const options = {
-    //     title: {
-    //         text: chartData.title,
-    //         style: {
-    //             fontSize: 14,
-    //             fontWeight: 500,
-    //             fontFamily: "Poppins",
-    //             color: "#1492E6",
-    //         },
-    //     },
-    //     states: {
-    //         hover: {
-    //             filter: {
-    //                 type: 'darken',
-    //                 value: 0.8,
-    //             }
-    //         }
-    //     },
-    //     chart: {
-    //         toolbar: {
-    //             show: false,
-    //         },
-    //     },
-    //     xaxis: {
-    //         categories: chartData?.categories,
-    //         labels: {
-    //             formatter: (val) => {
-    //                 return `${val}`;
-    //             },
-    //             style: {
-    //                 fontSize: "14",
-    //                 fontFamily: "poppins",
-    //                 fontWeight: 500,
-    //                 colors: ["#000000"],
-    //             },
-    //         },
-    //     },
-    //     yaxis: {
-    //         labels: {
-    //             formatter: (val) => {
-    //                 return `${val}%`;
-    //             },
-    //             style: {
-    //                 fontSize: "14",
-    //                 fontFamily: "poppins",
-    //                 fontWeight: 500,
-    //                 colors: ["#000000"],
-    //             },
-    //         },
-    //         stepSize: 10
-    //     },
-
-    //     dataLabels: {
-    //         enabled: true,
-    //         formatter: function (val, opts) {
-    //             // console.log("64", opts)
-    //             // console.log("65", val)
-    //             return `${val > 0 ? opts.seriesIndex + "%" : null}, ${val}%`;
-    //         },
-    //         offsetY: -25,
-    //         offsetX: 0,
-    //         style: {
-    //             colors: ["#1492E6"],
-    //         }
-    //     },
-
-    //     plotOptions: {
-    //         bar: {
-    //             horizontal: false,
-    //             columnWidth: "13%",
-    //             endingShape: "rounded",
-    //             distributed: false,
-    //             borderRadius: 1,
-    //             borderRadiusApplication: "last",
-    //             borderRadiusWhenStacked: 'last',
-    //             dataLabels: {
-    //                 position: "top",
-    //             },
-    //             colors: {
-    //                 ranges: chartData?.range,
-    //             },
-    //         },
-    //     },
-
-    //     fill: {
-    //         type: "gradient",
-    //         gradient: {
-    //             // Setting gradient from bottom to top
-    //             shade: "dark",
-    //             type: "vertical",
-    //             shadeIntensity: 0.5,
-    //             gradientToColors: ["#E1F3FF"],
-    //             inverseColors: false,
-    //             opacityFrom: 1,
-    //             opacityTo: 1,
-    //             stops: [0, 100],
-    //         },
-    //     },
-    // };
-
     return (
         <>
             <div className="y_axis_arrow ">
@@ -256,6 +173,9 @@ const IncentiveThickChart = ({ chartData }) => {
                     <h2 className="chart_axis_title">{chartData.title}</h2>
                     <img src={arrow2} className="chart_axis_icon" alt="arrow2" />
                 </div>
+
+                <p className="chart_ratio">{chartData.title}: <span className={`${chartData?.ratio > 0 ? "chart_ratio_value_pos" : "chart_ratio_value_neg"}`}>{chartData?.ratio}%</span></p>
+
             </div>
         </>
     );

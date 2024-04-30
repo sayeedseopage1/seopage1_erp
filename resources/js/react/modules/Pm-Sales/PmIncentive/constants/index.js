@@ -1,3 +1,9 @@
+const reVsTask = [10, 20, 22, 30, 40, 50, 60, 70, 80, 90, 100];
+const incentive = [0, 0, 50, 0, 0, 0, 0, 0, 0, 0];
+
+//rev=22
+//inc=50
+
 export const idealVsAchievedChartData = [
     {
         id: 1,
@@ -56,7 +62,6 @@ export const idealVsAchievedChartData = [
                     data: [0, 0, 50, 0, 0, 0, 0, 0, 0, 0, 0],
                 },
             ],
-            ratio: 22,
             categories: [
                 "0%",
                 "10%",
@@ -151,7 +156,102 @@ export const idealVsAchievedChartData = [
                     data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
                 },
             ],
-            ratio: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            ratio: 0,
+            categories: [
+                "0%",
+                "10%",
+                "20%",
+                "30%",
+                "40%",
+                "50%",
+                "60%",
+                "70%",
+                "80%",
+                "90%",
+                "100%",
+            ],
+            range: [
+                {
+                    from: 0,
+                    to: 20,
+                    color: "#FFA3A3",
+                },
+                {
+                    from: 21,
+                    to: 50,
+                    color: "#FEBC05",
+                },
+                {
+                    from: 51,
+                    to: 80,
+                    color: "#09F",
+                },
+                {
+                    from: 81,
+                    to: 100,
+                    color: "#14B96A",
+                },
+            ],
+        },
+    },
+    {
+        id: 3,
+        title: "Negative points vs Positive points ",
+        ideal: {
+            id: 2,
+            title: "Negative points vs Positive points ",
+            yTitle: "Incentive percentage",
+            chartTag: "Ideal",
+            series: [
+                {
+                    name: "Negative points vs Positive points ",
+                    data: [100, 80, 50, 10, 10, 10, 10],
+                },
+            ],
+            categories: [
+                "0-25%",
+                "26-35%",
+                "36-50%",
+                "51-65%",
+                "66-80%",
+                "81-95%",
+                "100%",
+            ],
+            range: [
+                {
+                    from: 0,
+                    to: 40,
+                    color: "#FFA3A3",
+                },
+                {
+                    from: 41,
+                    to: 50,
+                    color: "#FEBC05",
+                },
+                {
+                    from: 51,
+                    to: 80,
+                    color: "#09F",
+                },
+                {
+                    from: 81,
+                    to: 100,
+                    color: "#14B96A",
+                },
+            ],
+        },
+        achieved: {
+            id: 2,
+            title: "Negative points vs Positive points ",
+            yTitle: "Incentive percentage",
+            chartTag: "Achieved",
+            series: [
+                {
+                    name: "Negative points vs Positive points ",
+                    data: [0, 0, 0, 80, 0, 0, 0, 0, 0, 0, 0],
+                },
+            ],
+            ratio: 40,
             categories: [
                 "0%",
                 "10%",

@@ -16,6 +16,14 @@ const IncentiveBarChart = ({ chartData }) => {
                 color: "#1492E6",
             },
         },
+        states: {
+            hover: {
+                filter: {
+                    type: 'darken',
+                    value: 0.8,
+                }
+            }
+        },
         chart: {
             toolbar: {
                 show: false,
