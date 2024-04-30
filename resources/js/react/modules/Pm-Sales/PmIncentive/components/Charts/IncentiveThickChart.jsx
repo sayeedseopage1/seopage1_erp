@@ -2,18 +2,55 @@ import { useMemo, useRef } from "react";
 import Chart from "react-apexcharts";
 import arrow1 from '../../assets/arrow-1.svg'
 import arrow2 from '../../assets/arrow-2.svg'
+import { reset } from "browser-sync";
 
 const IncentiveThickChart = ({ chartData }) => {
     const chartRef = useRef(null);
 
     // Function to check if all values are zero
-    const allValuesAreZero = () => {
-        return chartData.series.every(series => {
-            return series.data.every(value => value === 0);
+    // const allValuesAreZero = () => {
+    //     return chartData.series.every(series => {
+    //         return series.data.every(value => value === 0);
+    //     });
+    // };
+
+    const isAllZero = chartData?.incentive == 0;
+
+
+    const dummyData = [
+        [0, 0],
+        [10, 0],
+        [20, 0],
+        [30, 0],
+        [40, 0],
+        [50, 0],
+        [60, 0],
+        [70, 0],
+        [80, 0],
+        [90, 0],
+        [100, 0],
+    ];
+
+    const formatData = () => {
+        let indexData = [];
+        const copyArray = [...dummyData];
+        copyArray.forEach((item, index) => {
+            if (item[0] <= chartData.ratio) {
+                indexData.push(index);
+            }
         });
+        copyArray[indexData.length - 1] = [chartData.ratio, chartData.incentive];
+        return copyArray;
     };
 
-    const isAllZero = allValuesAreZero();
+
+    const seriesFormate = [
+        {
+            name: chartData.title,
+            data: formatData()
+        }
+    ]
+
 
     const options = {
         title: {
@@ -33,13 +70,22 @@ const IncentiveThickChart = ({ chartData }) => {
                 }
             }
         },
-        chart: { toolbar: { show: !1 } },
+        chart: {
+            toolbar: {
+                show: false,
+                tools: {
+                    zoom: true,
+                    reset: true,
+                }
+            }
+        },
         grid: { show: !0, strokeDashArray: 3, position: "back" },
         xaxis: {
             tickPlacement: "on",
-            categories: chartData == null ? 0 : chartData.categories,
             labels: {
-                formatter: (g) => `${g}`,
+                formatter: (g) => {
+                    return Math.round(g);
+                },
                 style: {
                     fontSize: "14",
                     fontFamily: "poppins",
@@ -49,7 +95,7 @@ const IncentiveThickChart = ({ chartData }) => {
             },
 
             scrollbar: {
-                enabled: !0
+                enabled: false
             },
             axisTicks: {
                 show: !0,
@@ -79,13 +125,12 @@ const IncentiveThickChart = ({ chartData }) => {
             enabled: true,
             // enabledOnSeries: void 0,
             formatter: function (val, opts) {
-                console.log("abcd", opts)
                 // Apply special case for the first bar when all values are zero
                 if (isAllZero && opts.dataPointIndex === 0) {
                     return '⬤';
                 }
-                // return val ? `${chartData?.ratio}%, ${val}%` : "";
-                return val ? `${opts.w.globals.labels[opts.dataPointIndex]}, ${val}%` : "";
+                return val ? `${chartData?.ratio}%, ${val}%` : "";
+                // return val ? `${opts.w.globals.labels[opts.dataPointIndex]}, ${val}%` : "";
             },
             // textAnchor: "middle",
             // distributed: !1,
@@ -96,6 +141,7 @@ const IncentiveThickChart = ({ chartData }) => {
                 fontFamily: "poppins",
                 fontWeight: 500,
                 colors: isAllZero ? ['#FF0000'] : ["#1492E6"]
+                // colors: ["#1492E6"]
             },
         },
         plotOptions: {
@@ -104,7 +150,7 @@ const IncentiveThickChart = ({ chartData }) => {
                 endingShape: "rounded",
                 distributed: !1,
                 borderRadius: 0,
-                columnWidth: "12%",
+                columnWidth: "13%",
                 borderRadiusApplication: "last",
                 colors: {
                     ranges: [
@@ -160,7 +206,7 @@ const IncentiveThickChart = ({ chartData }) => {
                 <Chart
                     ref={chartRef}
                     type="bar"
-                    series={chartData.series}
+                    series={seriesFormate}
                     options={options}
                 ></Chart>
                 <button

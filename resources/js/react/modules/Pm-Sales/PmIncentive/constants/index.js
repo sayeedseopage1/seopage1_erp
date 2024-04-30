@@ -56,25 +56,8 @@ export const idealVsAchievedChartData = [
             title: "Revision Vs Task ratio",
             yTitle: "Incentive percentage",
             chartTag: "Achieved",
-            series: [
-                {
-                    name: "Revision vs task ratio",
-                    data: [0, 0, 50, 0, 0, 0, 0, 0, 0, 0, 0],
-                },
-            ],
-            categories: [
-                "0%",
-                "10%",
-                "20%",
-                "30%",
-                "40%",
-                "50%",
-                "60%",
-                "70%",
-                "80%",
-                "90%",
-                "100%",
-            ],
+            incentive: 50,
+            ratio: 22,
             range: [
                 {
                     from: 0,
@@ -150,26 +133,8 @@ export const idealVsAchievedChartData = [
             title: "Goal Achieve Rate",
             yTitle: "Incentive percentage",
             chartTag: "Achieved",
-            series: [
-                {
-                    name: "Goal Achieve Rate",
-                    data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-                },
-            ],
+            incentive: 0,
             ratio: 0,
-            categories: [
-                "0%",
-                "10%",
-                "20%",
-                "30%",
-                "40%",
-                "50%",
-                "60%",
-                "70%",
-                "80%",
-                "90%",
-                "100%",
-            ],
             range: [
                 {
                     from: 0,
@@ -196,26 +161,26 @@ export const idealVsAchievedChartData = [
     },
     {
         id: 3,
-        title: "Negative points vs Positive points ",
+        title: "Negative points vs Positive points",
         ideal: {
-            id: 2,
-            title: "Negative points vs Positive points ",
+            id: 1,
+            title: "Negative points vs Positive points",
             yTitle: "Incentive percentage",
             chartTag: "Ideal",
             series: [
                 {
-                    name: "Negative points vs Positive points ",
+                    name: "Negative points vs Positive points",
                     data: [100, 80, 50, 10, 10, 10, 10],
                 },
             ],
             categories: [
-                "0-25%",
-                "26-35%",
+                "0-10%",
+                "11-20%",
+                "21-35%",
                 "36-50%",
                 "51-65%",
                 "66-80%",
-                "81-95%",
-                "100%",
+                "81-100%",
             ],
             range: [
                 {
@@ -245,26 +210,8 @@ export const idealVsAchievedChartData = [
             title: "Negative points vs Positive points ",
             yTitle: "Incentive percentage",
             chartTag: "Achieved",
-            series: [
-                {
-                    name: "Negative points vs Positive points ",
-                    data: [0, 0, 0, 80, 0, 0, 0, 0, 0, 0, 0],
-                },
-            ],
-            ratio: 40,
-            categories: [
-                "0%",
-                "10%",
-                "20%",
-                "30%",
-                "40%",
-                "50%",
-                "60%",
-                "70%",
-                "80%",
-                "90%",
-                "100%",
-            ],
+            incentive: 80,
+            ratio: 57,
             range: [
                 {
                     from: 0,
