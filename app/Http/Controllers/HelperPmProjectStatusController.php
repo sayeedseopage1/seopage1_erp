@@ -7,33 +7,40 @@ use App\Models\Deal;
 use App\Models\PMProject;
 use App\Models\Project;
 use App\Models\ProjectPmGoal;
-use Auth;
+use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Models\ProjectMilestone;
 use DateTime;
+use Illuminate\Support\Facades\DB;
 
 class HelperPmProjectStatusController extends AccountBaseController
 {
     public function ProjectPmGoalCreation($pmGoalSetting, $findDeal, $findProject)
     {
-
         $milestone_count = ProjectMilestone::where('project_id', $findProject->id)->count();
+        $milestoneSum = ProjectMilestone::where('project_id', $findProject->id)->sum('cost');
+
+        // --------------- calculate total number of days for the project --------------------- //
+        $extraGoal = $milestoneSum < $findDeal->actual_amount ? 1 : 0;
+        dd($milestoneSum, $findDeal->actual_amount, $extraGoal);
+        $totalRequiedDayes = self::calculateProjectRequiedDays($pmGoalSetting->name, $milestone_count + $extraGoal);
+        // ------------- end -------------- //
 
         // check if deadline is short
         $d1 = new DateTime("$findDeal->start_date 00:00:00");
         $d2 = new DateTime("$findDeal->deadline 23:59:59");
         $interval = $d1->diff($d2);
         $totalProjectDays = $interval->d;
-        $totalRequiedDayes = self::calculateProjectRequiedDays(strtolower($pmGoalSetting->name), $milestone_count);
+
+        $pm_project = PMProject::where('project_id', $findProject->id)->first();
 
         if ($totalRequiedDayes !== 0 && $totalRequiedDayes > $totalProjectDays) {
-            self::createShortDeadlinePmGoals();
-            return;
+            return self::createShortDeadlinePmGoals($pmGoalSetting->name, $findProject, $findDeal, $pm_project, $milestone_count, $extraGoal, $totalProjectDays);
         }
         // check end
 
-        $pm_project = PMProject::where('project_id', $findProject->id)->first();
+        // dd($milestoneSum, $findDeal->actual_amount);
 
         if ($pmGoalSetting->name == 'Regular') {
             $p_pm_regular_goal = new ProjectPmGoal();
@@ -890,39 +897,98 @@ class HelperPmProjectStatusController extends AccountBaseController
         }
     }
 
-    function calculateProjectRequiedDays($priority, $milestoneCount)
+    function calculateProjectRequiedDays($priorityType, $milestoneCount)
     {
-        if ($milestoneCount <= 0 ||
-        ! in_array($priority, ['regular', 'priority', 'highPriority', 'topMost', 'criticallySensitive'])
+        $priorityType = strtolower($priorityType);
+        if (
+            $milestoneCount <= 0 ||
+            !in_array($priorityType, ['regular', 'priority', 'highPriority', 'topMost', 'criticallySensitive'])
         ) {
             return 0;
         }
 
-        $priority = in_array($priority, ['highPriority', 'topMost', 'criticallySensitive']) ? 'priority' : $priority;
+        $priorityType = in_array($priorityType, ['highPriority', 'topMost', 'criticallySensitive']) ? 'priority' : $priorityType;
 
         $timeMatrix = [
             'regular' => [
                 '1' => 12,
                 '2' => 15,
-                '3' => 22,
-                '4' => 29,
-                '5' => 36
+                '3' => 15,
+                '4' => 22,
             ],
             'priority' => [
                 '1' => 7,
                 '2' => 12,
                 '3' => 15,
                 '4' => 22,
-                '5' => 29,
             ]
         ];
-        if ($milestoneCount > 5) return $timeMatrix[$priority]['5'] + (($milestoneCount - 5) * 7);
+        if ($milestoneCount > 4) return $timeMatrix[$priorityType]['4'] + (($milestoneCount - 4) * 7);
 
-        return $timeMatrix[$priority][$milestoneCount];
+        return $timeMatrix[$priorityType][$milestoneCount];
     }
 
-    function createShortDeadlinePmGoals()
+    function createShortDeadlinePmGoals($priorityType, $project, $deal, $pmProject, $milestoneCount, $extraGoal, $totalProjectDuration)
     {
+        $goalCodes = ProjectPmGoal::$goalCodes[strtolower($priorityType)];
 
+        DB::beginTransaction();
+        try {
+            $timePassed = 0;
+            // first deliverables
+            $goal = new ProjectPmGoal();
+            $goal->project_id = $project->id;
+            $goal->client_id = $deal->client_id;
+            $goal->pm_id = $deal->pm_id;
+            $goal->project_type = $deal->project_type;
+            $goal->project_category = $priorityType;
+            $goal->goal_code = $goalCodes[0]['code'];
+            $goal->goal_name = $goalCodes[0]['name'];
+            $goal->goal_type = $goalCodes[0]['type'];
+            $goal->goal_start_date = $pmProject->created_at;
+            $goal->duration = 3;
+            $goal->goal_end_date = Carbon::parse($pmProject->created_at)->addDay(3);
+            $goal->added_by = Auth::user()->id;
+            $goal->save();
+
+            $timePassed = 3;
+
+            $daysRemain = ($totalProjectDuration - 3) + 2;
+            $perGoalDuration = $daysRemain / ($milestoneCount = $milestoneCount + $extraGoal - 1);
+
+            for($i=1; $i <= $milestoneCount; $i++) {
+
+                $goal = new ProjectPmGoal();
+                $goal->project_id = $project->id;
+                $goal->client_id = $deal->client_id;
+                $goal->pm_id = $deal->pm_id;
+                $goal->project_type = $deal->project_type;
+                $goal->project_category = $priorityType;
+
+                if($i <= 5){
+                    $goal->goal_code = $goalCodes[$i]['code'];
+                    $goal->goal_name = $goalCodes[$i]['name'];
+                    $goal->goal_type = $goalCodes[$i]['type'];
+                }
+                else {
+                    $goal->goal_code = $goalCodes[5]['code'] . ($i - 5);
+                    $goal->goal_name = $goalCodes[5]['name'];
+                    $goal->goal_type = $goalCodes[5]['type'];
+                }
+                $goal->goal_code = $goalCodes[$i]['code'];
+                $goal->goal_name = $goalCodes[$i]['name'];
+                $goal->goal_type = $goalCodes[$i]['type'];
+                $goal->goal_start_date = $pmProject->created_at;
+                $goal->goal_end_date = Carbon::parse($pmProject->created_at)->addHours((24 * ($timePassed += $perGoalDuration)));
+                $goal->duration = $perGoalDuration;
+                $goal->added_by = Auth::user()->id;
+                $goal->save();
+            }
+
+            DB::commit();
+        } catch (\Throwable $th) {
+            throw $th;
+            DB::rollBack();
+        }
     }
 }
