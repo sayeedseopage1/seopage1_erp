@@ -85,7 +85,7 @@ class DealController extends AccountBaseController
         }
         if(Auth::user()->role_id == 6 || Auth::user()->role_id == 13){
             abort(403);
-        } 
+        }
 
         return view('deals.index', $this->data);
     }
@@ -556,7 +556,7 @@ class DealController extends AccountBaseController
       //  dd($this->deal );
       if(Auth::user()->role_id == 6 || Auth::user()->role_id == 13){
         abort(403);
-    } 
+    }
 
         // abort_403(
         //     !(
@@ -890,7 +890,8 @@ class DealController extends AccountBaseController
             'lead_added_by.image as lead_added_by_image',
             'amount.currency_symbol as ammount_currency_symbol',
             'actual_amount.currency_symbol as actual_amount_currency_symbol',
-            'leads.project_link as lead_project_link'
+            'leads.project_link as lead_project_link',
+            'deals.sale_analysis_status as sale_analysis_status'
             )
             ->leftJoin('leads', 'leads.id', '=', 'deal_stages.lead_id')
             ->leftJoin('users as added_by', 'deal_stages.added_by', '=', 'added_by.id')
@@ -930,6 +931,9 @@ class DealController extends AccountBaseController
                 if ($request->status == 5) {
                     $dealQuery->where('deal_stages.deal_stage', $request->status)->where('won_lost', '=',null);
                 }
+                elseif ($request->status == 'pending') {
+                    $dealQuery->where('deals.sale_analysis_status', '=', 'pending');
+                }
                 elseif ($request->status == 'won') {
                     $dealQuery->where('deal_stages.won_lost', '=','Yes');
                 }
@@ -947,11 +951,17 @@ class DealController extends AccountBaseController
             foreach($deals_data as $item){
                 $won_lost = '';
                 $won_lost_bg = '';
-                if($item->won_lost != null){
+
+                if($request->status == 'pending' && $item->sale_analysis_status == 'pending')
+                {
+                    $won_lost = 'Pending Sales Analysis';
+                    $won_lost_bg = '#FCBD01';
+                }
+                elseif($item->won_lost != null){
                     if($item->won_lost== 'Yes'){
                         $won_lost = 'Won';
                         $won_lost_bg = '#00aa00';
-                    }else{
+                    }else {
                         $won_lost = 'Lost';
                         $won_lost_bg = '#FF0000';
                     }
