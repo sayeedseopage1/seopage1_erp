@@ -155,7 +155,7 @@ class ProjectStatusController extends AccountBaseController
                 $holidayArray[] = [
                     'id' => $goal->id,
                     'title' => $project->project_name. ' ('.$client->name.') ('.\Str::limit($goal->goal_name,25).')',
-                    'start' => Carbon::parse($goal->goal_end_date)->format('Y-m-d'),
+                    'start' => Carbon::parse($goal->goal_end_date),
                     // 'end' => Carbon::parse($goal->goal_end_date)->format('Y-m-d'),
                 ];
             }
