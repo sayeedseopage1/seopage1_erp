@@ -646,6 +646,7 @@ class DashboardController extends AccountBaseController
 
         if(Auth::user()->role_id = 14){
             $logStatus = true;
+            $userDailyTaskSubmission = true;
         }
 
         $incomplete_hours = $minimum_log_hours - $userTotalMin;
