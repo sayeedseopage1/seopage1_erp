@@ -2137,6 +2137,29 @@ class TaskController extends AccountBaseController
 
             $task->save();
 
+            $current_date = Carbon::now();
+            $pm_goal = ProjectPmGoal::where('project_id',$task->project_id)->where('goal_code','DCS')->first();
+            if($pm_goal != null && $current_date < $pm_goal->goal_end_date)
+            {
+                $goal_count= ProjectPmGoal::where('project_id',$task->project_id)->count();
+                $goal_percentage = 100/$goal_count;
+                $pm_goal->goal_progress = $goal_percentage;
+                $pm_goal->goal_status = 1;
+                
+            
+                $task_count= Task::where('project_id',$task->project_id)->count();
+                    if($task_count > 0)
+                        {
+                            $pm_goal->description = 'Having the deliverables signed and creating all the tasks';
+
+                        }elseif($task_count < 1)
+                        {
+                            $pm_goal->description = 'Deliverables is signed and tasks has not been created properly';
+
+                        }
+                        $pm_goal->save();
+            }
+
 
 
             $task->task_short_code = ($project) ? $project->project_short_code . '-' . $task->id : null;

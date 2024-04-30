@@ -318,7 +318,6 @@ class ProjectStatusController extends AccountBaseController
         return view('project-status.modal.extend_request',$this->data);
     }
     public function storePMExtendRequest(Request $request){
-        // dd($request->all());
 
         try {
             \DB::beginTransaction();
@@ -444,10 +443,11 @@ class ProjectStatusController extends AccountBaseController
                     $updateGoal->extended_request_status = 2;
                     $updateGoal->save();
                 }
-
                 $deadline_ext_history = new PmGoalDeadlineExtHistory();
                 if($request->goal_extension_auth_checkbox == 'Apply this extension to all goals'){
-                $deadline_ext_history->goal_id = $request->goal_id;
+                    $deadline_ext_history->goal_id = $request->goal_id;
+                }else{
+                    $deadline_ext_history->goal_id = $request->goal_id;
                 }
                 $deadline_ext_history->start_date = $updateGoal->goal_start_date;
                 $deadline_ext_history->old_deadline = $updateGoal->goal_end_date;
