@@ -140,9 +140,9 @@ const SalesRiskReport = () => {
                                     }}
                                 >
                                     {item.name}{" "}
-                                    <span className="badge badge-light">
+                                    <span className="badge badge-light ml-0">
                                         {" "}
-                                        {item.count}
+                                        {item.count ?? 0}
                                     </span>
                                 </button>
                             ))}

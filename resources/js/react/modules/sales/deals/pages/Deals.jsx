@@ -14,6 +14,7 @@ import DealTableExportButton from "../components/DealTableExportToExcel";
 
 const Deals = () => {
     const { isEditFormEnable } = useDealContext();
+    const [convertStatus, setConvertStatus] = React.useState(null);
 
     const [isCreationFormVisible, setIsCreationFormVisible] =
         React.useState(false);
@@ -53,7 +54,11 @@ const Deals = () => {
     return (
         <React.Fragment>
             <div>
-                <FilterBar setFilter={setFilter} />
+                <FilterBar
+                    setFilter={setFilter}
+                    setConvertStatus={setConvertStatus}
+                    convertStatus={convertStatus}
+                />
                 <Flex justifyContent="space-between" className="mb-3">
                     <Flex>
                         <Button
@@ -63,8 +68,35 @@ const Deals = () => {
                             <i className="fa-solid fa-plus" />
                             Create Deal
                         </Button>
-
                         <DealTableExportButton filter={filter} />
+                        <button
+                            className="btn btn-warning"
+                            style={{
+                                fontSize: "14px",
+                                padding: "6px 12px",
+                                backgroundColor:
+                                    convertStatus?.id === "pending"
+                                        ? "#FCBD01"
+                                        : "#ffdd78",
+                                border: "none",
+                                color: convertStatus?.id === "pending"
+                                ? "white"
+                                : "black",
+
+                            }}
+                            onClick={() =>
+                                setConvertStatus({
+                                    id: "pending",
+                                    title: "Pending Sales Analysis",
+                                })
+                            }
+                        >
+                            Pending{" "}
+                            <span className="badge badge-light ml-1">
+                                {" "}
+                                {deals?.pending ?? 0}
+                            </span>
+                        </button>
                     </Flex>
 
                     <Flex>
