@@ -160,7 +160,7 @@ const FilterBar = ({ setFilter }) => {
                                 { id: "3", title: "Proposal Made" },
                                 { id: "4", title: "Negotiation Started" },
                                 { id: "5", title: "Milestone Breakdown" },
-                                { id: "pending", title: "Pending" },
+                                { id: "pending", title: "Pending Sales Analysis" },
                                 { id: "won", title: "Won" },
                                 { id: "lost", title: "Lost" },
                             ]}
