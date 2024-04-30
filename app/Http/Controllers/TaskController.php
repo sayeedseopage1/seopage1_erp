@@ -3028,11 +3028,21 @@ class TaskController extends AccountBaseController
     //    CLIENT APPROVAL SECTION
     public function clientApproval(Request $request)
     {
-        // dd($request);
         $task_status = Task::find($request->task_id);
         $task_status->task_status = "submit task to client approval";
         $task_status->board_column_id = 9;
         $task_status->save();
+
+
+
+
+        $thisSubmissionTime = Carbon::parse(TaskSubmission::where('task_id', $request->task_id)->orderBy('id', 'desc')->first()->created_at)->format('Y-m-d H:i');
+        $taskIds = Task::where('project_id', Task::find($request->task_id)->project_id)->pluck('id');
+        if(TaskSubmission::whereIn('task_id', $taskIds)->where('created_at', '<', $thisSubmissionTime)->count()){
+            // PM get point here
+        };
+
+
         $current_date = Carbon::now();
     $pm_goal = ProjectPmGoal::where('project_id',$task_status->project_id)->where('goal_code','TSM')->first();
     if($pm_goal != null && $current_date < $pm_goal->goal_end_date)
@@ -3048,6 +3058,7 @@ class TaskController extends AccountBaseController
         
 
     }
+
         $actions = PendingAction::where('code','SFT')->where('past_status',0)->where('project_id',$task_status->project_id)->get();
         if($actions != null)
         {
