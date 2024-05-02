@@ -6,6 +6,7 @@ import { store } from "../../../services/store";
 import Toaster from "../../../global/Toaster";
 import Incentive from "./pages/Incentive";
 import './styles/Incentive.css';
+import './styles/heldAmount.css'
 
 
 const Content = () => {

@@ -621,6 +621,140 @@ export const upSaleCrossSaleChartData = [
     },
 ];
 
+export const heldAmountsDataTableHeaders = [
+    {
+        key: "month",
+        label: "Month",
+    },
+    {
+        key: "title",
+        label: "Title",
+    },
+    {
+        key: "totalAmount",
+        label: "Total Amount",
+    },
+    {
+        key: "disbursedAmount",
+        label: "Disbursed Amount",
+        description: "80% of the total amount",
+    },
+    {
+        key: "heldAmount",
+        label: "Held Amount",
+        description: "20% of the total amount",
+    },
+    {
+        key: "heldAmountBalance",
+        label: "Held Amount Balance",
+    },
+];
+
+export const heldAmountsData = [
+    {
+        month: "Feb 2024",
+        title: "Monthly Incentive",
+        sub_title: "For the month of January, 2024",
+        total_amount: 10000,
+        disbursed_amount: 8000,
+        held_amount: 2000,
+        held_amount_balance: 2000,
+    },
+    {
+        month: "Mar 2024",
+        title: "Monthly Incentive",
+        sub_title: "For the month of February, 2024",
+        total_amount: 10000,
+        disbursed_amount: 8000,
+        held_amount: 2000,
+        held_amount_balance: 2000,
+    },
+    {
+        month: "Apr 2024",
+        title: "Monthly Incentive",
+        sub_title: "For the month of March, 2024",
+        total_amount: 10000,
+        disbursed_amount: 8000,
+        held_amount: 2000,
+        held_amount_balance: 2000,
+    },
+    {
+        month: "May 2024",
+        title: "Monthly Incentive",
+        sub_title: "For the month of April, 2024",
+        total_amount: 10000,
+        disbursed_amount: 8000,
+        held_amount: 2000,
+        held_amount_balance: 2000,
+    },
+    {
+        month: "Jun 2024",
+        title: "Monthly Incentive",
+        sub_title: "For the month of May, 2024",
+        total_amount: 10000,
+        disbursed_amount: 8000,
+        held_amount: 2000,
+        held_amount_balance: 2000,
+    },
+    {
+        month: "Jul 2024",
+        title: "Monthly Incentive",
+        sub_title: "For the month of June, 2024",
+        total_amount: 10000,
+        disbursed_amount: 8000,
+        held_amount: 2000,
+        held_amount_balance: 2000,
+    },
+    {
+        month: "Aug 2024",
+        title: "Monthly Incentive",
+        total_amount: 10000,
+        disbursed_amount: 8000,
+        held_amount: 2000,
+        held_amount_balance: 2000,
+    },
+    {
+        month: "Sep 2024",
+        title: "Monthly Incentive",
+        total_amount: 10000,
+        disbursed_amount: 8000,
+        held_amount: 2000,
+        held_amount_balance: 2000,
+    },
+    {
+        month: "Oct 2024",
+        title: "Monthly Incentive",
+        total_amount: 10000,
+        disbursed_amount: 8000,
+        held_amount: 2000,
+        held_amount_balance: 2000,
+    },
+    {
+        month: "Nov 2024",
+        title: "Monthly Incentive",
+        total_amount: 10000,
+        disbursed_amount: 8000,
+        held_amount: 2000,
+        held_amount_balance: 2000,
+    },
+    {
+        month: "Dec 2024",
+        title: "Monthly Incentive",
+        total_amount: 10000,
+        disbursed_amount: 8000,
+        held_amount: 2000,
+        held_amount_balance: 2000,
+    },
+    {
+        month: "Jan 2025",
+        title: "Monthly Incentive",
+        total_amount: 10000,
+        disbursed_amount: 8000,
+        held_amount: 2000,
+        held_amount_balance: 2000,
+    },
+];
+
 // export const achivedBarChartData = [
 //     {
 //         id: 1,

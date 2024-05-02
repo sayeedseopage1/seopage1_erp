@@ -8,7 +8,7 @@ import UpsaleCrossSale from '../components/UpsaleCrossSale';
 import BonusPoints from '../components/BonusPoints';
 import FinalIncentiveBanner from '../components/FinalIncentiveBanner';
 import Switch from '../../../../global/Switch';
-import HeldAmounts from '../components/HeldAmounts';
+import HeldAmounts from '../components/HeldAmounts/HeldAmounts';
 
 const Incentive = () => {
     const [data, setData] = useState([]);
@@ -18,8 +18,8 @@ const Incentive = () => {
 
     const [filterByPeriod, setFilterByPeriod] = useState("monthly");
 
-    console.log("tab", tab);
-    console.log("filterByPeriod", filterByPeriod);
+    // console.log("tab", tab);
+    // console.log("filterByPeriod", filterByPeriod);
 
 
     React.useEffect(() => {

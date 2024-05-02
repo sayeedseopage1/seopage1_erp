@@ -1,0 +1,42 @@
+.held_amount_table_wrapper {
+    width: 100%;
+    overflow-x: auto;
+    border-radius: 16px;
+}
+
+.held_amount_table {
+    width: 100%;
+    background: #F7FAFF;
+    border: none;
+    border-collapse: collapse !important;
+}
+
+.held_amount_table thead {
+    height: 96px;
+    color: #FFF;
+    font-style: normal;
+    font-size: 16px;
+    font-weight: 500;
+    line-height: normal;
+}
+
+.held_amount_table th {
+    background-color: #1492E6 !important;
+    text-wrap: nowrap !important;
+    text-align: center !important;
+    border: 1px solid #ddd;
+    text-wrap: nowrap;
+    padding: 10px;
+}
+
+.held_amount_table td {
+    padding: 10px 15px;
+    font-size: 0.8em;
+    border: 1px solid #ddd;
+    color: #000;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+    text-wrap: nowrap;
+}
