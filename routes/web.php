@@ -373,6 +373,7 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
     Route::get('/menu/filter/get-employee', [PointsController::class, 'get_employe_by_filter_options']);
     //sales point routes
     Route::post('/point-table-data', [PointsController::class, 'get_point_table_data']);
+    
     //search bar routes
     Route::get('search-bar-filter', [PointsController::class, 'get_all_search_bar_data']);
     //sales points all routes
@@ -1160,10 +1161,12 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
     Route::post('project-status-resolve-submit', [ProjectStatusController::class, 'projectStatusResolve']);
     Route::get('project-status-extend-request/{id}', [ProjectStatusController::class, 'projectStatusExtendRequest'])->name('project-status.extendRequest');
     Route::post('pm-extend-request-store', [ProjectStatusController::class, 'storePMExtendRequest']);
-    Route::get('project-extend-image/{id}', [ProjectStatusController::class, 'extendImage']);
+    Route::get('project-extend-image', [ProjectStatusController::class, 'extendImage']);
     Route::get('project-status-review-extend-request/{id}', [ProjectStatusController::class, 'reviewExtendRequest'])->name('project-status.reviewExtendRequest');
     Route::post('project-status-accept-extend-request', [ProjectStatusController::class, 'acceptOrDenyExtendRequest'])->name('project-status-extend-request-accept');
-    Route::get('goal-resolved-history', [ProjectStatusController::class, 'resolvedHistory']);
+    Route::get('goal-extension-history/{id}', [ProjectStatusController::class, 'extensionHistory']);
+    Route::get('goal-resolved-history/{id}', [ProjectStatusController::class, 'resolvedHistory']);
+    Route::get('goal-expire/{id}', [ProjectStatusController::class, 'expireGoal']);
 
     //qualified sales Settings
 

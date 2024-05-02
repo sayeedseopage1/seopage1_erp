@@ -24,9 +24,8 @@ const PercentageofGoalsMetModal = ({
       onRequestClose={closeModal}
       contentLabel="Percentage of Goals Met"
     >
-      
           <div
-            className='d-flex justify-content-between align-items-center mb-3'
+            className='d-flex justify-content-between align-items-center mb-1'
            >
             <h5 style={{ fontSize: "20px" }}>Percentage of Goals Met</h5>
               <div 
@@ -54,6 +53,14 @@ const PercentageofGoalsMetModal = ({
                 </button>
               </div>
           </div>
+          <div 
+            className="d-flex justify-content-center align-items-center my-4"
+          >
+              <p style={customHeader}>Total goals: {projectDetails?.total_goal}</p>
+              <p style={customHeader}>Goals deadline expired so far: {projectDetails?.goal_expire}</p>
+              <p style={customHeader}>Goals met: {projectDetails?.goal_meet}</p>
+              <p style={customHeader}>Percentage of goals met: {projectDetails?.goal_percentage ?? 0}%</p>
+          </div>          
           <PercentageofGoalsMetTable
             projectDetails={projectDetails}
             closeModal={closeModal}     
@@ -79,10 +86,18 @@ const customStyles = {
   },
   content: {
       zIndex: 9999999,
-      maxWidth: "90%",
+      maxWidth: "75%",
       maxHeight: "fit-content",
       height: "fit-content",
       margin: "auto auto",
       padding: "20px",
   },
 };
+
+
+const customHeader = {
+  padding: "4px 10px",
+  backgroundColor: "#F2F4F7",
+  borderRadius: "5px",
+  margin: "0 5px",
+}

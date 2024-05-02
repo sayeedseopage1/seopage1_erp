@@ -11,3 +11,7 @@
   width: clamp(255px, 100%, 350px);
   cursor: pointer !important;
 }
+.projectStatus_percent_popover_button{
+  width: clamp(144px, 100%, 350px);
+  cursor: pointer !important;
+}

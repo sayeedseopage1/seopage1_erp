@@ -31,7 +31,8 @@ const ProjectStatusTable = ({
     tableColumns,
     tableData,
     handlePmGoalModal,
-    handlePercentOfGoalMet
+    handlePercentOfGoalMet,
+    handleNextGoalDetails
 }) => {
     const [sorting, setSorting] = React.useState([]);
     const [expanded, setExpanded] = React.useState({});
@@ -135,6 +136,9 @@ const ProjectStatusTable = ({
             },
             onPercentOfGoalMet: (rowData) => {
                 handlePercentOfGoalMet(rowData);
+            },
+            onNextGoalDetails: (rowData) => {
+                handleNextGoalDetails(rowData);
             },
         }
     })

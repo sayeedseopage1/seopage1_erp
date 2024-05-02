@@ -95,7 +95,7 @@ class PublicUrlController extends Controller
     public function projectSign(SignRequest $request, $id)
     {
         // dd($request->all());
-       // DB::beginTransaction();
+    //    DB::beginTransaction();
         $this->project = Project::with('signature')->findOrFail($id);
         //dd($this->project);
 
@@ -196,27 +196,30 @@ class PublicUrlController extends Controller
         }
     }
    // dd("dnkasmdasl");
-    $current_date = Carbon::now();
-    $pm_goal = ProjectPmGoal::where('project_id',$this->project->id)->where('goal_code','DCS')->first();
-    if($pm_goal != null && $current_date < $pm_goal->goal_end_date)
-    {
-        $pm_goal->goal_status = 1;
+    // $current_date = Carbon::now();
+    // $pm_goal = ProjectPmGoal::where('project_id',$this->project->id)->where('goal_code','DCS')->first();
+    // if($pm_goal != null && $current_date < $pm_goal->goal_end_date)
+    // {
+    //     $goal_count= ProjectPmGoal::where('project_id',$this->project->id)->count();
+    //     $goal_percentage = 100/$goal_count;
+    //     $pm_goal->goal_progress = $goal_percentage;
+    //     $pm_goal->goal_status = 1;
         
        
-        $task_count= Task::where('project_id',$this->project->id)->count();
-            if($task_count > 0)
-                {
-                    $pm_goal->description = 'Deliverables is signed and tasks has been created properly';
+    //     $task_count= Task::where('project_id',$this->project->id)->count();
+    //         if($task_count > 0)
+    //             {
+    //                 $pm_goal->description = 'Having the deliverables signed and creating all the tasks';
 
-                }elseif($task_count < 1)
-                {
-                    $pm_goal->description = 'Deliverables is signed and tasks has not been created properly';
+    //             }elseif($task_count < 1)
+    //             {
+    //                 $pm_goal->description = 'Deliverables is signed and tasks has not been created properly';
 
-                }
-                $pm_goal->save();
+    //             }
+    //             $pm_goal->save();
         
 
-    }
+    // }
 
 
        // dd($sign,$client,$deal_id);

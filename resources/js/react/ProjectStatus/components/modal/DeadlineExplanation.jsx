@@ -9,6 +9,7 @@ const DeadlineExplanation = ({
     isModalTwoOpen,
     projectDetails,
     refetchPmGoal,
+    deadlineExplanationData,
 }) => {
     const {
         project_name,
@@ -79,7 +80,7 @@ const DeadlineExplanation = ({
                 </div>
                  <div className="my-2 row">
                         <p className="col-4"><strong>Client:</strong>{" "}</p>
-                        <p className="col-8">{clientName}</p>
+                        <p className="col-8">{clientName ?? projectDetails.user_name}</p>
                 </div>
                  <div className="my-2 row">
                         <p className="col-4"><strong>Project Budget:</strong>{" "}</p>
@@ -99,7 +100,7 @@ const DeadlineExplanation = ({
                 </div>
                  <div className="my-2 row">
                         <p className="col-4"><strong>Description:</strong>{" "}</p>
-                        <p className="col-8"> {description}</p>
+                        <p className="col-8"> {deadlineExplanationData?.description}</p>
                 </div>
                 <div style={styles.reasonContainer}>
                     <p className="my-2">

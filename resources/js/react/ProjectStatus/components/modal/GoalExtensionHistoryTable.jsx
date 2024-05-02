@@ -21,10 +21,10 @@ const GoalExtensionHistoryTable = ({
   closeModal,
   tableName,
   tableColumns,
-  goalExtensionHistoryData,
+  goalExtensionHistory,
   isLoading,
 }) => {
-  const [data, setData] = React.useState(goalExtensionHistoryData || []);
+  const [data, setData] = React.useState(goalExtensionHistory?.data || []);
   const [value, setValue] = useLocalStorage(tableName);
   const [{ pageIndex, pageSize }, setPagination] = React.useState({
     pageIndex: 0,
@@ -33,7 +33,7 @@ const GoalExtensionHistoryTable = ({
   const [skipPageReset, setSkipPageReset] = React.useState(false);
   const [sorting, setSorting] = React.useState([]);
   const [expanded, setExpanded] = React.useState({});
-  const _goalExtensionHistoryData = React.useMemo(()=> goalExtensionHistoryData, [goalExtensionHistoryData]);
+  const _goalExtensionHistoryData = React.useMemo(()=> goalExtensionHistory?.data, [goalExtensionHistory?.data]);
 
   React.useEffect(() => {
         if(_.size(_goalExtensionHistoryData) === _.size(data)){

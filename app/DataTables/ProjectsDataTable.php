@@ -20,6 +20,7 @@ use App\Models\Task;
 use App\Models\ContractSign;
 use App\Models\ProjectDeadlineExtension;
 use App\Models\ProjectMilestone;
+use App\Models\ProjectPmGoal;
 use App\Models\ProjectTimeLog;
 use Str;
 
@@ -242,7 +243,7 @@ class ProjectsDataTable extends BaseDataTable
         $datatables->editColumn('project_name', function ($row) {
             $pin = '';
             $deal = Deal::find($row->deal_id);
-
+            $category = ProjectPmGoal::where('project_id',$row->id)->first();
             if (($row->pinned_project)) {
                 $pin .= '<span class="badge badge-secondary"><i class="fa fa-thumbtack"></i> ' . __('app.pinned') . '</span>';
             }
@@ -258,6 +259,9 @@ class ProjectsDataTable extends BaseDataTable
                 if ($deal->project_type == 'hourly') {
                     $html .= '<span class="badge badge-success">Hourly</span>';
                 }
+                if ($category != null) {
+                    $html .= '<span class="badge badge-primary">'.$category->project_category.'</span>';
+                }
                 $html .= '</div>
                   </div>';
                 return $html;
@@ -268,6 +272,9 @@ class ProjectsDataTable extends BaseDataTable
                       <p class="mb-0">' . $pin . '</p>';
                 if ($deal->project_type == 'hourly') {
                     $html .= '<span class="badge badge-success">Hourly</span>';
+                }
+                if ($category != null) {
+                    $html .= '<span class="badge badge-primary">'.$category->project_category.'</span>';
                 }
                 $html .= '</div>
                   </div>';

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import _ from "lodash";
 import {
     useReactTable, getCoreRowModel,
@@ -20,19 +20,26 @@ import GoalExtensionHistoryModal from "./GoalExtensionHistoryModal";
 import DeadlineExplanationHistoryModal from "./DeadlineExplanationHistoryModal";
 import PmGoalsTableLoader from "../loader/PmGoalsTableLoader";
 import style from "../styles/pmgoaltable.module.css"
+import { useLazyGetGoalExpiredHistoryQuery, useLazyGetGoalExtensionHistoryQuery, useLazyGetProjectExtendImagesQuery } from "../../../services/api/projectStatusApiSlice";
 
-const PmGoalsTable = ({ projectDetails, isLoading, isFetchingPmGoal, pmGoal, PmGoalsTableColumns, tableName, refetchPmGoal }) => {
+const PmGoalsTable = ({ projectDetails, isLoading, pmGoal, PmGoalsTableColumns, tableName, refetchPmGoal }) => {
     const [data, setData] = React.useState(pmGoal || []);
     const [sorting, setSorting] = React.useState([]);
     const [expanded, setExpanded] = React.useState({});
     const [projectPmGoalId, setProjectPmGoalId] = React.useState(null);
+    const [projectPmGoalIdForExtension, setProjectPmGoalIdForExtension] = React.useState(null);
+    const [projectPmGoalIdForExpired, setProjectPmGoalIdForExpired] = React.useState(null);
     const [{ pageIndex, pageSize }, setPagination] = React.useState({
         pageIndex: 0,
         pageSize: 10,
     });
-    const [pmGoalExtendReason, setPmGoalExtendReason] = React.useState("");
+
     const [skipPageReset, setSkipPageReset] = React.useState(false);
-    const [value, setValue] = useLocalStorage(tableName);
+    const [value, setValue] = useLocalStorage(tableName ?? '');
+    const [isGoalExpiredHistoryLoading, setIsGoalExpiredHistoryLoading] = React.useState(false);
+    const [isGoalExtensionHistoryLoading, setIsGoalExtensionHistoryLoading] = React.useState(false);
+
+
     // modals state
     const [ isOpenDeadlineExplainModal,setIsOpenDeadlineExplainModal] = React.useState(false);
     const [isOpenExtendRequestModal, setIsOpenExtendRequestModal] = React.useState(false);
@@ -44,8 +51,11 @@ const PmGoalsTable = ({ projectDetails, isLoading, isFetchingPmGoal, pmGoal, PmG
     // modals data
     const [reviewExtendRequestData, setReviewExtendRequestData] = React.useState(null);
     const [extendRequestGoalId, setExtendRequestGoalId] = React.useState(null);
+    const [deadlineExplanationData, setDeadlineExplanationData] = React.useState(null);
+    const [resolveDeadlineExplanationData, setResolveDeadlineExplanationData] = React.useState(null)
     const [goalExtensionHistoryData, setGoalExtensionHistoryData] = React.useState(null)
     const [deadlineExplanationHistoryData, setDeadlineExplanationHistoryData] = React.useState(null)
+
 
     //pagination start
     // Number of items to display per page
@@ -78,7 +88,7 @@ const PmGoalsTable = ({ projectDetails, isLoading, isFetchingPmGoal, pmGoal, PmG
 
     const [columnOrder, setColumnOrder] = React.useState(_.map(columns, 'id'));
 
-
+    
     const pagination = React.useMemo(() => ({pageIndex, pageSize}), [pageIndex, pageSize]);
 
 
@@ -88,6 +98,56 @@ const PmGoalsTable = ({ projectDetails, isLoading, isFetchingPmGoal, pmGoal, PmG
         setColumnOrder(value.columnOrders);
         }
     }, [])
+
+
+    // history Api call
+    const [getGoalExtensionHistory, {
+        data: goalExtensionHistory,
+    }] = useLazyGetGoalExtensionHistoryQuery({
+        refetchOnReconnect: true,
+        refetchOnFocus: false,
+    });
+
+    const [getGoalExpiredHistory, {
+        data: goalExpiredHistory,
+    }] = useLazyGetGoalExpiredHistoryQuery({
+        refetchOnReconnect: true,
+        refetchOnFocus: false,
+    });
+
+    // project extend images Api call
+    const [
+        getProjectExtendImages,
+        {
+            data: projectExtendImages,
+        }
+    ] = useLazyGetProjectExtendImagesQuery()
+
+    // handle goal extension history Api call
+    const handleGoalExtensionHistory = (goalExtensionHistoryId) => {
+        setIsGoalExtensionHistoryLoading(true);
+        getGoalExtensionHistory(goalExtensionHistoryId)
+        .then(() => {
+            setIsGoalExtensionHistoryLoading(false);
+        }).catch(() => {
+            setIsGoalExtensionHistoryLoading(false);
+        }).finally(() => {
+            setIsGoalExtensionHistoryLoading(false);
+        })
+    }
+
+    // handle goal expired history Api call
+    const handleGoalExpiredHistory = (goalExpiredHistoryId) => {
+        setIsGoalExpiredHistoryLoading(true);
+        getGoalExpiredHistory(goalExpiredHistoryId)
+        .then(() => {
+            setIsGoalExpiredHistoryLoading(false);
+        }).catch(() => {
+            setIsGoalExpiredHistoryLoading(false);
+        }).finally(() => {
+            setIsGoalExpiredHistoryLoading(false);
+        })
+    }
 
      
     const table = useReactTable({
@@ -116,6 +176,7 @@ const PmGoalsTable = ({ projectDetails, isLoading, isFetchingPmGoal, pmGoal, PmG
             extendReviewRequestClick: (row) => {
                 refetchPmGoal();
                 setReviewExtendRequestData(row);
+                getProjectExtendImages(`?goal_id=${row.id}&uuid=${row.uuid}`);
                 setIsOpenReviewExtendRequestModal(true);
             },
             extendRequestClick: (row) => {
@@ -126,22 +187,27 @@ const PmGoalsTable = ({ projectDetails, isLoading, isFetchingPmGoal, pmGoal, PmG
             deadlineExplainClick: (row) => {
                 refetchPmGoal();
                 setProjectPmGoalId(row.id)
+                setDeadlineExplanationData(row);
                 setIsOpenDeadlineExplainModal(true);
             },
             resolveExplainClick: (row) => {
                 refetchPmGoal();
                 setProjectPmGoalId(row.id)
                 setIsOpenResolveModal(true);
-                setPmGoalExtendReason(row.reason);
+                setResolveDeadlineExplanationData(row);
             },
             goalExtensionHistoryClick: (row) => {
                 refetchPmGoal();
                 setGoalExtensionHistoryData(row);
+                setProjectPmGoalIdForExtension(row.id);
                 setIsOpenGoalExtensionHistoryModal(true);
+                handleGoalExtensionHistory(row.id)
             },
             deadlineExplanationHistoryClick: (row) => {
                 refetchPmGoal();
+                handleGoalExpiredHistory(row.id);
                 setDeadlineExplanationHistoryData(row);
+                setProjectPmGoalIdForExpired(row.id);
                 setIsOpenDeadlineExplanationHistoryModal(true);
             }
         }
@@ -150,8 +216,8 @@ const PmGoalsTable = ({ projectDetails, isLoading, isFetchingPmGoal, pmGoal, PmG
 
     const handleCloseExtendReviewModal = () => {
         setIsOpenReviewExtendRequestModal(false);
+        setReviewExtendRequestData(null);
     };
-
 
     const handleClosExtendRequestModal = () => {
         setIsOpenExtendRequestModal(false);
@@ -167,6 +233,10 @@ const PmGoalsTable = ({ projectDetails, isLoading, isFetchingPmGoal, pmGoal, PmG
 
     const handleCloseDeadlineExHistoryModal = () => {
         setIsOpenDeadlineExplanationHistoryModal(false);
+    }
+
+    const handleCloseExtensionHistoryModal = () => {
+        setIsOpenGoalExtensionHistoryModal(false);
     }
 
 
@@ -187,14 +257,18 @@ const PmGoalsTable = ({ projectDetails, isLoading, isFetchingPmGoal, pmGoal, PmG
                     <tbody className='sp1_tasks_tbody'>
                             {!isLoading && table.getRowModel().rows.map(row => {
                             return (
-                                // <tr
-                                // className={`sp1_tasks_tr ${row.parentId !== undefined ? 'expended_row' :''} ${row.getIsExpanded() ? 'expended_parent_row': ''} ${row.original?.goal_status === 0 ? style.goalMeat : ''}`}
-                                //     key={row.id}
-                                // >
                                 <tr
-                                className={`sp1_tasks_tr ${row.parentId !== undefined ? 'expended_row' :''} ${row.getIsExpanded() ? 'expended_parent_row': ''} `}
+                                className={`sp1_tasks_tr ${row.parentId !== undefined ? 'expended_row' :''} ${row.getIsExpanded() ? 'expended_parent_row': ''} 
+                                ${row.original?.goal_status === 1 ? 
+                                    style.goalMeat :
+                                    (row.original?.goal_status === 0 && new Date(row.original?.goal_end_date) < new Date()) ? 
+                                        style.goalNotMeat : ''}`}
                                     key={row.id}
                                 >
+                                {/* <tr
+                                className={`sp1_tasks_tr ${row.parentId !== undefined ? 'expended_row' :''} ${row.getIsExpanded() ? 'expended_parent_row': ''} `}
+                                    key={row.id}
+                                > */}
                                     {row.getVisibleCells().map(cell => {
                                         return (
                                         <td key={cell.id} className='px-2 sp1_tasks_td'>
@@ -221,12 +295,14 @@ const PmGoalsTable = ({ projectDetails, isLoading, isFetchingPmGoal, pmGoal, PmG
                     projectDetails={projectDetails}
                     extendRequestGoalId={extendRequestGoalId}
                     isOpen={isOpenExtendRequestModal}
+                    refetchPmGoal={refetchPmGoal}
                     onClose={handleClosExtendRequestModal}
                 />
                 <ReviewExtendRequestModal
                      projectPmGoalId={projectPmGoalId}
                     projectDetails={projectDetails}
                     reviewExtendRequestData={reviewExtendRequestData}
+                    projectExtendImages={projectExtendImages}
                     isOpen={isOpenReviewExtendRequestModal}
                     refetchPmGoal={refetchPmGoal}
                     onClose={handleCloseExtendReviewModal}
@@ -235,31 +311,37 @@ const PmGoalsTable = ({ projectDetails, isLoading, isFetchingPmGoal, pmGoal, PmG
                     projectPmGoalId={projectPmGoalId}
                     projectDetails={projectDetails}
                     refetchPmGoal={refetchPmGoal}
+                    deadlineExplanationData={deadlineExplanationData}
                     isModalTwoOpen={isOpenDeadlineExplainModal}
                     closeModalTwo={handleCloseDeadlineExplainModal}
                 />
                 <ResolveModal
                     projectDetails={projectDetails}
-                    pmGoalExtendReason={pmGoalExtendReason}
                     projectPmGoalId={projectPmGoalId}
                     isModalOpen={isOpenResolveModal}
                     refetchPmGoal={refetchPmGoal}
+                    resolveDeadlineExplanationData={resolveDeadlineExplanationData}
                     closeModal={handleCloseResolveModal}
                 />
                  <GoalExtensionHistoryModal 
                     projectDetails={projectDetails}
                     goalExtensionHistoryData={goalExtensionHistoryData}
+                    goalExtensionHistory={goalExtensionHistory}
                     isOpen={isOpenGoalExtensionHistoryModal}
-                    refetchPmGoal={refetchPmGoal}
-                    isLoading={isLoading}
-                    closeModal={() => setIsOpenGoalExtensionHistoryModal(false)}
+                    refetchGoalExtensionHistory={() => {
+                        handleGoalExtensionHistory(projectPmGoalIdForExtension)
+                    }}
+                    isLoading={isGoalExtensionHistoryLoading}
+                    closeModal={handleCloseExtensionHistoryModal}
                  />   
                 <DeadlineExplanationHistoryModal
                     projectDetails={projectDetails}
-                    deadlineExplanationHistoryData={deadlineExplanationHistoryData}
+                    goalExpiredHistory={goalExpiredHistory}        
                     isOpen={isOpenDeadlineExplanationHistoryModal}
-                    refetchPmGoal={refetchPmGoal}
-                    isLoading={isLoading}
+                    refetchGoalExtensionHistory={() => {
+                        handleGoalExpiredHistory(projectPmGoalIdForExpired)
+                    }}
+                    isLoading={isGoalExpiredHistoryLoading}
                     closeModal={handleCloseDeadlineExHistoryModal}
                 />
             <Toaster />
