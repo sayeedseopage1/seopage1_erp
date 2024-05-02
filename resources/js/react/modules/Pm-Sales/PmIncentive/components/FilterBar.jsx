@@ -2,16 +2,84 @@ import React from 'react';
 import '../styles/Incentive.css'
 import { ButtonComponent } from '../../PointFactors/components/Styles/ui/ui';
 
+
+const pointFilters = [
+    {
+        id: "current",
+        title: "Current",
+        value: "current",
+        activeBackgroundColor: "#1492E6",
+        activeTextColor: "#fff",
+    },
+    {
+        id: "held_amount",
+        title: "Held amounts",
+        value: "held_amount",
+        activeBackgroundColor: "#1492E6",
+        activeTextColor: "#fff",
+    },
+    {
+        id: "incentive_factors",
+        title: "Incentive factors",
+        value: "incentive_factors",
+        activeBackgroundColor: "#1492E6",
+        activeTextColor: "#fff",
+    }
+]
+
+const periodFilters = [
+    {
+        id: "monthly",
+        title: "Monthly",
+        value: "monthly",
+        activeBackgroundColor: "#1492E6",
+        activeTextColor: "#fff",
+    },
+    {
+        id: "quarterly",
+        title: "Quarterly",
+        value: "quarterly",
+        activeBackgroundColor: "#1492E6",
+        activeTextColor: "#fff",
+    },
+    {
+        id: "yearly",
+        title: "Yearly",
+        value: "yearly",
+        activeBackgroundColor: "#1492E6",
+        activeTextColor: "#fff",
+    }
+]
+
+
 const FilterBar = ({ tab, setTab, filterByPeriod, setFilterByPeriod }) => {
+
     return (
         <div className='filter_bar'>
             <div className='filter_bar_left'>
-                <ButtonComponent color={tab == "current" ? "#1492E6" : undefined} textColor={tab == "current" ? "#fff" : undefined} onClick={() => setTab("current")}>Current</ButtonComponent>
-                <ButtonComponent color={tab == "held_amount" ? "#1492E6" : undefined} textColor={tab == "held_amount" ? "#fff" : undefined} onClick={() => setTab("held_amount")}>Held amounts</ButtonComponent>
-                <ButtonComponent color={tab == "incentive_factors" ? "#1492E6" : undefined} textColor={tab == "incentive_factors" ? "#fff" : undefined} onClick={() => setTab("incentive_factors")}>Incentive factors</ButtonComponent>
+                {
+                    pointFilters.map(item =>
+                        <ButtonComponent
+                            key={item.id}
+                            color={tab === item.value ? item.activeBackgroundColor : undefined} textColor={tab === item.value ? item.activeTextColor : undefined} onClick={() => setTab(item.value)}
+                        >
+                            {item.title}
+                        </ButtonComponent>
+                    )
+                }
             </div>
 
-            <div className='filter_bar_right'>
+            {tab === "current" && <div className='filter_bar_right'>
+                {/* {
+                    periodFilters.map(item =>
+                        <ButtonComponent
+                            key={item.id}
+                            color={tab === item.value ? item.activeBackgroundColor : undefined} textColor={tab === item.value ? item.activeTextColor : undefined} onClick={() => setTab(item.value)}
+                        >
+                            {item.title}
+                        </ButtonComponent>
+                    )
+                } */}
                 <ButtonComponent
                     color={filterByPeriod == "monthly" ? "#1492E6" : undefined} textColor={filterByPeriod == "monthly" ? "#fff" : undefined} onClick={() => setFilterByPeriod("monthly")}
                 >
@@ -29,7 +97,7 @@ const FilterBar = ({ tab, setTab, filterByPeriod, setFilterByPeriod }) => {
                 >
                     Yearly
                 </ButtonComponent>
-            </div>
+            </div>}
         </div>
     );
 };

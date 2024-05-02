@@ -17,7 +17,7 @@ const HeldAmounts = () => {
                 </thead>
                 <tbody>
                     {
-                        heldAmountsData?.map(item => <tr>
+                        heldAmountsData?.map((item, ind) => <tr key={ind}>
                             <td>{item?.month}</td>
                             <td>
                                 {item?.title}

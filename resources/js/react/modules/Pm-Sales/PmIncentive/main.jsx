@@ -7,6 +7,7 @@ import Toaster from "../../../global/Toaster";
 import Incentive from "./pages/Incentive";
 import './styles/Incentive.css';
 import './styles/heldAmount.css'
+import './styles/incentiveFactors.css'
 
 
 const Content = () => {

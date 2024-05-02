@@ -1,5 +1,4 @@
 import React from 'react';
-import '../styles/IdealVsAchieved.css'
 import IncentiveBarChart from './Charts/IncentiveBarChart';
 import { idealVsAchievedChartData } from '../constants';
 import IncentiveThickChart from './Charts/IncentiveThickChart';
