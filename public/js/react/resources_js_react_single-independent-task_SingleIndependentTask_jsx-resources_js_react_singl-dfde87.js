@@ -10974,7 +10974,7 @@ var SubTaskForm = function SubTaskForm(_ref) {
                 Swal.fire({
                   position: "center",
                   icon: "error",
-                  title: "Please fill up all required fields",
+                  title: "SubTask title should be unique on this project",
                   showConfirmButton: true
                 });
               }
