@@ -7,10 +7,12 @@ import View from "./View";
 import { usePagination } from "../Pagination";
 import { User as USER } from "../../../utils/user-details";
 import User from "./User";
+import CommentFilter from "./CommentFilter";
+import { useUserStore } from "../../../Zustand/store";
 
 const currentUser = new USER(window.Laravel.user);
 
-const FilterBar = ({ onFilter, change = false }) => {
+const FilterBar = ({ onFilter, change = false, setFilterData, data }) => {
     const { setPerPageItem, setCurrentPage } = usePagination();
 
     // ------- filter state (start) -------
@@ -20,6 +22,20 @@ const FilterBar = ({ onFilter, change = false }) => {
     const [view, setView] = useState("all");
     // const [user, setUser] = useState(null);
     // ------- filter state (end) -------
+
+    const [hideComments, setHideComments] = useState(false);
+    const { user, setUser } = useUserStore();
+    const filteredData = hideComments
+        ? data.filter((action) => action.item_name !== "New comment")
+        : data;
+
+    useEffect(() => {
+        setFilterData(filteredData);
+    }, [hideComments]);
+
+    useEffect(() => {
+        setHideComments(false);
+    }, [user]);
 
     useEffect(() => {
         // console.log({search});
@@ -32,7 +48,7 @@ const FilterBar = ({ onFilter, change = false }) => {
     }, [
         search,
         date,
-        view, 
+        view,
         //user
     ]);
 
@@ -66,11 +82,10 @@ const FilterBar = ({ onFilter, change = false }) => {
             <Search search={search} setSearch={setSearch} change={change} />
             <DateField setDate={setDate} change={change} />
             <Show show={show} setShow={setShow} change={change} />
-            {/* <View view={view} setView={setView} change={change} /> */}
-            {/* {(currentUser.getRoleId() === 1 ||
-                currentUser.getRoleId() === 8) && (
-                <User user={user} setUser={setUser} change={change} />
-            )} */}
+            <CommentFilter
+                hideComments={hideComments}
+                setHideComments={setHideComments}
+            />
         </div>
     );
 };

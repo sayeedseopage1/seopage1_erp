@@ -44,7 +44,8 @@ const isObjectURL = (url) => {
 };
 
 const HandleFileIcon = ({ URL = "", fileName = "", file = null }) => {
-    const {setIsImageModalOpen,setImageModalCurrentFileUrl} = useCommentContext();
+    const { setIsImageModalOpen, setImageModalCurrentFileUrl } =
+        useCommentContext();
     const selectFileComponent = ({ fileName = "", file = null }) => {
         const [url, name, ext] = handleFileUrl(URL, fileName, file);
         if (isImageFile(ext)) {
