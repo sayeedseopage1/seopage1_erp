@@ -2141,7 +2141,7 @@ class TaskController extends AccountBaseController
             $pm_goal = ProjectPmGoal::where('project_id',$task->project_id)->where('goal_code','DCS')->first();
             if($pm_goal != null && $current_date < $pm_goal->goal_end_date)
             {
-                $goal_count= ProjectPmGoal::where('project_id',$task->project_id)->where('goal_status', 0)->count();
+                $goal_count= ProjectPmGoal::where('project_id',$task->project_id)->count();
                 $goal_percentage = 100/$goal_count;
                 $pm_goal->goal_progress = $goal_percentage;
                 $pm_goal->goal_status = 1;
@@ -3052,7 +3052,6 @@ class TaskController extends AccountBaseController
     public function clientApproval(Request $request)
     {
         // dd($request);
-        DB::beginTransaction();
         $task_status = Task::find($request->task_id);
         $task_status->task_status = "submit task to client approval";
         $task_status->board_column_id = 9;
@@ -3072,7 +3071,6 @@ class TaskController extends AccountBaseController
                 
         $pm_goal->updated_at= Carbon::now();
         $pm_goal->save();
-        dd($pm_goal);
 
     }
         $actions = PendingAction::where('code','SFT')->where('past_status',0)->where('project_id',$task_status->project_id)->get();
