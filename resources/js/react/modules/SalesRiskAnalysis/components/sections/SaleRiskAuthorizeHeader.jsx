@@ -17,6 +17,7 @@ import SaleRiskAuthorizeHeaderLoader from "../loader/SaleRiskAuthorizeHeaderLoad
 const SaleRiskAuthorizeHeader = ({
     headerData,
     isLoading,
+    isPointNull,
     handleOpenAuthorizeModal,
 }) => {
     const getDealStatus = (status, shouldExcludePendingAndAnalysis = false) => {
@@ -32,10 +33,14 @@ const SaleRiskAuthorizeHeader = ({
             }}
         >
             <Switch>
-                <Switch.Case condition={isLoading}>
+                <Switch.Case
+                    condition={isLoading && isPointNull.isNull === null}
+                >
                     <SaleRiskAuthorizeHeaderLoader />
                 </Switch.Case>
-                <Switch.Case condition={!isLoading}>
+                <Switch.Case
+                    condition={!isLoading && isPointNull.isNull === false}
+                >
                     {/* 
                     
                         This Header will Show only for admin before the deal is authorized or auto-authorized or Denied
@@ -208,4 +213,5 @@ SaleRiskAuthorizeHeader.propTypes = {
     headerData: PropTypes.object,
     isLoading: PropTypes.bool,
     handleOpenAuthorizeModal: PropTypes.func,
+    isPointNull: PropTypes.object,
 };
