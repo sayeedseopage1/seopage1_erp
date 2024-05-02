@@ -37,10 +37,12 @@ import {
 import SaleRiskAuthorizePolicesModal from "../components/modal/SaleRiskAuthorizePolicesModal";
 import RuleActionConfirmationModal from "../components/modal/RuleActionConfirmationModal";
 import { SalesRiskAuthorizeTableColumnsForUser } from "../components/table/SalesRiskAuthorizeTableColumnsForUser";
+import { message } from "laravel-mix/src/Log";
 
 const SalesRiskAuthorize = () => {
     const [answersPoint, setAnswersPoint] = useState([]);
     const [metaInfo, setMetaInfo] = useState({});
+    const [isPointNull, setIsPointNull] = useState(false);
     const pathnames = window.location.pathname.split("/");
     const deal_id = pathnames[pathnames?.length - 1];
     const auth = useAuth();
@@ -62,29 +64,38 @@ const SalesRiskAuthorize = () => {
     const { data, isLoading, isSuccess, isFetching } = pathWiseApiCall(deal_id);
     useEffect(() => {
         if (data?.data && !isLoading) {
-            const { pointData, questionData, ...rest } = data?.data ?? {};
-            if (auth.getRoleId() === 1) {
-                const formatData = Object.entries(data?.data?.pointData).map(
-                    ([key, value]) => {
+            if (
+                data?.data.points === null &&
+                data?.message === "Policy question value not found"
+            ) {
+                setIsPointNull(true);
+                console.log("null data")
+            } else {
+                const { pointData, questionData, ...rest } = data?.data ?? {};
+                if (auth.getRoleId() === 1) {
+                    const formatData = Object.entries(
+                        data?.data?.pointData
+                    ).map(([key, value]) => {
                         return {
                             ...value,
                             key: key,
                             id: key,
                         };
-                    }
-                );
+                    });
 
-                setAnswersPoint(formatData);
-            } else {
-                const sortData = [...questionData]?.sort(
-                    (a, b) => Number(a.id) - Number(b.id)
-                );
-                setAnswersPoint(sortData);
+                    setAnswersPoint(formatData);
+                } else {
+                    const sortData = [...questionData]?.sort(
+                        (a, b) => Number(a.id) - Number(b.id)
+                    );
+                    setAnswersPoint(sortData);
+                }
+                setMetaInfo({
+                    ...rest,
+                    role: auth.getRoleId(),
+                });
+                setIsPointNull(false);
             }
-            setMetaInfo({
-                ...rest,
-                role: auth.getRoleId(),
-            });
         }
     }, [data?.data, isLoading]);
 
@@ -164,7 +175,7 @@ const SalesRiskAuthorize = () => {
 
     return (
         <React.Fragment>
-            <section>
+            <section className="mt-2">
                 <div className="d-flex justify-content-start align-items-center">
                     <button
                         className="btn btn-primary py-1 d-flex justify-content-center align-items-center"
