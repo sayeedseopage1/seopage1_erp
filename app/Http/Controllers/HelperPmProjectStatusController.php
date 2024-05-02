@@ -23,7 +23,7 @@ class HelperPmProjectStatusController extends AccountBaseController
 
         // --------------- calculate total number of days for the project --------------------- //
         $extraGoal = $milestoneSum < $findDeal->actual_amount ? 1 : 0;
-        dd($milestoneSum, $findDeal->actual_amount, $extraGoal);
+        // dd($milestoneSum, $findDeal->actual_amount, $extraGoal);
         $totalRequiedDayes = self::calculateProjectRequiedDays($pmGoalSetting->name, $milestone_count + $extraGoal);
         // ------------- end -------------- //
 
