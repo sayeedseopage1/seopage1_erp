@@ -2,97 +2,98 @@
 
 namespace App\Http\Controllers;
 
-use App\DataTables\TasksDataTable;
-use App\Events\TaskReminderEvent;
-use App\Helper\Reply;
-use App\Http\Requests\Tasks\StoreTask;
-use App\Http\Requests\Tasks\UpdateTask;
-use App\Models\BaseModel;
-use App\Models\EmployeeDetails;
-use App\Models\PendingAction;
-use App\Models\PendingActionPast;
-use App\Models\Pinned;
-use App\Models\PMProject;
-use App\Models\PmTaskGuideline;
-use App\Models\PMTaskGuidelineAuthorization;
-use App\Models\Project;
-use App\Models\ProjectMember;
-use App\Models\ProjectMilestone;
-use App\Models\ProjectTimeLogBreak;
-use App\Models\Role;
-use App\Models\SubTask;
-use App\Models\SubTaskFile;
-use App\Models\Task;
-use App\Models\TaskboardColumn;
-use App\Models\TaskCategory;
-use App\Models\TaskLabel;
-use App\Models\TaskLabelList;
-use App\Models\TaskReply;
-use App\Models\TaskRevision;
-use App\Models\TaskUser;
-use App\Models\User;
-use App\Models\WorkingEnvironment;
-use App\Notifications\PmTaskGuidelineNotification;
-use App\Traits\ProjectProgress;
-use Carbon\Carbon;
-use GrahamCampbell\GitLab\Facades\GitLab;
-use http\Env\Response;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
-use App\Helper\Files;
-use App\Models\TaskFile;
-use App\Models\TaskSetting;
-use Illuminate\Support\Facades\Config;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\File;
-use Modules\Gitlab\Entities\GitlabEmployee;
-use Modules\Gitlab\Entities\GitlabProject;
-use Modules\Gitlab\Entities\GitlabSetting;
-use Modules\Gitlab\Entities\GitlabTask;
-use Redirect;
-use App\Models\TaskApprove;
-use App\Models\TaskTimeExtension;
-use App\Models\TaskSubmission;
-use Illuminate\Support\Facades\Storage;
-use App\Notifications\TaskSubmitNotification;
-use App\Notifications\TaskRevisionNotification;
-use App\Notifications\TaskApproveNotification;
-use Notification;
 use Str;
-use Toastr;
 use Auth;
-use App\Models\ProjectDeliverable;
-use function _PHPStan_7d6f0f6a4\React\Promise\all;
-use function Clue\StreamFilter\fun;
-use function PHPUnit\Framework\isNull;
-use App\Models\TaskComment;
-use App\Models\AuthorizationAction;
+use Toastr;
+use Redirect;
+use Validator;
+use Notification;
+use Carbon\Carbon;
 use App\Models\Deal;
-use App\Models\DeveloperReportIssue;
+use App\Models\Role;
+use App\Models\Task;
+use App\Models\User;
+use App\Helper\Files;
+use App\Helper\Reply;
+use App\Models\Pinned;
+use http\Env\Response;
+use App\Models\Project;
+use App\Models\SubTask;
+use App\Models\TaskFile;
 use App\Models\TaskNote;
-use App\Models\TaskNoteFile;
-
-use App\Models\ProjectTimeLog;
+use App\Models\TaskType;
+use App\Models\TaskUser;
+use App\Models\BaseModel;
+use App\Models\PMProject;
+use App\Models\TaskLabel;
+use App\Models\TaskReply;
+use App\Models\SubTaskFile;
+use App\Models\TaskApprove;
+use App\Models\TaskComment;
 use App\Models\TaskHistory;
+use App\Models\TaskSetting;
+use App\Models\TaskCategory;
+use App\Models\TaskNoteFile;
+use App\Models\TaskRevision;
+use Illuminate\Http\Request;
+use App\Models\PendingAction;
+use App\Models\ProjectMember;
+use App\Models\ProjectPmGoal;
+use App\Models\TaskLabelList;
+use App\Models\ProjectTimeLog;
+use App\Models\TaskSubmission;
+use App\Models\DailySubmission;
+use App\Models\EmployeeDetails;
+use App\Models\PmTaskGuideline;
+use App\Models\TaskboardColumn;
+use App\Traits\ProjectProgress;
+use App\Models\ProjectMilestone;
+use App\Events\TaskReminderEvent;
+use App\Models\PendingActionPast;
+use App\Models\TaskTimeExtension;
+use App\DataTables\TasksDataTable;
 use App\Models\DeveloperStopTimer;
+use App\Models\PendingParentTasks;
+use App\Models\ProjectDeliverable;
+use App\Models\WorkingEnvironment;
+use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\DB;
+use App\Models\AuthorizationAction;
+use App\Models\ProjectTimeLogBreak;
 use App\Models\TaskDisputeQuestion;
 use App\Models\TaskRevisionDispute;
-use App\Models\TaskType;
-use App\Models\DailySubmission;
+use function Clue\StreamFilter\fun;
+use App\Models\DeveloperReportIssue;
+use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Hash;
+use App\Http\Requests\Tasks\StoreTask;
+use function PHPUnit\Framework\isNull;
+use Illuminate\Support\Facades\Config;
+use App\Http\Requests\Tasks\UpdateTask;
+use Illuminate\Support\Facades\Storage;
+
+use Modules\Gitlab\Entities\GitlabTask;
+use App\Helper\ProjectManagerPointLogic;
+use GrahamCampbell\GitLab\Facades\GitLab;
+use Modules\Gitlab\Entities\GitlabProject;
+use Modules\Gitlab\Entities\GitlabSetting;
+use Modules\Gitlab\Entities\GitlabEmployee;
+use App\Models\PMTaskGuidelineAuthorization;
 use App\Models\PendingParentTaskConversation;
-use App\Models\PendingParentTasks;
-use App\Notifications\PendingParentTasksNotification;
 use App\Notifications\PPAuthDenyNotification;
+use App\Notifications\TaskSubmitNotification;
+use App\Notifications\TaskApproveNotification;
 use App\Notifications\TaskCommentNotification;
-use App\Notifications\TaskCommentReplyNotification;
-use App\Models\ProjectPmGoal;
-use Illuminate\Support\Collection;
-
+use App\Notifications\TaskRevisionNotification;
 use function Symfony\Component\Cache\Traits\role;
+use App\Notifications\PmTaskGuidelineNotification;
+
+use function _PHPStan_7d6f0f6a4\React\Promise\all;
+use App\Notifications\TaskCommentReplyNotification;
+
+
 use function Symfony\Component\Cache\Traits\select;
-
-
-use Validator;
+use App\Notifications\PendingParentTasksNotification;
 
 
 class TaskController extends AccountBaseController
@@ -3032,32 +3033,27 @@ class TaskController extends AccountBaseController
         $task_status->task_status = "submit task to client approval";
         $task_status->board_column_id = 9;
         $task_status->save();
-
-
-
-
+        
         $thisSubmissionTime = Carbon::parse(TaskSubmission::where('task_id', $request->task_id)->orderBy('id', 'desc')->first()->created_at)->format('Y-m-d H:i');
-        $taskIds = Task::where('project_id', Task::find($request->task_id)->project_id)->pluck('id');
-        if(TaskSubmission::whereIn('task_id', $taskIds)->where('created_at', '<', $thisSubmissionTime)->count()){
-            // PM get point here
+        $projectId = Task::find($request->task_id)->project_id;
+        $taskIds = Task::where('project_id', $projectId)->pluck('id');
+        if(!TaskSubmission::whereIn('task_id', $taskIds)->where('created_at', '<', $thisSubmissionTime)->count()){
+            $project = Project::with('deal')->find($projectId);
+            if(Carbon::now()->diffInHours(Carbon::createFromFormat('Y-m-d H:i:s', $project->deal->released_at)) <= 100){
+                // Project Manager Point Distribution ( First submission is made within 100 hours )
+                ProjectManagerPointLogic::distribute(11, $projectId, $project->project_budget);
+            }
         };
 
-
         $current_date = Carbon::now();
-    $pm_goal = ProjectPmGoal::where('project_id',$task_status->project_id)->where('goal_code','TSM')->first();
-    if($pm_goal != null && $current_date < $pm_goal->goal_end_date)
-    {
-        $pm_goal->goal_status = 1;
-        
-
-        $pm_goal->description = 'The first submission has been completed and submitted to the client';
-
-                
-        $pm_goal->updated_at= Carbon::now();
-        $pm_goal->save();
-        
-
-    }
+        $pm_goal = ProjectPmGoal::where('project_id',$task_status->project_id)->where('goal_code','TSM')->first();
+        if($pm_goal != null && $current_date < $pm_goal->goal_end_date)
+        {
+            $pm_goal->goal_status = 1;
+            $pm_goal->description = 'The first submission has been completed and submitted to the client';
+            $pm_goal->updated_at= Carbon::now();
+            $pm_goal->save();
+        }
 
         $actions = PendingAction::where('code','SFT')->where('past_status',0)->where('project_id',$task_status->project_id)->get();
         if($actions != null)
