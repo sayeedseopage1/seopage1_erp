@@ -236,6 +236,389 @@ export const idealVsAchievedChartData = [
             ],
         },
     },
+    {
+        id: 4,
+        title: "Percentage of Delayed Projects",
+        ideal: {
+            id: 1,
+            title: "Percentage of Delayed Projects",
+            yTitle: "Incentive percentage",
+            chartTag: "Ideal",
+            series: [
+                {
+                    name: "Percentage of Delayed Projects",
+                    data: [120, 100, 80, 50, 10, 10, 10],
+                },
+            ],
+            categories: [
+                "0-30%",
+                "31-40%",
+                "41-50%",
+                "51-60%",
+                "61-70%",
+                "71-80%",
+                "100%",
+            ],
+            range: [
+                {
+                    from: 0,
+                    to: 40,
+                    color: "#FFA3A3",
+                },
+                {
+                    from: 41,
+                    to: 50,
+                    color: "#FEBC05",
+                },
+                {
+                    from: 51,
+                    to: 80,
+                    color: "#09F",
+                },
+                {
+                    from: 81,
+                    to: 120,
+                    color: "#14B96A",
+                },
+            ],
+        },
+        achieved: {
+            id: 2,
+            title: "Percentage of Delayed Projects ",
+            yTitle: "Incentive percentage",
+            chartTag: "Achieved",
+            incentive: 120,
+            ratio: 29,
+            range: [
+                {
+                    from: 0,
+                    to: 40,
+                    color: "#FFA3A3",
+                },
+                {
+                    from: 41,
+                    to: 50,
+                    color: "#FEBC05",
+                },
+                {
+                    from: 51,
+                    to: 80,
+                    color: "#09F",
+                },
+                {
+                    from: 81,
+                    to: 120,
+                    color: "#14B96A",
+                },
+            ],
+        },
+    },
+    {
+        id: 5,
+        title: "Milestone Cancelation Rate",
+        ideal: {
+            id: 1,
+            title: "Milestone Cancelation Rate",
+            yTitle: "Incentive percentage",
+            chartTag: "Ideal",
+            series: [
+                {
+                    name: "Milestone Cancelation Rate",
+                    data: [120, 100, 50, 20, 10, 10, 10],
+                },
+            ],
+            categories: [
+                "00-03%",
+                "05-05%",
+                "06-10%",
+                "11-15%",
+                "16-20%",
+                "21-30%",
+                "31-100%",
+            ],
+            range: [
+                {
+                    from: 0,
+                    to: 19,
+                    color: "#FFA3A3",
+                },
+                {
+                    from: 20,
+                    to: 49,
+                    color: "#FEBC05",
+                },
+                {
+                    from: 50,
+                    to: 80,
+                    color: "#09F",
+                },
+                {
+                    from: 81,
+                    to: 120,
+                    color: "#14B96A",
+                },
+            ],
+        },
+        achieved: {
+            id: 2,
+            title: "Milestone Cancelation Rate ",
+            yTitle: "Incentive percentage",
+            chartTag: "Achieved",
+            incentive: 120,
+            ratio: 3,
+            range: [
+                {
+                    from: 0,
+                    to: 40,
+                    color: "#FFA3A3",
+                },
+                {
+                    from: 41,
+                    to: 50,
+                    color: "#FEBC05",
+                },
+                {
+                    from: 51,
+                    to: 80,
+                    color: "#09F",
+                },
+                {
+                    from: 81,
+                    to: 120,
+                    color: "#14B96A",
+                },
+            ],
+        },
+    },
+    {
+        id: 6,
+        title: "Deadline Miss Rate",
+        ideal: {
+            id: 1,
+            title: "Deadline Miss Rate",
+            yTitle: "Incentive percentage",
+            chartTag: "Ideal",
+            series: [
+                {
+                    name: "Deadline Miss Rate",
+                    data: [100, 80, 50, 20, 10, 10, 10],
+                },
+            ],
+            categories: [
+                "0-30%",
+                "31-40%",
+                "41-45%",
+                "46-50%",
+                "51-65%",
+                "66-80%",
+                "81-100%",
+            ],
+            range: [
+                {
+                    from: 0,
+                    to: 19,
+                    color: "#FFA3A3",
+                },
+                {
+                    from: 20,
+                    to: 49,
+                    color: "#FEBC05",
+                },
+                {
+                    from: 50,
+                    to: 80,
+                    color: "#09F",
+                },
+                {
+                    from: 81,
+                    to: 120,
+                    color: "#14B96A",
+                },
+            ],
+        },
+        achieved: {
+            id: 2,
+            title: "Deadline Miss Rate",
+            yTitle: "Incentive percentage",
+            chartTag: "Achieved",
+            incentive: 80,
+            ratio: 40,
+            range: [
+                {
+                    from: 0,
+                    to: 40,
+                    color: "#FFA3A3",
+                },
+                {
+                    from: 41,
+                    to: 50,
+                    color: "#FEBC05",
+                },
+                {
+                    from: 51,
+                    to: 80,
+                    color: "#09F",
+                },
+                {
+                    from: 81,
+                    to: 120,
+                    color: "#14B96A",
+                },
+            ],
+        },
+    },
+    {
+        id: 7,
+        title: "Client Retention Rate",
+        ideal: {
+            id: 1,
+            title: "Client Retention Rate",
+            yTitle: "Incentive percentage",
+            chartTag: "Ideal",
+            series: [
+                {
+                    name: "Client Retention Rate",
+                    data: [0, 50, 80, 100, 120],
+                },
+            ],
+            categories: ["0-5%", "6-10%", "11-15%", "16-20%", "21-100%"],
+            range: [
+                {
+                    from: 0,
+                    to: 40,
+                    color: "#FFA3A3",
+                },
+                {
+                    from: 41,
+                    to: 50,
+                    color: "#FEBC05",
+                },
+                {
+                    from: 51,
+                    to: 80,
+                    color: "#09F",
+                },
+                {
+                    from: 81,
+                    to: 120,
+                    color: "#14B96A",
+                },
+            ],
+        },
+        achieved: {
+            id: 2,
+            title: "Client Retention Rate",
+            yTitle: "Incentive percentage",
+            chartTag: "Achieved",
+            incentive: 80,
+            ratio: 13,
+            range: [
+                {
+                    from: 0,
+                    to: 40,
+                    color: "#FFA3A3",
+                },
+                {
+                    from: 41,
+                    to: 50,
+                    color: "#FEBC05",
+                },
+                {
+                    from: 51,
+                    to: 80,
+                    color: "#09F",
+                },
+                {
+                    from: 81,
+                    to: 120,
+                    color: "#14B96A",
+                },
+            ],
+        },
+    },
+];
+
+export const upSaleCrossSaleChartData = [
+    {
+        id: 1,
+        title: "Upsale/Cross Sale Amount",
+        ideal: {
+            id: 1,
+            title: "Upsale/Cross Sale Amount",
+            yTitle: "Incentive percentage",
+            chartTag: "Ideal",
+            series: [
+                {
+                    name: "Upsale/Cross Sale Amount",
+                    data: [3, 4, 5, 5.5, 6],
+                },
+            ],
+            categories: [
+                "1-$500",
+                "501-$1200",
+                "1201-$1800",
+                "1801-S3000",
+                "3001-higher",
+            ],
+            range: [
+                {
+                    from: 0,
+                    to: 3,
+                    color: "#14B96A",
+                },
+                {
+                    from: 3.1,
+                    to: 4,
+                    color: "#09F",
+                },
+                {
+                    from: 4.1,
+                    to: 5,
+                    color: "#FEBC05",
+                },
+                {
+                    from: 5.1,
+                    to: 5.5,
+                    color: "#09F",
+                },
+                {
+                    from: 5.6,
+                    to: 6,
+                    color: "#14B96A",
+                },
+            ],
+        },
+        achieved: {
+            id: 1,
+            title: "Upsale/Cross Sale Amount",
+            yTitle: "Incentive percentage",
+            chartTag: "Achieved",
+            incentive: 60,
+            ratio: 11000,
+            range: [
+                {
+                    from: 0,
+                    to: 40,
+                    color: "#FFA3A3",
+                },
+                {
+                    from: 41,
+                    to: 50,
+                    color: "#FEBC05",
+                },
+                {
+                    from: 51,
+                    to: 80,
+                    color: "#09F",
+                },
+                {
+                    from: 81,
+                    to: 100,
+                    color: "#14B96A",
+                },
+            ],
+        },
+    },
 ];
 
 // export const achivedBarChartData = [

@@ -1,8 +1,7 @@
-import { useMemo, useRef } from "react";
+import { useRef } from "react";
 import Chart from "react-apexcharts";
 import arrow1 from '../../assets/arrow-1.svg'
 import arrow2 from '../../assets/arrow-2.svg'
-import { reset } from "browser-sync";
 
 const IncentiveThickChart = ({ chartData }) => {
     const chartRef = useRef(null);
@@ -108,8 +107,8 @@ const IncentiveThickChart = ({ chartData }) => {
             },
         },
         yaxis: {
-            tickAmount: 5,
-            max: 100,
+            // tickAmount: 5,
+            max: 120,
             labels: {
                 formatter: (val) => `${val}%`,
                 style: {
@@ -120,6 +119,7 @@ const IncentiveThickChart = ({ chartData }) => {
 
                 }
             },
+            stepSize: 20
         },
         dataLabels: {
             enabled: true,
