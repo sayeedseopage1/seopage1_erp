@@ -245,7 +245,7 @@ class PaymentController extends AccountBaseController
         $total_complete_milestones_value= ProjectMilestone::join('payments','payments.project_id','project_milestones.project_id')->where('project_milestones.project_id',$payment->project_id)->where('payments.status','complete')->groupBy('project_milestones.id')->sum('amount');
         $completion_percent = $total_complete_milestones_value/$total_milestones_value;
         $requierd_milestone = round($total_milestones/2,0);
-        $goal_count= ProjectPmGoal::where('project_id',$payment->project_id)->count();
+        $goal_count= ProjectPmGoal::where('project_id',$payment->project_id)->where('goal_status', 0)->count();
         $goal_percentage = 100/$goal_count;
         foreach ($pm_goals as $pm_goal){
             if($pm_goal != null && $current_date < $pm_goal->goal_end_date && $completion_percent >= 0.5 && $pm_goal->goal_code == 'FPMR')
