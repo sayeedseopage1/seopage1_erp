@@ -5,4 +5,67 @@
     font-weight: 600;
     line-height: normal;
     text-align: center;
+    margin-bottom: 35px;
+}
+
+.incentive_factors_wrapper {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 16px;
+}
+
+.incentive_factors_bottom {
+    border-radius: 12px;
+    background: #BCE4FF;
+    padding: 16px 24px;
+    display: flex;
+    justify-content: space-between;
+    gap: 15px;
+    margin-top: 24px;
+}
+
+.incentive_factors_bottom_text {
+    max-width: 570px;
+    display: flex;
+    color: #000;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+}
+
+.incentive_factors_bottom_text span {
+    color: #f66;
+}
+
+.incentive_factors_card {
+    border-radius: 12px;
+    background: #BCE4FF;
+    padding: 24px;
+}
+
+.incentive_factors_card_header {
+    border-left: 4px solid #1492E6;
+    padding-left: 11px;
+}
+
+.incentive_factors_card_title {
+    color: #000;
+    font-family: Poppins;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+    margin-bottom: 20px;
+}
+
+.incentive_factors_card_list li {
+    list-style-type: disc;
+    margin-left: 22px;
+    margin-bottom: 15px;
+    color: #000;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
 }
