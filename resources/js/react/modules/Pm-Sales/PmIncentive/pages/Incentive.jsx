@@ -7,15 +7,16 @@ import UpsaleCrossSale from '../components/UpsaleCrossSale';
 import BonusPoints from '../components/BonusPoints';
 import FinalIncentiveBanner from '../components/FinalIncentiveBanner';
 import Switch from '../../../../global/Switch';
-import HeldAmounts from '../components/HeldAmounts/HeldAmounts';
 import IncentiveFactors from '../components/incentiveFactors/IncentiveFactors';
 import FilterBar from '../components/FilterBar';
+import QuarterlyAndYearlyTable from '../components/QuarterlyAndYearly/QuarterlyAndYearlyTable';
+import HeldAmountsTable from '../components/HeldAmounts/HeldAmountsTable';
 
 const Incentive = () => {
     const [data, setData] = useState([]);
     const [loading, setLoading] = useState(true);
     const [isDataFetching, setIsDataFetching] = useState(true);
-    const [tab, setTab] = useState("incentive_factors");
+    const [tab, setTab] = useState("current");
 
     const [filterByPeriod, setFilterByPeriod] = useState("monthly");
 
@@ -55,19 +56,19 @@ const Incentive = () => {
                             </Switch.Case>
                             <Switch.Case condition={filterByPeriod == "quarterly"}>
                                 <div className='incentive_inner_wrapper'>
-                                    quarterly
+                                    <QuarterlyAndYearlyTable />
                                 </div>
                             </Switch.Case>
                             <Switch.Case condition={filterByPeriod == "yearly"}>
                                 <div className='incentive_inner_wrapper'>
-                                    yearly
+                                    <QuarterlyAndYearlyTable />
                                 </div>
                             </Switch.Case>
                         </Switch>
                     </Switch.Case>
                     <Switch.Case condition={tab == "held_amount"}>
                         <div className='incentive_inner_wrapper'>
-                            <HeldAmounts />
+                            <HeldAmountsTable />
                         </div>
                     </Switch.Case>
                     <Switch.Case condition={tab == "incentive_factors"}>

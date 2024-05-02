@@ -755,6 +755,148 @@ export const heldAmountsData = [
     },
 ];
 
+export const quarterlyAndYearlyTableHeaders = [
+    {
+        key: "month",
+        label: "Month",
+    },
+    {
+        key: "regularPoints",
+        label: "Regular points",
+    },
+    {
+        key: "actualPoints",
+        label: "Actual points",
+    },
+    {
+        key: "upsaleCrossSalePoints",
+        label: "Upsale/cross sale points",
+    },
+    {
+        key: "bonusPoints",
+        label: "Bonus points",
+    },
+    {
+        key: "incentiveAmount",
+        label: "Incentive amount (BDT)",
+    },
+    {
+        key: "cumulativeIncentiveAmount",
+        label: "Cumulative incentive amount (TK)",
+    },
+];
+
+export const quarterlyAndYearlyTableData = [
+    {
+        month: "January, 2023",
+        regularPoints: 100,
+        actualPoints: 120,
+        upsaleCrossSalePoints: 30,
+        bonusPoints: 25,
+        incentiveAmount: "300 BDT",
+        cumulativeIncentiveAmount: "300 TK",
+    },
+    {
+        month: "February, 2023",
+        regularPoints: 120,
+        actualPoints: 130,
+        upsaleCrossSalePoints: 35,
+        bonusPoints: 30,
+        incentiveAmount: "320 BDT",
+        cumulativeIncentiveAmount: "620 TK",
+    },
+    {
+        month: "March, 2023",
+        regularPoints: 140,
+        actualPoints: 150,
+        upsaleCrossSalePoints: 40,
+        bonusPoints: 35,
+        incentiveAmount: "340 BDT",
+        cumulativeIncentiveAmount: "960 TK",
+    },
+    {
+        month: "April, 2023",
+        regularPoints: 160,
+        actualPoints: 170,
+        upsaleCrossSalePoints: 45,
+        bonusPoints: 40,
+        incentiveAmount: "360 BDT",
+        cumulativeIncentiveAmount: "1320 TK",
+    },
+    {
+        month: "May, 2023",
+        regularPoints: 180,
+        actualPoints: 190,
+        upsaleCrossSalePoints: 50,
+        bonusPoints: 45,
+        incentiveAmount: "380 BDT",
+        cumulativeIncentiveAmount: "1700 TK",
+    },
+    {
+        month: "June, 2023",
+        regularPoints: 200,
+        actualPoints: 210,
+        upsaleCrossSalePoints: 55,
+        bonusPoints: 50,
+        incentiveAmount: "400 BDT",
+        cumulativeIncentiveAmount: "2100 TK",
+    },
+    {
+        month: "July, 2023",
+        regularPoints: 220,
+        actualPoints: 230,
+        upsaleCrossSalePoints: 60,
+        bonusPoints: 55,
+        incentiveAmount: "420 BDT",
+        cumulativeIncentiveAmount: "2520 TK",
+    },
+    {
+        month: "August, 2023",
+        regularPoints: 240,
+        actualPoints: 250,
+        upsaleCrossSalePoints: 65,
+        bonusPoints: 60,
+        incentiveAmount: "440 BDT",
+        cumulativeIncentiveAmount: "2960 TK",
+    },
+    {
+        month: "September, 2023",
+        regularPoints: 260,
+        actualPoints: 270,
+        upsaleCrossSalePoints: 70,
+        bonusPoints: 65,
+        incentiveAmount: "460 BDT",
+        cumulativeIncentiveAmount: "3420 TK",
+    },
+    {
+        month: "October, 2023",
+        regularPoints: 280,
+        actualPoints: 290,
+        upsaleCrossSalePoints: 75,
+        bonusPoints: 70,
+        incentiveAmount: "480 BDT",
+        cumulativeIncentiveAmount: "3900 TK",
+    },
+    {
+        month: "November, 2023",
+        regularPoints: 300,
+        actualPoints: 310,
+        upsaleCrossSalePoints: 80,
+        bonusPoints: 75,
+        incentiveAmount: "500 BDT",
+        cumulativeIncentiveAmount: "4400 TK",
+    },
+    {
+        month: "December, 2023",
+        regularPoints: 320,
+        actualPoints: 330,
+        upsaleCrossSalePoints: 85,
+        bonusPoints: 80,
+        incentiveAmount: "520 BDT",
+        cumulativeIncentiveAmount: "4920 TK",
+    },
+];
+
 // export const achivedBarChartData = [
 //     {
 //         id: 1,

@@ -39,4 +39,20 @@
     font-weight: 500;
     line-height: normal;
     text-wrap: nowrap;
+    text-align: center;
+}
+
+.held_amount_table td:first-child {
+    text-align: left;
+}
+
+.held_amount_table td:first-child,
+.held_amount_table td:last-child {
+    border-bottom: 0;
+    border-left: 0;
+    border-right: 0;
+}
+
+.held_amount_table tr:last-child td {
+    border-bottom: 0;
 }
