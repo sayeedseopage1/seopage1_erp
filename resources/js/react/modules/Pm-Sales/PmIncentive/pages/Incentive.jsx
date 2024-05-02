@@ -8,6 +8,7 @@ import UpsaleCrossSale from '../components/UpsaleCrossSale';
 import BonusPoints from '../components/BonusPoints';
 import FinalIncentiveBanner from '../components/FinalIncentiveBanner';
 import Switch from '../../../../global/Switch';
+import HeldAmounts from '../components/HeldAmounts';
 
 const Incentive = () => {
     const [data, setData] = useState([]);
@@ -49,7 +50,7 @@ const Incentive = () => {
                         <BonusPoints />
                         <FinalIncentiveBanner />
                     </div> : <div className='incentive_inner_wrapper'>
-                        hello from Held amounts
+                        <HeldAmounts />
                     </div>
                 }
 
