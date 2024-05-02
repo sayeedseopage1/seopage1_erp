@@ -15,7 +15,7 @@ class ProjectPmGoal extends Model
         parent::boot();
 
         static::updated(function ($item) {
-            if ($item->isDirty('goal_status') && $item->goal_status == 0) {
+            if ($item->isDirty('expired_status') && $item->expired_status == 1) {
                 $comparableValue = $item->project_category == 'Regular' ? 1 : ($item->project_category == 'Priority' ? 2 : ($item->project_category == 'High-priority' ? 3 : ($item->project_category == 'Top most priority' ? 4 : ($item->project_category == 'Critically sensitive' ? 5 : 0))));
             
                 // Project Manager Point Distribution ( PM goals )
