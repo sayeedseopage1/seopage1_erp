@@ -50,6 +50,16 @@ class DatabaseSync extends Command
         ");
         echo "\nend";
 
+        if(! Schema::hasColumn($table, 'sale_authorize_comment'))
+        {
+            echo "\nChanging sale_authorize_comment column in $table";
+
+            Schema::table('deals', function (Blueprint $table) {
+                $table->tinyText('sale_authorize_comment')->nullable()->after('sale_authorize_on');
+            });
+            echo "\nend";
+        }
+
         echo "\nChanging previous sales_risk_policies status";
         $salesTableCreateDate = DB::table('migrations')->where('migration', '2024_03_04_151733_create_sales_risk_policies_table')->first() ?: (object)['created_at' => '2024-04-24 00:00:00'];
         Deal::get()->each(function ($item) use($salesTableCreateDate) {
@@ -82,7 +92,7 @@ class DatabaseSync extends Command
             }
         }
         echo "\nend";
-        
+
         return Command::SUCCESS;
     }
 }

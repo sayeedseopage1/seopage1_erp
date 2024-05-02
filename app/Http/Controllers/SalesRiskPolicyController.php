@@ -1438,7 +1438,7 @@ class SalesRiskPolicyController extends AccountBaseController
         return view('sales-risk-policies.analysisReport', $this->data);
     }
 
-    function authorizeDenyDeal($deal_id, $status)
+    function authorizeDenyDeal(Request $req, $deal_id, $status)
     {
         if (auth()->user()->role_id != 1) {
             return response()->json(['status' => 'error', 'message' => 'Not authorized.']);
@@ -1457,6 +1457,7 @@ class SalesRiskPolicyController extends AccountBaseController
 
         $deal->sale_authorize_by = auth()->user()->id;
         $deal->sale_authorize_on = date('Y-m-d h:i:s');
+        $deal->sale_authorize_comment = $req->comment;
         $deal->save();
 
         return response()->json(['status' => 'successful', 'message' => 'Deal status updated.']);
