@@ -85,7 +85,7 @@ const Deals = () => {
                             All{" "}
                             <span className="badge badge-light ml-1">
                                 {" "}
-                                {deals?.all ?? 0}
+                                {deals?.total ?? 0}
                             </span>
                         </button>
                         <button
