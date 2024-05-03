@@ -40,7 +40,7 @@ const Incentive = () => {
             />
             <div className='incentive_wrapper'>
                 <FilterBar tab={tab} setTab={setTab} filterByPeriod={filterByPeriod} setFilterByPeriod={setFilterByPeriod} />
-                <Switch>
+                {/* <Switch>
                     <Switch.Case condition={tab == "current"}>
 
                         <Switch>
@@ -76,7 +76,7 @@ const Incentive = () => {
                             <IncentiveFactors />
                         </div>
                     </Switch.Case>
-                </Switch>
+                </Switch> */}
             </div>
         </div>
     );

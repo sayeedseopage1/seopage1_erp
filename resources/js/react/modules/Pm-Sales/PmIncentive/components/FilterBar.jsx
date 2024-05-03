@@ -60,6 +60,7 @@ const FilterBar = ({ tab, setTab, filterByPeriod, setFilterByPeriod }) => {
                 {
                     pointFilters.map(item =>
                         <ButtonComponent
+                            title={item.title}
                             key={item.id}
                             color={tab === item.value ? item.activeBackgroundColor : undefined} textColor={tab === item.value ? item.activeTextColor : undefined} onClick={() => setTab(item.value)}
                         >
@@ -81,18 +82,21 @@ const FilterBar = ({ tab, setTab, filterByPeriod, setFilterByPeriod }) => {
                     )
                 } */}
                 <ButtonComponent
+                    title={"Monthly"}
                     color={filterByPeriod == "monthly" ? "#1492E6" : undefined} textColor={filterByPeriod == "monthly" ? "#fff" : undefined} onClick={() => setFilterByPeriod("monthly")}
                 >
                     Monthly
                 </ButtonComponent>
 
                 <ButtonComponent
+                    title={"Quarterly"}
                     color={filterByPeriod == "quarterly" ? "#1492E6" : undefined} textColor={filterByPeriod == "quarterly" ? "#fff" : undefined} onClick={() => setFilterByPeriod("quarterly")}
                 >
                     Quarterly
                 </ButtonComponent>
 
                 <ButtonComponent
+                    title={"Yearly"}
                     color={filterByPeriod == "yearly" ? "#1492E6" : undefined} textColor={filterByPeriod == "yearly" ? "#fff" : undefined} onClick={() => setFilterByPeriod("yearly")}
                 >
                     Yearly
