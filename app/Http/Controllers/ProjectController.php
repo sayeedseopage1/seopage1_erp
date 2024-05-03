@@ -1925,8 +1925,12 @@ class ProjectController extends AccountBaseController
                         $project_status_helper->HourlyProjectPmGoalCreation($findDeal, $findProject);
                     // }
                 }
+
+                $project->status = 'in progress';
             }
         }
+
+        $project->save();
     // PROJECT PM GOAL SETTINGS END
 
        $actions = PendingAction::where('code','PWDA')->where('past_status',0)->where('project_id',$project->id)->get();
