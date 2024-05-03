@@ -3332,13 +3332,6 @@ class ProjectController extends AccountBaseController
             }
             $project->save();
 
-            $log_user = Auth::user();
-
-            $activity = new ProjectActivity();
-            $activity->activity = $log_user->name . ' added project deliverable : ' . $deliverable->title;
-            $activity->project_id = $project->id;
-            $activity->save();
-
             $text = Auth::user()->name . ' added project deliverable : ' . $deliverable->title;
             $link = '<a style="color:blue" href="' . route('projects.show', $project->id) . '?tab=deliverable">' . $text . '</a>';
             $this->logProjectActivity($project->id, $link);
