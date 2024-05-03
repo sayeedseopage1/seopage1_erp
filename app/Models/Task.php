@@ -18,6 +18,7 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use App\Models\Factor;
 
 /**
  * App\Models\Task
@@ -148,6 +149,30 @@ class Task extends BaseModel
     protected static function boot()
     {
         parent::boot();
+
+        static::created(function ($item) {
+
+            if(!$item->subtask_id && !$item->independent_task_status){
+                $project = Project::with('deal')->find($item->project_id);
+                if($latestTask = Task::where('id', '!=', $item->id)->where('project_id', $project->id)->orderBy('id', 'desc')->first()){
+                    $start_date = Carbon::createFromFormat('Y-m-d H:i:s', $latestTask->created_at);
+                    $countSundays = $start_date->diffInDaysFiltered(function (Carbon $date) {
+                        return $date->dayOfWeek === Carbon::SUNDAY;
+                    }, Carbon::now());
+                    $hoursDifference = Carbon::now()->diffInHours($start_date) - ($countSundays * 24);
+                }else{
+                    $start_date = Carbon::createFromFormat('Y-m-d H:i:s', $project->deal->released_at);
+                    $countSundays = $start_date->diffInDaysFiltered(function (Carbon $date) {
+                        return $date->dayOfWeek === Carbon::SUNDAY;
+                    }, Carbon::now());
+                    $hoursDifference = Carbon::now()->diffInHours($start_date) - 48 - ($countSundays * 24);
+                }
+    
+                $points = (int) ($hoursDifference/24) * Factor::where('criteria_id', 12)->first()->points;
+                // Project Manager Point Distribution ( Reviewing the work )
+                ProjectManagerPointLogic::distribute(12, $item->project_id, abs($points) ? 1 : 0, $points);
+            }
+        });
 
         static::updated(function ($item) {
             if ($item->isDirty('board_column_id') && in_array($item->board_column_id, [8, 1]) && $item->getOriginal('board_column_id') === 6) {
