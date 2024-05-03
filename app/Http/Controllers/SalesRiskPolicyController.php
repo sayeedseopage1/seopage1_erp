@@ -1148,10 +1148,11 @@ class SalesRiskPolicyController extends AccountBaseController
 
             if ($policy) {
                 $policies = SalesRiskPolicy::where('parent_id', $policy->id)->get();
-                $d1 = new DateTime("$deal->start_date 00:00:00");
-                $d2 = new DateTime("$deal->deadline 23:59:59");
-                $interval = $d1->diff($d2);
-                $deadline = $interval->d;
+
+                $d1 = date_create($deal->start_date);
+                $d2 = date_create($deal->deadline);
+                $diff = date_diff($d1, $d2);
+                $deadline = (int) $diff->format("%a");
                 $pointValue = 0;
                 $data = [];
 
@@ -1306,10 +1307,11 @@ class SalesRiskPolicyController extends AccountBaseController
         $data['authorizeBy'] = $deal->sale_authorize_by ? User::whereId($deal->sale_authorize_by)->first(['id', 'name']) : null;
 
         //get Date diff as intervals
-        $d1 = new DateTime("$deal->start_date 00:00:00");
-        $d2 = new DateTime("$deal->deadline 23:59:59");
-        $interval = $d1->diff($d2);
-        $data['deadline'] = $interval->d;
+
+        $d1 = date_create($deal->start_date);
+        $d2 = date_create($deal->deadline);
+        $diff = date_diff($d1, $d2);
+        $data['deadline'] = (int) $diff->format("%a");
 
         if (auth()->user()->role_id != 1) {
 
