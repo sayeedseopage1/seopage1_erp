@@ -1171,6 +1171,7 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
 
     Route::resource('qualified-sales',QualifiedSalesController::class);
     Route::get('qualified-sales/get-points/{id}',[QualifiedSalesController::class,'get_point_details']);
+    Route::get('export-qualified-sales-data', [QualifiedSalesController::class,'exportQualifiedSales']);
 
 
 
