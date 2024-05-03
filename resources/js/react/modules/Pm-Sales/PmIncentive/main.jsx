@@ -8,6 +8,7 @@ import Incentive from "./pages/Incentive";
 import './styles/Incentive.css';
 import './styles/heldAmount.css'
 import './styles/incentiveFactors.css'
+import './styles/Incentive.responsive.css'
 
 
 const Content = () => {
