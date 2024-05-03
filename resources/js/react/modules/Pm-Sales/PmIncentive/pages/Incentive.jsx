@@ -40,18 +40,18 @@ const Incentive = () => {
             />
             <div className='incentive_wrapper'>
                 <FilterBar tab={tab} setTab={setTab} filterByPeriod={filterByPeriod} setFilterByPeriod={setFilterByPeriod} />
-                {/* <Switch>
+                <Switch>
                     <Switch.Case condition={tab == "current"}>
 
                         <Switch>
                             <Switch.Case condition={filterByPeriod == "monthly"}>
                                 <div className='incentive_inner_wrapper'>
                                     <PointBanner />
-                                    <IdealVsAchieved />
+                                    {/* <IdealVsAchieved />
                                     <StatsInfo />
                                     <UpsaleCrossSale />
                                     <BonusPoints />
-                                    <FinalIncentiveBanner />
+                                    <FinalIncentiveBanner /> */}
                                 </div>
                             </Switch.Case>
                             <Switch.Case condition={filterByPeriod == "quarterly"}>
@@ -76,7 +76,7 @@ const Incentive = () => {
                             <IncentiveFactors />
                         </div>
                     </Switch.Case>
-                </Switch> */}
+                </Switch>
             </div>
         </div>
     );

@@ -444,16 +444,29 @@
  ####################################################*/
 
 @media only screen and (min-width: 1201px) and (max-width: 1400px) {
-    /* ******************************
-    Common starts here
- ********************************* */
 
+    /* Common starts here */
+    .incentive_inner_wrapper {
+        padding: 20px;
+    }
 
+    /* Filter bar and point card starts here */
+    .point_banner {
+        padding: 20px;
+        gap: 15px;
+    }
 
+    .point_card {
+        padding: 16px;
+    }
 
-    /* ******************************
-    Common ends here
- ********************************* */
+    .point_title {
+        font-size: 14px;
+    }
+
+    .point_score {
+        font-size: 17px;
+    }
 }
 
 @media only screen and (min-width: 993px) and (max-width: 1200px) {
@@ -461,6 +474,10 @@
     /* Common starts here */
     .incentive_wrapper {
         padding: 0px 15px !important;
+    }
+
+    .incentive_inner_wrapper {
+        padding: 20px;
     }
 
     /* Filter bar and point card starts here */
@@ -471,6 +488,23 @@
     .filter_bar_left,
     .filter_bar_right {
         gap: 0.5rem;
+    }
+
+    .point_banner {
+        padding: 20px;
+        gap: 15px;
+    }
+
+    .point_card {
+        padding: 16px;
+    }
+
+    .point_title {
+        font-size: 14px;
+    }
+
+    .point_score {
+        font-size: 17px;
     }
 }
 
@@ -482,6 +516,10 @@
         padding: 0px 15px !important;
     }
 
+    .incentive_inner_wrapper {
+        padding: 20px;
+    }
+
     /* Filter bar and point card starts here */
     .filter_bar {
         padding: 20px 0px;
@@ -490,6 +528,23 @@
     .filter_bar_left,
     .filter_bar_right {
         gap: 0.5rem;
+    }
+
+    .point_banner {
+        padding: 20px;
+        gap: 15px;
+    }
+
+    .point_card {
+        padding: 16px;
+    }
+
+    .point_title {
+        font-size: 14px;
+    }
+
+    .point_score {
+        font-size: 17px;
     }
 }
 
@@ -500,6 +555,10 @@
         padding: 0px 15px !important;
     }
 
+    .incentive_inner_wrapper {
+        padding: 20px;
+    }
+
     /* Filter bar and point card starts here */
     .filter_bar {
         padding: 20px 0px;
@@ -510,6 +569,24 @@
     .filter_bar_left,
     .filter_bar_right {
         gap: 0.5rem;
+    }
+
+    .point_banner {
+        padding: 20px;
+        gap: 15px;
+        flex-direction: column;
+    }
+
+    .point_card {
+        padding: 16px;
+    }
+
+    .point_title {
+        font-size: 14px;
+    }
+
+    .point_score {
+        font-size: 17px;
     }
 }
 
@@ -520,6 +597,10 @@
         padding: 0px 15px !important;
     }
 
+    .incentive_inner_wrapper {
+        padding: 20px;
+    }
+
     /* Filter bar and point card starts here */
     .filter_bar {
         padding: 20px 0px;
@@ -530,5 +611,28 @@
     .filter_bar_left,
     .filter_bar_right {
         gap: 0.5rem;
+    }
+
+    .point_banner {
+        padding: 20px;
+        gap: 15px;
+        flex-direction: column;
+    }
+
+    .point_card {
+        padding: 16px;
+        flex-direction: column;
+    }
+
+    .point_title {
+        font-size: 14px;
+    }
+
+    .point_score {
+        font-size: 17px;
+    }
+
+    .point_details_wrapper {
+        flex-direction: column;
     }
 }
