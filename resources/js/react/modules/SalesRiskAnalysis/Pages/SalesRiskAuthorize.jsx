@@ -470,11 +470,11 @@ const SalesRiskAuthorize = () => {
                                                     ?.sale_authorize_comment
                                             }
                                         >
-                                            <div className="alert alert-warning d-flex flex-column flex-md-row align-items-center align-items-md-start ">
+                                            <div className="alert alert-primary d-flex flex-column flex-md-row align-items-center align-items-md-start ">
                                                 <span
                                                     style={{
                                                         backgroundColor:
-                                                            "#FCBD01",
+                                                            "#459efd ",
                                                         color: "#fff",
                                                         borderRadius: "0.25rem",
                                                         padding: "4px 6px",

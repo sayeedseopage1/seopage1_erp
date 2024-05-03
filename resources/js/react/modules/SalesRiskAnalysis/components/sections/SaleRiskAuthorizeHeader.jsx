@@ -175,6 +175,9 @@ const SaleRiskAuthorizeHeader = ({
                                     <Popover.Button>
                                         <p
                                             className={`${popoverStyle.questionModal_popover_button} singleline-ellipsis`}
+                                            style={{
+                                                padding: "5px 0"
+                                            }}
                                         >
                                             Clients:{" "}
                                             {headerData?.deal?.client_name}
@@ -191,7 +194,7 @@ const SaleRiskAuthorizeHeader = ({
                                 </Popover>
                             </div>
                         </SaleRiskAuthorizeHeaderWrapper>
-                        <div className="col-12 ol-md-2 col-lg-2 d-flex">
+                        <div className="col-12 ol-md-2 col-lg-2 d-flex mt-3 mt-md-0 px-">
                             <div className="col-12 px-0 pl-md-0 pl-lg-3 pr-md-0">
                                 <SaleRiskAuthorizeHeaderButton
                                     onClick={handleOpenAuthorizeModal}
