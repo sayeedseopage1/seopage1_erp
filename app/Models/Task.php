@@ -180,17 +180,40 @@ class Task extends BaseModel
 
         static::updated(function ($item) {
             if ($item->isDirty('board_column_id') && in_array($item->board_column_id, [8, 1]) && $item->getOriginal('board_column_id') === 6) {
-                
-                
-                
-                
-                
-                
                 if(!$item->subtask_id && Auth::user()->role_id == 4 && $lastSubmission = TaskSubmission::where('task_id', $item->id)->orderBy('id', 'desc')->first()){
                     $hoursDifference = Carbon::parse($lastSubmission->created_at)->diffInHours(Carbon::now());
                     
                     // Project Manager Point Distribution ( Reviewing the work )
                     ProjectManagerPointLogic::distribute(8, $item->project_id, $hoursDifference);
+                }
+
+                if(!$item->subtask_id && Auth::user()->role_id == 4){
+                    $lastSubmissionTime = Carbon::parse(TaskSubmission::where('task_id', $item->task_id)->orderBy('id', 'desc')->first()->created_at);
+                    if(!TaskSubmission::whereIn('task_id', $item->task_id)->where('created_at', '<', $lastSubmissionTime->format('Y-m-d H:i'))->count()){
+                        // First Submission
+                        $start_date = $lastSubmissionTime;
+
+                        $countSundays = $start_date->diffInDaysFiltered(function (Carbon $date) {
+                            return $date->dayOfWeek === Carbon::SUNDAY;
+                        }, Carbon::now());
+                        $hoursDifference = Carbon::now()->diffInHours($start_date) - ($countSundays * 24);
+    
+                        $points = (int) ($hoursDifference/24) * Factor::where('criteria_id', 13)->first()->points;
+                        // Project Manager Point Distribution ( Task hold time during assign phase )
+                        ProjectManagerPointLogic::distribute(13, $item->project_id, abs($points) ? 1 : 0, $points);
+
+                    }else{
+                        $start_date = $lastSubmissionTime;
+
+                        $countSundays = $start_date->diffInDaysFiltered(function (Carbon $date) {
+                            return $date->dayOfWeek === Carbon::SUNDAY;
+                        }, Carbon::now());
+                        $hoursDifference = Carbon::now()->diffInHours($start_date) - ($countSundays * 24);
+    
+                        $points = (int) ($hoursDifference/4) * Factor::where('criteria_id', 14)->first()->points;
+                        // Project Manager Point Distribution ( Task hold time during assign phase )
+                        ProjectManagerPointLogic::distribute(14, $item->project_id, abs($points) ? 1 : 0, $points);
+                    }
                 }
             }
         });
