@@ -47,29 +47,6 @@ const QualifiedSalesTableExportButton = ({ filter }) => {
                 },
             };
 
-            // const clientContactForm = (d) => {
-            //     if (d?.toLowerCase() === "submitted") {
-            //         return {
-            //             fill: {
-            //                 fgColor: { rgb: "FF28A745" },
-            //             },
-            //             font: {
-            //                 color: { rgb: "FFFFFFFF" },
-            //             },
-            //         };
-            //     } else {
-            //         return {
-            //             fill: {
-            //                 fgColor: { rgb: "FFFCBD01" },
-            //             },
-            //             font: {
-            //                 color: { rgb: "FF000000" },
-            //             },
-            //         };
-            //     }
-            // };
-
-            // status
             const statusStyle = (row) => {
                 let isPMAccepted = Number(row?.accepted_by_project_manager);
 
@@ -134,13 +111,43 @@ const QualifiedSalesTableExportButton = ({ filter }) => {
                 }
             };
 
+            const ApprovedOrPending = (row) => {
+                if (row) {
+                    return "Approved";
+                } else {
+                    return "Pending";
+                }
+            };
+
+            const ApprovedOrPendingStyle = (row) => {
+                if (row) {
+                    return {
+                        fill: {
+                            fgColor: { rgb: "00AA00" },
+                        },
+                        font: {
+                            color: { rgb: "FFFFFFFF" },
+                        },
+                    };
+                } else {
+                    return {
+                        fill: {
+                            fgColor: { rgb: "1D82F5" },
+                        },
+                        font: {
+                            color: { rgb: "FFFFFFFF" },
+                        },
+                    };
+                }
+            };
+
             // date
             const date = (_data) =>
                 _data ? dayjs(_data).format(`DD-MM-YYYY hh:mm:ss A`) : "--";
 
             let row = [
                 {
-                    value: d["date"] ?? "--",
+                    value: date(d["date"]) ?? "--",
                     style: fieldStyle,
                 },
                 {
@@ -159,7 +166,7 @@ const QualifiedSalesTableExportButton = ({ filter }) => {
                     style: fieldStyle,
                 },
                 {
-                    value: d["amount"] ?? "--",
+                    value: `$${d["amount"]}` ?? "--",
                     style: fieldStyle,
                 },
                 {
@@ -171,20 +178,34 @@ const QualifiedSalesTableExportButton = ({ filter }) => {
                     style: fieldStyle,
                 },
                 {
-                    value: d?.["deal_id"] ?? "--",
+                    value:
+                        `$https://seopage1.net/account/deal-url/${d?.["deal_id"]}` ??
+                        "--",
                     style: fieldStyle,
                 },
                 {
-                    value: d?.authorized_by_sales_lead,
+                    value: ApprovedOrPending(d?.authorized_by_sales_lead),
+                    style: {
+                        ...fieldStyle,
+                        ...ApprovedOrPendingStyle(d?.authorized_by_sales_lead),
+                    },
                 },
 
                 {
-                    value: date(d?.accepted_by_project_manager) ?? "--",
-                    style: fieldStyle,
+                    value: ApprovedOrPending(d?.accepted_by_project_manager),
+                    style: {
+                        ...fieldStyle,
+                        ...ApprovedOrPendingStyle(
+                            d?.accepted_by_project_manager
+                        ),
+                    },
                 },
                 {
-                    value: d?.["authorized_by_admin"] ?? "--",
-                    style: fieldStyle,
+                    value: ApprovedOrPending(d?.["authorized_by_admin"]),
+                    style: {
+                        ...fieldStyle,
+                        ...ApprovedOrPendingStyle(d?.["authorized_by_admin"]),
+                    },
                 },
                 {
                     value: Status(d) ?? "--",
@@ -195,11 +216,10 @@ const QualifiedSalesTableExportButton = ({ filter }) => {
                     },
                 },
                 {
-                    value: d?.["total_points"] ?? "--",
+                    value: d?.["total_points"] ?? "0.00",
 
                     style: {
                         ...fieldStyle,
-                        // ...statusStyle(d?.total_points),
                     },
                 },
             ];
@@ -234,13 +254,16 @@ const QualifiedSalesTableExportButton = ({ filter }) => {
                 { title: "Project Manager" },
                 { title: "Client" },
                 { title: "Closed By" },
-                { title: "Status" },
+                { title: "Department" },
+                { title: "Shift" },
+                { title: "Project Name" },
             ],
             data: [
                 [
                     {
                         value: `--`,
                     },
+
                     {
                         value: `${dayjs(filter?.start_date).format(
                             "MMM-DD-YYYY"
@@ -251,10 +274,12 @@ const QualifiedSalesTableExportButton = ({ filter }) => {
                             },
                         },
                     },
-                    { value: filter?.pm_name ?? "--" },
-                    { value: filter?.client_username ?? "--" },
+                    { value: filter?.pm_Name ?? "--" },
+                    { value: filter?.client_Name ?? "--" },
                     { value: filter?.closed_by_name ?? "--" },
-                    { value: filter?.status_title ?? "--" },
+                    { value: "Web Development" },
+                    { value: "Sales Team" },
+                    { value: filter?.project_Name ?? "--" },
                 ],
             ],
         },
@@ -301,8 +326,7 @@ const QualifiedSalesTableExportButton = ({ filter }) => {
 export default QualifiedSalesTableExportButton;
 
 const ExportButton = styled.button`
-    margin-left: 10px;
-    margin-top: 10px;
+    margin-bottom: 20px;
     width: 140px;
     padding: 6px 10px;
     border-radius: 3px;

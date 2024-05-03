@@ -25,6 +25,7 @@ const QualifiedSales = () => {
         setFilter(f);
     };
 
+    console.log("filter", filter);
     return (
         <div className="d-flex flex-column position-relative">
             {usersIsFetching ? (
@@ -38,9 +39,8 @@ const QualifiedSales = () => {
 
             <QualifiedSalesFilterbar onFilter={handleOnFilter} />
 
-            <QualifiedSalesTableExportButton filter={filter} />
-
             <div className="p-4">
+                <QualifiedSalesTableExportButton filter={filter} />
                 <QualifiedSalesTable
                     data={data || []}
                     users={users || []}

@@ -13,9 +13,9 @@ const qualifiedSalesApiSlice = apiSlice.injectEndpoints({
         // deal export data
         exportableQualifiedSales: build.mutation({
             query: (query) => ({
-                url: `/account/qualified-sales?mode=json&${query}`,
+                // url: `/account/qualified-sales?mode=json&${query}`,
 
-                // url: `/account/export-qualified-sales-data?${query}`,
+                url: `/account/export-qualified-sales-data?${query}`,
                 method: "GET",
             }),
         }),
