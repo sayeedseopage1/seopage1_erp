@@ -1198,7 +1198,7 @@ class SalesRiskPolicyController extends AccountBaseController
 
                 $points += (float) $pointValue;
                 $pointData['projectDeadline']['points'] = $pointValue;
-                $pointData['projectDeadline']['questionAnswer'][] = ['title' => 'What is the deadline for this project?', 'value' => $deadline, 'parent_id' => null];
+                $pointData['projectDeadline']['questionAnswer'][] = ['title' => 'What is the deadline for this project?', 'value' => $deadline . ' Days', 'parent_id' => null];
                 $data ? $pointData['projectDeadline']['questionAnswer'][] = $data : '';
             } else
                 $message[] = 'Project Deadline policy not found.';
