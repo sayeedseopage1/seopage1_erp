@@ -373,6 +373,7 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
     Route::get('/menu/filter/get-employee', [PointsController::class, 'get_employe_by_filter_options']);
     //sales point routes
     Route::post('/point-table-data', [PointsController::class, 'get_point_table_data']);
+    Route::get('export-point-data', [PointsController::class, 'exportPointData']);
     //search bar routes
     Route::get('search-bar-filter', [PointsController::class, 'get_all_search_bar_data']);
     //sales points all routes
