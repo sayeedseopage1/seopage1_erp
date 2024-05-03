@@ -222,9 +222,7 @@ class RevisionCalculatorController extends AccountBaseController
     {
         $startDate = $request->input('start_date', null);
         $endDate = $request->input('end_date', null);
-       // dd($startDate, $$endDate);
 
-        // Check if $startDate and $endDate are not null and valid dates
         if ($startDate && $endDate) {
             if(Auth::user()->role_id == 4)
             {
@@ -392,14 +390,12 @@ class RevisionCalculatorController extends AccountBaseController
             $pm->total_disputes_not_solved= $total_disputes_not_solved;
             $pm->total_disputes= $total_disputes;
             }
-            return response()->json($users, 200);
 
-
-
-
+            return response()->json([
+                'data' => $users,
+                'status' => 200
+            ]);
         }
-
-
     }
 
 
