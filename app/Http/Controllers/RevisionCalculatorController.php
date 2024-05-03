@@ -390,7 +390,6 @@ class RevisionCalculatorController extends AccountBaseController
             $pm->total_disputes_not_solved= $total_disputes_not_solved;
             $pm->total_disputes= $total_disputes;
             }
-
             return response()->json([
                 'data' => $users,
                 'status' => 200
