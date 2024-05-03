@@ -1159,7 +1159,7 @@ class SalesRiskPolicyController extends AccountBaseController
                 foreach ($policies as $item) {
 
                     switch ($item->type) {
-                        case 'lessThandd':
+                        case 'lessThan':
                             if ($deadline < $item->value) {
                                 $pointValue = $item->points;
                                 $policyIdList[$item->id] = $item->id;
