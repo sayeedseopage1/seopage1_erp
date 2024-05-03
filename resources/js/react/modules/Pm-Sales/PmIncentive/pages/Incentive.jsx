@@ -50,7 +50,7 @@ const Incentive = () => {
                                     {/* <IdealVsAchieved /> */}
                                     <StatsInfo />
                                     <UpsaleCrossSale />
-                                    {/* <BonusPoints /> */}
+                                    <BonusPoints />
                                     <FinalIncentiveBanner />
                                 </div>
                             </Switch.Case>

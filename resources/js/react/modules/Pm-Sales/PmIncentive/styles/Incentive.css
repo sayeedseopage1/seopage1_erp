@@ -390,6 +390,29 @@
     gap: 12px;
 }
 
+.secondary_point_banner_bonus {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 15px;
+    padding: 22px;
+    color: #FFFFFF;
+    border-radius: 10px;
+    background-color: #E1F3FF;
+    margin-top: 28px;
+}
+
+.secondary_point_banner_bonus .secondary_point_card_wrapper {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    border-right: 1px solid #AAE3FF;
+    padding-right: 10px;
+}
+
+.secondary_point_banner_bonus .secondary_point_card_wrapper:last-child {
+    border-right: none;
+}
+
 /* ******************************
  upSale/cross sale ends here
 ********************************* */
@@ -453,6 +476,18 @@
 
 /* @@@@@@@@@@@@@@@@@@@@@@  >1201px && <1400px  @@@@@@@@@@@@@@@@@@@@*/
 
+@media only screen and (min-width: 1401px) and (max-width:1600px) {
+
+    /* bonus points  */
+    .secondary_point_banner_bonus {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .secondary_point_banner_bonus .secondary_point_card_wrapper:nth-child(2) {
+        border-right: none;
+    }
+}
+
 @media only screen and (min-width: 1201px) and (max-width: 1400px) {
 
     /* Common starts here */
@@ -489,6 +524,20 @@
     .stats_score_outer {
         width: 100%;
         justify-content: start;
+    }
+
+    /* ideal vs achieved  */
+    .chart_section_container {
+        padding: 20px;
+    }
+
+    /* bonus points  */
+    .secondary_point_banner_bonus {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .secondary_point_banner_bonus .secondary_point_card_wrapper:nth-child(2) {
+        border-right: none;
     }
 
     /* Final incentive value banner */
@@ -553,6 +602,20 @@
     .stats_score_outer {
         width: 100%;
         justify-content: start;
+    }
+
+    /* ideal vs achieved  */
+    .chart_section_container {
+        padding: 20px;
+    }
+
+    /* bonus points  */
+    .secondary_point_banner_bonus {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .secondary_point_banner_bonus .secondary_point_card_wrapper:nth-child(2) {
+        border-right: none;
     }
 
     /* final incentive banner  */
@@ -620,6 +683,20 @@
     .stats_score_outer {
         width: 100%;
         justify-content: start;
+    }
+
+    /* ideal vs achieved  */
+    .chart_section_container {
+        padding: 20px;
+    }
+
+    /* bonus points  */
+    .secondary_point_banner_bonus {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .secondary_point_banner_bonus .secondary_point_card_wrapper:nth-child(2) {
+        border-right: none;
     }
 
     /* final incentive banner  */
@@ -714,6 +791,11 @@
         gap: 15px;
     }
 
+    /* ideal vs achieved  */
+    .chart_section_container {
+        padding: 20px;
+    }
+
     /* upSale/cross sale here */
     .secondary_point_banner {
         padding: 20px;
@@ -727,6 +809,15 @@
 
     .secondary_point_banner .custom_divider {
         display: none;
+    }
+
+    /* bonus points  */
+    .secondary_point_banner_bonus {
+        grid-template-columns: repeat(1, 1fr);
+    }
+
+    .secondary_point_banner_bonus .secondary_point_card_wrapper {
+        border-right: none;
     }
 
     /* final incentive banner  */
@@ -854,11 +945,32 @@
         width: 100%;
         display: flex;
         text-align: center;
+        border-bottom: 1px solid #cfcfcf;
+    }
+
+    .secondary_point_card_wrapper:last-child {
+        border-bottom: 0;
     }
 
     .secondary_point_banner .custom_divider {
         display: none;
     }
+
+    /* ideal vs achieved  */
+    .chart_section_container {
+        padding: 20px;
+    }
+
+    /* bonus points  */
+    .secondary_point_banner_bonus {
+        grid-template-columns: repeat(1, 1fr);
+    }
+
+    .secondary_point_banner_bonus .secondary_point_card_wrapper {
+        border-right: none;
+        justify-content: center;
+    }
+
 
     /* final incentive banner  */
     .final_incentive_banner_wrapper {

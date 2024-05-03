@@ -9,7 +9,7 @@ const BonusPoints = () => {
                     Bonus Points
                 </p>
             </div>
-            <div className='chart_section_container'>
+            <div id='bonus_points' className='chart_section_container'>
                 <div className='chart_parent'>
                     {/* chart 1  */}
                     <div className="secondary_chart_wrapper">

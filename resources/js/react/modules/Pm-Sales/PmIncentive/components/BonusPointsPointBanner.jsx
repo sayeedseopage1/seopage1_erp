@@ -4,7 +4,7 @@ import cashBag from '../assets/cashBag.svg'
 
 const BonusPointsPointBanner = () => {
     return (
-        <div className="secondary_point_banner">
+        <div className="secondary_point_banner_bonus">
             <div className="secondary_point_card_wrapper">
                 <div className="secondary_point_card">
                     <span className="">
@@ -19,7 +19,7 @@ const BonusPointsPointBanner = () => {
                 </div>
             </div>
 
-            <div className="custom_divider"></div>
+            {/* <div className="custom_divider"></div> */}
 
             <div className="secondary_point_card_wrapper">
                 <div className="secondary_point_card">
@@ -37,7 +37,7 @@ const BonusPointsPointBanner = () => {
                 </div>
             </div>
 
-            <div className="custom_divider"></div>
+            {/* <div className="custom_divider"></div> */}
 
             <div className="secondary_point_card_wrapper">
                 <div className="secondary_point_card">
@@ -55,7 +55,7 @@ const BonusPointsPointBanner = () => {
                 </div>
             </div>
 
-            <div className="custom_divider"></div>
+            {/* <div className="custom_divider"></div> */}
 
             <div className="secondary_point_card_wrapper">
                 <div className="secondary_point_card">
