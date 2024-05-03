@@ -796,6 +796,7 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
     Route::get('tasks/get-task-status/{id}', [TaskController::class, 'GetTaskStatus']);
     //task revision
     Route::get('tasks/revisions', [TaskController::class, 'task_revisions']);
+    Route::get('export-task-revisions-data', [TaskController::class, 'exportTaskRevision']);
     //task revision json routes
     Route::get('tasks/get-task-revision/{id}', [TaskController::class, 'GetRevision']);
     //developer daily routes
@@ -1274,6 +1275,7 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
     Route::get('revision-calculator-data/total-dispute/{id}', [RevisionCalculatorController::class, 'TotalDispute']);
     Route::get('revision-calculator-data/dispute-not-resolve/{id}', [RevisionCalculatorController::class, 'DisputeNotResolve']);
     Route::get('revision-calculator-data/pending-issues/{id}', [RevisionCalculatorController::class, 'PendingIssues']);
+    Route::get('export-revision-calculator-data', [RevisionCalculatorController::class, 'exportRevisionCalculatorData']);
 
 
     // Contracts
