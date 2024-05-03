@@ -25,8 +25,7 @@ align-items: flex-start;
 gap: 24px;
 `
 export const ButtonComponent = styled.button`
-/* width:145px;
-height: 52px; */
+min-width: 145px;
 border-radius: 8px;
 border: 1px solid #1492E6;
 background-color: ${(props) => props.color || "transparent"};
@@ -35,6 +34,10 @@ font-size: 14px;
 font-weight: 500;
 color: ${(props) => props.textColor ? "#fff" : "#1492E6"};
 
+@media  (max-width: 1400px) {
+    min-width: 100px;
+  }
+  
 @media (min-width: 769px) and (max-width: 1199px) {
 font-size: 12px;
 padding: 10px 15px;

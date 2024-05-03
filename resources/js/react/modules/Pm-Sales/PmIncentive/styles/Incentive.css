@@ -503,6 +503,8 @@
     /* Filter bar and point card starts here */
     .filter_bar {
         padding: 20px 0px;
+        flex-direction: column;
+        align-items: start;
     }
 
     .filter_bar_left,
