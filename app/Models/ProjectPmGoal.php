@@ -80,6 +80,11 @@ class ProjectPmGoal extends Model
             'code' => 'ERAG',
             'name' => 'Extra Remaining Amount Goal.',
             'type' => 'extra_reaming_amount_gaol',
+        ],
+        'upsell' => [
+            'code' => 'OMMR',
+            'name' => 'At least 1 more milestone released',
+            'type' => 'one_more_milestone_released',
         ]
     ];
 }
