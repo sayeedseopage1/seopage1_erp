@@ -51,7 +51,7 @@ const Incentive = () => {
                                     <StatsInfo />
                                     {/* <UpsaleCrossSale /> */}
                                     {/* <BonusPoints /> */}
-                                    {/* <FinalIncentiveBanner /> */}
+                                    <FinalIncentiveBanner />
                                 </div>
                             </Switch.Case>
                             <Switch.Case condition={filterByPeriod == "quarterly"}>
