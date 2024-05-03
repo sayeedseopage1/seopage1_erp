@@ -13,21 +13,21 @@ const UpsaleCrossSale = () => {
                 </p>
             </div>
             <div className='chart_section_container'>
-                {
+                {/* {
                     upSaleCrossSaleChartData?.map(item => (
                         <div key={item?.id} className="chart_parent">
-                            {/* Ideal */}
+
                             <div className="secondary_chart_wrapper">
                                 <IncentiveBarChart chartData={item?.ideal} />
                             </div>
-                            {/* Achieved */}
+
                             <div className="secondary_chart_wrapper">
                                 <IncentiveThickChart chartData={item?.achieved} />
                             </div>
                         </div>
 
                     ))
-                }
+                } */}
 
                 <UpsaleCrossSalePointBanner />
             </div>
