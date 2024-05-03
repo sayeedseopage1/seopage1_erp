@@ -37,7 +37,7 @@ color: ${(props) => props.textColor ? "#fff" : "#1492E6"};
 @media  (max-width: 1400px) {
     min-width: 100px;
   }
-  
+
 @media (min-width: 769px) and (max-width: 1199px) {
 font-size: 12px;
 padding: 10px 15px;
@@ -51,6 +51,14 @@ white-space: nowrap;
 overflow: hidden;
 text-overflow: ellipsis;
 max-width: 100px;
+  }
+
+@media (max-width: 576px) {
+    min-width: 120px;
+  }
+
+@media (max-width:414px) {
+    min-width: 100px;
   }
 `
 

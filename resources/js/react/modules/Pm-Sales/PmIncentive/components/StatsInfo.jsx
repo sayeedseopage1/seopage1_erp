@@ -18,7 +18,7 @@ const StatsInfo = () => {
             </div>
             {/* point score */}
             <div className='stats_score_outer'>
-                <div className="d-flex flex-column align-items-start" style={{ gap: "28px" }}>
+                <div className="stats_score_inner">
                     {/* regular point  */}
                     <div className="stats_score_child">
                         <span className="">
