@@ -202,8 +202,69 @@ class PointsController extends AccountBaseController
         return response()->json($data);
     }
 
+    public function exportPointData(Request $request)
+    {
+        $startDate = $request->start_date ?? null;
+        $endDate = $request->end_date ?? null;
 
+        $data = CashPoint::select('cash_points.*');
 
+        if ($request->team_id != '') 
+        {
+            $team = Seopage1Team::where('id', $request->team_id)->get();
+            $user_list = [];
+            foreach ($team as $key => $value) {
+                $users = explode(',', $value->members);
+                foreach ($users as $user) {
+                    if ($user != '') {
+                        array_push($user_list, $user);
+                    }
+                }
+            }
+            $data = $data->whereIn('cash_points.user_id', $user_list);
+        }
+        if ($request->project_id != '') {
+            $data = $data->where('cash_points.project_id', $request->project_id);
+        }
+        if ($request->user_id != '') {
+            $data = $data->where('cash_points.user_id', $request->user_id);
+           
+        }
+        if ($startDate != '') {
+            $data = $data->where(\DB::raw('DATE(cash_points.created_at)'), '>=', Carbon::parse($startDate)->format('Y-m-d'));
+        }
+
+        if ($endDate != '') {
+            $data = $data->where(\DB::raw('DATE(cash_points.created_at)'), '<=', Carbon::parse($endDate)->format('Y-m-d'));
+        }
+        if ($request->client_id != '') {
+            $project= Project::where('client_id',$request->client_id)->first();
+            $data = $data->where('cash_points.project_id', $project->id);
+        }
+        if ($request->bonus_type != '') {
+            if($request->bonus_type == 'Bonus'){
+                $data = $data->where('cash_points.project_id',null);
+            }else{
+                $data = $data->where('cash_points.project_id', '!=',null);
+            }
+            if ($request->bonus_type == 'Authorization') {
+                $data = $data->where('cash_points.bonus_type', 'Authorization Bonus')->where('cash_points.bonus_type','!=',null);
+            }
+        }
+
+        if(Auth::user()->role_id == 1)
+        {
+            $data = $data->orderBy('cash_points.id', 'desc')->where('cash_points.points','!=',0)->orderBy('cash_points.id', 'desc')->get();
+        }elseif(Auth::user()->role_id == 8 ||Auth::user()->role_id == 7 )
+        {
+            $data = $data->where('cash_points.user_id',Auth::id())->where('cash_points.points','!=',0)->orderBy('cash_points.id', 'desc')->get();
+
+        } 
+        return response()->json([
+            'data' => $data,
+            'status' => 200
+        ]);
+    }
    
 
     public function get_all_search_bar_data()
