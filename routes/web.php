@@ -913,6 +913,7 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
     Route::get('tasks/get-sub-tasks/report-issues/{id}', [TaskController::class, 'get_sub_tasks_report_issues']);
     //subtasks table data
     Route::get('tasks/get-subtasks', [TaskController::class, 'get_subtasks'])->name('get-subtasks');
+    Route::get('export-subtask-data', [TaskController::class, 'exportSubTaskData']);
     //get tasks data
     Route::get('tasks/get-tasks', [TaskController::class, 'get_tasks'])->name('get-tasks');
     Route::get('export-task-data', [TaskController::class, 'exportTaskData']);
