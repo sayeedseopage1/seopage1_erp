@@ -206,6 +206,7 @@ class EvaluationController extends AccountBaseController
 
         $employee_evaluation = EmployeeEvaluation::where('user_id',$request->user_id)->first();
         $employee_evaluation->ld_submission_status = 1;
+        $employee_evaluation->lead_dev_id = Auth::user()->id;
         $employee_evaluation->lead_dev_avg_rating = $average_rating;
         $employee_evaluation->save();
 
@@ -313,7 +314,7 @@ class EvaluationController extends AccountBaseController
             $action->authorized_at= Carbon::now();
             $action->past_status = 1;
             $action->save();
-            $authorize_by= User::where('id',$action->authorized_by)->first();
+            $lead_dev = User::where('id',$evaluation->lead_dev_id)->first();
             $teamLead= User::where('id',$evaluation->team_lead_id)->first();
             $dev= User::where('id',$evaluation->user_id)->first();
                 
@@ -322,8 +323,8 @@ class EvaluationController extends AccountBaseController
             $past_action->code = $action->code;
             $past_action->serial = $action->serial;
             $past_action->action_id = $action->id;
-            $past_action->heading= 'Team Leader '.$teamLead->name.' has reviewed Lead Developer '.$authorize_by->name.' Evaluations on New Developer '.$dev->name.'!';
-            $past_action->message = 'Team Leader <a href="'.route('employees.show',$teamLead->id).'">'.$teamLead->name.'</a> has reviewed Lead Developer <a href="'.route('employees.show',$authorize_by->id).'">'.$authorize_by->name.'</a> Evaluations on New Developer <a href="'.route('employees.show',$dev->id).'">'.$dev->name.'</a>!';
+            $past_action->heading= 'Team Leader '.$teamLead->name.' has reviewed Lead Developer '.$lead_dev->name.' Evaluations on New Developer '.$dev->name.'!';
+            $past_action->message = 'Team Leader <a href="'.route('employees.show',$teamLead->id).'">'.$teamLead->name.'</a> has reviewed Lead Developer <a href="'.route('employees.show',$lead_dev->id).'">'.$lead_dev->name.'</a> Evaluations on New Developer <a href="'.route('employees.show',$dev->id).'">'.$dev->name.'</a>!';
             $past_action->timeframe = $action->timeframe;
             $past_action->authorization_for = $action->authorization_for;
             $past_action->authorized_by = $action->authorized_by;

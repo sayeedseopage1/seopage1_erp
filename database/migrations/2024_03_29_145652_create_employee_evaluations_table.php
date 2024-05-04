@@ -30,6 +30,7 @@ return new class extends Migration
             $table->string('accept_rejected')->nullable();
             $table->dateTime('pending_action_sending_time')->nullable();
             $table->integer('ld_submission_status')->default(0);
+            $table->integer('lead_dev_id')->nullable();
             $table->integer('team_lead_id')->nullable();
             $table->integer('lead_dev_acknowledged')->default(0);
             $table->integer('team_lead_acknowledged')->default(0);
