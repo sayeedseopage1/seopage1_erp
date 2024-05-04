@@ -164,7 +164,7 @@ class Task extends BaseModel
                     // Project Manager Point Distribution ( Task hold time during assign phase )
                     // ProjectManagerPointLogic::distribute(12, $item->project_id, abs($points) ? 1 : 0, $points);
                 }else{
-                    $start_date = Carbon::createFromFormat('Y-m-d H:i:s', $project->deal->released_at);
+                    $start_date = Carbon::createFromFormat('Y-m-d H:i:s', $project->project_acceptance_time ?? now());
                     $countSundays = $start_date->diffInDaysFiltered(function (Carbon $date) {
                         return $date->dayOfWeek === Carbon::SUNDAY;
                     }, Carbon::now());
@@ -199,7 +199,6 @@ class Task extends BaseModel
                         
                         // Project Manager Point Distribution ( Task hold time during submission phase )
                         ProjectManagerPointLogic::distribute(13, $item->project_id, abs($points) ? 1 : 0, $points);
-
                     }else{
                         $start_date = $lastSubmissionTime;
                         $countSundays = $start_date->diffInDaysFiltered(function (Carbon $date) {
