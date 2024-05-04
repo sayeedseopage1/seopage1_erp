@@ -148,13 +148,6 @@
     background-color: #F2F9FE;
 }
 
-/* .chart_row_wrapper {
-    display: flex;
-    flex-direction: column;
-    gap: 28px;
-    width: 50%;
-} */
-
 .chart_wrapper {
     background-color: #ffffff;
     border-radius: 15px;
@@ -197,7 +190,11 @@
     gap: 8px;
     position: absolute;
     top: 44%;
-    left: -30%;
+    left: -28%;
+}
+
+#bonus_points .chart_parent:first-child .y_axis_arrow {
+    left: -25%
 }
 
 .chart_axis_title {
@@ -467,3 +464,154 @@
 /* ******************************
   Final incentive value banner ends here
 ********************************* */
+
+@media only screen and (min-width: 1601px) and (max-width: 1700px) {
+    .y_axis_arrow {
+        left: -33%;
+    }
+
+    #bonus_points .chart_parent:first-child .y_axis_arrow {
+        left: -30%
+    }
+}
+
+@media only screen and (min-width: 1501px) and (max-width: 1600px) {
+    .y_axis_arrow {
+        left: -36%;
+    }
+
+    #bonus_points .chart_parent:first-child .y_axis_arrow {
+        left: -33%
+    }
+
+    .chart_axis_icon {
+        width: 18%;
+    }
+}
+
+@media only screen and (min-width: 1401px) and (max-width: 1500px) {
+    .y_axis_arrow {
+        top: 38%;
+        left: -40%;
+    }
+
+    #bonus_points .chart_parent:first-child .y_axis_arrow {
+        left: -37%
+    }
+
+    .chart_axis_icon {
+        width: 18%;
+    }
+}
+
+@media only screen and (min-width: 1301px) and (max-width: 1400px) {
+    .y_axis_arrow {
+        top: 38%;
+        left: -44%;
+    }
+
+    #bonus_points .chart_parent:first-child .y_axis_arrow {
+        left: -41%
+    }
+
+    .chart_axis_icon {
+        width: 18%;
+    }
+}
+
+@media only screen and (min-width: 1201px) and (max-width: 1300px) {
+    .y_axis_arrow {
+        top: 38%;
+        left: -49%;
+    }
+
+    #bonus_points .chart_parent:first-child .y_axis_arrow {
+        left: -46%
+    }
+
+    .chart_axis_icon {
+        width: 15%;
+    }
+}
+
+@media only screen and (min-width:993px) and (max-width: 1200px) {
+    .chart_parent {
+        flex-direction: column;
+    }
+
+    .secondary_chart_wrapper,
+    .chart_wrapper {
+        width: 100%;
+    }
+
+    .y_axis_arrow {
+        display: none;
+    }
+
+    .chart_axis_icon {
+        width: 18%;
+    }
+}
+
+@media only screen and (min-width:769px) and (max-width: 992px) {
+    .chart_parent {
+        flex-direction: column;
+    }
+
+    .secondary_chart_wrapper,
+    .chart_wrapper {
+        width: 100%;
+    }
+
+    .y_axis_arrow {
+        display: none;
+    }
+
+    .chart_axis_icon {
+        width: 18%;
+    }
+}
+
+@media only screen and (min-width:577px) and (max-width: 768px) {
+    .chart_parent {
+        flex-direction: column;
+    }
+
+    .secondary_chart_wrapper,
+    .chart_wrapper {
+        width: 100%;
+    }
+
+    .y_axis_arrow {
+        display: none;
+    }
+
+    .chart_axis_icon {
+        width: 18%;
+    }
+}
+
+@media only screen and (max-width:578px) {
+
+    .chart_parent {
+        flex-direction: column;
+    }
+
+    .secondary_chart_wrapper,
+    .chart_wrapper {
+        width: 100%;
+        padding: 10px;
+    }
+
+    .y_axis_arrow {
+        display: none;
+    }
+
+    .x_axis_arrow {
+        display: none;
+    }
+
+    .chart_axis_icon {
+        width: 18%;
+    }
+}

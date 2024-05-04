@@ -55,7 +55,7 @@ const IncentiveThickChart = ({ chartData }) => {
         title: {
             text: chartData.title,
             style: {
-                fontSize: 14,
+                fontSize: 10,
                 fontWeight: 500,
                 fontFamily: "Poppins",
                 color: "#1492E6",
@@ -86,7 +86,7 @@ const IncentiveThickChart = ({ chartData }) => {
                     return Math.round(g);
                 },
                 style: {
-                    fontSize: "14",
+                    fontSize: "10",
                     fontFamily: "poppins",
                     fontWeight: 500,
                     colors: ["#000000"]

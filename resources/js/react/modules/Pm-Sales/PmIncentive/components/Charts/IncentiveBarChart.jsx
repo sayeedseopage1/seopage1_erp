@@ -37,7 +37,7 @@ const IncentiveBarChart = ({ chartData }) => {
                     return `${val}`;
                 },
                 style: {
-                    fontSize: "14",
+                    fontSize: "10",
                     fontFamily: "poppins",
                     fontWeight: 500,
                     colors: ["#000000"],
@@ -50,7 +50,7 @@ const IncentiveBarChart = ({ chartData }) => {
                     return `${val}%`;
                 },
                 style: {
-                    fontSize: "14",
+                    fontSize: "10",
                     fontFamily: "poppins",
                     fontWeight: 500,
                     colors: ["#000000"],

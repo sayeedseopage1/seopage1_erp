@@ -1,5 +1,8 @@
 import React from 'react';
 import BonusPointsPointBanner from './BonusPointsPointBanner';
+import IncentiveBarChart from './Charts/IncentiveBarChart';
+import IncentiveThickChart from './Charts/IncentiveThickChart';
+import { bonusPointsChartData } from '../constants';
 
 const BonusPoints = () => {
     return (
@@ -10,16 +13,21 @@ const BonusPoints = () => {
                 </p>
             </div>
             <div id='bonus_points' className='chart_section_container'>
-                <div className='chart_parent'>
-                    {/* chart 1  */}
-                    <div className="secondary_chart_wrapper">
-                        Chart 1
-                    </div>
-                    {/* chart 1  */}
-                    <div className="secondary_chart_wrapper">
-                        Chart 1
-                    </div>
-                </div>
+                {
+                    bonusPointsChartData?.map(item => (
+                        <div key={item?.id} className="chart_parent">
+
+                            <div className="secondary_chart_wrapper">
+                                <IncentiveBarChart chartData={item?.ideal} />
+                            </div>
+
+                            <div className="secondary_chart_wrapper">
+                                <IncentiveThickChart chartData={item?.achieved} />
+                            </div>
+                        </div>
+
+                    ))
+                }
                 <BonusPointsPointBanner />
             </div>
         </>

@@ -621,6 +621,181 @@ export const upSaleCrossSaleChartData = [
     },
 ];
 
+export const bonusPointsChartData = [
+    {
+        id: 1,
+        title: "Bonus Points Based on Released Amount",
+        ideal: {
+            id: 1,
+            title: "Bonus Points Based on Released Amount",
+            yTitle: "Bonus Points",
+            chartTag: "Ideal",
+            series: [
+                {
+                    name: "Bonus Points",
+                    data: [10, 20, 40, 60, 80, 120],
+                },
+            ],
+            categories: [
+                "0-6000",
+                "6001-8000",
+                "8001-10000",
+                "10001-12000",
+                "12001-14000",
+                "14001-Higher",
+            ],
+            range: [
+                {
+                    from: 0,
+                    to: 20,
+                    color: "#FFA3A3",
+                },
+                {
+                    from: 20,
+                    to: 40,
+                    color: "#09F",
+                },
+                {
+                    from: 40,
+                    to: 60,
+                    color: "#FEBC05",
+                },
+                {
+                    from: 60,
+                    to: 80,
+                    color: "#09F",
+                },
+                {
+                    from: 80,
+                    to: 100,
+                    color: "#14B96A",
+                },
+                {
+                    from: 100,
+                    to: 120,
+                    color: "#14B96A",
+                },
+            ],
+        },
+        achieved: {
+            id: 1,
+            title: "Bonus Points Based on Released Amount",
+            yTitle: "Bonus Points",
+            chartTag: "Achieved",
+            incentive: 60,
+            ratio: 11000,
+            range: [
+                {
+                    from: 0,
+                    to: 40,
+                    color: "#FFA3A3",
+                },
+                {
+                    from: 41,
+                    to: 50,
+                    color: "#FEBC05",
+                },
+                {
+                    from: 51,
+                    to: 80,
+                    color: "#09F",
+                },
+                {
+                    from: 81,
+                    to: 100,
+                    color: "#14B96A",
+                },
+            ],
+        },
+    },
+    {
+        id: 2,
+        title: "Unreleased Payment Amount",
+        ideal: {
+            id: 1,
+            title: "Unreleased Payment Amount",
+            yTitle: "Incentive Percentage ",
+            chartTag: "Ideal",
+            series: [
+                {
+                    name: "Bonus Points",
+                    data: [10, 20, 40, 60, 80, 120],
+                },
+            ],
+            categories: [
+                "0-6000",
+                "6001-8000",
+                "8001-10000",
+                "10001-12000",
+                "12001-14000",
+                "14001-Higher",
+            ],
+            range: [
+                {
+                    from: 0,
+                    to: 20,
+                    color: "#FFA3A3",
+                },
+                {
+                    from: 20,
+                    to: 40,
+                    color: "#09F",
+                },
+                {
+                    from: 40,
+                    to: 60,
+                    color: "#FEBC05",
+                },
+                {
+                    from: 60,
+                    to: 80,
+                    color: "#09F",
+                },
+                {
+                    from: 80,
+                    to: 100,
+                    color: "#14B96A",
+                },
+                {
+                    from: 100,
+                    to: 120,
+                    color: "#14B96A",
+                },
+            ],
+        },
+        achieved: {
+            id: 1,
+            title: "Unreleased Payment Amount",
+            yTitle: "Incentive Percentage ",
+            chartTag: "Achieved",
+            incentive: 60,
+            ratio: 11000,
+            range: [
+                {
+                    from: 0,
+                    to: 40,
+                    color: "#FFA3A3",
+                },
+                {
+                    from: 41,
+                    to: 50,
+                    color: "#FEBC05",
+                },
+                {
+                    from: 51,
+                    to: 80,
+                    color: "#09F",
+                },
+                {
+                    from: 81,
+                    to: 100,
+                    color: "#14B96A",
+                },
+            ],
+        },
+    },
+];
+
 export const heldAmountsDataTableHeaders = [
     {
         key: "month",
