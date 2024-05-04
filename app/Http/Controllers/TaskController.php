@@ -5807,7 +5807,7 @@ class TaskController extends AccountBaseController
             $dispute->raised_by = $this->get_user($dispute->raised_by, false);
             $conversation = DB::table('task_dispute_questions')->where('dispute_id', $dispute->id)->get();
             $dispute->conversations = $conversation ?? [];
-            $dispute->task = get_task($dispute->task_id);
+            $dispute->task = $this->get_task($dispute->task_id);
             $dispute->client = $this->get_user($dispute->client_id, true);
             $dispute->project_manager = $this->get_user($dispute->pm_id, false);
             $dispute->sales_person = $this->get_user($dispute->deal_added_by, false);
@@ -5823,6 +5823,111 @@ class TaskController extends AccountBaseController
         });
 
         return response()->json($disputes, 200);
+    }
+    public function exportTaskDisput(Request $request)
+    {
+        $logged_user = Auth::user();
+
+        $start_date = $request->startDate ?? null;
+        $end_date = $request->endDate ?? null;
+        $task_id = $request->task_id ?? null;
+        $project_id = $request->project_id ?? null;
+        $dispute_id = $request->dispute_id ?? null;
+        $raised_by = $request->raised_by ?? null;
+        $raised_against = $request->raised_against ?? null;
+        $client_id =   $request->client ?? null;
+
+        $disputes = DB::table('task_revision_disputes as disputes')
+            ->leftJoin('task_revisions as revision', 'disputes.revision_id', 'revision.id')
+            ->leftJoin('projects', 'disputes.project_id', 'projects.id')
+            ->leftJoin('deals', 'projects.deal_id', 'deals.id')
+            ->select(
+                'disputes.*',
+                'revision.*',
+                'disputes.id as id',
+                'disputes.created_at as dispute_created_at',
+                'disputes.updated_at as dispute_updated_at',
+                'revision.id as revision_id',
+                'revision.created_at as revision_created_at',
+                'revision.updated_at as revision_updated_at',
+                'revision.raised_by_percent as revision_raised_by_percent',
+                'revision.raised_against_percent as revision_raised_against_percent',
+                'disputes.raised_by_percent as raised_by_percent',
+                'disputes.raised_against_percent as raised_against_percent',
+                'projects.id as project_id',
+                'projects.project_name as project_name',
+                'projects.client_id as client_id',
+                'projects.pm_id as pm_id',
+                'projects.deal_id as project_deal_id',
+                'deals.added_by as deal_added_by'
+            )
+            ->groupBy('revision.id')
+            ->where(function ($query) use ($task_id, $project_id, $dispute_id, $raised_by, $raised_against, $client_id, $start_date, $end_date, $logged_user) {
+                if ($task_id) {
+                    $query->where('disputes.task_id', $task_id);
+                }
+
+                if (collect([1, 8])->contains($logged_user->role_id)) {
+                    if ($raised_by) {
+                        $query->where('disputes.raised_by', $raised_by);
+                    }
+
+                    if ($raised_against) {
+                        $query->where('disputes.raised_against', $raised_against);
+                    }
+                } else {
+                    $query->where('disputes.raised_against', $logged_user->id)
+                        ->orWhere('disputes.raised_by', $logged_user->id);
+                }
+
+                if ($client_id) {
+                    $query->where('projects.client_id', $client_id);
+                }
+
+                if ($project_id) {
+                    $query->where('disputes.project_id', $project_id);
+                }
+
+                if ($dispute_id) {
+                    $query->where('disputes.id', $dispute_id);
+                }
+
+                if ($start_date) {
+                    $query->whereDate('disputes.created_at', '>=', Carbon::create($start_date)->format('Y-m-d'));
+                }
+
+                if ($end_date) {
+                    $query->whereDate('disputes.created_at', '<=', Carbon::create($end_date)->format('Y-m-d'));
+                }
+            })
+            
+            ->get();
+
+
+        $disputes->each(function ($dispute) {
+            $dispute->raised_against = $this->get_user($dispute->raised_against, false);
+            $dispute->raised_by = $this->get_user($dispute->raised_by, false);
+            $conversation = DB::table('task_dispute_questions')->where('dispute_id', $dispute->id)->get();
+            $dispute->conversations = $conversation ?? [];
+            $dispute->task = $this->get_task($dispute->task_id);
+            $dispute->client = $this->get_user($dispute->client_id, true);
+            $dispute->project_manager = $this->get_user($dispute->pm_id, false);
+            $dispute->sales_person = $this->get_user($dispute->deal_added_by, false);
+            if ($dispute->resolved_by) {
+                $dispute->resolved_by = $this->get_user($dispute->resolved_by, false);
+            }
+            if ($dispute->winner) {
+                $dispute->winner = $this->get_user($dispute->winner, false);
+            }
+            if ($dispute->authorized_by) {
+                $dispute->authorized_by = $this->get_user($dispute->authorized_by, false);
+            }
+        });
+
+        return response()->json([
+            'data' => $disputes,
+            'status' => 200
+        ]);
     }
 
     public function get_disputes(Request $request)
@@ -6338,7 +6443,7 @@ class TaskController extends AccountBaseController
 
             $task->lead_developer = $lead_developer ?? null;
             $task->developer = $developer ?? null;
-            $task->parent_task = get_task($subtask->task_id); 
+            $task->parent_task = $this->get_task($subtask->task_id); 
 
             return $task;
         }else {

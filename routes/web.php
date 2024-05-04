@@ -970,6 +970,7 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
     Route::get('independent-task-clients', [IndependentTaskController::class, 'clients'] );
     /******* TASK DISPUTE ******** */
     Route::get('task-disputes', [TaskController::class, 'get_disputes'])->name('task-disputes');
+    Route::get('export-task-dispute', [TaskController::class, 'exportTaskDisput']);
     Route::post('task-dispute-question', [TaskController::class, 'store_dispute_question'])->name('task-dispute-question');
     Route::put('task-dispute-question-answer', [TaskController::class, 'update_dispute_question_with_answer'])->name('task-dispute-question-answer');
     Route::put('task-dispute-submit-to-auth', [TaskController::class, 'dispute_send_for_authorization'])->name('task-dispute-submit-to-auth');
