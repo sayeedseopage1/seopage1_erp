@@ -10974,7 +10974,7 @@ var SubTaskForm = function SubTaskForm(_ref) {
                 Swal.fire({
                   position: "center",
                   icon: "error",
-                  title: "Please fill up all required fields",
+                  title: "SubTask title should be unique on this project",
                   showConfirmButton: true
                 });
               }
@@ -11169,7 +11169,7 @@ var SubTaskForm = function SubTaskForm(_ref) {
               style: {
                 color: "red"
               },
-              children: "You cannot assign this task to ".concat(assignedTo === null || assignedTo === void 0 ? void 0 : assignedTo.name, "  because ").concat((assignedTo === null || assignedTo === void 0 ? void 0 : assignedTo.gender) === "male" ? "He " : "She ", " has more than 10 Submittable tasks.")
+              children: "You cannot assign this task to ".concat(assignedTo === null || assignedTo === void 0 ? void 0 : assignedTo.name, "  because ").concat((assignedTo === null || assignedTo === void 0 ? void 0 : assignedTo.gender) === "male" ? "He " : "She ", " has more than 4 Submittable tasks.")
             })]
           }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_21__.jsxs)("div", {
             className: "col-12 col-md-6",
@@ -14269,7 +14269,7 @@ var ExpiredTimeModalForNewEmployee = function ExpiredTimeModalForNewEmployee(_re
     timeLeft = _ref.timeLeft,
     setTimeLeft = _ref.setTimeLeft,
     timerStatusForWarningModal = _ref.timerStatusForWarningModal;
-  var _useState = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false),
+  var _useState = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(true),
     _useState2 = _slicedToArray(_useState, 2),
     toggleModal = _useState2[0],
     setToggleModal = _useState2[1];
@@ -14297,9 +14297,10 @@ var ExpiredTimeModalForNewEmployee = function ExpiredTimeModalForNewEmployee(_re
       return clearInterval(interval);
     };
   }, []);
+  // console.log("show warning modal", showExpirationWarningModal);
   // console.log("time left", timeLeft);
-  // console.log("toggle modal", toggleModal);
-  // console.log("time left less then 3600000", timeLeft <= 3600000);
+  // console.log(" toggle modal warning modal", toggleModal);
+  // console.log("time left less then 4200 seconds", timeLeft <= 4200);
   // console.log("time left greater then 0", timeLeft > 0);
   // console.log("timer status for warning", timerStatusForWarningModal);
 
@@ -14309,7 +14310,7 @@ var ExpiredTimeModalForNewEmployee = function ExpiredTimeModalForNewEmployee(_re
     timeLeft > 0 && timerStatusForWarningModal) {
       setShowExpirationWarningModal(true);
     }
-  }, [toggleModal]);
+  }, [toggleModal, timeLeft]);
   var closeModal = function closeModal() {
     setShowExpirationWarningModal(false);
     setToggleModal(false);
@@ -16326,7 +16327,6 @@ var DeveloperRevisionView = function DeveloperRevisionView(_ref) {
       }
     } else return "Revision By Lead Developer";
   };
-  console.log("revision", revision);
   return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), {
     children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsxs)("div", {
       className: "sp1_single_task--modal-panel",
@@ -16921,7 +16921,7 @@ var RevisionView = function RevisionView(_ref) {
   var getComment = function getComment() {
     if (auth !== null && auth !== void 0 && auth.isHasRolePermission(6) || auth !== null && auth !== void 0 && auth.isHasRolePermission(13)) {
       return revision === null || revision === void 0 ? void 0 : revision.pm_comment;
-    } else if (auth !== null && auth !== void 0 && auth.isHasRolePermission(9) || auth !== null && auth !== void 0 && auth.isHasRolePermission(10) || auth !== null && auth !== void 0 && auth.isHasRolePermission(5)) {
+    } else if (auth !== null && auth !== void 0 && auth.isHasRolePermission(9) || auth !== null && auth !== void 0 && auth.isHasRolePermission(10) || auth !== null && auth !== void 0 && auth.isHasRolePermission(14) || auth !== null && auth !== void 0 && auth.isHasRolePermission(5)) {
       if ((revision === null || revision === void 0 ? void 0 : revision.revision_status) === "Project Manager Revision" || (revision === null || revision === void 0 ? void 0 : revision.revision_status) === "Client Has Revision") {
         return revision === null || revision === void 0 ? void 0 : revision.pm_comment;
       } else {

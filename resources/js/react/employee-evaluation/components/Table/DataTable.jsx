@@ -32,6 +32,7 @@ import EmptyTable from "../../../global/EmptyTable";
 
 const DataTable = ({
     data,
+    mainData,
     columns = [],
     isLoading,
     isFetching,
@@ -183,8 +184,8 @@ const DataTable = ({
 
                     <Flex>
                         <span>
-                            Showing {data?.from} to {data?.to} of {data?.total}{" "}
-                            entries
+                            Showing {mainData?.from} to {mainData?.to} of{" "}
+                            {mainData?.total} entries
                         </span>
 
                         <ReactPaginate
@@ -194,7 +195,7 @@ const DataTable = ({
                             nextLabel="Next"
                             pageRangeDisplayed={3}
                             marginPagesDisplayed={1}
-                            pageCount={data?.last_page ?? 1}
+                            pageCount={mainData?.last_page ?? 1}
                             renderOnZeroPageCount={null}
                             containerClassName={styles.containerClassName}
                             pageLinkClassName={styles.pageLinkClassName}
