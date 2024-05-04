@@ -915,6 +915,7 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
     Route::get('tasks/get-subtasks', [TaskController::class, 'get_subtasks'])->name('get-subtasks');
     //get tasks data
     Route::get('tasks/get-tasks', [TaskController::class, 'get_tasks'])->name('get-tasks');
+    Route::get('export-task-data', [TaskController::class, 'exportTaskData']);
     //developers today task data
     Route::get('tasks/get-today-tasks/{id}', [TaskController::class, 'get_today_tasks']);
     //developer daily submissions
