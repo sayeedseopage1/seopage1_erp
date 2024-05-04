@@ -109,6 +109,18 @@ const IncentiveBarChart = ({ chartData }) => {
                 stops: [0, 100],
             },
         },
+        responsive: [
+            {
+                breakpoint: 1600,
+                options: {
+                    plotOptions: {
+                        bar: {
+                            borderRadius: 2,
+                        },
+                    }
+                }
+            }
+        ]
     };
 
     return (

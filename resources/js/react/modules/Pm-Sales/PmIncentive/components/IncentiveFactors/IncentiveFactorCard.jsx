@@ -8,7 +8,7 @@ const IncentiveFactorCard = ({ item }) => {
             </div>
             <ul className='incentive_factors_card_list'>
                 {
-                    item?.conditions.map((condition) => <li>{condition}</li>)
+                    item?.conditions.map((condition, ind) => <li key={ind}>{condition}</li>)
                 }
             </ul>
 

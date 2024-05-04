@@ -13,7 +13,7 @@ const UpsaleCrossSale = () => {
                 </p>
             </div>
             <div className='chart_section_container'>
-                {/* {
+                {
                     upSaleCrossSaleChartData?.map(item => (
                         <div key={item?.id} className="chart_parent">
 
@@ -27,7 +27,7 @@ const UpsaleCrossSale = () => {
                         </div>
 
                     ))
-                } */}
+                }
 
                 <UpsaleCrossSalePointBanner />
             </div>
