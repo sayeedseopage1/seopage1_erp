@@ -39,9 +39,23 @@ export const PmGoalsTableColumns = [
         accessorKey: "duration",
         cell: ({ row }) => {
             const data = row?.original;
+            const handleDuration = () => {
+                if(data?.duration) {
+                    if(data?.duration?.includes(".")) {
+                        const getDays = data?.duration?.split(".")[0]
+                        const getHours = 24 / getDays * data?.duration?.split(".")[1]
+                        return `${getDays} Days ${getHours} Hours`
+                    } else {
+                        return `${data?.duration} Days`
+                    }
+                }  else {
+                    return "--"
+                
+                }
+            }
             return (
                 <span >
-                    {`${data?.duration} Days` ?? "--"}
+                    {handleDuration()}
                 </span>
             )
         }
