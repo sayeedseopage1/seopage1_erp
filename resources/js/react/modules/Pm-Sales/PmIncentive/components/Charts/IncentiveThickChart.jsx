@@ -55,7 +55,7 @@ const IncentiveThickChart = ({ chartData }) => {
         title: {
             text: chartData.title,
             style: {
-                fontSize: 10,
+                fontSize: 14,
                 fontWeight: 500,
                 fontFamily: "Poppins",
                 color: "#1492E6",
@@ -112,7 +112,7 @@ const IncentiveThickChart = ({ chartData }) => {
             labels: {
                 formatter: (val) => `${val}%`,
                 style: {
-                    fontSize: "14",
+                    fontSize: "10",
                     fontFamily: "poppins",
                     fontWeight: 500,
                     colors: ["#000000"]
