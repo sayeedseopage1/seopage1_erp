@@ -1155,6 +1155,7 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
     /* PM PROJECT STATUS */
     Route::resource('project-status',ProjectStatusController::class);
     Route::get('get-project-status-date', [ProjectStatusController::class, 'allProjectStatus']);
+    Route::get('export-project-status-data', [ProjectStatusController::class, 'exportProjectStatus']);
     Route::get('get-pm-goal-date/{id}', [ProjectStatusController::class, 'allProjectPmGoal']);
     Route::get('project-status-calendar', [ProjectStatusController::class, 'projectStatusCalendar'])->name('project-status-calendar');
     Route::get('calendar-show/{id}', [ProjectStatusController::class, 'calendarShow'])->name('calendar.show');
