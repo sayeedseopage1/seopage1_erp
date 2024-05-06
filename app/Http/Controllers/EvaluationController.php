@@ -162,7 +162,10 @@ class EvaluationController extends AccountBaseController
 
     public function getEmployeeTask($id)
     {
-        $data = EmployeeEvaluationTask::where('user_id',$id)->get();
+        $data = EmployeeEvaluationTask::select('employee_evaluation_tasks.*','tasks.board_column_id')
+            ->leftJoin('tasks','employee_evaluation_tasks.task_id','tasks.id')
+            ->where('user_id',$id)
+            ->get();
 
         return response()->json([
             'data' => $data,
@@ -362,7 +365,7 @@ class EvaluationController extends AccountBaseController
             $evaluation = EmployeeEvaluation::where('user_id',$request->user_id)->first();
             $evaluation->managements_cmnt = $request->managements_cmnt;
             $evaluation->managements_decision = 'Accepted';
-            $evaluation->accept_rejected = 'Accept';
+            $evaluation->accept_rejected = Carbon::now();
             $evaluation->managements_id = Auth::user()->id;
             $evaluation->managements_name = Auth::user()->name;
             $evaluation->managements_auth_at = Carbon::now();
@@ -427,7 +430,7 @@ class EvaluationController extends AccountBaseController
             $evaluation = EmployeeEvaluation::where('user_id',$request->user_id)->first();
             $evaluation->managements_cmnt = $request->managements_cmnt;
             $evaluation->managements_decision = 'Rejected';
-            $evaluation->accept_rejected = 'reject';
+            $evaluation->accept_rejected = Carbon::now();
             $evaluation->managements_id = Auth::user()->id;
             $evaluation->managements_name = Auth::user()->name;
             $evaluation->managements_auth_at = Carbon::now();
@@ -488,7 +491,7 @@ class EvaluationController extends AccountBaseController
             $evaluation = EmployeeEvaluation::where('user_id',$request->user_id)->first();
             $evaluation->managements_cmnt = $request->managements_cmnt;
             $evaluation->managements_decision = 'One more week';
-            $evaluation->accept_rejected = 'Trial';
+            $evaluation->accept_rejected = Carbon::now();
             $evaluation->managements_id = Auth::user()->id;
             $evaluation->managements_name = Auth::user()->name;
             $evaluation->managements_auth_at = Carbon::now();

@@ -761,10 +761,23 @@ class TimelogController extends AccountBaseController
 
                 if(Auth::user()->role_id == 14){
                     $user = Auth::user();
-                    $evaluation = EmployeeEvaluation::where('user_id',$user->id)->first();
-                    if($evaluation->start_date == null){
+                    $evaluation = EmployeeEvaluation::where('user_id', $user->id)->first();
+                    if ($evaluation->start_date == null) {
                         $evaluation->start_date = $timeLog->start_time;
-                        $evaluation->exp_date = Carbon::parse($timeLog->start_time)->addHours(2);
+                        $emp_start_task = $evaluation->start_date;
+
+                        $exp_date = Carbon::parse($emp_start_task)->addDays(7);
+                        $countSundays = 0;
+                        $currentDate = $emp_start_task->copy(); 
+                        while ($currentDate->lte($exp_date)) {
+                            if ($currentDate->dayOfWeek === Carbon::SUNDAY) {
+                                $countSundays++;
+                            }
+                            $currentDate->addDay(); 
+                        }
+                        
+                        $evaluation->exp_date = Carbon::parse($emp_start_task)->addDays(7 + $countSundays);
+                        
                         $evaluation->save();
                     }
                     return response()->json([

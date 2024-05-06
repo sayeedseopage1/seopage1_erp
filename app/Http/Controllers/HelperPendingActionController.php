@@ -1980,14 +1980,7 @@ class HelperPendingActionController extends AccountBaseController
                 $action->authorization_for= $authorizer->id;
                 $button = [
                     [
-                        'button_name' => 'Authorize',
-                        'button_color' => 'primary',
-                        'button_type' => 'redirect_url',
-                        'button_url' => route('employee-evaluation.index'),
-                        'button_url' => route('employee-evaluation.index', ['user_id' => $new_dev->id, 'show' => 'all']),
-                    ],
-                    [
-                        'button_name' => 'Continue this trial for 1 more week!',
+                        'button_name' => 'Review',
                         'button_color' => 'primary',
                         'button_type' => 'redirect_url',
                         'button_url' => route('employee-evaluation.index'),

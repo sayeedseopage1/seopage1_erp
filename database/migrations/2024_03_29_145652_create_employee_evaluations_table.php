@@ -27,7 +27,7 @@ return new class extends Migration
             $table->integer('managements_id')->nullable();
             $table->string('managements_name')->nullable();
             $table->dateTime('managements_auth_at')->nullable();
-            $table->string('accept_rejected')->nullable();
+            $table->dateTime('accept_rejected')->nullable();
             $table->dateTime('pending_action_sending_time')->nullable();
             $table->integer('ld_submission_status')->default(0);
             $table->integer('lead_dev_id')->nullable();
