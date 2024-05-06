@@ -41,7 +41,7 @@ class ProjectStatusController extends AccountBaseController
      */
     public function index(ProjectStatusDataTable $datatable,Request $request)
     {
-       
+
         $this->project_pm_goals = ProjectPmGoal::all();
         // if (!is_null($request->id)) {
         //     $this->projectId = $request->id;
@@ -49,7 +49,7 @@ class ProjectStatusController extends AccountBaseController
         //     $this->projectId = null;
         // }
         return $datatable->render('project-status.index',$this->data);
-        
+
     }
 
     /**
@@ -97,9 +97,9 @@ class ProjectStatusController extends AccountBaseController
             'data' => $project_pm_goals,
             'status' => 200
         ]);
-       
 
-      
+
+
     }
 
     /**
@@ -149,7 +149,7 @@ class ProjectStatusController extends AccountBaseController
 
             $pm_goals= ProjectPmGoal::get();
 
-            foreach ($pm_goals as $key => $goal) { 
+            foreach ($pm_goals as $key => $goal) {
                 $project = Project::find($goal->project_id);
                 $client = User::where('id',$project->client_id)->first();
                 $holidayArray[] = [
@@ -161,7 +161,7 @@ class ProjectStatusController extends AccountBaseController
             }
             return $holidayArray;
         }
- 
+
 
         return view('project-status.calendar.index', $this->data);
     }
@@ -194,7 +194,7 @@ class ProjectStatusController extends AccountBaseController
                     $pm = User::where('id',$pm_goal->pm_id)->first();
                     $client= User::where('id',$pm_goal->client_id)->first();
                     $authorize_by= User::where('id',$action->authorized_by)->first();
-                    
+
                     $past_action= new PendingActionPast();
                     $past_action->item_name = $action->item_name;
                     $past_action->code = $action->code;
@@ -217,7 +217,7 @@ class ProjectStatusController extends AccountBaseController
         /** WHEN EXPLANATION PM THEN  */
         $helper = new HelperPendingActionController();
         $helper->PmGoalReviewExplanation($ppg);
-        $users  = User::where('role_id',1)->get(); 
+        $users  = User::where('role_id',1)->get();
         foreach($users as $user){
             Notification::send($user, new PmGoalReviewExplanationNotification($ppg));
         }
@@ -284,7 +284,7 @@ class ProjectStatusController extends AccountBaseController
                     $project_manager= User::where('id',$pm_goal->pm_id)->first();
                     $client= User::where('id',$pm_goal->client_id)->first();
                     $authorize_by= User::where('id',$action->authorized_by)->first();
-                    
+
                     $past_action= new PendingActionPast();
                     $past_action->item_name = $action->item_name;
                     $past_action->code = $action->code;
@@ -305,7 +305,7 @@ class ProjectStatusController extends AccountBaseController
                 }
             }
 
-            \DB::commit();   
+            \DB::commit();
         } catch (\Throwable $th) {
             \DB::rollback();
         }
@@ -331,7 +331,7 @@ class ProjectStatusController extends AccountBaseController
             $goal->uuid = uniqid();
             $goal->save();
 
-            
+
             if ($request->hasFile('screenshot')) {
                 $files = $request->file('screenshot');
                 $destinationPath = storage_path('app/public/');
@@ -364,7 +364,7 @@ class ProjectStatusController extends AccountBaseController
                     $project_manager= User::where('id',$pm_goal->pm_id)->first();
                     $client= User::where('id',$pm_goal->client_id)->first();
                     $authorize_by= User::where('id',$action->authorized_by)->first();
-                    
+
                     $past_action= new PendingActionPast();
                     $past_action->item_name = $action->item_name;
                     $past_action->code = $action->code;
@@ -391,7 +391,7 @@ class ProjectStatusController extends AccountBaseController
 
             $helper = new HelperPendingActionController();
             $helper->PmGoalExtendRequest($goal);
-            $users  = User::where('role_id',1)->get(); 
+            $users  = User::where('role_id',1)->get();
             foreach($users as $user){
                 Notification::send($user, new PmGoalExtendRequestNotification($goal));
             }
@@ -412,7 +412,7 @@ class ProjectStatusController extends AccountBaseController
         if($goal->screenshot == 'yes'){
         $data = ProjectPmGoalFile::where('goal_id',$id)->where('uuid',$uuid)->get();
         }
-        
+
         return response()->json([
             'status'=>200,
             'data'=>$data
@@ -458,10 +458,10 @@ class ProjectStatusController extends AccountBaseController
                 $deadline_ext_history->extended_admin_cmnt = $request->is_any_negligence;
                 $deadline_ext_history->extension_req_on = $updateGoal->extension_req_on;
                 $deadline_ext_history->extension_req_for = Carbon::parse($updateGoal->extended_goal_end_day)->addDay($request->extended_day);
-                $deadline_ext_history->extension_req_auth_on = Carbon::now(); 
-                $deadline_ext_history->extension_req_auth_for = Carbon::parse($updateGoal->extended_goal_end_day)->addDay($request->extended_day); 
-                $deadline_ext_history->authorization_by = Auth::user()->id; 
-                $deadline_ext_history->auth_status = 1; 
+                $deadline_ext_history->extension_req_auth_on = Carbon::now();
+                $deadline_ext_history->extension_req_auth_for = Carbon::parse($updateGoal->extended_goal_end_day)->addDay($request->extended_day);
+                $deadline_ext_history->authorization_by = Auth::user()->id;
+                $deadline_ext_history->auth_status = 1;
                 $deadline_ext_history->save();
             }else{
                 $updateGoal = ProjectPmGoal::where('id',$request->goal_id)->first();
@@ -479,9 +479,9 @@ class ProjectStatusController extends AccountBaseController
                 $deadline_ext_history->extended_admin_cmnt = $request->is_any_negligence;
                 $deadline_ext_history->extension_req_on = $updateGoal->extension_req_on;
                 $deadline_ext_history->extension_req_for = Carbon::parse($updateGoal->extended_goal_end_day)->addDay($request->extended_day);
-                $deadline_ext_history->extension_req_auth_on = Carbon::now(); 
+                $deadline_ext_history->extension_req_auth_on = Carbon::now();
                 $deadline_ext_history->extension_req_auth_for = Carbon::parse($updateGoal->extended_goal_end_day)->addDay($request->extended_day);
-                $deadline_ext_history->authorization_by = Auth::user()->id; 
+                $deadline_ext_history->authorization_by = Auth::user()->id;
                 $deadline_ext_history->auth_status = 2;
                 $deadline_ext_history->save();
             }
@@ -517,7 +517,7 @@ class ProjectStatusController extends AccountBaseController
                     }else{
                         $goal_count = '6th';
                     }
-                    
+
                     $past_action= new PendingActionPast();
                     $past_action->item_name = $action->item_name;
                     $past_action->code = $action->code;
@@ -570,7 +570,7 @@ class ProjectStatusController extends AccountBaseController
         $endDate = $request->end_date ?? null;
         $limit = $request->limit ??  10;
 
-        $pmGoalsQuery = ProjectPmGoal::select('project_pm_goals.*','projects.id as projectId','projects.project_name','deals.actual_amount as project_budget', 'client.id as clientId','client.name as clientName','client.image as clientImage','pm.id as pmId','pm.name as pmName','pm.image as pmImage','currencies.currency_symbol',DB::raw('SUM(project_pm_goals.goal_progress) as goal_percentage') )
+        $pmGoalsQuery = ProjectPmGoal::select('project_pm_goals.*','projects.id as projectId','projects.project_name','deals.actual_amount as project_budget', 'deals.upsell_actual_amount as project_upsell_budget', 'client.id as clientId','client.name as clientName','client.image as clientImage','pm.id as pmId','pm.name as pmName','pm.image as pmImage','currencies.currency_symbol',DB::raw('SUM(project_pm_goals.goal_progress) as goal_percentage') )
             ->leftJoin('projects', 'project_pm_goals.project_id', '=', 'projects.id')
             ->leftJoin('deals', 'projects.deal_id', '=', 'deals.id')
             ->leftJoin('currencies', 'deals.original_currency_id', '=', 'currencies.id')
