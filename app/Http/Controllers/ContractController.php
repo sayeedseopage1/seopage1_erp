@@ -1447,10 +1447,9 @@ class ContractController extends AccountBaseController
             //$qualified_sale->actual_amount= $deal->actual_amount . $currency->currency_code;
             
             $qualified_sale->save();
-            $helper = new HelperPendingActionController();
 
-
-            $helper->WonDealAcceptAuthorization($project,$qualified_sale->pm_id);
+            // $helper = new HelperPendingActionController();
+            // $helper->WonDealAcceptAuthorization($project,$qualified_sale->pm_id);
 
 
 
@@ -1462,12 +1461,12 @@ class ContractController extends AccountBaseController
                 'body' => 'You have new project. Please check',
                 'redirectUrl' => route('contracts.show', $deal_pm_id->id)
             ]);
-            if ($deal->project_type == 'fixed') {
-                $user = User::where('id', $deal_pm_id->pm_id)->first();
-                Notification::send($user, new WonDealNotification($deal));
-            }else{
-                Notification::send($user, new HourlyDealNotification($deal));
-            }
+            // if ($deal->project_type == 'fixed') {
+            //     $user = User::where('id', $deal_pm_id->pm_id)->first();
+            //     Notification::send($user, new WonDealNotification($deal));
+            // }else{
+            //     Notification::send($user, new HourlyDealNotification($deal));
+            // }
            // dd("skdlkasmd ");
 
 
@@ -1982,20 +1981,33 @@ class ContractController extends AccountBaseController
                 $qualified_sale->amount = $deal->amount;
 
                 $qualified_sale->save();
-                $helper = new HelperPendingActionController();
 
+                // $helper = new HelperPendingActionController();
+                // $helper->WonDealAcceptAuthorization($project,$qualified_sale->pm_id);
 
-                $helper->WonDealAcceptAuthorization($project,$qualified_sale->pm_id);
                 // /dd($qualified_sale);
 
 
 
+                // if ($deal->project_type == 'fixed') {
+                //     $user = User::where('id', $deal_pm_id->pm_id)->first();
+                //     Notification::send($user, new WonDealNotification($deal));
+                // }else{
+                //     Notification::send($user, new HourlyDealNotification($deal));
+                // }
+
                 if ($deal->project_type == 'fixed') {
-                    $user = User::where('id', $deal_pm_id->pm_id)->first();
-                    Notification::send($user, new WonDealNotification($deal));
+                    $users = User::where('role_id', 1)->get();
+                    foreach ($users as $usr) {
+                        Notification::send($usr, new WonDealNotification($deal));
+                    }
                 }else{
-                    Notification::send($user, new HourlyDealNotification($deal));
+                    $users = User::where('role_id', 1)->get();
+                    foreach ($users as $usr) {
+                        Notification::send($usr, new HourlyDealNotification($deal));
+                    }
                 }
+                
                 $users = User::where('role_id', 8)->get();
 
                 foreach ($users as $key => $user) {
@@ -2326,6 +2338,12 @@ class ContractController extends AccountBaseController
                 break;
         }
 
+        $itemDeal = $this->data['contract']->deal;
+        
+        if((Auth::user()->role_id == 7 || Auth::user()->role_id == 8) && !($itemDeal->is_drafted == 0 && ($itemDeal->authorization_status == 1 || (((Carbon::now()->diffInSeconds($itemDeal->released_at) > 10800) && (Carbon::parse($itemDeal->released_at)->format('H:i:s') >= '07:00' && Carbon::parse($itemDeal->released_at)->format('H:i:s') < '23:30')) || ((Carbon::parse($itemDeal->released_at)->format('H:i:s') < '07:00' || Carbon::parse($itemDeal->released_at)->format('H:i:s') >= '23:30') && (Carbon::parse(now())->format('H:i:s') >= '10:00') || Carbon::parse($itemDeal->released_at)->format('Y-m-d') < now()->format('Y-m-d')))))){
+            $this->data['contract']->deal->pm_id = null;
+        }
+
         if (request()->ajax()) {
             $html = view($this->view, $this->data)->render();
             return Reply::dataOnly(['status' => 'success', 'html' => $html, 'title' => $this->pageTitle]);
@@ -2556,6 +2574,22 @@ class ContractController extends AccountBaseController
             $qualified_sale->total_points = $point;
             $qualified_sale->sales_lead_id = Auth::id();
             $qualified_sale->save();
+        }
+
+        
+        if(!$request->denyDeal){
+            $user = User::where('id', $deal->pm_id)->first();
+            if ($deal->project_type == 'fixed') {
+                Notification::send($user, new WonDealNotification($deal));
+            }else{
+                Notification::send($user, new HourlyDealNotification($deal));
+            }
+
+            $deal->email_send_status = 1;
+
+            $project = Project::where('deal_id', $deal->id)->first();
+            $helper = new HelperPendingActionController();
+            $helper->WonDealAcceptAuthorization($project, $project->pm_id);
         }
 
         if ($deal->save()) {
@@ -2986,7 +3020,7 @@ public function getAllContracts(Request $request){
     $startDate = $request->start_date ?? null;
     $endDate = $request->end_date ?? null;
     $limit = $request->limit ??  10;
-
+    $now = \Carbon\Carbon::now()->toDateTimeString();
     $dealsQuery = Deal::select(
         'deals.*',
         'deals.status as deal_status',
@@ -3142,6 +3176,14 @@ public function getAllContracts(Request $request){
 
 
         $itemDeal->action = $action;
+
+        if((Auth::user()->role_id == 7 || Auth::user()->role_id == 8) && !($itemDeal->is_drafted == 0 && ($itemDeal->authorization_status == 1 || (((Carbon::now()->diffInSeconds($itemDeal->released_at) > 10800) && (Carbon::parse($itemDeal->released_at)->format('H:i:s') >= '07:00' && Carbon::parse($itemDeal->released_at)->format('H:i:s') < '23:30')) || ((Carbon::parse($itemDeal->released_at)->format('H:i:s') < '07:00' || Carbon::parse($itemDeal->released_at)->format('H:i:s') >= '23:30') && (Carbon::parse(now())->format('H:i:s') >= '10:00') || Carbon::parse($itemDeal->released_at)->format('Y-m-d') < now()->format('Y-m-d')))))){
+            $itemDeal->pm_name = null;
+            $itemDeal->pm_avatar = null;
+            $itemDeal->closing_date = null;
+            $itemDeal->pm_id = null;
+        }
+        
     }
     /**AMOUNT CHECK ITS UPSELL OR NOT END */
     /**COUNT OF AWARD TIME REQUEST DATA START */

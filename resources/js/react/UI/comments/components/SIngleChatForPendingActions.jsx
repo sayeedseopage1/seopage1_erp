@@ -22,6 +22,7 @@ import getFormattedTime, { checkSameDay } from "../utils/getFormattedTime";
 import { TiCancel } from "react-icons/ti";
 import { IoEyeOffOutline, IoEyeOutline } from "react-icons/io5";
 import "../styles/single-comment.css";
+import HandleFileIconForPendingActions from "../utils/handleFileIconForPendingActions";
 
 const currentUser = new User(window.Laravel.user);
 
@@ -36,7 +37,6 @@ const SingleChatForPendingActions = ({
     selectMentionIndex,
     setSelectMentionIndex,
 }) => {
-    // console.log("comment in single chat", comment);
     const {
         setContextHolder,
         setMentionedComment,
@@ -596,7 +596,7 @@ const SingleChatForPendingActions = ({
                                                                                     left: "0",
                                                                                 }}
                                                                             />
-                                                                            <HandleFileIcon
+                                                                            <HandleFileIconForPendingActions
                                                                                 fileName={
                                                                                     comment
                                                                                         ?.mention
@@ -681,11 +681,11 @@ const SingleChatForPendingActions = ({
                                         {comment?.files_data?.length ? (
                                             <FileView
                                                 comment={comment}
-                                                // onContextMenu={(e) => {
-                                                //     onContextMenu(e);
-                                                //     setContextHolder(comment);
-                                                // }}
-                                                // onKeyDown={onKeyDown}
+                                                onContextMenu={(e) => {
+                                                    onContextMenu(e);
+                                                    setContextHolder(comment);
+                                                }}
+                                                onKeyDown={onKeyDown}
                                                 isCurrentUser={isCurrentUser(
                                                     comment?.user?.id
                                                 )}
@@ -839,7 +839,7 @@ const SingleChatForPendingActions = ({
                                                                                 left: "0",
                                                                             }}
                                                                         />
-                                                                        <HandleFileIcon
+                                                                        <HandleFileIconForPendingActions
                                                                             fileName={
                                                                                 comment
                                                                                     ?.mention
@@ -1001,7 +1001,7 @@ const FileView = ({
                             key={i}
                             className={`${style.chatInput_filePreview__file} shadow-sm`}
                         >
-                            <HandleFileIcon
+                            <HandleFileIconForPendingActions
                                 fileName={
                                     comment.original_files
                                         ? comment.original_files[i]

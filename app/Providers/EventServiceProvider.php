@@ -21,6 +21,7 @@ use App\Events\InvoiceReminderEvent;
 use App\Events\InvoiceUpdatedEvent;
 use App\Events\LeadEvent;
 use App\Events\LeaveEvent;
+use App\Events\MilestoneAddedEvent;
 use App\Events\NewChatEvent;
 use App\Events\NewContractEvent;
 use App\Events\NewCreditNoteEvent;
@@ -76,6 +77,7 @@ use App\Listeners\InvoiceUpdatedListener;
 use App\Listeners\LeadListener;
 use App\Listeners\LeaveListener;
 use App\Listeners\LogSuccessfulLogin;
+use App\Listeners\MilestoneAddedEventListener;
 use App\Listeners\NewChatListener;
 use App\Listeners\NewContractListener;
 use App\Listeners\NewCreditNoteListener;
@@ -325,6 +327,7 @@ class EventServiceProvider extends ServiceProvider
         EmployeeShiftScheduleEvent::class => [EmployeeShiftScheduleListener::class],
         EmployeeShiftChangeEvent::class => [EmployeeShiftChangeListener::class],
         TwoFactorCodeEvent::class => [TwoFactorCodeListener::class],
+        MilestoneAddedEvent::class => [MilestoneAddedEventListener::class]
     ];
 
     protected $observers = [
@@ -404,5 +407,5 @@ class EventServiceProvider extends ServiceProvider
         UserPermission::class => [UserPermissionObserver::class],
 
     ];
-    
+
 }

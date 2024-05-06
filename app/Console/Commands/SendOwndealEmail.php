@@ -1,0 +1,92 @@
+<?php
+
+namespace App\Console\Commands;
+
+use Auth;
+use Notification;
+use App\Models\Deal;
+use App\Models\User;
+use Illuminate\Console\Command;
+use App\Notifications\WonDealNotification;
+use App\Notifications\HourlyDealNotification;
+use App\Http\Controllers\HelperPendingActionController;
+use App\Models\Project;
+use App\Notifications\DealAuthorizationSendNotification;
+
+class SendOwndealEmail extends Command
+{
+    /**
+     * The name and signature of the console command.
+     *
+     * @var string
+     */
+    protected $signature = 'send-owndeal-email';
+
+    /**
+     * The console command description.
+     *
+     * @var string
+     */
+    protected $description = 'If team lead does not authorize the owndeal then send require email based on cirtain conditions';
+
+    /**
+     * Execute the console command.
+     *
+     * @return int
+     */
+    public function handle()
+    {
+        $now = \Carbon\Carbon::now()->toDateTimeString();
+        $deals = Deal::whereNull('email_send_status')->where('is_drafted', 0)
+            ->where('authorization_status', 1)
+            ->where(function ($innerSubquery) use ($now) {
+                $innerSubquery->whereRaw('
+                    (
+                        (
+                            (TIME(released_at) >= "23:30" OR TIME(released_at) < "07:00")
+                            AND (DATE(released_at) < CURDATE())
+                        )
+                        OR
+                        (
+                            (TIME(released_at) >= "23:30" OR TIME(released_at) < "07:00")
+                            AND TIME(?) >= "10:00"
+                        )
+                        OR
+                        (
+                            TIME(released_at) >= "07:00" AND TIME(released_at) < "23:30"
+                            AND TIMESTAMPDIFF(SECOND, released_at, ?) > ?
+                        )
+                    )
+                ', [$now, $now, (180 * 60)]);
+            })->get();
+        
+        foreach($deals as $deal){
+            $user = User::where('id', $deal->pm_id)->first();
+            if ($deal->project_type == 'fixed') {
+                Notification::send($user, new WonDealNotification($deal));
+            }else{
+                Notification::send($user, new HourlyDealNotification($deal));
+            }
+    
+            $project = Project::where('deal_id', $deal->id)->first();
+            $helper = new HelperPendingActionController();
+            $helper->WonDealAcceptAuthorization($project, $project->pm_id);
+
+            // if ($deal->project_type == 'fixed') {
+            //     $users = User::where('role_id', 1)->get();
+            //     foreach ($users as $usr) {
+            //         Notification::send($usr, new WonDealNotification($deal));
+            //     }
+            // }else{
+            //     $users = User::where('role_id', 1)->get();
+            //     foreach ($users as $usr) {
+            //         Notification::send($usr, new HourlyDealNotification($deal));
+            //     }
+            // }
+
+            $deal->email_send_status = 1;
+            $deal->save();
+        }
+        
+    }
+}
