@@ -178,13 +178,13 @@
 
 .chart_wrapper_inner {
     width: 100%;
-    position: relative;
+    /* position: relative; */
 }
 
 .chart_button {
-    position: absolute;
+    /* position: absolute;
     top: 0;
-    right: 0;
+    right: 0; */
     font-size: 16px;
     font-weight: 500;
     color: #1492E6;
@@ -255,6 +255,24 @@
     font-weight: 600;
     line-height: 14px;
     letter-spacing: -0.28px;
+}
+
+.chart_title {
+    color: #000;
+    font-family: Poppins;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+    margin-left: 8px;
+}
+
+.chart_header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    /* margin-bottom: 20px; */
 }
 
 

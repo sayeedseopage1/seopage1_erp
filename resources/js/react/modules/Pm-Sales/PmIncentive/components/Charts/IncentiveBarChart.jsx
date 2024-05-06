@@ -8,7 +8,7 @@ const IncentiveBarChart = ({ chartData }) => {
 
     const options = {
         title: {
-            text: chartData.title,
+            // text: chartData.title,
             style: {
                 fontSize: 14,
                 fontWeight: 500,
@@ -125,23 +125,27 @@ const IncentiveBarChart = ({ chartData }) => {
 
     return (
         <>
-            <div className="y_axis_arrow ">
-                <img src={arrow1} className="chart_axis_icon" alt="arrow1" />
-                <h2 className="chart_axis_title">{chartData?.yTitle}</h2>
-                <img src={arrow2} className="chart_axis_icon" alt="arrow2" />
+            <div className="chart_header">
+                <h4 className="chart_title">{chartData?.title}</h4>
+                <button
+                    className="chart_button"
+                >
+                    {chartData.chartTag}
+                </button>
             </div>
             <div className="chart_wrapper_inner">
+                <div className="y_axis_arrow ">
+                    <img src={arrow1} className="chart_axis_icon" alt="arrow1" />
+                    <h2 className="chart_axis_title">{chartData?.yTitle}</h2>
+                    <img src={arrow2} className="chart_axis_icon" alt="arrow2" />
+                </div>
                 <Chart
                     ref={chartRef}
                     type="bar"
                     series={chartData.series}
                     options={options}
                 ></Chart>
-                <button
-                    className="chart_button"
-                >
-                    {chartData.chartTag}
-                </button>
+
                 <div className="x_axis_arrow">
                     <img src={arrow1} className="chart_axis_icon" alt="arrow1" />
                     <h2 className="chart_axis_title">{chartData.title}</h2>
