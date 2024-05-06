@@ -44,13 +44,13 @@ export const PmGoalsTableColumns = [
                     if(data?.duration?.includes(".")) {
                         const getDays = data?.duration?.split(".")[0]
                         const getHours = 24 / getDays * data?.duration?.split(".")[1]
-                        return `${getDays} Days ${getHours} Hours`
+                        return `${getDays} Days ${Math.round(getHours)} Hours`
                     } else {
                         return `${data?.duration} Days`
                     }
                 }  else {
                     return "--"
-                
+
                 }
             }
             return (
