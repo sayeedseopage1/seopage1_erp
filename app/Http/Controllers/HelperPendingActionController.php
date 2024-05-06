@@ -1971,7 +1971,7 @@ class HelperPendingActionController extends AccountBaseController
                 $action->code = 'TLSDE';
                 $action->serial = 'TLSDE'.'x'.$key;
                 $action->item_name= 'Team leader submission!';
-                $action->heading= 'Team Leader '.$team_lead->name.'\'s Lead Developer '.$lead_dev->name.'\'s evaluation on Employee '.$new_dev->name.'!';
+                $action->heading= 'Team Leader '.$team_lead->name.'\'s & Lead Developer '.$lead_dev->name.'\'s evaluation report on Employee '.$new_dev->name.'!';
                 $action->message = 'Team Leader <a href="'.route('employees.show',$team_lead->id).'">'.$team_lead->name.'</a> has reviewed Lead Developer <a href="'.route('employees.show',$lead_dev->id).'">'.$lead_dev->name.'\'s</a> evaluations  on New Developer on '.$formatted_date_time.'';
                 $action->timeframe= 24;
                 $action->client_id = $task->client_id;
