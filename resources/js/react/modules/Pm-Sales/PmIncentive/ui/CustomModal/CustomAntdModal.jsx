@@ -13,6 +13,7 @@ const CustomAntdModal = ({ title, antdModalOpen, setAntdModalOpen, children }) =
                 open={antdModalOpen}
                 // onOk={() => setRegularPointsModalOpen(false)}
                 onCancel={() => setAntdModalOpen(false)}
+                width={545}
             >
                 <div className={`mt-3 ${!title && 'pt-4'}`}>
                     {

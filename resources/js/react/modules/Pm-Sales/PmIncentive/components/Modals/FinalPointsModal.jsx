@@ -10,7 +10,21 @@ const FinalPointsModal = ({ antdModalOpen, setAntdModalOpen }) => {
                 antdModalOpen={antdModalOpen}
                 setAntdModalOpen={setAntdModalOpen}
             >
-                <p>Final points...</p>
+                <>
+                    <div className="modal_point_row">
+                        <p>Your bonus points: </p>{" "}
+                        <span className="text-sm">60</span>
+                    </div>
+                    <div className="modal_point_row">
+                        <p>Incentive Percentage: </p>{" "}
+                        <span className="text-sm">80%</span>
+                    </div>
+                    <hr />
+                    <div className="modal_point_row">
+                        <p>Your final points: <span>(60*80%)</span></p>{" "}
+                        <span className="text-sm">48pt</span>
+                    </div>
+                </>
             </CustomAntdModal>
         </div>
     );

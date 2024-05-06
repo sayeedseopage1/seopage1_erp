@@ -31,9 +31,11 @@ if (container) {
                     theme={{
                         components: {
                             Modal: {
-                                titleFontSize: 16
+                                titleFontSize: 20,
+                                borderRadiusLG: 22,
                             },
                         },
+
                     }}
                 >
                     <BrowserRouter basename="/account/pm-incentives">

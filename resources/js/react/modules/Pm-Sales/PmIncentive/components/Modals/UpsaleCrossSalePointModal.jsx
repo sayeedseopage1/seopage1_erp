@@ -10,7 +10,21 @@ const UpsaleCrossSalePointModal = ({ antdModalOpen, setAntdModalOpen }) => {
                 antdModalOpen={antdModalOpen}
                 setAntdModalOpen={setAntdModalOpen}
             >
-                <p>Upsale/cross sale points...</p>
+                <>
+                    <div className="modal_point_row">
+                        <p>Upsale/cross sale: </p>{" "}
+                        <span className="text-sm">$1201</span>
+                    </div>
+                    <div className="modal_point_row">
+                        <p>incentive: </p>{" "}
+                        <span className="text-sm">5%</span>
+                    </div>
+                    <hr />
+                    <div className="modal_point_row">
+                        <p>Upsale/cross sale point: <span>(1201*5%)</span></p>{" "}
+                        <span className="text-sm">60.5</span>
+                    </div>
+                </>
             </CustomAntdModal>
         </div>
     );

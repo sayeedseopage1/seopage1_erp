@@ -10,7 +10,21 @@ const IncentivePointModal = ({ antdModalOpen, setAntdModalOpen }) => {
                 antdModalOpen={antdModalOpen}
                 setAntdModalOpen={setAntdModalOpen}
             >
-                <p>Your antual incentive points...</p>
+                <>
+                    <div className="modal_point_row">
+                        <p>Your obtained points: </p>{" "}
+                        <span className="text-sm">500</span>
+                    </div>
+                    <div className="modal_point_row">
+                        <p>incentive points: </p>{" "}
+                        <span className="text-sm">80%</span>
+                    </div>
+                    <hr />
+                    <div className="modal_point_row">
+                        <p>Your actual incentive points: <span>(500*80)</span></p>{" "}
+                        <span className="text-sm">400</span>
+                    </div>
+                </>
             </CustomAntdModal>
         </div>
     );

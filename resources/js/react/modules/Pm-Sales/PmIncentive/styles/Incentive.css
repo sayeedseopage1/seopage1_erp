@@ -496,6 +496,41 @@
   Final incentive value banner ends here
 ********************************* */
 
+
+
+/*********************************
+            modals starts here
+*********************************/
+
+.modal_point_row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 16px;
+    color: #000;
+    font-family: Poppins;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 14px;
+}
+
+.modal_point_note {
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 14px;
+    margin-top: 40px;
+    text-align: center;
+    /* max-width: 424px; */
+    /* margin: 40px auto 0; */
+}
+
+/*********************************
+            modals starts ends
+*********************************/
+
 @media only screen and (min-width: 1601px) and (max-width: 1700px) {
     .y_axis_arrow {
         left: -33%;
