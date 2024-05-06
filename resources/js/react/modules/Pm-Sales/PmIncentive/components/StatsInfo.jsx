@@ -1,9 +1,15 @@
-import React from 'react';
+import React, { useState } from 'react';
 import StatsInfoProgressCard from './StatsInfoProgressCard';
 import pointIconDark from '../assets/pointIconDark.svg'
 import { IoInformationCircle } from "react-icons/io5";
+import RegularPointsModal from './Modals/RegularPointsModal';
+import CustomAntdModal from '../ui/CustomModal/CustomAntdModal';
+import IncentivePointModal from './Modals/IncentivePointModal';
 
 const StatsInfo = () => {
+    const [regularPointsModalOpen, setRegularPointsModalOpen] = useState(false);
+    const [incentivePointsModalOpen, setIncentivePointsModalOpen] = useState(false);
+
     return (
         <div className='stats_info_wrapper'>
             {/* point stats */}
@@ -25,14 +31,18 @@ const StatsInfo = () => {
                             <img src={pointIconDark} alt="pointIconDark" />
                         </span>
                         <div className="point_details_wrapper">
-                            <p className="stats_info_desc">Your obtained points:</p>
+                            <p className="stats_info_desc">Your Regular points:</p>
                             <span
+                                onClick={() => setRegularPointsModalOpen(true)}
                                 className="stats_info_link"
                             >
                                 80pt
                             </span>
                         </div>
-                        {/* <FinalPointModal /> */}
+                        <RegularPointsModal
+                            antdModalOpen={regularPointsModalOpen}
+                            setAntdModalOpen={setRegularPointsModalOpen}
+                        />
                     </div>
                     {/* Your actual incentive points  */}
                     <div className="stats_score_child">
@@ -46,7 +56,7 @@ const StatsInfo = () => {
                             <div
                                 className="d-flex align-items-center"
                             >
-                                <span className="stats_info_link">
+                                <span className="stats_info_link" onClick={() => setIncentivePointsModalOpen(true)}>
                                     400pt
                                 </span>
                                 <span
@@ -55,7 +65,10 @@ const StatsInfo = () => {
                                     <IoInformationCircle style={{ color: "#8F8F8F" }} />
                                 </span>
                             </div>
-                            {/* <IncentivePointModal /> */}
+                            <IncentivePointModal
+                                antdModalOpen={incentivePointsModalOpen}
+                                setAntdModalOpen={setIncentivePointsModalOpen}
+                            />
                         </div>
                     </div>
                     <div>
