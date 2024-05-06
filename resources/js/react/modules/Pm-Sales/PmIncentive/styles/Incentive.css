@@ -460,7 +460,7 @@
     padding: 20px 30px;
     margin-top: 21px;
     background-color: #1492E6;
-    gap: 10px;
+    gap: 40px;
 }
 
 .incentive_amount_card {
@@ -482,8 +482,9 @@
     align-items: center;
     justify-content: space-between;
     gap: 10px;
-    max-width: 1127px;
+    /* max-width: 1127px; */
     font-size: 14px;
+    flex: 1;
 }
 
 .incentive_amount_list {
