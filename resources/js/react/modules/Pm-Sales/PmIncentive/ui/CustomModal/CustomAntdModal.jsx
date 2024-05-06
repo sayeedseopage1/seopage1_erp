@@ -6,7 +6,7 @@ const CustomAntdModal = ({ title, antdModalOpen, setAntdModalOpen, children }) =
     return (
         <div>
             <Modal
-                title={title}
+                title={title || null}
                 centered
                 footer={null}
                 maskClosable={false}
@@ -14,9 +14,11 @@ const CustomAntdModal = ({ title, antdModalOpen, setAntdModalOpen, children }) =
                 // onOk={() => setRegularPointsModalOpen(false)}
                 onCancel={() => setAntdModalOpen(false)}
             >
-                {
-                    children
-                }
+                <div className={`mt-3 ${!title && 'pt-4'}`}>
+                    {
+                        children
+                    }
+                </div>
             </Modal>
         </div>
     );

@@ -211,7 +211,7 @@ export const idealVsAchievedChartData = [
             yTitle: "Incentive percentage",
             chartTag: "Achieved",
             incentive: 80,
-            ratio: 57,
+            ratio: 30,
             range: [
                 {
                     from: 0,
@@ -287,7 +287,7 @@ export const idealVsAchievedChartData = [
             title: "Percentage of Delayed Projects ",
             yTitle: "Incentive percentage",
             chartTag: "Achieved",
-            incentive: 120,
+            incentive: 30,
             ratio: 29,
             range: [
                 {
@@ -364,7 +364,7 @@ export const idealVsAchievedChartData = [
             title: "Milestone Cancelation Rate ",
             yTitle: "Incentive percentage",
             chartTag: "Achieved",
-            incentive: 120,
+            incentive: 80,
             ratio: 3,
             range: [
                 {
@@ -594,7 +594,7 @@ export const upSaleCrossSaleChartData = [
             yTitle: "Incentive percentage",
             chartTag: "Achieved",
             incentive: 60,
-            ratio: 11000,
+            ratio: 200,
             range: [
                 {
                     from: 0,
@@ -683,7 +683,7 @@ export const bonusPointsChartData = [
             yTitle: "Bonus Points",
             chartTag: "Achieved",
             incentive: 60,
-            ratio: 11000,
+            ratio: 100,
             range: [
                 {
                     from: 0,
@@ -769,7 +769,7 @@ export const bonusPointsChartData = [
             yTitle: "Incentive Percentage ",
             chartTag: "Achieved",
             incentive: 60,
-            ratio: 11000,
+            ratio: 1500,
             range: [
                 {
                     from: 0,
@@ -1071,6 +1071,53 @@ export const quarterlyAndYearlyTableData = [
         cumulativeIncentiveAmount: "4920 TK",
     },
 ];
+
+export const statsInfoData = {
+    regular_points: 0,
+    incentive_points: 400,
+    stats_info: [
+        {
+            id: 1,
+            title: "Revision vs task ratio",
+            achieved: 80,
+        },
+        {
+            id: 2,
+            title: "Goal achieve rate",
+            achieved: 0,
+        },
+        {
+            id: 3,
+            title: "Negative points vs positive points",
+            achieved: 80,
+        },
+        {
+            id: 4,
+            title: "Percentage of delayed projects",
+            achieved: 29,
+        },
+        {
+            id: 5,
+            title: "Milestone cancelation rate",
+            achieved: 3,
+        },
+        {
+            id: 6,
+            title: "Deadline miss rate",
+            achieved: 40,
+        },
+        {
+            id: 7,
+            title: "Client retention rate",
+            achieved: 80,
+        },
+        {
+            id: 8,
+            title: "Average",
+            achieved: 0,
+        },
+    ],
+};
 
 // export const achivedBarChartData = [
 //     {

@@ -1,9 +1,11 @@
-import React from 'react';
+import React, { useState } from 'react';
 import pointIconDark from '../assets/pointIconDark.svg'
 import cashBag from '../assets/cashBag.svg'
 import { IoInformationCircle } from 'react-icons/io5';
+import FinalPointsModal from './Modals/FinalPointsModal';
 
 const BonusPointsPointBanner = () => {
+    const [finalPointsModalOpen, setFinalPointsModalOpen] = useState(false);
     return (
         <div className="secondary_point_banner_bonus">
             <div className="secondary_point_card_wrapper">
@@ -59,9 +61,11 @@ const BonusPointsPointBanner = () => {
                         <p className='point_title' style={{ color: "#000000" }}>
                             Final points:
                         </p>
-                        <span className='point_score clickable_link' style={{ color: "#1492E6" }}>
+                        <span onClick={() => setFinalPointsModalOpen(true)} className='point_score clickable_link' style={{ color: "#1492E6" }}>
                             48pt
                         </span>
+                        <FinalPointsModal antdModalOpen={finalPointsModalOpen}
+                            setAntdModalOpen={setFinalPointsModalOpen} />
                     </div>
                 </div>
             </div>

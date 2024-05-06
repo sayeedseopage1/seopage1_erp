@@ -5,6 +5,7 @@ import { IoInformationCircle } from "react-icons/io5";
 import RegularPointsModal from './Modals/RegularPointsModal';
 import CustomAntdModal from '../ui/CustomModal/CustomAntdModal';
 import IncentivePointModal from './Modals/IncentivePointModal';
+import { statsInfoData } from '../constants';
 
 const StatsInfo = () => {
     const [regularPointsModalOpen, setRegularPointsModalOpen] = useState(false);
@@ -14,13 +15,9 @@ const StatsInfo = () => {
         <div className='stats_info_wrapper'>
             {/* point stats */}
             <div className='stats_info_outer'>
-                <StatsInfoProgressCard />
-                <StatsInfoProgressCard />
-                <StatsInfoProgressCard />
-                <StatsInfoProgressCard />
-                <StatsInfoProgressCard />
-                <StatsInfoProgressCard />
-                <StatsInfoProgressCard />
+                {
+                    statsInfoData?.stats_info?.map((item) => <StatsInfoProgressCard key={item?.id} item={item} />)
+                }
             </div>
             {/* point score */}
             <div className='stats_score_outer'>

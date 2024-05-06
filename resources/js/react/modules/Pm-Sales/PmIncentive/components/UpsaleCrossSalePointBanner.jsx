@@ -1,8 +1,10 @@
-import React from 'react';
+import React, { useState } from 'react';
 import pointIconDark from '../assets/pointIconDark.svg'
 import cashBag from '../assets/cashBag.svg'
+import UpsaleCrossSalePointModal from './Modals/UpsaleCrossSalePointModal';
 
 const UpsaleCrossSalePointBanner = () => {
+    const [upsaleCrossSalePointsModalOpen, setUpsaleCrossSalePointsModalOpen] = useState(false);
     return (
         <div className="secondary_point_banner">
             <div className="secondary_point_card_wrapper">
@@ -12,10 +14,11 @@ const UpsaleCrossSalePointBanner = () => {
                     </span>
                     <div className="point_details_wrapper">
                         <p className='point_title' style={{ color: "#000000" }}>Your upsale/cross sales points:</p>
-                        <span className='point_score clickable_link' style={{ color: "#1492E6" }}>
+                        <span onClick={() => setUpsaleCrossSalePointsModalOpen(true)} className='point_score clickable_link' style={{ color: "#1492E6" }}>
                             60.05pt
                         </span>
-                        {/* <UpsaleCrossSaleModal /> */}
+                        <UpsaleCrossSalePointModal antdModalOpen={upsaleCrossSalePointsModalOpen}
+                            setAntdModalOpen={setUpsaleCrossSalePointsModalOpen} />
                     </div>
                 </div>
             </div>
