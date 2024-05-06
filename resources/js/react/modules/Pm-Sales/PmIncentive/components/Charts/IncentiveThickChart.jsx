@@ -2,6 +2,8 @@ import { useRef } from "react";
 import Chart from "react-apexcharts";
 import arrow1 from '../../assets/arrow-1.svg'
 import arrow2 from '../../assets/arrow-2.svg'
+import { Popover } from "antd";
+import { IoInformationCircle } from "react-icons/io5";
 
 const IncentiveThickChart = ({ chartData }) => {
     const chartRef = useRef(null);
@@ -203,7 +205,23 @@ const IncentiveThickChart = ({ chartData }) => {
                 <img src={arrow2} className="chart_axis_icon" alt="arrow2" />
             </div>
             <div className="chart_header">
-                <h4 className="chart_title">{chartData?.title}</h4>
+                <div className="chart_title">
+                    {/* <span>{chartData?.title}</span> {chartData?.title == "Deadline Miss Rate" && <span
+                        title='Did he accept this? We may 
+                        need time for planning, understanding requirements, creating deliverables etc.'
+                    >
+                        <IoInformationCircle className='informationCircle' />
+                    </span>} */}
+                    <span>{chartData?.title}</span> {chartData?.title == "Deadline Miss Rate" && <Popover
+                        content='Did he accept this? We may 
+                        need time for planning, understanding requirements, creating deliverables etc.'
+                        overlayStyle={{
+                            width: "13vw"
+                        }}
+                    >
+                        <IoInformationCircle className='informationCircle' />
+                    </Popover>}
+                </div>
                 <button
                     className="chart_button"
                 >

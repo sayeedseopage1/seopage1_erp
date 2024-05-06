@@ -265,6 +265,9 @@
     font-weight: 500;
     line-height: normal;
     margin-left: 8px;
+    display: flex;
+    align-items: center;
+    gap: 4px;
 }
 
 .chart_header {
