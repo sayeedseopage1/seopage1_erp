@@ -105,9 +105,16 @@
 }
 
 .point_details_wrapper {
-    display: flex;
+    /* display: inline-flex;
     align-items: center;
-    gap: 6px;
+    gap: 6px; */
+}
+
+.informationCircle {
+    margin-left: 5px;
+    margin-bottom: 3px;
+    color: #8F8F8F;
+
 }
 
 .point_title {

@@ -12,11 +12,11 @@ const UpsaleCrossSalePointBanner = () => {
                     <span className="">
                         <img src={pointIconDark} alt="pointIcon" />
                     </span>
-                    <div className="point_details_wrapper">
-                        <p className='point_title' style={{ color: "#000000" }}>Your upsale/cross sales points:</p>
-                        <span onClick={() => setUpsaleCrossSalePointsModalOpen(true)} className='point_score clickable_link' style={{ color: "#1492E6" }}>
+                    <div className="">
+                        <p className='point_title point_details_wrapper' style={{ color: "#000000" }}>Your upsale/cross sales points: <span onClick={() => setUpsaleCrossSalePointsModalOpen(true)} className='point_score clickable_link' style={{ color: "#1492E6" }}>
                             60.05pt
-                        </span>
+                        </span></p>
+
                         <UpsaleCrossSalePointModal antdModalOpen={upsaleCrossSalePointsModalOpen}
                             setAntdModalOpen={setUpsaleCrossSalePointsModalOpen} />
                     </div>
@@ -30,13 +30,13 @@ const UpsaleCrossSalePointBanner = () => {
                     <span className="secondary_point_card_image_wrapper">
                         <img src={cashBag} style={{ width: "24px", height: "24px" }} alt="taka" />
                     </span>
-                    <div className="point_details_wrapper">
-                        <p className='point_title' style={{ color: "#000000" }}>
-                            Cash value of every upsale/cross sale point:
+                    <div className="">
+                        <p className='point_title point_details_wrapper' style={{ color: "#000000" }}>
+                            Cash value of every upsale/cross sale point: <span className='point_score' style={{ color: "#1492E6" }}>
+                                100 Taka
+                            </span>
                         </p>
-                        <span className='point_score' style={{ color: "#1492E6" }}>
-                            100 Taka
-                        </span>
+
                     </div>
                 </div>
             </div>

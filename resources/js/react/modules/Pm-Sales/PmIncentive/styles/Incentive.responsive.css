@@ -429,9 +429,9 @@
         font-size: 17px;
     }
 
-    .point_details_wrapper {
+    /* .point_details_wrapper {
         flex-direction: column;
-    }
+    } */
 
     .stats_info_wrapper {
         flex-direction: column;

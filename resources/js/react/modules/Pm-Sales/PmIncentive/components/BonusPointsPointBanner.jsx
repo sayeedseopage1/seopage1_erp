@@ -13,16 +13,17 @@ const BonusPointsPointBanner = () => {
                     <span className="">
                         <img src={pointIconDark} alt="pointIcon" />
                     </span>
-                    <div className="point_details_wrapper">
-                        <p className='point_title' style={{ color: "#000000" }}>Your bonus points:</p>
-                        <span className='point_score' style={{ color: "#1492E6" }}>
+                    <div className="">
+                        <p className='point_title point_details_wrapper' style={{ color: "#000000" }}>Your bonus points: <span className='point_score' style={{ color: "#1492E6" }}>
                             60.05pt
                         </span>
-                        <span
-                            title='Lorem ipsum dolor sit ammet'
-                        >
-                            <IoInformationCircle style={{ color: "#8F8F8F" }} />
-                        </span>
+                            <span
+                                title='Lorem ipsum dolor sit ammet'
+                            >
+                                <IoInformationCircle className='informationCircle' />
+                            </span>
+                        </p>
+
                     </div>
                 </div>
             </div>
@@ -34,18 +35,18 @@ const BonusPointsPointBanner = () => {
                     <span className="secondary_point_card_image_wrapper">
                         <img src={cashBag} style={{ width: "24px", height: "24px" }} alt="taka" />
                     </span>
-                    <div className="point_details_wrapper">
-                        <p className='point_title' style={{ color: "#000000" }}>
-                            Incentive Percentage:
+                    <div className="">
+                        <p className='point_title point_details_wrapper' style={{ color: "#000000" }}>
+                            Incentive Percentage: <span className='point_score' style={{ color: "#1492E6" }}>
+                                80%
+                            </span>
+                            <span
+                                title='Lorem ipsum dolor sit ammet'
+                            >
+                                <IoInformationCircle className='informationCircle' />
+                            </span>
                         </p>
-                        <span className='point_score' style={{ color: "#1492E6" }}>
-                            80%
-                        </span>
-                        <span
-                            title='Lorem ipsum dolor sit ammet'
-                        >
-                            <IoInformationCircle style={{ color: "#8F8F8F" }} />
-                        </span>
+
                     </div>
                 </div>
             </div>
@@ -57,13 +58,13 @@ const BonusPointsPointBanner = () => {
                     <span className="secondary_point_card_image_wrapper">
                         <img src={cashBag} style={{ width: "24px", height: "24px" }} alt="taka" />
                     </span>
-                    <div className="point_details_wrapper">
-                        <p className='point_title' style={{ color: "#000000" }}>
-                            Final points:
+                    <div className="">
+                        <p className='point_title point_details_wrapper' style={{ color: "#000000" }}>
+                            Final points: <span onClick={() => setFinalPointsModalOpen(true)} className='point_score clickable_link' style={{ color: "#1492E6" }}>
+                                48pt
+                            </span>
                         </p>
-                        <span onClick={() => setFinalPointsModalOpen(true)} className='point_score clickable_link' style={{ color: "#1492E6" }}>
-                            48pt
-                        </span>
+
                         <FinalPointsModal antdModalOpen={finalPointsModalOpen}
                             setAntdModalOpen={setFinalPointsModalOpen} />
                     </div>
@@ -77,13 +78,12 @@ const BonusPointsPointBanner = () => {
                     <span className="secondary_point_card_image_wrapper">
                         <img src={cashBag} style={{ width: "24px", height: "24px" }} alt="taka" />
                     </span>
-                    <div className="point_details_wrapper">
-                        <p className='point_title' style={{ color: "#000000" }}>
-                            Cash value of every bonus  point:
+                    <div className="">
+                        <p className='point_title point_details_wrapper' style={{ color: "#000000" }}>
+                            Cash value of every bonus  point: <span className='point_score' style={{ color: "#1492E6" }}>
+                                100 Taka
+                            </span>
                         </p>
-                        <span className='point_score' style={{ color: "#1492E6" }}>
-                            100 Taka
-                        </span>
                     </div>
                 </div>
             </div>

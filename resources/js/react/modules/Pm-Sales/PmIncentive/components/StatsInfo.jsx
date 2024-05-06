@@ -27,14 +27,13 @@ const StatsInfo = () => {
                         <span className="">
                             <img src={pointIconDark} alt="pointIconDark" />
                         </span>
-                        <div className="point_details_wrapper">
-                            <p className="stats_info_desc">Your Regular points:</p>
-                            <span
+                        <div className="">
+                            <p className="stats_info_desc point_details_wrapper">Your Regular points: <span
                                 onClick={() => setRegularPointsModalOpen(true)}
                                 className="stats_info_link"
                             >
                                 80pt
-                            </span>
+                            </span></p>
                         </div>
                         <RegularPointsModal
                             antdModalOpen={regularPointsModalOpen}
@@ -46,21 +45,21 @@ const StatsInfo = () => {
                         <span className="">
                             <img src={pointIconDark} alt="pointIconDark" />
                         </span>
-                        <div className="point_details_wrapper">
-                            <p className="stats_info_desc">
-                                Your actual incentive points:
-                            </p>
-                            <div
-                                className="d-flex align-items-center"
-                            >
-                                <span className="stats_info_link" onClick={() => setIncentivePointsModalOpen(true)}>
+                        <div className="">
+                            <p className="stats_info_desc point_details_wrapper">
+                                Your actual incentive points: <span className="stats_info_link" onClick={() => setIncentivePointsModalOpen(true)}>
                                     400pt
                                 </span>
                                 <span
                                     title='This is after multiplying your regular points with the average percentage calculated earlier'
                                 >
-                                    <IoInformationCircle style={{ color: "#8F8F8F" }} />
+                                    <IoInformationCircle className='informationCircle' />
                                 </span>
+                            </p>
+                            <div
+                                className="d-flex align-items-center"
+                            >
+
                             </div>
                             <IncentivePointModal
                                 antdModalOpen={incentivePointsModalOpen}
