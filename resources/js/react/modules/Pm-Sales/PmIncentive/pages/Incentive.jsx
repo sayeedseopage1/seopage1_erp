@@ -56,7 +56,7 @@ const Incentive = () => {
                             </Switch.Case>
                             <Switch.Case condition={filterByPeriod == "quarterly"}>
                                 <div className='incentive_inner_wrapper'>
-                                    <QuarterlyAndYearlyTable />
+                                    <QuarterlyAndYearlyTable period={3} />
                                 </div>
                             </Switch.Case>
                             <Switch.Case condition={filterByPeriod == "yearly"}>

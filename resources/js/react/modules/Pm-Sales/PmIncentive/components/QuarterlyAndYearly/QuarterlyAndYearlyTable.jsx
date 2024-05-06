@@ -1,7 +1,7 @@
 import React from 'react';
 import { quarterlyAndYearlyTableData, quarterlyAndYearlyTableHeaders } from '../../constants';
 
-const QuarterlyAndYearlyTable = () => {
+const QuarterlyAndYearlyTable = ({ period }) => {
     return (
         <div className='held_amount_table_wrapper'>
             <table className="held_amount_table">
@@ -16,7 +16,7 @@ const QuarterlyAndYearlyTable = () => {
                 </thead>
                 <tbody>
                     {
-                        quarterlyAndYearlyTableData?.map((item, ind) => <tr key={ind}>
+                        quarterlyAndYearlyTableData?.slice(0, period).map((item, ind) => <tr key={ind}>
                             <td>{item?.month}</td>
                             <td>
                                 {item?.regularPoints}
