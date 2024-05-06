@@ -82,7 +82,7 @@ class TaskObserver
 
             if ($task->project_id) {
                 // Calculate project progress if enabled
-                $log->logProjectActivity($task->project_id, 'messages.newTaskAddedToTheProject');
+                // $log->logProjectActivity($task->project_id, 'messages.newTaskAddedToTheProject');
                 $this->calculateProjectProgress($task->project_id);
             }
 
