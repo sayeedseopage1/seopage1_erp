@@ -135,6 +135,10 @@
     background-color: #F2F9FE;
 }
 
+.ideal_vs_achieved_container .chart_parent .chart_wrapper:last-child {
+    border: 1px solid #1492E6
+}
+
 .chart_parent {
     display: flex;
     gap: 28px;
@@ -204,6 +208,7 @@
     line-height: 32px;
     text-align: center;
     color: #1492E6;
+    margin-top: 7px;
 }
 
 .chart_axis_icon {
