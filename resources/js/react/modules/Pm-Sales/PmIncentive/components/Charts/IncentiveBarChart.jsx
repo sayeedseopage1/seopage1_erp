@@ -139,7 +139,7 @@ const IncentiveBarChart = ({ chartData }) => {
                         content='Did he accept this? We may 
                         need time for planning, understanding requirements, creating deliverables etc.'
                         overlayStyle={{
-                            width: "13vw"
+                            width: "220px"
                         }}
                     >
                         <IoInformationCircle className='informationCircle' />

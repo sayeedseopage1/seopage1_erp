@@ -6,6 +6,7 @@ import RegularPointsModal from './Modals/RegularPointsModal';
 import CustomAntdModal from '../ui/CustomModal/CustomAntdModal';
 import IncentivePointModal from './Modals/IncentivePointModal';
 import { statsInfoData } from '../constants';
+import { Popover } from 'antd';
 
 const StatsInfo = () => {
     const [regularPointsModalOpen, setRegularPointsModalOpen] = useState(false);
@@ -50,11 +51,19 @@ const StatsInfo = () => {
                                 Your actual incentive points: <span className="stats_info_link" onClick={() => setIncentivePointsModalOpen(true)}>
                                     400pt
                                 </span>
-                                <span
+                                <Popover
+                                    content='This is after multiplying your regular points with the average percentage calculated earlier'
+                                    overlayStyle={{
+                                        width: "220px"
+                                    }}
+                                >
+                                    <IoInformationCircle className='informationCircle' />
+                                </Popover>
+                                {/* <span
                                     title='This is after multiplying your regular points with the average percentage calculated earlier'
                                 >
                                     <IoInformationCircle className='informationCircle' />
-                                </span>
+                                </span> */}
                             </p>
                             <div
                                 className="d-flex align-items-center"

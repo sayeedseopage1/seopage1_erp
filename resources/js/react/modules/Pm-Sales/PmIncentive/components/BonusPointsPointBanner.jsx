@@ -3,6 +3,7 @@ import pointIconDark from '../assets/pointIconDark.svg'
 import cashBag from '../assets/cashBag.svg'
 import { IoInformationCircle } from 'react-icons/io5';
 import FinalPointsModal from './Modals/FinalPointsModal';
+import { Popover } from 'antd';
 
 const BonusPointsPointBanner = () => {
     const [finalPointsModalOpen, setFinalPointsModalOpen] = useState(false);
@@ -17,11 +18,15 @@ const BonusPointsPointBanner = () => {
                         <p className='point_title point_details_wrapper' style={{ color: "#000000" }}>Your bonus points: <span className='point_score' style={{ color: "#1492E6" }}>
                             60.05pt
                         </span>
-                            <span
-                                title='Lorem ipsum dolor sit ammet'
+                            <Popover
+                                content='This value is Bonus Points Based 
+                                on Released Amount'
+                                overlayStyle={{
+                                    width: "220px"
+                                }}
                             >
                                 <IoInformationCircle className='informationCircle' />
-                            </span>
+                            </Popover>
                         </p>
 
                     </div>
@@ -40,11 +45,14 @@ const BonusPointsPointBanner = () => {
                             Incentive Percentage: <span className='point_score' style={{ color: "#1492E6" }}>
                                 80%
                             </span>
-                            <span
-                                title='Lorem ipsum dolor sit ammet'
+                            <Popover
+                                content='This value is Unreleased Payment Amount'
+                                overlayStyle={{
+                                    width: "220px"
+                                }}
                             >
                                 <IoInformationCircle className='informationCircle' />
-                            </span>
+                            </Popover>
                         </p>
 
                     </div>
