@@ -473,7 +473,7 @@ class LeadController extends AccountBaseController
 
                 // activity log
                 $user = Auth::user();
-                $text = $user->getRole->name.' '.$user->name.' - Moved Deal ('.$deal->project_name.') from Qualified to Requirements Defined, Explanation: '.\Str::limit($request->comments, 30, '...');
+                $text = $user->name.' moved the deal from Qualified to Requirements Defined';
                 $link = '<a href="'.route('deals.show', $deal->id).'">'.$text.'</a>';
 
                 $activityLog = new LeadsDealsActivityLog();
@@ -512,7 +512,7 @@ class LeadController extends AccountBaseController
 
                 // activity log
                 $user = Auth::user();
-                $text = $user->getRole->name.' '.$user->name.' - Moved Deal ('.$deal->project_name.') from Requirements Defined to Proposal Made, Explanation: '.\Str::limit($request->comments, 30, '...');
+                $text = $user->name.' moved the deal from Requirements Defined to Proposal Made';
                 $link = '<a href="'.route('deals.show', $deal->id).'">'.$text.'</a>';
 
                 $activityLog = new LeadsDealsActivityLog();
@@ -551,7 +551,7 @@ class LeadController extends AccountBaseController
 
                 // activity log
                 $user = Auth::user();
-                $text = $user->getRole->name.' '.$user->name.' - Moved Deal ('.$deal->project_name.') from Proposal Made to Negotiation Started, Explanation: '.\Str::limit($request->comments, 30, '...');
+                $text = $user->name.' moved the deal from Proposal Made to Negotiation Started';
                 $link = '<a href="'.route('deals.show', $deal->id).'">'.$text.'</a>';
 
                 $activityLog = new LeadsDealsActivityLog();
@@ -589,7 +589,7 @@ class LeadController extends AccountBaseController
 
                 // activity log
                 $user = Auth::user();
-                $text = $user->getRole->name.' '.$user->name.' - Moved Deal ('.$deal->project_name.') from Negotiation Started to Milestone Breakdown, Explanation: '.\Str::limit($request->comments, 30, '...');
+                $text = $user->name.' moved the deal from Negotiation Started to Milestone Breakdown';
                 $link = '<a href="'.route('deals.show', $deal->id).'">'.$text.'</a>';
 
                 $activityLog = new LeadsDealsActivityLog();
