@@ -2506,7 +2506,9 @@ class ContractController extends AccountBaseController
             $deal->authorization_status = 1;
             $deal->price_authorization = $request->price_authorization;
             $deal->requirment_define = $request->requirment_define;
+            $deal->authorized_on = now();
             $deal->project_deadline_authorization = $request->project_deadline_authorization;
+
         }
 
         //kpi settings
@@ -2611,6 +2613,7 @@ class ContractController extends AccountBaseController
     {
         if ($this->user->role_id == 1) {
             $this->award_time_request = AwardTimeIncress::where('status', '0')->orderBy('id', 'desc')->get();
+            $this->goalCreationTimeType = Project::$goalCreationTimeType;
             return view('contracts.award_time_extention', $this->data);
         } else {
             abort(403);
@@ -2649,6 +2652,14 @@ class ContractController extends AccountBaseController
         if ($deal) {
             $mode = '0';
             if ($request->mode == 'approve') {
+
+                $this->validate($request, [
+                    'id' => 'required',
+                    'request_id' => 'required',
+                    'hours' => 'required',
+                    'creation_type' => 'required'
+                ]);
+
                 $mode = '1';
                 //$total_secoends = 20 * 60 * 60;
                 $second_left = Carbon::now()->diffInSeconds($deal->award_time);
@@ -2685,6 +2696,7 @@ class ContractController extends AccountBaseController
                 $project = Project::find($project_id->id);
                 $project->project_status = 'pending';
                 $project->status = 'not started';
+                $project->goal_creation_time_type = $request->creation_type;
                 $project->save();
                 $helper = new HelperPendingActionController();
 

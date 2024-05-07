@@ -134,6 +134,14 @@ class Project extends BaseModel
 
     public $customFieldModel = 'App\Models\Project';
 
+    public static $goalCreationTimeType = [
+        '1'=> "Award Time",
+        '2'=> "Submission Time",
+        '3'=> "Authorization Time",
+        '4'=> "Project Accept Time",
+        '5'=> "Deadline Extension Request Time",
+    ];
+
     public function category(): BelongsTo
     {
         return $this->belongsTo(ProjectCategory::class, 'category_id');
