@@ -786,7 +786,7 @@ class ContractController extends AccountBaseController
 
         // activity log
         $user = Auth::user();
-        $text = $user->getRole->name . ' ' . $user->name . ' - Closed Deal (' . $deal->project_name . ') for ' . $deal->actual_amount . '$ (Client: ' . $deal->client_name . ')';
+        $text = $user->name . ' closed the deal for ' . $deal->actual_amount . '$';
         $link = '<a href="' . route('deals.show', $deal->id) . '">' . $text . '</a>';
         $activityLog = new LeadsDealsActivityLog();
         if ($lead != null) {
@@ -2591,13 +2591,25 @@ class ContractController extends AccountBaseController
             $helper = new HelperPendingActionController();
             $helper->WonDealAcceptAuthorization($project, $project->pm_id);
         }
+        $deal->save();
 
-        if ($deal->save()) {
-            return response()->json([
-                'success' => true,
-                'message' => 'Data inserted successfully'
-            ]);
+        $user = Auth::user();
+        $text = 'The deal was authorized by ' . $user->name . 'as sales lead';
+        $link = '<a href="' . route('deals.show', $deal->id) . '">' . $text . '</a>';
+        $activityLog = new LeadsDealsActivityLog();
+        if ($deal->lead_id != null) {
+            $activityLog->lead_id = $deal->lead_id;
         }
+        $activityLog->deal_id = $deal->id;
+        $activityLog->project_id = $project->id;
+        $activityLog->message = $link;
+        $activityLog->created_by = Auth::id();
+        $activityLog->save();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Data inserted successfully'
+        ]);
     }
 
     public function award_time_increase_index()
@@ -2983,7 +2995,7 @@ public function storeClientDeal(Request $request){
 
     // activity log
     $user = Auth::user();
-    $text = $user->getRole->name . ' ' . $user->name . ' - Closed Deal (' . $deal->project_name . ') for ' . $deal->actual_amount . '$ (Client: ' . $deal->client_name . ')';
+    $text = $user->name . ' closed the deal for ' . $deal->actual_amount . '$';
     $link = '<a href="' . route('deals.show', $deal->id) . '">' . $text . '</a>';
     $activityLog = new LeadsDealsActivityLog();
     if ($lead != null) {
