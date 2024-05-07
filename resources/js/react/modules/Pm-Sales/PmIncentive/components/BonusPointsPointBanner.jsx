@@ -4,6 +4,7 @@ import cashBag from '../assets/cashBag.svg'
 import { IoInformationCircle } from 'react-icons/io5';
 import FinalPointsModal from './Modals/FinalPointsModal';
 import { Popover } from 'antd';
+import IncentiveEditButton from './ui/IncentiveEditButton';
 
 const BonusPointsPointBanner = () => {
     const [finalPointsModalOpen, setFinalPointsModalOpen] = useState(false);
@@ -90,7 +91,7 @@ const BonusPointsPointBanner = () => {
                         <p className='point_title point_details_wrapper' style={{ color: "#000000" }}>
                             Cash value of every bonus  point: <span className='point_score' style={{ color: "#1492E6" }}>
                                 100 Taka
-                            </span>
+                            </span> <IncentiveEditButton className={`chart_button`}></IncentiveEditButton>
                         </p>
                     </div>
                 </div>

@@ -107,7 +107,9 @@
 .point_details_wrapper {
     /* display: inline-flex;
     align-items: center;
-    gap: 6px; */
+    justify-content: center;
+    gap: 6px;
+    flex-wrap: wrap; */
 }
 
 .informationCircle {
@@ -189,7 +191,7 @@
     border-radius: 5px;
     padding: 5px 30px;
     letter-spacing: -0.32px;
-    display: flex;
+    display: inline-flex;
     align-items: center;
     justify-content: center;
     gap: 10px;
@@ -203,7 +205,7 @@
     border-radius: 5px;
     padding: 5px 30px;
     letter-spacing: -0.32px;
-    display: flex;
+    display: inline-flex;
     align-items: center;
     justify-content: center;
     gap: 10px;
