@@ -332,6 +332,46 @@ class ProjectStatusController extends AccountBaseController
                 'status'=>200
             ]);
     }
+    public function exportProjectStatus(Request $request){ 
+        $startDate = $request->start_date ?? null;
+        $endDate = $request->end_date ?? null;
+
+        $pmGoalsQuery = ProjectPmGoal::select('project_pm_goals.*','projects.id as projectId','projects.project_name','deals.actual_amount as project_budget', 'client.id as clientId','client.name as clientName','client.image as clientImage','pm.id as pmId','pm.name as pmName','pm.image as pmImage','currencies.currency_symbol')
+            ->leftJoin('projects', 'project_pm_goals.project_id', '=', 'projects.id')
+            ->leftJoin('deals', 'projects.deal_id', '=', 'deals.id')
+            ->leftJoin('currencies', 'deals.original_currency_id', '=', 'currencies.id')
+            ->leftJoin('users as client', 'projects.client_id', '=', 'client.id')
+            ->leftJoin('users as pm', 'projects.pm_id', '=', 'pm.id')
+            ->groupBy('projects.id');
+
+            if ($startDate !== null && $endDate !== null) {
+                $pmGoalsQuery->where(function ($query) use ($startDate, $endDate) {
+                    $query->whereBetween(DB::raw('DATE(project_pm_goals.`created_at`)'), [$startDate, $endDate]);
+                    $query->orWhereBetween(DB::raw('DATE(project_pm_goals.`updated_at`)'), [$startDate, $endDate]);
+                });
+            }
+            if ($request->search != '') {
+                $pmGoalsQuery->where(function ($query) {
+                    $query->where('project_pm_goals.project_id', 'like', '%' . request('search') . '%')
+                    ->orWhere('projects.project_name', 'like', '%' . request('search') . '%')
+                    ->orWhere('client.name', 'like', '%' . request('search') . '%')
+                    ->orWhere('pm.name', 'like', '%' . request('search') . '%');
+                });
+            }
+            if ($request->client_id != null) {
+                $pmGoalsQuery->where('project_pm_goals.client_id', $request->client_id);
+            }
+            if ($request->pm_id != null) {
+                $pmGoalsQuery->where('project_pm_goals.pm_id', $request->pm_id);
+            }
+            $pm_goals = $pmGoalsQuery
+            ->orderBy('project_pm_goals.id', 'desc')
+            ->get();
+            return response()->json([
+                'data'=>$pm_goals,
+                'status'=>200
+            ]);
+    }
     public function resolvedHistory(){
         $data = PmGoalHistory::select('pm_goal_histories.*','project_pm_goals.goal_name','projects.project_name','client.id as clientId','client.name as clientName','client.image as clientImage','pm.id as pmId','pm.name as pmIName','pm.image as pmImage','currencies.currency_symbol')
                 ->leftJoin('project_pm_goals','pm_goal_histories.goal_id','project_pm_goals.id')

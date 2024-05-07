@@ -913,8 +913,10 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
     Route::get('tasks/get-sub-tasks/report-issues/{id}', [TaskController::class, 'get_sub_tasks_report_issues']);
     //subtasks table data
     Route::get('tasks/get-subtasks', [TaskController::class, 'get_subtasks'])->name('get-subtasks');
+    Route::get('export-subtask-data', [TaskController::class, 'exportSubTaskData']);
     //get tasks data
     Route::get('tasks/get-tasks', [TaskController::class, 'get_tasks'])->name('get-tasks');
+    Route::get('export-task-data', [TaskController::class, 'exportTaskData']);
     //developers today task data
     Route::get('tasks/get-today-tasks/{id}', [TaskController::class, 'get_today_tasks']);
     //developer daily submissions
@@ -951,6 +953,7 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
     Route::get('get-all-independent-task',[IndependentTaskController::class,'independentTaskAll'])->name('get-all-independent-task');
     Route::get('independent-task/{task_id}/subtask',[IndependentTaskController::class,'independentSubTask'])->name('get-independent-subtask');
     Route::get('independent-subtasks',[IndependentTaskController::class,'independentAllSubTask'])->name('get-independent-all-sub-task');
+    Route::get('export-independent-task', [IndependentTaskController::class, 'exportIndependentTask']);
      /******* Independent TASK End ******** */
 
     /******* PENDING PARENT TASK CONVERSATION ******** */
@@ -967,6 +970,7 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
     Route::get('independent-task-clients', [IndependentTaskController::class, 'clients'] );
     /******* TASK DISPUTE ******** */
     Route::get('task-disputes', [TaskController::class, 'get_disputes'])->name('task-disputes');
+    Route::get('export-task-dispute', [TaskController::class, 'exportTaskDisput']);
     Route::post('task-dispute-question', [TaskController::class, 'store_dispute_question'])->name('task-dispute-question');
     Route::put('task-dispute-question-answer', [TaskController::class, 'update_dispute_question_with_answer'])->name('task-dispute-question-answer');
     Route::put('task-dispute-submit-to-auth', [TaskController::class, 'dispute_send_for_authorization'])->name('task-dispute-submit-to-auth');
@@ -1155,6 +1159,7 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
     /* PM PROJECT STATUS */
     Route::resource('project-status',ProjectStatusController::class);
     Route::get('get-project-status-date', [ProjectStatusController::class, 'allProjectStatus']);
+    Route::get('export-project-status-data', [ProjectStatusController::class, 'exportProjectStatus']);
     Route::get('get-pm-goal-date/{id}', [ProjectStatusController::class, 'allProjectPmGoal']);
     Route::get('project-status-calendar', [ProjectStatusController::class, 'projectStatusCalendar'])->name('project-status-calendar');
     Route::get('calendar-show/{id}', [ProjectStatusController::class, 'calendarShow'])->name('calendar.show');
