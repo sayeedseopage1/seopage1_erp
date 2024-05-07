@@ -300,6 +300,18 @@
     /* margin-bottom: 20px; */
 }
 
+.chart_tooltip {
+    color: #000;
+    text-align: left;
+    font-family: Poppins;
+    font-size: 12px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 14px;
+    border-radius: 8px;
+    padding: 8px;
+}
+
 
 
 /* ********************************************

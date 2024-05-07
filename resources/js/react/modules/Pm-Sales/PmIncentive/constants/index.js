@@ -60,6 +60,7 @@ export const idealVsAchievedChartData = [
             chartTag: "Achieved",
             incentive: 50,
             ratio: 22,
+            ybarDataValueType: "percent",
             range: [
                 {
                     from: 0,
@@ -139,6 +140,7 @@ export const idealVsAchievedChartData = [
             chartTag: "Achieved",
             incentive: 0,
             ratio: 0,
+            ybarDataValueType: "percent",
             range: [
                 {
                     from: 0,
@@ -218,6 +220,7 @@ export const idealVsAchievedChartData = [
             chartTag: "Achieved",
             incentive: 80,
             ratio: 30,
+            ybarDataValueType: "percent",
             range: [
                 {
                     from: 0,
@@ -297,6 +300,7 @@ export const idealVsAchievedChartData = [
             chartTag: "Achieved",
             incentive: 30,
             ratio: 29,
+            ybarDataValueType: "percent",
             range: [
                 {
                     from: 0,
@@ -376,6 +380,7 @@ export const idealVsAchievedChartData = [
             chartTag: "Achieved",
             incentive: 80,
             ratio: 3,
+            ybarDataValueType: "percent",
             range: [
                 {
                     from: 0,
@@ -455,6 +460,7 @@ export const idealVsAchievedChartData = [
             chartTag: "Achieved",
             incentive: 80,
             ratio: 40,
+            ybarDataValueType: "percent",
             range: [
                 {
                     from: 0,
@@ -526,6 +532,7 @@ export const idealVsAchievedChartData = [
             chartTag: "Achieved",
             incentive: 80,
             ratio: 13,
+            ybarDataValueType: "percent",
             range: [
                 {
                     from: 0,
@@ -611,6 +618,7 @@ export const upSaleCrossSaleChartData = [
             chartTag: "Achieved",
             incentive: 60,
             ratio: 200,
+            ybarDataValueType: "money",
             range: [
                 {
                     from: 0,
@@ -702,6 +710,7 @@ export const bonusPointsChartData = [
             chartTag: "Achieved",
             incentive: 60,
             ratio: 100,
+            ybarDataValueType: "money",
             range: [
                 {
                     from: 0,
@@ -788,8 +797,9 @@ export const bonusPointsChartData = [
             title: "Unreleased Payment Amount",
             yTitle: "Incentive Percentage ",
             chartTag: "Achieved",
-            incentive: 60,
-            ratio: 1500,
+            incentive: 35,
+            ratio: 10,
+            ybarDataValueType: "money",
             range: [
                 {
                     from: 0,

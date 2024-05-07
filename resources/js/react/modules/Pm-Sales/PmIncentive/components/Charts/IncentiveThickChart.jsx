@@ -1,4 +1,4 @@
-import { useRef } from "react";
+import { useEffect, useRef } from "react";
 import Chart from "react-apexcharts";
 import arrow1 from '../../assets/arrow-1.svg'
 import arrow2 from '../../assets/arrow-2.svg'
@@ -62,6 +62,19 @@ const IncentiveThickChart = ({ chartData }) => {
                 fontFamily: "Poppins",
                 color: "#1492E6",
             },
+        },
+        tooltip: {
+            custom: function ({ series, seriesIndex, dataPointIndex }) {
+
+                return (
+                    `
+                        <div class="chart_tooltip">
+                            <p>${chartData.title} ${chartData?.ybarDataValueType == "money" ? "$" : ""}${chartData?.ratio}${chartData?.ybarDataValueType == "percent" ? "%" : ""}</p>
+                            <p>${chartData?.yTitle} : ${series[seriesIndex][dataPointIndex]}% </p>
+                        </div>
+                    `
+                )
+            }
         },
         states: {
             hover: {
@@ -152,7 +165,7 @@ const IncentiveThickChart = ({ chartData }) => {
                 endingShape: "rounded",
                 distributed: !1,
                 borderRadius: 0,
-                columnWidth: "5px",
+                columnWidth: "9px",
                 borderRadiusApplication: "last",
                 colors: {
                     ranges: [
@@ -206,12 +219,6 @@ const IncentiveThickChart = ({ chartData }) => {
             </div>
             <div className="chart_header">
                 <div className="chart_title">
-                    {/* <span>{chartData?.title}</span> {chartData?.title == "Deadline Miss Rate" && <span
-                        title='Did he accept this? We may 
-                        need time for planning, understanding requirements, creating deliverables etc.'
-                    >
-                        <IoInformationCircle className='informationCircle' />
-                    </span>} */}
                     <span>{chartData?.title}</span> {chartData?.title == "Deadline Miss Rate" && <Popover
                         content='Did he accept this? We may 
                         need time for planning, understanding requirements, creating deliverables etc.'
@@ -228,7 +235,7 @@ const IncentiveThickChart = ({ chartData }) => {
                     {chartData.chartTag}
                 </button>
             </div>
-            <div className="chart_wrapper_inner">
+            <div className="chart_wrapper_inner" id={`chart_wrapper_inner_${chartData?.id}`}>
                 <Chart
                     ref={chartRef}
                     type="bar"
