@@ -2594,7 +2594,7 @@ class ContractController extends AccountBaseController
         $deal->save();
 
         $user = Auth::user();
-        $text = 'The deal was authorized by ' . $user->name . 'as sales lead';
+        $text = 'The deal was authorized by ' . $user->name . ' as sales lead';
         $link = '<a href="' . route('deals.show', $deal->id) . '">' . $text . '</a>';
         $activityLog = new LeadsDealsActivityLog();
         if ($deal->lead_id != null) {

@@ -946,10 +946,8 @@ class ProjectController extends AccountBaseController
      */
     public function update(UpdateProject $request, $id)
     {
-
-
         //kpi distribution start from here
-      //  DB::beginTransaction();
+    //    DB::beginTransaction();
         $find_project_id = Project::where('id', $id)->first();
         $find_deal_id = Deal::where('id', $find_project_id->deal_id)->first();
         $dealStage = DealStage::where('short_code', $find_deal_id->deal_id)->first();
@@ -2156,7 +2154,6 @@ class ProjectController extends AccountBaseController
         $project->project_summary = ($request->project_summary !== '<p><br></p>') ? $request->project_summary : null;
 
         $project->save();
-       // dd($project);
 
         // PROJECT PM GOAL SETTINGS START
         if($project->status = 'not started'){
@@ -2320,46 +2317,57 @@ class ProjectController extends AccountBaseController
             $project->updateCustomFieldData($request->get('custom_fields_data'));
         }
 
-        if ($project->project_status != 'Accepted') {
-            $pm_name = User::where('id', $project->pm_id)->first();
+        // OLD ACTIVITY LOG CODE
+        // if ($project->project_status != 'Accepted') {
+        //     $pm_name = User::where('id', $project->pm_id)->first();
 
-            $text = 'Project accepted by ' . $pm_name->name;
-            $link = '<a style="color:blue" href="' . route('projects.show', $project->id) . '?tab=deliverable">' . $text . '</a>';
+        //     $text = 'Project accepted by ' . $pm_name->name;
+        //     $link = '<a style="color:blue" href="' . route('projects.show', $project->id) . '?tab=deliverable">' . $text . '</a>';
+        //     $this->logProjectActivity($project->id, $link);
+        // } else {
+        //     $log_user = Auth::user();
+        //     foreach ($originalValues as $attribute => $originalValue) {
+        //         if ($attribute === 'updated_at' || $attribute === 'last_updated_by') {
+        //             continue;
+        //         }
+
+        //         $updatedValue = $project->$attribute;
+
+        //         if ($attribute == 'project_summary' && $originalValue != $updatedValue) {
+        //             if ($attribute == 'project_name') {
+        //                 $print = 'project name';
+        //             } else {
+        //                 $print = $attribute;
+        //             }
+        //             $activity = new ProjectActivity();
+        //             if ($attribute == 'project_summary') {
+        //                 $activity->activity = $log_user->name . ' updated project summary';
+        //                 $activity->old_data = $originalValue;
+        //             } else {
+        //                 $activity->activity = $log_user->name . ' updated ' . $print . ' from ' . $originalValue . ' to ' . $updatedValue;
+        //             }
+
+        //             $activity->project_id = $project->id;
+        //             // $activity->attribute = $attribute;
+        //             // $activity->old_value = $originalValue;
+        //             // $activity->new_value = $updatedValue;
+        //             // $activity->user_id = Auth::id();
+        //             $activity->save();
+        //         }
+        //     }
+        // }
+
+        // NEW ACTIVITY LOG CODE
+        if ($project->project_summary != null) {
+            $p_m = User::where('id', $project->pm_id)->first();
+            $link = $p_m->name . ' updated the'.'<a style="color:blue" href="' . route('projects.show', $project->id) . '"> project </a>'.'general guidelines';
             $this->logProjectActivity($project->id, $link);
-        } else {
-            $log_user = Auth::user();
-            foreach ($originalValues as $attribute => $originalValue) {
-                if ($attribute === 'updated_at' || $attribute === 'last_updated_by') {
-                    continue;
-                }
-
-                $updatedValue = $project->$attribute;
-
-                if ($attribute == 'project_summary' && $originalValue != $updatedValue) {
-                    if ($attribute == 'project_name') {
-                        $print = 'project name';
-                    } else {
-                        $print = $attribute;
-                    }
-                    $activity = new ProjectActivity();
-                    if ($attribute == 'project_summary') {
-                        $activity->activity = $log_user->name . ' updated project summary';
-                        $activity->old_data = $originalValue;
-                    } else {
-                        $activity->activity = $log_user->name . ' updated ' . $print . ' from ' . $originalValue . ' to ' . $updatedValue;
-                    }
-
-                    $activity->project_id = $project->id;
-                    // $activity->attribute = $attribute;
-                    // $activity->old_value = $originalValue;
-                    // $activity->new_value = $updatedValue;
-                    // $activity->user_id = Auth::id();
-                    $activity->save();
-                }
-            }
         }
-
-
+        if ($project->project_status == 'Accepted') {
+            $p_m = User::where('id', $project->pm_id)->first();
+            $link = $p_m->name . ' accepted the '.'<a style="color:blue" href="' . route('projects.show', $project->id) . '">project</a>';
+            $this->logProjectActivity($project->id, $link);
+        }
 
         $redirectUrl = urldecode($request->redirect_url);
 
