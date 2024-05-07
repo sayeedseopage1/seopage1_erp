@@ -13,7 +13,7 @@ const AveragePointModal = ({ antdModalOpen, setAntdModalOpen }) => {
             >
                 <>
                     {
-                        statsInfoData?.stats_info?.map((item) => <div className="modal_point_row">
+                        statsInfoData?.stats_info?.map((item) => <div key={item?.id} className="modal_point_row">
                             <p>{item?.title}: </p>{" "}
                             <span className="text-sm">{item?.achieved}%</span>
                         </div>)

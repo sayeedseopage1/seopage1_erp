@@ -182,9 +182,6 @@
 }
 
 .chart_button {
-    /* position: absolute;
-    top: 0;
-    right: 0; */
     font-size: 16px;
     font-weight: 500;
     color: #1492E6;
@@ -192,7 +189,32 @@
     border-radius: 5px;
     padding: 5px 30px;
     letter-spacing: -0.32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
 }
+
+.chart_button_secondary {
+    font-size: 16px;
+    font-weight: 500;
+    color: #FFFFFF;
+    background-color: #2FADFF;
+    border-radius: 5px;
+    padding: 5px 30px;
+    letter-spacing: -0.32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+
+.incentive_button_wrapper {
+    display: flex;
+    align-items: center;
+    gap: 13px;
+}
+
 
 .y_axis_arrow {
     transform: rotate(-90deg);

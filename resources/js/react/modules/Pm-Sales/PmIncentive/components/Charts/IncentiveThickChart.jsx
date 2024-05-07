@@ -75,8 +75,8 @@ const IncentiveThickChart = ({ chartData }) => {
             toolbar: {
                 show: false,
                 tools: {
-                    zoom: true,
-                    reset: true,
+                    zoom: false,
+                    reset: false,
                 }
             }
         },
@@ -152,7 +152,7 @@ const IncentiveThickChart = ({ chartData }) => {
                 endingShape: "rounded",
                 distributed: !1,
                 borderRadius: 0,
-                columnWidth: "13%",
+                columnWidth: "5px",
                 borderRadiusApplication: "last",
                 colors: {
                     ranges: [

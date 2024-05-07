@@ -4,6 +4,7 @@ import arrow1 from '../../assets/arrow-1.svg'
 import arrow2 from '../../assets/arrow-2.svg'
 import { IoInformationCircle } from "react-icons/io5";
 import { Button, Popover } from "antd";
+import IncentiveEditButton from "../ui/IncentiveEditButton";
 
 const IncentiveBarChart = ({ chartData }) => {
     const chartRef = useRef(null);
@@ -125,16 +126,12 @@ const IncentiveBarChart = ({ chartData }) => {
         ]
     };
 
+    const btn_class_edit = (chartData?.refId === 8 || chartData?.refId === 9 || chartData?.refId === 10) ? "chart_button_secondary" : "chart_button"
+
     return (
         <>
             <div className="chart_header">
                 <div className="chart_title">
-                    {/* <span>{chartData?.title}</span> {chartData?.title == "Deadline Miss Rate" && <span
-                        title='Did he accept this? We may 
-                        need time for planning, understanding requirements, creating deliverables etc.'
-                    >
-                        <IoInformationCircle className='informationCircle' />
-                    </span>} */}
                     <span>{chartData?.title}</span> {chartData?.title == "Deadline Miss Rate" && <Popover
                         content='Did he accept this? We may 
                         need time for planning, understanding requirements, creating deliverables etc.'
@@ -145,11 +142,16 @@ const IncentiveBarChart = ({ chartData }) => {
                         <IoInformationCircle className='informationCircle' />
                     </Popover>}
                 </div>
-                <button
-                    className="chart_button"
-                >
-                    {chartData.chartTag}
-                </button>
+                <div className="incentive_button_wrapper">
+
+                    <IncentiveEditButton className={btn_class_edit}>Edit</IncentiveEditButton>
+
+                    <button
+                        className="chart_button"
+                    >
+                        {chartData.chartTag}
+                    </button>
+                </div>
             </div>
             <div className="chart_wrapper_inner">
                 <div className="y_axis_arrow ">
