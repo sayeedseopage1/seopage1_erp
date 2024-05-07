@@ -3047,7 +3047,7 @@ class ContractController extends AccountBaseController
         if ($startDate !== null && $endDate !== null) {
             $dealsQuery->where(function ($q) use ($startDate, $endDate) {
                 $q->whereBetween(DB::raw('DATE(deals.`created_at`)'), [$startDate, $endDate]);
-                $q->WhereBetween(DB::raw('DATE(deals.`updated_at`)'), [$startDate, $endDate]);
+                $q->orWhereBetween(DB::raw('DATE(deals.`updated_at`)'), [$startDate, $endDate]);
             });
         }
         if ($request->search != '') {

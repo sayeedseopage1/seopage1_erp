@@ -45,15 +45,15 @@
 
           <!-- CARD BODY START -->
           <div class="card-body">
-             
+
                 <h5>Deal Details</h5>
-           
+
             <hr>
             <?php
             $url= url('/');
              ?>
               <div class="invoice-table-wrapper">
-               
+
 
                 <div class="row">
                     <div class="col-sm-12">
@@ -700,7 +700,7 @@
                                 </div>
                               </div>
                           </div>
-                          
+
                           <br>
                           <div class="d-flex justify-content-center">
                               <button class="btn btn-primary" type="submit" id="createDeal"><span class="btn-txt">Complete Deal Creation</span></button>
@@ -709,7 +709,7 @@
 
                     </div>
                 </div>
-               
+
               </div>
 
               <div class="d-flex flex-column">

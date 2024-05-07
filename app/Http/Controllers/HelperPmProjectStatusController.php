@@ -1037,7 +1037,7 @@ class HelperPmProjectStatusController extends AccountBaseController
                 }
                 $goal->goal_start_date = $deal->award_time;
                 $goal->goal_end_date = Carbon::parse($deal->award_time)->addHours((24 * ($timePassed += $perGoalDuration)));
-                $goal->duration = $timePassed += $perGoalDuration;
+                $goal->duration = $timePassed;
                 $goal->added_by = Auth::user()->id;
                 $goal->save();
             }
