@@ -25,7 +25,7 @@ const QualifiedSales = () => {
         setFilter(f);
     };
 
-    console.log("filter", filter);
+    // console.log("filter", filter);
     return (
         <div className="d-flex flex-column position-relative">
             {usersIsFetching ? (
