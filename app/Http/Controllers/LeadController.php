@@ -429,7 +429,7 @@ class LeadController extends AccountBaseController
                 //$deal = Deal::where('deal_id', $deal->short_code)->first();
 
                 $user = Auth::user();
-                $text = $user->getRole->name.' '.$user->name.' - Moved Deal ('.$deal->project_name.') from Contact Made to Qualified, Explanation: '.\Str::limit($deal_stage->comments, 30, '...');
+                $text = $user->name.' moved the deal from Contact Made to Qualified';
                 $link = '<a href="'.route('deals.show', $deal->id).'">'.$text.'</a>';
 
                 $activityLog = new LeadsDealsActivityLog();
