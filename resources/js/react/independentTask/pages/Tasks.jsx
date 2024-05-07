@@ -21,6 +21,7 @@ import TaskAuthorization from "../components/authorized-task/TaskAuthorization";
 import TableFilter from "../components/table/TableFilter";
 import { defaultColumnVisibility } from "../constant";
 import { useRefresh } from "../index";
+import IndependentTaskExportButton from "../components/IndependentTasksExportButton";
 
 const Tasks = ({ tableData, isLoading, onFilter, filter }) => {
     // const {tasks} = useSelector(s => s.tasks)
@@ -119,21 +120,13 @@ const Tasks = ({ tableData, isLoading, onFilter, filter }) => {
             </FilterContainer>
 
             <div className="sp1_tlr_container">
-                <section className="pt-3 pr-3 d-flex justify-content-end">
-                    {/* <Button
+                <section className="pt-3 pr-3 d-flex justify-content-between">
+                    <IndependentTaskExportButton filter={filter} />
+
+                    <Button
                         onClick={handleRefresh}
-                        size="sm"
                         variant="primary"
-                        isLoading={refresh}
-                    >
-                        Refresh
-                    </Button> */}
-                    <button
-                        onClick={handleRefresh}
-                        className="btn btn-primary"
-                        type="button"
                         disabled={refresh}
-                        style={{paddingTop:"5px",paddingBottom:"5px"}}
                     >
                         {refresh && (
                             <span
@@ -143,7 +136,7 @@ const Tasks = ({ tableData, isLoading, onFilter, filter }) => {
                             ></span>
                         )}
                         Refresh
-                    </button>
+                    </Button>
                 </section>
                 <div className="sp1_tlr_tbl_container">
                     <div className="mb-3 d-flex align-items-center flex-wrap justify-content-between">
