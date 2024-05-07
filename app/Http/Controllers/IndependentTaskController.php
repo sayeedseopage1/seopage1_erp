@@ -462,6 +462,7 @@ class IndependentTaskController extends AccountBaseController
         ]);
     }
     public function exportIndependentTask(Request $request){
+       
         $startDate = $request->input('start_date', null);
         $endDate = $request->input('end_date', null);
         $assignee_to = $request->input('assignee_to', null);

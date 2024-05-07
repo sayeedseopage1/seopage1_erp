@@ -219,9 +219,11 @@ class RevisionCalculatorController extends AccountBaseController
     }
 
     public function exportRevisionCalculatorData(Request $request)
+
     {
-        $startDate = $request->input('start_date', null);
-        $endDate = $request->input('end_date', null);
+       
+        $startDate = $request->input('startDate', null);
+        $endDate = $request->input('endDate', null);
 
         if ($startDate && $endDate) {
             if(Auth::user()->role_id == 4)

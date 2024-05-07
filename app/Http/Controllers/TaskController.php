@@ -5828,14 +5828,14 @@ class TaskController extends AccountBaseController
     {
         $logged_user = Auth::user();
 
-        $start_date = $request->startDate ?? null;
-        $end_date = $request->endDate ?? null;
+        $start_date = $request->start_date ?? null;
+        $end_date = $request->end_date ?? null;
         $task_id = $request->task_id ?? null;
         $project_id = $request->project_id ?? null;
         $dispute_id = $request->dispute_id ?? null;
-        $raised_by = $request->raised_by ?? null;
-        $raised_against = $request->raised_against ?? null;
-        $client_id =   $request->client ?? null;
+        $raised_by = $request->dispute_raised_by ?? null;
+        $raised_against = $request->dispute_raised_against ?? null;
+        $client_id =   $request->client_id ?? null;
 
         $disputes = DB::table('task_revision_disputes as disputes')
             ->leftJoin('task_revisions as revision', 'disputes.revision_id', 'revision.id')
