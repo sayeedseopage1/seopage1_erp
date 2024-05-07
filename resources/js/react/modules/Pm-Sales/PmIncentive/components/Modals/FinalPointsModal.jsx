@@ -1,5 +1,5 @@
 import React from 'react';
-import CustomAntdModal from '../../ui/CustomModal/CustomAntdModal';
+import CustomAntdModal from '../ui/CustomAntdModal';
 
 const FinalPointsModal = ({ antdModalOpen, setAntdModalOpen }) => {
 

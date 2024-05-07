@@ -3,7 +3,6 @@ import StatsInfoProgressCard from './StatsInfoProgressCard';
 import pointIconDark from '../assets/pointIconDark.svg'
 import { IoInformationCircle } from "react-icons/io5";
 import RegularPointsModal from './Modals/RegularPointsModal';
-import CustomAntdModal from '../ui/CustomModal/CustomAntdModal';
 import IncentivePointModal from './Modals/IncentivePointModal';
 import { statsInfoData } from '../constants';
 import { Popover } from 'antd';

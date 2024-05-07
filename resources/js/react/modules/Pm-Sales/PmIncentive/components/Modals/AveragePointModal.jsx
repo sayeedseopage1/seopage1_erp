@@ -1,6 +1,6 @@
 import React from 'react';
-import CustomAntdModal from '../../ui/CustomModal/CustomAntdModal';
 import { statsInfoData } from '../../constants';
+import CustomAntdModal from '../ui/CustomAntdModal';
 
 const AveragePointModal = ({ antdModalOpen, setAntdModalOpen }) => {
 
