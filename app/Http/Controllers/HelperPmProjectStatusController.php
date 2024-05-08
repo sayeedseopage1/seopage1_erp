@@ -960,7 +960,7 @@ class HelperPmProjectStatusController extends AccountBaseController
                 return $deal->authorized_on;
                 break;
             case '4':
-                return $deal->authorized_on;
+                return $project->project_acceptance_time;
                 break;
             case '5':
                 $incressesRequest = AwardTimeIncress::where('deal_id', $deal->id)->first();
