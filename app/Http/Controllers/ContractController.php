@@ -2698,10 +2698,14 @@ class ContractController extends AccountBaseController
                 $project->status = 'not started';
                 $project->goal_creation_time_type = $request->creation_type;
                 $project->save();
+
                 $helper = new HelperPendingActionController();
-
-
                 $helper->WonDealAcceptAuthorization($project, $project->pm_id);
+
+                $awardTimeRequest = AwardTimeIncress::find($request->request_id);
+                $awardTimeRequest->approved_hours = $request->hours;
+                $awardTimeRequest->save();
+
             } elseif ($request->mode == 'reject') {
                 $mode = '2';
             }
@@ -3084,6 +3088,7 @@ class ContractController extends AccountBaseController
             $dealsQuery->where('deals.status', $request->status);
         }
 
+
         if (Auth::user()->role_id == 4) {
             $now = \Carbon\Carbon::now()->toDateTimeString();
             $dealsQuery->where('deals.pm_id', Auth::id())
@@ -3115,6 +3120,8 @@ class ContractController extends AccountBaseController
                         });
                 });
         }
+        // dd($dealsQuery->get());
+
         $deals = $dealsQuery
             ->orderBy('deals.id', 'desc')
             ->paginate($limit);
