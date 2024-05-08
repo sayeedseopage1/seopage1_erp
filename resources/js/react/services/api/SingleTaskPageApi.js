@@ -502,6 +502,14 @@ const singleTaskPageApiSlice = apiSlice.injectEndpoints({
                 method: "GET",
             }),
         }),
+
+        //dispute export
+        exportDisputes: build.mutation({
+            query: (query) => ({
+                url: `/account/export-task-dispute?${query}`,
+                method: "GET",
+            }),
+        }),
     }),
 });
 
@@ -557,4 +565,5 @@ export const {
     useGetWorkingEnvironmentQuery,
     useLazyGetWorkingEnvironmentQuery,
     useCheckWorkingReportMutation,
+    useExportDisputesMutation,
 } = singleTaskPageApiSlice;

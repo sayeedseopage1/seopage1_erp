@@ -1,36 +1,36 @@
 import { apiSlice } from "./apiSlice";
 
 const taskReportApi = apiSlice.injectEndpoints({
-  endpoints: (build) => ({
+    endpoints: (build) => ({
+        // get task report
+        getTaskReport: build.query({
+            query: (filter) => `/account/get-task-report?${filter}`,
+            // providesTags: ["TASK_REPORT"]
+        }),
 
-    // get task report
-    getTaskReport: build.query({
-      query: (filter) => `/account/get-task-report?${filter}`,
-      // providesTags: ["TASK_REPORT"]
+        submitTaskReport: build.mutation({
+            query: (data) => ({
+                url: `/account/tasks/report-issues/resolve`,
+                method: "POST",
+                body: {
+                    ...data,
+                    _token: document
+                        .querySelector("meta[name='csrf-token']")
+                        .getAttribute("content"),
+                },
+            }),
+        }),
+        exportTaskReport: build.mutation({
+            query: (query) => ({
+                url: `/account/get-task-report?${query}`,
+                method: "GET",
+            }),
+        }),
     }),
-
-    submitTaskReport: build.mutation({
-      query: (data) => ({
-        url: `/account/tasks/report-issues/resolve`,
-        method: 'POST',
-        body: {
-          ...data,
-          _token: document
-            .querySelector("meta[name='csrf-token']")
-            .getAttribute("content"),
-        },
-      }),
-
-      // invalidatesTags: ["TASK_REPORT"]
-    })
-
-  }),
 });
 
-
-
-
 export const {
-  useLazyGetTaskReportQuery,
-  useSubmitTaskReportMutation,
+    useLazyGetTaskReportQuery,
+    useSubmitTaskReportMutation,
+    useExportTaskReportMutation,
 } = taskReportApi;

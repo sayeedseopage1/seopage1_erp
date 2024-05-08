@@ -86,6 +86,18 @@ const taskApiSlice = apiSlice.injectEndpoints({
         checkUnAuthorizedTaskType: build.query({
             query: () => `/account/developer/primary-page-authorization-count`,
         }),
+        exportTasks: build.mutation({
+            query: (query) => ({
+                url: `/account/export-task-data?${query}`,
+                method: "GET",
+            }),
+        }),
+        exportSubTasks: build.mutation({
+            query: (query) => ({
+                url: `/account/export-subtask-data?${query}`,
+                method: "GET",
+            }),
+        }),
     }),
 });
 
@@ -106,4 +118,6 @@ export const {
     useGetTaskTypeDataQuery,
     useUpdateTasktypeAuthStatusMutation,
     useCheckUnAuthorizedTaskTypeQuery,
+    useExportTasksMutation,
+    useExportSubTasksMutation,
 } = taskApiSlice;
