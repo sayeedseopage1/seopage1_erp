@@ -47,7 +47,7 @@ return new class extends Migration
             $table->string('uuid')->nullable();
             $table->integer('reason_status')->default(0);
             $table->integer('extended_day')->nullable();
-            $table->dateTime('extended_goal_end_day')->nullable();
+            // $table->dateTime('extended_goal_end_day')->nullable();
             $table->integer('extended_request_status')->default(0);
             $table->integer('expired_status')->default(0);
             $table->integer('mail_status')->default(0);

@@ -166,7 +166,7 @@ class ProjectStatusController extends AccountBaseController
         return view('project-status.calendar.index', $this->data);
     }
     public function projectStatusReason(Request $request){
-        // dd($request->all());
+        dd($request->all());
         $validator =  $request->validate([
             'reason' => 'required',
 
@@ -176,10 +176,12 @@ class ProjectStatusController extends AccountBaseController
         try {
         \DB::beginTransaction();
         $ppg = ProjectPmGoal::where('id',$request->project_pm_goal_id)->first();
-        $ppg->reason = $request->reason;
-        $ppg->reason_status = 1;
-        $ppg->expired_status = 1;
-        $ppg->save();
+        $goal_history = new PmGoalExpHistory();
+        $goal_history->goal_id = $ppg->id;
+        $goal_history->expired_pm_reason = $request->reason;
+        // $goal_history->start_date = $ppg->goal_start_date;
+        // $goal_history->deadline = $ppg->goal_end_date;
+        $goal_history->save();
 
         $actions = PendingAction::where('code','PMGM')->where('past_status',0)->where('goal_id',$ppg->id)->get();
         if($actions != null)
@@ -242,36 +244,27 @@ class ProjectStatusController extends AccountBaseController
         }
         try {
             \DB::beginTransaction();
-            $projectPG = ProjectPmGoal::where('id',$request->project_pm_goal_id)->first();
-            $projectPG->client_communication = $request->client_communication;
-            $projectPG->client_communication_rating = $request->client_communication_rating;
-            $projectPG->negligence_pm = $request->negligence_pm;
-            $projectPG->negligence_pm_rating = $request->negligence_pm_rating;
-            $projectPG->reason_status = 2;
-            $projectPG->expired_status = 2;
-            $projectPG->save();
+            // $projectPG = ProjectPmGoal::where('id',$request->project_pm_goal_id)->first();
+            // $projectPG->client_communication = $request->client_communication;
+            // $projectPG->client_communication_rating = $request->client_communication_rating;
+            // $projectPG->negligence_pm = $request->negligence_pm;
+            // $projectPG->negligence_pm_rating = $request->negligence_pm_rating;
+            // $projectPG->reason_status = 2;
+            // $projectPG->expired_status = 2;
+            // $projectPG->save();
 
-            $project = Project::where('id',$projectPG->project_id)->first();
-            $deal = Deal::where('id',$project->deal_id)->first();
-            $goalHistory = new PmGoalExpHistory();
-            $goalHistory->goal_id = $projectPG->id;
-            $goalHistory->start_date = $projectPG->goal_start_date;
-            $goalHistory->deadline = $projectPG->goal_end_date;
-            $goalHistory->goal_name = $projectPG->goal_name;
-            $goalHistory->description = $projectPG->description;
-            $goalHistory->duration = $projectPG->duration;
-            $goalHistory->goal_status = $projectPG->goal_status;
-            $goalHistory->reason = $projectPG->reason;
+            $goalHistory = PmGoalExpHistory::where('goal_id',$request->project_pm_goal_id)->first();
             $goalHistory->client_communication = $request->client_communication;
-            $goalHistory->negligence_pm = $request->negligence_pm;
             $goalHistory->client_communication_rating = $request->client_communication_rating;
+            $goalHistory->negligence_pm = $request->negligence_pm;
             $goalHistory->negligence_pm_rating = $request->negligence_pm_rating;
+            $goalHistory->any_other_suggestion_admin  = $request->any_other_suggestion_admin ;
             $goalHistory->authorization_status = 1;
             $goalHistory->authorization_on = Carbon::now();
             $goalHistory->authorization_by = Auth::user()->id;
             $goalHistory->save();
 
-            $actions = PendingAction::where('code','PMRE')->where('past_status',0)->where('goal_id',$projectPG->id)->get();
+            $actions = PendingAction::where('code','PMRE')->where('past_status',0)->where('goal_id',$goalHistory->goal_id)->get();
             if($actions != null)
             {
                 foreach ($actions as $key => $action)
