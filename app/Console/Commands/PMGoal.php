@@ -46,13 +46,8 @@ class PMGoal extends Command
     //    dd($goals);
         foreach ($goals as $goal) {
             $current_date = Carbon::now();
-            if($goal->extended_goal_end_day == null)
-            {
-                $end_date = $goal->goal_end_date;
-            }else 
-            {
-                $end_date = $goal->extended_goal_end_day;
-            }
+            $end_date = $goal->goal_end_date;
+            
             if($goal->goal_code == 'DCS' && $current_date > $end_date)
             {
                // DB::beginTransaction();
@@ -216,10 +211,8 @@ class PMGoal extends Command
             $currentTime = Carbon::now();
             
             $goal_end_date = Carbon::parse($goal_check->goal_end_date)->subDays(1);
-            $goal_ext_end_date = Carbon::parse($goal_check->extended_goal_end_day)->subDays(1);
-            if($goal_check->goal_end_date >= $currentTime && $goal_end_date <=$currentTime || $goal_check->extended_goal_end_day >= $currentTime && $goal_ext_end_date <=$currentTime){
+            if($goal_check->goal_end_date >= $currentTime && $goal_end_date <=$currentTime){
                 $difference_in_hours = $currentTime->diffInHours($goal_end_date);
-                $difference_in_hours = $currentTime->diffInHours($goal_ext_end_date);
                 $difference_in_hours += 1;
                 if( $difference_in_hours <= 24)
                 {
@@ -233,11 +226,7 @@ class PMGoal extends Command
             }
             /**WHEN GOAL DEADLINE OVER*/
             $current_date = now();
-            if($goal_check->extended_goal_end_day ==null){
-                $goal_end_date = Carbon::parse($goal_check->goal_end_date)->addHours(24);
-            }else{
-                $goal_end_date = Carbon::parse($goal_check->extended_goal_end_day)->addHours(24);
-            }
+            $goal_end_date = Carbon::parse($goal_check->goal_end_date)->addHours(24);
             if($goal_check->goal_status ==0 && $goal_check->goal_end_date <= $current_date){
                 if($goal_check->mail_status == 1 || $goal_check->mail_status == 0){
                     $helper = new HelperPendingActionController();
