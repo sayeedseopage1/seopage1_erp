@@ -1,0 +1,39 @@
+.dashboardCardPricingInfo {
+  display: flex;
+  flex-direction: column;
+}
+
+.dashboardCardPricingInfo h5 {
+  font-family: Poppins, sans-serif;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+  margin-bottom: 10px;
+}
+
+.dashboardCardCurrencyInfo {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.dashboardCardCurrencyInfo img {
+  width: 20px;
+  height: 20px;
+  margin-right: 8px;
+}
+
+.dashboardCardCurrencyInfo p {
+  font-family: Poppins, sans-serif;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+}
+
+@media screen and (max-width: 768px) {
+  .dashboardCardPricingInfo:first-child {
+    margin-bottom: 16px;
+  }
+}
