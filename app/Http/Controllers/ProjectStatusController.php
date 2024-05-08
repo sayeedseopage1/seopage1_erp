@@ -227,7 +227,8 @@ class ProjectStatusController extends AccountBaseController
         }
         return response()->json(['status'=>200]);
     }
-    public function projectStatusResolve(Request $request){
+    public function projectStatusResolve(Request $request)
+    {
         // dd($request->all());
         $validator = Validator::make($request->all(), [
             'client_communication' => 'required',
