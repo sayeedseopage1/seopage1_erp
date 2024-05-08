@@ -744,7 +744,7 @@ return new class extends Migration
                 'project_type' => 2,
                 'lower_limit' => 1,
                 'upper_limit' => 1,
-                'limit_type' => 1,
+                'limit_type' => 2,
                 'limit_unit' => 1,
                 'lower_limit_condition' => '==',
                 'upper_limit_condition' => '==',
