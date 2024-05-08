@@ -29,12 +29,12 @@ class ProjectPmGoal extends Model
             ],
             [
                 'code' => 'MPMR',
-                'name' => 'At least 1 more milestone released between 12-15 days.',
+                'name' => 'At least 1 more milestone released.',
                 'type' => 'more_milestone_released',
             ],
             [
                 'code' => 'MMPMR',
-                'name' => 'At least 1 more milestone released between 12-15 days.',
+                'name' => 'At least 1 more milestone released.',
                 'type' => 'more_and_more_milestone_released',
             ],
             [
@@ -62,12 +62,12 @@ class ProjectPmGoal extends Model
             ],
             [
                 'code' => 'MPMR',
-                'name' => 'One more milestone has to be released between 7-12 th days.',
+                'name' => 'One more milestone has to be released.',
                 'type' => 'more_milestone_released',
             ],
             [
                 'code' => 'MMPMR',
-                'name' => 'At least 1 more milestone released between 12-15 days.',
+                'name' => 'At least 1 more milestone released.',
                 'type' => 'more_and_more_milestone_released',
             ],
             [

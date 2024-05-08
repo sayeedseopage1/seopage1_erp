@@ -738,6 +738,16 @@ class ProjectMilestoneController extends AccountBaseController
         return view('projects.milestone.show', $this->data);
     }
 
+
+    /**
+     * This function will return total sum of a project milestone 'cost' column
+     * @param int $projectId Project Id
+     */
+    public function getCostSum($projectId)
+    {
+        return (float) ProjectMilestone::where('project_id', $projectId)->sum('cost');
+    }
+
     public function byProject($id)
     {
         if ($id == 0) {

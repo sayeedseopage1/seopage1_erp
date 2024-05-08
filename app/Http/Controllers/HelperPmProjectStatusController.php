@@ -20,8 +20,9 @@ class HelperPmProjectStatusController extends AccountBaseController
 {
     public function ProjectPmGoalCreation($pmGoalSetting, $findDeal, $findProject)
     {
+        // dd($pmGoalSetting);
         $milestone_count = ProjectMilestone::where('project_id', $findProject->id)->count();
-        $milestoneSum = ProjectMilestone::where('project_id', $findProject->id)->sum('cost');
+        $milestoneSum = (new ProjectMilestoneController)->getCostSum($findProject->id);
 
         // --------------- calculate total number of days for the project --------------------- //
         $extraGoal = $milestoneSum < $findDeal->actual_amount ? 1 : 0;
@@ -1067,8 +1068,11 @@ class HelperPmProjectStatusController extends AccountBaseController
             $timePassed = 3;
 
             $daysRemain = ($totalProjectDuration - 3) + 2;
-            $perGoalDuration = $daysRemain / ($milestoneCount = $milestoneCount + $extraGoal - 1);
+            $perGoalDuration = $daysRemain / ($goalCount += $extraGoal);
             $perGoalDuration = number_format($perGoalDuration, 2);
+
+            // removing extra goal  for separate insert
+            $goalCount -= $extraGoal;
 
             for ($i = 1; $i <= $goalCount; $i++) {
 

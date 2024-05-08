@@ -137,6 +137,7 @@ use App\Notifications\UpdateClientFormNotification;
 use App\Notifications\UpdateClientProductCategoryNotification;
 use App\Notifications\UpdateClientProductDescriptionNotification;
 use App\Models\ProjectPmGoal;
+use Exception;
 
 class ProjectController extends AccountBaseController
 {
@@ -1874,24 +1875,25 @@ class ProjectController extends AccountBaseController
         $project->project_summary = ($request->project_summary !== '<p><br></p>') ? $request->project_summary : null;
 
         $project->save();
-        // dd($project);
+        // dd($project->status);
 
         // PROJECT PM GOAL SETTINGS START
         if ($project->status == 'not started') {
+            // dd($project);
             if ($project->project_budget) {
-                // dd($project);
-
                 $findProject = Project::where('id', $request->project_id)->first();
                 $findDeal = Deal::where('id', $findProject->deal_id)->first();
+                // dd($findDeal->project_type);
                 if ($findDeal->project_type == 'fixed') {
                     $pmGoalSetting = PmGoalSetting::where('initial_value', '<=', $findProject->project_budget)
                         ->where('end_value', '>=', $findProject->project_budget)
                         ->first();
-                    // dd($pmGoalSetting);
+
                     if ($pmGoalSetting != null) {
                         $project_status_helper = new HelperPmProjectStatusController();
                         $project_status_helper->ProjectPmGoalCreation($pmGoalSetting, $findDeal, $findProject);
                     }
+                    else throw new Exception("Pm goal settings not found.");
                 } else {
                     // if($findDeal->project_type !=null){
                     $project_status_helper = new HelperPmProjectStatusController();
@@ -1901,8 +1903,9 @@ class ProjectController extends AccountBaseController
 
                 $project->status = 'in progress';
             }
+            else throw new Exception("Deal budget not found.");
         }
-
+        // dd('asdf');
         $project->save();
         // PROJECT PM GOAL SETTINGS END
 
