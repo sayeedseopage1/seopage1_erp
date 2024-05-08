@@ -22,11 +22,11 @@ class HelperPmProjectStatusController extends AccountBaseController
     {
         $milestone_count = ProjectMilestone::where('project_id', $findProject->id)->count();
         $milestoneSum = ProjectMilestone::where('project_id', $findProject->id)->sum('cost');
+
         // --------------- calculate total number of days for the project --------------------- //
         $extraGoal = $milestoneSum < $findDeal->actual_amount ? 1 : 0;
 
         $totalRequiedDayes = self::calculateProjectRequiedDays($pmGoalSetting->name, $milestone_count + $extraGoal);
-
         // ------------- end -------------- //
 
         $pm_project = PMProject::where('project_id', $findProject->id)->first();
@@ -1024,6 +1024,24 @@ class HelperPmProjectStatusController extends AccountBaseController
 
     function createShortDeadlinePmGoals($priorityType, $project, $deal, $pmProject, $milestoneCount, $extraGoal, $totalProjectDuration)
     {
+
+        /**
+         * total goal count
+         * ragular
+         * Milestone -> goals
+         * 1 - 2+1 = 3
+         * 2 - 2 +1(1) +1(1) = 4
+         * 3 - 2 +1(2) +1(1) = 4
+         * 4 - 2 +1(2) +1(1) +1(1) = 5
+         * 5 - 2 +1(3) +1(1) +1(1) = 5
+         * 6 - 2 +1(3) +1(1) +1(1) +1(1)= 6
+         * 7 - 2 +1(4) +1(1) +1(1) +1(1)= 6
+         * 8 - 2 +1(4) +1(1) +1(1) +1(1) +1(1)= 7
+         *
+         * milestone count(mc) = 2 + 1 + mc - up round(mc/2)
+         */
+
+        $goalCount = 2 + 1 + $milestoneCount - round($milestoneCount / 2, 0);
         $goalCodes = ProjectPmGoal::$goalCodes[strtolower($priorityType)];
 
         DB::beginTransaction();
@@ -1045,13 +1063,14 @@ class HelperPmProjectStatusController extends AccountBaseController
             $goal->added_by = Auth::user()->id;
             $goal->save();
 
+            $goalCount -= 1;
             $timePassed = 3;
 
             $daysRemain = ($totalProjectDuration - 3) + 2;
             $perGoalDuration = $daysRemain / ($milestoneCount = $milestoneCount + $extraGoal - 1);
             $perGoalDuration = number_format($perGoalDuration, 2);
 
-            for ($i = 1; $i <= $milestoneCount - $extraGoal; $i++) {
+            for ($i = 1; $i <= $goalCount; $i++) {
 
                 $goal = new ProjectPmGoal();
                 $goal->project_id = $project->id;
@@ -1092,7 +1111,7 @@ class HelperPmProjectStatusController extends AccountBaseController
                 $goal->goal_type = $goalCodes['type'];
 
                 $goal->goal_start_date = $deal->award_time;
-                $goal->goal_end_date = Carbon::parse($deal->award_time)->addHours((24 * ($timePassed + $perGoalDuration)));
+                $goal->goal_end_date = Carbon::parse($deal->award_time)->addHours((24 * ($timePassed += $perGoalDuration)));
                 $goal->duration = $timePassed;
                 $goal->added_by = Auth::user()->id;
                 $goal->save();
