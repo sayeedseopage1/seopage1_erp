@@ -470,6 +470,7 @@ class ProjectStatusController extends AccountBaseController
                 {
                     // dd($action);
                     $pm_goal= ProjectPmGoal::where('id',$action->goal_id)->first();
+                    $ext_history= PmGoalDeadlineExtHistory::where('id',$action->goal_id)->first();
                     $project= Project::where('id',$pm_goal->project_id)->first();
                     $action->authorized_by= Auth::id();
                     $action->authorized_at= Carbon::now();
@@ -500,12 +501,18 @@ class ProjectStatusController extends AccountBaseController
                     $past_action->serial = $action->serial;
                     $past_action->action_id = $action->id;
                     $past_action->heading = $action->heading;
-                    if($pm_goal->extended_request_status == 2){
+                    if($ext_history->auth_status == 2){
                         $past_action->message = 'Goal ('. $goal_count .') (Name: '. $pm_goal->goal_name .') extension request PM <a href="'. route('employees.show', $pm->id) .'">'. $pm->name .'</a> for project (<a href="'. route('projects.show', $project->id) .'">'. $project->project_name .'</a>) from client (<a href="'. route('clients.show', $client->id) .'">'. $client->name .'</a>) was accepted by Admin <a href="'. route('employees.show', $authorize_by->id) .'">'. $authorize_by->name .'</a>!';
                     }
-                    if($pm_goal->extended_request_status == 3){
+                    if($ext_history->auth_status == 3){
                         $past_action->message = 'Goal ('. $goal_count .') (Name: '. $pm_goal->goal_name .') extension request PM <a href="'. route('employees.show', $pm->id) .'">'. $pm->name .'</a> for project (<a href="'. route('projects.show', $project->id) .'">'. $project->project_name .'</a>) from client (<a href="'. route('clients.show', $client->id) .'">'. $client->name .'</a>) was rejected by Admin <a href="'. route('employees.show', $authorize_by->id) .'">'. $authorize_by->name .'</a>!';
                     }
+                    // if($pm_goal->extended_request_status == 2){
+                    //     $past_action->message = 'Goal ('. $goal_count .') (Name: '. $pm_goal->goal_name .') extension request PM <a href="'. route('employees.show', $pm->id) .'">'. $pm->name .'</a> for project (<a href="'. route('projects.show', $project->id) .'">'. $project->project_name .'</a>) from client (<a href="'. route('clients.show', $client->id) .'">'. $client->name .'</a>) was accepted by Admin <a href="'. route('employees.show', $authorize_by->id) .'">'. $authorize_by->name .'</a>!';
+                    // }
+                    // if($pm_goal->extended_request_status == 3){
+                    //     $past_action->message = 'Goal ('. $goal_count .') (Name: '. $pm_goal->goal_name .') extension request PM <a href="'. route('employees.show', $pm->id) .'">'. $pm->name .'</a> for project (<a href="'. route('projects.show', $project->id) .'">'. $project->project_name .'</a>) from client (<a href="'. route('clients.show', $client->id) .'">'. $client->name .'</a>) was rejected by Admin <a href="'. route('employees.show', $authorize_by->id) .'">'. $authorize_by->name .'</a>!';
+                    // }
                     $past_action->timeframe = $action->timeframe;
                     $past_action->authorization_for = $action->authorization_for;
                     $past_action->authorized_by = $action->authorized_by;
