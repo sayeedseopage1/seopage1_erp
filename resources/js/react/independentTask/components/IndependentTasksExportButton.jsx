@@ -29,7 +29,7 @@ const IndependentTaskExportButton = ({ filter }) => {
     const queryObject = _.pickBy(Object ?? {}, Boolean);
     const query = new URLSearchParams(queryObject).toString();
 
-    const [getIndependentTasksData, { data, isFetching, isLoading }] =
+    const [getIndependentTasksData, { data, isLoading }] =
         useExportIndependentTasksMutation();
 
     const IndependentTasks = data?.data;
@@ -48,14 +48,65 @@ const IndependentTaskExportButton = ({ filter }) => {
                     horizontal: "top",
                 },
                 font: {
-                    bold: d?.project_type?.toLowerCase() === "hourly",
+                    bold: false,
                     color: {
-                        rgb:
-                            d?.project_type?.toLowerCase() === "hourly"
-                                ? "FF28A745"
-                                : "",
+                        rgb: "",
                     },
                 },
+            };
+
+            const statusStyle = (row) => {
+                if (
+                    row.board_column_name ===
+                    "Submitted Task for Client Approval"
+                ) {
+                    return {
+                        fill: {
+                            fgColor: { rgb: "FF84D6" },
+                        },
+                        font: {
+                            color: { rgb: "FFFFFFFF" },
+                        },
+                    };
+                } else if (row.board_column_name === "To Do") {
+                    return {
+                        fill: {
+                            fgColor: { rgb: "F5C71F" },
+                        },
+                        font: {
+                            color: { rgb: "FFFFFFFF" },
+                        },
+                    };
+                } else if (row.board_column_name === "Doing") {
+                    return {
+                        fill: {
+                            fgColor: { rgb: "31A0F4" },
+                        },
+                        font: {
+                            color: { rgb: "FFFFFFFF" },
+                        },
+                    };
+                } else if (
+                    row.board_column_name === "Awaiting Client Approval"
+                ) {
+                    return {
+                        fill: {
+                            fgColor: { rgb: "0e0bc2" },
+                        },
+                        font: {
+                            color: { rgb: "FFFFFFFF" },
+                        },
+                    };
+                } else {
+                    return {
+                        fill: {
+                            fgColor: { rgb: "f01616" },
+                        },
+                        font: {
+                            color: { rgb: "FFFFFFFF" },
+                        },
+                    };
+                }
             };
 
             let row = [
@@ -111,6 +162,7 @@ const IndependentTaskExportButton = ({ filter }) => {
 
                     style: {
                         ...fieldStyle,
+                        ...statusStyle(d),
                     },
                 },
             ];
@@ -191,7 +243,7 @@ const IndependentTaskExportButton = ({ filter }) => {
     return (
         <React.Fragment>
             <ExportButton onClick={handleRender}>
-                {false ? (
+                {isLoading ? (
                     <>
                         <Loader title="Processing..." />
                     </>

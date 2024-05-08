@@ -5,7 +5,7 @@ import ReactExport from "react-data-export";
 import _, { fill } from "lodash";
 import styled from "styled-components";
 
-import { useExportIndependentTasksMutation } from "../../services/api/independentTaskApiSlice";
+// import { useExportIndependentTasksMutation } from "../../services/api/independentTaskApiSlice";
 import Loader from "../../global/Loader";
 
 const ExcelFile = ReactExport.ExcelFile;
@@ -16,8 +16,8 @@ const IndependentSubTaskExportButton = ({ filter, subTaskTableData }) => {
     const queryObject = _.pickBy(filter ?? {}, Boolean);
     const query = new URLSearchParams(queryObject).toString();
 
-    const [getIndependentTasksData, { data, isFetching, isLoading }] =
-        useExportIndependentTasksMutation();
+    // const [getIndependentTasksData, { data, isLoading }] =
+    //     useExportIndependentTasksMutation();
 
     const IndependentTasks = subTaskTableData;
 
@@ -41,7 +41,59 @@ const IndependentSubTaskExportButton = ({ filter, subTaskTableData }) => {
                     },
                 },
             };
-
+            const statusStyle = (row) => {
+                if (
+                    row.board_column_name ===
+                    "Submitted Task for Client Approval"
+                ) {
+                    return {
+                        fill: {
+                            fgColor: { rgb: "FF84D6" },
+                        },
+                        font: {
+                            color: { rgb: "FFFFFFFF" },
+                        },
+                    };
+                } else if (row.board_column_name === "To Do") {
+                    return {
+                        fill: {
+                            fgColor: { rgb: "F5C71F" },
+                        },
+                        font: {
+                            color: { rgb: "FFFFFFFF" },
+                        },
+                    };
+                } else if (row.board_column_name === "Doing") {
+                    return {
+                        fill: {
+                            fgColor: { rgb: "31A0F4" },
+                        },
+                        font: {
+                            color: { rgb: "FFFFFFFF" },
+                        },
+                    };
+                } else if (
+                    row.board_column_name === "Awaiting Client Approval"
+                ) {
+                    return {
+                        fill: {
+                            fgColor: { rgb: "0e0bc2" },
+                        },
+                        font: {
+                            color: { rgb: "FFFFFFFF" },
+                        },
+                    };
+                } else {
+                    return {
+                        fill: {
+                            fgColor: { rgb: "f01616" },
+                        },
+                        font: {
+                            color: { rgb: "FFFFFFFF" },
+                        },
+                    };
+                }
+            };
             let row = [
                 {
                     value: d?.heading ?? "--",
@@ -95,6 +147,7 @@ const IndependentSubTaskExportButton = ({ filter, subTaskTableData }) => {
 
                     style: {
                         ...fieldStyle,
+                        ...statusStyle(d),
                     },
                 },
             ];
