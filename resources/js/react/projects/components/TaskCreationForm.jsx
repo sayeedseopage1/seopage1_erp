@@ -245,7 +245,12 @@ const TaskCreationForm = ({ handleRefresh, isOpen, close, onSuccess }) => {
 
             if (!primaryColor) {
                 err.primaryColor = "Primary color is required"
-                toast.warn("You have to provide a primary color");
+                // toast.warn("You have to provide a primary color");
+                errCount++;
+            }
+            if (!primaryColorDescription) {
+                err.primaryColorDescription = "Primary color description is required"
+                // toast.warn("Primary color description is required");
                 errCount++;
             }
             // if (!secondaryColors[0]?.color) {
@@ -1347,6 +1352,11 @@ const TaskCreationForm = ({ handleRefresh, isOpen, close, onSuccess }) => {
                                                                         </span>
                                                                     </div>
                                                                 </div>
+                                                                {formError?.primaryColor && (
+                                                                    <div style={{ color: "red" }}>
+                                                                        {formError?.primaryColor}
+                                                                    </div>
+                                                                )}
                                                             </div>
 
                                                             <div className="form-group pl-2">
@@ -1354,6 +1364,7 @@ const TaskCreationForm = ({ handleRefresh, isOpen, close, onSuccess }) => {
                                                                     Where Should
                                                                     Designer Use this
                                                                     Color
+                                                                    <sup>*</sup>{" "}
                                                                 </label>
                                                                 <div className="ck-editor-holder">
                                                                     <CKEditorComponent
@@ -1368,17 +1379,9 @@ const TaskCreationForm = ({ handleRefresh, isOpen, close, onSuccess }) => {
                                                                     />
                                                                 </div>
 
-                                                                {error?.pColorDesc && (
-                                                                    <div
-                                                                        className=""
-                                                                        style={{
-                                                                            color: "red",
-                                                                        }}
-                                                                    >
-                                                                        {" "}
-                                                                        {
-                                                                            error?.pColorDesc
-                                                                        }{" "}
+                                                                {formError?.primaryColorDescription && (
+                                                                    <div style={{ color: "red" }}>
+                                                                        {formError?.primaryColorDescription}
                                                                     </div>
                                                                 )}
                                                             </div>

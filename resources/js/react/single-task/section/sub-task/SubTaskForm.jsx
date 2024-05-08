@@ -450,7 +450,10 @@ const SubTaskForm = ({ close, isDesignerTask }) => {
             submit();
         }
 
+
+
         const primaryPageConfirmation = () => {
+
             if (
                 !isDesignerTask &&
                 pageTypePriority === "Primary Page Development"
@@ -466,16 +469,20 @@ const SubTaskForm = ({ close, isDesignerTask }) => {
                     }
                 });
             } else {
-                Swal.fire({
-                    icon: "info",
-                    html: `<p>Primary Page Design: All the pages on the website that are money pages (can generate money or revenue), require significant effort to be designed and clients usually remain very picky about them and don’t want to compromise anything in those pages are what we are calling primary pages. You can consider a page as a “Primary Page Design” based on the following criteria:</p> <p>* The homepage should consistently be counted as the primary page. In the absence of specific requirements regarding the homepage, the initial page that the designer is tasked with designing will be considered the "Primary Page Design". This applies to other significant money pages such as the product page, services page, collection page, etc.</p> <p> Rough numbers of the primary pages on a website: Not more than 3 (Except for very rare cases)</p> <p> When you will select primary page, it will be sent to management for authorization. </p>`,
-                    showCloseButton: true,
-                    showCancelButton: true,
-                }).then((res) => {
-                    if (res.isConfirmed) {
-                        submit();
-                    }
-                });
+                if (pageTypePriority == "Primary Page Design") {
+                    Swal.fire({
+                        icon: "info",
+                        html: `<p>Primary Page Design: All the pages on the website that are money pages (can generate money or revenue), require significant effort to be designed and clients usually remain very picky about them and don’t want to compromise anything in those pages are what we are calling primary pages. You can consider a page as a “Primary Page Design” based on the following criteria:</p> <p>* The homepage should consistently be counted as the primary page. In the absence of specific requirements regarding the homepage, the initial page that the designer is tasked with designing will be considered the "Primary Page Design". This applies to other significant money pages such as the product page, services page, collection page, etc.</p> <p> Rough numbers of the primary pages on a website: Not more than 3 (Except for very rare cases)</p> <p> When you will select primary page, it will be sent to management for authorization. </p>`,
+                        showCloseButton: true,
+                        showCancelButton: true,
+                    }).then((res) => {
+                        if (res.isConfirmed) {
+                            submit();
+                        }
+                    });
+                } else {
+                    submit();
+                }
             }
         };
 

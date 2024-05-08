@@ -377,6 +377,12 @@ const TaskEditForm = ({ task, singleTask: row, onSubmit, isLoading, onClose }) =
                 toast.warn("You have to provide a primary color");
                 count++;
             }
+
+            if (!primaryColorDescription) {
+                err.primaryColorDescription = "Primary color description is required"
+                // toast.warn("Primary color description is required");
+                count++;
+            }
             // if (!brandGuideline) {
             //     err.brandGuideline = "Brand guideline is required";
             //     count++;
@@ -1510,6 +1516,11 @@ const TaskEditForm = ({ task, singleTask: row, onSubmit, isLoading, onClose }) =
                                                             </span>
                                                         </div>
                                                     </div>
+                                                    {error?.primaryColor && (
+                                                        <div style={{ color: "red" }}>
+                                                            {error?.primaryColor}
+                                                        </div>
+                                                    )}
                                                 </div>
 
                                                 <div className="form-group pl-2">
@@ -1517,6 +1528,7 @@ const TaskEditForm = ({ task, singleTask: row, onSubmit, isLoading, onClose }) =
                                                         Where Should
                                                         Designer Use this
                                                         Color
+                                                        <sup>*</sup>
                                                     </label>
                                                     <div className="ck-editor-holder">
                                                         <CKEditorComponent
@@ -1526,6 +1538,11 @@ const TaskEditForm = ({ task, singleTask: row, onSubmit, isLoading, onClose }) =
                                                             )}
                                                         />
                                                     </div>
+                                                    {error?.primaryColorDescription && (
+                                                        <div style={{ color: "red" }}>
+                                                            {error?.primaryColorDescription}
+                                                        </div>
+                                                    )}
                                                 </div>
                                             </div>
                                         </div>
