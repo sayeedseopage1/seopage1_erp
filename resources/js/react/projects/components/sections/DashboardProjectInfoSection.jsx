@@ -144,7 +144,7 @@ const DashboardProjectInfoSection = ({ projectData }) => {
                         title="Project Budget"
                         isBorderUse={true}
                     />
-                    <div className="py-3">
+                    <div className="pt-3 pt-md-0 py-0 py-md-3">
                         <div className="d-flex justify-content-md-between flex-column flex-md-row ">
                             {ProjectBudgetData?.project_budget.map((budget) => (
                                 <DashboardCardPricingInfo
@@ -180,7 +180,64 @@ const DashboardProjectInfoSection = ({ projectData }) => {
                     </div>
                 </CardWrapper>
             </div>
-            <div className="d-flex col-3">hello</div>
+            <div className="d-flex flex-column justify-content-between col-12 col-md-3 px-0 px-md-3 pr-0">
+                <CardWrapper
+                    color="#ffffff"
+                    className="d-flex justify-content-between flex-column flex-md-row"
+                >
+                    {ProjectBudgetData.hours_logged.map((logInfo) => (
+                        <div className="d-flex flex-column" key={logInfo.id}>
+                            <DashboardCardTitle
+                                title={logInfo.title}
+                                isBorderUse={true}
+                            />
+                            <DashboardCardPricingInfo
+                                key={logInfo.id}
+                                amount={logInfo.time}
+                                icon={logInfo.icon}
+                                className="py-3"
+                            />
+                        </div>
+                    ))}
+                </CardWrapper>
+                <CardWrapper
+                    color="#ffffff"
+                    className="d-flex flex-column my-4 my-md-0"
+                >
+                    <DashboardCardTitle
+                        title="Earnings & Expenses"
+                        isBorderUse={true}
+                    />
+                    <div className="d-flex justify-content-between py-3">
+                        {ProjectBudgetData.earning_expenses
+                            .slice(0, 2)
+                            .map((moneyInfo) => (
+                                <DashboardCardPricingInfo
+                                    key={moneyInfo.id}
+                                    amount={moneyInfo.price}
+                                    title={moneyInfo.title}
+                                    icon={moneyInfo.icon}
+                                    currency={moneyInfo.currency}
+                                    currency_symbol={moneyInfo.currency_symbol}
+                                />
+                            ))}
+                    </div>
+                    <div className="d-flex">
+                        {ProjectBudgetData.earning_expenses
+                            .slice(2,3)
+                            .map((moneyInfo) => (
+                                <DashboardCardPricingInfo
+                                    key={moneyInfo.id}
+                                    amount={moneyInfo.price}
+                                    title={moneyInfo.title}
+                                    icon={moneyInfo.icon}
+                                    currency={moneyInfo.currency}
+                                    currency_symbol={moneyInfo.currency_symbol}
+                                />
+                            ))}
+                    </div>
+                </CardWrapper>
+            </div>
         </SectionWrapper>
     );
 };

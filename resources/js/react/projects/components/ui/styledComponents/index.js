@@ -68,19 +68,23 @@ export const CardWrapper = styled.div`
     align-items: center;
     .dashboardProgressDataDates{
       height: 150px;
-      font-family: Poppins, sans-serif;
-      font-size: 14px;
-      font-style: normal;
-      
-      line-height: normal;
+      color: #000;
       p {
         font-weight: 500;
-        color: #000;
+        font-family: Poppins, sans-serif;
+        font-size: 14px;
+        font-style: normal;
+        line-height: normal;
+        
       }
 
       span {
+        color: ${props => props.textColor || "#000"};   
+        font-family: Poppins;
+        font-size: 16px;
+        font-style: normal;
         font-weight: 400;
-        color: ${props => props.textColor || "#000"};    
+        line-height: normal; 
       }
 
       @media (max-width: 768px) {

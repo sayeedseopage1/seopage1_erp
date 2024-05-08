@@ -47,23 +47,23 @@ export const projectData = {
         image_url: "dghgfhg",
         pm_id: 1,
     },
-    project:{
+    project: {
         start_date: "2021-09-01",
         deadline: "2021-09-30",
         project_id: 1,
         progress: 50,
         project_budget: 1000,
-        upsell_actual_amount: 200,         
+        upsell_actual_amount: 200,
         currency: "USD",
         currency_symbol: "$",
-        deal: {  
+        deal: {
             deal_id: 1,
             original_currency: {
                 currency_code: "AUD",
                 amount: 650,
             }
         }
-        
+
     }
 
 }
@@ -165,6 +165,47 @@ export const ProjectBudgetData = {
             currency: "AUD",
             currency_symbol: "AUD",
             icon: "/images/money-tick.png"
+        }
+    ],
+    hours_logged: [
+        {
+            id: 1,
+            time: "04:33 hour",
+            icon: "/images/timer.png",
+            title: "Hours Logged"
+        },
+        {
+            id: 2,
+            title: "Estimated Time",
+            time: "04:33 hour",
+            icon: "/images/timer.png"
+        }
+    ],
+    earning_expenses: [
+
+        {
+            id: 1,
+            title: "Earning",
+            price: "800",
+            currency: "USD",
+            currency_symbol: "$",
+            icon: "/images/dollar-circle.png"
+        },
+        {
+            id: 2,
+            title: "Earning",
+            price: "200",
+            currency: "AUD",
+            currency_symbol: "AUD",
+            icon: "/images/money-tick.png"
+        },
+        {
+            id: 3,
+            title: "Expenses",
+            price: "200",
+            currency: "USD",
+            currency_symbol: "$",
+            icon: "/images/dollar-circle.png"
         }
     ]
 

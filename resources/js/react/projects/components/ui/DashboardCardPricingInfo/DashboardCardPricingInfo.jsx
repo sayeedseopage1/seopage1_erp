@@ -32,7 +32,7 @@ const DashboardCardPricingInfo = ({
 export default DashboardCardPricingInfo;
 
 DashboardCardPricingInfo.propTypes = {
-    title: PropTypes.string.isRequired,
+    title: PropTypes.string,
     amount: PropTypes.string.isRequired,
     currency: PropTypes.string,
     currency_symbol: PropTypes.string,
