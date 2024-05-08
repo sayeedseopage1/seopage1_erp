@@ -26,9 +26,9 @@ return new class extends Migration
             $table->dateTime('goal_start_date');
             $table->dateTime('goal_end_date');
             $table->string('duration');
-            $table->double('rating')->nullable();
-            $table->double('client_communication_rating')->nullable();
-            $table->double('negligence_pm_rating')->nullable();
+            // $table->double('rating')->nullable();
+            // $table->double('client_communication_rating')->nullable();
+            // $table->double('negligence_pm_rating')->nullable();
             $table->integer('admin_id')->nullable();
             $table->integer('added_by');
             $table->integer('updated_by')->nullable();
@@ -36,7 +36,7 @@ return new class extends Migration
             $table->float('goal_progress')->default(0);
             $table->integer('resolved_status')->default(0);
             $table->integer('goal_status')->default(0);
-            $table->longText('client_communication')->nullable();
+            // $table->longText('client_communication')->nullable();
             $table->longText('description')->nullable();
             $table->longText('negligence_pm')->nullable();
             $table->longText('reason')->nullable();
