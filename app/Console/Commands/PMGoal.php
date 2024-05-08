@@ -50,7 +50,7 @@ class PMGoal extends Command
             
             if($goal->goal_code == 'DCS' && $current_date > $end_date)
             {
-               // DB::beginTransaction();
+            //    DB::beginTransaction();
                 $goal_update= ProjectPmGoal::where('id',$goal->id)->first();
                 $deliverable_sign= ContractSign::where('project_id',$goal->project_id)->first();
                // dd($deliverable_sign);
