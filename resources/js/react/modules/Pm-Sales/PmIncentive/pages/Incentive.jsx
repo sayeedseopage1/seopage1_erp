@@ -17,12 +17,21 @@ const Incentive = () => {
     const [loading, setLoading] = useState(true);
     const [isDataFetching, setIsDataFetching] = useState(true);
     const [tab, setTab] = useState("held_amount");
-
     const [filterByPeriod, setFilterByPeriod] = useState("monthly");
 
-    // console.log("tab", tab);
-    // console.log("filterByPeriod", filterByPeriod);
+    const [isPayNowModalOpen, setIsPayNowModalOpen] = useState(false);
 
+    const showPayNowModal = () => {
+        setIsPayNowModalOpen(true);
+    };
+
+    const handlePayNowOk = () => {
+        setIsPayNowModalOpen(false);
+    };
+
+    const handlePayNowCancel = () => {
+        setIsPayNowModalOpen(false);
+    };
 
     React.useEffect(() => {
         const timer = setTimeout(() => {
@@ -39,7 +48,9 @@ const Incentive = () => {
                 setIsDataFetching={setIsDataFetching}
             />
             <div className='incentive_wrapper'>
-                <FilterBar tab={tab} setTab={setTab} filterByPeriod={filterByPeriod} setFilterByPeriod={setFilterByPeriod} />
+
+                <FilterBar tab={tab} setTab={setTab} filterByPeriod={filterByPeriod} setFilterByPeriod={setFilterByPeriod} isPayNowModalOpen={isPayNowModalOpen} setIsPayNowModalOpen={setIsPayNowModalOpen} showPayNowModal={showPayNowModal} handlePayNowOk={handlePayNowOk} handlePayNowCancel={handlePayNowCancel} />
+
                 <Switch>
                     <Switch.Case condition={tab == "current"}>
 

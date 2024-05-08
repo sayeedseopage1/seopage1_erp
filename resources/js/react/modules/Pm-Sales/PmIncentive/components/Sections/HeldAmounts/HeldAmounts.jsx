@@ -7,8 +7,6 @@ const HeldAmounts = () => {
     const [currentPageData, setCurrentPageData] = useState([]);
     const [numberOfRowPerPage, setNumberOfRowPerPage] = useState(10);
 
-
-
     return (
         <div className='held_amount_table_wrapper'>
             <table className="held_amount_table">

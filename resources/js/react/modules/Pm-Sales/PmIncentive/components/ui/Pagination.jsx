@@ -167,7 +167,7 @@ const Pagination = ({ data, setCurrentPageData, numOfPerPageRow = 10, sortConfig
 
 Pagination.propTypes = {
     // sortConfig: PropTypes.object.isRequired,
-    sortedData: PropTypes.func.isRequired,
+    // sortedData: PropTypes.func.isRequired,
     data: PropTypes.array.isRequired,
     setCurrentPageData: PropTypes.func,
     numOfPerPageRow: PropTypes.number,
