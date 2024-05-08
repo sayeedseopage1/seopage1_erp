@@ -45,11 +45,7 @@ class PMHourlyGoal extends Command
 
                 foreach($goals as $goal){
                     $current_date = Carbon::now();
-                    if($goal->extended_goal_end_day == null){
-                        $end_date = $goal->goal_end_date;
-                    }else{
-                        $end_date = $goal->extended_goal_end_day;
-                    }
+                    $end_date = $goal->goal_end_date;
                     if($goal->goal_code == 'HTA')
                     {
                         $goal_update = ProjectPmGoal::where('id',$goal->id)->first();
