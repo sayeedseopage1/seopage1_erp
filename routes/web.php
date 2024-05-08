@@ -1828,3 +1828,17 @@ Route::put('/task-guideline-update/{id}', [TaskController::class, 'updateTaskGui
 Route::get('/task-guideline-authorization/{id}', [TaskController::class, 'taskGuidelineAuthorization']);
 Route::get('/server-time-status', [TaskController::class, 'dailyServerStatus']);
 
+Route::get('/check-exp-deadline',function(){
+    $goalHistory = App\Models\PmGoalExpHistory::where('goal_id',1)->first();
+    $goalHistory->client_communication = 'Lorem ipsum dolor sit amet';
+    $goalHistory->client_communication_rating = '5';
+    $goalHistory->negligence_pm = 'Lorem ipsum dolor sit amet';
+    $goalHistory->negligence_pm_rating = '5';
+    $goalHistory->any_other_suggestion_admin  = 'Lorem ipsum dolor sit amet';
+    $goalHistory->authorization_status = 1;
+    $goalHistory->authorization_on = Carbon\Carbon::now();
+    $goalHistory->authorization_by = \Auth::user()->id;
+    $goalHistory->save();
+
+    return "success";
+});

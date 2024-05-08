@@ -166,7 +166,7 @@ class ProjectStatusController extends AccountBaseController
         return view('project-status.calendar.index', $this->data);
     }
     public function projectStatusReason(Request $request){
-        dd($request->all());
+        // dd($request->all());
         $validator =  $request->validate([
             'reason' => 'required',
 
@@ -311,18 +311,22 @@ class ProjectStatusController extends AccountBaseController
         $this->project_id = $id;
         return view('project-status.modal.extend_request',$this->data);
     }
-    public function storePMExtendRequest(Request $request){
-
+    public function storePMExtendRequest(Request $request)
+    {
+        // dd($request->all());
         try {
             \DB::beginTransaction();
-            $goal = ProjectPmGoal::where('id', $request->goal_id)->first();
-            $goal->extended_reason = $request->is_client_communication;
-            $goal->extended_day = $request->extended_day;
-            $goal->extension_req_on = Carbon::now();
-            $goal->extended_request_status = 1;
-            $goal->screenshot = $request->hasFile('screenshot') ? 'yes' : 'no';
-            $goal->uuid = uniqid();
-            $goal->save();
+            $goal = PmGoalDeadlineExtHistory::where('id', $request->goal_id)->first();
+            $ext_history = new PmGoalDeadlineExtHistory();
+            $ext_history->goal_id = $goal->id;
+            $ext_history->old_deadline = $goal->goal_end_date;
+            $ext_history->old_duration = $goal->duration;
+            $ext_history->extension_req_on = Carbon::now();
+            $ext_history->extension_req_for = Carbon::parse($goal->goal_end_date)->addDays($request->extended_day);
+            $ext_history->extended_pm_reason = $request->is_client_communication;
+            $ext_history->uuid = uniqid();
+            $ext_history->screenshot = $request->hasFile('screenshot') ? 'yes' : 'no';
+            $ext_history->save();
 
             
             if ($request->hasFile('screenshot')) {
@@ -417,7 +421,7 @@ class ProjectStatusController extends AccountBaseController
         return view('project-status.modal.review_extend_request',$this->data);
     }
     public function acceptOrDenyExtendRequest(Request $request){
-        // dd($request->all());
+        dd($request->all());
         try {
         \DB::beginTransaction();
             if($request->status==1){
