@@ -10,13 +10,13 @@ import Switch from '../../../../global/Switch';
 import IncentiveFactors from '../components/incentiveFactors/IncentiveFactors';
 import FilterBar from '../components/FilterBar';
 import QuarterlyAndYearlyTable from '../components/QuarterlyAndYearly/QuarterlyAndYearlyTable';
-import HeldAmountsTable from '../components/HeldAmounts/HeldAmountsTable';
+import HeldAmounts from '../components/Sections/HeldAmounts/HeldAmounts';
 
 const Incentive = () => {
     const [data, setData] = useState([]);
     const [loading, setLoading] = useState(true);
     const [isDataFetching, setIsDataFetching] = useState(true);
-    const [tab, setTab] = useState("current");
+    const [tab, setTab] = useState("held_amount");
 
     const [filterByPeriod, setFilterByPeriod] = useState("monthly");
 
@@ -68,7 +68,7 @@ const Incentive = () => {
                     </Switch.Case>
                     <Switch.Case condition={tab == "held_amount"}>
                         <div className='incentive_inner_wrapper'>
-                            <HeldAmountsTable />
+                            <HeldAmounts />
                         </div>
                     </Switch.Case>
                     <Switch.Case condition={tab == "incentive_factors"}>

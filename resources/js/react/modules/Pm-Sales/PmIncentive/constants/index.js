@@ -863,10 +863,15 @@ export const heldAmountsDataTableHeaders = [
         key: "heldAmountBalance",
         label: "Held Amount Balance",
     },
+    {
+        key: "status",
+        label: "Status",
+    },
 ];
 
 export const heldAmountsData = [
     {
+        id: 1,
         month: "Feb 2024",
         title: "Monthly Incentive",
         sub_title: "For the month of January, 2024",
@@ -874,8 +879,10 @@ export const heldAmountsData = [
         disbursed_amount: 8000,
         held_amount: 2000,
         held_amount_balance: 2000,
+        status: 1,
     },
     {
+        id: 2,
         month: "Mar 2024",
         title: "Monthly Incentive",
         sub_title: "For the month of February, 2024",
@@ -883,8 +890,10 @@ export const heldAmountsData = [
         disbursed_amount: 8000,
         held_amount: 2000,
         held_amount_balance: 2000,
+        status: 1,
     },
     {
+        id: 3,
         month: "Apr 2024",
         title: "Monthly Incentive",
         sub_title: "For the month of March, 2024",
@@ -892,8 +901,10 @@ export const heldAmountsData = [
         disbursed_amount: 8000,
         held_amount: 2000,
         held_amount_balance: 2000,
+        status: 1,
     },
     {
+        id: 4,
         month: "May 2024",
         title: "Monthly Incentive",
         sub_title: "For the month of April, 2024",
@@ -901,8 +912,10 @@ export const heldAmountsData = [
         disbursed_amount: 8000,
         held_amount: 2000,
         held_amount_balance: 2000,
+        status: 1,
     },
     {
+        id: 5,
         month: "Jun 2024",
         title: "Monthly Incentive",
         sub_title: "For the month of May, 2024",
@@ -910,8 +923,10 @@ export const heldAmountsData = [
         disbursed_amount: 8000,
         held_amount: 2000,
         held_amount_balance: 2000,
+        status: 1,
     },
     {
+        id: 6,
         month: "Jul 2024",
         title: "Monthly Incentive",
         sub_title: "For the month of June, 2024",
@@ -919,54 +934,67 @@ export const heldAmountsData = [
         disbursed_amount: 8000,
         held_amount: 2000,
         held_amount_balance: 2000,
+        status: 2,
     },
     {
+        id: 7,
         month: "Aug 2024",
         title: "Monthly Incentive",
         total_amount: 10000,
         disbursed_amount: 8000,
         held_amount: 2000,
         held_amount_balance: 2000,
+        status: 2,
     },
     {
+        id: 8,
         month: "Sep 2024",
         title: "Monthly Incentive",
         total_amount: 10000,
         disbursed_amount: 8000,
         held_amount: 2000,
         held_amount_balance: 2000,
+        status: 2,
     },
     {
+        id: 9,
         month: "Oct 2024",
         title: "Monthly Incentive",
         total_amount: 10000,
         disbursed_amount: 8000,
         held_amount: 2000,
         held_amount_balance: 2000,
+        status: 2,
     },
     {
+        id: 10,
         month: "Nov 2024",
         title: "Monthly Incentive",
         total_amount: 10000,
         disbursed_amount: 8000,
         held_amount: 2000,
         held_amount_balance: 2000,
+        status: 2,
     },
     {
+        id: 11,
         month: "Dec 2024",
         title: "Monthly Incentive",
         total_amount: 10000,
         disbursed_amount: 8000,
         held_amount: 2000,
         held_amount_balance: 2000,
+        status: 2,
     },
     {
+        id: 12,
         month: "Jan 2025",
         title: "Monthly Incentive",
         total_amount: 10000,
         disbursed_amount: 8000,
         held_amount: 2000,
         held_amount_balance: 2000,
+        status: 2,
     },
 ];
 
@@ -1158,6 +1186,9 @@ export const statsInfoData = {
         },
     ],
 };
+
+// TODO: it will be removed
+export const dummyUserRole = 1;
 
 // export const achivedBarChartData = [
 //     {

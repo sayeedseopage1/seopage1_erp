@@ -46,6 +46,30 @@
     height: 100px;
 }
 
+.incentive_success_btn,
+.incentive_danger_btn {
+    border-radius: 11px;
+    background: #CAEDE1;
+    color: #119254;
+    font-family: Poppins;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+    padding: 11px 18px;
+    min-width: 104px;
+}
+
+.incentive_success_btn {
+    background: #CAEDE1;
+    color: #119254;
+}
+
+.incentive_danger_btn {
+    background: #F9C8CC;
+    color: #F00;
+}
+
 /* ******************************
     Common ends here
  ********************************* */
@@ -568,7 +592,7 @@
 }
 
 /*********************************
-            modals starts ends
+            modals ends
 *********************************/
 
 @media only screen and (min-width: 1601px) and (max-width: 1700px) {
