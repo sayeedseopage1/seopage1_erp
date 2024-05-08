@@ -26,47 +26,97 @@ export const projectTaskTableDefaultVisibleColumns = (auth, type) => ({
 
 
 
-export const projectData = {
-    client: {
-        name: "Jill De",
-        country: {
-            iso: "au",
-            nicename: "Australia",
-            country_id: 13,
-        },
-        image_url: "ghdfdhf",
-        client_id: 251,
-    },
-    pm: {
-        name: "Belayat Hossain",
-        country: {
-            iso: "bd",
-            nicename: "Bangladesh",
-            country_id: 19,
-        },
-        image_url: "dghgfhg",
-        pm_id: 1,
-    },
-    project: {
-        start_date: "2021-09-01",
-        deadline: "2021-09-30",
-        project_id: 1,
-        progress: 50,
-        project_budget: 1000,
-        upsell_actual_amount: 200,
-        currency: "USD",
-        currency_symbol: "$",
-        deal: {
-            deal_id: 1,
-            original_currency: {
-                currency_code: "AUD",
-                amount: 650,
-            }
-        }
+export const projectData = [
+    {
+        projectType: "Hourly",
+        projectData: {
+            client: {
+                name: "Jill De",
+                country: {
+                    iso: "au",
+                    nicename: "Australia",
+                    country_id: 13,
+                },
+                image_url: "ghdfdhf",
+                client_id: 251,
+            },
+            pm: {
+                name: "Belayat Hossain",
+                country: {
+                    iso: "bd",
+                    nicename: "Bangladesh",
+                    country_id: 19,
+                },
+                image_url: "dghgfhg",
+                pm_id: 1,
+            },
+            project: {
+                start_date: "2021-09-01",
+                deadline: "2021-09-30",
+                project_id: 1,
+                progress: 50,
+                project_budget: 1000,
+                upsell_actual_amount: 200,
+                currency: "USD",
+                currency_symbol: "$",
+                deal: {
+                    deal_id: 1,
+                    original_currency: {
+                        currency_code: "AUD",
+                        amount: 650,
+                    }
+                }
 
+            }
+
+        }
+    },
+    {
+        projectType: "Fixed",
+        projectData: {
+            client: {
+                name: "Jill De",
+                country: {
+                    iso: "au",
+                    nicename: "Australia",
+                    country_id: 13,
+                },
+                image_url: "ghdfdhf",
+                client_id: 251,
+            },
+            pm: {
+                name: "Belayat Hossain",
+                country: {
+                    iso: "bd",
+                    nicename: "Bangladesh",
+                    country_id: 19,
+                },
+                image_url: "dghgfhg",
+                pm_id: 1,
+            },
+            project: {
+                start_date: "2021-09-01",
+                deadline: "2021-09-30",
+                project_id: 1,
+                progress: 50,
+                project_budget: 1000,
+                upsell_actual_amount: 200,
+                currency: "USD",
+                currency_symbol: "$",
+                deal: {
+                    deal_id: 1,
+                    original_currency: {
+                        currency_code: "AUD",
+                        amount: 650,
+                    }
+                }
+
+            }
+
+        }
     }
 
-}
+]
 
 
 

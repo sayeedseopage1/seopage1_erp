@@ -15,7 +15,7 @@ const DashboardCardPricingInfo = ({
     return (
         <div className={`dashboardCardPricingInfo ${className}`}>
             <div className="mr-2">
-                <h5 className="mb-0">
+                <h5>
                     {title} {currency && `(${currency})`}
                 </h5>
             </div>

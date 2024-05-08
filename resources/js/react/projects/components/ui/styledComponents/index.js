@@ -13,6 +13,17 @@ export const SectionWrapper = styled.section`
   }
 `
 
+export const SectionContainer = styled.div`
+  width: 100%;
+  padding: 24px;
+  background-color: ${props => props.theme.colors.sectionBg};
+  border-radius: 9px;
+
+  @media (max-width: 768px) {
+    padding: 16px;
+  }
+
+`
 
 
 // card for the project Dashboard
