@@ -13,21 +13,21 @@ const DashboardActionButtonSection = () => {
     return (
         <div className={`${style.dashboardActionButtonSection} mb-4`}>
             <SectionContainer className={`${style.dashboardActionLeftButton}`}>
-                <Button className={`${style.dashboardActionButton}`}>
+                <Button onClick={() => {}} className={`${style.dashboardActionButton}`}>
                     PM Task Guideline
                 </Button>
-                <Button className={`${style.dashboardActionButton}`}>
+                <Button onClick={() => {}} className={`${style.dashboardActionButton}`}>
                     Project Deadline Ext. Request
                 </Button>
             </SectionContainer>
             <SectionContainer className={`${style.dashboardActionRightButton}`}>
-                <Button className={`${style.dashboardActionButton}`}>
+                <Button onClick={() => {}} className={`${style.dashboardActionButton}`}>
                     QC Form
                 </Button>
-                <Button className={`${style.dashboardActionButton}`}>
+                <Button onClick={() => {}} className={`${style.dashboardActionButton}`}>
                     Completion Form
                 </Button>
-                <Button className={`${style.dashboardActionButton}`}>
+                <Button onClick={() => {}} className={`${style.dashboardActionButton}`}>
                     Dispute Form
                 </Button>
             </SectionContainer>

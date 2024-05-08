@@ -260,3 +260,107 @@ export const ProjectBudgetData = {
     ]
 
 }
+
+
+export const DashboardTaskTableData = [
+    {
+        "task_id": 1,
+        "task_name": "Task 1: This is a placeholder task name for Task 1, providing the minimum length required to meet the requested 150 character requirement. This is just filler text to demonstrate the format of the JSON array.",
+        "creation_date": "2021-09-01",
+        "due_date": "2021-09-30",
+        "status": "To Do",
+        "tracking_start_time": "2021-09-01 10:00:00",
+        "estimated_hours": "10",
+        "logged_hours": "5"
+    },
+    {
+        "task_id": 2,
+        "task_name": "Task 2: This is a placeholder task name for Task 2, providing the minimum length required to meet the requested 150 character requirement. This is just filler text to demonstrate the format of the JSON array.",
+        "creation_date": "2021-10-05",
+        "due_date": "2021-10-31",
+        "status": "In Progress",
+        "tracking_start_time": "2021-10-05 09:00:00",
+        "estimated_hours": "15",
+        "logged_hours": "8"
+    },
+    {
+        "task_id": 3,
+        "task_name": "Task 3: This is a placeholder task name for Task 3, providing the minimum length required to meet the requested 150 character requirement. This is just filler text to demonstrate the format of the JSON array.",
+        "creation_date": "2021-11-15",
+        "due_date": "2021-12-15",
+        "status": "To Do",
+        "tracking_start_time": "2021-11-15 08:30:00",
+        "estimated_hours": "20",
+        "logged_hours": "10"
+    },
+    {
+        "task_id": 4,
+        "task_name": "Task 4: This is a placeholder task name for Task 4, providing the minimum length required to meet the requested 150 character requirement. This is just filler text to demonstrate the format of the JSON array.",
+        "creation_date": "2022-01-03",
+        "due_date": "2022-01-31",
+        "status": "Completed",
+        "tracking_start_time": "2022-01-03 11:00:00",
+        "estimated_hours": "8",
+        "logged_hours": "8"
+    },
+    {
+        "task_id": 5,
+        "task_name": "Task 5: This is a placeholder task name for Task 5, providing the minimum length required to meet the requested 150 character requirement. This is just filler text to demonstrate the format of the JSON array.",
+        "creation_date": "2022-02-10",
+        "due_date": "2022-03-10",
+        "status": "To Do",
+        "tracking_start_time": "2022-02-10 10:30:00",
+        "estimated_hours": "12",
+        "logged_hours": "6"
+    },
+    {
+        "task_id": 6,
+        "task_name": "Task 6: This is a placeholder task name for Task 6, providing the minimum length required to meet the requested 150 character requirement. This is just filler text to demonstrate the format of the JSON array.",
+        "creation_date": "2022-03-20",
+        "due_date": "2022-04-20",
+        "status": "In Progress",
+        "tracking_start_time": "2022-03-20 09:45:00",
+        "estimated_hours": "18",
+        "logged_hours": "9"
+    },
+    {
+        "task_id": 7,
+        "task_name": "Task 7: This is a placeholder task name for Task 7, providing the minimum length required to meet the requested 150 character requirement. This is just filler text to demonstrate the format of the JSON array.",
+        "creation_date": "2022-05-05",
+        "due_date": "2022-05-31",
+        "status": "To Do",
+        "tracking_start_time": "2022-05-05 08:00:00",
+        "estimated_hours": "25",
+        "logged_hours": "12"
+    },
+    {
+        "task_id": 8,
+        "task_name": "Task 8: This is a placeholder task name for Task 8, providing the minimum length required to meet the requested 150 character requirement. This is just filler text to demonstrate the format of the JSON array.",
+        "creation_date": "2022-06-15",
+        "due_date": "2022-07-15",
+        "status": "In Progress",
+        "tracking_start_time": "2022-06-15 10:15:00",
+        "estimated_hours": "30",
+        "logged_hours": "15"
+    },
+    {
+        "task_id": 9,
+        "task_name": "Task 9: This is a placeholder task name for Task 9, providing the minimum length required to meet the requested 150 character requirement. This is just filler text to demonstrate the format of the JSON array.",
+        "creation_date": "2022-08-01",
+        "due_date": "2022-08-31",
+        "status": "To Do",
+        "tracking_start_time": "2022-08-01 09:30:00",
+        "estimated_hours": "10",
+        "logged_hours": "4"
+    },
+    {
+        "task_id": 10,
+        "task_name": "Task 10: This is a placeholder task name for Task 10, providing the minimum length required to meet the requested 150 character requirement. This is just filler text to demonstrate the format of the JSON array.",
+        "creation_date": "2022-09-10",
+        "due_date": "2022-09-30",
+        "status": "To Do",
+        "tracking_start_time": "2022-09-10 08:45:00",
+        "estimated_hours": "8",
+        "logged_hours": "2"
+    }
+]
