@@ -142,8 +142,9 @@ const IncentiveThickChart = ({ chartData }) => {
             formatter: function (val, opts) {
                 // Apply special case for the first bar when all values are zero
                 if (isAllZero && opts.dataPointIndex === 0) {
-                    return '⬤';
+                    return `⬤ ${chartData?.shortTitle}: ${chartData?.ybarDataValueType == "money" ? "$" : ""}${chartData?.ratio}${chartData?.ybarDataValueType == "percent" ? "%" : ""}`;
                 }
+                // return val ? `${chartData?.ratio}%, ${val}%` : "";
                 return val ? `${chartData?.ratio}%, ${val}%` : "";
                 // return val ? `${opts.w.globals.labels[opts.dataPointIndex]}, ${val}%` : "";
             },
