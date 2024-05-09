@@ -8,6 +8,7 @@ import styled from "styled-components";
 import Loader from "../global/Loader";
 
 import { useExportTableRevisionCalculatorMutation } from "../services/api/revisionCalculatorApiSlice";
+import { convertTime } from "../utils/converTime";
 
 const ExcelFile = ReactExport.ExcelFile;
 const ExcelSheet = ReactExport.ExcelFile.ExcelSheet;
@@ -17,7 +18,7 @@ const RevisionCalculatorExportButton = ({ filter }) => {
     const queryObject = _.pickBy(filter ?? {}, Boolean);
     const query = new URLSearchParams(queryObject).toString();
 
-    const [getRevisionCalculatorData, { data, isFetching, isLoading }] =
+    const [getRevisionCalculatorData, { data, isLoading }] =
         useExportTableRevisionCalculatorMutation();
 
     const RevisionCalculator = data?.data;
@@ -29,17 +30,9 @@ const RevisionCalculatorExportButton = ({ filter }) => {
         _.forEach(deals, (d) => {
             const fieldStyle = {
                 alignment: {
+                    wrapText: true,
                     vertical: "center",
-                    horizontal: "top",
-                },
-                font: {
-                    bold: d?.project_type?.toLowerCase() === "hourly",
-                    color: {
-                        rgb:
-                            d?.project_type?.toLowerCase() === "hourly"
-                                ? "FF28A745"
-                                : "",
-                    },
+                    horizontal: "center",
                 },
             };
 
@@ -55,7 +48,9 @@ const RevisionCalculatorExportButton = ({ filter }) => {
                     },
                 },
                 {
-                    value: d?.total_project_value ?? "--",
+                    value:
+                        ` $ ${Number(d?.total_project_value).toFixed(2)}` ??
+                        "--",
                     style: fieldStyle,
                 },
                 {
@@ -67,32 +62,32 @@ const RevisionCalculatorExportButton = ({ filter }) => {
                     style: fieldStyle,
                 },
                 {
-                    value: d?.minutes_spent ?? "--",
+                    value: convertTime(d?.minutes_spent) ?? "--",
                     style: fieldStyle,
                 },
                 {
-                    value: d?.sales_issues ?? "--",
+                    value: Number(d?.sales_issues).toFixed(2) ?? "--",
                     style: fieldStyle,
                 },
                 {
-                    value: d?.client_issues,
+                    value: Number(d?.client_issues).toFixed(2) ?? "--",
                     style: {
                         ...fieldStyle,
                     },
                 },
 
                 {
-                    value: d?.pm_issues ?? "--",
+                    value: Number(d?.pm_issues).toFixed(2) ?? "--",
                     style: fieldStyle,
                 },
                 {
-                    value: d?.lead_developer_issues ?? "--",
+                    value: Number(d?.lead_developer_issues).toFixed(2) ?? "--",
                     style: {
                         ...fieldStyle,
                     },
                 },
                 {
-                    value: d?.developer_issues ?? "--",
+                    value: Number(d?.developer_issues).toFixed(2) ?? "--",
 
                     style: {
                         ...fieldStyle,
@@ -106,7 +101,7 @@ const RevisionCalculatorExportButton = ({ filter }) => {
                     },
                 },
                 {
-                    value: d?.total_disputes ?? "--",
+                    value: Number(d?.total_disputes).toFixed(2) ?? "--",
 
                     style: {
                         ...fieldStyle,
@@ -121,13 +116,16 @@ const RevisionCalculatorExportButton = ({ filter }) => {
 
     // columns
     const columns = [
-        { title: "Project Manager Name" },
+        { title: "Project Manager Name", width: { wpx: 150 } },
         { title: "Assigned projects count" },
         { title: "Project budget" },
         { title: "Number of tasks" },
         { title: "Total no of revisions" },
-        { title: "Hours spent in revisions (On developers/designers end" },
-        { title: "Revision Breakdown" },
+        {
+            title: "Hours spent in revisions (On developers/designers end",
+            width: { wpx: 150 },
+        },
+        { title: "Sales Issues" },
         { title: "Client Side Issues" },
         { title: "Project Manager Issues" },
         { title: "Lead Developers/Designers Issues" },
@@ -176,7 +174,7 @@ const RevisionCalculatorExportButton = ({ filter }) => {
     return (
         <React.Fragment>
             <ExportButton onClick={handleRender}>
-                {false ? (
+                {isLoading ? (
                     <>
                         <Loader title="Processing..." />
                     </>
@@ -205,7 +203,6 @@ const RevisionCalculatorExportButton = ({ filter }) => {
 export default RevisionCalculatorExportButton;
 
 const ExportButton = styled.button`
-    margin-bottom: 20px;
     width: 140px;
     padding: 6px 10px;
     border-radius: 3px;
