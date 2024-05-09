@@ -37,7 +37,7 @@ return new class extends Migration
             // $table->integer('resolved_status')->default(0);
             $table->integer('goal_status')->default(0);
             // $table->longText('client_communication')->nullable();
-            $table->longText('description')->nullable();
+            $table->longText('expired_meet_description')->nullable();
             // $table->longText('negligence_pm')->nullable();
             // $table->longText('reason')->nullable();
             // $table->dateTime('extension_req_on');
