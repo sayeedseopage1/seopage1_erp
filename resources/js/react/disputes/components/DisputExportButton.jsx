@@ -28,17 +28,9 @@ const DisputesExportButton = ({ filter }) => {
         _.forEach(deals, (d) => {
             const fieldStyle = {
                 alignment: {
+                    wrapText: true,
                     vertical: "center",
-                    horizontal: "top",
-                },
-                font: {
-                    bold: d?.project_type?.toLowerCase() === "hourly",
-                    color: {
-                        rgb:
-                            d?.project_type?.toLowerCase() === "hourly"
-                                ? "FF28A745"
-                                : "",
-                    },
+                    horizontal: "left",
                 },
             };
 
@@ -146,20 +138,16 @@ const DisputesExportButton = ({ filter }) => {
             const statusStyle = (row) => {
                 if (row.status) {
                     return {
-                        fill: {
-                            fgColor: { rgb: "0b7c27" },
-                        },
                         font: {
-                            color: { rgb: "FFFFFFFF" },
+                            color: { rgb: "0b7c27" },
+                            bold: true,
                         },
                     };
                 } else {
                     return {
-                        fill: {
-                            fgColor: { rgb: "f1ce04" },
-                        },
                         font: {
-                            color: { rgb: "FFFFFFFF" },
+                            color: { rgb: "f1ce04" },
+                            bold: true,
                         },
                     };
                 }
@@ -167,20 +155,16 @@ const DisputesExportButton = ({ filter }) => {
             const winnerStyle = (row) => {
                 if (row?.winner?.name) {
                     return {
-                        fill: {
-                            fgColor: { rgb: "0b7c27" },
-                        },
                         font: {
-                            color: { rgb: "FFFFFFFF" },
+                            color: { rgb: "0b7c27" },
+                            bold: true,
                         },
                     };
                 } else {
                     return {
-                        fill: {
-                            fgColor: { rgb: "f1ce04" },
-                        },
                         font: {
-                            color: { rgb: "FFFFFFFF" },
+                            color: { rgb: "f1ce04" },
+                            bold: true,
                         },
                     };
                 }
@@ -315,9 +299,9 @@ const DisputesExportButton = ({ filter }) => {
         { title: "Initiated On" },
         { title: "Client" },
         { title: "Status" },
-        { title: "Project" },
-        { title: "Task" },
-        { title: "Sub Task" },
+        { title: "Project", width: { wpx: 150 } },
+        { title: "Task", width: { wpx: 150 } },
+        { title: "Sub Task", width: { wpx: 150 } },
         { title: "Sales Person" },
         { title: "Project Manager" },
         { title: "Lead Developer/Designer" },
