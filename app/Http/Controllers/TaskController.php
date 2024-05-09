@@ -2150,11 +2150,11 @@ class TaskController extends AccountBaseController
                 $task_count= Task::where('project_id',$task->project_id)->count();
                     if($task_count > 0)
                         {
-                            $pm_goal->description = 'Having the deliverables signed and creating all the tasks';
+                            $pm_goal->expired_meet_description = 'Having the deliverables signed and creating all the tasks';
 
                         }elseif($task_count < 1)
                         {
-                            $pm_goal->description = 'Deliverables is signed and tasks has not been created properly';
+                            $pm_goal->expired_meet_description = 'Deliverables is signed and tasks has not been created properly';
 
                         }
                         $pm_goal->save();

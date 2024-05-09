@@ -192,11 +192,7 @@ class ProjectController extends AccountBaseController
             if (!is_null($pm_goal) && $pm_goal->isNotEmpty()) {
                 foreach ($pm_goal as $item) {
                     $current_date = now();
-                    if($item->extended_goal_end_day !=null){
-                        $goal_end_date = Carbon::parse($item->extended_goal_end_day)->addHours(24);
-                    }else{
-                        $goal_end_date = Carbon::parse($item->goal_end_date)->addHours(24);
-                    }
+                    $goal_end_date = Carbon::parse($item->goal_end_date)->addHours(24);
                     if (Auth::user()->id == $item->pm_id && $current_date->gte($goal_end_date) && $item->goal_status == 0 && $item->reason == null) {
                         return view('projects.ajax.goale_alert', $this->data);
                     }
@@ -2535,11 +2531,7 @@ class ProjectController extends AccountBaseController
             if (!is_null($pm_goal) && $pm_goal->isNotEmpty()) {
                 foreach ($pm_goal as $item) {
                     $current_date = now();
-                    if($item->extended_goal_end_day !=null){
-                        $goal_end_date = Carbon::parse($item->extended_goal_end_day)->addHours(24);
-                    }else{
-                        $goal_end_date = Carbon::parse($item->goal_end_date)->addHours(24);
-                    }
+                    $goal_end_date = Carbon::parse($item->goal_end_date)->addHours(24);
                     if (Auth::user()->id == $item->pm_id && $current_date->gte($goal_end_date) && $item->goal_status == 0 && $item->reason == null) {
                         return view('projects.ajax.goale_alert', $this->data);
                     }
