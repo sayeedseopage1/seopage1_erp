@@ -1044,6 +1044,7 @@ class HelperPmProjectStatusController extends AccountBaseController
 
         $goalCount = 2 + 1 + $milestoneCount - round($milestoneCount / 2, 0);
         $goalCodes = ProjectPmGoal::$goalCodes[strtolower($priorityType)];
+        $goal_start_date = self::getGoalStartDate($project, $deal, $pmProject);
 
         DB::beginTransaction();
         try {
@@ -1058,9 +1059,9 @@ class HelperPmProjectStatusController extends AccountBaseController
             $goal->goal_code = $goalCodes[0]['code'];
             $goal->goal_name = $goalCodes[0]['name'];
             $goal->goal_type = $goalCodes[0]['type'];
-            $goal->goal_start_date = $pmProject->created_at;
+            $goal->goal_start_date = $goal_start_date;
+            $goal->goal_end_date = Carbon::parse($goal_start_date)->addDay(3);
             $goal->duration = 3;
-            $goal->goal_end_date = Carbon::parse($deal->award_time)->addDay(3);
             $goal->added_by = Auth::user()->id;
             $goal->save();
 
@@ -1092,8 +1093,8 @@ class HelperPmProjectStatusController extends AccountBaseController
                     $goal->goal_name = $goalCodes[5]['name'];
                     $goal->goal_type = $goalCodes[5]['type'];
                 }
-                $goal->goal_start_date = $deal->award_time;
-                $goal->goal_end_date = Carbon::parse($deal->award_time)->addHours((24 * ($timePassed += $perGoalDuration)));
+                $goal->goal_start_date = $goal_start_date;
+                $goal->goal_end_date = Carbon::parse($goal_start_date)->addHours((24 * ($timePassed += $perGoalDuration)));
                 $goal->duration = $timePassed;
                 $goal->added_by = Auth::user()->id;
                 $goal->save();
@@ -1114,8 +1115,8 @@ class HelperPmProjectStatusController extends AccountBaseController
                 $goal->goal_name = $goalCodes['name'];
                 $goal->goal_type = $goalCodes['type'];
 
-                $goal->goal_start_date = $deal->award_time;
-                $goal->goal_end_date = Carbon::parse($deal->award_time)->addHours((24 * ($timePassed += $perGoalDuration)));
+                $goal->goal_start_date = $goal_start_date;
+                $goal->goal_end_date = Carbon::parse($goal_start_date)->addHours((24 * ($timePassed += $perGoalDuration)));
                 $goal->duration = $timePassed;
                 $goal->added_by = Auth::user()->id;
                 $goal->save();

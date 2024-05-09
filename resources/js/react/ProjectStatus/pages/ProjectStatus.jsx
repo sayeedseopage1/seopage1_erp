@@ -21,7 +21,7 @@ const ProjectStatus = () => {
     const [projectDetails, setProjectDetails] = React.useState({});
     const [filter, setFilter] = React.useState(null);
     const [searchParams, setSearchParams] = useSearchParams();
-    const [projectId, setProjectId] = React.useState("900");
+    const [projectId, setProjectId] = React.useState(null);
     const [{ pageIndex, pageSize }, setPagination] = React.useState({
         pageIndex: 0,
         pageSize: 10,
@@ -61,6 +61,7 @@ const ProjectStatus = () => {
         refetch: refetchPmGoal,
     } = useGetPmGoalQuery(projectId, {
         refetchOnMountOrArgChange: true /*, skip: !filter?.start_date*/,
+        skip: !projectId,
     });
 
     // Data from the API
