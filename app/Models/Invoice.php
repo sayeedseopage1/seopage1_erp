@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Carbon\Carbon;
+use App\Models\Factor;
 use App\Traits\CustomFieldsTrait;
 use App\Observers\InvoiceObserver;
 use Illuminate\Support\Facades\DB;
@@ -140,6 +141,11 @@ class Invoice extends BaseModel
                     
                     // Project Manager Point Distribution ( Milestone release )
                     if($is_all_paid) ProjectManagerPointLogic::distribute(4, $item->project_id, $is_all_paid);
+                }
+
+                if(Project::with('deal')->find($item->project_id)->deal->project_type == 'hourly'){
+                    // Project Manager Point Distribution ( Billed amount every week )
+                    ProjectManagerPointLogic::distribute(18, $item->project_id, 1, ($item->total/100) * Factor::find(45)->points);
                 }
             }
         });
