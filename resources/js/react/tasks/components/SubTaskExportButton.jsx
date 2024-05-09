@@ -4,22 +4,20 @@ import dayjs from "dayjs";
 import ReactExport from "react-data-export";
 import _, { fill } from "lodash";
 import styled from "styled-components";
-
-import { useExportTasksMutation } from "../../services/api/tasksApiSlice";
-import Loader from "../../global/Loader";
-import { convertTime } from "../../utils/converTime";
 import { CompareDate } from "../../utils/dateController";
+import Loader from "../../global/Loader";
+import { useExportSubTasksMutation } from "../../services/api/tasksApiSlice";
 
 const ExcelFile = ReactExport.ExcelFile;
 const ExcelSheet = ReactExport.ExcelFile.ExcelSheet;
 
-const TaskExportButton = ({ filter }) => {
+const SubTaskExportButton = ({ filter }) => {
     const compareDate = new CompareDate();
     const [isRender, setIsRender] = React.useState(false);
     const queryObject = _.pickBy(filter ?? {}, Boolean);
     const query = new URLSearchParams(queryObject).toString();
 
-    const [getTasksData, { data, isLoading }] = useExportTasksMutation();
+    const [getSubTaskData, { data, isLoading }] = useExportSubTasksMutation();
 
     const Tasks = data?.tasks;
 
@@ -133,7 +131,7 @@ const TaskExportButton = ({ filter }) => {
 
                 {
                     value: dueDate(d) ?? "--",
-                    style: { ...fieldStyle },
+                    style: fieldStyle,
                 },
                 {
                     value: dayjs(data?.task_approval_date).isValid()
@@ -180,7 +178,7 @@ const TaskExportButton = ({ filter }) => {
                     },
                 },
                 {
-                    value: convertTime(d?.subtasks_hours_logged) ?? "--",
+                    value: d?.subtasks_hours_logged ?? "--",
 
                     style: {
                         ...fieldStyle,
@@ -234,7 +232,7 @@ const TaskExportButton = ({ filter }) => {
         { title: "Hours Logged" },
         { title: "Assigned By" },
         { title: "Assigned To" },
-        { title: "Task Status" },
+        { title: "Task Status", width: { wpx: 150 } },
     ];
 
     // multi data set
@@ -298,7 +296,7 @@ const TaskExportButton = ({ filter }) => {
 
     const handleRender = async () => {
         setIsRender(false);
-        await getTasksData(query).unwrap();
+        await getSubTaskData(query).unwrap();
         setIsRender(true);
     };
 
@@ -317,15 +315,15 @@ const TaskExportButton = ({ filter }) => {
             </ExportButton>
 
             {isRender && !isLoading && Tasks?.length > 0 && (
-                <ExcelFile filename="Task_table" hideElement={true}>
-                    <ExcelSheet dataSet={multiDataSet} name=" task table" />
+                <ExcelFile filename="SubTask_table" hideElement={true}>
+                    <ExcelSheet dataSet={multiDataSet} name=" Subtask table" />
                 </ExcelFile>
             )}
         </React.Fragment>
     );
 };
 
-export default TaskExportButton;
+export default SubTaskExportButton;
 
 const ExportButton = styled.button`
     width: 140px;
@@ -333,7 +331,8 @@ const ExportButton = styled.button`
     border-radius: 3px;
     display: flex;
     align-items: center;
-    /* margin-left: 15px; */
+    margin-left: 10px;
+    margin-bottom: 5px;
 
     /* color: #DAF7A6; */
     color: #000;

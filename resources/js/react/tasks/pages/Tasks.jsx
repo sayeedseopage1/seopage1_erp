@@ -34,7 +34,6 @@ const Tasks = () => {
         new Object(defaultColumnVisibility(auth))
     );
 
-    console.log("filter from task", filter);
     // api function
     const { data: unAuthorizedType } = useCheckUnAuthorizedTaskTypeQuery();
 
