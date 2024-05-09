@@ -31,17 +31,9 @@ const RevisionTableExportButton = ({ filter }) => {
         _.forEach(deals, (d) => {
             const fieldStyle = {
                 alignment: {
+                    wrapText: true,
                     vertical: "center",
-                    horizontal: "top",
-                },
-                font: {
-                    bold: d?.project_type?.toLowerCase() === "hourly",
-                    color: {
-                        rgb:
-                            d?.project_type?.toLowerCase() === "hourly"
-                                ? "FF28A745"
-                                : "",
-                    },
+                    horizontal: "left",
                 },
             };
 
@@ -84,20 +76,16 @@ const RevisionTableExportButton = ({ filter }) => {
             const statusStyle = (data) => {
                 if (data?.approval_status === "pending") {
                     return {
-                        fill: {
-                            fgColor: { rgb: "fada25" },
-                        },
                         font: {
-                            color: { rgb: "FFFFFFFF" },
+                            color: { rgb: "fada25" },
+                            bold: true,
                         },
                     };
                 } else {
                     return {
-                        fill: {
-                            fgColor: { rgb: "49db2c" },
-                        },
                         font: {
-                            color: { rgb: "FFFFFFFF" },
+                            color: { rgb: "49db2c" },
+                            bold: true,
                         },
                     };
                 }
@@ -188,17 +176,17 @@ const RevisionTableExportButton = ({ filter }) => {
     // columns
     const columns = [
         { title: "Id" },
-        { title: "Project" },
+        { title: "Project", width: { wpx: 200 } },
         { title: "Client" },
-        { title: "Task" },
-        { title: "Revision" },
-        { title: "Revision reason" },
+        { title: "Task", width: { wpx: 150 } },
+        { title: "Revision", width: { wpx: 300 } },
+        { title: "Revision reason", width: { wpx: 200 } },
         { title: "Revision Provided By" },
         { title: "Revision Due To" },
         { title: "Project Manager" },
         { title: "Lead Developer" },
         { title: "Sales Executive" },
-        { title: "Action/Status" },
+        { title: "Action/Status", width: { wpx: 150 } },
     ];
 
     // multi data set
