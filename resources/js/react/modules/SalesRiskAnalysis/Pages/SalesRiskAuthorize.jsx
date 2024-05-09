@@ -353,7 +353,7 @@ const SalesRiskAuthorize = () => {
                                     true
                                 )}
                             >
-                                <div className="d-flex justify-content-center align-items-center mt-4">
+                                <div className="d-flex justify-content-center align-items-center mt-3">
                                     <Switch>
                                         {/* 
                                         Sale Risk Analysis after auto authorize
@@ -369,7 +369,7 @@ const SalesRiskAuthorize = () => {
                                                 <div className="d-flex justify-content-center mb-3">
                                                     <p
                                                         style={{
-                                                            width: "50%",
+                                                            width: "100%",
                                                             backgroundColor:
                                                                 "#28a745",
                                                             color: "#fff",
@@ -388,6 +388,140 @@ const SalesRiskAuthorize = () => {
                                                         }
                                                     </p>
                                                 </div>
+                                            </div>
+                                        </Switch.Case>
+                                        {/* 
+                                            Sale Risk Analysis after authorize
+                                        */}
+                                        <Switch.Case
+                                            condition={
+                                                metaInfo?.deal
+                                                    ?.sale_analysis_status ===
+                                                "authorized"
+                                            }
+                                        >
+                                            <div className="d-flex flex-column justify-content-center">
+                                                <div className="d-flex justify-content-center mb-3">
+                                                    <div
+                                                        style={{
+                                                            width: "100%",
+                                                            backgroundColor:
+                                                                "#28a745",
+                                                            color: "#fff",
+                                                            cursor: "pointer",
+                                                            padding: "9px 11px",
+                                                            borderRadius:
+                                                                "0.25rem",
+                                                            textAlign: "center",
+                                                        }}
+                                                    >
+                                                        Authorized
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </Switch.Case>
+                                        {/* 
+                                            Sale Risk Analysis after denied
+                                        */}
+                                        <Switch.Case
+                                            condition={
+                                                metaInfo?.deal
+                                                    ?.sale_analysis_status ===
+                                                "denied"
+                                            }
+                                        >
+                                            <div className="d-flex flex-column justify-content-center">
+                                                <div className="d-flex justify-content-center mb-3">
+                                                    <div
+                                                        style={{
+                                                            width: "100%",
+                                                            backgroundColor:
+                                                                "#D30000",
+                                                            color: "#fff",
+                                                            cursor: "pointer",
+                                                            padding: "9px 11px",
+                                                            borderRadius:
+                                                                "0.25rem",
+                                                            textAlign: "center",
+                                                        }}
+                                                    >
+                                                        Denied
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </Switch.Case>
+                                    </Switch>
+                                </div>
+                            </Switch.Case>
+
+                            {/* 
+                                                            Sale Risk Analysis for admin comment
+                                                        */}
+                            <div className="d-flex justify-content-center align-items-center">
+                                <Switch.Case
+                                    condition={
+                                        metaInfo?.deal?.sale_authorize_comment
+                                    }
+                                >
+                                    <div className="d-flex flex-column justify-content-center w-50">
+                                        <Switch.Case
+                                            condition={
+                                                metaInfo?.deal
+                                                    ?.sale_authorize_comment
+                                            }
+                                        >
+                                            <div className="alert alert-primary d-flex flex-column flex-md-row align-items-center align-items-md-start ">
+                                                <span
+                                                    style={{
+                                                        backgroundColor:
+                                                            "#459efd ",
+                                                        color: "#fff",
+                                                        borderRadius: "0.25rem",
+                                                        padding: "4px 6px",
+                                                        height: "30px",
+                                                        width: "100%",
+                                                        minWidth: "130px",
+                                                        maxWidth: "170px",
+                                                        marginRight: "10px",
+                                                        display: "flex",
+                                                        justifyContent: "center",
+                                                        alignItems: "center",
+                                                    }}
+                                                    className="mb-3 mb-md-0"
+                                                >
+                                                    Admin Comment:{" "}
+                                                </span>
+                                                <p className="text-wrap">
+                                                    {
+                                                        metaInfo?.deal
+                                                            ?.sale_authorize_comment
+                                                    }
+                                                </p>
+                                            </div>
+                                        </Switch.Case>
+                                    </div>
+                                </Switch.Case>
+                            </div>
+
+                            <Switch.Case
+                                condition={getDealStatus(
+                                    metaInfo?.deal?.sale_analysis_status,
+                                    true
+                                )}
+                            >
+                                <div className="d-flex justify-content-center align-items-center mt-3">
+                                    <Switch>
+                                        {/* 
+                                        Sale Risk Analysis after auto authorize
+                                        */}
+                                        <Switch.Case
+                                            condition={
+                                                metaInfo?.deal
+                                                    ?.sale_analysis_status ==
+                                                "auto-authorized"
+                                            }
+                                        >
+                                            <div className="d-flex flex-column justify-content-center">
                                                 <div className="alert alert-success text-center">
                                                     This won deal was{" "}
                                                     <a
@@ -429,23 +563,6 @@ const SalesRiskAuthorize = () => {
                                             }
                                         >
                                             <div className="d-flex flex-column justify-content-center">
-                                                <div className="d-flex justify-content-center mb-3">
-                                                    <div
-                                                        style={{
-                                                            width: "50%",
-                                                            backgroundColor:
-                                                                "#28a745",
-                                                            color: "#fff",
-                                                            cursor: "pointer",
-                                                            padding: "9px 11px",
-                                                            borderRadius:
-                                                                "0.25rem",
-                                                            textAlign: "center",
-                                                        }}
-                                                    >
-                                                        Authorized
-                                                    </div>
-                                                </div>
                                                 <div className="alert alert-success text-center">
                                                     This won deal is Authorized
                                                     by{" "}
@@ -492,23 +609,6 @@ const SalesRiskAuthorize = () => {
                                             }
                                         >
                                             <div className="d-flex flex-column justify-content-center">
-                                                <div className="d-flex justify-content-center mb-3">
-                                                    <div
-                                                        style={{
-                                                            width: "50%",
-                                                            backgroundColor:
-                                                                "#D30000",
-                                                            color: "#fff",
-                                                            cursor: "pointer",
-                                                            padding: "9px 11px",
-                                                            borderRadius:
-                                                                "0.25rem",
-                                                            textAlign: "center",
-                                                        }}
-                                                    >
-                                                        Denied
-                                                    </div>
-                                                </div>
                                                 <div className="alert alert-danger text-center">
                                                     This Deal is Denied by{" "}
                                                     <a
