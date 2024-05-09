@@ -28,17 +28,9 @@ const IndependentSubTaskExportButton = ({ filter, subTaskTableData }) => {
         _.forEach(deals, (d) => {
             const fieldStyle = {
                 alignment: {
+                    wrapText: true,
                     vertical: "center",
-                    horizontal: "top",
-                },
-                font: {
-                    bold: d?.project_type?.toLowerCase() === "hourly",
-                    color: {
-                        rgb:
-                            d?.project_type?.toLowerCase() === "hourly"
-                                ? "FF28A745"
-                                : "",
-                    },
+                    horizontal: "center",
                 },
             };
             const statusStyle = (row) => {
@@ -47,49 +39,39 @@ const IndependentSubTaskExportButton = ({ filter, subTaskTableData }) => {
                     "Submitted Task for Client Approval"
                 ) {
                     return {
-                        fill: {
-                            fgColor: { rgb: "FF84D6" },
-                        },
                         font: {
-                            color: { rgb: "FFFFFFFF" },
+                            color: { rgb: "FF84D6" },
+                            bold: true,
                         },
                     };
                 } else if (row.board_column_name === "To Do") {
                     return {
-                        fill: {
-                            fgColor: { rgb: "F5C71F" },
-                        },
                         font: {
-                            color: { rgb: "FFFFFFFF" },
+                            color: { rgb: "F5C71F" },
+                            bold: true,
                         },
                     };
                 } else if (row.board_column_name === "Doing") {
                     return {
-                        fill: {
-                            fgColor: { rgb: "31A0F4" },
-                        },
                         font: {
-                            color: { rgb: "FFFFFFFF" },
+                            color: { rgb: "31A0F4" },
+                            bold: true,
                         },
                     };
                 } else if (
                     row.board_column_name === "Awaiting Client Approval"
                 ) {
                     return {
-                        fill: {
-                            fgColor: { rgb: "0e0bc2" },
-                        },
                         font: {
-                            color: { rgb: "FFFFFFFF" },
+                            color: { rgb: "0e0bc2" },
+                            bold: true,
                         },
                     };
                 } else {
                     return {
-                        fill: {
-                            fgColor: { rgb: "f01616" },
-                        },
                         font: {
-                            color: { rgb: "FFFFFFFF" },
+                            color: { rgb: "f01616" },
+                            bold: true,
                         },
                     };
                 }
@@ -104,6 +86,10 @@ const IndependentSubTaskExportButton = ({ filter, subTaskTableData }) => {
                     style: {
                         ...fieldStyle,
                     },
+                },
+                {
+                    value: d?.task_heading ?? "--",
+                    style: fieldStyle,
                 },
                 {
                     value: d?.existing_client_name ?? "--",
@@ -159,8 +145,9 @@ const IndependentSubTaskExportButton = ({ filter, subTaskTableData }) => {
 
     // columns
     const columns = [
-        { title: "Task" },
+        { title: "Task", width: { wpx: 200 } },
         { title: "Timer Status" },
+        { title: "Parent Task", width: { wpx: 200 } },
         { title: "Client" },
         { title: "Creation Date" },
         { title: "Started Date" },
@@ -169,7 +156,7 @@ const IndependentSubTaskExportButton = ({ filter, subTaskTableData }) => {
         { title: "Hours Logged" },
         { title: "Assigned By" },
         { title: "Assigned To" },
-        { title: "Task Status" },
+        { title: "Task Status", width: { wpx: 200 } },
     ];
 
     // multi data set
@@ -239,7 +226,7 @@ const IndependentSubTaskExportButton = ({ filter, subTaskTableData }) => {
                 )}
             </ExportButton>
 
-            {isRender && !isLoading && IndependentTasks?.length > 0 && (
+            {isRender && IndependentTasks?.length > 0 && (
                 <ExcelFile
                     filename="Independent_sub_task_table"
                     hideElement={true}

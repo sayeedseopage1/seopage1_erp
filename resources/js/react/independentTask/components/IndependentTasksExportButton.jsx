@@ -44,14 +44,9 @@ const IndependentTaskExportButton = ({ filter }) => {
         _.forEach(deals, (d) => {
             const fieldStyle = {
                 alignment: {
+                    wrapText: true,
                     vertical: "center",
-                    horizontal: "top",
-                },
-                font: {
-                    bold: false,
-                    color: {
-                        rgb: "",
-                    },
+                    horizontal: "left",
                 },
             };
 
@@ -61,49 +56,39 @@ const IndependentTaskExportButton = ({ filter }) => {
                     "Submitted Task for Client Approval"
                 ) {
                     return {
-                        fill: {
-                            fgColor: { rgb: "FF84D6" },
-                        },
                         font: {
-                            color: { rgb: "FFFFFFFF" },
+                            color: { rgb: "FF84D6" },
+                            bold: true,
                         },
                     };
                 } else if (row.board_column_name === "To Do") {
                     return {
-                        fill: {
-                            fgColor: { rgb: "F5C71F" },
-                        },
                         font: {
-                            color: { rgb: "FFFFFFFF" },
+                            color: { rgb: "F5C71F" },
+                            bold: true,
                         },
                     };
                 } else if (row.board_column_name === "Doing") {
                     return {
-                        fill: {
-                            fgColor: { rgb: "31A0F4" },
-                        },
                         font: {
-                            color: { rgb: "FFFFFFFF" },
+                            color: { rgb: "31A0F4" },
+                            bold: true,
                         },
                     };
                 } else if (
                     row.board_column_name === "Awaiting Client Approval"
                 ) {
                     return {
-                        fill: {
-                            fgColor: { rgb: "0e0bc2" },
-                        },
                         font: {
-                            color: { rgb: "FFFFFFFF" },
+                            color: { rgb: "0e0bc2" },
+                            bold: true,
                         },
                     };
                 } else {
                     return {
-                        fill: {
-                            fgColor: { rgb: "f01616" },
-                        },
                         font: {
-                            color: { rgb: "FFFFFFFF" },
+                            color: { rgb: "f01616" },
+                            bold: true,
                         },
                     };
                 }
@@ -174,7 +159,7 @@ const IndependentTaskExportButton = ({ filter }) => {
 
     // columns
     const columns = [
-        { title: "Task" },
+        { title: "Task", width: { wpx: 150 } },
         { title: "Timer Status" },
         { title: "Client" },
         { title: "Creation Date" },
@@ -184,7 +169,7 @@ const IndependentTaskExportButton = ({ filter }) => {
         { title: "Hours Logged" },
         { title: "Assigned By" },
         { title: "Assigned To" },
-        { title: "Task Status" },
+        { title: "Task Status", width: { wpx: 150 } },
     ];
 
     // multi data set
