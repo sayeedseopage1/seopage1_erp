@@ -1,5 +1,6 @@
 import React from 'react';
-import { quarterlyAndYearlyTableData, quarterlyAndYearlyTableHeaders } from '../../constants';
+import { quarterlyAndYearlyTableData, quarterlyAndYearlyTableHeaders } from '../../../constants/index';
+// import {} from '../../../constants/index'
 
 const QuarterlyAndYearlyTable = ({ period }) => {
     return (

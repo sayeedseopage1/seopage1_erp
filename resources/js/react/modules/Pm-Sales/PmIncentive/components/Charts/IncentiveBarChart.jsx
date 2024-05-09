@@ -5,6 +5,7 @@ import arrow2 from '../../assets/arrow-2.svg'
 import { IoInformationCircle } from "react-icons/io5";
 import { Button, Popover } from "antd";
 import IncentiveEditButton from "../ui/IncentiveEditButton";
+import { dummyUserRole } from "../../constants";
 
 const IncentiveBarChart = ({ chartData }) => {
     const chartRef = useRef(null);
@@ -143,8 +144,9 @@ const IncentiveBarChart = ({ chartData }) => {
                     </Popover>}
                 </div>
                 <div className="incentive_button_wrapper">
-
-                    <IncentiveEditButton className={btn_class_edit}>Edit</IncentiveEditButton>
+                    {
+                        dummyUserRole == 1 && <IncentiveEditButton className={btn_class_edit}>Edit</IncentiveEditButton>
+                    }
 
                     <button
                         className="chart_button"

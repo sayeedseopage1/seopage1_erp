@@ -3,6 +3,7 @@ import pointIconDark from '../assets/pointIconDark.svg'
 import cashBag from '../assets/cashBag.svg'
 import UpsaleCrossSalePointModal from './Modals/UpsaleCrossSalePointModal';
 import IncentiveEditButton from './ui/IncentiveEditButton';
+import { dummyUserRole } from '../constants';
 
 const UpsaleCrossSalePointBanner = () => {
     const [upsaleCrossSalePointsModalOpen, setUpsaleCrossSalePointsModalOpen] = useState(false);
@@ -35,7 +36,9 @@ const UpsaleCrossSalePointBanner = () => {
                         <p className='point_title point_details_wrapper' style={{ color: "#000000" }}>
                             Cash value of every upsale/cross sale point: <span className='point_score' style={{ color: "#1492E6" }}>
                                 100 Taka
-                            </span> <IncentiveEditButton className={`chart_button`}>Edit</IncentiveEditButton>
+                            </span> {
+                                dummyUserRole == 1 && <IncentiveEditButton className={`chart_button`}>Edit</IncentiveEditButton>
+                            }
                         </p>
 
                     </div>

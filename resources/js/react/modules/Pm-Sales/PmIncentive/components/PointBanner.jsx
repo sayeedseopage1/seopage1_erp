@@ -28,7 +28,14 @@ const PointBanner = () => {
                             <img src={`${item?.value_type == 'point' ? pointIcon : takaIcon}`} style={{ width: "24px", height: "24px" }} alt="pointIcon" />
                         </span>
                         <div className="">
-                            <p className='point_title point_details_wrapper'>{item?.title}: <span className='point_score'>{item?.value} {item?.value_type == 'point' ? 'pt' : 'Taka'}</span> {item?.value_type == 'point' ? '' : <IncentiveEditButton className={`chart_button`}>Edit</IncentiveEditButton>} </p>
+                            <p className='point_title point_details_wrapper'>
+                                {item?.title}: <span className='point_score'>{item?.value} {item?.value_type == 'point' ? 'pt' : 'Taka'}</span>
+                                {
+                                    item?.value_type == 'point' ? '' :
+
+                                        <IncentiveEditButton className={`chart_button`}>Edit</IncentiveEditButton>
+                                }
+                            </p>
 
                         </div>
                     </div>

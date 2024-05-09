@@ -9,14 +9,14 @@ import FinalIncentiveBanner from '../components/FinalIncentiveBanner';
 import Switch from '../../../../global/Switch';
 import IncentiveFactors from '../components/incentiveFactors/IncentiveFactors';
 import FilterBar from '../components/FilterBar';
-import QuarterlyAndYearlyTable from '../components/QuarterlyAndYearly/QuarterlyAndYearlyTable';
 import HeldAmounts from '../components/Sections/HeldAmounts/HeldAmounts';
+import QuarterlyAndYearlyTable from '../components/Sections/QuarterlyAndYearly/QuarterlyAndYearlyTable';
 
 const Incentive = () => {
     const [data, setData] = useState([]);
     const [loading, setLoading] = useState(true);
     const [isDataFetching, setIsDataFetching] = useState(true);
-    const [tab, setTab] = useState("held_amount");
+    const [tab, setTab] = useState("current");
     const [filterByPeriod, setFilterByPeriod] = useState("monthly");
 
 
