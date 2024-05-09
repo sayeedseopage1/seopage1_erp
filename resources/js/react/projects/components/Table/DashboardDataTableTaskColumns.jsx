@@ -1,5 +1,7 @@
-import { ceil } from "lodash";
+// Component - UI - Shared
 import DashboardProgressStatus from "../ui/DashboardProgressStatus/DashboardProgressStatus";
+
+// Constants
 import { ProjectProgressStatus } from "../../constants";
 
 export const DashboardDataTableTaskColumns = [

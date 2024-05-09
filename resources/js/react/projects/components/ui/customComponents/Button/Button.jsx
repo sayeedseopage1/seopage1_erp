@@ -8,9 +8,9 @@ const Button = ({
     children,
     onClick,
     type = "button",
-    className = "",
     disabled = false,
     loading = false,
+    className = "",
     ...rest
 }) => {
     return (

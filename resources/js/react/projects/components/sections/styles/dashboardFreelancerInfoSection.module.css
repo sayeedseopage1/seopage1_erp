@@ -1,0 +1,54 @@
+.dashboardFreelancerInfoSection {
+  margin: 0;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-gap: 16px;
+}
+
+.dashboardFreelancerInfoContent {
+  display: flex;
+  flex-direction: column;
+}
+
+
+.dashboardFreelancerInfoContent h2 {
+  color: #000;
+  font-family: Poppins;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+  margin-bottom: 8px;
+}
+
+.dashboardFreelancerInfoContent svg {
+  margin-right: 8px;
+  color: #000;
+  width: 25px;
+  height: 25px;
+}
+
+.dashboardFreelancerInfoContent p {
+  overflow: hidden;
+  color: #1492E6;
+  text-overflow: ellipsis;
+  font-family: Poppins;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+}
+.dashboardFreelancerInfoContent a {
+  text-decoration: none;
+}
+
+.dashboardFreelancerInfoContent a:hover {
+  text-decoration: underline;
+}
+
+
+@media (max-width: 768px) {
+  .dashboardFreelancerInfoSection {
+    grid-template-columns: 1fr;
+  }
+}

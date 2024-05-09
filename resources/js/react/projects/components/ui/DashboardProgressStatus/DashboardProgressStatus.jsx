@@ -3,9 +3,9 @@ import PropTypes from "prop-types";
 
 // style
 import "./dashboardProgressStatus.css";
-import { ProjectProgressStatus } from "../../../constants";
 
 // constant
+import { ProjectProgressStatus } from "../../../constants";
 
 const DashboardProgressStatus = ({ title, className = "", statusType }) => {
     const getBgColor = (statusType) => {

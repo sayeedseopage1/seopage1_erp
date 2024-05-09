@@ -10,6 +10,8 @@ import DashboardSalesAndPMInfoSection from "../components/sections/DashboardSale
 import { projectData } from "../constants";
 import DashboardProjectInfoFixedSection from "../components/sections/DashboardProjectInfoFixedSection";
 import DashboardProjectInfoHourlySection from "../components/sections/DashboardProjectInfoHourlySection";
+
+// Components - UI - Custom
 import Switch from "../../global/Switch";
 
 const ProjectDashboard = () => {
@@ -29,9 +31,9 @@ const ProjectDashboard = () => {
                     />
                 </Switch.Case>
             </Switch>
-            <DashboardActionButtonSection />
-            <DashboardTaskAndMileStoneSection />
-            <DashboardFreelancerInfoSection />
+            <DashboardActionButtonSection   />
+            <DashboardTaskAndMileStoneSection  />
+            <DashboardFreelancerInfoSection projectData={projectData[1]} />
             <DashboardProjectGuideAndChallengeSection />
             <DashboardSalesAndPMInfoSection />
         </section>

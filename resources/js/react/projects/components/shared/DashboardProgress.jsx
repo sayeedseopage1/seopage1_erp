@@ -10,7 +10,6 @@ import DashboardCardTitle from "../ui/DashboardCardTitle/DashboardCardTitle";
 import DashboardProgressStatus from "../ui/DashboardProgressStatus/DashboardProgressStatus";
 import ProjectProgressChart from "../ui/ProjectProgressChart/ProjectProgressChart";
 
-
 // Constants
 import { ProjectProgressStatus } from "../../constants";
 

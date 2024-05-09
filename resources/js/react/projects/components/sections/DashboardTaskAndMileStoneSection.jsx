@@ -15,7 +15,6 @@ import DashboardDataTable from "../Table/DashboardDataTable";
 import { DashboardDataTableTaskColumns } from "../Table/DashboardDataTableTaskColumns";
 import { DashboardDataTableMilestoneColumns } from "../Table/DashboardDataTableMilestoneColumns";
 
-
 // constants
 import { DashboardMileStoneTableData, DashboardTaskTableData } from "../../constants";
 

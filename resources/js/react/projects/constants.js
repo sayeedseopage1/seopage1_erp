@@ -64,7 +64,13 @@ export const projectData = [
                     original_currency: {
                         currency_code: "AUD",
                         amount: 650,
-                    }
+                    },
+                    profile_link: "https://www.freelancer.com/u/mbjsolutions?from=messaging&ref_project_id=38007534",
+                    message_link: [
+                        "https://www.freelancer.com/messages/thread/326491443?filter=active",
+                        "https://www.freelancer.com/messages/thread/326491443?filter=active",
+                    ]
+
                 }
 
             }
@@ -108,10 +114,15 @@ export const projectData = [
                     original_currency: {
                         currency_code: "AUD",
                         amount: 650,
-                    }
+                    },
+                    profile_link: "https://www.freelancer.com/u/mbjsolutions?from=messaging&ref_project_id=38007534",
+                    message_link: [
+                        "https://www.freelancer.com/messages/thread/326491443?filter=active",
+                    ]
                 }
 
-            }
+            },
+
 
         }
     }

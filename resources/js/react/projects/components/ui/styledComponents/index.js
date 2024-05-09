@@ -2,7 +2,7 @@ import styled from "styled-components";
 
 
 // container for the project Dashboard
-export const SectionWrapper = styled.section`
+export const SectionWrapper = styled.div`
   width: 100%;
   padding: 24px;
   background-color: ${props => props.theme.colors.sectionBg};
@@ -16,11 +16,13 @@ export const SectionWrapper = styled.section`
 export const SectionContainer = styled.div`
   width: 100%;
   padding: 24px;
-  background-color: ${props => props.theme.colors.sectionBg};
+  background-color: ${props => props.color || props.theme.colors.sectionBg};
   border-radius: 9px;
+  border: ${props => props.border || `1px solid ${props.theme.colors.borderBg}`};
 
   @media (max-width: 768px) {
     padding: 16px;
+    overflow: hidden;
   }
 
 `
