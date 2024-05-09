@@ -39,7 +39,7 @@ class PMHourlyGoal extends Command
     public function handle()
     {
         $goals = ProjectPmGoal::where('goal_status', 0)
-                ->where('description', null)
+                ->where('expired_meet_description', null)
                 ->whereIn('goal_code', ['HTA', '3HT','4HT','5HT', '6HT', '7HT', '8HT', '10HT', '10HTW', '12HT', '12HTW','15HT', '15HTW', '18HT', '18HTW'])
                 ->get();
 
@@ -56,11 +56,11 @@ class PMHourlyGoal extends Command
 
                         if($project_timelog >= 60){
                             $goal_update->goal_status = 1;
-                            $goal_update->description = 'At least 1 task is assigned and 1 hour is tracked';
+                            $goal_update->expired_meet_description = 'At least 1 task is assigned and 1 hour is tracked';
                             $goal_update->updated_at= Carbon::now();
                             $goal_update->save();
                         }else{
-                            $goal_update->description = 'At least 1 task is assigned and 1 hour is not tracked ';
+                            $goal_update->expired_meet_description = 'At least 1 task is assigned and 1 hour is not tracked ';
                             $goal_update->updated_at= Carbon::now();
                             $goal_update->save();
                         }
@@ -86,11 +86,11 @@ class PMHourlyGoal extends Command
 
                         if($project_timelog >= 180){
                             $goal_update->goal_status = 1;
-                            $goal_update->description = 'At least '.$num_of_hr.' hours are tracked';
+                            $goal_update->expired_meet_description = 'At least '.$num_of_hr.' hours are tracked';
                             $goal_update->updated_at= Carbon::now();
                             $goal_update->save();
                         }else{
-                            $goal_update->description = 'At least '.$num_of_hr.' hours are not tracked';
+                            $goal_update->expired_meet_description = 'At least '.$num_of_hr.' hours are not tracked';
                             $goal_update->updated_at= Carbon::now();
                             $goal_update->save();
                         }
@@ -115,11 +115,11 @@ class PMHourlyGoal extends Command
 
                         if($project_timelog >= 300){
                             $goal_update->goal_status = 1;
-                            $goal_update->description = 'At least '.$num_of_hr.' hours are tracked';
+                            $goal_update->expired_meet_description = 'At least '.$num_of_hr.' hours are tracked';
                             $goal_update->updated_at= Carbon::now();
                             $goal_update->save();
                         }else{
-                            $goal_update->description = 'At least '.$num_of_hr.' hours are tracked';
+                            $goal_update->expired_meet_description = 'At least '.$num_of_hr.' hours are tracked';
                             $goal_update->updated_at= Carbon::now();
                             $goal_update->save();
                         }
@@ -144,11 +144,11 @@ class PMHourlyGoal extends Command
 
                         if($project_timelog >= 300){
                             $goal_update->goal_status = 1;
-                            $goal_update->description = 'At least '.$num_of_hr.' hours are tracked';
+                            $goal_update->expired_meet_description = 'At least '.$num_of_hr.' hours are tracked';
                             $goal_update->updated_at= Carbon::now();
                             $goal_update->save();
                         }else{
-                            $goal_update->description = 'At least '.$num_of_hr.' hours are not tracked';
+                            $goal_update->expired_meet_description = 'At least '.$num_of_hr.' hours are not tracked';
                             $goal_update->updated_at= Carbon::now();
                             $goal_update->save();
                         }
@@ -161,11 +161,11 @@ class PMHourlyGoal extends Command
 
                         if($project_timelog >= 360){
                             $goal_update->goal_status = 1;
-                            $goal_update->description = '6 hour has been tracked out of 5 days';
+                            $goal_update->expired_meet_description = '6 hour has been tracked out of 5 days';
                             $goal_update->updated_at= Carbon::now();
                             $goal_update->save();
                         }else{
-                            $goal_update->description = '6 hour has not been tracked out of 5 days';
+                            $goal_update->expired_meet_description = '6 hour has not been tracked out of 5 days';
                             $goal_update->updated_at= Carbon::now();
                             $goal_update->save();
                         }
@@ -178,11 +178,11 @@ class PMHourlyGoal extends Command
 
                         if($project_timelog >= 420){
                             $goal_update->goal_status = 1;
-                            $goal_update->description = '7 hour has been tracked out of 5 days';
+                            $goal_update->expired_meet_description = '7 hour has been tracked out of 5 days';
                             $goal_update->updated_at= Carbon::now();
                             $goal_update->save();
                         }else{
-                            $goal_update->description = '7 hour has not been tracked out of 5 days';
+                            $goal_update->expired_meet_description = '7 hour has not been tracked out of 5 days';
                             $goal_update->updated_at= Carbon::now();
                             $goal_update->save();
                         }
@@ -195,11 +195,11 @@ class PMHourlyGoal extends Command
 
                         if($project_timelog >= 480){
                             $goal_update->goal_status = 1;
-                            $goal_update->description = '8 hour has been tracked out of 5 days';
+                            $goal_update->expired_meet_description = '8 hour has been tracked out of 5 days';
                             $goal_update->updated_at= Carbon::now();
                             $goal_update->save();
                         }else{
-                            $goal_update->description = '8 hour has not been tracked out of 5 days';
+                            $goal_update->expired_meet_description = '8 hour has not been tracked out of 5 days';
                             $goal_update->updated_at= Carbon::now();
                             $goal_update->save();
                         }
@@ -213,11 +213,11 @@ class PMHourlyGoal extends Command
 
                         if($project_timelog >= 600){
                             $goal_update->goal_status = 1;
-                            $goal_update->description = '10 hours has been tracked out of between 6th and 12th days';
+                            $goal_update->expired_meet_description = '10 hours has been tracked out of between 6th and 12th days';
                             $goal_update->updated_at= Carbon::now();
                             $goal_update->save();
                         }else{
-                            $goal_update->description = '10 hours has not been tracked out of between 6th and 12th days';
+                            $goal_update->expired_meet_description = '10 hours has not been tracked out of between 6th and 12th days';
                             $goal_update->updated_at= Carbon::now();
                             $goal_update->save();
                         }
@@ -231,11 +231,11 @@ class PMHourlyGoal extends Command
 
                         if($project_timelog >= 600){
                             $goal_update->goal_status = 1;
-                            $goal_update->description = '10 hours has been tracked 1 weekly';
+                            $goal_update->expired_meet_description = '10 hours has been tracked 1 weekly';
                             $goal_update->updated_at= Carbon::now();
                             $goal_update->save();
                         }else{
-                            $goal_update->description = '10 hours has been tracked 1 weekly';
+                            $goal_update->expired_meet_description = '10 hours has been tracked 1 weekly';
                             $goal_update->updated_at= Carbon::now();
                             $goal_update->save();
                         }
@@ -249,11 +249,11 @@ class PMHourlyGoal extends Command
 
                         if($project_timelog >= 720){
                             $goal_update->goal_status = 1;
-                            $goal_update->description = '12 hours has been tracked out of between 6th and 12th days';
+                            $goal_update->expired_meet_description = '12 hours has been tracked out of between 6th and 12th days';
                             $goal_update->updated_at= Carbon::now();
                             $goal_update->save();
                         }else{
-                            $goal_update->description = '12 hours has not been tracked out of between 6th and 12th days';
+                            $goal_update->expired_meet_description = '12 hours has not been tracked out of between 6th and 12th days';
                             $goal_update->updated_at= Carbon::now();
                             $goal_update->save();
                         }
@@ -267,11 +267,11 @@ class PMHourlyGoal extends Command
 
                         if($project_timelog >= 720){
                             $goal_update->goal_status = 1;
-                            $goal_update->description = '12 hours has been tracked 1 weekly';
+                            $goal_update->expired_meet_description = '12 hours has been tracked 1 weekly';
                             $goal_update->updated_at= Carbon::now();
                             $goal_update->save();
                         }else{
-                            $goal_update->description = '12 hours has been tracked 1 weekly';
+                            $goal_update->expired_meet_description = '12 hours has been tracked 1 weekly';
                             $goal_update->updated_at= Carbon::now();
                             $goal_update->save();
                         }
@@ -285,11 +285,11 @@ class PMHourlyGoal extends Command
 
                         if($project_timelog >= 900){
                             $goal_update->goal_status = 1;
-                            $goal_update->description = '15 hours has been tracked out of between 6th and 12th days';
+                            $goal_update->expired_meet_description = '15 hours has been tracked out of between 6th and 12th days';
                             $goal_update->updated_at= Carbon::now();
                             $goal_update->save();
                         }else{
-                            $goal_update->description = '15 hours has not been tracked out of between 6th and 12th days';
+                            $goal_update->expired_meet_description = '15 hours has not been tracked out of between 6th and 12th days';
                             $goal_update->updated_at= Carbon::now();
                             $goal_update->save();
                         }
@@ -303,11 +303,11 @@ class PMHourlyGoal extends Command
 
                         if($project_timelog >= 900){
                             $goal_update->goal_status = 1;
-                            $goal_update->description = '15 hours has been tracked 1 weekly';
+                            $goal_update->expired_meet_description = '15 hours has been tracked 1 weekly';
                             $goal_update->updated_at= Carbon::now();
                             $goal_update->save();
                         }else{
-                            $goal_update->description = '15 hours has been tracked 1 weekly';
+                            $goal_update->expired_meet_description = '15 hours has been tracked 1 weekly';
                             $goal_update->updated_at= Carbon::now();
                             $goal_update->save();
                         }
@@ -321,11 +321,11 @@ class PMHourlyGoal extends Command
 
                         if($project_timelog >= 1080){
                             $goal_update->goal_status = 1;
-                            $goal_update->description = '18 hours has been tracked out of between 6th and 12th days';
+                            $goal_update->expired_meet_description = '18 hours has been tracked out of between 6th and 12th days';
                             $goal_update->updated_at= Carbon::now();
                             $goal_update->save();
                         }else{
-                            $goal_update->description = '18 hours has not been tracked out of between 6th and 12th days';
+                            $goal_update->expired_meet_description = '18 hours has not been tracked out of between 6th and 12th days';
                             $goal_update->updated_at= Carbon::now();
                             $goal_update->save();
                         }
@@ -339,11 +339,11 @@ class PMHourlyGoal extends Command
 
                         if($project_timelog >= 1080){
                             $goal_update->goal_status = 1;
-                            $goal_update->description = '18 hours has been tracked 1 weekly';
+                            $goal_update->expired_meet_description = '18 hours has been tracked 1 weekly';
                             $goal_update->updated_at= Carbon::now();
                             $goal_update->save();
                         }else{
-                            $goal_update->description = '18 hours has been tracked 1 weekly';
+                            $goal_update->expired_meet_description = '18 hours has been tracked 1 weekly';
                             $goal_update->updated_at= Carbon::now();
                             $goal_update->save();
                         }
