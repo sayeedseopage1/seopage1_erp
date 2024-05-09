@@ -17,7 +17,7 @@ import { DashboardDataTableMilestoneColumns } from "../Table/DashboardDataTableM
 
 
 // constants
-import { DashboardTaskTableData } from "../../constants";
+import { DashboardMileStoneTableData, DashboardTaskTableData } from "../../constants";
 
 const DashboardTaskAndMileStoneSection = () => {
     return (
@@ -25,7 +25,7 @@ const DashboardTaskAndMileStoneSection = () => {
             <SectionContainer>
                 <DashboardCardTitle title="Task List" isBorderUse={false} />
                 <div className="sp1_tlr_container">
-                    <div className="sp1_tlr_tbl_container mx-0 pt-3">
+                    <div className="sp1_tlr_tbl_container mx-0 py-3">
                         {/* Dashboard Task Table */}
                         <DashboardDataTable
                             tableColumns={DashboardDataTableTaskColumns}
@@ -39,12 +39,12 @@ const DashboardTaskAndMileStoneSection = () => {
             <SectionContainer>
                 <DashboardCardTitle title="Project Milestones" isBorderUse={false} />
                 <div className="sp1_tlr_container">
-                    <div className="sp1_tlr_tbl_container mx-0 pt-3">
+                    <div className="sp1_tlr_tbl_container mx-0 py-3">
                         {/* Dashboard Task Table */}
                         <DashboardDataTable
                             tableColumns={DashboardDataTableMilestoneColumns}
                             tableName="Project Milestones"
-                            tableData={[]}
+                            tableData={DashboardMileStoneTableData}
                             isLoading={false}
                         />
                     </div>

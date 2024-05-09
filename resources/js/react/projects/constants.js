@@ -268,7 +268,7 @@ export const DashboardTaskTableData = [
         "task_name": "Task 1: This is a placeholder task name for Task 1, providing the minimum length required to meet the requested 150 character requirement. This is just filler text to demonstrate the format of the JSON array.",
         "creation_date": "2021-09-01",
         "due_date": "2021-09-30",
-        "status": "To Do",
+        "status": "Completed",
         "tracking_start_time": "2021-09-01 10:00:00",
         "estimated_hours": "10",
         "logged_hours": "5"
@@ -278,7 +278,7 @@ export const DashboardTaskTableData = [
         "task_name": "Task 2: This is a placeholder task name for Task 2, providing the minimum length required to meet the requested 150 character requirement. This is just filler text to demonstrate the format of the JSON array.",
         "creation_date": "2021-10-05",
         "due_date": "2021-10-31",
-        "status": "In Progress",
+        "status": "Doing",
         "tracking_start_time": "2021-10-05 09:00:00",
         "estimated_hours": "15",
         "logged_hours": "8"
@@ -288,7 +288,7 @@ export const DashboardTaskTableData = [
         "task_name": "Task 3: This is a placeholder task name for Task 3, providing the minimum length required to meet the requested 150 character requirement. This is just filler text to demonstrate the format of the JSON array.",
         "creation_date": "2021-11-15",
         "due_date": "2021-12-15",
-        "status": "To Do",
+        "status": "Completed",
         "tracking_start_time": "2021-11-15 08:30:00",
         "estimated_hours": "20",
         "logged_hours": "10"
@@ -309,26 +309,26 @@ export const DashboardTaskTableData = [
         "creation_date": "2022-02-10",
         "due_date": "2022-03-10",
         "status": "To Do",
-        "tracking_start_time": "2022-02-10 10:30:00",
+        "tracking_start_time": null,
         "estimated_hours": "12",
-        "logged_hours": "6"
+        "logged_hours": "0"
     },
     {
         "task_id": 6,
         "task_name": "Task 6: This is a placeholder task name for Task 6, providing the minimum length required to meet the requested 150 character requirement. This is just filler text to demonstrate the format of the JSON array.",
         "creation_date": "2022-03-20",
         "due_date": "2022-04-20",
-        "status": "In Progress",
-        "tracking_start_time": "2022-03-20 09:45:00",
+        "status": "To Do",
+        "tracking_start_time": null,
         "estimated_hours": "18",
-        "logged_hours": "9"
+        "logged_hours": "0"
     },
     {
         "task_id": 7,
         "task_name": "Task 7: This is a placeholder task name for Task 7, providing the minimum length required to meet the requested 150 character requirement. This is just filler text to demonstrate the format of the JSON array.",
         "creation_date": "2022-05-05",
         "due_date": "2022-05-31",
-        "status": "To Do",
+        "status": "Doing",
         "tracking_start_time": "2022-05-05 08:00:00",
         "estimated_hours": "25",
         "logged_hours": "12"
@@ -338,29 +338,84 @@ export const DashboardTaskTableData = [
         "task_name": "Task 8: This is a placeholder task name for Task 8, providing the minimum length required to meet the requested 150 character requirement. This is just filler text to demonstrate the format of the JSON array.",
         "creation_date": "2022-06-15",
         "due_date": "2022-07-15",
-        "status": "In Progress",
+        "status": "Doing",
         "tracking_start_time": "2022-06-15 10:15:00",
         "estimated_hours": "30",
         "logged_hours": "15"
-    },
-    {
-        "task_id": 9,
-        "task_name": "Task 9: This is a placeholder task name for Task 9, providing the minimum length required to meet the requested 150 character requirement. This is just filler text to demonstrate the format of the JSON array.",
-        "creation_date": "2022-08-01",
-        "due_date": "2022-08-31",
-        "status": "To Do",
-        "tracking_start_time": "2022-08-01 09:30:00",
-        "estimated_hours": "10",
-        "logged_hours": "4"
-    },
-    {
-        "task_id": 10,
-        "task_name": "Task 10: This is a placeholder task name for Task 10, providing the minimum length required to meet the requested 150 character requirement. This is just filler text to demonstrate the format of the JSON array.",
-        "creation_date": "2022-09-10",
-        "due_date": "2022-09-30",
-        "status": "To Do",
-        "tracking_start_time": "2022-09-10 08:45:00",
-        "estimated_hours": "8",
-        "logged_hours": "2"
     }
 ]
+export const DashboardMileStoneTableData = [
+    {
+        "milestone_id": 1,
+        "milestone_name": "Updated Milestone 1",
+        "milestone_cost": "600",
+        "milestone_currency": "EUR",
+        "milestone_currency_symbol": "€",
+        "creation_date": "2021-09-30",
+        "status": "Paid"
+    },
+    {
+        "milestone_id": 2,
+        "milestone_name": "Special Achievement",
+        "milestone_cost": "750",
+        "milestone_currency": "GBP",
+        "milestone_currency_symbol": "£",
+        "creation_date": "2021-09-30",
+        "status": "Unpaid"
+    },
+    {
+        "milestone_id": 3,
+        "milestone_name": "Goal Reached",
+        "milestone_cost": "400",
+        "milestone_currency": "CAD",
+        "milestone_currency_symbol": "CA$",
+        "creation_date": "2021-09-30",
+        "status": "Paid"
+    },
+    {
+        "milestone_id": 4,
+        "milestone_name": "New Phase Initiated",
+        "milestone_cost": "550",
+        "milestone_currency": "AUD",
+        "milestone_currency_symbol": "A$",
+        "creation_date": "2021-09-30",
+        "status": "Unpaid"
+    },
+    {
+        "milestone_id": 5,
+        "milestone_name": "Achievement Unlocked",
+        "milestone_cost": "800",
+        "milestone_currency": "JPY",
+        "milestone_currency_symbol": "¥",
+        "creation_date": "2021-09-30",
+        "status": "Paid"
+    },
+    {
+        "milestone_id": 6,
+        "milestone_name": "Next Level Attained",
+        "milestone_cost": "350",
+        "milestone_currency": "CHF",
+        "milestone_currency_symbol": "CHF",
+        "creation_date": "2021-09-30",
+        "status": "Unpaid"
+    },
+    {
+        "milestone_id": 7,
+        "milestone_name": "Victory Unleashed",
+        "milestone_cost": "700",
+        "milestone_currency": "INR",
+        "milestone_currency_symbol": "₹",
+        "creation_date": "2021-09-30",
+        "status": "Paid"
+    },
+    {
+        "milestone_id": 8,
+        "milestone_name": "Triumph Achieved",
+        "milestone_cost": "600",
+        "milestone_currency": "CNY",
+        "milestone_currency_symbol": "¥",
+        "creation_date": "2021-09-30",
+        "status": "Unpaid"
+    }
+]
+

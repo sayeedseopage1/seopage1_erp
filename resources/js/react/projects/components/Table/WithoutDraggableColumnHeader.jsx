@@ -27,10 +27,13 @@ const WithoutDraggableColumnHeader = ({
 
     // Define column justify content
     const columnJustifyContent = {
-        milestone_name: "center",
         milestone_cost: "center",
-        creation_date_milestone: "center",
-        status_milestone: "center",
+        creation_date: "center",
+        status: "center",
+        due_date: "center",
+        tracking_start_time: "center",
+        estimated_hours: "center",
+        logged_hours: "center",
         default: "flex-start",
     };
 

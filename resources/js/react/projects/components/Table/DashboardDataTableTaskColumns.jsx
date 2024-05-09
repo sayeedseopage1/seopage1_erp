@@ -1,12 +1,22 @@
+import { ceil } from "lodash";
+import DashboardProgressStatus from "../ui/DashboardProgressStatus/DashboardProgressStatus";
+import { ProjectProgressStatus } from "../../constants";
+
 export const DashboardDataTableTaskColumns = [
     {
         id: "task_name",
         header: "Task name",
         accessorKey: "task_name",
         cell: ({ row }) => {
-            const data = row.original
+            const data = row.original;
             return (
-                <a href={`/account/tasks/${data.task_id}`} className="singleline-ellipsis">{data.task_name}</a>
+                <a
+                    href={`/account/tasks/${data.task_id}`}
+                    className="singleline-ellipsis"
+                    title={data.task_name}
+                >
+                    {data.task_name}
+                </a>
             );
         },
     },
@@ -24,11 +34,32 @@ export const DashboardDataTableTaskColumns = [
         id: "status",
         header: "Status",
         accessorKey: "status",
+        cell: ({ row }) => {
+            const data = row.original;
+            const statusData = ProjectProgressStatus?.find(
+                (status) => status?.name === data?.status
+            );
+            return (
+                <DashboardProgressStatus
+                    title={statusData?.name}
+                    statusType={statusData?.tag}
+                    className="dashboardTaskTableStatus"
+                />
+            );
+        },
     },
     {
         id: "tracking_start_time",
         header: "Tracking start time",
         accessorKey: "tracking_start_time",
+        cell: ({ row }) => {
+            const data = row.original;
+            return (
+                <span className="singleline-ellipsis">
+                    {data.tracking_start_time ?? "Not started yet"}
+                </span>
+            );
+        },
     },
     {
         id: "estimated_hours",

@@ -13,6 +13,10 @@ import {
 import WithoutDraggableColumnHeader from "./WithoutDraggableColumnHeader";
 import EmptyTable from "../../../global/EmptyTable";
 
+// Style
+import './style/dashboardDataTable.css'
+
+
 const DashboardDataTable = ({
     tableName,
     tableData,
@@ -73,7 +77,7 @@ const DashboardDataTable = ({
     return (
         <>
             <div
-                className="sp1_tasks_table_wrapper"
+                className="sp1_tasks_table_wrapper dashboardDataTable"
                 style={{
                     height: "100%",
                     maxHeight: "30vh",
