@@ -27,7 +27,10 @@ export const RevisionTableColumns = [
                 <Popover>
                     <Popover.Button>
                         <a href={`/account/projects/${data?.project_id}`}>
-                            <span className="multiline-ellipsis">
+                            <span
+                                className="multiline-ellipsis"
+                                style={{ color: "#3366CC" }}
+                            >
                                 {row.getValue()}
                             </span>
                         </a>
@@ -82,7 +85,9 @@ export const RevisionTableColumns = [
                             href={`/account/tasks/${data.task_id}`}
                             className="multiline-ellipsis"
                         >
-                            {data.heading}
+                            <span style={{ color: "#3366CC" }}>
+                                {data.heading}
+                            </span>
                         </a>
                     </Popover.Button>
 

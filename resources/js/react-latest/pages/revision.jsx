@@ -32,7 +32,6 @@ const Revision = () => {
         }
     );
 
-    console.log("filter in filter", filter.filter);
     return (
         <section className={styles.revision_section_container}>
             {/* filter */}
