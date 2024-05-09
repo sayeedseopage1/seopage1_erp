@@ -33,7 +33,7 @@ const SubTaskExportButton = ({ filter }) => {
                 alignment: {
                     wrapText: true,
                     vertical: "center",
-                    horizontal: "left",
+                    horizontal: "center",
                 },
             };
 
@@ -89,6 +89,22 @@ const SubTaskExportButton = ({ filter }) => {
                 return date;
             };
 
+            const approveStyle = (d) => {
+                if (dayjs(d?.task_approval_date).isValid()) {
+                    return {
+                        font: {
+                            color: { rgb: "050000" },
+                            bold: true,
+                        },
+                    };
+                } else {
+                    return {
+                        font: {
+                            color: { rgb: "fdae1a" },
+                        },
+                    };
+                }
+            };
             let row = [
                 {
                     value: d?.heading ?? "--",
@@ -166,6 +182,7 @@ const SubTaskExportButton = ({ filter }) => {
 
                     style: {
                         ...fieldStyle,
+                        ...approveStyle(d),
                     },
                 },
                 {
@@ -227,7 +244,7 @@ const SubTaskExportButton = ({ filter }) => {
         { title: "Started Date" },
         { title: "Completion Date" },
         { title: "Submission Date" },
-        { title: "Approved On" },
+        { title: "Approved On", width: { wpx: 100 } },
         { title: "Estimated Time" },
         { title: "Hours Logged" },
         { title: "Assigned By" },

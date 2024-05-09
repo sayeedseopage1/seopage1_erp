@@ -84,7 +84,7 @@ var SubTaskExportButton = function SubTaskExportButton(_ref) {
         alignment: {
           wrapText: true,
           vertical: "center",
-          horizontal: "left"
+          horizontal: "center"
         }
       };
       var statusStyle = function statusStyle(row) {
@@ -144,6 +144,26 @@ var SubTaskExportButton = function SubTaskExportButton(_ref) {
         date = date === "Today" ? date : dayjs__WEBPACK_IMPORTED_MODULE_2___default()(date).format("DD-MM-YYYY");
         return date;
       };
+      var approveStyle = function approveStyle(d) {
+        if (dayjs__WEBPACK_IMPORTED_MODULE_2___default()(d === null || d === void 0 ? void 0 : d.task_approval_date).isValid()) {
+          return {
+            font: {
+              color: {
+                rgb: "050000"
+              },
+              bold: true
+            }
+          };
+        } else {
+          return {
+            font: {
+              color: {
+                rgb: "fdae1a"
+              }
+            }
+          };
+        }
+      };
       var row = [{
         value: (_d$heading = d === null || d === void 0 ? void 0 : d.heading) !== null && _d$heading !== void 0 ? _d$heading : "--",
         style: fieldStyle
@@ -182,7 +202,7 @@ var SubTaskExportButton = function SubTaskExportButton(_ref) {
         style: _objectSpread({}, fieldStyle)
       }, {
         value: dayjs__WEBPACK_IMPORTED_MODULE_2___default()(d === null || d === void 0 ? void 0 : d.task_approval_date).isValid() ? dayjs__WEBPACK_IMPORTED_MODULE_2___default()(d === null || d === void 0 ? void 0 : d.task_approval_date).format("DD-MM-YYYY") : "Not Completed Yet",
-        style: _objectSpread({}, fieldStyle)
+        style: _objectSpread(_objectSpread({}, fieldStyle), approveStyle(d))
       }, {
         value: (_ref2 = "".concat(d === null || d === void 0 ? void 0 : d.estimate_hours, " hrs ").concat(d === null || d === void 0 ? void 0 : d.estimate_minutes, " mins")) !== null && _ref2 !== void 0 ? _ref2 : "--",
         style: _objectSpread({}, fieldStyle)
@@ -245,7 +265,10 @@ var SubTaskExportButton = function SubTaskExportButton(_ref) {
   }, {
     title: "Submission Date"
   }, {
-    title: "Approved On"
+    title: "Approved On",
+    width: {
+      wpx: 100
+    }
   }, {
     title: "Estimated Time"
   }, {

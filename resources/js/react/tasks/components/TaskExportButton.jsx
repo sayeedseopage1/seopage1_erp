@@ -35,7 +35,7 @@ const TaskExportButton = ({ filter }) => {
                 alignment: {
                     wrapText: true,
                     vertical: "center",
-                    horizontal: "left",
+                    horizontal: "center",
                 },
             };
 
@@ -89,6 +89,23 @@ const TaskExportButton = ({ filter }) => {
                 date =
                     date === "Today" ? date : dayjs(date).format("DD-MM-YYYY");
                 return date;
+            };
+
+            const approveStyle = (d) => {
+                if (dayjs(d?.task_approval_date).isValid()) {
+                    return {
+                        font: {
+                            color: { rgb: "050000" },
+                            bold: true,
+                        },
+                    };
+                } else {
+                    return {
+                        font: {
+                            color: { rgb: "fdae1a" },
+                        },
+                    };
+                }
             };
 
             let row = [
@@ -168,6 +185,7 @@ const TaskExportButton = ({ filter }) => {
 
                     style: {
                         ...fieldStyle,
+                        ...approveStyle(d),
                     },
                 },
                 {
@@ -229,12 +247,12 @@ const TaskExportButton = ({ filter }) => {
         { title: "Started Date" },
         { title: "Completion Date" },
         { title: "Submission Date" },
-        { title: "Approved On" },
+        { title: "Approved On", width: { wpx: 100 } },
         { title: "Estimated Time" },
         { title: "Hours Logged" },
         { title: "Assigned By" },
         { title: "Assigned To" },
-        { title: "Task Status" },
+        { title: "Task Status", width: { wpx: 150 } },
     ];
 
     // multi data set
