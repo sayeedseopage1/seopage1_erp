@@ -58,14 +58,9 @@ const CashPointsExportButton = ({ filter }) => {
         _.forEach(deals, (d) => {
             const fieldStyle = {
                 alignment: {
+                    wrapText: true,
                     vertical: "center",
-                    horizontal: "top",
-                },
-                font: {
-                    bold: false,
-                    color: {
-                        rgb: "",
-                    },
+                    horizontal: "center",
                 },
             };
 
@@ -117,7 +112,7 @@ const CashPointsExportButton = ({ filter }) => {
     const columns = [
         { title: "ID" },
         { title: "Date" },
-        { title: "Action" },
+        { title: "Action", width: { wpx: 300 } },
         { title: "Points Earned" },
         { title: "Points Lost" },
         { title: "Balance Points" },
