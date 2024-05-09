@@ -30,7 +30,7 @@ border-radius: 8px;
 border: 1px solid #1492E6;
 background-color: ${(props) => props.color || "transparent"};
 padding: 15px 20px;
-font-size: 14px;
+font-size: ${(props) => props.font || "14px"};
 font-weight: 500;
 color: ${(props) => props.textColor ? "#fff" : "#1492E6"};
 
@@ -60,6 +60,10 @@ max-width: 100px;
 @media (max-width:414px) {
     min-width: 100px;
   }
+
+  &:disabled {
+        cursor: not-allowed;
+    }
 `
 
 export const AddNewSectionCointainer = styled.div`

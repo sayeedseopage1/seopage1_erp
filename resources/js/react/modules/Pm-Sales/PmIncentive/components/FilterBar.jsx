@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import '../styles/Incentive.css'
 import { ButtonComponent } from '../../PointFactors/components/Styles/ui/ui';
 import PayNowModal from './Modals/HeldAmounts/PayNowModal';
@@ -28,9 +28,13 @@ const pointFilters = [
     }
 ]
 
-const FilterBar = ({ tab, setTab, filterByPeriod, setFilterByPeriod, showPayNowModal, isPayNowModalOpen, setIsPayNowModalOpen, handlePayNowOk, handlePayNowCancel }) => {
+const FilterBar = ({ tab, setTab, filterByPeriod, setFilterByPeriod }) => {
 
+    const [isPayNowModalOpen, setIsPayNowModalOpen] = useState(false);
 
+    const showPayNowModal = () => {
+        setIsPayNowModalOpen(!isPayNowModalOpen);
+    };
 
     return (
         <div className='filter_bar'>
@@ -77,7 +81,7 @@ const FilterBar = ({ tab, setTab, filterByPeriod, setFilterByPeriod, showPayNowM
                 </div>
             }
 
-            <PayNowModal isPayNowModalOpen={isPayNowModalOpen} setIsPayNowModalOpen={setIsPayNowModalOpen} handlePayNowOk={handlePayNowOk} handlePayNowCancel={handlePayNowCancel} />
+            <PayNowModal isPayNowModalOpen={isPayNowModalOpen} showPayNowModal={showPayNowModal} />
         </div>
     );
 };

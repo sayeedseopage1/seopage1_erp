@@ -19,19 +19,6 @@ const Incentive = () => {
     const [tab, setTab] = useState("held_amount");
     const [filterByPeriod, setFilterByPeriod] = useState("monthly");
 
-    const [isPayNowModalOpen, setIsPayNowModalOpen] = useState(false);
-
-    const showPayNowModal = () => {
-        setIsPayNowModalOpen(true);
-    };
-
-    const handlePayNowOk = () => {
-        setIsPayNowModalOpen(false);
-    };
-
-    const handlePayNowCancel = () => {
-        setIsPayNowModalOpen(false);
-    };
 
     React.useEffect(() => {
         const timer = setTimeout(() => {
@@ -49,7 +36,9 @@ const Incentive = () => {
             />
             <div className='incentive_wrapper'>
 
-                <FilterBar tab={tab} setTab={setTab} filterByPeriod={filterByPeriod} setFilterByPeriod={setFilterByPeriod} isPayNowModalOpen={isPayNowModalOpen} setIsPayNowModalOpen={setIsPayNowModalOpen} showPayNowModal={showPayNowModal} handlePayNowOk={handlePayNowOk} handlePayNowCancel={handlePayNowCancel} />
+                {/*  <FilterBar tab={tab} setTab={setTab} filterByPeriod={filterByPeriod} setFilterByPeriod={setFilterByPeriod} isPayNowModalOpen={isPayNowModalOpen} setIsPayNowModalOpen={setIsPayNowModalOpen} showPayNowModal={showPayNowModal} handlePayNowOk={handlePayNowOk} handlePayNowCancel={handlePayNowCancel} /> */}
+
+                <FilterBar tab={tab} setTab={setTab} filterByPeriod={filterByPeriod} setFilterByPeriod={setFilterByPeriod} />
 
                 <Switch>
                     <Switch.Case condition={tab == "current"}>
