@@ -252,7 +252,7 @@ class PaymentController extends AccountBaseController
                 $goal_percentage = 100/$goal_count;
                 $pm_goal->goal_progress = $goal_percentage;
                 $pm_goal->goal_status = 1;
-                $pm_goal->description = $complete_milestones . ' milestones of '.$total_milestones. ' milestones are released';
+                $pm_goal->expired_meet_description = $complete_milestones . ' milestones of '.$total_milestones. ' milestones are released';
                 $pm_goal->updated_at= Carbon::now();
                 $pm_goal->save();
             }elseif($pm_goal != null && $current_date < $pm_goal->goal_end_date && 2 <= $complete_milestones && $pm_goal->goal_code == 'MPMR'){
@@ -260,7 +260,7 @@ class PaymentController extends AccountBaseController
                 $goal_percentage = 100/$goal_count;
                 $pm_goal->goal_progress = $goal_percentage;
                 $pm_goal->goal_status = 1;
-                $pm_goal->description = '2 out of '.$complete_milestones.' milestones released in this week';
+                $pm_goal->expired_meet_description = '2 out of '.$complete_milestones.' milestones released in this week';
                 $pm_goal->updated_at= Carbon::now();
                 $pm_goal->save();
             }elseif($pm_goal != null && $current_date < $pm_goal->goal_end_date && 3 <= $complete_milestones && $pm_goal->goal_code == 'MMPMR'){
@@ -268,7 +268,7 @@ class PaymentController extends AccountBaseController
                 $goal_percentage = 100/$goal_count;
                 $pm_goal->goal_progress = $goal_percentage;
                 $pm_goal->goal_status = 1;
-                $pm_goal->description = '3 out of '.$complete_milestones.' milestones released in this week';
+                $pm_goal->expired_meet_description = '3 out of '.$complete_milestones.' milestones released in this week';
                 $pm_goal->updated_at= Carbon::now();
                 $pm_goal->save();
             }elseif($pm_goal != null && $current_date < $pm_goal->goal_end_date && 4 <= $complete_milestones && $pm_goal->goal_code == 'LM'){
@@ -276,7 +276,7 @@ class PaymentController extends AccountBaseController
                 $goal_percentage = 100/$goal_count;
                 $pm_goal->goal_progress = $goal_percentage;
                 $pm_goal->goal_status = 1;
-                $pm_goal->description = '4 out of '.$complete_milestones.' milestones released in this week';
+                $pm_goal->expired_meet_description = '4 out of '.$complete_milestones.' milestones released in this week';
                 $pm_goal->updated_at= Carbon::now();
                 $pm_goal->save();
             }elseif($pm_goal != null && $current_date < $pm_goal->goal_end_date && $complete_milestones >= 1 && $pm_goal->goal_code == 'FMR'){
@@ -284,7 +284,7 @@ class PaymentController extends AccountBaseController
                 $goal_percentage = 100/$goal_count;
                 $pm_goal->goal_progress = $goal_percentage;
                 $pm_goal->goal_status = 1;
-                $pm_goal->description = '1 out of '.$complete_milestones. ' milestones released in this week';
+                $pm_goal->expired_meet_description = '1 out of '.$complete_milestones. ' milestones released in this week';
                 $pm_goal->updated_at= Carbon::now();
                 $pm_goal->save();
             }
