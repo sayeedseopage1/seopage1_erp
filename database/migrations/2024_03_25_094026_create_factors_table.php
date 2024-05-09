@@ -749,7 +749,7 @@ return new class extends Migration
                 'lower_limit_condition' => '==',
                 'upper_limit_condition' => '==',
                 'limit_depend_on_models_and_fields' => null,
-                'point_type' => 2,
+                'point_type' => 1,
                 'points' => 3,
                 'point_depend_on_model' => null,
                 'point_depend_on_field' => null
