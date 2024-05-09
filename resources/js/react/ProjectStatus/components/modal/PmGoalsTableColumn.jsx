@@ -41,13 +41,10 @@ export const PmGoalsTableColumns = [
             const data = row?.original;
             const handleDuration = () => {
                 if(data?.duration) {
-                    if(data?.duration?.includes(".")) {
-                        const getDays = data?.duration?.split(".")[0]
-                        const getHours = 24 / getDays * data?.duration?.split(".")[1]
-                        return `${getDays} Days ${Math.round(getHours)} Hours`
-                    } else {
-                        return `${data?.duration} Days`
-                    }
+                    const duration = parseFloat(data?.duration);
+                    const getDays = parseInt(duration);
+                    const getHours = Math.floor((duration - getDays) * 24); 
+                    return `${getDays} Days${getHours === 0 ? '' : ` ${getHours} Hours`}`
                 }  else {
                     return "--"
 
