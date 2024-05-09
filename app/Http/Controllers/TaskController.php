@@ -3066,7 +3066,7 @@ class TaskController extends AccountBaseController
         $pm_goal->goal_status = 1;
         
 
-        $pm_goal->description = '1st task submission';
+        $pm_goal->expired_meet_description = '1st task submission';
 
                 
         $pm_goal->updated_at= Carbon::now();

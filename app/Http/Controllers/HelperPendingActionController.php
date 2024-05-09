@@ -1947,7 +1947,7 @@ class HelperPendingActionController extends AccountBaseController
                 $action->serial = 'PMGM'.'x0';
                 $action->item_name= 'Add explanation for your missing goal';
                 $action->heading= 'Add explanation for your missing goal!';
-                $action->message = 'Goal '.$goal->goal_name.' ('.$goal->description.') for project <a href="'.route('projects.show',$project->id).'">'.$project->project_name.'</a> from client <a href="'.route('clients.show',$client->id).'">'.$client->name.'</a> was not met!';
+                $action->message = 'Goal '.$goal->goal_name.' ('.$goal->expired_meet_description.') for project <a href="'.route('projects.show',$project->id).'">'.$project->project_name.'</a> from client <a href="'.route('clients.show',$client->id).'">'.$client->name.'</a> was not met!';
                 $action->timeframe= 24;
                 $action->goal_id = $goal->id;
                 $action->project_id = $project->id;
@@ -1979,7 +1979,7 @@ class HelperPendingActionController extends AccountBaseController
                 $action->serial = 'PMRE'.'x'.$key;
                 $action->item_name= 'Review Goal missing explanation';
                 $action->heading= 'Review Goal missing explanation!';
-                $action->message = 'Review explanation given by PM on missing goal ' . $goal->goal_name .' ('. $goal->description .') for project <a href="'.route('projects.show',$project->id).'">'.$project->project_name.'</a> from client <a href="'.route('clients.show',$client->id).'">'.$client->name.'</a> !';
+                $action->message = 'Review explanation given by PM on missing goal ' . $goal->goal_name .' ('. $goal->expired_meet_description .') for project <a href="'.route('projects.show',$project->id).'">'.$project->project_name.'</a> from client <a href="'.route('clients.show',$client->id).'">'.$client->name.'</a> !';
                 $action->timeframe= 24;
                 $action->goal_id = $goal->id;
                 $action->project_id = $project->id;
