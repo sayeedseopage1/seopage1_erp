@@ -9,6 +9,7 @@ import Loader from "../../global/Loader";
 import { useExportableQualifiedSalesMutation } from "../../services/api/qualifiedSalesApiSlice";
 
 import { CompareDate } from "../../Insights/utils/dateController";
+import { convert } from "html-to-text";
 const ExcelFile = ReactExport.ExcelFile;
 const ExcelSheet = ReactExport.ExcelFile.ExcelSheet;
 
@@ -18,12 +19,10 @@ const QualifiedSalesTableExportButton = ({ filter }) => {
     const queryObject = _.pickBy(filter ?? {}, Boolean);
     const query = new URLSearchParams(queryObject).toString();
 
-    const [getQualifiedSales, { data, isFetching, isLoading }] =
+    const [getQualifiedSales, { data, isLoading }] =
         useExportableQualifiedSalesMutation();
 
     const qualifiedSales = data;
-
-    console.log("qualified sales", qualifiedSales);
 
     // get deals
     const getData = (deals) => {
@@ -32,18 +31,9 @@ const QualifiedSalesTableExportButton = ({ filter }) => {
         _.forEach(deals, (d) => {
             const fieldStyle = {
                 alignment: {
-                    // wrapText: true,
+                    wrapText: true,
                     vertical: "center",
                     horizontal: "top",
-                },
-                font: {
-                    bold: d?.project_type?.toLowerCase() === "hourly",
-                    color: {
-                        rgb:
-                            d?.project_type?.toLowerCase() === "hourly"
-                                ? "FF28A745"
-                                : "",
-                    },
                 },
             };
 
@@ -58,32 +48,26 @@ const QualifiedSalesTableExportButton = ({ filter }) => {
 
                 if (isPMAccepted && isTopMApproved && isSLApproved) {
                     return {
-                        fill: {
-                            fgColor: { rgb: "00AA00" },
-                        },
                         font: {
-                            color: { rgb: "FFFFFFFF" },
+                            color: { rgb: "00AA00" },
+                            bold: true,
                         },
                     };
                 } else if (!isPMAccepted || !isTopMApproved || !isSLApproved) {
                     // any of two accept
                     if (diff > 5) {
                         return {
-                            fill: {
-                                fgColor: { rgb: "FCBD01" },
-                            },
                             font: {
-                                color: { rgb: "FFFFFFFF" },
+                                color: { rgb: "FCBD01" },
+                                bold: true,
                             },
                         };
                     }
 
                     return {
-                        fill: {
-                            fgColor: { rgb: "1D82F5" },
-                        },
                         font: {
-                            color: { rgb: "FFFFFFFF" },
+                            color: { rgb: "1D82F5" },
+                            bold: true,
                         },
                     };
                 }
@@ -122,25 +106,28 @@ const QualifiedSalesTableExportButton = ({ filter }) => {
             const ApprovedOrPendingStyle = (row) => {
                 if (row) {
                     return {
-                        fill: {
-                            fgColor: { rgb: "00AA00" },
-                        },
                         font: {
-                            color: { rgb: "FFFFFFFF" },
+                            color: { rgb: "00AA00" },
+                            bold: true,
                         },
                     };
                 } else {
                     return {
-                        fill: {
-                            fgColor: { rgb: "1D82F5" },
-                        },
                         font: {
-                            color: { rgb: "FFFFFFFF" },
+                            color: { rgb: "1D82F5" },
+                            bold: true,
                         },
                     };
                 }
             };
 
+            const convertHTMLToText = (html) => {
+                const tempElement = document.createElement("div");
+                tempElement.innerHTML = html;
+                const text =
+                    tempElement.textContent || tempElement.innerText || "";
+                return text;
+            };
             // date
             const date = (_data) =>
                 _data ? dayjs(_data).format(`DD-MM-YYYY hh:mm:ss A`) : "--";
@@ -166,8 +153,13 @@ const QualifiedSalesTableExportButton = ({ filter }) => {
                     style: fieldStyle,
                 },
                 {
-                    value: `$${d["amount"]}` ?? "--",
-                    style: fieldStyle,
+                    value: `$${Number(d["amount"]).toFixed(2)}` ?? "--",
+                    style: {
+                        ...fieldStyle,
+                        font: {
+                            bold: true,
+                        },
+                    },
                 },
                 {
                     value: d["closed_by_name"] ?? "--",
@@ -216,6 +208,100 @@ const QualifiedSalesTableExportButton = ({ filter }) => {
                     },
                 },
                 {
+                    value:
+                        `Question for Sales Lead:
+                         Did the sales executive defined requirements for this project properly?\n
+                         Sales Lead's Comment: (By ${
+                             Number(d?.sales_lead_id) === 208
+                                 ? "Mohammad Sayeed Ullah"
+                                 : "--"
+                         })
+                         ${convertHTMLToText(d?.sales_lead_need_define)} 
+                         \n \n
+                         Question for Project Manager: 
+                         Did the sales team defined requirements for this project properly?\n
+                         Project Manager's Comment: (By ${d?.pm_name})
+                         ${convertHTMLToText(
+                             d?.project_manager_needs_define
+                         )}` ?? "--",
+
+                    style: {
+                        alignment: {
+                            wrapText: true,
+                            vertical: "top",
+                            horizontal: "left",
+                        },
+                    },
+                },
+                {
+                    value:
+                        `Question for sales Lead:
+                         Did the sales executive defined requirements for this project properly?\n
+                         Sales Lead's Comment: (By ${
+                             Number(d?.sales_lead_id) === 208
+                                 ? "Mohammad Sayeed Ullah"
+                                 : "--"
+                         })
+                         ${convertHTMLToText(
+                             d?.sales_lead_price_authorization
+                         )} 
+                    ` ?? "--",
+
+                    style: {
+                        alignment: {
+                            wrapText: true,
+                            vertical: "top",
+                            horizontal: "left",
+                        },
+                    },
+                },
+                {
+                    value:
+                        `Question for sales lead:
+                        Did the sales executive set deadline for this project correctly?\n
+                        Sales Lead's Comment: (By ${
+                            Number(d?.sales_lead_id) === 208
+                                ? "Mohammad Sayeed Ullah"
+                                : "--"
+                        })
+                         ${convertHTMLToText(d?.sales_lead_deadline_comment)} 
+                         \n \n
+                         Question for project manager: 
+                         Did the sales team set deadline for this project correctly?\n
+                         Project Manager's Comment: (By ${d?.pm_name})
+                         ${convertHTMLToText(
+                             d?.project_manager_deadline_comment
+                         )}` ?? "--",
+
+                    style: {
+                        alignment: {
+                            wrapText: true,
+                            vertical: "top",
+                            horizontal: "left",
+                        },
+                    },
+                },
+                {
+                    value:
+                        `Question for Top management:
+                        Was the sale authorized by the top management?\n
+                         Top Management's Comment: (By ${
+                             Number(d?.admin_id) === 62
+                                 ? "Rajat Chakraborty"
+                                 : "--"
+                         })
+                         ${convertHTMLToText(d?.admin_authorization_comment)} 
+                         ` ?? "--",
+
+                    style: {
+                        alignment: {
+                            wrapText: true,
+                            vertical: "top",
+                            horizontal: "left",
+                        },
+                    },
+                },
+                {
                     value: d?.["total_points"] ?? "0.00",
 
                     style: {
@@ -232,16 +318,20 @@ const QualifiedSalesTableExportButton = ({ filter }) => {
     // columns
     const columns = [
         { title: "Date" },
-        { title: "Project Name" },
+        { title: "Project Name", width: { wpx: 170 } },
         { title: "Client Name" },
         { title: "Amount" },
-        { title: "Closed By" },
-        { title: "Project Manager" },
-        { title: "Contact Form" },
+        { title: "Closed By", width: { wpx: 90 } },
+        { title: "Project Manager", width: { wpx: 90 } },
+        { title: "Contact Form", width: { wpx: 110 } },
         { title: "Authorized By Sales Lead" },
         { title: "Accepted by Project Manager" },
         { title: "Authorized By Top Management" },
         { title: "Status" },
+        { title: "Needs Defined", width: { wpx: 550 } },
+        { title: "Prices", width: { wpx: 550 } },
+        { title: "Deadline", width: { wpx: 500 } },
+        { title: "Top Management", width: { wpx: 550 } },
         { title: "points Earned" },
     ];
 
@@ -300,7 +390,7 @@ const QualifiedSalesTableExportButton = ({ filter }) => {
     return (
         <React.Fragment>
             <ExportButton onClick={handleRender}>
-                {false ? (
+                {isLoading ? (
                     <>
                         <Loader title="Processing..." />
                     </>

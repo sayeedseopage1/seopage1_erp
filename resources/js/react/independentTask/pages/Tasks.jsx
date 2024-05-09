@@ -142,20 +142,6 @@ const Tasks = ({ tableData, isLoading, onFilter, filter }) => {
                     <div className="mb-3 d-flex align-items-center flex-wrap justify-content-between">
                         <Tabbar />
 
-                        {/* {
-                            _.includes([1, 8], auth?.getRoleId()) &&
-                            <Button
-                                onClick={fetchTasksTypeData}
-                                className="sp1_tlr_tab active ml-2 mb-2 text-white"
-                            >
-                                {tasksTypeDataIsFetching ? 'Loading...' :
-                                    <>
-                                        <i className="fa-solid fa-hourglass-half" />
-                                        Primary Page Authorize
-                                        <span className="badge badge-light">{unAuthorizedType?.task_types}</span>
-                                    </>}
-                            </Button>
-                        } */}
                         <div
                             className="d-flex align-items-center flex-wrap mb-2"
                             style={{ gap: "10px" }}
