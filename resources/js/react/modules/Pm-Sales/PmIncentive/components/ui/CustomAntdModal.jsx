@@ -1,7 +1,8 @@
 import { Modal } from 'antd';
 import React from 'react';
+import PropTypes from "prop-types";
 
-const CustomAntdModal = ({ title, antdModalOpen, setAntdModalOpen, children }) => {
+const CustomAntdModal = ({ title, antdModalOpen, setAntdModalOpen, children, modalWidth }) => {
 
     return (
         <div>
@@ -13,7 +14,7 @@ const CustomAntdModal = ({ title, antdModalOpen, setAntdModalOpen, children }) =
                 open={antdModalOpen}
                 // onOk={() => setRegularPointsModalOpen(false)}
                 onCancel={() => setAntdModalOpen(false)}
-                width={545}
+                width={modalWidth || 545}
             >
                 <div className={`mt-3 ${!title && 'pt-4'}`}>
                     {
@@ -26,3 +27,11 @@ const CustomAntdModal = ({ title, antdModalOpen, setAntdModalOpen, children }) =
 };
 
 export default CustomAntdModal;
+
+CustomAntdModal.prototypes = {
+    title: PropTypes.node,
+    antdModalOpen: PropTypes.bool,
+    setAntdModalOpen: PropTypes.func,
+    children: PropTypes.node,
+    modalWidth: PropTypes.number
+}

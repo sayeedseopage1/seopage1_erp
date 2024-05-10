@@ -20,7 +20,8 @@ const UpsaleCrossSalePointBanner = () => {
                         </span></p>
 
                         <UpsaleCrossSalePointModal antdModalOpen={upsaleCrossSalePointsModalOpen}
-                            setAntdModalOpen={setUpsaleCrossSalePointsModalOpen} />
+                            setAntdModalOpen={setUpsaleCrossSalePointsModalOpen}
+                        />
                     </div>
                 </div>
             </div>

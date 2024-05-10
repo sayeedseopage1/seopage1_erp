@@ -53,7 +53,7 @@ export const idealVsAchievedChartData = [
             ],
         },
         achieved: {
-            id: 1,
+            id: 2,
             refId: 1,
             title: "Revision Vs Task ratio",
             yTitle: "Incentive percentage",
@@ -90,7 +90,7 @@ export const idealVsAchievedChartData = [
         id: 2,
         title: "Goal Achieve Rate",
         ideal: {
-            id: 2,
+            id: 3,
             refId: 2,
             title: "Goal Achieve Rate",
             yTitle: "Incentive percentage",
@@ -134,7 +134,7 @@ export const idealVsAchievedChartData = [
             ],
         },
         achieved: {
-            id: 2,
+            id: 4,
             refId: 2,
             title: "Goal Achieve Rate",
             yTitle: "Incentive percentage",
@@ -171,7 +171,7 @@ export const idealVsAchievedChartData = [
         id: 3,
         title: "Negative points vs Positive points",
         ideal: {
-            id: 1,
+            id: 5,
             refId: 3,
             title: "Negative points vs Positive points",
             yTitle: "Incentive percentage",
@@ -215,7 +215,7 @@ export const idealVsAchievedChartData = [
             ],
         },
         achieved: {
-            id: 2,
+            id: 6,
             refId: 3,
             title: "Negative points vs Positive points ",
             yTitle: "Incentive percentage",
@@ -252,7 +252,7 @@ export const idealVsAchievedChartData = [
         id: 4,
         title: "Percentage of Delayed Projects",
         ideal: {
-            id: 1,
+            id: 7,
             refId: 4,
             title: "Percentage of Delayed Projects",
             yTitle: "Incentive percentage",
@@ -296,7 +296,7 @@ export const idealVsAchievedChartData = [
             ],
         },
         achieved: {
-            id: 2,
+            id: 8,
             refId: 4,
             title: "Percentage of Delayed Projects ",
             yTitle: "Incentive percentage",
@@ -333,7 +333,7 @@ export const idealVsAchievedChartData = [
         id: 5,
         title: "Milestone Cancelation Rate",
         ideal: {
-            id: 1,
+            id: 9,
             refId: 5,
             title: "Milestone Cancelation Rate",
             yTitle: "Incentive percentage",
@@ -377,7 +377,7 @@ export const idealVsAchievedChartData = [
             ],
         },
         achieved: {
-            id: 2,
+            id: 10,
             refId: 5,
             title: "Milestone Cancelation Rate ",
             yTitle: "Incentive percentage",
@@ -414,7 +414,7 @@ export const idealVsAchievedChartData = [
         id: 6,
         title: "Deadline Miss Rate",
         ideal: {
-            id: 1,
+            id: 11,
             refId: 6,
             title: "Deadline Miss Rate",
             yTitle: "Incentive percentage",
@@ -458,7 +458,7 @@ export const idealVsAchievedChartData = [
             ],
         },
         achieved: {
-            id: 2,
+            id: 12,
             refId: 6,
             title: "Deadline Miss Rate",
             yTitle: "Incentive percentage",
@@ -495,7 +495,7 @@ export const idealVsAchievedChartData = [
         id: 7,
         title: "Client Retention Rate",
         ideal: {
-            id: 1,
+            id: 13,
             refId: 7,
             title: "Client Retention Rate",
             yTitle: "Incentive percentage",
@@ -531,7 +531,7 @@ export const idealVsAchievedChartData = [
             ],
         },
         achieved: {
-            id: 2,
+            id: 14,
             refId: 7,
             title: "Client Retention Rate",
             yTitle: "Incentive percentage",
@@ -571,7 +571,7 @@ export const upSaleCrossSaleChartData = [
         id: 8,
         title: "Upsale/Cross Sale Amount",
         ideal: {
-            id: 1,
+            id: 15,
             refId: 8,
             title: "Upsale/Cross Sale Amount",
             yTitle: "Incentive percentage",
@@ -618,7 +618,7 @@ export const upSaleCrossSaleChartData = [
             ],
         },
         achieved: {
-            id: 1,
+            id: 16,
             refId: 8,
             title: "Upsale/Cross Sale Amount",
             yTitle: "Incentive percentage",
@@ -658,7 +658,7 @@ export const bonusPointsChartData = [
         id: 9,
         title: "Bonus Points Based on Released Amount",
         ideal: {
-            id: 1,
+            id: 17,
             refId: 9,
             title: "Bonus Points Based on Released Amount",
             yTitle: "Bonus Points",
@@ -711,7 +711,7 @@ export const bonusPointsChartData = [
             ],
         },
         achieved: {
-            id: 1,
+            id: 18,
             refId: 9,
             title: "Bonus Points Based on Released Amount",
             yTitle: "Bonus Points",
@@ -748,7 +748,7 @@ export const bonusPointsChartData = [
         id: 10,
         title: "Unreleased Payment Amount",
         ideal: {
-            id: 1,
+            id: 19,
             refId: 10,
             title: "Unreleased Payment Amount",
             yTitle: "Incentive Percentage ",
@@ -801,7 +801,7 @@ export const bonusPointsChartData = [
             ],
         },
         achieved: {
-            id: 1,
+            id: 20,
             refId: 10,
             title: "Unreleased Payment Amount",
             yTitle: "Incentive Percentage ",

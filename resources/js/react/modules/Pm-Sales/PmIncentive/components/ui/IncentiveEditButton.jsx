@@ -1,6 +1,7 @@
 import React from 'react';
 import editIcon from '../../assets/edit.svg'
 import editIcon2 from '../../assets/edit_2.svg'
+import PropTypes from "prop-types";
 
 const IncentiveEditButton = ({ children, className, onClick }) => {
     const baseStyle = {
@@ -31,3 +32,9 @@ const IncentiveEditButton = ({ children, className, onClick }) => {
 };
 
 export default IncentiveEditButton;
+
+IncentiveEditButton.prototypes = {
+    children: PropTypes.node,
+    className: PropTypes.string,
+    onClick: PropTypes.func
+}

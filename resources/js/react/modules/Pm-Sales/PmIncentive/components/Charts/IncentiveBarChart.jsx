@@ -6,6 +6,7 @@ import { IoInformationCircle } from "react-icons/io5";
 import { Button, Popover } from "antd";
 import IncentiveEditButton from "../ui/IncentiveEditButton";
 import { dummyUserRole } from "../../constants";
+import EditChartDataModal from "../Modals/Incentives/EditChartDataModal";
 
 const IncentiveBarChart = ({ chartData }) => {
     const chartRef = useRef(null);
@@ -127,7 +128,15 @@ const IncentiveBarChart = ({ chartData }) => {
         ]
     };
 
+
+    // Conditionally assigns a CSS class to a button based on the 'refId' property of 'chartData'.
+    // If 'refId' is 8, 9, or 10, the button is assigned 'chart_button_secondary'. Otherwise, it gets 'chart_button'.
     const btn_class_edit = (chartData?.refId === 8 || chartData?.refId === 9 || chartData?.refId === 10) ? "chart_button_secondary" : "chart_button"
+
+
+    const handleEditChartData = (chartId) => {
+        console.log(chartId)
+    }
 
     return (
         <>
@@ -145,8 +154,9 @@ const IncentiveBarChart = ({ chartData }) => {
                 </div>
                 <div className="incentive_button_wrapper">
                     {
-                        dummyUserRole == 1 && <IncentiveEditButton className={btn_class_edit}>Edit</IncentiveEditButton>
+                        dummyUserRole == 1 && <IncentiveEditButton onClick={() => handleEditChartData(chartData?.id)} className={btn_class_edit}>Edit</IncentiveEditButton>
                     }
+                    <EditChartDataModal key={chartData?.id} />
 
                     <button
                         className="chart_button"
