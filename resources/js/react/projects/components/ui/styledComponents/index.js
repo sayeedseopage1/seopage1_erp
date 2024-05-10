@@ -55,6 +55,12 @@ export const SectionContentContainer = styled.div`
   max-height: ${props => props.maxHeight || "auto"};
   overflow-y: auto;
   position: relative;
+  font-family: Poppins, sans-serif;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+
   
   .clipboardIcon {
     position: absolute;
