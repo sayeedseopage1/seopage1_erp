@@ -1,8 +1,6 @@
 <?php
 
 namespace App\Http\Controllers;
-
-use App\Http\Controllers\Controller;
 use App\Models\Holiday;
 use App\DataTables\ProjectStatusDataTable;
 use App\Models\ProjectPmGoal;
@@ -10,7 +8,6 @@ use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Helper\Reply;
-use App\Models\Deal;
 use App\Models\PendingAction;
 use App\Models\PendingActionPast;
 use App\Models\PmGoalDeadlineExtHistory;
@@ -43,11 +40,6 @@ class ProjectStatusController extends AccountBaseController
     {
        
         $this->project_pm_goals = ProjectPmGoal::all();
-        // if (!is_null($request->id)) {
-        //     $this->projectId = $request->id;
-        // }else{
-        //     $this->projectId = null;
-        // }
         return $datatable->render('project-status.index',$this->data);
         
     }
@@ -179,8 +171,6 @@ class ProjectStatusController extends AccountBaseController
         $goal_history = new PmGoalExpHistory();
         $goal_history->goal_id = $ppg->id;
         $goal_history->expired_pm_reason = $request->reason;
-        // $goal_history->start_date = $ppg->goal_start_date;
-        // $goal_history->deadline = $ppg->goal_end_date;
         $goal_history->save();
 
         $actions = PendingAction::where('code','PMGM')->where('past_status',0)->where('goal_id',$ppg->id)->get();

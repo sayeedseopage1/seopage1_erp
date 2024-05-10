@@ -29,7 +29,7 @@ return new class extends Migration
             // $table->double('rating')->nullable();
             // $table->double('client_communication_rating')->nullable();
             // $table->double('negligence_pm_rating')->nullable();
-            $table->integer('admin_id')->nullable();
+            // $table->integer('admin_id')->nullable();
             $table->integer('added_by');
             $table->integer('updated_by')->nullable();
             // $table->integer('extension_status')->default(0);
