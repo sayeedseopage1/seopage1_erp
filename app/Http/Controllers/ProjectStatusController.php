@@ -80,7 +80,7 @@ class ProjectStatusController extends AccountBaseController
 
         foreach($project_pm_goals as $goal){
             $pm_goal = PmGoalExpHistory::where('goal_id',$goal->id)->count();
-            $goal_deadline = PmGoalDeadlineExtHistory::where('goal_id',$goal->id)->count();
+            $goal_deadline = PmGoalDeadlineExtHistory::where('goal_id',$goal->id)->where('auth_status', '!=', 0)->count();
             $goal->goal_expired_history = $pm_goal;
             $goal->goal_extension_history = $goal_deadline;
         }
@@ -307,6 +307,9 @@ class ProjectStatusController extends AccountBaseController
         try {
             \DB::beginTransaction();
             $goal = ProjectPmGoal::where('id', $request->goal_id)->first();
+            $goal->extension_status = 1;
+            $goal->save();
+
             $ext_history = new PmGoalDeadlineExtHistory();
             $ext_history->goal_id = $goal->id;
             $ext_history->old_deadline = $goal->goal_end_date;
@@ -419,15 +422,15 @@ class ProjectStatusController extends AccountBaseController
                     foreach($pmGoalFinds as $item){
                         $updateGoal = ProjectPmGoal::where('id',$item->id)->first();
                         $updateGoal->goal_end_date = Carbon::parse($item->goal_end_date)->addDay($request->extended_day);
+                        $updateGoal->extension_status = 2;
                         // $updateGoal->extended_admin_cmnt = $request->is_any_negligence;
-                        // $updateGoal->extended_request_status = 2;
                         $updateGoal->save();
                     }
                 }else{
                     $updateGoal = ProjectPmGoal::where('id',$request->goal_id)->first();
                     $updateGoal->goal_end_date = Carbon::parse($updateGoal->goal_end_date)->addDay($request->extended_day);
+                    $updateGoal->extension_status = 2;
                     // $updateGoal->extended_admin_cmnt = $request->is_any_negligence;
-                    // $updateGoal->extended_request_status = 2;
                     $updateGoal->save();
                 }
                 $deadline_ext_history = PmGoalDeadlineExtHistory::where('goal_id',$request->goal_id)->first();
@@ -441,6 +444,9 @@ class ProjectStatusController extends AccountBaseController
                 $deadline_ext_history->save();
             }else{
                 $updateGoal = ProjectPmGoal::where('id',$request->goal_id)->first();
+                $updateGoal->extension_status = 3;
+                $updateGoal->save();
+
                 $deadline_ext_history = PmGoalDeadlineExtHistory::where('goal_id',$request->goal_id)->first();
                 $deadline_ext_history->extension_req_auth_for = Carbon::parse($updateGoal->goal_end_date)->addDay($request->extended_day);
                 $deadline_ext_history->new_deadline = $updateGoal->goal_end_date;
