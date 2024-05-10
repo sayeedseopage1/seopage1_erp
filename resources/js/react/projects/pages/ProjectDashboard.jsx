@@ -34,8 +34,8 @@ const ProjectDashboard = () => {
             <DashboardActionButtonSection   />
             <DashboardTaskAndMileStoneSection  />
             <DashboardFreelancerInfoSection projectData={projectData[1]} />
-            <DashboardProjectGuideAndChallengeSection />
-            <DashboardSalesAndPMInfoSection />
+            <DashboardProjectGuideAndChallengeSection projectData={projectData[1]} />
+            <DashboardSalesAndPMInfoSection projectData={projectData[1]} />
         </section>
     );
 };

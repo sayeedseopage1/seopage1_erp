@@ -4,11 +4,13 @@ import { TbUserSquareRounded } from "react-icons/tb";
 import PropTypes from "prop-types";
 
 // Components - UI - Custom
+import Switch from "../../../global/Switch";
 import { SectionContainer } from "../ui/styledComponents";
+
 
 // style
 import style from "./styles/dashboardFreelancerInfoSection.module.css";
-import Switch from "../../../global/Switch";
+
 
 const DashboardFreelancerInfoSection = ({ projectData }) => {
     const dealInfo = projectData.projectData.project.deal;

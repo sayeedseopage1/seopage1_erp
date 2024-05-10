@@ -1,0 +1,14 @@
+.dashboardSalesAndPMInfoSection {
+  margin: 0;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-gap: 16px;
+}
+
+
+@media (max-width: 768px) {
+  .dashboardSalesAndPMInfoSection {
+    grid-template-columns: 1fr;
+  }
+  
+}

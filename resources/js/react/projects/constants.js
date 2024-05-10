@@ -1,4 +1,6 @@
+import { reference } from "@popperjs/core";
 import { progress } from "framer-motion";
+import { info } from "laravel-mix/src/Log";
 
 export const projectTaskTableDefaultVisibleColumns = (auth, type) => ({
     task: true,
@@ -68,10 +70,65 @@ export const projectData = [
                     profile_link: "https://www.freelancer.com/u/mbjsolutions?from=messaging&ref_project_id=38007534",
                     message_link: [
                         "https://www.freelancer.com/messages/thread/326491443?filter=active",
-                        "https://www.freelancer.com/messages/thread/326491443?filter=active",
-                    ]
+                    ],
+                    description2: `<p>E-commerce website on wordpress</p>`,
+                    description3: `<p>1. The site will be on Wordpress</p>
 
-                }
+                    <p>2. The site will have standard e-commerce functionalities</p>
+                    
+                    <p>3. The currency will be GBP</p>
+                    
+                    <p>4. pages -&nbsp;Home, categories, products, contact, blog, add to cart, checkout, user account</p>
+                    
+                    <p>5. There will be 12 products in total that will be uploaded by us.</p>
+                    
+                    <p>6.&nbsp;The design will be custom modern design similar to <a href="https://www.freelancer.com/users/l.php?url=https:%2F%2Fwww.kolkol.co.za%2Fhottubs.php&amp;sig=b23b9c4a06c889e25185e8de2c797744ec1c23d38f973deb396635d88f4d2fe9" target="_blank">https://www.kolkol.co.za/hottubs.php</a></p>
+                    
+                    <p>7.&nbsp;Images and all information will be used from the reference site as well, the client will share 'about us' content, and the rest will be collected from the reference site.</p>
+                    
+                    <p>8. We&nbsp;will integrate a payment gateway of the client's&nbsp;choice.</p>
+                    
+                    <p>9. We need to transform the client's logo from JPEG to PSD or Ai</p>
+                    
+                    <p>&nbsp;</p>
+                    
+                    <p>&nbsp;</p>`,
+                    description4: `<p><a href="https://www.freelancer.com/users/l.php?url=https:%2F%2Fwww.kolkol.co.za%2Fhottubs.php&amp;sig=b23b9c4a06c889e25185e8de2c797744ec1c23d38f973deb396635d88f4d2fe9" target="_blank">https://www.kolkol.co.za/hottubs.php</a></p>`,
+                    description5: `<p>Please complete the project before mid-next week.&nbsp;</p>`,
+                    description6: `<ol><li>Godaddy:</li><li>User:&nbsp;john@cartagenafishing.com</li><li>Pass:&nbsp;Isla24680!!!</li></ol><div>WordPress:</div><div>URL:&nbsp;https://cartagenafishing.com/wp-admin</div><div>User:&nbsp;john@cartagenafishing.com</div><div>Pass:&nbsp;I2n%w4yQZdG0K0IPt4UEVeGm</div><app-messaging-message-details _ngcontent-webapp-c215="" _nghost-webapp-c178="" class="ng-star-inserted" style="display: flex; float: right; margin-left: 8px; color: rgb(0, 0, 0); font-family: Roboto, &quot;Helvetica Neue&quot;, Helvetica, Arial, sans-serif; font-size: medium; background-color: rgb(240, 240, 240);"></app-messaging-message-details>`,
+                    description7: `<p>You can take from the existing site, but I asked the raw logo file. If he can't provide the raw file, we will sell our logo service, also the logo doesn't look good, we will try to sell this logo service after the project is accepted. Please let me know once you accept the project.&nbsp;</p>`,
+                    description8: `<p>We should be able to get seo and google ad work from him if this project goes well, he should be a well paying client&nbsp;&nbsp;</p>`,
+                    description9: `<p>Asked for partial release as you show progress of the work.</p>`,
+            
+                },
+                project_summary: `<p><strong>We need to fix the product main Image to high resulation dynamically.</strong><br>
+                <strong>Website:</strong>&nbsp;https://homedesignstoreflorida.com/</p>
+                
+                <p><br>
+                <strong>Task Details:&nbsp;</strong></p>
+                
+                <ul>
+                    <li>Every single product page, The main product image is looks blury even on uploading high resulation images:&nbsp;https://prnt.sc/bceeih0I4kuV&nbsp;</li>
+                    <li>We need implement on global solution, So that every product images will look on perfect resulation.&nbsp;</li>
+                    <li>As it is Global solution, It should be applied for all products and upcoming products.&nbsp;</li>
+                </ul>
+                
+                <p><strong>Solution:&nbsp;</strong></p>
+                
+                <ul>
+                    <li>Main loading pic is cropped by 450*320. We need to change this to 1024px width in template code:&nbsp;https://prnt.sc/5quIKtB74suH&nbsp;</li>
+                    <li>It is just a quick fix. Submit it to me on Monday.</li>
+                </ul>
+                
+                <p><strong>Website access:&nbsp;<br>
+                Domain</strong> - https://homedesignstoreflorida.com/<br>
+                Platform- Shopify<br>
+                homedsignstore@gmail.com<br>
+                Password - Shopify123//</p>`,
+                project_challenges: "Nothing to mention here",
+                comment: "Nothing to mention here",
+                requirement_defined: "Ok but milestone breakdown was wrong and it is confusing. Sale team can change the milestone breakdown while making the milestione.. Otherwise it can be a issue if the client will go for any intentional issue.",
+                deadline_meet: "yes, but need to be careful because of Eid vacation.",
 
             }
 
@@ -118,9 +175,65 @@ export const projectData = [
                     profile_link: "https://www.freelancer.com/u/mbjsolutions?from=messaging&ref_project_id=38007534",
                     message_link: [
                         "https://www.freelancer.com/messages/thread/326491443?filter=active",
-                    ]
-                }
+                    ],
+                    description2: `<p>E-commerce website on wordpress</p>`,
+                    description3: `<p>1. The site will be on Wordpress</p>
 
+                    <p>2. The site will have standard e-commerce functionalities</p>
+                    
+                    <p>3. The currency will be GBP</p>
+                    
+                    <p>4. pages -&nbsp;Home, categories, products, contact, blog, add to cart, checkout, user account</p>
+                    
+                    <p>5. There will be 12 products in total that will be uploaded by us.</p>
+                    
+                    <p>6.&nbsp;The design will be custom modern design similar to <a href="https://www.freelancer.com/users/l.php?url=https:%2F%2Fwww.kolkol.co.za%2Fhottubs.php&amp;sig=b23b9c4a06c889e25185e8de2c797744ec1c23d38f973deb396635d88f4d2fe9" target="_blank">https://www.kolkol.co.za/hottubs.php</a></p>
+                    
+                    <p>7.&nbsp;Images and all information will be used from the reference site as well, the client will share 'about us' content, and the rest will be collected from the reference site.</p>
+                    
+                    <p>8. We&nbsp;will integrate a payment gateway of the client's&nbsp;choice.</p>
+                    
+                    <p>9. We need to transform the client's logo from JPEG to PSD or Ai</p>
+                    
+                    <p>&nbsp;</p>
+                    
+                    <p>&nbsp;</p>`,
+                    description4: `<p><a href="https://www.freelancer.com/users/l.php?url=https:%2F%2Fwww.kolkol.co.za%2Fhottubs.php&amp;sig=b23b9c4a06c889e25185e8de2c797744ec1c23d38f973deb396635d88f4d2fe9" target="_blank">https://www.kolkol.co.za/hottubs.php</a></p>`,
+                    description5: `<p>Please complete the project before mid-next week.&nbsp;</p>`,
+                    description6: `<ol><li>Godaddy:</li><li>User:&nbsp;john@cartagenafishing.com</li><li>Pass:&nbsp;Isla24680!!!</li></ol><div>WordPress:</div><div>URL:&nbsp;https://cartagenafishing.com/wp-admin</div><div>User:&nbsp;john@cartagenafishing.com</div><div>Pass:&nbsp;I2n%w4yQZdG0K0IPt4UEVeGm</div><app-messaging-message-details _ngcontent-webapp-c215="" _nghost-webapp-c178="" class="ng-star-inserted" style="display: flex; float: right; margin-left: 8px; color: rgb(0, 0, 0); font-family: Roboto, &quot;Helvetica Neue&quot;, Helvetica, Arial, sans-serif; font-size: medium; background-color: rgb(240, 240, 240);"></app-messaging-message-details>`,
+                    description7: `<p>You can take from the existing site, but I asked the raw logo file. If he can't provide the raw file, we will sell our logo service, also the logo doesn't look good, we will try to sell this logo service after the project is accepted. Please let me know once you accept the project.&nbsp;</p>`,
+                    description8: `<p>We should be able to get seo and google ad work from him if this project goes well, he should be a well paying client&nbsp;&nbsp;</p>`,
+                    description9: `<p>Asked for partial release as you show progress of the work.</p>`,
+            
+                },
+                project_summary: `<p><strong>We need to fix the product main Image to high resulation dynamically.</strong><br>
+                <strong>Website:</strong>&nbsp;https://homedesignstoreflorida.com/</p>
+                
+                <p><br>
+                <strong>Task Details:&nbsp;</strong></p>
+                
+                <ul>
+                    <li>Every single product page, The main product image is looks blury even on uploading high resulation images:&nbsp;https://prnt.sc/bceeih0I4kuV&nbsp;</li>
+                    <li>We need implement on global solution, So that every product images will look on perfect resulation.&nbsp;</li>
+                    <li>As it is Global solution, It should be applied for all products and upcoming products.&nbsp;</li>
+                </ul>
+                
+                <p><strong>Solution:&nbsp;</strong></p>
+                
+                <ul>
+                    <li>Main loading pic is cropped by 450*320. We need to change this to 1024px width in template code:&nbsp;https://prnt.sc/5quIKtB74suH&nbsp;</li>
+                    <li>It is just a quick fix. Submit it to me on Monday.</li>
+                </ul>
+                
+                <p><strong>Website access:&nbsp;<br>
+                Domain</strong> - https://homedesignstoreflorida.com/<br>
+                Platform- Shopify<br>
+                homedsignstore@gmail.com<br>
+                Password - Shopify123//</p>`,
+                project_challenges: "Nothing to mention here",
+                comment: "Nothing to mention here",
+                requirement_defined: "Ok but milestone breakdown was wrong and it is confusing. Sale team can change the milestone breakdown while making the milestione.. Otherwise it can be a issue if the client will go for any intentional issue.",
+                deadline_meet: "yes, but need to be careful because of Eid vacation.",
             },
 
 
@@ -128,6 +241,39 @@ export const projectData = [
     }
 
 ]
+
+
+
+export const DetailsSalesExecutiveConstant = {
+    wordsHere2_8: {
+        title: "Write the what in 2-8 words here? ",
+        infoText: "Examples: Website redesign, Shopify website migration to Wix, Creating a 5 page business website in WordPress, Shopify website creation, etc.",
+    },
+    linesHere3_4: {
+        title: `Elaborate the "WHAT" 3-4 lines here`,
+        infoText: "The client needs a 5 page static WordPress website for his new design agency. It should include home, about, his services in one page, blog, and contact. The look and feel should be better than the references",
+    },
+    referenceWebsite: {
+        title: "Reference websites and what the references are for",
+        infoText: "Examples: ABC.com is for the color scheme. XYZ.com is for section layouts DEF.com is for header & footer styling. However, none of these can be copied.",
+    },
+    clientConcern: {
+        title: "Any particular focus/concern of the client",
+        infoText: "Examples: 1. The client is very concerned about the final look & feel so needs to be careful with the design 2. The client is very concerned if the booking functionality will work the way he wants. ", 
+    },
+    logoReference:{
+        title: "Logo Reference", 
+        infoText: "Upload the google drive link here. Always ask for PSD and AI files so they are editable",
+    },
+    requiredLogins:{
+        title: "Required Logins", 
+        infoText: "Whichever of these are applicable: Wordpress, FTP, Cpanel, shopify, Domain register",
+    },
+    involvedProject : {
+        title: "If there is any cross-departmental work involved in this project",
+        infoText: "Example: SEO, Content writing, design, google ads, social media marketing, email marketing & anything else that is not explicitly included in web development",
+    },
+} 
 
 
 
@@ -231,16 +377,17 @@ export const ProjectBudgetData = {
     hours_logged: [
         {
             id: 1,
+            title: "Estimated Time",
+            time: "04:33 hour",
+            icon: "/images/timer.png"
+        },
+        {
+            id: 2,
             time: "04:33 hour",
             icon: "/images/timer.png",
             title: "Hours Logged"
         },
-        {
-            id: 2,
-            title: "Estimated Time",
-            time: "04:33 hour",
-            icon: "/images/timer.png"
-        }
+
     ],
     earning_expenses: [
 
