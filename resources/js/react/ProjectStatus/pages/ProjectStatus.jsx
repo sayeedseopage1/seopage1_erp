@@ -100,6 +100,7 @@ const ProjectStatus = () => {
         setProjectId(data.project_id);
         setIsModalOneOpen(true);
         setSelectedProjectName(data.project_name);
+
         refetchPmGoal();
     };
 

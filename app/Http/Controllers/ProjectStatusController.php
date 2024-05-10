@@ -76,11 +76,16 @@ class ProjectStatusController extends AccountBaseController
     }
     public function allProjectPmGoal($id)
     {
-        $project_pm_goals = ProjectPmGoal::where('project_id',$id)->get();
+        $project_pm_goals = ProjectPmGoal::select('project_pm_goals.*','pm_goal_deadline_ext_histories.*')
+                            ->leftJoin('pm_goal_deadline_ext_histories','project_pm_goals.id','pm_goal_deadline_ext_histories.goal_id')
+                            ->where('project_pm_goals.project_id',$id)
+                            ->get();
+
 
         foreach($project_pm_goals as $goal){
             $pm_goal = PmGoalExpHistory::where('goal_id',$goal->id)->count();
             $goal_deadline = PmGoalDeadlineExtHistory::where('goal_id',$goal->id)->where('auth_status', '!=', 0)->count();
+            $goal->extended_day = Carbon::parse($goal->extension_req_for)->diffInDays(Carbon::parse($goal->old_deadline));
             $goal->goal_expired_history = $pm_goal;
             $goal->goal_extension_history = $goal_deadline;
         }
@@ -89,9 +94,6 @@ class ProjectStatusController extends AccountBaseController
             'data' => $project_pm_goals,
             'status' => 200
         ]);
-       
-
-      
     }
 
     /**
@@ -330,7 +332,7 @@ class ProjectStatusController extends AccountBaseController
                     $pmGoalFile = new ProjectPmGoalFile();
                     $pmGoalFile->goal_id = $goal->id;
                     $pmGoalFile->project_id = $goal->project_id;
-                    $pmGoalFile->uuid = $goal->uuid;
+                    $pmGoalFile->uuid = $ext_history->uuid;
                     $filename = uniqid() . '.' . $file->getClientOriginalExtension();
                     array_push($file_name, $filename);
                     $pmGoalFile->file_name = $filename;
@@ -391,15 +393,13 @@ class ProjectStatusController extends AccountBaseController
         }
         return response()->json(['status'=>200]);
     }
-    public function extendImage(Request $request){
-
-        $id = $request->query('goal_id');
-        $uuid = $request->query('uuid');
-
-        $goal = ProjectPmGoal::where('id',$id)->first();
+    public function extendImage(Request $request)
+    {
+        $goal = PmGoalDeadlineExtHistory::where('goal_id',$request->query('goal_id'))->where('uuid',$request->query('uuid'))->first();
         $data = [];
         if($goal->screenshot == 'yes'){
-        $data = ProjectPmGoalFile::where('goal_id',$id)->where('uuid',$uuid)->get();
+        $data = ProjectPmGoalFile::where('goal_id',$goal->id)->where('uuid',$goal->uuid)->get();
+
         }
         
         return response()->json([
