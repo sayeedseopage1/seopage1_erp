@@ -6566,7 +6566,7 @@ var DailySubmissionItem = function DailySubmissionItem(_ref) {
       style: {
         minWidth: "100px"
       },
-      children: dayjs__WEBPACK_IMPORTED_MODULE_0___default()(item.submission_creation_date).format("MMM DD, YYYY")
+      children: dayjs__WEBPACK_IMPORTED_MODULE_0___default()(item.report_date).format("MMM DD, YYYY")
     }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("td", {
       className: "sp1_tlr_td",
       style: {
