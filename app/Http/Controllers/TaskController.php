@@ -6751,7 +6751,7 @@ class TaskController extends AccountBaseController
             // DB::raw('COALESCE((SELECT SUM(project_time_logs.total_minutes) FROM project_time_logs WHERE project_time_logs.task_id = tasks.id  AND DATE(project_time_logs.start_time) >= daily_submissions.created_at AND DATE(project_time_logs.end_time) <= daily_submissions.created_at), 0) as total_time_spent'),
         )
             ->join('tasks', 'tasks.id', '=', 'daily_submissions.task_id')
-            ->join('task_types', 'tasks.id', '=', 'task_types.task_id')
+            ->leftJoin('task_types', 'tasks.id', '=', 'task_types.task_id')
             ->join('users as employee', 'employee.id', '=', 'daily_submissions.user_id')
             ->join('users as client', 'client.id', '=', 'daily_submissions.client_id')
             ->join('projects', 'projects.id', '=', 'daily_submissions.project_id')
