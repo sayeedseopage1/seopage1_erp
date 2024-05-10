@@ -2,6 +2,7 @@ import "../styles/Incentive.css"
 import pointIcon from '../assets/pointIcon.svg'
 import takaIcon from '../assets/takaIcon.svg'
 import IncentiveEditButton from "./ui/IncentiveEditButton";
+import { dummyUserRole } from "../constants";
 
 const obtainPoints = [
     {
@@ -29,14 +30,13 @@ const PointBanner = () => {
                         </span>
                         <div className="">
                             <p className='point_title point_details_wrapper'>
-                                {item?.title}: <span className='point_score'>{item?.value} {item?.value_type == 'point' ? 'pt' : 'Taka'}</span>
-                                {
-                                    item?.value_type == 'point' ? '' :
-
-                                        <IncentiveEditButton className={`chart_button`}>Edit</IncentiveEditButton>
-                                }
+                                {item?.title}: <span className='point_score'>{item?.value} {item?.value_type === 'point' ? 'pt' : 'Taka'}</span> &nbsp;
+                                {item?.value_type !== 'point' && dummyUserRole === 1 && (
+                                    <IncentiveEditButton className="chart_button">
+                                        Edit
+                                    </IncentiveEditButton>
+                                )}
                             </p>
-
                         </div>
                     </div>
                 ))
