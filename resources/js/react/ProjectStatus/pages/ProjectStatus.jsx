@@ -21,7 +21,7 @@ const ProjectStatus = () => {
     const [projectDetails, setProjectDetails] = React.useState({});
     const [filter, setFilter] = React.useState(null);
     const [searchParams, setSearchParams] = useSearchParams();
-    const [projectId, setProjectId] = React.useState("900");
+    const [projectId, setProjectId] = React.useState(null);
     const [{ pageIndex, pageSize }, setPagination] = React.useState({
         pageIndex: 0,
         pageSize: 10,
@@ -61,6 +61,7 @@ const ProjectStatus = () => {
         refetch: refetchPmGoal,
     } = useGetPmGoalQuery(projectId, {
         refetchOnMountOrArgChange: true /*, skip: !filter?.start_date*/,
+        skip: !projectId,
     });
 
     // Data from the API
@@ -138,7 +139,6 @@ const ProjectStatus = () => {
         }
     }, []);
 
-
     return (
         <React.Fragment>
             {/* Filter */}
@@ -180,31 +180,37 @@ const ProjectStatus = () => {
                 </div>
             </div>
             {/* Project Status Modal */}
-            <ProjectModal
-                refetchPmGoal={refetchPmGoal}
-                isFetchingPmGoal={isFetchingPmGoal}
-                pmGoal={pmGoal}
-                projectStatus={projectStatus}
-                setProjectDetails={setProjectDetails}
-                isOpen={isModalOneOpen}
-                closeModal={closeModalOne}
-                selectedProjectName={selectedProjectName}
-                projectDetails={projectDetails}
-            />
+            {isModalOneOpen && (
+                <ProjectModal
+                    refetchPmGoal={refetchPmGoal}
+                    isFetchingPmGoal={isFetchingPmGoal}
+                    pmGoal={pmGoal}
+                    projectStatus={projectStatus}
+                    setProjectDetails={setProjectDetails}
+                    isOpen={isModalOneOpen}
+                    closeModal={closeModalOne}
+                    selectedProjectName={selectedProjectName}
+                    projectDetails={projectDetails}
+                />
+            )}
             {/* Percent of Goals Met Modal */}
-            <PercentageofGoalsMetModal
-                projectDetails={projectDetails}
-                refetchPmGoal={refetchPmGoal}
-                isOpen={isOpenPercentageofGoalsMetModal}
-                isLoading={isFetchingPmGoal}
-                percentageOfGoalsMet={percentageOfGoalsMet}
-                closeModal={handleClosePercentageofGoalsMetModal}
-            />
-            <NextGoalDetailsModal
-                isOpen={isOpenNextGoalDetailsModal}
-                closeModal={handleCloseNextGoalDetailsModal}
-                projectDetails={projectDetails}
-            />
+            {isOpenPercentageofGoalsMetModal && (
+                <PercentageofGoalsMetModal
+                    projectDetails={projectDetails}
+                    refetchPmGoal={refetchPmGoal}
+                    isOpen={isOpenPercentageofGoalsMetModal}
+                    isLoading={isFetchingPmGoal}
+                    percentageOfGoalsMet={percentageOfGoalsMet}
+                    closeModal={handleClosePercentageofGoalsMetModal}
+                />
+            )}
+            {isOpenNextGoalDetailsModal && (
+                <NextGoalDetailsModal
+                    isOpen={isOpenNextGoalDetailsModal}
+                    closeModal={handleCloseNextGoalDetailsModal}
+                    projectDetails={projectDetails}
+                />
+            )}
             <ProjectManagerExplanationModal />
         </React.Fragment>
     );

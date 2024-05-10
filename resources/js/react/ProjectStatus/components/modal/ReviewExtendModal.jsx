@@ -23,6 +23,8 @@ const ReviewExtendRequestModal = ({
     reviewExtendRequestData,
     projectExtendImages,
 }) => {
+
+    console.log(reviewExtendRequestData)
     const [reviewExtendState, setReviewExtendState] = useState({
         extended_day: reviewExtendRequestData?.extended_day,
         comment: "",

@@ -1,4 +1,3 @@
-import { method } from "lodash";
 import { apiSlice } from "./apiSlice";
 
 const _token = document

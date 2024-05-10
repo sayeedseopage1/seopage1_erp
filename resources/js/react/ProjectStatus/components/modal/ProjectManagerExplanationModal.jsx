@@ -6,7 +6,7 @@ import { useSearchParams } from 'react-router-dom'
 import ProjectManagerExplanationTable from './ProjectManagerExplanationTable'
 import { ProjectManagerExplanationColumns } from './ProjectManagerExplanationColumns'
 import { projectManagerExplanationData } from '../../constant'
-import RefreshButton from '../RefreshButton'
+
 import { useAuth } from '../../../hooks/useAuth'
 import { useGetProjectManagerDeadlineExpiredGoalsQuery } from '../../../services/api/projectStatusApiSlice'
 
