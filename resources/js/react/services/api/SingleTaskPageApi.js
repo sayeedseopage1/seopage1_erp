@@ -22,7 +22,10 @@ const singleTaskPageApiSlice = apiSlice.injectEndpoints({
                 body: data,
                 formData: true,
             }),
-            invalidatesTags: ["TASK_STATUS", "SUB_TASKS"],
+            // invalidatesTags: ["TASK_STATUS", "SUB_TASKS"],
+            invalidatesTags: ["TASK_STATUS"],
+            //changed the invalidate tags to stop reloading whole page while creating a new subtask
+            //it had to change due to show the server side error message on the input field of subtask name
         }),
 
         // delete uploaded file

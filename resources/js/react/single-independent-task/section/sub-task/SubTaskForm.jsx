@@ -299,7 +299,7 @@ const SubTaskForm = ({ close, isFirstSubtask = false }) => {
                         Swal.fire({
                             position: "center",
                             icon: "error",
-                            title: "SubTask title should be unique on this project",
+                            title: "Task title should be unique on this project",
                             showConfirmButton: true,
                         });
                     }
