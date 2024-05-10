@@ -88,7 +88,7 @@
     padding: 24px;
 }
 
-.pay_now_modal .pay_now_modal_footer {
+.pay_now_modal_footer {
     display: flex;
     align-items: center;
     justify-content: center;

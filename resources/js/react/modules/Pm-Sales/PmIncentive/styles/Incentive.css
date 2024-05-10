@@ -589,6 +589,40 @@
     /* margin: 40px auto 0; */
 }
 
+.edit_chart_data_modal_title {
+    text-align: center;
+    color: #000;
+    font-family: Poppins;
+    font-size: 32px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+}
+
+.edit_chart_data_modal_content {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    /* margin-top: 40px; */
+    color: #000;
+    font-family: Poppins;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 14px;
+    padding: 40px;
+}
+
+.edit_chart_data_sub_title {
+    color: #000;
+    font-family: Poppins;
+    font-size: 18px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 21px;
+}
+
 /*********************************
             modals ends
 *********************************/

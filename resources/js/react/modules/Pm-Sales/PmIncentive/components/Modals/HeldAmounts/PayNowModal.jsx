@@ -229,7 +229,7 @@ const PayNowModal = ({ isPayNowModalOpen, showPayNowModal }) => {
             </div>
             <div className='pay_now_modal_footer'>
                 <ButtonComponent disabled={selectedRowKeys.length < 1} onClick={handlePay} color='#1492E6' textColor='#fff' font='18px'>Pay</ButtonComponent>
-                <ButtonComponent onClick={handleCancel} font='16px'>Cancel</ButtonComponent>
+                <ButtonComponent onClick={handleCancel} font='18px'>Cancel</ButtonComponent>
             </div>
         </Modal>
     );

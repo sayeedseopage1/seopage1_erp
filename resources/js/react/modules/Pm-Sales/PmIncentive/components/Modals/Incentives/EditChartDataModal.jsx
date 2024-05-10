@@ -1,39 +1,39 @@
 import React from 'react';
 import CustomAntdModal from '../../ui/CustomAntdModal';
 import PropTypes from "prop-types";
+import { ButtonComponent } from '../../../../PointFactors/components/Styles/ui/ui';
 
-const EditChartDataModal = ({ antdModalOpen, setAntdModalOpen }) => {
+const EditChartDataModal = ({ chartData, antdModalOpen, setAntdModalOpen }) => {
+
+    console.log(chartData)
 
     return (
         <div>
             <CustomAntdModal
-                title="Ideal Vs Achieved"
+                // title="Ideal Vs Achieved"
                 antdModalOpen={antdModalOpen}
                 modalWidth={817}
                 setAntdModalOpen={setAntdModalOpen}
             >
-
-                <>
-                    <div className="modal_point_row">
-                        <p>Points: </p>{" "}
-                        <span className="text-sm">00</span>
+                <h1 className="edit_chart_data_modal_title">Ideal Vs Achieved</h1>
+                <div className='edit_chart_data_modal_content'>
+                    <div>
+                        <h3 className='edit_chart_data_sub_title'>X Axis Ratio</h3>
+                        <div>
+                            forms here...
+                        </div>
                     </div>
-                    <div className="modal_point_row">
-                        <p>Total incentive average: </p>{" "}
-                        <span className="text-sm">00%</span>
+                    <div>
+                        <h3 className='edit_chart_data_sub_title'>Y Axis Ratio</h3>
+                        <div>
+                            forms here...
+                        </div>
                     </div>
-                    <hr />
-                    <div className="modal_point_row">
-                        <p>Your final points: <span>(00*00)</span></p>{" "}
-                        <span className="text-sm">00%</span>
-                    </div>
-                </>
-
-                <p className="modal_point_note">
-                    <span style={{ color: '#FF6666' }}>**</span>If you fail to maintain
-                    the minimum incentive slab for any of the criteria, your overall
-                    incentive percentage will be zero.{" "}
-                </p>
+                </div>
+                <div className='pay_now_modal_footer'>
+                    <ButtonComponent color='#1492E6' textColor='#fff' font='18px'>Save</ButtonComponent>
+                    <ButtonComponent onClick={() => setAntdModalOpen(false)} font='18px'>Do it later</ButtonComponent>
+                </div>
             </CustomAntdModal>
         </div>
     );

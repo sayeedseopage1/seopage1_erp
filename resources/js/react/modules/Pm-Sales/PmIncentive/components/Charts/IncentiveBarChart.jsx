@@ -1,15 +1,18 @@
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import Chart from "react-apexcharts";
 import arrow1 from '../../assets/arrow-1.svg'
 import arrow2 from '../../assets/arrow-2.svg'
 import { IoInformationCircle } from "react-icons/io5";
-import { Button, Popover } from "antd";
+import { Popover } from "antd";
 import IncentiveEditButton from "../ui/IncentiveEditButton";
 import { dummyUserRole } from "../../constants";
 import EditChartDataModal from "../Modals/Incentives/EditChartDataModal";
+import { set } from "lodash";
 
 const IncentiveBarChart = ({ chartData }) => {
     const chartRef = useRef(null);
+    const [editChartDataModalOpen, setEditChartdataModalOpen] = useState(false);
+    const [modalStateData, setModalStateData] = useState({});
 
     const options = {
         title: {
@@ -134,8 +137,9 @@ const IncentiveBarChart = ({ chartData }) => {
     const btn_class_edit = (chartData?.refId === 8 || chartData?.refId === 9 || chartData?.refId === 10) ? "chart_button_secondary" : "chart_button"
 
 
-    const handleEditChartData = (chartId) => {
-        console.log(chartId)
+    const handleEditChartData = (chartData) => {
+        setEditChartdataModalOpen(true)
+        setModalStateData(chartData)
     }
 
     return (
@@ -154,10 +158,9 @@ const IncentiveBarChart = ({ chartData }) => {
                 </div>
                 <div className="incentive_button_wrapper">
                     {
-                        dummyUserRole == 1 && <IncentiveEditButton onClick={() => handleEditChartData(chartData?.id)} className={btn_class_edit}>Edit</IncentiveEditButton>
+                        dummyUserRole == 1 && <IncentiveEditButton onClick={() => handleEditChartData(chartData)} className={btn_class_edit}>Edit</IncentiveEditButton>
                     }
-                    <EditChartDataModal key={chartData?.id} />
-
+                    <EditChartDataModal chartData={modalStateData} antdModalOpen={editChartDataModalOpen} setAntdModalOpen={setEditChartdataModalOpen} />
                     <button
                         className="chart_button"
                     >
