@@ -623,6 +623,49 @@
     line-height: 21px;
 }
 
+.point_edit_modal_title {
+    color: #000;
+    font-family: Poppins;
+    font-size: 20px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+    text-align: center;
+    margin-bottom: 0;
+}
+
+.point_edit_modal_content {
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 14px;
+    color: #8F8F8F;
+    font-family: Poppins;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+    margin-bottom: 37px;
+    margin-top: 18px;
+}
+
+.point_edit_modal_input {
+    max-width: 332px;
+    width: 100%;
+    border-radius: 9px;
+    border: 1px solid #B1B1B1;
+    padding: 10px;
+    margin: 0 auto;
+    color: #8F8F8F;
+    font-family: Poppins;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+}
+
 /*********************************
             modals ends
 *********************************/

@@ -16,7 +16,7 @@ const CustomAntdModal = ({ title, antdModalOpen, setAntdModalOpen, children, mod
                 onCancel={() => setAntdModalOpen(false)}
                 width={modalWidth || 545}
             >
-                <div className={`mt-3 ${!title && 'pt-4'}`}>
+                <div className=''>
                     {
                         children
                     }

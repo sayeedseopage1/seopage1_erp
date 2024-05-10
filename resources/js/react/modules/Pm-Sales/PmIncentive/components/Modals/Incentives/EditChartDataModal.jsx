@@ -20,7 +20,8 @@ const EditChartDataModal = ({ chartData, antdModalOpen, setAntdModalOpen }) => {
                     <div>
                         <h3 className='edit_chart_data_sub_title'>X Axis Ratio</h3>
                         <div>
-                            forms here...
+                            <div>
+                            </div>
                         </div>
                     </div>
                     <div>

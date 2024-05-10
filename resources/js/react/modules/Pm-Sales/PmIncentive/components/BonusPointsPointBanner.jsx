@@ -6,9 +6,11 @@ import FinalPointsModal from './Modals/FinalPointsModal';
 import { Popover } from 'antd';
 import IncentiveEditButton from './ui/IncentiveEditButton';
 import { dummyUserRole } from '../constants';
+import CashValueBonusEditModal from './Modals/Incentives/CashValueBonusEditModal';
 
 const BonusPointsPointBanner = () => {
     const [finalPointsModalOpen, setFinalPointsModalOpen] = useState(false);
+    const [editBonusPointsModalOpen, setEditBonusPointsModalOpen] = useState(false);
     return (
         <div className="secondary_point_banner_bonus">
             <div className="secondary_point_card_wrapper">
@@ -93,9 +95,10 @@ const BonusPointsPointBanner = () => {
                             Cash value of every bonus  point: <span className='point_score' style={{ color: "#1492E6" }}>
                                 100 Taka
                             </span> {
-                                dummyUserRole == 1 && <IncentiveEditButton className={`chart_button`}></IncentiveEditButton>
+                                dummyUserRole == 1 && <IncentiveEditButton onClick={() => setEditBonusPointsModalOpen(true)} className={`chart_button`}></IncentiveEditButton>
                             }
                         </p>
+                        <CashValueBonusEditModal antdModalOpen={editBonusPointsModalOpen} setAntdModalOpen={setEditBonusPointsModalOpen} />
                     </div>
                 </div>
             </div>

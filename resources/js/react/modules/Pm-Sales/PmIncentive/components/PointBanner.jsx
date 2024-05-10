@@ -3,6 +3,8 @@ import pointIcon from '../assets/pointIcon.svg'
 import takaIcon from '../assets/takaIcon.svg'
 import IncentiveEditButton from "./ui/IncentiveEditButton";
 import { dummyUserRole } from "../constants";
+import CashValuePointEditModal from "./Modals/Incentives/CashValuePointEditModal";
+import { useState } from "react";
 
 const obtainPoints = [
     {
@@ -20,6 +22,8 @@ const obtainPoints = [
 ]
 
 const PointBanner = () => {
+    const [editPointDataModalOpen, setEditPointDataModalOpen] = useState(false);
+
     return (
         <div className="point_banner">
             {
@@ -32,11 +36,12 @@ const PointBanner = () => {
                             <p className='point_title point_details_wrapper'>
                                 {item?.title}: <span className='point_score'>{item?.value} {item?.value_type === 'point' ? 'pt' : 'Taka'}</span> &nbsp;
                                 {item?.value_type !== 'point' && dummyUserRole === 1 && (
-                                    <IncentiveEditButton className="chart_button">
+                                    <IncentiveEditButton onClick={() => setEditPointDataModalOpen(true)} className="chart_button">
                                         Edit
                                     </IncentiveEditButton>
                                 )}
                             </p>
+                            <CashValuePointEditModal antdModalOpen={editPointDataModalOpen} setAntdModalOpen={setEditPointDataModalOpen} />
                         </div>
                     </div>
                 ))
