@@ -942,7 +942,6 @@ class ProjectController extends AccountBaseController
      */
     public function update(UpdateProject $request, $id)
     {
-
         DB::beginTransaction();
         //kpi distribution start from here
         //  DB::beginTransaction();
@@ -1880,30 +1879,28 @@ class ProjectController extends AccountBaseController
         // PROJECT PM GOAL SETTINGS START
         if ($project->status == 'not started') {
             // dd($project);
-            if ($project->project_budget) {
-                $findProject = Project::where('id', $request->project_id)->first();
-                $findDeal = Deal::where('id', $findProject->deal_id)->first();
-                // dd($findDeal->project_type);
-                if ($findDeal->project_type == 'fixed') {
+
+            $findProject = Project::where('id', $request->project_id)->first();
+            $findDeal = Deal::where('id', $findProject->deal_id)->first();
+            // dd($findDeal->project_type);
+            if ($findDeal->project_type == 'fixed') {
+                if ($project->project_budget) {
                     $pmGoalSetting = PmGoalSetting::where('initial_value', '<=', $findProject->project_budget)
                         ->where('end_value', '>=', $findProject->project_budget)
                         ->first();
 
-                    if ($pmGoalSetting != null) {
-                        $project_status_helper = new HelperPmProjectStatusController();
-                        $project_status_helper->ProjectPmGoalCreation($pmGoalSetting, $findDeal, $findProject);
-                    }
-                    else throw new Exception("Pm goal settings not found.");
-                } else {
-                    // if($findDeal->project_type !=null){
+                    if (!$pmGoalSetting) throw new Exception("Pm goal settings not found.");
                     $project_status_helper = new HelperPmProjectStatusController();
-                    $project_status_helper->HourlyProjectPmGoalCreation($findDeal, $findProject);
-                    // }
-                }
-
-                $project->status = 'in progress';
+                    $project_status_helper->ProjectPmGoalCreation($pmGoalSetting, $findDeal, $findProject);
+                } else throw new Exception("Deal budget not found.");
+            } else {
+                // if($findDeal->project_type !=null){
+                $project_status_helper = new HelperPmProjectStatusController();
+                $project_status_helper->HourlyProjectPmGoalCreation($findDeal, $findProject);
+                // }
             }
-            else throw new Exception("Deal budget not found.");
+
+            $project->status = 'in progress';
         }
         // dd('asdf');
         $project->save();
