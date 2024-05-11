@@ -1,10 +1,12 @@
 import { Modal } from 'antd';
-import React from 'react';
+import React, { useState } from 'react';
 import { ButtonComponent } from '../../../../PointFactors/components/Styles/ui/ui';
 import { RxCross1 } from "react-icons/rx";
+import AddNewAxisItemModal from './AddNewAxisItemModal';
 
 const ChartIdealVsAchievedEditModal = ({ antdModalOpen, showIdealVsAchievedEditModal, chartData }) => {
     console.log(chartData)
+    const [addNewAxisDataModalOpen, setAddNewAxisDataModalOpen] = useState(false);
 
     const handleCancel = () => {
         showIdealVsAchievedEditModal();  // Assuming this function toggles the modal's visibility
@@ -25,12 +27,13 @@ const ChartIdealVsAchievedEditModal = ({ antdModalOpen, showIdealVsAchievedEditM
             open={antdModalOpen}
             width={528}
             footer={null}
+            centered={true}
         >
             <div className='pay_now_modal_body' style={{ paddingTop: "0px" }}>
                 <div className='edit_chart_data_modal_top'>
                     <div className='ideal_vs_achieved_chart_data_actions'>
                         <div className='ideal_vs_achieved_chart_data_actions_buttons'>
-                            <button className='chart_data_add'>Add</button>
+                            <button onClick={() => setAddNewAxisDataModalOpen(true)} className='chart_data_add'>Add</button>
                             <button className='chart_data_remove'>Remove</button>
                         </div>
                         <button className='ideal_vs_achieved_chart_data_actions_range'>Select Range</button>
@@ -72,6 +75,8 @@ const ChartIdealVsAchievedEditModal = ({ antdModalOpen, showIdealVsAchievedEditM
                 <ButtonComponent color='#1492E6' textColor='#fff' font='18px'>Save</ButtonComponent>
                 <ButtonComponent onClick={handleCancel} font='18px'>Do it later</ButtonComponent>
             </div>
+
+            <AddNewAxisItemModal antdModalOpen={addNewAxisDataModalOpen} setAntdModalOpen={setAddNewAxisDataModalOpen} />
         </Modal>
     );
 };
