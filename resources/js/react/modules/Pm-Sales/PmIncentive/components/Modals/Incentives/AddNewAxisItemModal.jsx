@@ -64,8 +64,8 @@ const AddNewAxisItemModal = ({ antdModalOpen, setAntdModalOpen, chartData }) => 
                             </div>
                         </div>
                         <div className='pay_now_modal_footer'>
-                            <ButtonComponent type='submit' color='#1492E6' textColor='#fff' font='18px'>Save</ButtonComponent>
-                            <ButtonComponent onClick={handleCancel} font='18px'>Do it later</ButtonComponent>
+                            <ButtonComponent type='submit' color='#1492E6' textColor='#fff' font='14px'>Add Now</ButtonComponent>
+                            <ButtonComponent onClick={handleCancel} font='14px'>Do it later</ButtonComponent>
                         </div>
                     </form>
                 </div>

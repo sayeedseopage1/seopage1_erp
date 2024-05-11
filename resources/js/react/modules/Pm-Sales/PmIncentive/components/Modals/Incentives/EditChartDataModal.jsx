@@ -1,3 +1,6 @@
+// ! This is deprecated Component. Use new one.
+
+
 import React from 'react';
 import CustomAntdModal from '../../ui/CustomAntdModal';
 import PropTypes from "prop-types";
