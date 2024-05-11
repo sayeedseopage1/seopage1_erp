@@ -62,6 +62,7 @@ const ProjectStatus = () => {
     } = useGetPmGoalQuery(projectId, {
         refetchOnMountOrArgChange: true /*, skip: !filter?.start_date*/,
         skip: !projectId,
+        staleTime: 0
     });
 
     // Data from the API
@@ -75,6 +76,7 @@ const ProjectStatus = () => {
     const closeModalOne = () => {
         setIsModalOneOpen(false);
         setSelectedProjectName("");
+        setProjectId(null);
         searchParams.delete("modal_type");
         searchParams.delete("goal_id");
         searchParams.delete("project_id");
@@ -100,8 +102,7 @@ const ProjectStatus = () => {
         setProjectId(data.project_id);
         setIsModalOneOpen(true);
         setSelectedProjectName(data.project_name);
-
-        refetchPmGoal();
+        // refetchPmGoal();
     };
 
     // handle percent of goal met  modal
@@ -212,7 +213,9 @@ const ProjectStatus = () => {
                     projectDetails={projectDetails}
                 />
             )}
-            <ProjectManagerExplanationModal />
+            {searchParams.get("modal_type") === "modal_type" && (
+                <ProjectManagerExplanationModal />
+            )}
         </React.Fragment>
     );
 };
