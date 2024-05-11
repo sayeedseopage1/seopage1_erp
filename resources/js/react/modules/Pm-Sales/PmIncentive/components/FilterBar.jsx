@@ -81,7 +81,7 @@ const FilterBar = ({ tab, setTab, filterByPeriod, setFilterByPeriod }) => {
                 </div>
             }
 
-            <PayNowModal isPayNowModalOpen={isPayNowModalOpen} showPayNowModal={showPayNowModal} />
+            <PayNowModal antdModalOpen={isPayNowModalOpen} showPayNowModal={showPayNowModal} />
         </div>
     );
 };

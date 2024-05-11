@@ -8,11 +8,19 @@ import IncentiveEditButton from "../ui/IncentiveEditButton";
 import { dummyUserRole } from "../../constants";
 import EditChartDataModal from "../Modals/Incentives/EditChartDataModal";
 import { set } from "lodash";
+import ChartIdealVsAchievedEditModal from "../Modals/Incentives/ChartIdealVsAchievedEditModal";
 
 const IncentiveBarChart = ({ chartData }) => {
     const chartRef = useRef(null);
-    const [editChartDataModalOpen, setEditChartdataModalOpen] = useState(false);
     const [modalStateData, setModalStateData] = useState({});
+
+    const [isIdealVsAchievedEditModalOpen, setIsIdealVsAchievedEditModalOpen] = useState(false);
+
+    const showIdealVsAchievedEditModal = (chartDataFromParent) => {
+        setModalStateData(chartDataFromParent)
+        setIsIdealVsAchievedEditModalOpen(!isIdealVsAchievedEditModalOpen);
+    };
+
 
     const options = {
         title: {
@@ -137,11 +145,6 @@ const IncentiveBarChart = ({ chartData }) => {
     const btn_class_edit = (chartData?.refId === 8 || chartData?.refId === 9 || chartData?.refId === 10) ? "chart_button_secondary" : "chart_button"
 
 
-    const handleEditChartData = (chartData) => {
-        setEditChartdataModalOpen(true)
-        setModalStateData(chartData)
-    }
-
     return (
         <>
             <div className="chart_header">
@@ -158,9 +161,9 @@ const IncentiveBarChart = ({ chartData }) => {
                 </div>
                 <div className="incentive_button_wrapper">
                     {
-                        dummyUserRole == 1 && <IncentiveEditButton onClick={() => handleEditChartData(chartData)} className={btn_class_edit}>Edit</IncentiveEditButton>
+                        dummyUserRole == 1 && <IncentiveEditButton onClick={() => showIdealVsAchievedEditModal(chartData)} className={btn_class_edit}>Edit</IncentiveEditButton>
                     }
-                    <EditChartDataModal chartData={modalStateData} antdModalOpen={editChartDataModalOpen} setAntdModalOpen={setEditChartdataModalOpen} />
+                    <ChartIdealVsAchievedEditModal antdModalOpen={isIdealVsAchievedEditModalOpen} showIdealVsAchievedEditModal={showIdealVsAchievedEditModal} chartData={modalStateData} />
                     <button
                         className="chart_button"
                     >

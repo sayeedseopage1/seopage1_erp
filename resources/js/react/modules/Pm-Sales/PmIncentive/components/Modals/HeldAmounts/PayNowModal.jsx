@@ -98,7 +98,7 @@ const held_years = [
 ]
 
 
-const PayNowModal = ({ isPayNowModalOpen, showPayNowModal }) => {
+const PayNowModal = ({ antdModalOpen, showPayNowModal }) => {
     const initialYear = held_years.find(item => item.status === 'Pending')?.year || held_years[0]?.year;
     const [defaultHeldYear, setDefaultHeldYear] = useState(initialYear);
     const [modifiedData, setModifiedData] = useState([...payNowData].filter(item => item.year === initialYear));
@@ -171,8 +171,6 @@ const PayNowModal = ({ isPayNowModalOpen, showPayNowModal }) => {
                 }
             `,
             showCancelButton: true,
-            // confirmButtonColor: "#1492E6",
-            // cancelButtonColor: "#fff",
             confirmButtonText: "Confirm",
             cancelButtonText: "Do it later",
             customClass: {
@@ -214,7 +212,7 @@ const PayNowModal = ({ isPayNowModalOpen, showPayNowModal }) => {
                     </div>
                 </div>
             }
-            open={isPayNowModalOpen}
+            open={antdModalOpen}
             width={675}
             footer={null}
         >
