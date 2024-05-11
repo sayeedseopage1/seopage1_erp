@@ -22,7 +22,9 @@ const singleTaskPageApiSlice = apiSlice.injectEndpoints({
                 body: data,
                 formData: true,
             }),
-            invalidatesTags: ["TASK_STATUS", "SUB_TASKS"],
+            // invalidatesTags: ["TASK_STATUS", "SUB_TASKS"],
+            //tag changed due to remove unnecessary reloading the page
+            invalidatesTags: ["TASK_STATUS"],
         }),
 
         // delete uploaded file

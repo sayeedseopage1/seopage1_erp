@@ -41,8 +41,8 @@ import FileExtensionMultiSelect from "../../../projects/components/graphics-desi
 
 const fileInputStyle = {
     height: "39px",
-    zIndex: '0'
-}
+    zIndex: "0",
+};
 
 const SubTaskForm = ({ close, isDesignerTask }) => {
     const {
@@ -50,7 +50,6 @@ const SubTaskForm = ({ close, isDesignerTask }) => {
         subTask,
         isWorkingEnvironmentSubmit,
     } = useSelector((s) => s.subTask);
-
 
     // graphic task details
     const graphicWorkDetails = new Object(taskDetails?.graphic_work_detail);
@@ -64,15 +63,36 @@ const SubTaskForm = ({ close, isDesignerTask }) => {
     let defaultImgOrVidForWork;
     let defaultBrandGuidelineFiles;
     let defaultRefFiles;
-    if (graphicWorkDetails?.secondary_colors || graphicWorkDetails?.file_types_needed || graphicWorkDetails?.file_extensions || graphicWorkDetails?.graphic_task_files) {
-        defaultSecondaryColors = JSON.parse(graphicWorkDetails?.secondary_colors)
-        defaultFileTypesNeeded = JSON.parse(graphicWorkDetails?.file_types_needed)
-        defaultFileExtension = JSON.parse(graphicWorkDetails?.file_extensions)
-        defaultTextForDesign = graphicWorkDetails?.graphic_task_files?.filter((item) => item?.file_type == 1)
-        defaultImageForDesigner = graphicWorkDetails?.graphic_task_files?.filter((item) => item?.file_type == 2)
-        defaultImgOrVidForWork = graphicWorkDetails?.graphic_task_files?.filter((item) => item?.file_type == 3)
-        defaultBrandGuidelineFiles = graphicWorkDetails?.graphic_task_files?.filter((item) => item?.file_type == 4)
-        defaultRefFiles = graphicWorkDetails?.graphic_task_files?.filter((item) => item?.file_type == 5)
+    if (
+        graphicWorkDetails?.secondary_colors ||
+        graphicWorkDetails?.file_types_needed ||
+        graphicWorkDetails?.file_extensions ||
+        graphicWorkDetails?.graphic_task_files
+    ) {
+        defaultSecondaryColors = JSON.parse(
+            graphicWorkDetails?.secondary_colors
+        );
+        defaultFileTypesNeeded = JSON.parse(
+            graphicWorkDetails?.file_types_needed
+        );
+        defaultFileExtension = JSON.parse(graphicWorkDetails?.file_extensions);
+        defaultTextForDesign = graphicWorkDetails?.graphic_task_files?.filter(
+            (item) => item?.file_type == 1
+        );
+        defaultImageForDesigner =
+            graphicWorkDetails?.graphic_task_files?.filter(
+                (item) => item?.file_type == 2
+            );
+        defaultImgOrVidForWork = graphicWorkDetails?.graphic_task_files?.filter(
+            (item) => item?.file_type == 3
+        );
+        defaultBrandGuidelineFiles =
+            graphicWorkDetails?.graphic_task_files?.filter(
+                (item) => item?.file_type == 4
+            );
+        defaultRefFiles = graphicWorkDetails?.graphic_task_files?.filter(
+            (item) => item?.file_type == 5
+        );
     }
 
     // const [defaultBrandGuidelineFiles, setDefaultBrandGuidelineFiles] = useState(graphicWorkDetails?.graphic_task_files?.filter((item) => item?.file_type == 4))
@@ -98,7 +118,9 @@ const SubTaskForm = ({ close, isDesignerTask }) => {
     const [files, setFiles] = React.useState([]);
 
     //state for graphic designer start
-    const [workableUrl, setWorkableUrl] = useState(graphicWorkDetails?.workable_url);
+    const [workableUrl, setWorkableUrl] = useState(
+        graphicWorkDetails?.workable_url
+    );
 
     const [typeOfGraphicsCategory, setTypeOfGraphicsCategory] = useState("");
     const [typeOfLogo, setTypeOfLogo] = useState("");
@@ -106,26 +128,37 @@ const SubTaskForm = ({ close, isDesignerTask }) => {
     const [numOfVersions, setNumOfVersions] = useState(null);
     const [referenceList, setReferenceList] = useState([{ reference: "" }]);
     const [referenceFile, setReferenceFile] = useState(defaultRefFiles);
-    const [fileTypesNeeded, setFileTypesNeeded] = React.useState(defaultFileTypesNeeded);
+    const [fileTypesNeeded, setFileTypesNeeded] = React.useState(
+        defaultFileTypesNeeded
+    );
     const [textForDesign, setTextForDesign] = useState(defaultTextForDesign);
-    const [imageForDesigner, setImageForDesigner] = useState(defaultImageForDesigner);
-    const [imgOrVidForWork, setImgOrVidForWork] = useState(defaultImgOrVidForWork);
-    const [fontName, setFontName] = useState('');
-    const [fontUrl, setFontUrl] = useState('');
-    const [brandGuideline, setBrandGuideline] = useState(defaultBrandGuidelineFiles);
+    const [imageForDesigner, setImageForDesigner] = useState(
+        defaultImageForDesigner
+    );
+    const [imgOrVidForWork, setImgOrVidForWork] = useState(
+        defaultImgOrVidForWork
+    );
+    const [fontName, setFontName] = useState("");
+    const [fontUrl, setFontUrl] = useState("");
+    const [brandGuideline, setBrandGuideline] = useState(
+        defaultBrandGuidelineFiles
+    );
     const [illustration, setIllustration] = useState("");
     const [others, setOthers] = useState("");
     const [primaryColor, setPrimaryColor] = React.useState("");
     const [primaryColorDescription, setPrimaryColorDescription] =
         React.useState("");
-    const [secondaryColors, setSecondaryColors] = React.useState(defaultSecondaryColors);
-    const [fileExtension, setFileExtension] = React.useState(defaultFileExtension);
+    const [secondaryColors, setSecondaryColors] = React.useState(
+        defaultSecondaryColors
+    );
+    const [fileExtension, setFileExtension] =
+        React.useState(defaultFileExtension);
     //state for graphic designer end
 
     // state for ui/ux start
-    const [cms, setCms] = useState("")
-    const [themeName, setThemeName] = useState("")
-    const [themeTemplate, setThemeTemplate] = useState("")
+    const [cms, setCms] = useState("");
+    const [themeName, setThemeName] = useState("");
+    const [themeTemplate, setThemeTemplate] = useState("");
     // state for ui/ux end
 
     const [pageType, setPageType] = React.useState("");
@@ -157,22 +190,24 @@ const SubTaskForm = ({ close, isDesignerTask }) => {
 
     const [checkRestrictedWords, { isLoading: checking }] =
         useCheckRestrictedWordsMutation();
-    const { data: graphicOptions } = useGetTypesOfGraphicWorksQuery("")
+    const { data: graphicOptions } = useGetTypesOfGraphicWorksQuery("");
 
     // handle change
     useEffect(() => {
         setMilestone(task?.milestoneTitle);
         setProject(task?.projectName);
         setParentTask(task?.title);
-    }, [task])
+    }, [task]);
 
     React.useEffect(() => {
-        setBrandName(graphicWorkDetails?.brand_name)
+        setBrandName(graphicWorkDetails?.brand_name);
         setNumOfVersions(graphicWorkDetails?.number_of_versions);
         setFontName(graphicWorkDetails?.font_name);
         setFontUrl(graphicWorkDetails?.font_url);
         setPrimaryColor(graphicWorkDetails?.primary_color);
-        setPrimaryColorDescription(graphicWorkDetails?.primary_color_description);
+        setPrimaryColorDescription(
+            graphicWorkDetails?.primary_color_description
+        );
         setIllustration(graphicWorkDetails?.design_instruction);
         setOthers(graphicWorkDetails?.design_instruction);
         if (graphicWorkDetails?.reference) {
@@ -182,11 +217,11 @@ const SubTaskForm = ({ close, isDesignerTask }) => {
 
     useEffect(() => {
         if (taskDetails) {
-            setCms(taskDetails?.cms)
-            setThemeName(taskDetails?.theme_name)
-            setThemeTemplate(taskDetails?.theme_template_library_link)
+            setCms(taskDetails?.cms);
+            setThemeName(taskDetails?.theme_name);
+            setThemeTemplate(taskDetails?.theme_template_library_link);
         }
-    }, [taskDetails])
+    }, [taskDetails]);
 
     React.useEffect(() => {
         getTaskDetails(`/${task?.id}/json?mode=estimation_time`).unwrap();
@@ -204,9 +239,16 @@ const SubTaskForm = ({ close, isDesignerTask }) => {
         isDesignerTask &&
             setTypeOfGraphicsCategory({
                 id: graphicWorkDetails?.type_of_graphic_work_id,
-                name: graphicOptions?.find((item) => item.id == graphicWorkDetails?.type_of_graphic_work_id)?.name,
+                name: graphicOptions?.find(
+                    (item) =>
+                        item.id == graphicWorkDetails?.type_of_graphic_work_id
+                )?.name,
             });
-    }, [isDesignerTask, graphicWorkDetails?.type_of_graphic_work_id, graphicOptions]);
+    }, [
+        isDesignerTask,
+        graphicWorkDetails?.type_of_graphic_work_id,
+        graphicOptions,
+    ]);
 
     React.useEffect(() => {
         isDesignerTask &&
@@ -256,7 +298,8 @@ const SubTaskForm = ({ close, isDesignerTask }) => {
 
         if (assignedTo && assignedTo?.isOverloaded) {
             toast.warn(
-                `You cannot assign this task to ${assignedTo?.name}  because ${assignedTo?.gender === "male" ? "He " : "She "
+                `You cannot assign this task to ${assignedTo?.name}  because ${
+                    assignedTo?.gender === "male" ? "He " : "She "
                 } has more than 04 Submittable tasks.`
             );
             count++;
@@ -309,7 +352,9 @@ const SubTaskForm = ({ close, isDesignerTask }) => {
                     }
                 }
 
-                if (_.toLower(pageType) === _.toLower("Cloning Existing Design")) {
+                if (
+                    _.toLower(pageType) === _.toLower("Cloning Existing Design")
+                ) {
                     if (!pageTypeName) {
                         error.pageTypeName = "You have to select an option";
                         count++;
@@ -340,8 +385,6 @@ const SubTaskForm = ({ close, isDesignerTask }) => {
                 }
             }
         }
-
-
 
         setErr(error);
         return !count;
@@ -438,9 +481,40 @@ const SubTaskForm = ({ close, isDesignerTask }) => {
                     })
                     .catch((err) => {
                         if (err?.status === 422) {
-                            toast.warn(
-                                `Estimate hours cannot exceed from project allocation hours !`
-                            );
+                            let errorMessage = "";
+                            if (
+                                err?.data["estimate_hours"] &&
+                                !err?.data["estimate_minutes"]
+                            ) {
+                                errorMessage =
+                                    "The estimate hours field is required.";
+                            } else if (
+                                !err?.data["estimate_hours"] &&
+                                err?.data["estimate_minutes"]
+                            ) {
+                                errorMessage =
+                                    "The estimate minutes field is required.";
+                            } else if (
+                                err?.data["estimate_hours"] &&
+                                err?.data["estimate_minutes"]
+                            ) {
+                                errorMessage =
+                                    "The estimated hours and minutes fields are required..";
+                            } else if (
+                                !err?.data["estimate_hours"] &&
+                                !err?.data["estimate_minutes"] &&
+                                err?.data["errors"]
+                            ) {
+                                errorMessage =
+                                    "Estimate hours cannot exceed from project allocation hours ";
+                            }
+
+                            Swal.fire({
+                                position: "center",
+                                icon: "error",
+                                title: errorMessage,
+                                showConfirmButton: true,
+                            });
                         }
                     });
             }
@@ -450,10 +524,7 @@ const SubTaskForm = ({ close, isDesignerTask }) => {
             submit();
         }
 
-
-
         const primaryPageConfirmation = () => {
-
             if (
                 !isDesignerTask &&
                 pageTypePriority === "Primary Page Development"
@@ -593,7 +664,7 @@ const SubTaskForm = ({ close, isDesignerTask }) => {
         setPageTypeName("");
     }, [pageType]);
 
-    // FIXME: taskDetails time and estimation time inconsistent 
+    // FIXME: taskDetails time and estimation time inconsistent
     // console.log(estimation)
     // console.log(taskDetails)
 
@@ -614,8 +685,8 @@ const SubTaskForm = ({ close, isDesignerTask }) => {
                     />
                 </div>
 
-                {
-                    task?.category?.name !== "Graphic Design" && <div className="col-12 col-md-6">
+                {task?.category?.name !== "Graphic Design" && (
+                    <div className="col-12 col-md-6">
                         <div className="form-group my-3">
                             <label
                                 className={`f-14 text-dark-gray mb-1`}
@@ -630,7 +701,7 @@ const SubTaskForm = ({ close, isDesignerTask }) => {
                             />
                         </div>
                     </div>
-                }
+                )}
 
                 <div className="col-12 col-md-6">
                     <div className="form-group my-3">
@@ -762,389 +833,504 @@ const SubTaskForm = ({ close, isDesignerTask }) => {
 
                 {
                     // lead designer to graphic designer
-                    (auth?.isHasRolePermission(13) && task?.category?.name === "Graphic Design") && <>
-                        {/* Type Of Graphics Work */}
-                        <div className="col-12 col-md-6">
-                            <TypeOfGraphicsWorkSelection
-                                selected={typeOfGraphicsCategory}
-                                onSelect={setTypeOfGraphicsCategory}
-                                isDesignerTask={isDesignerTask}
-                            />
-                            {err?.typeOfGraphicsCategory && (
-                                <div style={{ color: "red" }}>
-                                    {err?.typeOfGraphicsCategory}
-                                </div>
-                            )}
-                        </div>
-                        {/* for logo  */}
-                        {
-                            typeOfGraphicsCategory?.id === 1 && <>
+                    auth?.isHasRolePermission(13) &&
+                        task?.category?.name === "Graphic Design" && (
+                            <>
+                                {/* Type Of Graphics Work */}
                                 <div className="col-12 col-md-6">
-                                    <TypeOfLogo
-                                        selected={typeOfLogo}
-                                        onSelect={setTypeOfLogo}
+                                    <TypeOfGraphicsWorkSelection
+                                        selected={typeOfGraphicsCategory}
+                                        onSelect={setTypeOfGraphicsCategory}
                                         isDesignerTask={isDesignerTask}
                                     />
-                                    {err?.typeOfLogo && (
+                                    {err?.typeOfGraphicsCategory && (
                                         <div style={{ color: "red" }}>
-                                            {err?.typeOfLogo}
+                                            {err?.typeOfGraphicsCategory}
                                         </div>
                                     )}
                                 </div>
+                                {/* for logo  */}
+                                {typeOfGraphicsCategory?.id === 1 && (
+                                    <>
+                                        <div className="col-12 col-md-6">
+                                            <TypeOfLogo
+                                                selected={typeOfLogo}
+                                                onSelect={setTypeOfLogo}
+                                                isDesignerTask={isDesignerTask}
+                                            />
+                                            {err?.typeOfLogo && (
+                                                <div style={{ color: "red" }}>
+                                                    {err?.typeOfLogo}
+                                                </div>
+                                            )}
+                                        </div>
+                                        <div className="col-12 col-md-6">
+                                            <Input
+                                                id="brandName"
+                                                label="Brand Name"
+                                                type="text"
+                                                placeholder="Enter brand name"
+                                                name="brandName"
+                                                defaultValue={brandName}
+                                                error={err?.brandName}
+                                                readOnly={true}
+                                            />
+                                        </div>
+
+                                        <div className="col-12 col-md-6">
+                                            <Input
+                                                id="fileTypesNeeded"
+                                                label="File Types Needed"
+                                                type="text"
+                                                name="fileTypesNeeded"
+                                                value={fileTypesNeeded?.join(
+                                                    ", "
+                                                )}
+                                                readOnly={true}
+                                            />
+                                        </div>
+
+                                        <div className="col-12 col-md-6">
+                                            <Input
+                                                id="numOfVersions"
+                                                label="Number of Versions"
+                                                type="number"
+                                                placeholder="Enter Number of versions"
+                                                name="numOfVersions"
+                                                defaultValue={numOfVersions}
+                                                error={err?.numOfVersions}
+                                                readOnly={true}
+                                            />
+                                        </div>
+                                    </>
+                                )}
+
+                                {/* for Banner, brochure or company profile */}
+                                {(typeOfGraphicsCategory?.id === 2 ||
+                                    typeOfGraphicsCategory?.id === 3 ||
+                                    typeOfGraphicsCategory?.id === 4) && (
+                                    <>
+                                        <div className="col-12 col-md-6">
+                                            <div
+                                                className={`form-group my-3 w-100`}
+                                            >
+                                                <label
+                                                    htmlFor={"imageForDesigner"}
+                                                    className={`f-14 text-dark-gray mb-1`}
+                                                    data-label="true"
+                                                >
+                                                    Attach text that will be
+                                                    used for the design
+                                                    <sup className="f-14 mr-1">
+                                                        *
+                                                    </sup>
+                                                </label>
+                                                <div>
+                                                    <FileUploadWithInput
+                                                        inputType="url"
+                                                        inputUrl={workableUrl}
+                                                        previous={textForDesign}
+                                                        readOnly={true}
+                                                    />
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </>
+                                )}
+                                {/* background removal or image retouching */}
+                                {(typeOfGraphicsCategory?.id === 5 ||
+                                    typeOfGraphicsCategory?.id === 6) && (
+                                    <>
+                                        <div className="col-12 col-md-6">
+                                            <div
+                                                className={`form-group my-3 w-100`}
+                                            >
+                                                <label
+                                                    htmlFor={"imageForDesigner"}
+                                                    className={`f-14 text-dark-gray mb-1`}
+                                                    data-label="true"
+                                                >
+                                                    Image where the designer
+                                                    will work
+                                                    <sup className="f-14 mr-1">
+                                                        *
+                                                    </sup>
+                                                </label>
+                                                <div>
+                                                    <FileUploadWithInput
+                                                        inputType="url"
+                                                        inputUrl={workableUrl}
+                                                        previous={
+                                                            imageForDesigner
+                                                        }
+                                                        readOnly={true}
+                                                    />
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </>
+                                )}
+
+                                {/* motion graphics */}
+                                {typeOfGraphicsCategory?.id === 8 && (
+                                    <>
+                                        <div className="col-12 col-md-6">
+                                            <div
+                                                className={`form-group my-3 w-100`}
+                                            >
+                                                <label
+                                                    htmlFor={"imgOrVidForWork"}
+                                                    className={`f-14 text-dark-gray mb-1`}
+                                                    data-label="true"
+                                                >
+                                                    Images/videos that will be
+                                                    used for the work
+                                                    <sup className="f-14 mr-1">
+                                                        *
+                                                    </sup>
+                                                </label>
+                                                <div>
+                                                    <FileUploadWithInput
+                                                        inputType="url"
+                                                        inputUrl={workableUrl}
+                                                        previous={
+                                                            imgOrVidForWork
+                                                        }
+                                                        readOnly={true}
+                                                    />
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </>
+                                )}
+
+                                {/* Illustration */}
+                                {typeOfGraphicsCategory?.id === 7 && (
+                                    <>
+                                        <div className="col-12 col-md-6">
+                                            <div className="form-group my-3">
+                                                <label htmlFor="">
+                                                    {" "}
+                                                    Name of the illustration
+                                                    work!<sup>*</sup>{" "}
+                                                </label>
+                                                <div
+                                                    className={`sp1_ck_content sp1_guideline_text px-2 py-2 rounded`}
+                                                    style={{
+                                                        backgroundColor:
+                                                            "#E9ECEF",
+                                                    }}
+                                                    dangerouslySetInnerHTML={{
+                                                        __html: illustration,
+                                                    }}
+                                                ></div>
+                                            </div>
+                                        </div>
+                                    </>
+                                )}
+                                {/* Others */}
+                                {typeOfGraphicsCategory?.id === 9 && (
+                                    <>
+                                        <div className="col-12 col-md-6">
+                                            <div className="form-group my-3">
+                                                <label htmlFor="">
+                                                    {" "}
+                                                    Name of the graphic design
+                                                    work!<sup>*</sup>{" "}
+                                                </label>
+                                                <div
+                                                    className={`sp1_ck_content sp1_guideline_text px-2 py-2 rounded`}
+                                                    style={{
+                                                        backgroundColor:
+                                                            "#E9ECEF",
+                                                    }}
+                                                    dangerouslySetInnerHTML={{
+                                                        __html: others,
+                                                    }}
+                                                ></div>
+                                            </div>
+                                        </div>
+                                    </>
+                                )}
+
+                                {/* Reference */}
+                                <div className="col-12 col-md-6">
+                                    <div className={`form-group my-3 w-100`}>
+                                        <label
+                                            htmlFor="reference"
+                                            className={`f-14 text-dark-gray mb-1`}
+                                            data-label="true"
+                                        >
+                                            Reference
+                                            <sup className="f-14 mr-1">*</sup>
+                                        </label>
+                                        <div
+                                            style={{
+                                                maxHeight: "200px",
+                                                overflow: "auto",
+                                            }}
+                                        >
+                                            {referenceList?.map(
+                                                (singleReference, index) => (
+                                                    <input
+                                                        key={index}
+                                                        type="url"
+                                                        name="reference"
+                                                        className={`form-control height-35 f-14 ${
+                                                            index !== 0 &&
+                                                            "mt-2"
+                                                        }`}
+                                                        placeholder={
+                                                            "Enter Task Reference"
+                                                        }
+                                                        value={
+                                                            singleReference.reference
+                                                        }
+                                                        readOnly={true}
+                                                    />
+                                                )
+                                            )}
+                                            <div>
+                                                <CustomFileUpload
+                                                    previous={referenceFile}
+                                                    readOnly={true}
+                                                />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                {/* Font name */}
                                 <div className="col-12 col-md-6">
                                     <Input
-                                        id="brandName"
-                                        label="Brand Name"
+                                        id="fontName"
+                                        label="Font Name"
                                         type="text"
-                                        placeholder="Enter brand name"
-                                        name="brandName"
-                                        defaultValue={brandName}
-                                        error={err?.brandName}
+                                        placeholder="Enter a font name"
+                                        name="fontName"
+                                        required={true}
+                                        value={fontName}
+                                        error={err?.fontName}
                                         readOnly={true}
                                     />
                                 </div>
 
-                                <div className="col-12 col-md-6">
-                                    <Input
-                                        id="fileTypesNeeded"
-                                        label="File Types Needed"
-                                        type="text"
-                                        name="fileTypesNeeded"
-                                        value={fileTypesNeeded?.join(", ")}
-                                        readOnly={true}
-                                    />
-                                </div>
-
-                                <div className="col-12 col-md-6">
-                                    <Input
-                                        id="numOfVersions"
-                                        label="Number of Versions"
-                                        type="number"
-                                        placeholder="Enter Number of versions"
-                                        name="numOfVersions"
-                                        defaultValue={numOfVersions}
-                                        error={err?.numOfVersions}
-                                        readOnly={true}
-                                    />
-                                </div>
-                            </>
-                        }
-
-                        {/* for Banner, brochure or company profile */}
-                        {
-                            (typeOfGraphicsCategory?.id === 2 || typeOfGraphicsCategory?.id === 3 || typeOfGraphicsCategory?.id === 4) && <>
-                                <div className="col-12 col-md-6">
-                                    <div className={`form-group my-3 w-100`}>
-                                        <label
-                                            htmlFor={'imageForDesigner'}
-                                            className={`f-14 text-dark-gray mb-1`}
-                                            data-label="true"
-                                        >
-                                            Attach text that will be used for the design
-                                            <sup className='f-14 mr-1'>*</sup>
-                                        </label>
-                                        <div>
-                                            <FileUploadWithInput
-                                                inputType="url"
-                                                inputUrl={workableUrl}
-                                                previous={textForDesign}
-                                                readOnly={true}
-                                            />
-                                        </div>
-                                    </div>
-                                </div>
-                            </>
-                        }
-                        {/* background removal or image retouching */}
-                        {
-                            (typeOfGraphicsCategory?.id === 5 || typeOfGraphicsCategory?.id === 6) && <>
-                                <div className="col-12 col-md-6">
-                                    <div className={`form-group my-3 w-100`}>
-                                        <label
-                                            htmlFor={'imageForDesigner'}
-                                            className={`f-14 text-dark-gray mb-1`}
-                                            data-label="true"
-                                        >
-                                            Image where the designer will work
-                                            <sup className='f-14 mr-1'>*</sup>
-                                        </label>
-                                        <div>
-                                            <FileUploadWithInput
-                                                inputType="url"
-                                                inputUrl={workableUrl}
-                                                previous={imageForDesigner}
-                                                readOnly={true}
-                                            />
-                                        </div>
-                                    </div>
-                                </div>
-                            </>
-                        }
-
-                        {/* motion graphics */}
-                        {
-                            typeOfGraphicsCategory?.id === 8 && <>
-                                <div className="col-12 col-md-6">
-                                    <div className={`form-group my-3 w-100`}>
-                                        <label
-                                            htmlFor={'imgOrVidForWork'}
-                                            className={`f-14 text-dark-gray mb-1`}
-                                            data-label="true"
-                                        >
-                                            Images/videos that will be used for the work
-                                            <sup className='f-14 mr-1'>*</sup>
-                                        </label>
-                                        <div>
-                                            <FileUploadWithInput
-                                                inputType="url"
-                                                inputUrl={workableUrl}
-                                                previous={imgOrVidForWork}
-                                                readOnly={true}
-                                            />
-                                        </div>
-                                    </div>
-                                </div>
-                            </>
-                        }
-
-                        {/* Illustration */}
-                        {
-
-                            typeOfGraphicsCategory?.id === 7 && <>
-                                <div className="col-12 col-md-6">
-                                    <div className="form-group my-3">
-                                        <label htmlFor="">
-                                            {" "}
-                                            Name of the illustration work!<sup>*</sup>{" "}
-                                        </label>
-                                        <div className={`sp1_ck_content sp1_guideline_text px-2 py-2 rounded`} style={{ backgroundColor: "#E9ECEF" }} dangerouslySetInnerHTML={{ __html: illustration }}>
-                                        </div>
-                                    </div>
-                                </div>
-                            </>
-                        }
-                        {/* Others */}
-                        {
-                            typeOfGraphicsCategory?.id === 9 && <>
-                                <div className="col-12 col-md-6">
-                                    <div className="form-group my-3">
-                                        <label htmlFor="">
-                                            {" "}
-                                            Name of the graphic design work!<sup>*</sup>{" "}
-                                        </label>
-                                        <div className={`sp1_ck_content sp1_guideline_text px-2 py-2 rounded`} style={{ backgroundColor: "#E9ECEF" }} dangerouslySetInnerHTML={{ __html: others }}>
-                                        </div>
-                                    </div>
-                                </div>
-                            </>
-                        }
-
-                        {/* Reference */}
-                        <div className="col-12 col-md-6">
-                            <div className={`form-group my-3 w-100`}>
-                                <label
-                                    htmlFor='reference'
-                                    className={`f-14 text-dark-gray mb-1`}
-                                    data-label="true"
-                                >
-                                    Reference
-                                    <sup className='f-14 mr-1'>*</sup>
-                                </label>
-                                <div style={{ maxHeight: '200px', overflow: 'auto' }}>
-                                    {
-                                        referenceList?.map((singleReference, index) => <input
-                                            key={index}
+                                {/* font url  */}
+                                {fontUrl && (
+                                    <div className="col-12 col-md-6">
+                                        <Input
+                                            id="fontUrl"
+                                            label="Font Url"
                                             type="url"
-                                            name="reference"
-                                            className={`form-control height-35 f-14 ${index !== 0 && 'mt-2'}`}
-                                            placeholder={'Enter Task Reference'}
-                                            value={singleReference.reference}
-                                            readOnly={true}
-
-                                        />)
-                                    }
-                                    <div>
-                                        <CustomFileUpload
-                                            previous={referenceFile}
+                                            placeholder="Enter font url"
+                                            name="fontUrl"
+                                            value={fontUrl}
                                             readOnly={true}
                                         />
                                     </div>
-                                </div>
+                                )}
 
-                            </div>
-                        </div>
-
-                        {/* Font name */}
-                        <div className="col-12 col-md-6">
-                            <Input
-                                id="fontName"
-                                label="Font Name"
-                                type="text"
-                                placeholder="Enter a font name"
-                                name="fontName"
-                                required={true}
-                                value={fontName}
-                                error={err?.fontName}
-                                readOnly={true}
-                            />
-                        </div>
-
-                        {/* font url  */}
-                        {
-                            fontUrl && <div className="col-12 col-md-6">
-                                <Input
-                                    id="fontUrl"
-                                    label="Font Url"
-                                    type="url"
-                                    placeholder="Enter font url"
-                                    name="fontUrl"
-                                    value={fontUrl}
-                                    readOnly={true}
-                                />
-                            </div>
-                        }
-
-
-                        {/* Brand guideline */}
-                        {
-                            !_.isEmpty(brandGuideline) && <div className="col-12">
-                                <div className={`form-group my-3 w-100`}>
-                                    <label
-                                        htmlFor={'brandGuideline'}
-                                        className={`f-14 text-dark-gray mb-2`}
-                                        data-label="true"
-                                    >
-                                        Brand guideline
-                                    </label>
-                                    <div style={{ maxHeight: "200px", overflowY: "auto" }}>
-                                        <FileUploader>
-                                            {_.map(
-                                                brandGuideline,
-                                                (attachment) => {
-                                                    const file_icon = attachment?.filename.split(".").pop();
-
-                                                    return attachment?.filename ? (
-                                                        <FileUploader.Preview
-                                                            key={attachment?.id}
-                                                            fileName={attachment?.filename}
-                                                            downloadAble={true}
-                                                            deleteAble={false}
-                                                            downloadUrl={attachment?.file_url}
-                                                            previewUrl={attachment?.file_url}
-                                                            fileType={
-                                                                _.includes(
-                                                                    ["png", "jpeg", "jpg", "svg", "webp", "gif"],
-                                                                    file_icon
-                                                                )
-                                                                    ? "images"
-                                                                    : "others"
-                                                            }
-                                                            classname="comment_file"
-                                                            ext={file_icon}
-                                                        />
-                                                    ) : null;
-                                                }
-                                            )}
-                                        </FileUploader>
-                                    </div>
-                                </div>
-                            </div>
-                        }
-
-
-                        {/* color schema */}
-                        <div className="col-12">
-                            <div className='mb-2 f-16' style={{ color: '#878E97' }}><strong>Color Scheme: </strong></div>
-                            <div className='mb-3 rounded'>
-                                <div className='row' style={{ marginLeft: "0px" }}>
-                                    <div className='col-12 col-md-6 px-0'>
-                                        <label
-                                            htmlFor='primaryColor'
-                                            className={`font-weight-bold mr-2 mb-2`}
-                                            data-label="true"
+                                {/* Brand guideline */}
+                                {!_.isEmpty(brandGuideline) && (
+                                    <div className="col-12">
+                                        <div
+                                            className={`form-group my-3 w-100`}
                                         >
-                                            Primary Color
-                                            <sup className='f-14 mr-1'>*</sup>
-                                        </label>
-                                        <ColorItem color={primaryColor} desc={primaryColorDescription} />
-                                    </div>
-                                    {
-                                        defaultSecondaryColors && (defaultSecondaryColors[0].color || defaultSecondaryColors[0].description) &&
-                                        <div className='col-12 col-md-6 px-0'>
-                                            <p className='font-weight-bold mr-2 mb-2'>
-                                                {
-                                                    defaultSecondaryColors?.length > 1
-                                                        ? "Secondary Colors: "
-                                                        : "Secondary Color: "
-                                                }
-                                            </p>
-                                            {
-                                                defaultSecondaryColors?.map((color, i) => (
-                                                    <ColorItem key={i + color} color={color?.color}
-                                                        desc={color?.description} />
-                                                ))
-                                            }
-                                        </div>
-                                    }
-                                </div>
-                            </div>
-                        </div>
-                        {/* end color schema */}
+                                            <label
+                                                htmlFor={"brandGuideline"}
+                                                className={`f-14 text-dark-gray mb-2`}
+                                                data-label="true"
+                                            >
+                                                Brand guideline
+                                            </label>
+                                            <div
+                                                style={{
+                                                    maxHeight: "200px",
+                                                    overflowY: "auto",
+                                                }}
+                                            >
+                                                <FileUploader>
+                                                    {_.map(
+                                                        brandGuideline,
+                                                        (attachment) => {
+                                                            const file_icon =
+                                                                attachment?.filename
+                                                                    .split(".")
+                                                                    .pop();
 
-                        <div className="col-12 col-md-6">
-                            <Input
-                                id="fileExtension"
-                                label="Required File Extension"
-                                type="url"
-                                name="fileExtension"
-                                value={fileExtension?.join(", ")}
-                                readOnly={true}
-                            />
-                        </div>
-                    </>
+                                                            return attachment?.filename ? (
+                                                                <FileUploader.Preview
+                                                                    key={
+                                                                        attachment?.id
+                                                                    }
+                                                                    fileName={
+                                                                        attachment?.filename
+                                                                    }
+                                                                    downloadAble={
+                                                                        true
+                                                                    }
+                                                                    deleteAble={
+                                                                        false
+                                                                    }
+                                                                    downloadUrl={
+                                                                        attachment?.file_url
+                                                                    }
+                                                                    previewUrl={
+                                                                        attachment?.file_url
+                                                                    }
+                                                                    fileType={
+                                                                        _.includes(
+                                                                            [
+                                                                                "png",
+                                                                                "jpeg",
+                                                                                "jpg",
+                                                                                "svg",
+                                                                                "webp",
+                                                                                "gif",
+                                                                            ],
+                                                                            file_icon
+                                                                        )
+                                                                            ? "images"
+                                                                            : "others"
+                                                                    }
+                                                                    classname="comment_file"
+                                                                    ext={
+                                                                        file_icon
+                                                                    }
+                                                                />
+                                                            ) : null;
+                                                        }
+                                                    )}
+                                                </FileUploader>
+                                            </div>
+                                        </div>
+                                    </div>
+                                )}
+
+                                {/* color schema */}
+                                <div className="col-12">
+                                    <div
+                                        className="mb-2 f-16"
+                                        style={{ color: "#878E97" }}
+                                    >
+                                        <strong>Color Scheme: </strong>
+                                    </div>
+                                    <div className="mb-3 rounded">
+                                        <div
+                                            className="row"
+                                            style={{ marginLeft: "0px" }}
+                                        >
+                                            <div className="col-12 col-md-6 px-0">
+                                                <label
+                                                    htmlFor="primaryColor"
+                                                    className={`font-weight-bold mr-2 mb-2`}
+                                                    data-label="true"
+                                                >
+                                                    Primary Color
+                                                    <sup className="f-14 mr-1">
+                                                        *
+                                                    </sup>
+                                                </label>
+                                                <ColorItem
+                                                    color={primaryColor}
+                                                    desc={
+                                                        primaryColorDescription
+                                                    }
+                                                />
+                                            </div>
+                                            {defaultSecondaryColors &&
+                                                (defaultSecondaryColors[0]
+                                                    .color ||
+                                                    defaultSecondaryColors[0]
+                                                        .description) && (
+                                                    <div className="col-12 col-md-6 px-0">
+                                                        <p className="font-weight-bold mr-2 mb-2">
+                                                            {defaultSecondaryColors?.length >
+                                                            1
+                                                                ? "Secondary Colors: "
+                                                                : "Secondary Color: "}
+                                                        </p>
+                                                        {defaultSecondaryColors?.map(
+                                                            (color, i) => (
+                                                                <ColorItem
+                                                                    key={
+                                                                        i +
+                                                                        color
+                                                                    }
+                                                                    color={
+                                                                        color?.color
+                                                                    }
+                                                                    desc={
+                                                                        color?.description
+                                                                    }
+                                                                />
+                                                            )
+                                                        )}
+                                                    </div>
+                                                )}
+                                        </div>
+                                    </div>
+                                </div>
+                                {/* end color schema */}
+
+                                <div className="col-12 col-md-6">
+                                    <Input
+                                        id="fileExtension"
+                                        label="Required File Extension"
+                                        type="url"
+                                        name="fileExtension"
+                                        value={fileExtension?.join(", ")}
+                                        readOnly={true}
+                                    />
+                                </div>
+                            </>
+                        )
                 }
 
                 {
                     // lead designer to ui/ux designer
-                    (auth?.isHasRolePermission(13) && task?.category?.name === "UI/UIX Design") && <>
-                        {/* cms name  */}
-                        <div className="col-12 col-md-6">
-                            <Input
-                                id="cms"
-                                label="CMS"
-                                type="text"
-                                name="cms"
-                                value={cms}
-                                readOnly={true}
-                            />
-                        </div>
-                        {/* theme name */}
-                        {
-                            themeName && <div className="col-12 col-md-6">
-                                <Input
-                                    id="themeName"
-                                    label="Theme Name"
-                                    type="text"
-                                    name="themeName"
-                                    value={themeName}
-                                    readOnly={true}
-                                />
-                            </div>
-                        }
-                        {/* theme template url */}
-                        {
-                            themeTemplate && <div className="col-12 col-md-6">
-                                <Input
-                                    id="themeTemplate"
-                                    label="Theme Template Library URL"
-                                    type="url"
-                                    name="themeTemplate"
-                                    value={themeTemplate}
-                                    readOnly={true}
-                                />
-                            </div>
-                        }
-                    </>
+                    auth?.isHasRolePermission(13) &&
+                        task?.category?.name === "UI/UIX Design" && (
+                            <>
+                                {/* cms name  */}
+                                <div className="col-12 col-md-6">
+                                    <Input
+                                        id="cms"
+                                        label="CMS"
+                                        type="text"
+                                        name="cms"
+                                        value={cms}
+                                        readOnly={true}
+                                    />
+                                </div>
+                                {/* theme name */}
+                                {themeName && (
+                                    <div className="col-12 col-md-6">
+                                        <Input
+                                            id="themeName"
+                                            label="Theme Name"
+                                            type="text"
+                                            name="themeName"
+                                            value={themeName}
+                                            readOnly={true}
+                                        />
+                                    </div>
+                                )}
+                                {/* theme template url */}
+                                {themeTemplate && (
+                                    <div className="col-12 col-md-6">
+                                        <Input
+                                            id="themeTemplate"
+                                            label="Theme Template Library URL"
+                                            type="url"
+                                            name="themeTemplate"
+                                            value={themeTemplate}
+                                            readOnly={true}
+                                        />
+                                    </div>
+                                )}
+                            </>
+                        )
                 }
                 <div className="col-12 col-md-6">
                     <AssginedToSelection
@@ -1159,9 +1345,11 @@ const SubTaskForm = ({ close, isDesignerTask }) => {
 
                     {assignedTo?.isOverloaded && (
                         <div style={{ color: "red" }}>
-                            {`You cannot assign this task to ${assignedTo?.name
-                                }  because ${assignedTo?.gender === "male" ? "He " : "She "
-                                } has more than 4 Submittable tasks.`}
+                            {`You cannot assign this task to ${
+                                assignedTo?.name
+                            }  because ${
+                                assignedTo?.gender === "male" ? "He " : "She "
+                            } has more than 4 Submittable tasks.`}
                         </div>
                     )}
                 </div>
@@ -1178,11 +1366,14 @@ const SubTaskForm = ({ close, isDesignerTask }) => {
 
                 {/* {console.log("roleId", auth?.isHasRolePermission(13))} */}
 
-                {
-                    task?.category?.name !== "Graphic Design" && <>
+                {task?.category?.name !== "Graphic Design" && (
+                    <>
                         {auth?.isHasRolePermission(13) ? (
                             <div className="col-12 col-md-6">
-                                <Listbox value={pageType} onChange={setPageType}>
+                                <Listbox
+                                    value={pageType}
+                                    onChange={setPageType}
+                                >
                                     <div className="form-group position-relative my-3">
                                         <label htmlFor="">
                                             {" "}
@@ -1206,7 +1397,10 @@ const SubTaskForm = ({ close, isDesignerTask }) => {
                                                 <Listbox.Option
                                                     key={i}
                                                     className={({ active }) =>
-                                                        `sp1-select-option ${active ? "active" : ""
+                                                        `sp1-select-option ${
+                                                            active
+                                                                ? "active"
+                                                                : ""
                                                         }`
                                                     }
                                                     value={s}
@@ -1235,12 +1429,17 @@ const SubTaskForm = ({ close, isDesignerTask }) => {
                                 )}
 
                                 {err?.taskType && (
-                                    <div style={{ color: "red" }}>{err?.taskType}</div>
+                                    <div style={{ color: "red" }}>
+                                        {err?.taskType}
+                                    </div>
                                 )}
                             </div>
                         ) : (
                             <div className="col-12 col-md-6">
-                                <Listbox value={pageType} onChange={setPageType}>
+                                <Listbox
+                                    value={pageType}
+                                    onChange={setPageType}
+                                >
                                     <div className="form-group position-relative my-3">
                                         <label htmlFor="">
                                             {" "}
@@ -1264,7 +1463,10 @@ const SubTaskForm = ({ close, isDesignerTask }) => {
                                                 <Listbox.Option
                                                     key={i}
                                                     className={({ active }) =>
-                                                        `sp1-select-option ${active ? "active" : ""
+                                                        `sp1-select-option ${
+                                                            active
+                                                                ? "active"
+                                                                : ""
                                                         }`
                                                     }
                                                     value={s}
@@ -1293,7 +1495,9 @@ const SubTaskForm = ({ close, isDesignerTask }) => {
                                 )}
 
                                 {err?.taskType && (
-                                    <div style={{ color: "red" }}>{err?.taskType}</div>
+                                    <div style={{ color: "red" }}>
+                                        {err?.taskType}
+                                    </div>
                                 )}
                             </div>
                         )}
@@ -1310,7 +1514,8 @@ const SubTaskForm = ({ close, isDesignerTask }) => {
                                         </label>
                                         <Listbox.Button className=" sp1-selection-display-button form-control height-35 f-14 sp1-selection-display bg-white w-100">
                                             <span className="singleline-ellipsis pr-3">
-                                                {pageTypePriority || "Select page type"}
+                                                {pageTypePriority ||
+                                                    "Select page type"}
                                             </span>
 
                                             <div className="__icon">
@@ -1320,18 +1525,21 @@ const SubTaskForm = ({ close, isDesignerTask }) => {
                                         <Listbox.Options className="sp1-select-options">
                                             {(isDesignerTask
                                                 ? [
-                                                    "Primary Page Design",
-                                                    "Secondary Page Design",
-                                                ]
+                                                      "Primary Page Design",
+                                                      "Secondary Page Design",
+                                                  ]
                                                 : [
-                                                    "Primary Page Development",
-                                                    "Secondary Page Development",
-                                                ]
+                                                      "Primary Page Development",
+                                                      "Secondary Page Development",
+                                                  ]
                                             )?.map((s, i) => (
                                                 <Listbox.Option
                                                     key={i}
                                                     className={({ active }) =>
-                                                        `sp1-select-option ${active ? "active" : ""
+                                                        `sp1-select-option ${
+                                                            active
+                                                                ? "active"
+                                                                : ""
                                                         }`
                                                     }
                                                     value={s}
@@ -1392,7 +1600,10 @@ const SubTaskForm = ({ close, isDesignerTask }) => {
                                                 <Listbox.Option
                                                     key={i}
                                                     className={({ active }) =>
-                                                        `sp1-select-option ${active ? "active" : ""
+                                                        `sp1-select-option ${
+                                                            active
+                                                                ? "active"
+                                                                : ""
                                                         }`
                                                     }
                                                     value={s}
@@ -1433,11 +1644,13 @@ const SubTaskForm = ({ close, isDesignerTask }) => {
                                             >
                                                 <div className="form-group position-relative my-3">
                                                     <label htmlFor="">
-                                                        Page Type Name <sup>*</sup>
+                                                        Page Type Name{" "}
+                                                        <sup>*</sup>
                                                     </label>
                                                     <Listbox.Button className=" sp1-selection-display-button form-control height-35 f-14 sp1-selection-display bg-white w-100">
                                                         <span className="singleline-ellipsis pr-3">
-                                                            {pageTypeName || "Select page type name"}
+                                                            {pageTypeName ||
+                                                                "Select page type name"}
                                                         </span>
 
                                                         <div className="__icon">
@@ -1447,27 +1660,30 @@ const SubTaskForm = ({ close, isDesignerTask }) => {
                                                     <Listbox.Options className="sp1-select-options">
                                                         {(isDesignerTask
                                                             ? [
-                                                                "Primary Page Design",
-                                                                "Secondary Page Design",
-                                                            ]
+                                                                  "Primary Page Design",
+                                                                  "Secondary Page Design",
+                                                              ]
                                                             : [
-                                                                "Primary Page Development",
-                                                                "Secondary Page Development",
-                                                            ]
+                                                                  "Primary Page Development",
+                                                                  "Secondary Page Development",
+                                                              ]
                                                         )?.map((s, i) => (
                                                             <Listbox.Option
                                                                 key={i}
                                                                 className={({
                                                                     active,
                                                                 }) =>
-                                                                    `sp1-select-option ${active
-                                                                        ? "active"
-                                                                        : ""
+                                                                    `sp1-select-option ${
+                                                                        active
+                                                                            ? "active"
+                                                                            : ""
                                                                     }`
                                                                 }
                                                                 value={s}
                                                             >
-                                                                {({ selected }) => (
+                                                                {({
+                                                                    selected,
+                                                                }) => (
                                                                     <>
                                                                         {s}
 
@@ -1505,8 +1721,9 @@ const SubTaskForm = ({ close, isDesignerTask }) => {
                                             />
                                         </div>
 
-                                        {
-                                            task?.category?.name !== "UI/UIX Design" && <div className="col-12 col-md-6">
+                                        {task?.category?.name !==
+                                            "UI/UIX Design" && (
+                                            <div className="col-12 col-md-6">
                                                 <Input
                                                     id="page_url"
                                                     label="Page URL"
@@ -1517,15 +1734,18 @@ const SubTaskForm = ({ close, isDesignerTask }) => {
                                                     value={pageURL}
                                                     error={
                                                         err?.pageUrl ||
-                                                        required_error?.page_url?.[0]
+                                                        required_error
+                                                            ?.page_url?.[0]
                                                     }
                                                     onChange={(e) =>
-                                                        handleChange(e, setPageURL)
+                                                        handleChange(
+                                                            e,
+                                                            setPageURL
+                                                        )
                                                     }
                                                 />
                                             </div>
-                                        }
-
+                                        )}
                                     </>
                                 )}
 
@@ -1542,7 +1762,10 @@ const SubTaskForm = ({ close, isDesignerTask }) => {
                                                 value={numberOfPage}
                                                 error={err?.numberOfPage}
                                                 onChange={(e) =>
-                                                    handleChange(e, setNumberOfPage)
+                                                    handleChange(
+                                                        e,
+                                                        setNumberOfPage
+                                                    )
                                                 }
                                             />
                                         </div>
@@ -1570,11 +1793,8 @@ const SubTaskForm = ({ close, isDesignerTask }) => {
                             </React.Fragment>
                         ) : null}
                         {/*  */}
-
                     </>
-                }
-
-
+                )}
 
                 <div className="col-12 col-md-6">
                     <PrioritySelection
@@ -1635,7 +1855,7 @@ const SubTaskForm = ({ close, isDesignerTask }) => {
                             className={`f-14 text-dark-gray mb-2`}
                         >
                             Description
-                            <sup className='f-14 mr-1'>*</sup>
+                            <sup className="f-14 mr-1">*</sup>
                         </label>
                         <div
                             className="sp1_st_write_comment_editor"
