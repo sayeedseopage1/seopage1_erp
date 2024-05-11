@@ -236,15 +236,6 @@ class ProjectStatusController extends AccountBaseController
         }
         try {
             \DB::beginTransaction();
-            // $projectPG = ProjectPmGoal::where('id',$request->project_pm_goal_id)->first();
-            // $projectPG->client_communication = $request->client_communication;
-            // $projectPG->client_communication_rating = $request->client_communication_rating;
-            // $projectPG->negligence_pm = $request->negligence_pm;
-            // $projectPG->negligence_pm_rating = $request->negligence_pm_rating;
-            // $projectPG->reason_status = 2;
-            // $projectPG->expired_status = 2;
-            // $projectPG->save();
-
             $goalHistory = PmGoalExpHistory::where('goal_id',$request->project_pm_goal_id)->first();
             $goalHistory->client_communication = $request->client_communication;
             $goalHistory->client_communication_rating = $request->client_communication_rating;
@@ -416,39 +407,76 @@ class ProjectStatusController extends AccountBaseController
     {
         try {
         \DB::beginTransaction();
-            if($request->status==1){
-                if($request->goal_extension_auth_checkbox == 'Apply this extension to all goals'){
-                    $pmGoalFinds = ProjectPmGoal::where('project_id',$request->project_id)->where('goal_status',0)->get();
-                    foreach($pmGoalFinds as $item){
-                        $updateGoal = ProjectPmGoal::where('id',$item->id)->first();
-                        $updateGoal->goal_end_date = Carbon::parse($item->goal_end_date)->addDay($request->extended_day);
-                        $updateGoal->extension_status = 2;
-                        // $updateGoal->extended_admin_cmnt = $request->is_any_negligence;
+            if ($request->status == 1) {
+                if ($request->goal_extension_auth_checkbox == 'Apply this extension to all goals') {
+                    $pmGoalFinds = ProjectPmGoal::where('project_id', $request->project_id)
+                        ->where('goal_status', 0)
+                        ->get();
+
+                    foreach ($pmGoalFinds as $item) {
+                        $updateGoal = ProjectPmGoal::where('id', $item->id)->first();
+                        $updateGoal->goal_end_date = $updateGoal->goal_end_date->addDay($request->extended_day);
+                        $updateGoal->extension_status = 0;
                         $updateGoal->save();
+
+                        $deadline_ext_history = PmGoalDeadlineExtHistory::where('goal_id', $request->goal_id)->first();
+                        $deadline_ext_history->extension_req_auth_for = $updateGoal->goal_end_date;
+                        $deadline_ext_history->new_deadline = $updateGoal->goal_end_date;
+                        $deadline_ext_history->new_duration = $updateGoal->duration + $request->extended_day;
+                        $deadline_ext_history->extended_admin_comment = $request->is_any_negligence;
+                        $deadline_ext_history->extension_req_auth_on = Carbon::now();
+                        $deadline_ext_history->authorization_by = Auth::user()->id;
+                        $deadline_ext_history->auth_status = 1;
+                        $deadline_ext_history->save();
                     }
-                }else{
-                    $updateGoal = ProjectPmGoal::where('id',$request->goal_id)->first();
-                    $updateGoal->goal_end_date = Carbon::parse($updateGoal->goal_end_date)->addDay($request->extended_day);
-                    $updateGoal->extension_status = 2;
-                    // $updateGoal->extended_admin_cmnt = $request->is_any_negligence;
+
+                    $find_pm_goals = ProjectPmGoal::where('project_id', $request->project_id)
+                        ->where('goal_status', 0)
+                        ->where('id', '<>', $request->goal_id)
+                        ->get();
+
+                    foreach ($find_pm_goals as $item) {
+                        $history = new PmGoalDeadlineExtHistory();
+                        $history->goal_id = $item->id;
+                        $history->old_deadline = $item->goal_end_date;
+                        $history->old_duration = $item->duration;
+                        $history->extension_req_on = Carbon::now();
+                        $history->extension_req_for = $item->goal_end_date->addDays($request->extended_day);
+                        $history->extended_pm_reason = $request->is_client_communication;
+                        $history->uuid = uniqid();
+                        $history->screenshot = 'no';
+                        $history->extension_req_auth_for = $item->goal_end_date->addDay($request->extended_day);
+                        $history->new_deadline = $item->goal_end_date;
+                        $history->new_duration = $item->duration + $request->extended_day;
+                        $history->extended_admin_comment = $request->is_any_negligence;
+                        $history->extension_req_auth_on = Carbon::now();
+                        $history->authorization_by = Auth::user()->id;
+                        $history->auth_status = 1;
+                        $history->save();
+                    }
+                } else {
+                    $updateGoal = ProjectPmGoal::where('id', $request->goal_id)->first();
+                    $updateGoal->goal_end_date = $updateGoal->goal_end_date->addDay($request->extended_day);
+                    $updateGoal->extension_status = 0;
                     $updateGoal->save();
+
+                    $deadline_ext_history = PmGoalDeadlineExtHistory::where('goal_id', $request->goal_id)->first();
+                    $deadline_ext_history->extension_req_auth_for = $updateGoal->goal_end_date;
+                    $deadline_ext_history->new_deadline = $updateGoal->goal_end_date;
+                    $deadline_ext_history->new_duration = $updateGoal->duration + $request->extended_day;
+                    $deadline_ext_history->extended_admin_comment = $request->is_any_negligence;
+                    $deadline_ext_history->extension_req_auth_on = Carbon::now();
+                    $deadline_ext_history->authorization_by = Auth::user()->id;
+                    $deadline_ext_history->auth_status = 1;
+                    $deadline_ext_history->save();
                 }
-                $deadline_ext_history = PmGoalDeadlineExtHistory::where('goal_id',$request->goal_id)->first();
-                $deadline_ext_history->extension_req_auth_for = Carbon::parse($updateGoal->goal_end_date)->addDay($request->extended_day);
-                $deadline_ext_history->new_deadline = $updateGoal->goal_end_date;
-                $deadline_ext_history->new_duration = $updateGoal->duration + $request->extended_day;
-                $deadline_ext_history->extended_admin_comment = $request->is_any_negligence;
-                $deadline_ext_history->extension_req_auth_on = Carbon::now();
-                $deadline_ext_history->authorization_by = Auth::user()->id; 
-                $deadline_ext_history->auth_status = 1; 
-                $deadline_ext_history->save();
-            }else{
-                $updateGoal = ProjectPmGoal::where('id',$request->goal_id)->first();
-                $updateGoal->extension_status = 3;
+            } else {
+                $updateGoal = ProjectPmGoal::where('id', $request->goal_id)->first();
+                $updateGoal->extension_status = 0;
                 $updateGoal->save();
 
-                $deadline_ext_history = PmGoalDeadlineExtHistory::where('goal_id',$request->goal_id)->first();
-                $deadline_ext_history->extension_req_auth_for = Carbon::parse($updateGoal->goal_end_date)->addDay($request->extended_day);
+                $deadline_ext_history = PmGoalDeadlineExtHistory::where('goal_id', $request->goal_id)->first();
+                $deadline_ext_history->extension_req_auth_for = $updateGoal->goal_end_date->addDay($request->extended_day);
                 $deadline_ext_history->new_deadline = $updateGoal->goal_end_date;
                 $deadline_ext_history->new_duration = $updateGoal->duration + $request->extended_day;
                 $deadline_ext_history->extended_admin_comment = $request->is_any_negligence;
