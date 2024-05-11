@@ -1,41 +1,38 @@
+import Popover from "../../../../react-latest/ui/Popover";
 import { convertTime } from "../../../utils/converTime";
 import ActionDropdown from "./ActionDropdown";
-export const EvaluationTableColumns = [
-    // {
-    //     header: "#",
-    //     accessorKey: "id",
-    //     cell: ({ row }) => {
-    //         const data = row.original;
 
-    //         return <ColumnContent>{data?.id}</ColumnContent>;
-    //     },
-    // },
+export const EvaluationTableColumns = [
     {
         id: "task_name",
         header: "Task Name",
         accessorKey: "task_name",
-        cell: ({ row }) => {
-            const data = row.original;
 
-            return (
-                <abbr
-                    title={data?.task_name}
-                    style={{ textDecoration: "none" }}
-                >
-                    <div
-                        className="d-flex align-items-center"
-                        style={{ gap: "10px" }}
-                    >
-                        <a
-                            href={`/account/tasks/${data?.task_id}`}
-                            className="hover-underline multine-ellipsis "
-                        >
-                            <span className="link_color">
-                                {data?.task_name}
+        cell: ({ row: { original }, className }) => {
+            return original?.task_name ? (
+                <div style={{ minWidth: "10rem" }}>
+                    <Popover>
+                        <Popover.Button>
+                            <span className=" singleline-ellipsis link_color">
+                                <span className="link_color">
+                                    {original?.task_name}
+                                </span>
                             </span>
-                        </a>
-                    </div>
-                </abbr>
+                        </Popover.Button>
+
+                        <Popover.Panel>
+                            <div className="revision_popover_panel">
+                                <a href={`/account/tasks/${original?.task_id}`}>
+                                    <span className="link_color hover-underline">
+                                        {original?.task_name}
+                                    </span>
+                                </a>
+                            </div>
+                        </Popover.Panel>
+                    </Popover>
+                </div>
+            ) : (
+                <span>Not Available</span>
             );
         },
     },
@@ -54,25 +51,58 @@ export const EvaluationTableColumns = [
         accessorKey: "submission_date",
         cell: ({ row }) => {
             const data = row.original;
-            return <div>{data?.submission_date}</div>;
+            return <div>{data?.submission_date ?? "Not Submitted yet"}</div>;
         },
     },
     {
         id: "completed_work",
         header: "Completed Work Link",
         accessorKey: "completed_work",
-        cell: ({ row }) => {
-            const data = row.original;
-            if (data?.completed_work) {
-                return JSON.parse(data.completed_work).map((data) => (
-                    <div>
-                        <a href={data}>{data}</a>
-                        <br />
-                    </div>
-                ));
-            } else {
-                return "--";
-            }
+
+        cell: ({ row: { original }, className }) => {
+            return original?.completed_work ? (
+                <div style={{ minWidth: "10rem" }}>
+                    <Popover>
+                        <Popover.Button>
+                            <span className=" singleline-ellipsis link_color hover-underline">
+                                {JSON.parse(original?.completed_work).map(
+                                    (data) => (
+                                        <div>
+                                            <a
+                                                className="link_color"
+                                                href={data}
+                                            >
+                                                {data}
+                                            </a>
+                                            <br />
+                                        </div>
+                                    )
+                                )}
+                            </span>
+                        </Popover.Button>
+
+                        <Popover.Panel>
+                            <div className="revision_popover_panel">
+                                {JSON.parse(original.completed_work).map(
+                                    (data) => (
+                                        <div>
+                                            <a
+                                                className="hover-underline"
+                                                href={data}
+                                            >
+                                                {data}
+                                            </a>
+                                            <br />
+                                        </div>
+                                    )
+                                )}
+                            </div>
+                        </Popover.Panel>
+                    </Popover>
+                </div>
+            ) : (
+                <span>Not Available</span>
+            );
         },
     },
     {
@@ -97,7 +127,9 @@ export const EvaluationTableColumns = [
             const data = row.original;
 
             return (
-                <div style={{ marginLeft: "30%" }}>{data?.revision_number}</div>
+                <div style={{ marginLeft: "30%" }}>
+                    {data?.revision_number ?? "0"}
+                </div>
             );
         },
     },

@@ -200,11 +200,11 @@ const EvaluationModal = ({
                 },
                 content: {
                     borderRadius: "10px",
-                    maxWidth: "80%",
+                    maxWidth: "100%",
                     height: "fit-content",
                     maxHeight: "90vh",
                     margin: "auto auto",
-                    padding: "20px",
+                    padding: "10px",
                     overflowY: "auto",
                 },
             }}

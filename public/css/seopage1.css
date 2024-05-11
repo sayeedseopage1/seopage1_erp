@@ -1498,7 +1498,7 @@
   }
 }
 .link_color {
-  color: #2323ee;
+  color: #2323ee !important;
 }
 
 .skeleton-loading {
