@@ -43,6 +43,8 @@ const ExtendRequestModal = ({ projectDetails, isOpen, onClose, extendRequestGoal
 
         // Check if fields are empty using state validation
         const isEmpty = isStateAllHaveValue(extendRequestData);
+        console.log(extendRequestData)
+        console.log(isEmpty)
         if (isEmpty) {
             const validation = markEmptyFieldsValidation(extendRequestData);
             setExtendRequestDataValidation({

@@ -32,7 +32,6 @@ return new class extends Migration
             // $table->integer('admin_id')->nullable();
             $table->integer('added_by');
             $table->integer('updated_by')->nullable();
-            // $table->integer('extension_status')->default(0);
             $table->float('goal_progress')->default(0);
             // $table->integer('resolved_status')->default(0);
             $table->integer('goal_status')->default(0);
@@ -50,6 +49,7 @@ return new class extends Migration
             // $table->dateTime('extended_goal_end_day')->nullable();
             // $table->integer('extended_request_status')->default(0);
             $table->integer('expired_status')->default(0);
+            $table->integer('extension_status')->default(0)->comment('1 = pending, 2 = accepted, 3 = rejected');
             $table->integer('mail_status')->default(0);
             $table->timestamps();
         });
