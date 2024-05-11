@@ -12031,7 +12031,7 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
 var fileInputStyle = {
   height: "39px",
-  zIndex: '0'
+  zIndex: "0"
 };
 var SubTaskForm = function SubTaskForm(_ref) {
   var _window, _required_error$title, _task$category9, _required_error$start, _required_error$start2, _required_error$due_d, _required_error$due_d2, _task$category10, _defaultSecondaryColo, _defaultSecondaryColo2, _task$category11, _task$category12, _ref5, _required_error$pageT, _required_error$pageT2, _ref8, _required_error$pageT3, _required_error$pageT4, _ref11, _ref14, _ref17, _required_error$page_, _task$category13, _required_error$page_2, _required_error$descr, _required_error$descr2;
@@ -12194,11 +12194,11 @@ var SubTaskForm = function SubTaskForm(_ref) {
     _useState50 = _slicedToArray(_useState49, 2),
     imgOrVidForWork = _useState50[0],
     setImgOrVidForWork = _useState50[1];
-  var _useState51 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(''),
+  var _useState51 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(""),
     _useState52 = _slicedToArray(_useState51, 2),
     fontName = _useState52[0],
     setFontName = _useState52[1];
-  var _useState53 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(''),
+  var _useState53 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(""),
     _useState54 = _slicedToArray(_useState53, 2),
     fontUrl = _useState54[0],
     setFontUrl = _useState54[1];
@@ -12568,7 +12568,22 @@ var SubTaskForm = function SubTaskForm(_ref) {
                         }
                       })["catch"](function (err) {
                         if ((err === null || err === void 0 ? void 0 : err.status) === 422) {
-                          react_toastify__WEBPACK_IMPORTED_MODULE_12__.toast.warn("Estimate hours cannot exceed from project allocation hours !");
+                          var errorMessage = "";
+                          if (err !== null && err !== void 0 && err.data["estimate_hours"] && !(err !== null && err !== void 0 && err.data["estimate_minutes"])) {
+                            errorMessage = "The estimate hours field is required.";
+                          } else if (!(err !== null && err !== void 0 && err.data["estimate_hours"]) && err !== null && err !== void 0 && err.data["estimate_minutes"]) {
+                            errorMessage = "The estimate minutes field is required.";
+                          } else if (err !== null && err !== void 0 && err.data["estimate_hours"] && err !== null && err !== void 0 && err.data["estimate_minutes"]) {
+                            errorMessage = "The estimated hours and minutes fields are required..";
+                          } else if (!(err !== null && err !== void 0 && err.data["estimate_hours"]) && !(err !== null && err !== void 0 && err.data["estimate_minutes"]) && err !== null && err !== void 0 && err.data["errors"]) {
+                            errorMessage = "Estimate hours cannot exceed from project allocation hours ";
+                          }
+                          Swal.fire({
+                            position: "center",
+                            icon: "error",
+                            title: errorMessage,
+                            showConfirmButton: true
+                          });
                         }
                       });
                     case 3:
@@ -12711,7 +12726,7 @@ var SubTaskForm = function SubTaskForm(_ref) {
     setPageTypeName("");
   }, [pageType]);
 
-  // FIXME: taskDetails time and estimation time inconsistent 
+  // FIXME: taskDetails time and estimation time inconsistent
   // console.log(estimation)
   // console.log(taskDetails)
 
@@ -12927,7 +12942,7 @@ var SubTaskForm = function SubTaskForm(_ref) {
             children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_27__.jsxs)("div", {
               className: "form-group my-3 w-100",
               children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_27__.jsxs)("label", {
-                htmlFor: 'imageForDesigner',
+                htmlFor: "imageForDesigner",
                 className: "f-14 text-dark-gray mb-1",
                 "data-label": "true",
                 children: ["Attach text that will be used for the design", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_27__.jsx)("sup", {
@@ -12950,7 +12965,7 @@ var SubTaskForm = function SubTaskForm(_ref) {
             children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_27__.jsxs)("div", {
               className: "form-group my-3 w-100",
               children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_27__.jsxs)("label", {
-                htmlFor: 'imageForDesigner',
+                htmlFor: "imageForDesigner",
                 className: "f-14 text-dark-gray mb-1",
                 "data-label": "true",
                 children: ["Image where the designer will work", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_27__.jsx)("sup", {
@@ -12973,7 +12988,7 @@ var SubTaskForm = function SubTaskForm(_ref) {
             children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_27__.jsxs)("div", {
               className: "form-group my-3 w-100",
               children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_27__.jsxs)("label", {
-                htmlFor: 'imgOrVidForWork',
+                htmlFor: "imgOrVidForWork",
                 className: "f-14 text-dark-gray mb-1",
                 "data-label": "true",
                 children: ["Images/videos that will be used for the work", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_27__.jsx)("sup", {
@@ -13046,15 +13061,15 @@ var SubTaskForm = function SubTaskForm(_ref) {
               })]
             }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_27__.jsxs)("div", {
               style: {
-                maxHeight: '200px',
-                overflow: 'auto'
+                maxHeight: "200px",
+                overflow: "auto"
               },
               children: [referenceList === null || referenceList === void 0 ? void 0 : referenceList.map(function (singleReference, index) {
                 return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_27__.jsx)("input", {
                   type: "url",
                   name: "reference",
-                  className: "form-control height-35 f-14 ".concat(index !== 0 && 'mt-2'),
-                  placeholder: 'Enter Task Reference',
+                  className: "form-control height-35 f-14 ".concat(index !== 0 && "mt-2"),
+                  placeholder: "Enter Task Reference",
                   value: singleReference.reference,
                   readOnly: true
                 }, index);
@@ -13095,7 +13110,7 @@ var SubTaskForm = function SubTaskForm(_ref) {
           children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_27__.jsxs)("div", {
             className: "form-group my-3 w-100",
             children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_27__.jsx)("label", {
-              htmlFor: 'brandGuideline',
+              htmlFor: "brandGuideline",
               className: "f-14 text-dark-gray mb-2",
               "data-label": "true",
               children: "Brand guideline"
@@ -13126,7 +13141,7 @@ var SubTaskForm = function SubTaskForm(_ref) {
           children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_27__.jsx)("div", {
             className: "mb-2 f-16",
             style: {
-              color: '#878E97'
+              color: "#878E97"
             },
             children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_27__.jsx)("strong", {
               children: "Color Scheme: "
@@ -13452,7 +13467,7 @@ var SubTaskForm = function SubTaskForm(_ref) {
                   className: "form-group position-relative my-3",
                   children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_27__.jsxs)("label", {
                     htmlFor: "",
-                    children: ["Page Type Name ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_27__.jsx)("sup", {
+                    children: ["Page Type Name", " ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_27__.jsx)("sup", {
                       children: "*"
                     })]
                   }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_27__.jsxs)(_headlessui_react__WEBPACK_IMPORTED_MODULE_29__.Listbox.Button, {
