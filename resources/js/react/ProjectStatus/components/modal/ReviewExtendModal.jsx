@@ -6,7 +6,6 @@ import { IoClose } from "react-icons/io5";
 import CKEditorComponent from "../../../ckeditor";
 import {
     useCreateReviewExtendRequestMutation,
-    useGetProjectExtendImagesQuery,
 } from "../../../services/api/projectStatusApiSlice";
 import ImageViewer from "./ImageViewer";
 import { toast } from "react-toastify";
@@ -14,6 +13,10 @@ import {
     isStateAllHaveValue,
     markEmptyFieldsValidation,
 } from "../../../utils/stateValidation";
+
+
+import '../styles/reviewExtendModal.css'
+
 const ReviewExtendRequestModal = ({
     projectDetails,
     isOpen,
@@ -23,8 +26,6 @@ const ReviewExtendRequestModal = ({
     reviewExtendRequestData,
     projectExtendImages,
 }) => {
-
-    console.log(reviewExtendRequestData)
     const [reviewExtendState, setReviewExtendState] = useState({
         extended_day: reviewExtendRequestData?.extended_day,
         comment: "",
@@ -211,26 +212,26 @@ const ReviewExtendRequestModal = ({
             </div>
 
             <section style={styles.container}>
-                <div className="w-100">
-                    <div className="my-2 row">
+                <div className="w-100 extendedReasonReview">
+                    <div className="my-3 row">
                         <p className="col-4">
                             <strong>Project Name:</strong>{" "}
                         </p>
                         <p className="col-8">{projectDetails?.project_name}</p>
                     </div>
-                    <div className="my-2 row">
+                    <div className="my-3 row">
                         <p className="col-4">
                             <strong>Client:</strong>{" "}
                         </p>
                         <p className="col-8">{projectDetails?.clientName}</p>
                     </div>
-                    <div className="my-2 row">
+                    <div className="my-3 row">
                         <p className="col-4">
                             <strong>Project Manager:</strong>{" "}
                         </p>
                         <p className="col-8">{projectDetails?.pmName}</p>
                     </div>
-                    <div className="my-2 row">
+                    <div className="my-3 row">
                         <p className="col-4">
                             <strong>Project Budget:</strong>{" "}
                         </p>
@@ -239,7 +240,7 @@ const ReviewExtendRequestModal = ({
                             {projectDetails?.project_budget}
                         </p>
                     </div>
-                    <div className="my-2 row">
+                    <div className="my-3 row">
                         <p className="col-4">
                             <strong>Extended Days:</strong>{" "}
                         </p>
@@ -265,7 +266,17 @@ const ReviewExtendRequestModal = ({
                             )}
                         </div>
                     </div>
-                    <div className="row my-2">
+                    <div className="my-3 row">
+                        <p className="col-4">
+                            <strong>Extended Reason:</strong>{" "}
+                        </p>
+                        <div className="col-8">
+                            <div dangerouslySetInnerHTML={{
+                                __html: reviewExtendRequestData?.extended_pm_reason
+                            }}/>
+                        </div>
+                    </div>
+                    <div className="row my-3">
                         <p className="col-4">
                             {" "}
                             <strong htmlFor="itemsPerPage">

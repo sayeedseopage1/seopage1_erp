@@ -60,7 +60,6 @@ const ResolveModal = ({
             const result = await submitData({
                 project_pm_goal_id: projectPmGoalId,
                 ...resolveModalData,
-                rating: 5,
             }).unwrap();
             if (result?.status) {
                 closeModal();
@@ -157,39 +156,39 @@ const ResolveModal = ({
 
             <section style={styles.container}>
                 <div className="w-100">
-                    <div className="my-2 row">
+                    <div className="my-3 row">
                         <p className="col-4"><strong>Project Name</strong>{" "}</p>
                         <p className="col-8">{projectDetails?.project_name}</p>
                     </div>
-                    <div className="my-2 row">
+                    <div className="my-3 row">
                         <p className="col-4"><strong>Client:</strong>{" "}</p>
                         <p className="col-8">{projectDetails?.clientName}</p>
                     </div>
-                    <div className="my-2 row">
+                    <div className="my-3 row">
                         <p className="col-4"><strong>Project Budget:</strong>{" "}</p>
                         <p className="col-8">{projectDetails?.currency_symbol} {projectDetails?.project_budget}</p>
                     </div>
-                    <div className="my-2 row">
+                    <div className="my-3 row">
                         <p className="col-4"><strong>Project Category:</strong>{" "}</p>
                         <p className="col-8">{projectDetails?.project_category}</p>
                     </div>
-                    <div className="my-2 row">
+                    <div className="my-3 row">
                         <p className="col-4"><strong>Start Date:</strong>{" "}</p>
                         <p className="col-8">{new Date(
                             projectDetails?.goal_start_date
                         ).toLocaleDateString()}</p>
                     </div>
-                    <div className="my-2 row">
+                    <div className="my-3 row">
                         <p className="col-4"><strong>Deadline:</strong>{" "}</p>
                         <p className="col-8">{new Date(
                             projectDetails?.goal_end_date
                         ).toLocaleDateString()}</p>
                     </div>
-                    <div className="my-2 row">
+                    <div className="my-3 row">
                         <p className="col-4"><strong>Description:</strong>{" "}</p>
                         <p className="col-8">{resolveDeadlineExplanationData?.description}</p>
                     </div>
-                    <div className="my-2 row">
+                    <div className="my-3 row">
                         <p className="col-4"><strong>Reason:</strong>{" "}</p>
                         <p className="col-8"><span
                             dangerouslySetInnerHTML={{
