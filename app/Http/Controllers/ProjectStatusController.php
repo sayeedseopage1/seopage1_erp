@@ -76,12 +76,12 @@ class ProjectStatusController extends AccountBaseController
     }
     public function allProjectPmGoal($id)
     {
-        $project_pm_goals = ProjectPmGoal::select('project_pm_goals.*','pm_goal_deadline_ext_histories.*')
-                            ->leftJoin('pm_goal_deadline_ext_histories','project_pm_goals.id','pm_goal_deadline_ext_histories.goal_id')
+        $project_pm_goals = ProjectPmGoal::select('project_pm_goals.*','pm_goal_deadline_ext_histories.id as ext_history_id','pm_goal_deadline_ext_histories.goal_id','pm_goal_deadline_ext_histories.old_deadline','pm_goal_deadline_ext_histories.old_duration','pm_goal_deadline_ext_histories.extension_req_on','pm_goal_deadline_ext_histories.extension_req_for','pm_goal_deadline_ext_histories.extended_pm_reason','pm_goal_deadline_ext_histories.uuid','pm_goal_deadline_ext_histories.screenshot','pm_goal_deadline_ext_histories.extension_req_auth_for','pm_goal_deadline_ext_histories.new_deadline','pm_goal_deadline_ext_histories.new_duration','pm_goal_deadline_ext_histories.extended_admin_comment','pm_goal_deadline_ext_histories.extension_req_auth_on','pm_goal_deadline_ext_histories.authorization_by','pm_goal_deadline_ext_histories.auth_status')
+                            ->leftJoin('pm_goal_deadline_ext_histories','project_pm_goals.id','=','pm_goal_deadline_ext_histories.goal_id')
                             ->where('project_pm_goals.project_id',$id)
                             ->get();
 
-
+        // dd($project_pm_goals);
         foreach($project_pm_goals as $goal){
             $pm_goal = PmGoalExpHistory::where('goal_id',$goal->id)->count();
             $goal_deadline = PmGoalDeadlineExtHistory::where('goal_id',$goal->id)->where('auth_status', '!=', 0)->count();
