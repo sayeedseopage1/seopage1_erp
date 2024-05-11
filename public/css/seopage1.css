@@ -1497,6 +1497,10 @@
     opacity: 0.6;
   }
 }
+.link_color {
+  color: #2323ee;
+}
+
 .skeleton-loading {
   width: -moz-fit-content;
   width: fit-content;

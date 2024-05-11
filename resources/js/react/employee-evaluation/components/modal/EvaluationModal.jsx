@@ -68,6 +68,7 @@ const EvaluationModal = ({
 
     const Tasks = data?.data;
 
+    console.log("evaluations task", Tasks);
     const [allTasksReviewed, setAllTasksReviewed] = useState(false);
 
     useEffect(() => {

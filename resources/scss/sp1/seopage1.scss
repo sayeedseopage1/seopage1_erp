@@ -1,4 +1,6 @@
 @import "single-task-page";
+@import "evaluation-page" ;
+
 
 .text-hover-underline:hover{
   text-decoration: underline;
@@ -29,6 +31,10 @@
     }
   }
 
+
+  .link_color{
+    color: #2323ee
+  }
   .skeleton-loading {
     width: fit-content;
     padding: 3px ;

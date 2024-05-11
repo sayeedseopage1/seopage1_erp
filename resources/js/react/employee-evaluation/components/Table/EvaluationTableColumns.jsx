@@ -17,7 +17,26 @@ export const EvaluationTableColumns = [
         cell: ({ row }) => {
             const data = row.original;
 
-            return <div>{data?.task_name}</div>;
+            return (
+                <abbr
+                    title={data?.task_name}
+                    style={{ textDecoration: "none" }}
+                >
+                    <div
+                        className="d-flex align-items-center"
+                        style={{ gap: "10px" }}
+                    >
+                        <a
+                            href={`/account/tasks/${data?.task_id}`}
+                            className="hover-underline multine-ellipsis "
+                        >
+                            <span className="link_color">
+                                {data?.task_name}
+                            </span>
+                        </a>
+                    </div>
+                </abbr>
+            );
         },
     },
     {
