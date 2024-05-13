@@ -4,9 +4,7 @@ import Button from "../../../global/Button";
 import { Flex } from "../table/ui";
 import { IoClose } from "react-icons/io5";
 import CKEditorComponent from "../../../ckeditor";
-import {
-    useCreateReviewExtendRequestMutation,
-} from "../../../services/api/projectStatusApiSlice";
+import { useCreateReviewExtendRequestMutation } from "../../../services/api/projectStatusApiSlice";
 import ImageViewer from "./ImageViewer";
 import { toast } from "react-toastify";
 import {
@@ -14,8 +12,9 @@ import {
     markEmptyFieldsValidation,
 } from "../../../utils/stateValidation";
 
-
-import '../styles/reviewExtendModal.css'
+import "../styles/reviewExtendModal.css";
+import { over } from "lodash";
+import Switch from "../Switch";
 
 const ReviewExtendRequestModal = ({
     projectDetails,
@@ -39,6 +38,7 @@ const ReviewExtendRequestModal = ({
             isSubmitting: false,
             goal_extension_auth_checkbox: false,
         });
+    const [actionType, setActionType] = useState("");
     // Submit data
     const [submitData, { isLoading }] = useCreateReviewExtendRequestMutation();
 
@@ -76,11 +76,15 @@ const ReviewExtendRequestModal = ({
             return;
         }
         const fd = new FormData();
+        setActionType("accept");
         fd.append("extended_day", reviewExtendState?.extended_day ?? "");
         fd.append("is_any_negligence", reviewExtendState?.comment ?? "");
-        fd.append("goal_extension_auth_checkbox", reviewExtendState?.goal_extension_auth_checkbox ?? "");
+        fd.append(
+            "goal_extension_auth_checkbox",
+            reviewExtendState?.goal_extension_auth_checkbox ?? ""
+        );
         fd.append("goal_id", reviewExtendState?.goal_id ?? "");
-        fd.append("project_id", reviewExtendRequestData.project_id)
+        fd.append("project_id", reviewExtendRequestData.project_id);
         fd.append("status", "1");
         fd.append(
             "_token",
@@ -95,6 +99,7 @@ const ReviewExtendRequestModal = ({
                 refetchPmGoal();
                 toast.success("Submission was successful");
                 handleResetForm();
+                setActionType("");
             })
             .catch((err) => {
                 if (err?.status === 422) {
@@ -108,12 +113,27 @@ const ReviewExtendRequestModal = ({
     // Reject request
     const handleReject = async (e) => {
         e.preventDefault();
+        const isEmpty = isStateAllHaveValue(reviewExtendState);
+        if (isEmpty) {
+            // mark empty fields
+            const validation = markEmptyFieldsValidation(reviewExtendState);
+            setReviewExtendStateValidation({
+                ...reviewExtendStateValidation,
+                ...validation,
+                isSubmitting: true,
+            });
+            return;
+        }
         const fd = new FormData();
+        setActionType("reject");
         fd.append("extended_day", reviewExtendState.extended_day ?? "");
         fd.append("is_any_negligence", reviewExtendState.comment ?? "");
-        fd.append("goal_extension_auth_checkbox", reviewExtendState.goal_extension_auth_checkbox ?? "");
+        fd.append(
+            "goal_extension_auth_checkbox",
+            reviewExtendState.goal_extension_auth_checkbox ?? ""
+        );
         fd.append("goal_id", reviewExtendState.goal_id ?? "");
-        fd.append("project_id", reviewExtendRequestData.project_id)
+        fd.append("project_id", reviewExtendRequestData.project_id);
         fd.append("status", "0");
         fd.append(
             "_token",
@@ -129,6 +149,7 @@ const ReviewExtendRequestModal = ({
                 toast.success("Rejection was successful");
                 handleResetForm();
                 refetchPmGoal();
+                setActionType("");
             })
             .catch((err) => {
                 if (err?.status === 422) {
@@ -178,8 +199,6 @@ const ReviewExtendRequestModal = ({
         }
     };
 
-    
-
     return (
         <ReactModal
             style={customStyles}
@@ -214,37 +233,43 @@ const ReviewExtendRequestModal = ({
             <section style={styles.container}>
                 <div className="w-100 extendedReasonReview">
                     <div className="my-3 row">
-                        <p className="col-4">
+                        <p className="col-12 col-md-4">
                             <strong>Project Name:</strong>{" "}
                         </p>
-                        <p className="col-8">{projectDetails?.project_name}</p>
+                        <p className="col-12 col-md-8">
+                            {projectDetails?.project_name}
+                        </p>
                     </div>
                     <div className="my-3 row">
-                        <p className="col-4">
+                        <p className="col-12 col-md-4">
                             <strong>Client:</strong>{" "}
                         </p>
-                        <p className="col-8">{projectDetails?.clientName}</p>
+                        <p className="col-12 col-md-8">
+                            {projectDetails?.clientName}
+                        </p>
                     </div>
                     <div className="my-3 row">
-                        <p className="col-4">
+                        <p className="col-12 col-md-4">
                             <strong>Project Manager:</strong>{" "}
                         </p>
-                        <p className="col-8">{projectDetails?.pmName}</p>
+                        <p className="col-12 col-md-8">
+                            {projectDetails?.pmName}
+                        </p>
                     </div>
                     <div className="my-3 row">
-                        <p className="col-4">
+                        <p className="col-12 col-md-4">
                             <strong>Project Budget:</strong>{" "}
                         </p>
-                        <p className="col-8">
+                        <p className="col-12 col-md-8">
                             {projectDetails?.currency_symbol}
                             {projectDetails?.project_budget}
                         </p>
                     </div>
                     <div className="my-3 row">
-                        <p className="col-4">
+                        <p className="col-12 col-md-4">
                             <strong>Extended Days:</strong>{" "}
                         </p>
-                        <div className="col-8">
+                        <div className="col-12 col-md-8">
                             <input
                                 className="p-1 rounded"
                                 defaultValue={reviewExtendState?.extended_day}
@@ -267,24 +292,37 @@ const ReviewExtendRequestModal = ({
                         </div>
                     </div>
                     <div className="my-3 row">
-                        <p className="col-4">
+                        <p className="col-12 col-md-4">
                             <strong>Extended Reason:</strong>{" "}
                         </p>
-                        <div className="col-8">
-                            <div dangerouslySetInnerHTML={{
-                                __html: reviewExtendRequestData?.extended_pm_reason
-                            }}/>
+                        <div className="col-12 col-md-8">
+                            <div
+                                dangerouslySetInnerHTML={{
+                                    __html: reviewExtendRequestData?.extended_pm_reason,
+                                }}
+                            />
                         </div>
                     </div>
                     <div className="row my-3">
-                        <p className="col-4">
+                        <p className="col-12 col-md-4">
                             {" "}
                             <strong htmlFor="itemsPerPage">
                                 Screenshots:
                             </strong>{" "}
                         </p>
-                        <div className="col-8">
-                            <ImageViewer imageData={imageData} />
+                        <div className="col-12 col-md-8">
+                            <Switch>
+                                <Switch.Case condition={imageData?.length > 0}>
+                                    <div className="d-flex flex-wrap">
+                                        <ImageViewer imageData={imageData} />
+                                    </div>
+                                </Switch.Case>
+                                <Switch.Case
+                                    condition={imageData?.length === 0}
+                                >
+                                    <p>No screenshots uploaded</p>
+                                </Switch.Case>
+                            </Switch>
                         </div>
                     </div>
 
@@ -317,9 +355,9 @@ const ReviewExtendRequestModal = ({
                     <Flex
                         justifyContent="space-between"
                         align-items="center"
-                        className="mt-2"
+                        className="mt-2 flex-column flex-md-row"
                     >
-                        <Flex align-items="center">
+                        <Flex className="align-items-start align-items-md-center flex-column flex-md-row">
                             <div className="d-flex align-items-center">
                                 <input
                                     type="checkbox"
@@ -375,7 +413,9 @@ const ReviewExtendRequestModal = ({
                                 disabled={isLoading}
                                 className="mt-0"
                             >
-                                {isLoading ? "Accepting..." : "Accept"}
+                                {isLoading && actionType === "accept"
+                                    ? "Accepting..."
+                                    : "Accept"}
                             </Button>
                             <Button
                                 variant="danger"
@@ -384,7 +424,9 @@ const ReviewExtendRequestModal = ({
                                 disabled={isLoading}
                                 className="mt-0"
                             >
-                                {isLoading ? "Rejecting..." : "Reject"}
+                                {isLoading && actionType === "reject"
+                                    ? "Rejecting..."
+                                    : "Reject"}
                             </Button>
                         </Flex>
                     </Flex>
@@ -412,8 +454,8 @@ const customStyles = {
         zIndex: 99999999,
         maxWidth: "700px",
         height: "fit-content",
-        maxHeight: "100vh",
-
+        overflow: "auto",
+        maxHeight: "85vh",
         margin: "auto auto",
         padding: "20px",
     },

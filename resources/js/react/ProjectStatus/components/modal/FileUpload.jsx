@@ -65,8 +65,8 @@ const FileUpload = ({ selectedFiles, setSelectedFiles }) => {
         <>
             <div style={containerStyle}>
                 <div className="my-2 row">
-                    <strong className="col-4 d-flex">Screenshots:</strong>
-                    <div className="col-8">
+                    <strong className="col-12 col-md-4 d-flex">Screenshots:</strong>
+                    <div className="col-12 col-md-8">
                         <FileInputWithCustomIcon
                             handleFileChange={handleFileChange}
                             

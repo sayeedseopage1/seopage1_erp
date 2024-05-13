@@ -74,36 +74,36 @@ const DeadlineExplanation = ({
     return (
         <div style={styles.container}>
             <div className="w-100">
-                 <div className="my-2 row">
-                        <p className="col-4"><strong>Project Name:</strong>{" "}</p>
-                        <p className="col-8">{project_name}</p>
+                 <div className="my-3 row">
+                        <p className="col-12 col-md-4"><strong>Project Name:</strong>{" "}</p>
+                        <p className="col-12 col-md-8">{project_name}</p>
                 </div>
-                 <div className="my-2 row">
-                        <p className="col-4"><strong>Client:</strong>{" "}</p>
-                        <p className="col-8">{clientName ?? projectDetails.user_name}</p>
+                 <div className="my-3 row">
+                        <p className="col-12 col-md-4"><strong>Client:</strong>{" "}</p>
+                        <p className="col-12 col-md-8">{clientName ?? projectDetails.user_name}</p>
                 </div>
-                 <div className="my-2 row">
-                        <p className="col-4"><strong>Project Budget:</strong>{" "}</p>
-                        <p className="col-8">{currency_symbol}{project_budget}</p>
+                 <div className="my-3 row">
+                        <p className="col-12 col-md-4"><strong>Project Budget:</strong>{" "}</p>
+                        <p className="col-12 col-md-8">{currency_symbol}{project_budget}</p>
                 </div>
-                 <div className="my-2 row">
-                        <p className="col-4"><strong>Project Category:</strong>{" "}</p>
-                        <p className="col-8">{project_category}</p>
+                 <div className="my-3 row">
+                        <p className="col-12 col-md-4"><strong>Project Category:</strong>{" "}</p>
+                        <p className="col-12 col-md-8">{project_category}</p>
                 </div>
-                 <div className="my-2 row">
-                        <p className="col-4"><strong>Start Date:</strong>{" "}</p>
-                        <p className="col-8">{new Date(goal_start_date).toLocaleDateString()}</p>
+                 <div className="my-3 row">
+                        <p className="col-12 col-md-4"><strong>Start Date:</strong>{" "}</p>
+                        <p className="col-12 col-md-8">{new Date(goal_start_date).toLocaleDateString()}</p>
                 </div>
-                 <div className="my-2 row">
-                        <p className="col-4"><strong>Deadline:</strong>{" "}</p>
-                        <p className="col-8"> {new Date(goal_end_date).toLocaleDateString()}</p>
+                 <div className="my-3 row">
+                        <p className="col-12 col-md-4"><strong>Deadline:</strong>{" "}</p>
+                        <p className="col-12 col-md-8"> {new Date(goal_end_date).toLocaleDateString()}</p>
                 </div>
-                 <div className="my-2 row">
-                        <p className="col-4"><strong>Description:</strong>{" "}</p>
-                        <p className="col-8"> {deadlineExplanationData?.expired_meet_description}</p>
+                 <div className="my-3 row">
+                        <p className="col-12 col-md-4"><strong>Description:</strong>{" "}</p>
+                        <p className="col-12 col-md-8"> {deadlineExplanationData?.expired_meet_description}</p>
                 </div>
                 <div style={styles.reasonContainer}>
-                    <p className="my-2">
+                    <p className="my-3">
                         <strong>Reason</strong>
                     </p>
                     <div

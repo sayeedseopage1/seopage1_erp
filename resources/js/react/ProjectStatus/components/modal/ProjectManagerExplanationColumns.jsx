@@ -119,7 +119,7 @@ export const ProjectManagerExplanationColumns = [
                     <Switch>
                         <Switch.Case condition={user?.roleId === 4}>
                             <Switch>
-                                <Switch.Case condition={data?.expired_status === 1}>
+                                <Switch.Case condition={data?.reason_status === 1}>
                                     <button
                                         onClick={() => handle.deadlineExplainClick(data)} className={`btn btn-danger ${styles?.authorize}`}
                                     >

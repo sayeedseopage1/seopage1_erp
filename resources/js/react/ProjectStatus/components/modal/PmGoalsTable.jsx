@@ -262,6 +262,7 @@ const PmGoalsTable = ({
         setIsOpenGoalExtensionHistoryModal(false);
     };
 
+
     return (
         <div className="sp1_tasks_table_wrapper">
             <table className="sp1_tasks_table">
