@@ -79,7 +79,6 @@ const ActionDropdownDataTable = ({ data, table }) => {
                             >
                                 <Button
                                     onClick={() => {
-                                        console.log("Data:", data);
                                         handleEvaluationClick();
                                         setEvaluationObject(data);
                                     }}

@@ -4,8 +4,12 @@ import { IoIosSend } from "react-icons/io";
 import ButtonStyles from "./ActionButton.module.css";
 import SingleEvaluationModal from "../modal/SingleEvaluationModal";
 import { useAuth } from "../../../hooks/useAuth";
+import Popover from "../../../../react-latest/ui/Popover";
+import { convertTime } from "../../../utils/converTime";
 
 const ActionDropdown = ({ data }) => {
+    const hideEvaluationButton =
+        Number(data?.total_min) < 5 && data?.submission_date === null;
     const auth = useAuth();
     const [isSingleEvaluationModalOpen, setSingleEvaluationModalOpen] =
         useState(false);
@@ -14,40 +18,107 @@ const ActionDropdown = ({ data }) => {
     };
     return (
         <React.Fragment>
-            <ColumnContent onClick={() => toggleSingleEvaluationModal()}>
+            <ColumnContent>
                 {auth.roleId === 6 && (
-                    <button
-                        className={ButtonStyles.sendContainer}
-                        // disabled={data?.avg_rating}
-                    >
-                        {data?.avg_rating ? (
-                            <h4>{data?.avg_rating}</h4>
+                    <div>
+                        {!hideEvaluationButton ? (
+                            <button
+                                onClick={() => toggleSingleEvaluationModal()}
+                                className={ButtonStyles.sendContainer}
+                                // disabled={data?.avg_rating}
+                            >
+                                {data?.avg_rating ? (
+                                    <h4>{data?.avg_rating}</h4>
+                                ) : (
+                                    <div>
+                                        <IoIosSend
+                                            className={ButtonStyles.send}
+                                            color="#fff"
+                                            size={`20px`}
+                                        />
+                                        <IoIosSend
+                                            className={ButtonStyles.send2}
+                                            color="#696666"
+                                            size={`20px`}
+                                        />
+                                        <p>Evaluate</p>
+                                    </div>
+                                )}
+                            </button>
                         ) : (
-                            <div>
-                                <IoIosSend
-                                    className={ButtonStyles.send}
-                                    color="#fff"
-                                    size={`20px`}
-                                />
-                                <IoIosSend
-                                    className={ButtonStyles.send2}
-                                    color="#696666"
-                                    size={`20px`}
-                                />
-                                <p>Evaluate</p>
+                            <div
+                                style={{ minWidth: "10rem", marginTop: "10px" }}
+                            >
+                                <Popover>
+                                    <Popover.Button>
+                                        <span
+                                            className=" singleline-ellipsis"
+                                            style={{ color: "red" }}
+                                        >
+                                            Not applicable for rating
+                                        </span>
+                                    </Popover.Button>
+
+                                    <Popover.Panel>
+                                        <div className="revision_popover_panel">
+                                            <div style={{ color: "red" }}>
+                                                <div>
+                                                    {`Tracked Hour: ${convertTime(
+                                                        data?.total_min
+                                                    )}`}
+                                                </div>
+
+                                                <div>
+                                                    Submission Status: Not
+                                                    Submitted
+                                                </div>
+                                            </div>
+                                            <br />
+                                            <div>
+                                                Hence, this task is not
+                                                applicable for rating
+                                            </div>
+                                        </div>
+                                    </Popover.Panel>
+                                </Popover>
                             </div>
                         )}
-                    </button>
+                    </div>
                 )}
 
-                {(auth.roleId === 8 || auth.roleId === 1) && (
-                    <button
-                        className={ButtonStyles.sendContainer}
-                        style={{ color: "white", fontSize: "16px" }}
-                    >
-                        {data?.avg_rating}
-                    </button>
-                )}
+                {auth.roleId === 8 ||
+                    (auth.roleId === 1 && (
+                        <div>
+                            {!hideEvaluationButton ? (
+                                <button
+                                    className={ButtonStyles.sendContainer}
+                                    style={{ color: "white", fontSize: "16px" }}
+                                >
+                                    {data?.avg_rating}
+                                </button>
+                            ) : (
+                                <div style={{ minWidth: "10rem" }}>
+                                    <Popover>
+                                        <Popover.Button>
+                                            <span
+                                                className=" singleline-ellipsis"
+                                                style={{ color: "red" }}
+                                            >
+                                                Not available for rating
+                                            </span>
+                                        </Popover.Button>
+
+                                        <Popover.Panel>
+                                            <div className="revision_popover_panel">
+                                                Tracked less then 1 hour and did
+                                                not submit
+                                            </div>
+                                        </Popover.Panel>
+                                    </Popover>
+                                </div>
+                            )}
+                        </div>
+                    ))}
             </ColumnContent>
 
             <SingleEvaluationModal
