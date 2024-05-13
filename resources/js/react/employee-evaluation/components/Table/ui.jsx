@@ -1,6 +1,7 @@
 import styled from "styled-components";
 
 export const EvalTableTitle = styled.div`
+    position: relative;
     padding: 20px;
     width: 100%;
     height: 70px;

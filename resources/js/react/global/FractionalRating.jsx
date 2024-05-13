@@ -9,9 +9,10 @@ import styles from "./FractionalRating.module.css";
  * @param {onChange} props - function to change the value of rating
  * @returns  FractionalRating component
  */
-const FractionalRating = ({ value, onChange }) => {
+const FractionalRating = ({ value, onChange, readonly }) => {
     return (
         <Rating
+            readonly={readonly}
             emptySymbol={
                 <div
                     style={{
