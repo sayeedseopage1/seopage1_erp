@@ -107,7 +107,7 @@ const ChartIdealVsAchievedEditModal = ({ antdModalOpen, showIdealVsAchievedEditM
                         chartAxisData?.length == 0 && <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />
                     }
                     {
-                        chartAxisData?.map((item) => (
+                        chartAxisData?.sort((a, b) => a?.xAxisLowerLimit - b?.xAxisLowerLimit)?.map((item) => (
                             <div key={item?.id} className='edit_chart_data_modal_content ratio_card'>
                                 <div className='ratio_wrapper'>
                                     <p className='ratio_text'>{item?.xAxisLowerLimit}-{item?.xAxisUpperLimit}%</p>
@@ -132,9 +132,13 @@ const ChartIdealVsAchievedEditModal = ({ antdModalOpen, showIdealVsAchievedEditM
 
             {/* Modals for each modal */}
             <AddNewAxisItemModal chartAxisData={chartAxisData} setChartAxisData={setChartAxisData} antdModalOpen={addNewAxisDataModalOpen} setAntdModalOpen={setAddNewAxisDataModalOpen} />
+
             <EditXAxisModal axisEditItem={axisEditItem} chartAxisData={chartAxisData} setChartAxisData={setChartAxisData} antdModalOpen={editXAxisDataModalOpen} setAntdModalOpen={setEditXAxisDataModalOpen} />
-            <EditYAxisModal axisEditItem={axisEditItem} antdModalOpen={editYAxisDataModalOpen} setAntdModalOpen={setEditYAxisDataModalOpen} />
+
+            <EditYAxisModal axisEditItem={axisEditItem} chartAxisData={chartAxisData} setChartAxisData={setChartAxisData} antdModalOpen={editYAxisDataModalOpen} setAntdModalOpen={setEditYAxisDataModalOpen} />
+
             <SelectRatioRangeModal xAxisStartAndEndValue={xAxisStartAndEndValue} setXAxisStartAndEndValue={setXAxisStartAndEndValue} antdModalOpen={selectRatioRange} setAntdModalOpen={setSelectRatioRange} />
+
             <RemoveRatioItemsModal chartAxisData={chartAxisData} setChartAxisData={setChartAxisData} antdModalOpen={removeRatioItemsModalOpen} setAntdModalOpen={setRemoveRatioItemsModalOpen} />
 
         </Modal>

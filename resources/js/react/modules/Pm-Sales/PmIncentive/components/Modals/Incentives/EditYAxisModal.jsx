@@ -4,7 +4,7 @@ import { ButtonComponent } from '../../../../PointFactors/components/Styles/ui/u
 import { useForm } from 'react-hook-form';
 import { Modal } from 'antd';
 
-const EditYAxisModal = ({ axisEditItem, antdModalOpen, setAntdModalOpen }) => {
+const EditYAxisModal = ({ axisEditItem, chartAxisData, setChartAxisData, antdModalOpen, setAntdModalOpen }) => {
 
     const { yAxisRatio } = axisEditItem || {}
 
@@ -12,11 +12,23 @@ const EditYAxisModal = ({ axisEditItem, antdModalOpen, setAntdModalOpen }) => {
         register,
         handleSubmit,
         watch,
+        reset,
         formState: { errors },
     } = useForm()
 
     const onSubmit = (data) => {
-        console.log(data)
+        const newData = {
+            ...axisEditItem,
+            yAxisRatio: data.yAxisRatio,
+        };
+
+        // Filter out items that need to be removed
+        const filteredData = chartAxisData.filter(item => item.id !== axisEditItem.id);
+
+        // Concatenate newData with filteredData
+        setChartAxisData([...filteredData, newData]);
+        setAntdModalOpen(false);
+        reset();
     }
 
     const handleCancel = () => {
@@ -47,8 +59,8 @@ const EditYAxisModal = ({ axisEditItem, antdModalOpen, setAntdModalOpen }) => {
                             <p className='axis_item_modal_inputs_title' style={{ fontSize: '16px' }}>New Percentage</p>
                             <div className='axis_item_modal_inputs_inner'>
                                 <div className='w-100'>
-                                    <input className='point_edit_modal_input' type='number' {...register("yAxisRation", { required: true })} placeholder='Write here ' />
-                                    {errors.yAxisRation && <span style={{ color: 'red', fontSize: '12px' }}>This field is required</span>}
+                                    <input defaultValue={yAxisRatio} className='point_edit_modal_input' type='number' {...register("yAxisRatio", { required: true })} placeholder='Write here' />
+                                    {errors.yAxisRatio && <span style={{ color: 'red', fontSize: '12px' }}>This field is required</span>}
                                 </div>
                             </div>
                         </div>

@@ -17,7 +17,6 @@ const EditXAxisModal = ({ axisEditItem, chartAxisData, setChartAxisData, antdMod
     } = useForm()
 
     const onSubmit = (data) => {
-        console.log(data);
         const newData = {
             ...axisEditItem,
             xAxisLowerLimit: data.xAxisLowerLimit,
@@ -58,7 +57,6 @@ const EditXAxisModal = ({ axisEditItem, chartAxisData, setChartAxisData, antdMod
                 <div className='add_new_axis_item_modal_body'>
                     <form onSubmit={handleSubmit(onSubmit)}>
                         <div style={{ marginBottom: '32px' }}>
-                            {/* <p className='axis_item_modal_inputs_title'>X Axis ratio (Percentage)</p> */}
                             <p className="axis_item_modal_inputs_title" style={{ fontSize: '16px' }}>Current Value: <span style={{ fontWeight: '500', color: '#000', fontSize: '20px' }}>{xAxisLowerLimit}-{xAxisUpperLimit}%</span></p>
                             <p className='axis_item_modal_inputs_title' style={{ fontSize: '16px' }}>New X Axis ratio (Percentage)</p>
                             <div className='axis_item_modal_inputs_inner'>
