@@ -10,10 +10,9 @@ import PMGuideline from "../../../components/PMGuideline";
 import FileUploader from "../../../../file-upload/FileUploader";
 import { useAuth } from "../../../../hooks/useAuth";
 
-const Genarel = ({ task, isFetching }) => {
+const Genarel = ({ task, isFetching, singleTask }) => {
     const loggedUser = new User(window?.Laravel?.user);
     const auth = useAuth();
-    console.log("task revision", task?.revisions);
 
     return (
         <div className="row">
@@ -111,14 +110,14 @@ const Genarel = ({ task, isFetching }) => {
                                                 task?.assigneeTo?.getId()
                                             ) ===
                                                 Number(loggedUser?.getId()) && (
-                                                <sup
-                                                    className="rounded-pill bg-dark text-white px-1"
-                                                    style={{ fontSize: "10px" }}
-                                                >
-                                                    {" "}
-                                                    It's You{" "}
-                                                </sup>
-                                            )}
+                                                    <sup
+                                                        className="rounded-pill bg-dark text-white px-1"
+                                                        style={{ fontSize: "10px" }}
+                                                    >
+                                                        {" "}
+                                                        It's You{" "}
+                                                    </sup>
+                                                )}
                                         </span>
 
                                         <span style={{ fontSize: "12px" }}>
@@ -162,13 +161,13 @@ const Genarel = ({ task, isFetching }) => {
                                                 task?.assigneeBy?.getId()
                                             ) ===
                                                 Number(loggedUser?.getId()) && (
-                                                <sup
-                                                    className="rounded-pill bg-dark text-white px-1"
-                                                    style={{ fontSize: "10px" }}
-                                                >
-                                                    It's You
-                                                </sup>
-                                            )}
+                                                    <sup
+                                                        className="rounded-pill bg-dark text-white px-1"
+                                                        style={{ fontSize: "10px" }}
+                                                    >
+                                                        It's You
+                                                    </sup>
+                                                )}
                                         </span>
 
                                         <span style={{ fontSize: "12px" }}>
@@ -398,6 +397,7 @@ const Genarel = ({ task, isFetching }) => {
                                 task={task}
                                 workEnv={task?.workEnvData}
                                 editorContainerClass="modal-guideline-editor-text"
+                            // singleTask={singleTask}
                             />
                         </>
                     )}
@@ -407,7 +407,7 @@ const Genarel = ({ task, isFetching }) => {
                     <Accordion
                         title={
                             task?.category?.name === "Graphic Design" ||
-                            task?.category?.name === "UI/UIX Design"
+                                task?.category?.name === "UI/UIX Design"
                                 ? "Lead Designer Revision"
                                 : _.last(task?.revisions)?.revisionStatus
                         }
@@ -438,10 +438,11 @@ const Genarel = ({ task, isFetching }) => {
                         text={task?.description}
                         task={task}
                         type="TASK_DESCRIPTION"
+                        singleTask={singleTask}
                     />
                     {_.size(task?.attachments) > 0 ? (
                         <div className="mt-3">
-                            <h4 className="mb-2">Task Attachments: </h4>
+                            <h6 className="mb-2">Task Attachments: </h6>
                             <FileUploader>
                                 {_.map(task?.attachments, (attachment) =>
                                     attachment?.task_file_name ? (
