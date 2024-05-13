@@ -34,7 +34,7 @@ export const GoalExtensionHistoryTableColumn = [
         accessorKey: "old_deadline",
         cell: ({ row }) => {
             const data = row?.original;
-            return <span>{data?.new_deadline ?? data?.old_deadline}</span>;
+            return <span>{data?.old_deadline}</span>;
         },
     },
     {
@@ -43,7 +43,7 @@ export const GoalExtensionHistoryTableColumn = [
         accessorKey: "new_deadline",
         cell: ({ row }) => {
             const data = row?.original;
-            return <span>{data?.new_deadline ?? data?.old_deadline}</span>;
+            return <span>{data?.new_deadline ?? "--"}</span>;
         },
     },
     {
