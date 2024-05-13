@@ -37,7 +37,7 @@ class DatabaseSync extends Command
         $table = 'sales_policy_questions';
         echo "Changing title column length in $table";
         Schema::table('sales_policy_questions', function (Blueprint $table) {
-            $table->string('title', 300)->change();
+            $table->string('title', 1000)->change();
         });
         echo "\nend";
 
