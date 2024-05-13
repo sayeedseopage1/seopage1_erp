@@ -57,14 +57,14 @@ export const ProjectManagerExplanationColumns = [
         }
     },
     {
-        id: "description",
-        header: "Goal Description",
-        accessorKey: "description",
+        id: "expired_meet_description",
+        header: "Expired Meet Description",
+        accessorKey: "expired_meet_description",
         cell: ({ row }) => {
             const data = row?.original;
             return (
-                <span title={data?.description} className="multine-ellipsis">
-                    {data?.description ?? "--"}
+                <span title={data?.expired_meet_description} className="multine-ellipsis">
+                    {data?.expired_meet_description ?? "--"}
                 </span>
             )
         }
@@ -119,14 +119,14 @@ export const ProjectManagerExplanationColumns = [
                     <Switch>
                         <Switch.Case condition={user?.roleId === 4}>
                             <Switch>
-                                <Switch.Case condition={data?.reason_status === 0 || data?.reason_status === 2}>
+                                <Switch.Case condition={data?.expired_status === 1}>
                                     <button
                                         onClick={() => handle.deadlineExplainClick(data)} className={`btn btn-danger ${styles?.authorize}`}
                                     >
                                         Explain Why Expired
                                     </button>
                                 </Switch.Case>
-                                <Switch.Case condition={data?.reason_status === 1}>
+                                <Switch.Case condition={data?.expired_status === 0}>
                                     <span>--</span>
                                 </Switch.Case>
                             </Switch>

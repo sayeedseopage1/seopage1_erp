@@ -100,7 +100,7 @@ const DeadlineExplanation = ({
                 </div>
                  <div className="my-2 row">
                         <p className="col-4"><strong>Description:</strong>{" "}</p>
-                        <p className="col-8"> {deadlineExplanationData?.description}</p>
+                        <p className="col-8"> {deadlineExplanationData?.expired_meet_description}</p>
                 </div>
                 <div style={styles.reasonContainer}>
                     <p className="my-2">

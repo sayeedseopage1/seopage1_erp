@@ -243,7 +243,7 @@ export const PmGoalsTableColumns = [
                         <Switch.Case condition={user?.roleId === 1}>
                             <Switch>
                                 <Switch.Case
-                                    condition={data.reason_status == 2}
+                                    condition={data.expired_status === 2}
                                 >
                                     <button
                                         className={`btn ${styles?.resolved}`}
@@ -252,9 +252,9 @@ export const PmGoalsTableColumns = [
                                         Resolved{" "}
                                     </button>
                                 </Switch.Case>
-                                <Switch.Case
-                                    condition={data.reason_status === 1}
-                                >
+                                {/* <Switch.Case
+                                    condition={data.expired_status === 1}
+                                > */}
                                     <button
                                         onClick={() =>
                                             handle.resolveExplainClick(data)
@@ -263,7 +263,7 @@ export const PmGoalsTableColumns = [
                                     >
                                         Authorize Explanation
                                     </button>
-                                </Switch.Case>
+                                {/* </Switch.Case> */}
                             </Switch>
                         </Switch.Case>
                     </Switch>

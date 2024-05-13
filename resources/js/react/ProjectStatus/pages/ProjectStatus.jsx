@@ -137,7 +137,7 @@ const ProjectStatus = () => {
         if (modalType === "filtered_goal_details" && goal_id && project_id) {
             setProjectId(project_id);
             setIsModalOneOpen(true);
-            refetchPmGoal();
+            // refetchPmGoal();
         }
     }, []);
 
@@ -213,7 +213,7 @@ const ProjectStatus = () => {
                     projectDetails={projectDetails}
                 />
             )}
-            {searchParams.get("modal_type") === "modal_type" && (
+            {searchParams.get("modal_type") === "individual_goal_details" && (
                 <ProjectManagerExplanationModal />
             )}
         </React.Fragment>

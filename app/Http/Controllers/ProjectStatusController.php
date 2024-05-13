@@ -161,7 +161,7 @@ class ProjectStatusController extends AccountBaseController
         return view('project-status.calendar.index', $this->data);
     }
     public function projectStatusReason(Request $request){
-        // dd($request->all());
+        dd($request->all());
         $validator =  $request->validate([
             'reason' => 'required',
 
@@ -693,7 +693,7 @@ class ProjectStatusController extends AccountBaseController
                 ]);
     }
     public function expireGoal($id){
-        $pmGoal = ProjectPmGoal::select('project_pm_goals.id','project_pm_goals.goal_name','project_pm_goals.goal_start_date','project_pm_goals.goal_end_date','project_pm_goals.duration','project_pm_goals.expired_meet_description','project_pm_goals.project_category','project_pm_goals.reason_status','deals.actual_amount as project_budget','currencies.currency_symbol','projects.id as project_id','projects.project_name','users.id as user_id','users.name as user_name','users.image as user_image')
+        $pmGoal = ProjectPmGoal::select('project_pm_goals.id','project_pm_goals.goal_name','project_pm_goals.goal_start_date','project_pm_goals.goal_end_date','project_pm_goals.duration','project_pm_goals.expired_meet_description','project_pm_goals.project_category','deals.actual_amount as project_budget','currencies.currency_symbol','projects.id as project_id','projects.project_name','users.id as user_id','users.name as user_name','users.image as user_image', 'project_pm_goals.expired_status')
         ->leftJoin('projects','project_pm_goals.project_id','projects.id')
         ->leftJoin('deals', 'projects.deal_id', '=', 'deals.id')
         ->leftJoin('currencies', 'deals.original_currency_id', '=', 'currencies.id')

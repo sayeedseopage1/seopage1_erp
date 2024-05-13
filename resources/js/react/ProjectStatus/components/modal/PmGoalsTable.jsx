@@ -393,7 +393,7 @@ const PmGoalsTable = ({
                     closeModal={handleCloseExtensionHistoryModal}
                 />
             )}
-            {isGoalExpiredHistoryLoading && (
+            {isOpenDeadlineExplanationHistoryModal && (
                 <DeadlineExplanationHistoryModal
                     projectDetails={projectDetails}
                     goalExpiredHistory={goalExpiredHistory}
