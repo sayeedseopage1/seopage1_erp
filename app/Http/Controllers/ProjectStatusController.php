@@ -527,12 +527,6 @@ class ProjectStatusController extends AccountBaseController
                     if($ext_history->auth_status == 3){
                         $past_action->message = 'Goal ('. $goal_count .') (Name: '. $pm_goal->goal_name .') extension request PM <a href="'. route('employees.show', $pm->id) .'">'. $pm->name .'</a> for project (<a href="'. route('projects.show', $project->id) .'">'. $project->project_name .'</a>) from client (<a href="'. route('clients.show', $client->id) .'">'. $client->name .'</a>) was rejected by Admin <a href="'. route('employees.show', $authorize_by->id) .'">'. $authorize_by->name .'</a>!';
                     }
-                    // if($pm_goal->extended_request_status == 2){
-                    //     $past_action->message = 'Goal ('. $goal_count .') (Name: '. $pm_goal->goal_name .') extension request PM <a href="'. route('employees.show', $pm->id) .'">'. $pm->name .'</a> for project (<a href="'. route('projects.show', $project->id) .'">'. $project->project_name .'</a>) from client (<a href="'. route('clients.show', $client->id) .'">'. $client->name .'</a>) was accepted by Admin <a href="'. route('employees.show', $authorize_by->id) .'">'. $authorize_by->name .'</a>!';
-                    // }
-                    // if($pm_goal->extended_request_status == 3){
-                    //     $past_action->message = 'Goal ('. $goal_count .') (Name: '. $pm_goal->goal_name .') extension request PM <a href="'. route('employees.show', $pm->id) .'">'. $pm->name .'</a> for project (<a href="'. route('projects.show', $project->id) .'">'. $project->project_name .'</a>) from client (<a href="'. route('clients.show', $client->id) .'">'. $client->name .'</a>) was rejected by Admin <a href="'. route('employees.show', $authorize_by->id) .'">'. $authorize_by->name .'</a>!';
-                    // }
                     $past_action->timeframe = $action->timeframe;
                     $past_action->authorization_for = $action->authorization_for;
                     $past_action->authorized_by = $action->authorized_by;
