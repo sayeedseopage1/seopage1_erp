@@ -27,9 +27,7 @@ export const PmGoalsTableColumns = [
         accessorKey: "goal_end_date",
         cell: ({ row }) => {
             const data = row?.original;
-            return (
-                <span>{data.goal_end_date}</span>
-            );
+            return <span>{data.goal_end_date}</span>;
         },
     },
     {
@@ -171,7 +169,11 @@ export const PmGoalsTableColumns = [
                         <Switch.Case condition={user?.roleId === 4}>
                             <Switch>
                                 <Switch.Case
-                                    condition={data.expired_status === 0}
+                                    condition={
+                                        (data.reason_status === 0 ||
+                                            data.reason_status === 2) &&
+                                        data?.expired_status !== 2
+                                    }
                                 >
                                     <Switch>
                                         <Switch.Case
@@ -240,7 +242,9 @@ export const PmGoalsTableColumns = [
                                 </Switch.Case>
                             </Switch>
                         </Switch.Case>
-                        <Switch.Case condition={user?.roleId === 1}>
+                        <Switch.Case
+                            condition={user?.roleId === 1 && data.reason}
+                        >
                             <Switch>
                                 <Switch.Case
                                     condition={data.reason_status == 2}
@@ -271,7 +275,7 @@ export const PmGoalsTableColumns = [
                         <Switch.Case
                             condition={
                                 user.roleId === 4 &&
-                                data?.extension_status === 0 && 
+                                data?.extension_status === 0 &&
                                 new Date(data.goal_end_date) > new Date() &&
                                 data.goal_status !== 1
                             }
@@ -327,7 +331,7 @@ export const PmGoalsTableColumns = [
                         <Switch.Case
                             condition={
                                 user?.roleId === 1 &&
-                                data?.extension_status !== 1 
+                                data?.extension_status !== 1
                             }
                         >
                             <span>--</span>

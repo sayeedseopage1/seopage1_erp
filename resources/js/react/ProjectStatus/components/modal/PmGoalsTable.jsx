@@ -262,6 +262,7 @@ const PmGoalsTable = ({
         setIsOpenGoalExtensionHistoryModal(false);
     };
 
+
     return (
         <div className="sp1_tasks_table_wrapper">
             <table className="sp1_tasks_table">
@@ -393,7 +394,7 @@ const PmGoalsTable = ({
                     closeModal={handleCloseExtensionHistoryModal}
                 />
             )}
-            {isGoalExpiredHistoryLoading && (
+            {isOpenDeadlineExplanationHistoryModal && (
                 <DeadlineExplanationHistoryModal
                     projectDetails={projectDetails}
                     goalExpiredHistory={goalExpiredHistory}

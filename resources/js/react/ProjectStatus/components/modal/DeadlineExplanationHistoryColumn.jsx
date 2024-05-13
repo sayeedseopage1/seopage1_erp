@@ -75,7 +75,7 @@ export const DeadlineEHColumn = [
             return (
                 <div className="d-flex align-items-center">
                     <i
-                        class="fa fa-circle mr-1 f-10"
+                        className="fa fa-circle mr-1 f-10"
                         style={{
                             color:
                                 data?.goal_status === 0 ? "#FF0000" : "#00b5ff",

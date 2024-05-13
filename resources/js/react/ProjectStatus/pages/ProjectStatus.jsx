@@ -137,7 +137,6 @@ const ProjectStatus = () => {
         if (modalType === "filtered_goal_details" && goal_id && project_id) {
             setProjectId(project_id);
             setIsModalOneOpen(true);
-            refetchPmGoal();
         }
     }, []);
 
