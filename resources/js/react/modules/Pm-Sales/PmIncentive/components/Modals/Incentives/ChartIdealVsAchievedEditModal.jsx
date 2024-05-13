@@ -10,12 +10,32 @@ import RemoveRatioItemsModal from './RemoveRatioItemsModal';
 
 const ChartIdealVsAchievedEditModal = ({ antdModalOpen, showIdealVsAchievedEditModal, chartData }) => {
     // console.log(chartData)
+
+    // Modal states for each modal
     const [addNewAxisDataModalOpen, setAddNewAxisDataModalOpen] = useState(false);
     const [editXAxisDataModalOpen, setEditXAxisDataModalOpen] = useState(false);
     const [editYAxisDataModalOpen, setEditYAxisDataModalOpen] = useState(false);
     const [selectRatioRange, setSelectRatioRange] = useState(false);
     const [removeRatioItemsModalOpen, setRemoveRatioItemsModalOpen] = useState(false);
 
+
+    // x axis and y axis data state
+    const [chartAxisData, setChartAxisData] = useState([
+        {
+            id: '1',
+            xAxisLowerLimit: 0,
+            xAxisUpperLimit: 10,
+            yAxis: 100,
+        },
+        {
+            id: '2',
+            xAxisLowerLimit: 10,
+            xAxisUpperLimit: 20,
+            yAxis: 80,
+        },
+    ])
+
+    // Function to close the modal visibility
     const handleCancel = () => {
         showIdealVsAchievedEditModal();  // Assuming this function toggles the modal's visibility
     }
@@ -38,6 +58,7 @@ const ChartIdealVsAchievedEditModal = ({ antdModalOpen, showIdealVsAchievedEditM
             centered={true}
         >
             <div className='pay_now_modal_body' style={{ paddingTop: "0px" }}>
+                {/* Modal Top */}
                 <div className='edit_chart_data_modal_top'>
                     <div className='ideal_vs_achieved_chart_data_actions'>
                         <div className='ideal_vs_achieved_chart_data_actions_buttons'>
@@ -51,40 +72,39 @@ const ChartIdealVsAchievedEditModal = ({ antdModalOpen, showIdealVsAchievedEditM
                         <p>Ending Point (X Axis): <span>100</span>%</p>
                     </div>
                 </div>
+
+                {/* Modal Content */}
                 <div className='edit_chart_data_modal_content' style={{ padding: "28px 0 0 0" }}>
                     <h3 className='edit_chart_data_sub_title'>X Axis Ratio</h3>
                     <h3 className='edit_chart_data_sub_title'>Y Axis Ratio</h3>
                 </div>
 
                 <div className='edit_chart_data_modal_content_wrapper'>
-                    <div className='edit_chart_data_modal_content ratio_card'>
-                        <div className='ratio_wrapper'>
-                            <p className='ratio_text'>0-10%</p>
-                            <button onClick={() => setEditXAxisDataModalOpen(true)} className='ratio_edit_button'>Edit</button>
+                    {
+                        chartAxisData?.map((item, ind) => (
+                            <div key={item?.id} className='edit_chart_data_modal_content ratio_card'>
+                                <div className='ratio_wrapper'>
+                                    <p className='ratio_text'>{item?.xAxisLowerLimit}-{item?.xAxisUpperLimit}%</p>
+                                    <button onClick={() => setEditXAxisDataModalOpen(true)} className='ratio_edit_button'>Edit</button>
 
-                        </div>
-                        <div className='ratio_wrapper'>
-                            <p className='ratio_text'>100%</p>
-                            <button onClick={() => setEditYAxisDataModalOpen(true)} className='ratio_edit_button'>Edit</button>
-
-                        </div>
-                    </div>
-                    <div className='edit_chart_data_modal_content ratio_card'>
-                        <div className='ratio_wrapper'>
-                            <p className='ratio_text'>0-10%</p>
-                            <button onClick={() => setEditXAxisDataModalOpen(true)} className='ratio_edit_button'>Edit</button>
-                        </div>
-                        <div className='ratio_wrapper'>
-                            <p className='ratio_text'>100%</p>
-                            <button onClick={() => setEditYAxisDataModalOpen(true)} className='ratio_edit_button'>Edit</button>
-                        </div>
-                    </div>
+                                </div>
+                                <div className='ratio_wrapper'>
+                                    <p className='ratio_text'>{item?.yAxis}%</p>
+                                    <button onClick={() => setEditYAxisDataModalOpen(true)} className='ratio_edit_button'>Edit</button>
+                                </div>
+                            </div>
+                        ))
+                    }
                 </div>
             </div>
+
+            {/* Modal Footer */}
             <div className='pay_now_modal_footer'>
                 <ButtonComponent color='#1492E6' textColor='#fff' font='18px'>Save</ButtonComponent>
                 <ButtonComponent onClick={handleCancel} font='18px'>Do it later</ButtonComponent>
             </div>
+
+            {/* Modals for each modal */}
             <AddNewAxisItemModal antdModalOpen={addNewAxisDataModalOpen} setAntdModalOpen={setAddNewAxisDataModalOpen} />
             <EditXAxisModal antdModalOpen={editXAxisDataModalOpen} setAntdModalOpen={setEditXAxisDataModalOpen} />
             <EditYAxisModal antdModalOpen={editYAxisDataModalOpen} setAntdModalOpen={setEditYAxisDataModalOpen} />
