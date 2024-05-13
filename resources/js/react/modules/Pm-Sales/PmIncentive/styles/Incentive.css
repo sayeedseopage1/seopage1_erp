@@ -833,6 +833,15 @@
     line-height: normal;
 }
 
+.select_ratio_range_modal_inputs {
+    display: flex;
+    gap: 18px;
+    max-width: 294px;
+    align-items: center;
+    justify-content: space-between;
+    margin: auto;
+}
+
 /*********************************
             modals ends
 *********************************/

@@ -5,12 +5,14 @@ import { RxCross1 } from "react-icons/rx";
 import AddNewAxisItemModal from './AddNewAxisItemModal';
 import EditXAxisModal from './EditXAxisModal';
 import EditYAxisModal from './EditYAxisModal';
+import SelectRatioRangeModal from './SelectRatioRangeModal';
 
 const ChartIdealVsAchievedEditModal = ({ antdModalOpen, showIdealVsAchievedEditModal, chartData }) => {
     // console.log(chartData)
     const [addNewAxisDataModalOpen, setAddNewAxisDataModalOpen] = useState(false);
     const [editXAxisDataModalOpen, setEditXAxisDataModalOpen] = useState(false);
     const [editYAxisDataModalOpen, setEditYAxisDataModalOpen] = useState(false);
+    const [selectRatioRange, setSelectRatioRange] = useState(false);
 
     const handleCancel = () => {
         showIdealVsAchievedEditModal();  // Assuming this function toggles the modal's visibility
@@ -40,7 +42,7 @@ const ChartIdealVsAchievedEditModal = ({ antdModalOpen, showIdealVsAchievedEditM
                             <button onClick={() => setAddNewAxisDataModalOpen(true)} className='chart_data_add'>Add</button>
                             <button className='chart_data_remove'>Remove</button>
                         </div>
-                        <button className='ideal_vs_achieved_chart_data_actions_range'>Select Range</button>
+                        <button onClick={() => setSelectRatioRange(true)} className='ideal_vs_achieved_chart_data_actions_range'>Select Range</button>
                     </div>
                     <div className='ideal_vs_achieved_axis_data'>
                         <p>Starting Point (X Axis): <span>0</span>%</p>
@@ -84,6 +86,8 @@ const ChartIdealVsAchievedEditModal = ({ antdModalOpen, showIdealVsAchievedEditM
             <AddNewAxisItemModal antdModalOpen={addNewAxisDataModalOpen} setAntdModalOpen={setAddNewAxisDataModalOpen} />
             <EditXAxisModal antdModalOpen={editXAxisDataModalOpen} setAntdModalOpen={setEditXAxisDataModalOpen} />
             <EditYAxisModal antdModalOpen={editYAxisDataModalOpen} setAntdModalOpen={setEditYAxisDataModalOpen} />
+            <SelectRatioRangeModal antdModalOpen={selectRatioRange} setAntdModalOpen={setSelectRatioRange} />
+
         </Modal>
     );
 };
