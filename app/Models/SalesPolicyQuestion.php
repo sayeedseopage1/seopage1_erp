@@ -27,7 +27,8 @@ class SalesPolicyQuestion extends Model
         'sequence',
         'placeholder',
         'policy_id',
-        'status'
+        'status',
+        'comment'
     ];
 
     public function newEloquentBuilder($query)
