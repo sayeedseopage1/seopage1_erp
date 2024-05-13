@@ -4,17 +4,20 @@ import { ButtonComponent } from '../../../../PointFactors/components/Styles/ui/u
 import { useForm } from 'react-hook-form';
 import { Modal } from 'antd';
 
-const SelectRatioRangeModal = ({ antdModalOpen, setAntdModalOpen }) => {
+const SelectRatioRangeModal = ({ xAxisStartAndEndValue, setXAxisStartAndEndValue, antdModalOpen, setAntdModalOpen }) => {
 
     const {
         register,
         handleSubmit,
+        reset,
         watch,
         formState: { errors },
     } = useForm()
 
     const onSubmit = (data) => {
-        console.log(data)
+        setXAxisStartAndEndValue(data)
+        reset()
+        setAntdModalOpen(false)
     }
 
     const handleCancel = () => {
@@ -43,19 +46,19 @@ const SelectRatioRangeModal = ({ antdModalOpen, setAntdModalOpen }) => {
                             <div className='select_ratio_range_modal_inputs'>
                                 <p className="axis_item_modal_inputs_title" style={{ marginBottom: '0' }}>Starting Point (X Axis)</p>
                                 <div className='d-flex align-items-center'>
-                                    <input className='point_edit_modal_input' style={{ width: '96px' }} type='number' {...register("xAxisStartPoint", { required: true })} />
+                                    <input defaultValue={xAxisStartAndEndValue?.xAxisStaring} className='point_edit_modal_input' style={{ width: '96px' }} type='number' {...register("xAxisStaring", { required: true })} />
                                     <span className='axis_item_modal_inputs_title' style={{ margin: '0 0 0 7px' }}>%</span>
                                 </div>
                             </div>
-                            {errors.xAxisStartPoint && <p style={{ color: 'red', fontSize: '12px', textAlign: 'center' }}>This field is required</p>}
+                            {errors.xAxisStaring && <p style={{ color: 'red', fontSize: '12px', textAlign: 'center' }}>This field is required</p>}
                             <div className='select_ratio_range_modal_inputs' style={{ marginTop: '18px' }}>
                                 <p className="axis_item_modal_inputs_title" style={{ marginBottom: '0' }}>Ending Point (X Axis)</p>
                                 <div className='d-flex align-items-center'>
-                                    <input className='point_edit_modal_input' style={{ width: '96px' }} type='number' {...register("xAxisEndPoint", { required: true })} />
+                                    <input defaultValue={xAxisStartAndEndValue?.xAxisEnding} className='point_edit_modal_input' style={{ width: '96px' }} type='number' {...register("xAxisEnding", { required: true })} />
                                     <span className='axis_item_modal_inputs_title' style={{ margin: '0 0 0 7px' }}>%</span>
                                 </div>
                             </div>
-                            {errors.xAxisEndPoint && <p style={{ color: 'red', fontSize: '12px', textAlign: 'center' }}>This field is required</p>}
+                            {errors.xAxisEnding && <p style={{ color: 'red', fontSize: '12px', textAlign: 'center' }}>This field is required</p>}
                         </div>
                         <div className='pay_now_modal_footer' style={{ marginTop: '18px' }}>
                             <ButtonComponent type='submit' color='#1492E6' textColor='#fff' font='14px'>Save</ButtonComponent>

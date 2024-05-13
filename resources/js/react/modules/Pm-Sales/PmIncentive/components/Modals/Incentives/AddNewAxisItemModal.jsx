@@ -1,20 +1,23 @@
 import React from 'react';
-import CustomAntdModal from '../../ui/CustomAntdModal';
 import PropTypes from "prop-types";
 import { ButtonComponent } from '../../../../PointFactors/components/Styles/ui/ui';
 import { useForm } from 'react-hook-form';
 import { Modal } from 'antd';
 
-const AddNewAxisItemModal = ({ antdModalOpen, setAntdModalOpen, chartData }) => {
+const AddNewAxisItemModal = ({ chartAxisData, setChartAxisData, antdModalOpen, setAntdModalOpen, chartData }) => {
     const {
         register,
         handleSubmit,
         watch,
+        reset,
         formState: { errors },
     } = useForm()
 
     const onSubmit = (data) => {
-        console.log(data)
+        const newData = [...chartAxisData, data]
+        setChartAxisData(newData)
+        reset()
+        setAntdModalOpen(false)
     }
 
     const handleCancel = () => {
@@ -42,14 +45,14 @@ const AddNewAxisItemModal = ({ antdModalOpen, setAntdModalOpen, chartData }) => 
                         <div style={{ marginBottom: '32px' }}>
                             <p className='axis_item_modal_inputs_title'>X Axis ratio (Percentage)</p>
                             <div className='axis_item_modal_inputs_inner'>
-                                <div>
-                                    <input className='point_edit_modal_input' type='number' {...register("xAxisLowerLimit", { required: true })} placeholder='Write here ' />
+                                <div className='w-50'>
+                                    <input className='point_edit_modal_input' type='number' {...register("xAxisLowerLimit", { required: true })} placeholder='Write here' />
 
                                     {errors.xAxisLowerLimit && <span style={{ color: 'red', fontSize: '12px' }}>This field is required</span>}
                                 </div>
 
-                                <div>
-                                    <input className='point_edit_modal_input' type='number' {...register("xAxisUpperLimit", { required: true })} placeholder='Write here ' />
+                                <div className='w-50'>
+                                    <input className='point_edit_modal_input' type='number' {...register("xAxisUpperLimit", { required: true })} placeholder='Write here' />
 
                                     {errors.xAxisUpperLimit && <span style={{ color: 'red', fontSize: '12px' }}>This field is required</span>}
                                 </div>
@@ -59,8 +62,8 @@ const AddNewAxisItemModal = ({ antdModalOpen, setAntdModalOpen, chartData }) => 
                             <p className='axis_item_modal_inputs_title'>Y Axis ratio (Percentage)</p>
                             <div className='axis_item_modal_inputs_inner'>
                                 <div className='w-100'>
-                                    <input className='point_edit_modal_input' type='number' {...register("yAxisRation", { required: true })} placeholder='Write here ' />
-                                    {errors.yAxisRation && <span style={{ color: 'red', fontSize: '12px' }}>This field is required</span>}
+                                    <input className='point_edit_modal_input' type='number' {...register("yAxisRatio", { required: true })} placeholder='Write here ' />
+                                    {errors.yAxisRatio && <span style={{ color: 'red', fontSize: '12px' }}>This field is required</span>}
                                 </div>
                             </div>
                         </div>

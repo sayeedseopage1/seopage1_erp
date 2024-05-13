@@ -1,4 +1,4 @@
-import { Modal } from 'antd';
+import { Empty, Modal } from 'antd';
 import React, { useState } from 'react';
 import { ButtonComponent } from '../../../../PointFactors/components/Styles/ui/ui';
 import { RxCross1 } from "react-icons/rx";
@@ -25,15 +25,26 @@ const ChartIdealVsAchievedEditModal = ({ antdModalOpen, showIdealVsAchievedEditM
             id: '1',
             xAxisLowerLimit: 0,
             xAxisUpperLimit: 10,
-            yAxis: 100,
+            yAxisRatio: 100,
         },
         {
             id: '2',
             xAxisLowerLimit: 10,
             xAxisUpperLimit: 20,
-            yAxis: 80,
+            yAxisRatio: 80,
+        },
+        {
+            id: '3',
+            xAxisLowerLimit: 20,
+            xAxisUpperLimit: 30,
+            yAxisRatio: 50,
         },
     ])
+
+    const [xAxisStartAndEndValue, setXAxisStartAndEndValue] = useState({
+        xAxisStaring: 0,
+        xAxisEnding: 120
+    })
 
     // Function to close the modal visibility
     const handleCancel = () => {
@@ -68,8 +79,8 @@ const ChartIdealVsAchievedEditModal = ({ antdModalOpen, showIdealVsAchievedEditM
                         <button onClick={() => setSelectRatioRange(true)} className='ideal_vs_achieved_chart_data_actions_range'>Select Range</button>
                     </div>
                     <div className='ideal_vs_achieved_axis_data'>
-                        <p>Starting Point (X Axis): <span>0</span>%</p>
-                        <p>Ending Point (X Axis): <span>100</span>%</p>
+                        <p>Starting Point (X Axis): <span>{xAxisStartAndEndValue?.xAxisStaring}</span>%</p>
+                        <p>Ending Point (X Axis): <span>{xAxisStartAndEndValue?.xAxisEnding}</span>%</p>
                     </div>
                 </div>
 
@@ -81,7 +92,10 @@ const ChartIdealVsAchievedEditModal = ({ antdModalOpen, showIdealVsAchievedEditM
 
                 <div className='edit_chart_data_modal_content_wrapper'>
                     {
-                        chartAxisData?.map((item, ind) => (
+                        chartAxisData?.length == 0 && <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />
+                    }
+                    {
+                        chartAxisData?.map((item) => (
                             <div key={item?.id} className='edit_chart_data_modal_content ratio_card'>
                                 <div className='ratio_wrapper'>
                                     <p className='ratio_text'>{item?.xAxisLowerLimit}-{item?.xAxisUpperLimit}%</p>
@@ -89,7 +103,7 @@ const ChartIdealVsAchievedEditModal = ({ antdModalOpen, showIdealVsAchievedEditM
 
                                 </div>
                                 <div className='ratio_wrapper'>
-                                    <p className='ratio_text'>{item?.yAxis}%</p>
+                                    <p className='ratio_text'>{item?.yAxisRatio}%</p>
                                     <button onClick={() => setEditYAxisDataModalOpen(true)} className='ratio_edit_button'>Edit</button>
                                 </div>
                             </div>
@@ -105,11 +119,11 @@ const ChartIdealVsAchievedEditModal = ({ antdModalOpen, showIdealVsAchievedEditM
             </div>
 
             {/* Modals for each modal */}
-            <AddNewAxisItemModal antdModalOpen={addNewAxisDataModalOpen} setAntdModalOpen={setAddNewAxisDataModalOpen} />
+            <AddNewAxisItemModal chartAxisData={chartAxisData} setChartAxisData={setChartAxisData} antdModalOpen={addNewAxisDataModalOpen} setAntdModalOpen={setAddNewAxisDataModalOpen} />
             <EditXAxisModal antdModalOpen={editXAxisDataModalOpen} setAntdModalOpen={setEditXAxisDataModalOpen} />
             <EditYAxisModal antdModalOpen={editYAxisDataModalOpen} setAntdModalOpen={setEditYAxisDataModalOpen} />
-            <SelectRatioRangeModal antdModalOpen={selectRatioRange} setAntdModalOpen={setSelectRatioRange} />
-            <RemoveRatioItemsModal antdModalOpen={removeRatioItemsModalOpen} setAntdModalOpen={setRemoveRatioItemsModalOpen} />
+            <SelectRatioRangeModal xAxisStartAndEndValue={xAxisStartAndEndValue} setXAxisStartAndEndValue={setXAxisStartAndEndValue} antdModalOpen={selectRatioRange} setAntdModalOpen={setSelectRatioRange} />
+            <RemoveRatioItemsModal chartAxisData={chartAxisData} setChartAxisData={setChartAxisData} antdModalOpen={removeRatioItemsModalOpen} setAntdModalOpen={setRemoveRatioItemsModalOpen} />
 
         </Modal>
     );

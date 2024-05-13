@@ -816,7 +816,7 @@
 
 .axis_item_modal_inputs_inner {
     display: flex;
-    align-items: center;
+    align-items: flex-start;
     gap: 11px;
     max-width: 294px;
     margin: auto;
