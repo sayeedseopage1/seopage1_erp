@@ -142,6 +142,19 @@ class Project extends BaseModel
         '5'=> "Deadline Extension Request Time",
     ];
 
+    public static $types = [
+        'fixed',
+        'hourly'
+    ];
+
+    public static $categories = [
+        'regular' => 'Regular',
+        'priority' => 'Priority',
+        'highPriority' => 'High Priority',
+        'topMostPriority' => 'Top most priority',
+        'criticallySensitive' => 'Critically Sensitive'
+    ];
+
     public function category(): BelongsTo
     {
         return $this->belongsTo(ProjectCategory::class, 'category_id');
