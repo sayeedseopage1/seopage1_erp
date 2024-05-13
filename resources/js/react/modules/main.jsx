@@ -9,3 +9,7 @@ import "./sales/won-deals/main";
 import './digital-marketing/DmDeals/main';
 import './digital-marketing/DmLeads/main';
 import './digital-marketing/DmWonDeals/main';
+
+// pm sales
+import './Pm-Sales/PointFactors/main'
+import './Pm-Sales/Points/main'

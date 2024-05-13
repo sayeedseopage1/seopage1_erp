@@ -48,7 +48,7 @@ const Content = () => {
     return (
         <React.Fragment>
             <DragLayer />
-                <Outlet />
+            <Outlet />
             <Toaster />
         </React.Fragment>
     );
@@ -67,11 +67,11 @@ if (container) {
                         <BrowserRouter basename="/account/deals">
                             <Routes>
                                 <Route path="/" element={<Content />}>
-                                <Route index element={<Deals />} />
+                                    <Route index element={<Deals />} />
                                 </Route>
                             </Routes>
                         </BrowserRouter>
-                    </DealContextProvider> 
+                    </DealContextProvider>
                 </DndProvider>
             </Provider>
         </React.StrictMode>

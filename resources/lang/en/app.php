@@ -253,7 +253,8 @@ return array (
     'department' => 'Department',
     'expenseReport' => 'Expense Report',
     'advanced' => 'Advanced',
-    'point' => 'Points'
+    'point' => 'Points',
+    'factor' => 'Factors',
 ),
   'parentId' => 'Parent',
   'childId' => 'Child',
