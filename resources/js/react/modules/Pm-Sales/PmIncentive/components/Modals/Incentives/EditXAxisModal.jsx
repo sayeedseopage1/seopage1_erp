@@ -4,7 +4,9 @@ import { ButtonComponent } from '../../../../PointFactors/components/Styles/ui/u
 import { useForm } from 'react-hook-form';
 import { Modal } from 'antd';
 
-const EditXAxisModal = ({ antdModalOpen, setAntdModalOpen }) => {
+const EditXAxisModal = ({ axisEditItem, antdModalOpen, setAntdModalOpen }) => {
+
+    const { xAxisLowerLimit, xAxisUpperLimit } = axisEditItem || {}
 
     const {
         register,
@@ -41,7 +43,7 @@ const EditXAxisModal = ({ antdModalOpen, setAntdModalOpen }) => {
                     <form onSubmit={handleSubmit(onSubmit)}>
                         <div style={{ marginBottom: '32px' }}>
                             {/* <p className='axis_item_modal_inputs_title'>X Axis ratio (Percentage)</p> */}
-                            <p className="axis_item_modal_inputs_title" style={{ fontSize: '16px' }}>Current Value: <span style={{ fontWeight: '500', color: '#000', fontSize: '20px' }}>0-10%</span></p>
+                            <p className="axis_item_modal_inputs_title" style={{ fontSize: '16px' }}>Current Value: <span style={{ fontWeight: '500', color: '#000', fontSize: '20px' }}>{xAxisLowerLimit}-{xAxisUpperLimit}%</span></p>
                             <p className='axis_item_modal_inputs_title' style={{ fontSize: '16px' }}>New X Axis ratio (Percentage)</p>
                             <div className='axis_item_modal_inputs_inner'>
                                 <div>

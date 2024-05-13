@@ -18,6 +18,9 @@ const ChartIdealVsAchievedEditModal = ({ antdModalOpen, showIdealVsAchievedEditM
     const [selectRatioRange, setSelectRatioRange] = useState(false);
     const [removeRatioItemsModalOpen, setRemoveRatioItemsModalOpen] = useState(false);
 
+    //state for x axis and y axis edit 
+    const [axisEditItem, setAxisEditItem] = useState({})
+
 
     // x axis and y axis data state
     const [chartAxisData, setChartAxisData] = useState([
@@ -49,6 +52,15 @@ const ChartIdealVsAchievedEditModal = ({ antdModalOpen, showIdealVsAchievedEditM
     // Function to close the modal visibility
     const handleCancel = () => {
         showIdealVsAchievedEditModal();  // Assuming this function toggles the modal's visibility
+    }
+
+    const xAxisEditHandler = (item) => {
+        setAxisEditItem(item)
+        setEditXAxisDataModalOpen(true)
+    }
+    const yAxisEditHandler = (item) => {
+        setAxisEditItem(item)
+        setEditYAxisDataModalOpen(true)
     }
 
     return (
@@ -99,12 +111,12 @@ const ChartIdealVsAchievedEditModal = ({ antdModalOpen, showIdealVsAchievedEditM
                             <div key={item?.id} className='edit_chart_data_modal_content ratio_card'>
                                 <div className='ratio_wrapper'>
                                     <p className='ratio_text'>{item?.xAxisLowerLimit}-{item?.xAxisUpperLimit}%</p>
-                                    <button onClick={() => setEditXAxisDataModalOpen(true)} className='ratio_edit_button'>Edit</button>
+                                    <button onClick={() => xAxisEditHandler(item)} className='ratio_edit_button'>Edit</button>
 
                                 </div>
                                 <div className='ratio_wrapper'>
                                     <p className='ratio_text'>{item?.yAxisRatio}%</p>
-                                    <button onClick={() => setEditYAxisDataModalOpen(true)} className='ratio_edit_button'>Edit</button>
+                                    <button onClick={() => yAxisEditHandler(item)} className='ratio_edit_button'>Edit</button>
                                 </div>
                             </div>
                         ))
@@ -120,8 +132,8 @@ const ChartIdealVsAchievedEditModal = ({ antdModalOpen, showIdealVsAchievedEditM
 
             {/* Modals for each modal */}
             <AddNewAxisItemModal chartAxisData={chartAxisData} setChartAxisData={setChartAxisData} antdModalOpen={addNewAxisDataModalOpen} setAntdModalOpen={setAddNewAxisDataModalOpen} />
-            <EditXAxisModal antdModalOpen={editXAxisDataModalOpen} setAntdModalOpen={setEditXAxisDataModalOpen} />
-            <EditYAxisModal antdModalOpen={editYAxisDataModalOpen} setAntdModalOpen={setEditYAxisDataModalOpen} />
+            <EditXAxisModal axisEditItem={axisEditItem} antdModalOpen={editXAxisDataModalOpen} setAntdModalOpen={setEditXAxisDataModalOpen} />
+            <EditYAxisModal axisEditItem={axisEditItem} antdModalOpen={editYAxisDataModalOpen} setAntdModalOpen={setEditYAxisDataModalOpen} />
             <SelectRatioRangeModal xAxisStartAndEndValue={xAxisStartAndEndValue} setXAxisStartAndEndValue={setXAxisStartAndEndValue} antdModalOpen={selectRatioRange} setAntdModalOpen={setSelectRatioRange} />
             <RemoveRatioItemsModal chartAxisData={chartAxisData} setChartAxisData={setChartAxisData} antdModalOpen={removeRatioItemsModalOpen} setAntdModalOpen={setRemoveRatioItemsModalOpen} />
 
