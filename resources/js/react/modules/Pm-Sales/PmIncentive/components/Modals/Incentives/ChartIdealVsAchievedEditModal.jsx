@@ -4,11 +4,13 @@ import { ButtonComponent } from '../../../../PointFactors/components/Styles/ui/u
 import { RxCross1 } from "react-icons/rx";
 import AddNewAxisItemModal from './AddNewAxisItemModal';
 import EditXAxisModal from './EditXAxisModal';
+import EditYAxisModal from './EditYAxisModal';
 
 const ChartIdealVsAchievedEditModal = ({ antdModalOpen, showIdealVsAchievedEditModal, chartData }) => {
     // console.log(chartData)
     const [addNewAxisDataModalOpen, setAddNewAxisDataModalOpen] = useState(false);
     const [editXAxisDataModalOpen, setEditXAxisDataModalOpen] = useState(false);
+    const [editYAxisDataModalOpen, setEditYAxisDataModalOpen] = useState(false);
 
     const handleCancel = () => {
         showIdealVsAchievedEditModal();  // Assuming this function toggles the modal's visibility
@@ -38,7 +40,6 @@ const ChartIdealVsAchievedEditModal = ({ antdModalOpen, showIdealVsAchievedEditM
                             <button onClick={() => setAddNewAxisDataModalOpen(true)} className='chart_data_add'>Add</button>
                             <button className='chart_data_remove'>Remove</button>
                         </div>
-                        <AddNewAxisItemModal antdModalOpen={addNewAxisDataModalOpen} setAntdModalOpen={setAddNewAxisDataModalOpen} />
                         <button className='ideal_vs_achieved_chart_data_actions_range'>Select Range</button>
                     </div>
                     <div className='ideal_vs_achieved_axis_data'>
@@ -56,22 +57,22 @@ const ChartIdealVsAchievedEditModal = ({ antdModalOpen, showIdealVsAchievedEditM
                         <div className='ratio_wrapper'>
                             <p className='ratio_text'>0-10%</p>
                             <button onClick={() => setEditXAxisDataModalOpen(true)} className='ratio_edit_button'>Edit</button>
-                            <EditXAxisModal antdModalOpen={editXAxisDataModalOpen} setAntdModalOpen={setEditXAxisDataModalOpen} />
+
                         </div>
                         <div className='ratio_wrapper'>
                             <p className='ratio_text'>100%</p>
-                            <button className='ratio_edit_button'>Edit</button>
+                            <button onClick={() => setEditYAxisDataModalOpen(true)} className='ratio_edit_button'>Edit</button>
+
                         </div>
                     </div>
                     <div className='edit_chart_data_modal_content ratio_card'>
                         <div className='ratio_wrapper'>
                             <p className='ratio_text'>0-10%</p>
                             <button onClick={() => setEditXAxisDataModalOpen(true)} className='ratio_edit_button'>Edit</button>
-                            <EditXAxisModal antdModalOpen={editXAxisDataModalOpen} setAntdModalOpen={setEditXAxisDataModalOpen} />
                         </div>
                         <div className='ratio_wrapper'>
                             <p className='ratio_text'>100%</p>
-                            <button className='ratio_edit_button'>Edit</button>
+                            <button onClick={() => setEditYAxisDataModalOpen(true)} className='ratio_edit_button'>Edit</button>
                         </div>
                     </div>
                 </div>
@@ -80,6 +81,9 @@ const ChartIdealVsAchievedEditModal = ({ antdModalOpen, showIdealVsAchievedEditM
                 <ButtonComponent color='#1492E6' textColor='#fff' font='18px'>Save</ButtonComponent>
                 <ButtonComponent onClick={handleCancel} font='18px'>Do it later</ButtonComponent>
             </div>
+            <AddNewAxisItemModal antdModalOpen={addNewAxisDataModalOpen} setAntdModalOpen={setAddNewAxisDataModalOpen} />
+            <EditXAxisModal antdModalOpen={editXAxisDataModalOpen} setAntdModalOpen={setEditXAxisDataModalOpen} />
+            <EditYAxisModal antdModalOpen={editYAxisDataModalOpen} setAntdModalOpen={setEditYAxisDataModalOpen} />
         </Modal>
     );
 };
