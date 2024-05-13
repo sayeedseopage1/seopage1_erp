@@ -51,12 +51,20 @@ export const EvaluationTableColumns = [
         accessorKey: "submission_date",
         cell: ({ row }) => {
             const data = row.original;
-            return <div>{data?.submission_date ?? "Not Submitted yet"}</div>;
+            return (
+                <div>
+                    {data?.submission_date ? (
+                        <span>{data?.submission_date}</span>
+                    ) : (
+                        <span style={{ color: "red" }}>Not Submitted yet </span>
+                    )}
+                </div>
+            );
         },
     },
     {
         id: "completed_work",
-        header: "Completed Work Link",
+        header: "Completed Work URL",
         accessorKey: "completed_work",
 
         cell: ({ row: { original }, className }) => {
@@ -101,7 +109,7 @@ export const EvaluationTableColumns = [
                     </Popover>
                 </div>
             ) : (
-                <span>Not Available</span>
+                <span style={{ color: "red" }}>Not Available</span>
             );
         },
     },
