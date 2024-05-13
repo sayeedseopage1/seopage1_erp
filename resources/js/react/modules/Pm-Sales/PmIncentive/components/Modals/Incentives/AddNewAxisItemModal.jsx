@@ -6,7 +6,6 @@ import { useForm } from 'react-hook-form';
 import { Modal } from 'antd';
 
 const AddNewAxisItemModal = ({ antdModalOpen, setAntdModalOpen, chartData }) => {
-
     const {
         register,
         handleSubmit,
@@ -59,8 +58,10 @@ const AddNewAxisItemModal = ({ antdModalOpen, setAntdModalOpen, chartData }) => 
                         <div style={{ marginBottom: '32px' }}>
                             <p className='axis_item_modal_inputs_title'>Y Axis ratio (Percentage)</p>
                             <div className='axis_item_modal_inputs_inner'>
-                                <input className='point_edit_modal_input' type='number' {...register("yAxisRation", { required: true })} placeholder='Write here ' />
-                                {errors.yAxisRation && <span style={{ color: 'red', fontSize: '12px' }}>This field is required</span>}
+                                <div className='w-100'>
+                                    <input className='point_edit_modal_input' type='number' {...register("yAxisRation", { required: true })} placeholder='Write here ' />
+                                    {errors.yAxisRation && <span style={{ color: 'red', fontSize: '12px' }}>This field is required</span>}
+                                </div>
                             </div>
                         </div>
                         <div className='pay_now_modal_footer'>

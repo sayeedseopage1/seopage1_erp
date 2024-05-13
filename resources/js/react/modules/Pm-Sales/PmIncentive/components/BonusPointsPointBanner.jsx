@@ -11,6 +11,7 @@ import CashValueBonusEditModal from './Modals/Incentives/CashValueBonusEditModal
 const BonusPointsPointBanner = () => {
     const [finalPointsModalOpen, setFinalPointsModalOpen] = useState(false);
     const [editBonusPointsModalOpen, setEditBonusPointsModalOpen] = useState(false);
+
     return (
         <div className="secondary_point_banner_bonus">
             <div className="secondary_point_card_wrapper">

@@ -6,8 +6,6 @@ import { IoInformationCircle } from "react-icons/io5";
 import { Popover } from "antd";
 import IncentiveEditButton from "../ui/IncentiveEditButton";
 import { dummyUserRole } from "../../constants";
-import EditChartDataModal from "../Modals/Incentives/EditChartDataModal";
-import { set } from "lodash";
 import ChartIdealVsAchievedEditModal from "../Modals/Incentives/ChartIdealVsAchievedEditModal";
 
 const IncentiveBarChart = ({ chartData }) => {
