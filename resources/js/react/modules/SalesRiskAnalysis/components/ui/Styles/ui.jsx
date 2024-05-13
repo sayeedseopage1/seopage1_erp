@@ -220,7 +220,7 @@ export const CustomInputsInput = styled.input`
 export const CustomInputsLabel = styled.label`
     color: ${(props) => props.color || "#000000"};
     font-family: Poppins;
-    font-size: 18px;
+    font-size: 20px;
     font-style: normal;
     font-weight: 500;
     display: flex;

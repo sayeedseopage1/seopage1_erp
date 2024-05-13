@@ -12,6 +12,10 @@ import { CustomInputsLabel } from "../Styles/ui";
 // ui components
 import Tooltip from "../../Tooltip";
 
+
+//style
+import pStyle from "../../popover.module.css";
+
 const CustomAccordion = ({
     expendable = true,
     children,
@@ -73,6 +77,31 @@ const CustomAccordion = ({
                 color={isChild ? "#b1b1b1" : "#000000"}
             >
                 {label}{" "}
+                {comment && (
+                        <Popover
+                            className={`${pStyle.questionShow} d-inline-block ml-2`}
+                        >
+                            <Popover.Button
+                                className={`${pStyle.questionShowInfoIcon} d-inline`}
+                            >
+                                <div className="d-inline">
+                                    <i
+                                        className="fa-solid fa-circle-info "
+                                        style={{
+                                            color: "#8F8F8F",
+                                        }}
+                                    ></i>
+                                </div>
+                            </Popover.Button>
+                            <Popover.Panel placement="bottom-start">
+                                <div
+                                    className={`${pStyle.questionShowInfoPanel}`}
+                                >
+                                    <span>{comment}</span>
+                                </div>
+                            </Popover.Panel>
+                        </Popover>
+                    )}
                 {isCurrencyHave.status && (
                     <span
                         className="ml-2"
@@ -87,19 +116,6 @@ const CustomAccordion = ({
                         }}
                     >
                         Currency in {getCurrencySymbol()}
-                    </span>
-                )}
-                {comment && (
-                    <span className="ml-2">
-                        <Tooltip text={comment}>
-                            {" "}
-                            <i
-                                className="fa-solid fa-circle-info "
-                                style={{
-                                    color: "#8F8F8F",
-                                }}
-                            ></i>
-                        </Tooltip>
                     </span>
                 )}
             </CustomInputsLabel>

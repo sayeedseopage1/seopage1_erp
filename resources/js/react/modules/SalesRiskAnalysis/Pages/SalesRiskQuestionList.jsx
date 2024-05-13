@@ -12,6 +12,7 @@ import { QuestionsListTableColumns } from "../components/table/QuestionsListTabl
 
 //APi services
 import { useSaleAnalysisQuestionsListQuery } from "../../../services/api/salesRiskAnalysisSlice";
+import { set } from "lodash";
 
 
 const SalesRiskQuestionList = () => {
@@ -67,6 +68,7 @@ const SalesRiskQuestionList = () => {
     // close modal
     const handleCloseAddQuestionsModal = () => {
         setAddQuestionsModalOpen(false);
+        setIsQuestionUpdating(false);
     };
 
     // pagination
