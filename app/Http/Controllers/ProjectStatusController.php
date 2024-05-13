@@ -621,12 +621,13 @@ class ProjectStatusController extends AccountBaseController
                 'status'=>200
             ]);
     }
-    public function extensionHistory($id){
-        $data = PmGoalDeadlineExtHistory::select('pm_goal_deadline_ext_histories.*','authorization_by.id as authorization_by_id','authorization_by.name as authorization_by_name','authorization_by.image as authorization_by_img')
+    public function extensionHistory($id)
+    {
+        $data = PmGoalDeadlineExtHistory::select('pm_goal_deadline_ext_histories.*','project_pm_goals.goal_start_date','project_pm_goals.goal_status','project_pm_goals.goal_name','authorization_by.id as authorization_by_id','authorization_by.name as authorization_by_name','authorization_by.image as authorization_by_img')
+                ->leftJoin('project_pm_goals','pm_goal_deadline_ext_histories.goal_id','project_pm_goals.id')
                 ->leftJoin('users as authorization_by','pm_goal_deadline_ext_histories.authorization_by','authorization_by.id')
                 ->where('pm_goal_deadline_ext_histories.goal_id',$id)
                 ->get();
-
 
                 return response()->json([
                     'data' => $data,
