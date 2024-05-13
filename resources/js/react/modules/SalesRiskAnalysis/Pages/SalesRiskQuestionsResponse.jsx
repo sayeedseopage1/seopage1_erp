@@ -267,13 +267,12 @@ const SalesRiskQuestionsResponse = () => {
         return setInputsData(addSelectValue);
     };
 
-    // console.log(inputsData);
 
     return (
         <section>
             <SalesRiskAnalysisQuestionContainer>
                 <SalesRiskAnalysisQuestionTitleContainer>
-                    <h5>Sale Risk Analysis</h5>
+                    <h5>Sales Risk Analysis</h5>
                 </SalesRiskAnalysisQuestionTitleContainer>
                 <>
                     <div>

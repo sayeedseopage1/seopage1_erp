@@ -171,7 +171,7 @@ const SaleRiskAuthorizeHeader = ({
                                 </p>
                             </div>
                             <div className="col-12 col-md-3 px-0">
-                                <Popover>
+                                <Popover >
                                     <Popover.Button>
                                         <p
                                             className={`${popoverStyle.questionModal_popover_button} singleline-ellipsis`}

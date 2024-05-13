@@ -9,7 +9,7 @@ const NoDataIcon = () => {
             fill="none"
             xmlns="http://www.w3.org/2000/svg"
         >
-            <g clip-path="url(#clip0_416_104)">
+            <g clipPath="url(#clip0_416_104)">
                 <path d="M462 327.4H-38V327.65H462V327.4Z" fill="#EBEBEB" />
                 <path
                     d="M411.899 343.49H378.779V343.74H411.899V343.49Z"

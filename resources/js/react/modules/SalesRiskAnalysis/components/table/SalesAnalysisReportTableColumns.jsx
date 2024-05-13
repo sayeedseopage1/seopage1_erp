@@ -1,8 +1,6 @@
 // ui components
-
 import { CreatedBy } from "../../../../ProjectStatus/components/table/ui";
 import Avatar from "../../../../global/Avatar";
-import { useAuth } from "../../../../hooks/useAuth";
 import Switch from "../Switch";
 import Tooltip from "../Tooltip";
 

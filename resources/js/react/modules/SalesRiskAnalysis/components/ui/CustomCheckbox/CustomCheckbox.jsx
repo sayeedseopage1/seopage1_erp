@@ -15,7 +15,7 @@ const CustomCheckbox = ({ isChecked, setIsChecked }) => {
             <CustomInputsLabel>
                 I hereby confirm that all provided information is accurate. Any
                 future discrepancies in the above-mentioned information will
-                result in marking this deal as a 'Disqualified Deal,' and
+                result in marking this deal as a 'Disqualified Deal' and
                 negative points will be added to my cumulative sales points.
             </CustomInputsLabel>
         </div>

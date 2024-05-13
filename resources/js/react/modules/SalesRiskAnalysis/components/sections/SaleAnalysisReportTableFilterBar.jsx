@@ -6,7 +6,6 @@ import PropTypes from "prop-types";
 // Ui components
 import JqueryDateRangePicker from "../../../sales/leads/components/JqueryDateRangePicker";
 import Button from "../Button";
-import SearchBox from "../SearchBox";
 
 // hooks
 import UserFilter from "../UserFilter";
@@ -51,18 +50,12 @@ const SaleAnalysisReportTableFilterBar = ({ setFilter }) => {
             <HDivider />
 
             {width > 1400 && (
-                <React.Fragment>
-                    <UserFilter
-                        title="Client"
-                        state={client}
-                        setState={setClient}
-                        roleIds={null}
-                    />
-                    {/* <HDivider />
-                    <div style={{ maxWidth: "256px" }}>
-                        <SearchBox value={search} onChange={setSearch} />
-                </div> */}
-                </React.Fragment>
+                <UserFilter
+                    title="Client"
+                    state={client}
+                    setState={setClient}
+                    roleIds={null}
+                />
             )}
             {width < 1400 && (
                 <React.Fragment>
@@ -71,7 +64,10 @@ const SaleAnalysisReportTableFilterBar = ({ setFilter }) => {
                         <button
                             className="sp1_filter_button"
                             onClick={() => setIsOpen(true)}
-                            style={{ gap: "10px", backgroundColor: "transparent"}}
+                            style={{
+                                gap: "10px",
+                                backgroundColor: "transparent",
+                            }}
                             onKeyDown={() => setIsOpen(true)}
                         >
                             <i className="fa-solid fa-filter"></i>
@@ -101,12 +97,6 @@ const SaleAnalysisReportTableFilterBar = ({ setFilter }) => {
                                         roleIds={null}
                                         sidebarIsOpen={true}
                                     />
-                                    {/* <div style={{ maxWidth: "256px" }}>
-                                        <SearchBox
-                                            value={search}
-                                            onChange={setSearch}
-                                        />
-                                    </div> */}
                                 </div>
                             </div>
                         )}

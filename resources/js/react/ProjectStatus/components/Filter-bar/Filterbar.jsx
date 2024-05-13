@@ -14,7 +14,6 @@ const Filterbar = ({ onFilter, page = "tasks" }) => {
     const [startDate, setStartDate] = React.useState(null);
     const [endDate, setEndDate] = React.useState(null);
     const [search, setSearch] = React.useState("");
-    const [searchQuery, setSearchQuery] = React.useState("");
     const [developer, setDeveloper] = React.useState(null);
     const [client, setClient] = React.useState(null);
     const [leadDeveloper, setLeadDeveloper] = React.useState(null);
@@ -39,7 +38,6 @@ const Filterbar = ({ onFilter, page = "tasks" }) => {
     const _leadDeveloper = React.useMemo(() => leadDeveloper, [leadDeveloper]);
     const _pm = React.useMemo(() => pm, [pm]);
     const _status = React.useMemo(() => status, [status]);
-    const date_filter_by = React.useMemo(() => dateType, [dateType]);
 
     React.useEffect(() => {
         const filter = {

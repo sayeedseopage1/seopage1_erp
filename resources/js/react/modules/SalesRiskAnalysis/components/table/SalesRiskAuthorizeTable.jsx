@@ -15,7 +15,6 @@ import EmptyTable from "../../../../global/EmptyTable";
 
 // loader
 import SalesRiskAuthorizeTableLoader from "../loader/SalesRiskAuthorizeTableLoader";
-import { end } from "@popperjs/core";
 
 const SalesRiskAuthorizeTable = ({
     tableColumns,

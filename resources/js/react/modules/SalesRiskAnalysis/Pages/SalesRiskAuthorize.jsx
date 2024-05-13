@@ -39,7 +39,6 @@ import RuleActionConfirmationModal from "../components/modal/RuleActionConfirmat
 
 // image
 
-import NoPointDataImage from "../../../../../../public/images/no_data.jpg";
 import NoDataIcon from "../components/ui/NoDataIcon";
 
 const SalesRiskAuthorize = () => {
@@ -66,7 +65,7 @@ const SalesRiskAuthorize = () => {
     const [statusActionData, setStatusActionData] = React.useState({});
 
     // fetch data
-    const { data, isLoading, isSuccess, isFetching } = pathWiseApiCall(deal_id);
+    const { data, isLoading, isFetching } = pathWiseApiCall(deal_id);
     useEffect(() => {
         if (data?.data && !isLoading) {
             if (
@@ -76,7 +75,6 @@ const SalesRiskAuthorize = () => {
                 setIsPointNull({
                     isNull: true,
                 });
-                console.log("null data");
             } else {
                 const { pointData, questionData, ...rest } = data?.data ?? {};
                 if (auth.getRoleId() === 1) {

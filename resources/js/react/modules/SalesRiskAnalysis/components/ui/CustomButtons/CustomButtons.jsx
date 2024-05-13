@@ -4,6 +4,7 @@ import PropTypes from "prop-types";
 import Tooltip from "../../Tooltip";
 import { CustomInputsLabel } from "../Styles/ui";
 import style from "./customButtons.module.css";
+import Popover from "../../Popover";
 
 const CustomButtons = ({
     label,
@@ -50,19 +51,40 @@ const CustomButtons = ({
                             Currency in {getCurrencySymbol()}
                         </span>
                     )}
-                    {props?.comment && (
-                        <span className="ml-2">
-                            <Tooltip text={props?.comment}>
-                                {" "}
+                    {/* {props?.comment && ( */}
+                    <span className="ml-2">
+                        {/* <Tooltip
+                            text={
+                                "For contnet, it will be 3 hours per 1000 words, for speed optimization, around 8 hours and like this."
+                            }
+                        >
+                            {" "}
+                            <i
+                                className="fa-solid fa-circle-info "
+                                style={{
+                                    color: "#8F8F8F",
+                                }}
+                            ></i>
+                        </Tooltip> */}
+                        <Popover className="d-inline">
+                            <Popover.Button className="d-inline">
                                 <i
                                     className="fa-solid fa-circle-info "
                                     style={{
                                         color: "#8F8F8F",
                                     }}
                                 ></i>
-                            </Tooltip>
-                        </span>
-                    )}
+                            </Popover.Button>
+                            <Popover.Panel>
+                                <span>
+                                    For contnet, it will be 3 hours per 1000
+                                    words, for speed optimization, around 8
+                                    hours and like this.F
+                                </span>
+                            </Popover.Panel>
+                        </Popover>
+                    </span>
+                    {/* )} */}
                 </CustomInputsLabel>
             )}
             <div className="d-flex">

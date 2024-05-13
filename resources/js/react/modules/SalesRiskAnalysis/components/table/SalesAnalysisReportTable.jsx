@@ -1,4 +1,4 @@
-import React, { useMemo } from "react";
+import React from "react";
 import {
     useReactTable,
     getCoreRowModel,
@@ -12,9 +12,6 @@ import PropTypes from "prop-types";
 // table components
 import { DraggableColumnHeader } from "./DraggableColumnHeader";
 import EmptyTable from "../../../../global/EmptyTable";
-
-// pagination component
-import SalesRiskAnalysisTablePagination from "./SalesRiskAnalysisTablePagination";
 
 // loader components
 import SalesAnalysisReportTableLoader from "../loader/SalesAnalysisReportTableLoader";

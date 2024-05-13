@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo } from "react";
+import React, { useEffect } from "react";
 
 // Ui components
 import { Flex } from "../../../global/styled-component/Flex";

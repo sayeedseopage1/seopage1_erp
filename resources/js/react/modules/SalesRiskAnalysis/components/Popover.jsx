@@ -103,7 +103,7 @@ const Toggle = ({ children, className, ...props }) => {
 };
 
 // popover
-const Popover = ({ children }) => {
+const Popover = ({ children , className }) => {
     const [isVisible, setIsVisible] = useState(false);
     const [refElement, setRefElement] = useState(null);
     const [popperElement, setPopperElement] = useState(null);
@@ -128,7 +128,7 @@ const Popover = ({ children }) => {
                 onMouseLeave={() => setIsVisible(false)}
                 tabIndex={0}
                 role="button"
-                className="singleline-ellipsis"
+                className={`singleline-ellipsis ${className}`}
             >
                 {children}
             </div>
