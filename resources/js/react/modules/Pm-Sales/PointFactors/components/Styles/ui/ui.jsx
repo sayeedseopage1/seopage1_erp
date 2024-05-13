@@ -27,7 +27,7 @@ gap: 24px;
 export const ButtonComponent = styled.button`
 min-width: 145px;
 border-radius: 8px;
-border: 1px solid #1492E6;
+border: ${(props) => props.border || "1px solid #1492E6"};
 background-color: ${(props) => props.color || "transparent"};
 padding: 15px 20px;
 font-size: ${(props) => props.font || "14px"};
