@@ -73,19 +73,22 @@ export const RevisionTableColumns = [
         draggable: true,
         sortable: true,
         accessorFn: (row) => row.heading,
-        cell: ({row}) => {
+        cell: ({ row }) => {
             const data = row.original;
             return (
                 <Popover>
                     <Popover.Button>
-                        <a href={`/account/tasks/${data.task_id}`} className="multiline-ellipsis">
+                        <a
+                            href={`/account/tasks/${data.task_id}`}
+                            className="multiline-ellipsis"
+                        >
                             {data.heading}
                         </a>
                     </Popover.Button>
 
                     <Popover.Panel>
                         <div className={styles.revision_popover_panel}>
-                            <a href={`/account/tasks/${data.task_id}`} >
+                            <a href={`/account/tasks/${data.task_id}`}>
                                 {data.heading}
                             </a>
                         </div>
@@ -138,7 +141,7 @@ export const RevisionTableColumns = [
         cell: (row) => {
             const text = row.getValue();
 
-            if(!text) return <span> -- </span>
+            if (!text) return <span> -- </span>;
             return (
                 <Popover>
                     <Popover.Button>
@@ -199,7 +202,11 @@ export const RevisionTableColumns = [
         cell: ({ row }) => {
             const d = row.original;
 
-            const person = d.dispute_between ? (d?.sale_person ? d?.sale_person : d?.task_assign_to) : null
+            const person = d.dispute_between
+                ? d?.sale_person
+                    ? d?.sale_person
+                    : d?.task_assign_to
+                : null;
 
             if (person) {
                 return (
@@ -290,30 +297,51 @@ export const RevisionTableColumns = [
             const data = row.original;
             const user = window?.Laravel?.user;
 
-            const actionAlreadyTaken = data.dispute_between === "SPR" ?
-                                (data.sale_accept || data.sale_deny) :
-                                (data.is_accept || data.is_deny);
+            const actionAlreadyTaken =
+                data?.dispute_between === "SPR"
+                    ? data?.sale_accept || data?.sale_deny
+                    : data?.is_accept || data?.is_deny;
 
             const hasPermissionToTakeAction =
-                Number(user.id) === Number(data?.deal_added_by.id);
+                Number(user?.id) === Number(data?.deal_added_by?.id);
 
             return (
                 <Switch>
-                    <Switch.Case condition={!hasPermissionToTakeAction || actionAlreadyTaken}>
-                       <Switch>
+                    <Switch.Case
+                        condition={
+                            !hasPermissionToTakeAction || actionAlreadyTaken
+                        }
+                    >
+                        <Switch>
                             {/* if sales accept */}
-                            <Switch.Case condition={data.dispute_between === 'SPR' && data.sale_accept}>
+                            <Switch.Case
+                                condition={
+                                    data.dispute_between === "SPR" &&
+                                    data.sale_accept
+                                }
+                            >
                                 <Popover>
                                     <Popover.Button>
-                                        <div className={`${styles.status} f-12`}>
+                                        <div
+                                            className={`${styles.status} f-12`}
+                                        >
                                             {`Accepted by ${data?.deal_added_by?.name}`}
                                         </div>
                                     </Popover.Button>
 
                                     <Popover.Panel>
-                                        <div className={styles.revision_popover_panel}>
+                                        <div
+                                            className={
+                                                styles.revision_popover_panel
+                                            }
+                                        >
                                             <div className={`f-12`}>
-                                                Accepted by <a href={`/account/employees/${data?.deal_added_by?.id}`}>{data?.deal_added_by?.name}</a>
+                                                Accepted by{" "}
+                                                <a
+                                                    href={`/account/employees/${data?.deal_added_by?.id}`}
+                                                >
+                                                    {data?.deal_added_by?.name}
+                                                </a>
                                             </div>
                                         </div>
                                     </Popover.Panel>
@@ -321,18 +349,34 @@ export const RevisionTableColumns = [
                             </Switch.Case>
 
                             {/* if sales deny */}
-                            <Switch.Case condition={data.dispute_between === 'SPR' && data.sale_deny}>
+                            <Switch.Case
+                                condition={
+                                    data.dispute_between === "SPR" &&
+                                    data.sale_deny
+                                }
+                            >
                                 <Popover>
                                     <Popover.Button>
-                                        <div className={`${styles.status} ${styles.deny} f-12`}>
+                                        <div
+                                            className={`${styles.status} ${styles.deny} f-12`}
+                                        >
                                             {`Denied by ${data?.deal_added_by?.name}`}
                                         </div>
                                     </Popover.Button>
 
                                     <Popover.Panel>
-                                        <div className={styles.revision_popover_panel}>
+                                        <div
+                                            className={
+                                                styles.revision_popover_panel
+                                            }
+                                        >
                                             <div className={`f-12`}>
-                                                Denied by <a href={`/account/employees/${data?.deal_added_by?.id}`}>{data?.deal_added_by?.name}</a>
+                                                Denied by{" "}
+                                                <a
+                                                    href={`/account/employees/${data?.deal_added_by?.id}`}
+                                                >
+                                                    {data?.deal_added_by?.name}
+                                                </a>
                                             </div>
                                         </div>
                                     </Popover.Panel>
@@ -340,18 +384,34 @@ export const RevisionTableColumns = [
                             </Switch.Case>
 
                             {/* if revision accept by assignee */}
-                            <Switch.Case condition={data.dispute_between !== 'SPR' && data.is_accept}>
+                            <Switch.Case
+                                condition={
+                                    data.dispute_between !== "SPR" &&
+                                    data.is_accept
+                                }
+                            >
                                 <Popover>
                                     <Popover.Button>
-                                        <div className={`${styles.status} f-12`}>
+                                        <div
+                                            className={`${styles.status} f-12`}
+                                        >
                                             {`Accepted by ${data?.task_assign_to?.name}`}
                                         </div>
                                     </Popover.Button>
 
                                     <Popover.Panel>
-                                        <div className={styles.revision_popover_panel}>
+                                        <div
+                                            className={
+                                                styles.revision_popover_panel
+                                            }
+                                        >
                                             <div className={`f-12`}>
-                                            Accepted by <a href={`/account/employees/${data?.task_assign_to?.id}`}>{data?.task_assign_to?.name}</a>
+                                                Accepted by{" "}
+                                                <a
+                                                    href={`/account/employees/${data?.task_assign_to?.id}`}
+                                                >
+                                                    {data?.task_assign_to?.name}
+                                                </a>
                                             </div>
                                         </div>
                                     </Popover.Panel>
@@ -359,18 +419,34 @@ export const RevisionTableColumns = [
                             </Switch.Case>
 
                             {/* if revision accept by assignee */}
-                            <Switch.Case condition={data.dispute_between !== 'SPR' && data.is_deny}>
+                            <Switch.Case
+                                condition={
+                                    data.dispute_between !== "SPR" &&
+                                    data.is_deny
+                                }
+                            >
                                 <Popover>
                                     <Popover.Button>
-                                        <div className={`${styles.status} ${styles.deny} f-12`}>
+                                        <div
+                                            className={`${styles.status} ${styles.deny} f-12`}
+                                        >
                                             {`Denied by ${data?.task_assign_to?.name}`}
                                         </div>
                                     </Popover.Button>
 
                                     <Popover.Panel>
-                                        <div className={styles.revision_popover_panel}>
+                                        <div
+                                            className={
+                                                styles.revision_popover_panel
+                                            }
+                                        >
                                             <div className={`f-12`}>
-                                                Denied by <a href={`/account/employees/${data?.task_assign_to?.id}`}>{data?.task_assign_to?.name}</a>
+                                                Denied by{" "}
+                                                <a
+                                                    href={`/account/employees/${data?.task_assign_to?.id}`}
+                                                >
+                                                    {data?.task_assign_to?.name}
+                                                </a>
                                             </div>
                                         </div>
                                     </Popover.Panel>
@@ -378,15 +454,26 @@ export const RevisionTableColumns = [
                             </Switch.Case>
 
                             {/* Pending */}
-                            <Switch.Case condition={data.dispute_between !== 'SPR' ? data?.approval_status === "pending": !actionAlreadyTaken}>
-                                <div className={`${styles.status} ${styles.pending} f-12`}> Pending </div>
+                            <Switch.Case
+                                condition={
+                                    data.dispute_between !== "SPR"
+                                        ? data?.approval_status === "pending"
+                                        : !actionAlreadyTaken
+                                }
+                            >
+                                <div
+                                    className={`${styles.status} ${styles.pending} f-12`}
+                                >
+                                    {" "}
+                                    Pending{" "}
+                                </div>
                             </Switch.Case>
-                       </Switch>
+                        </Switch>
                     </Switch.Case>
 
                     <Switch.Case
                         condition={
-                            data.dispute_between === 'SPR' &&
+                            data.dispute_between === "SPR" &&
                             !actionAlreadyTaken &&
                             hasPermissionToTakeAction
                         }
