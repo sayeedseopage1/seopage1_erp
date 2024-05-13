@@ -15,7 +15,6 @@
 
 
 .questionShowInfoIcon {
-  margin-left: 10px;
   width: clamp(144px, 100%, 350px);
   cursor: pointer !important;
 }

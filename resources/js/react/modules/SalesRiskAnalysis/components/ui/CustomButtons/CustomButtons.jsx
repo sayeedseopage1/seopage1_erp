@@ -41,7 +41,7 @@ const CustomButtons = ({
                     {label}{" "}
                     {props?.comment && (
                         <Popover
-                            className={`${pStyle.questionShow} d-inline-block ml-2`}
+                            className={`${pStyle.questionShow} d-inline-block ml-1`}
                         >
                             <Popover.Button
                                 className={`${pStyle.questionShowInfoIcon} d-inline`}
@@ -51,6 +51,7 @@ const CustomButtons = ({
                                         className="fa-solid fa-circle-info "
                                         style={{
                                             color: "#8F8F8F",
+                                            fontSize: "16px",
                                         }}
                                     ></i>
                                 </div>
