@@ -1,3 +1,4 @@
+import { Cell } from "recharts";
 import Avatar from "../../../global/Avatar";
 import { CreatedBy } from "../table/ui";
 
@@ -8,28 +9,42 @@ export const GoalExtensionHistoryTableColumn = [
         accessorKey: "id",
         cell: ({ cell }) => {
             return (
-                <div style={{
-                    width: "20px",
-                }}>
+                <div
+                    style={{
+                        width: "20px",
+                    }}
+                >
                     {cell?.row?.index + 1}
                 </div>
-            )
-        }
+            );
+        },
     },
     {
         id: "goal_start_date",
         header: "Goal Start Date",
-        accessorKey: "start_date",
+        accessorKey: "goal_start_date",
+        cell: ({ row }) => {
+            const data = row?.original;
+            return <span>{data?.goal_start_date}</span>;
+        },
     },
     {
         id: "goal_end_date",
         header: "Prev. Goal Deadline",
         accessorKey: "old_deadline",
+        cell: ({ row }) => {
+            const data = row?.original;
+            return <span>{data?.new_deadline ?? data?.old_deadline}</span>;
+        },
     },
     {
         id: "new_goal_deadline",
         header: "New Goal Deadline",
         accessorKey: "new_deadline",
+        cell: ({ row }) => {
+            const data = row?.original;
+            return <span>{data?.new_deadline ?? data?.old_deadline}</span>;
+        },
     },
     {
         id: "goal_name",
@@ -41,8 +56,8 @@ export const GoalExtensionHistoryTableColumn = [
                 <span title={data?.goal_name} className="multine-ellipsis">
                     {data?.goal_name ?? "--"}
                 </span>
-            )
-        }
+            );
+        },
     },
     {
         id: "duration",
@@ -51,24 +66,28 @@ export const GoalExtensionHistoryTableColumn = [
         cell: ({ row }) => {
             const data = row?.original;
             return (
-                <span >
-                    {`${data?.duration} Days` ?? "--"}
+                <span>
+                    {`${data?.new_duration ?? data?.old_duration} Days` ?? "--"}
                 </span>
-            )
-        }
+            );
+        },
     },
     {
         id: "description",
-        header: "Description",
-        accessorKey: "description",
+        header: "Admin Comment",
+        accessorKey: "extended_admin_comment",
         cell: ({ row }) => {
             const data = row?.original;
             return (
-                <span title={data?.reason} className="multine-ellipsis"
-                    dangerouslySetInnerHTML={{ __html: data?.description ?? "--", }}
+                <span
+                    title={data?.reason}
+                    className="multine-ellipsis"
+                    dangerouslySetInnerHTML={{
+                        __html: data?.extended_admin_comment ?? "--",
+                    }}
                 />
-            )
-        }
+            );
+        },
     },
     {
         id: "status",
@@ -77,28 +96,60 @@ export const GoalExtensionHistoryTableColumn = [
         cell: ({ row }) => {
             const data = row?.original;
             return (
-                <div className="d-flex align-items-center" >
-                    <i class="fa fa-circle mr-1 f-10" style={{
-                        color: data?.goal_status === 0 ? "#1492d2 " : "#218838",
-                    }}></i>
-
+                <div className="d-flex align-items-center">
+                    <i
+                        class="fa fa-circle mr-1 f-10"
+                        style={{
+                            color:
+                                data?.goal_status === 0
+                                    ? "#1492d2 "
+                                    : "#218838",
+                        }}
+                    ></i>
                     {data?.goal_status === 0 ? "Incomplete" : "Completed"}
                 </div>
-            )
-        }
+            );
+        },
     },
     {
         id: "reason",
-        header: "Reason",
-        accessorKey: "reason",
+        header: "PM Reason",
+        accessorKey: "extended_pm_reason",
         cell: ({ row }) => {
             const data = row?.original;
             return (
-                <span title={data?.reason} className="multine-ellipsis"
-                    dangerouslySetInnerHTML={{ __html: data?.extended_admin_cmnt ?? "--", }}
+                <span
+                    title={data?.reason}
+                    className="multine-ellipsis"
+                    dangerouslySetInnerHTML={{
+                        __html: data?.extended_pm_reason ?? "--",
+                    }}
                 />
-            )
-        }
+            );
+        },
+    },
+    {
+        id: "authorization_status",
+        header: "Authorization Status",
+        accessorKey: "auth_status",
+        cell: ({ row }) => {
+            const data = row?.original;
+            return (
+                <div className="d-flex align-items-center justify-content-center">
+                    <p
+                        style={{
+                            backgroundColor:
+                                data?.auth_status === 2 ? "#ff3838" : "#018839",
+                            color: "#fff",
+                            padding: "5px 10px",
+                            borderRadius: "20px",
+                        }}
+                    >
+                        {data?.auth_status === 2 ? "Rejected" : "Accepted"}
+                    </p>
+                </div>
+            );
+        },
     },
     {
         id: "extension_req_on",
@@ -128,18 +179,20 @@ export const GoalExtensionHistoryTableColumn = [
                     <Avatar
                         type="circle"
                         name={data?.authorization_by_name}
-                        src={data?.clientImage ? `/user-uploads/avatar/${data?.authorization_by_img}` : null}
+                        src={
+                            data?.clientImage
+                                ? `/user-uploads/avatar/${data?.authorization_by_img}`
+                                : null
+                        }
                     />
                     <span>{data?.authorization_by_name}</span>
                 </CreatedBy>
-            )
-        }
+            );
+        },
     },
     {
         id: "extension_req_authorized_for",
         header: "Extension Req. Authorized For",
         accessorKey: "extension_req_auth_for",
     },
-
-
 ];

@@ -2456,6 +2456,9 @@ class ProjectController extends AccountBaseController
                 }
                 break;
 
+            case 'dashboard-temp':
+                $this->view = 'projects.ajax.dashboard-temp';
+                break;
             case 'deliverables':
                 $this->view = 'projects.ajax.deliverables';
                 break;

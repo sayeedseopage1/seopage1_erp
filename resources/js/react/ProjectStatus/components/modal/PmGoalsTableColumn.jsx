@@ -271,7 +271,7 @@ export const PmGoalsTableColumns = [
                         <Switch.Case
                             condition={
                                 user.roleId === 4 &&
-                                data?.extension_status === 0 &&
+                                data?.extension_status === 0 && 
                                 new Date(data.goal_end_date) > new Date() &&
                                 data.goal_status !== 1
                             }
