@@ -79,6 +79,7 @@ class ProjectStatusController extends AccountBaseController
         $project_pm_goals = ProjectPmGoal::select('project_pm_goals.*','pm_goal_deadline_ext_histories.id as ext_history_id','pm_goal_deadline_ext_histories.goal_id','pm_goal_deadline_ext_histories.old_deadline','pm_goal_deadline_ext_histories.old_duration','pm_goal_deadline_ext_histories.extension_req_on','pm_goal_deadline_ext_histories.extension_req_for','pm_goal_deadline_ext_histories.extended_pm_reason','pm_goal_deadline_ext_histories.uuid','pm_goal_deadline_ext_histories.screenshot','pm_goal_deadline_ext_histories.extension_req_auth_for','pm_goal_deadline_ext_histories.new_deadline','pm_goal_deadline_ext_histories.new_duration','pm_goal_deadline_ext_histories.extended_admin_comment','pm_goal_deadline_ext_histories.extension_req_auth_on','pm_goal_deadline_ext_histories.authorization_by','pm_goal_deadline_ext_histories.auth_status')
                             ->leftJoin('pm_goal_deadline_ext_histories','project_pm_goals.id','=','pm_goal_deadline_ext_histories.goal_id')
                             ->where('project_pm_goals.project_id',$id)
+                            ->groupBy('project_pm_goals.id')
                             ->get();
 
         // dd($project_pm_goals);
@@ -389,7 +390,7 @@ class ProjectStatusController extends AccountBaseController
         $goal = PmGoalDeadlineExtHistory::where('goal_id',$request->query('goal_id'))->where('uuid',$request->query('uuid'))->first();
         $data = [];
         if($goal->screenshot == 'yes'){
-        $data = ProjectPmGoalFile::where('goal_id',$goal->id)->where('uuid',$goal->uuid)->get();
+        $data = ProjectPmGoalFile::where('goal_id',$goal->goal_id)->where('uuid',$goal->uuid)->get();
 
         }
         
@@ -405,6 +406,7 @@ class ProjectStatusController extends AccountBaseController
     }
     public function acceptOrDenyExtendRequest(Request $request)
     {
+        // dd($request->all());
         try {
         \DB::beginTransaction();
             if ($request->status == 1) {
@@ -456,7 +458,7 @@ class ProjectStatusController extends AccountBaseController
                     $updateGoal->extension_status = 0;
                     $updateGoal->save();
 
-                    $deadline_ext_history = PmGoalDeadlineExtHistory::where('goal_id', $request->goal_id)->first();
+                    $deadline_ext_history = PmGoalDeadlineExtHistory::where('goal_id', $request->goal_id)->orderBy('id','desc')->first();
                     $deadline_ext_history->extension_req_auth_for = $updateGoal->goal_end_date;
                     $deadline_ext_history->new_deadline = $updateGoal->goal_end_date;
                     $deadline_ext_history->new_duration = $updateGoal->duration + $request->extended_day;
@@ -471,7 +473,7 @@ class ProjectStatusController extends AccountBaseController
                 $updateGoal->extension_status = 0;
                 $updateGoal->save();
 
-                $deadline_ext_history = PmGoalDeadlineExtHistory::where('goal_id', $request->goal_id)->first();
+                $deadline_ext_history = PmGoalDeadlineExtHistory::where('goal_id', $request->goal_id)->orderBy('id','desc')->first();
                 $deadline_ext_history->extension_req_auth_for = Carbon::parse($updateGoal->goal_end_date)->addDays($request->extended_day);
                 $deadline_ext_history->new_deadline = $updateGoal->goal_end_date;
                 $deadline_ext_history->new_duration = $updateGoal->duration + $request->extended_day;
@@ -627,6 +629,7 @@ class ProjectStatusController extends AccountBaseController
                 ->leftJoin('project_pm_goals','pm_goal_deadline_ext_histories.goal_id','project_pm_goals.id')
                 ->leftJoin('users as authorization_by','pm_goal_deadline_ext_histories.authorization_by','authorization_by.id')
                 ->where('pm_goal_deadline_ext_histories.goal_id',$id)
+                ->where('pm_goal_deadline_ext_histories.auth_status', '>', 0)
                 ->get();
 
                 return response()->json([
