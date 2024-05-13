@@ -842,6 +842,22 @@
     margin: auto;
 }
 
+.remove_axis_item_table_title,
+.remove_axis_item_table_data {
+    color: #000;
+    font-family: Poppins;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 21px;
+    /* 131.25% */
+}
+
+.remove_axis_item_table_wrapper {
+    max-width: 314px;
+    margin: 0px auto;
+}
+
 /*********************************
             modals ends
 *********************************/
