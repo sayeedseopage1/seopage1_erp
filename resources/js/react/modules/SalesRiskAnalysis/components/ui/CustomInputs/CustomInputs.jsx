@@ -61,7 +61,7 @@ const CustomInputs = ({
 
     return (
         <div className="d-flex flex-column mb-4">
-            <CustomInputsLabel color={isChild ? "#b1b1b1" : "#000000"}>
+            <CustomInputsLabel  className="d-inline" color={isChild ? "#b1b1b1" : "#000000"}>
                 {label}{" "}
                 {props?.comment && (
                         <Popover

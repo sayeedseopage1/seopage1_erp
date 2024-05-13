@@ -73,7 +73,7 @@ const CustomAccordion = ({
     return (
         <div className="d-flex flex-column">
             <CustomInputsLabel
-                className="mb-2"
+                className="mb-2 d-inline"
                 color={isChild ? "#b1b1b1" : "#000000"}
             >
                 {label}{" "}
