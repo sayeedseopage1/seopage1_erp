@@ -42,9 +42,6 @@ const EmployeeEvaluation = () => {
     const mainData = data?.data;
     const Evaluations = data?.data.data;
 
-    console.log("maindata", mainData);
-    // console.log("evaluations", Evaluations);
-    // filter data
     const getData = (type) => {
         let _data = _.orderBy(Evaluations, "managements_decision", "asc");
         switch (type) {
