@@ -3,27 +3,50 @@ import PropTypes from "prop-types";
 import { ButtonComponent } from '../../../../PointFactors/components/Styles/ui/ui';
 import { useForm } from 'react-hook-form';
 import { Modal } from 'antd';
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
-const AddNewAxisItemModal = ({ chartAxisData, setChartAxisData, antdModalOpen, setAntdModalOpen, chartData }) => {
+const AddNewAxisItemModal = ({ xAxisStartAndEndValue, chartAxisData, setChartAxisData, antdModalOpen, setAntdModalOpen, chartData }) => {
     const {
         register,
         handleSubmit,
         watch,
         reset,
         formState: { errors },
-    } = useForm()
+    } = useForm();
+
+    const { xAxisStaring, xAxisEnding } = xAxisStartAndEndValue || {};
+
+    const validateFields = (data) => {
+        let isValid = true;
+
+        if (data.xAxisLowerLimit >= data.xAxisUpperLimit) {
+            toast.error('X Axis Lower Limit cannot be greater than or equal to Upper Limit');
+            isValid = false;
+        }
+
+        if (data.xAxisLowerLimit < xAxisStaring || data.xAxisUpperLimit > xAxisEnding) {
+            toast.error(`X Axis Lower Limit must be between ${xAxisStaring} and ${xAxisEnding}`);
+            isValid = false;
+        }
+
+        return isValid;
+    };
 
     const onSubmit = (data) => {
-        const newData = [...chartAxisData, data]
-        setChartAxisData(newData)
-        reset()
-        setAntdModalOpen(false)
-    }
+        if (validateFields(data)) {
+            const newData = [...chartAxisData, data];
+            setChartAxisData(newData);
+            reset();
+            setAntdModalOpen(false);
+            toast.success('Axis item added successfully');
+        }
+    };
 
     const handleCancel = () => {
-        setAntdModalOpen(false)
-        reset()
-    }
+        setAntdModalOpen(false);
+        reset();
+    };
 
     return (
         <div>
@@ -32,7 +55,7 @@ const AddNewAxisItemModal = ({ chartAxisData, setChartAxisData, antdModalOpen, s
                 maskClosable={false}
                 title={
                     <div className='add_new_axis_item_modal_header'>
-                        <h4 className="" >Add New Items</h4>
+                        <h4 className="">Add New Items</h4>
                     </div>
                 }
                 open={antdModalOpen}
@@ -48,13 +71,11 @@ const AddNewAxisItemModal = ({ chartAxisData, setChartAxisData, antdModalOpen, s
                             <div className='axis_item_modal_inputs_inner'>
                                 <div className='w-50'>
                                     <input className='point_edit_modal_input' type='number' {...register("xAxisLowerLimit", { required: true })} placeholder='Write here' />
-
                                     {errors.xAxisLowerLimit && <span style={{ color: 'red', fontSize: '12px' }}>This field is required</span>}
                                 </div>
 
                                 <div className='w-50'>
                                     <input className='point_edit_modal_input' type='number' {...register("xAxisUpperLimit", { required: true })} placeholder='Write here' />
-
                                     {errors.xAxisUpperLimit && <span style={{ color: 'red', fontSize: '12px' }}>This field is required</span>}
                                 </div>
                             </div>
@@ -75,6 +96,7 @@ const AddNewAxisItemModal = ({ chartAxisData, setChartAxisData, antdModalOpen, s
                     </form>
                 </div>
             </Modal>
+            <ToastContainer />
         </div>
     );
 };

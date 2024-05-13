@@ -130,16 +130,44 @@ const ChartIdealVsAchievedEditModal = ({ antdModalOpen, showIdealVsAchievedEditM
                 <ButtonComponent onClick={handleCancel} font='18px'>Do it later</ButtonComponent>
             </div>
 
-            {/* Modals for each modal */}
-            <AddNewAxisItemModal chartAxisData={chartAxisData} setChartAxisData={setChartAxisData} antdModalOpen={addNewAxisDataModalOpen} setAntdModalOpen={setAddNewAxisDataModalOpen} />
+            {/* Modals for add, edit and remove */}
+            <AddNewAxisItemModal
+                xAxisStartAndEndValue={xAxisStartAndEndValue}
+                chartAxisData={chartAxisData}
+                setChartAxisData={setChartAxisData}
+                antdModalOpen={addNewAxisDataModalOpen}
+                setAntdModalOpen={setAddNewAxisDataModalOpen}
+            />
 
-            <EditXAxisModal axisEditItem={axisEditItem} chartAxisData={chartAxisData} setChartAxisData={setChartAxisData} antdModalOpen={editXAxisDataModalOpen} setAntdModalOpen={setEditXAxisDataModalOpen} />
+            <EditXAxisModal
+                axisEditItem={axisEditItem}
+                chartAxisData={chartAxisData}
+                setChartAxisData={setChartAxisData}
+                antdModalOpen={editXAxisDataModalOpen}
+                setAntdModalOpen={setEditXAxisDataModalOpen}
+            />
 
-            <EditYAxisModal axisEditItem={axisEditItem} chartAxisData={chartAxisData} setChartAxisData={setChartAxisData} antdModalOpen={editYAxisDataModalOpen} setAntdModalOpen={setEditYAxisDataModalOpen} />
+            <EditYAxisModal
+                axisEditItem={axisEditItem}
+                chartAxisData={chartAxisData}
+                setChartAxisData={setChartAxisData}
+                antdModalOpen={editYAxisDataModalOpen}
+                setAntdModalOpen={setEditYAxisDataModalOpen}
+            />
 
-            <SelectRatioRangeModal xAxisStartAndEndValue={xAxisStartAndEndValue} setXAxisStartAndEndValue={setXAxisStartAndEndValue} antdModalOpen={selectRatioRange} setAntdModalOpen={setSelectRatioRange} />
+            <SelectRatioRangeModal
+                xAxisStartAndEndValue={xAxisStartAndEndValue}
+                setXAxisStartAndEndValue={setXAxisStartAndEndValue}
+                antdModalOpen={selectRatioRange}
+                setAntdModalOpen={setSelectRatioRange}
+            />
 
-            <RemoveRatioItemsModal chartAxisData={chartAxisData} setChartAxisData={setChartAxisData} antdModalOpen={removeRatioItemsModalOpen} setAntdModalOpen={setRemoveRatioItemsModalOpen} />
+            <RemoveRatioItemsModal
+                chartAxisData={chartAxisData}
+                setChartAxisData={setChartAxisData}
+                antdModalOpen={removeRatioItemsModalOpen}
+                setAntdModalOpen={setRemoveRatioItemsModalOpen}
+            />
 
         </Modal>
     );
