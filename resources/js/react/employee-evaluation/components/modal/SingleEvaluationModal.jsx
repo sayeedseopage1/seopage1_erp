@@ -4,13 +4,9 @@ import { EvalTableTitle } from "../Table/ui";
 
 import { useEffect, useState } from "react";
 
-import ReusableSection from "./ReusableSection";
-
 import { toast } from "react-toastify";
 
 import { BiSolidEditAlt } from "react-icons/bi";
-
-import ReusableSectionTeamLeadAndAdmin from "./ReusableSectionTeamLeadAndAdmin";
 
 import CKEditorComponent from "../../../ckeditor";
 useStoreTaskRatingMutation;
@@ -24,6 +20,9 @@ import FormatDate from "../../../UI/comments/utils/FormatDate";
 import { Button } from "react-bootstrap";
 import axios from "axios";
 import { convertTime } from "../../../utils/converTime";
+import Popover from "../../../../react-latest/ui/Popover";
+import RatingSection from "./RatingSection";
+import RatingSectionStatic from "./RatingSectionStatic";
 
 const SingleEvaluationModal = ({
     toggleSingleEvaluationModal,
@@ -312,6 +311,7 @@ const SingleEvaluationModal = ({
             }}
             isOpen={isSingleEvaluationModalOpen}
             onRequestClose={() => toggleSingleEvaluationModal()}
+            ariaHideApp={false}
         >
             <EvalTableTitle>
                 <span>New Developer Evaluation :</span>
@@ -322,30 +322,92 @@ const SingleEvaluationModal = ({
                     <thead>
                         <tr>
                             <th>Task name</th>
-                            <th>Assign data</th>
-                            <th>Submission Date</th>
+                            <th>Assign date</th>
+                            <th>Submission date</th>
                             <th>Total hours tracked</th>
-                            <th>Completed work link</th>
+                            <th>Completed work URL</th>
                             <th>Revisions needed</th>
-                            <th>Average Rating</th>
+                            <th>Average rating</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr>
-                            <td>{data?.task_name}</td>
+                            <td>
+                                {data?.task_name ? (
+                                    <div style={{ minWidth: "10rem" }}>
+                                        <Popover>
+                                            <Popover.Button>
+                                                <span className=" singleline-ellipsis link_color">
+                                                    <span className="link_color">
+                                                        {data?.task_name}
+                                                    </span>
+                                                </span>
+                                            </Popover.Button>
+
+                                            <Popover.Panel>
+                                                <div className="revision_popover_panel">
+                                                    <a
+                                                        href={`/account/tasks/${data.task_id}`}
+                                                    >
+                                                        <span className="link_color hover-underline">
+                                                            {data?.task_name}
+                                                        </span>
+                                                    </a>
+                                                </div>
+                                            </Popover.Panel>
+                                        </Popover>
+                                    </div>
+                                ) : (
+                                    <span>Not Available</span>
+                                )}
+                            </td>
                             <td>{data?.assign_date}</td>
                             <td>{data.submission_date}</td>
                             <td>{convertTime(data?.total_min)}</td>
                             <td>
-                                {data?.completed_work &&
-                                    JSON.parse(data?.completed_work).map(
-                                        (data) => (
-                                            <div>
-                                                <a href={data}>{data}</a>
-                                                <br />
-                                            </div>
-                                        )
-                                    )}
+                                {data?.completed_work ? (
+                                    <div style={{ minWidth: "10rem" }}>
+                                        <Popover>
+                                            <Popover.Button>
+                                                <span className=" singleline-ellipsis link_color hover-underline">
+                                                    {JSON.parse(
+                                                        data?.completed_work
+                                                    ).map((data) => (
+                                                        <div>
+                                                            <a
+                                                                className="link_color"
+                                                                href={data}
+                                                            >
+                                                                {data}
+                                                            </a>
+                                                            <br />
+                                                        </div>
+                                                    ))}
+                                                </span>
+                                            </Popover.Button>
+
+                                            <Popover.Panel>
+                                                <div className="revision_popover_panel">
+                                                    {JSON.parse(
+                                                        data.completed_work
+                                                    ).map((data) => (
+                                                        <div>
+                                                            <a
+                                                                className="hover-underline"
+                                                                href={data}
+                                                            >
+                                                                {data}
+                                                            </a>
+                                                            <br />
+                                                        </div>
+                                                    ))}
+                                                </div>
+                                            </Popover.Panel>
+                                        </Popover>
+                                    </div>
+                                ) : (
+                                    <span>Not Available</span>
+                                )}
                             </td>
                             <td>{data.revision_number}</td>
 
@@ -360,22 +422,16 @@ const SingleEvaluationModal = ({
                     {auth.roleId === 6 &&
                         (evaluationObject?.ld_submission_status === 0
                             ? formFields.map((field, index) => (
-                                  <ReusableSection key={index} {...field} />
+                                  <RatingSection key={index} {...field} />
                               ))
                             : evaluationObject?.ld_submission_status === 1 &&
                               formFields.map((field, index) => (
-                                  <ReusableSectionTeamLeadAndAdmin
-                                      key={index}
-                                      {...field}
-                                  />
+                                  <RatingSectionStatic key={index} {...field} />
                               )))}
 
                     {(auth.roleId === 8 || auth.roleId === 1) &&
                         formFields.map((field, index) => (
-                            <ReusableSectionTeamLeadAndAdmin
-                                key={index}
-                                {...field}
-                            />
+                            <RatingSectionStatic key={index} {...field} />
                         ))}
                 </div>
 
