@@ -181,9 +181,8 @@ const SubTaskSection = ({ status }) => {
                     style={{ zIndex: isTaskModalOpen ? "110" : "" }}
                 >
                     <i
-                        className={`fa-solid fa-circle-chevron-${
-                            isTaskModalOpen ? "right" : "left"
-                        }`}
+                        className={`fa-solid fa-circle-chevron-${isTaskModalOpen ? "right" : "left"
+                            }`}
                         style={{ color: "#276fec" }}
                     />
                 </button>
