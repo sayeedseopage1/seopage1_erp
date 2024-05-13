@@ -577,6 +577,7 @@ class SalesRiskPolicyController extends AccountBaseController
                     'parent_id' => $item->parent_id,
                     'policy_id' => $item->policy_id,
                     'policy_title' => SalesRiskPolicy::find($item->policy_id)->title,
+                    'comment' => $item->comment,
                     'questions' => self::questionListChild($item->id)
                 ];
 
@@ -676,6 +677,7 @@ class SalesRiskPolicyController extends AccountBaseController
                     'parent_id' => $item->parent_id,
                     'policy_id' => $item->policy_id,
                     'policy_title' => SalesRiskPolicy::find($item->policy_id)->title,
+                    'comment' => $item->comment,
                     'questions' => self::questionListChild($item->id)
                 ];
             })->toArray();
