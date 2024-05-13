@@ -132,7 +132,7 @@ const ChartIdealVsAchievedEditModal = ({ antdModalOpen, showIdealVsAchievedEditM
 
             {/* Modals for each modal */}
             <AddNewAxisItemModal chartAxisData={chartAxisData} setChartAxisData={setChartAxisData} antdModalOpen={addNewAxisDataModalOpen} setAntdModalOpen={setAddNewAxisDataModalOpen} />
-            <EditXAxisModal axisEditItem={axisEditItem} antdModalOpen={editXAxisDataModalOpen} setAntdModalOpen={setEditXAxisDataModalOpen} />
+            <EditXAxisModal axisEditItem={axisEditItem} chartAxisData={chartAxisData} setChartAxisData={setChartAxisData} antdModalOpen={editXAxisDataModalOpen} setAntdModalOpen={setEditXAxisDataModalOpen} />
             <EditYAxisModal axisEditItem={axisEditItem} antdModalOpen={editYAxisDataModalOpen} setAntdModalOpen={setEditYAxisDataModalOpen} />
             <SelectRatioRangeModal xAxisStartAndEndValue={xAxisStartAndEndValue} setXAxisStartAndEndValue={setXAxisStartAndEndValue} antdModalOpen={selectRatioRange} setAntdModalOpen={setSelectRatioRange} />
             <RemoveRatioItemsModal chartAxisData={chartAxisData} setChartAxisData={setChartAxisData} antdModalOpen={removeRatioItemsModalOpen} setAntdModalOpen={setRemoveRatioItemsModalOpen} />

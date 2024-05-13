@@ -22,6 +22,7 @@ const AddNewAxisItemModal = ({ chartAxisData, setChartAxisData, antdModalOpen, s
 
     const handleCancel = () => {
         setAntdModalOpen(false)
+        reset()
     }
 
     return (
