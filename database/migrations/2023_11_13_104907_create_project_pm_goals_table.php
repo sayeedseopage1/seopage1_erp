@@ -44,7 +44,7 @@ return new class extends Migration
             // $table->longText('extended_admin_cmnt')->nullable();
             // $table->string('screenshot')->nullable();
             // $table->string('uuid')->nullable();
-            // $table->integer('reason_status')->default(0);
+            $table->integer('reason_status')->default(0)->comment('1 = pending, 2 = accepted');
             // $table->integer('extended_day')->nullable();
             // $table->dateTime('extended_goal_end_day')->nullable();
             // $table->integer('extended_request_status')->default(0);

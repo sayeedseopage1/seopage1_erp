@@ -76,8 +76,11 @@ class ProjectStatusController extends AccountBaseController
     }
     public function allProjectPmGoal($id)
     {
-        $project_pm_goals = ProjectPmGoal::select('project_pm_goals.*','pm_goal_deadline_ext_histories.id as ext_history_id','pm_goal_deadline_ext_histories.goal_id','pm_goal_deadline_ext_histories.old_deadline','pm_goal_deadline_ext_histories.old_duration','pm_goal_deadline_ext_histories.extension_req_on','pm_goal_deadline_ext_histories.extension_req_for','pm_goal_deadline_ext_histories.extended_pm_reason','pm_goal_deadline_ext_histories.uuid','pm_goal_deadline_ext_histories.screenshot','pm_goal_deadline_ext_histories.extension_req_auth_for','pm_goal_deadline_ext_histories.new_deadline','pm_goal_deadline_ext_histories.new_duration','pm_goal_deadline_ext_histories.extended_admin_comment','pm_goal_deadline_ext_histories.extension_req_auth_on','pm_goal_deadline_ext_histories.authorization_by','pm_goal_deadline_ext_histories.auth_status')
+        $project_pm_goals = ProjectPmGoal::select('project_pm_goals.*','pm_goal_deadline_ext_histories.id as ext_history_id','pm_goal_deadline_ext_histories.goal_id','pm_goal_deadline_ext_histories.old_deadline','pm_goal_deadline_ext_histories.old_duration','pm_goal_deadline_ext_histories.extension_req_on','pm_goal_deadline_ext_histories.extension_req_for','pm_goal_deadline_ext_histories.extended_pm_reason','pm_goal_deadline_ext_histories.uuid','pm_goal_deadline_ext_histories.screenshot','pm_goal_deadline_ext_histories.extension_req_auth_for','pm_goal_deadline_ext_histories.new_deadline','pm_goal_deadline_ext_histories.new_duration','pm_goal_deadline_ext_histories.extended_admin_comment','pm_goal_deadline_ext_histories.extension_req_auth_on','deadline_authorization_by.id as deadline_authorization_by_id','deadline_authorization_by.name as deadline_authorization_by_name','pm_goal_deadline_ext_histories.auth_status','pm_goal_exp_histories.id as goal_exp_history_id','pm_goal_exp_histories.expired_pm_reason as expired_reason','pm_goal_exp_histories.client_communication','pm_goal_exp_histories.client_communication_rating','pm_goal_exp_histories.negligence_pm','pm_goal_exp_histories.negligence_pm_rating','pm_goal_exp_histories.any_other_suggestion_admin','pm_goal_exp_histories.authorization_status','pm_goal_exp_histories.authorization_on','goal_exp_authorization_by.id as goal_exp_authorization_by_id','goal_exp_authorization_by.name as goal_exp_authorization_by_name')
                             ->leftJoin('pm_goal_deadline_ext_histories','project_pm_goals.id','=','pm_goal_deadline_ext_histories.goal_id')
+                            ->leftJoin('pm_goal_exp_histories','project_pm_goals.id','=','pm_goal_exp_histories.goal_id')
+                            ->leftJoin('users as deadline_authorization_by','pm_goal_deadline_ext_histories.authorization_by','=','deadline_authorization_by.id')
+                            ->leftJoin('users as goal_exp_authorization_by','pm_goal_exp_histories.authorization_by','=','goal_exp_authorization_by.id')
                             ->where('project_pm_goals.project_id',$id)
                             ->groupBy('project_pm_goals.id')
                             ->get();
@@ -160,8 +163,8 @@ class ProjectStatusController extends AccountBaseController
 
         return view('project-status.calendar.index', $this->data);
     }
-    public function projectStatusReason(Request $request){
-        dd($request->all());
+    public function projectStatusReason(Request $request)
+    {
         $validator =  $request->validate([
             'reason' => 'required',
 
@@ -171,6 +174,9 @@ class ProjectStatusController extends AccountBaseController
         try {
         \DB::beginTransaction();
         $ppg = ProjectPmGoal::where('id',$request->project_pm_goal_id)->first();
+        $ppg->reason_status = 1;
+        $ppg->save();
+
         $goal_history = new PmGoalExpHistory();
         $goal_history->goal_id = $ppg->id;
         $goal_history->expired_pm_reason = $request->reason;
@@ -237,6 +243,10 @@ class ProjectStatusController extends AccountBaseController
         }
         try {
             \DB::beginTransaction();
+            $ppg = ProjectPmGoal::where('id',$request->project_pm_goal_id)->first();
+            $ppg->reason_status = 2;
+            $ppg->save();
+
             $goalHistory = PmGoalExpHistory::where('goal_id',$request->project_pm_goal_id)->first();
             $goalHistory->client_communication = $request->client_communication;
             $goalHistory->client_communication_rating = $request->client_communication_rating;
@@ -693,7 +703,7 @@ class ProjectStatusController extends AccountBaseController
                 ]);
     }
     public function expireGoal($id){
-        $pmGoal = ProjectPmGoal::select('project_pm_goals.id','project_pm_goals.goal_name','project_pm_goals.goal_start_date','project_pm_goals.goal_end_date','project_pm_goals.duration','project_pm_goals.expired_meet_description','project_pm_goals.project_category','deals.actual_amount as project_budget','currencies.currency_symbol','projects.id as project_id','projects.project_name','users.id as user_id','users.name as user_name','users.image as user_image', 'project_pm_goals.expired_status')
+        $pmGoal = ProjectPmGoal::select('project_pm_goals.id','project_pm_goals.goal_name','project_pm_goals.goal_start_date','project_pm_goals.goal_end_date','project_pm_goals.duration','project_pm_goals.expired_meet_description','project_pm_goals.project_category','deals.actual_amount as project_budget','currencies.currency_symbol','projects.id as project_id','projects.project_name','users.id as user_id','users.name as user_name','users.image as user_image', 'project_pm_goals.expired_status', 'project_pm_goals.reason_status')
         ->leftJoin('projects','project_pm_goals.project_id','projects.id')
         ->leftJoin('deals', 'projects.deal_id', '=', 'deals.id')
         ->leftJoin('currencies', 'deals.original_currency_id', '=', 'currencies.id')

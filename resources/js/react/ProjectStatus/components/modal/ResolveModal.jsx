@@ -186,7 +186,7 @@ const ResolveModal = ({
                     </div>
                     <div className="my-3 row">
                         <p className="col-4"><strong>Description:</strong>{" "}</p>
-                        <p className="col-8">{resolveDeadlineExplanationData?.description}</p>
+                        <p className="col-8">{resolveDeadlineExplanationData?.expired_meet_description}</p>
                     </div>
                     <div className="my-3 row">
                         <p className="col-4"><strong>Reason:</strong>{" "}</p>
