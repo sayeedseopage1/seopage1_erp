@@ -8,6 +8,8 @@ import EditYAxisModal from './EditYAxisModal';
 import SelectRatioRangeModal from './SelectRatioRangeModal';
 import RemoveRatioItemsModal from './RemoveRatioItemsModal';
 import { toast } from 'react-toastify';
+import Swal from 'sweetalert2';
+import warningIcon from '../../../assets/warning.svg'
 
 const ChartIdealVsAchievedEditModal = ({ antdModalOpen, showIdealVsAchievedEditModal, chartData }) => {
     // console.log(chartData)
@@ -25,8 +27,8 @@ const ChartIdealVsAchievedEditModal = ({ antdModalOpen, showIdealVsAchievedEditM
     const [chartAxisData, setChartAxisData] = useState([
         {
             id: '1',
-            xAxisLowerLimit: 5,
-            xAxisUpperLimit: 15,
+            xAxisLowerLimit: 0,
+            xAxisUpperLimit: 10,
             yAxisRatio: 100,
         },
         {
@@ -44,7 +46,7 @@ const ChartIdealVsAchievedEditModal = ({ antdModalOpen, showIdealVsAchievedEditM
         {
             id: '4',
             xAxisLowerLimit: 90,
-            xAxisUpperLimit: 95,
+            xAxisUpperLimit: 100,
             yAxisRatio: 50,
         },
     ])
@@ -102,7 +104,24 @@ const ChartIdealVsAchievedEditModal = ({ antdModalOpen, showIdealVsAchievedEditM
         // Validation 3: Check for missing ranges
         for (let i = 0; i < sortedChartData.length - 1; i++) {
             if (Number(sortedChartData[i].xAxisUpperLimit) < Number(sortedChartData[i + 1].xAxisLowerLimit) - 1) {
-                toast.error('Missing range detected.');
+                // toast.error('Missing range detected.');
+
+                Swal.fire({
+                    html: `     
+                            <p class="incentive_swal_desc text-dark">Please review the table entry again, as
+                            you're missing a percentage in the row.</p>
+                            `
+                    ,
+                    showCancelButton: true,
+                    confirmButtonText: "Try Again",
+                    cancelButtonText: "Cancel",
+                    customClass: {
+                        confirmButton: 'swal2-confirm-custom',
+                        cancelButton: 'swal2-cancel-custom',
+                        icon: 'swal2-icon-custom'
+                    },
+                    iconHtml: `<img src="${warningIcon}">`
+                })
                 return;
             }
         }

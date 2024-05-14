@@ -858,6 +858,16 @@
     margin: 0px auto;
 }
 
+/* div:where(.swal2-icon) {
+    border: none !important;
+    border-color: transparent !important;
+} */
+
+.swal2-icon-custom {
+    margin-bottom: -25px !important;
+    border: none !important;
+}
+
 /*********************************
             modals ends
 *********************************/
