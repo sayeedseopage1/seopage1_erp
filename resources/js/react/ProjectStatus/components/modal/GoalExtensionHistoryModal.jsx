@@ -82,9 +82,9 @@ const customStyles = {
   },
   content: {
       zIndex: 9999999,
-      maxWidth: "90%",
-      maxHeight: "fit-content",
+      maxWidth: "65wv",
       height: "fit-content",
+      maxHeight: "85vh",
       margin: "auto auto",
       padding: "20px",
   },

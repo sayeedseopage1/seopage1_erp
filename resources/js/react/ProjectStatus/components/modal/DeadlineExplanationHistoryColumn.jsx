@@ -21,12 +21,12 @@ export const DeadlineEHColumn = [
     {
         id: "start_date",
         header: "Goal Start Date",
-        accessorKey: "start_date",
+        accessorKey: "goal_start_date",
     },
     {
         id: "deadline",
         header: "Goal Dead Line",
-        accessorKey: "deadline",
+        accessorKey: "goal_end_date",
     },
     {
         id: "duration",
@@ -52,14 +52,14 @@ export const DeadlineEHColumn = [
     },
     {
         id: "description",
-        header: "Description",
-        accessorKey: "description",
+        header: "Expired Meet Des..",
+        accessorKey: "expired_meet_description",
         cell: ({ row }) => {
             const data = row?.original;
-            return data?.description ? (
+            return data?.expired_meet_description ? (
                 <span
                     className="multine-ellipsis"
-                    dangerouslySetInnerHTML={{ __html: data?.description }}
+                    dangerouslySetInnerHTML={{ __html: data?.expired_meet_description }}
                 />
             ) : (
                 <span>--</span>
@@ -88,14 +88,14 @@ export const DeadlineEHColumn = [
     },
     {
         id: "reason",
-        header: "Reason",
+        header: "PM Reason",
         accessorKey: "reason",
         cell: ({ row }) => {
             const data = row?.original;
             return (
                 <span
                     className="multine-ellipsis"
-                    dangerouslySetInnerHTML={{ __html: data?.reason ?? "--" }}
+                    dangerouslySetInnerHTML={{ __html: data?.expired_pm_reason ?? "--" }}
                 />
             );
         },
@@ -155,6 +155,22 @@ export const DeadlineEHColumn = [
                 <span className="multine-ellipsis">
                     {data.negligence_pm_rating}
                 </span>
+            );
+        },
+    },
+    {
+        id: "any_other_suggestion_admin",
+        header: "Any Other Suggestions From Admin",
+        accessorKey: "Any other suggestions from authorizer",
+        cell: ({ row }) => {
+            const data = row?.original;
+            return (
+                <span
+                    className="multine-ellipsis"
+                    dangerouslySetInnerHTML={{
+                        __html: data?.any_other_suggestion_admin ?? "--",
+                    }}
+                />
             );
         },
     },

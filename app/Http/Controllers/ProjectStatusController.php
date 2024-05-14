@@ -692,7 +692,7 @@ class ProjectStatusController extends AccountBaseController
                 ]);
     }
     public function resolvedHistory($id){
-        $data = PmGoalExpHistory::select('pm_goal_exp_histories.*','project_pm_goals.goal_start_date','project_pm_goals.goal_end_date','project_pm_goals.duration','project_pm_goals.goal_status','project_pm_goals.goal_name','authorization_by.id as authorization_by_id','authorization_by.name as authorization_by_name','authorization_by.image as authorization_by_img')
+        $data = PmGoalExpHistory::select('pm_goal_exp_histories.*','project_pm_goals.goal_start_date','project_pm_goals.goal_end_date','project_pm_goals.duration','project_pm_goals.goal_status','project_pm_goals.expired_meet_description','project_pm_goals.goal_name','authorization_by.id as authorization_by_id','authorization_by.name as authorization_by_name','authorization_by.image as authorization_by_img')
                 ->leftJoin('project_pm_goals','pm_goal_exp_histories.goal_id','project_pm_goals.id')
                 ->leftJoin('users as authorization_by','pm_goal_exp_histories.authorization_by','authorization_by.id')
                 ->where('pm_goal_exp_histories.goal_id',$id)

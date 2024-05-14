@@ -99,12 +99,13 @@ export const PmGoalsTableColumns = [
             return (
                 <span
                     role="button"
-                    className={`${data?.goal_extension_history &&
+                    className={`${
+                        data?.goal_extension_history &&
                         data.goal_status === 0 &&
                         new Date(row.original?.goal_end_date) > new Date()
-                        ? styles?.tableAnchor
-                        : ""
-                        }`}
+                            ? styles?.tableAnchor
+                            : ""
+                    }`}
                     style={{
                         textDecoration: data?.goal_extension_history
                             ? "underline"
@@ -131,12 +132,13 @@ export const PmGoalsTableColumns = [
             return (
                 <span
                     role="button"
-                    className={`${data.goal_expired_history &&
+                    className={`${
+                        data.goal_expired_history &&
                         data.goal_status === 0 &&
                         new Date(row.original?.goal_end_date) > new Date()
-                        ? styles?.tableAnchor
-                        : ""
-                        }`}
+                            ? styles?.tableAnchor
+                            : ""
+                    }`}
                     style={{
                         textDecoration: data?.goal_expired_history
                             ? "underline"
@@ -173,60 +175,33 @@ export const PmGoalsTableColumns = [
                             >
                                 <button
                                     onClick={() =>
-                                        handle.deadlineExplainClick(
-                                            data
-                                        )
+                                        handle.deadlineExplainClick(data)
                                     }
                                     className={`btn btn-danger ${styles?.authorize}`}
                                 >
                                     Explain Why Expired
                                 </button>
                             </Switch.Case>
-                            <Switch.Case
-                                condition={
-                                    (data?.reason_status === 0 ||
-                                        data?.reason_status === 2) &&
-                                    data?.expired_status === 2
-                                }
-                            >
-                                <div
-                                    className={`${styles?.explanationSubmitted}`}
-                                >
-                                    Goal Expired & Explanation
-                                    Submitted
-                                </div>
-                            </Switch.Case>
-                            <Switch.Case
-                                condition={
-                                    data.reason_status === 1
-                                }
-                            >
+                            <Switch.Case condition={data.reason_status === 1}>
                                 <button
                                     className={`btn btn-outline-success ${styles?.awaitingDeadlineExtension}`}
                                 >
-                                    Awaiting Authorization on
-                                    Deadline Explanation
+                                    Awaiting Authorization on Deadline
+                                    Explanation
                                 </button>
-
+                            </Switch.Case>
+                            <Switch.Case condition={data?.reason_status === 2}>
+                                <div
+                                    className={`${styles?.explanationSubmitted}`}
+                                >
+                                    Goal Expired & Explanation Submitted
+                                </div>
                             </Switch.Case>
                         </Switch.Case>
                         <Switch.Case
                             condition={user?.roleId === 1 || user?.roleId === 8}
                         >
-
-                            <Switch.Case
-                                condition={data.expired_status === 2}
-                            >
-                                <button
-                                    className={`btn ${styles?.resolved}`}
-                                >
-                                    {" "}
-                                    Resolved{" "}
-                                </button>
-                            </Switch.Case>
-                            <Switch.Case
-                                condition={data.expired_status === 1}
-                            >
+                            <Switch.Case condition={data.reason_status === 1}>
                                 <button
                                     onClick={() =>
                                         handle.resolveExplainClick(data)
@@ -234,6 +209,12 @@ export const PmGoalsTableColumns = [
                                     className={`btn btn-warning ${styles?.authorize}`}
                                 >
                                     Authorize Explanation
+                                </button>
+                            </Switch.Case>
+                            <Switch.Case condition={data.reason_status === 2}>
+                                <button className={`btn ${styles?.resolved}`}>
+                                    {" "}
+                                    Resolved{" "}
                                 </button>
                             </Switch.Case>
                         </Switch.Case>
