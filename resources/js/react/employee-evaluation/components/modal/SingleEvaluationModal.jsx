@@ -45,11 +45,11 @@ const SingleEvaluationModal = ({
         qw_second_revision: data.qw_second_revision ?? 0,
         speed_of_work: data.speed_of_work ?? 0,
         understand_instruction: data.understand_instruction ?? 0,
-        communication: data.communication ?? 0,
-        professionalism: data.professionalism ?? 0,
-        identiey_issues: data.identiey_issues ?? 0,
-        dedication: data.dedication ?? 0,
-        obedience: data.obedience ?? 0,
+        // communication: data.communication ?? 0,
+        // professionalism: data.professionalism ?? 0,
+        // identiey_issues: data.identiey_issues ?? 0,
+        // dedication: data.dedication ?? 0,
+        // obedience: data.obedience ?? 0,
         lead_dev_cmnt: data.lead_dev_cmnt ?? "",
     });
 
@@ -147,55 +147,55 @@ const SingleEvaluationModal = ({
                     understand_instruction: value,
                 }),
         },
-        {
-            label: "Communication",
-            value: formData.communication,
-            onChange: (value) =>
-                setFormData({
-                    ...formData,
-                    communication: value,
-                }),
-        },
-        {
-            label: "Professionalism",
-            value: formData.professionalism,
-            onChange: (value) =>
-                setFormData({
-                    ...formData,
+        // {
+        //     label: "Communication",
+        //     value: formData.communication,
+        //     onChange: (value) =>
+        //         setFormData({
+        //             ...formData,
+        //             communication: value,
+        //         }),
+        // },
+        // {
+        //     label: "Professionalism",
+        //     value: formData.professionalism,
+        //     onChange: (value) =>
+        //         setFormData({
+        //             ...formData,
 
-                    professionalism: value,
-                }),
-        },
-        {
-            label: "Ability to identify issues",
-            value: formData.identiey_issues,
-            onChange: (value) =>
-                setFormData({
-                    ...formData,
+        //             professionalism: value,
+        //         }),
+        // },
+        // {
+        //     label: "Ability to identify issues",
+        //     value: formData.identiey_issues,
+        //     onChange: (value) =>
+        //         setFormData({
+        //             ...formData,
 
-                    identiey_issues: value,
-                }),
-        },
-        {
-            label: "Dedication",
-            value: formData.dedication,
-            onChange: (value) =>
-                setFormData({
-                    ...formData,
+        //             identiey_issues: value,
+        //         }),
+        // },
+        // {
+        //     label: "Dedication",
+        //     value: formData.dedication,
+        //     onChange: (value) =>
+        //         setFormData({
+        //             ...formData,
 
-                    dedication: value,
-                }),
-        },
-        {
-            label: "Obedience",
-            value: formData.obedience,
-            onChange: (value) =>
-                setFormData({
-                    ...formData,
+        //             dedication: value,
+        //         }),
+        // },
+        // {
+        //     label: "Obedience",
+        //     value: formData.obedience,
+        //     onChange: (value) =>
+        //         setFormData({
+        //             ...formData,
 
-                    obedience: value,
-                }),
-        },
+        //             obedience: value,
+        //         }),
+        // },
     ];
 
     const handleSubmit = async (e) => {
@@ -218,14 +218,14 @@ const SingleEvaluationModal = ({
                 key: "understand_instruction",
                 label: "Ability to understand instruction",
             },
-            { key: "communication", label: "Communication" },
-            { key: "professionalism", label: "Professionalism" },
-            {
-                key: "identiey_issues",
-                label: "Ability to identify issues",
-            },
-            { key: "dedication", label: "Dedication" },
-            { key: "obedience", label: "Obedience" },
+            // { key: "communication", label: "Communication" },
+            // { key: "professionalism", label: "Professionalism" },
+            // {
+            //     key: "identiey_issues",
+            //     label: "Ability to identify issues",
+            // },
+            // { key: "dedication", label: "Dedication" },
+            // { key: "obedience", label: "Obedience" },
             { key: "lead_dev_cmnt", label: "Lead Developers Opinion" },
         ];
 
@@ -301,7 +301,7 @@ const SingleEvaluationModal = ({
                     borderRadius: "10px",
                     height: "fit-content",
                     maxHeight: "95vh",
-                    maxWidth: "1200px",
+                    maxWidth: "850px",
                     margin: "auto auto",
                     border: "none",
 
@@ -348,8 +348,10 @@ const SingleEvaluationModal = ({
                                                 <div className="revision_popover_panel">
                                                     <a
                                                         href={`/account/tasks/${data.task_id}`}
+                                                        target="_blank"
+                                                        className="hover-underline"
                                                     >
-                                                        <span className="link_color hover-underline">
+                                                        <span className="link_color">
                                                             {data?.task_name}
                                                         </span>
                                                     </a>
@@ -436,12 +438,7 @@ const SingleEvaluationModal = ({
                         ))}
                 </div>
 
-                <div
-                    style={{
-                        marginTop: "30px",
-                        fontWeight: "bold",
-                    }}
-                >
+                <div className={styles.lead_dev_opinion}>
                     Lead Developers Opinion
                 </div>
                 <div
@@ -490,9 +487,8 @@ const SingleEvaluationModal = ({
                                 >
                                     By{" "}
                                     <a
-                                        href="www.LeadDevId.com"
+                                        href={`/account/employees/${evaluationObject?.added_by_id}`}
                                         target="_blank"
-                                        rel="noopener noreferrer"
                                     >
                                         {evaluationObject?.added_by_name}
                                     </a>{" "}

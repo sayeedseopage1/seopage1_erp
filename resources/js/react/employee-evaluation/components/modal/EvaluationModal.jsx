@@ -26,7 +26,6 @@ import EvaluationTable from "../Table/EvaluationTable";
 import { useAuth } from "../../../hooks/useAuth";
 import CKEditorComponent from "../../../ckeditor";
 
-import { EvaluationTableColumns } from "../Table/EvaluationTableColumns";
 import { Button } from "react-bootstrap";
 
 import {
@@ -39,6 +38,7 @@ import {
 } from "../../../services/api/EvaluationApiSlice";
 import { useEffect } from "react";
 import FormatDate from "../../../UI/comments/utils/FormatDate";
+import { EvaluationTaskTableColumns } from "../Table/EvaluationTaskTableColumns";
 
 const EvaluationModal = ({
     isEvaluationModal,
@@ -46,8 +46,11 @@ const EvaluationModal = ({
     singleEvaluation,
 }) => {
     const auth = useAuth();
+
     const [teamLeadReview, setTeamLeadReview] = useState("");
     const [adminComment, setAdminComment] = useState("");
+    const [isAllTaskRated, setIsAllTaskRated] = useState(false);
+    const [sorting, setSorting] = useState([]);
 
     const [
         taskRatingFinalSubmission,
@@ -67,21 +70,24 @@ const EvaluationModal = ({
     );
 
     const Tasks = data?.data;
-
-    console.log("evaluations task", Tasks);
-    const [allTasksReviewed, setAllTasksReviewed] = useState(false);
+    let tasksToRate = [];
+    //to enable or disable button
 
     useEffect(() => {
-        if (data && data.data) {
-            const Tasks = data.data;
-            const allTasksReviewed =
-                Tasks.length ===
-                Tasks.filter((task) => task.lead_dev_cmnt !== null).length;
-            setAllTasksReviewed(allTasksReviewed);
+        if (data && data?.data) {
+            const tasks = data?.data;
+            tasksToRate = tasks?.filter((task) => {
+                return (
+                    Number(task.total_min) > 5 && task.submission_date !== null
+                );
+            });
+            const isAllTaskRated =
+                tasksToRate?.length ===
+                tasksToRate?.filter((task) => task.lead_dev_cmnt !== null)
+                    .length;
+            setIsAllTaskRated(isAllTaskRated);
         }
     }, [data]);
-
-    const [sorting, setSorting] = useState([]);
 
     const [{ pageIndex, pageSize }, setPagination] = useState({
         pageIndex: 0,
@@ -202,7 +208,7 @@ const EvaluationModal = ({
                     borderRadius: "10px",
                     maxWidth: "100%",
                     height: "fit-content",
-                    maxHeight: "90vh",
+                    maxHeight: "100%",
                     margin: "auto auto",
                     padding: "10px",
                     overflowY: "auto",
@@ -212,12 +218,17 @@ const EvaluationModal = ({
             onRequestClose={() => setIsEvaluationModal(false)}
         >
             <EvalTableTitle>
-                <span>New Developer Evaluation :</span>
-                <span>{singleEvaluation.user_name}</span>
+                <span>New Developer Evaluation:</span>
+                <span> {singleEvaluation.user_name}</span>
+
+                <span className="average_rating">
+                    <span>Cumulative Average:</span>
+                    <span> {singleEvaluation?.lead_dev_avg_rating ?? 0}</span>
+                </span>
             </EvalTableTitle>
             <EvaluationTable
                 data={Tasks}
-                columns={[...EvaluationTableColumns]}
+                columns={[...EvaluationTaskTableColumns]}
                 isLoading={isLoading}
                 onPageChange={onPageChange}
                 sorting={sorting}
@@ -354,7 +365,7 @@ const EvaluationModal = ({
                         size="md"
                         className="ml-2"
                         disabled={
-                            !allTasksReviewed ||
+                            !isAllTaskRated ||
                             singleEvaluation.ld_submission_status === 1 ||
                             isLoadingLeadDevFinalSubmission
                         }
