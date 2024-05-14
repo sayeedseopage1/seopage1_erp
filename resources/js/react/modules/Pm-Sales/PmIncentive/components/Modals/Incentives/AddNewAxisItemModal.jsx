@@ -48,6 +48,7 @@ const AddNewAxisItemModal = ({ xAxisStartAndEndValue, chartAxisData, setChartAxi
         }
     };
 
+
     const handleCancel = () => {
         setAntdModalOpen(false);
         reset();

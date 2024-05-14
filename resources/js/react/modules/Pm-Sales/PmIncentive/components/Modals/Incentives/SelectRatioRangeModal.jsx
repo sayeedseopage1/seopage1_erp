@@ -21,6 +21,7 @@ const SelectRatioRangeModal = ({ xAxisStartAndEndValue, setXAxisStartAndEndValue
     }
 
     const handleCancel = () => {
+        reset()
         setAntdModalOpen(false)
     }
 

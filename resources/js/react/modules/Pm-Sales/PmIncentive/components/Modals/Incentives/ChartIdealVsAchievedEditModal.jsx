@@ -7,6 +7,7 @@ import EditXAxisModal from './EditXAxisModal';
 import EditYAxisModal from './EditYAxisModal';
 import SelectRatioRangeModal from './SelectRatioRangeModal';
 import RemoveRatioItemsModal from './RemoveRatioItemsModal';
+import { toast } from 'react-toastify';
 
 const ChartIdealVsAchievedEditModal = ({ antdModalOpen, showIdealVsAchievedEditModal, chartData }) => {
     // console.log(chartData)
@@ -26,27 +27,33 @@ const ChartIdealVsAchievedEditModal = ({ antdModalOpen, showIdealVsAchievedEditM
     const [chartAxisData, setChartAxisData] = useState([
         {
             id: '1',
-            xAxisLowerLimit: 0,
-            xAxisUpperLimit: 10,
+            xAxisLowerLimit: 5,
+            xAxisUpperLimit: 15,
             yAxisRatio: 100,
         },
         {
             id: '2',
             xAxisLowerLimit: 10,
-            xAxisUpperLimit: 20,
+            xAxisUpperLimit: 50,
             yAxisRatio: 80,
         },
         {
             id: '3',
-            xAxisLowerLimit: 20,
-            xAxisUpperLimit: 30,
+            xAxisLowerLimit: 50,
+            xAxisUpperLimit: 80,
+            yAxisRatio: 50,
+        },
+        {
+            id: '4',
+            xAxisLowerLimit: 90,
+            xAxisUpperLimit: 95,
             yAxisRatio: 50,
         },
     ])
 
     const [xAxisStartAndEndValue, setXAxisStartAndEndValue] = useState({
         xAxisStaring: 0,
-        xAxisEnding: 120
+        xAxisEnding: 100
     })
 
     // Function to close the modal visibility
@@ -62,6 +69,59 @@ const ChartIdealVsAchievedEditModal = ({ antdModalOpen, showIdealVsAchievedEditM
         setAxisEditItem(item)
         setEditYAxisDataModalOpen(true)
     }
+
+    //submit
+    const handleChartDataSave = () => {
+        // Sort chartAxisData based on xAxisLowerLimit
+        const sortedChartData = chartAxisData.sort((a, b) => a.xAxisLowerLimit - b.xAxisLowerLimit);
+
+        // Validation 0: Check if starting point is valid
+        if ((sortedChartData[0].xAxisLowerLimit < xAxisStartAndEndValue.xAxisStaring) || (sortedChartData[sortedChartData.length - 1].xAxisUpperLimit > xAxisStartAndEndValue.xAxisEnding)) {
+            toast.error(`X Axis range must be between ${xAxisStartAndEndValue?.xAxisStaring} and ${xAxisStartAndEndValue?.xAxisEnding}`);
+            return;
+        }
+
+        // Validation 1: Check if starting point is less than the minimum xAxisLowerLimit
+        if (sortedChartData.length > 0 && sortedChartData[0].xAxisLowerLimit > xAxisStartAndEndValue.xAxisStaring) {
+            toast.error('Starting Point (X Axis) is invalid.');
+            return;
+        }
+
+        // Validation 4: Check if ending point is greater than the maximum xAxisUpperLimit
+        if (sortedChartData.length > 0 && sortedChartData[sortedChartData.length - 1].xAxisUpperLimit < xAxisStartAndEndValue.xAxisEnding) {
+            toast.error('Ending Point (X Axis) is invalid.');
+            return;
+        }
+
+        // Validation : Check if starting point is valid
+        // if (sortedChartData[sortedChartData.length - 1].xAxisUpperLimit > xAxisStartAndEndValue.xAxisEnding) {
+        //     toast.error('Please enter a valid ending point.');
+        //     return;
+        // }
+
+        // Validation 2: Check for conflicts between ranges
+        for (let i = 0; i < sortedChartData.length - 1; i++) {
+            if (sortedChartData[i].xAxisUpperLimit > sortedChartData[i + 1].xAxisLowerLimit) {
+                toast.error('Conflicting ranges detected.');
+                return;
+            }
+        }
+
+        // Validation 3: Check for missing ranges
+        for (let i = 0; i < sortedChartData.length - 1; i++) {
+            if (sortedChartData[i].xAxisUpperLimit < sortedChartData[i + 1].xAxisLowerLimit - 1) {
+                toast.error('Missing range detected.');
+                return;
+            }
+        }
+
+        // If all validations passed, proceed with saving the data
+        console.log(sortedChartData);
+        // Add your save logic here
+    }
+
+
+
 
     return (
         <Modal className='pay_now_modal'
@@ -126,7 +186,7 @@ const ChartIdealVsAchievedEditModal = ({ antdModalOpen, showIdealVsAchievedEditM
 
             {/* Modal Footer */}
             <div className='pay_now_modal_footer'>
-                <ButtonComponent color='#1492E6' textColor='#fff' font='18px'>Save</ButtonComponent>
+                <ButtonComponent onClick={handleChartDataSave} color='#1492E6' textColor='#fff' font='18px'>Save</ButtonComponent>
                 <ButtonComponent onClick={handleCancel} font='18px'>Do it later</ButtonComponent>
             </div>
 
