@@ -22,8 +22,12 @@ export const EvaluationTableColumns = [
 
                         <Popover.Panel>
                             <div className="revision_popover_panel">
-                                <a href={`/account/tasks/${original?.task_id}`}>
-                                    <span className="link_color hover-underline">
+                                <a
+                                    href={`/account/tasks/${original?.task_id}`}
+                                    className="hover-underline"
+                                    target="_blank"
+                                >
+                                    <span className="link_color ">
                                         {original?.task_name}
                                     </span>
                                 </a>
@@ -77,7 +81,8 @@ export const EvaluationTableColumns = [
                                     (data) => (
                                         <div>
                                             <a
-                                                className="link_color"
+                                                className="link_color hover-underline"
+                                                target="_blank"
                                                 href={data}
                                             >
                                                 {data}
@@ -95,7 +100,8 @@ export const EvaluationTableColumns = [
                                     (data) => (
                                         <div>
                                             <a
-                                                className="hover-underline"
+                                                className="link_color hover-underline"
+                                                target="_blank"
                                                 href={data}
                                             >
                                                 {data}
