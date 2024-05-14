@@ -4,7 +4,7 @@ import FractionalRating from "../../../global/FractionalRating";
 const RatingSectionStatic = ({ label, value, onChange }) => {
     return (
         <section>
-            <label>{label}</label>
+            <label style={{ fontWeight: "bold" }}>{label}</label>
             <div className="d-flex flex-row">
                 <div className="pr-2">
                     <FractionalRating value={value} readonly={true} />
