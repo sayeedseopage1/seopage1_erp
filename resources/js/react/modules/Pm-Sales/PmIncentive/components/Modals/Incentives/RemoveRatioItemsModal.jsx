@@ -4,7 +4,7 @@ import { ButtonComponent } from '../../../../PointFactors/components/Styles/ui/u
 import { Modal, Table } from 'antd';
 
 const RemoveRatioItemsModal = ({ chartAxisData, setChartAxisData, antdModalOpen, setAntdModalOpen }) => {
-    const [selectedRowKeys, setSelectedRowKeys] = useState([]);
+    const [selectedRowKeysState, setSelectedRowKeys] = useState([]);
 
 
     const columns = [
@@ -33,22 +33,20 @@ const RemoveRatioItemsModal = ({ chartAxisData, setChartAxisData, antdModalOpen,
 
     const rowSelection = {
         onChange: (selectedRowKeys, selectedRows) => {
-            console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
+            console.log(selectedRowKeys)
             setSelectedRowKeys(selectedRowKeys);
         },
+        selectedRowKeys: selectedRowKeysState,
     };
 
     const handleRemove = () => {
-        setChartAxisData(chartAxisData.filter(item => !selectedRowKeys.includes(item.id)))
+        setChartAxisData(chartAxisData.filter(item => !selectedRowKeysState.includes(item.id)))
         setAntdModalOpen(false)
     }
 
-
-
-
     const handleCancel = () => {
-
         setAntdModalOpen(false)
+        setSelectedRowKeys([])
     }
 
     return (

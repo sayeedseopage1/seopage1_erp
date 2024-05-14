@@ -21,8 +21,6 @@ const ChartIdealVsAchievedEditModal = ({ antdModalOpen, showIdealVsAchievedEditM
 
     //state for x axis and y axis edit 
     const [axisEditItem, setAxisEditItem] = useState({})
-
-
     // x axis and y axis data state
     const [chartAxisData, setChartAxisData] = useState([
         {
@@ -92,12 +90,6 @@ const ChartIdealVsAchievedEditModal = ({ antdModalOpen, showIdealVsAchievedEditM
             toast.error('Ending Point (X Axis) is invalid.');
             return;
         }
-
-        // Validation : Check if starting point is valid
-        // if (sortedChartData[sortedChartData.length - 1].xAxisUpperLimit > xAxisStartAndEndValue.xAxisEnding) {
-        //     toast.error('Please enter a valid ending point.');
-        //     return;
-        // }
 
         // Validation 2: Check for conflicts between ranges
         for (let i = 0; i < sortedChartData.length - 1; i++) {
