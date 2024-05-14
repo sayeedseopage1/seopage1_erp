@@ -395,6 +395,7 @@ const SingleEvaluationModal = ({
                                                             <a
                                                                 className="hover-underline"
                                                                 href={data}
+                                                                target="_blank"
                                                             >
                                                                 {data}
                                                             </a>
