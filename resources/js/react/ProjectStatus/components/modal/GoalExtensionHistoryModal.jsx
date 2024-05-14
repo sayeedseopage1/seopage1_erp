@@ -75,14 +75,14 @@ export default GoalExtensionHistoryModal
 
 const customStyles = {
   overlay: {
-      zIndex: 9999998,
+      zIndex: 9,
       backgroundColor: "rgba(0, 0, 0, 0.5)",
       margin: "auto auto",
       padding: "20px",
   },
   content: {
       zIndex: 9999999,
-      maxWidth: "65wv",
+      maxWidth: "75vw",
       height: "fit-content",
       maxHeight: "85vh",
       margin: "auto auto",

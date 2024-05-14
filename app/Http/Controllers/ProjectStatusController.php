@@ -423,6 +423,7 @@ class ProjectStatusController extends AccountBaseController
                 if ($request->goal_extension_auth_checkbox == 'Apply this extension to all goals') {
                     $pmGoalFinds = ProjectPmGoal::where('project_id', $request->project_id)
                         ->where('goal_status', 0)
+                        ->where('expired_status', 0)
                         ->get();
 
 
@@ -482,6 +483,7 @@ class ProjectStatusController extends AccountBaseController
                 if ($request->goal_extension_auth_checkbox == 'Apply this extension to all goals') {
                     $pmGoalFinds = ProjectPmGoal::where('project_id', $request->project_id)
                         ->where('goal_status', 0)
+                        ->where('expired_status', 0)
                         ->get();
 
                     foreach ($pmGoalFinds as $item) {
@@ -546,7 +548,7 @@ class ProjectStatusController extends AccountBaseController
                 {
                     // dd($action);
                     $pm_goal= ProjectPmGoal::where('id',$action->goal_id)->first();
-                    $ext_history= PmGoalDeadlineExtHistory::where('id',$action->goal_id)->first();
+                    $ext_history= PmGoalDeadlineExtHistory::where('goal_id',$action->goal_id)->first();
                     $project= Project::where('id',$pm_goal->project_id)->first();
                     $action->authorized_by= Auth::id();
                     $action->authorized_at= Carbon::now();
@@ -711,6 +713,7 @@ class ProjectStatusController extends AccountBaseController
         ->leftJoin('users','project_pm_goals.client_id','users.id')
         ->where('project_pm_goals.pm_id',$id)
         ->where('project_pm_goals.expired_status',1)
+        ->where('project_pm_goals.reason_status',0)
         ->get();
         return response()->json([
             'data'=>$pmGoal

@@ -29,7 +29,6 @@ const ResolveModal = ({
         negligence_pm_rating: null,
         any_other_suggestion_admin: "",
     });
-    console.log(auth)
     const [resolveModalDataValidation, setResolveModalDataValidation] =
         useState({
             client_communication: false,
@@ -45,15 +44,16 @@ const ResolveModal = ({
 
     // Api Call
     const handleSubmit = async () => {
+        const {any_other_suggestion_admin, ...rest} = resolveModalData
         const isEmpty = isStateAllHaveValue({
             project_pm_goal_id: projectPmGoalId,
-            ...resolveModalData,
+            ...rest,
         });
 
         if (isEmpty) {
             const validation = markEmptyFieldsValidation({
                 project_pm_goal_id: projectPmGoalId,
-                ...resolveModalData,
+                ...rest,
             });
             setResolveModalDataValidation({
                 ...resolveModalDataValidation,
