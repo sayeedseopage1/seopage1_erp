@@ -20,22 +20,27 @@ const AddNewAxisItemModal = ({ xAxisStartAndEndValue, chartAxisData, setChartAxi
     const validateFields = (data) => {
         let isValid = true;
 
-        if (data.xAxisLowerLimit >= data.xAxisUpperLimit) {
+        if (data.xAxisLowerLimit >= data.xAxisUpperLimit || data.xAxisUpperLimit < data.xAxisLowerLimit) {
             toast.error('X Axis Lower Limit cannot be greater than or equal to Upper Limit');
             isValid = false;
         }
 
         if (data.xAxisLowerLimit < xAxisStaring || data.xAxisUpperLimit > xAxisEnding) {
-            toast.error(`X Axis Lower Limit must be between ${xAxisStaring} and ${xAxisEnding}`);
+            toast.error(`X Axis range must be between ${xAxisStaring} and ${xAxisEnding}`);
             isValid = false;
         }
 
         return isValid;
     };
 
+    //make unique id
+    const uniqueId = () => {
+        return Math.floor(Math.random() * 1000000000).toString(32);
+    };
+
     const onSubmit = (data) => {
         if (validateFields(data)) {
-            const newData = [...chartAxisData, data];
+            const newData = [...chartAxisData, { ...data, id: uniqueId() }];
             setChartAxisData(newData);
             reset();
             setAntdModalOpen(false);
