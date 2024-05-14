@@ -18,16 +18,55 @@ use Illuminate\Support\Facades\DB;
 
 class HelperPmProjectStatusController extends AccountBaseController
 {
+
+    function goalCount($priorityType,  $milestoneCount) : int
+    {
+        /**
+         * total goal count
+         * ragular
+         * Milestone -> goals
+         * 1 - 2+1 = 3
+         * 2 - 2 +1(1) +1(1) = 4
+         * 3 - 2 +1(2) +1(1) = 4
+         * 4 - 2 +1(2) +1(1) +1(1) = 5
+         * 5 - 2 +1(3) +1(1) +1(1) = 5
+         * 6 - 2 +1(3) +1(1) +1(1) +1(1)= 6
+         * 7 - 2 +1(4) +1(1) +1(1) +1(1)= 6
+         * 8 - 2 +1(4) +1(1) +1(1) +1(1) +1(1)= 7
+         *
+         * milestone count(mc)
+         * goal count = 2 + 1 + mc - up round(mc/2)
+         *
+         * Priority
+         *  goal count = 2 + mc
+         */
+
+        $priorityType = in_array($priorityType, ['highPriority', 'topMostPriority', 'criticallySensitive']) ? 'priority' : $priorityType;
+
+        switch ($priorityType) {
+            case 'regular':
+                return 2 + 1 + $milestoneCount - round($milestoneCount / 2, 0);
+                break;
+            case 'priority':
+                return 2 + $milestoneCount;
+                break;
+            default:
+                return new Exception('Project priority type is invalid');
+        }
+    }
+
     public function ProjectPmGoalCreation($pmGoalSetting, $findDeal, $findProject)
     {
+        if (! in_array($pmGoalSetting->category, array_keys(Project::$categories))) return new Exception('Project priority type is invalid');
+
         // dd($pmGoalSetting);
-        $milestone_count = ProjectMilestone::where('project_id', $findProject->id)->count();
+        $milestoneCount = ProjectMilestone::where('project_id', $findProject->id)->count();
         $milestoneSum = (new ProjectMilestoneController)->getCostSum($findProject->id);
 
         // --------------- calculate total number of days for the project --------------------- //
         $extraGoal = $milestoneSum < $findDeal->actual_amount ? 1 : 0;
 
-        $totalRequiedDayes = self::calculateProjectRequiedDays($pmGoalSetting->name, $milestone_count + $extraGoal);
+        $totalRequiedDayes = self::calculateProjectRequiedDays($pmGoalSetting->category, $milestoneCount + $extraGoal);
         // ------------- end -------------- //
 
         $pm_project = PMProject::where('project_id', $findProject->id)->first();
@@ -43,491 +82,166 @@ class HelperPmProjectStatusController extends AccountBaseController
 
 
         if ($totalRequiedDayes !== 0 && $totalRequiedDayes > $totalProjectDays) {
-            return self::createShortDeadlinePmGoals($pmGoalSetting->name, $findProject, $findDeal, $pm_project, $milestone_count, $extraGoal, $totalProjectDays);
+            return self::createShortDeadlinePmGoals($pmGoalSetting->category, $findProject, $findDeal, $pm_project, $milestoneCount, $extraGoal, $totalProjectDays);
         }
         // check end
 
         DB::beginTransaction();
 
         try {
-            if ($pmGoalSetting->name == 'Regular') {
-                $p_pm_regular_goal = new ProjectPmGoal();
-                $p_pm_regular_goal->project_id = $findProject->id;
-                $p_pm_regular_goal->client_id = $findDeal->client_id;
-                $p_pm_regular_goal->pm_id = $findDeal->pm_id;
-                $p_pm_regular_goal->project_type = $findDeal->project_type;
-                $p_pm_regular_goal->project_category = 'Regular';
-                $p_pm_regular_goal->goal_code = 'DCS';
-                $p_pm_regular_goal->goal_name = 'Deliverables have to be signed off and all the tasks have to be created with proper planning';
-                $p_pm_regular_goal->goal_type = 'deliverable_signed_by_client';
-                $p_pm_regular_goal->goal_start_date = $goal_start_date;
-                $p_pm_regular_goal->goal_end_date = Carbon::parse($goal_start_date)->addDay(3);
-                $p_pm_regular_goal->duration = 3;
-                $p_pm_regular_goal->added_by = Auth::user()->id;
-                $p_pm_regular_goal->save();
+            if ($pmGoalSetting->category == 'regular') {
 
-                $p_pm_regular_goal = new ProjectPmGoal();
-                $p_pm_regular_goal->project_id = $findProject->id;
-                $p_pm_regular_goal->client_id = $findDeal->client_id;
-                $p_pm_regular_goal->pm_id = $findDeal->pm_id;
-                $p_pm_regular_goal->project_type = $findDeal->project_type;
-                $p_pm_regular_goal->project_category = 'Regular';
-                $p_pm_regular_goal->goal_code = 'TSM';
-                $p_pm_regular_goal->goal_name = '1st submission has to be made';
-                $p_pm_regular_goal->goal_type = '1st_task_submissino';
-                $p_pm_regular_goal->goal_start_date = $goal_start_date;
-                $p_pm_regular_goal->goal_end_date = Carbon::parse($goal_start_date)->addDay(7);
-                $p_pm_regular_goal->duration = 7;
-                $p_pm_regular_goal->added_by = Auth::user()->id;
-                $p_pm_regular_goal->save();
+                $goalDurationArray = [3, 7, 12, 15, 22, 29];
+                $i = 0;
+                $goalCount = self::goalCount($pmGoalSetting->category, $milestoneCount);
+                $goalCodes = ProjectPmGoal::$goalCodes[$pmGoalSetting->category];
 
-                $p_pm_regular_goal = new ProjectPmGoal();
-                $p_pm_regular_goal->project_id = $findProject->id;
-                $p_pm_regular_goal->client_id = $findDeal->client_id;
-                $p_pm_regular_goal->pm_id = $findDeal->pm_id;
-                $p_pm_regular_goal->project_type = $findDeal->project_type;
-                $p_pm_regular_goal->project_category = 'Regular';
-                $p_pm_regular_goal->goal_code = 'FPMR';
-                $p_pm_regular_goal->goal_name = 'At least 50% of the milestones have to be released';
-                $p_pm_regular_goal->goal_type = '50%_milestone_value_released';
-                $p_pm_regular_goal->goal_start_date = $goal_start_date;
-                $p_pm_regular_goal->goal_end_date = Carbon::parse($goal_start_date)->addDay(12);
-                $p_pm_regular_goal->duration = 12;
-                $p_pm_regular_goal->added_by = Auth::user()->id;
-                $p_pm_regular_goal->save();
-                if ($milestone_count > 1) {
-                    $p_pm_regular_goal = new ProjectPmGoal();
-                    $p_pm_regular_goal->project_id = $findProject->id;
-                    $p_pm_regular_goal->client_id = $findDeal->client_id;
-                    $p_pm_regular_goal->pm_id = $findDeal->pm_id;
-                    $p_pm_regular_goal->project_type = $findDeal->project_type;
-                    $p_pm_regular_goal->project_category = 'Regular';
-                    $p_pm_regular_goal->goal_code = 'MPMR';
-                    $p_pm_regular_goal->goal_name = 'At least 1 more milestone released between 12-15 days';
-                    $p_pm_regular_goal->goal_type = 'more_milestone_released';
-                    $p_pm_regular_goal->goal_start_date = $goal_start_date;
-                    $p_pm_regular_goal->goal_end_date = Carbon::parse($goal_start_date)->addDay(15);
-                    $p_pm_regular_goal->duration = 15;
-                    $p_pm_regular_goal->added_by = Auth::user()->id;
-                    $p_pm_regular_goal->save();
-                }
-                if ($milestone_count > 2) {
-                    $p_pm_regular_goal = new ProjectPmGoal();
-                    $p_pm_regular_goal->project_id = $findProject->id;
-                    $p_pm_regular_goal->client_id = $findDeal->client_id;
-                    $p_pm_regular_goal->pm_id = $findDeal->pm_id;
-                    $p_pm_regular_goal->project_type = $findDeal->project_type;
-                    $p_pm_regular_goal->project_category = 'Regular';
-                    $p_pm_regular_goal->goal_code = 'MMPMR';
-                    $p_pm_regular_goal->goal_name = 'At least 1 more milestone released between 12-15 days';
-                    $p_pm_regular_goal->goal_type = 'more_and_more_milestone_released';
-                    $p_pm_regular_goal->goal_start_date = $goal_start_date;
-                    $p_pm_regular_goal->goal_end_date = Carbon::parse($goal_start_date)->addDay(22);
-                    $p_pm_regular_goal->duration = 22;
-                    $p_pm_regular_goal->added_by = Auth::user()->id;
-                    $p_pm_regular_goal->save();
-                }
-                if ($milestone_count > 3) {
+                $goal = new ProjectPmGoal();
+                $goal->project_id = $findProject->id;
+                $goal->client_id = $findDeal->client_id;
+                $goal->pm_id = $findDeal->pm_id;
+                $goal->project_type = $findDeal->project_type;
+                $goal->project_category = 'Regular';
 
-                    $p_pm_regular_goal = new ProjectPmGoal();
-                    $p_pm_regular_goal->project_id = $findProject->id;
-                    $p_pm_regular_goal->client_id = $findDeal->client_id;
-                    $p_pm_regular_goal->pm_id = $findDeal->pm_id;
-                    $p_pm_regular_goal->project_type = $findDeal->project_type;
-                    $p_pm_regular_goal->project_category = 'Regular';
-                    $p_pm_regular_goal->goal_code = 'LM';
-                    $p_pm_regular_goal->goal_name = 'This 1 more milestone need to be released until the completion of the project following every 7 days';
-                    $p_pm_regular_goal->goal_type = 'last_milestone';
-                    $p_pm_regular_goal->goal_start_date = $goal_start_date;
-                    $p_pm_regular_goal->goal_end_date = Carbon::parse($goal_start_date)->addDay(29);
-                    $p_pm_regular_goal->duration = 29;
-                    $p_pm_regular_goal->added_by = Auth::user()->id;
-                    $p_pm_regular_goal->save();
-                }
-                $timePassed = $p_pm_regular_goal->duration;
-            } elseif ($pmGoalSetting->name == 'Priority') {
-                $pPmPriorityGoal = new ProjectPmGoal();
-                $pPmPriorityGoal->project_id = $findProject->id;
-                $pPmPriorityGoal->client_id = $findDeal->client_id;
-                $pPmPriorityGoal->pm_id = $findDeal->pm_id;
-                $pPmPriorityGoal->project_type = $findDeal->project_type;
-                $pPmPriorityGoal->project_category = 'Priority';
-                $pPmPriorityGoal->goal_code = 'DCS';
-                $pPmPriorityGoal->goal_name = 'Deliverables have to be signed off and all the tasks have to be created with proper planning';
-                $pPmPriorityGoal->goal_type = 'deliverable_signed_by_client';
-                $pPmPriorityGoal->goal_start_date = $goal_start_date;
-                $pPmPriorityGoal->goal_end_date = Carbon::parse($goal_start_date)->addDay(3);
-                $pPmPriorityGoal->duration = 3;
-                $pPmPriorityGoal->added_by = Auth::user()->id;
-                $pPmPriorityGoal->save();
+                $goal->goal_code = $goalCodes[$i]['code'];
+                $goal->goal_name = $goalCodes[$i]['name'];
+                $goal->goal_type = $goalCodes[$i]['type'];
 
-                $pPmPriorityGoal = new ProjectPmGoal();
-                $pPmPriorityGoal->project_id = $findProject->id;
-                $pPmPriorityGoal->client_id = $findDeal->client_id;
-                $pPmPriorityGoal->pm_id = $findDeal->pm_id;
-                $pPmPriorityGoal->project_type = $findDeal->project_type;
-                $pPmPriorityGoal->project_category = 'Priority';
-                $pPmPriorityGoal->goal_code = 'TSM';
-                $pPmPriorityGoal->goal_name = '1st submission has to be made';
-                $pPmPriorityGoal->goal_type = '1st_task_submissino';
-                $pPmPriorityGoal->goal_start_date = $goal_start_date;
-                $pPmPriorityGoal->goal_end_date = Carbon::parse($goal_start_date)->addDay(4);
-                $pPmPriorityGoal->duration = 4;
-                $pPmPriorityGoal->added_by = Auth::user()->id;
-                $pPmPriorityGoal->save();
+                $goal->goal_start_date = $goal_start_date;
+                $goal->goal_end_date = Carbon::parse($goal_start_date)->addDay($goalDurationArray[$i]);
+                $goal->duration = $goalDurationArray[$i];
+                $goal->added_by = Auth::user()->id;
+                $goal->save();
 
-                $pPmPriorityGoal = new ProjectPmGoal();
-                $pPmPriorityGoal->project_id = $findProject->id;
-                $pPmPriorityGoal->client_id = $findDeal->client_id;
-                $pPmPriorityGoal->pm_id = $findDeal->pm_id;
-                $pPmPriorityGoal->project_type = $findDeal->project_type;
-                $pPmPriorityGoal->project_category = 'Priority';
-                $pPmPriorityGoal->goal_code = 'FMR';
-                $pPmPriorityGoal->goal_name = '1st milestone has to be released';
-                $pPmPriorityGoal->goal_type = '1st_milestone_released';
-                $pPmPriorityGoal->goal_start_date = $goal_start_date;
-                $pPmPriorityGoal->goal_end_date = Carbon::parse($goal_start_date)->addDay(7);
-                $pPmPriorityGoal->duration = 7;
-                $pPmPriorityGoal->added_by = Auth::user()->id;
-                $pPmPriorityGoal->save();
-                if ($milestone_count > 1) {
-                    $pPmPriorityGoal = new ProjectPmGoal();
-                    $pPmPriorityGoal->project_id = $findProject->id;
-                    $pPmPriorityGoal->client_id = $findDeal->client_id;
-                    $pPmPriorityGoal->pm_id = $findDeal->pm_id;
-                    $pPmPriorityGoal->project_type = $findDeal->project_type;
-                    $pPmPriorityGoal->project_category = 'Priority';
-                    $pPmPriorityGoal->goal_code = 'MPMR';
-                    $pPmPriorityGoal->goal_name = 'One more milestone has to be released between 7-12 th days';
-                    $pPmPriorityGoal->goal_type = 'more_milestone_released';
-                    $pPmPriorityGoal->goal_start_date = $goal_start_date;
-                    $pPmPriorityGoal->goal_end_date = Carbon::parse($goal_start_date)->addDay(12);
-                    $pPmPriorityGoal->duration = 12;
-                    $pPmPriorityGoal->added_by = Auth::user()->id;
-                    $pPmPriorityGoal->save();
-                }
-                if ($milestone_count > 2) {
-                    $pPmPriorityGoal = new ProjectPmGoal();
-                    $pPmPriorityGoal->project_id = $findProject->id;
-                    $pPmPriorityGoal->client_id = $findDeal->client_id;
-                    $pPmPriorityGoal->pm_id = $findDeal->pm_id;
-                    $pPmPriorityGoal->project_type = $findDeal->project_type;
-                    $pPmPriorityGoal->project_category = 'Priority';
-                    $pPmPriorityGoal->goal_code = 'MMPMR';
-                    $pPmPriorityGoal->goal_name = 'At least 1 more milestone released between 12-15 days';
-                    $pPmPriorityGoal->goal_type = 'more_and_more_milestone_released';
-                    $pPmPriorityGoal->goal_start_date = $goal_start_date;
-                    $pPmPriorityGoal->goal_end_date = Carbon::parse($goal_start_date)->addDay(15);
-                    $pPmPriorityGoal->duration = 15;
-                    $pPmPriorityGoal->added_by = Auth::user()->id;
-                    $pPmPriorityGoal->save();
-                }
-                if ($milestone_count > 3) {
-                    $pPmPriorityGoal = new ProjectPmGoal();
-                    $pPmPriorityGoal->project_id = $findProject->id;
-                    $pPmPriorityGoal->client_id = $findDeal->client_id;
-                    $pPmPriorityGoal->pm_id = $findDeal->pm_id;
-                    $pPmPriorityGoal->project_type = $findDeal->project_type;
-                    $pPmPriorityGoal->project_category = 'Priority';
-                    $pPmPriorityGoal->goal_code = 'LM';
-                    $pPmPriorityGoal->goal_name = 'At least 1 more milestone released between 12-15 days';
-                    $pPmPriorityGoal->goal_type = 'last_milestone';
-                    $pPmPriorityGoal->goal_start_date = $goal_start_date;
-                    $pPmPriorityGoal->goal_end_date = Carbon::parse($goal_start_date)->addDay(22);
-                    $pPmPriorityGoal->duration = 22;
-                    $pPmPriorityGoal->added_by = Auth::user()->id;
-                    $pPmPriorityGoal->save();
+                $timePassed = $goal->duration;
+
+                for (++$i; $i < $goalCount; $i++) {
+                    $goal = new ProjectPmGoal();
+                    $goal->project_id = $findProject->id;
+                    $goal->client_id = $findDeal->client_id;
+                    $goal->pm_id = $findDeal->pm_id;
+                    $goal->project_type = $findDeal->project_type;
+                    $goal->project_category = 'Regular';
+                    $goal->goal_start_date = $goal_start_date;
+
+                    if ($i < 6) {
+                        $goal->goal_code = $goalCodes[$i]['code'];
+                        $goal->goal_name = $goalCodes[$i]['name'];
+                        $goal->goal_type = $goalCodes[$i]['type'];
+                        $goal->goal_end_date = Carbon::parse($goal_start_date)->addDay($goalDurationArray[$i]);
+                        $goal->duration = $goalDurationArray[$i];
+                        $timePassed = $goal->duration;
+                    }
+                    else {
+                        $goal->goal_code = $goalCodes[5]['code'];
+                        $goal->goal_name = $goalCodes[5]['name'];
+                        $goal->goal_type = $goalCodes[5]['type'];
+
+                        $timePassed = $goal->duration;
+                        $goal->goal_end_date = Carbon::parse($goal_start_date)->addDay($timePassed=+7);
+                        $goal->duration = $timePassed;
+                    }
+
+                    $goal->added_by = Auth::user()->id;
+                    $goal->save();
                 }
 
-                $timePassed = $pPmPriorityGoal->duration;
-            } elseif ($pmGoalSetting->name == 'High-priority') {
-                $pPmHPGoal = new ProjectPmGoal();
-                $pPmHPGoal->project_id = $findProject->id;
-                $pPmHPGoal->client_id = $findDeal->client_id;
-                $pPmHPGoal->pm_id = $findDeal->pm_id;
-                $pPmHPGoal->project_type = $findDeal->project_type;
-                $pPmHPGoal->project_category = 'High-priority';
-                $pPmHPGoal->goal_code = 'DCS';
-                $pPmHPGoal->goal_name = 'Deliverables have to be signed off and all the tasks have to be created with proper planning';
-                $pPmHPGoal->goal_type = 'deliverable_signed_by_client';
-                $pPmHPGoal->goal_start_date = $goal_start_date;
-                $pPmHPGoal->goal_end_date = Carbon::parse($goal_start_date)->addDay(3);
-                $pPmHPGoal->duration = 3;
-                $pPmHPGoal->added_by = Auth::user()->id;
-                $pPmHPGoal->save();
-
-                $pPmHPGoal = new ProjectPmGoal();
-                $pPmHPGoal->project_id = $findProject->id;
-                $pPmHPGoal->client_id = $findDeal->client_id;
-                $pPmHPGoal->pm_id = $findDeal->pm_id;
-                $pPmHPGoal->project_type = $findDeal->project_type;
-                $pPmHPGoal->project_category = 'High-priority';
-                $pPmHPGoal->goal_code = 'TSM';
-                $pPmHPGoal->goal_name = '1st submission has to be made';
-                $pPmHPGoal->goal_type = '1st_task_submissino';
-                $pPmHPGoal->goal_start_date = $goal_start_date;
-                $pPmHPGoal->goal_end_date = Carbon::parse($goal_start_date)->addDay(4);
-                $pPmHPGoal->duration = 4;
-                $pPmHPGoal->added_by = Auth::user()->id;
-                $pPmHPGoal->save();
-
-                $pPmHPGoal = new ProjectPmGoal();
-                $pPmHPGoal->project_id = $findProject->id;
-                $pPmHPGoal->client_id = $findDeal->client_id;
-                $pPmHPGoal->pm_id = $findDeal->pm_id;
-                $pPmHPGoal->project_type = $findDeal->project_type;
-                $pPmHPGoal->project_category = 'High-priority';
-                $pPmHPGoal->goal_code = 'FMR';
-                $pPmHPGoal->goal_name = '1st milestone has to be released';
-                $pPmHPGoal->goal_type = '1st_milestone_released';
-                $pPmHPGoal->goal_start_date = $goal_start_date;
-                $pPmHPGoal->goal_end_date = Carbon::parse($goal_start_date)->addDay(7);
-                $pPmHPGoal->duration = 7;
-                $pPmHPGoal->added_by = Auth::user()->id;
-                $pPmHPGoal->save();
-                if ($milestone_count > 1) {
-                    $pPmHPGoal = new ProjectPmGoal();
-                    $pPmHPGoal->project_id = $findProject->id;
-                    $pPmHPGoal->client_id = $findDeal->client_id;
-                    $pPmHPGoal->pm_id = $findDeal->pm_id;
-                    $pPmHPGoal->project_type = $findDeal->project_type;
-                    $pPmHPGoal->project_category = 'High-priority';
-                    $pPmHPGoal->goal_code = 'MPMR';
-                    $pPmHPGoal->goal_name = 'One more milestone has to be released between 7-12 th days';
-                    $pPmHPGoal->goal_type = 'more_milestone_released';
-                    $pPmHPGoal->goal_start_date = $goal_start_date;
-                    $pPmHPGoal->goal_end_date = Carbon::parse($goal_start_date)->addDay(12);
-                    $pPmHPGoal->duration = 12;
-                    $pPmHPGoal->added_by = Auth::user()->id;
-                    $pPmHPGoal->save();
-                }
-                if ($milestone_count > 2) {
-                    $pPmHPGoal = new ProjectPmGoal();
-                    $pPmHPGoal->project_id = $findProject->id;
-                    $pPmHPGoal->client_id = $findDeal->client_id;
-                    $pPmHPGoal->pm_id = $findDeal->pm_id;
-                    $pPmHPGoal->project_type = $findDeal->project_type;
-                    $pPmHPGoal->project_category = 'High-priority';
-                    $pPmHPGoal->goal_code = 'MMPMR';
-                    $pPmHPGoal->goal_name = 'At least 1 more milestone released between 12-15 days';
-                    $pPmHPGoal->goal_type = 'more_and_more_milestone_released';
-                    $pPmHPGoal->goal_start_date = $goal_start_date;
-                    $pPmHPGoal->goal_end_date = Carbon::parse($goal_start_date)->addDay(15);
-                    $pPmHPGoal->duration = 15;
-                    $pPmHPGoal->added_by = Auth::user()->id;
-                    $pPmHPGoal->save();
-                }
-                if ($milestone_count > 3) {
-                    $pPmHPGoal = new ProjectPmGoal();
-                    $pPmHPGoal->project_id = $findProject->id;
-                    $pPmHPGoal->client_id = $findDeal->client_id;
-                    $pPmHPGoal->pm_id = $findDeal->pm_id;
-                    $pPmHPGoal->project_type = $findDeal->project_type;
-                    $pPmHPGoal->project_category = 'High-priority';
-                    $pPmHPGoal->goal_code = 'LM';
-                    $pPmHPGoal->goal_name = 'At least 1 more milestone released between 12-15 days';
-                    $pPmHPGoal->goal_type = 'last_milestone';
-                    $pPmHPGoal->goal_start_date = $goal_start_date;
-                    $pPmHPGoal->goal_end_date = Carbon::parse($goal_start_date)->addDay(22);
-                    $pPmHPGoal->duration = 22;
-                    $pPmHPGoal->added_by = Auth::user()->id;
-                    $pPmHPGoal->save();
-                }
-
-                $timePassed = $pPmHPGoal->duration;
-            } elseif ($pmGoalSetting->name == 'Top most priority') {
-                $pPmTMPGoal = new ProjectPmGoal();
-                $pPmTMPGoal->project_id = $findProject->id;
-                $pPmTMPGoal->client_id = $findDeal->client_id;
-                $pPmTMPGoal->pm_id = $findDeal->pm_id;
-                $pPmTMPGoal->project_type = $findDeal->project_type;
-                $pPmTMPGoal->project_category = 'Top most priority';
-                $pPmTMPGoal->goal_code = 'DCS';
-                $pPmTMPGoal->goal_name = 'Deliverables have to be signed off and all the tasks have to be created with proper planning';
-                $pPmTMPGoal->goal_type = 'deliverable_signed_by_client';
-                $pPmTMPGoal->goal_start_date = $goal_start_date;
-                $pPmTMPGoal->goal_end_date = Carbon::parse($goal_start_date)->addDay(3);
-                $pPmTMPGoal->duration = 3;
-                $pPmTMPGoal->added_by = Auth::user()->id;
-                $pPmTMPGoal->save();
-
-                $pPmTMPGoal = new ProjectPmGoal();
-                $pPmTMPGoal->project_id = $findProject->id;
-                $pPmTMPGoal->client_id = $findDeal->client_id;
-                $pPmTMPGoal->pm_id = $findDeal->pm_id;
-                $pPmTMPGoal->project_type = $findDeal->project_type;
-                $pPmTMPGoal->project_category = 'Top most priority';
-                $pPmTMPGoal->goal_code = 'TSM';
-                $pPmTMPGoal->goal_name = '1st submission has to be made';
-                $pPmTMPGoal->goal_type = '1st_task_submissino';
-                $pPmTMPGoal->goal_start_date = $goal_start_date;
-                $pPmTMPGoal->goal_end_date = Carbon::parse($goal_start_date)->addDay(4);
-                $pPmTMPGoal->duration = 4;
-                $pPmTMPGoal->added_by = Auth::user()->id;
-                $pPmTMPGoal->save();
-
-                $pPmTMPGoal = new ProjectPmGoal();
-                $pPmTMPGoal->project_id = $findProject->id;
-                $pPmTMPGoal->client_id = $findDeal->client_id;
-                $pPmTMPGoal->pm_id = $findDeal->pm_id;
-                $pPmTMPGoal->project_type = $findDeal->project_type;
-                $pPmTMPGoal->project_category = 'Top most priority';
-                $pPmTMPGoal->goal_code = 'FMR';
-                $pPmTMPGoal->goal_name = '1st milestone has to be released';
-                $pPmTMPGoal->goal_type = '1st_milestone_released';
-                $pPmTMPGoal->goal_start_date = $goal_start_date;
-                $pPmTMPGoal->goal_end_date = Carbon::parse($goal_start_date)->addDay(7);
-                $pPmTMPGoal->duration = 7;
-                $pPmTMPGoal->added_by = Auth::user()->id;
-                $pPmTMPGoal->save();
-                if ($milestone_count > 1) {
-                    $pPmTMPGoal = new ProjectPmGoal();
-                    $pPmTMPGoal->project_id = $findProject->id;
-                    $pPmTMPGoal->client_id = $findDeal->client_id;
-                    $pPmTMPGoal->pm_id = $findDeal->pm_id;
-                    $pPmTMPGoal->project_type = $findDeal->project_type;
-                    $pPmTMPGoal->project_category = 'Top most priority';
-                    $pPmTMPGoal->goal_code = 'MPMR';
-                    $pPmTMPGoal->goal_name = 'One more milestone has to be released between 7-12 th days';
-                    $pPmTMPGoal->goal_type = 'more_milestone_released';
-                    $pPmTMPGoal->goal_start_date = $goal_start_date;
-                    $pPmTMPGoal->goal_end_date = Carbon::parse($goal_start_date)->addDay(12);
-                    $pPmTMPGoal->duration = 12;
-                    $pPmTMPGoal->added_by = Auth::user()->id;
-                    $pPmTMPGoal->save();
-                }
-                if ($milestone_count > 2) {
-                    $pPmTMPGoal = new ProjectPmGoal();
-                    $pPmTMPGoal->project_id = $findProject->id;
-                    $pPmTMPGoal->client_id = $findDeal->client_id;
-                    $pPmTMPGoal->pm_id = $findDeal->pm_id;
-                    $pPmTMPGoal->project_type = $findDeal->project_type;
-                    $pPmTMPGoal->project_category = 'Top most priority';
-                    $pPmTMPGoal->goal_code = 'MMPMR';
-                    $pPmTMPGoal->goal_name = 'At least 1 more milestone released between 12-15 days';
-                    $pPmTMPGoal->goal_type = 'more_and_more_milestone_released';
-                    $pPmTMPGoal->goal_start_date = $goal_start_date;
-                    $pPmTMPGoal->goal_end_date = Carbon::parse($goal_start_date)->addDay(15);
-                    $pPmTMPGoal->duration = 15;
-                    $pPmTMPGoal->added_by = Auth::user()->id;
-                    $pPmTMPGoal->save();
-                }
-                if ($milestone_count > 3) {
-
-                    $pPmTMPGoal = new ProjectPmGoal();
-                    $pPmTMPGoal->project_id = $findProject->id;
-                    $pPmTMPGoal->client_id = $findDeal->client_id;
-                    $pPmTMPGoal->pm_id = $findDeal->pm_id;
-                    $pPmTMPGoal->project_type = $findDeal->project_type;
-                    $pPmTMPGoal->project_category = 'Top most priority';
-                    $pPmTMPGoal->goal_code = 'LM';
-                    $pPmTMPGoal->goal_name = 'At least 1 more milestone released between 12-15 days';
-                    $pPmTMPGoal->goal_type = 'last_milestone';
-                    $pPmTMPGoal->goal_start_date = $goal_start_date;
-                    $pPmTMPGoal->goal_end_date = Carbon::parse($goal_start_date)->addDay(22);
-                    $pPmTMPGoal->duration = 22;
-                    $pPmTMPGoal->added_by = Auth::user()->id;
-                    $pPmTMPGoal->save();
-                }
-
-                $timePassed = $pPmTMPGoal->duration;
+                $timePassed = $goal->duration;
             } else {
-                $pPmCSGoal = new ProjectPmGoal();
-                $pPmCSGoal->project_id = $findProject->id;
-                $pPmCSGoal->client_id = $findDeal->client_id;
-                $pPmCSGoal->pm_id = $findDeal->pm_id;
-                $pPmCSGoal->project_type = $findDeal->project_type;
-                $pPmCSGoal->project_category = 'Critically sensitive';
-                $pPmCSGoal->goal_code = 'DCS';
-                $pPmCSGoal->goal_name = 'Deliverables have to be signed off and all the tasks have to be created with proper planning';
-                $pPmCSGoal->goal_type = 'deliverable_signed_by_client';
-                $pPmCSGoal->goal_start_date = $goal_start_date;
-                $pPmCSGoal->goal_end_date = Carbon::parse($goal_start_date)->addDay(3);
-                $pPmCSGoal->duration = 3;
-                $pPmCSGoal->added_by = Auth::user()->id;
-                $pPmCSGoal->save();
+                $goal = new ProjectPmGoal();
+                $goal->project_id = $findProject->id;
+                $goal->client_id = $findDeal->client_id;
+                $goal->pm_id = $findDeal->pm_id;
+                $goal->project_type = $findDeal->project_type;
+                $goal->project_category = $pmGoalSetting->category;
+                $goal->goal_code = 'DCS';
+                $goal->goal_name = 'Deliverables have to be signed off and all the tasks have to be created with proper planning';
+                $goal->goal_type = 'deliverable_signed_by_client';
+                $goal->goal_start_date = $goal_start_date;
+                $goal->goal_end_date = Carbon::parse($goal_start_date)->addDay(3);
+                $goal->duration = 3;
+                $goal->added_by = Auth::user()->id;
+                $goal->save();
 
-                $pPmCSGoal = new ProjectPmGoal();
-                $pPmCSGoal->project_id = $findProject->id;
-                $pPmCSGoal->client_id = $findDeal->client_id;
-                $pPmCSGoal->pm_id = $findDeal->pm_id;
-                $pPmCSGoal->project_type = $findDeal->project_type;
-                $pPmCSGoal->project_category = 'Critically sensitive';
-                $pPmCSGoal->goal_code = 'TSM';
-                $pPmCSGoal->goal_name = '1st submission has to be made';
-                $pPmCSGoal->goal_type = '1st_task_submissino';
-                $pPmCSGoal->goal_start_date = $goal_start_date;
-                $pPmCSGoal->goal_end_date = Carbon::parse($goal_start_date)->addDay(4);
-                $pPmCSGoal->duration = 4;
-                $pPmCSGoal->added_by = Auth::user()->id;
-                $pPmCSGoal->save();
+                $goal = new ProjectPmGoal();
+                $goal->project_id = $findProject->id;
+                $goal->client_id = $findDeal->client_id;
+                $goal->pm_id = $findDeal->pm_id;
+                $goal->project_type = $findDeal->project_type;
+                $goal->project_category = 'Priority';
+                $goal->goal_code = 'TSM';
+                $goal->goal_name = '1st submission has to be made';
+                $goal->goal_type = '1st_task_submissino';
+                $goal->goal_start_date = $goal_start_date;
+                $goal->goal_end_date = Carbon::parse($goal_start_date)->addDay(4);
+                $goal->duration = 4;
+                $goal->added_by = Auth::user()->id;
+                $goal->save();
 
-                $pPmCSGoal = new ProjectPmGoal();
-                $pPmCSGoal->project_id = $findProject->id;
-                $pPmCSGoal->client_id = $findDeal->client_id;
-                $pPmCSGoal->pm_id = $findDeal->pm_id;
-                $pPmCSGoal->project_type = $findDeal->project_type;
-                $pPmCSGoal->project_category = 'Critically sensitive';
-                $pPmCSGoal->goal_code = 'FMR';
-                $pPmCSGoal->goal_name = '1st milestone has to be released';
-                $pPmCSGoal->goal_type = '1st_milestone_released';
-                $pPmCSGoal->goal_start_date = $goal_start_date;
-                $pPmCSGoal->goal_end_date = Carbon::parse($goal_start_date)->addDay(7);
-                $pPmCSGoal->duration = 7;
-                $pPmCSGoal->added_by = Auth::user()->id;
-                $pPmCSGoal->save();
-                if ($milestone_count > 1) {
-                    $pPmCSGoal = new ProjectPmGoal();
-                    $pPmCSGoal->project_id = $findProject->id;
-                    $pPmCSGoal->client_id = $findDeal->client_id;
-                    $pPmCSGoal->pm_id = $findDeal->pm_id;
-                    $pPmCSGoal->project_type = $findDeal->project_type;
-                    $pPmCSGoal->project_category = 'Critically sensitive';
-                    $pPmCSGoal->goal_code = 'MPMR';
-                    $pPmCSGoal->goal_name = 'One more milestone has to be released between 7-12 th days';
-                    $pPmCSGoal->goal_type = 'more_milestone_released';
-                    $pPmCSGoal->goal_start_date = $goal_start_date;
-                    $pPmCSGoal->goal_end_date = Carbon::parse($goal_start_date)->addDay(12);
-                    $pPmCSGoal->duration = 12;
-                    $pPmCSGoal->added_by = Auth::user()->id;
-                    $pPmCSGoal->save();
+                $goal = new ProjectPmGoal();
+                $goal->project_id = $findProject->id;
+                $goal->client_id = $findDeal->client_id;
+                $goal->pm_id = $findDeal->pm_id;
+                $goal->project_type = $findDeal->project_type;
+                $goal->project_category = 'Priority';
+                $goal->goal_code = 'FMR';
+                $goal->goal_name = '1st milestone has to be released';
+                $goal->goal_type = '1st_milestone_released';
+                $goal->goal_start_date = $goal_start_date;
+                $goal->goal_end_date = Carbon::parse($goal_start_date)->addDay(7);
+                $goal->duration = 7;
+                $goal->added_by = Auth::user()->id;
+                $goal->save();
+                if ($milestoneCount > 1) {
+                    $goal = new ProjectPmGoal();
+                    $goal->project_id = $findProject->id;
+                    $goal->client_id = $findDeal->client_id;
+                    $goal->pm_id = $findDeal->pm_id;
+                    $goal->project_type = $findDeal->project_type;
+                    $goal->project_category = 'Priority';
+                    $goal->goal_code = 'MPMR';
+                    $goal->goal_name = 'One more milestone has to be released between 7-12 th days';
+                    $goal->goal_type = 'more_milestone_released';
+                    $goal->goal_start_date = $goal_start_date;
+                    $goal->goal_end_date = Carbon::parse($goal_start_date)->addDay(12);
+                    $goal->duration = 12;
+                    $goal->added_by = Auth::user()->id;
+                    $goal->save();
+                }
+                if ($milestoneCount > 2) {
+                    $goal = new ProjectPmGoal();
+                    $goal->project_id = $findProject->id;
+                    $goal->client_id = $findDeal->client_id;
+                    $goal->pm_id = $findDeal->pm_id;
+                    $goal->project_type = $findDeal->project_type;
+                    $goal->project_category = 'Priority';
+                    $goal->goal_code = 'MMPMR';
+                    $goal->goal_name = 'At least 1 more milestone released between 12-15 days';
+                    $goal->goal_type = 'more_and_more_milestone_released';
+                    $goal->goal_start_date = $goal_start_date;
+                    $goal->goal_end_date = Carbon::parse($goal_start_date)->addDay(15);
+                    $goal->duration = 15;
+                    $goal->added_by = Auth::user()->id;
+                    $goal->save();
+                }
+                if ($milestoneCount > 3) {
+                    $goal = new ProjectPmGoal();
+                    $goal->project_id = $findProject->id;
+                    $goal->client_id = $findDeal->client_id;
+                    $goal->pm_id = $findDeal->pm_id;
+                    $goal->project_type = $findDeal->project_type;
+                    $goal->project_category = 'Priority';
+                    $goal->goal_code = 'LM';
+                    $goal->goal_name = 'At least 1 more milestone released between 12-15 days';
+                    $goal->goal_type = 'last_milestone';
+                    $goal->goal_start_date = $goal_start_date;
+                    $goal->goal_end_date = Carbon::parse($goal_start_date)->addDay(22);
+                    $goal->duration = 22;
+                    $goal->added_by = Auth::user()->id;
+                    $goal->save();
                 }
 
-                if ($milestone_count > 2) {
-                    $pPmCSGoal = new ProjectPmGoal();
-                    $pPmCSGoal->project_id = $findProject->id;
-                    $pPmCSGoal->client_id = $findDeal->client_id;
-                    $pPmCSGoal->pm_id = $findDeal->pm_id;
-                    $pPmCSGoal->project_type = $findDeal->project_type;
-                    $pPmCSGoal->project_category = 'Critically sensitive';
-                    $pPmCSGoal->goal_code = 'MMPMR';
-                    $pPmCSGoal->goal_name = 'At least 1 more milestone released between 12-15 days';
-                    $pPmCSGoal->goal_type = 'more_and_more_milestone_released';
-                    $pPmCSGoal->goal_start_date = $goal_start_date;
-                    $pPmCSGoal->goal_end_date = Carbon::parse($goal_start_date)->addDay(15);
-                    $pPmCSGoal->duration = 15;
-                    $pPmCSGoal->added_by = Auth::user()->id;
-                    $pPmCSGoal->save();
-                }
-
-                if ($milestone_count > 3) {
-                    $pPmCSGoal = new ProjectPmGoal();
-                    $pPmCSGoal->project_id = $findProject->id;
-                    $pPmCSGoal->client_id = $findDeal->client_id;
-                    $pPmCSGoal->pm_id = $findDeal->pm_id;
-                    $pPmCSGoal->project_type = $findDeal->project_type;
-                    $pPmCSGoal->project_category = 'Critically sensitive';
-                    $pPmCSGoal->goal_code = 'LM';
-                    $pPmCSGoal->goal_name = 'At least 1 more milestone released between 12-15 days';
-                    $pPmCSGoal->goal_type = 'last_milestone';
-                    $pPmCSGoal->goal_start_date = $goal_start_date;
-                    $pPmCSGoal->goal_end_date = Carbon::parse($goal_start_date)->addDay(22);
-                    $pPmCSGoal->duration = 22;
-                    $pPmCSGoal->added_by = Auth::user()->id;
-                    $pPmCSGoal->save();
-                }
-
-                $timePassed = $pPmCSGoal->duration;
+                $timePassed = $goal->duration;
             }
 
             if ($extraGoal) {
@@ -541,7 +255,7 @@ class HelperPmProjectStatusController extends AccountBaseController
                 $goal->client_id = $findDeal->client_id;
                 $goal->pm_id = $findDeal->pm_id;
                 $goal->project_type = $findDeal->project_type;
-                $goal->project_category = $pmGoalSetting->name;
+                $goal->project_category = $pmGoalSetting->category;
 
                 $goal->goal_code = $goalCodes['code'];
                 $goal->goal_name = $goalCodes['name'];
@@ -973,15 +687,14 @@ class HelperPmProjectStatusController extends AccountBaseController
 
     function calculateProjectRequiedDays($priorityType, $milestoneCount)
     {
-        $priorityType = strtolower($priorityType);
         if (
             $milestoneCount <= 0 ||
-            !in_array($priorityType, ['regular', 'priority', 'highPriority', 'topMost', 'criticallySensitive'])
+            !in_array($priorityType, array_keys(Project::$categories))
         ) {
-            return 0;
+            return new Exception('Project priority type is invalid');
         }
 
-        $priorityType = in_array($priorityType, ['highPriority', 'topMost', 'criticallySensitive']) ? 'priority' : $priorityType;
+        $priorityType = in_array($priorityType, ['highPriority', 'topMostPriority', 'criticallySensitive']) ? 'priority' : $priorityType;
 
         /**
          * +Regular
@@ -998,53 +711,43 @@ class HelperPmProjectStatusController extends AccountBaseController
 
          * milestone count -> milestone count/2 + (remaining count) = 12 + 3(remaining count - 1) = 15 + (remaining count * 7)
             5 - 5/2 = 12+ 3(2.5) = 12(2)+ 3 = 15(1) + (7*1) = 15+ 7 = 22
-            6 - 6/2 = 12(3) = 12(2) + 3 = 15(2) + (7*2) = 15+ 14 = 29
-            7 - 7/2 = 12(3.5) = 12(2) + 3 = 15(2) + (7*2) = 15+ 14 = 29
-            8 - 8/2 = 12(4) = 12(3) + 3 = 15(3) + (7*3) = 15+ 21 = 36
-            9 - 9/2 = 12(4.5) = 12(3) + 3 = 15(3) + (7*3) = 15+ 21 = 36
-            10 - 10/2 = 12(5) = 12(4) + 3 = 15(4) + (7*4) = 15+ 28 = 43
+            6 - 6/2 = 12(3) = 12(2) + 3 = 15(2) + (7*2) = 15+ 14    = 29
+            7 - 7/2 = 12(3.5) = 12(2) + 3 = 15(2) + (7*2) = 15+ 14  = 29
+            8 - 8/2 = 12(4) = 12(3) + 3 = 15(3) + (7*3) = 15+ 21    = 36
+            9 - 9/2 = 12(4.5) = 12(3) + 3 = 15(3) + (7*3) = 15+ 21  = 36
+            10 - 10/2 = 12(5) = 12(4) + 3 = 15(4) + (7*4) = 15+ 28  = 43
+
+         *+Priority
+            1 - 4+3     = 7
+            2 - 4+3+5   = 12
+            4+3(m-1)+5(m-1)+3(m-1)+(7(m-1))*
+
          */
 
-        $timeMatrix = [
-            'regular' => [
-                '1' => 12,
-                '2' => 15,
-                '3' => 15,
-            ],
-            'priority' => [
-                '1' => 7,
-                '2' => 12,
-                '3' => 15,
-            ]
-        ];
+        switch ($priorityType) {
+            case 'regular':
+                $timeMatrix = [
+                    '1' => 12,
+                    '2' => 15,
+                    '3' => 15,
+                ];
+                // calculation in comment
+                if ($milestoneCount > 3) return $timeMatrix['3'] + (($milestoneCount - (round(($milestoneCount / 2), 0)) - 1)  * 7);
+                return $timeMatrix[$milestoneCount];
+                break;
 
-        if ($milestoneCount > 3) return $timeMatrix[$priorityType]['3'] + (($milestoneCount - (round(($milestoneCount / 2), 0)) - 1)  * 7);
-
-        return $timeMatrix[$priorityType][$milestoneCount];
+            case 'priority':
+                // 4+3(m-1) +5(m-1) +3(m-1) + 7 * (m-1))*
+                return 4 + (($milestoneCount-- > 0) ? 3 : 0) + (($milestoneCount-- > 0) ? 5 : 0) + (($milestoneCount-- > 0) ? 3 : 0) + ($milestoneCount > 0 ? $milestoneCount  * 7 : 0);
+                break;
+        }
     }
 
     function createShortDeadlinePmGoals($priorityType, $project, $deal, $pmProject, $milestoneCount, $extraGoal, $totalProjectDuration)
     {
-
-        /**
-         * total goal count
-         * ragular
-         * Milestone -> goals
-         * 1 - 2+1 = 3
-         * 2 - 2 +1(1) +1(1) = 4
-         * 3 - 2 +1(2) +1(1) = 4
-         * 4 - 2 +1(2) +1(1) +1(1) = 5
-         * 5 - 2 +1(3) +1(1) +1(1) = 5
-         * 6 - 2 +1(3) +1(1) +1(1) +1(1)= 6
-         * 7 - 2 +1(4) +1(1) +1(1) +1(1)= 6
-         * 8 - 2 +1(4) +1(1) +1(1) +1(1) +1(1)= 7
-         *
-         * milestone count(mc) = 2 + 1 + mc - up round(mc/2)
-         */
-
-        $goalCount = 2 + 1 + $milestoneCount - round($milestoneCount / 2, 0);
-        $goalCodes = ProjectPmGoal::$goalCodes[strtolower($priorityType)];
-        $goal_start_date = self::getGoalStartDate($project, $deal, $pmProject);
+        $goalCount = self::goalCount($priorityType, $milestoneCount);
+        $goalCodes = ProjectPmGoal::$goalCodes[$priorityType];
+        $goalStartDate = self::getGoalStartDate($project, $deal, $pmProject);
 
         DB::beginTransaction();
         try {
@@ -1059,8 +762,8 @@ class HelperPmProjectStatusController extends AccountBaseController
             $goal->goal_code = $goalCodes[0]['code'];
             $goal->goal_name = $goalCodes[0]['name'];
             $goal->goal_type = $goalCodes[0]['type'];
-            $goal->goal_start_date = $goal_start_date;
-            $goal->goal_end_date = Carbon::parse($goal_start_date)->addDay(3);
+            $goal->goal_start_date = $goalStartDate;
+            $goal->goal_end_date = Carbon::parse($goalStartDate)->addDay(3);
             $goal->duration = 3;
             $goal->added_by = Auth::user()->id;
             $goal->save();
@@ -1093,8 +796,8 @@ class HelperPmProjectStatusController extends AccountBaseController
                     $goal->goal_name = $goalCodes[5]['name'];
                     $goal->goal_type = $goalCodes[5]['type'];
                 }
-                $goal->goal_start_date = $goal_start_date;
-                $goal->goal_end_date = Carbon::parse($goal_start_date)->addHours((24 * ($timePassed += $perGoalDuration)));
+                $goal->goal_start_date = $goalStartDate;
+                $goal->goal_end_date = Carbon::parse($goalStartDate)->addHours((24 * ($timePassed += $perGoalDuration)));
                 $goal->duration = $timePassed;
                 $goal->added_by = Auth::user()->id;
                 $goal->save();
@@ -1115,8 +818,8 @@ class HelperPmProjectStatusController extends AccountBaseController
                 $goal->goal_name = $goalCodes['name'];
                 $goal->goal_type = $goalCodes['type'];
 
-                $goal->goal_start_date = $goal_start_date;
-                $goal->goal_end_date = Carbon::parse($goal_start_date)->addHours((24 * ($timePassed += $perGoalDuration)));
+                $goal->goal_start_date = $goalStartDate;
+                $goal->goal_end_date = Carbon::parse($goalStartDate)->addHours((24 * ($timePassed += $perGoalDuration)));
                 $goal->duration = $timePassed;
                 $goal->added_by = Auth::user()->id;
                 $goal->save();
@@ -1148,8 +851,8 @@ class HelperPmProjectStatusController extends AccountBaseController
 
         // dd($milestone);
 
-        if($milestone->cost < 100) $goalDuration = 3;
-        else $goalDuration = 3 +  (int) (($milestone->cost -100) / 100);
+        if ($milestone->cost < 100) $goalDuration = 3;
+        else $goalDuration = 3 +  (int) (($milestone->cost - 100) / 100);
 
         $goal = new ProjectPmGoal();
         $goal->project_id = $lastGoal->project_id;
