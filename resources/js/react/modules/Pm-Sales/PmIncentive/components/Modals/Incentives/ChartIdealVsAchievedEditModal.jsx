@@ -132,9 +132,6 @@ const ChartIdealVsAchievedEditModal = ({ antdModalOpen, showIdealVsAchievedEditM
         // Add your save logic here
     }
 
-
-
-
     return (
         <Modal className='pay_now_modal'
             closable={false}
@@ -198,8 +195,8 @@ const ChartIdealVsAchievedEditModal = ({ antdModalOpen, showIdealVsAchievedEditM
 
             {/* Modal Footer */}
             <div className='pay_now_modal_footer'>
-                <ButtonComponent onClick={handleChartDataSave} color='#1492E6' textColor='#fff' font='18px'>Save</ButtonComponent>
-                <ButtonComponent onClick={handleCancel} font='18px'>Do it later</ButtonComponent>
+                <button onClick={handleChartDataSave} className='chart_edit_modal_button'>Save</button>
+                <button onClick={handleCancel} className='chart_edit_modal_button_secondary'>Do it later</button>
             </div>
 
             {/* Modals for add, edit and remove */}

@@ -29,12 +29,13 @@ const EditYAxisModal = ({ axisEditItem, chartAxisData, setChartAxisData, antdMod
         // Concatenate newData with filteredData
         setChartAxisData([...filteredData, newData]);
         setAntdModalOpen(false);
-        toast.success('Y Axis item updated successfully');
+        toast.success('Y Axis Ratio updated successfully');
         reset();
     }
 
     const handleCancel = () => {
         setAntdModalOpen(false)
+        reset();
     }
 
     return (
