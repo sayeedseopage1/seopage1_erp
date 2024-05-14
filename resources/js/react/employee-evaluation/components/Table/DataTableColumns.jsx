@@ -1,22 +1,12 @@
-import ActionDropdown from "./ActionDropdown";
-import ActionDropdownDataTable from "./ActionDropDownDataTable";
 import Person from "./Person";
 
 import CommentModal from "./CommentModal";
 import { User } from "../../../utils/user-details";
 import FormatDate from "../../../utils/FormateDate";
 import { convertTime } from "../../../utils/converTime";
+import ActionEvaluationTable from "./ActionEvaluationTable";
 const auth = new User(window.Laravel.user);
 export const DataTableColumns = [
-    // {
-    //     header: "#",
-    //     accessorKey: "id",
-    //     cell: ({ row }) => {
-    //         const data = row.original;
-
-    //         return <ColumnContent>{data?.id}</ColumnContent>;
-    //     },
-    // },
     {
         id: "user_name",
         header: "Employee Name",
@@ -164,7 +154,7 @@ export const DataTableColumns = [
         cell: ({ row }) => {
             const data = row.original;
 
-            return <ActionDropdownDataTable data={data} />;
+            return <ActionEvaluationTable data={data} />;
         },
     },
 ];

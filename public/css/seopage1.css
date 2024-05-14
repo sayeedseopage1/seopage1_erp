@@ -1469,6 +1469,34 @@
   overflow-y: auto;
 }
 
+.average_rating {
+  font-size: 16px;
+  position: absolute;
+  top: 30px;
+  right: 50px;
+}
+
+/* Tablet */
+@media screen and (max-width: 1024px) {
+  .average_rating {
+    top: 20px;
+    right: 40px;
+  }
+}
+/* Mobile */
+@media screen and (max-width: 768px) {
+  .average_rating {
+    top: 10px;
+    right: 20px;
+  }
+}
+/* Adjust for smaller mobile screens */
+@media screen and (max-width: 480px) {
+  .average_rating {
+    top: 5px;
+    right: 10px;
+  }
+}
 .text-hover-underline:hover {
   text-decoration: underline;
 }

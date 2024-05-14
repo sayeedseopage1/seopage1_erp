@@ -8643,10 +8643,19 @@ var AssginedToSelection = function AssginedToSelection(_ref) {
     _React$useState2 = _slicedToArray(_React$useState, 2),
     query = _React$useState2[0],
     setQuery = _React$useState2[1];
+  var _React$useState3 = react__WEBPACK_IMPORTED_MODULE_0__.useState(),
+    _React$useState4 = _slicedToArray(_React$useState3, 2),
+    employeeId = _React$useState4[0],
+    setEmployeeId = _React$useState4[1];
   var params = (0,react_router_dom__WEBPACK_IMPORTED_MODULE_7__.useParams)();
   var _useGetTaskDetailsQue = (0,_services_api_SingleTaskPageApi__WEBPACK_IMPORTED_MODULE_2__.useGetTaskDetailsQuery)("/".concat(params === null || params === void 0 ? void 0 : params.taskId, "/json?mode=employees")),
     data = _useGetTaskDetailsQue.data,
     isFetching = _useGetTaskDetailsQue.isFetching;
+  var _useDeveloperInProgre = (0,_services_api_SingleTaskPageApi__WEBPACK_IMPORTED_MODULE_2__.useDeveloperInProgressTaskQuery)(employeeId, {
+      skip: !employeeId
+    }),
+    DevProgressStatus = _useDeveloperInProgre.DevProgressStatus,
+    isLoading = _useDeveloperInProgre.isLoading;
   var employees = [];
   if (taskCategory && taskCategory.id === 5) {
     employees = lodash__WEBPACK_IMPORTED_MODULE_1___default().filter(data, function (d) {
@@ -8700,7 +8709,10 @@ var AssginedToSelection = function AssginedToSelection(_ref) {
           children: "Nothing found."
         }) : filteredData === null || filteredData === void 0 ? void 0 : filteredData.map(function (employee) {
           return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(Option, {
-            employee: employee
+            employee: employee,
+            DevProgressStatus: DevProgressStatus,
+            isLoading: isLoading,
+            setEmployeeId: setEmployeeId
           }, employee.id);
         })]
       })]
@@ -8709,12 +8721,11 @@ var AssginedToSelection = function AssginedToSelection(_ref) {
 };
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (AssginedToSelection);
 var Option = function Option(_ref2) {
-  var employee = _ref2.employee;
-  var _useDeveloperInProgre = (0,_services_api_SingleTaskPageApi__WEBPACK_IMPORTED_MODULE_2__.useDeveloperInProgressTaskQuery)(employee === null || employee === void 0 ? void 0 : employee.id, {
-      skip: !(employee !== null && employee !== void 0 && employee.id)
-    }),
-    data = _useDeveloperInProgre.data,
-    isLoading = _useDeveloperInProgre.isLoading;
+  var employee = _ref2.employee,
+    DevProgressStatus = _ref2.DevProgressStatus,
+    isLoading = _ref2.isLoading,
+    setEmployeeId = _ref2.setEmployeeId;
+  setEmployeeId(employee === null || employee === void 0 ? void 0 : employee.id);
   if (isLoading) {
     return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("div", {
       className: "sp1-select-option mb-2",
@@ -8730,7 +8741,7 @@ var Option = function Option(_ref2) {
       return "sp1-select-option ".concat(active ? "active" : "");
     },
     value: _objectSpread(_objectSpread({}, employee), {}, {
-      isOverloaded: (data === null || data === void 0 ? void 0 : data.status) === 400
+      isOverloaded: (DevProgressStatus === null || DevProgressStatus === void 0 ? void 0 : DevProgressStatus.status) === 400
     }),
     children: function children(_ref4) {
       var selected = _ref4.selected;
@@ -8763,7 +8774,7 @@ var Option = function Option(_ref2) {
           children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("span", {
             className: "mr-2",
             children: employee === null || employee === void 0 ? void 0 : employee.name
-          }), (data === null || data === void 0 ? void 0 : data.status) === 400 ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("span", {
+          }), (DevProgressStatus === null || DevProgressStatus === void 0 ? void 0 : DevProgressStatus.status) === 400 ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("span", {
             className: "badge badge-danger",
             children: "Overloaded"
           }) : (employee === null || employee === void 0 ? void 0 : employee.developer_status) === 1 ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("span", {
@@ -10781,7 +10792,7 @@ var SubTaskForm = function SubTaskForm(_ref) {
     _useLazyGetTaskDetail3 = _useLazyGetTaskDetail2[1],
     estimation = _useLazyGetTaskDetail3.data,
     isFetching = _useLazyGetTaskDetail3.isFetching;
-  var _React$useState19 = react__WEBPACK_IMPORTED_MODULE_0___default().useState(false),
+  var _React$useState19 = react__WEBPACK_IMPORTED_MODULE_0___default().useState(true),
     _React$useState20 = _slicedToArray(_React$useState19, 2),
     showForm = _React$useState20[0],
     setShowForm = _React$useState20[1];
