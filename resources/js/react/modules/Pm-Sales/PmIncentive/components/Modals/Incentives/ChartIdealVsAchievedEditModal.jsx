@@ -193,6 +193,7 @@ const ChartIdealVsAchievedEditModal = ({ antdModalOpen, showIdealVsAchievedEditM
             />
 
             <EditXAxisModal
+                xAxisStartAndEndValue={xAxisStartAndEndValue}
                 axisEditItem={axisEditItem}
                 chartAxisData={chartAxisData}
                 setChartAxisData={setChartAxisData}

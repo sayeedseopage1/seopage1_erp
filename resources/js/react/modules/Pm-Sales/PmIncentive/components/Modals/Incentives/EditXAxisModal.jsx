@@ -3,10 +3,12 @@ import PropTypes from "prop-types";
 import { ButtonComponent } from '../../../../PointFactors/components/Styles/ui/ui';
 import { useForm } from 'react-hook-form';
 import { Modal } from 'antd';
+import { toast } from 'react-toastify';
 
-const EditXAxisModal = ({ axisEditItem, chartAxisData, setChartAxisData, antdModalOpen, setAntdModalOpen }) => {
+const EditXAxisModal = ({ xAxisStartAndEndValue, axisEditItem, chartAxisData, setChartAxisData, antdModalOpen, setAntdModalOpen }) => {
 
     const { xAxisLowerLimit, xAxisUpperLimit } = axisEditItem || {}
+    const { xAxisStaring, xAxisEnding } = xAxisStartAndEndValue || {};
 
     const {
         register,
@@ -16,20 +18,39 @@ const EditXAxisModal = ({ axisEditItem, chartAxisData, setChartAxisData, antdMod
         formState: { errors },
     } = useForm()
 
+    const validateFields = (data) => {
+        let isValid = true;
+
+        if (Number(data.xAxisLowerLimit) >= Number(data.xAxisUpperLimit) || Number(data.xAxisUpperLimit) < Number(data.xAxisLowerLimit)) {
+            toast.error('X Axis Lower Limit cannot be greater than or equal to Upper Limit');
+            isValid = false;
+        }
+
+        if (Number(data.xAxisLowerLimit) < Number(xAxisStaring) || Number(data.xAxisUpperLimit) > Number(xAxisEnding)) {
+            toast.error(`X Axis range must be between ${xAxisStaring} and ${xAxisEnding}`);
+            isValid = false;
+        }
+
+        return isValid;
+    };
+
     const onSubmit = (data) => {
-        const newData = {
-            ...axisEditItem,
-            xAxisLowerLimit: data.xAxisLowerLimit,
-            xAxisUpperLimit: data.xAxisUpperLimit
-        };
+        if (validateFields(data)) {
+            const newData = {
+                ...axisEditItem,
+                xAxisLowerLimit: data.xAxisLowerLimit,
+                xAxisUpperLimit: data.xAxisUpperLimit
+            };
 
-        // Filter out items that need to be removed
-        const filteredData = chartAxisData.filter(item => item.id !== axisEditItem.id);
+            // Filter out items that need to be removed
+            const filteredData = chartAxisData.filter(item => item.id !== axisEditItem.id);
 
-        // Concatenate newData with filteredData
-        setChartAxisData([...filteredData, newData]);
-        setAntdModalOpen(false);
-        reset();
+            // Concatenate newData with filteredData
+            setChartAxisData([...filteredData, newData]);
+            setAntdModalOpen(false);
+            toast.success('X Axis item updated successfully');
+            reset();
+        }
     };
 
 
