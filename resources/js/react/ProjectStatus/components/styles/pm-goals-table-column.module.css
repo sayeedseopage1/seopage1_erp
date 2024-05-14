@@ -92,23 +92,17 @@
     padding: 5px !important;
     font-size: 13px !important;
 }
-.awaitingDeadlineExplanation:hover{
-    cursor: not-allowed !important;
-    color: #1492d2   !important;
-    border-color: #1492d2  ;
-    background-color: #e6f8ef !important;
-    padding: 5px !important;
-    font-size: 13px !important;
-}
 
-.action.extend:hover{
+
+ .action.extend:hover{
     background: #00af58 !important;
     border-color: #00af58 !important;
 }
+/*
 .action.extendReview:hover{
     background: #00af58 !important;
     border-color: #00af58 !important;
-}
+} */
 
 
 
