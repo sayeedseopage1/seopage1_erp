@@ -12,10 +12,17 @@ import { useAuth } from "../../../hooks/useAuth";
 
 const AssginedToSelection = ({ selected, onSelect, taskCategory }) => {
     const [query, setQuery] = React.useState("");
-
+    const [employeeId, setEmployeeId] = React.useState();
     const params = useParams();
     const { data, isFetching } = useGetTaskDetailsQuery(
         `/${params?.taskId}/json?mode=employees`
+    );
+
+    const { DevProgressStatus, isLoading } = useDeveloperInProgressTaskQuery(
+        employeeId,
+        {
+            skip: !employeeId,
+        }
     );
 
     let employees = [];
@@ -73,7 +80,13 @@ const AssginedToSelection = ({ selected, onSelect, taskCategory }) => {
                         </div>
                     ) : (
                         filteredData?.map((employee) => (
-                            <Option key={employee.id} employee={employee} />
+                            <Option
+                                key={employee.id}
+                                employee={employee}
+                                DevProgressStatus={DevProgressStatus}
+                                isLoading={isLoading}
+                                setEmployeeId={setEmployeeId}
+                            />
                         ))
                     )}
                 </Combobox.Options>
@@ -84,11 +97,8 @@ const AssginedToSelection = ({ selected, onSelect, taskCategory }) => {
 
 export default AssginedToSelection;
 
-const Option = ({ employee }) => {
-    const { data, isLoading } = useDeveloperInProgressTaskQuery(employee?.id, {
-        skip: !employee?.id,
-    });
-
+const Option = ({ employee, DevProgressStatus, isLoading, setEmployeeId }) => {
+    setEmployeeId(employee?.id);
     if (isLoading) {
         return (
             <div className="sp1-select-option mb-2">
@@ -107,7 +117,7 @@ const Option = ({ employee }) => {
             }
             value={{
                 ...employee,
-                isOverloaded: data?.status === 400,
+                isOverloaded: DevProgressStatus?.status === 400,
             }}
         >
             {({ selected }) => (
@@ -142,7 +152,7 @@ const Option = ({ employee }) => {
                         }`}
                     >
                         <span className="mr-2">{employee?.name}</span>
-                        {data?.status === 400 ? (
+                        {DevProgressStatus?.status === 400 ? (
                             <span className="badge badge-danger">
                                 Overloaded
                             </span>

@@ -79,7 +79,7 @@ const SubTaskForm = ({ close, isFirstSubtask = false }) => {
     const [getTaskDetails, { data: estimation, isFetching }] =
         useLazyGetTaskDetailsQuery();
 
-    const [showForm, setShowForm] = React.useState(false);
+    const [showForm, setShowForm] = React.useState(true);
 
     const required_error = error?.status === 422 ? error?.data : null;
     const [containViolation, setContainViolation] = React.useState(false);
