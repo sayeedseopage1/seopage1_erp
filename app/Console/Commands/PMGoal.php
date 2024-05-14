@@ -93,7 +93,6 @@ class PMGoal extends Command
                 {
                     $goal_update= ProjectPmGoal::where('id',$goal->id)->first();
                     $goal_update->expired_meet_description = 'The first submission has not been completed and it is not ready for submission to the client';
-                    $goal_update->goal_progress = 100;
                     $goal_update->expired_status = 1;
                     $goal_update->updated_at = Carbon::now();
                     $goal_update->save();

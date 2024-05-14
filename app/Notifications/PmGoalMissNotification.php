@@ -87,7 +87,7 @@ class PmGoalMissNotification extends Notification
         </p>'
         .
         '<p>
-            <b style="color: black">' . __('Goal description') . ': '.'</b>' . '<span>'.$pm_goal->description.'</span>'. '
+            <b style="color: black">' . __('Goal description') . ': '.'</b>' . '<span>'.$pm_goal->expired_meet_description.'</span>'. '
         </p>';
         $pm_goal->mail_status = 2;
         $pm_goal->save();
