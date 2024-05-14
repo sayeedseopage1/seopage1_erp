@@ -84,8 +84,11 @@ const Toggle = ({ children, className, ...props }) => {
         <div
             ref={setRefElement}
             className={`${css.popover_toggle} ${className}`}
-            onMouseOver={() => setIsVisible(true)}
+            onMouseOver={() => {
+                setIsVisible(true);
+            }}
             {...props}
+
         >
             {_.isFunction(children) ? children({ isVisible }) : children}
         </div>

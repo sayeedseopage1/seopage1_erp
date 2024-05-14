@@ -113,14 +113,14 @@ export default ProjectModal;
 
 const customStyles = {
     overlay: {
-        zIndex: 9999998,
+        zIndex: 9,
         backgroundColor: "rgba(0, 0, 0, 0.5)",
         margin: "auto auto",
         padding: "20px",
     },
     content: {
         zIndex: 9999999,
-        maxWidth: "70vw",
+        maxWidth: "75vw",
         maxHeight: "85vh",
         height: "fit-content",
         margin: "auto auto",

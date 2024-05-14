@@ -3,6 +3,7 @@ import { User } from "../../../utils/user-details";
 import { CreatedBy } from "../table/ui";
 import styles from "../styles/pm-goals-table-column.module.css";
 import Switch from "../Switch";
+import TablePopover from "../TablePopover";
 
 export const ProjectManagerExplanationColumns = [
     {
@@ -12,13 +13,15 @@ export const ProjectManagerExplanationColumns = [
         cell: ({ row, table, column, cell }) => {
             const data = row?.original;
             return (
-                <div style={{
-                    width: "20px",
-                }}>
+                <div
+                    style={{
+                        width: "20px",
+                    }}
+                >
                     {cell?.row?.index + 1}
                 </div>
-            )
-        }
+            );
+        },
     },
     {
         id: "goal_start_date",
@@ -36,12 +39,8 @@ export const ProjectManagerExplanationColumns = [
         accessorKey: "duration",
         cell: ({ row }) => {
             const data = row?.original;
-            return (
-                <span >
-                    {`${data?.duration} Days` ?? "--"}
-                </span>
-            )
-        }
+            return <span>{`${data?.duration} Days` ?? "--"}</span>;
+        },
     },
     {
         id: "goal_name",
@@ -49,12 +48,8 @@ export const ProjectManagerExplanationColumns = [
         accessorKey: "goal_name",
         cell: ({ row }) => {
             const data = row?.original;
-            return (
-                <span title={data?.goal_name} className="multine-ellipsis">
-                    {data?.goal_name ?? "--"}
-                </span>
-            )
-        }
+            return <TablePopover text={data?.goal_name} />;
+        },
     },
     {
         id: "expired_meet_description",
@@ -62,12 +57,8 @@ export const ProjectManagerExplanationColumns = [
         accessorKey: "expired_meet_description",
         cell: ({ row }) => {
             const data = row?.original;
-            return (
-                <span title={data?.expired_meet_description} className="multine-ellipsis">
-                    {data?.expired_meet_description ?? "--"}
-                </span>
-            )
-        }
+            return <TablePopover text={data?.expired_meet_description} />;
+        },
     },
     {
         id: "client",
@@ -76,19 +67,21 @@ export const ProjectManagerExplanationColumns = [
         cell: ({ row }) => {
             const data = row?.original;
             return (
-                <CreatedBy
-                    href={`/account/client/${data?.user_id}`}
-                >
+                <CreatedBy href={`/account/client/${data?.user_id}`}>
                     <Avatar
                         type="circle"
                         name={data?.user_name}
-                        src={data?.user_image ? `/user-uploads/avatar/${data?.user_image}` : null}
+                        src={
+                            data?.user_image
+                                ? `/user-uploads/avatar/${data?.user_image}`
+                                : null
+                        }
                     />
 
                     <span>{data?.user_name}</span>
                 </CreatedBy>
-            )
-        }
+            );
+        },
     },
     {
         id: "project_name",
@@ -96,14 +89,7 @@ export const ProjectManagerExplanationColumns = [
         accessorKey: "project_name",
         cell: ({ row, table }) => {
             const data = row?.original;
-            return (
-                <p
-                    role="button"
-                    className="multiline-ellipsis text-hover-underline-color pr-2 text-primary"
-                >
-                    {data?.project_name}
-                </p>
-            );
+            return <TablePopover text={data?.project_name} />;
         },
     },
     {
@@ -112,26 +98,52 @@ export const ProjectManagerExplanationColumns = [
         accessorKey: "action",
         cell: ({ row, table }) => {
             const data = row?.original;
-            const user = new User(window?.Laravel?.user)
-            const handle = table?.options?.meta
+            const user = new User(window?.Laravel?.user);
+            const handle = table?.options?.meta;
             return (
-                <div className={`${styles.actionContainer}`}  >
+                <div className={`${styles.actionContainer}`}>
                     <Switch>
                         <Switch.Case condition={user?.roleId === 4}>
-                            <Switch.Case condition={data?.reason_status === 0 && data?.expired_status === 1}>
+                            <Switch.Case
+                                condition={
+                                    data?.reason_status === 0 &&
+                                    data?.expired_status === 1
+                                }
+                            >
                                 <button
-                                    onClick={() => handle.deadlineExplainClick(data)} className={`btn btn-danger ${styles?.authorize}`}
+                                    onClick={() =>
+                                        handle.deadlineExplainClick(data)
+                                    }
+                                    className={`btn btn-danger ${styles?.authorize}`}
                                 >
                                     Explain Why Expired
                                 </button>
                             </Switch.Case>
-                            <Switch.Case condition={data?.expired_status === 0}>
-                                <span>--</span>
+                            <Switch.Case condition={data.reason_status === 1}>
+                                <button
+                                    className={`btn  ${styles?.awaitingDeadlineExtension}`}
+                                    style={{
+                                        color: "gray",
+                                    }}
+                                >
+                                    Awaiting Authorization on Deadline
+                                    Explanation
+                                </button>
+                            </Switch.Case>
+                            <Switch.Case condition={data?.reason_status === 2}>
+                                <div
+                                    className={`${styles?.explanationSubmitted}`}
+                                    style={{
+                                        color: "gray",
+                                    }}
+                                >
+                                    Goal Expired & Explanation Submitted
+                                </div>
                             </Switch.Case>
                         </Switch.Case>
                     </Switch>
                 </div>
-            )
-        }
+            );
+        },
     },
 ];

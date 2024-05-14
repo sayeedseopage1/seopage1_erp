@@ -52,7 +52,7 @@
 }
 
 .extendReview{
-    width: 120px !important;
+    width: 125px !important;
 }
 
 
@@ -61,7 +61,7 @@
 
 .authorize{
     padding: 6px 12px !important;
-    width: 185px !important;
+    width: 195px !important;
     color: #e6f8ef !important;
     background-color: #1492d2 !important;
     border-color: #1492d2 !important;
@@ -78,21 +78,13 @@
 
 .awaitingDeadlineExtension{
     cursor: not-allowed !important;
-    color: #ffc107 !important;
+    color: #e6f8ef ;
     border-color: #ffc107 !important;
     padding: 5px !important;
     font-size: 13px !important;
     opacity: 1 !important;
 }
-.awaitingDeadlineExtension:hover{
-    cursor: not-allowed !important;
-    color: #ffc107  !important;
-    border-color: #ffc107 ;
-    background-color: #e6f8ef !important;
-    padding: 5px !important;
-    font-size: 13px !important;
-    opacity: 1 !important;
-}
+
 .awaitingDeadlineExplanation{
     cursor: not-allowed !important;
     color: #1492d2  !important;

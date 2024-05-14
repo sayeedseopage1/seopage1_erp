@@ -1,5 +1,8 @@
 import Avatar from "../../../global/Avatar";
+import TablePopover from "../TablePopover";
 import { CreatedBy } from "../table/ui";
+import Popover from "../ui/Popover";
+import style from "../ui/popover.module.css";
 
 export const DeadlineEHColumn = [
     {
@@ -43,11 +46,7 @@ export const DeadlineEHColumn = [
         accessorKey: "goal_name",
         cell: ({ row }) => {
             const data = row?.original;
-            return (
-                <span title={data?.goal_name} className="multine-ellipsis">
-                    {data?.goal_name ?? "--"}
-                </span>
-            );
+            return <TablePopover text={data?.goal_name} />;
         },
     },
     {
@@ -56,13 +55,11 @@ export const DeadlineEHColumn = [
         accessorKey: "expired_meet_description",
         cell: ({ row }) => {
             const data = row?.original;
-            return data?.expired_meet_description ? (
-                <span
-                    className="multine-ellipsis"
-                    dangerouslySetInnerHTML={{ __html: data?.expired_meet_description }}
+            return (
+                <TablePopover
+                    text={data?.expired_meet_description}
+                    isDangerHtml={true}
                 />
-            ) : (
-                <span>--</span>
             );
         },
     },
@@ -93,9 +90,9 @@ export const DeadlineEHColumn = [
         cell: ({ row }) => {
             const data = row?.original;
             return (
-                <span
-                    className="multine-ellipsis"
-                    dangerouslySetInnerHTML={{ __html: data?.expired_pm_reason ?? "--" }}
+                <TablePopover
+                    text={data?.expired_pm_reason}
+                    isDangerHtml={true}
                 />
             );
         },
@@ -107,11 +104,9 @@ export const DeadlineEHColumn = [
         cell: ({ row }) => {
             const data = row?.original;
             return (
-                <span
-                    className="multine-ellipsis"
-                    dangerouslySetInnerHTML={{
-                        __html: data?.client_communication ?? "--",
-                    }}
+                <TablePopover
+                    text={data?.client_communication}
+                    isDangerHtml={true}
                 />
             );
         },
@@ -122,11 +117,7 @@ export const DeadlineEHColumn = [
         accessorKey: "client_communication_rating",
         cell: ({ row }) => {
             const data = row?.original;
-            return (
-                <span className="multine-ellipsis">
-                    {data.client_communication_rating}
-                </span>
-            );
+            return <TablePopover text={data?.client_communication_rating} />;
         },
     },
     {
@@ -136,12 +127,7 @@ export const DeadlineEHColumn = [
         cell: ({ row }) => {
             const data = row?.original;
             return (
-                <span
-                    className="multine-ellipsis"
-                    dangerouslySetInnerHTML={{
-                        __html: data?.negligence_pm ?? "--",
-                    }}
-                />
+                <TablePopover text={data?.negligence_pm} isDangerHtml={true} />
             );
         },
     },
@@ -151,25 +137,19 @@ export const DeadlineEHColumn = [
         accessorKey: "negligence_pm_rating",
         cell: ({ row }) => {
             const data = row?.original;
-            return (
-                <span className="multine-ellipsis">
-                    {data.negligence_pm_rating}
-                </span>
-            );
+            return <TablePopover text={data?.negligence_pm_rating} />;
         },
     },
     {
         id: "any_other_suggestion_admin",
-        header: "Any Other Suggestions From Admin",
-        accessorKey: "Any other suggestions from authorizer",
+        header: "Any other suggestions from authorizer",
+        accessorKey: "any_other_suggestion_admin",
         cell: ({ row }) => {
             const data = row?.original;
             return (
-                <span
-                    className="multine-ellipsis"
-                    dangerouslySetInnerHTML={{
-                        __html: data?.any_other_suggestion_admin ?? "--",
-                    }}
+                <TablePopover
+                    text={data?.any_other_suggestion_admin}
+                    isDangerHtml={true}
                 />
             );
         },

@@ -1,6 +1,8 @@
-import { Cell } from "recharts";
 import Avatar from "../../../global/Avatar";
+import TablePopover from "../TablePopover";
 import { CreatedBy } from "../table/ui";
+import Popover from "../ui/Popover";
+import style from "../ui/popover.module.css";
 
 export const GoalExtensionHistoryTableColumn = [
     {
@@ -52,11 +54,7 @@ export const GoalExtensionHistoryTableColumn = [
         accessorKey: "goal_name",
         cell: ({ row }) => {
             const data = row?.original;
-            return (
-                <span title={data?.goal_name} className="multine-ellipsis">
-                    {data?.goal_name ?? "--"}
-                </span>
-            );
+            return <TablePopover text={data?.goal_name} />;
         },
     },
     {
@@ -79,13 +77,7 @@ export const GoalExtensionHistoryTableColumn = [
         cell: ({ row }) => {
             const data = row?.original;
             return (
-                <span
-                    title={data?.reason}
-                    className="multine-ellipsis"
-                    dangerouslySetInnerHTML={{
-                        __html: data?.extended_admin_comment ?? "--",
-                    }}
-                />
+                <TablePopover text={data?.extended_admin_comment} isDangerHtml={true} />
             );
         },
     },
@@ -118,13 +110,7 @@ export const GoalExtensionHistoryTableColumn = [
         cell: ({ row }) => {
             const data = row?.original;
             return (
-                <span
-                    title={data?.reason}
-                    className="multine-ellipsis"
-                    dangerouslySetInnerHTML={{
-                        __html: data?.extended_pm_reason ?? "--",
-                    }}
-                />
+                <TablePopover text={data?.extended_pm_reason} isDangerHtml={true} />
             );
         },
     },

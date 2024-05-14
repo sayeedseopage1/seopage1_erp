@@ -1,5 +1,6 @@
 import { User } from "../../../utils/user-details";
 import Switch from "../Switch";
+import TablePopover from "../TablePopover";
 import styles from "../styles/pm-goals-table-column.module.css";
 
 export const PmGoalsTableColumns = [
@@ -45,11 +46,7 @@ export const PmGoalsTableColumns = [
         accessorKey: "goal_name",
         cell: ({ row }) => {
             const data = row?.original;
-            return (
-                <span title={data?.goal_name} className="multine-ellipsis">
-                    {data?.goal_name ?? "--"}
-                </span>
-            );
+            return <TablePopover text={data?.goal_name} />;
         },
     },
     {
@@ -59,12 +56,10 @@ export const PmGoalsTableColumns = [
         cell: ({ row }) => {
             const data = row?.original;
             return (
-                <span
-                    title={data?.expired_meet_description}
-                    className="multine-ellipsis"
-                >
-                    {data?.expired_meet_description ?? "--"}
-                </span>
+                <TablePopover
+                    text={data?.expired_meet_description}
+                    isDangerHtml={true}
+                />
             );
         },
     },
@@ -184,7 +179,7 @@ export const PmGoalsTableColumns = [
                             </Switch.Case>
                             <Switch.Case condition={data.reason_status === 1}>
                                 <button
-                                    className={`btn btn-outline-success ${styles?.awaitingDeadlineExtension}`}
+                                    className={`btn  ${styles?.awaitingDeadlineExtension}`}
                                 >
                                     Awaiting Authorization on Deadline
                                     Explanation
@@ -253,7 +248,10 @@ export const PmGoalsTableColumns = [
                         >
                             <button
                                 disabled
-                                className={`btn btn-outline-success ${styles?.awaitingDeadlineExtension}`}
+                                className={`btn ${styles?.awaitingDeadlineExtension}`}
+                                style={{
+                                    color: "gray",
+                                }}
                             >
                                 Awaiting Deadline Extension Request
                                 Authorization
@@ -279,7 +277,9 @@ export const PmGoalsTableColumns = [
                         <Switch.Case
                             condition={
                                 user?.roleId === 1 &&
-                                data?.extension_status !== 1
+                                data?.extension_status === 0 &&
+                                data.reason_status === 0 &&
+                                data?.expired_status === 0
                             }
                         >
                             <span>--</span>
