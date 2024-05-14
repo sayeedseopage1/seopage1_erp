@@ -103,7 +103,7 @@ const ChartIdealVsAchievedEditModal = ({ antdModalOpen, showIdealVsAchievedEditM
 
         // Validation 3: Check for missing ranges
         for (let i = 0; i < sortedChartData.length - 1; i++) {
-            if (Number(sortedChartData[i].xAxisUpperLimit) < Number(sortedChartData[i + 1].xAxisLowerLimit) - 1) {
+            if (Number(sortedChartData[i].xAxisUpperLimit) <= Number(sortedChartData[i + 1].xAxisLowerLimit) - 1) {
                 // toast.error('Missing range detected.');
 
                 Swal.fire({
