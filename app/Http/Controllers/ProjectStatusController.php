@@ -87,7 +87,7 @@ class ProjectStatusController extends AccountBaseController
 
         // dd($project_pm_goals);
         foreach($project_pm_goals as $goal){
-            $pm_goal = PmGoalExpHistory::where('goal_id',$goal->id)->count();
+            $pm_goal = PmGoalExpHistory::where('goal_id',$goal->id)->where('authorization_status', '!=', 0)->count();
             $goal_deadline = PmGoalDeadlineExtHistory::where('goal_id',$goal->id)->where('auth_status', '!=', 0)->count();
             $goal->extended_day = Carbon::parse($goal->extension_req_for)->diffInDays(Carbon::parse($goal->old_deadline));
             $goal->goal_expired_history = $pm_goal;
@@ -692,7 +692,8 @@ class ProjectStatusController extends AccountBaseController
                 ]);
     }
     public function resolvedHistory($id){
-        $data = PmGoalExpHistory::select('pm_goal_exp_histories.*','authorization_by.id as authorization_by_id','authorization_by.name as authorization_by_name','authorization_by.image as authorization_by_img')
+        $data = PmGoalExpHistory::select('pm_goal_exp_histories.*','project_pm_goals.goal_start_date','project_pm_goals.goal_end_date','project_pm_goals.duration','project_pm_goals.goal_status','project_pm_goals.goal_name','authorization_by.id as authorization_by_id','authorization_by.name as authorization_by_name','authorization_by.image as authorization_by_img')
+                ->leftJoin('project_pm_goals','pm_goal_exp_histories.goal_id','project_pm_goals.id')
                 ->leftJoin('users as authorization_by','pm_goal_exp_histories.authorization_by','authorization_by.id')
                 ->where('pm_goal_exp_histories.goal_id',$id)
                 ->get();
