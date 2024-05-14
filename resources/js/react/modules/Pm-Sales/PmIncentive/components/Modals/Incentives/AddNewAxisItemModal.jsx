@@ -20,12 +20,12 @@ const AddNewAxisItemModal = ({ xAxisStartAndEndValue, chartAxisData, setChartAxi
     const validateFields = (data) => {
         let isValid = true;
 
-        if (data.xAxisLowerLimit >= data.xAxisUpperLimit || data.xAxisUpperLimit < data.xAxisLowerLimit) {
+        if (Number(data.xAxisLowerLimit) >= Number(data.xAxisUpperLimit) || Number(data.xAxisUpperLimit) < Number(data.xAxisLowerLimit)) {
             toast.error('X Axis Lower Limit cannot be greater than or equal to Upper Limit');
             isValid = false;
         }
 
-        if (data.xAxisLowerLimit < xAxisStaring || data.xAxisUpperLimit > xAxisEnding) {
+        if (Number(data.xAxisLowerLimit) < Number(xAxisStaring) || Number(data.xAxisUpperLimit) > Number(xAxisEnding)) {
             toast.error(`X Axis range must be between ${xAxisStaring} and ${xAxisEnding}`);
             isValid = false;
         }

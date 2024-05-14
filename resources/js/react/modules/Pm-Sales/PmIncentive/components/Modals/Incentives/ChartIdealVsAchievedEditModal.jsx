@@ -74,26 +74,26 @@ const ChartIdealVsAchievedEditModal = ({ antdModalOpen, showIdealVsAchievedEditM
         const sortedChartData = chartAxisData.sort((a, b) => a.xAxisLowerLimit - b.xAxisLowerLimit);
 
         // Validation 0: Check if starting point is valid
-        if ((sortedChartData[0].xAxisLowerLimit < xAxisStartAndEndValue.xAxisStaring) || (sortedChartData[sortedChartData.length - 1].xAxisUpperLimit > xAxisStartAndEndValue.xAxisEnding)) {
+        if ((Number(sortedChartData[0].xAxisLowerLimit) < Number(xAxisStartAndEndValue.xAxisStaring)) || (Number(sortedChartData[sortedChartData.length - 1].xAxisUpperLimit) > Number(xAxisStartAndEndValue.xAxisEnding))) {
             toast.error(`X Axis range must be between ${xAxisStartAndEndValue?.xAxisStaring} and ${xAxisStartAndEndValue?.xAxisEnding}`);
             return;
         }
 
         // Validation 1: Check if starting point is less than the minimum xAxisLowerLimit
-        if (sortedChartData.length > 0 && sortedChartData[0].xAxisLowerLimit > xAxisStartAndEndValue.xAxisStaring) {
+        if (sortedChartData.length > 0 && Number(sortedChartData[0].xAxisLowerLimit) > Number(xAxisStartAndEndValue.xAxisStaring)) {
             toast.error('Starting Point (X Axis) is invalid.');
             return;
         }
 
         // Validation 4: Check if ending point is greater than the maximum xAxisUpperLimit
-        if (sortedChartData.length > 0 && sortedChartData[sortedChartData.length - 1].xAxisUpperLimit < xAxisStartAndEndValue.xAxisEnding) {
+        if (sortedChartData.length > 0 && Number(sortedChartData[sortedChartData.length - 1].xAxisUpperLimit) < Number(xAxisStartAndEndValue.xAxisEnding)) {
             toast.error('Ending Point (X Axis) is invalid.');
             return;
         }
 
         // Validation 2: Check for conflicts between ranges
         for (let i = 0; i < sortedChartData.length - 1; i++) {
-            if (sortedChartData[i].xAxisUpperLimit > sortedChartData[i + 1].xAxisLowerLimit) {
+            if (Number(sortedChartData[i].xAxisUpperLimit) > Number(sortedChartData[i + 1].xAxisLowerLimit)) {
                 toast.error('Conflicting ranges detected.');
                 return;
             }
@@ -101,7 +101,7 @@ const ChartIdealVsAchievedEditModal = ({ antdModalOpen, showIdealVsAchievedEditM
 
         // Validation 3: Check for missing ranges
         for (let i = 0; i < sortedChartData.length - 1; i++) {
-            if (sortedChartData[i].xAxisUpperLimit < sortedChartData[i + 1].xAxisLowerLimit - 1) {
+            if (Number(sortedChartData[i].xAxisUpperLimit) < Number(sortedChartData[i + 1].xAxisLowerLimit) - 1) {
                 toast.error('Missing range detected.');
                 return;
             }
@@ -109,6 +109,7 @@ const ChartIdealVsAchievedEditModal = ({ antdModalOpen, showIdealVsAchievedEditM
 
         // If all validations passed, proceed with saving the data
         console.log(sortedChartData);
+        toast.success('Chart data saved successfully.');
         // Add your save logic here
     }
 

@@ -3,6 +3,7 @@ import PropTypes from "prop-types";
 import { ButtonComponent } from '../../../../PointFactors/components/Styles/ui/ui';
 import { useForm } from 'react-hook-form';
 import { Modal } from 'antd';
+import { toast } from 'react-toastify';
 
 const SelectRatioRangeModal = ({ xAxisStartAndEndValue, setXAxisStartAndEndValue, antdModalOpen, setAntdModalOpen }) => {
 
@@ -15,6 +16,10 @@ const SelectRatioRangeModal = ({ xAxisStartAndEndValue, setXAxisStartAndEndValue
     } = useForm()
 
     const onSubmit = (data) => {
+        if (Number(data?.xAxisStaring) >= Number(data?.xAxisEnding)) {
+            toast.error('Starting Point (X Axis) cannot be greater than or equal to Ending Point (X Axis)')
+            return
+        }
         setXAxisStartAndEndValue(data)
         reset()
         setAntdModalOpen(false)
