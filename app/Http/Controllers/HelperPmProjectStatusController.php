@@ -87,13 +87,14 @@ class HelperPmProjectStatusController extends AccountBaseController
 
         DB::beginTransaction();
 
+        $goalCount = self::goalCount($pmGoalSetting->category, $milestoneCount);
+        $goalCodes = ProjectPmGoal::$goalCodes[$pmGoalSetting->category];
+
         try {
             if ($pmGoalSetting->category == 'regular') {
 
                 $goalDurationArray = [3, 7, 12, 15, 22, 29];
                 $i = 0;
-                $goalCount = self::goalCount($pmGoalSetting->category, $milestoneCount);
-                $goalCodes = ProjectPmGoal::$goalCodes[$pmGoalSetting->category];
 
                 $goal = new ProjectPmGoal();
                 $goal->project_id = $findProject->id;
@@ -113,7 +114,6 @@ class HelperPmProjectStatusController extends AccountBaseController
                 $goal->save();
 
                 $timePassed = 0;
-
                 for (++$i; $i < $goalCount; $i++) {
                     $goal = new ProjectPmGoal();
                     $goal->project_id = $findProject->id;
@@ -145,95 +145,53 @@ class HelperPmProjectStatusController extends AccountBaseController
 
                 $timePassed = $goal->duration;
             } else {
+
+                $goalDurationArray = [3, 4, 7, 12, 15, 22];
+                $i = 0;
+
                 $goal = new ProjectPmGoal();
                 $goal->project_id = $findProject->id;
                 $goal->client_id = $findDeal->client_id;
                 $goal->pm_id = $findDeal->pm_id;
                 $goal->project_type = $findDeal->project_type;
                 $goal->project_category = $pmGoalSetting->category;
-                $goal->goal_code = 'DCS';
-                $goal->goal_name = 'Deliverables have to be signed off and all the tasks have to be created with proper planning';
-                $goal->goal_type = 'deliverable_signed_by_client';
+
+                $goal->goal_code = $goalCodes[$i]['code'];
+                $goal->goal_name = $goalCodes[$i]['name'];
+                $goal->goal_type = $goalCodes[$i]['type'];
+
                 $goal->goal_start_date = $goal_start_date;
-                $goal->goal_end_date = Carbon::parse($goal_start_date)->addDay(3);
-                $goal->duration = 3;
+                $goal->goal_end_date = Carbon::parse($goal_start_date)->addDay($goalDurationArray[$i]);
+                $goal->duration = $goalDurationArray[$i];
                 $goal->added_by = Auth::user()->id;
                 $goal->save();
 
-                $goal = new ProjectPmGoal();
-                $goal->project_id = $findProject->id;
-                $goal->client_id = $findDeal->client_id;
-                $goal->pm_id = $findDeal->pm_id;
-                $goal->project_type = $findDeal->project_type;
-                $goal->project_category = 'Priority';
-                $goal->goal_code = 'TSM';
-                $goal->goal_name = '1st submission has to be made';
-                $goal->goal_type = '1st_task_submissino';
-                $goal->goal_start_date = $goal_start_date;
-                $goal->goal_end_date = Carbon::parse($goal_start_date)->addDay(4);
-                $goal->duration = 4;
-                $goal->added_by = Auth::user()->id;
-                $goal->save();
+                $timePassed = 0;
+                for (++$i; $i < $goalCount; $i++) {
+                    $goal = new ProjectPmGoal();
+                    $goal->project_id = $findProject->id;
+                    $goal->client_id = $findDeal->client_id;
+                    $goal->pm_id = $findDeal->pm_id;
+                    $goal->project_type = $findDeal->project_type;
+                    $goal->project_category = $pmGoalSetting->category;
+                    $goal->goal_start_date = $goal_start_date;
 
-                $goal = new ProjectPmGoal();
-                $goal->project_id = $findProject->id;
-                $goal->client_id = $findDeal->client_id;
-                $goal->pm_id = $findDeal->pm_id;
-                $goal->project_type = $findDeal->project_type;
-                $goal->project_category = 'Priority';
-                $goal->goal_code = 'FMR';
-                $goal->goal_name = '1st milestone has to be released';
-                $goal->goal_type = '1st_milestone_released';
-                $goal->goal_start_date = $goal_start_date;
-                $goal->goal_end_date = Carbon::parse($goal_start_date)->addDay(7);
-                $goal->duration = 7;
-                $goal->added_by = Auth::user()->id;
-                $goal->save();
-                if ($milestoneCount > 1) {
-                    $goal = new ProjectPmGoal();
-                    $goal->project_id = $findProject->id;
-                    $goal->client_id = $findDeal->client_id;
-                    $goal->pm_id = $findDeal->pm_id;
-                    $goal->project_type = $findDeal->project_type;
-                    $goal->project_category = 'Priority';
-                    $goal->goal_code = 'MPMR';
-                    $goal->goal_name = 'One more milestone has to be released between 7-12 th days';
-                    $goal->goal_type = 'more_milestone_released';
-                    $goal->goal_start_date = $goal_start_date;
-                    $goal->goal_end_date = Carbon::parse($goal_start_date)->addDay(12);
-                    $goal->duration = 12;
-                    $goal->added_by = Auth::user()->id;
-                    $goal->save();
-                }
-                if ($milestoneCount > 2) {
-                    $goal = new ProjectPmGoal();
-                    $goal->project_id = $findProject->id;
-                    $goal->client_id = $findDeal->client_id;
-                    $goal->pm_id = $findDeal->pm_id;
-                    $goal->project_type = $findDeal->project_type;
-                    $goal->project_category = 'Priority';
-                    $goal->goal_code = 'MMPMR';
-                    $goal->goal_name = 'At least 1 more milestone released between 12-15 days';
-                    $goal->goal_type = 'more_and_more_milestone_released';
-                    $goal->goal_start_date = $goal_start_date;
-                    $goal->goal_end_date = Carbon::parse($goal_start_date)->addDay(15);
-                    $goal->duration = 15;
-                    $goal->added_by = Auth::user()->id;
-                    $goal->save();
-                }
-                if ($milestoneCount > 3) {
-                    $goal = new ProjectPmGoal();
-                    $goal->project_id = $findProject->id;
-                    $goal->client_id = $findDeal->client_id;
-                    $goal->pm_id = $findDeal->pm_id;
-                    $goal->project_type = $findDeal->project_type;
-                    $goal->project_category = 'Priority';
-                    $goal->goal_code = 'LM';
-                    $goal->goal_name = 'At least 1 more milestone released between 12-15 days';
-                    $goal->goal_type = 'last_milestone';
-                    $goal->goal_start_date = $goal_start_date;
-                    $goal->goal_end_date = Carbon::parse($goal_start_date)->addDay(22);
-                    $goal->duration = 22;
+                    if ($i < 6) {
+                        $goal->goal_code = $goalCodes[$i]['code'];
+                        $goal->goal_name = $goalCodes[$i]['name'];
+                        $goal->goal_type = $goalCodes[$i]['type'];
+                        $goal->goal_end_date = Carbon::parse($goal_start_date)->addDay($goalDurationArray[$i]);
+                        $goal->duration = $goalDurationArray[$i];
+                    }
+                    else {
+                        $goal->goal_code = $goalCodes[5]['code'];
+                        $goal->goal_name = $goalCodes[5]['name'];
+                        $goal->goal_type = $goalCodes[5]['type'];
+
+                        $goal->duration = $goalDurationArray[5] + ($timePassed+=7);
+                        $goal->goal_end_date = Carbon::parse($goal_start_date)->addDay($goal->duration);
+                    }
+
                     $goal->added_by = Auth::user()->id;
                     $goal->save();
                 }
