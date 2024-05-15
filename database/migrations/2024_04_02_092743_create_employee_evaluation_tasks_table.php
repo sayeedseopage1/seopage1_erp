@@ -29,11 +29,6 @@ return new class extends Migration
             $table->decimal('qw_second_revision')->nullable();
             $table->decimal('speed_of_work')->nullable();
             $table->decimal('understand_instruction')->nullable();
-            $table->decimal('communication')->nullable();
-            $table->decimal('professionalism')->nullable();
-            $table->decimal('identiey_issues')->nullable();
-            $table->decimal('dedication')->nullable();
-            $table->decimal('obedience')->nullable();
             $table->integer('lead_dev_id')->nullable();
             $table->longText('lead_dev_cmnt')->nullable();
             $table->decimal('avg_rating')->nullable();

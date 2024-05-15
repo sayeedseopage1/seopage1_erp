@@ -20,6 +20,11 @@ return new class extends Migration
             $table->dateTime('join_date');
             $table->dateTime('start_date')->nullable();
             $table->dateTime('exp_date')->nullable();
+            $table->decimal('communication')->nullable();
+            $table->decimal('professionalism')->nullable();
+            $table->decimal('identiey_issues')->nullable();
+            $table->decimal('dedication')->nullable();
+            $table->decimal('obedience')->nullable();
             $table->decimal('lead_dev_avg_rating')->nullable();
             $table->longText('team_lead_cmnt')->nullable();
             $table->longText('managements_cmnt')->nullable();
