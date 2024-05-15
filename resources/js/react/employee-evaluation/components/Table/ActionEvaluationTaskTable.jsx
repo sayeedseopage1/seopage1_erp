@@ -2,11 +2,12 @@ import React, { useEffect, useState } from "react";
 import { ColumnContent } from "./ui";
 import { IoIosSend } from "react-icons/io";
 import ButtonStyles from "./ActionButton.module.css";
-import SingleEvaluationModal from "../modal/SingleEvaluationModal";
+
 import { useAuth } from "../../../hooks/useAuth";
 import Popover from "../../../../react-latest/ui/Popover";
-import { convertTime } from "../../../utils/converTime";
+
 import EvaluationRatingPopover from "./EvaluationRatingPopover";
+import EvaluationRatingModal from "../modal/EvaluationRatingModal";
 
 const ActionEvaluationTaskTable = ({ data }) => {
     const hideEvaluationButton =
@@ -73,20 +74,23 @@ const ActionEvaluationTaskTable = ({ data }) => {
                     <div>
                         {!hideEvaluationButton ? (
                             <button
+                                onClick={() => toggleSingleEvaluationModal()}
                                 className={ButtonStyles.sendContainer}
                                 style={{ color: "white", fontSize: "16px" }}
                             >
                                 {data?.avg_rating}
                             </button>
                         ) : (
-                            <div style={{ minWidth: "10rem" }}>
+                            <div
+                                style={{ minWidth: "10rem", marginTop: "10px" }}
+                            >
                                 <Popover>
                                     <Popover.Button>
                                         <span
                                             className=" singleline-ellipsis"
                                             style={{ color: "red" }}
                                         >
-                                            Not available for rating
+                                            Not applicable for rating
                                         </span>
                                     </Popover.Button>
 
@@ -100,7 +104,7 @@ const ActionEvaluationTaskTable = ({ data }) => {
                 )}
             </ColumnContent>
 
-            <SingleEvaluationModal
+            <EvaluationRatingModal
                 isSingleEvaluationModalOpen={isSingleEvaluationModalOpen}
                 toggleSingleEvaluationModal={toggleSingleEvaluationModal}
                 data={data}

@@ -1,6 +1,31 @@
 import styled from "styled-components";
 
-export const EvalTableTitle = styled.div`
+export const TitleAndTableSection = styled.section``;
+export const RatingLeadDevSection = styled.section``;
+export const CommentTeamLeadSection = styled.section``;
+export const CommentAdminSection = styled.section``;
+export const ButtonSection = styled.section``;
+export const RatingTitleAndTableSection = styled.section``;
+export const RatingSectionLeadDev = styled.section``;
+export const CommentLeadDevSection = styled.section``;
+export const RatingButtonSection = styled.section``;
+export const LeadDevName = styled.div`
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+    padding: 3px;
+    border: 1px solid grey;
+`;
+
+export const LeadDevComment = styled.div`
+    height: auto;
+    position: relative;
+    width: 100%;
+    padding: 10px;
+    padding-bottom: 40px;
+`;
+
+export const EvalTableTitle = styled.section`
     position: relative;
     padding: 20px;
     width: 100%;
@@ -17,6 +42,7 @@ export const EvalTableTitle = styled.div`
     background-color: #1d82f5;
     color: #ffffff;
 `;
+
 export const FooterButtons = styled.div`
     display: flex;
     justify-content: right;

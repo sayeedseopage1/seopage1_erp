@@ -2,11 +2,12 @@ import React, { useState } from "react";
 import { useLocation } from "react-router-dom";
 import { useAuth } from "../../../hooks/useAuth";
 import Button from "../Button";
-import EvaluationModal from "../modal/EvaluationModal";
+
 import Switch from "../../../global/Switch";
 import { Tooltip } from "react-tooltip";
 
 import useEmployeeEvaluation from "../../../zustand/store";
+import EvaluationTaskListModal from "../modal/EvaluationTaskListModal";
 
 const ActionEvaluationTable = ({ data, table }) => {
     const [isEvaluationModal, setIsEvaluationModal] = useState(false);
@@ -284,7 +285,7 @@ const ActionEvaluationTable = ({ data, table }) => {
                 </Switch>
             </div>
 
-            <EvaluationModal
+            <EvaluationTaskListModal
                 singleEvaluation={data}
                 setIsEvaluationModal={setIsEvaluationModal}
                 isEvaluationModal={isEvaluationModal}

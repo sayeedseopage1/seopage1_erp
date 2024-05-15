@@ -2,8 +2,7 @@ import React, { useState, useEffect } from "react";
 
 import { useGetEvaluationListQuery } from "../../services/api/EvaluationApiSlice";
 import { DataTableColumns } from "../components/Table/DataTableColumns";
-import DataTable from "../components/Table/DataTable";
-import Button from "../../global/Button";
+
 import styles from "./EmployeeEvaluation.module.css";
 import EvaluationTableFilterBar from "../components/EvaluationTableFilterBar";
 
@@ -12,6 +11,7 @@ import RefreshButton from "../components/RefreshButton";
 import { Link, useSearchParams } from "react-router-dom";
 import _ from "lodash";
 import Card from "../../global/Card";
+import EvaluationTable from "../components/Table/EvaluationTable";
 
 const EmployeeEvaluation = () => {
     const [searchParams, setSearchParams] = useSearchParams();
@@ -102,7 +102,7 @@ const EmployeeEvaluation = () => {
                     />
                 </Flex>
 
-                <DataTable
+                <EvaluationTable
                     data={tableData(searchParams.get("show"))}
                     mainData={mainData}
                     columns={[...DataTableColumns]}
