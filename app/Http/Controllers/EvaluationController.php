@@ -204,7 +204,15 @@ class EvaluationController extends AccountBaseController
     public function storeSubmissionEvaluation(Request $request)
     {
         // dd($request->all());
-        // DB::beginTransaction();
+        // // DB::beginTransaction();
+        // $userTasks = EmployeeEvaluationTask::where('user_id',$request->user_id)->get();
+        // foreach($userTasks as $userTask){
+        //      $project_time_log = ProjectTimeLog::where('task_id',$userTask->task_id)->where('user_id',$userTask->task_id)->first();
+        //      if($project_time_log->total_minutes > 60){
+        //         dd('ok');
+        //      }
+        // }
+
         $task_sum = EmployeeEvaluationTask::where('user_id',$request->user_id)->sum('avg_rating');
         $task_count = EmployeeEvaluationTask::where('user_id',$request->user_id)->count('avg_rating');
         $avg_rating = $task_count > 0 ? $task_sum / $task_count : 0;
