@@ -132,7 +132,7 @@ class PublicUrlController extends Controller
         $sign->signature = $imageName;
         $sign->save();
 
-        // Project Manager Point Distribution
+        // Project Manager Point Distribution ( Signing the deliverables )
         if($released_time = Project::with('deal')->find($id)->deal->released_at ?? null) ProjectManagerPointLogic::distribute(1, $id, Carbon::parse($released_time)->diffInHours(Carbon::now()));
         
 

@@ -9,7 +9,7 @@ import SelectRatioRangeModal from './SelectRatioRangeModal';
 import RemoveRatioItemsModal from './RemoveRatioItemsModal';
 import { toast } from 'react-toastify';
 import Swal from 'sweetalert2';
-import warningIcon from '../../../assets/warning.svg'
+import warningIcon from '../../../assets/warningIcon.svg'
 
 const ChartIdealVsAchievedEditModal = ({ antdModalOpen, showIdealVsAchievedEditModal, chartData }) => {
     // console.log(chartData)
@@ -99,7 +99,7 @@ const ChartIdealVsAchievedEditModal = ({ antdModalOpen, showIdealVsAchievedEditM
         // Sort chartAxisData based on xAxisLowerLimit
         const sortedChartData = chartAxisData.sort((a, b) => a.xAxisLowerLimit - b.xAxisLowerLimit);
 
-        // Validation 0: Check if starting point is valid
+        // Validation 0: Check if starting point is valid and ending point is valid
         if ((Number(sortedChartData[0].xAxisLowerLimit) < Number(xAxisStartAndEndValue.xAxisStaring)) || (Number(sortedChartData[sortedChartData.length - 1].xAxisUpperLimit) > Number(xAxisStartAndEndValue.xAxisEnding))) {
             toast.error(`X Axis range must be between ${xAxisStartAndEndValue?.xAxisStaring} and ${xAxisStartAndEndValue?.xAxisEnding}`);
             return;

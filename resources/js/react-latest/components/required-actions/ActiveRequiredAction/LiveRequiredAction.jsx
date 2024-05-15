@@ -9,10 +9,12 @@ import { useLazyGetLiveRequiredActionQuery } from "../../../services/api/require
 import RequiredActionCard_Loader from "../RequiredActionCards/RequiredActionCard_Loader";
 import { useRefresh } from "../Index";
 import { User } from "../../../utils/user-details";
+import useCounterStore from "../../../Zustand/store";
 
 const currentUser = new User(window.Laravel.user);
 
 const LiveRequiredAction = () => {
+    const { count } = useCounterStore();
     const { currentPage, perPageItem, setTotalItem } = usePagination();
     const { refresh, setLoading, user } = useRefresh();
     const [data, setData] = useState([]);
@@ -32,7 +34,10 @@ const LiveRequiredAction = () => {
 
     // data fetching according to filter
     useEffect(() => {
-        const queryObj = _.pickBy({...dateFilter,user_id:user?.id}, Boolean);
+        const queryObj = _.pickBy(
+            { ...dateFilter, user_id: user?.id },
+            Boolean
+        );
         const query = new URLSearchParams(queryObj).toString();
         // console.log({query});
         getLiveRequiredAction(query)
@@ -40,7 +45,7 @@ const LiveRequiredAction = () => {
             .then(({ pending_actions }) => {
                 setData(pending_actions);
             });
-    }, [dateFilter, refresh, user]);
+    }, [dateFilter, refresh, user, count]);
 
     // filter data according to search
     useEffect(() => {
@@ -88,7 +93,12 @@ const LiveRequiredAction = () => {
 
     return (
         <div>
-            <FilterBar onFilter={onFilter} change={true} />
+            <FilterBar
+                onFilter={onFilter}
+                change={true}
+                setFilterData={setFilterData}
+                data={data}
+            />
             {(isLoading || isFetching) &&
                 _.fill(Array(perPageItem), "*").map((v, i) => (
                     <RequiredActionCard_Loader key={i} />
@@ -99,7 +109,7 @@ const LiveRequiredAction = () => {
                     return (
                         <RequiredActionsCard
                             key={i}
-                            role={user?user.role_id:currentUser.roleId}
+                            role={user ? user.role_id : currentUser.roleId}
                             data={data}
                             status={"live"}
                         />

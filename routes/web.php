@@ -69,6 +69,7 @@ use App\Http\Controllers\CreditNoteController;
 use App\Http\Controllers\DepartmentController;
 use App\Http\Controllers\DiscussionController;
 use App\Http\Controllers\DMContractController;
+use App\Http\Controllers\EvaluationController;
 use App\Http\Controllers\GoogleAuthController;
 use App\Http\Controllers\KpiSettingController;
 use App\Http\Controllers\StickyNoteController;
@@ -183,6 +184,7 @@ use App\Http\Controllers\LeadStatusSettingController;
 use App\Http\Controllers\Payment\AuthorizeController;
 use App\Http\Controllers\PmPointFactorViewController;
 use App\Http\Controllers\SocialAuthSettingController;
+use App\Http\Controllers\TypeOfGraphicWorkController;
 use App\Http\Controllers\ContractDiscussionController;
 use App\Http\Controllers\DiscussionCategoryController;
 use App\Http\Controllers\ProductSubCategoryController;
@@ -193,13 +195,14 @@ use App\Http\Controllers\Payment\FlutterwaveController;
 use App\Http\Controllers\ProjectManagerPointController;
 use App\Http\Controllers\ProjectTemplateTaskController;
 use App\Http\Controllers\ProjectTimelogBreakController;
-use App\Http\Controllers\NonCashPointSettingsController;
 
+use App\Http\Controllers\NonCashPointSettingsController;
 use App\Http\Controllers\TicketReplyTemplatesController;
 use App\Http\Controllers\DatabaseBackupSettingController;
 use App\Http\Controllers\EmployeeShiftScheduleController;
 use App\Http\Controllers\GoogleCalendarSettingController;
 use App\Http\Controllers\IncomeVsExpenseReportController;
+
 use App\Http\Controllers\KnowledgeBaseCategoryController;
 use App\Http\Controllers\OfflinePaymentSettingController;
 use App\Http\Controllers\Payment\StripeWebhookController;
@@ -209,9 +212,11 @@ use App\Http\Controllers\PointIncentive\CriteriaController;
 use App\Http\Controllers\PaymentGatewayCredentialController;
 use App\Http\Controllers\EmployeeShiftChangeRequestController;
 use App\Http\Controllers\PointIncentive\GetPmCashPointController;
+use App\Http\Controllers\PointIncentive\PmIncentiveViewController;
 use App\Http\Controllers\PointIncentive\GetPmPointCriteriaController;
 use App\Http\Controllers\PointIncentive\GetCriteriaWiseFactorController;
-use App\Http\Controllers\PointIncentive\PmIncentiveViewController;
+use App\Http\Controllers\PointIncentive\IncentiveFactorController;
+use App\Http\Controllers\PointIncentive\IncentiveTypeController;
 
 /*
 |--------------------------------------------------------------------------
@@ -415,6 +420,7 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
     Route::get('check-in-status', [DashboardController::class, 'clockInStatus']);
     Route::post('/developer/daily-minimum-track-hours-log/acknowledgement',[DashboardController::class,'developerDailytrackHoursLog']);
     Route::put('check-out-status', [DashboardController::class, 'clockOutStatus']);
+
     /** DEVELOPER CHECK IN CHECK OUT START*/
 
     /* Setting menu routes starts from here */
@@ -568,6 +574,7 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
         Route::post('employee-shifts/set-default', [EmployeeShiftController::class, 'setDefaultShift'])->name('employee-shifts.set_default');
         Route::resource('employee-shifts', EmployeeShiftController::class);
         Route::get('pending-action/{any?}', [PendingActionController::class, 'index'])->where('any', '.*');
+        Route::post('past-pending-action-comment', [PendingActionController::class, 'pastAction']);
         Route::resource('pending-action', PendingActionController::class);
 
 
@@ -1151,9 +1158,11 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
     //Monthly Incentive Settings
     Route::resource('monthly-incentive', MonthlyIncentiveController::class);
     Route::get('monthly-incentive/download/{id}', [MonthlyIncentiveController::class, 'download'])->name('monthly-incentive.download');
-
+    
     Route::get('monthly-incentive/get-json/index', [MonthlyIncentiveController::class, 'get_index_json']);
-
+    
+    Route::resource('employee-evaluation', EvaluationController::class);
+    Route::get('get-all-evaluation', [EvaluationController::class,'getAllEvaluation']);
     //Pm goal Settings
     Route::resource('pm-goal-setting', PmGoalSetingController::class);
     Route::post('pm-goal-setting-update',[PmGoalSetingController::class,'pmGoalUpdate'])->name('pm-goal-setting-update');
@@ -1556,9 +1565,14 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
     Route::resource('pm-point-criteria', CriteriaController::class)->only(['index']);
     Route::get('get-pm-cashpoint', GetPmCashPointController::class)->name('get.pm.cashpoint');
     Route::get('pm-incentives', PmIncentiveViewController::class)->name('project.manager.incentives');
+    Route::resource('incentive-type', IncentiveTypeController::class)->only(['index', 'update']);
+    Route::resource('incentive-factor', IncentiveFactorController::class);
 
 
   //  Route::any('tasks/{any?}', [TaskController::class, 'home'])->where('any', '.*');
+
+    // Graphic task files delete
+    Route::get('graphic-task-file/delete/{id}', [TaskController::class, 'deleteGraphicTaskFile'])->name('graphic.task.file.delete');
 });
 
 //custom route for seopage1
@@ -1842,13 +1856,17 @@ Route::put('/task-guideline-update/{id}', [TaskController::class, 'updateTaskGui
 Route::get('/task-guideline-authorization/{id}', [TaskController::class, 'taskGuidelineAuthorization']);
 Route::get('/server-time-status', [TaskController::class, 'dailyServerStatus']);
 
+Route::group(['middleware' => 'auth'], function () {
+    Route::get('type-of-graphic-works', TypeOfGraphicWorkController::class)->name('typeof.graphic.works');
+});
+
 Route::get('test-point/{factorId}/{projectId}/{comparable_value}', function($factorId, $projectId, $comparable_value){
     return ProjectManagerPointLogic::distribute($factorId, $projectId, $comparable_value) ? 'Point distributed successfully' : 'The condition does not satisfied or something went wrong!';
 });
 
-Route::get('test-calculation/{factorId}/{projectId}', function ($factorId, $projectId){
-    $project = Project::find($projectId);
-    $project->status = $project->status=='finished' ? 'partially finished' : 'finished';
-    $project->save();
+Route::get('test-calculation/{taskId}', function ($taskId){
+    $task = \App\Models\Task::find($taskId);
+    $task->board_column_id = $task->board_column_id == 6 ? 8 : 6;
+    $task->save();
     dd('Success');
 });

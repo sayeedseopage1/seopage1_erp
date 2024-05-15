@@ -31,6 +31,8 @@ class ProjectManagerPointLogic
                 $earned_points = $factor->getCalculatedPoints($projectId);
                 $factor_id = $factor->id;
                 break;
+            }elseif($points){
+                $factor_id = $factor->id;
             }
         }
         

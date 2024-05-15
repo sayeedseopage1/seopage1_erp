@@ -27,7 +27,7 @@ import { useGoals } from '../hooks/useGoals';
 
 // assignee for 
 
-const AssigneeFor = ({assigneeFor, setAssigneeFor, assigneeType}) => {
+const AssigneeFor = ({ assigneeFor, setAssigneeFor, assigneeType }) => {
     const [search, setSearch] = React.useState('');
     // const [users, setUsers] = React.useState([]);
     // const [teams,setTeams] = React.useState([]);
@@ -38,19 +38,19 @@ const AssigneeFor = ({assigneeFor, setAssigneeFor, assigneeType}) => {
         isFetching: usersIsFetching,
     } = useGetUsersQuery(`/`);
 
-      const {
+    const {
         data: teams,
         isFetching: teamsIsFetching,
     } = useGetTeamsQuery(`/`);
 
-    return(
+    return (
         <React.Fragment>
             <Dropdown className="cnx_select_box_dd">
                 <Dropdown.Toggle className="cnx_select_box">
                     {assigneeFor.name || `Select ${assigneeType}`}
                 </Dropdown.Toggle>
                 <Dropdown.Menu className="cnx_select_box_options">
-                    {Number(activeUser?.role_id)!== 7 &&
+                    {Number(activeUser?.role_id) !== 7 &&
                         <div className='cnx_select_box_search'>
                             <SearchBox autoFocus={true} value={search} onChange={setSearch} />
                         </div>
@@ -73,45 +73,45 @@ const AssigneeFor = ({assigneeFor, setAssigneeFor, assigneeType}) => {
                     } */}
 
                     {
-                        assigneeType === "User" ?  Number(activeUser?.role_id) === 7 ?
-                                <Dropdown.Item 
-                                    key={activeUser?.id}
-                                    onClick={() => setAssigneeFor({id: activeUser?.id, name: activeUser?.name})}
-                                    className={ `cnx_select_box_option ${assigneeFor.name === activeUser?.name ? 'active': ''}`}> 
-                                        {activeUser?.name}
-                                        {assigneeFor.name === activeUser?.name && <i className="fa-solid fa-check" />}
-                                </Dropdown.Item>
-                                
-                            : (!users && usersIsFetching) ? 
+                        assigneeType === "User" ? Number(activeUser?.role_id) === 7 ?
+                            <Dropdown.Item
+                                key={activeUser?.id}
+                                onClick={() => setAssigneeFor({ id: activeUser?.id, name: activeUser?.name })}
+                                className={`cnx_select_box_option ${assigneeFor.name === activeUser?.name ? 'active' : ''}`}>
+                                {activeUser?.name}
+                                {assigneeFor.name === activeUser?.name && <i className="fa-solid fa-check" />}
+                            </Dropdown.Item>
+
+                            : (!users && usersIsFetching) ?
                                 <Dropdown.Item>
                                     Loading...
                                 </Dropdown.Item>
-                            :
-                            users ? users.filter(f => f.name.includes(search)).map(user => (
-                                <Dropdown.Item 
-                                    key={user.id}
-                                    onClick={() => setAssigneeFor({id: user.id, name: user.name})}
-                                    className={ `cnx_select_box_option ${assigneeFor.name === user.name ? 'active': ''}`}> 
+                                :
+                                users ? users.filter(f => f.name.includes(search)).map(user => (
+                                    <Dropdown.Item
+                                        key={user.id}
+                                        onClick={() => setAssigneeFor({ id: user.id, name: user.name })}
+                                        className={`cnx_select_box_option ${assigneeFor.name === user.name ? 'active' : ''}`}>
                                         {user.name}
                                         {assigneeFor.name === user.name && <i className="fa-solid fa-check" />}
-                                </Dropdown.Item>
-                            )): <Dropdown.Item>Users not found</Dropdown.Item>
-                        : assigneeType === "Team" ? (!teams && teamsIsFetching) ? 
-                                 <Dropdown.Item>
+                                    </Dropdown.Item>
+                                )) : <Dropdown.Item>Users not found</Dropdown.Item>
+                            : assigneeType === "Team" ? (!teams && teamsIsFetching) ?
+                                <Dropdown.Item>
                                     Loading...
                                 </Dropdown.Item>
-                            : 
-                            teams ? teams.filter(f => f.team_name.includes(search)).map(team => (
-                                <Dropdown.Item 
-                                    key={team.id}
-                                    onClick={() => setAssigneeFor({id: team.id, name: team.team_name})}
-                                    className={ `cnx_select_box_option ${assigneeFor.name === team.team_name ? 'active': ''}`}> 
+                                :
+                                teams ? teams.filter(f => f.team_name.includes(search)).map(team => (
+                                    <Dropdown.Item
+                                        key={team.id}
+                                        onClick={() => setAssigneeFor({ id: team.id, name: team.team_name })}
+                                        className={`cnx_select_box_option ${assigneeFor.name === team.team_name ? 'active' : ''}`}>
                                         {team.team_name}
                                         {assigneeFor.name === team.team_name && <i className="fa-solid fa-check" />}
-                                </Dropdown.Item>
-                                )) 
-                            : <Dropdown.Item> Teams not found </Dropdown.Item>
-                        : null
+                                    </Dropdown.Item>
+                                ))
+                                    : <Dropdown.Item> Teams not found </Dropdown.Item>
+                                : null
                     }
                 </Dropdown.Menu>
             </Dropdown>
@@ -123,13 +123,13 @@ const PipelineSelect = ({ pipeline, setPipeline, multiple }) => {
     const [search, setSearch] = React.useState('');
 
     const onSelected = (option) => {
-        if(multiple){
-            if(pipeline.includes(option)){
+        if (multiple) {
+            if (pipeline.includes(option)) {
                 setPipeline(pipeline.filter(p => p !== option));
-            }else{
+            } else {
                 setPipeline([...pipeline, option]);
             }
-        }else{
+        } else {
             setPipeline([option]);
         }
     }
@@ -141,14 +141,14 @@ const PipelineSelect = ({ pipeline, setPipeline, multiple }) => {
 
     // remove all tags
     const removeAll = () => {
-        if(multiple){
+        if (multiple) {
             setPipeline([]);
-        }else setPipeline(['Select Pipeline']);
+        } else setPipeline(['Select Pipeline']);
     }
 
-    const options = () => (['Pipeline'])
+    const options = ['Pipeline']
 
-    return(
+    return (
         <React.Fragment>
             <Dropdown disabled={true} className="cnx_select_box_dd">
                 <Dropdown.Toggle className="cnx_select_box">
@@ -158,7 +158,7 @@ const PipelineSelect = ({ pipeline, setPipeline, multiple }) => {
                                 <button aria-label='removeTag' onMouseDown={() => remove(p)}>
                                     <i className="fa-solid fa-xmark" />
                                 </button>
-                                <span>{p}</span> 
+                                <span>{p}</span>
                             </div>
                         )) : pipeline[0]}
                     </div>
@@ -169,25 +169,15 @@ const PipelineSelect = ({ pipeline, setPipeline, multiple }) => {
                 </Dropdown.Toggle>
                 <Dropdown.Menu className="cnx_select_box_options pipeline">
                     <div className='cnx_select_box_search'>
-                        <SearchBox autoFocus={true} value={search} onChange={setSearch}  className="cnx_select_box_search_input" />
+                        <SearchBox autoFocus={true} value={search} onChange={setSearch} className="cnx_select_box_search_input" />
                     </div>
 
-                    {/* {
-                        multiple && (
-                            <>
-                                <Dropdown.Item
-                                onClick={() => setPipeline([...options()])}
-                                className={`cnx_select_box_option all`}> All Pipeline </Dropdown.Item>
-                                <div className="hr" />
-                            </>
-                        )
-                    } */}
-                    {options()?.filter(f => f.includes(search)).map(option => (
-                        <Dropdown.Item key={`${option}-${Math.random()}`} 
-                        onClick={() => onSelected(option)}
-                        className={`cnx_select_box_option ${multiple ? pipeline.includes(option) &&'active' : pipeline===option ? 'active' : '' }`}> {option} 
-                        {pipeline.includes(option) && 
-                        <i className="fa-solid fa-check" />   }
+                    {options?.filter(f => f.includes(search)).map(option => (
+                        <Dropdown.Item key={`${option}-${Math.random()}`}
+                            onClick={() => onSelected(option)}
+                            className={`cnx_select_box_option ${multiple ? pipeline.includes(option) && 'active' : pipeline === option ? 'active' : ''}`}> {option}
+                            {pipeline.includes(option) &&
+                                <i className="fa-solid fa-check" />}
                         </Dropdown.Item>
 
                     ))}
@@ -201,7 +191,7 @@ const PipelineSelect = ({ pipeline, setPipeline, multiple }) => {
 const Qualified = ({ qualified, setQualified }) => {
     const options = () => stage;
 
-    return(
+    return (
         <React.Fragment>
             <Dropdown className="cnx_select_box_dd">
                 <Dropdown.Toggle className="cnx_select_box">
@@ -210,10 +200,10 @@ const Qualified = ({ qualified, setQualified }) => {
                 <Dropdown.Menu className="cnx_select_box_options">
                     {
                         options()?.map(option => (
-                            <Dropdown.Item key={`${option}-${Math.random()}`} 
-                            onClick={() => setQualified(option)}
-                            className={`cnx_select_box_option ${qualified === option ? 'active' : ''}`}> {option} 
-                            {qualified === option && <i className="fa-solid fa-check" />}
+                            <Dropdown.Item key={`${option}-${Math.random()}`}
+                                onClick={() => setQualified(option)}
+                                className={`cnx_select_box_option ${qualified === option ? 'active' : ''}`}> {option}
+                                {qualified === option && <i className="fa-solid fa-check" />}
                             </Dropdown.Item>
 
                         ))
@@ -235,7 +225,7 @@ const Frequency = ({ frequency, setFrequency, setEdit }) => {
         'Yearly',
     ])
 
-    return(
+    return (
         <React.Fragment>
             <Dropdown className="cnx_select_box_dd">
                 <Dropdown.Toggle className="cnx_select_box">
@@ -244,13 +234,13 @@ const Frequency = ({ frequency, setFrequency, setEdit }) => {
                 <Dropdown.Menu className="cnx_select_box_options">
                     {
                         options()?.map(option => (
-                            <Dropdown.Item key={`${option}-${Math.random()}`} 
-                            onClick={() => {
-                                setFrequency(option);
-                                setEdit(true);
-                            }}
-                            className={`cnx_select_box_option ${frequency === option ? 'active' : ''}`}> {option} 
-                            {frequency === option && <i className="fa-solid fa-check" />}
+                            <Dropdown.Item key={`${option}-${Math.random()}`}
+                                onClick={() => {
+                                    setFrequency(option);
+                                    setEdit(true);
+                                }}
+                                className={`cnx_select_box_option ${frequency === option ? 'active' : ''}`}> {option}
+                                {frequency === option && <i className="fa-solid fa-check" />}
                             </Dropdown.Item>
 
                         ))
@@ -271,7 +261,7 @@ const DealType = ({ dealType, setDealType }) => {
         'Existing Client'
     ])
 
-    return(
+    return (
         <React.Fragment>
             <Dropdown className="cnx_select_box_dd">
                 <Dropdown.Toggle className="cnx_select_box">
@@ -280,10 +270,10 @@ const DealType = ({ dealType, setDealType }) => {
                 <Dropdown.Menu className="cnx_select_box_options">
                     {
                         options()?.map(option => (
-                            <Dropdown.Item key={`${option}-${Math.random()}`} 
-                            onClick={() => setDealType(option)}
-                            className={`cnx_select_box_option ${dealType === option ? 'active' : ''}`}> {option} 
-                            {dealType === option && <i className="fa-solid fa-check" />}
+                            <Dropdown.Item key={`${option}-${Math.random()}`}
+                                onClick={() => setDealType(option)}
+                                className={`cnx_select_box_option ${dealType === option ? 'active' : ''}`}> {option}
+                                {dealType === option && <i className="fa-solid fa-check" />}
                             </Dropdown.Item>
 
                         ))
@@ -302,7 +292,7 @@ const GoalType = ({ goalType, setGoalType }) => {
         'Milestone'
     ])
 
-    return(
+    return (
         <React.Fragment>
             <Dropdown className="cnx_select_box_dd">
                 <Dropdown.Toggle className="cnx_select_box">
@@ -311,10 +301,10 @@ const GoalType = ({ goalType, setGoalType }) => {
                 <Dropdown.Menu className="cnx_select_box_options">
                     {
                         options()?.map(option => (
-                            <Dropdown.Item key={`${option}-${Math.random()}`} 
-                            onClick={() => setGoalType(option)}
-                            className={`cnx_select_box_option ${goalType === option ? 'active' : ''}`}> {option} 
-                            {goalType === option && <i className="fa-solid fa-check" />}
+                            <Dropdown.Item key={`${option}-${Math.random()}`}
+                                onClick={() => setGoalType(option)}
+                                className={`cnx_select_box_option ${goalType === option ? 'active' : ''}`}> {option}
+                                {goalType === option && <i className="fa-solid fa-check" />}
                             </Dropdown.Item>
 
                         ))
@@ -330,7 +320,7 @@ const GoalType = ({ goalType, setGoalType }) => {
 // period
 const Period = ({ period, recurringValue, defaultValue, setRecurringValue, trackingType }) => {
     const [value, setValue] = React.useState(period.value);
-    
+
 
     React.useEffect(() => {
         setValue(period.value);
@@ -338,8 +328,8 @@ const Period = ({ period, recurringValue, defaultValue, setRecurringValue, track
 
     const handleChange = e => {
         const index = recurringValue.findIndex(f => f?.title === period?.title);
-        if(index !== -1){
-            if(!e.target.value){
+        if (index !== -1) {
+            if (!e.target.value) {
                 const newValue = recurringValue.filter(f => f?.title !== period?.title);
                 setValue(e.target.value);
                 setRecurringValue(newValue);
@@ -347,8 +337,8 @@ const Period = ({ period, recurringValue, defaultValue, setRecurringValue, track
             }
 
             const newValue = recurringValue.map((m, i) => {
-                if(i === index){
-                    return {...m, ...{value: e.target.value}}
+                if (i === index) {
+                    return { ...m, ...{ value: e.target.value } }
                 }
                 return m;
             })
@@ -357,27 +347,27 @@ const Period = ({ period, recurringValue, defaultValue, setRecurringValue, track
             return;
         }
 
-        if(e.target.value){
+        if (e.target.value) {
             setValue(e.target.value);
-            setRecurringValue([ ...recurringValue, {value: e.target.value, ...period}]);
+            setRecurringValue([...recurringValue, { value: e.target.value, ...period }]);
         }
 
-        
+
     }
 
 
-    return(
+    return (
         <div className='cnx_time_period__item'>
             <div className="cnx_select_box cnx_time_periods__title">
                 {period?.title}
             </div>
             <div className='cnx_time_periods__input'>
-                <input 
-                    type='number' 
-                    value={value} 
-                    onChange={handleChange} 
-                    placeholder={`Insert ${trackingType}`} 
-                    min={0} className='cnx_select_box' 
+                <input
+                    type='number'
+                    value={value}
+                    onChange={handleChange}
+                    placeholder={`Insert ${trackingType}`}
+                    min={0} className='cnx_select_box'
                 />
             </div>
         </div>
@@ -385,14 +375,14 @@ const Period = ({ period, recurringValue, defaultValue, setRecurringValue, track
 }
 
 // tracking Value
-const TrackingInput = ({ 
-    trackingType, 
-    startDate, 
-    endDate, 
-    trackingValue, 
+const TrackingInput = ({
+    trackingType,
+    startDate,
+    endDate,
+    trackingValue,
     setTrackingValue,
     recurring,
-    setRecurring, 
+    setRecurring,
     frequency,
     goalType,
     edit,
@@ -404,8 +394,8 @@ const TrackingInput = ({
     const [error, setError] = React.useState(recurring);
 
 
-    React.useEffect(()=> {
-        if(!endDate){
+    React.useEffect(() => {
+        if (!endDate) {
             setChecked(false);
         }
     }, [endDate])
@@ -413,7 +403,7 @@ const TrackingInput = ({
 
     // apply to all
     React.useEffect(() => {
-        if(recurring.length > 0){
+        if (recurring.length > 0) {
             !edit && setChecked(true);
             !edit && setPeriod([...recurring]);
         }
@@ -421,18 +411,18 @@ const TrackingInput = ({
 
     React.useEffect(() => {
         const doc = document.querySelector('.cnx_ins__goal_form_modal');
-        
-            if(doc.scrollHeight > 720){
-                doc.style.height = window.innerHeight - 100 + 'px';
-                doc.style.maxHeight = 720 + "px";
-                doc.style.overflowY = 'auto';
-            } else {
-                doc.style.height = 'auto';
-                doc.style.overflowY = 'hidden';
-            }
-        
+
+        if (doc.scrollHeight > 720) {
+            doc.style.height = window.innerHeight - 100 + 'px';
+            doc.style.maxHeight = 720 + "px";
+            doc.style.overflowY = 'auto';
+        } else {
+            doc.style.height = 'auto';
+            doc.style.overflowY = 'hidden';
+        }
+
     }, [period, endDate, startDate, frequency, checked, edit, recurring])
-    
+
 
 
     // period control
@@ -446,9 +436,9 @@ const TrackingInput = ({
         //         {setPeriod, startDate, endDate, frequency}
         //     ); 
         // } else {
-            edit && getPeriod(
-                {setPeriod, startDate, endDate, frequency}
-            );      
+        edit && getPeriod(
+            { setPeriod, startDate, endDate, frequency }
+        );
         // } 
     }, [endDate, frequency, setRecurring, startDate, edit]);
     // end time period control
@@ -457,10 +447,10 @@ const TrackingInput = ({
 
     // apply to all
     const applyToAll = () => {
-        let newPeriod = [...period]; 
+        let newPeriod = [...period];
         newPeriod = period.map(p => ({
             ...p,
-            value: trackingValue 
+            value: trackingValue
         }));
         setRecurring(newPeriod);
         setPeriod(newPeriod);
@@ -469,40 +459,40 @@ const TrackingInput = ({
 
 
 
-    return(
+    return (
         <div className='cnx_ins_tracking'>
             <div className="cnx_ins__goal_modal__tracking_input">
-                <input 
-                    type='number' 
-                    value = {trackingValue}
+                <input
+                    type='number'
+                    value={trackingValue}
                     onChange={e => setTrackingValue(e.target.value)}
-                    placeholder={`Insert ${trackingType}`} 
-                    min={0} 
+                    placeholder={`Insert ${trackingType}`}
+                    min={0}
                     className='cnx_select_box'
-                    style={{width: 'auto'}}
+                    style={{ width: 'auto' }}
                 />
-                {checked ? 
+                {checked ?
                     <Button size='sm' onClick={applyToAll}>
-                       Apply all
+                        Apply all
                     </Button>
-                : <Tooltip text='Recurring'>
-                    <i className="fa-solid fa-repeat"></i>
-                </Tooltip>}
+                    : <Tooltip text='Recurring'>
+                        <i className="fa-solid fa-repeat"></i>
+                    </Tooltip>}
 
                 <GoalType goalType={goalType} setGoalType={setGoalType} />
 
             </div>
-            {endDate ?  <div className="cnx_ins__goal_modal__tracking_input">
+            {endDate ? <div className="cnx_ins__goal_modal__tracking_input">
                 <input
-                    type='checkbox' 
+                    type='checkbox'
                     checked={checked}
-                    id="recurring" 
-                    onChange={e =>{
+                    id="recurring"
+                    onChange={e => {
                         setChecked(e.target.checked);
                         !e.target.checked && setRecurring([]);
                         !e.target.checked && setPeriod([]);
                         setEdit(e.target.checked);
-                    }}  
+                    }}
                 />
                 <label htmlFor='recurring'>Specify individual period goals</label>
             </div> :
@@ -520,13 +510,13 @@ const TrackingInput = ({
                     <div className="cnx_time_periods__title">
                         Period
                     </div>
-                    <div className='cnx_time_periods__input' style={{marginLeft: '10px'}}>
+                    <div className='cnx_time_periods__input' style={{ marginLeft: '10px' }}>
                         {trackingType === 'value' ? 'Value (USD)' : 'Count'}
                     </div>
                 </div>
                 {period.map(p => (
-                    <Period  
-                        key={`${p.title}`} 
+                    <Period
+                        key={`${p.title}`}
                         period={p}
                         recurringValue={recurring}
                         trackingType={trackingType}
@@ -541,7 +531,7 @@ const TrackingInput = ({
 
 // goal modal
 const GoalFormModal = () => {
-    const {data, mode, entry, entryType } = useSelector(state => state.goalFormModal);
+    const { data, mode, entry, entryType } = useSelector(state => state.goalFormModal);
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const [isSaving, setIsSaving] = React.useState(false);
@@ -568,23 +558,23 @@ const GoalFormModal = () => {
         updateGoal,
         updateGoalIsLoading,
         updateGoalIsSuccess,
-        
+
         addGoal,
         addGoalIsLoading,
         addGoalIsSuccess,
     } = useGoals();
- 
- 
+
+
     // if form mode is edit
     React.useEffect(() => {
-        if(_.lowerCase(mode) === 'edit' && data){
+        if (_.lowerCase(mode) === 'edit' && data) {
             setAssigneeType(data.assigneeType);
             // assignee for
-            if(data.assigneeType === 'Company'){
+            if (data.assigneeType === 'Company') {
                 setAssigneeFor({});
-            } else if(data.assigneeType === 'User'){
-                setAssigneeFor({id: data.user_id, name: data.name});
-            } else setAssigneeFor({id: data.team_id, name: data.team_name});
+            } else if (data.assigneeType === 'User') {
+                setAssigneeFor({ id: data.user_id, name: data.name });
+            } else setAssigneeFor({ id: data.team_id, name: data.team_name });
             // general
             // setGeneral(Number(data.general_checkbox) === 1 ? true : false);
             // frequency
@@ -597,7 +587,7 @@ const GoalFormModal = () => {
             setTrackingType(data.trackingType);
             // tracking value
             setTrackingValue(data.trackingValue);
-            
+
             // recurring
             setRecurring(data.recurring || []);
             // qualified
@@ -614,14 +604,14 @@ const GoalFormModal = () => {
 
 
     React.useEffect(() => {
-        if(formStatus === 'saved'){
+        if (formStatus === 'saved') {
             close();
         }
     }, [formStatus])
 
     // close modal
     const previous = () => {
-        if(mode === 'add'){
+        if (mode === 'add') {
             dispatch(openGoalModal({
                 entry,
                 entryType,
@@ -638,17 +628,17 @@ const GoalFormModal = () => {
 
     // validation 
     const isFormDataValid = () => {
-        if(assigneeType !== 'Company'){
-            if(_.isEmpty(assigneeFor)) {
+        if (assigneeType !== 'Company') {
+            if (_.isEmpty(assigneeFor)) {
                 return false;
             }
         }
 
-        if(pipeline.length === 0) return false;
-        if(!Number(trackingValue)) return false;
-        if(!dealType) return false;
-        if(!goalType) return false;
-         return true;
+        if (pipeline.length === 0) return false;
+        if (!Number(trackingValue)) return false;
+        if (!dealType) return false;
+        if (!goalType) return false;
+        return true;
     }
 
     // handle on submit 
@@ -657,61 +647,61 @@ const GoalFormModal = () => {
         setIsSaving(true);
         setFormStatus('saving');
 
-        if(!isFormDataValid()) return;  
-        
+        if (!isFormDataValid()) return;
+
         let sDate = dayjs(new Date(startDate).valueOf()).format();
         let eDate = endDate ? dayjs(new Date(endDate).valueOf()).format() : null;
-            
+
         const formData = {
             title: `${entry} ${entryType} ${assigneeFor.name}`,
-            entry, 
-            entryType, 
-            assigneeType, 
-            assigneeFor, 
-            pipeline, 
-            frequency, 
+            entry,
+            entryType,
+            assigneeType,
+            assigneeFor,
+            pipeline,
+            frequency,
             startDate: sDate,
             endDate: eDate,
-            trackingType, 
-            trackingValue, 
+            trackingType,
+            trackingValue,
             recurring,
             dealType,
-            qualified, 
-            goalType, 
+            qualified,
+            goalType,
             achievablePoints: Number(achievablePoints)
         };
 
- 
 
-        if(_.lowerCase(mode) === 'edit'){
-            try{
-                const res = await updateGoal({id: data.id, data: {...formData}});
 
-                if(res?.goal){
+        if (_.lowerCase(mode) === 'edit') {
+            try {
+                const res = await updateGoal({ id: data.id, data: { ...formData } });
+
+                if (res?.goal) {
                     dispatch(setStatus('updating'));
-                    dispatch(updateGoal({goal: res.goal}));
+                    dispatch(updateGoal({ goal: res.goal }));
                     dispatch(updateRecurring(res));
                     dispatch(setStatus('idle'))
                     navigate(`goals/${res?.goal.id}`);
                 }
-                
 
-            }catch(err){
+
+            } catch (err) {
                 console.log(err)
             } finally {
                 setFormStatus('saved');
                 setIsSaving(false);
             }
         } else {
-            try{
+            try {
                 let res = await addGoal(formData).unwrap();
 
-                if(res){
-                    navigate(`goals/${res?.goal.id}`); 
+                if (res) {
+                    navigate(`goals/${res?.goal.id}`);
                     dispatch(closeGoalFormModal());
                 }
 
-            }catch(err){
+            } catch (err) {
                 console.log(err)
             } finally {
                 setFormStatus('saved');
@@ -719,15 +709,15 @@ const GoalFormModal = () => {
             }
         }
     }
-    
 
 
-    
 
-    return(
+
+
+    return (
         <div className="cnx_ins__goal_modal__container">
             <Card className="cnx_ins__goal_modal__card">
-                <Card.Header 
+                <Card.Header
                     className="cnx_ins__goal_modal__card_header"
                     onClose={close}
                 >
@@ -763,228 +753,228 @@ const GoalFormModal = () => {
                             </div>
                         </div>
                     } */}
-                {/* assignee  */}
-                <div className='cnx_ins__goal_modal__card_body'>
-                    <div className='cnx_ins__goal_modal__card_body_label'>
-                        Assignee
-                    </div>
-                    {/* assignee type */}
-                    <div className='cnx_select_box_wrapper'>
-                        <Dropdown className="cnx_select_box_dd">
-                            <Dropdown.Toggle className="cnx_select_box">
-                                {assigneeType}
-                            </Dropdown.Toggle>
-                            <Dropdown.Menu className="cnx_select_box_options">
-                                {
-                                    Number(window.Laravel?.user?.role_id) === 1 && (
-                                        <Dropdown.Item 
-                                            onClick={() => setAssigneeType("Company")} 
-                                            className={`
+                    {/* assignee  */}
+                    <div className='cnx_ins__goal_modal__card_body'>
+                        <div className='cnx_ins__goal_modal__card_body_label'>
+                            Assignee
+                        </div>
+                        {/* assignee type */}
+                        <div className='cnx_select_box_wrapper'>
+                            <Dropdown className="cnx_select_box_dd">
+                                <Dropdown.Toggle className="cnx_select_box">
+                                    {assigneeType}
+                                </Dropdown.Toggle>
+                                <Dropdown.Menu className="cnx_select_box_options">
+                                    {
+                                        Number(window.Laravel?.user?.role_id) === 1 && (
+                                            <Dropdown.Item
+                                                onClick={() => setAssigneeType("Company")}
+                                                className={`
                                                 cnx_select_box_option 
-                                                ${assigneeType === 'Company'? 'active' : ''}
+                                                ${assigneeType === 'Company' ? 'active' : ''}
                                             `}
-                                        > 
-                                            Company (everyone) 
-                                            {assigneeType === 'Company' && <i className="fa-solid fa-check" />}
-                                        </Dropdown.Item>
-                                    )
-                                }
-                                {
-                                    (Number(window?.Laravel?.user?.role_id) === 1 || 
-                                    Number(window?.Laravel?.user?.role_id) === 8) && (
-                                        <Dropdown.Item 
-                                            onClick={() => setAssigneeType("Team")} 
-                                            className={`
+                                            >
+                                                Company (everyone)
+                                                {assigneeType === 'Company' && <i className="fa-solid fa-check" />}
+                                            </Dropdown.Item>
+                                        )
+                                    }
+                                    {
+                                        (Number(window?.Laravel?.user?.role_id) === 1 ||
+                                            Number(window?.Laravel?.user?.role_id) === 8) && (
+                                            <Dropdown.Item
+                                                onClick={() => setAssigneeType("Team")}
+                                                className={`
                                                 cnx_select_box_option 
-                                                ${assigneeType === 'Team'? 'active' : ''}`}
-                                            > 
+                                                ${assigneeType === 'Team' ? 'active' : ''}`}
+                                            >
                                                 Team
-                                            {assigneeType === 'Team' && <i className="fa-solid fa-check" />}
-                                        </Dropdown.Item>
-                                    ) 
-                                }
-                                
+                                                {assigneeType === 'Team' && <i className="fa-solid fa-check" />}
+                                            </Dropdown.Item>
+                                        )
+                                    }
 
-                                <Dropdown.Item 
-                                    onClick={() => setAssigneeType("User")} 
-                                    className={`cnx_select_box_option ${assigneeType === 'User'? 'active' : ''}`}
-                                > 
-                                    User 
-                                    {assigneeType === 'User' && <i className="fa-solid fa-check" />}
-                                </Dropdown.Item>
-                            </Dropdown.Menu>
-                        </Dropdown>
-                    {/* end assignee type */} 
-                    {assigneeType === 'Company' ? null :  
-                    <AssigneeFor 
-                        assigneeFor={assigneeFor} 
-                        setAssigneeFor={setAssigneeFor}
-                        assigneeType={assigneeType}    
-                    />}
+
+                                    <Dropdown.Item
+                                        onClick={() => setAssigneeType("User")}
+                                        className={`cnx_select_box_option ${assigneeType === 'User' ? 'active' : ''}`}
+                                    >
+                                        User
+                                        {assigneeType === 'User' && <i className="fa-solid fa-check" />}
+                                    </Dropdown.Item>
+                                </Dropdown.Menu>
+                            </Dropdown>
+                            {/* end assignee type */}
+                            {assigneeType === 'Company' ? null :
+                                <AssigneeFor
+                                    assigneeFor={assigneeFor}
+                                    setAssigneeFor={setAssigneeFor}
+                                    assigneeType={assigneeType}
+                                />}
+                        </div>
                     </div>
-                </div>
-                {/* end assignee */}
+                    {/* end assignee */}
 
-                {/* pipeline */}
-                <div className='cnx_ins__goal_modal__card_body'>
-                    <div className='cnx_ins__goal_modal__card_body_label'>
-                        Pipeline
+                    {/* pipeline */}
+                    <div className='cnx_ins__goal_modal__card_body'>
+                        <div className='cnx_ins__goal_modal__card_body_label'>
+                            Pipeline
+                        </div>
+
+                        <div className='cnx_select_box_wrapper'>
+                            <PipelineSelect
+                                pipeline={pipeline}
+                                setPipeline={setPipeline}
+                                multiple={entryType !== 'Progressed'}
+                            />
+
+                            {entryType === 'Progressed' &&
+                                <Qualified qualified={qualified} setQualified={setQualified} />
+                            }
+                        </div>
                     </div>
+                    {/* end pipeline */}
 
-                    <div className='cnx_select_box_wrapper'>
-                        <PipelineSelect 
-                            pipeline={pipeline}
-                            setPipeline={setPipeline}
-                            multiple={entryType !== 'Progressed'}
-                        />
 
-                        {entryType==='Progressed' &&
-                            <Qualified qualified={qualified} setQualified={setQualified} />
-                        }
+
+                    {/* Frequency */}
+                    <div className='cnx_ins__goal_modal__card_body'>
+                        <div className='cnx_ins__goal_modal__card_body_label'>
+                            Frequency
+                        </div>
+
+                        <div className='cnx_select_box_wrapper'>
+                            <Frequency frequency={frequency} setFrequency={setFrequency} setEdit={setEdit} />
+                            <DealType dealType={dealType} setDealType={setDealType} />
+                        </div>
                     </div>
-                </div>
-                {/* end pipeline */}
+                    {/* end Frequency */}
 
+                    {/* Duration */}
+                    <div className='cnx_ins__goal_modal__card_body'>
+                        <div className='cnx_ins__goal_modal__card_body_label'>
+                            Duration
+                        </div>
 
+                        <div className='cnx_select_box_wrapper'>
+                            <RangeDatePicker
 
-                {/* Frequency */}
-                <div className='cnx_ins__goal_modal__card_body'>
-                    <div className='cnx_ins__goal_modal__card_body_label'>
-                        Frequency
-                    </div>
-
-                    <div className='cnx_select_box_wrapper'>
-                        <Frequency frequency={frequency} setFrequency={setFrequency} setEdit={setEdit} />
-                        <DealType dealType={dealType} setDealType={setDealType} />
-                    </div>
-                </div>
-                {/* end Frequency */}
-
-                {/* Duration */}
-                <div className='cnx_ins__goal_modal__card_body'>
-                    <div className='cnx_ins__goal_modal__card_body_label'>
-                    Duration 
-                    </div>
-
-                    <div className='cnx_select_box_wrapper'>
-                        <RangeDatePicker 
-                            
-                            startDate={startDate}
-                            endDate={endDate}
-                            setStartDate={(v) => {
-                                setStartDate(v);
-                                setEdit(true);
-                            } }
-                            setEndDate={(v) => {
-                                setEndDate(v);
-                                setEdit(true);
-                            }}
-                        />
-                    </div>
-                </div>
-                {/* end Duration */}
-
-
-                {/* Frequency */}
-                <div className='cnx_ins__goal_modal__card_body'>
-                    <div className='cnx_ins__goal_modal__card_body_label'>
-                        Achievable Points
-                    </div>
-
-                    <div className='cnx_select_box_wrapper'>
-                        <input 
-                            type='number' 
-                            value = {achievablePoints}
-                            onChange={e => setAchievablePoints(e.target.value)}
-                            placeholder="Achievable Pointes" 
-                            min={0} 
-                            className='cnx_select_box'
-                        />
-
-                        
-                    </div>
-                </div>
-
-                
-
-                {/* Tracking metric */}
-                <div className='cnx_ins__goal_modal__card_body'>
-                    <div className='cnx_ins__goal_modal__card_body_label'>
-                        Tracking metric
-                    </div>
-
-                    <div className='cnx_select_box_wrapper'>
-                        <label className='' htmlFor='metric_value'>
-                            <input 
-                               id="metric_value" 
-                               type="radio" 
-                               name="metric" 
-                               value="value" 
-                               onChange={e => setTrackingType(e.target.value)} 
-                               checked={trackingType === 'value'} 
-                               style={{
-                                    cursor: 'pointer',
+                                startDate={startDate}
+                                endDate={endDate}
+                                setStartDate={(v) => {
+                                    setStartDate(v);
+                                    setEdit(true);
                                 }}
-                            /> 
-                            Value
-                        </label>
-
-                        <label className='' htmlFor='metric_count'>
-                            <input 
-                                type="radio" 
-                                id="metric_count" 
-                                name="metric" 
-                                value="count" 
-                                onChange={e => setTrackingType(e.target.value)} 
-                                checked={trackingType === 'count'} 
-                                style={{
-                                    cursor: 'pointer',
+                                setEndDate={(v) => {
+                                    setEndDate(v);
+                                    setEdit(true);
                                 }}
                             />
-                            Count
-                        </label>
+                        </div>
                     </div>
-                </div>
-                {/* end Tracking metric */}
+                    {/* end Duration */}
 
 
-                {/* Tracking metric */}
-                <div className='cnx_ins__goal_modal__card_body' style={{alignItems: 'flex-start'}}>
-                    <div className='cnx_ins__goal_modal__card_body_label' style={{marginTop: '6px'}}>
-                        {trackingType === 'value' ? 'Value (USD)' : 'Count'}
+                    {/* Frequency */}
+                    <div className='cnx_ins__goal_modal__card_body'>
+                        <div className='cnx_ins__goal_modal__card_body_label'>
+                            Achievable Points
+                        </div>
+
+                        <div className='cnx_select_box_wrapper'>
+                            <input
+                                type='number'
+                                value={achievablePoints}
+                                onChange={e => setAchievablePoints(e.target.value)}
+                                placeholder="Achievable Pointes"
+                                min={0}
+                                className='cnx_select_box'
+                            />
+
+
+                        </div>
                     </div>
 
-                    <div className='cnx_select_box_wrapper'>
-                        <TrackingInput 
-                            trackingType={trackingType} 
-                            startDate={startDate}
-                            endDate={endDate} 
-                            recurring={recurring}
-                            setRecurring={setRecurring}
-                            trackingValue={trackingValue}
-                            setTrackingValue={setTrackingValue}
-                            frequency={frequency}
-                            // applyRecurring={applyRecurring}
-                            goalType={goalType}
-                            edit = {edit}
-                            setEdit = {setEdit}
-                            setGoalType ={setGoalType}
-                        />
+
+
+                    {/* Tracking metric */}
+                    <div className='cnx_ins__goal_modal__card_body'>
+                        <div className='cnx_ins__goal_modal__card_body_label'>
+                            Tracking metric
+                        </div>
+
+                        <div className='cnx_select_box_wrapper'>
+                            <label className='' htmlFor='metric_value'>
+                                <input
+                                    id="metric_value"
+                                    type="radio"
+                                    name="metric"
+                                    value="value"
+                                    onChange={e => setTrackingType(e.target.value)}
+                                    checked={trackingType === 'value'}
+                                    style={{
+                                        cursor: 'pointer',
+                                    }}
+                                />
+                                Value
+                            </label>
+
+                            <label className='' htmlFor='metric_count'>
+                                <input
+                                    type="radio"
+                                    id="metric_count"
+                                    name="metric"
+                                    value="count"
+                                    onChange={e => setTrackingType(e.target.value)}
+                                    checked={trackingType === 'count'}
+                                    style={{
+                                        cursor: 'pointer',
+                                    }}
+                                />
+                                Count
+                            </label>
+                        </div>
                     </div>
-                </div>
-                {/* end Tracking metric */}
+                    {/* end Tracking metric */}
+
+
+                    {/* Tracking metric */}
+                    <div className='cnx_ins__goal_modal__card_body' style={{ alignItems: 'flex-start' }}>
+                        <div className='cnx_ins__goal_modal__card_body_label' style={{ marginTop: '6px' }}>
+                            {trackingType === 'value' ? 'Value (USD)' : 'Count'}
+                        </div>
+
+                        <div className='cnx_select_box_wrapper'>
+                            <TrackingInput
+                                trackingType={trackingType}
+                                startDate={startDate}
+                                endDate={endDate}
+                                recurring={recurring}
+                                setRecurring={setRecurring}
+                                trackingValue={trackingValue}
+                                setTrackingValue={setTrackingValue}
+                                frequency={frequency}
+                                // applyRecurring={applyRecurring}
+                                goalType={goalType}
+                                edit={edit}
+                                setEdit={setEdit}
+                                setGoalType={setGoalType}
+                            />
+                        </div>
+                    </div>
+                    {/* end Tracking metric */}
 
                 </Card.Body>
                 {/* end card body */}
                 <Card.Footer>
-                       {_.lowerCase(mode) !== 'edit' && <Button
-                            onClick={previous}
-                            className='cnx_ins__goal_modal__card_footer_cancel'
-                            variant='tertiary'
-                        >
-                            <i className="fa-solid fa-chevron-left" />
-                            Previous
-                        </Button>} 
+                    {_.lowerCase(mode) !== 'edit' && <Button
+                        onClick={previous}
+                        className='cnx_ins__goal_modal__card_footer_cancel'
+                        variant='tertiary'
+                    >
+                        <i className="fa-solid fa-chevron-left" />
+                        Previous
+                    </Button>}
 
                     <div className='cnx_ins__goal_modal__card_footer'>
                         <Button
@@ -996,23 +986,23 @@ const GoalFormModal = () => {
 
                         {
                             formStatus === 'idle' ? (
-                                <Button 
+                                <Button
                                     onClick={handleOnSubmit}
-                                    disabled={ !isFormDataValid() }  
+                                    disabled={!isFormDataValid()}
                                     variant='success'
                                 >
                                     {_.lowerCase(mode) === 'edit' ? 'Update' : 'Save'}
                                 </Button>
-                            ): formStatus === 'saving' ? (
-                                <Button 
-                                    disabled={ !trackingValue }  
+                            ) : formStatus === 'saving' ? (
+                                <Button
+                                    disabled={!trackingValue}
                                     variant='success'
                                 >
                                     Saving...
                                 </Button>
                             ) : formStatus === 'saved' ? (
-                                <Button 
-                                    disabled={ !trackingValue }  
+                                <Button
+                                    disabled={!trackingValue}
                                     variant='success'
                                 >
                                     Saved
@@ -1022,7 +1012,7 @@ const GoalFormModal = () => {
                     </div>
                 </Card.Footer>
             </Card>
-        </div> 
+        </div>
     )
 }
 

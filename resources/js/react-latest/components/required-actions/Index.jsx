@@ -7,15 +7,17 @@ import Pagination, { PaginationContext } from "./Pagination";
 import { ToastContainer } from "react-toastify";
 import { User as USER } from "../../utils/user-details";
 import User from "./FilterBar/User";
+import { useUserStore } from "../../Zustand/store";
 
 const RefreshContext = createContext({
     refresh: false,
     setRefresh: () => {},
     setLoading: () => {},
-    user:{},
+    user: {},
 });
 export function useRefresh() {
-    const { refresh, handleRefresh, setLoading, user } = useContext(RefreshContext);
+    const { refresh, handleRefresh, setLoading, user } =
+        useContext(RefreshContext);
     return { refresh, handleRefresh, setLoading, user };
 }
 
@@ -28,7 +30,7 @@ export default function Index() {
     const [perPageItem, setPerPageItem] = useState(1);
     const [refresh, setRefresh] = useState(false);
     const [loading, setLoading] = useState(false);
-    const [user, setUser] = useState(null);
+    const { user, setUser } = useUserStore();
 
     const [action, setAction] = useState("active");
 
@@ -37,7 +39,9 @@ export default function Index() {
     }, [setRefresh]);
 
     return (
-        <RefreshContext.Provider value={{ refresh, handleRefresh, setLoading, user }}>
+        <RefreshContext.Provider
+            value={{ refresh, handleRefresh, setLoading, user }}
+        >
             <PaginationContext.Provider
                 value={{
                     currentPage,

@@ -133,6 +133,11 @@ class Project extends BaseModel
 
         static::updated(function ($item) {
             if ($item->isDirty('status') && in_array($item->status, ['finished', 'partially finished'])) {
+                // The project_completion_time will be updated when a project is finished
+                $project = Project::where('id', $item->id)->update([
+                    'project_completion_time' => now()
+                ]);
+
                 $project = \App\Models\Project::with('times:id,project_id,total_minutes,total_hours,revision_id,revision_status')
                 ->select('projects.id')
                 ->selectRaw('SUM(project_deliverables.estimation_time) * 60 as total_estimate_minutes')
@@ -153,12 +158,19 @@ class Project extends BaseModel
                         return $carry + ($item['revision_id'] ? intval($item['total_minutes']) : 0);
                     }, 0);
     
-                    // Project Manager Point Distribution (Estimated vs logged hours)
+                    // Project Manager Point Distribution ( Estimated vs logged hours )
                     if($percentage = round(($totalLoggedMinutes / $project->total_estimate_minutes) * 100, 2)) ProjectManagerPointLogic::distribute(2, $item->id, $percentage);
     
-                    // Project Manager Point Distribution (Amount of revisions)
+                    // Project Manager Point Distribution ( Amount of revisions )
                     if($totalRevisionLoggedMinutes > 60 && $percentage = round(($totalRevisionLoggedMinutes / $project->total_estimate_minutes) * 100, 2)) ProjectManagerPointLogic::distribute(3, $item->id, $percentage);
                 }
+
+                // Project Manager Point Distribution ( Project completion )
+                ProjectManagerPointLogic::distribute(5, $item->id, 1);
+
+                $projectDeadlineItem = ProjectDeadlineExtension::where('project_id', $item->id)->first();
+                // Project Manager Point Distribution ( Meeting the deadline )
+                if (Carbon::parse($projectDeadlineItem ? $projectDeadlineItem->old_deadline : $item->deadline)->greaterThanOrEqualTo(Carbon::today())) ProjectManagerPointLogic::distribute(7, $item->id, 1);
             }
         });
     }
