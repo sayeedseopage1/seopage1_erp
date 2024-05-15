@@ -89,7 +89,7 @@ class HelperPmProjectStatusController extends AccountBaseController
         DB::beginTransaction();
 
         $goalCount = self::goalCount($pmGoalSetting->category, $milestoneCount);
-        $goalCodes = ProjectPmGoal::$goalCodes['fixed'][$pmGoalSetting->category];
+        $goalCodes = ProjectPmGoal::$goalCodes['fixed'][in_array($pmGoalSetting->category, ['highPriority', 'topMostPriority', 'criticallySensitive']) ? 'priority' : $pmGoalSetting->category];
 
         try {
             if ($pmGoalSetting->category == 'regular') {
