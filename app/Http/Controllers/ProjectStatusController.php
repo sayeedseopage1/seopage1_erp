@@ -84,6 +84,7 @@ class ProjectStatusController extends AccountBaseController
     }
     public function allProjectPmGoal($id)
     {
+
         $project_pm_goals = ProjectPmGoal::where('project_id', $id)->get();
 
         foreach ($project_pm_goals as $goal) {
@@ -614,6 +615,9 @@ class ProjectStatusController extends AccountBaseController
             $pmGoal->goal_meet = $goal_meet;
             $pmGoal->goal_description = $goal->goal_name ?? '';
         }
+
+        $custom = collect(['categories' => Project::$categories]);
+        $pm_goals = $custom->merge($pm_goals);
 
         return response()->json([
             'data' => $pm_goals,

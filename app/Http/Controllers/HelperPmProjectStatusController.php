@@ -80,7 +80,6 @@ class HelperPmProjectStatusController extends AccountBaseController
         $diff = date_diff($d1, $d2);
         $totalProjectDays = (int) $diff->format("%a");
 
-
         if ($totalRequiedDayes !== 0 && $totalRequiedDayes > $totalProjectDays) {
             return self::createShortDeadlinePmGoals($pmGoalSetting->category, $findProject, $findDeal, $pm_project, $milestoneCount, $extraGoal, $totalProjectDays);
         }
@@ -113,7 +112,7 @@ class HelperPmProjectStatusController extends AccountBaseController
                 $goal->added_by = Auth::user()->id;
                 $goal->save();
 
-                $timePassed = $goal->duration;
+                $timePassed = 0;
 
                 for (++$i; $i < $goalCount; $i++) {
                     $goal = new ProjectPmGoal();
@@ -130,16 +129,14 @@ class HelperPmProjectStatusController extends AccountBaseController
                         $goal->goal_type = $goalCodes[$i]['type'];
                         $goal->goal_end_date = Carbon::parse($goal_start_date)->addDay($goalDurationArray[$i]);
                         $goal->duration = $goalDurationArray[$i];
-                        $timePassed = $goal->duration;
                     }
                     else {
                         $goal->goal_code = $goalCodes[5]['code'];
                         $goal->goal_name = $goalCodes[5]['name'];
                         $goal->goal_type = $goalCodes[5]['type'];
 
-                        $timePassed = $goal->duration;
-                        $goal->goal_end_date = Carbon::parse($goal_start_date)->addDay($timePassed=+7);
-                        $goal->duration = $timePassed;
+                        $goal->duration = $goalDurationArray[5] + ($timePassed+=7);
+                        $goal->goal_end_date = Carbon::parse($goal_start_date)->addDay($goal->duration);
                     }
 
                     $goal->added_by = Auth::user()->id;
@@ -746,7 +743,7 @@ class HelperPmProjectStatusController extends AccountBaseController
     function createShortDeadlinePmGoals($priorityType, $project, $deal, $pmProject, $milestoneCount, $extraGoal, $totalProjectDuration)
     {
         $goalCount = self::goalCount($priorityType, $milestoneCount);
-        $goalCodes = ProjectPmGoal::$goalCodes[$priorityType];
+        $goalCodes = ProjectPmGoal::$goalCodes[in_array($priorityType, ['highPriority', 'topMostPriority', 'criticallySensitive']) ? 'priority' : $priorityType];
         $goalStartDate = self::getGoalStartDate($project, $deal, $pmProject);
 
         DB::beginTransaction();
