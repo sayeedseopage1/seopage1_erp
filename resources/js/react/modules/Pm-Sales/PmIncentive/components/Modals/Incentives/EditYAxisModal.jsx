@@ -87,6 +87,9 @@ const EditYAxisModal = ({ axisEditItem, chartAxisData, setChartAxisData, antdMod
 export default EditYAxisModal;
 
 EditYAxisModal.propTypes = {
+    axisEditItem: PropTypes.object,
+    chartAxisData: PropTypes.array,
+    setChartAxisData: PropTypes.func,
     antdModalOpen: PropTypes.bool,
     setAntdModalOpen: PropTypes.func
 };
