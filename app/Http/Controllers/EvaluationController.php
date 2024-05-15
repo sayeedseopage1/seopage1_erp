@@ -10,6 +10,7 @@ use App\Models\PendingActionPast;
 use App\Models\ProjectTimeLog;
 use App\Models\SubTask;
 use App\Models\Task;
+use App\Models\TaskboardColumn;
 use App\Models\TaskRevision;
 use App\Models\TaskSubmission;
 use App\Models\TaskUser;
@@ -204,14 +205,7 @@ class EvaluationController extends AccountBaseController
     public function storeSubmissionEvaluation(Request $request)
     {
         // dd($request->all());
-        // // DB::beginTransaction();
-        // $userTasks = EmployeeEvaluationTask::where('user_id',$request->user_id)->get();
-        // foreach($userTasks as $userTask){
-        //      $project_time_log = ProjectTimeLog::where('task_id',$userTask->task_id)->where('user_id',$userTask->task_id)->first();
-        //      if($project_time_log->total_minutes > 60){
-        //         dd('ok');
-        //      }
-        // }
+        // DB::beginTransaction();
 
         $task_sum = EmployeeEvaluationTask::where('user_id',$request->user_id)->sum('avg_rating');
         $task_count = EmployeeEvaluationTask::where('user_id',$request->user_id)->count('avg_rating');
