@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 
 import { useGetEvaluationListQuery } from "../../services/api/EvaluationApiSlice";
-import { DataTableColumns } from "../components/Table/DataTableColumns";
 
 import styles from "./EmployeeEvaluation.module.css";
 import EvaluationTableFilterBar from "../components/EvaluationTableFilterBar";
@@ -12,6 +11,7 @@ import { Link, useSearchParams } from "react-router-dom";
 import _ from "lodash";
 import Card from "../../global/Card";
 import EvaluationTable from "../components/Table/EvaluationTable";
+import { EvaluationTableColumns } from "../components/Table/EvaluationTableColumns";
 
 const EmployeeEvaluation = () => {
     const [searchParams, setSearchParams] = useSearchParams();
@@ -105,7 +105,7 @@ const EmployeeEvaluation = () => {
                 <EvaluationTable
                     data={tableData(searchParams.get("show"))}
                     mainData={mainData}
-                    columns={[...DataTableColumns]}
+                    columns={[...EvaluationTableColumns]}
                     isLoading={isLoading}
                     isFetching={isFetching}
                     onPageChange={onPageChange}
