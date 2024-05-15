@@ -636,5 +636,13 @@ class EvaluationController extends AccountBaseController
             'status' => 200
         ]);
     }
+    public function employeeTaskRevision($id)
+    {
+        $revision = TaskRevision::where('task_id',$id);
+        return response()->json([
+            'status' => 200,
+            'data' => $revision
+            ]);
+    }
 
 }
