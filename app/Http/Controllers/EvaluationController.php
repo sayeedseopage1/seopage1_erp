@@ -203,7 +203,7 @@ class EvaluationController extends AccountBaseController
     }
     public function storeSubmissionEvaluation(Request $request)
     {
-        dd($request->all());
+        // dd($request->all());
         // DB::beginTransaction();
         $task_sum = EmployeeEvaluationTask::where('user_id',$request->user_id)->sum('avg_rating');
         $task_count = EmployeeEvaluationTask::where('user_id',$request->user_id)->count('avg_rating');
