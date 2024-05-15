@@ -26,6 +26,7 @@ export const SectionContainer = styled.div`
   scroll-behavior: smooth !important;
   border-radius: 8px !important;
   -webkit-border-radius: 5px;
+  overflow: hidden;
 
   &::-webkit-scrollbar {
     width: 10px !important;
@@ -42,7 +43,7 @@ export const SectionContainer = styled.div`
   } 
   @media (max-width: 768px) {
     padding: 16px;
-    overflow: hidden;
+    
   }
 
 `
@@ -125,7 +126,7 @@ export const SectionContentContainer = styled.div`
   }
 
   @media (max-width: 768px) {
-    padding: 16px;
+    padding: 14px;
 
     .clipboardIcon{
       width: 30px;
@@ -147,7 +148,18 @@ export const CardWrapper = styled.div`
   background-color: ${props => props.color || props.theme.colors.cardBg};
   border-radius: 9px;
   border: 1px solid ${props => props.theme.colors.borderBg};
+  gap: ${props => props.gap || "0"};
 
+
+  .questionAnswerDashboard{
+    color: #000;
+    font-family: Poppins;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: normal;
+    margin: 16px 0;
+  }
 
   .dashboardCardPersonImage{
     width: 40px;
@@ -164,7 +176,6 @@ export const CardWrapper = styled.div`
       height: 20px;
       border-radius: 30%;
     }
-
     span{
       color: #000;
       font-family: Poppins;
@@ -211,7 +222,6 @@ export const CardWrapper = styled.div`
         font-weight: 400;
         line-height: normal; 
       }
-
       @media (max-width: 768px) {
         height: 115px;
       }
@@ -251,5 +261,12 @@ export const CardTitle = styled.div`
     width: 300px;
   }
 
+  @media (max-width: 768px) {
+    font-size: 14px;
+  }
+
+  @media screen and (max-width: 375px) {
+    font-size: 14px;
+  }
 
 `

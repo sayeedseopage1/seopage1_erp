@@ -45,7 +45,7 @@ const DashboardClientAndPMCard = ({ projectData, className = "" }) => {
                     </div>
                 </div>
             </CardWrapper>
-            <CardWrapper color="#ffffff">
+            <CardWrapper color="#ffffff" className={`${className}`}>
                 <DashboardCardTitle
                     title="Project Manager"
                     isBorderUse={true}

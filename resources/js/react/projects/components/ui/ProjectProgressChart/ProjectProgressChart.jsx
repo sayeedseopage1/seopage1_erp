@@ -12,6 +12,10 @@ import {
     PointElement,
 } from "chart.js";
 
+
+import "./projectProgressChart.css"
+
+
 Chart.register(
     PieController,
     ArcElement,
@@ -52,7 +56,7 @@ const ProjectProgressChart = () => {
         ],
         datasets: [
             {
-                data: [0, 0, 12, 0, 0, 0, 19, 3],
+                data: [0, 15, 70, 15, 0, 0, 0, 0],
                 backgroundColor: [
                     "#D21010",
                     "#F5C308",
@@ -68,7 +72,7 @@ const ProjectProgressChart = () => {
         ],
     };
     return (
-        <div className="d-flex align-items-center">
+        <div className="projectProgressChartDashboard">
             <Pie options={options} data={data} width={150} height={150} />
         </div>
     );

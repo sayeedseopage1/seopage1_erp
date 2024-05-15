@@ -15,7 +15,7 @@ import DashboardProjectInfoHourlySection from "../components/sections/DashboardP
 import Switch from "../../global/Switch";
 
 const ProjectDashboard = () => {
-    const projectType = projectData[1].projectType;
+    const projectType = projectData[0].projectType;
     return (
         <section>
             <DashboardHeaderSection />

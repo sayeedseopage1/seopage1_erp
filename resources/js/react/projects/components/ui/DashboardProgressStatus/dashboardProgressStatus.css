@@ -2,7 +2,8 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 8px;
+  text-align: center;
+  padding: 5px;
   color: #fff;
   font-family: Poppins, sans-serif; 
   font-size: 12px;

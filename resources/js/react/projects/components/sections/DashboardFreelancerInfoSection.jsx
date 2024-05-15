@@ -21,6 +21,7 @@ const DashboardFreelancerInfoSection = ({ projectData }) => {
                     <SectionContainer
                         color="#D8EDFC"
                         border="1px dashed #1492E6;"
+                        
                     >
                         <div
                             className={`${style.dashboardFreelancerInfoContent}`}

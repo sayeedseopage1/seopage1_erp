@@ -34,7 +34,7 @@ const DashboardHeaderSection = ({ projectType = "Fixed" }) => {
                 </Button>
                 <Button
                     onClick={() => {}}
-                    className={`${style?.dashboardHeaderButton} ml-2`}
+                    className={`${style?.dashboardHeaderButton} ${style.actionButton} ml-2`}
                 >
                     Action <i className="fa-solid fa-ellipsis-vertical ml-1"></i>
                 </Button>

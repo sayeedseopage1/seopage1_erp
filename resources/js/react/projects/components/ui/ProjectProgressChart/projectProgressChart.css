@@ -1,0 +1,17 @@
+.projectProgressChartDashboard {
+    display: flex;
+    align-items: center;
+}
+
+.projectProgressChartDashboard canvas {
+    width: 150px;
+    height: 150px;
+}
+
+@media screen and (max-width: 375px) {
+    .projectProgressChartDashboard canvas {
+        width: 100px !important;
+        height: 100px !important;
+    }
+  
+}

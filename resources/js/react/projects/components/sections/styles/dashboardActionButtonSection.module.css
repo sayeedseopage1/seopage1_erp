@@ -37,6 +37,22 @@
 }
 
 
+@media screen and (max-width: 1024px){
+  .dashboardActionButton {
+    border-radius: 9px;
+    background: #1492E6;
+    color: #FFF;
+    font-family: Poppins, sans-serif;
+    font-size: 18px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+    padding: 16px;
+  }
+}
+
+
+
 @media (max-width: 768px) {
   .dashboardActionButtonSection {
     grid-template-columns: 1fr;
@@ -53,5 +69,8 @@
   .dashboardActionRightButton button {
     width: 100% !important;
   }
-  
+  .dashboardActionButton{
+    padding: 12px;
+    font-size: 14px;
+  }
 }

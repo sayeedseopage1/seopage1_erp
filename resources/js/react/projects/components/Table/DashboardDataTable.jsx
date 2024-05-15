@@ -81,6 +81,7 @@ const DashboardDataTable = ({
                 style={{
                     height: "100%",
                     maxHeight: "30vh",
+                    overflow: "auto",
                 }}
             >
                 <table className="sp1_tasks_table">

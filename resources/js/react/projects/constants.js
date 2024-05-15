@@ -130,7 +130,8 @@ export const projectData = [
                 requirement_defined: "Ok but milestone breakdown was wrong and it is confusing. Sale team can change the milestone breakdown while making the milestione.. Otherwise it can be a issue if the client will go for any intentional issue.",
                 deadline_meet: "yes, but need to be careful because of Eid vacation.",
 
-            }
+            },
+
 
         }
     },
@@ -336,6 +337,25 @@ export const ProjectProgressStatus = [
     }
 ]
 
+
+export const HourlyProjectSalesData = [
+    {
+        id: 1,
+        question : "Is the amount of work he expects per hour realistic?",
+        answer: "Asked for 8-10 hours for the mockup task.",
+    },
+    {
+        id: 2,
+        question : `Does the client have any certain amount of hours on mind for the
+        first set of tasks?`,
+        answer: "Not like this, she gave a small task and needs to be done in 1-2 days."
+    },
+    {
+        id: 3,
+        question: "For how long the project may continue?",
+        answer: "The client has a few tasks and the project will be finished when those are done",
+    }
+]
 
 export const ProjectBudgetData = {
     project_budget: [

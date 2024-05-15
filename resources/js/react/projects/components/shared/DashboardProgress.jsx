@@ -13,9 +13,9 @@ import ProjectProgressChart from "../ui/ProjectProgressChart/ProjectProgressChar
 // Constants
 import { ProjectProgressStatus } from "../../constants";
 
-const DashboardProgress = ({ projectData, style }) => {
+const DashboardProgress = ({ projectData, style, className="" }) => {
     return (
-        <CardWrapper color="#ffffff">
+        <CardWrapper color="#ffffff" className={`${className}`}>
             <DashboardCardTitle
                 title="Project Progress"
                 isBorderUse={true}
@@ -42,7 +42,7 @@ const DashboardProgress = ({ projectData, style }) => {
                 <ProjectProgressChart />
             </div>
 
-            <div className={`${style.dashboardProgressStatusContainer} mt-5`}>
+            <div className={`${style.dashboardProgressStatusContainer} mt-2 mt-md-5`}>
                 {ProjectProgressStatus.map((status) => (
                     <DashboardProgressStatus
                         key={status.id}

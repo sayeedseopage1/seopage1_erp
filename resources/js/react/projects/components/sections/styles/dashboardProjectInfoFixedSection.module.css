@@ -1,13 +1,98 @@
-.dashboardProgressStatusContainer{
+.dashboardProgressStatusContainer {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   grid-gap: 8px;
 }
 
 
-@media screen and (max-width: 768px) {
-  .dashboardProgressStatusContainer{
-    grid-template-columns: repeat(2, 1fr);
-  }
+.clientInfoCard {
+  flex: 0 0 16.66%;
+  max-width: 16.66%;
 }
 
+.projectProgressInfoCard {
+  flex: 0 0 33.33%;
+  max-width: 33.33333333%;
+}
+
+.projectBudgetInfoCard {
+  flex: 0 0 28%;
+  max-width: 28%;
+  gap: 8px;
+  justify-content: space-between;
+}
+
+.timeEarningInfoCard {
+  flex: 0 0 22%;
+  max-width: 22%;
+  gap: 8px;
+  padding-left: 16px;
+}
+
+
+@media screen and (max-width: 1890px) {
+  .dashboardProgressStatusContainer {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+}
+
+/* @media screen and (max-width: 1589px) {
+  .clientInfoCard {
+    flex: 0 0 25%;
+    max-width: 25%;
+  }
+
+  .projectProgressInfoCard {
+    flex: 0 0 50%;
+    max-width: 50%;
+  }
+
+  .projectBudgetInfoCard {
+    flex: 0 0 25%;
+    max-width: 25%;
+    justify-content: space-between;
+  }
+  .timeEarningInfoCard {
+    flex: 0 0 100%;
+    max-width: 100%;
+    padding-left: 0px; 
+    padding-top: 16px;
+  }
+  .timeEarningInfoCard div:first-child {
+    width: 40%;
+    flex-direction: column !important;
+  }
+
+} */
+
+
+
+
+@media screen and (max-width: 768px) {
+  .dashboardProgressStatusContainer {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .clientInfoCard {
+    flex: 0 0 100%;
+    max-width: 100%;
+  }
+
+  .projectProgressInfoCard {
+    flex: 0 0 100%;
+    max-width: 100%;
+  }
+
+  .projectBudgetInfoCard {
+    flex: 0 0 100%;
+    max-width: 100%;
+    gap: 24px;
+    justify-content: space-between;
+  }
+  .timeEarningInfoCard {
+    flex: 0 0 100%;
+    max-width: 100%;
+    padding-left: 0px;
+    gap: 24px;
+  }
+}

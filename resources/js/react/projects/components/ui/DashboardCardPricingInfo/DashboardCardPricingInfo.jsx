@@ -2,7 +2,7 @@ import React from "react";
 import PropTypes from "prop-types";
 
 // style
-import './dashboardCardPricingInfo.css'
+import "./dashboardCardPricingInfo.css";
 
 const DashboardCardPricingInfo = ({
     title,
@@ -14,13 +14,15 @@ const DashboardCardPricingInfo = ({
 }) => {
     return (
         <div className={`dashboardCardPricingInfo ${className}`}>
-            <div className="mr-2">
-                <h5>
-                    {title} {currency && `(${currency})`}
-                </h5>
-            </div>
+            {title && (
+                <div className="mr-2">
+                    <h5>
+                        {title} {currency && `(${currency})`}
+                    </h5>
+                </div>
+            )}
             <div className="dashboardCardCurrencyInfo">
-                <img src={icon} alt={title} />
+                {icon && <img src={icon} alt={title} />}
                 <p className="mb-0">
                     <span>{currency_symbol}</span> {amount}
                 </p>
