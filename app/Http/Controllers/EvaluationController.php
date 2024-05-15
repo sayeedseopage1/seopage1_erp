@@ -163,8 +163,9 @@ class EvaluationController extends AccountBaseController
 
     public function getEmployeeTask($id)
     {
-        $data = EmployeeEvaluationTask::select('employee_evaluation_tasks.*','tasks.board_column_id')
+        $data = EmployeeEvaluationTask::select('employee_evaluation_tasks.*','taskboard_columns.id as task_board_column_id','taskboard_columns.column_name as task_board_column_name','taskboard_columns.slug as task_board_column_slug','taskboard_columns.label_color as task_board_column_color','taskboard_columns.priority as task_board_column_priority')
             ->leftJoin('tasks','employee_evaluation_tasks.task_id','tasks.id')
+            ->leftJoin('taskboard_columns','tasks.board_column_id','taskboard_columns.id')
             ->where('user_id',$id)
             ->get();
 
