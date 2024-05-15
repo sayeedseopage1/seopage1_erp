@@ -614,10 +614,8 @@ class ProjectStatusController extends AccountBaseController
             $pmGoal->goal_expire = $goal_expire;
             $pmGoal->goal_meet = $goal_meet;
             $pmGoal->goal_description = $goal->goal_name ?? '';
+            $pmGoal->project_category = isset(Project::$categories[$pmGoal->project_category]) ? Project::$categories[$pmGoal->project_category] : $pmGoal->project_category;
         }
-
-        $custom = collect(['categories' => Project::$categories]);
-        $pm_goals = $custom->merge($pm_goals);
 
         return response()->json([
             'data' => $pm_goals,

@@ -1885,7 +1885,7 @@ class ProjectController extends AccountBaseController
             // dd($findDeal->project_type);
             if ($findDeal->project_type == 'fixed') {
                 if ($project->project_budget) {
-                    $pmGoalSetting = PmGoalSetting::where('initial_value', '<=', $findProject->project_budget)
+                    $pmGoalSetting = PmGoalSetting::where('project_type', 'fixed')->where('initial_value', '<=', $findProject->project_budget)
                         ->where('end_value', '>=', $findProject->project_budget)
                         ->first();
 
@@ -1893,11 +1893,14 @@ class ProjectController extends AccountBaseController
                     $project_status_helper = new HelperPmProjectStatusController();
                     $project_status_helper->ProjectPmGoalCreation($pmGoalSetting, $findDeal, $findProject);
                 } else throw new Exception("Deal budget not found.");
-            } else {
-                // if($findDeal->project_type !=null){
+            }
+            else {
+                $pmGoalSetting = PmGoalSetting::where('project_type', 'hourly')->where('initial_value', '<=', $findProject->project_budget)
+                        ->where('end_value', '>=', $findProject->project_budget)
+                        ->first();
+
                 $project_status_helper = new HelperPmProjectStatusController();
-                $project_status_helper->HourlyProjectPmGoalCreation($findDeal, $findProject);
-                // }
+                $project_status_helper->HourlyProjectPmGoalCreation($pmGoalSetting, $findDeal, $findProject);
             }
 
             $project->status = 'in progress';

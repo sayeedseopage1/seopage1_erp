@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use App\Models\AwardTimeIncress;
 use App\Models\Deal;
+use App\Models\PmGoalSetting;
 use App\Models\PMProject;
 use App\Models\Project;
 use App\Models\ProjectPmGoal;
@@ -19,7 +20,7 @@ use Illuminate\Support\Facades\DB;
 class HelperPmProjectStatusController extends AccountBaseController
 {
 
-    function goalCount($priorityType,  $milestoneCount) : int
+    function goalCount($priorityType,  $milestoneCount): int
     {
         /**
          * total goal count
@@ -55,9 +56,9 @@ class HelperPmProjectStatusController extends AccountBaseController
         }
     }
 
-    public function ProjectPmGoalCreation($pmGoalSetting, $findDeal, $findProject)
+    public function ProjectPmGoalCreation(PmGoalSetting $pmGoalSetting, Deal $findDeal, Project $findProject)
     {
-        if (! in_array($pmGoalSetting->category, array_keys(Project::$categories))) return new Exception('Project priority type is invalid');
+        if (!in_array($pmGoalSetting->category, array_keys(Project::$categories))) return new Exception('Project priority type is invalid');
 
         // dd($pmGoalSetting);
         $milestoneCount = ProjectMilestone::where('project_id', $findProject->id)->count();
@@ -88,7 +89,7 @@ class HelperPmProjectStatusController extends AccountBaseController
         DB::beginTransaction();
 
         $goalCount = self::goalCount($pmGoalSetting->category, $milestoneCount);
-        $goalCodes = ProjectPmGoal::$goalCodes[$pmGoalSetting->category];
+        $goalCodes = ProjectPmGoal::$goalCodes['fixed'][$pmGoalSetting->category];
 
         try {
             if ($pmGoalSetting->category == 'regular') {
@@ -129,13 +130,12 @@ class HelperPmProjectStatusController extends AccountBaseController
                         $goal->goal_type = $goalCodes[$i]['type'];
                         $goal->goal_end_date = Carbon::parse($goal_start_date)->addDay($goalDurationArray[$i]);
                         $goal->duration = $goalDurationArray[$i];
-                    }
-                    else {
+                    } else {
                         $goal->goal_code = $goalCodes[5]['code'];
                         $goal->goal_name = $goalCodes[5]['name'];
                         $goal->goal_type = $goalCodes[5]['type'];
 
-                        $goal->duration = $goalDurationArray[5] + ($timePassed+=7);
+                        $goal->duration = $goalDurationArray[5] + ($timePassed += 7);
                         $goal->goal_end_date = Carbon::parse($goal_start_date)->addDay($goal->duration);
                     }
 
@@ -182,13 +182,12 @@ class HelperPmProjectStatusController extends AccountBaseController
                         $goal->goal_type = $goalCodes[$i]['type'];
                         $goal->goal_end_date = Carbon::parse($goal_start_date)->addDay($goalDurationArray[$i]);
                         $goal->duration = $goalDurationArray[$i];
-                    }
-                    else {
+                    } else {
                         $goal->goal_code = $goalCodes[5]['code'];
                         $goal->goal_name = $goalCodes[5]['name'];
                         $goal->goal_type = $goalCodes[5]['type'];
 
-                        $goal->duration = $goalDurationArray[5] + ($timePassed+=7);
+                        $goal->duration = $goalDurationArray[5] + ($timePassed += 7);
                         $goal->goal_end_date = Carbon::parse($goal_start_date)->addDay($goal->duration);
                     }
 
@@ -201,7 +200,7 @@ class HelperPmProjectStatusController extends AccountBaseController
 
             if ($extraGoal) {
 
-                $goalCodes = ProjectPmGoal::$goalCodes['extraGoal'];
+                $goalCodes = ProjectPmGoal::$goalCodes['fixed']['extraGoal'];
 
                 $goalDuration = 7;
 
@@ -229,391 +228,63 @@ class HelperPmProjectStatusController extends AccountBaseController
             throw $th;
         }
     }
-    public function HourlyProjectPmGoalCreation($findDeal, $findProject)
+    public function HourlyProjectPmGoalCreation(PmGoalSetting $pmGoalSetting, Deal $findDeal, Project $findProject)
     {
         $pm_project = PMProject::where('project_id', $findProject->id)->first();
-        $project = Project::where('id', $pm_project->project_id)->first();
         // goal creation time
         $goal_start_date = self::getGoalStartDate($findProject, $findDeal, $pm_project);
 
-        if ($project->status != 'finished') {
-            if ($findDeal->hourly_rate <= 20) {
-                $p_pm_regular_goal = new ProjectPmGoal();
-                $p_pm_regular_goal->project_id = $findProject->id;
-                $p_pm_regular_goal->client_id = $findDeal->client_id;
-                $p_pm_regular_goal->pm_id = $findDeal->pm_id;
-                $p_pm_regular_goal->project_type = $findDeal->project_type;
-                $p_pm_regular_goal->project_category = 'Regular';
-                $p_pm_regular_goal->goal_code = 'HTA';
-                $p_pm_regular_goal->goal_name = 'At least one task has been assigned and 1 hour has been tracked';
-                $p_pm_regular_goal->goal_type = 'task_need_to_be_assigned';
-                $p_pm_regular_goal->goal_start_date = $goal_start_date;
-                $p_pm_regular_goal->goal_end_date = Carbon::parse($goal_start_date)->addHours(30);
-                $p_pm_regular_goal->duration = 2;
-                $p_pm_regular_goal->added_by = Auth::user()->id;
-                $p_pm_regular_goal->save();
+        $goal = new ProjectPmGoal();
+        $goal->project_id = $findProject->id;
+        $goal->client_id = $findDeal->client_id;
+        $goal->pm_id = $findDeal->pm_id;
+        $goal->project_type = $findDeal->project_type;
+        $goal->project_category = $pmGoalSetting->category;
+        $goal->goal_code = 'HTA';
+        $goal->goal_name = 'At least one task has been assigned and 1 hour has been tracked';
+        $goal->goal_type = 'task_need_to_be_assigned';
+        $goal->goal_start_date = $goal_start_date;
+        $goal->goal_end_date = Carbon::parse($goal_start_date)->addHours(30);
+        $goal->duration = 30 / 24;
+        $goal->added_by = Auth::user()->id;
+        $goal->save();
 
-                $p_pm_regular_goal = new ProjectPmGoal();
-                $p_pm_regular_goal->project_id = $findProject->id;
-                $p_pm_regular_goal->client_id = $findDeal->client_id;
-                $p_pm_regular_goal->pm_id = $findDeal->pm_id;
-                $p_pm_regular_goal->project_type = $findDeal->project_type;
-                $p_pm_regular_goal->project_category = 'Regular';
-                $p_pm_regular_goal->goal_code = '3HT';
-                $p_pm_regular_goal->goal_name = 'At least 3 hours have been tracked';
-                $p_pm_regular_goal->goal_type = 'hours_3_tracked';
-                $p_pm_regular_goal->goal_start_date = $goal_start_date;
-                $p_pm_regular_goal->goal_end_date = Carbon::parse($goal_start_date)->addHours(60);
-                $p_pm_regular_goal->duration = 4;
-                $p_pm_regular_goal->added_by = Auth::user()->id;
-                $p_pm_regular_goal->save();
+        // 2nd goal
+        $goal = new ProjectPmGoal();
+        $goal->project_id = $findProject->id;
+        $goal->client_id = $findDeal->client_id;
+        $goal->pm_id = $findDeal->pm_id;
+        $goal->project_type = $findDeal->project_type;
+        $goal->project_category = $pmGoalSetting->category;
 
-                $p_pm_regular_goal = new ProjectPmGoal();
-                $p_pm_regular_goal->project_id = $findProject->id;
-                $p_pm_regular_goal->client_id = $findDeal->client_id;
-                $p_pm_regular_goal->pm_id = $findDeal->pm_id;
-                $p_pm_regular_goal->project_type = $findDeal->project_type;
-                $p_pm_regular_goal->project_category = 'Regular';
-                $p_pm_regular_goal->goal_code = '6HT';
-                $p_pm_regular_goal->goal_name = 'At least 6 hours have been tracked';
-                $p_pm_regular_goal->goal_type = 'hours_6_tracked';
-                $p_pm_regular_goal->goal_start_date = $goal_start_date;
-                $p_pm_regular_goal->goal_end_date = Carbon::parse($goal_start_date)->addDay(5);
-                $p_pm_regular_goal->duration = 5;
-                $p_pm_regular_goal->added_by = Auth::user()->id;
-                $p_pm_regular_goal->save();
-
-                $p_pm_regular_goal = new ProjectPmGoal();
-                $p_pm_regular_goal->project_id = $findProject->id;
-                $p_pm_regular_goal->client_id = $findDeal->client_id;
-                $p_pm_regular_goal->pm_id = $findDeal->pm_id;
-                $p_pm_regular_goal->project_type = $findDeal->project_type;
-                $p_pm_regular_goal->project_category = 'Regular';
-                $p_pm_regular_goal->goal_code = '10HT';
-                $p_pm_regular_goal->goal_name = 'At least 10 hours have been tracked between 6th and 12th days';
-                $p_pm_regular_goal->goal_type = 'hours_10_tracked_between_6th_and_12th_days';
-                $p_pm_regular_goal->goal_start_date = $goal_start_date;
-                $p_pm_regular_goal->goal_end_date = Carbon::parse($goal_start_date)->addDay(12);
-                $p_pm_regular_goal->duration = 12;
-                $p_pm_regular_goal->added_by = Auth::user()->id;
-                $p_pm_regular_goal->save();
-
-                $p_pm_regular_goal = new ProjectPmGoal();
-                $p_pm_regular_goal->project_id = $findProject->id;
-                $p_pm_regular_goal->client_id = $findDeal->client_id;
-                $p_pm_regular_goal->pm_id = $findDeal->pm_id;
-                $p_pm_regular_goal->project_type = $findDeal->project_type;
-                $p_pm_regular_goal->project_category = 'Regular';
-                $p_pm_regular_goal->goal_code = '10HTW';
-                $p_pm_regular_goal->goal_name = 'At least 10 hours have been tracked during that week';
-                $p_pm_regular_goal->goal_type = 'hours_10_tracked_during_week';
-                $p_pm_regular_goal->goal_start_date = $goal_start_date;
-                $p_pm_regular_goal->goal_end_date = Carbon::parse($goal_start_date)->addDay(7);
-                $p_pm_regular_goal->duration = 7;
-                $p_pm_regular_goal->added_by = Auth::user()->id;
-                $p_pm_regular_goal->save();
-            } elseif ($findDeal->hourly_rate >= 21 && $findDeal->hourly_rate <= 30) {
-                $p_pm_regular_goal = new ProjectPmGoal();
-                $p_pm_regular_goal->project_id = $findProject->id;
-                $p_pm_regular_goal->client_id = $findDeal->client_id;
-                $p_pm_regular_goal->pm_id = $findDeal->pm_id;
-                $p_pm_regular_goal->project_type = $findDeal->project_type;
-                $p_pm_regular_goal->project_category = 'Priority';
-                $p_pm_regular_goal->goal_code = 'HTA';
-                $p_pm_regular_goal->goal_name = 'At least one task has been assigned and 1 hour has been tracked';
-                $p_pm_regular_goal->goal_type = 'task_need_to_be_assigned';
-                $p_pm_regular_goal->goal_start_date = $goal_start_date;
-                $p_pm_regular_goal->goal_end_date = Carbon::parse($goal_start_date)->addHours(30);
-                $p_pm_regular_goal->duration = 2;
-                $p_pm_regular_goal->added_by = Auth::user()->id;
-                $p_pm_regular_goal->save();
-
-                $p_pm_regular_goal = new ProjectPmGoal();
-                $p_pm_regular_goal->project_id = $findProject->id;
-                $p_pm_regular_goal->client_id = $findDeal->client_id;
-                $p_pm_regular_goal->pm_id = $findDeal->pm_id;
-                $p_pm_regular_goal->project_type = $findDeal->project_type;
-                $p_pm_regular_goal->project_category = 'Priority';
-                $p_pm_regular_goal->goal_code = '3HT';
-                $p_pm_regular_goal->goal_name = 'At least 3 hours have been tracked';
-                $p_pm_regular_goal->goal_type = 'hours_3_tracked';
-                $p_pm_regular_goal->goal_start_date = $goal_start_date;
-                $p_pm_regular_goal->goal_end_date = Carbon::parse($goal_start_date)->addHours(60);
-                $p_pm_regular_goal->duration = 4;
-                $p_pm_regular_goal->added_by = Auth::user()->id;
-                $p_pm_regular_goal->save();
-
-                $p_pm_regular_goal = new ProjectPmGoal();
-                $p_pm_regular_goal->project_id = $findProject->id;
-                $p_pm_regular_goal->client_id = $findDeal->client_id;
-                $p_pm_regular_goal->pm_id = $findDeal->pm_id;
-                $p_pm_regular_goal->project_type = $findDeal->project_type;
-                $p_pm_regular_goal->project_category = 'Priority';
-                $p_pm_regular_goal->goal_code = '7HT';
-                $p_pm_regular_goal->goal_name = 'At least 7 hours have been tracked';
-                $p_pm_regular_goal->goal_type = 'hours_7_tracked';
-                $p_pm_regular_goal->goal_start_date = $goal_start_date;
-                $p_pm_regular_goal->goal_end_date = Carbon::parse($goal_start_date)->addDay(5);
-                $p_pm_regular_goal->duration = 5;
-                $p_pm_regular_goal->added_by = Auth::user()->id;
-                $p_pm_regular_goal->save();
-
-                $p_pm_regular_goal = new ProjectPmGoal();
-                $p_pm_regular_goal->project_id = $findProject->id;
-                $p_pm_regular_goal->client_id = $findDeal->client_id;
-                $p_pm_regular_goal->pm_id = $findDeal->pm_id;
-                $p_pm_regular_goal->project_type = $findDeal->project_type;
-                $p_pm_regular_goal->project_category = 'Priority';
-                $p_pm_regular_goal->goal_code = '12HT';
-                $p_pm_regular_goal->goal_name = 'At least 12 hours have been tracked between 6th and 12th days';
-                $p_pm_regular_goal->goal_type = 'hours_12_tracked_between_6th_and_12th_days';
-                $p_pm_regular_goal->goal_start_date = $goal_start_date;
-                $p_pm_regular_goal->goal_end_date = Carbon::parse($goal_start_date)->addDay(12);
-                $p_pm_regular_goal->duration = 12;
-                $p_pm_regular_goal->added_by = Auth::user()->id;
-                $p_pm_regular_goal->save();
-
-                $p_pm_regular_goal = new ProjectPmGoal();
-                $p_pm_regular_goal->project_id = $findProject->id;
-                $p_pm_regular_goal->client_id = $findDeal->client_id;
-                $p_pm_regular_goal->pm_id = $findDeal->pm_id;
-                $p_pm_regular_goal->project_type = $findDeal->project_type;
-                $p_pm_regular_goal->project_category = 'Priority';
-                $p_pm_regular_goal->goal_code = '12HTW';
-                $p_pm_regular_goal->goal_name = 'At least 12 hours have been tracked during that week';
-                $p_pm_regular_goal->goal_type = 'hours_12_tracked_during_week';
-                $p_pm_regular_goal->goal_start_date = $goal_start_date;
-                $p_pm_regular_goal->goal_end_date = Carbon::parse($goal_start_date)->addDay(7);
-                $p_pm_regular_goal->duration = 7;
-                $p_pm_regular_goal->added_by = Auth::user()->id;
-                $p_pm_regular_goal->save();
-            } elseif ($findDeal->hourly_rate >= 31 && $findDeal->hourly_rate <= 40) {
-                $p_pm_regular_goal = new ProjectPmGoal();
-                $p_pm_regular_goal->project_id = $findProject->id;
-                $p_pm_regular_goal->client_id = $findDeal->client_id;
-                $p_pm_regular_goal->pm_id = $findDeal->pm_id;
-                $p_pm_regular_goal->project_type = $findDeal->project_type;
-                $p_pm_regular_goal->project_category = 'High-priority';
-                $p_pm_regular_goal->goal_code = 'HTA';
-                $p_pm_regular_goal->goal_name = 'At least one task has been assigned and 1 hour has been tracked';
-                $p_pm_regular_goal->goal_type = 'task_need_to_be_assigned';
-                $p_pm_regular_goal->goal_start_date = $goal_start_date;
-                $p_pm_regular_goal->goal_end_date = Carbon::parse($goal_start_date)->addHours(30);
-                $p_pm_regular_goal->duration = 2;
-                $p_pm_regular_goal->added_by = Auth::user()->id;
-                $p_pm_regular_goal->save();
-
-                $p_pm_regular_goal = new ProjectPmGoal();
-                $p_pm_regular_goal->project_id = $findProject->id;
-                $p_pm_regular_goal->client_id = $findDeal->client_id;
-                $p_pm_regular_goal->pm_id = $findDeal->pm_id;
-                $p_pm_regular_goal->project_type = $findDeal->project_type;
-                $p_pm_regular_goal->project_category = 'High-priority';
-                $p_pm_regular_goal->goal_code = '4HT';
-                $p_pm_regular_goal->goal_name = 'At least 4 hours have been tracked';
-                $p_pm_regular_goal->goal_type = 'hours_4_tracked';
-                $p_pm_regular_goal->goal_start_date = $goal_start_date;
-                $p_pm_regular_goal->goal_end_date = Carbon::parse($goal_start_date)->addHours(60);
-                $p_pm_regular_goal->duration = 4;
-                $p_pm_regular_goal->added_by = Auth::user()->id;
-                $p_pm_regular_goal->save();
-
-                $p_pm_regular_goal = new ProjectPmGoal();
-                $p_pm_regular_goal->project_id = $findProject->id;
-                $p_pm_regular_goal->client_id = $findDeal->client_id;
-                $p_pm_regular_goal->pm_id = $findDeal->pm_id;
-                $p_pm_regular_goal->project_type = $findDeal->project_type;
-                $p_pm_regular_goal->project_category = 'High-priority';
-                $p_pm_regular_goal->goal_code = '8HT';
-                $p_pm_regular_goal->goal_name = 'At least 8 hours have been tracked';
-                $p_pm_regular_goal->goal_type = 'hours_8_tracked';
-                $p_pm_regular_goal->goal_start_date = $goal_start_date;
-                $p_pm_regular_goal->goal_end_date = Carbon::parse($goal_start_date)->addDay(5);
-                $p_pm_regular_goal->duration = 5;
-                $p_pm_regular_goal->added_by = Auth::user()->id;
-                $p_pm_regular_goal->save();
-
-                $p_pm_regular_goal = new ProjectPmGoal();
-                $p_pm_regular_goal->project_id = $findProject->id;
-                $p_pm_regular_goal->client_id = $findDeal->client_id;
-                $p_pm_regular_goal->pm_id = $findDeal->pm_id;
-                $p_pm_regular_goal->project_type = $findDeal->project_type;
-                $p_pm_regular_goal->project_category = 'High-priority';
-                $p_pm_regular_goal->goal_code = '15HT';
-                $p_pm_regular_goal->goal_name = 'At least 15 hours have been tracked between 6th and 12th days';
-                $p_pm_regular_goal->goal_type = 'hours_15_tracked_between_6th_and_12th_days';
-                $p_pm_regular_goal->goal_start_date = $goal_start_date;
-                $p_pm_regular_goal->goal_end_date = Carbon::parse($goal_start_date)->addDay(12);
-                $p_pm_regular_goal->duration = 12;
-                $p_pm_regular_goal->added_by = Auth::user()->id;
-                $p_pm_regular_goal->save();
-
-                $p_pm_regular_goal = new ProjectPmGoal();
-                $p_pm_regular_goal->project_id = $findProject->id;
-                $p_pm_regular_goal->client_id = $findDeal->client_id;
-                $p_pm_regular_goal->pm_id = $findDeal->pm_id;
-                $p_pm_regular_goal->project_type = $findDeal->project_type;
-                $p_pm_regular_goal->project_category = 'High-priority';
-                $p_pm_regular_goal->goal_code = '15HTW';
-                $p_pm_regular_goal->goal_name = 'At least 15 hours have been tracked during that week';
-                $p_pm_regular_goal->goal_type = 'hours_15_tracked_during_week';
-                $p_pm_regular_goal->goal_start_date = $goal_start_date;
-                $p_pm_regular_goal->goal_end_date = Carbon::parse($goal_start_date)->addDay(7);
-                $p_pm_regular_goal->duration = 7;
-                $p_pm_regular_goal->added_by = Auth::user()->id;
-                $p_pm_regular_goal->save();
-            } elseif ($findDeal->hourly_rate >= 41 && $findDeal->hourly_rate <= 50) {
-                $p_pm_regular_goal = new ProjectPmGoal();
-                $p_pm_regular_goal->project_id = $findProject->id;
-                $p_pm_regular_goal->client_id = $findDeal->client_id;
-                $p_pm_regular_goal->pm_id = $findDeal->pm_id;
-                $p_pm_regular_goal->project_type = $findDeal->project_type;
-                $p_pm_regular_goal->project_category = 'Top most priority';
-                $p_pm_regular_goal->goal_code = 'HTA';
-                $p_pm_regular_goal->goal_name = 'At least one task has been assigned and 1 hour has been tracked';
-                $p_pm_regular_goal->goal_type = 'task_need_to_be_assigned';
-                $p_pm_regular_goal->goal_start_date = $goal_start_date;
-                $p_pm_regular_goal->goal_end_date = Carbon::parse($goal_start_date)->addHours(30);
-                $p_pm_regular_goal->duration = 2;
-                $p_pm_regular_goal->added_by = Auth::user()->id;
-                $p_pm_regular_goal->save();
-
-                $p_pm_regular_goal = new ProjectPmGoal();
-                $p_pm_regular_goal->project_id = $findProject->id;
-                $p_pm_regular_goal->client_id = $findDeal->client_id;
-                $p_pm_regular_goal->pm_id = $findDeal->pm_id;
-                $p_pm_regular_goal->project_type = $findDeal->project_type;
-                $p_pm_regular_goal->project_category = 'Top most priority';
-                $p_pm_regular_goal->goal_code = '5HT';
-                $p_pm_regular_goal->goal_name = 'At least 5 hours have been tracked';
-                $p_pm_regular_goal->goal_type = 'hours_5_tracked';
-                $p_pm_regular_goal->goal_start_date = $goal_start_date;
-                $p_pm_regular_goal->goal_end_date = Carbon::parse($goal_start_date)->addHours(60);
-                $p_pm_regular_goal->duration = 4;
-                $p_pm_regular_goal->added_by = Auth::user()->id;
-                $p_pm_regular_goal->save();
-
-                $p_pm_regular_goal = new ProjectPmGoal();
-                $p_pm_regular_goal->project_id = $findProject->id;
-                $p_pm_regular_goal->client_id = $findDeal->client_id;
-                $p_pm_regular_goal->pm_id = $findDeal->pm_id;
-                $p_pm_regular_goal->project_type = $findDeal->project_type;
-                $p_pm_regular_goal->project_category = 'Top most priority';
-                $p_pm_regular_goal->goal_code = '8HT';
-                $p_pm_regular_goal->goal_name = 'At least 8 hours have been tracked';
-                $p_pm_regular_goal->goal_type = 'hours_8_tracked';
-                $p_pm_regular_goal->goal_start_date = $goal_start_date;
-                $p_pm_regular_goal->goal_end_date = Carbon::parse($goal_start_date)->addDay(5);
-                $p_pm_regular_goal->duration = 5;
-                $p_pm_regular_goal->added_by = Auth::user()->id;
-                $p_pm_regular_goal->save();
-
-                $p_pm_regular_goal = new ProjectPmGoal();
-                $p_pm_regular_goal->project_id = $findProject->id;
-                $p_pm_regular_goal->client_id = $findDeal->client_id;
-                $p_pm_regular_goal->pm_id = $findDeal->pm_id;
-                $p_pm_regular_goal->project_type = $findDeal->project_type;
-                $p_pm_regular_goal->project_category = 'Top most priority';
-                $p_pm_regular_goal->goal_code = '15HT';
-                $p_pm_regular_goal->goal_name = 'At least 15 hours have been tracked between 6th and 12th days';
-                $p_pm_regular_goal->goal_type = 'hours_15_tracked_between_6th_and_12th_days';
-                $p_pm_regular_goal->goal_start_date = $goal_start_date;
-                $p_pm_regular_goal->goal_end_date = Carbon::parse($goal_start_date)->addDay(12);
-                $p_pm_regular_goal->duration = 12;
-                $p_pm_regular_goal->added_by = Auth::user()->id;
-                $p_pm_regular_goal->save();
-
-                $p_pm_regular_goal = new ProjectPmGoal();
-                $p_pm_regular_goal->project_id = $findProject->id;
-                $p_pm_regular_goal->client_id = $findDeal->client_id;
-                $p_pm_regular_goal->pm_id = $findDeal->pm_id;
-                $p_pm_regular_goal->project_type = $findDeal->project_type;
-                $p_pm_regular_goal->project_category = 'Top most priority';
-                $p_pm_regular_goal->goal_code = '15HTW';
-                $p_pm_regular_goal->goal_name = 'At least 15 hours have been tracked during that week';
-                $p_pm_regular_goal->goal_type = 'hours_15_tracked_during_week';
-                $p_pm_regular_goal->goal_start_date = $goal_start_date;
-                $p_pm_regular_goal->goal_end_date = Carbon::parse($goal_start_date)->addDay(7);
-                $p_pm_regular_goal->duration = 7;
-                $p_pm_regular_goal->added_by = Auth::user()->id;
-                $p_pm_regular_goal->save();
-            } else {
-                $p_pm_regular_goal = new ProjectPmGoal();
-                $p_pm_regular_goal->project_id = $findProject->id;
-                $p_pm_regular_goal->client_id = $findDeal->client_id;
-                $p_pm_regular_goal->pm_id = $findDeal->pm_id;
-                $p_pm_regular_goal->project_type = $findDeal->project_type;
-                $p_pm_regular_goal->project_category = 'Critically sensitive';
-                $p_pm_regular_goal->goal_code = 'HTA';
-                $p_pm_regular_goal->goal_name = 'At least one task has been assigned and 1 hour has been tracked';
-                $p_pm_regular_goal->goal_type = 'task_need_to_be_assigned';
-                $p_pm_regular_goal->goal_start_date = $goal_start_date;
-                $p_pm_regular_goal->goal_end_date = Carbon::parse($goal_start_date)->addHours(30);
-                $p_pm_regular_goal->duration = 2;
-                $p_pm_regular_goal->added_by = Auth::user()->id;
-                $p_pm_regular_goal->save();
-
-                $p_pm_regular_goal = new ProjectPmGoal();
-                $p_pm_regular_goal->project_id = $findProject->id;
-                $p_pm_regular_goal->client_id = $findDeal->client_id;
-                $p_pm_regular_goal->pm_id = $findDeal->pm_id;
-                $p_pm_regular_goal->project_type = $findDeal->project_type;
-                $p_pm_regular_goal->project_category = 'Critically sensitive';
-                $p_pm_regular_goal->goal_code = '5HT';
-                $p_pm_regular_goal->goal_name = 'At least 5 hours have been tracked';
-                $p_pm_regular_goal->goal_type = 'hours_5_tracked';
-                $p_pm_regular_goal->goal_start_date = $goal_start_date;
-                $p_pm_regular_goal->goal_end_date = Carbon::parse($goal_start_date)->addHours(60);
-                $p_pm_regular_goal->duration = 4;
-                $p_pm_regular_goal->added_by = Auth::user()->id;
-                $p_pm_regular_goal->save();
-
-                $p_pm_regular_goal = new ProjectPmGoal();
-                $p_pm_regular_goal->project_id = $findProject->id;
-                $p_pm_regular_goal->client_id = $findDeal->client_id;
-                $p_pm_regular_goal->pm_id = $findDeal->pm_id;
-                $p_pm_regular_goal->project_type = $findDeal->project_type;
-                $p_pm_regular_goal->project_category = 'Critically sensitive';
-                $p_pm_regular_goal->goal_code = '10HT';
-                $p_pm_regular_goal->goal_name = 'At least 10 hours have been tracked';
-                $p_pm_regular_goal->goal_type = 'hours_10_tracked';
-                $p_pm_regular_goal->goal_start_date = $goal_start_date;
-                $p_pm_regular_goal->goal_end_date = Carbon::parse($goal_start_date)->addDay(5);
-                $p_pm_regular_goal->duration = 5;
-                $p_pm_regular_goal->added_by = Auth::user()->id;
-                $p_pm_regular_goal->save();
-
-                $p_pm_regular_goal = new ProjectPmGoal();
-                $p_pm_regular_goal->project_id = $findProject->id;
-                $p_pm_regular_goal->client_id = $findDeal->client_id;
-                $p_pm_regular_goal->pm_id = $findDeal->pm_id;
-                $p_pm_regular_goal->project_type = $findDeal->project_type;
-                $p_pm_regular_goal->project_category = 'Critically sensitive';
-                $p_pm_regular_goal->goal_code = '18HT';
-                $p_pm_regular_goal->goal_name = 'At least 18 hours have been tracked between 6th and 12th days';
-                $p_pm_regular_goal->goal_type = 'hours_18_tracked_between_6th_and_12th_days';
-                $p_pm_regular_goal->goal_start_date = $goal_start_date;
-                $p_pm_regular_goal->goal_end_date = Carbon::parse($goal_start_date)->addDay(12);
-                $p_pm_regular_goal->duration = 12;
-                $p_pm_regular_goal->added_by = Auth::user()->id;
-                $p_pm_regular_goal->save();
-
-                $p_pm_regular_goal = new ProjectPmGoal();
-                $p_pm_regular_goal->project_id = $findProject->id;
-                $p_pm_regular_goal->client_id = $findDeal->client_id;
-                $p_pm_regular_goal->pm_id = $findDeal->pm_id;
-                $p_pm_regular_goal->project_type = $findDeal->project_type;
-                $p_pm_regular_goal->project_category = 'Critically sensitive';
-                $p_pm_regular_goal->goal_code = '18HTW';
-                $p_pm_regular_goal->goal_name = 'At least 18 hours have been tracked during that week';
-                $p_pm_regular_goal->goal_type = 'hours_18_tracked_during_week';
-                $p_pm_regular_goal->goal_start_date = $goal_start_date;
-                $p_pm_regular_goal->goal_end_date = Carbon::parse($goal_start_date)->addDay(7);
-                $p_pm_regular_goal->duration = 7;
-                $p_pm_regular_goal->added_by = Auth::user()->id;
-                $p_pm_regular_goal->save();
-            }
+        switch ($pmGoalSetting->category) {
+            case 'regular':
+            case 'priority':
+                $goal->goal_code = '3HT';
+                $goal->goal_name = 'At least 3 hours have been tracked';
+                $goal->goal_type = 'hours_3_tracked';
+                break;
+            case 'highPriority':
+                $goal->goal_code = '4HT';
+                $goal->goal_name = 'At least 4 hours have been tracked';
+                $goal->goal_type = 'hours_4_tracked';
+                break;
+            case 'topMostPriority':
+            case 'criticallySensitive':
+                $goal->goal_code = '5HT';
+                $goal->goal_name = 'At least 5 hours have been tracked';
+                $goal->goal_type = 'hours_5_tracked';
+                break;
+            default:
+                return new Exception('Project priority type is invalid');
+                break;
         }
+
+        $goal->goal_start_date = $goal_start_date;
+        $goal->goal_end_date = Carbon::parse($goal_start_date)->addHours(60);
+        $goal->duration = 60 / 24;
+        $goal->added_by = Auth::user()->id;
+        $goal->save();
     }
 
     function getGoalStartDate($project, $deal, $pm_project)
@@ -701,7 +372,7 @@ class HelperPmProjectStatusController extends AccountBaseController
     function createShortDeadlinePmGoals($priorityType, $project, $deal, $pmProject, $milestoneCount, $extraGoal, $totalProjectDuration)
     {
         $goalCount = self::goalCount($priorityType, $milestoneCount);
-        $goalCodes = ProjectPmGoal::$goalCodes[in_array($priorityType, ['highPriority', 'topMostPriority', 'criticallySensitive']) ? 'priority' : $priorityType];
+        $goalCodes = ProjectPmGoal::$goalCodes['fixed'][in_array($priorityType, ['highPriority', 'topMostPriority', 'criticallySensitive']) ? 'priority' : $priorityType];
         $goalStartDate = self::getGoalStartDate($project, $deal, $pmProject);
 
         DB::beginTransaction();
@@ -760,7 +431,7 @@ class HelperPmProjectStatusController extends AccountBaseController
 
             if ($extraGoal) {
 
-                $goalCodes = ProjectPmGoal::$goalCodes['extraGoal'];
+                $goalCodes = ProjectPmGoal::$goalCodes['fixed']['extraGoal'];
 
                 $goal = new ProjectPmGoal();
                 $goal->project_id = $project->id;
