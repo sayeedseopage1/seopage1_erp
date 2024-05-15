@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react'; // Added useEffect import
 import PropTypes from "prop-types";
 import { ButtonComponent } from '../../../../PointFactors/components/Styles/ui/ui';
 import { useForm } from 'react-hook-form';
@@ -10,7 +10,6 @@ const AddNewAxisItemModal = ({ xAxisStartAndEndValue, chartAxisData, setChartAxi
     const {
         register,
         handleSubmit,
-        watch,
         reset,
         formState: { errors },
     } = useForm();
@@ -33,7 +32,7 @@ const AddNewAxisItemModal = ({ xAxisStartAndEndValue, chartAxisData, setChartAxi
         return isValid;
     };
 
-    //make unique id
+    // Make unique id
     const uniqueId = () => {
         return Math.floor(Math.random() * 1000000000).toString(32);
     };
@@ -44,15 +43,20 @@ const AddNewAxisItemModal = ({ xAxisStartAndEndValue, chartAxisData, setChartAxi
             setChartAxisData(newData);
             reset();
             setAntdModalOpen(false);
-            toast.success('Axis item added successfully');
+            toast.success('Axis item added successfully'); // Only called on successful submission
         }
     };
 
-
     const handleCancel = () => {
         setAntdModalOpen(false);
-        reset();
+        reset(); // Reset the form when the modal is closed
     };
+
+    useEffect(() => {
+        if (antdModalOpen) {
+            reset(); // Reset the form when the modal is opened
+        }
+    }, [antdModalOpen, reset]); // Dependency array includes antdModalOpen and reset
 
     return (
         <div>
@@ -111,5 +115,9 @@ export default AddNewAxisItemModal;
 
 AddNewAxisItemModal.propTypes = {
     antdModalOpen: PropTypes.bool,
-    setAntdModalOpen: PropTypes.func
+    setAntdModalOpen: PropTypes.func,
+    xAxisStartAndEndValue: PropTypes.object,
+    chartAxisData: PropTypes.array,
+    setChartAxisData: PropTypes.func,
+    chartData: PropTypes.array,
 };

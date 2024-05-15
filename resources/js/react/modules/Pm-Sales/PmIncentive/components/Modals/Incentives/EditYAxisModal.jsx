@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import PropTypes from "prop-types";
 import { ButtonComponent } from '../../../../PointFactors/components/Styles/ui/ui';
 import { useForm } from 'react-hook-form';
@@ -34,9 +34,15 @@ const EditYAxisModal = ({ axisEditItem, chartAxisData, setChartAxisData, antdMod
     }
 
     const handleCancel = () => {
-        setAntdModalOpen(false)
-        reset();
+        reset()
+        setAntdModalOpen(false);
     }
+
+    useEffect(() => {
+        if (antdModalOpen) {
+            reset(); // Reset the form when the modal is opened
+        }
+    }, [antdModalOpen, reset]); // Dependency array includes antdModalOpen and reset
 
     return (
         <div>
