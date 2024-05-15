@@ -13,4 +13,9 @@ class IncentiveType extends Model
         'title',
         'cash_value'
     ];
+
+    public function incentiveCriterias()
+    {
+        return $this->hasMany(IncentiveCriteria::class, 'incentive_type_id');
+    }
 }
