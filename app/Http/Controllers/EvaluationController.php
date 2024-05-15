@@ -175,25 +175,26 @@ class EvaluationController extends AccountBaseController
 
     public function storeEmployeeTaskEvaluation(Request $request)
     {
+        // dd($request->all());
         $evaluation_task = EmployeeEvaluationTask::where('id',$request->evaluation_id)->first();
         $evaluation_task->qw_first_chance = $request->qw_first_chance;
         $evaluation_task->qw_first_revision = $request->qw_first_revision;
         $evaluation_task->qw_second_revision = $request->qw_second_revision;
         $evaluation_task->speed_of_work = $request->speed_of_work;
         $evaluation_task->understand_instruction = $request->understand_instruction;
-        $evaluation_task->communication = $request->communication;
-        $evaluation_task->professionalism = $request->professionalism;
-        $evaluation_task->identiey_issues = $request->identiey_issues;
-        $evaluation_task->dedication = $request->dedication;
-        $evaluation_task->obedience = $request->obedience;
+        // $evaluation_task->communication = $request->communication;
+        // $evaluation_task->professionalism = $request->professionalism;
+        // $evaluation_task->identiey_issues = $request->identiey_issues;
+        // $evaluation_task->dedication = $request->dedication;
+        // $evaluation_task->obedience = $request->obedience;
         $evaluation_task->lead_dev_id = Auth::user()->id;
         $evaluation_task->lead_dev_cmnt = $request->lead_dev_cmnt;
 
         $total_ratings = array_sum([
-            $request->qw_first_chance,$request->qw_first_revision,$request->qw_second_revision,$request->speed_of_work,$request->understand_instruction,$request->communication,$request->professionalism,$request->identiey_issues,$request->dedication,$request->obedience
+            $request->qw_first_chance,$request->qw_first_revision,$request->qw_second_revision,$request->speed_of_work,$request->understand_instruction
         ]);
         $number_of_ratings = count([
-            $request->qw_first_chance,$request->qw_first_revision,$request->qw_second_revision,$request->speed_of_work,$request->understand_instruction,$request->communication,$request->professionalism,$request->identiey_issues,$request->dedication,$request->obedience
+            $request->qw_first_chance,$request->qw_first_revision,$request->qw_second_revision,$request->speed_of_work,$request->understand_instruction
         ]);
         $average_rating = $number_of_ratings > 0 ? $total_ratings / $number_of_ratings : 0;
         $evaluation_task->avg_rating = $average_rating;
@@ -202,15 +203,28 @@ class EvaluationController extends AccountBaseController
     }
     public function storeSubmissionEvaluation(Request $request)
     {
+        dd($request->all());
         // DB::beginTransaction();
         $task_sum = EmployeeEvaluationTask::where('user_id',$request->user_id)->sum('avg_rating');
         $task_count = EmployeeEvaluationTask::where('user_id',$request->user_id)->count('avg_rating');
-        $average_rating = $task_count > 0 ? $task_sum / $task_count : 0;
+        $avg_rating = $task_count > 0 ? $task_sum / $task_count : 0;
 
         $employee_evaluation = EmployeeEvaluation::where('user_id',$request->user_id)->first();
         $employee_evaluation->ld_submission_status = 1;
         $employee_evaluation->lead_dev_id = Auth::user()->id;
-        $employee_evaluation->lead_dev_avg_rating = $average_rating;
+        $employee_evaluation->communication = $request->communication;
+        $employee_evaluation->professionalism = $request->professionalism;
+        $employee_evaluation->identiey_issues = $request->identiey_issues;
+        $employee_evaluation->dedication = $request->dedication;
+        $employee_evaluation->obedience = $request->obedience;
+        $total_ratings = array_sum([
+            $request->communication,$request->professionalism,$request->identiey_issues,$request->dedication,$request->obedience
+        ]);
+        $number_of_ratings = count([
+            $request->communication,$request->professionalism,$request->identiey_issues,$request->dedication,$request->obedience
+        ]);
+        $average_rating = $number_of_ratings > 0 ? $total_ratings / $number_of_ratings : 0;
+        $employee_evaluation->lead_dev_avg_rating = ($average_rating + $avg_rating) / 2;
         $employee_evaluation->save();
 
         $evaluation_task = EmployeeEvaluationTask::where('user_id',$request->user_id)->first();
