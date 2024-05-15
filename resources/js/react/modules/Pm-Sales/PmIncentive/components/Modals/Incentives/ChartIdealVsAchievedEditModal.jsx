@@ -34,20 +34,44 @@ const ChartIdealVsAchievedEditModal = ({ antdModalOpen, showIdealVsAchievedEditM
         {
             id: '2',
             xAxisLowerLimit: 10,
-            xAxisUpperLimit: 50,
+            xAxisUpperLimit: 20,
             yAxisRatio: 80,
         },
         {
             id: '3',
-            xAxisLowerLimit: 50,
-            xAxisUpperLimit: 80,
+            xAxisLowerLimit: 20,
+            xAxisUpperLimit: 35,
             yAxisRatio: 50,
         },
         {
             id: '4',
+            xAxisLowerLimit: 35,
+            xAxisUpperLimit: 50,
+            yAxisRatio: 0,
+        },
+        {
+            id: '5',
+            xAxisLowerLimit: 50,
+            xAxisUpperLimit: 65,
+            yAxisRatio: 0,
+        },
+        {
+            id: '6',
+            xAxisLowerLimit: 65,
+            xAxisUpperLimit: 80,
+            yAxisRatio: 0,
+        },
+        {
+            id: '7',
+            xAxisLowerLimit: 80,
+            xAxisUpperLimit: 90,
+            yAxisRatio: 0,
+        },
+        {
+            id: '8',
             xAxisLowerLimit: 90,
             xAxisUpperLimit: 100,
-            yAxisRatio: 50,
+            yAxisRatio: 0,
         },
     ])
 
