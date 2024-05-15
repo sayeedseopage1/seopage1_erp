@@ -6,7 +6,7 @@ import FormatDate from "../../../utils/FormateDate";
 import { convertTime } from "../../../utils/converTime";
 import ActionEvaluationTable from "./ActionEvaluationTable";
 const auth = new User(window.Laravel.user);
-export const DataTableColumns = [
+export const EvaluationTableColumns = [
     {
         id: "user_name",
         header: "Employee Name",

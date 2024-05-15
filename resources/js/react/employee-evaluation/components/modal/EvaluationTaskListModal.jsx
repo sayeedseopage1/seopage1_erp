@@ -1,7 +1,5 @@
-//mitul work start
-
 import ReactModal from "react-modal";
-
+import styles from "./EvaluationRating.module.css";
 import { useState } from "react";
 import {
     ButtonSection,
@@ -10,7 +8,7 @@ import {
     EvalTableTitle,
     Flex,
     FooterButtons,
-    RatingLeadDevSection,
+    RatingSectionLeadDev,
     TitleAndTableSection,
 } from "../Table/ui";
 
@@ -48,6 +46,9 @@ import { useEffect } from "react";
 import FormatDate from "../../../UI/comments/utils/FormatDate";
 import { EvaluationTaskTableColumns } from "../Table/EvaluationTaskTableColumns";
 import EvaluationTaskTable from "../Table/EvaluationTaskTable";
+import useEmployeeEvaluation from "../../../zustand/store";
+import RatingSection from "./RatingSection";
+import RatingSectionStatic from "./RatingSectionStatic";
 
 const EvaluationTaskListModal = ({
     isEvaluationModal,
@@ -55,12 +56,20 @@ const EvaluationTaskListModal = ({
     singleEvaluation,
 }) => {
     const auth = useAuth();
-
+    const { evaluationObject } = useEmployeeEvaluation();
     const [teamLeadReview, setTeamLeadReview] = useState("");
     const [adminComment, setAdminComment] = useState("");
     const [isAllTaskRated, setIsAllTaskRated] = useState(false);
     const [sorting, setSorting] = useState([]);
+    const [formData, setFormData] = useState({
+        communication: singleEvaluation?.communication ?? 0,
+        professionalism: singleEvaluation?.professionalism ?? 0,
+        identiey_issues: singleEvaluation?.identiey_issues ?? 0,
+        dedication: singleEvaluation?.dedication ?? 0,
+        obedience: singleEvaluation?.obedience ?? 0,
+    });
 
+    console.log("formdata", formData);
     const [
         taskRatingFinalSubmission,
         { isLoading: isLoadingLeadDevFinalSubmission },
@@ -103,12 +112,99 @@ const EvaluationTaskListModal = ({
         pageSize: 10,
     });
 
+    const formFields = [
+        {
+            label: "Communication",
+            value: formData.communication,
+            onChange: (value) =>
+                setFormData({
+                    ...formData,
+                    communication: value,
+                }),
+        },
+        {
+            label: "Professionalism",
+            value: formData.professionalism,
+            onChange: (value) =>
+                setFormData({
+                    ...formData,
+
+                    professionalism: value,
+                }),
+        },
+        {
+            label: "Ability to identify issues",
+            value: formData.identiey_issues,
+            onChange: (value) =>
+                setFormData({
+                    ...formData,
+
+                    identiey_issues: value,
+                }),
+        },
+        {
+            label: "Dedication",
+            value: formData.dedication,
+            onChange: (value) =>
+                setFormData({
+                    ...formData,
+
+                    dedication: value,
+                }),
+        },
+        {
+            label: "Obedience",
+            value: formData.obedience,
+            onChange: (value) =>
+                setFormData({
+                    ...formData,
+
+                    obedience: value,
+                }),
+        },
+    ];
+
     const onPageChange = (paginate) => {
         setPagination(paginate);
     };
 
     const handleLeadDevFinalSubmission = async () => {
+        const requiredFields = [
+            { key: "communication", label: "Communication" },
+            { key: "professionalism", label: "Professionalism" },
+            {
+                key: "identiey_issues",
+                label: "Ability to identify issues",
+            },
+            { key: "dedication", label: "Dedication" },
+            { key: "obedience", label: "Obedience" },
+        ];
+
+        const emptyFields = requiredFields
+            .filter((field) => !formData[field.key])
+            .map((field) => field.label);
+
+        if (emptyFields.length > 0) {
+            const errorMessage = (
+                <div>
+                    <div style={{ fontWeight: "bold" }}>
+                        {" "}
+                        Please fill in the following fields:
+                    </div>
+                    <div>
+                        {emptyFields.map((field, index) => (
+                            <p key={index}>{field}</p>
+                        ))}
+                    </div>
+                </div>
+            );
+
+            toast.error(errorMessage);
+            return;
+        }
+
         await taskRatingFinalSubmission({
+            ...formData,
             user_id: singleEvaluation?.user_id,
             confirm_submission: "lead_dev_submitted",
             _token: document
@@ -250,7 +346,25 @@ const EvaluationTaskListModal = ({
                 />
             </TitleAndTableSection>
 
-            <RatingLeadDevSection></RatingLeadDevSection>
+            <RatingSectionLeadDev
+                className={styles.rating_container_task_table}
+                style={{ marginLeft: "10%", marginRight: "10%" }}
+            >
+                {auth.roleId === 6 &&
+                    (evaluationObject?.ld_submission_status === 0
+                        ? formFields.map((field, index) => (
+                              <RatingSection key={index} {...field} />
+                          ))
+                        : evaluationObject?.ld_submission_status === 1 &&
+                          formFields.map((field, index) => (
+                              <RatingSectionStatic key={index} {...field} />
+                          )))}
+
+                {(auth.roleId === 8 || auth.roleId === 1) &&
+                    formFields.map((field, index) => (
+                        <RatingSectionStatic key={index} {...field} />
+                    ))}
+            </RatingSectionLeadDev>
 
             <CommentTeamLeadSection>
                 {/* //team lead comment start */}
@@ -293,7 +407,11 @@ const EvaluationTaskListModal = ({
 
                                 <ReviewFooter>
                                     By{" "}
-                                    <a href="www.teamLead.com" target="_blank">
+                                    <a
+                                        href={`/account/employees/208`}
+                                        target="_blank"
+                                        v
+                                    >
                                         Mohammad Sayeed Ullah
                                     </a>{" "}
                                     on{" "}
@@ -359,7 +477,10 @@ const EvaluationTaskListModal = ({
 
                                 <ReviewFooter>
                                     By{" "}
-                                    <a href="www.teamLead.com" target="_blank">
+                                    <a
+                                        href={`/account/employees/${singleEvaluation?.managements_id}`}
+                                        target="_blank"
+                                    >
                                         {singleEvaluation?.managements_name}
                                     </a>{" "}
                                     on{" "}
@@ -474,5 +595,3 @@ const EvaluationTaskListModal = ({
 };
 
 export default EvaluationTaskListModal;
-
-//mitul work end

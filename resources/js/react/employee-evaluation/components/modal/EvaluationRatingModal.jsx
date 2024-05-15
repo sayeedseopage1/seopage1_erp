@@ -207,31 +207,14 @@ const EvaluationRatingModal = ({
     const handleSubmit = async (e) => {
         e.preventDefault();
         const requiredFields = [
+            { key: "communication", label: "Communication" },
+            { key: "professionalism", label: "Professionalism" },
             {
-                key: "qw_first_chance",
-                label: "Quality of work (in the first chance)",
+                key: "identiey_issues",
+                label: "Ability to identify issues",
             },
-            {
-                key: "qw_first_revision",
-                label: "Quality of work (After 1st revision)",
-            },
-            {
-                key: "qw_second_revision",
-                label: "Quality of work (After 2nd revision)",
-            },
-            { key: "speed_of_work", label: "Speed of work" },
-            {
-                key: "understand_instruction",
-                label: "Ability to understand instruction",
-            },
-            // { key: "communication", label: "Communication" },
-            // { key: "professionalism", label: "Professionalism" },
-            // {
-            //     key: "identiey_issues",
-            //     label: "Ability to identify issues",
-            // },
-            // { key: "dedication", label: "Dedication" },
-            // { key: "obedience", label: "Obedience" },
+            { key: "dedication", label: "Dedication" },
+            { key: "obedience", label: "Obedience" },
             { key: "lead_dev_cmnt", label: "Lead Developers Opinion" },
         ];
 
@@ -329,85 +312,55 @@ const EvaluationRatingModal = ({
                     averageRating={averageRating}
                 />
             </RatingTitleAndTableSection>
-            <div>
-                <RatingSectionLeadDev>
-                    <div className={styles.rating_container}>
-                        {auth.roleId === 6 &&
-                            (evaluationObject?.ld_submission_status === 0
-                                ? formFields.map((field, index) => (
-                                      <RatingSection key={index} {...field} />
-                                  ))
-                                : evaluationObject?.ld_submission_status ===
-                                      1 &&
-                                  formFields.map((field, index) => (
-                                      <RatingSectionStatic
-                                          key={index}
-                                          {...field}
-                                      />
-                                  )))}
 
-                        {(auth.roleId === 8 || auth.roleId === 1) &&
-                            formFields.map((field, index) => (
-                                <RatingSectionStatic key={index} {...field} />
-                            ))}
-                    </div>
-                </RatingSectionLeadDev>
+            <RatingSectionLeadDev className={styles.rating_container}>
+                {auth.roleId === 6 &&
+                    (evaluationObject?.ld_submission_status === 0
+                        ? formFields.map((field, index) => (
+                              <RatingSection key={index} {...field} />
+                          ))
+                        : evaluationObject?.ld_submission_status === 1 &&
+                          formFields.map((field, index) => (
+                              <RatingSectionStatic key={index} {...field} />
+                          )))}
 
-                <CommentLeadDevSection>
-                    <div className={styles.lead_dev_opinion}>
-                        Lead Developers Opinion
-                    </div>
-                    <div
-                        style={{
-                            border: "2px solid rgba(0, 0, 0, 0.2)",
-                            marginBottom: "20px",
-                            marginTop: "10px",
-                        }}
-                    >
-                        {auth.roleId === 6 &&
-                            (evaluationObject?.ld_submission_status === 0 ? (
-                                <CKEditorComponent
-                                    placeholder="Write your comment here"
-                                    data={formData?.lead_dev_cmnt}
-                                    onChange={(e, editor) => {
-                                        const data = editor.getData();
-                                        setFormData((prev) => ({
-                                            ...prev,
-                                            lead_dev_cmnt: data,
-                                        }));
-                                    }}
-                                />
-                            ) : (
-                                <LeadDevComment>
-                                    <div
-                                        dangerouslySetInnerHTML={{
-                                            __html: data?.lead_dev_cmnt,
-                                        }}
-                                    ></div>
-                                    <LeadDevName>
-                                        By{" "}
-                                        <a
-                                            href={`/account/employees/${evaluationObject?.added_by_id}`}
-                                            target="_blank"
-                                        >
-                                            {evaluationObject?.added_by_name}
-                                        </a>{" "}
-                                        on{" "}
-                                        <span>
-                                            {FormatDate(data?.updated_at)}
-                                        </span>
-                                    </LeadDevName>
-                                </LeadDevComment>
-                            ))}
+                {(auth.roleId === 8 || auth.roleId === 1) &&
+                    formFields.map((field, index) => (
+                        <RatingSectionStatic key={index} {...field} />
+                    ))}
+            </RatingSectionLeadDev>
 
-                        {(auth.roleId === 8 || auth.roleId === 1) && (
+            <CommentLeadDevSection>
+                <div className={styles.lead_dev_opinion}>
+                    Lead Developers Opinion
+                </div>
+                <div
+                    style={{
+                        border: "2px solid rgba(0, 0, 0, 0.2)",
+                        marginBottom: "20px",
+                        marginTop: "10px",
+                    }}
+                >
+                    {auth.roleId === 6 &&
+                        (evaluationObject?.ld_submission_status === 0 ? (
+                            <CKEditorComponent
+                                placeholder="Write your comment here"
+                                data={formData?.lead_dev_cmnt}
+                                onChange={(e, editor) => {
+                                    const data = editor.getData();
+                                    setFormData((prev) => ({
+                                        ...prev,
+                                        lead_dev_cmnt: data,
+                                    }));
+                                }}
+                            />
+                        ) : (
                             <LeadDevComment>
                                 <div
                                     dangerouslySetInnerHTML={{
                                         __html: data?.lead_dev_cmnt,
                                     }}
                                 ></div>
-
                                 <LeadDevName>
                                     By{" "}
                                     <a
@@ -420,52 +373,72 @@ const EvaluationRatingModal = ({
                                     <span>{FormatDate(data?.updated_at)}</span>
                                 </LeadDevName>
                             </LeadDevComment>
-                        )}
-                    </div>
-                </CommentLeadDevSection>
-                <RatingButtonSection>
-                    <div className="d-flex justify-content-center">
-                        {auth.roleId === 6 &&
-                            evaluationObject?.ld_submission_status === 0 &&
-                            (data?.avg_rating === null ? (
-                                <Button
-                                    onClick={handleSubmit}
-                                    size="md"
-                                    className="ml-2"
-                                    disabled={isLoadingReview}
+                        ))}
+
+                    {(auth.roleId === 8 || auth.roleId === 1) && (
+                        <LeadDevComment>
+                            <div
+                                dangerouslySetInnerHTML={{
+                                    __html: data?.lead_dev_cmnt,
+                                }}
+                            ></div>
+
+                            <LeadDevName>
+                                By{" "}
+                                <a
+                                    href={`/account/employees/${evaluationObject?.added_by_id}`}
+                                    target="_blank"
                                 >
-                                    {isLoadingReview
-                                        ? "Submitting"
-                                        : "Submit Evaluation"}
-                                </Button>
-                            ) : (
-                                <Button
-                                    className="mr-2 btn btn-primary "
-                                    onClick={handleEdit}
-                                    disabled={isLoadingUpdateTaskRating}
-                                >
-                                    <div>
-                                        <BiSolidEditAlt />
-                                        <span>
-                                            {" "}
-                                            {isLoadingUpdateTaskRating
-                                                ? "Updating"
-                                                : "Update Rating"}
-                                        </span>
-                                    </div>
-                                </Button>
-                            ))}
-                        <Button
-                            size="md"
-                            onClick={() => toggleSingleEvaluationModal()}
-                            className="ml-2"
-                            variant="secondary"
-                        >
-                            Close
-                        </Button>
-                    </div>
-                </RatingButtonSection>
-            </div>
+                                    {evaluationObject?.added_by_name}
+                                </a>{" "}
+                                on <span>{FormatDate(data?.updated_at)}</span>
+                            </LeadDevName>
+                        </LeadDevComment>
+                    )}
+                </div>
+            </CommentLeadDevSection>
+            <RatingButtonSection>
+                <div className="d-flex justify-content-center">
+                    {auth.roleId === 6 &&
+                        evaluationObject?.ld_submission_status === 0 &&
+                        (data?.avg_rating === null ? (
+                            <Button
+                                onClick={handleSubmit}
+                                size="md"
+                                className="ml-2"
+                                disabled={isLoadingReview}
+                            >
+                                {isLoadingReview
+                                    ? "Submitting"
+                                    : "Submit Evaluation"}
+                            </Button>
+                        ) : (
+                            <Button
+                                className="mr-2 btn btn-primary "
+                                onClick={handleEdit}
+                                disabled={isLoadingUpdateTaskRating}
+                            >
+                                <div>
+                                    <BiSolidEditAlt />
+                                    <span>
+                                        {" "}
+                                        {isLoadingUpdateTaskRating
+                                            ? "Updating"
+                                            : "Update Rating"}
+                                    </span>
+                                </div>
+                            </Button>
+                        ))}
+                    <Button
+                        size="md"
+                        onClick={() => toggleSingleEvaluationModal()}
+                        className="ml-2"
+                        variant="secondary"
+                    >
+                        Close
+                    </Button>
+                </div>
+            </RatingButtonSection>
         </ReactModal>
     );
 };
