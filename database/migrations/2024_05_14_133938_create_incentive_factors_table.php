@@ -640,22 +640,7 @@ return new class extends Migration
                 'upper_limit' => 35000,
                 'incentive_amount_type' => 2,
                 'incentive_amount' => 0
-            ],
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+            ]
         ]);
     }
 
