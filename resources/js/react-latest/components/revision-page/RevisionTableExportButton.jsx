@@ -33,7 +33,7 @@ const RevisionTableExportButton = ({ filter }) => {
                 alignment: {
                     wrapText: true,
                     vertical: "center",
-                    horizontal: "left",
+                    horizontal: "center",
                 },
             };
 
@@ -71,6 +71,15 @@ const RevisionTableExportButton = ({ filter }) => {
                 ) {
                     return " Sales Status";
                 }
+            };
+
+            const revisionDueTo = (d) => {
+                const person = d?.dispute_between
+                    ? d?.sale_person
+                        ? d?.sale_person.name
+                        : d?.task_assign_to.name
+                    : null;
+                return person || "--";
             };
 
             const statusStyle = (data) => {
@@ -113,7 +122,7 @@ const RevisionTableExportButton = ({ filter }) => {
                     },
                 },
                 {
-                    value: d?.client.name ?? "--",
+                    value: d?.client?.name ?? "--",
                     style: fieldStyle,
                 },
                 {
@@ -135,7 +144,7 @@ const RevisionTableExportButton = ({ filter }) => {
                     style: fieldStyle,
                 },
                 {
-                    value: d?.dispute_between,
+                    value: revisionDueTo(d),
                     style: {
                         ...fieldStyle,
                     },
@@ -146,13 +155,13 @@ const RevisionTableExportButton = ({ filter }) => {
                     style: fieldStyle,
                 },
                 {
-                    value: d?.lead_developer.name ?? "--",
+                    value: d?.lead_developer?.name ?? "--",
                     style: {
                         ...fieldStyle,
                     },
                 },
                 {
-                    value: d?.deal_added_by.name ?? "--",
+                    value: d?.deal_added_by?.name ?? "--",
 
                     style: {
                         ...fieldStyle,
