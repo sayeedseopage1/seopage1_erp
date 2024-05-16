@@ -1,4 +1,4 @@
-import { useGetAllCriteriaQuery } from '../../../../services/api/pmSalesApiSlice';
+import { useGetAllCriteriaQuery } from "../../../../services/api/Pm-Sales/pmSalesApiSlice";
 
 const useCriteriaList = () => {
     const { data: criterias } = useGetAllCriteriaQuery()

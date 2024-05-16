@@ -15,7 +15,7 @@ import TypeFilter from './TypeFilter';
 
 import { useUsers } from '../../../../hooks/useUsers.jsx';
 import { useAuth } from '../../../../hooks/useAuth.jsx';
-import { useGetPmCashPointsQuery } from '../../../../services/api/pmSalesApiSlice.js';
+import { useGetPmCashPointsQuery } from '../../../../services/api/Pm-Sales/pmSalesApiSlice.js';
 
 export default function CashPointsFilter({
     setData,

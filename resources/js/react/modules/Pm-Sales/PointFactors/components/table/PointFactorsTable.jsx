@@ -36,8 +36,8 @@ import { useState } from "react";
 import PmPointFactorsTableLoader from "../loader/PmPointFactorsTableLoader";
 import EditFactorModal from "../modal/EditFactorModal";
 import { LimitUnits } from "../../constant";
-import { useGetSinglePmPointFactorQuery, useUpdatePmPointfactorMutation } from "../../../../../services/api/pmSalesApiSlice";
 import { validationFormator } from "../../utils/validationFormator";
+import { useGetSinglePmPointFactorQuery, useUpdatePmPointfactorMutation } from "../../../../../services/api/Pm-Sales/pmSalesApiSlice";
 
 const PointFactorsTable = ({
     isLoading,

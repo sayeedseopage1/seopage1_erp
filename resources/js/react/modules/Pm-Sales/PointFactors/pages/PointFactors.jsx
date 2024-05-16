@@ -4,13 +4,13 @@ import { PointFactorsColumns } from '../components/table/PointFactorsColumns';
 import TopSection from '../components/sectionComponents/TopSection';
 import { AddButton, AddNewSectionCointainer } from '../components/Styles/ui/ui';
 import AddNewItemsModal from '../components/modal/AddNewItemsModal';
-import { useCreatePmPointFactorMutation, useGetFactorsFieldsByCriteriaQuery, useGetPmPointFactorsQuery } from '../../../../services/api/pmSalesApiSlice';
 import { useEffect } from 'react';
 import _ from 'lodash';
 import { toast } from 'react-toastify';
 import useActiveFactorFields from '../hooks/useActiveFactorFields';
 import { validationFormator } from '../utils/validationFormator';
 import { filterNullValues } from '../utils/removeNull';
+import { useCreatePmPointFactorMutation, useGetFactorsFieldsByCriteriaQuery, useGetPmPointFactorsQuery } from '../../../../services/api/Pm-Sales/pmSalesApiSlice';
 // import { HourlyPointFactorsColumns } from '../components/table/HourlyPointFactorsColumns';
 
 const PointFactors = () => {
