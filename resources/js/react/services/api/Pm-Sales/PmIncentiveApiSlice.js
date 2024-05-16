@@ -12,7 +12,7 @@ const pmSalesApiSlice = apiSlice.injectEndpoints({
         }),
         editIncentiveTypes: build.mutation({
             query: ({ id, payload }) => ({
-                url: `/account/incentive-type/${id}/update`,
+                url: `/account/incentive-type/${id}`,
                 method: "PUT",
                 body: payload,
                 headers: {

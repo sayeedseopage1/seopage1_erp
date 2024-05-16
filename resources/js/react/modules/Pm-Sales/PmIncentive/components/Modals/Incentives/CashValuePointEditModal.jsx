@@ -8,12 +8,13 @@ import { toast } from 'react-toastify';
 
 const CashValuePointEditModal = ({ regularIncentiveTypes, antdModalOpen, setAntdModalOpen }) => {
 
-    const [editIncentiveTypes, { isLoading }] = useEditIncentiveTypesMutation()
+    const [editIncentiveTypes, { isLoading: isEditIncentiveTypesLoading }] = useEditIncentiveTypesMutation()
 
     const {
         register,
         handleSubmit,
         watch,
+        reset,
         formState: { errors },
     } = useForm()
 
@@ -26,6 +27,7 @@ const CashValuePointEditModal = ({ regularIncentiveTypes, antdModalOpen, setAntd
             const response = await editIncentiveTypes({ id: regularIncentiveTypes?.id, payload }).unwrap();
             if (response?.status == 200) {
                 toast.success(response.message);
+                reset();
                 setAntdModalOpen(false)
             } else {
                 toast.warning(response.message);
@@ -48,11 +50,15 @@ const CashValuePointEditModal = ({ regularIncentiveTypes, antdModalOpen, setAntd
                         <p className="point_edit_modal_text">Current Value: <span style={{ fontWeight: '500', color: '#000', fontSize: '20px' }}>{regularIncentiveTypes?.cash_value} Taka</span></p>
                         <p>New Value (Taka)</p>
                         {/* include validation with required or other standard HTML validation rules */}
-                        <input className='point_edit_modal_input' type='number' {...register("regularPoint", { required: true })} placeholder='Write here ' />
+                        <input className='point_edit_modal_input' defaultValue={regularIncentiveTypes?.cash_value} type='number' {...register("regularPoint", { required: true })} placeholder='Write here ' />
                         {errors.regularPoint && <span style={{ color: 'red', fontSize: '12px' }}>This field is required</span>}
                     </div>
                     <div className='pay_now_modal_footer'>
-                        <ButtonComponent type='submit' color='#1492E6' textColor='#fff' font='18px'>Save</ButtonComponent>
+                        <ButtonComponent type='submit' color='#1492E6' textColor='#fff' font='18px'>
+                            {
+                                isEditIncentiveTypesLoading ? "Loading..." : "Save"
+                            }
+                        </ButtonComponent>
                     </div>
                 </form>
             </CustomAntdModal>
