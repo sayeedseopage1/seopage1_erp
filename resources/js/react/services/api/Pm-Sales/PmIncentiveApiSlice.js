@@ -10,7 +10,19 @@ const pmSalesApiSlice = apiSlice.injectEndpoints({
             query: () => `/account/incentive-type`,
             providesTags: ["GET_INCENTIVE_TYPE"],
         }),
+        editIncentiveTypes: build.mutation({
+            query: ({ id, payload }) => ({
+                url: `/account/incentive-type/${id}/update`,
+                method: "PUT",
+                body: payload,
+                headers: {
+                    "X-CSRF-TOKEN": _token,
+                },
+            }),
+            invalidatesTags: ["GET_INCENTIVE_TYPE"],
+        }),
     }),
 });
 
-export const { useGetIncentiveTypeQuery } = pmSalesApiSlice;
+export const { useGetIncentiveTypeQuery, useEditIncentiveTypesMutation } =
+    pmSalesApiSlice;

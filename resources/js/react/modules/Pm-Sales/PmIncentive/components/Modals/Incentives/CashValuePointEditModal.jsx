@@ -3,8 +3,12 @@ import CustomAntdModal from '../../ui/CustomAntdModal';
 import PropTypes from "prop-types";
 import { ButtonComponent } from '../../../../PointFactors/components/Styles/ui/ui';
 import { useForm } from 'react-hook-form';
+import { useEditIncentiveTypesMutation } from '../../../../../../services/api/Pm-Sales/PmIncentiveApiSlice';
+import { toast } from 'react-toastify';
 
 const CashValuePointEditModal = ({ regularIncentiveTypes, antdModalOpen, setAntdModalOpen }) => {
+
+    const [editIncentiveTypes, { isLoading }] = useEditIncentiveTypesMutation()
 
     const {
         register,
@@ -13,8 +17,22 @@ const CashValuePointEditModal = ({ regularIncentiveTypes, antdModalOpen, setAntd
         formState: { errors },
     } = useForm()
 
-    const onSubmit = (data) => {
-        console.log(data)
+    const onSubmit = async (data) => {
+        try {
+            const payload = {
+                title: regularIncentiveTypes?.title,
+                cash_value: data.regularPoint
+            }
+            const response = await editIncentiveTypes({ id: regularIncentiveTypes?.id, payload }).unwrap();
+            if (response?.status == 200) {
+                toast.success(response.message);
+                setAntdModalOpen(false)
+            } else {
+                toast.warning(response.message);
+            }
+        } catch (error) {
+            toast.error("Failed to update");
+        }
     }
 
     return (
