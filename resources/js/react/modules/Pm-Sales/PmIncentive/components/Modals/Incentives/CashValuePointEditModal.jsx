@@ -4,7 +4,7 @@ import PropTypes from "prop-types";
 import { ButtonComponent } from '../../../../PointFactors/components/Styles/ui/ui';
 import { useForm } from 'react-hook-form';
 
-const CashValuePointEditModal = ({ antdModalOpen, setAntdModalOpen }) => {
+const CashValuePointEditModal = ({ regularIncentiveTypes, antdModalOpen, setAntdModalOpen }) => {
 
     const {
         register,
@@ -27,7 +27,7 @@ const CashValuePointEditModal = ({ antdModalOpen, setAntdModalOpen }) => {
                 <form onSubmit={handleSubmit(onSubmit)}>
                     <h4 className="point_edit_modal_title">Cash value for every regular point:</h4>
                     <div className='point_edit_modal_content'>
-                        <p className="point_edit_modal_text">Current Value: <span style={{ fontWeight: '500', color: '#000', fontSize: '20px' }}>20 Taka</span></p>
+                        <p className="point_edit_modal_text">Current Value: <span style={{ fontWeight: '500', color: '#000', fontSize: '20px' }}>{regularIncentiveTypes?.cash_value} Taka</span></p>
                         <p>New Value (Taka)</p>
                         {/* include validation with required or other standard HTML validation rules */}
                         <input className='point_edit_modal_input' type='number' {...register("regularPoint", { required: true })} placeholder='Write here ' />
