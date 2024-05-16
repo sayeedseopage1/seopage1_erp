@@ -218,10 +218,18 @@ class PMGoal extends Command
             $goal_end_date = Carbon::parse($goal_check->goal_end_date)->subDays(1);
             $goal_ext_end_date = Carbon::parse($goal_check->extended_goal_end_day)->subDays(1);
             if($goal_check->goal_end_date >= $currentTime && $goal_end_date <=$currentTime || $goal_check->extended_goal_end_day >= $currentTime && $goal_ext_end_date <=$currentTime){
-                $helper = new HelperPendingActionController();
-                $helper->PmGoalBeforeExpireCheck($goal_check);
-                $user  = User::where('id',$goal_check->pm_id)->first();
-                Notification::send($user, new PmGoalBeforeExpireNotification($goal_check));
+                $difference_in_hours = $currentTime->diffInHours($goal_end_date);
+                $difference_in_hours = $currentTime->diffInHours($goal_ext_end_date);
+                $difference_in_hours += 1;
+                if( $difference_in_hours <= 24)
+                {
+                    if($goal_check->mail_status == 0){
+                        $helper = new HelperPendingActionController();
+                        $helper->PmGoalBeforeExpireCheck($goal_check, $difference_in_hours);
+                        $user  = User::where('id',$goal_check->pm_id)->first();
+                        Notification::send($user, new PmGoalBeforeExpireNotification($goal_check));
+                    }
+                }
             }
             /**WHEN GOAL DEADLINE OVER*/
             $current_date = now();
@@ -231,10 +239,12 @@ class PMGoal extends Command
                 $goal_end_date = Carbon::parse($goal_check->extended_goal_end_day)->addHours(24);
             }
             if($goal_check->goal_status ==0 && $goal_check->goal_end_date <= $current_date){
-            $helper = new HelperPendingActionController();
-            $helper->PmGoalDeadlineCheck(ProjectPmGoal::where('id',$goal->id)->first());
-            $user = User::where('id',$goal_check->pm_id)->get();
-                Notification::send($user, new PmGoalMissNotification($goal_check));
+                if($goal_check->mail_status == 1 || $goal_check->mail_status == 0){
+                    $helper = new HelperPendingActionController();
+                    $helper->PmGoalDeadlineCheck(ProjectPmGoal::where('id',$goal->id)->first());
+                    $user = User::where('id',$goal_check->pm_id)->get();
+                    Notification::send($user, new PmGoalMissNotification($goal_check));
+                }
             }
             
         }

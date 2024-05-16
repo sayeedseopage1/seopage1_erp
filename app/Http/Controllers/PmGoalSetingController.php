@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Models\PmGoalSetting;
+use App\Models\Project;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 
@@ -23,7 +24,10 @@ class PmGoalSetingController extends AccountBaseController
      */
     public function index()
     {
-        $this->pm_goals = PmGoalSetting::all();
+        $this->pmGoalFixed = PmGoalSetting::where('project_type', 'fixed')->get();
+        $this->pmGoalHourly = PmGoalSetting::where('project_type', 'hourly')->get();
+        $this->categories = Project::$categories;
+        // dd($this->data);
         return view('pm-goal-setting.index',$this->data);
     }
 
@@ -79,14 +83,20 @@ class PmGoalSetingController extends AccountBaseController
      */
     public function update(Request $request, $id)
     {
-        // 
+        //
     }
 
     public function pmGoalUpdate(Request $request){
+
+        $request->validate([
+            'id' => 'required',
+            'initial_value' => 'required',
+            'end_value' => 'required',
+        ]);
+
         $pmGoal = PmGoalSetting::where('id',$request->id)->first();
         $pmGoal->initial_value = $request->initial_value;
         $pmGoal->end_value = $request->end_value;
-        $pmGoal->no_of_goal = $request->no_of_goal;
         $pmGoal->save();
 
         return response()->json([

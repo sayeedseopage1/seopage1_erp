@@ -314,9 +314,37 @@
             @yield('content')
             @if (Auth::user()->role_id == 4 && !Request::is('account/contracts/*') && !Request::is('account/deals/*'))
                 @php
+                    $now = \Carbon\Carbon::now()->toDateTimeString();
                     $deal_id = App\Models\Deal::where('status', 'pending')
                         ->orderBy('id', 'asc')
                         ->where('pm_id', Auth::id())
+                        ->where('is_drafted', 0)
+                        ->where(function ($query) use ($now) {
+                            $query->where('authorization_status', 1)
+                                ->orWhere(function ($subquery) use ($now) {
+                                    $subquery->where('authorization_status', 2)
+                                        ->where(function ($innerSubquery) use ($now) {
+                                            $innerSubquery->whereRaw('
+                                                (
+                                                    (
+                                                        (TIME(released_at) >= "23:30" OR TIME(released_at) < "07:00")
+                                                        AND (DATE(released_at) < CURDATE())
+                                                    )
+                                                    OR
+                                                    (
+                                                        (TIME(released_at) >= "23:30" OR TIME(released_at) < "07:00")
+                                                        AND TIME(?) >= "10:00"
+                                                    )
+                                                    OR
+                                                    (
+                                                        TIME(released_at) >= "07:00" AND TIME(released_at) < "23:30"
+                                                        AND TIMESTAMPDIFF(SECOND, released_at, ?) > ?
+                                                    )
+                                                )
+                                            ', [$now, $now, (180 * 60)]);
+                                        });
+                                });
+                        })
                         ->get();
                 @endphp
                 @if (count($deal_id) > 0)
@@ -361,8 +389,37 @@
             @endif
             @if (Auth::user()->role_id == 1 && !Request::is('account/contracts/*') && !Request::is('account/deals/*'))
                 @php
+                    $now = \Carbon\Carbon::now()->toDateTimeString();
                     $deal_id = App\Models\Deal::where('status', 'pending')
                         ->orderBy('id', 'asc')
+                        ->where('pm_id', Auth::id())
+                        ->where('is_drafted', 0)
+                        ->where(function ($query) use ($now) {
+                            $query->where('authorization_status', 1)
+                                ->orWhere(function ($subquery) use ($now) {
+                                    $subquery->where('authorization_status', 2)
+                                        ->where(function ($innerSubquery) use ($now) {
+                                            $innerSubquery->whereRaw('
+                                                (
+                                                    (
+                                                        (TIME(released_at) >= "23:30" OR TIME(released_at) < "07:00")
+                                                        AND (DATE(released_at) < CURDATE())
+                                                    )
+                                                    OR
+                                                    (
+                                                        (TIME(released_at) >= "23:30" OR TIME(released_at) < "07:00")
+                                                        AND TIME(?) >= "10:00"
+                                                    )
+                                                    OR
+                                                    (
+                                                        TIME(released_at) >= "07:00" AND TIME(released_at) < "23:30"
+                                                        AND TIMESTAMPDIFF(SECOND, released_at, ?) > ?
+                                                    )
+                                                )
+                                            ', [$now, $now, (180 * 60)]);
+                                        });
+                                });
+                        })
                         ->get();
                 @endphp
                 @if (count($deal_id) > 0)

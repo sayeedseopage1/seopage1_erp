@@ -47,7 +47,7 @@ class PmGoalReviewExplanationNotification extends Notification
 
         $goal= ProjectPmGoal::where('id',$this->ppg->id)->first();
         $project= Project::where('id',$goal->project_id)->first();
-        $url = url('/account/project-status?modal_type=review_explanation&project_id=' . $project->id);
+        $url = url('/account/project-status?modal_type=filtered_goal_details&goal_id=' . $goal->id. '&project_id='.$project->id);
         $client= User::where('id',$goal->client_id)->first();
         $pm= User::where('id',$goal->pm_id)->first();
 
@@ -67,9 +67,9 @@ class PmGoalReviewExplanationNotification extends Notification
         }
         
         $greet= '<p><b style="color: black">'  . '<span style="color:black">'.'Hi '. $notifiable->name. ','.'</span>'.'</b></p>';
-        $header = '<strong>' . __('PM'.$pm->name.': '.$goal_count.' goal for client ' . $client->name . ' was not met! Add your rating!') . '</strong>';
+        $header = '<strong>' . __('PM '.$pm->name.': '.$goal_count.' goal for client ' . $client->name . ' was not met! Add your rating!') . '</strong>';
 
-        $body= '<p>'.'PM'.$pm->name.'couldn’t meet his goal. Please check the details below:'.'</p>';
+        $body= '<p>'.'PM'. $pm->name .' couldn’t meet his goal. Please check the details below:'.'</p>';
         $content =
         '<p>
             <b style="color: black">' . __('Project name') . ': '.'</b>' . '<a href="'.route('projects.show',$project->id).'">'.$project->project_name . '
@@ -89,11 +89,11 @@ class PmGoalReviewExplanationNotification extends Notification
         '<p>
             <b style="color: black">' . __('Goal description') . ': '.'</b>' . '<span>'.$goal->description.'</span>'. '
         </p>';
-        $goal->mail_status = 1;
+        $goal->mail_status = 3;
         $goal->save();
 
           return (new MailMessage)
-          ->subject(__('PM'.$pm->name.': '.$goal_count.' goal for client ' . $client->name . ' was not met! Add your rating!') )
+          ->subject(__('PM '.$pm->name.': '.$goal_count.' goal for client ' . $client->name . ' was not met! Add your rating!') )
 
           ->greeting(__('email.Hi') . ' ' . mb_ucwords($notifiable->name) . ',')
           ->markdown('mail.pm-goal.review_explanation', ['url' => $url, 'greet'=> $greet,'content' => $content, 'body'=> $body,'header'=>$header, 'name' => mb_ucwords($notifiable->name)]);

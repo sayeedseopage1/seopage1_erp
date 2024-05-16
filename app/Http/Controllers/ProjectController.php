@@ -137,6 +137,7 @@ use App\Notifications\UpdateClientFormNotification;
 use App\Notifications\UpdateClientProductCategoryNotification;
 use App\Notifications\UpdateClientProductDescriptionNotification;
 use App\Models\ProjectPmGoal;
+use Exception;
 
 class ProjectController extends AccountBaseController
 {
@@ -163,7 +164,7 @@ class ProjectController extends AccountBaseController
     {
         $viewPermission = user()->permission('view_projects');
         abort_403(!in_array($viewPermission, ['all', 'added', 'owned', 'both']));
-        if(Auth::user()->role_id == 6 || Auth::user()->role_id == 13){
+        if (Auth::user()->role_id == 6 || Auth::user()->role_id == 13) {
             abort(403);
         }
 
@@ -197,14 +198,14 @@ class ProjectController extends AccountBaseController
         //             }else{
         //                 $goal_end_date = Carbon::parse($item->goal_end_date)->addHours(24);
         //             }
-        //             if (Auth::user()->id == $item->pm_id && $current_date->gte($goal_end_date) && $item->goal_status == 0 && $item->reason == null) { 
-        //                 return view('projects.ajax.goale_alert', $this->data); 
+        //             if (Auth::user()->id == $item->pm_id && $current_date->gte($goal_end_date) && $item->goal_status == 0 && $item->reason == null) {
+        //                 return view('projects.ajax.goale_alert', $this->data);
         //             }
         //         }
         //     }
         // }
         /** PROJECT MANAGER GOAL FUNCTION END */
-        
+
         return $dataTable->render('projects.index', $this->data);
     }
     public function ProjectOverviewFilter(Request $request)
@@ -595,6 +596,9 @@ class ProjectController extends AccountBaseController
             ->withTrashed()
             ->findOrFail($id)
             ->withCustomFields();
+        $deal = Deal::where('id', $this->project->deal_id)->first();
+        // if($deal->is_drafted == 1 || ($deal->authorization_status == 2 && Carbon::now()->diffInMinutes($deal->released_at) < 180)) abort_403(true);
+        if ($deal->is_drafted == 1 || ($deal->authorization_status == 2 && Carbon::now()->diffInSeconds($deal->released_at) < 10800)) abort_403(true);
 
         $memberIds = $this->project->members->pluck('user_id')->toArray();
 
@@ -763,27 +767,26 @@ class ProjectController extends AccountBaseController
         $dispute->save();
         $project = Project::find($dispute->project_id);
 
-        $actions = PendingAction::where('code','DSA')->where('past_status',0)->where('project_id',$project->id)->get();
-        if($actions != null)
-        {
-        foreach ($actions as $key => $action) {
+        $actions = PendingAction::where('code', 'DSA')->where('past_status', 0)->where('project_id', $project->id)->get();
+        if ($actions != null) {
+            foreach ($actions as $key => $action) {
 
-                $action->authorized_by= Auth::id();
-                $action->authorized_at= Carbon::now();
+                $action->authorized_by = Auth::id();
+                $action->authorized_at = Carbon::now();
                 $action->past_status = 1;
                 $action->save();
-                $project_manager= User::where('id',$project->pm_id)->first();
-                $client= User::where('id',$project->client_id)->first();
-                $authorize_by= User::where('id',$action->authorized_by)->first();
+                $project_manager = User::where('id', $project->pm_id)->first();
+                $client = User::where('id', $project->client_id)->first();
+                $authorize_by = User::where('id', $action->authorized_by)->first();
 
-                $past_action= new PendingActionPast();
+                $past_action = new PendingActionPast();
                 $past_action->item_name = $action->item_name;
                 $past_action->code = $action->code;
                 $past_action->serial = $action->serial;
                 $past_action->action_id = $action->id;
                 $past_action->heading = $action->heading;
-                $past_action->message = $action->message. ' submitted by <a href="'.route('employees.show',$authorize_by->id).'">'.$authorize_by->name.'</a>';
-             //   $past_action->button = $action->button;
+                $past_action->message = $action->message . ' submitted by <a href="' . route('employees.show', $authorize_by->id) . '">' . $authorize_by->name . '</a>';
+                //   $past_action->button = $action->button;
                 $past_action->timeframe = $action->timeframe;
                 $past_action->authorization_for = $action->authorization_for;
                 $past_action->authorized_by = $action->authorized_by;
@@ -795,16 +798,14 @@ class ProjectController extends AccountBaseController
                 $past_action->client_id = $action->client_id;
                 $past_action->milestone_id = $action->milestone_id;
                 $past_action->save();
-
-
+            }
         }
-    }
         $helper = new HelperPendingActionController();
 
 
         $helper->DisputeFormAuthorization($project);
 
-       
+
         $project->save();
         $users = User::where('role_id', 1)->get();
         foreach ($users as $user) {
@@ -874,7 +875,8 @@ class ProjectController extends AccountBaseController
     }
 
 
-    public function storeDisputeAuthorization(Request $request){
+    public function storeDisputeAuthorization(Request $request)
+    {
         $validator =  $request->validate([
             'dispute_admin_comment' => 'required',
 
@@ -886,35 +888,34 @@ class ProjectController extends AccountBaseController
         $project->dispute_admin_comment = $request->dispute_admin_comment;
         $project->status = 'canceled';
         $project->save();
-        $project_milestones= ProjectMilestone::where('project_id',$project->id)->where('status','incomplete')->get();
+        $project_milestones = ProjectMilestone::where('project_id', $project->id)->where('status', 'incomplete')->get();
         foreach ($project_milestones as $milestone) {
-            $milestone_update= ProjectMilestone::find($milestone->id);
-            $milestone_update->status ='canceled';
+            $milestone_update = ProjectMilestone::find($milestone->id);
+            $milestone_update->status = 'canceled';
             $milestone_update->save();
             # code...
         }
 
-        $actions = PendingAction::where('code','DFA')->where('past_status',0)->where('project_id',$project->id)->get();
-        if($actions != null)
-        {
-        foreach ($actions as $key => $action) {
+        $actions = PendingAction::where('code', 'DFA')->where('past_status', 0)->where('project_id', $project->id)->get();
+        if ($actions != null) {
+            foreach ($actions as $key => $action) {
 
-                $action->authorized_by= Auth::id();
-                $action->authorized_at= Carbon::now();
+                $action->authorized_by = Auth::id();
+                $action->authorized_at = Carbon::now();
                 $action->past_status = 1;
                 $action->save();
-                $project_manager= User::where('id',$project->pm_id)->first();
-                $client= User::where('id',$project->client_id)->first();
-                $authorize_by= User::where('id',$action->authorized_by)->first();
+                $project_manager = User::where('id', $project->pm_id)->first();
+                $client = User::where('id', $project->client_id)->first();
+                $authorize_by = User::where('id', $action->authorized_by)->first();
 
-                $past_action= new PendingActionPast();
+                $past_action = new PendingActionPast();
                 $past_action->item_name = $action->item_name;
                 $past_action->code = $action->code;
                 $past_action->serial = $action->serial;
                 $past_action->action_id = $action->id;
                 $past_action->heading = $action->heading;
-                $past_action->message = 'Dispute form for <a href="'.route('projects.show',$project->id).'">'.$project->project_name.'</a> from Client <a href="'.route('clients.show',$client->id).'">'.$client->name.'</a> required authorization(Project manager: <a href="'.route('employees.show',$project_manager->id).'">'.$project_manager->name.'</a>) was authorized by <a href="'.route('employees.show',$authorize_by->id).'">'.$authorize_by->name.'</a>';
-             //   $past_action->button = $action->button;
+                $past_action->message = 'Dispute form for <a href="' . route('projects.show', $project->id) . '">' . $project->project_name . '</a> from Client <a href="' . route('clients.show', $client->id) . '">' . $client->name . '</a> required authorization(Project manager: <a href="' . route('employees.show', $project_manager->id) . '">' . $project_manager->name . '</a>) was authorized by <a href="' . route('employees.show', $authorize_by->id) . '">' . $authorize_by->name . '</a>';
+                //   $past_action->button = $action->button;
                 $past_action->timeframe = $action->timeframe;
                 $past_action->authorization_for = $action->authorization_for;
                 $past_action->authorized_by = $action->authorized_by;
@@ -926,12 +927,10 @@ class ProjectController extends AccountBaseController
                 $past_action->client_id = $action->client_id;
                 $past_action->milestone_id = $action->milestone_id;
                 $past_action->save();
-
-
+            }
         }
-    }
 
-        return response()->json(['status'=>400]);
+        return response()->json(['status' => 400]);
     }
 
 
@@ -943,10 +942,9 @@ class ProjectController extends AccountBaseController
      */
     public function update(UpdateProject $request, $id)
     {
-
-
+        DB::beginTransaction();
         //kpi distribution start from here
-      //  DB::beginTransaction();
+        //  DB::beginTransaction();
         $find_project_id = Project::where('id', $id)->first();
         $find_deal_id = Deal::where('id', $find_project_id->deal_id)->first();
         $dealStage = DealStage::where('short_code', $find_deal_id->deal_id)->first();
@@ -995,7 +993,6 @@ class ProjectController extends AccountBaseController
                     $point->total_points_earn = $cash_points_qualified->total_points_earn + ($project_budget * $kpi->qualify) / 100;
                 } else {
                     $point->total_points_earn =  ($project_budget * $kpi->qualify) / 100;
-
                 }
                 $point->save();
 
@@ -1018,7 +1015,6 @@ class ProjectController extends AccountBaseController
                     $point->total_points_earn = $cash_points_requirements_defined->total_points_earn + ($project_budget * $kpi->requirements_defined) / 100;
                 } else {
                     $point->total_points_earn =  ($project_budget * $kpi->requirements_defined) / 100;
-
                 }
                 $point->save();
 
@@ -1041,7 +1037,6 @@ class ProjectController extends AccountBaseController
                     $point->total_points_earn = $cash_points_proposal_made->total_points_earn + ($project_budget * $kpi->proposal_made) / 100;
                 } else {
                     $point->total_points_earn =  ($project_budget * $kpi->proposal_made) / 100;
-
                 }
                 $point->save();
 
@@ -1063,7 +1058,6 @@ class ProjectController extends AccountBaseController
                     $point->total_points_earn = $cash_points_negotiation_started->total_points_earn + ($project_budget * $kpi->negotiation_started) / 100;
                 } else {
                     $point->total_points_earn =  ($project_budget * $kpi->negotiation_started) / 100;
-
                 }
                 $point->save();
 
@@ -1129,37 +1123,35 @@ class ProjectController extends AccountBaseController
                 } else {
                     $point->total_points_earn =
                         ($project_budget * $kpi->contact_form) / 100;
-
                 }
                 $point->save();
-                if($find_deal_id->authorization_status == 1)
-                {
+                if ($find_deal_id->authorization_status == 1) {
 
-                $team_lead= User::where('role_id',8)->first();
-                $earned_point= ($project_budget*$kpi->authorized_by_leader)/100;
-                $cash_points_team_lead= Cashpoint::where('user_id',$team_lead->id)->sum('points');
-               // dd($cash_points_team_lead);
-                $point= new CashPoint();
-                $point->user_id= $team_lead->id;
-                $point->project_id= $find_project_id->id;
-                $point->activity= '<a style="color:blue" href="'.route('employees.show',$team_lead->id).'">'.$team_lead->name .
-                    '</a> authorized the deal : <a style="color:blue" href="'.route('projects.show',$find_project_id->id).'">'
-                    .$find_project_id->project_name. '</a>, Client: <a style="color:blue" href="'.route('clients.show',$find_project_id->client_id).'">'.
-                    $find_project_id->client_name->name .'</a> (Accepted By PM(' . $kpi->authorized_by_leader . '%))';
+                    $team_lead = User::where('role_id', 8)->first();
+                    $earned_point = ($project_budget * $kpi->authorized_by_leader) / 100;
+                    $cash_points_team_lead = Cashpoint::where('user_id', $team_lead->id)->sum('points');
+                    // dd($cash_points_team_lead);
+                    $point = new CashPoint();
+                    $point->user_id = $team_lead->id;
+                    $point->project_id = $find_project_id->id;
+                    $point->activity = '<a style="color:blue" href="' . route('employees.show', $team_lead->id) . '">' . $team_lead->name .
+                        '</a> authorized the deal : <a style="color:blue" href="' . route('projects.show', $find_project_id->id) . '">'
+                        . $find_project_id->project_name . '</a>, Client: <a style="color:blue" href="' . route('clients.show', $find_project_id->client_id) . '">' .
+                        $find_project_id->client_name->name . '</a> (Accepted By PM(' . $kpi->authorized_by_leader . '%))';
 
-                $point->gained_as = "Individual";
-                $point->points= $earned_point;
-                $point->type = 'Authorization Bonus';
+                    $point->gained_as = "Individual";
+                    $point->points = $earned_point;
+                    $point->type = 'Authorization Bonus';
 
-                if ($cash_points_team_lead != null) {
-                    $point->total_points_earn=$cash_points_team_lead+ $earned_point/100;
-                } else {
-                    $point->total_points_earn= $earned_point/100;
+                    if ($cash_points_team_lead != null) {
+                        $point->total_points_earn = $cash_points_team_lead + $earned_point / 100;
+                    } else {
+                        $point->total_points_earn = $earned_point / 100;
+                    }
+
+                    $point->save();
                 }
-
-                $point->save();
-            }
-          //  dd($point);
+                //  dd($point);
                 // if ($find_deal_id->authorization_status == 1) {
                 //     $earned_point = ($kpi->authorized_by_leader * $project_budget) / 100;
 
@@ -1208,7 +1200,6 @@ class ProjectController extends AccountBaseController
                             $point->total_points_earn = $cash_points->total_points_earn + $bonus_point * 24 / 100;
                         } else {
                             $point->total_points_earn =  $bonus_point * 24 / 100;
-
                         }
                         $point->save();
                         // dd($point);
@@ -1234,7 +1225,6 @@ class ProjectController extends AccountBaseController
                         $point->total_points_earn = $cash_points_qualified->total_points_earn + $bonus_point * 4 / 100;
                     } else {
                         $point->total_points_earn =  $bonus_point * 4 / 100;
-
                     }
                     $point->save();
 
@@ -1259,7 +1249,6 @@ class ProjectController extends AccountBaseController
                         $point->total_points_earn = $cash_points_requirements_defined->total_points_earn + $bonus_point * 17 / 100;
                     } else {
                         $point->total_points_earn = $bonus_point * 17 / 100;
-
                     }
                     $point->save();
 
@@ -1284,7 +1273,6 @@ class ProjectController extends AccountBaseController
                         $point->total_points_earn = $cash_points_proposal_made->total_points_earn + $bonus_point * 12 / 100;
                     } else {
                         $point->total_points_earn =  $bonus_point * 12 / 100;
-
                     }
                     $point->save();
 
@@ -1308,7 +1296,6 @@ class ProjectController extends AccountBaseController
                         $point->total_points_earn = $cash_points_negotiation_started->total_points_earn + $bonus_point * 12 / 100;
                     } else {
                         $point->total_points_earn =  $bonus_point * 12 / 100;
-
                     }
                     $point->save();
 
@@ -1336,7 +1323,6 @@ class ProjectController extends AccountBaseController
                                 $bonus_point * 14 / 100;
                         }
                         $point->save();
-
                     }
                     $deal_id = Deal::where('id', $find_deal_id->id)->first();
                     //dd($deal_id);
@@ -1390,11 +1376,11 @@ class ProjectController extends AccountBaseController
                         $point->save();
 
                         CashPoint::where('user_id', $total_points->user_id)->where('type', 'Single Deal Bonus')->delete();
-                        $updated_total_points=  CashPoint::where('user_id', $total_points->user_id)->orderBy('id','desc')->first();
-                        $total_points=  CashPoint::where('user_id', $total_points->user_id)->sum('points');
-                       // dd($total_points,$point);
-                        $point_update= CashPoint::find($updated_total_points->id);
-                        $point_update->total_points_earn = $point->total_points_earn- $point->points;
+                        $updated_total_points =  CashPoint::where('user_id', $total_points->user_id)->orderBy('id', 'desc')->first();
+                        $total_points =  CashPoint::where('user_id', $total_points->user_id)->sum('points');
+                        // dd($total_points,$point);
+                        $point_update = CashPoint::find($updated_total_points->id);
+                        $point_update->total_points_earn = $point->total_points_earn - $point->points;
                         $point_update->save();
                     }
 
@@ -1410,261 +1396,6 @@ class ProjectController extends AccountBaseController
                 //     // / dd($currentMonth);
                 $monthly_deal = Deal::whereMonth('created_at', $currentMonth)->sum('amount');
 
-                // need to check shift wise
-
-                // if ($monthly_deal > $kpi->after && $monthly_deal >= $monthly_deal + $kpi->additional_sales_amount) {
-
-                //     $project_budget_additional = $kpi->additional_sales_amount;
-
-                //     if ($find_deal_id->lead_id != null) {
-                //         $lead = Lead::where('id', $find_deal_id->lead_id)->first();
-                //         $user_name = User::where('id', $lead->added_by)->first();
-                //         $cash_points = CashPoint::where('user_id', $lead->added_by)->orderBy('id', 'desc')->first();
-                //         $point = new CashPoint();
-                //         $point->user_id = $lead->added_by;
-                //         $point->project_id = $find_project_id->id;
-                //         $point->bonus_type = "Bonus";
-                //         $point->activity = '<a style="color:blue" href="' . route('employees.show', $user_name->id) . '">' . $user_name->name . '</a> created the bid Project : <a style="color:blue" href="' . route('projects.show', $find_project_id->id) . '">' . $find_project_id->project_name . '</a>, Client: <a style="color:blue" href="' . route('clients.show', $find_project_id->client_id) . '">' . $find_project_id->client_name->name . '</a>Additional milestone reach ' . $kpi->after_reach_amount . '%';
-                //         $point->gained_as = "Individual";
-                //         $point->points = ($project_budget_additional * $kpi->the_bidder) / 100;
-
-                //         if ($cash_points != null) {
-
-                //             $point->total_points_earn = $cash_points->total_points_earn + ($project_budget_additional * $kpi->the_bidder) / 100;
-                //         } else {
-                //             $point->total_points_earn =  ($project_budget_additional * $kpi->the_bidder) / 100;
-
-                //         }
-                //         $point->save();
-                //         // dd($point);
-
-                //     }
-
-                //     $deal_qualified = DealStageChange::where('deal_id', $find_deal_id->deal_id)->where('deal_stage_id', 1)->first();
-
-
-                //     $user_name = User::where('id', $deal_qualified->updated_by)->first();
-                //     $cash_points_qualified = CashPoint::where('user_id', $user_name->id)->orderBy('id', 'desc')->first();
-                //     $point = new CashPoint();
-                //     $point->user_id = $deal_qualified->updated_by;
-                //     $point->project_id = $find_project_id->id;
-                //     $point->bonus_type = "Bonus";
-                //     $point->activity = '<a style="color:blue" href="' . route('employees.show', $user_name->id) . '">' . $user_name->name . '</a> made the deal qualify deal Project : <a style="color:blue" href="' . route('projects.show', $find_project_id->id) . '">' . $find_project_id->project_name . '</a>, Client: <a style="color:blue" href="' . route('clients.show', $find_project_id->client_id) . '">' . $find_project_id->client_name->name . '</a>Additional milestone reach ' . $kpi->after_reach_amount . '%';
-                //     $point->gained_as = "Individual";
-                //     $point->points = ($project_budget_additional * $kpi->qualify) / 100;
-
-                //     if ($cash_points_qualified != null) {
-
-                //         $point->total_points_earn = $cash_points_qualified->total_points_earn + ($project_budget_additional * $kpi->qualify) / 100;
-                //     } else {
-                //         $point->total_points_earn =  ($project_budget_additional * $kpi->qualify) / 100;
-
-                //     }
-                //     $point->save();
-
-
-
-
-                //     $deal_short_code = DealStageChange::where('deal_id', $find_deal_id->deal_id)->where('deal_stage_id', 2)->first();
-
-                //     $user_name = User::where('id', $deal_short_code->updated_by)->first();
-                //     $cash_points_requirements_defined = CashPoint::where('user_id', $user_name->id)->orderBy('id', 'desc')->first();
-                //     $point = new CashPoint();
-                //     $point->user_id = $deal_short_code->updated_by;
-                //     $point->project_id = $find_project_id->id;
-                //     $point->bonus_type = "Bonus";
-                //     $point->activity = '<a style="color:blue" href="' . route('employees.show', $user_name->id) . '">' . $user_name->name . '</a> made the deal requirements defined Project : <a style="color:blue" href="' . route('projects.show', $find_project_id->id) . '">' . $find_project_id->project_name . '</a>, Client: <a style="color:blue" href="' . route('clients.show', $find_project_id->client_id) . '">' . $find_project_id->client_name->name . '</a>Additional milestone reach ' . $kpi->after_reach_amount . '%';
-                //     $point->gained_as = "Individual";
-                //     $point->points = ($project_budget_additional * $kpi->requirements_defined) / 100;
-
-                //     if ($cash_points_requirements_defined != null) {
-
-                //         $point->total_points_earn = $cash_points_requirements_defined->total_points_earn + ($project_budget_additional * $kpi->requirements_defined) / 100;
-                //     } else {
-                //         $point->total_points_earn =  ($project_budget_additional * $kpi->requirements_defined) / 100;
-
-                //     }
-                //     $point->save();
-
-
-
-
-
-                //     $deal_proposal = DealStageChange::where('deal_id', $find_deal_id->deal_id)->where('deal_stage_id', 3)->first();
-                //     $user_name = User::where('id', $deal_proposal->updated_by)->first();
-                //     $cash_points_proposal_made = CashPoint::where('user_id', $user_name->id)->orderBy('id', 'desc')->first();
-                //     $point = new CashPoint();
-                //     $point->user_id = $deal_proposal->updated_by;
-                //     $point->project_id = $find_project_id->id;
-                //     $point->bonus_type = "Bonus";
-                //     $point->activity = '<a style="color:blue" href="' . route('employees.show', $user_name->id) . '">' . $user_name->name . '</a> created the proposal Project : <a style="color:blue" href="' . route('projects.show', $find_project_id->id) . '">' . $find_project_id->project_name . '</a>, Client: <a style="color:blue" href="' . route('clients.show', $find_project_id->client_id) . '">' . $find_project_id->client_name->name . '</a>Additional milestone reach ' . $kpi->after_reach_amount . '%';
-                //     $point->gained_as = "Individual";
-                //     $point->points = ($project_budget_additional * $kpi->proposal_made) / 100;
-
-                //     if ($cash_points_proposal_made != null) {
-
-                //         $point->total_points_earn = $cash_points_proposal_made->total_points_earn + ($project_budget_additional * $kpi->proposal_made) / 100;
-                //     } else {
-                //         $point->total_points_earn =  ($project_budget_additional * $kpi->proposal_made) / 100;
-
-                //     }
-                //     $point->save();
-
-
-
-
-                //     $deal_negotiation_started = DealStageChange::where('deal_id', $find_deal_id->deal_id)->where('deal_stage_id', 4)->first();
-                //     $user_name = User::where('id', $deal_negotiation_started->updated_by)->first();
-                //     $cash_points_negotiation_started = CashPoint::where('user_id', $user_name->id)->orderBy('id', 'desc')->first();
-                //     $point = new CashPoint();
-                //     $point->user_id = $deal_negotiation_started->updated_by;
-                //     $point->project_id = $find_project_id->id;
-                //     $point->activity = '<a style="color:blue" href="' . route('employees.show', $user_name->id) . '">' . $user_name->name . '</a> started negotiation started Project : <a style="color:blue" href="' . route('projects.show', $find_project_id->id) . '">' . $find_project_id->project_name . '</a>, Client: <a style="color:blue" href="' . route('clients.show', $find_project_id->client_id) . '">' . $find_project_id->client_name->name . '</a>Additional milestone reach ' . $kpi->after_reach_amount . '%';
-                //     $point->gained_as = "Individual";
-                //     $point->bonus_type = "Bonus";
-                //     $point->points = ($project_budget_additional * $kpi->negotiation_started) / 100;
-
-                //     if ($cash_points_negotiation_started != null) {
-
-                //         $point->total_points_earn = $cash_points_negotiation_started->total_points_earn + ($project_budget_additional * $kpi->negotiation_started) / 100;
-                //     } else {
-                //         $point->total_points_earn =  ($project_budget_additional * $kpi->negotiation_started) / 100;
-
-                //     }
-                //     $point->save();
-
-
-
-
-
-                //     $deal_milestone_breakdown = DealStageChange::where('deal_id', $find_deal_id->deal_id)->where('deal_stage_id', 5)->first();
-                //     if ($deal_milestone_breakdown != null) {
-                //         $user_name = User::where('id', $deal_milestone_breakdown->updated_by)->first();
-
-                //         $cash_points_milestone_breakdown = CashPoint::where('user_id', $user_name->id)->orderBy('id', 'desc')->first();
-                //         $point = new CashPoint();
-                //         $point->user_id = $deal_milestone_breakdown->updated_by;
-                //         $point->project_id = $find_project_id->id;
-                //         $point->activity = '<a style="color:blue" href="' . route('employees.show', $user_name->id) . '">' . $user_name->name . '</a> created the milestone breakdown Project : <a style="color:blue" href="' . route('projects.show', $find_project_id->id) . '">' . $find_project_id->project_name . '</a>, Client: <a style="color:blue" href="' . route('clients.show', $find_project_id->client_id) . '">' . $find_project_id->client_name->name . '</a>Additional milestone reach ' . $kpi->after_reach_amount . '%';
-                //         $point->gained_as = "Individual";
-                //         $point->bonus_type = "Bonus";
-                //         $point->points = ($project_budget_additional * $kpi->milestone_breakdown) / 100;
-
-                //         if ($cash_points_milestone_breakdown != null) {
-
-                //             $point->total_points_earn = $cash_points_milestone_breakdown->total_points_earn + ($project_budget_additional * $kpi->milestone_breakdown) / 100;
-                //         } else {
-                //             $point->total_points_earn =
-                //                 ($project_budget_additional * $kpi->milestone_breakdown) / 100;
-                //         }
-                //         $point->save();
-                //     }
-
-                //     $deal_id = Deal::where('id', $find_deal_id->id)->first();
-                //     //dd($deal_id);
-                //     $user_name = User::where('id', $deal_id->added_by)->first();
-
-                //     $cash_points_close_deal = CashPoint::where('user_id', $user_name->id)->orderBy('id', 'desc')->first();
-                //     $point = new CashPoint();
-                //     $point->user_id = $deal_id->added_by;
-                //     $point->project_id = $find_project_id->id;
-                //     $point->activity = '<a style="color:blue" href="' . route('employees.show', $user_name->id) . '">' . $user_name->name . '</a> closed the deal Project : <a style="color:blue" href="' . route('projects.show', $find_project_id->id) . '">' . $find_project_id->project_name . '</a>, Client: <a style="color:blue" href="' . route('clients.show', $find_project_id->client_id) . '">' . $find_project_id->client_name->name . '</a>Additional milestone reach ' . $kpi->after_reach_amount . '%';
-                //     $point->gained_as = "Individual";
-                //     $point->bonus_type = "Bonus";
-                //     $point->points = ($project_budget_additional * $kpi->closed_deal) / 100;
-
-                //     if ($cash_points_close_deal != null) {
-
-                //         $point->total_points_earn = $cash_points_close_deal->total_points_earn + ($project_budget_additional * $kpi->closed_deal) / 100;
-                //     } else {
-                //         $point->total_points_earn =
-                //             ($project_budget_additional * $kpi->closed_deal) / 100;
-                //     }
-                //     $point->save();
-                //     $deal_id_contact = Deal::where('id', $find_deal_id->id)->first();
-                //     $user_name = User::where('id', $deal_id_contact->added_by)->first();
-
-                //     $cash_points_contact = CashPoint::where('user_id', $user_name->id)->orderBy('id', 'desc')->first();
-                //     $point = new CashPoint();
-                //     $point->user_id = $deal_id_contact->added_by;
-                //     $point->project_id = $find_project_id->id;
-                //     $point->bonus_type = "Bonus";
-                //     $point->activity = '<a style="color:blue" href="' . route('employees.show', $user_name->id) . '">' . $user_name->name . '</a> submitted the contact form for the project manager Project : <a style="color:blue" href="' . route('projects.show', $find_project_id->id) . '">' . $find_project_id->project_name . '</a>, Client: <a style="color:blue" href="' . route('clients.show', $find_project_id->client_id) . '">' . $find_project_id->client_name->name . '</a>Additional milestone reach ' . $kpi->after_reach_amount . '%';
-                //     $point->gained_as = "Individual";
-                //     $point->points = ($project_budget_additional * $kpi->contact_form) / 100;
-
-                //     if ($cash_points_contact != null) {
-
-                //         $point->total_points_earn = $cash_points_contact->total_points_earn + ($project_budget_additional * $kpi->contact_form) / 100;
-                //     } else {
-                //         $point->total_points_earn =
-                //             ($project_budget_additional * $kpi->contact_form) / 100;
-                //     }
-                //     $point->save();
-                // }
-
-                // //points for sales team lead
-                // $kpi_settings = kpiSettingGenerateSale::where('kpi_id', $kpi->id)->where('bonus_status', 0)->get();
-                // // dd($kpi_settings);
-                // $user_name = User::where('role_id', 8)->first();
-                // $cash_points_team_lead = CashPoint::where('user_id', $user_name->id)->orderBy('id', 'desc')->first();
-                // foreach ($kpi_settings as $value) {
-                //     // /dd($value);
-                //     if ($monthly_deal >= $value->generate_sales_from  &&  $monthly_deal <= $value->generate_sales_to) {
-                //         $budget = $value->generate_sales_to - $value->generate_sales_from;
-
-                //         $point = new CashPoint();
-                //         $point->user_id = $user_name->id;
-                //         // / $point->project_id= $find_project_id->id;
-                //         $point->activity = '<a style="color:blue" href="' . route('employees.show', $user_name->id) . '">' . $user_name->name . '</a> for achieving monthly target from $' . $value->generate_sales_from . ' to $' . $value->generate_sales_to;
-                //         $point->gained_as = "Individual";
-                //         $point->points = ($budget * $value->generate_sales_amount) / 100;
-
-                //         if ($cash_points_team_lead != null) {
-
-                //             $point->total_points_earn = $cash_points_team_lead->total_points_earn + ($budget * $value->generate_sales_amount) / 100;
-                //         } else {
-                //             $point->total_points_earn =
-                //                 ($budget * $value->generate_sales_amount) / 100;
-                //         }
-                //         // $point->created_at= $find_project_id->created_at;
-                //         $point->bonus_type = "Bonus";
-                //         $point->save();
-                //         $update_settings = kpiSettingGenerateSale::find($value->id);
-                //         $update_settings->bonus_status = 1;
-                //         $update_settings->save();
-                //     }
-                // }
-                // $last_value = kpiSettingGenerateSale::where('kpi_id', $kpi->id)->orderBy('id', 'desc')->first();
-                // $budget = $kpi->generate_sales_above - $last_value->generate_sales_from;
-                // if ($monthly_deal > $kpi->generate_sales_above) {
-                //     $user_name = User::where('role_id', 8)->first();
-                //     $cash_points_team_lead = CashPoint::where('user_id', $user_name->id)->orderBy('id', 'desc')->first();
-                //     $point = new CashPoint();
-                //     $point->user_id = $user_name->id;
-                //     // $point->project_id= $find_project_id->id;
-                //     $point->activity = '<a style="color:blue" href="' . route('employees.show', $user_name->id) . '">' . $user_name->name . '</a> for achieving monthly target above $' . $kpi->generate_sales_above;
-                //     $point->gained_as = "Individual";
-                //     $point->bonus_type = "Bonus";
-                //     $point->points = ($budget * $kpi->generate_sales_above_point) / 100;
-
-                //     if ($cash_points_team_lead != null) {
-
-                //         $point->total_points_earn = $cash_points_team_lead->total_points_earn + ($budget * $kpi->generate_sales_above_point) / 100;
-                //     } else {
-                //         $point->total_points_earn =
-                //             ($budget * $kpi->generate_sales_above_point) / 100;
-                //     }
-                //     // / $point->created_at= $find_project_id->created_at;
-                //     $point->save();
-                //     $update_kpi = kpiSetting::find($kpi->id);
-                //     $update_kpi->bonus_status = 1;
-                //     $update_kpi->save();
-                // }
-
-
-
-
 
                 //points for sales team lead end
 
@@ -1674,7 +1405,7 @@ class ProjectController extends AccountBaseController
                     'goal_status' =>  0,
                 ])->get();
 
-                foreach($goals as $goal) {
+                foreach ($goals as $goal) {
                     $start = Carbon::parse($goal->startDate);
                     $end = Carbon::parse($goal->endDate);
                     $dateToCheck = Carbon::parse($find_deal_id->created_at);
@@ -1703,7 +1434,7 @@ class ProjectController extends AccountBaseController
                                 if (!is_null($goal->endDate)) {
                                     $deals_data = $deals_data->whereDate('deals.created_at', '<=', $goal->endDate);
                                 }
-                                $deals_data = $deals_data->where('deals.status', '!=','Denied')
+                                $deals_data = $deals_data->where('deals.status', '!=', 'Denied')
                                     // ->whereIn('deals.added_by', $user_id)
                                     ->orderBy('deals.id', 'desc')
                                     ->get();
@@ -1728,7 +1459,7 @@ class ProjectController extends AccountBaseController
                                                 'project_id' => $project->id,
                                             ])->whereBetween(DB::raw('DATE(paid_on)'), [$goal->startDate, $goal->endDate])->get();
 
-                                            if (count($payments) > 0 ) {
+                                            if (count($payments) > 0) {
                                                 $value->amount = $payments->sum('amount');
                                             } else {
                                                 $value->amount = 0;
@@ -1788,7 +1519,7 @@ class ProjectController extends AccountBaseController
 
                                     $array[] = $value;
                                 }
-                                if($goal->team_id == 1) {
+                                if ($goal->team_id == 1) {
                                     if (is_null($goal->endDate)) {
                                         $end_date = Carbon::parse($goal->startDate);
                                         if ($goal->frequency == 'Monthly') {
@@ -1804,13 +1535,13 @@ class ProjectController extends AccountBaseController
                                         $end_date = $goal->endDate;
                                     }
 
-                                    if($goal->trackingType == 'value') {
-                                        $team_total_amount = Deal::where('status','!=','Denied')->where('client_badge','new client')
+                                    if ($goal->trackingType == 'value') {
+                                        $team_total_amount = Deal::where('status', '!=', 'Denied')->where('client_badge', 'new client')
                                             ->whereDate('start_date', '>=', $goal->startDate)
                                             ->whereDate('start_date', '<=', $end_date)
                                             ->sum('amount');
                                     } else {
-                                        $team_total_amount = Deal::where('status','!=','Denied')->where('client_badge','new client')
+                                        $team_total_amount = Deal::where('status', '!=', 'Denied')->where('client_badge', 'new client')
                                             ->whereDate('start_date', '>=', $goal->startDate)
                                             ->whereDate('start_date', '<=', $end_date)
                                             ->count();
@@ -1827,26 +1558,25 @@ class ProjectController extends AccountBaseController
                                         foreach ($user_id as $value) {
 
                                             $user_name = User::find($value);
-                                            $user_last_point = CashPoint::where('user_id',$user_name->id)->orderBy('id','desc')->first();
+                                            $user_last_point = CashPoint::where('user_id', $user_name->id)->orderBy('id', 'desc')->first();
 
-                                            $point= new CashPoint();
-                                            $point->user_id= $value;
-                                           // $point->project_id= $find_project_id->id;
-                                            $point->activity= '<a style="color:blue" href="'.route('employees.show',$user_name->id).'">'.$user_name->name . '</a> For achieving '.$goal->frequency.' Goal '.$goal->title;
+                                            $point = new CashPoint();
+                                            $point->user_id = $value;
+                                            // $point->project_id= $find_project_id->id;
+                                            $point->activity = '<a style="color:blue" href="' . route('employees.show', $user_name->id) . '">' . $user_name->name . '</a> For achieving ' . $goal->frequency . ' Goal ' . $goal->title;
                                             $point->gained_as = "Individual";
-                                            $point->points= $distribute_amount;
+                                            $point->points = $distribute_amount;
 
                                             if ($user_last_point != null) {
-                                                $point->total_points_earn= $user_last_point->total_points_earn + $distribute_amount;
+                                                $point->total_points_earn = $user_last_point->total_points_earn + $distribute_amount;
                                             } else {
-                                                $point->total_points_earn=  $distribute_amount;
+                                                $point->total_points_earn =  $distribute_amount;
                                             }
 
                                             $point->save();
                                         }
                                     }
                                 }
-
                             } elseif ($goal->dealType == 'New Client') {
                                 $deals_data = Deal::select([
                                     'deals.*',
@@ -1858,13 +1588,12 @@ class ProjectController extends AccountBaseController
                                     ->leftjoin('leads', 'leads.id', 'deals.lead_id')
                                     ->join('users as pm', 'pm.id', '=', 'deals.pm_id')
                                     ->whereDate('deals.created_at', '>=', $goal->startDate)
-                                    ->where('deals.client_badge','=','new client');
-                                ;
+                                    ->where('deals.client_badge', '=', 'new client');;
 
                                 if (!is_null($goal->endDate)) {
                                     $deals_data = $deals_data->whereDate('deals.created_at', '<=', $goal->endDate);
                                 }
-                                $deals_data = $deals_data->where('deals.status', '!=','Denied')
+                                $deals_data = $deals_data->where('deals.status', '!=', 'Denied')
                                     // ->whereIn('deals.added_by', $user_id)
 
                                     ->orderBy('deals.id', 'desc')
@@ -1884,7 +1613,7 @@ class ProjectController extends AccountBaseController
                                                 'project_id' => $project->id,
                                             ])->whereBetween(DB::raw('DATE(paid_on)'), [$goal->startDate, $goal->endDate])->get();
 
-                                            if (count($payments) > 0 ) {
+                                            if (count($payments) > 0) {
                                                 $value->amount = $payments->sum('amount');
                                             } else {
                                                 $value->amount = 0;
@@ -1941,11 +1670,8 @@ class ProjectController extends AccountBaseController
                                     }
 
                                     $array[] = $value;
-
-
-
                                 }
-                                if($goal->team_id == 1) {
+                                if ($goal->team_id == 1) {
                                     if (is_null($goal->endDate)) {
                                         $end_date = Carbon::parse($goal->startDate);
                                         if ($goal->frequency == 'Monthly') {
@@ -1961,13 +1687,13 @@ class ProjectController extends AccountBaseController
                                         $end_date = $goal->endDate;
                                     }
 
-                                    if($goal->trackingType == 'value') {
-                                        $team_total_amount = Deal::where('status','!=','Denied')->where('client_badge','new client')
+                                    if ($goal->trackingType == 'value') {
+                                        $team_total_amount = Deal::where('status', '!=', 'Denied')->where('client_badge', 'new client')
                                             ->whereDate('start_date', '>=', $goal->startDate)
                                             ->whereDate('start_date', '<=', $end_date)
                                             ->sum('amount');
                                     } else {
-                                        $team_total_amount = Deal::where('status','!=','Denied')->where('client_badge','new client')
+                                        $team_total_amount = Deal::where('status', '!=', 'Denied')->where('client_badge', 'new client')
                                             ->whereDate('start_date', '>=', $goal->startDate)
                                             ->whereDate('start_date', '<=', $end_date)
                                             ->count();
@@ -1984,19 +1710,19 @@ class ProjectController extends AccountBaseController
                                         foreach ($user_id as $value) {
 
                                             $user_name = User::find($value);
-                                            $user_last_point = CashPoint::where('user_id',$user_name->id)->orderBy('id','desc')->first();
+                                            $user_last_point = CashPoint::where('user_id', $user_name->id)->orderBy('id', 'desc')->first();
 
-                                            $point= new CashPoint();
-                                            $point->user_id= $value;
-                                           // $point->project_id= $find_project_id->id;
-                                            $point->activity= '<a style="color:blue" href="'.route('employees.show',$user_name->id).'">'.$user_name->name . '</a> For achieving '.$goal->frequency.' Goal '.$goal->title;
+                                            $point = new CashPoint();
+                                            $point->user_id = $value;
+                                            // $point->project_id= $find_project_id->id;
+                                            $point->activity = '<a style="color:blue" href="' . route('employees.show', $user_name->id) . '">' . $user_name->name . '</a> For achieving ' . $goal->frequency . ' Goal ' . $goal->title;
                                             $point->gained_as = "Individual";
-                                            $point->points= $distribute_amount;
+                                            $point->points = $distribute_amount;
 
                                             if ($user_last_point != null) {
-                                                $point->total_points_earn= $user_last_point->total_points_earn + $distribute_amount;
+                                                $point->total_points_earn = $user_last_point->total_points_earn + $distribute_amount;
                                             } else {
-                                                $point->total_points_earn=  $distribute_amount;
+                                                $point->total_points_earn =  $distribute_amount;
                                             }
 
                                             $point->save();
@@ -2011,9 +1737,8 @@ class ProjectController extends AccountBaseController
 
                 //5% kpi setting end
             }
-
         }
-         //dd($find_project_id);
+        //dd($find_project_id);
 
 
 
@@ -2048,8 +1773,6 @@ class ProjectController extends AccountBaseController
             //     }
             // }
             $users = User::where('role_id', 1)->get();
-
-
         }
 
 
@@ -2057,7 +1780,7 @@ class ProjectController extends AccountBaseController
         if ($project->deal->project_type != 'hourly') {
             // if (!$request->has('without_deadline')) {
             //     $project->deadline = Carbon::createFromFormat($this->global->date_format, $request->deadline)->format('Y-m-d');
-                $project->deadline = $project->deal->deadline;
+            $project->deadline = $project->deal->deadline;
             // } else {
             //     $project->deadline = null;
             // }
@@ -2114,13 +1837,13 @@ class ProjectController extends AccountBaseController
         $project->currency_id = 1;
 
         //$project->hours_allocated = 0;
-        if ($request->project_challenge == 'No Challenge') {
-        $project->status = 'in progress';
-        }else
-        {
-            $project->status = 'in progress';
+        // if ($request->project_challenge == 'No Challenge') {
+        // $project->status = 'in progress';
+        // }else
+        // {
+        //     $project->status = 'in progress';
+        // }
 
-        }
         $project->project_status = 'Accepted';
         //$project->added_by= Auth::id();
         $project->last_updated_by = Auth::id();
@@ -2140,68 +1863,74 @@ class ProjectController extends AccountBaseController
             $project->membersMany()->sync($request->member_id);
         }
 
-        if($project->status == 'not started'){
-        $project->project_challenge = $request->project_challenge;
-        if($request->project_challenge != 'No Challenge' || $request->project_challenge != null)
-        {
-            $project->admin_authorization_status = 0;
-
+        if ($project->status == 'not started') {
+            $project->project_challenge = $request->project_challenge;
+            if ($request->project_challenge != 'No Challenge' || $request->project_challenge != null) {
+                $project->admin_authorization_status = 0;
+            }
         }
-    }
         $project->comments = $request->comments;
 
         $project->project_summary = ($request->project_summary !== '<p><br></p>') ? $request->project_summary : null;
 
         $project->save();
-       // dd($project);
+        // dd($project->status);
 
         // PROJECT PM GOAL SETTINGS START
-        if($project->status = 'not started'){
-            if($request->project_budget){
-                $findProject = Project::where('id',$request->project_id)->first();
-                $findDeal = Deal::where('id',$findProject->deal_id)->first();
-                if($findDeal->project_type =='fixed'){
-                    $pmGoalSetting = PmGoalSetting::where('initial_value', '<=', $request->project_budget)
-                                ->where('end_value', '>=', $request->project_budget)
-                                ->first();
-                                
-                    if($pmGoalSetting !=null){
-                        $project_status_helper = new HelperPmProjectStatusController();
-                        $project_status_helper->ProjectPmGoalCreation($pmGoalSetting, $findDeal, $findProject);
-                    }
-                }else{                                
-                    // if($findDeal->project_type !=null){
-                        $project_status_helper = new HelperPmProjectStatusController();
-                        $project_status_helper->HourlyProjectPmGoalCreation($findDeal, $findProject);
-                    // }
-                }
+        if ($project->status == 'not started') {
+            // dd($project);
+
+            $findProject = Project::where('id', $request->project_id)->first();
+            $findDeal = Deal::where('id', $findProject->deal_id)->first();
+            // dd($findDeal->project_type);
+            if ($findDeal->project_type == 'fixed') {
+                if ($project->project_budget) {
+                    $pmGoalSetting = PmGoalSetting::where('project_type', 'fixed')->where('initial_value', '<=', $findProject->project_budget)
+                        ->where('end_value', '>=', $findProject->project_budget)
+                        ->first();
+
+                    if (!$pmGoalSetting) throw new Exception("Pm goal settings not found.");
+                    $project_status_helper = new HelperPmProjectStatusController();
+                    $project_status_helper->ProjectPmGoalCreation($pmGoalSetting, $findDeal, $findProject);
+                } else throw new Exception("Deal budget not found.");
             }
+            else {
+                $pmGoalSetting = PmGoalSetting::where('project_type', 'hourly')->where('initial_value', '<=', $findProject->project_budget)
+                        ->where('end_value', '>=', $findProject->project_budget)
+                        ->first();
+
+                $project_status_helper = new HelperPmProjectStatusController();
+                $project_status_helper->HourlyProjectPmGoalCreation($pmGoalSetting, $findDeal, $findProject);
+            }
+
+            $project->status = 'in progress';
         }
-    // PROJECT PM GOAL SETTINGS END
+        // dd('asdf');
+        $project->save();
+        // PROJECT PM GOAL SETTINGS END
 
-       $actions = PendingAction::where('code','PWDA')->where('past_status',0)->where('project_id',$project->id)->get();
-        if($actions != null)
-        {
-        foreach ($actions as $key => $action) {
+        $actions = PendingAction::where('code', 'PWDA')->where('past_status', 0)->where('project_id', $project->id)->get();
+        if ($actions != null) {
+            foreach ($actions as $key => $action) {
 
-                $action->authorized_by= Auth::id();
-                $action->authorized_at= Carbon::now();
+                $action->authorized_by = Auth::id();
+                $action->authorized_at = Carbon::now();
                 $action->past_status = 1;
                 $action->save();
-                $project_manager= User::where('id',$project->pm_id)->first();
-                $client= User::where('id',$project->client_id)->first();
-                $authorize_by= User::where('id',$action->authorized_by)->first();
-                $dealId=Deal::where('id',$project->deal_id)->first();
-                $sales = User::where('id',$deal->added_by)->first();
+                $project_manager = User::where('id', $project->pm_id)->first();
+                $client = User::where('id', $project->client_id)->first();
+                $authorize_by = User::where('id', $action->authorized_by)->first();
+                $dealId = Deal::where('id', $project->deal_id)->first();
+                $sales = User::where('id', $deal->added_by)->first();
 
-                $past_action= new PendingActionPast();
+                $past_action = new PendingActionPast();
                 $past_action->item_name = $action->item_name;
                 $past_action->code = $action->code;
                 $past_action->serial = $action->serial;
                 $past_action->action_id = $action->id;
                 $past_action->heading = $action->heading;
-                $past_action->message = 'Won deal <a href="'.route('contracts.show', $dealId->id).'">'.$project->project_name.'</a> from Client <a href="'.route('clients.show',$client->id).'">'.$client->name.'</a> is awaiting for your acceptance! (Sales person: <a href="'.route('employees.show',$sales->id).'">'.$sales->name.'</a>) accepted by (Project manager: <a href="'.route('employees.show',$project_manager->id).'">'.$project_manager->name.'</a>)';
-             //   $past_action->button = $action->button;
+                $past_action->message = 'Won deal <a href="' . route('contracts.show', $dealId->id) . '">' . $project->project_name . '</a> from Client <a href="' . route('clients.show', $client->id) . '">' . $client->name . '</a> is awaiting for your acceptance! (Sales person: <a href="' . route('employees.show', $sales->id) . '">' . $sales->name . '</a>) accepted by (Project manager: <a href="' . route('employees.show', $project_manager->id) . '">' . $project_manager->name . '</a>)';
+                //   $past_action->button = $action->button;
                 $past_action->timeframe = $action->timeframe;
                 $past_action->authorization_for = $action->authorization_for;
                 $past_action->authorized_by = $action->authorized_by;
@@ -2209,28 +1938,21 @@ class ProjectController extends AccountBaseController
                 $past_action->expired_status = $action->expired_status;
                 $past_action->past_status = $action->past_status;
                 $past_action->project_id = $action->project_id;
-              //  $past_action->task_id = $action->task_id;
+                //  $past_action->task_id = $action->task_id;
                 $past_action->client_id = $action->client_id;
-           //     $past_action->milestone_id = $action->milestone_id;
+                //     $past_action->milestone_id = $action->milestone_id;
                 $past_action->save();
-
-               
-
-
+            }
         }
-    }
-    $pending_actions = PendingAction::where('code','DCA')->where('project_id',$project->id)->where('authorization_for',$project->pm_id)->count();
-    if($pending_actions == 0)
-    {
-        $helper = new HelperPendingActionController();
+        $pending_actions = PendingAction::where('code', 'DCA')->where('project_id', $project->id)->where('authorization_for', $project->pm_id)->count();
+        if ($pending_actions == 0) {
+            $helper = new HelperPendingActionController();
 
 
-        $helper->ProjectDeliverableCreation($project->id);
-    
+            $helper->ProjectDeliverableCreation($project->id);
+        }
 
-    }
-   
-        if($project->status == 'not started'){
+        if ($project->status == 'not started') {
             if ($request->project_challenge != 'No Challenge') {
                 $project_update = Project::find($request->project_id);
                 $project->status = 'in progress';
@@ -2242,10 +1964,10 @@ class ProjectController extends AccountBaseController
 
                 // $helper->ProjectChallengeAuthorization($project);
 
-            // pending action
+                // pending action
 
 
-            //pending action
+                //pending action
                 $users = User::where('role_id', 1)->get();
                 foreach ($users as $user) {
                     Notification::send($user, new ProjectReviewNotification($project));
@@ -2308,7 +2030,7 @@ class ProjectController extends AccountBaseController
         $pmproject = PMProject::where('project_id', $project->id)->first();
         $pmproject->status = 'Accepted';
         $pmproject->save();
-      //  $project->project_summary = $request->proejct_summary;
+        //  $project->project_summary = $request->proejct_summary;
 
 
 
@@ -2356,7 +2078,7 @@ class ProjectController extends AccountBaseController
             }
         }
 
-
+        DB::commit();
 
         $redirectUrl = urldecode($request->redirect_url);
 
@@ -2375,16 +2097,14 @@ class ProjectController extends AccountBaseController
      */
     public function show($id)
     {
-        if(Auth::user()->role_id == 4)
-        {
-            $project_id= Project::where('pm_id',Auth::id())->where('id',$id)->first();
-            if($project_id == null )
-            {
+
+        if (Auth::user()->role_id == 4) {
+            $project_id = Project::where('pm_id', Auth::id())->where('id', $id)->first();
+            if ($project_id == null) {
                 abort(403);
             };
-
         }
-        if(Auth::user()->role_id == 6 || Auth::user()->role_id == 13){
+        if (Auth::user()->role_id == 6 || Auth::user()->role_id == 13) {
             abort(403);
         }
 
@@ -2447,18 +2167,15 @@ class ProjectController extends AccountBaseController
                 ));
                 $this->view = 'projects.ajax.members';
                 break;
-               
-                    case 'milestones':
-                        if(Auth::user()->role_id != 6)
-                        {
-                        $this->view = 'projects.ajax.milestones';
-                    }else {
-                        abort(403);
-                    }
-                        break;
 
-               
-           
+            case 'milestones':
+                if (Auth::user()->role_id != 6) {
+                    $this->view = 'projects.ajax.milestones';
+                } else {
+                    abort(403);
+                }
+                break;
+
             case 'deliverables':
                 $this->view = 'projects.ajax.deliverables';
                 break;
@@ -2539,8 +2256,8 @@ class ProjectController extends AccountBaseController
         //             }else{
         //                 $goal_end_date = Carbon::parse($item->goal_end_date)->addHours(24);
         //             }
-        //             if (Auth::user()->id == $item->pm_id && $current_date->gte($goal_end_date) && $item->goal_status == 0 && $item->reason == null) { 
-        //                 return view('projects.ajax.goale_alert', $this->data); 
+        //             if (Auth::user()->id == $item->pm_id && $current_date->gte($goal_end_date) && $item->goal_status == 0 && $item->reason == null) {
+        //                 return view('projects.ajax.goale_alert', $this->data);
         //             }
         //         }
         //     }
@@ -2673,7 +2390,7 @@ class ProjectController extends AccountBaseController
 
     public function tasks($projectAdmin = false)
     {
-       // dd("asjdnasknd");
+        // dd("asjdnasknd");
         $dataTable = new TasksDataTable();
 
         if (!$projectAdmin) {
@@ -2687,7 +2404,7 @@ class ProjectController extends AccountBaseController
         $tab = request('tab');
         ($tab == '') ? $this->activeTab = 'overview' : $this->activeTab = $tab;
         $this->view = 'projects.ajax.tasks';
-       // dd($this->data);
+        // dd($this->data);
         return $dataTable->render('projects.show', $this->data);
     }
 
@@ -3212,8 +2929,8 @@ class ProjectController extends AccountBaseController
     }
     public function sign(SignRequest $request, $id)
     {
-     //  dd($request,$id);
-    // DB::beginTransaction();
+        //  dd($request,$id);
+        // DB::beginTransaction();
         $this->project = Project::with('signature')->findOrFail($id);
 
         if ($this->project && $this->project->signature) {
@@ -3246,7 +2963,7 @@ class ProjectController extends AccountBaseController
         $sign->signature = $imageName;
         $sign->save();
 
-      
+
 
 
 
@@ -3282,31 +2999,30 @@ class ProjectController extends AccountBaseController
             $deliverable->milestone_id = $request->milestone_id;
             $deliverable->description = $request->description;
             $deliverable->save();
-            $project= Project::where('id',$deliverable->project_id)->first();
-            $actions = PendingAction::where('code','DCA')->where('past_status',0)->where('project_id',$request->project_id)->get();
-            if($actions != null)
-            {
-            foreach ($actions as $key => $action) {
+            $project = Project::where('id', $deliverable->project_id)->first();
+            $actions = PendingAction::where('code', 'DCA')->where('past_status', 0)->where('project_id', $request->project_id)->get();
+            if ($actions != null) {
+                foreach ($actions as $key => $action) {
 
-                    $action->authorized_by= Auth::id();
-                    $action->authorized_at= Carbon::now();
+                    $action->authorized_by = Auth::id();
+                    $action->authorized_at = Carbon::now();
                     $action->past_status = 1;
                     $action->save();
-                    $project_manager= User::where('id',$project->pm_id)->first();
-                    $client= User::where('id',$project->client_id)->first();
-                    $authorize_by= User::where('id',$action->authorized_by)->first();
+                    $project_manager = User::where('id', $project->pm_id)->first();
+                    $client = User::where('id', $project->client_id)->first();
+                    $authorize_by = User::where('id', $action->authorized_by)->first();
 
 
 
-                    $past_action= new PendingActionPast();
+                    $past_action = new PendingActionPast();
                     $past_action->item_name = $action->item_name;
                     $past_action->code = $action->code;
                     $past_action->serial = $action->serial;
                     $past_action->action_id = $action->id;
                     $past_action->heading = $action->heading;
-                    $past_action->message = 'Deliverables for project <a href="'.route('projects.show', $project->id.'?tab=deliverables').'">'.$project->project_name.'</a> from the client <a href="'.route('clients.show',$client->id).'">'.$client->name.'</a> was created by  <a href="'.route('employees.show',Auth::user()->id).'">'.Auth::user()->name.'</a>
+                    $past_action->message = 'Deliverables for project <a href="' . route('projects.show', $project->id . '?tab=deliverables') . '">' . $project->project_name . '</a> from the client <a href="' . route('clients.show', $client->id) . '">' . $client->name . '</a> was created by  <a href="' . route('employees.show', Auth::user()->id) . '">' . Auth::user()->name . '</a>
                     ';
-                 //   $past_action->button = $action->button;
+                    //   $past_action->button = $action->button;
                     $past_action->timeframe = $action->timeframe;
                     $past_action->authorization_for = $action->authorization_for;
                     $past_action->authorized_by = $action->authorized_by;
@@ -3314,12 +3030,12 @@ class ProjectController extends AccountBaseController
                     $past_action->expired_status = $action->expired_status;
                     $past_action->past_status = $action->past_status;
                     $past_action->project_id = $action->project_id;
-                  //  $past_action->task_id = $action->task_id;
+                    //  $past_action->task_id = $action->task_id;
                     $past_action->client_id = $action->client_id;
-               //     $past_action->milestone_id = $action->milestone_id;
+                    //     $past_action->milestone_id = $action->milestone_id;
                     $past_action->save();
+                }
             }
-        }
             $project_id = Project::where('id', $deliverable->project_id)->first();
             $project = Project::find($deliverable->project_id);
             $project->hours_allocated = $project_id->hours_allocated + $deliverable->estimation_time;
@@ -3356,10 +3072,10 @@ class ProjectController extends AccountBaseController
 
                 //need pending action
 
-            $helper = new HelperPendingActionController();
+                $helper = new HelperPendingActionController();
 
 
-            $helper->OthersDeliverableAuthorization($project,$deliverable->id);
+                $helper->OthersDeliverableAuthorization($project, $deliverable->id);
 
                 //need pending action
 
@@ -3477,30 +3193,29 @@ class ProjectController extends AccountBaseController
                     $data->save();
                 }
             }
-            $project= Project::where('id',$deliverable->project_id)->first();
-            $actions = PendingAction::where('code','DMA')->where('past_status',0)->where('deliverable_id',$request->id)->get();
-            if($actions != null)
-            {
-            foreach ($actions as $key => $action) {
+            $project = Project::where('id', $deliverable->project_id)->first();
+            $actions = PendingAction::where('code', 'DMA')->where('past_status', 0)->where('deliverable_id', $request->id)->get();
+            if ($actions != null) {
+                foreach ($actions as $key => $action) {
 
-                    $action->authorized_by= Auth::id();
-                    $action->authorized_at= Carbon::now();
+                    $action->authorized_by = Auth::id();
+                    $action->authorized_at = Carbon::now();
                     $action->past_status = 1;
                     $action->save();
-                    $project_manager= User::where('id',$project->pm_id)->first();
-                    $client= User::where('id',$project->client_id)->first();
-                    $authorize_by= User::where('id',$action->authorized_by)->first();
+                    $project_manager = User::where('id', $project->pm_id)->first();
+                    $client = User::where('id', $project->client_id)->first();
+                    $authorize_by = User::where('id', $action->authorized_by)->first();
 
 
 
-                    $past_action= new PendingActionPast();
+                    $past_action = new PendingActionPast();
                     $past_action->item_name = $action->item_name;
                     $past_action->code = $action->code;
                     $past_action->serial = $action->serial;
                     $past_action->action_id = $action->id;
                     $past_action->heading = $action->heading;
-                    $past_action->message = 'Revision requested by management for the deliverables '.$deliverable->title.' for project <a href="'.route('projects.show', $project->id.'?tab=deliverables').'">'.$project->project_name.'</a> from the Client <a href="'.route('clients.show',$client->id).'">'.$client->name.'</a> authorized by <a href="'.route('employees.show',$project_manager->id).'">'.$project_manager->name.'</a>';
-                 //   $past_action->button = $action->button;
+                    $past_action->message = 'Revision requested by management for the deliverables ' . $deliverable->title . ' for project <a href="' . route('projects.show', $project->id . '?tab=deliverables') . '">' . $project->project_name . '</a> from the Client <a href="' . route('clients.show', $client->id) . '">' . $client->name . '</a> authorized by <a href="' . route('employees.show', $project_manager->id) . '">' . $project_manager->name . '</a>';
+                    //   $past_action->button = $action->button;
                     $past_action->timeframe = $action->timeframe;
                     $past_action->authorization_for = $action->authorization_for;
                     $past_action->authorized_by = $action->authorized_by;
@@ -3508,12 +3223,12 @@ class ProjectController extends AccountBaseController
                     $past_action->expired_status = $action->expired_status;
                     $past_action->past_status = $action->past_status;
                     $past_action->project_id = $action->project_id;
-                  //  $past_action->task_id = $action->task_id;
+                    //  $past_action->task_id = $action->task_id;
                     $past_action->client_id = $action->client_id;
-               //     $past_action->milestone_id = $action->milestone_id;
+                    //     $past_action->milestone_id = $action->milestone_id;
                     $past_action->save();
+                }
             }
-        }
         }
 
         $deliverable->title = $request->title ?? $deliverable->title;
@@ -3574,28 +3289,27 @@ class ProjectController extends AccountBaseController
         $project = ProjectDeliverable::find($deliverable_id->id);
         $project->authorization = 1;
         $project->save();
-        $actions = PendingAction::where('code','DOA')->where('past_status',0)->where('deliverable_id',$id)->get();
-        if($actions != null)
-        {
-        foreach ($actions as $key => $action) {
+        $actions = PendingAction::where('code', 'DOA')->where('past_status', 0)->where('deliverable_id', $id)->get();
+        if ($actions != null) {
+            foreach ($actions as $key => $action) {
 
-                $action->authorized_by= Auth::id();
-                $action->authorized_at= Carbon::now();
+                $action->authorized_by = Auth::id();
+                $action->authorized_at = Carbon::now();
                 $action->past_status = 1;
                 $action->save();
-                $project_id= Project::where('id',$project->project_id)->first();
-                $project_manager= User::where('id',$project_id->pm_id)->first();
-                $client= User::where('id',$project_id->client_id)->first();
-                $authorize_by= User::where('id',$action->authorized_by)->first();
+                $project_id = Project::where('id', $project->project_id)->first();
+                $project_manager = User::where('id', $project_id->pm_id)->first();
+                $client = User::where('id', $project_id->client_id)->first();
+                $authorize_by = User::where('id', $action->authorized_by)->first();
 
-                $past_action= new PendingActionPast();
+                $past_action = new PendingActionPast();
                 $past_action->item_name = $action->item_name;
                 $past_action->code = $action->code;
                 $past_action->serial = $action->serial;
                 $past_action->action_id = $action->id;
                 $past_action->heading = $action->heading;
-                $past_action->message = '"Other" type of <a href="'.route('projects.show', $project_id->id.'?tab=deliverables').'">deliverable</a> for project <a href="'.route('projects.show',$project_id->id).'">'.$project_id->project_name.'</a> from Client <a href="'.route('clients.show',$client->id).'">'.$client->name.'</a> had challenge (Project manager: <a href="'.route('employees.show',$project_manager->id).'">'.$project_manager->name.'</a>) (Authorized by <a href="'.route('employees.show',$authorize_by->id).'">'.$authorize_by->name.'</a>)';
-              //  $past_action->button = $action->button;
+                $past_action->message = '"Other" type of <a href="' . route('projects.show', $project_id->id . '?tab=deliverables') . '">deliverable</a> for project <a href="' . route('projects.show', $project_id->id) . '">' . $project_id->project_name . '</a> from Client <a href="' . route('clients.show', $client->id) . '">' . $client->name . '</a> had challenge (Project manager: <a href="' . route('employees.show', $project_manager->id) . '">' . $project_manager->name . '</a>) (Authorized by <a href="' . route('employees.show', $authorize_by->id) . '">' . $authorize_by->name . '</a>)';
+                //  $past_action->button = $action->button;
                 $past_action->timeframe = $action->timeframe;
                 $past_action->authorization_for = $action->authorization_for;
                 $past_action->authorized_by = $action->authorized_by;
@@ -3607,10 +3321,8 @@ class ProjectController extends AccountBaseController
                 $past_action->client_id = $action->client_id;
                 $past_action->deliverable_id = $action->deliverable_id;
                 $past_action->save();
-
-
+            }
         }
-    }
 
 
 
@@ -3703,16 +3415,10 @@ class ProjectController extends AccountBaseController
     }
     public function ProjectCompletion($id)
     {
-
-
-
         $this->editPermission = user()->permission('edit_projects');
         $this->editProjectMembersPermission = user()->permission('edit_project_members');
 
-
-
         $this->pageTitle = __('Project') . ' ' . __('Completion Form');
-
 
         $this->clients = User::allClients();
         $this->categories = ProjectNiche::all();
@@ -3733,11 +3439,13 @@ class ProjectController extends AccountBaseController
             return Reply::dataOnly(['status' => 'success', 'html' => $html, 'title' => $this->pageTitle]);
         }
 
-
         abort_403(user()->permission('edit_projects') == 'added' && $this->milestone->added_by != user()->id);
         $this->view = 'projects.ajax.project-completion';
+        $data = $this->data;
+        $data['themeList'] = ProjectWebsiteTheme::all();
+        $data['pluginList'] = ProjectWebsitePlugin::all();
 
-        return view('projects.create', $this->data);
+        return view('projects.create', $data);
     }
     public function ProjectCompletionSubmit(Request $request)
     {
@@ -3756,8 +3464,9 @@ class ProjectController extends AccountBaseController
             'main_page_number' => 'required',
             'secondary_page_number' => 'required',
             'backup_email_address' => 'required',
-            'theme_name' => 'required',
-            'theme_url' => 'required',
+            // 'theme_name' => 'required',
+            // 'theme_url' => 'required',
+            'theme_id' => 'required',
             'day_interval' => 'required',
             'notify' => 'required',
             'actual_yes' => 'required',
@@ -3796,11 +3505,12 @@ class ProjectController extends AccountBaseController
             'secondary_page_number.required' => 'This field is required!!',
             'backup_email_address.required' => 'This field is required!!',
             'day_interval.required' => 'This field is required!!',
-            'theme_name.required' => 'This field is required!!',
-            'theme_url.required' => 'This field is required!!',
+            // 'theme_name.required' => 'This field is required!!',
+            // 'theme_url.required' => 'This field is required!!',
+            'theme_id.required' => 'This field is required!!',
             'website_plugin_box_information.required' => 'This field is required. Please select Yes or No!!',
         ]);
-        //      dd($request);
+        // dd($request->all());
         $milestone = new ProjectSubmission();
         $milestone->qc_protocol = $request->qc_protocol;
         $milestone->milestone_id = $request->milestone_id;
@@ -3835,36 +3545,38 @@ class ProjectController extends AccountBaseController
 
         $milestone->save();
 
-        $website_themes = new ProjectWebsiteTheme();
-        $website_themes->theme_name = $request->theme_name;
-        $website_themes->theme_url = $request->theme_url;
-        $website_themes->save();
+        // $website_themes = new ProjectWebsiteTheme();
+        // $website_themes->theme_name = $request->theme_name;
+        // $website_themes->theme_url = $request->theme_url;
+        // $website_themes->save();
 
-        foreach($request->plugin_name as $key => $plugin_name) {
-            $website_plugins = new ProjectWebsitePlugin();
-            $website_plugins->plugin_name = $plugin_name;
-            $website_plugins->plugin_url = $request->plugin_url[$key] ;
-            $website_plugins->save();
-        }
+        // foreach($request->plugin_name as $key => $plugin_name) {
+        //     $website_plugins = new ProjectWebsitePlugin();
+        //     $website_plugins->plugin_name = $plugin_name;
+        //     $website_plugins->plugin_url = $request->plugin_url[$key] ;
+        //     $website_plugins->save();
+        // }
 
         $data = $request->all();
 
-//        $plugin_names = json_encode($data['plugin_name']);
-//        $plugin_urls = json_encode($data['plugin_url']);
-        $project_cms = ProjectCms::where('cms_name',$request->cms_category)->first();
+        //        $plugin_names = json_encode($data['plugin_name']);
+        //        $plugin_urls = json_encode($data['plugin_url']);
+        $project_cms = ProjectCms::where('cms_name', $request->cms_category)->first();
 
         $project_portfolio = new ProjectPortfolio();
+
         $project_portfolio->project_id = $project->project_id;
         if ($project_cms) {
             $project_portfolio->cms_category = $project_cms->id;
-        }else{
+        } else {
             $project_portfolio->cms_category = $data['cms_id'];
         }
         $project_portfolio->website_type = $data['website_type'];
         $project_portfolio->niche = $data['niche'];
         $project_portfolio->sub_niche = $data['sub_niche'];
-        $project_portfolio->theme_name = $website_themes->id;
-        $project_portfolio->theme_url = $website_themes->id;
+        // $project_portfolio->theme_name = $website_themes->id;
+        // $project_portfolio->theme_url = $website_themes->id;
+        $project_portfolio->theme_id = $request->theme_id;
         $project_portfolio->plugin_information = $data['website_plugin_box_information'];
         $project_portfolio->main_page_number = $data['main_page_number'];
         $project_portfolio->secondary_page_number = $data['secondary_page_number'];
@@ -3873,8 +3585,14 @@ class ProjectController extends AccountBaseController
         $project_portfolio->description = $data['description'];
         $project_portfolio->portfolio_link = $data['actual_link'];
         $project_portfolio->added_by = $data['added_by'];
-        $project_portfolio->plugin_name = $website_plugins->id;
-        $project_portfolio->plugin_url = $website_plugins->id;
+        // $project_portfolio->plugin_name = $website_plugins->id;
+        // $project_portfolio->plugin_url = $website_plugins->id;
+        if ($project_portfolio->plugin_information) {
+            $project_portfolio->plugin_list = $request->plugin_list ? json_encode($request->plugin_list) : null;
+        } else {
+            $project_portfolio->plugin_list = null;
+        }
+
         $project_portfolio->save();
         $milestone_update = ProjectMilestone::where('id', $milestone->milestone_id)->first();
         $milestone_update->project_completion_status = 2;
@@ -3887,27 +3605,26 @@ class ProjectController extends AccountBaseController
         $project_id = Project::find($project->project_id);
 
         //need pending action
-        $actions = PendingAction::where('code','PCSA')->where('past_status',0)->where('project_id',$project_id->id)->get();
-        if($actions != null)
-        {
-        foreach ($actions as $key => $action) {
+        $actions = PendingAction::where('code', 'PCSA')->where('past_status', 0)->where('project_id', $project_id->id)->get();
+        if ($actions != null) {
+            foreach ($actions as $key => $action) {
 
-                $action->authorized_by= Auth::id();
-                $action->authorized_at= Carbon::now();
+                $action->authorized_by = Auth::id();
+                $action->authorized_at = Carbon::now();
                 $action->past_status = 1;
                 $action->save();
-                $project_manager= User::where('id',$project->pm_id)->first();
-                $client= User::where('id',$project->client_id)->first();
-                $authorize_by= User::where('id',$action->authorized_by)->first();
+                $project_manager = User::where('id', $project->pm_id)->first();
+                $client = User::where('id', $project->client_id)->first();
+                $authorize_by = User::where('id', $action->authorized_by)->first();
 
-                $past_action= new PendingActionPast();
+                $past_action = new PendingActionPast();
                 $past_action->item_name = $action->item_name;
                 $past_action->code = $action->code;
                 $past_action->serial = $action->serial;
                 $past_action->action_id = $action->id;
                 $past_action->heading = $action->heading;
-                $past_action->message = $action->message. ' submitted by <a href="'.route('employees.show',$authorize_by->id).'">'.$authorize_by->name.'</a>';
-             //   $past_action->button = $action->button;
+                $past_action->message = $action->message . ' submitted by <a href="' . route('employees.show', $authorize_by->id) . '">' . $authorize_by->name . '</a>';
+                //   $past_action->button = $action->button;
                 $past_action->timeframe = $action->timeframe;
                 $past_action->authorization_for = $action->authorization_for;
                 $past_action->authorized_by = $action->authorized_by;
@@ -3919,16 +3636,14 @@ class ProjectController extends AccountBaseController
                 $past_action->client_id = $action->client_id;
                 $past_action->milestone_id = $action->milestone_id;
                 $past_action->save();
-
-
+            }
         }
-    }
 
 
-         $helper = new HelperPendingActionController();
+        $helper = new HelperPendingActionController();
 
 
-         $helper->ProjectCompletionAuthorization($project_id);
+        $helper->ProjectCompletionAuthorization($project_id);
         //need pending action
 
 
@@ -4075,1248 +3790,1286 @@ class ProjectController extends AccountBaseController
         return $sub_categories;
     }
 
-//Cross Departmental Work
-public function viewWebContent(Request $request, $id){
-    $this->pageTitle = 'Web-Content';
-    $this->web_contents = WebContent::where('deal_id',$request->id)->paginate(10);
-    return view('service-type.web_content_view',$this->data);
-}
-public function viewBlogArticle(Request $request, $id){
-    $this->pageTitle = 'Blog Article';
-    $this->blog_artcles = BlogArticle::where('deal_id',$request->id)->paginate(10);
-    return view('service-type.blog_artcle_view',$this->data);
-}
-public function viewProductDescription(Request $request, $id){
-    $this->pageTitle = 'Product Description';
-    $this->product_descriptions = ProductDescription::where('deal_id',$request->id)->paginate(5);
-    return view('service-type.product_description_view',$this->data);
-}
-public function viewProductCategoryCollection(Request $request, $id){
-    $this->pageTitle = 'Product Category Collection';
-    $this->product_categories = ProductCategoryCollection::where('deal_id',$request->id)->paginate(5);
-    return view('service-type.product_category_collection_view',$this->data);
-}
-public function viewBasicSEO(Request $request, $id){
-    $this->pageTitle = 'Basic SEO';
-    $this->basic_seos = BasicSeo::where('deal_id',$request->id)->paginate(5);
-    return view('service-type.basic_seo_view',$this->data);
-}
-
-// Edit web content
-public function EditWebContent(Request $request, $id){
-    $this->pageTitle = 'Edit web content';
-    $this->web_content = WebContent::find($id);
-    return view('service-type.edit_web_content',$this->data);
-}
-
-// Edit Blog Article
-public function EditBlogArticle(Request $request, $id){
-    $this->pageTitle = 'Edit blog article';
-    $this->blog_article = BlogArticle::find($id);
-    return view('service-type.edit_blog_article',$this->data);
-}
-
-// Edit Product description
-public function EditProductDescription(Request $request, $id){
-    $this->pageTitle = 'Edit product description';
-    $this->product_description = ProductDescription::find($id);
-    return view('service-type.edit_product_description',$this->data);
-}
-
-// Edit Product Category
-public function EditProductCategory(Request $request, $id){
-    $this->pageTitle = 'Edit product category';
-    $this->product_category = ProductCategoryCollection::find($id);
-    return view('service-type.edit_product_category',$this->data);
-}
-public function EditBasicSEO(Request $request, $id){
-    $this->pageTitle = 'Edit basic seo';
-    $this->basic_seo = BasicSeo::find($id);
-    return view('service-type.edit_basic_seo',$this->data);
-}
-
-// ================================= UPDATE WEB CONTENT START =======================
-
-public function updateSalesWebContent(Request $request, $id){
-    $validated = $request->validate([
-        'website_link' => 'required|url',
-        'website_niche' => 'required',
-        'website_name' => 'required',
-        'product_list' => 'required',
-        'country' => 'required',
-        'city' => 'required',
-        'interest' => 'required',
-        'buying_habit1' => 'required',
-        'buying_habit2' => 'required',
-        'buying_habit3' => 'required',
-        'language' => 'required',
-    ], [
-        'website_link.required' => 'This field is required!!',
-        'website_niche.required' => 'This field is required!!',
-        'website_name.required' => 'This field is required!!',
-        'product_list.required' => 'This field is required!!',
-        'country.required' => 'This field is required!!',
-        'city.required' => 'This field is required!!',
-        'interest.required' => 'This field is required!!',
-        'buying_habit1.required' => 'This field is required!!',
-        'buying_habit2.required' => 'This field is required!!',
-        'buying_habit3.required' => 'This field is required!!',
-        'language.required' => 'This field is required!!',
-    ]);
-
-    $sales_web_content = new SalesWebContent();
-    $user = Deal::where('id',$request->deal_id)->first();
-    $pm_id = User::where('id',$user->pm_id)->first();
-
-
-    if($request->website_link){
-        $sales_web_content->deal_id = $request->deal_id;
-        $sales_web_content->web_content_id = $request->web_content_id;
-        $sales_web_content->website_link = $request->website_link;
+    //Cross Departmental Work
+    public function viewWebContent(Request $request, $id)
+    {
+        $this->pageTitle = 'Web-Content';
+        $this->web_contents = WebContent::where('deal_id', $request->id)->paginate(10);
+        return view('service-type.web_content_view', $this->data);
     }
-    if($request->website_niche){
-        $sales_web_content->deal_id = $request->deal_id;
-        $sales_web_content->web_content_id = $request->web_content_id;
-        $sales_web_content->website_niche = $request->website_niche;
+    public function viewBlogArticle(Request $request, $id)
+    {
+        $this->pageTitle = 'Blog Article';
+        $this->blog_artcles = BlogArticle::where('deal_id', $request->id)->paginate(10);
+        return view('service-type.blog_artcle_view', $this->data);
     }
-    if($request->website_name){
-        $sales_web_content->deal_id = $request->deal_id;
-        $sales_web_content->web_content_id = $request->web_content_id;
-        $sales_web_content->website_name = $request->website_name;
+    public function viewProductDescription(Request $request, $id)
+    {
+        $this->pageTitle = 'Product Description';
+        $this->product_descriptions = ProductDescription::where('deal_id', $request->id)->paginate(5);
+        return view('service-type.product_description_view', $this->data);
     }
-    if($request->product_list){
-        $sales_web_content->deal_id = $request->deal_id;
-        $sales_web_content->web_content_id = $request->web_content_id;
-        $sales_web_content->product_list = $request->product_list;
+    public function viewProductCategoryCollection(Request $request, $id)
+    {
+        $this->pageTitle = 'Product Category Collection';
+        $this->product_categories = ProductCategoryCollection::where('deal_id', $request->id)->paginate(5);
+        return view('service-type.product_category_collection_view', $this->data);
     }
-    if($request->country){
-        $sales_web_content->deal_id = $request->deal_id;
-        $sales_web_content->web_content_id = $request->web_content_id;
-        $sales_web_content->country = $request->country;
-    }
-    if($request->city){
-        $sales_web_content->deal_id = $request->deal_id;
-        $sales_web_content->web_content_id = $request->web_content_id;
-        $sales_web_content->city = $request->city;
-    }
-    if($request->interest){
-        $sales_web_content->deal_id = $request->deal_id;
-        $sales_web_content->web_content_id = $request->web_content_id;
-        $sales_web_content->interest = $request->interest;
-    }
-    if($request->buying_habit1){
-        $sales_web_content->deal_id = $request->deal_id;
-        $sales_web_content->web_content_id = $request->web_content_id;
-        $sales_web_content->buying_habit1 = $request->buying_habit1;
-    }
-    if($request->buying_habit2){
-        $sales_web_content->deal_id = $request->deal_id;
-        $sales_web_content->web_content_id = $request->web_content_id;
-        $sales_web_content->buying_habit2 = $request->buying_habit2;
-    }
-    if($request->buying_habit3){
-        $sales_web_content->deal_id = $request->deal_id;
-        $sales_web_content->web_content_id = $request->web_content_id;
-        $sales_web_content->buying_habit3 = $request->buying_habit3;
-    }
-    if($request->language){
-        $sales_web_content->deal_id = $request->deal_id;
-        $sales_web_content->web_content_id = $request->web_content_id;
-        $sales_web_content->language = $request->language;
-    }
-    $sales_web_content->milestone_id = $request->milestone_id;
-    $sales_web_content->status = 'submitted';
-    $sales_web_content->save();
-
-    Notification::send($pm_id, new UpdateClientFormNotification($sales_web_content));
-
-    return response()->json([
-        'status'=>200,
-        'website_link'=>$sales_web_content->website_link,
-        'website_niche'=>$sales_web_content->website_niche,
-        'website_name'=>$sales_web_content->website_name,
-        'product_list'=>$sales_web_content->product_list,
-        'country'=>$sales_web_content->country,
-        'city'=>$sales_web_content->city,
-        'interest'=>$sales_web_content->interest,
-        'buying_habit1'=>$sales_web_content->buying_habit1,
-        'buying_habit2'=>$sales_web_content->buying_habit2,
-        'buying_habit3'=>$sales_web_content->buying_habit3,
-        'language'=>$sales_web_content->language,
-    ]);
-}
-public function updateSalesWebContentPageList(Request $request ,$id){
-    $data = $request->all();
-    $page_names = json_encode($data['page_name']);
-    $quantitys = json_encode($data['quantity']);
-    $approximate_words = json_encode($data['approximate_word']);
-
-    $sales_web_content = SalesWebContent::find($id);
-    $sales_web_content->page_name = $page_names;
-    $sales_web_content->quantity = $quantitys;
-    $sales_web_content->approximate_word = $approximate_words;
-    $sales_web_content->save();
-
-    return response()->json(['status'=>200]);
-}
-public function updateSalesWebContentReferenceWebsite(Request $request ,$id){
-    // dd($request->all());
-    $data = $request->all();
-    $reference_websites = json_encode($data['reference_website']);
-    $description1 = json_encode($data['description1']);
-    $description2 = json_encode($data['description2']);
-    $description3 = json_encode($data['description3']);
-
-    $sales_web_content = SalesWebContent::find($id);
-    $sales_web_content->reference_website = $reference_websites;
-    $sales_web_content->competitor_content = $data['competitor_content'];
-    $sales_web_content->description1 = $description1;
-    $sales_web_content->description2 = $description2;
-    $sales_web_content->description3 = $description3;
-    $sales_web_content->save();
-
-    return response()->json(['status'=>200]);
-}
-public function updateSalesWebContentBusinessInfo(Request $request ,$id){
-    $data = $request->all();
-    $folder_links = json_encode($data['folder_link']);
-
-    $sales_web_content = SalesWebContent::find($id);
-    // dd($sales_web_content);
-    $sales_web_content->business_information = $data['business_information'];
-    $sales_web_content->share_file_info = $data['share_file_info'];
-    $sales_web_content->folder_link = $folder_links;
-    $sales_web_content->save();
-
-    return response()->json([
-        'status'=>200,
-    ]);
-}
-public function updateSalesWebContentDemographicInfo(Request $request ,$id){
-
-    $sales_web_content = SalesWebContent::find($id);
-    $sales_web_content->gender = $request->gender;
-    $sales_web_content->age1 = $request->age1;
-    $sales_web_content->age2 = $request->age2;
-    $sales_web_content->monthly_income = $request->monthly_income;
-    $sales_web_content->education_level = $request->education_level;
-    $sales_web_content->save();
-
-    return response()->json([
-        'status'=>200,
-    ]);
-}
-// ================================= WEB CONTENT END=======================
-
-
-// ================================= BLOG ARTICLES START =======================
-
-public function updateSalesBlogArticle(Request $request, $id){
-    $validated = $request->validate([
-        'website_link' => 'required|url',
-        'website_niche' => 'required',
-        'website_name' => 'required',
-        'product_no' => 'required',
-    ], [
-        'website_link.required' => 'This field is required!!',
-        'website_niche.required' => 'This field is required!!',
-        'website_name.required' => 'This field is required!!',
-        'product_no.required' => 'This field is required!!',
-    ]);
-
-    $sales_blog_article = new SalesBlogArticle();
-    $user = Deal::where('id',$request->deal_id)->first();
-    $pm_id = User::where('id',$user->pm_id)->first();
-
-    if($request->website_link){
-        $sales_blog_article->deal_id = $request->deal_id;
-        $sales_blog_article->blog_article_id = $request->blog_article_id;
-        $sales_blog_article->website_link = $request->website_link;
-    }
-    if($request->website_niche){
-        $sales_blog_article->deal_id = $request->deal_id;
-        $sales_blog_article->blog_article_id = $request->blog_article_id;
-        $sales_blog_article->website_niche = $request->website_niche;
-    }
-    if($request->website_name){
-        $sales_blog_article->deal_id = $request->deal_id;
-        $sales_blog_article->blog_article_id = $request->blog_article_id;
-        $sales_blog_article->website_name = $request->website_name;
-    }
-    if($request->product_no){
-        $sales_blog_article->deal_id = $request->deal_id;
-        $sales_blog_article->blog_article_id = $request->blog_article_id;
-        $sales_blog_article->product_no = $request->product_no;
-    }
-    $sales_blog_article->milestone_id= $request->milestone_id;
-    $sales_blog_article->status = 'submitted';
-    $sales_blog_article->save();
-
-    Notification::send($pm_id, new UpdateClientBlogArticlesNotification($sales_blog_article));
-
-    return response()->json([
-        'status'=>200,
-        'website_link'=>$sales_blog_article->website_link,
-        'website_niche'=>$sales_blog_article->website_niche,
-        'website_name'=>$sales_blog_article->website_name,
-        'product_no'=>$sales_blog_article->product_no,
-    ]);
-}
-
-public function updateSalesBlogArticleBusinessInfo(Request $request ,$id){
-    $data = $request->all();
-    $folder_links = json_encode($data['folder_link']);
-
-    $sales_blog_article = SalesBlogArticle::find($id);
-    $sales_blog_article->business_information = $data['business_information'];
-    $sales_blog_article->share_file_info = $data['share_file_info'];
-    $sales_blog_article->folder_link = $folder_links;
-    $sales_blog_article->save();
-
-    return response()->json([
-        'status'=>200,
-    ]);
-}
-
-public function updateSalesBlogArticleReferenceblog(Request $request ,$id){
-    $data = $request->all();
-    $blog_urls = json_encode($data['blog_url']);
-
-    $sales_blog_article = SalesBlogArticle::find($id);
-    $sales_blog_article->blog_url = $blog_urls;
-    $sales_blog_article->save();
-
-    return response()->json(['status'=>200]);
-}
-
-public function updateSalesBlogArticleTopiceInfo(Request $request ,$id){
-
-    $data = $request->all();
-    $topic_links = json_encode($data['topic_link']);
-
-    $sales_blog_article = SalesBlogArticle::find($id);
-    $sales_blog_article->topic_info = $data['topic_info'];
-    $sales_blog_article->topic_link = $topic_links;
-    $sales_blog_article->save();
-
-    return response()->json(['status'=>200]);
-}
-
-public function updateSalesBlogArticleKeywordsInfo(Request $request ,$id){
-    $data = $request->all();
-    $keyword_links = json_encode($data['keyword_link']);
-
-    $sales_blog_article = SalesBlogArticle::find($id);
-    $sales_blog_article->keyword_info = $data['keyword_info'];
-    $sales_blog_article->keyword_link = $keyword_links;
-    $sales_blog_article->save();
-
-    return response()->json(['status'=>200]);
-}
-// ================================= BLOG ARTICLES END =======================
-
-
-
-// ================================= PRODUCT DESCRIPTION START =======================
-public function updateProductDescription(Request $request, $id){
-    $validated = $request->validate([
-        'website_link' => 'required|url',
-        'website_niche' => 'required',
-        'website_name' => 'required',
-        'product_no' => 'required',
-        'word_count' => 'required',
-    ], [
-        'website_link.required' => 'This field is required!!',
-        'website_niche.required' => 'This field is required!!',
-        'website_name.required' => 'This field is required!!',
-        'product_no.required' => 'This field is required!!',
-        'word_count.required' => 'This field is required!!',
-    ]);
-
-    $sales_product_description = new SalesProductDescription();
-    $user = Deal::where('id',$request->deal_id)->first();
-    $pm_id = User::where('id',$user->pm_id)->first();
-
-    if($request->website_link){
-        $sales_product_description->website_link = $request->website_link;
-    }
-    if($request->website_niche){
-        $sales_product_description->website_niche = $request->website_niche;
-    }
-    if($request->website_name){
-        $sales_product_description->website_name = $request->website_name;
-    }
-    if($request->product_no){
-        $sales_product_description->product_no = $request->product_no;
-    }
-    if($request->word_count){
-        $sales_product_description->word_count = $request->word_count;
-    }
-    $sales_product_description->deal_id = $request->deal_id;
-    $sales_product_description->product_description_id = $request->product_description_id;
-    $sales_product_description->milestone_id= $request->milestone_id;
-    $sales_product_description->status = 'submitted';
-    $sales_product_description->save();
-
-    Notification::send($pm_id, new UpdateClientProductDescriptionNotification($sales_product_description));
-
-    return response()->json([
-        'status'=>200,
-        'website_link'=>$sales_product_description->website_link,
-        'website_niche'=>$sales_product_description->website_niche,
-        'website_name'=>$sales_product_description->website_name,
-        'product_no'=>$sales_product_description->product_no,
-        'word_count'=>$sales_product_description->word_count,
-    ]);
-}
-
-public function updateSalesProductDescriptionBusinessInfo(Request $request ,$id){
-    $data = $request->all();
-    $folder_links = json_encode($data['folder_link']);
-
-    $sales_product_description = SalesProductDescription::find($id);
-    $sales_product_description->business_information = $data['business_information'];
-    $sales_product_description->share_file_info = $data['share_file_info'];
-    $sales_product_description->folder_link = $folder_links;
-    $sales_product_description->save();
-
-    return response()->json([
-        'status'=>200,
-    ]);
-}
-
-public function updateSalesProductDescriptionReferenceblog(Request $request ,$id){
-    $data = $request->all();
-    $blog_urls = json_encode($data['blog_url']);
-
-    $sales_product_description = SalesProductDescription::find($id);
-    $sales_product_description->blog_url = $blog_urls;
-    $sales_product_description->save();
-
-    return response()->json(['status'=>200]);
-}
-
-public function updateSalesProductDescriptionProductList(Request $request ,$id){
-    $data = $request->all();
-    $product_lists = json_encode($data['product_list']);
-
-    $sales_product_description = SalesProductDescription::find($id);
-    $sales_product_description->product_list = $product_lists;
-    $sales_product_description->save();
-
-    return response()->json(['status'=>200]);
-}
- // ================================= PRODUCT DESCRIPTION END =======================
-
-
-public function updateProductCategory(Request $request, $id){
-    // dd($request->all());
-
-    $validated = $request->validate([
-        'website_link' => 'required|url',
-        'website_niche' => 'required',
-        'website_name' => 'required',
-        'product_no' => 'required',
-        'word_count' => 'required',
-    ], [
-        'website_link.required' => 'This field is required!!',
-        'website_niche.required' => 'This field is required!!',
-        'website_name.required' => 'This field is required!!',
-        'product_no.required' => 'This field is required!!',
-        'word_count.required' => 'This field is required!!',
-    ]);
-
-    $data = $request->all();
-
-    $sales_product_category = new SalesProductCategory();
-    $user = Deal::where('id',$request->deal_id)->first();
-    $pm_id = User::where('id',$user->pm_id)->first();
-
-    if($request->website_link){
-        $sales_product_category->website_link = $request->website_link;
-    }
-    if($request->website_niche){
-        $sales_product_category->website_niche = $request->website_niche;
-    }
-    if($request->website_name){
-        $sales_product_category->website_name = $request->website_name;
-    }
-    if($request->product_no){
-        $sales_product_category->product_no = $request->product_no;
-    }
-    if($request->word_count){
-        $sales_product_category->word_count = $request->word_count;
-    }
-    $sales_product_category->deal_id = $request->deal_id;
-    $sales_product_category->product_cat_callection_id = $request->product_category_id;
-    $sales_product_category->milestone_id= $request->milestone_id;
-    $sales_product_category->status = 'submitted';
-    $sales_product_category->save();
-
-    Notification::send($pm_id, new UpdateClientProductCategoryNotification($sales_product_category));
-
-    return response()->json([
-        'status'=>200,
-        'website_link'=>$sales_product_category->website_link,
-        'website_niche'=>$sales_product_category->website_niche,
-        'website_name'=>$sales_product_category->website_name,
-        'product_no'=>$sales_product_category->product_no,
-        'word_count'=>$sales_product_category->word_count,
-    ]);
-}
-public function updateSalesProductCategoryBusinessInfo(Request $request ,$id){
-    $data = $request->all();
-    $folder_links = json_encode($data['folder_link']);
-
-    $sales_product_category = SalesProductCategory::find($id);
-    $sales_product_category->business_information = $data['business_information'];
-    $sales_product_category->share_file_info = $data['share_file_info'];
-    $sales_product_category->folder_link = $folder_links;
-    $sales_product_category->save();
-
-    return response()->json([
-        'status'=>200,
-    ]);
-}
-
-public function updateSalesProductCategoryReferenceblog(Request $request ,$id){
-    $data = $request->all();
-    $category_urls = json_encode($data['category_url']);
-
-    $sales_product_category = SalesProductCategory::find($id);
-    $sales_product_category->category_url = $category_urls;
-    $sales_product_category->save();
-
-    return response()->json(['status'=>200]);
-}
-public function updateSalesProductCategoryProductList(Request $request ,$id){
-    $data = $request->all();
-    $category_lists = json_encode($data['category_list']);
-
-    $sales_product_category = SalesProductCategory::find($id);
-    $sales_product_category->category_list = $category_lists;
-    $sales_product_category->save();
-
-    return response()->json(['status'=>200]);
-}
-
-// ================================= BASIC SEO =======================
-public function updateBasicSEO(Request $request, $id){
-
-    $validated = $request->validate([
-        'owner_name' => 'required|url',
-        'business_name' => 'required',
-        'business_address' => 'required',
-        'phone_number' => 'required',
-        'zip_code' => 'required',
-    ], [
-        'owner_name.required' => 'This field is required!!',
-        'business_name.required' => 'This field is required!!',
-        'business_address.required' => 'This field is required!!',
-        'phone_number.required' => 'This field is required!!',
-        'zip_code.required' => 'This field is required!!',
-    ]);
-
-    $sales_basic_seo = new SalesBasicSeo();
-    $user = Deal::where('id',$request->deal_id)->first();
-    $pm_id = User::where('id',$user->pm_id)->first();
-
-    if($request->owner_name){
-        $sales_basic_seo->owner_name = $request->owner_name;
-    }
-    if($request->business_name){
-        $sales_basic_seo->business_name = $request->business_name;
-    }
-    if($request->business_address){
-        $sales_basic_seo->business_address = $request->business_address;
-    }
-    if($request->phone_number){
-        $sales_basic_seo->phone_number = $request->phone_number;
-    }
-    if($request->zip_code){
-        $sales_basic_seo->zip_code = $request->zip_code;
-    }
-    $sales_basic_seo->deal_id = $request->deal_id;
-    $sales_basic_seo->basic_seo_id = $request->basic_seo_id;
-    $sales_basic_seo->milestone_id= $request->milestone_id;
-    $sales_basic_seo->status = 'submitted';
-    $sales_basic_seo->save();
-
-    Notification::send($pm_id, new UpdateClientBasicSeoNotification($sales_basic_seo));
-
-    return response()->json([
-        'status'=>200,
-        'owner_name'=>$sales_basic_seo->owner_name,
-        'business_name'=>$sales_basic_seo->business_name,
-        'business_address'=>$sales_basic_seo->business_address,
-        'phone_number'=>$sales_basic_seo->phone_number,
-        'zip_code'=>$sales_basic_seo->zip_code,
-    ]);
-}
-public function updateSalesBasicSeoGoogleSearch(Request $request ,$id){
-    $sales_basic_seo = SalesBasicSeo::find($id);
-    $sales_basic_seo->google_search_info = $request->google_search_info;
-    $sales_basic_seo->done1 = $request->done1;
-    $sales_basic_seo->email1 = $request->email1;
-    $sales_basic_seo->password1 = $request->password1;
-    $sales_basic_seo->save();
-
-    return response()->json(['status'=>200]);
-}
-public function updateSalesBasicSeoGoogleAnalytic(Request $request ,$id){
-    $sales_basic_seo = SalesBasicSeo::find($id);
-    $sales_basic_seo->google_analytic_info = $request->google_analytic_info;
-    $sales_basic_seo->done2 = $request->done2;
-    $sales_basic_seo->email2 = $request->email2;
-    $sales_basic_seo->password2 = $request->password2;
-    $sales_basic_seo->save();
-
-    return response()->json(['status'=>200]);
-}
-public function updateSalesBasicSeoGoogleAccountInfo(Request $request ,$id){
-    $sales_basic_seo = SalesBasicSeo::find($id);
-    $sales_basic_seo->google_business_account_info = $request->google_business_account_info;
-    $sales_basic_seo->done3 = $request->done3;
-    $sales_basic_seo->email3 = $request->email3;
-    $sales_basic_seo->password3 = $request->password3;
-    $sales_basic_seo->save();
-
-    return response()->json(['status'=>200]);
-}
-public function updateSalesBasicSeoShareCms(Request $request ,$id){
-    $sales_basic_seo = SalesBasicSeo::find($id);
-    $sales_basic_seo->share_cms_access_info = $request->share_cms_access_info;
-    $sales_basic_seo->url = $request->url;
-    $sales_basic_seo->user_name = $request->user_name;
-    $sales_basic_seo->password4 = $request->password4;
-    $sales_basic_seo->save();
-
-    return response()->json(['status'=>200]);
-}
-// ================== Update Web Content =======================
-public function updatePmWebContent(Request $request){
-    DB::beginTransaction();
-    $data = $request->all();
-    $folder_links = json_encode($data['folder_link']);
-    $reference_websites = json_encode($data['reference_website']);
-    $description1 = json_encode($data['description1']);
-    $description2 = json_encode($data['description2']);
-    $description3 = json_encode($data['description3']);
-    $page_names = json_encode($data['page_name1']);
-    $quantitys = json_encode($data['quantity1']);
-    $approximate_words = json_encode($data['approximate_word1']);
-    $website_links = json_encode($data['website_link']);
-    $pm_page_names = json_encode($data['page_name']);
-    $pm_quantitys = json_encode($data['quantity']);
-    $pm_approximate_words = json_encode($data['approximate_word']);
-
-    $pm_web_content = new PmWebContent();
-    $pm_web_content->sales_web_content_id = $data['sales_web_content_id'];
-    $pm_web_content->deal_id = $data['deal_id'];
-    $pm_web_content->website_link = $data['website_link2'];
-    $pm_web_content->website_niche = $data['website_niche2'];
-    $pm_web_content->website_name = $data['website_name2'];
-    $pm_web_content->business_information = $data['business_information2'];
-    $pm_web_content->share_file = $request->share_file;
-    $pm_web_content->folder_link = $folder_links;
-    $pm_web_content->reference_website = $reference_websites;
-    $pm_web_content->competitor_content = $request->competitor_content;
-    $pm_web_content->description1 = $description1;
-    $pm_web_content->description2 = $description2;
-    $pm_web_content->description3 = $description3;
-    $pm_web_content->product_list = $data['product_list1'];
-    $pm_web_content->page_name1 = $page_names;
-    $pm_web_content->quantity1 = $quantitys;
-    $pm_web_content->approximate_word = $approximate_words;
-    $pm_web_content->gender = $data['target_audience_gender'];
-    $pm_web_content->age1 = $data['target_audience_age1'];
-    $pm_web_content->age2 = $data['target_audience_age2'];
-    $pm_web_content->monthly_income = $data['monthly_income1'];
-    $pm_web_content->education_level = $data['education_level1'];
-    $pm_web_content->country = $data['country1'];
-    $pm_web_content->city = $data['city1'];
-    $pm_web_content->interest = $data['interest1'];
-    $pm_web_content->buying_habit1 = $data['interest_buying_habit1'];
-    $pm_web_content->buying_habit2 = $data['interest_buying_habit2'];
-    $pm_web_content->buying_habit3 = $data['interest_buying_habit3'];
-    $pm_web_content->language = $data['thor_native_language'];
-    $pm_web_content->word_appropriate = $data['word_appropriate'];
-    $pm_web_content->word_client_initially = $data['word_client_initially'];
-    $pm_web_content->additional_word = $data['additional_word'];
-    $pm_web_content->layout_content = $data['layout_content'];
-    $pm_web_content->theme_link = $website_links;
-    $pm_web_content->pm_page_name = $pm_page_names;
-    $pm_web_content->pm_quantity= $pm_quantitys;
-    $pm_web_content->pm_approximate_word= $pm_approximate_words;
-    $pm_web_content->milestone_id= $request->milestone_id;
-    if($request->submitted_by){
-        $pm_web_content->submitted_by= $request->submitted_by;
-    }
-    $pm_web_content->save();
-
-
-    // AUTO TASK ASSIGN FOR SALES PROJECT MANAGER
-
-    $project_id = Project::where('deal_id', $request->deal_id)->first();
-    $task_estimation_hours = Task::where('project_id', $project_id->id)->sum('estimate_hours');
-    $task_estimation_minutes = Task::where('project_id', $project_id->id)->sum('estimate_minutes');
-    $total_task_estimation_minutes = $task_estimation_hours * 60 + $task_estimation_minutes;
-    $left_minutes = ($project_id->hours_allocated - $request->estimate_hours) * 60 - ($total_task_estimation_minutes + $request->estimate_minutes);
-    // dd($left_minutes);
-
-    $left_in_hours = round($left_minutes / 60, 0);
-    $left_in_minutes = $left_minutes % 60;
-
-    if ($left_minutes < 1) {
-        // return response()->json([
-        //     "message" => "The given data was invalid.",
-        //     "errors" => [
-        //         "estimate_hours" => [
-        //             "Estimate hours cannot exceed from project allocation hours !"
-        //         ]
-        //     ]
-        // ], 422);
+    public function viewBasicSEO(Request $request, $id)
+    {
+        $this->pageTitle = 'Basic SEO';
+        $this->basic_seos = BasicSeo::where('deal_id', $request->id)->paginate(5);
+        return view('service-type.basic_seo_view', $this->data);
     }
 
-    // dd($request);
-    $project = request('project_id') ? Project::findOrFail(request('project_id')) : null;
-
-    $ganttTaskArray = [];
-    $gantTaskLinkArray = [];
-    $taskBoardColumn = TaskboardColumn::where('slug', 'incomplete')->first();
-    $task = new Task();
-    $task->heading = $project_id->project_name . ' - Cross Departmental Task';
-
-    $task->description = '<p>'.$data['website_link2'] .'</p><br><p>'
-    .$data['website_niche2'].'</p></br><p>'.$data['website_name2'].'</p></br><p>'
-    .$data['business_information2'].'</p></br><p>'.$request->share_file.'</p></br><p>'.$folder_links.'</p></br><p>'.$reference_websites.'</p></br><p>'.$request->competitor_content.'</p></br><p>'
-    .$description1.'</p></br><p>'.$description2.'</p></br><p>'.$description3.'</p></br><p>'.$data['product_list1'].'</p></br><p>'.$page_names.'</p></br><p>'.$quantitys.'</p></br><p>'.$approximate_words.'</p></br><p>'
-    .$data['target_audience_gender'].'</p></br><p>'.$data['target_audience_age1'].'</p></br><p>'.$data['target_audience_age2'].'</p></br><p>'.$data['monthly_income1'].'</p></br><p>'.$data['education_level1'].'</p></br><p>'
-    .$data['country1'].'</p></br><p>'.$data['city1'].'</p></br><p>'.$data['interest1'].'</p></br><p>'.$data['interest_buying_habit1'].'</p></br><p>'.$data['interest_buying_habit2'].'</p></br><p>'.$data['interest_buying_habit3'].'</p></br><p>'
-    .$data['thor_native_language'].'</p></br><p>'.$data['word_appropriate'].'</p></br><p>'.$data['word_client_initially'].'</p></br><p>'.$data['additional_word'].'</p></br><p>'.$data['layout_content'].'</p></br><p>'
-    .$website_links.'</p></br><p>'.$pm_page_names.'</p></br><p>'.$pm_quantitys.'</p></br><p>'.$pm_approximate_words.'</p></br>';
-
-    // $dueDate = ($request->has('without_duedate')) ? null : Carbon::createFromFormat($this->global->date_format, $request->due_date)->format('Y-m-d');
-    $task->start_date = Carbon::now()->format('Y-m-d');
-    // $task->due_date = $dueDate;
-    $task->project_id = $project_id->id;
-    // $task->task_category_id = $request->category_id;
-    $task->priority = 'medium';
-    $task->board_column_id = 2;
-
-    $task->estimate_hours = 0;
-    $task->estimate_minutes = 0;
-    // $task->deliverable_id = $request->deliverable_id;
-
-
-    if ($request->milestone_id != '') {
-        $task->milestone_id = $request->milestone_id;
+    // Edit web content
+    public function EditWebContent(Request $request, $id)
+    {
+        $this->pageTitle = 'Edit web content';
+        $this->web_content = WebContent::find($id);
+        return view('service-type.edit_web_content', $this->data);
     }
 
-    $task->task_status = "pending";
-    $total_hours = 0;
-    $total_minutes = 0;
-    $total_in_minutes = 0;
-    $task->estimate_time_left_minutes = $total_in_minutes;
-
-    $task->save();
-
-    $task->task_short_code = ($project) ? $project->project_short_code . '-' . $task->id : null;
-    $task->saveQuietly();
-
-    $users = User::where('role_id',11)->get();
-    foreach ($users as $user) {
-        $task_user = new TaskUser();
-        $task_user->user_id = $user->id;
-        $task_user->task_id= $task->id;
-        $task_user->save();
-        Notification::send($user, new PmUpdateWebContentNotification($task_user));
+    // Edit Blog Article
+    public function EditBlogArticle(Request $request, $id)
+    {
+        $this->pageTitle = 'Edit blog article';
+        $this->blog_article = BlogArticle::find($id);
+        return view('service-type.edit_blog_article', $this->data);
     }
 
-
-    return response()->json(['status'=>200]);
-}
-
-
-// ==================================Update PM Blog Articles======================
-public function updatePmBlogArticle(Request $request){
-
-// dd($request->all());
-    $data = $request->all();
-
-    $folderLinks = json_encode($data['folder_link']);
-    $blogUrls = json_encode($data['blog_url']);
-    $topicLinks = json_encode($data['topic_link']);
-    $keywordLinks = json_encode($data['keyword_link']);
-    $website_links = json_encode($data['website_link']);
-    $page_names = json_encode($data['page_name']);
-    $quantitys = json_encode($data['quantity']);
-    $approximate_words = json_encode($data['approximate_word']);
-
-    $pm_blog_article = new PmBlogArticle();
-    $pm_blog_article->word_appropriate = $data['word_appropriate'];
-    $pm_blog_article->word_client_initially = $data['word_client_initially'];
-    $pm_blog_article->website_link = $data['website_link_2'];
-    $pm_blog_article->website_niche = $data['website_niche_2'];
-    $pm_blog_article->website_name = $data['website_name'];
-    $pm_blog_article->business_information = $data['business_information'];
-    $pm_blog_article->product_no = $data['product_no'];
-    $pm_blog_article->sales_blog_article_id = $data['sales_blog_article_id'];
-    $pm_blog_article->deal_id = $data['deal_id'];
-    $pm_blog_article->additional_word = $data['additional_word'];
-    $pm_blog_article->layout_content = $data['layout_content'];
-    $pm_blog_article->share_file_info = $request->share_file_info;
-    $pm_blog_article->folder_link = $folderLinks;
-    $pm_blog_article->blog_url = $blogUrls;
-    $pm_blog_article->topic_info = $data['topic_info'];
-    $pm_blog_article->topic_link = $topicLinks;
-    $pm_blog_article->keyword_info = $data['keyword_info'];
-    $pm_blog_article->keyword_link = $keywordLinks;
-    $pm_blog_article->theme_link = $website_links;
-    $pm_blog_article->page_name = $page_names;
-    $pm_blog_article->quantity = $quantitys;
-    $pm_blog_article->approximate_word = $approximate_words;
-    $pm_blog_article->milestone_id= $request->milestone_id;
-    if($request->submitted_by){
-        $pm_blog_article->submitted_by= $request->submitted_by;
-    }
-    $pm_blog_article->save();
-
-     // AUTO TASK ASSIGN FOR SALES PROJECT MANAGER
-
-     $project_id = Project::where('deal_id', $request->deal_id)->first();
-     $task_estimation_hours = Task::where('project_id', $project_id->id)->sum('estimate_hours');
-     $task_estimation_minutes = Task::where('project_id', $project_id->id)->sum('estimate_minutes');
-     $total_task_estimation_minutes = $task_estimation_hours * 60 + $task_estimation_minutes;
-     $left_minutes = ($project_id->hours_allocated - $request->estimate_hours) * 60 - ($total_task_estimation_minutes + $request->estimate_minutes);
-     // dd($left_minutes);
-
-     $left_in_hours = round($left_minutes / 60, 0);
-     $left_in_minutes = $left_minutes % 60;
-
-     if ($left_minutes < 1) {
-         // return response()->json([
-         //     "message" => "The given data was invalid.",
-         //     "errors" => [
-         //         "estimate_hours" => [
-         //             "Estimate hours cannot exceed from project allocation hours !"
-         //         ]
-         //     ]
-         // ], 422);
-     }
-
-     // dd($request);
-     $project = request('project_id') ? Project::findOrFail(request('project_id')) : null;
-
-     $ganttTaskArray = [];
-     $gantTaskLinkArray = [];
-     $taskBoardColumn = TaskboardColumn::where('slug', 'incomplete')->first();
-     $task = new Task();
-     $task->heading = $project_id->project_name . ' - Cross Departmental Task';
-
-     $task->description = '<p>'.$data['word_appropriate'] .'</p><br><p>'
-     .$data['word_client_initially'].'</p></br><p>'.$data['website_link_2'].'</p></br><p>'
-     .$data['website_niche_2'].'</p></br><p>'.$data['website_name'].'</p></br><p>'.$data['business_information'].'</p></br><p>'.$data['product_no'].'</p></br><p>'
-     .$data['additional_word'].'</p></br><p>'.$data['layout_content'].'</p></br><p>'.$request->share_file_info.'</p></br><p>'.$folderLinks.'</p></br><p>'.$blogUrls.'</p></br><p>'.$data['topic_info'].'</p></br><p>'.$topicLinks.'</p></br><p>'
-     .$data['keyword_info'].'</p></br><p>'.$keywordLinks.'</p></br><p>'.$website_links.'</p></br><p>'.$page_names.'</p></br><p>'.$quantitys.'</p></br><p>'
-     .$approximate_words.'</p></br>';
-
-     // $dueDate = ($request->has('without_duedate')) ? null : Carbon::createFromFormat($this->global->date_format, $request->due_date)->format('Y-m-d');
-     $task->start_date = Carbon::now()->format('Y-m-d');
-     // $task->due_date = $dueDate;
-     $task->project_id = $project_id->id;
-     // $task->task_category_id = $request->category_id;
-     $task->priority = 'medium';
-     $task->board_column_id = 2;
-
-     $task->estimate_hours = 0;
-     $task->estimate_minutes = 0;
-     // $task->deliverable_id = $request->deliverable_id;
-
-
-     if ($request->milestone_id != '') {
-         $task->milestone_id = $request->milestone_id;
-     }
-
-     $task->task_status = "pending";
-     $total_hours = 0;
-     $total_minutes = 0;
-     $total_in_minutes = 0;
-     $task->estimate_time_left_minutes = $total_in_minutes;
-
-
-     $task->save();
-
-     $task->task_short_code = ($project) ? $project->project_short_code . '-' . $task->id : null;
-     $task->saveQuietly();
-
-     $users = User::where('role_id',11)->get();
-     foreach ($users as $user) {
-         $task_user = new TaskUser();
-         $task_user->user_id = $user->id;
-         $task_user->task_id= $task->id;
-         $task_user->save();
-         Notification::send($user, new PmUpdateBlogArticleNotification($task_user));
-     }
-
-    return response()->json(['status'=>200]);
-}
-// ==================================Update PM Product Description======================
-public function updatePmProductDescription(Request $request){
-    // dd($request->all());
-    $data = $request->all();
-
-    $folder_links = json_encode($data['folder_link']);
-    $blogUrls = json_encode($data['blog_url']);
-    $product_lists = json_encode($data['product_list']);
-    $website_links = json_encode($data['website_link']);
-    $page_names = json_encode($data['page_name']);
-    $quantitys = json_encode($data['quantity']);
-    $approximate_words = json_encode($data['approximate_word']);
-
-    $pm_product_description = new PmProductDescription();
-
-    $pm_product_description->sales_product_description_id = $data['sales_product_description_id'];
-    $pm_product_description->deal_id = $data['deal_id'];
-    $pm_product_description->word_appropriate = $data['word_appropriate'];
-    $pm_product_description->word_client_initially = $data['word_client_initially'];
-    $pm_product_description->website_link = $data['website_link_2'];
-    $pm_product_description->website_niche = $data['website_niche_2'];
-    $pm_product_description->website_name = $data['website_name'];
-    $pm_product_description->business_information = $data['business_information'];
-    $pm_product_description->additional_word = $data['additional_word'];
-    $pm_product_description->product_no = $data['product_no'];
-    $pm_product_description->word_count = $data['word_count'];
-    $pm_product_description->layout_content = $data['layout_content'];
-    $pm_product_description->share_file_info = $request->share_file_info;
-    $pm_product_description->folder_link = $folder_links;
-    $pm_product_description->blog_url = $blogUrls;
-    $pm_product_description->product_list = $product_lists;
-    $pm_product_description->theme_link = $website_links;
-    $pm_product_description->page_name = $page_names;
-    $pm_product_description->quantity = $quantitys;
-    $pm_product_description->approximate_word = $approximate_words;
-    $pm_product_description->milestone_id= $request->milestone_id;
-    if($request->submitted_by){
-        $pm_product_description->submitted_by= $request->submitted_by;
-    }
-    $pm_product_description->save();
-
-
-    // AUTO TASK ASSIGN FOR SALES PROJECT MANAGER
-
-    $project_id = Project::where('deal_id', $request->deal_id)->first();
-    $task_estimation_hours = Task::where('project_id', $project_id->id)->sum('estimate_hours');
-    $task_estimation_minutes = Task::where('project_id', $project_id->id)->sum('estimate_minutes');
-    $total_task_estimation_minutes = $task_estimation_hours * 60 + $task_estimation_minutes;
-    $left_minutes = ($project_id->hours_allocated - $request->estimate_hours) * 60 - ($total_task_estimation_minutes + $request->estimate_minutes);
-    // dd($left_minutes);
-
-    $left_in_hours = round($left_minutes / 60, 0);
-    $left_in_minutes = $left_minutes % 60;
-
-    if ($left_minutes < 1) {
-        // return response()->json([
-        //     "message" => "The given data was invalid.",
-        //     "errors" => [
-        //         "estimate_hours" => [
-        //             "Estimate hours cannot exceed from project allocation hours !"
-        //         ]
-        //     ]
-        // ], 422);
+    // Edit Product description
+    public function EditProductDescription(Request $request, $id)
+    {
+        $this->pageTitle = 'Edit product description';
+        $this->product_description = ProductDescription::find($id);
+        return view('service-type.edit_product_description', $this->data);
     }
 
-    // dd($request);
-    $project = request('project_id') ? Project::findOrFail(request('project_id')) : null;
-
-    $ganttTaskArray = [];
-    $gantTaskLinkArray = [];
-    $taskBoardColumn = TaskboardColumn::where('slug', 'incomplete')->first();
-    $task = new Task();
-    $task->heading = $project_id->project_name . ' - Cross Departmental Task';
-
-    $task->description = '<p>'.$data['word_appropriate'] .'</p><br><p>'
-    .$data['word_client_initially'].'</p></br><p>'.$data['website_link_2'].'</p></br><p>'
-    .$data['website_niche_2'].'</p></br><p>'.$data['website_name'].'</p></br><p>'.$data['business_information'].'</p></br><p>'.$data['additional_word'].'</p></br><p>'
-    .$data['product_no'].'</p></br><p>'.$data['word_count'].'</p></br><p>'.$data['layout_content'].'</p></br><p>'.$request->share_file_info.'</p></br><p>'.$folder_links.'</p></br><p>'.$blogUrls.'</p></br><p>'.$product_lists.'</p></br><p>'
-    .$website_links.'</p></br><p>'.$page_names.'</p></br><p>'.$quantitys.'</p></br><p>'.$approximate_words.'</p></br>';
-
-    // $dueDate = ($request->has('without_duedate')) ? null : Carbon::createFromFormat($this->global->date_format, $request->due_date)->format('Y-m-d');
-    $task->start_date = Carbon::now()->format('Y-m-d');
-    // $task->due_date = $dueDate;
-    $task->project_id = $project_id->id;
-    // $task->task_category_id = $request->category_id;
-    $task->priority = 'medium';
-    $task->board_column_id = 2;
-
-    $task->estimate_hours = 0;
-    $task->estimate_minutes = 0;
-    // $task->deliverable_id = $request->deliverable_id;
-
-
-    if ($request->milestone_id != '') {
-        $task->milestone_id = $request->milestone_id;
+    // Edit Product Category
+    public function EditProductCategory(Request $request, $id)
+    {
+        $this->pageTitle = 'Edit product category';
+        $this->product_category = ProductCategoryCollection::find($id);
+        return view('service-type.edit_product_category', $this->data);
+    }
+    public function EditBasicSEO(Request $request, $id)
+    {
+        $this->pageTitle = 'Edit basic seo';
+        $this->basic_seo = BasicSeo::find($id);
+        return view('service-type.edit_basic_seo', $this->data);
     }
 
-    $task->task_status = "pending";
-    $total_hours = 0;
-    $total_minutes = 0;
-    $total_in_minutes = 0;
-    $task->estimate_time_left_minutes = $total_in_minutes;
+    // ================================= UPDATE WEB CONTENT START =======================
+
+    public function updateSalesWebContent(Request $request, $id)
+    {
+        $validated = $request->validate([
+            'website_link' => 'required|url',
+            'website_niche' => 'required',
+            'website_name' => 'required',
+            'product_list' => 'required',
+            'country' => 'required',
+            'city' => 'required',
+            'interest' => 'required',
+            'buying_habit1' => 'required',
+            'buying_habit2' => 'required',
+            'buying_habit3' => 'required',
+            'language' => 'required',
+        ], [
+            'website_link.required' => 'This field is required!!',
+            'website_niche.required' => 'This field is required!!',
+            'website_name.required' => 'This field is required!!',
+            'product_list.required' => 'This field is required!!',
+            'country.required' => 'This field is required!!',
+            'city.required' => 'This field is required!!',
+            'interest.required' => 'This field is required!!',
+            'buying_habit1.required' => 'This field is required!!',
+            'buying_habit2.required' => 'This field is required!!',
+            'buying_habit3.required' => 'This field is required!!',
+            'language.required' => 'This field is required!!',
+        ]);
+
+        $sales_web_content = new SalesWebContent();
+        $user = Deal::where('id', $request->deal_id)->first();
+        $pm_id = User::where('id', $user->pm_id)->first();
 
 
-    $task->save();
+        if ($request->website_link) {
+            $sales_web_content->deal_id = $request->deal_id;
+            $sales_web_content->web_content_id = $request->web_content_id;
+            $sales_web_content->website_link = $request->website_link;
+        }
+        if ($request->website_niche) {
+            $sales_web_content->deal_id = $request->deal_id;
+            $sales_web_content->web_content_id = $request->web_content_id;
+            $sales_web_content->website_niche = $request->website_niche;
+        }
+        if ($request->website_name) {
+            $sales_web_content->deal_id = $request->deal_id;
+            $sales_web_content->web_content_id = $request->web_content_id;
+            $sales_web_content->website_name = $request->website_name;
+        }
+        if ($request->product_list) {
+            $sales_web_content->deal_id = $request->deal_id;
+            $sales_web_content->web_content_id = $request->web_content_id;
+            $sales_web_content->product_list = $request->product_list;
+        }
+        if ($request->country) {
+            $sales_web_content->deal_id = $request->deal_id;
+            $sales_web_content->web_content_id = $request->web_content_id;
+            $sales_web_content->country = $request->country;
+        }
+        if ($request->city) {
+            $sales_web_content->deal_id = $request->deal_id;
+            $sales_web_content->web_content_id = $request->web_content_id;
+            $sales_web_content->city = $request->city;
+        }
+        if ($request->interest) {
+            $sales_web_content->deal_id = $request->deal_id;
+            $sales_web_content->web_content_id = $request->web_content_id;
+            $sales_web_content->interest = $request->interest;
+        }
+        if ($request->buying_habit1) {
+            $sales_web_content->deal_id = $request->deal_id;
+            $sales_web_content->web_content_id = $request->web_content_id;
+            $sales_web_content->buying_habit1 = $request->buying_habit1;
+        }
+        if ($request->buying_habit2) {
+            $sales_web_content->deal_id = $request->deal_id;
+            $sales_web_content->web_content_id = $request->web_content_id;
+            $sales_web_content->buying_habit2 = $request->buying_habit2;
+        }
+        if ($request->buying_habit3) {
+            $sales_web_content->deal_id = $request->deal_id;
+            $sales_web_content->web_content_id = $request->web_content_id;
+            $sales_web_content->buying_habit3 = $request->buying_habit3;
+        }
+        if ($request->language) {
+            $sales_web_content->deal_id = $request->deal_id;
+            $sales_web_content->web_content_id = $request->web_content_id;
+            $sales_web_content->language = $request->language;
+        }
+        $sales_web_content->milestone_id = $request->milestone_id;
+        $sales_web_content->status = 'submitted';
+        $sales_web_content->save();
 
-    $task->task_short_code = ($project) ? $project->project_short_code . '-' . $task->id : null;
-    $task->saveQuietly();
+        Notification::send($pm_id, new UpdateClientFormNotification($sales_web_content));
 
-    $users = User::where('role_id',11)->get();
-    foreach ($users as $user) {
-        $task_user = new TaskUser();
-        $task_user->user_id = $user->id;
-        $task_user->task_id= $task->id;
-        $task_user->save();
-        Notification::send($user, new PmUpdateProductDescriptionNotification($task_user));
+        return response()->json([
+            'status' => 200,
+            'website_link' => $sales_web_content->website_link,
+            'website_niche' => $sales_web_content->website_niche,
+            'website_name' => $sales_web_content->website_name,
+            'product_list' => $sales_web_content->product_list,
+            'country' => $sales_web_content->country,
+            'city' => $sales_web_content->city,
+            'interest' => $sales_web_content->interest,
+            'buying_habit1' => $sales_web_content->buying_habit1,
+            'buying_habit2' => $sales_web_content->buying_habit2,
+            'buying_habit3' => $sales_web_content->buying_habit3,
+            'language' => $sales_web_content->language,
+        ]);
+    }
+    public function updateSalesWebContentPageList(Request $request, $id)
+    {
+        $data = $request->all();
+        $page_names = json_encode($data['page_name']);
+        $quantitys = json_encode($data['quantity']);
+        $approximate_words = json_encode($data['approximate_word']);
+
+        $sales_web_content = SalesWebContent::find($id);
+        $sales_web_content->page_name = $page_names;
+        $sales_web_content->quantity = $quantitys;
+        $sales_web_content->approximate_word = $approximate_words;
+        $sales_web_content->save();
+
+        return response()->json(['status' => 200]);
+    }
+    public function updateSalesWebContentReferenceWebsite(Request $request, $id)
+    {
+        // dd($request->all());
+        $data = $request->all();
+        $reference_websites = json_encode($data['reference_website']);
+        $description1 = json_encode($data['description1']);
+        $description2 = json_encode($data['description2']);
+        $description3 = json_encode($data['description3']);
+
+        $sales_web_content = SalesWebContent::find($id);
+        $sales_web_content->reference_website = $reference_websites;
+        $sales_web_content->competitor_content = $data['competitor_content'];
+        $sales_web_content->description1 = $description1;
+        $sales_web_content->description2 = $description2;
+        $sales_web_content->description3 = $description3;
+        $sales_web_content->save();
+
+        return response()->json(['status' => 200]);
+    }
+    public function updateSalesWebContentBusinessInfo(Request $request, $id)
+    {
+        $data = $request->all();
+        $folder_links = json_encode($data['folder_link']);
+
+        $sales_web_content = SalesWebContent::find($id);
+        // dd($sales_web_content);
+        $sales_web_content->business_information = $data['business_information'];
+        $sales_web_content->share_file_info = $data['share_file_info'];
+        $sales_web_content->folder_link = $folder_links;
+        $sales_web_content->save();
+
+        return response()->json([
+            'status' => 200,
+        ]);
+    }
+    public function updateSalesWebContentDemographicInfo(Request $request, $id)
+    {
+
+        $sales_web_content = SalesWebContent::find($id);
+        $sales_web_content->gender = $request->gender;
+        $sales_web_content->age1 = $request->age1;
+        $sales_web_content->age2 = $request->age2;
+        $sales_web_content->monthly_income = $request->monthly_income;
+        $sales_web_content->education_level = $request->education_level;
+        $sales_web_content->save();
+
+        return response()->json([
+            'status' => 200,
+        ]);
+    }
+    // ================================= WEB CONTENT END=======================
+
+
+    // ================================= BLOG ARTICLES START =======================
+
+    public function updateSalesBlogArticle(Request $request, $id)
+    {
+        $validated = $request->validate([
+            'website_link' => 'required|url',
+            'website_niche' => 'required',
+            'website_name' => 'required',
+            'product_no' => 'required',
+        ], [
+            'website_link.required' => 'This field is required!!',
+            'website_niche.required' => 'This field is required!!',
+            'website_name.required' => 'This field is required!!',
+            'product_no.required' => 'This field is required!!',
+        ]);
+
+        $sales_blog_article = new SalesBlogArticle();
+        $user = Deal::where('id', $request->deal_id)->first();
+        $pm_id = User::where('id', $user->pm_id)->first();
+
+        if ($request->website_link) {
+            $sales_blog_article->deal_id = $request->deal_id;
+            $sales_blog_article->blog_article_id = $request->blog_article_id;
+            $sales_blog_article->website_link = $request->website_link;
+        }
+        if ($request->website_niche) {
+            $sales_blog_article->deal_id = $request->deal_id;
+            $sales_blog_article->blog_article_id = $request->blog_article_id;
+            $sales_blog_article->website_niche = $request->website_niche;
+        }
+        if ($request->website_name) {
+            $sales_blog_article->deal_id = $request->deal_id;
+            $sales_blog_article->blog_article_id = $request->blog_article_id;
+            $sales_blog_article->website_name = $request->website_name;
+        }
+        if ($request->product_no) {
+            $sales_blog_article->deal_id = $request->deal_id;
+            $sales_blog_article->blog_article_id = $request->blog_article_id;
+            $sales_blog_article->product_no = $request->product_no;
+        }
+        $sales_blog_article->milestone_id = $request->milestone_id;
+        $sales_blog_article->status = 'submitted';
+        $sales_blog_article->save();
+
+        Notification::send($pm_id, new UpdateClientBlogArticlesNotification($sales_blog_article));
+
+        return response()->json([
+            'status' => 200,
+            'website_link' => $sales_blog_article->website_link,
+            'website_niche' => $sales_blog_article->website_niche,
+            'website_name' => $sales_blog_article->website_name,
+            'product_no' => $sales_blog_article->product_no,
+        ]);
+    }
+
+    public function updateSalesBlogArticleBusinessInfo(Request $request, $id)
+    {
+        $data = $request->all();
+        $folder_links = json_encode($data['folder_link']);
+
+        $sales_blog_article = SalesBlogArticle::find($id);
+        $sales_blog_article->business_information = $data['business_information'];
+        $sales_blog_article->share_file_info = $data['share_file_info'];
+        $sales_blog_article->folder_link = $folder_links;
+        $sales_blog_article->save();
+
+        return response()->json([
+            'status' => 200,
+        ]);
+    }
+
+    public function updateSalesBlogArticleReferenceblog(Request $request, $id)
+    {
+        $data = $request->all();
+        $blog_urls = json_encode($data['blog_url']);
+
+        $sales_blog_article = SalesBlogArticle::find($id);
+        $sales_blog_article->blog_url = $blog_urls;
+        $sales_blog_article->save();
+
+        return response()->json(['status' => 200]);
+    }
+
+    public function updateSalesBlogArticleTopiceInfo(Request $request, $id)
+    {
+
+        $data = $request->all();
+        $topic_links = json_encode($data['topic_link']);
+
+        $sales_blog_article = SalesBlogArticle::find($id);
+        $sales_blog_article->topic_info = $data['topic_info'];
+        $sales_blog_article->topic_link = $topic_links;
+        $sales_blog_article->save();
+
+        return response()->json(['status' => 200]);
+    }
+
+    public function updateSalesBlogArticleKeywordsInfo(Request $request, $id)
+    {
+        $data = $request->all();
+        $keyword_links = json_encode($data['keyword_link']);
+
+        $sales_blog_article = SalesBlogArticle::find($id);
+        $sales_blog_article->keyword_info = $data['keyword_info'];
+        $sales_blog_article->keyword_link = $keyword_links;
+        $sales_blog_article->save();
+
+        return response()->json(['status' => 200]);
+    }
+    // ================================= BLOG ARTICLES END =======================
+
+
+
+    // ================================= PRODUCT DESCRIPTION START =======================
+    public function updateProductDescription(Request $request, $id)
+    {
+        $validated = $request->validate([
+            'website_link' => 'required|url',
+            'website_niche' => 'required',
+            'website_name' => 'required',
+            'product_no' => 'required',
+            'word_count' => 'required',
+        ], [
+            'website_link.required' => 'This field is required!!',
+            'website_niche.required' => 'This field is required!!',
+            'website_name.required' => 'This field is required!!',
+            'product_no.required' => 'This field is required!!',
+            'word_count.required' => 'This field is required!!',
+        ]);
+
+        $sales_product_description = new SalesProductDescription();
+        $user = Deal::where('id', $request->deal_id)->first();
+        $pm_id = User::where('id', $user->pm_id)->first();
+
+        if ($request->website_link) {
+            $sales_product_description->website_link = $request->website_link;
+        }
+        if ($request->website_niche) {
+            $sales_product_description->website_niche = $request->website_niche;
+        }
+        if ($request->website_name) {
+            $sales_product_description->website_name = $request->website_name;
+        }
+        if ($request->product_no) {
+            $sales_product_description->product_no = $request->product_no;
+        }
+        if ($request->word_count) {
+            $sales_product_description->word_count = $request->word_count;
+        }
+        $sales_product_description->deal_id = $request->deal_id;
+        $sales_product_description->product_description_id = $request->product_description_id;
+        $sales_product_description->milestone_id = $request->milestone_id;
+        $sales_product_description->status = 'submitted';
+        $sales_product_description->save();
+
+        Notification::send($pm_id, new UpdateClientProductDescriptionNotification($sales_product_description));
+
+        return response()->json([
+            'status' => 200,
+            'website_link' => $sales_product_description->website_link,
+            'website_niche' => $sales_product_description->website_niche,
+            'website_name' => $sales_product_description->website_name,
+            'product_no' => $sales_product_description->product_no,
+            'word_count' => $sales_product_description->word_count,
+        ]);
+    }
+
+    public function updateSalesProductDescriptionBusinessInfo(Request $request, $id)
+    {
+        $data = $request->all();
+        $folder_links = json_encode($data['folder_link']);
+
+        $sales_product_description = SalesProductDescription::find($id);
+        $sales_product_description->business_information = $data['business_information'];
+        $sales_product_description->share_file_info = $data['share_file_info'];
+        $sales_product_description->folder_link = $folder_links;
+        $sales_product_description->save();
+
+        return response()->json([
+            'status' => 200,
+        ]);
+    }
+
+    public function updateSalesProductDescriptionReferenceblog(Request $request, $id)
+    {
+        $data = $request->all();
+        $blog_urls = json_encode($data['blog_url']);
+
+        $sales_product_description = SalesProductDescription::find($id);
+        $sales_product_description->blog_url = $blog_urls;
+        $sales_product_description->save();
+
+        return response()->json(['status' => 200]);
+    }
+
+    public function updateSalesProductDescriptionProductList(Request $request, $id)
+    {
+        $data = $request->all();
+        $product_lists = json_encode($data['product_list']);
+
+        $sales_product_description = SalesProductDescription::find($id);
+        $sales_product_description->product_list = $product_lists;
+        $sales_product_description->save();
+
+        return response()->json(['status' => 200]);
+    }
+    // ================================= PRODUCT DESCRIPTION END =======================
+
+
+    public function updateProductCategory(Request $request, $id)
+    {
+        // dd($request->all());
+
+        $validated = $request->validate([
+            'website_link' => 'required|url',
+            'website_niche' => 'required',
+            'website_name' => 'required',
+            'product_no' => 'required',
+            'word_count' => 'required',
+        ], [
+            'website_link.required' => 'This field is required!!',
+            'website_niche.required' => 'This field is required!!',
+            'website_name.required' => 'This field is required!!',
+            'product_no.required' => 'This field is required!!',
+            'word_count.required' => 'This field is required!!',
+        ]);
+
+        $data = $request->all();
+
+        $sales_product_category = new SalesProductCategory();
+        $user = Deal::where('id', $request->deal_id)->first();
+        $pm_id = User::where('id', $user->pm_id)->first();
+
+        if ($request->website_link) {
+            $sales_product_category->website_link = $request->website_link;
+        }
+        if ($request->website_niche) {
+            $sales_product_category->website_niche = $request->website_niche;
+        }
+        if ($request->website_name) {
+            $sales_product_category->website_name = $request->website_name;
+        }
+        if ($request->product_no) {
+            $sales_product_category->product_no = $request->product_no;
+        }
+        if ($request->word_count) {
+            $sales_product_category->word_count = $request->word_count;
+        }
+        $sales_product_category->deal_id = $request->deal_id;
+        $sales_product_category->product_cat_callection_id = $request->product_category_id;
+        $sales_product_category->milestone_id = $request->milestone_id;
+        $sales_product_category->status = 'submitted';
+        $sales_product_category->save();
+
+        Notification::send($pm_id, new UpdateClientProductCategoryNotification($sales_product_category));
+
+        return response()->json([
+            'status' => 200,
+            'website_link' => $sales_product_category->website_link,
+            'website_niche' => $sales_product_category->website_niche,
+            'website_name' => $sales_product_category->website_name,
+            'product_no' => $sales_product_category->product_no,
+            'word_count' => $sales_product_category->word_count,
+        ]);
+    }
+    public function updateSalesProductCategoryBusinessInfo(Request $request, $id)
+    {
+        $data = $request->all();
+        $folder_links = json_encode($data['folder_link']);
+
+        $sales_product_category = SalesProductCategory::find($id);
+        $sales_product_category->business_information = $data['business_information'];
+        $sales_product_category->share_file_info = $data['share_file_info'];
+        $sales_product_category->folder_link = $folder_links;
+        $sales_product_category->save();
+
+        return response()->json([
+            'status' => 200,
+        ]);
+    }
+
+    public function updateSalesProductCategoryReferenceblog(Request $request, $id)
+    {
+        $data = $request->all();
+        $category_urls = json_encode($data['category_url']);
+
+        $sales_product_category = SalesProductCategory::find($id);
+        $sales_product_category->category_url = $category_urls;
+        $sales_product_category->save();
+
+        return response()->json(['status' => 200]);
+    }
+    public function updateSalesProductCategoryProductList(Request $request, $id)
+    {
+        $data = $request->all();
+        $category_lists = json_encode($data['category_list']);
+
+        $sales_product_category = SalesProductCategory::find($id);
+        $sales_product_category->category_list = $category_lists;
+        $sales_product_category->save();
+
+        return response()->json(['status' => 200]);
+    }
+
+    // ================================= BASIC SEO =======================
+    public function updateBasicSEO(Request $request, $id)
+    {
+
+        $validated = $request->validate([
+            'owner_name' => 'required|url',
+            'business_name' => 'required',
+            'business_address' => 'required',
+            'phone_number' => 'required',
+            'zip_code' => 'required',
+        ], [
+            'owner_name.required' => 'This field is required!!',
+            'business_name.required' => 'This field is required!!',
+            'business_address.required' => 'This field is required!!',
+            'phone_number.required' => 'This field is required!!',
+            'zip_code.required' => 'This field is required!!',
+        ]);
+
+        $sales_basic_seo = new SalesBasicSeo();
+        $user = Deal::where('id', $request->deal_id)->first();
+        $pm_id = User::where('id', $user->pm_id)->first();
+
+        if ($request->owner_name) {
+            $sales_basic_seo->owner_name = $request->owner_name;
+        }
+        if ($request->business_name) {
+            $sales_basic_seo->business_name = $request->business_name;
+        }
+        if ($request->business_address) {
+            $sales_basic_seo->business_address = $request->business_address;
+        }
+        if ($request->phone_number) {
+            $sales_basic_seo->phone_number = $request->phone_number;
+        }
+        if ($request->zip_code) {
+            $sales_basic_seo->zip_code = $request->zip_code;
+        }
+        $sales_basic_seo->deal_id = $request->deal_id;
+        $sales_basic_seo->basic_seo_id = $request->basic_seo_id;
+        $sales_basic_seo->milestone_id = $request->milestone_id;
+        $sales_basic_seo->status = 'submitted';
+        $sales_basic_seo->save();
+
+        Notification::send($pm_id, new UpdateClientBasicSeoNotification($sales_basic_seo));
+
+        return response()->json([
+            'status' => 200,
+            'owner_name' => $sales_basic_seo->owner_name,
+            'business_name' => $sales_basic_seo->business_name,
+            'business_address' => $sales_basic_seo->business_address,
+            'phone_number' => $sales_basic_seo->phone_number,
+            'zip_code' => $sales_basic_seo->zip_code,
+        ]);
+    }
+    public function updateSalesBasicSeoGoogleSearch(Request $request, $id)
+    {
+        $sales_basic_seo = SalesBasicSeo::find($id);
+        $sales_basic_seo->google_search_info = $request->google_search_info;
+        $sales_basic_seo->done1 = $request->done1;
+        $sales_basic_seo->email1 = $request->email1;
+        $sales_basic_seo->password1 = $request->password1;
+        $sales_basic_seo->save();
+
+        return response()->json(['status' => 200]);
+    }
+    public function updateSalesBasicSeoGoogleAnalytic(Request $request, $id)
+    {
+        $sales_basic_seo = SalesBasicSeo::find($id);
+        $sales_basic_seo->google_analytic_info = $request->google_analytic_info;
+        $sales_basic_seo->done2 = $request->done2;
+        $sales_basic_seo->email2 = $request->email2;
+        $sales_basic_seo->password2 = $request->password2;
+        $sales_basic_seo->save();
+
+        return response()->json(['status' => 200]);
+    }
+    public function updateSalesBasicSeoGoogleAccountInfo(Request $request, $id)
+    {
+        $sales_basic_seo = SalesBasicSeo::find($id);
+        $sales_basic_seo->google_business_account_info = $request->google_business_account_info;
+        $sales_basic_seo->done3 = $request->done3;
+        $sales_basic_seo->email3 = $request->email3;
+        $sales_basic_seo->password3 = $request->password3;
+        $sales_basic_seo->save();
+
+        return response()->json(['status' => 200]);
+    }
+    public function updateSalesBasicSeoShareCms(Request $request, $id)
+    {
+        $sales_basic_seo = SalesBasicSeo::find($id);
+        $sales_basic_seo->share_cms_access_info = $request->share_cms_access_info;
+        $sales_basic_seo->url = $request->url;
+        $sales_basic_seo->user_name = $request->user_name;
+        $sales_basic_seo->password4 = $request->password4;
+        $sales_basic_seo->save();
+
+        return response()->json(['status' => 200]);
+    }
+    // ================== Update Web Content =======================
+    public function updatePmWebContent(Request $request)
+    {
+        DB::beginTransaction();
+        $data = $request->all();
+        $folder_links = json_encode($data['folder_link']);
+        $reference_websites = json_encode($data['reference_website']);
+        $description1 = json_encode($data['description1']);
+        $description2 = json_encode($data['description2']);
+        $description3 = json_encode($data['description3']);
+        $page_names = json_encode($data['page_name1']);
+        $quantitys = json_encode($data['quantity1']);
+        $approximate_words = json_encode($data['approximate_word1']);
+        $website_links = json_encode($data['website_link']);
+        $pm_page_names = json_encode($data['page_name']);
+        $pm_quantitys = json_encode($data['quantity']);
+        $pm_approximate_words = json_encode($data['approximate_word']);
+
+        $pm_web_content = new PmWebContent();
+        $pm_web_content->sales_web_content_id = $data['sales_web_content_id'];
+        $pm_web_content->deal_id = $data['deal_id'];
+        $pm_web_content->website_link = $data['website_link2'];
+        $pm_web_content->website_niche = $data['website_niche2'];
+        $pm_web_content->website_name = $data['website_name2'];
+        $pm_web_content->business_information = $data['business_information2'];
+        $pm_web_content->share_file = $request->share_file;
+        $pm_web_content->folder_link = $folder_links;
+        $pm_web_content->reference_website = $reference_websites;
+        $pm_web_content->competitor_content = $request->competitor_content;
+        $pm_web_content->description1 = $description1;
+        $pm_web_content->description2 = $description2;
+        $pm_web_content->description3 = $description3;
+        $pm_web_content->product_list = $data['product_list1'];
+        $pm_web_content->page_name1 = $page_names;
+        $pm_web_content->quantity1 = $quantitys;
+        $pm_web_content->approximate_word = $approximate_words;
+        $pm_web_content->gender = $data['target_audience_gender'];
+        $pm_web_content->age1 = $data['target_audience_age1'];
+        $pm_web_content->age2 = $data['target_audience_age2'];
+        $pm_web_content->monthly_income = $data['monthly_income1'];
+        $pm_web_content->education_level = $data['education_level1'];
+        $pm_web_content->country = $data['country1'];
+        $pm_web_content->city = $data['city1'];
+        $pm_web_content->interest = $data['interest1'];
+        $pm_web_content->buying_habit1 = $data['interest_buying_habit1'];
+        $pm_web_content->buying_habit2 = $data['interest_buying_habit2'];
+        $pm_web_content->buying_habit3 = $data['interest_buying_habit3'];
+        $pm_web_content->language = $data['thor_native_language'];
+        $pm_web_content->word_appropriate = $data['word_appropriate'];
+        $pm_web_content->word_client_initially = $data['word_client_initially'];
+        $pm_web_content->additional_word = $data['additional_word'];
+        $pm_web_content->layout_content = $data['layout_content'];
+        $pm_web_content->theme_link = $website_links;
+        $pm_web_content->pm_page_name = $pm_page_names;
+        $pm_web_content->pm_quantity = $pm_quantitys;
+        $pm_web_content->pm_approximate_word = $pm_approximate_words;
+        $pm_web_content->milestone_id = $request->milestone_id;
+        if ($request->submitted_by) {
+            $pm_web_content->submitted_by = $request->submitted_by;
+        }
+        $pm_web_content->save();
+
+
+        // AUTO TASK ASSIGN FOR SALES PROJECT MANAGER
+
+        $project_id = Project::where('deal_id', $request->deal_id)->first();
+        $task_estimation_hours = Task::where('project_id', $project_id->id)->sum('estimate_hours');
+        $task_estimation_minutes = Task::where('project_id', $project_id->id)->sum('estimate_minutes');
+        $total_task_estimation_minutes = $task_estimation_hours * 60 + $task_estimation_minutes;
+        $left_minutes = ($project_id->hours_allocated - $request->estimate_hours) * 60 - ($total_task_estimation_minutes + $request->estimate_minutes);
+        // dd($left_minutes);
+
+        $left_in_hours = round($left_minutes / 60, 0);
+        $left_in_minutes = $left_minutes % 60;
+
+        if ($left_minutes < 1) {
+            // return response()->json([
+            //     "message" => "The given data was invalid.",
+            //     "errors" => [
+            //         "estimate_hours" => [
+            //             "Estimate hours cannot exceed from project allocation hours !"
+            //         ]
+            //     ]
+            // ], 422);
+        }
+
+        // dd($request);
+        $project = request('project_id') ? Project::findOrFail(request('project_id')) : null;
+
+        $ganttTaskArray = [];
+        $gantTaskLinkArray = [];
+        $taskBoardColumn = TaskboardColumn::where('slug', 'incomplete')->first();
+        $task = new Task();
+        $task->heading = $project_id->project_name . ' - Cross Departmental Task';
+
+        $task->description = '<p>' . $data['website_link2'] . '</p><br><p>'
+            . $data['website_niche2'] . '</p></br><p>' . $data['website_name2'] . '</p></br><p>'
+            . $data['business_information2'] . '</p></br><p>' . $request->share_file . '</p></br><p>' . $folder_links . '</p></br><p>' . $reference_websites . '</p></br><p>' . $request->competitor_content . '</p></br><p>'
+            . $description1 . '</p></br><p>' . $description2 . '</p></br><p>' . $description3 . '</p></br><p>' . $data['product_list1'] . '</p></br><p>' . $page_names . '</p></br><p>' . $quantitys . '</p></br><p>' . $approximate_words . '</p></br><p>'
+            . $data['target_audience_gender'] . '</p></br><p>' . $data['target_audience_age1'] . '</p></br><p>' . $data['target_audience_age2'] . '</p></br><p>' . $data['monthly_income1'] . '</p></br><p>' . $data['education_level1'] . '</p></br><p>'
+            . $data['country1'] . '</p></br><p>' . $data['city1'] . '</p></br><p>' . $data['interest1'] . '</p></br><p>' . $data['interest_buying_habit1'] . '</p></br><p>' . $data['interest_buying_habit2'] . '</p></br><p>' . $data['interest_buying_habit3'] . '</p></br><p>'
+            . $data['thor_native_language'] . '</p></br><p>' . $data['word_appropriate'] . '</p></br><p>' . $data['word_client_initially'] . '</p></br><p>' . $data['additional_word'] . '</p></br><p>' . $data['layout_content'] . '</p></br><p>'
+            . $website_links . '</p></br><p>' . $pm_page_names . '</p></br><p>' . $pm_quantitys . '</p></br><p>' . $pm_approximate_words . '</p></br>';
+
+        // $dueDate = ($request->has('without_duedate')) ? null : Carbon::createFromFormat($this->global->date_format, $request->due_date)->format('Y-m-d');
+        $task->start_date = Carbon::now()->format('Y-m-d');
+        // $task->due_date = $dueDate;
+        $task->project_id = $project_id->id;
+        // $task->task_category_id = $request->category_id;
+        $task->priority = 'medium';
+        $task->board_column_id = 2;
+
+        $task->estimate_hours = 0;
+        $task->estimate_minutes = 0;
+        // $task->deliverable_id = $request->deliverable_id;
+
+
+        if ($request->milestone_id != '') {
+            $task->milestone_id = $request->milestone_id;
+        }
+
+        $task->task_status = "pending";
+        $total_hours = 0;
+        $total_minutes = 0;
+        $total_in_minutes = 0;
+        $task->estimate_time_left_minutes = $total_in_minutes;
+
+        $task->save();
+
+        $task->task_short_code = ($project) ? $project->project_short_code . '-' . $task->id : null;
+        $task->saveQuietly();
+
+        $users = User::where('role_id', 11)->get();
+        foreach ($users as $user) {
+            $task_user = new TaskUser();
+            $task_user->user_id = $user->id;
+            $task_user->task_id = $task->id;
+            $task_user->save();
+            Notification::send($user, new PmUpdateWebContentNotification($task_user));
+        }
+
+
+        return response()->json(['status' => 200]);
     }
 
 
-    return response()->json(['status'=>200]);
-}
+    // ==================================Update PM Blog Articles======================
+    public function updatePmBlogArticle(Request $request)
+    {
 
-// ===================== Update Pm Product Category =================
-public function updatePmProductCategory(Request $request){
-    $data = $request->all();
-    $folder_links = json_encode($data['folder_link']);
-    $categoryUrls = json_encode($data['category_url']);
-    $category_lists = json_encode($data['category_list']);
-    $website_links = json_encode($data['website_link']);
-    $page_names = json_encode($data['page_name']);
-    $quantitys = json_encode($data['quantity']);
-    $approximate_words = json_encode($data['approximate_word']);
+        // dd($request->all());
+        $data = $request->all();
 
-    $pm_product_category = new PmProductCategory();
-    $pm_product_category->sales_product_category_id = $data['sales_product_category_id'];
-    $pm_product_category->deal_id = $data['deal_id'];
-    $pm_product_category->word_appropriate = $data['word_appropriate'];
-    $pm_product_category->word_client_initially = $data['word_client_initially'];
-    $pm_product_category->website_link = $data['website_link_2'];
-    $pm_product_category->website_niche = $data['website_niche_2'];
-    $pm_product_category->website_name = $data['website_name'];
-    $pm_product_category->business_information = $data['business_information'];
-    $pm_product_category->share_file_info = $request->share_file_info;
-    $pm_product_category->folder_link = $folder_links;
-    $pm_product_category->category_url = $categoryUrls;
-    $pm_product_category->product_no = $data['product_no'];
-    $pm_product_category->category_list = $category_lists;
-    $pm_product_category->word_count = $data['word_count'];
-    $pm_product_category->additional_word = $data['additional_word'];
-    $pm_product_category->layout_content = $data['layout_content'];
-    $pm_product_category->theme_link = $website_links;
-    $pm_product_category->page_name = $page_names;
-    $pm_product_category->quantity = $quantitys;
-    $pm_product_category->approximate_word = $approximate_words;
-    $pm_product_category->milestone_id= $request->milestone_id;
-    if($request->submitted_by){
-        $pm_product_category->submitted_by= $request->submitted_by;
+        $folderLinks = json_encode($data['folder_link']);
+        $blogUrls = json_encode($data['blog_url']);
+        $topicLinks = json_encode($data['topic_link']);
+        $keywordLinks = json_encode($data['keyword_link']);
+        $website_links = json_encode($data['website_link']);
+        $page_names = json_encode($data['page_name']);
+        $quantitys = json_encode($data['quantity']);
+        $approximate_words = json_encode($data['approximate_word']);
+
+        $pm_blog_article = new PmBlogArticle();
+        $pm_blog_article->word_appropriate = $data['word_appropriate'];
+        $pm_blog_article->word_client_initially = $data['word_client_initially'];
+        $pm_blog_article->website_link = $data['website_link_2'];
+        $pm_blog_article->website_niche = $data['website_niche_2'];
+        $pm_blog_article->website_name = $data['website_name'];
+        $pm_blog_article->business_information = $data['business_information'];
+        $pm_blog_article->product_no = $data['product_no'];
+        $pm_blog_article->sales_blog_article_id = $data['sales_blog_article_id'];
+        $pm_blog_article->deal_id = $data['deal_id'];
+        $pm_blog_article->additional_word = $data['additional_word'];
+        $pm_blog_article->layout_content = $data['layout_content'];
+        $pm_blog_article->share_file_info = $request->share_file_info;
+        $pm_blog_article->folder_link = $folderLinks;
+        $pm_blog_article->blog_url = $blogUrls;
+        $pm_blog_article->topic_info = $data['topic_info'];
+        $pm_blog_article->topic_link = $topicLinks;
+        $pm_blog_article->keyword_info = $data['keyword_info'];
+        $pm_blog_article->keyword_link = $keywordLinks;
+        $pm_blog_article->theme_link = $website_links;
+        $pm_blog_article->page_name = $page_names;
+        $pm_blog_article->quantity = $quantitys;
+        $pm_blog_article->approximate_word = $approximate_words;
+        $pm_blog_article->milestone_id = $request->milestone_id;
+        if ($request->submitted_by) {
+            $pm_blog_article->submitted_by = $request->submitted_by;
+        }
+        $pm_blog_article->save();
+
+        // AUTO TASK ASSIGN FOR SALES PROJECT MANAGER
+
+        $project_id = Project::where('deal_id', $request->deal_id)->first();
+        $task_estimation_hours = Task::where('project_id', $project_id->id)->sum('estimate_hours');
+        $task_estimation_minutes = Task::where('project_id', $project_id->id)->sum('estimate_minutes');
+        $total_task_estimation_minutes = $task_estimation_hours * 60 + $task_estimation_minutes;
+        $left_minutes = ($project_id->hours_allocated - $request->estimate_hours) * 60 - ($total_task_estimation_minutes + $request->estimate_minutes);
+        // dd($left_minutes);
+
+        $left_in_hours = round($left_minutes / 60, 0);
+        $left_in_minutes = $left_minutes % 60;
+
+        if ($left_minutes < 1) {
+            // return response()->json([
+            //     "message" => "The given data was invalid.",
+            //     "errors" => [
+            //         "estimate_hours" => [
+            //             "Estimate hours cannot exceed from project allocation hours !"
+            //         ]
+            //     ]
+            // ], 422);
+        }
+
+        // dd($request);
+        $project = request('project_id') ? Project::findOrFail(request('project_id')) : null;
+
+        $ganttTaskArray = [];
+        $gantTaskLinkArray = [];
+        $taskBoardColumn = TaskboardColumn::where('slug', 'incomplete')->first();
+        $task = new Task();
+        $task->heading = $project_id->project_name . ' - Cross Departmental Task';
+
+        $task->description = '<p>' . $data['word_appropriate'] . '</p><br><p>'
+            . $data['word_client_initially'] . '</p></br><p>' . $data['website_link_2'] . '</p></br><p>'
+            . $data['website_niche_2'] . '</p></br><p>' . $data['website_name'] . '</p></br><p>' . $data['business_information'] . '</p></br><p>' . $data['product_no'] . '</p></br><p>'
+            . $data['additional_word'] . '</p></br><p>' . $data['layout_content'] . '</p></br><p>' . $request->share_file_info . '</p></br><p>' . $folderLinks . '</p></br><p>' . $blogUrls . '</p></br><p>' . $data['topic_info'] . '</p></br><p>' . $topicLinks . '</p></br><p>'
+            . $data['keyword_info'] . '</p></br><p>' . $keywordLinks . '</p></br><p>' . $website_links . '</p></br><p>' . $page_names . '</p></br><p>' . $quantitys . '</p></br><p>'
+            . $approximate_words . '</p></br>';
+
+        // $dueDate = ($request->has('without_duedate')) ? null : Carbon::createFromFormat($this->global->date_format, $request->due_date)->format('Y-m-d');
+        $task->start_date = Carbon::now()->format('Y-m-d');
+        // $task->due_date = $dueDate;
+        $task->project_id = $project_id->id;
+        // $task->task_category_id = $request->category_id;
+        $task->priority = 'medium';
+        $task->board_column_id = 2;
+
+        $task->estimate_hours = 0;
+        $task->estimate_minutes = 0;
+        // $task->deliverable_id = $request->deliverable_id;
+
+
+        if ($request->milestone_id != '') {
+            $task->milestone_id = $request->milestone_id;
+        }
+
+        $task->task_status = "pending";
+        $total_hours = 0;
+        $total_minutes = 0;
+        $total_in_minutes = 0;
+        $task->estimate_time_left_minutes = $total_in_minutes;
+
+
+        $task->save();
+
+        $task->task_short_code = ($project) ? $project->project_short_code . '-' . $task->id : null;
+        $task->saveQuietly();
+
+        $users = User::where('role_id', 11)->get();
+        foreach ($users as $user) {
+            $task_user = new TaskUser();
+            $task_user->user_id = $user->id;
+            $task_user->task_id = $task->id;
+            $task_user->save();
+            Notification::send($user, new PmUpdateBlogArticleNotification($task_user));
+        }
+
+        return response()->json(['status' => 200]);
     }
-    $pm_product_category->save();
+    // ==================================Update PM Product Description======================
+    public function updatePmProductDescription(Request $request)
+    {
+        // dd($request->all());
+        $data = $request->all();
 
-    // AUTO TASK ASSIGN FOR SALES PROJECT MANAGER
+        $folder_links = json_encode($data['folder_link']);
+        $blogUrls = json_encode($data['blog_url']);
+        $product_lists = json_encode($data['product_list']);
+        $website_links = json_encode($data['website_link']);
+        $page_names = json_encode($data['page_name']);
+        $quantitys = json_encode($data['quantity']);
+        $approximate_words = json_encode($data['approximate_word']);
 
-    $project_id = Project::where('deal_id', $request->deal_id)->first();
-    $task_estimation_hours = Task::where('project_id', $project_id->id)->sum('estimate_hours');
-    $task_estimation_minutes = Task::where('project_id', $project_id->id)->sum('estimate_minutes');
-    $total_task_estimation_minutes = $task_estimation_hours * 60 + $task_estimation_minutes;
-    $left_minutes = ($project_id->hours_allocated - $request->estimate_hours) * 60 - ($total_task_estimation_minutes + $request->estimate_minutes);
-    // dd($left_minutes);
+        $pm_product_description = new PmProductDescription();
 
-    $left_in_hours = round($left_minutes / 60, 0);
-    $left_in_minutes = $left_minutes % 60;
+        $pm_product_description->sales_product_description_id = $data['sales_product_description_id'];
+        $pm_product_description->deal_id = $data['deal_id'];
+        $pm_product_description->word_appropriate = $data['word_appropriate'];
+        $pm_product_description->word_client_initially = $data['word_client_initially'];
+        $pm_product_description->website_link = $data['website_link_2'];
+        $pm_product_description->website_niche = $data['website_niche_2'];
+        $pm_product_description->website_name = $data['website_name'];
+        $pm_product_description->business_information = $data['business_information'];
+        $pm_product_description->additional_word = $data['additional_word'];
+        $pm_product_description->product_no = $data['product_no'];
+        $pm_product_description->word_count = $data['word_count'];
+        $pm_product_description->layout_content = $data['layout_content'];
+        $pm_product_description->share_file_info = $request->share_file_info;
+        $pm_product_description->folder_link = $folder_links;
+        $pm_product_description->blog_url = $blogUrls;
+        $pm_product_description->product_list = $product_lists;
+        $pm_product_description->theme_link = $website_links;
+        $pm_product_description->page_name = $page_names;
+        $pm_product_description->quantity = $quantitys;
+        $pm_product_description->approximate_word = $approximate_words;
+        $pm_product_description->milestone_id = $request->milestone_id;
+        if ($request->submitted_by) {
+            $pm_product_description->submitted_by = $request->submitted_by;
+        }
+        $pm_product_description->save();
 
-    if ($left_minutes < 1) {
-        // return response()->json([
-        //     "message" => "The given data was invalid.",
-        //     "errors" => [
-        //         "estimate_hours" => [
-        //             "Estimate hours cannot exceed from project allocation hours !"
-        //         ]
-        //     ]
-        // ], 422);
+
+        // AUTO TASK ASSIGN FOR SALES PROJECT MANAGER
+
+        $project_id = Project::where('deal_id', $request->deal_id)->first();
+        $task_estimation_hours = Task::where('project_id', $project_id->id)->sum('estimate_hours');
+        $task_estimation_minutes = Task::where('project_id', $project_id->id)->sum('estimate_minutes');
+        $total_task_estimation_minutes = $task_estimation_hours * 60 + $task_estimation_minutes;
+        $left_minutes = ($project_id->hours_allocated - $request->estimate_hours) * 60 - ($total_task_estimation_minutes + $request->estimate_minutes);
+        // dd($left_minutes);
+
+        $left_in_hours = round($left_minutes / 60, 0);
+        $left_in_minutes = $left_minutes % 60;
+
+        if ($left_minutes < 1) {
+            // return response()->json([
+            //     "message" => "The given data was invalid.",
+            //     "errors" => [
+            //         "estimate_hours" => [
+            //             "Estimate hours cannot exceed from project allocation hours !"
+            //         ]
+            //     ]
+            // ], 422);
+        }
+
+        // dd($request);
+        $project = request('project_id') ? Project::findOrFail(request('project_id')) : null;
+
+        $ganttTaskArray = [];
+        $gantTaskLinkArray = [];
+        $taskBoardColumn = TaskboardColumn::where('slug', 'incomplete')->first();
+        $task = new Task();
+        $task->heading = $project_id->project_name . ' - Cross Departmental Task';
+
+        $task->description = '<p>' . $data['word_appropriate'] . '</p><br><p>'
+            . $data['word_client_initially'] . '</p></br><p>' . $data['website_link_2'] . '</p></br><p>'
+            . $data['website_niche_2'] . '</p></br><p>' . $data['website_name'] . '</p></br><p>' . $data['business_information'] . '</p></br><p>' . $data['additional_word'] . '</p></br><p>'
+            . $data['product_no'] . '</p></br><p>' . $data['word_count'] . '</p></br><p>' . $data['layout_content'] . '</p></br><p>' . $request->share_file_info . '</p></br><p>' . $folder_links . '</p></br><p>' . $blogUrls . '</p></br><p>' . $product_lists . '</p></br><p>'
+            . $website_links . '</p></br><p>' . $page_names . '</p></br><p>' . $quantitys . '</p></br><p>' . $approximate_words . '</p></br>';
+
+        // $dueDate = ($request->has('without_duedate')) ? null : Carbon::createFromFormat($this->global->date_format, $request->due_date)->format('Y-m-d');
+        $task->start_date = Carbon::now()->format('Y-m-d');
+        // $task->due_date = $dueDate;
+        $task->project_id = $project_id->id;
+        // $task->task_category_id = $request->category_id;
+        $task->priority = 'medium';
+        $task->board_column_id = 2;
+
+        $task->estimate_hours = 0;
+        $task->estimate_minutes = 0;
+        // $task->deliverable_id = $request->deliverable_id;
+
+
+        if ($request->milestone_id != '') {
+            $task->milestone_id = $request->milestone_id;
+        }
+
+        $task->task_status = "pending";
+        $total_hours = 0;
+        $total_minutes = 0;
+        $total_in_minutes = 0;
+        $task->estimate_time_left_minutes = $total_in_minutes;
+
+
+        $task->save();
+
+        $task->task_short_code = ($project) ? $project->project_short_code . '-' . $task->id : null;
+        $task->saveQuietly();
+
+        $users = User::where('role_id', 11)->get();
+        foreach ($users as $user) {
+            $task_user = new TaskUser();
+            $task_user->user_id = $user->id;
+            $task_user->task_id = $task->id;
+            $task_user->save();
+            Notification::send($user, new PmUpdateProductDescriptionNotification($task_user));
+        }
+
+
+        return response()->json(['status' => 200]);
     }
 
-    // dd($request);
-    $project = request('project_id') ? Project::findOrFail(request('project_id')) : null;
+    // ===================== Update Pm Product Category =================
+    public function updatePmProductCategory(Request $request)
+    {
+        $data = $request->all();
+        $folder_links = json_encode($data['folder_link']);
+        $categoryUrls = json_encode($data['category_url']);
+        $category_lists = json_encode($data['category_list']);
+        $website_links = json_encode($data['website_link']);
+        $page_names = json_encode($data['page_name']);
+        $quantitys = json_encode($data['quantity']);
+        $approximate_words = json_encode($data['approximate_word']);
 
-    $ganttTaskArray = [];
-    $gantTaskLinkArray = [];
-    $taskBoardColumn = TaskboardColumn::where('slug', 'incomplete')->first();
-    $task = new Task();
-    $task->heading = $project_id->project_name . ' - Cross Departmental Task';
+        $pm_product_category = new PmProductCategory();
+        $pm_product_category->sales_product_category_id = $data['sales_product_category_id'];
+        $pm_product_category->deal_id = $data['deal_id'];
+        $pm_product_category->word_appropriate = $data['word_appropriate'];
+        $pm_product_category->word_client_initially = $data['word_client_initially'];
+        $pm_product_category->website_link = $data['website_link_2'];
+        $pm_product_category->website_niche = $data['website_niche_2'];
+        $pm_product_category->website_name = $data['website_name'];
+        $pm_product_category->business_information = $data['business_information'];
+        $pm_product_category->share_file_info = $request->share_file_info;
+        $pm_product_category->folder_link = $folder_links;
+        $pm_product_category->category_url = $categoryUrls;
+        $pm_product_category->product_no = $data['product_no'];
+        $pm_product_category->category_list = $category_lists;
+        $pm_product_category->word_count = $data['word_count'];
+        $pm_product_category->additional_word = $data['additional_word'];
+        $pm_product_category->layout_content = $data['layout_content'];
+        $pm_product_category->theme_link = $website_links;
+        $pm_product_category->page_name = $page_names;
+        $pm_product_category->quantity = $quantitys;
+        $pm_product_category->approximate_word = $approximate_words;
+        $pm_product_category->milestone_id = $request->milestone_id;
+        if ($request->submitted_by) {
+            $pm_product_category->submitted_by = $request->submitted_by;
+        }
+        $pm_product_category->save();
 
-    $task->description = '<p>'.$data['word_appropriate'] .'</p><br><p>'
-    .$data['word_client_initially'].'</p></br><p>'.$data['website_link_2'].'</p></br><p>'
-    .$data['website_niche_2'].'</p></br><p>'.$data['website_name'].'</p></br><p>'.$data['business_information'].'</p></br><p>'.$request->share_file_info.'</p></br><p>'.$folder_links.'</p></br><p>'
-    .$categoryUrls.'</p></br><p>'.$data['product_no'].'</p></br><p>'.$category_lists.'</p></br><p>'.$data['word_count'].'</p></br><p>'.$data['additional_word'].'</p></br><p>'.$data['layout_content'].'</p></br><p>'
-    .$website_links.'</p></br><p>'.$page_names.'</p></br><p>'.$quantitys.'</p></br><p>'.$approximate_words.'</p></br>';
+        // AUTO TASK ASSIGN FOR SALES PROJECT MANAGER
 
-    // $dueDate = ($request->has('without_duedate')) ? null : Carbon::createFromFormat($this->global->date_format, $request->due_date)->format('Y-m-d');
-    $task->start_date = Carbon::now()->format('Y-m-d');
-    // $task->due_date = $dueDate;
-    $task->project_id = $project_id->id;
-    // $task->task_category_id = $request->category_id;
-    $task->priority = 'medium';
-    $task->board_column_id = 2;
+        $project_id = Project::where('deal_id', $request->deal_id)->first();
+        $task_estimation_hours = Task::where('project_id', $project_id->id)->sum('estimate_hours');
+        $task_estimation_minutes = Task::where('project_id', $project_id->id)->sum('estimate_minutes');
+        $total_task_estimation_minutes = $task_estimation_hours * 60 + $task_estimation_minutes;
+        $left_minutes = ($project_id->hours_allocated - $request->estimate_hours) * 60 - ($total_task_estimation_minutes + $request->estimate_minutes);
+        // dd($left_minutes);
 
-    $task->estimate_hours = 0;
-    $task->estimate_minutes = 0;
-    // $task->deliverable_id = $request->deliverable_id;
+        $left_in_hours = round($left_minutes / 60, 0);
+        $left_in_minutes = $left_minutes % 60;
+
+        if ($left_minutes < 1) {
+            // return response()->json([
+            //     "message" => "The given data was invalid.",
+            //     "errors" => [
+            //         "estimate_hours" => [
+            //             "Estimate hours cannot exceed from project allocation hours !"
+            //         ]
+            //     ]
+            // ], 422);
+        }
+
+        // dd($request);
+        $project = request('project_id') ? Project::findOrFail(request('project_id')) : null;
+
+        $ganttTaskArray = [];
+        $gantTaskLinkArray = [];
+        $taskBoardColumn = TaskboardColumn::where('slug', 'incomplete')->first();
+        $task = new Task();
+        $task->heading = $project_id->project_name . ' - Cross Departmental Task';
+
+        $task->description = '<p>' . $data['word_appropriate'] . '</p><br><p>'
+            . $data['word_client_initially'] . '</p></br><p>' . $data['website_link_2'] . '</p></br><p>'
+            . $data['website_niche_2'] . '</p></br><p>' . $data['website_name'] . '</p></br><p>' . $data['business_information'] . '</p></br><p>' . $request->share_file_info . '</p></br><p>' . $folder_links . '</p></br><p>'
+            . $categoryUrls . '</p></br><p>' . $data['product_no'] . '</p></br><p>' . $category_lists . '</p></br><p>' . $data['word_count'] . '</p></br><p>' . $data['additional_word'] . '</p></br><p>' . $data['layout_content'] . '</p></br><p>'
+            . $website_links . '</p></br><p>' . $page_names . '</p></br><p>' . $quantitys . '</p></br><p>' . $approximate_words . '</p></br>';
+
+        // $dueDate = ($request->has('without_duedate')) ? null : Carbon::createFromFormat($this->global->date_format, $request->due_date)->format('Y-m-d');
+        $task->start_date = Carbon::now()->format('Y-m-d');
+        // $task->due_date = $dueDate;
+        $task->project_id = $project_id->id;
+        // $task->task_category_id = $request->category_id;
+        $task->priority = 'medium';
+        $task->board_column_id = 2;
+
+        $task->estimate_hours = 0;
+        $task->estimate_minutes = 0;
+        // $task->deliverable_id = $request->deliverable_id;
 
 
-    if ($request->milestone_id != '') {
-        $task->milestone_id = $request->milestone_id;
+        if ($request->milestone_id != '') {
+            $task->milestone_id = $request->milestone_id;
+        }
+
+        $task->task_status = "pending";
+        $total_hours = 0;
+        $total_minutes = 0;
+        $total_in_minutes = 0;
+        $task->estimate_time_left_minutes = $total_in_minutes;
+
+
+        $task->save();
+
+        $task->task_short_code = ($project) ? $project->project_short_code . '-' . $task->id : null;
+        $task->saveQuietly();
+
+        $users = User::where('role_id', 11)->get();
+        foreach ($users as $user) {
+            $task_user = new TaskUser();
+            $task_user->user_id = $user->id;
+            $task_user->task_id = $task->id;
+            $task_user->save();
+            Notification::send($user, new PmUpdateProductCategoryNotification($task_user));
+        }
+
+        return response()->json(['status' => 200]);
     }
+    // =========================== PM BASIC SEO ========================
+    public function updatePmBasicSEO(Request $request)
+    {
 
-    $task->task_status = "pending";
-    $total_hours = 0;
-    $total_minutes = 0;
-    $total_in_minutes = 0;
-    $task->estimate_time_left_minutes = $total_in_minutes;
+        $pm_basic_seo = new PmBasicSeo();
+        $pm_basic_seo->sales_basic_seo_id = $request->sales_basic_seo_id;
+        $pm_basic_seo->deal_id = $request->deal_id;
+        $pm_basic_seo->owner_name = $request->owner_name2;
+        $pm_basic_seo->business_name = $request->business_name2;
+        $pm_basic_seo->business_address = $request->business_address2;
+        $pm_basic_seo->phone_number = $request->phone_number2;
+        $pm_basic_seo->zip_code = $request->zip_code2;
+        $pm_basic_seo->google_search_info = $request->google_search_info;
+        $pm_basic_seo->done1 = $request->done1;
+        $pm_basic_seo->google_search_info_email = $request->google_search_info_email;
+        $pm_basic_seo->google_search_info_password = $request->google_search_info_password;
+        $pm_basic_seo->google_analytic_info = $request->google_analytic_info;
+        $pm_basic_seo->done2 = $request->done2;
+        $pm_basic_seo->google_analytic_info_email = $request->google_analytic_info_email;
+        $pm_basic_seo->google_analytic_info_password = $request->google_analytic_info_password;
+        $pm_basic_seo->google_business_account_info = $request->google_business_account_info;
+        $pm_basic_seo->done3 = $request->done3;
+        $pm_basic_seo->google_business_account_info_email = $request->google_business_account_info_email;
+        $pm_basic_seo->google_business_account_info_password = $request->google_business_account_info_password;
+        $pm_basic_seo->share_cms_access_info = $request->share_cms_access_info;
+        $pm_basic_seo->login_url = $request->login_url;
+        $pm_basic_seo->email = $request->email;
+        $pm_basic_seo->password = $request->password;
+        $pm_basic_seo->confirm_adding = $request->confirm_adding;
+        $pm_basic_seo->google_console_setup = $request->google_console_setup;
+        $pm_basic_seo->google_analytics_setup = $request->google_analytics_setup;
+        $pm_basic_seo->sitemap_setup = $request->sitemap_setup;
+        $pm_basic_seo->robots_txt_setup = $request->robots_txt_setup;
+        $pm_basic_seo->google_business_setup = $request->google_business_setup;
+        $pm_basic_seo->milestone_id = $request->milestone_id;
+        if ($request->submitted_by) {
+            $pm_basic_seo->submitted_by = $request->submitted_by;
+        }
+        $pm_basic_seo->save();
+
+        // AUTO TASK ASSIGN FOR SALES PROJECT MANAGER
+
+        $project_id = Project::where('deal_id', $request->deal_id)->first();
+        $task_estimation_hours = Task::where('project_id', $project_id->id)->sum('estimate_hours');
+        $task_estimation_minutes = Task::where('project_id', $project_id->id)->sum('estimate_minutes');
+        $total_task_estimation_minutes = $task_estimation_hours * 60 + $task_estimation_minutes;
+        $left_minutes = ($project_id->hours_allocated - $request->estimate_hours) * 60 - ($total_task_estimation_minutes + $request->estimate_minutes);
+        // dd($left_minutes);
+
+        $left_in_hours = round($left_minutes / 60, 0);
+        $left_in_minutes = $left_minutes % 60;
+
+        if ($left_minutes < 1) {
+            // return response()->json([
+            //     "message" => "The given data was invalid.",
+            //     "errors" => [
+            //         "estimate_hours" => [
+            //             "Estimate hours cannot exceed from project allocation hours !"
+            //         ]
+            //     ]
+            // ], 422);
+        }
+
+        // dd($request);
+        $project = request('project_id') ? Project::findOrFail(request('project_id')) : null;
+
+        $ganttTaskArray = [];
+        $gantTaskLinkArray = [];
+        $taskBoardColumn = TaskboardColumn::where('slug', 'incomplete')->first();
+        $task = new Task();
+        $task->heading = $project_id->project_name . ' - Cross Departmental Task';
+
+        $task->description = '<p>' . $request->owner_name2 . '</p><br><p>'
+            . $request->business_name2 . '</p></br><p>' . $request->business_address2 . '</p></br><p>'
+            . $request->phone_number2 . '</p></br><p>' . $request->zip_code2 . '</p></br><p>' . $request->google_search_info . '</p></br><p>' . $request->done1 . '</p></br><p>' . $request->google_search_info_email . '</p></br><p>'
+            . $request->google_search_info_password . '</p></br><p>' . $request->google_analytic_info . '</p></br><p>' . $request->done2 . '</p></br><p>' . $request->google_analytic_info_email . '</p></br><p>' . $request->google_analytic_info_password . '</p></br><p>' . $request->google_business_account_info . '</p></br><p>'
+            . $request->done3 . '</p></br><p>' . $request->google_business_account_info_email . '</p></br><p>' . $request->google_business_account_info_password . '</p></br><p>' . $request->share_cms_access_info . '</p></br><p>'
+            . $request->login_url . '</p></br><p>' . $request->email . '</p></br><p>' . $request->password . '</p></br><p>' . $request->confirm_adding . '</p></br><p>' . $request->google_console_setup . '</p></br><p>'
+            . $request->google_analytics_setup . '</p></br><p>' . $request->sitemap_setup . '</p></br><p>' . $request->robots_txt_setup . '</p></br><p>' . $request->google_business_setup . '</p></br>';
+
+        // $dueDate = ($request->has('without_duedate')) ? null : Carbon::createFromFormat($this->global->date_format, $request->due_date)->format('Y-m-d');
+        $task->start_date = Carbon::now()->format('Y-m-d');
+        // $task->due_date = $dueDate;
+        $task->project_id = $project_id->id;
+        // $task->task_category_id = $request->category_id;
+        $task->priority = 'medium';
+        $task->board_column_id = 2;
+
+        $task->estimate_hours = 0;
+        $task->estimate_minutes = 0;
+        // $task->deliverable_id = $request->deliverable_id;
 
 
-    $task->save();
+        if ($request->milestone_id != '') {
+            $task->milestone_id = $request->milestone_id;
+        }
 
-    $task->task_short_code = ($project) ? $project->project_short_code . '-' . $task->id : null;
-    $task->saveQuietly();
+        $task->task_status = "pending";
+        $total_hours = 0;
+        $total_minutes = 0;
+        $total_in_minutes = 0;
+        $task->estimate_time_left_minutes = $total_in_minutes;
 
-    $users = User::where('role_id',11)->get();
-    foreach ($users as $user) {
-        $task_user = new TaskUser();
-        $task_user->user_id = $user->id;
-        $task_user->task_id= $task->id;
-        $task_user->save();
-        Notification::send($user, new PmUpdateProductCategoryNotification($task_user));
+        $task->save();
+
+        $task->task_short_code = ($project) ? $project->project_short_code . '-' . $task->id : null;
+        $task->saveQuietly();
+
+        $users = User::where('role_id', 11)->get();
+        foreach ($users as $user) {
+            $task_user = new TaskUser();
+            $task_user->user_id = $user->id;
+            $task_user->task_id = $task->id;
+            $task_user->save();
+            Notification::send($user, new PmUpdateBasicSeoNotification($task_user));
+        }
+
+        return response()->json(['status' => 200]);
     }
-
-    return response()->json(['status'=>200]);
-}
-// =========================== PM BASIC SEO ========================
-public function updatePmBasicSEO(Request $request){
-
-    $pm_basic_seo = new PmBasicSeo();
-    $pm_basic_seo->sales_basic_seo_id = $request->sales_basic_seo_id;
-    $pm_basic_seo->deal_id = $request->deal_id;
-    $pm_basic_seo->owner_name = $request->owner_name2;
-    $pm_basic_seo->business_name = $request->business_name2;
-    $pm_basic_seo->business_address = $request->business_address2;
-    $pm_basic_seo->phone_number = $request->phone_number2;
-    $pm_basic_seo->zip_code = $request->zip_code2;
-    $pm_basic_seo->google_search_info = $request->google_search_info;
-    $pm_basic_seo->done1 = $request->done1;
-    $pm_basic_seo->google_search_info_email = $request->google_search_info_email;
-    $pm_basic_seo->google_search_info_password = $request->google_search_info_password;
-    $pm_basic_seo->google_analytic_info = $request->google_analytic_info;
-    $pm_basic_seo->done2 = $request->done2;
-    $pm_basic_seo->google_analytic_info_email = $request->google_analytic_info_email;
-    $pm_basic_seo->google_analytic_info_password = $request->google_analytic_info_password;
-    $pm_basic_seo->google_business_account_info = $request->google_business_account_info;
-    $pm_basic_seo->done3 = $request->done3;
-    $pm_basic_seo->google_business_account_info_email = $request->google_business_account_info_email;
-    $pm_basic_seo->google_business_account_info_password = $request->google_business_account_info_password;
-    $pm_basic_seo->share_cms_access_info = $request->share_cms_access_info;
-    $pm_basic_seo->login_url = $request->login_url;
-    $pm_basic_seo->email = $request->email;
-    $pm_basic_seo->password = $request->password;
-    $pm_basic_seo->confirm_adding = $request->confirm_adding;
-    $pm_basic_seo->google_console_setup = $request->google_console_setup;
-    $pm_basic_seo->google_analytics_setup = $request->google_analytics_setup;
-    $pm_basic_seo->sitemap_setup = $request->sitemap_setup;
-    $pm_basic_seo->robots_txt_setup = $request->robots_txt_setup;
-    $pm_basic_seo->google_business_setup = $request->google_business_setup;
-    $pm_basic_seo->milestone_id= $request->milestone_id;
-    if($request->submitted_by){
-        $pm_basic_seo->submitted_by= $request->submitted_by;
-    }
-    $pm_basic_seo->save();
-
-    // AUTO TASK ASSIGN FOR SALES PROJECT MANAGER
-
-    $project_id = Project::where('deal_id', $request->deal_id)->first();
-    $task_estimation_hours = Task::where('project_id', $project_id->id)->sum('estimate_hours');
-    $task_estimation_minutes = Task::where('project_id', $project_id->id)->sum('estimate_minutes');
-    $total_task_estimation_minutes = $task_estimation_hours * 60 + $task_estimation_minutes;
-    $left_minutes = ($project_id->hours_allocated - $request->estimate_hours) * 60 - ($total_task_estimation_minutes + $request->estimate_minutes);
-    // dd($left_minutes);
-
-    $left_in_hours = round($left_minutes / 60, 0);
-    $left_in_minutes = $left_minutes % 60;
-
-    if ($left_minutes < 1) {
-        // return response()->json([
-        //     "message" => "The given data was invalid.",
-        //     "errors" => [
-        //         "estimate_hours" => [
-        //             "Estimate hours cannot exceed from project allocation hours !"
-        //         ]
-        //     ]
-        // ], 422);
-    }
-
-    // dd($request);
-    $project = request('project_id') ? Project::findOrFail(request('project_id')) : null;
-
-    $ganttTaskArray = [];
-    $gantTaskLinkArray = [];
-    $taskBoardColumn = TaskboardColumn::where('slug', 'incomplete')->first();
-    $task = new Task();
-    $task->heading = $project_id->project_name . ' - Cross Departmental Task';
-
-    $task->description = '<p>'.$request->owner_name2 .'</p><br><p>'
-    .$request->business_name2.'</p></br><p>'.$request->business_address2.'</p></br><p>'
-    .$request->phone_number2.'</p></br><p>'.$request->zip_code2.'</p></br><p>'.$request->google_search_info.'</p></br><p>'.$request->done1.'</p></br><p>'.$request->google_search_info_email.'</p></br><p>'
-    .$request->google_search_info_password.'</p></br><p>'.$request->google_analytic_info.'</p></br><p>'.$request->done2.'</p></br><p>'.$request->google_analytic_info_email.'</p></br><p>'.$request->google_analytic_info_password.'</p></br><p>'.$request->google_business_account_info.'</p></br><p>'
-    .$request->done3.'</p></br><p>'.$request->google_business_account_info_email.'</p></br><p>'.$request->google_business_account_info_password.'</p></br><p>'.$request->share_cms_access_info.'</p></br><p>'
-    .$request->login_url.'</p></br><p>'.$request->email.'</p></br><p>'.$request->password.'</p></br><p>'.$request->confirm_adding.'</p></br><p>'.$request->google_console_setup.'</p></br><p>'
-    .$request->google_analytics_setup.'</p></br><p>'.$request->sitemap_setup.'</p></br><p>'.$request->robots_txt_setup.'</p></br><p>'.$request->google_business_setup.'</p></br>';
-
-    // $dueDate = ($request->has('without_duedate')) ? null : Carbon::createFromFormat($this->global->date_format, $request->due_date)->format('Y-m-d');
-    $task->start_date = Carbon::now()->format('Y-m-d');
-    // $task->due_date = $dueDate;
-    $task->project_id = $project_id->id;
-    // $task->task_category_id = $request->category_id;
-    $task->priority = 'medium';
-    $task->board_column_id = 2;
-
-    $task->estimate_hours = 0;
-    $task->estimate_minutes = 0;
-    // $task->deliverable_id = $request->deliverable_id;
-
-
-    if ($request->milestone_id != '') {
-        $task->milestone_id = $request->milestone_id;
-    }
-
-    $task->task_status = "pending";
-    $total_hours = 0;
-    $total_minutes = 0;
-    $total_in_minutes = 0;
-    $task->estimate_time_left_minutes = $total_in_minutes;
-
-    $task->save();
-
-    $task->task_short_code = ($project) ? $project->project_short_code . '-' . $task->id : null;
-    $task->saveQuietly();
-
-    $users = User::where('role_id',11)->get();
-    foreach ($users as $user) {
-        $task_user = new TaskUser();
-        $task_user->user_id = $user->id;
-        $task_user->task_id= $task->id;
-        $task_user->save();
-        Notification::send($user, new PmUpdateBasicSeoNotification($task_user));
-    }
-
-    return response()->json(['status'=>200]);
-}
 
 
     public function Niche()
@@ -5368,34 +5121,33 @@ public function updatePmBasicSEO(Request $request){
     }
     public function ProjectAccept(Request $request)
     {
-       // DB::beginTransaction();
+        // DB::beginTransaction();
         $project = Project::find($request->project_id);
         $project->status = 'in progress';
         $project->project_status = 'Accepted';
-      //  $project->admin_authorization_status = 1;
+        //  $project->admin_authorization_status = 1;
         $project->admin_comment = $request->admin_comment;
         $project->save();
-        $actions = PendingAction::where('code','CHA')->where('past_status',0)->where('project_id',$project->id)->get();
-        if($actions != null)
-        {
-        foreach ($actions as $key => $action) {
+        $actions = PendingAction::where('code', 'CHA')->where('past_status', 0)->where('project_id', $project->id)->get();
+        if ($actions != null) {
+            foreach ($actions as $key => $action) {
 
-                $action->authorized_by= Auth::id();
-                $action->authorized_at= Carbon::now();
+                $action->authorized_by = Auth::id();
+                $action->authorized_at = Carbon::now();
                 $action->past_status = 1;
                 $action->save();
-                $project_manager= User::where('id',$project->pm_id)->first();
-                $client= User::where('id',$project->client_id)->first();
-                $authorize_by= User::where('id',$action->authorized_by)->first();
+                $project_manager = User::where('id', $project->pm_id)->first();
+                $client = User::where('id', $project->client_id)->first();
+                $authorize_by = User::where('id', $action->authorized_by)->first();
 
-                $past_action= new PendingActionPast();
+                $past_action = new PendingActionPast();
                 $past_action->item_name = $action->item_name;
                 $past_action->code = $action->code;
                 $past_action->serial = $action->serial;
                 $past_action->action_id = $action->id;
                 $past_action->heading = $action->heading;
-                $past_action->message = 'Project <a href="'.route('projects.show',$project->id).'">'.$project->project_name.'</a> from Client <a href="'.route('clients.show',$client->id).'">'.$client->name.'</a> had challenge (Project manager: <a href="'.route('employees.show',$project_manager->id).'">'.$project_manager->name.'</a>) (Authorized by <a href="'.route('employees.show',$authorize_by->id).'">'.$authorize_by->name.'</a>)';
-             //   $past_action->button = $action->button;
+                $past_action->message = 'Project <a href="' . route('projects.show', $project->id) . '">' . $project->project_name . '</a> from Client <a href="' . route('clients.show', $client->id) . '">' . $client->name . '</a> had challenge (Project manager: <a href="' . route('employees.show', $project_manager->id) . '">' . $project_manager->name . '</a>) (Authorized by <a href="' . route('employees.show', $authorize_by->id) . '">' . $authorize_by->name . '</a>)';
+                //   $past_action->button = $action->button;
                 $past_action->timeframe = $action->timeframe;
                 $past_action->authorization_for = $action->authorization_for;
                 $past_action->authorized_by = $action->authorized_by;
@@ -5405,12 +5157,10 @@ public function updatePmBasicSEO(Request $request){
                 $past_action->project_id = $action->project_id;
                 $past_action->task_id = $action->task_id;
                 $past_action->client_id = $action->client_id;
-               // $past_action->deliverable_id = $action->deliverable_id;
+                // $past_action->deliverable_id = $action->deliverable_id;
                 $past_action->save();
-
-
+            }
         }
-    }
         $user = User::where('id', $project->pm_id)->first();
 
         //if request comes from original authrization serction then data will be update form authorizatin action
@@ -5436,28 +5186,27 @@ public function updatePmBasicSEO(Request $request){
         $user = User::where('id', $project->pm_id)->first();
 
 
-        $actions = PendingAction::where('code','CHA')->where('past_status',0)->where('project_id',$project->id)->get();
-        if($actions != null)
-        {
-        foreach ($actions as $key => $action) {
+        $actions = PendingAction::where('code', 'CHA')->where('past_status', 0)->where('project_id', $project->id)->get();
+        if ($actions != null) {
+            foreach ($actions as $key => $action) {
 
-                $action->authorized_by= Auth::id();
-                $action->authorized_at= Carbon::now();
+                $action->authorized_by = Auth::id();
+                $action->authorized_at = Carbon::now();
                 $action->past_status = 1;
                 $action->save();
 
-                $project_manager= User::where('id',$project->pm_id)->first();
-                $client= User::where('id',$project->client_id)->first();
-                $authorize_by= User::where('id',$action->authorized_by)->first();
+                $project_manager = User::where('id', $project->pm_id)->first();
+                $client = User::where('id', $project->client_id)->first();
+                $authorize_by = User::where('id', $action->authorized_by)->first();
 
-                $past_action= new PendingActionPast();
+                $past_action = new PendingActionPast();
                 $past_action->item_name = $action->item_name;
                 $past_action->code = $action->code;
                 $past_action->serial = $action->serial;
                 $past_action->action_id = $action->id;
                 $past_action->heading = $action->heading;
-                $past_action->message = 'Project <a href="'.route('projects.show',$project->id).'">'.$project->project_name.'</a> from Client <a href="'.route('clients.show',$client->id).'">'.$client->name.'</a> had challenge (Project manager: <a href="'.route('employees.show',$project_manager->id).'">'.$project_manager->name.'</a>) (Authorized by <a href="'.route('employees.show',$authorize_by->id).'">'.$authorize_by->name.'</a>)';
-              //  $past_action->button = $action->button;
+                $past_action->message = 'Project <a href="' . route('projects.show', $project->id) . '">' . $project->project_name . '</a> from Client <a href="' . route('clients.show', $client->id) . '">' . $client->name . '</a> had challenge (Project manager: <a href="' . route('employees.show', $project_manager->id) . '">' . $project_manager->name . '</a>) (Authorized by <a href="' . route('employees.show', $authorize_by->id) . '">' . $authorize_by->name . '</a>)';
+                //  $past_action->button = $action->button;
                 $past_action->timeframe = $action->timeframe;
                 $past_action->authorization_for = $action->authorization_for;
                 $past_action->authorized_by = $action->authorized_by;
@@ -5467,12 +5216,10 @@ public function updatePmBasicSEO(Request $request){
                 $past_action->project_id = $action->project_id;
                 $past_action->task_id = $action->task_id;
                 $past_action->client_id = $action->client_id;
-               // $past_action->deliverable_id = $action->deliverable_id;
+                // $past_action->deliverable_id = $action->deliverable_id;
                 $past_action->save();
-
-
+            }
         }
-    }
 
         Notification::send($user, new ProjectReviewAcceptNotification($project));
         Toastr::success('Project Canceled Successfully', 'Success', ["positionClass" => "toast-top-right"]);
@@ -5489,28 +5236,27 @@ public function updatePmBasicSEO(Request $request){
             $project->status = 'accepted';
         }
         $project->save();
-        $actions = PendingAction::where('code','PCA')->where('past_status',0)->where('project_id',$project->project_id)->get();
-        if($actions != null)
-        {
-        foreach ($actions as $key => $action) {
+        $actions = PendingAction::where('code', 'PCA')->where('past_status', 0)->where('project_id', $project->project_id)->get();
+        if ($actions != null) {
+            foreach ($actions as $key => $action) {
 
-                $action->authorized_by= Auth::id();
-                $action->authorized_at= Carbon::now();
+                $action->authorized_by = Auth::id();
+                $action->authorized_at = Carbon::now();
                 $action->past_status = 1;
                 $action->save();
-                $project_id =Project::where('id',$project->project_id)->first();
-                $project_manager= User::where('id',$project_id->pm_id)->first();
-                $client= User::where('id',$project_id->client_id)->first();
-                $authorize_by= User::where('id',$action->authorized_by)->first();
+                $project_id = Project::where('id', $project->project_id)->first();
+                $project_manager = User::where('id', $project_id->pm_id)->first();
+                $client = User::where('id', $project_id->client_id)->first();
+                $authorize_by = User::where('id', $action->authorized_by)->first();
 
-                $past_action= new PendingActionPast();
+                $past_action = new PendingActionPast();
                 $past_action->item_name = $action->item_name;
                 $past_action->code = $action->code;
                 $past_action->serial = $action->serial;
                 $past_action->action_id = $action->id;
                 $past_action->heading = $action->heading;
-                $past_action->message = 'Project completion form for project <a href="'.route('projects.show',$project_id->id).'">'.$project_id->project_name.'</a> from Client <a href="'.route('clients.show',$client->id).'">'.$client->name.'</a> required authorization (Project manager: <a href="'.route('employees.show',$project_manager->id).'">'.$project_manager->name.'</a>) (Authorized by <a href="'.route('employees.show',$authorize_by->id).'">'.$authorize_by->name.'</a>)';
-             //   $past_action->button = $action->button;
+                $past_action->message = 'Project completion form for project <a href="' . route('projects.show', $project_id->id) . '">' . $project_id->project_name . '</a> from Client <a href="' . route('clients.show', $client->id) . '">' . $client->name . '</a> required authorization (Project manager: <a href="' . route('employees.show', $project_manager->id) . '">' . $project_manager->name . '</a>) (Authorized by <a href="' . route('employees.show', $authorize_by->id) . '">' . $authorize_by->name . '</a>)';
+                //   $past_action->button = $action->button;
                 $past_action->timeframe = $action->timeframe;
                 $past_action->authorization_for = $action->authorization_for;
                 $past_action->authorized_by = $action->authorized_by;
@@ -5520,12 +5266,10 @@ public function updatePmBasicSEO(Request $request){
                 $past_action->project_id = $action->project_id;
                 $past_action->task_id = $action->task_id;
                 $past_action->client_id = $action->client_id;
-               // $past_action->deliverable_id = $action->deliverable_id;
+                // $past_action->deliverable_id = $action->deliverable_id;
                 $past_action->save();
-
-
+            }
         }
-    }
         if ($request->deny != null) {
             $milestone = ProjectMilestone::where('id', $project->milestone_id)->first();
             $mile = ProjectMilestone::find($milestone->id);
@@ -5612,48 +5356,45 @@ public function updatePmBasicSEO(Request $request){
             if ($project->save()) {
                 $project_id = Project::find($request->project_id);
 
-               //need pedning action
-               $helper = new HelperPendingActionController();
+                //need pedning action
+                $helper = new HelperPendingActionController();
 
 
-               $helper->QcSubmissionAuthorization($project_id);
-               //need pending action
-               $actions = PendingAction::where('code','QCSA')->where('past_status',0)->where('project_id',$project_id->id)->get();
-               if($actions != null)
-               {
-               foreach ($actions as $key => $action) {
+                $helper->QcSubmissionAuthorization($project_id);
+                //need pending action
+                $actions = PendingAction::where('code', 'QCSA')->where('past_status', 0)->where('project_id', $project_id->id)->get();
+                if ($actions != null) {
+                    foreach ($actions as $key => $action) {
 
-                       $action->authorized_by= Auth::id();
-                       $action->authorized_at= Carbon::now();
-                       $action->past_status = 1;
-                       $action->save();
-                       $project_manager= User::where('id',$project->pm_id)->first();
-                       $client= User::where('id',$project->client_id)->first();
-                       $authorize_by= User::where('id',$action->authorized_by)->first();
+                        $action->authorized_by = Auth::id();
+                        $action->authorized_at = Carbon::now();
+                        $action->past_status = 1;
+                        $action->save();
+                        $project_manager = User::where('id', $project->pm_id)->first();
+                        $client = User::where('id', $project->client_id)->first();
+                        $authorize_by = User::where('id', $action->authorized_by)->first();
 
-                       $past_action= new PendingActionPast();
-                       $past_action->item_name = $action->item_name;
-                       $past_action->code = $action->code;
-                       $past_action->serial = $action->serial;
-                       $past_action->action_id = $action->id;
-                       $past_action->heading = $action->heading;
-                       $past_action->message = $action->message. ' submitted by <a href="'.route('employees.show',$authorize_by->id).'">'.$authorize_by->name.'</a>';
-                    //   $past_action->button = $action->button;
-                       $past_action->timeframe = $action->timeframe;
-                       $past_action->authorization_for = $action->authorization_for;
-                       $past_action->authorized_by = $action->authorized_by;
-                       $past_action->authorized_at = $action->authorized_at;
-                       $past_action->expired_status = $action->expired_status;
-                       $past_action->past_status = $action->past_status;
-                       $past_action->project_id = $action->project_id;
-                       $past_action->task_id = $action->task_id;
-                       $past_action->client_id = $action->client_id;
-                       $past_action->milestone_id = $action->milestone_id;
-                       $past_action->save();
-
-
-               }
-           }
+                        $past_action = new PendingActionPast();
+                        $past_action->item_name = $action->item_name;
+                        $past_action->code = $action->code;
+                        $past_action->serial = $action->serial;
+                        $past_action->action_id = $action->id;
+                        $past_action->heading = $action->heading;
+                        $past_action->message = $action->message . ' submitted by <a href="' . route('employees.show', $authorize_by->id) . '">' . $authorize_by->name . '</a>';
+                        //   $past_action->button = $action->button;
+                        $past_action->timeframe = $action->timeframe;
+                        $past_action->authorization_for = $action->authorization_for;
+                        $past_action->authorized_by = $action->authorized_by;
+                        $past_action->authorized_at = $action->authorized_at;
+                        $past_action->expired_status = $action->expired_status;
+                        $past_action->past_status = $action->past_status;
+                        $past_action->project_id = $action->project_id;
+                        $past_action->task_id = $action->task_id;
+                        $past_action->client_id = $action->client_id;
+                        $past_action->milestone_id = $action->milestone_id;
+                        $past_action->save();
+                    }
+                }
 
                 $milestone = ProjectMilestone::where('id', $request->milestone_id)->first();
                 //dd($milestone);
@@ -5686,29 +5427,28 @@ public function updatePmBasicSEO(Request $request){
         $project->save();
 
         // pending action
-        $actions = PendingAction::where('code','QCA')->where('past_status',0)->where('project_id',$project->project_id)->get();
-        if($actions != null)
-        {
-        foreach ($actions as $key => $action) {
+        $actions = PendingAction::where('code', 'QCA')->where('past_status', 0)->where('project_id', $project->project_id)->get();
+        if ($actions != null) {
+            foreach ($actions as $key => $action) {
 
-                $action->authorized_by= Auth::id();
-                $action->authorized_at= Carbon::now();
+                $action->authorized_by = Auth::id();
+                $action->authorized_at = Carbon::now();
                 $action->past_status = 1;
                 $action->save();
 
-                $project_id =Project::where('id',$project->project_id)->first();
-                $project_manager= User::where('id',$project_id->pm_id)->first();
-                $client= User::where('id',$project_id->client_id)->first();
-                $authorize_by= User::where('id',$action->authorized_by)->first();
+                $project_id = Project::where('id', $project->project_id)->first();
+                $project_manager = User::where('id', $project_id->pm_id)->first();
+                $client = User::where('id', $project_id->client_id)->first();
+                $authorize_by = User::where('id', $action->authorized_by)->first();
 
-                $past_action= new PendingActionPast();
+                $past_action = new PendingActionPast();
                 $past_action->item_name = $action->item_name;
                 $past_action->code = $action->code;
                 $past_action->serial = $action->serial;
                 $past_action->action_id = $action->id;
                 $past_action->heading = $action->heading;
-                $past_action->message = 'QC form for project <a href="'.route('projects.show',$project_id->id).'">'.$project_id->project_name.'</a> from Client <a href="'.route('clients.show',$client->id).'">'.$client->name.'</a> required authorization (Project manager: <a href="'.route('employees.show',$project_manager->id).'">'.$project_manager->name.'</a>) (Authorized by <a href="'.route('employees.show',$authorize_by->id).'">'.$authorize_by->name.'</a>)';
-              //  $past_action->button = $action->button;
+                $past_action->message = 'QC form for project <a href="' . route('projects.show', $project_id->id) . '">' . $project_id->project_name . '</a> from Client <a href="' . route('clients.show', $client->id) . '">' . $client->name . '</a> required authorization (Project manager: <a href="' . route('employees.show', $project_manager->id) . '">' . $project_manager->name . '</a>) (Authorized by <a href="' . route('employees.show', $authorize_by->id) . '">' . $authorize_by->name . '</a>)';
+                //  $past_action->button = $action->button;
                 $past_action->timeframe = $action->timeframe;
                 $past_action->authorization_for = $action->authorization_for;
                 $past_action->authorized_by = $action->authorized_by;
@@ -5718,12 +5458,10 @@ public function updatePmBasicSEO(Request $request){
                 $past_action->project_id = $action->project_id;
                 $past_action->task_id = $action->task_id;
                 $past_action->client_id = $action->client_id;
-               // $past_action->deliverable_id = $action->deliverable_id;
+                // $past_action->deliverable_id = $action->deliverable_id;
                 $past_action->save();
-
-
+            }
         }
-    }
         // pending action
 
         if ($request->deny != null) {
@@ -5741,7 +5479,6 @@ public function updatePmBasicSEO(Request $request){
 
             $qc_submission = QcSubmission::find($request->id);
             $qc_submission->delete();
-         
         } else {
             $milestone = ProjectMilestone::where('id', $project->milestone_id)->first();
             // dd($milestone);
@@ -5756,7 +5493,7 @@ public function updatePmBasicSEO(Request $request){
 
         $project_id = Project::where('id', $project->project_id)->first();
 
-       
+
 
         Toastr::success('Project Q&C Request Accepted Successfully', 'Success', ["positionClass" => "toast-top-right"]);
         return back();
@@ -5818,29 +5555,28 @@ public function updatePmBasicSEO(Request $request){
         $pm_project = PMProject::find($project->id);
         $pm_project->deliverable_status = 1;
         $pm_project->save();
-        $actions = PendingAction::where('code','DDA')->where('past_status',0)->where('project_id',$request->project_id)->get();
-        if($actions != null)
-        {
-        foreach ($actions as $key => $action) {
+        $actions = PendingAction::where('code', 'DDA')->where('past_status', 0)->where('project_id', $request->project_id)->get();
+        if ($actions != null) {
+            foreach ($actions as $key => $action) {
 
-                $action->authorized_by= Auth::id();
-                $action->authorized_at= Carbon::now();
+                $action->authorized_by = Auth::id();
+                $action->authorized_at = Carbon::now();
                 $action->past_status = 1;
                 $action->save();
 
-                $project_id =Project::where('id',$project->project_id)->first();
-                $project_manager= User::where('id',$project_id->pm_id)->first();
-                $client= User::where('id',$project_id->client_id)->first();
-                $authorize_by= User::where('id',$action->authorized_by)->first();
+                $project_id = Project::where('id', $project->project_id)->first();
+                $project_manager = User::where('id', $project_id->pm_id)->first();
+                $client = User::where('id', $project_id->client_id)->first();
+                $authorize_by = User::where('id', $action->authorized_by)->first();
 
-                $past_action= new PendingActionPast();
+                $past_action = new PendingActionPast();
                 $past_action->item_name = $action->item_name;
                 $past_action->code = $action->code;
                 $past_action->serial = $action->serial;
                 $past_action->action_id = $action->id;
                 $past_action->heading = $action->heading;
-                $past_action->message = 'Project manager <a href="'.route('employees.show',$project_manager->id).'">'.$project_manager->name.'</a> requested to extend deadline for <a href="'.route('projects.show', $project_id->id.'?tab=deliverables').'">deliverables</a> creation for project <a href="'.route('projects.show',$project->id).'">'.$project_id->project_name.'</a> from Client <a href="'.route('clients.show',$client->id).'">'.$client->name.'</a> (Authorized by <a href="'.route('employees.show',$authorize_by->name).'">'.$authorize_by->name.'</a>)';
-              //  $past_action->button = $action->button;
+                $past_action->message = 'Project manager <a href="' . route('employees.show', $project_manager->id) . '">' . $project_manager->name . '</a> requested to extend deadline for <a href="' . route('projects.show', $project_id->id . '?tab=deliverables') . '">deliverables</a> creation for project <a href="' . route('projects.show', $project->id) . '">' . $project_id->project_name . '</a> from Client <a href="' . route('clients.show', $client->id) . '">' . $client->name . '</a> (Authorized by <a href="' . route('employees.show', $authorize_by->name) . '">' . $authorize_by->name . '</a>)';
+                //  $past_action->button = $action->button;
                 $past_action->timeframe = $action->timeframe;
                 $past_action->authorization_for = $action->authorization_for;
                 $past_action->authorized_by = $action->authorized_by;
@@ -5850,12 +5586,10 @@ public function updatePmBasicSEO(Request $request){
                 $past_action->project_id = $action->project_id;
                 $past_action->task_id = $action->task_id;
                 $past_action->client_id = $action->client_id;
-               // $past_action->deliverable_id = $action->deliverable_id;
+                // $past_action->deliverable_id = $action->deliverable_id;
                 $past_action->save();
-
-
+            }
         }
-    }
 
 
 
@@ -5913,7 +5647,7 @@ public function updatePmBasicSEO(Request $request){
         //need pending action
 
         $users = User::where('role_id', 1)->get();
-        foreach ($users as $user) { 
+        foreach ($users as $user) {
             $this->triggerPusher('notification-channel', 'notification', [
                 'user_id' => $user->id,
                 'role_id' => 1,
@@ -5932,42 +5666,41 @@ public function updatePmBasicSEO(Request $request){
     }
     public function DeliverableFinalAuthorizationAccept(Request $request)
     {
-      //  DB::beginTransaction();
+        //  DB::beginTransaction();
         if ($request->denyAuthorization) {
             $project = Project::find($request->project_id);
             $project->authorization_status = 'canceled';
             $project->project_status = 'canceled';
             $project->deliverable_authorization = 2;
             $project->save();
-        }else{
-            $project=Project::find($request->project_id);
+        } else {
+            $project = Project::find($request->project_id);
             $project->authorization_status = 'approved';
-            $project->deliverable_authorization= 1;
+            $project->deliverable_authorization = 1;
             $project->save();
         }
-        $actions = PendingAction::whereIn('code',['DGA','DOA','DDA'])->where('past_status',0)->where('project_id',$request->project_id)->get();
-        if($actions != null)
-        {
-        foreach ($actions as $key => $action) {
+        $actions = PendingAction::whereIn('code', ['DGA', 'DOA', 'DDA'])->where('past_status', 0)->where('project_id', $request->project_id)->get();
+        if ($actions != null) {
+            foreach ($actions as $key => $action) {
 
-                $action->authorized_by= Auth::id();
-                $action->authorized_at= Carbon::now();
+                $action->authorized_by = Auth::id();
+                $action->authorized_at = Carbon::now();
                 $action->past_status = 1;
                 $action->save();
 
-              //  $project_id =Project::where('id',$project->project_id)->first();
-                $project_manager= User::where('id',$project->pm_id)->first();
-                $client= User::where('id',$project->client_id)->first();
-                $authorize_by= User::where('id',$action->authorized_by)->first();
+                //  $project_id =Project::where('id',$project->project_id)->first();
+                $project_manager = User::where('id', $project->pm_id)->first();
+                $client = User::where('id', $project->client_id)->first();
+                $authorize_by = User::where('id', $action->authorized_by)->first();
 
-                $past_action= new PendingActionPast();
+                $past_action = new PendingActionPast();
                 $past_action->item_name = $action->item_name;
                 $past_action->code = $action->code;
                 $past_action->serial = $action->serial;
                 $past_action->action_id = $action->id;
                 $past_action->heading = $action->heading;
-                $past_action->message = '<a href="'.route('projects.show', $project->id.'?tab=deliverables').'">Deliverables</a> for project <a href="'.route('projects.show',$project->id).'">'.$project->project_name.'</a> from Client <a href="'.route('clients.show',$client->id).'">'.$client->name.'</a> required authorization (Project manager: <a href="'.route('employees.show',$project_manager->id).'">'.$project_manager->name.'</a>) (Authorized by <a href="'.route('employees.show',$authorize_by->id).'">'.$authorize_by->name.'</a>)';
-              //  $past_action->button = $action->button;
+                $past_action->message = '<a href="' . route('projects.show', $project->id . '?tab=deliverables') . '">Deliverables</a> for project <a href="' . route('projects.show', $project->id) . '">' . $project->project_name . '</a> from Client <a href="' . route('clients.show', $client->id) . '">' . $client->name . '</a> required authorization (Project manager: <a href="' . route('employees.show', $project_manager->id) . '">' . $project_manager->name . '</a>) (Authorized by <a href="' . route('employees.show', $authorize_by->id) . '">' . $authorize_by->name . '</a>)';
+                //  $past_action->button = $action->button;
                 $past_action->timeframe = $action->timeframe;
                 $past_action->authorization_for = $action->authorization_for;
                 $past_action->authorized_by = $action->authorized_by;
@@ -5979,36 +5712,31 @@ public function updatePmBasicSEO(Request $request){
                 $past_action->client_id = $action->client_id;
                 $past_action->deliverable_id = $action->deliverable_id;
                 $past_action->save();
+            }
+            $helper = new HelperPendingActionController();
 
+
+            $helper->SendDeliverabletoClient($past_action->project_id);
         }
-        $helper = new HelperPendingActionController();
-
-
-        $helper->SendDeliverabletoClient($past_action->project_id);
-
-    }
 
 
         $qualified_sale_id = QualifiedSale::where('project_id', $project->id)->first();
 
 
-        if($qualified_sale_id != null)
-        {
+        if ($qualified_sale_id != null) {
             if ($request->denyAuthorization) {
                 $qualified_sale = QualifiedSale::find($qualified_sale_id->id);
                 $qualified_sale->authorized_by_admin = 2;
                 $qualified_sale->admin_authorization_comment = $request->admin_authorization_comment;
                 $qualified_sale->admin_id = Auth::id();
                 $qualified_sale->save();
-            }else{
-                $qualified_sale= QualifiedSale::find($qualified_sale_id->id);
+            } else {
+                $qualified_sale = QualifiedSale::find($qualified_sale_id->id);
                 $qualified_sale->authorized_by_admin = 1;
                 $qualified_sale->admin_authorization_comment = $request->admin_authorization_comment;
                 $qualified_sale->admin_id = Auth::id();
                 $qualified_sale->save();
             }
-
-
         }
 
 
@@ -6041,8 +5769,8 @@ public function updatePmBasicSEO(Request $request){
         $log_user = Auth::user();
 
         // 2ND TIME TOM MANAGEMENT AUTHORIZATION START
-        if($request->project_id){
-            $oldDeliverable = ProjectDeliverable::where('project_id',$request->project_id)->first();
+        if ($request->project_id) {
+            $oldDeliverable = ProjectDeliverable::where('project_id', $request->project_id)->first();
 
             $deliverableReAuth = new DeliverableReAuthorization();
             $deliverableReAuth->deliverable_id = $oldDeliverable->id;
@@ -6107,7 +5835,7 @@ public function updatePmBasicSEO(Request $request){
             $helper = new HelperPendingActionController();
 
 
-            $helper->DeliverableModification($project,$deliverable->id);
+            $helper->DeliverableModification($project, $deliverable->id);
             //need pending action
 
             $data = ProjectDeliverable::find($request->delivarable_id);
@@ -6227,36 +5955,36 @@ public function updatePmBasicSEO(Request $request){
             } else {
             }
             $data = Project::select(
-                        'projects.id as id',
-                        'projects.status as project_status',
-                        'projects.project_name',
-                        'users.id as client_id',
-                        'users.name as client_name',
-                        'users.status as client_status'
-                    )
-                    ->leftJoin('users', 'projects.client_id', 'users.id')
-                    ->where('projects.status', $mode)
-                    ->get();
+                'projects.id as id',
+                'projects.status as project_status',
+                'projects.project_name',
+                'users.id as client_id',
+                'users.name as client_name',
+                'users.status as client_status'
+            )
+                ->leftJoin('users', 'projects.client_id', 'users.id')
+                ->where('projects.status', $mode)
+                ->get();
         } else {
 
             $data = Project::select(
-                        'projects.id as id',
-                        'projects.status as project_status',
-                        'projects.project_name',
-                        'users.id as client_id',
-                        'users.name as client_name',
-                        'users.status as client_status'
-                    )
-                    ->leftJoin('users', 'projects.client_id', 'users.id')
-                    ->where('projects.status', 'in progress')
-                    ->get();
+                'projects.id as id',
+                'projects.status as project_status',
+                'projects.project_name',
+                'users.id as client_id',
+                'users.name as client_name',
+                'users.status as client_status'
+            )
+                ->leftJoin('users', 'projects.client_id', 'users.id')
+                ->where('projects.status', 'in progress')
+                ->get();
         }
 
         return response()->json($data);
     }
     public function get_client_json($type = null)
     {
-      $data= User::where('role_id',null)->get();
+        $data = User::where('role_id', null)->get();
 
         return response()->json($data);
     }
@@ -6264,32 +5992,34 @@ public function updatePmBasicSEO(Request $request){
     public function get_project_details($id)
     {
 
-        $milestones= ProjectMilestone::select('project_milestones.*','project_milestones.milestone_title',
-        'project_deliverables.deliverable_type','project_deliverables.title as deliverable_title','projects.project_name'
+        $milestones = ProjectMilestone::select(
+            'project_milestones.*',
+            'project_milestones.milestone_title',
+            'project_deliverables.deliverable_type',
+            'project_deliverables.title as deliverable_title',
+            'projects.project_name'
 
         )
-        ->join('projects','projects.id','project_milestones.project_id')
+            ->join('projects', 'projects.id', 'project_milestones.project_id')
 
-        ->leftJoin('project_deliverables','project_deliverables.milestone_id','project_milestones.id')
-        ->groupBy('project_milestones.id')
+            ->leftJoin('project_deliverables', 'project_deliverables.milestone_id', 'project_milestones.id')
+            ->groupBy('project_milestones.id')
 
-        ->where('project_milestones.project_id',$id)->get();
-        $project = Project::where('id',$id)->first();
-        $estimate_minutes_project= $project->hours_allocated *60;
+            ->where('project_milestones.project_id', $id)->get();
+        $project = Project::where('id', $id)->first();
+        $estimate_minutes_project = $project->hours_allocated * 60;
 
-        if($estimate_minutes_project == 0)
-        {
+        if ($estimate_minutes_project == 0) {
             $estimated_minutes_left = 0;
-        }else
-        {
-        $estimated_hours_tasks = Task::where('project_id',$project->id)->where('subtask_id','=',null)->sum('estimate_hours');
-        $estimated_minutes_tasks = Task::where('project_id',$project->id)->where('subtask_id','=',null)->sum('estimate_minutes');
+        } else {
+            $estimated_hours_tasks = Task::where('project_id', $project->id)->where('subtask_id', '=', null)->sum('estimate_hours');
+            $estimated_minutes_tasks = Task::where('project_id', $project->id)->where('subtask_id', '=', null)->sum('estimate_minutes');
 
-        $total_minutes = $estimated_hours_tasks *60 + $estimated_minutes_tasks;
+            $total_minutes = $estimated_hours_tasks * 60 + $estimated_minutes_tasks;
 
 
-        $estimated_minutes_left = $estimate_minutes_project - $total_minutes;
-    //    / dd($estimated_hours_tasks);
+            $estimated_minutes_left = $estimate_minutes_project - $total_minutes;
+            //    / dd($estimated_hours_tasks);
         }
 
 
@@ -6301,13 +6031,15 @@ public function updatePmBasicSEO(Request $request){
     }
 
     // projects request extension section
-    public function requestExtension($id){
+    public function requestExtension($id)
+    {
         $this->pageTitle = 'Delayed projects time extension';
         $this->project_id = $id;
-        return view('projects.ajax.request_extension',$this->data);
+        return view('projects.ajax.request_extension', $this->data);
     }
 
-    public function storeRequestExtension(Request $request){
+    public function storeRequestExtension(Request $request)
+    {
         $validator = $request->validate([
             'day' => 'required',
             'file' => 'required',
@@ -6325,50 +6057,59 @@ public function updatePmBasicSEO(Request $request){
 
         $image_files = array();
         $files = $request->file('file');
-        if (!empty($files)){
-            foreach ($files as $file){
+        if (!empty($files)) {
+            foreach ($files as $file) {
                 $imageName = md5(rand(1000, 10000));
                 $ext = strtolower($file->getClientOriginalExtension());
-                $imageFullName = $imageName.'.'.$ext;
+                $imageFullName = $imageName . '.' . $ext;
                 $dir = 'project-request-extension/';
-                $imageUrl=$dir.$imageFullName;
-                $file->move($dir,$imageFullName);
-                $image_files[]=$imageUrl;
+                $imageUrl = $dir . $imageFullName;
+                $file->move($dir, $imageFullName);
+                $image_files[] = $imageUrl;
             }
-            $project_request_time_extension['file']=implode("|",$image_files);
+            $project_request_time_extension['file'] = implode("|", $image_files);
         }
         $project_request_time_extension->save();
 
-        return response()->json(['status'=>200]);
+        return response()->json(['status' => 200]);
     }
 
-    public function approvedRequestExtension(Request $request){
+    public function approvedRequestExtension(Request $request)
+    {
         $delayed_project = ProjectRequestTimeExtension::find($request->id);
         $delayed_project->day = $request->day;
         $delayed_project->admin_comment = $request->admin_comment;
-        $delayed_project->status= 'Approved';
+        $delayed_project->status = 'Approved';
         $delayed_project->save();
 
-        return response()->json(['status'=>200]);
+        return response()->json(['status' => 200]);
     }
-    public function denyRequestExtension(Request $request){
+    public function denyRequestExtension(Request $request)
+    {
         $delayed_project = ProjectRequestTimeExtension::find($request->id);
         $delayed_project->day = $request->day;
         $delayed_project->admin_comment = $request->admin_comment;
-        $delayed_project->status= 'Deny';
+        $delayed_project->status = 'Deny';
         $delayed_project->save();
 
-        return response()->json(['status'=>200]);
+        return response()->json(['status' => 200]);
     }
     public function ProjectChallenge($id)
     {
-        $challenge = Project::select('projects.id','projects.project_name','projects.comments','projects.project_challenge',
-        'pm.id as project_manager_id','pm.name as project_manager_name','client.id as clientId','client.name as client_name'
+        $challenge = Project::select(
+            'projects.id',
+            'projects.project_name',
+            'projects.comments',
+            'projects.project_challenge',
+            'pm.id as project_manager_id',
+            'pm.name as project_manager_name',
+            'client.id as clientId',
+            'client.name as client_name'
         )
-        ->leftJoin('users as pm','pm.id','projects.pm_id')
-        ->leftJoin('users as client','client.id','projects.client_id')
-        ->where('projects.id',$id)
-        ->first();
+            ->leftJoin('users as pm', 'pm.id', 'projects.pm_id')
+            ->leftJoin('users as client', 'client.id', 'projects.client_id')
+            ->where('projects.id', $id)
+            ->first();
         return response()->json([
             'challenge' => $challenge,
             'status' => 200,
@@ -6379,13 +6120,15 @@ public function updatePmBasicSEO(Request $request){
         $this->projectId = $request->project_id;
         return view('projects.modals.project_deadline_extension_modal', $this->data);
     }
-    public function pDERequest(ProjectDeadlineExtensionDataTable $datatable){
+    public function pDERequest(ProjectDeadlineExtensionDataTable $datatable)
+    {
         $this->clients = User::allClients();
         $this->pageTitle = 'Project Deadline Extension Requests';
-        $this->project_managers = User::where('role_id',4)->get();
-        return $datatable->render('projects.ajax.project_deadline_extension',$this->data);
+        $this->project_managers = User::where('role_id', 4)->get();
+        return $datatable->render('projects.ajax.project_deadline_extension', $this->data);
     }
-    public function storeProjectDeadline(Request $request){
+    public function storeProjectDeadline(Request $request)
+    {
         // dd($request->all());
         $validator = $request->validate([
             'new_deadline' => 'required',
@@ -6396,7 +6139,7 @@ public function updatePmBasicSEO(Request $request){
             'extension.required' => 'This filed is required!',
             'description.required' => 'This filed is required!',
         ]);
-        
+
         $oldDeadline = Carbon::parse($request->old_deadline);
         $newDeadline = Carbon::parse($request->new_deadline);
         $dayDifference = $newDeadline->diffInDays($oldDeadline);
@@ -6413,12 +6156,12 @@ public function updatePmBasicSEO(Request $request){
         $pd_ext->status = 1;
         $pd_ext->save();
 
-        $project_F = Project::where('id',$request->project_id)->first();
+        $project_F = Project::where('id', $request->project_id)->first();
         $project_F->deadline_auth_status = 1;
         $project_F->save();
-        
+
         return response()->json([
-            'status'=>200
+            'status' => 200
         ]);
     }
     public function pDExtensionAuthorization(Request $request)
@@ -6427,9 +6170,9 @@ public function updatePmBasicSEO(Request $request){
         return view('projects.modals.project_deadline_extension_auth_modal', $this->data);
     }
 
-    public function storeAuthorization(Request $request){
+    public function storeAuthorization(Request $request)
+    {
         // dd($request->all());
-        // DB::beginTransaction();
         $validator = $request->validate([
             'new_deadline' => 'required',
         ], [
@@ -6439,8 +6182,9 @@ public function updatePmBasicSEO(Request $request){
         $newDeadline = Carbon::parse($request->new_deadline);
         $dayDifference = $newDeadline->diffInDays($oldDeadline);
 
-        if($request->type =='accept'){
-            $pde = ProjectDeadlineExtension::where('id',$request->pde_id)->first();
+
+        if ($request->type == 'accept') {
+            $pde = ProjectDeadlineExtension::where('id', $request->pde_id)->first();
             $pde->new_deadline = $request->new_deadline;
             $pde->deadline_extend_admin = $request->new_deadline;
             $pde->deadline_extended_for = $dayDifference;
@@ -6450,27 +6194,26 @@ public function updatePmBasicSEO(Request $request){
             $pde->status = 2;
             $pde->save();
 
-            $project = Project::where('id',$request->project_id)->first();
+            $project = Project::where('id', $request->project_id)->first();
             $project->old_deadline = $pde->old_deadline;
             $project->deadline = $pde->new_deadline;
             $project->deadline_auth_status = 2;
             $project->save();
-
-        }else{
-            $pde = ProjectDeadlineExtension::where('id',$request->pde_id)->first();
+        } else {
+            $pde = ProjectDeadlineExtension::where('id', $request->pde_id)->first();
             $pde->admin_comment = $request->admin_comment;
             $pde->approved_on = Carbon::now();
             $pde->approved_by = Auth::user()->id;
             $pde->status = 3;
             $pde->save();
 
-            $project = Project::where('id',$request->project_id)->first();
+            $project = Project::where('id', $request->project_id)->first();
             $project->deadline_auth_status = 0;
             $project->save();
         }
 
         return response()->json([
-            'status'=> 200
+            'status' => 200
         ]);
     }
 

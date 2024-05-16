@@ -32,7 +32,10 @@ const ExpireRequiredAction = () => {
 
     // data fetching according to filter
     useEffect(() => {
-        const queryObj = _.pickBy({...dateFilter,user_id:user?.id}, Boolean);
+        const queryObj = _.pickBy(
+            { ...dateFilter, user_id: user?.id },
+            Boolean
+        );
         const query = new URLSearchParams(queryObj).toString();
         // console.log({query});
         getExpiredRequiredAction(query)
@@ -40,7 +43,7 @@ const ExpireRequiredAction = () => {
             .then(({ pending_actions }) => {
                 setData(pending_actions);
             });
-        }, [dateFilter, refresh, user]);
+    }, [dateFilter, refresh, user]);
 
     // filter data according to search
     useEffect(() => {
@@ -88,7 +91,12 @@ const ExpireRequiredAction = () => {
 
     return (
         <div>
-            <FilterBar onFilter={onFilter} change={true} />
+            <FilterBar
+                onFilter={onFilter}
+                change={true}
+                setFilterData={setFilterData}
+                data={data}
+            />
             {(isLoading || isFetching) &&
                 _.fill(Array(perPageItem), "*").map((v, i) => (
                     <RequiredActionCard_Loader key={i} />
@@ -99,7 +107,7 @@ const ExpireRequiredAction = () => {
                     return (
                         <RequiredActionsCard
                             key={i}
-                            role={user?user.role_id:currentUser.roleId}
+                            role={user ? user.role_id : currentUser.roleId}
                             data={data}
                             status={"expire"}
                         />

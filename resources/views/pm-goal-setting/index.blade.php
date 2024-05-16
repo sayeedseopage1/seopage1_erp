@@ -86,10 +86,11 @@
             </div>
         </x-slot>
         <div class="col-lg-12 col-md-12 ntfcn-tab-content-left w-100 p-4 ">
+            <h4>Fixed Project</h4>
             <form id="pm-goal-setting-form" action="#" method="PUT">
                 @csrf
                 <section class="point__distribution">
-                    @foreach ($pm_goals as $pm_goal)
+                    @foreach ($pmGoalFixed as $pm_goal)
                     <div class="d-flex">
                         <div class="point__row">
                             <div class="point__col">
@@ -99,10 +100,30 @@
                             <div class="point__col">
                                 <input type="number" class="point__input" name="end_value" id="end_value_{{ $pm_goal->id }}" value="{{ $pm_goal->end_value }}">
                             </div>
+                            <div class="point__col"> {{$categories[$pm_goal->category]}}</div>
+                        </div>
+                        <button type="button" class="btn btn-primary ml-3 mt-2 h-50 updateBtn" data-id="{{ $pm_goal->id }}"><i class="fa fa-check"></i></button>
+                    </div>
+                     @endforeach
+                </section>
+            </form>
+        </div>
+        <div class="col-lg-12 col-md-12 ntfcn-tab-content-left w-100 p-4 ">
+            <h4>Hourly Project</h4>
+            <form id="pm-goal-setting-form" action="#" method="PUT">
+                @csrf
+                <section class="point__distribution">
+                    @foreach ($pmGoalHourly as $pm_goal)
+                    <div class="d-flex">
+                        <div class="point__row">
                             <div class="point__col">
-                                <input type="number" class="point__input" name="no_of_goal" id="no_of_goal_{{ $pm_goal->id }}" value="{{ $pm_goal->no_of_goal }}">
+                                <input type="number" class="point__input" name="initial_value" id="initial_value_{{ $pm_goal->id }}" value="{{ $pm_goal->initial_value }}">
                             </div>
-                            <div class="point__col"> {{$pm_goal->name}}</div>
+                            <div class="point__col"> - </div>
+                            <div class="point__col">
+                                <input type="number" class="point__input" name="end_value" id="end_value_{{ $pm_goal->id }}" value="{{ $pm_goal->end_value }}">
+                            </div>
+                            <div class="point__col"> {{$categories[$pm_goal->category]}}</div>
                         </div>
                         <button type="button" class="btn btn-primary ml-3 mt-2 h-50 updateBtn" data-id="{{ $pm_goal->id }}"><i class="fa fa-check"></i></button>
                     </div>
@@ -125,7 +146,6 @@
                 '_token': "{{ csrf_token() }}",
                 'initial_value': $("#initial_value_" + id).val(),
                 'end_value': $("#end_value_" + id).val(),
-                'no_of_goal': $("#no_of_goal_" + id).val(),
                 'id': id,
             }
             $.ajaxSetup({

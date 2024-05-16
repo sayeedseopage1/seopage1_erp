@@ -74,13 +74,13 @@
                                                     </button>
                                                 </div>
                                                 <div class="modal-body">
-                                                    <div class="form-group height-35 f-14">
-                                                        
+                                                    <div class="form-group">
+
                                                         <label for="hours">
                                                             Select Hours <strong>(Requested for {{ $value->incress_hours }} Hrs) </strong>
                                                         </label>
-                                                        
-                                                        <select name="hours" id="task_hours{{ $value->id }}" class="form-control height-35 f-14">
+
+                                                        <select name="hours" id="task_hours{{ $value->id }}" class="form-control height-35" required>
                                                             <option value="">Select Hours</option>
                                                             @for ($i = 1; $i <= 20; $i++)
                                                                 <option value="{{ $i }}" @selected($i == $value->incress_hours)>
@@ -88,7 +88,19 @@
                                                                 </option>
                                                             @endfor
                                                         </select>
-                                                    
+
+                                                    </div>
+                                                    <div class="form-group">
+
+                                                        <label for="goal_creation_type">
+                                                            Select Hours  Hrs </strong>
+                                                        </label>
+
+                                                        <select name="goal_creation_type" id="goal_creation_type" class="form-control height-35" required>
+                                                            @foreach ($goalCreationTimeType as $key => $item)
+                                                                <option value="{{ $key }}">{{ $item }}</option>
+                                                            @endforeach
+                                                        </select>
 
                                                     </div>
                                                     <div class="card mt-5">
@@ -132,6 +144,7 @@
                 var task_id = $(this).data('deal-id');
                 var request_id = $(this).data('request-id');
                 var task_hours = $('#task_hours' + request_id).val();
+                var goal_creation_type = $('#goal_creation_type').val();
                 var task_description = $('#task_description' + request_id).val();
                 var mode = $(this).data('mode');
                 $.easyAjax({
@@ -144,6 +157,7 @@
                         id: task_id,
                         request_id: request_id,
                         hours: task_hours,
+                        creation_type: goal_creation_type,
                         description: task_description,
                         mode: mode,
                     },

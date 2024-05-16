@@ -42,4 +42,8 @@ class Deal extends Model
     {
         return $this->belongsTo(AwardTimeIncress::class, 'id', 'deal_id');
     }
+
+    public function pm_project(){
+        return $this->hasOne(PMProject::class, 'deal_id');
+    }
 }

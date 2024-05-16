@@ -193,84 +193,78 @@ $currency_id= App\Models\Currency::where('id',$contract->original_currency_id)->
                   //dd($diff_in_minutes,$to,$from);
                    ?>
 
-                  @if(Auth::user()->role_id == 4 || Auth::user()->role_id == 1)
-                  @if($contract->deal->status == 'pending')
-      <div class="wrapper-timezone d-flex justify-content-center">
-
-
-       <p>You have </p>
-
-       <div class="clock">
-
-
-           <div class="column">
-               <div class="timer" id="hours"></div>
-               <div class="timer_text">HOURS</div>
-           </div>
-
-           <!-- <div class="timer">:</div> -->
-           <div class="column">
-               <div class="timer" id="minutes"></div>
-               <div class="timer_text">MINUTES</div>
-           </div>
-
-           <!-- <div class="timer">:</div> -->
-           <div class="column">
-               <div class="timer" id="seconds"></div>
-               <div class="timer_text">SECONDS</div>
-           </div>
-       </div>
-
-       <p>remaining for accepting the project</p>
-   </div>
-   @endif
-   @endif
-
-   <div class="wrapper-timezone d-flex justify-content-center">
-
-     @if(Auth::user()->role_id == 4 || Auth::user()->role_id == 1)
-     @if($contract->deal->status == 'pending')
-
-   {{--  <button class="btn btn-danger mr-3"  type="button" data-toggle="modal" data-target="#dealdenymodal">Deny <i class="fa-solid fa-xmark"></i></button>
-       @include('contracts.modals.dealdenymodal') --}}
-       @if($diff_in_minutes < 1230 )
-       @if($contract->deal->pm_id == Auth::id() || Auth::user()->role_id == 1)
-     <a href="/account/projects/{{$project_id->id}}/edit" class="btn btn-success">Submit Project Acceptance Form <i class="fa-solid fa-check"></i></a>
-     @endif
-     @endif
-
-     @elseif($contract->deal->status == 'Accepted')
-       <h3 class="d-flex justify-content-center" style="color:green;">{{$contract->deal->status}}</h3>
-       @else
-       @if($contract->deal->status == 'Denied')
-     <h3 class="d-flex justify-content-left" style="color:red;">
-
-            Time Expired
-        </h3>
-        <span class="mt-5 d-flex justify-content-start">
-            @php
-            $award_time_request = App\Models\AwardTimeIncress::where('deal_id',$contract->deal->id)->where('status',1)->first();
-            $pending_award_time_request = App\Models\AwardTimeIncress::where('deal_id',$contract->deal->id)->first();
-            @endphp
-            @if($award_time_request == null)
-                <button class="btn btn-success award_time_incress">Request for time extension</button>
-            @else
-                @if($pending_award_time_request->status == 0)
-                <button class="btn btn-success">Pending</button>
+                @if(Auth::user()->role_id == 4 || Auth::user()->role_id == 1)
+                    @if($contract->deal->status == 'pending')
+                        @if($contract->deal->is_drafted == 0 && ($contract->deal->authorization_status == 1 || 
+                        (((Carbon\Carbon::now()->diffInSeconds($contract->deal->released_at) > 10800) && (Carbon\Carbon::parse($contract->deal->released_at)->format('H:i:s') >= '07:00' && Carbon\Carbon::parse($contract->deal->released_at)->format('H:i:s') < '23:30')) || ((Carbon\Carbon::parse($contract->deal->released_at)->format('H:i:s') < '07:00' || Carbon\Carbon::parse($contract->deal->released_at)->format('H:i:s') >= '23:30') && (Carbon\Carbon::parse(now())->format('H:i:s') >= '10:00') || Carbon\Carbon::parse($contract->deal->released_at)->format('Y-m-d') < now()->format('Y-m-d')))))
+                            <div class="wrapper-timezone d-flex justify-content-center">
+                                <p>You have </p>
+                                <div class="clock">
+                                    <div class="column">
+                                        <div class="timer" id="hours"></div>
+                                        <div class="timer_text">HOURS</div>
+                                    </div>
+                                    <!-- <div class="timer">:</div> -->
+                                    <div class="column">
+                                        <div class="timer" id="minutes"></div>
+                                        <div class="timer_text">MINUTES</div>
+                                    </div>
+                                    <!-- <div class="timer">:</div> -->
+                                    <div class="column">
+                                        <div class="timer" id="seconds"></div>
+                                        <div class="timer_text">SECONDS</div>
+                                    </div>
+                                </div>
+                                <p>remaining for accepting the project</p>
+                            </div>
+                        @else
+                            @if($contract->deal->is_drafted == 1)
+                            <h3>The project is drafted!</h3>
+                            @else
+                            <h3>Awaiting Authorization from Sales Lead!</h3>
+                            @endif
+                        @endif
+                    @endif
                 @endif
+    @if($contract->deal->is_drafted == 0 && ($contract->deal->authorization_status == 1 || 
+    (((Carbon\Carbon::now()->diffInSeconds($contract->deal->released_at) > 10800) && (Carbon\Carbon::parse($contract->deal->released_at)->format('H:i:s') >= '07:00' && Carbon\Carbon::parse($contract->deal->released_at)->format('H:i:s') < '23:30')) || ((Carbon\Carbon::parse($contract->deal->released_at)->format('H:i:s') < '07:00' || Carbon\Carbon::parse($contract->deal->released_at)->format('H:i:s') >= '23:30') && (Carbon\Carbon::parse(now())->format('H:i:s') >= '10:00') || Carbon\Carbon::parse($contract->deal->released_at)->format('Y-m-d') < now()->format('Y-m-d')))))
+    <div class="wrapper-timezone d-flex justify-content-center">
+
+        @if(Auth::user()->role_id == 4 || Auth::user()->role_id == 1)
+            @if($contract->deal->status == 'pending')
+                {{--  <button class="btn btn-danger mr-3"  type="button" data-toggle="modal" data-target="#dealdenymodal">Deny <i class="fa-solid fa-xmark"></i></button>
+                    @include('contracts.modals.dealdenymodal') --}}
+                @if($diff_in_minutes < 1230 )
+                    @if($contract->deal->pm_id == Auth::id() || Auth::user()->role_id == 1)
+                        <a href="/account/projects/{{$project_id->id}}/edit" class="btn btn-success">Submit Project Acceptance Form <i class="fa-solid fa-check"></i></a>
+                    @endif
+                @endif
+            @elseif($contract->deal->status == 'Accepted')
+                <h3 class="d-flex justify-content-center" style="color:green;">{{$contract->deal->status}}</h3>
+            @else
+                @if($contract->deal->status == 'Denied')
+                    <h3 class="d-flex justify-content-left" style="color:red;">Time Expired</h3>
+                    <span class="mt-5 d-flex justify-content-start">
+                        @php
+                        $award_time_request = App\Models\AwardTimeIncress::where('deal_id',$contract->deal->id)->where('status',1)->first();
+                        $pending_award_time_request = App\Models\AwardTimeIncress::where('deal_id',$contract->deal->id)->first();
+                        @endphp
+                        @if($award_time_request == null)
+                            <button class="btn btn-success award_time_incress">Request for time extension</button>
+                        @else
+                            @if($pending_award_time_request->status == 0)
+                            <button class="btn btn-success">Pending</button>
+                            @endif
+                        @endif
+                    </span>
+                @endif
+
             @endif
-
-        </span>
-
-
-
+        @else
+            <h3 class="d-flex justify-content-center" style="color:green;">{{$contract->deal->status}}</h3>
+        @endif
+    </div>
     @endif
-
-     @endif
-     @else
-         <h3 class="d-flex justify-content-center" style="color:green;">{{$contract->deal->status}}</h3>
-     @endif
-   </div>
                 </div>
                 <div class="col-md-4" align="right">
                   <td >

@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1037.5" height="1214.5" viewBox="0 0 1037.5 1214.5">
+  <g id="Group_3730" data-name="Group 3730" transform="translate(-283.25 -167.25)">
+    <g id="Rectangle_1060" data-name="Rectangle 1060" transform="translate(284 213)" fill="#f3f8ff" stroke="#1d82f5" stroke-linecap="round" stroke-linejoin="round" stroke-width="0.75">
+      <path d="M0,0H1036a0,0,0,0,1,0,0V1163a5,5,0,0,1-5,5H5a5,5,0,0,1-5-5V0A0,0,0,0,1,0,0Z" stroke="none"/>
+      <path d="M0-.375H1036a.375.375,0,0,1,.375.375V1163a5.375,5.375,0,0,1-5.375,5.375H5A5.375,5.375,0,0,1-.375,1163V0A.375.375,0,0,1,0-.375Z" fill="none"/>
+    </g>
+    <g id="Rectangle_1061" data-name="Rectangle 1061" transform="translate(284 168)" fill="#f3f8ff" stroke="#1d82f5" stroke-linecap="round" stroke-linejoin="round" stroke-width="0.75">
+      <path d="M5,0H146a5,5,0,0,1,5,5V44a0,0,0,0,1,0,0H0a0,0,0,0,1,0,0V5A5,5,0,0,1,5,0Z" stroke="none"/>
+      <path d="M5-.375H146A5.375,5.375,0,0,1,151.375,5V44a.375.375,0,0,1-.375.375H0A.375.375,0,0,1-.375,44V5A5.375,5.375,0,0,1,5-.375Z" fill="none"/>
+    </g>
+    <rect id="Rectangle_1062" data-name="Rectangle 1062" width="151" height="32" transform="translate(284 202)" fill="#f3f8ff"/>
+  </g>
+</svg>

@@ -1,0 +1,49 @@
+/* styles.css */
+.tableContainer {
+  width: 100%;
+  overflow-x:auto;
+  
+}
+
+.table {
+  width: 100%;
+}
+
+.table th, .table td {
+  border: 1px solid #ccc;
+  padding: 10px;
+  text-align: left;
+}
+
+.table th {
+  background-color: #f2f2f2;
+  color: #333;
+}
+
+.table tr:nth-child(even) {
+  background-color: #f2f2f2;
+}
+
+.table tr:hover {
+  background-color: #ddd;
+}
+
+
+.rating_container{
+
+  display: grid;
+  grid-template-columns: auto auto ;
+  justify-content: space-between;
+  gap: 20px;
+  margin-top: 30px;
+  margin-bottom: 10px;
+  padding-left: 20px;
+  padding-right: 20px;
+
+}
+/* For tablet view */
+@media screen and (max-width: 768px) {
+  .rating_container {
+    grid-template-columns: auto;
+  }
+}

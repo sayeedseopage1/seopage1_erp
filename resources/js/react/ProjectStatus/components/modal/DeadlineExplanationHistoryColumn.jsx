@@ -8,13 +8,15 @@ export const DeadlineEHColumn = [
         accessorKey: "id",
         cell: ({ cell }) => {
             return (
-                <div style={{
-                    width: "20px",
-                }}>
+                <div
+                    style={{
+                        width: "20px",
+                    }}
+                >
                     {cell?.row?.index + 1}
                 </div>
-            )
-        }
+            );
+        },
     },
     {
         id: "start_date",
@@ -32,12 +34,8 @@ export const DeadlineEHColumn = [
         accessorKey: "duration",
         cell: ({ row }) => {
             const data = row?.original;
-            return (
-                <span >
-                    {`${data?.duration} Days` ?? "--"}
-                </span>
-            )
-        }
+            return <span>{`${data?.duration} Days` ?? "--"}</span>;
+        },
     },
     {
         id: "goal_name",
@@ -49,8 +47,8 @@ export const DeadlineEHColumn = [
                 <span title={data?.goal_name} className="multine-ellipsis">
                     {data?.goal_name ?? "--"}
                 </span>
-            )
-        }
+            );
+        },
     },
     {
         id: "description",
@@ -58,11 +56,15 @@ export const DeadlineEHColumn = [
         accessorKey: "description",
         cell: ({ row }) => {
             const data = row?.original;
-            return (
-                <span className="multine-ellipsis"
-                    dangerouslySetInnerHTML={{ __html: data?.description ?? "--", }} />
-            )
-        }
+            return data?.description ? (
+                <span
+                    className="multine-ellipsis"
+                    dangerouslySetInnerHTML={{ __html: data?.description }}
+                />
+            ) : (
+                <span>--</span>
+            );
+        },
     },
     {
         id: "status",
@@ -71,14 +73,18 @@ export const DeadlineEHColumn = [
         cell: ({ row }) => {
             const data = row?.original;
             return (
-                <div className="d-flex align-items-center" >
-                    <i class="fa fa-circle mr-1 f-10" style={{
-                        color: data?.goal_status === 0 ? "#FF0000" : "#00b5ff",
-                    }}></i>
+                <div className="d-flex align-items-center">
+                    <i
+                        class="fa fa-circle mr-1 f-10"
+                        style={{
+                            color:
+                                data?.goal_status === 0 ? "#FF0000" : "#00b5ff",
+                        }}
+                    ></i>
                     {data?.goal_status === 0 ? "Incomplete" : "Completed"}
                 </div>
-            )
-        }
+            );
+        },
     },
     {
         id: "reason",
@@ -87,11 +93,12 @@ export const DeadlineEHColumn = [
         cell: ({ row }) => {
             const data = row?.original;
             return (
-                <span className="multine-ellipsis"
-                    dangerouslySetInnerHTML={{ __html: data?.reason ?? "--", }}
+                <span
+                    className="multine-ellipsis"
+                    dangerouslySetInnerHTML={{ __html: data?.reason ?? "--" }}
                 />
-            )
-        }
+            );
+        },
     },
     {
         id: "client_communication",
@@ -100,23 +107,27 @@ export const DeadlineEHColumn = [
         cell: ({ row }) => {
             const data = row?.original;
             return (
-                <span className="multine-ellipsis"
-                    dangerouslySetInnerHTML={{ __html: data?.client_communication ?? "--", }}
+                <span
+                    className="multine-ellipsis"
+                    dangerouslySetInnerHTML={{
+                        __html: data?.client_communication ?? "--",
+                    }}
                 />
-            )
-        }
+            );
+        },
     },
     {
-
         id: "client_communication_rating",
         header: "Client Communication Rating",
         accessorKey: "client_communication_rating",
         cell: ({ row }) => {
             const data = row?.original;
             return (
-                <span className="multine-ellipsis">{data.client_communication_rating}</span>
-            )
-        }
+                <span className="multine-ellipsis">
+                    {data.client_communication_rating}
+                </span>
+            );
+        },
     },
     {
         id: "negligence_pm",
@@ -125,11 +136,14 @@ export const DeadlineEHColumn = [
         cell: ({ row }) => {
             const data = row?.original;
             return (
-                <span className="multine-ellipsis"
-                    dangerouslySetInnerHTML={{ __html: data?.negligence_pm ?? "--", }}
+                <span
+                    className="multine-ellipsis"
+                    dangerouslySetInnerHTML={{
+                        __html: data?.negligence_pm ?? "--",
+                    }}
                 />
-            )
-        }
+            );
+        },
     },
     {
         id: "negligence_pm_rating",
@@ -138,9 +152,11 @@ export const DeadlineEHColumn = [
         cell: ({ row }) => {
             const data = row?.original;
             return (
-                <span className="multine-ellipsis">{data.negligence_pm_rating}</span>
-            )
-        }
+                <span className="multine-ellipsis">
+                    {data.negligence_pm_rating}
+                </span>
+            );
+        },
     },
     {
         id: "authorization_status",
@@ -149,17 +165,24 @@ export const DeadlineEHColumn = [
         cell: ({ row }) => {
             const data = row?.original;
             return (
-                <div style={{
-                    width: "fit-content",
-                    padding: "0px 10px",
-                    borderRadius: "20px",
-                    color: "white",
-                    backgroundColor: data?.authorization_status === 0 ? "#FFB800" : "#3F9C35",
-                }}>
-                    {data?.authorization_status === 0 ? "Pending" : "Authorized"}
+                <div
+                    style={{
+                        width: "fit-content",
+                        padding: "0px 10px",
+                        borderRadius: "20px",
+                        color: "white",
+                        backgroundColor:
+                            data?.authorization_status === 0
+                                ? "#FFB800"
+                                : "#3F9C35",
+                    }}
+                >
+                    {data?.authorization_status === 0
+                        ? "Pending"
+                        : "Authorized"}
                 </div>
-            )
-        }
+            );
+        },
     },
     {
         id: "authorization_on",
@@ -179,13 +202,15 @@ export const DeadlineEHColumn = [
                     <Avatar
                         type="circle"
                         name={data?.authorization_by_name}
-                        src={data?.authorization_by_img ? `/user-uploads/avatar/${data?.authorization_by_img}` : null}
+                        src={
+                            data?.authorization_by_img
+                                ? `/user-uploads/avatar/${data?.authorization_by_img}`
+                                : null
+                        }
                     />
                     <span>{data?.authorization_by_name}</span>
                 </CreatedBy>
-
-            )
-        }
+            );
+        },
     },
-
 ];

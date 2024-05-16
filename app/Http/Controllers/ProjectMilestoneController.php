@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\MilestoneAddedEvent;
 use App\Helper\Reply;
 use App\Http\Requests\Milestone\StoreMilestone;
 use App\Models\BaseModel;
@@ -85,7 +86,7 @@ class ProjectMilestoneController extends AccountBaseController
                 $action->authorized_at= Carbon::now();
                 $action->past_status = 1;
                 $action->save();
-               
+
                 $authorize_by= User::where('id',$action->authorized_by)->first();
 
                 $past_action= new PendingActionPast();
@@ -118,7 +119,7 @@ class ProjectMilestoneController extends AccountBaseController
 
         //authorization action start
 
-      
+
         //authorization action end
 
         $milestone_count= ProjectMilestone::where('project_id',$milestone->project_id)->count();
@@ -129,7 +130,7 @@ class ProjectMilestoneController extends AccountBaseController
 
 
             $helper->ProjectQcSubmission($project,$milestone);
-    
+
             $users= User::where('role_id',1)->get();
             foreach ($users as $user) {
 
@@ -235,6 +236,8 @@ class ProjectMilestoneController extends AccountBaseController
         $milestone->added_by = Auth::id();
 
         $milestone->save();
+
+        MilestoneAddedEvent::dispatch($milestone);
 
         if($request->service_type == 'web-content'){
             $web_content = WebContent::where('random_id', $request->randomId)->first();
@@ -735,6 +738,16 @@ class ProjectMilestoneController extends AccountBaseController
         return view('projects.milestone.show', $this->data);
     }
 
+
+    /**
+     * This function will return total sum of a project milestone 'cost' column
+     * @param int $projectId Project Id
+     */
+    public function getCostSum($projectId)
+    {
+        return (float) ProjectMilestone::where('project_id', $projectId)->sum('cost');
+    }
+
     public function byProject($id)
     {
         if ($id == 0) {
@@ -772,7 +785,7 @@ class ProjectMilestoneController extends AccountBaseController
                 $action->authorized_at= Carbon::now();
                 $action->past_status = 1;
                 $action->save();
-               
+
                 $authorize_by= User::where('id',$action->authorized_by)->first();
 
                 $past_action= new PendingActionPast();
