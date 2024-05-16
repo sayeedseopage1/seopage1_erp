@@ -37,7 +37,7 @@ export const PmGoalsTableColumns = [
         accessorKey: "duration",
         cell: ({ row }) => {
             const data = row?.original;
-            return <span>{`${data?.duration} Days` ?? "--"}</span>;
+            return <span>{`${data.duration} Days` ?? "--"}</span>;
         },
     },
     {

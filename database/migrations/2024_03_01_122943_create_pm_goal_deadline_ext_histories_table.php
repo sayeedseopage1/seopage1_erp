@@ -21,6 +21,7 @@ return new class extends Migration
             $table->dateTime('extension_req_on');
             $table->dateTime('extension_req_for');
             $table->longText('extended_pm_reason');
+            $table->integer('extended_day')->nullable();
             $table->string('uuid')->nullable();
             $table->string('screenshot')->nullable();
             $table->dateTime('extension_req_auth_for')->nullable();

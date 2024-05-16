@@ -65,12 +65,12 @@ export const GoalExtensionHistoryTableColumn = [
             const data = row?.original;
             return (
                 <span>
-                    {`${data?.new_duration ?? data?.old_duration} Days` ?? "--"}
+                    {` ${data?.old_duration} Days` ?? "--"}
                 </span>
             );
         },
     },
- 
+
     {
         id: "new_duration",
         header: "New Goal Duration",
@@ -79,7 +79,7 @@ export const GoalExtensionHistoryTableColumn = [
             const data = row?.original;
             return (
                 <span>
-                    {`${data?.new_duration ?? data?.new_duration} Days` ?? "--"}
+                    {`${data?.new_duration} Days` ?? "--"}
                 </span>
             );
         },
@@ -133,27 +133,59 @@ export const GoalExtensionHistoryTableColumn = [
         header: "Extension Requested On",
         accessorKey: "extension_req_on",
     },
-    
-   
+
+
     {
         id: "extension_req_for",
         header: "Extension Requested For (Date)",
         accessorKey: "extension_req_for",
+        cell: ({ row }) => {
+            const data = row?.original;
+            return (
+                <span>
+                    {data?.extension_req_for ?? "--"}
+                </span>
+            );
+        }
     },
     {
         id: "extension_req_for",
         header: "Extension Requested For (Days)",
-        accessorKey: "extension_req_for",
+        accessorKey: "extension_req_for_days",
+        cell: ({ row }) => {
+            const data = row?.original;
+            return (
+                <span>
+                    {data?.extension_req_for_days ? `${data?.extension_req_for_days} Days` : "--"}
+                </span>
+            );
+        }
     },
     {
         id: "extension_req_authorized_for",
         header: "Extension Req. Authorized For (Date)",
         accessorKey: "extension_req_auth_for",
+        cell: ({ row }) => {
+            const data = row?.original;
+            return (
+                <span>
+                    {`${data?.extension_req_auth_for}` ?? "--"}
+                </span>
+            );
+        }
     },
     {
         id: "extension_req_authorized_for",
         header: "Extension Req. Authorized For (Days)",
-        accessorKey: "extension_req_auth_for",
+        accessorKey: "extension_req_auth_for_days",
+        cell: ({ row }) => {
+            const data = row?.original;
+            return (
+                <span>
+                    {data.extension_req_auth_for_days ? `${data?.extension_req_auth_for_days} Days` : "--"}
+                </span>
+            );
+        }
     },
     {
         id: "authorization_status",
