@@ -5,47 +5,40 @@ import IncentiveEditButton from "./ui/IncentiveEditButton";
 import { dummyUserRole } from "../constants";
 import CashValuePointEditModal from "./Modals/Incentives/CashValuePointEditModal";
 import { useState } from "react";
-
-const obtainPoints = [
-    {
-        id: 1,
-        title: 'Your obtained points',
-        value: 500,
-        value_type: 'point'
-    },
-    {
-        id: 2,
-        title: 'Cash value for every regular point',
-        value: 600,
-        value_type: 'taka'
-    }
-]
+import { Placeholder } from "../../../../global/Placeholder";
+import useIncentiveTypes from "../hooks/useIncentiveTypes";
 
 const PointBanner = () => {
     const [editPointDataModalOpen, setEditPointDataModalOpen] = useState(false);
+    const { regularIncentiveTypes, incentiveTypesLoading } = useIncentiveTypes();
 
     return (
         <div className="point_banner">
-            {
-                obtainPoints?.map(item => (
-                    <div key={item?.id} className="point_card">
-                        <span className="point_card_image_wrapper">
-                            <img src={`${item?.value_type == 'point' ? pointIcon : takaIcon}`} style={{ width: "24px", height: "24px" }} alt="pointIcon" />
-                        </span>
-                        <div className="">
-                            <p className='point_title point_details_wrapper'>
-                                {item?.title}: <span className='point_score'>{item?.value} {item?.value_type === 'point' ? 'pt' : 'Taka'}</span> &nbsp;
-                                {item?.value_type !== 'point' && dummyUserRole === 1 && (
-                                    <IncentiveEditButton onClick={() => setEditPointDataModalOpen(true)} className="chart_button">
-                                        Edit
-                                    </IncentiveEditButton>
-                                )}
-                            </p>
-                            <CashValuePointEditModal antdModalOpen={editPointDataModalOpen} setAntdModalOpen={setEditPointDataModalOpen} />
-                        </div>
-                    </div>
-                ))
-            }
+            <div className="point_card">
+                <span className="point_card_image_wrapper">
+                    <img src={pointIcon} style={{ width: "24px", height: "24px" }} alt="pointIcon" />
+                </span>
+                <p className='point_title point_details_wrapper'>
+                    Your obtained points: <span className='point_score'>500 pt</span> &nbsp;
+                </p>
+            </div>
+
+            <div className="point_card">
+                <span className="point_card_image_wrapper">
+                    <img src={takaIcon} style={{ width: "24px", height: "24px" }} alt="takaIcon" />
+                </span>
+                {incentiveTypesLoading ? <Placeholder width="60%" height={28} /> :
+                    <p className='point_title point_details_wrapper'>
+                        Cash value for every regular point: <span className='point_score'>
+                            {regularIncentiveTypes?.cash_value} Taka
+                        </span> &nbsp; {dummyUserRole === 1 && (
+                            <IncentiveEditButton onClick={() => setEditPointDataModalOpen(true)} className="chart_button">
+                            </IncentiveEditButton>
+                        )}
+                    </p>
+                }
+            </div>
+            <CashValuePointEditModal antdModalOpen={editPointDataModalOpen} setAntdModalOpen={setEditPointDataModalOpen} />
         </div>
     );
 };
