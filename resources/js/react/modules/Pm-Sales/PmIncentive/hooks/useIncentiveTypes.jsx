@@ -1,7 +1,7 @@
-import { useGetIncentiveTypeQuery } from '../../../../services/api/Pm-Sales/PmIncentiveApiSlice';
+import { useGetIncentiveFactorsQuery } from "../../../../services/api/Pm-Sales/PmIncentiveApiSlice";
 
 const useIncentiveTypes = () => {
-    const { data: incentiveTypes, isLoading: incentiveTypesLoading } = useGetIncentiveTypeQuery();
+    const { data: incentiveTypes, isLoading: incentiveTypesLoading } = useGetIncentiveFactorsQuery();
     const incentiveTypesData = incentiveTypes?.data;
 
     const regularIncentiveTypes = incentiveTypesData?.find((item) => item?.id == 1);

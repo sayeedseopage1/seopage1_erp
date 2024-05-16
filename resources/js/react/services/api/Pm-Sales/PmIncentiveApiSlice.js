@@ -6,9 +6,9 @@ const _token = document
 
 const pmSalesApiSlice = apiSlice.injectEndpoints({
     endpoints: (build) => ({
-        getIncentiveType: build.query({
-            query: () => `/account/incentive-type`,
-            providesTags: ["GET_INCENTIVE_TYPE"],
+        getIncentiveFactors: build.query({
+            query: () => `/account/incentive-factor`,
+            providesTags: ["GET_INCENTIVE_FACTORS"],
         }),
         editIncentiveTypes: build.mutation({
             query: ({ id, payload }) => ({
@@ -19,10 +19,13 @@ const pmSalesApiSlice = apiSlice.injectEndpoints({
                     "X-CSRF-TOKEN": _token,
                 },
             }),
-            invalidatesTags: ["GET_INCENTIVE_TYPE"],
+            invalidatesTags: ["GET_INCENTIVE_FACTORS"],
         }),
     }),
 });
 
-export const { useGetIncentiveTypeQuery, useEditIncentiveTypesMutation } =
-    pmSalesApiSlice;
+export const {
+    useGetIncentiveTypeQuery,
+    useEditIncentiveTypesMutation,
+    useGetIncentiveFactorsQuery,
+} = pmSalesApiSlice;

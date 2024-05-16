@@ -12,10 +12,6 @@ const PointBanner = () => {
     const [editPointDataModalOpen, setEditPointDataModalOpen] = useState(false);
     const { regularIncentiveTypes, incentiveTypesLoading } = useIncentiveTypes();
 
-    const handleRegularIncentiveTypesEdit = () => {
-        setEditPointDataModalOpen(true)
-    }
-
     return (
         <div className="point_banner">
             <div className="point_card">
@@ -36,7 +32,7 @@ const PointBanner = () => {
                         Cash value for every regular point: <span className='point_score'>
                             {regularIncentiveTypes?.cash_value} Taka
                         </span> &nbsp; {dummyUserRole === 1 && (
-                            <IncentiveEditButton onClick={handleRegularIncentiveTypesEdit} className="chart_button">
+                            <IncentiveEditButton onClick={() => setEditPointDataModalOpen(true)} className="chart_button">
                             </IncentiveEditButton>
                         )}
                     </p>
