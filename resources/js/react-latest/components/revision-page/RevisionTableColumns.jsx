@@ -308,7 +308,7 @@ export const RevisionTableColumns = [
                     : data.is_accept || data.is_deny;
 
             const hasPermissionToTakeAction =
-                Number(user.id) === Number(data?.deal_added_by.id);
+                Number(user.id) === Number(data?.deal_added_by?.id);
 
             return (
                 <Switch>
