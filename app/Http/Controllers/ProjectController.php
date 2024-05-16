@@ -1864,8 +1864,8 @@ class ProjectController extends AccountBaseController
         }
 
         if ($project->status == 'not started') {
-            $project->project_challenge = $request->project_challenge;
-            if ($request->project_challenge != 'No Challenge' || $request->project_challenge != null) {
+            if ($request->project_challenge != 'No Challenge' && $request->project_challenge != null) {
+                $project->project_challenge = $request->project_challenge;
                 $project->admin_authorization_status = 0;
             }
         }
