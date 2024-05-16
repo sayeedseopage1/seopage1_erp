@@ -2982,7 +2982,10 @@ class ProjectController extends AccountBaseController
             'delivery-type' => 'required',
             'from' => 'required',
         ]);
+
         if ($validate) {
+
+            DB::beginTransaction();
             $deliverable = new ProjectDeliverable();
             if ($request->deliverable_type == 'Others' || $request->deliverable_type == 'Fixing Issues/Bugs') {
                 $deliverable->authorization = 0;
@@ -2999,7 +3002,12 @@ class ProjectController extends AccountBaseController
             $deliverable->milestone_id = $request->milestone_id;
             $deliverable->description = $request->description;
             $deliverable->save();
+
             $project = Project::where('id', $deliverable->project_id)->first();
+
+            // create pm goal for hourly project
+            if($project->deal->project_type == 'hourly') (new HelperPmProjectStatusController)->deliverablePmGoalCreation($deliverable);
+
             $actions = PendingAction::where('code', 'DCA')->where('past_status', 0)->where('project_id', $request->project_id)->get();
             if ($actions != null) {
                 foreach ($actions as $key => $action) {
@@ -3085,6 +3093,7 @@ class ProjectController extends AccountBaseController
                 }
             }
 
+            DB::commit();
             return response()->json([
                 'status' => 200,
             ]);

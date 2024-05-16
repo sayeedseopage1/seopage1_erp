@@ -2,18 +2,16 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Controllers\Controller;
 use App\Models\AwardTimeIncress;
 use App\Models\Deal;
 use App\Models\PmGoalSetting;
 use App\Models\PMProject;
 use App\Models\Project;
+use App\Models\ProjectDeliverable;
 use App\Models\ProjectPmGoal;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
-use Illuminate\Http\Request;
 use App\Models\ProjectMilestone;
-use DateTime;
 use Exception;
 use Illuminate\Support\Facades\DB;
 
@@ -494,6 +492,42 @@ class HelperPmProjectStatusController extends AccountBaseController
         $goal->goal_start_date = $lastGoal->goal_start_date;
         $goal->goal_end_date = Carbon::parse($lastGoal->goal_start_date)->addDay($lastGoal->duration + $goalDuration);
         $goal->duration = $lastGoal->duration + $goalDuration;
+        $goal->added_by = Auth::user()->id;
+        $goal->save();
+    }
+
+    function deliverablePmGoalCreation(ProjectDeliverable $deliverable)
+    {
+        $preGoals = ProjectPmGoal::where('project_id', $deliverable->project_id);
+        $lastGoal = $preGoals->first();
+        $goalCount = $preGoals->count();
+        if ($goalCount > 2) {
+            $days = ceil(($deliverable->estimation_time - 4) / 3);
+        }
+        else {
+            $days = ceil($deliverable->estimation_time / 3);
+        }
+
+        $goal = new ProjectPmGoal();
+        $goal->project_id = $lastGoal->project_id;
+        $goal->client_id = $lastGoal->client_id;
+        $goal->pm_id = $lastGoal->pm_id;
+        $goal->project_type = $lastGoal->project_type;
+        $goal->project_category = $lastGoal->project_category;
+
+        $goal->goal_code = 'HP'.$goalCount;
+        $goal->goal_name = 'If at least '.$deliverable->estimation_time.' hours have been tracked';
+        $goal->goal_type = 'hourly_project_no'.$goalCount;
+        $goal->goal_start_date = $deliverable->created_at;
+
+        $endDate = $goal->goal_start_date;
+        for ($i=0; $i < $days; $i++) {
+            $endDate = Carbon::parse($endDate)->addDay(1);
+            if(Carbon::parse($endDate)->format("D") == "Sun") $endDate = Carbon::parse($endDate)->addDay(1);
+        }
+        $goal->goal_end_date = $endDate;
+
+        $goal->duration = $days;
         $goal->added_by = Auth::user()->id;
         $goal->save();
     }

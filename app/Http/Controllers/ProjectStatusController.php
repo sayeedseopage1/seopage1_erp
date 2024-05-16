@@ -568,7 +568,7 @@ class ProjectStatusController extends AccountBaseController
         $endDate = $request->end_date ?? null;
         $limit = $request->limit ??  10;
 
-        $pmGoalsQuery = ProjectPmGoal::select('project_pm_goals.*', 'projects.id as projectId', 'projects.project_name', 'deals.actual_amount as project_budget', 'deals.upsell_actual_amount as project_upsell_budget', 'client.id as clientId', 'client.name as clientName', 'client.image as clientImage', 'pm.id as pmId', 'pm.name as pmName', 'pm.image as pmImage', 'currencies.currency_symbol', DB::raw('SUM(project_pm_goals.goal_progress) as goal_percentage'))
+        $pmGoalsQuery = ProjectPmGoal::select('project_pm_goals.*', 'projects.id as projectId', 'projects.project_name', 'deals.actual_amount as project_budget', 'deals.hourly_rate as hourly_rate', 'deals.upsell_actual_amount as project_upsell_budget', 'client.id as clientId', 'client.name as clientName', 'client.image as clientImage', 'pm.id as pmId', 'pm.name as pmName', 'pm.image as pmImage', 'currencies.currency_symbol', DB::raw('SUM(project_pm_goals.goal_progress) as goal_percentage'))
             ->leftJoin('projects', 'project_pm_goals.project_id', '=', 'projects.id')
             ->leftJoin('deals', 'projects.deal_id', '=', 'deals.id')
             ->leftJoin('currencies', 'deals.original_currency_id', '=', 'currencies.id')

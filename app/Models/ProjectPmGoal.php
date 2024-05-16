@@ -224,6 +224,11 @@ class ProjectPmGoal extends Model
             'code' => 'OMMR',
             'name' => 'At least 1 more milestone released',
             'type' => 'one_more_milestone_released',
-        ]
+        ],
     ];
+
+    public function project()
+    {
+        return $this->belongsTo(Project::class, 'project_id');
+    }
 }

@@ -73,7 +73,7 @@ export const ProjectStatusTableColumns = [
             return (
                 <span>
                     {getBudgetDisplay(data)}{" "}
-                    {(project_budget || project_upsell_budget) &&
+                    {(data.project_budget || data.project_upsell_budget) &&
                         data?.currency_symbol}
                 </span>
             );
