@@ -21,6 +21,7 @@ const SelectRatioRangeModal = ({ xAxisStartAndEndValue, setXAxisStartAndEndValue
             return
         }
         setXAxisStartAndEndValue(data)
+        toast.success('X Axis range changed');
         reset()
         setAntdModalOpen(false)
     }

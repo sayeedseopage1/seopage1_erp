@@ -29,7 +29,7 @@ const EditYAxisModal = ({ axisEditItem, chartAxisData, setChartAxisData, antdMod
         // Concatenate newData with filteredData
         setChartAxisData([...filteredData, newData]);
         setAntdModalOpen(false);
-        toast.success('Y Axis Ratio updated successfully');
+        // toast.success('Y Axis Ratio updated successfully');
         reset();
     }
 

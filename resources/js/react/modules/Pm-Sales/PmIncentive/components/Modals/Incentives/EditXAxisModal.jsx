@@ -48,7 +48,7 @@ const EditXAxisModal = ({ xAxisStartAndEndValue, axisEditItem, chartAxisData, se
             // Concatenate newData with filteredData
             setChartAxisData([...filteredData, newData]);
             setAntdModalOpen(false);
-            toast.success('X Axis Ratio updated successfully');
+            // toast.success('X Axis Ratio updated successfully');
             reset();
         }
     };
