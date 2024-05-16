@@ -60,12 +60,21 @@ export const ProjectStatusTableColumns = [
         accessorKey: "project_budget",
         cell: ({ row }) => {
             const data = row.original;
+
+            const getBudgetDisplay = (data) => {
+                if (data?.project_budget !== 0) {
+                    return data?.project_budget;
+                } else if (data?.project_upsell_budget !== 0) {
+                    return data?.project_upsell_budget;
+                } else {
+                    return `${data.hourly_rate}/Hour`;
+                }
+            };
             return (
                 <span>
-                    {data?.project_budget === 0
-                        ? data?.project_upsell_budget
-                        : data?.project_budget}{" "}
-                    {data?.currency_symbol}
+                    {getBudgetDisplay(data)}{" "}
+                    {(project_budget || project_upsell_budget) &&
+                        data?.currency_symbol}
                 </span>
             );
         },
