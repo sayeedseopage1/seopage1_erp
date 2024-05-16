@@ -207,14 +207,23 @@ const EvaluationRatingModal = ({
     const handleSubmit = async (e) => {
         e.preventDefault();
         const requiredFields = [
-            { key: "communication", label: "Communication" },
-            { key: "professionalism", label: "Professionalism" },
             {
-                key: "identiey_issues",
-                label: "Ability to identify issues",
+                key: "qw_first_chance",
+                label: "Quality of work (in the first chance)",
             },
-            { key: "dedication", label: "Dedication" },
-            { key: "obedience", label: "Obedience" },
+            {
+                key: "qw_first_revision",
+                label: "Quality of work (After 1st revision)",
+            },
+            {
+                key: "qw_second_revision",
+                label: "Quality of work (After 2nd revision)",
+            },
+            { key: "speed_of_work", label: "Speed of work" },
+            {
+                key: "understand_instruction",
+                label: "Ability to understand instruction",
+            },
             { key: "lead_dev_cmnt", label: "Lead Developers Opinion" },
         ];
 
@@ -290,7 +299,7 @@ const EvaluationRatingModal = ({
                     borderRadius: "10px",
                     height: "fit-content",
                     maxHeight: "95vh",
-                    maxWidth: "850px",
+                    maxWidth: "870px",
                     margin: "auto auto",
                     border: "none",
 
