@@ -1,5 +1,6 @@
 import Popover from "../../../../react-latest/ui/Popover";
 import { convertTime } from "../../../utils/converTime";
+import EvaluationTaskRevisionModal from "../modal/EvaluationTaskRevisionModal";
 import ActionEvaluationTaskTable from "./ActionEvaluationTaskTable";
 
 export const EvaluationTaskTableColumns = [
@@ -47,6 +48,23 @@ export const EvaluationTaskTableColumns = [
         cell: ({ row }) => {
             const data = row.original;
             return <div>{data?.assign_date}</div>;
+        },
+    },
+    {
+        id: "status",
+        header: "Task Status",
+        accessorKey: "task_board_column_name",
+        cell: ({ row }) => {
+            const data = row?.original;
+            // console.log('from independent task table column',data?.column_name);
+            return (
+                <span
+                    className="badge text-white"
+                    style={{ background: data?.task_board_column_color }}
+                >
+                    {data?.task_board_column_name ?? "--"}
+                </span>
+            );
         },
     },
     {
@@ -143,7 +161,7 @@ export const EvaluationTaskTableColumns = [
 
             return (
                 <div style={{ marginLeft: "30%" }}>
-                    {data?.revision_number ?? "0"}
+                    <EvaluationTaskRevisionModal data={data} />
                 </div>
             );
         },

@@ -69,7 +69,7 @@ const EvaluationTaskListModal = ({
         obedience: singleEvaluation?.obedience ?? 0,
     });
 
-    console.log("formdata", formData);
+    // console.log("formdata", formData);
     const [
         taskRatingFinalSubmission,
         { isLoading: isLoadingLeadDevFinalSubmission },
@@ -348,7 +348,7 @@ const EvaluationTaskListModal = ({
 
             <RatingSectionLeadDev
                 className={styles.rating_container_task_table}
-                style={{ marginLeft: "10%", marginRight: "10%" }}
+                style={{ marginLeft: "5%", marginRight: "5%" }}
             >
                 {auth.roleId === 6 &&
                     (evaluationObject?.ld_submission_status === 0
