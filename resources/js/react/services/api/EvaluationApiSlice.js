@@ -82,6 +82,10 @@ const evaluationApiSlice = apiSlice.injectEndpoints({
             query: () => `/account/get-all-evaluation`,
             providesTags: ["ALL_EVALUATION"],
         }),
+        getRevisionList: build.query({
+            query: (taskId) => `account/employee-task-revision/${taskId}`,
+            providesTags: ["ALL_REVISION"],
+        }),
     }),
 });
 
@@ -96,4 +100,5 @@ export const {
     useStoreTaskRatingFinalSubmissionMutation,
     useFinalTaskSubmissionStatusMutation,
     useGetEvaluationListQuery,
+    useGetRevisionListQuery,
 } = evaluationApiSlice;
