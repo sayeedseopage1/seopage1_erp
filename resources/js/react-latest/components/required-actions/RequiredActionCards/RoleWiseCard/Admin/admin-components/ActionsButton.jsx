@@ -68,6 +68,7 @@ const ActionsButton = ({ data }) => {
                         <div>
                             {btn.button_name === "View and Reply" && (
                                 <button
+                                    key={i}
                                     onClick={() => {
                                         setViewCommentModal((prev) => !prev);
                                         dispatch(setPendingActionId(data?.id));
@@ -80,6 +81,7 @@ const ActionsButton = ({ data }) => {
 
                             {btn.button_name === "Not relevant to me" && (
                                 <button
+                                    key={i}
                                     onClick={() => {
                                         setIsRelevantModal((prev) => !prev);
 
@@ -92,6 +94,7 @@ const ActionsButton = ({ data }) => {
                             )}
                             {btn.button_name === "View" && (
                                 <button
+                                    key={i}
                                     onClick={() =>
                                         setViewModal((prev) => !prev)
                                     }
