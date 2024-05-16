@@ -5,11 +5,14 @@ import UpsaleCrossSalePointModal from './Modals/UpsaleCrossSalePointModal';
 import IncentiveEditButton from './ui/IncentiveEditButton';
 import { dummyUserRole } from '../constants';
 import CashValueUpCrossEditModal from './Modals/Incentives/CashValueUpCrossEditModal';
+import useIncentiveTypes from '../hooks/useIncentiveTypes';
+import { Placeholder } from '../../../../global/Placeholder';
 
 const UpsaleCrossSalePointBanner = () => {
     const [upsaleCrossSalePointsModalOpen, setUpsaleCrossSalePointsModalOpen] = useState(false);
     const [editUpsaleCrossSalePointsModalOpen, setEditUpsaleCrossSalePointsModalOpen] = useState(false);
 
+    const { upSaleCrossSaleTypes, incentiveTypesLoading } = useIncentiveTypes();
 
     return (
         <div className="secondary_point_banner">
@@ -37,18 +40,18 @@ const UpsaleCrossSalePointBanner = () => {
                     <span className="secondary_point_card_image_wrapper">
                         <img src={cashBag} style={{ width: "24px", height: "24px" }} alt="taka" />
                     </span>
-                    <div className="">
-                        <p className='point_title point_details_wrapper' style={{ color: "#000000" }}>
+                    {
+                        incentiveTypesLoading ? <Placeholder width="60%" height={28} /> : <p className='point_title point_details_wrapper' style={{ color: "#000000" }}>
                             Cash value of every upsale/cross sale point: <span className='point_score' style={{ color: "#1492E6" }}>
-                                100 Taka
+                                {upSaleCrossSaleTypes?.cash_value} Taka
                             </span> {
                                 dummyUserRole == 1 && <IncentiveEditButton onClick={() => setEditUpsaleCrossSalePointsModalOpen(true)} className={`chart_button`}></IncentiveEditButton>
                             }
                         </p>
-                        <CashValueUpCrossEditModal antdModalOpen={editUpsaleCrossSalePointsModalOpen} setAntdModalOpen={setEditUpsaleCrossSalePointsModalOpen} />
-                    </div>
+                    }
                 </div>
             </div>
+            <CashValueUpCrossEditModal upSaleCrossSaleTypes={upSaleCrossSaleTypes} antdModalOpen={editUpsaleCrossSalePointsModalOpen} setAntdModalOpen={setEditUpsaleCrossSalePointsModalOpen} />
         </div>
     );
 };

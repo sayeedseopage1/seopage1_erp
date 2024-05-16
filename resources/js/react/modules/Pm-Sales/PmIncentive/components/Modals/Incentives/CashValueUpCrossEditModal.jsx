@@ -3,8 +3,12 @@ import CustomAntdModal from '../../ui/CustomAntdModal';
 import PropTypes from "prop-types";
 import { ButtonComponent } from '../../../../PointFactors/components/Styles/ui/ui';
 import { useForm } from 'react-hook-form';
+import { useEditIncentiveTypesMutation } from '../../../../../../services/api/Pm-Sales/PmIncentiveApiSlice';
+import { toast } from 'react-toastify';
 
-const CashValueUpCrossEditModal = ({ antdModalOpen, setAntdModalOpen }) => {
+const CashValueUpCrossEditModal = ({ upSaleCrossSaleTypes, antdModalOpen, setAntdModalOpen }) => {
+
+    const [editIncentiveTypes, { isLoading: isEditIncentiveTypesLoading }] = useEditIncentiveTypesMutation()
 
     const {
         register,
@@ -13,8 +17,25 @@ const CashValueUpCrossEditModal = ({ antdModalOpen, setAntdModalOpen }) => {
         formState: { errors },
     } = useForm()
 
-    const onSubmit = (data) => {
-        console.log(data)
+
+    // TODO: need to fix here 
+    const onSubmit = async (data) => {
+        try {
+            const payload = {
+                title: upSaleCrossSaleTypes?.title,
+                cash_value: data.upsaleCrossSalePoint
+            }
+            const response = await editIncentiveTypes({ id: upSaleCrossSaleTypes?.id, payload }).unwrap();
+            if (response?.status == 200) {
+                toast.success(response.message);
+                reset();
+                setAntdModalOpen(false)
+            } else {
+                toast.warning(response.message);
+            }
+        } catch (error) {
+            toast.error("Failed to update");
+        }
     }
 
     return (
@@ -34,7 +55,11 @@ const CashValueUpCrossEditModal = ({ antdModalOpen, setAntdModalOpen }) => {
                         {errors.upsaleCrossSalePoint && <span style={{ color: 'red', fontSize: '12px' }}>This field is required</span>}
                     </div>
                     <div className='pay_now_modal_footer'>
-                        <ButtonComponent type='submit' color='#1492E6' textColor='#fff' font='18px'>Save</ButtonComponent>
+                        <ButtonComponent type='submit' color='#1492E6' textColor='#fff' font='18px'>
+                            {
+                                isEditIncentiveTypesLoading ? 'Loading...' : 'Update'
+                            }
+                        </ButtonComponent>
                     </div>
                 </form>
             </CustomAntdModal>
