@@ -22,6 +22,15 @@ export const GoalExtensionHistoryTableColumn = [
         },
     },
     {
+        id: "goal_name",
+        header: "Goal Name",
+        accessorKey: "goal_name",
+        cell: ({ row }) => {
+            const data = row?.original;
+            return <TablePopover text={data?.goal_name} />;
+        },
+    },
+    {
         id: "goal_start_date",
         header: "Goal Start Date",
         accessorKey: "goal_start_date",
@@ -49,18 +58,9 @@ export const GoalExtensionHistoryTableColumn = [
         },
     },
     {
-        id: "goal_name",
-        header: "Goal Name",
-        accessorKey: "goal_name",
-        cell: ({ row }) => {
-            const data = row?.original;
-            return <TablePopover text={data?.goal_name} />;
-        },
-    },
-    {
-        id: "duration",
-        header: "Duration",
-        accessorKey: "duration",
+        id: "old_duration",
+        header: "Prev. Goal Duration",
+        accessorKey: "old_duration",
         cell: ({ row }) => {
             const data = row?.original;
             return (
@@ -70,9 +70,34 @@ export const GoalExtensionHistoryTableColumn = [
             );
         },
     },
+ 
+    {
+        id: "new_duration",
+        header: "New Goal Duration",
+        accessorKey: "new_duration",
+        cell: ({ row }) => {
+            const data = row?.original;
+            return (
+                <span>
+                    {`${data?.new_duration ?? data?.new_duration} Days` ?? "--"}
+                </span>
+            );
+        },
+    },
+    {
+        id: "reason",
+        header: "PM Reason",
+        accessorKey: "extended_pm_reason",
+        cell: ({ row }) => {
+            const data = row?.original;
+            return (
+                <TablePopover text={data?.extended_pm_reason} isDangerHtml={true} />
+            );
+        },
+    },
     {
         id: "description",
-        header: "Admin Comment",
+        header: "Authorizer Comment",
         accessorKey: "extended_admin_comment",
         cell: ({ row }) => {
             const data = row?.original;
@@ -104,15 +129,31 @@ export const GoalExtensionHistoryTableColumn = [
         },
     },
     {
-        id: "reason",
-        header: "PM Reason",
-        accessorKey: "extended_pm_reason",
-        cell: ({ row }) => {
-            const data = row?.original;
-            return (
-                <TablePopover text={data?.extended_pm_reason} isDangerHtml={true} />
-            );
-        },
+        id: "extension_req_on",
+        header: "Extension Requested On",
+        accessorKey: "extension_req_on",
+    },
+    
+   
+    {
+        id: "extension_req_for",
+        header: "Extension Requested For (Date)",
+        accessorKey: "extension_req_for",
+    },
+    {
+        id: "extension_req_for",
+        header: "Extension Requested For (Days)",
+        accessorKey: "extension_req_for",
+    },
+    {
+        id: "extension_req_authorized_for",
+        header: "Extension Req. Authorized For (Date)",
+        accessorKey: "extension_req_auth_for",
+    },
+    {
+        id: "extension_req_authorized_for",
+        header: "Extension Req. Authorized For (Days)",
+        accessorKey: "extension_req_auth_for",
     },
     {
         id: "authorization_status",
@@ -136,16 +177,6 @@ export const GoalExtensionHistoryTableColumn = [
                 </div>
             );
         },
-    },
-    {
-        id: "extension_req_on",
-        header: "Extension Requested On",
-        accessorKey: "extension_req_on",
-    },
-    {
-        id: "extension_req_for",
-        header: "Extension Requested For",
-        accessorKey: "extension_req_for",
     },
     {
         id: "extension_req_auth_on",
@@ -175,10 +206,5 @@ export const GoalExtensionHistoryTableColumn = [
                 </CreatedBy>
             );
         },
-    },
-    {
-        id: "extension_req_authorized_for",
-        header: "Extension Req. Authorized For",
-        accessorKey: "extension_req_auth_for",
-    },
+    }
 ];
