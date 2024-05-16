@@ -30,7 +30,7 @@ const TaskReportExportButton = ({ filter }) => {
                 alignment: {
                     wrapText: true,
                     vertical: "center",
-                    horizontal: "left",
+                    horizontal: "center",
                 },
             };
 
@@ -40,6 +40,40 @@ const TaskReportExportButton = ({ filter }) => {
                 const text =
                     tempElement.textContent || tempElement.innerText || "";
                 return text;
+            };
+            const reportStatus = (d) => {
+                if (d?.status === "pending") {
+                    return "Pending";
+                } else if (d?.status === "approved") {
+                    return "Accepted & Resolved";
+                } else if (d?.status === "denied") {
+                    return "Denied & Resolved";
+                }
+            };
+
+            const reportStatusColor = (d) => {
+                if (d?.status === "pending") {
+                    return {
+                        font: {
+                            color: { rgb: "ffeb3c" },
+                            bold: true,
+                        },
+                    };
+                } else if (d?.status === "approved") {
+                    return {
+                        font: {
+                            color: { rgb: "52e90c" },
+                            bold: true,
+                        },
+                    };
+                } else if (d?.status === "denied") {
+                    return {
+                        font: {
+                            color: { rgb: "e90c0c" },
+                            bold: true,
+                        },
+                    };
+                }
             };
             const date = (_data) =>
                 _data ? dayjs(_data).format(`DD-MM-YYYY hh:mm:ss A`) : "--";
@@ -110,6 +144,14 @@ const TaskReportExportButton = ({ filter }) => {
                         ...fieldStyle,
                     },
                 },
+                {
+                    value: reportStatus(d) ?? "--",
+
+                    style: {
+                        ...fieldStyle,
+                        ...reportStatusColor(d),
+                    },
+                },
             ];
             rows.push(row);
         });
@@ -131,6 +173,7 @@ const TaskReportExportButton = ({ filter }) => {
         { title: "Report Reason", width: { wpx: 300 } },
         { title: "Report Reason Details", width: { wpx: 500 } },
         { title: "Previously Reported" },
+        { title: "Status" },
     ];
 
     // multi data set
