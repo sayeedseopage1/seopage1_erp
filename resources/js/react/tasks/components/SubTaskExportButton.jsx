@@ -111,6 +111,10 @@ const SubTaskExportButton = ({ filter }) => {
                     style: fieldStyle,
                 },
                 {
+                    value: d?.perent_task_heading ?? "--",
+                    style: fieldStyle,
+                },
+                {
                     value: d?.subtasks_timer_active ?? "--",
                     style: {
                         ...fieldStyle,
@@ -232,7 +236,8 @@ const SubTaskExportButton = ({ filter }) => {
 
     // columns
     const columns = [
-        { title: "Task", width: { wpx: 150 } },
+        { title: "Subtask", width: { wpx: 150 } },
+        { title: "Parent Task", width: { wpx: 150 } },
         { title: "Timer Status" },
         { title: "Milestone", width: { wpx: 150 } },
         { title: "Deliverable", width: { wpx: 150 } },
