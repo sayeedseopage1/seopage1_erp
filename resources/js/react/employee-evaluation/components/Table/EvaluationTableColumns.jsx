@@ -84,12 +84,12 @@ export const EvaluationTableColumns = [
         },
     },
     {
-        id: "totalNoOfRevision",
+        id: "total_revision",
         header: "Total Number of Revisions",
-        accessorKey: "totalNoOfRevision",
+        accessorKey: "total_revision",
         cell: ({ row }) => {
             const data = row.original;
-            return <div>{data?.totalNoOfRevision}</div>;
+            return <div>{data?.total_revision}</div>;
         },
     },
     {

@@ -4,7 +4,8 @@ import ReactModal from "react-modal";
 import RevisionTable from "../Table/RevisionTable";
 import { useGetRevisionListQuery } from "../../../services/api/EvaluationApiSlice";
 import { EvaluationRevisionTableColumns } from "../Table/EvaluationRevisionTableColumns";
-
+import Card from "../../../global/Card";
+import styles from "../../../../react/tasks/components/PrimaryPageAuthorization.module.css";
 const RevisionModalBody = ({
     data,
     isEvaluationRevisionModal,
@@ -19,7 +20,7 @@ const RevisionModalBody = ({
     const onPageChange = (paginate) => {
         setPagination(paginate);
     };
-    console.log("revisionData", Revisions);
+
     return (
         <div>
             <ReactModal
@@ -31,7 +32,7 @@ const RevisionModalBody = ({
                     },
                     content: {
                         borderRadius: "10px",
-                        maxWidth: "100%",
+                        maxWidth: "820px",
                         height: "fit-content",
                         maxHeight: "100%",
                         margin: "auto auto",
@@ -43,15 +44,26 @@ const RevisionModalBody = ({
                 onRequestClose={() => setIsEvaluationRevisionModal(false)}
                 ariaHideApp={false}
             >
-                <RevisionTable
-                    data={Revisions}
-                    columns={[...EvaluationRevisionTableColumns]}
-                    isLoading={isLoading}
-                    onPageChange={onPageChange}
-                    sorting={sorting}
-                    tableName="Revision Table"
-                    setSorting={setSorting}
-                />
+                <Card className={styles.card}>
+                    <Card.Head
+                        onClose={() => setIsEvaluationRevisionModal(false)}
+                        className={styles.card_head}
+                    >
+                        Task Revision
+                    </Card.Head>
+
+                    <Card.Body className={styles.card_body}>
+                        <RevisionTable
+                            data={Revisions}
+                            columns={[...EvaluationRevisionTableColumns]}
+                            isLoading={isLoading}
+                            onPageChange={onPageChange}
+                            sorting={sorting}
+                            tableName="Revision Table"
+                            setSorting={setSorting}
+                        />
+                    </Card.Body>
+                </Card>
             </ReactModal>
         </div>
     );

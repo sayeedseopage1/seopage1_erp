@@ -299,7 +299,7 @@ const EvaluationRatingModal = ({
                     borderRadius: "10px",
                     height: "fit-content",
                     maxHeight: "95vh",
-                    maxWidth: "870px",
+                    maxWidth: "1000px",
                     margin: "auto auto",
                     border: "none",
 

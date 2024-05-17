@@ -1,5 +1,5 @@
 //mitul work start
-
+import { useNavigate } from "react-router-dom";
 import ReactModal from "react-modal";
 import React, { useEffect, useState } from "react";
 import {
@@ -39,6 +39,7 @@ const EvaluationAcknowledgeModal = ({
     setAcknowledgement,
     developerId,
 }) => {
+    const navigate = useNavigate();
     const pendingActionId = useSelector(
         (state) => state.pendingActions.pendingActionId
     );
@@ -113,22 +114,40 @@ const EvaluationAcknowledgeModal = ({
         setPagination(paginate);
     };
 
-    const handleAcknowledgedIt = () => {
-        if (auth.roleId === 6) {
-            updatePendingAction({
-                acknowledged: "lead_dev",
-                user_id: singleEvaluation?.user_id,
-            });
-        }
-        if (auth.roleId === 8) {
-            updatePendingAction({
-                user_id: singleEvaluation?.user_id,
-            });
-        }
-
+    const handleAcknowledgedItLeadDev = () => {
+        updatePendingAction({
+            acknowledged: "lead_dev",
+            user_id: singleEvaluation?.user_id,
+        });
         toast.success("Acknowledge successful!");
         setAcknowledgement(false);
         increaseCount();
+    };
+
+    const handleAcknowledgedItTeamLead = async () => {
+        try {
+            const response = await updatePendingAction({
+                user_id: singleEvaluation?.user_id,
+            }).unwrap();
+
+            if (response?.status == 200) {
+                if (singleEvaluation?.managements_decision == "One more week") {
+                    console.log("response url", response.url);
+                    toast.success("Acknowledge successful!");
+                    setAcknowledgement(false);
+                    increaseCount();
+                    window.location.href = response.url;
+                } else {
+                    toast.success("Acknowledge successful!");
+                    setAcknowledgement(false);
+                    increaseCount();
+                }
+            }
+
+            response?.url;
+        } catch (error) {
+            console.error("Error updating pending action:", error);
+        }
     };
 
     const EvaluationTableColumns = [
@@ -366,13 +385,24 @@ const EvaluationAcknowledgeModal = ({
                     Close
                 </Button>
 
-                <Button
-                    onClick={handleAcknowledgedIt}
-                    size="md"
-                    className="ml-2"
-                >
-                    <div> Ok, Acknowledged it</div>
-                </Button>
+                {auth.roleId === 8 && (
+                    <Button
+                        onClick={handleAcknowledgedItTeamLead}
+                        size="md"
+                        className="ml-2"
+                    >
+                        <div> Ok, Acknowledged it team lead</div>
+                    </Button>
+                )}
+                {auth.roleId === 6 && (
+                    <Button
+                        onClick={handleAcknowledgedItLeadDev}
+                        size="md"
+                        className="ml-2"
+                    >
+                        <div> Ok, Acknowledged it lead dev</div>
+                    </Button>
+                )}
             </FooterButtons>
         </ReactModal>
     );

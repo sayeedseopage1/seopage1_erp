@@ -96,7 +96,7 @@ const EvaluationTaskListModal = ({
             const tasks = data?.data;
             tasksToRate = tasks?.filter((task) => {
                 return (
-                    Number(task.total_min) > 5 && task.submission_date !== null
+                    Number(task.total_min) < 5 && task.submission_date !== null
                 );
             });
             const isAllTaskRated =
