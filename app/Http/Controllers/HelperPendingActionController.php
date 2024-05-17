@@ -2107,5 +2107,43 @@ class HelperPendingActionController extends AccountBaseController
                 $action->save();
             }
         }
+        public function evaluationAuthTeamLead($evaluation_task)
+        {
+            $evaluation_task = EmployeeEvaluationTask::where('id',$evaluation_task)->first(); 
+            $new_dev = User::where('id',$evaluation_task->user_id)->first(); 
+            $lead_dev = User::where('id',$evaluation_task->lead_dev_id)->first(); 
+            $evaluation = EmployeeEvaluation::where('user_id',$evaluation_task->user_id)->first(); 
+            $top_management = User::where('id',Auth::user()->id)->first(); 
+            $team_lead = User::where('id',$evaluation->team_lead_id)->first();
+            $task = Task::where('id',$evaluation_task->task_id)->first();
+            $authorizers = User::where('role_id', 6)->get();
+            $updated_at = Carbon::parse($evaluation_task->updated_at);
+            $formatted_date_time = $updated_at->format('d F Y \a\t g:i A');
+            foreach ($authorizers as $key => $authorizer) {
+                $action = new PendingAction();
+                $action->code = 'EEFA';
+                $action->serial = 'EEFA'.'x'.$key;
+                $action->item_name= 'Evaluation extend for admin!';
+                $action->heading= 'Top Management '.$top_management->name.' has extended the trial period for New Developer '.$new_dev->name.'!';
+                $action->message = 'Top Management <a href="'.route('employees.show',$top_management->id).'">'.$top_management->name.'</a> has extended the trial period for one more week for New Developer <a href="'.route('employees.show',$new_dev->id).'">'.$new_dev->name.'</a> from '.$formatted_date_time.'';
+                $action->timeframe= 24;
+                $action->client_id = $task->client_id;
+                $action->task_id = $task->id;
+                $action->developer_id = $new_dev->id;
+                $action->authorization_for= $authorizer->id;
+                $button = [
+                    [
+                        'button_name' => 'Acknowledge It',
+                        'button_color' => 'primary',
+                        'button_type' => 'modal',
+                        'button_url' => '',
+                        'modal_form'=> false,
+                    ],
+
+                ];
+                $action->button = json_encode($button);
+                $action->save();
+            }
+        }
 
 }
