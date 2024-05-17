@@ -18,7 +18,9 @@ import { DashboardDataTableMilestoneColumns } from "../Table/DashboardDataTableM
 // constants
 import { DashboardMileStoneTableData, DashboardTaskTableData } from "../../constants";
 
-const DashboardTaskAndMileStoneSection = () => {
+const DashboardTaskAndMileStoneSection = ({
+    isLoading
+}) => {
     return (
         <div className={`${style.dashboardTaskAndMileStoneSection} mb-4`}>
             <SectionContainer>
@@ -30,7 +32,7 @@ const DashboardTaskAndMileStoneSection = () => {
                             tableColumns={DashboardDataTableTaskColumns}
                             tableName="Task List"
                             tableData={DashboardTaskTableData}
-                            isLoading={false}
+                            isLoading={isLoading}
                         />
                     </div>
                 </div>
@@ -44,7 +46,7 @@ const DashboardTaskAndMileStoneSection = () => {
                             tableColumns={DashboardDataTableMilestoneColumns}
                             tableName="Project Milestones"
                             tableData={DashboardMileStoneTableData}
-                            isLoading={false}
+                            isLoading={isLoading}
                         />
                     </div>
                 </div>
@@ -55,4 +57,6 @@ const DashboardTaskAndMileStoneSection = () => {
 
 export default DashboardTaskAndMileStoneSection;
 
-DashboardTaskAndMileStoneSection.propTypes = {};
+DashboardTaskAndMileStoneSection.propTypes = {
+    isLoading: PropTypes.bool,
+};

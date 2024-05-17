@@ -1,20 +1,36 @@
 import React from "react";
 import PropTypes from "prop-types";
+import { BsPinAngle } from "react-icons/bs";
+import { LiaEdit } from "react-icons/lia";
 
 // Components - Custom
 import Button from "../ui/customComponents/Button/Button";
+import CustomAntModal from "../ui/CustomAntModal/CustomAntModal";
+
 
 // Styles
 import style from "./styles/dashboardHeaderSection.module.css";
 
+
+// ShortName
+// WN - WorkingEnvironment;
+
 const DashboardHeaderSection = ({ projectType = "Fixed" }) => {
+    const [isWNModalOpen, setIsWNModalOpen] = React.useState(false);
+
+    const handleOpenWNModal = () => {
+        setIsWNModalOpen(true);
+    };
+    const handleCloseWNModal = () => {
+        setIsWNModalOpen(false);
+    };
+
     return (
         <div className="d-flex flex-column flex-md-row justify-content-md-between mb-4">
             <div className="d-flex mb-3 mb-md-0">
                 <Button
-                    onClick={() => {}}
+                    onClick={handleOpenWNModal}
                     className={`${style?.dashboardHeaderButton} `}
-                  
                 >
                     Working Environment
                 </Button>
@@ -32,13 +48,56 @@ const DashboardHeaderSection = ({ projectType = "Fixed" }) => {
                 >
                     Mark as complete
                 </Button>
-                <Button
-                    onClick={() => {}}
-                    className={`${style?.dashboardHeaderButton} ${style.actionButton} ml-2`}
-                >
-                    Action <i className="fa-solid fa-ellipsis-vertical ml-1"></i>
-                </Button>
+                <div class={`dropdown ml-2  ${style.actionButtonDropdown}`}>
+                    <button
+                        className={`btn btn-lg bg-white  f-15 px-2 py-1 text-dark-grey text-capitalize rounded dropdown-toggle ${style?.dashboardHeaderButton} ${style.actionButton}`}
+                        type="button"
+                        data-toggle="dropdown"
+                        aria-haspopup="true"
+                        aria-expanded="true"
+                    >
+                        Action <i className="icon-options-vertical icons"></i>
+                    </button>
+                    <div
+                        className="dropdown-menu dropdown-menu-right border-grey rounded b-shadow-4 p-0 "
+                        aria-labelledby="dropdownMenuLink"
+                        tabindex="0"
+                        x-placement="bottom-end"
+                        style={{
+                            position: "absolute",
+                            willChange: "transform",
+                            top: "0px",
+                            left: "0px",
+                            transform: "translate3d(-80px, 39px, 0px)",
+                        }}
+                    >
+                        <a
+                            className="dropdown-item openRightModal"
+                            href="http://localhost:8000/account/projects/1181/edit"
+                        >
+                            <LiaEdit className="mr-2" />
+                            Edit Project
+                        </a>
+                        <hr className="my-1" />
+                        <a
+                            className="dropdown-item"
+                            href="javascript:;"
+                            id="pinnedItem"
+                            data-pinned="unpinned"
+                        >
+                            <BsPinAngle className="mr-2" />
+                            Pin Project
+                        </a>
+                    </div>
+                </div>
             </div>
+
+            {/* Modal */}
+            <CustomAntModal
+                isModalOpen={isWNModalOpen}
+                closeModal={handleCloseWNModal}
+                // title="Working Environment"
+            />
         </div>
     );
 };

@@ -21,8 +21,10 @@ import { HourlyProjectSalesData, ProjectBudgetData } from "../../constants";
 
 // style
 import style from "./styles/dashboardProjectInfoHourlySection.module.css";
+import { handleLoadingComponent } from "../../helper";
+import TextLoaderDynamic from "../loader/TextLoaderDynamic";
 
-const DashboardProjectInfoHourlySection = ({ projectData }) => {
+const DashboardProjectInfoHourlySection = ({ projectData, isLoading }) => {
     return (
         <React.Fragment>
             <SectionWrapper className="my-4 row m-0">
@@ -37,6 +39,7 @@ const DashboardProjectInfoHourlySection = ({ projectData }) => {
                             <DashboardClientAndPMCard
                                 projectData={projectData}
                                 className="h-100"
+                                isLoading={isLoading}
                             />
                         </div>
                         <div className="px-0 px-md-3 my-4 my-md-0 col-12 col-md-6">
@@ -44,6 +47,7 @@ const DashboardProjectInfoHourlySection = ({ projectData }) => {
                                 projectData={projectData}
                                 style={style}
                                 className="h-100"
+                                isLoading={isLoading}
                             />
                         </div>
                         <div
@@ -69,6 +73,12 @@ const DashboardProjectInfoHourlySection = ({ projectData }) => {
                                     icon={
                                         ProjectBudgetData.hours_logged[1].icon
                                     }
+                                    isLoading={isLoading}
+                                    loaderInformation={{
+                                        number: 1,
+                                        height: 21,
+                                        parentClassName: "w-100 py-3",
+                                    }}
                                     className="py-3"
                                 />
                             </CardWrapper>
@@ -89,10 +99,16 @@ const DashboardProjectInfoHourlySection = ({ projectData }) => {
                                                 amount={moneyInfo.price}
                                                 title={moneyInfo.title}
                                                 icon={moneyInfo.icon}
+                                                isLoading={isLoading}
                                                 currency={moneyInfo.currency}
                                                 currency_symbol={
                                                     moneyInfo.currency_symbol
                                                 }
+                                                loaderInformation={{
+                                                    number: 1,
+                                                    height: 21,
+                                                    parentClassName: "w-100",
+                                                }}
                                             />
                                         ))}
                                 </div>
@@ -105,7 +121,13 @@ const DashboardProjectInfoHourlySection = ({ projectData }) => {
                                                 amount={moneyInfo.price}
                                                 title={moneyInfo.title}
                                                 icon={moneyInfo.icon}
+                                                isLoading={isLoading}
                                                 currency={moneyInfo.currency}
+                                                loaderInformation={{
+                                                    number: 1,
+                                                    height: 21,
+                                                    parentClassName: "w-100",
+                                                }}
                                                 currency_symbol={
                                                     moneyInfo.currency_symbol
                                                 }
@@ -117,7 +139,7 @@ const DashboardProjectInfoHourlySection = ({ projectData }) => {
                     </div>
                     <div className="d-flex row px-0 h-100 m-0 mt-3">
                         <div
-                            className="d-flex flex-column  col-12 col-md-9  pl-md-0"
+                            className="d-flex flex-column  col-12 col-md-9 px-0 pr-md-3 pl-md-0"
                             style={{
                                 gap: "16px",
                             }}
@@ -130,21 +152,37 @@ const DashboardProjectInfoHourlySection = ({ projectData }) => {
                                     title="How many hours need to be tracked in the first 24 hours"
                                     isBorderUse={true}
                                 />
-                                <p className="questionAnswerDashboard">
-                                    2 Hours
-                                </p>
 
+                                {handleLoadingComponent(
+                                    isLoading,
+                                    <TextLoaderDynamic
+                                        number={1}
+                                        hight={25}
+                                        parentClassName="py-3 w-75"
+                                    />,
+                                    <p className="questionAnswerDashboard">
+                                        2 Hours
+                                    </p>
+                                )}
                                 <DashboardCardTitle
                                     title="How many hours need to be tracked on the 2nd day i.e. between 25th-48th hours? "
                                     isBorderUse={true}
                                 />
-                                <p className="questionAnswerDashboard">
-                                    3 Hours
-                                </p>
+                                {handleLoadingComponent(
+                                    isLoading,
+                                    <TextLoaderDynamic
+                                        number={1}
+                                        hight={25}
+                                        parentClassName="py-3 w-75"
+                                    />,
+                                    <p className="questionAnswerDashboard">
+                                        3 Hours
+                                    </p>
+                                )}
                             </CardWrapper>
                         </div>
                         <div
-                            className="d-flex flex-column  col-12 col-md-3  px-0"
+                            className="d-flex flex-column  col-12 col-md-3  px-0 mt-3 mt-md-0"
                             style={{
                                 gap: "24px",
                             }}
@@ -158,14 +196,24 @@ const DashboardProjectInfoHourlySection = ({ projectData }) => {
                                     Hubstaff tracking? "
                                     isBorderUse={true}
                                 />
-                                <p>Yes</p>
+                                {handleLoadingComponent(
+                                    isLoading,
+                                    <TextLoaderDynamic
+                                        number={1}
+                                        hight={25}
+                                        parentClassName="py-3 w-75"
+                                    />,
+                                    <p className="questionAnswerDashboard">
+                                        yes
+                                    </p>
+                                )}
                             </CardWrapper>
                         </div>
                     </div>
                 </div>
-                <div className="d-flex flex-column col-12 col-md-4 pr-0">
+                <div className="d-flex flex-column col-12 col-md-4 px-0">
                     <div
-                        className="col-12 d-flex flex-column"
+                        className="col-12 d-flex flex-column px-0 pl-md-3 pr-md-0 mt-3 mt-md-0"
                         style={{
                             gap: "16px",
                         }}
@@ -173,7 +221,7 @@ const DashboardProjectInfoHourlySection = ({ projectData }) => {
                         <CardWrapper
                             color="#ffffff"
                             gap="16px"
-                            className="d-flex"
+                            className="d-flex flex-column flex-md-row"
                         >
                             <div>
                                 <DashboardCardTitle
@@ -187,6 +235,13 @@ const DashboardProjectInfoHourlySection = ({ projectData }) => {
                                         <DashboardCardPricingInfo
                                             amount="1-5 hours"
                                             icon="/images/timer.png"
+                                            className="w-100"
+                                            isLoading={isLoading}
+                                            loaderInformation={{
+                                                number: 1,
+                                                height: 21,
+                                                parentClassName: "w-100",
+                                            }}
                                         />
                                     </div>
                                 </div>
@@ -197,13 +252,31 @@ const DashboardProjectInfoHourlySection = ({ projectData }) => {
                                     isBorderUse={true}
                                 />
                                 <div
-                                    className="pt-3 pt-md-0 py-0 py-md-3 d-flex"
+                                    className="pt-3 pt-md-0 py-0 py-md-3 d-flex justify-content-between"
                                     style={{
                                         gap: "16px",
                                     }}
                                 >
-                                    <DashboardCardPricingInfo amount="10.00 GBP (£)" />
-                                    <DashboardCardPricingInfo amount="17.00 USD ($)" />
+                                    <DashboardCardPricingInfo
+                                        amount="10.00 GBP (£)"
+                                        isLoading={isLoading}
+                                        className="w-100"
+                                        loaderInformation={{
+                                            number: 1,
+                                            height: 21,
+                                            parentClassName: "w-100",
+                                        }}
+                                    />
+                                    <DashboardCardPricingInfo
+                                        amount="17.00 USD ($)"
+                                        className="w-100"
+                                        isLoading={isLoading}
+                                        loaderInformation={{
+                                            number: 1,
+                                            height: 21,
+                                            parentClassName: "w-100",
+                                        }}
+                                    />
                                 </div>
                             </div>
                         </CardWrapper>
@@ -214,7 +287,16 @@ const DashboardProjectInfoHourlySection = ({ projectData }) => {
                                         title={item.question}
                                         isBorderUse={true}
                                     />
-                                    <DashboardCardPricingInfo amount={item.answer} />
+                                    <DashboardCardPricingInfo
+                                        amount={item.answer}
+                                        isLoading={isLoading}
+                                        className="py-3"
+                                        loaderInformation={{
+                                            number: 1,
+                                            height: 21,
+                                            parentClassName: "w-100",
+                                        }}
+                                    />
                                 </div>
                             ))}
                         </CardWrapper>
@@ -229,4 +311,5 @@ export default DashboardProjectInfoHourlySection;
 
 DashboardProjectInfoHourlySection.propTypes = {
     projectData: PropTypes.object.isRequired,
+    isLoading: PropTypes.bool,
 };

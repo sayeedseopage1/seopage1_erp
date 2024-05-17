@@ -164,7 +164,7 @@ const DashboardProjectInfoFixedSection = ({ projectData }) => {
                 >
                     <DashboardClientAndPMCard
                         projectData={projectData}
-                        className="mb-4"
+                     
                     />
                 </div>
                 <div

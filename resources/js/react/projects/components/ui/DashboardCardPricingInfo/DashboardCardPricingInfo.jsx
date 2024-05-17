@@ -3,6 +3,8 @@ import PropTypes from "prop-types";
 
 // style
 import "./dashboardCardPricingInfo.css";
+import { handleLoadingComponent } from "../../../helper";
+import TextLoaderDynamic from "../../loader/TextLoaderDynamic";
 
 const DashboardCardPricingInfo = ({
     title,
@@ -11,6 +13,8 @@ const DashboardCardPricingInfo = ({
     currency_symbol,
     icon,
     className = "",
+    isLoading,
+    loaderInformation,
 }) => {
     return (
         <div className={`dashboardCardPricingInfo ${className}`}>
@@ -23,9 +27,20 @@ const DashboardCardPricingInfo = ({
             )}
             <div className="dashboardCardCurrencyInfo">
                 {icon && <img src={icon} alt={title} />}
-                <p className="mb-0">
-                    <span>{currency_symbol}</span> {amount}
-                </p>
+                {handleLoadingComponent(
+                    isLoading,
+                    <TextLoaderDynamic
+                        number={loaderInformation?.number}
+                        height={loaderInformation?.height}
+                        parentClassName={loaderInformation?.parentClassName}
+                        className={loaderInformation?.className}
+                        fullSizeCount={loaderInformation?.fullSizeCount}
+                        widthDeference={loaderInformation?.widthDeference}
+                    />,
+                    <p className="mb-0">
+                        <span>{currency_symbol}</span> {amount}
+                    </p>
+                )}
             </div>
         </div>
     );
@@ -40,4 +55,6 @@ DashboardCardPricingInfo.propTypes = {
     currency_symbol: PropTypes.string,
     icon: PropTypes.string,
     className: PropTypes.string,
+    isLoading: PropTypes.bool,
+    loaderInformation: PropTypes.object,
 };

@@ -9,3 +9,13 @@ export function formatHttp(text) {
   });
   return formattedText;
 }
+
+
+
+export const handleLoadingComponent = (isLoading, loadingComponent, renderDataComponents) => {
+  if (isLoading) {
+    return loadingComponent;
+  } else {
+    return renderDataComponents;
+  }
+}

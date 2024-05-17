@@ -13,29 +13,38 @@ import DashboardProjectInfoHourlySection from "../components/sections/DashboardP
 
 // Components - UI - Custom
 import Switch from "../../global/Switch";
+import { set } from "lodash";
 
 const ProjectDashboard = () => {
-    const projectType = projectData[0].projectType;
+    const projectType = projectData[1].projectType;
+    const [isLoading, setIsLoading] = React.useState(false);
+
+    // setTimeout(() => {
+    //     setIsLoading(false);
+    // }, 10000);
+
     return (
         <section>
             <DashboardHeaderSection />
             <Switch>
                 <Switch.Case condition={projectType === "Fixed"}>
                     <DashboardProjectInfoFixedSection
+                        isLoading={isLoading}
                         projectData={projectData[1].projectData}
                     />
                 </Switch.Case>
                 <Switch.Case condition={projectType === "Hourly"}>
                     <DashboardProjectInfoHourlySection
+                        isLoading={isLoading}
                         projectData={projectData[0].projectData}
                     />
                 </Switch.Case>
             </Switch>
             <DashboardActionButtonSection   />
-            <DashboardTaskAndMileStoneSection  />
-            <DashboardFreelancerInfoSection projectData={projectData[1]} />
-            <DashboardProjectGuideAndChallengeSection projectData={projectData[1]} />
-            <DashboardSalesAndPMInfoSection projectData={projectData[1]} />
+            <DashboardTaskAndMileStoneSection isLoading={isLoading}  />
+            <DashboardFreelancerInfoSection isLoading={isLoading} projectData={projectData[1]} />
+            <DashboardProjectGuideAndChallengeSection isLoading={isLoading} projectData={projectData[1]} />
+            <DashboardSalesAndPMInfoSection isLoading={isLoading} projectData={projectData[1]} />
         </section>
     );
 };

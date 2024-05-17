@@ -54,6 +54,12 @@
     font-family: Poppins, sans-serif;
     width: 50%;
   }
+  .actionButton{
+    width: 100% !important;
+  }
+  .actionButtonDropdown{
+    width: 50% !important;
+  }
 
 }
 
@@ -70,6 +76,13 @@
     font-size: 12px !important;
     font-family: Poppins, sans-serif;
     width: 50%;
+  }
+
+  .actionButton{
+    width: 100% !important;
+  }
+  .actionButtonDropdown{
+    width: 50% !important;
   }
 
 }

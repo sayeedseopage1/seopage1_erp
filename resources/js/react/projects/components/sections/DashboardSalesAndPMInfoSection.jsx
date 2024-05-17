@@ -12,10 +12,17 @@ import {
 
 // Components - UI - Shared
 import DashboardCardTitle from "../ui/DashboardCardTitle/DashboardCardTitle";
-import { formatHttp } from "../../helper";
+
+// Components - Loader
+import TextLoaderDynamic from "../loader/TextLoaderDynamic";
+
+// Constants
 import { DetailsSalesExecutiveConstant } from "../../constants";
 
-const DashboardSalesAndPMInfoSection = ({ projectData }) => {
+// Helper -
+import { formatHttp, handleLoadingComponent } from "../../helper";
+
+const DashboardSalesAndPMInfoSection = ({ projectData, isLoading }) => {
     const projectInfo = projectData.projectData.project;
     const dealInfo = projectData.projectData.project.deal;
     return (
@@ -39,14 +46,26 @@ const DashboardSalesAndPMInfoSection = ({ projectData }) => {
                                     .infoText
                             }
                         />
-                        <SectionContentContainer
-                            color="linear-gradient(0deg, #F2F9FE 0%, #F2F9FE 100%), #D9D9D9"
-                            maxHeight="35vh"
-                            className="pt-3"
-                            dangerouslySetInnerHTML={{
-                                __html: formatHttp(dealInfo.description2),
-                            }}
-                        />
+                        {handleLoadingComponent(
+                            isLoading,
+                            <TextLoaderDynamic
+                                number={2}
+                                widthDeference={20}
+                                hight={16}
+                                className="mb-2"
+                                parentClassName="pl-4 pt-3"
+                            />,
+                            <SectionContentContainer
+                                color="linear-gradient(0deg, #F2F9FE 0%, #F2F9FE 100%), #D9D9D9"
+                                maxHeight="35vh"
+                                className="pt-3"
+                                dangerouslySetInnerHTML={{
+                                    __html:
+                                        !isLoading &&
+                                        formatHttp(dealInfo.description2),
+                                }}
+                            />
+                        )}
                     </SectionContainer>
                     <SectionContainer className="mb-4">
                         <DashboardCardTitle
@@ -61,14 +80,27 @@ const DashboardSalesAndPMInfoSection = ({ projectData }) => {
                                     .infoText
                             }
                         />
-                        <SectionContentContainer
-                            color="linear-gradient(0deg, #F2F9FE 0%, #F2F9FE 100%), #D9D9D9"
-                            maxHeight="35vh"
-                            className="pt-3"
-                            dangerouslySetInnerHTML={{
-                                __html: formatHttp(dealInfo.description3),
-                            }}
-                        />
+                        {handleLoadingComponent(
+                            isLoading,
+                            <TextLoaderDynamic
+                                number={10}
+                                widthDeference={20}
+                                hight={16}
+                                fullSizeCount={5}
+                                className="mb-2"
+                                parentClassName="pl-4 pt-3"
+                            />,
+                            <SectionContentContainer
+                                color="linear-gradient(0deg, #F2F9FE 0%, #F2F9FE 100%), #D9D9D9"
+                                maxHeight="35vh"
+                                className="pt-3"
+                                dangerouslySetInnerHTML={{
+                                    __html:
+                                        !isLoading &&
+                                        formatHttp(dealInfo.description3),
+                                }}
+                            />
+                        )}
                     </SectionContainer>
                     <SectionContainer>
                         <DashboardCardTitle
@@ -84,14 +116,27 @@ const DashboardSalesAndPMInfoSection = ({ projectData }) => {
                                     .infoText
                             }
                         />
-                        <SectionContentContainer
-                            color="linear-gradient(0deg, #F2F9FE 0%, #F2F9FE 100%), #D9D9D9"
-                            maxHeight="35vh"
-                            className="pt-3"
-                            dangerouslySetInnerHTML={{
-                                __html: formatHttp(dealInfo.description8),
-                            }}
-                        />
+                        {handleLoadingComponent(
+                            isLoading,
+                            <TextLoaderDynamic
+                                number={8}
+                                widthDeference={20}
+                                hight={16}
+                                fullSizeCount={3}
+                                className="mb-2"
+                                parentClassName="pl-4 pt-3"
+                            />,
+                            <SectionContentContainer
+                                color="linear-gradient(0deg, #F2F9FE 0%, #F2F9FE 100%), #D9D9D9"
+                                maxHeight="35vh"
+                                className="pt-3"
+                                dangerouslySetInnerHTML={{
+                                    __html:
+                                        !isLoading &&
+                                        formatHttp(dealInfo.description8),
+                                }}
+                            />
+                        )}
                     </SectionContainer>
                 </div>
                 <div>
@@ -109,14 +154,26 @@ const DashboardSalesAndPMInfoSection = ({ projectData }) => {
                                     .infoText
                             }
                         />
-                        <SectionContentContainer
-                            color="linear-gradient(0deg, #F2F9FE 0%, #F2F9FE 100%), #D9D9D9"
-                            maxHeight="35vh"
-                            className="pt-3"
-                            dangerouslySetInnerHTML={{
-                                __html: formatHttp(dealInfo.description4),
-                            }}
-                        />
+                        {handleLoadingComponent(
+                            isLoading,
+                            <TextLoaderDynamic
+                                number={2}
+                                widthDeference={20}
+                                hight={16}
+                                className="mb-2"
+                                parentClassName="pl-4 pt-3"
+                            />,
+                            <SectionContentContainer
+                                color="linear-gradient(0deg, #F2F9FE 0%, #F2F9FE 100%), #D9D9D9"
+                                maxHeight="35vh"
+                                className="pt-3"
+                                dangerouslySetInnerHTML={{
+                                    __html:
+                                        !isLoading &&
+                                        formatHttp(dealInfo.description4),
+                                }}
+                            />
+                        )}
                     </SectionContainer>
                     <SectionContainer className="mb-4">
                         <DashboardCardTitle
@@ -132,14 +189,28 @@ const DashboardSalesAndPMInfoSection = ({ projectData }) => {
                                     .infoText
                             }
                         />
-                        <SectionContentContainer
-                            color="linear-gradient(0deg, #F2F9FE 0%, #F2F9FE 100%), #D9D9D9"
-                            maxHeight="35vh"
-                            className="pt-3"
-                            dangerouslySetInnerHTML={{
-                                __html: formatHttp(dealInfo.description5),
-                            }}
-                        />
+
+                        {handleLoadingComponent(
+                            isLoading,
+                            <TextLoaderDynamic
+                                number={2}
+                                widthDeference={20}
+                                hight={16}
+                               
+                                className="mb-2"
+                                parentClassName="pl-4 pt-3"
+                            />,
+                            <SectionContentContainer
+                                color="linear-gradient(0deg, #F2F9FE 0%, #F2F9FE 100%), #D9D9D9"
+                                maxHeight="35vh"
+                                className="pt-3"
+                                dangerouslySetInnerHTML={{
+                                    __html:
+                                        !isLoading &&
+                                        formatHttp(dealInfo.description5),
+                                }}
+                            />
+                        )}
                     </SectionContainer>
                     <SectionContainer className="mb-4">
                         <DashboardCardTitle
@@ -155,14 +226,38 @@ const DashboardSalesAndPMInfoSection = ({ projectData }) => {
                                     .infoText
                             }
                         />
-                        <SectionContentContainer
-                            color="linear-gradient(0deg, #F2F9FE 0%, #F2F9FE 100%), #D9D9D9"
-                            maxHeight="35vh"
-                            className="pt-3"
-                            dangerouslySetInnerHTML={{
-                                __html: formatHttp(dealInfo.description7),
-                            }}
-                        />
+                        {handleLoadingComponent(
+                            isLoading,
+                            <>
+                                <TextLoaderDynamic
+                                    number={3}
+                                    widthDeference={20}
+                                    hight={16}
+                                    fullSizeCount={3}
+                                    className="mb-2"
+                                    parentClassName="pl-4 pt-3"
+                                />
+                                <br />
+                                <TextLoaderDynamic
+                                    number={4}
+                                    widthDeference={10}
+                                    hight={16}
+                                    fullSizeCount={1}
+                                    className="mb-2"
+                                    parentClassName="pl-4 pt-3"
+                                />
+                            </>,
+                            <SectionContentContainer
+                                color="linear-gradient(0deg, #F2F9FE 0%, #F2F9FE 100%), #D9D9D9"
+                                maxHeight="35vh"
+                                className="pt-3"
+                                dangerouslySetInnerHTML={{
+                                    __html:
+                                        !isLoading &&
+                                        formatHttp(dealInfo.description7),
+                                }}
+                            />
+                        )}
                     </SectionContainer>
                     <SectionContainer>
                         <DashboardCardTitle
@@ -178,14 +273,27 @@ const DashboardSalesAndPMInfoSection = ({ projectData }) => {
                                     .infoText
                             }
                         />
-                        <SectionContentContainer
-                            color="linear-gradient(0deg, #F2F9FE 0%, #F2F9FE 100%), #D9D9D9"
-                            maxHeight="35vh"
-                            className="pt-3"
-                            dangerouslySetInnerHTML={{
-                                __html: formatHttp(dealInfo.description6),
-                            }}
-                        />
+                        {handleLoadingComponent(
+                            isLoading,
+                            <TextLoaderDynamic
+                                number={6}
+                                widthDeference={20}
+                                hight={16}
+                                fullSizeCount={2}
+                                className="mb-2"
+                                parentClassName="pl-4 pt-3"
+                            />,
+                            <SectionContentContainer
+                                color="linear-gradient(0deg, #F2F9FE 0%, #F2F9FE 100%), #D9D9D9"
+                                maxHeight="35vh"
+                                className="pt-3"
+                                dangerouslySetInnerHTML={{
+                                    __html:
+                                        !isLoading &&
+                                        formatHttp(dealInfo.description6),
+                                }}
+                            />
+                        )}
                     </SectionContainer>
                 </div>
             </div>
@@ -207,7 +315,19 @@ const DashboardSalesAndPMInfoSection = ({ projectData }) => {
                             borderType="dotted"
                             className="mb-3"
                         />
-                        <p className="boldText">{projectInfo.requirement_defined}</p>
+                        {handleLoadingComponent(
+                            isLoading,
+                            <TextLoaderDynamic
+                                number={5}
+                                widthDeference={20}
+                                hight={16}
+                                fullSizeCount={2}
+                                className="mb-2"
+                            />,
+                            <p className="boldText">
+                                {projectInfo.requirement_defined}
+                            </p>
+                        )}
                     </SectionContentContainer>
                     <SectionContentContainer
                         color="#D8EDFC"
@@ -220,7 +340,19 @@ const DashboardSalesAndPMInfoSection = ({ projectData }) => {
                             borderType="dotted"
                             className="mb-3"
                         />
-                        <p className="boldText">{projectInfo.deadline_meet}</p>
+                        {handleLoadingComponent(
+                            isLoading,
+                            <TextLoaderDynamic
+                                number={5}
+                                widthDeference={20}
+                                hight={16}
+                                fullSizeCount={1}
+                                className="mb-2"
+                            />,
+                            <p className="boldText">
+                                {projectInfo.deadline_meet}
+                            </p>
+                        )}
                     </SectionContentContainer>
                 </SectionContainer>
 
@@ -230,14 +362,27 @@ const DashboardSalesAndPMInfoSection = ({ projectData }) => {
                             title="Any other notes for the project manager/technical team"
                             isBorderUse={false}
                         />
-                        <SectionContentContainer
-                            color="linear-gradient(0deg, #F2F9FE 0%, #F2F9FE 100%), #D9D9D9"
-                            maxHeight="35vh"
-                            className="pt-3"
-                            dangerouslySetInnerHTML={{
-                                __html: formatHttp(dealInfo.description9),
-                            }}
-                        />
+                        {handleLoadingComponent(
+                            isLoading,
+                            <TextLoaderDynamic
+                                number={6}
+                                widthDeference={20}
+                                hight={16}
+                                fullSizeCount={2}
+                                className="mb-2"
+                                parentClassName="pl-4"
+                            />,
+                            <SectionContentContainer
+                                color="linear-gradient(0deg, #F2F9FE 0%, #F2F9FE 100%), #D9D9D9"
+                                maxHeight="35vh"
+                                className="pt-3"
+                                dangerouslySetInnerHTML={{
+                                    __html:
+                                        !isLoading &&
+                                        formatHttp(dealInfo.description9),
+                                }}
+                            />
+                        )}
                     </SectionContainer>
                 </div>
             </div>
@@ -249,4 +394,5 @@ export default DashboardSalesAndPMInfoSection;
 
 DashboardSalesAndPMInfoSection.propTypes = {
     projectData: PropTypes.object.isRequired,
+    isLoading: PropTypes.bool.isRequired,
 };

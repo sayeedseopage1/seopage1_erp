@@ -14,8 +14,8 @@ import WithoutDraggableColumnHeader from "./WithoutDraggableColumnHeader";
 import EmptyTable from "../../../global/EmptyTable";
 
 // Style
-import './style/dashboardDataTable.css'
-
+import "./style/dashboardDataTable.css";
+import TaskListTableLoader from "../loader/TaskListTableLoader";
 
 const DashboardDataTable = ({
     tableName,
@@ -45,7 +45,6 @@ const DashboardDataTable = ({
             setSkipPageReset(false);
         }
     }, [data]);
-
 
     // default columns
     const defaultColumns = React.useMemo(() => [...tableColumns]);
@@ -147,6 +146,12 @@ const DashboardDataTable = ({
                                     </tr>
                                 );
                             })}
+                        {isLoading && (
+                            <TaskListTableLoader
+                                prevItemLength={data?.length}
+                                tableCol={tableColumns}
+                            />
+                        )}
                     </tbody>
                 </table>
                 {!isLoading && _.size(table.getRowModel().rows) === 0 && (
