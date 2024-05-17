@@ -562,6 +562,7 @@ class EvaluationController extends AccountBaseController
     }
     public function storeAcknowledged(Request $request)
     {
+        dd($request->all());
         $evaluation = EmployeeEvaluation::where('user_id',$request->user_id)->first();
         if($request->acknowledged == 'lead_dev'){
             $evaluation->lead_dev_acknowledged = 1;
