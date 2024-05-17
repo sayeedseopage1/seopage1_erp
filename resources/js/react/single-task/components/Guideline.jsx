@@ -137,7 +137,7 @@ const Guideline = ({ text, task, type = "", editorContainerClass, workEnv, singl
 
         {
             singleTask?.category?.category_name === "Graphic Design" && <div className="px-4 py-3" style={{ background: '#F3F5F9' }}>
-                <h6 className="mb-2">Graphic Work Details 2222</h6>
+                <h6 className="mb-2">Graphic Work Details</h6>
                 <hr />
                 <div className="row">
                     {
