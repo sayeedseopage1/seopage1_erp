@@ -8,6 +8,7 @@ use App\Models\TaskFile;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 use App\Helper\Files;
+use App\Models\EmployeeEvaluationTask;
 use App\Models\PendingParentTaskConversation;
 use App\Models\SubTask;
 use App\Models\Task;
@@ -73,6 +74,7 @@ class IndependentTaskController extends AccountBaseController
      */
     public function store(Request $request)
     {
+        dd($request->all());
         $ppTask = new PendingParentTasks();
         $ppTask->heading = $request->heading;
         $ppTask->description = $request->description;
@@ -113,6 +115,10 @@ class IndependentTaskController extends AccountBaseController
                 $this->logTaskActivity($ppTask->id, $ppTask->user_id, 'fileActivity', $ppTask->board_column_id);
             }
         }
+
+        // if(Auth::user()->role_id == 8){
+        //     $evaluation = EmployeeEvaluationTask::where();
+        // }
 
 
         $users = User::where('role_id',1)->orWhere('role_id',8)->get();
