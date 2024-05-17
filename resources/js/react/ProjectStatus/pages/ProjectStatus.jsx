@@ -15,6 +15,7 @@ import PercentageofGoalsMetModal from "../components/modal/PercentageofGoalsMetM
 import NextGoalDetailsModal from "../components/modal/NextGoalDetailsModal";
 import ProjectManagerExplanationModal from "../components/modal/ProjectManagerExplanationModal";
 import { useSearchParams } from "react-router-dom";
+import { set } from "lodash";
 
 const ProjectStatus = () => {
     const [search, setSearch] = React.useState("");
@@ -120,6 +121,7 @@ const ProjectStatus = () => {
     // handle close percentage of goal met modal
     const handleClosePercentageofGoalsMetModal = () => {
         setIsOpenPercentageofGoalsMetModal(false);
+        setProjectId(null);
     };
 
     // handle close next goal details modal

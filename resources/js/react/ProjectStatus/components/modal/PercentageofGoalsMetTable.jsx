@@ -13,7 +13,8 @@ import PercentageofGoalsMetTableLoader from "../loader/PercentageofGoalsMetTable
 import EmptyTable from "../../../global/EmptyTable";
 import { useLocalStorage } from "react-use";
 import Toaster from "../../../global/Toaster";
-import style from "../styles/pmgoaltable.module.css"
+import style from "../styles/pmgoaltable.module.css";
+import ProjectStatusTablePagination from "../ProjectStatusTablePagination";
 
 const PercentageofGoalsMetTable = ({
     percentageOfGoalsMet,
@@ -98,76 +99,95 @@ const PercentageofGoalsMetTable = ({
     });
 
     return (
-        <div className="sp1_tasks_table_wrapper">
-            <table className="sp1_tasks_table">
-                <thead className="sp1_tasks_thead">
-                    {table.getHeaderGroups().map((headerGroup) => (
-                        <tr key={headerGroup.id} className="sp1_tasks_tr">
-                            {headerGroup.headers.map((header) => {
+        <React.Fragment>
+            <div className="sp1_tasks_table_wrapper">
+                <table className="sp1_tasks_table">
+                    <thead className="sp1_tasks_thead">
+                        {table.getHeaderGroups().map((headerGroup) => (
+                            <tr key={headerGroup.id} className="sp1_tasks_tr">
+                                {headerGroup.headers.map((header) => {
+                                    return (
+                                        <DragableColumnHeader
+                                            key={header.id}
+                                            header={header}
+                                            table={table}
+                                        />
+                                    );
+                                })}
+                            </tr>
+                        ))}
+                    </thead>
+                    <tbody className="sp1_tasks_tbody">
+                        {!isLoading &&
+                            table.getRowModel().rows.map((row) => {
                                 return (
-                                    <DragableColumnHeader
-                                        key={header.id}
-                                        header={header}
-                                        table={table}
-                                    />
+                                    <tr
+                                        className={`sp1_tasks_tr ${
+                                            row.parentId !== undefined
+                                                ? "expended_row"
+                                                : ""
+                                        } ${
+                                            row.getIsExpanded()
+                                                ? "expended_parent_row"
+                                                : ""
+                                        }  ${
+                                            row.original?.goal_status === 1
+                                                ? style.goalMeat
+                                                : row.original?.goal_status ===
+                                                      0 &&
+                                                  new Date(
+                                                      row.original?.goal_end_date
+                                                  ) < new Date()
+                                                ? style.goalNotMeat
+                                                : ""
+                                        }`}
+                                        key={row.id}
+                                    >
+                                        {row.getVisibleCells().map((cell) => {
+                                            return (
+                                                <td
+                                                    key={cell.id}
+                                                    className="px-2 sp1_tasks_td"
+                                                >
+                                                    {flexRender(
+                                                        cell.column.columnDef
+                                                            .cell,
+                                                        cell.getContext()
+                                                    )}
+                                                </td>
+                                            );
+                                        })}
+                                    </tr>
                                 );
                             })}
-                        </tr>
-                    ))}
-                </thead>
-                <tbody className="sp1_tasks_tbody">
-                    {!isLoading &&
-                        table.getRowModel().rows.map((row) => {
-                            return (
-                                <tr
-                                    className={`sp1_tasks_tr ${
-                                        row.parentId !== undefined
-                                            ? "expended_row"
-                                            : ""
-                                    } ${
-                                        row.getIsExpanded()
-                                            ? "expended_parent_row"
-                                            : ""
-                                    }  ${
-                                        row.original?.goal_status === 1
-                                            ? style.goalMeat
-                                            : row.original?.goal_status === 0 &&
-                                              new Date(
-                                                  row.original?.goal_end_date
-                                              ) < new Date()
-                                            ? style.goalNotMeat
-                                            : ""
-                                    }`}
-                                    key={row.id}
-                                >
-                                    {row.getVisibleCells().map((cell) => {
-                                        return (
-                                            <td
-                                                key={cell.id}
-                                                className="px-2 sp1_tasks_td"
-                                            >
-                                                {flexRender(
-                                                    cell.column.columnDef.cell,
-                                                    cell.getContext()
-                                                )}
-                                            </td>
-                                        );
-                                    })}
-                                </tr>
-                            );
-                        })}
-                    {isLoading && (
-                        <PercentageofGoalsMetTableLoader
-                            prevItemLength={data?.length}
-                        />
-                    )}
-                </tbody>
-            </table>
-            {!isLoading && _.size(table.getRowModel().rows) === 0 && (
-                <EmptyTable />
-            )}
-            <Toaster />
-        </div>
+                        {isLoading && (
+                            <PercentageofGoalsMetTableLoader
+                                prevItemLength={data?.length}
+                            />
+                        )}
+                    </tbody>
+                </table>
+                {!isLoading && _.size(table.getRowModel().rows) === 0 && (
+                    <EmptyTable />
+                )}
+                <Toaster />
+            </div>
+            {/* Project Status Table Pagination */}
+            <ProjectStatusTablePagination
+                currentPage={pageIndex + 1}
+                perpageRow={pageSize}
+                onPageSize={(size) => table?.setPageSize(size)}
+                onPaginate={(page) => table?.setPageIndex(page - 1)}
+                totalEntry={_.size(data)}
+                onNext={() => table.getCanNextPage() && table.nextPage()}
+                disableNext={!table?.getCanNextPage()}
+                onPrevious={() =>
+                    table?.getCanPreviousPage() && table?.previousPage()
+                }
+                disablePrevious={!table?.getCanPreviousPage()}
+                totalPages={table?.getPageCount()}
+            />
+        </React.Fragment>
     );
 };
 

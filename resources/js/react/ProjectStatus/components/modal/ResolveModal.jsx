@@ -309,8 +309,8 @@ const customStyles = {
     },
     content: {
         zIndex: 99999999,
-        maxWidth: "600px",
-        maxHeight: "800px",
+        maxWidth: "76vw",
+        maxHeight: "85vh",
         margin: "auto auto",
         padding: "20px",
     },
