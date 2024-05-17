@@ -13,7 +13,7 @@ import { handleLoadingComponent } from "../../helper";
 import TextLoaderDynamic from "../loader/TextLoaderDynamic";
 
 const DashboardFreelancerInfoSection = ({ projectData, isLoading }) => {
-    const dealInfo = projectData.projectData.project.deal;
+    const dealInfo = projectData?.projectData?.project?.deal;
     return (
         <div className={`${style.dashboardFreelancerInfoSection} mb-4`}>
             <Switch>
@@ -73,10 +73,10 @@ const DashboardFreelancerInfoSection = ({ projectData, isLoading }) => {
                         <p className="d-flex">
                             <TbUserSquareRounded />{" "}
                             <a
-                                href={dealInfo.profile_link}
+                                href={dealInfo?.profile_link}
                                 className="singleline-ellipsis"
                             >
-                                {dealInfo.profile_link}
+                                {dealInfo?.profile_link}
                             </a>
                         </p>
                     )}

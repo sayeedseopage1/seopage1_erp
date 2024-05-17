@@ -23,8 +23,8 @@ import { DetailsSalesExecutiveConstant } from "../../constants";
 import { formatHttp, handleLoadingComponent } from "../../helper";
 
 const DashboardSalesAndPMInfoSection = ({ projectData, isLoading }) => {
-    const projectInfo = projectData.projectData.project;
-    const dealInfo = projectData.projectData.project.deal;
+    const projectInfo = projectData?.projectData?.project;
+    const dealInfo = projectData?.projectData?.project?.deal;
     return (
         <React.Fragment>
             <DashboardCardTitle
@@ -36,14 +36,13 @@ const DashboardSalesAndPMInfoSection = ({ projectData, isLoading }) => {
                     <SectionContainer className="mb-4">
                         <DashboardCardTitle
                             title={
-                                DetailsSalesExecutiveConstant.wordsHere2_8.title
+                                DetailsSalesExecutiveConstant?.wordsHere2_8?.title
                             }
                             isBorderUse={true}
                             borderType="dotted"
                             isInfoIconUse={true}
                             infoText={
-                                DetailsSalesExecutiveConstant.wordsHere2_8
-                                    .infoText
+                                DetailsSalesExecutiveConstant?.wordsHere2_8?.infoText
                             }
                         />
                         {handleLoadingComponent(
@@ -62,7 +61,7 @@ const DashboardSalesAndPMInfoSection = ({ projectData, isLoading }) => {
                                 dangerouslySetInnerHTML={{
                                     __html:
                                         !isLoading &&
-                                        formatHttp(dealInfo.description2),
+                                        formatHttp(dealInfo?.description2),
                                 }}
                             />
                         )}
@@ -70,14 +69,13 @@ const DashboardSalesAndPMInfoSection = ({ projectData, isLoading }) => {
                     <SectionContainer className="mb-4">
                         <DashboardCardTitle
                             title={
-                                DetailsSalesExecutiveConstant.linesHere3_4.title
+                                DetailsSalesExecutiveConstant?.linesHere3_4?.title
                             }
                             isBorderUse={true}
                             borderType="dotted"
                             isInfoIconUse={true}
                             infoText={
-                                DetailsSalesExecutiveConstant.linesHere3_4
-                                    .infoText
+                                DetailsSalesExecutiveConstant?.linesHere3_4?.infoText
                             }
                         />
                         {handleLoadingComponent(
@@ -97,7 +95,7 @@ const DashboardSalesAndPMInfoSection = ({ projectData, isLoading }) => {
                                 dangerouslySetInnerHTML={{
                                     __html:
                                         !isLoading &&
-                                        formatHttp(dealInfo.description3),
+                                        formatHttp(dealInfo?.description3),
                                 }}
                             />
                         )}
@@ -105,15 +103,13 @@ const DashboardSalesAndPMInfoSection = ({ projectData, isLoading }) => {
                     <SectionContainer>
                         <DashboardCardTitle
                             title={
-                                DetailsSalesExecutiveConstant.involvedProject
-                                    .title
+                                DetailsSalesExecutiveConstant?.involvedProject?.title
                             }
                             isBorderUse={true}
                             borderType="dotted"
                             isInfoIconUse={true}
                             infoText={
-                                DetailsSalesExecutiveConstant.involvedProject
-                                    .infoText
+                                DetailsSalesExecutiveConstant?.involvedProject?.infoText
                             }
                         />
                         {handleLoadingComponent(
@@ -133,7 +129,7 @@ const DashboardSalesAndPMInfoSection = ({ projectData, isLoading }) => {
                                 dangerouslySetInnerHTML={{
                                     __html:
                                         !isLoading &&
-                                        formatHttp(dealInfo.description8),
+                                        formatHttp(dealInfo?.description8),
                                 }}
                             />
                         )}
@@ -143,15 +139,13 @@ const DashboardSalesAndPMInfoSection = ({ projectData, isLoading }) => {
                     <SectionContainer className="mb-4">
                         <DashboardCardTitle
                             title={
-                                DetailsSalesExecutiveConstant.referenceWebsite
-                                    .title
+                                DetailsSalesExecutiveConstant?.referenceWebsite?.title
                             }
                             isBorderUse={true}
                             borderType="dotted"
                             isInfoIconUse={true}
                             infoText={
-                                DetailsSalesExecutiveConstant.referenceWebsite
-                                    .infoText
+                                DetailsSalesExecutiveConstant?.referenceWebsite?.infoText
                             }
                         />
                         {handleLoadingComponent(
@@ -170,7 +164,7 @@ const DashboardSalesAndPMInfoSection = ({ projectData, isLoading }) => {
                                 dangerouslySetInnerHTML={{
                                     __html:
                                         !isLoading &&
-                                        formatHttp(dealInfo.description4),
+                                        formatHttp(dealInfo?.description4),
                                 }}
                             />
                         )}
@@ -178,15 +172,13 @@ const DashboardSalesAndPMInfoSection = ({ projectData, isLoading }) => {
                     <SectionContainer className="mb-4">
                         <DashboardCardTitle
                             title={
-                                DetailsSalesExecutiveConstant.clientConcern
-                                    .title
+                                DetailsSalesExecutiveConstant?.clientConcern?.title
                             }
                             isBorderUse={true}
                             borderType="dotted"
                             isInfoIconUse={true}
                             infoText={
-                                DetailsSalesExecutiveConstant.clientConcern
-                                    .infoText
+                                DetailsSalesExecutiveConstant?.clientConcern?.infoText
                             }
                         />
 
@@ -207,7 +199,7 @@ const DashboardSalesAndPMInfoSection = ({ projectData, isLoading }) => {
                                 dangerouslySetInnerHTML={{
                                     __html:
                                         !isLoading &&
-                                        formatHttp(dealInfo.description5),
+                                        formatHttp(dealInfo?.description5),
                                 }}
                             />
                         )}
@@ -215,15 +207,13 @@ const DashboardSalesAndPMInfoSection = ({ projectData, isLoading }) => {
                     <SectionContainer className="mb-4">
                         <DashboardCardTitle
                             title={
-                                DetailsSalesExecutiveConstant.logoReference
-                                    .title
+                                DetailsSalesExecutiveConstant?.logoReference?.title
                             }
                             isBorderUse={true}
                             borderType="dotted"
                             isInfoIconUse={true}
                             infoText={
-                                DetailsSalesExecutiveConstant.logoReference
-                                    .infoText
+                                DetailsSalesExecutiveConstant?.logoReference?.infoText
                             }
                         />
                         {handleLoadingComponent(
@@ -254,7 +244,7 @@ const DashboardSalesAndPMInfoSection = ({ projectData, isLoading }) => {
                                 dangerouslySetInnerHTML={{
                                     __html:
                                         !isLoading &&
-                                        formatHttp(dealInfo.description7),
+                                        formatHttp(dealInfo?.description7),
                                 }}
                             />
                         )}
@@ -262,15 +252,13 @@ const DashboardSalesAndPMInfoSection = ({ projectData, isLoading }) => {
                     <SectionContainer>
                         <DashboardCardTitle
                             title={
-                                DetailsSalesExecutiveConstant.requiredLogins
-                                    .title
+                                DetailsSalesExecutiveConstant?.requiredLogins?.title
                             }
                             isBorderUse={true}
                             borderType="dotted"
                             isInfoIconUse={true}
                             infoText={
-                                DetailsSalesExecutiveConstant.requiredLogins
-                                    .infoText
+                                DetailsSalesExecutiveConstant?.requiredLogins?.infoText
                             }
                         />
                         {handleLoadingComponent(
@@ -290,7 +278,7 @@ const DashboardSalesAndPMInfoSection = ({ projectData, isLoading }) => {
                                 dangerouslySetInnerHTML={{
                                     __html:
                                         !isLoading &&
-                                        formatHttp(dealInfo.description6),
+                                        formatHttp(dealInfo?.description6),
                                 }}
                             />
                         )}
@@ -325,7 +313,7 @@ const DashboardSalesAndPMInfoSection = ({ projectData, isLoading }) => {
                                 className="mb-2"
                             />,
                             <p className="boldText">
-                                {projectInfo.requirement_defined}
+                                {projectInfo?.requirement_defined}
                             </p>
                         )}
                     </SectionContentContainer>
@@ -350,7 +338,7 @@ const DashboardSalesAndPMInfoSection = ({ projectData, isLoading }) => {
                                 className="mb-2"
                             />,
                             <p className="boldText">
-                                {projectInfo.deadline_meet}
+                                {projectInfo?.deadline_meet}
                             </p>
                         )}
                     </SectionContentContainer>
@@ -379,7 +367,7 @@ const DashboardSalesAndPMInfoSection = ({ projectData, isLoading }) => {
                                 dangerouslySetInnerHTML={{
                                     __html:
                                         !isLoading &&
-                                        formatHttp(dealInfo.description9),
+                                        formatHttp(dealInfo?.description9),
                                 }}
                             />
                         )}

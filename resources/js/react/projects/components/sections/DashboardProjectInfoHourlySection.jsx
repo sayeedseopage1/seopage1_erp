@@ -62,16 +62,16 @@ const DashboardProjectInfoHourlySection = ({ projectData, isLoading }) => {
                             >
                                 <DashboardCardTitle
                                     title={
-                                        ProjectBudgetData.hours_logged[1].title
+                                        ProjectBudgetData?.hours_logged[1].title
                                     }
                                     isBorderUse={true}
                                 />
                                 <DashboardCardPricingInfo
                                     amount={
-                                        ProjectBudgetData.hours_logged[1].time
+                                        ProjectBudgetData?.hours_logged[1].time
                                     }
                                     icon={
-                                        ProjectBudgetData.hours_logged[1].icon
+                                        ProjectBudgetData?.hours_logged[1].icon
                                     }
                                     isLoading={isLoading}
                                     loaderInformation={{
@@ -91,18 +91,18 @@ const DashboardProjectInfoHourlySection = ({ projectData, isLoading }) => {
                                     isBorderUse={true}
                                 />
                                 <div className="d-flex justify-content-between py-3">
-                                    {ProjectBudgetData.earning_expenses
+                                    {ProjectBudgetData?.earning_expenses
                                         .slice(0, 1)
                                         .map((moneyInfo) => (
                                             <DashboardCardPricingInfo
-                                                key={moneyInfo.id}
-                                                amount={moneyInfo.price}
-                                                title={moneyInfo.title}
-                                                icon={moneyInfo.icon}
+                                                key={moneyInfo?.id}
+                                                amount={moneyInfo?.price}
+                                                title={moneyInfo?.title}
+                                                icon={moneyInfo?.icon}
                                                 isLoading={isLoading}
-                                                currency={moneyInfo.currency}
+                                                currency={moneyInfo?.currency}
                                                 currency_symbol={
-                                                    moneyInfo.currency_symbol
+                                                    moneyInfo?.currency_symbol
                                                 }
                                                 loaderInformation={{
                                                     number: 1,
@@ -113,23 +113,23 @@ const DashboardProjectInfoHourlySection = ({ projectData, isLoading }) => {
                                         ))}
                                 </div>
                                 <div className="d-flex">
-                                    {ProjectBudgetData.earning_expenses
+                                    {ProjectBudgetData?.earning_expenses
                                         .slice(2, 3)
                                         .map((moneyInfo) => (
                                             <DashboardCardPricingInfo
-                                                key={moneyInfo.id}
-                                                amount={moneyInfo.price}
-                                                title={moneyInfo.title}
-                                                icon={moneyInfo.icon}
+                                                key={moneyInfo?.id}
+                                                amount={moneyInfo?.price}
+                                                title={moneyInfo?.title}
+                                                icon={moneyInfo?.icon}
                                                 isLoading={isLoading}
-                                                currency={moneyInfo.currency}
+                                                currency={moneyInfo?.currency}
                                                 loaderInformation={{
                                                     number: 1,
                                                     height: 21,
                                                     parentClassName: "w-100",
                                                 }}
                                                 currency_symbol={
-                                                    moneyInfo.currency_symbol
+                                                    moneyInfo?.currency_symbol
                                                 }
                                             />
                                         ))}
@@ -281,14 +281,14 @@ const DashboardProjectInfoHourlySection = ({ projectData, isLoading }) => {
                             </div>
                         </CardWrapper>
                         <CardWrapper color="#ffffff" className="h-100">
-                            {HourlyProjectSalesData.map((item) => (
-                                <div className="mb-3" key={item.id}>
+                            {HourlyProjectSalesData?.map((item) => (
+                                <div className="mb-3" key={item?.id}>
                                     <DashboardCardTitle
-                                        title={item.question}
+                                        title={item?.question}
                                         isBorderUse={true}
                                     />
                                     <DashboardCardPricingInfo
-                                        amount={item.answer}
+                                        amount={item?.answer}
                                         isLoading={isLoading}
                                         className="py-3"
                                         loaderInformation={{

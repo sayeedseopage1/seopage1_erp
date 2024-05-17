@@ -1,6 +1,4 @@
-import { reference } from "@popperjs/core";
-import { progress } from "framer-motion";
-import { info } from "laravel-mix/src/Log";
+
 
 export const projectTaskTableDefaultVisibleColumns = (auth, type) => ({
     task: true,
@@ -28,7 +26,8 @@ export const projectTaskTableDefaultVisibleColumns = (auth, type) => ({
 
 
 
-export const projectData = [
+
+export const ProjectData = [
     {
         projectType: "Hourly",
         projectData: {
@@ -129,9 +128,34 @@ export const projectData = [
                 comment: "Nothing to mention here",
                 requirement_defined: "Ok but milestone breakdown was wrong and it is confusing. Sale team can change the milestone breakdown while making the milestione.. Otherwise it can be a issue if the client will go for any intentional issue.",
                 deadline_meet: "yes, but need to be careful because of Eid vacation.",
-
             },
-
+            working_environment: {
+                site_url: "https://homedesignstoreflorida.com/",
+                frontend_password: "Shopify123//",
+                login_url: "https://homedesignstoreflorida.com/admin",
+                email:"seopageone@gamil.com",
+                password: "Isla24680!!!",
+            },
+            pm_task_guideline : {
+                theme_details: 1,
+                theme_name: "Broadcast",
+                theme_url: "https://woodmart.xtemos.com/",
+                design: "https://www.figma.com/file/84u4UfttYreAuNQ3bAlHgF/Laconic.-Website-Notes?type=design&node-id=0%3A1&mode=design&t=Mc8ZnMp5TFJjkmWJ-1",
+                xd_url: "https://xd.adobe.com/view/1b1b4b3b-0b3b-4b3b-8b3b-3b3b3b3b3b3b/",
+                drive_url: "https://drive.google.com/drive/folders/1b1b4b3b-0b3b-4b3b-8b3b-3b3b3b3b3b3b",
+                reference_link: ["https:\/\/www.nietiet.gmbh\/","https:\/\/kapsafill.de\/"],
+                instruction: `<p>This is not a reference for cloning or doing the design same, we just take inspiration from the color and the way the wordings are.&nbsp;</p>`,
+                primary_color: "#610D14",
+                primary_color_description: `<p>Theme-based color. use color from the theme demo</p>`,
+                color: 1,
+                color: `["#222222","#FFFFFF","#C09631"]`,
+                color_description: ["<p>Body text color<\/p>","<p>Dark background text color<\/p>","<p>Dark background title color. Same as demo<\/p>"],
+                plugin_research: 1,
+                plugin_name: "TranslatePress",
+                plugin_url: "https://wordpress.org/plugins/translatepress-multilingual/",
+                google_drive_link: "https://drive.google.com/drive/folders/1b1b4b3b-0b3b-4b3b-8b3b-3b3b3b3b3b3b",
+                instruction_plugin: `<p>You can use this plugin for migrating the website</p>`
+            }
 
         }
     },
@@ -236,6 +260,33 @@ export const projectData = [
                 requirement_defined: "Ok but milestone breakdown was wrong and it is confusing. Sale team can change the milestone breakdown while making the milestione.. Otherwise it can be a issue if the client will go for any intentional issue.",
                 deadline_meet: "yes, but need to be careful because of Eid vacation.",
             },
+            working_environment: {
+                site_url: "https://homedesignstoreflorida.com/",
+                frontend_password: "Shopify123//",
+                login_url: "https://homedesignstoreflorida.com/admin",
+                email:"seopageone@gamil.com",
+                password: "Isla24680!!!",
+            },
+            pm_task_guideline : {
+                theme_details: 1,
+                theme_name: "Broadcast",
+                theme_url: "https://woodmart.xtemos.com/",
+                design: "https://www.figma.com/file/84u4UfttYreAuNQ3bAlHgF/Laconic.-Website-Notes?type=design&node-id=0%3A1&mode=design&t=Mc8ZnMp5TFJjkmWJ-1",
+                xd_url: "https://xd.adobe.com/view/1b1b4b3b-0b3b-4b3b-8b3b-3b3b3b3b3b3b/",
+                drive_url: "https://drive.google.com/drive/folders/1b1b4b3b-0b3b-4b3b-8b3b-3b3b3b3b3b3b",
+                reference_link: ["https:\/\/www.nietiet.gmbh\/","https:\/\/kapsafill.de\/"],
+                instruction: `<p>This is not a reference for cloning or doing the design same, we just take inspiration from the color and the way the wordings are.&nbsp;</p>`,
+                primary_color: "#610D14",
+                primary_color_description: `<p>Theme-based color. use color from the theme demo</p>`,
+                color: 1,
+                color: `["#222222","#FFFFFF","#C09631"]`,
+                color_description: ["<p>Body text color<\/p>","<p>Dark background text color<\/p>","<p>Dark background title color. Same as demo<\/p>"],
+                plugin_research: 1,
+                plugin_name: "TranslatePress",
+                plugin_url: "https://wordpress.org/plugins/translatepress-multilingual/",
+                google_drive_link: "https://drive.google.com/drive/folders/1b1b4b3b-0b3b-4b3b-8b3b-3b3b3b3b3b3b",
+                instruction_plugin: `<p>You can use this plugin for migrating the website</p>`
+            }
 
 
         }

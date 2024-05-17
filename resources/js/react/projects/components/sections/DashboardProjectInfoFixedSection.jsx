@@ -188,13 +188,13 @@ const DashboardProjectInfoFixedSection = ({ projectData }) => {
                                 {ProjectBudgetData?.project_budget.map(
                                     (budget) => (
                                         <DashboardCardPricingInfo
-                                            key={budget.id}
+                                            key={budget?.id}
                                             amount={budget.price}
-                                            title={budget.title}
-                                            icon={budget.icon}
-                                            currency={budget.currency}
+                                            title={budget?.title}
+                                            icon={budget?.icon}
+                                            currency={budget?.currency}
                                             currency_symbol={
-                                                budget.currency_symbol
+                                                budget?.currency_symbol
                                             }
                                         />
                                     )

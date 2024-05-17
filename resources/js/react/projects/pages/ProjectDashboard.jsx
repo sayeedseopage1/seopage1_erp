@@ -7,44 +7,47 @@ import DashboardTaskAndMileStoneSection from "../components/sections/DashboardTa
 import DashboardFreelancerInfoSection from "../components/sections/DashboardFreelancerInfoSection";
 import DashboardProjectGuideAndChallengeSection from "../components/sections/DashboardProjectGuideAndChallengeSection";
 import DashboardSalesAndPMInfoSection from "../components/sections/DashboardSalesAndPMInfoSection";
-import { projectData } from "../constants";
 import DashboardProjectInfoFixedSection from "../components/sections/DashboardProjectInfoFixedSection";
 import DashboardProjectInfoHourlySection from "../components/sections/DashboardProjectInfoHourlySection";
 
+// Constants
+import { ProjectData, projectData } from "../constants";
+
+
 // Components - UI - Custom
 import Switch from "../../global/Switch";
-import { set } from "lodash";
+
 
 const ProjectDashboard = () => {
-    const projectType = projectData[1].projectType;
+    const projectData = ProjectData[1];
     const [isLoading, setIsLoading] = React.useState(false);
 
-    // setTimeout(() => {
-    //     setIsLoading(false);
-    // }, 10000);
+    setTimeout(() => {
+        setIsLoading(false);
+    }, 16000);
 
     return (
         <section>
-            <DashboardHeaderSection />
+            <DashboardHeaderSection isLoading={isLoading} projectData={projectData} />
             <Switch>
-                <Switch.Case condition={projectType === "Fixed"}>
+                <Switch.Case condition={projectData?.projectType === "Fixed"}>
                     <DashboardProjectInfoFixedSection
                         isLoading={isLoading}
-                        projectData={projectData[1].projectData}
+                        projectData={projectData}
                     />
                 </Switch.Case>
-                <Switch.Case condition={projectType === "Hourly"}>
+                <Switch.Case condition={projectData?.projectType === "Hourly"}>
                     <DashboardProjectInfoHourlySection
                         isLoading={isLoading}
-                        projectData={projectData[0].projectData}
+                        projectData={projectData}
                     />
                 </Switch.Case>
             </Switch>
-            <DashboardActionButtonSection   />
+            <DashboardActionButtonSection projectData={projectData} isLoading={isLoading}  />
             <DashboardTaskAndMileStoneSection isLoading={isLoading}  />
-            <DashboardFreelancerInfoSection isLoading={isLoading} projectData={projectData[1]} />
-            <DashboardProjectGuideAndChallengeSection isLoading={isLoading} projectData={projectData[1]} />
-            <DashboardSalesAndPMInfoSection isLoading={isLoading} projectData={projectData[1]} />
+            <DashboardFreelancerInfoSection isLoading={isLoading} projectData={projectData} />
+            <DashboardProjectGuideAndChallengeSection isLoading={isLoading} projectData={projectData} />
+            <DashboardSalesAndPMInfoSection isLoading={isLoading} projectData={projectData} />
         </section>
     );
 };

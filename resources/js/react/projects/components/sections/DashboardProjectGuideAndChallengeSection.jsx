@@ -1,6 +1,5 @@
 import React, { useEffect } from "react";
 import PropTypes from "prop-types";
-import Swal from "sweetalert2";
 
 // Components - UI - Shared
 import DashboardCardTitle from "../ui/DashboardCardTitle/DashboardCardTitle";
@@ -24,7 +23,7 @@ const DashboardProjectGuideAndChallengeSection = ({
     isLoading,
     projectData,
 }) => {
-    const projectInfo = projectData.projectData.project;
+    const projectInfo = projectData?.projectData?.project;
 
     return (
         <div
@@ -62,7 +61,7 @@ const DashboardProjectGuideAndChallengeSection = ({
                         dangerouslySetInnerHTML={{
                             __html:
                                 !isLoading &&
-                                formatHttp(projectInfo.project_summary),
+                                formatHttp(projectInfo?.project_summary),
                         }}
                     />
                 )}
@@ -94,8 +93,8 @@ const DashboardProjectGuideAndChallengeSection = ({
                             />
                         </>,
                         <p>
-                            {projectInfo.project_challenges ??
-                                projectInfo.comment}
+                            {projectInfo?.project_challenges ??
+                                projectInfo?.comment}
                         </p>
                     )}
                 </SectionContentContainer>

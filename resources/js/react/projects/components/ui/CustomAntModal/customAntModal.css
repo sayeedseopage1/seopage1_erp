@@ -1,5 +1,6 @@
-.customAntModal {
-  /* padding: 2px !important; */
+.customAntModal .ant-modal-content {
+  border-radius: 29px !important;
+  padding: 24px !important;
 }
 
 
@@ -25,10 +26,56 @@
 
 .customAntModalTitleWithClose .ant-modal-close {
   top: 29px !important;
+  right: 20px !important;
 }
 
 .customAntModalTitleWithClose .ant-modal-close-x {
   font-size: 25px !important;
+}
+
+
+
+/* 
+    Dashboard Modal Table Styles
+*/
+.dashboardModalTableContainer {
+  display: flex;
+  flex-direction: column;
+  border-top: 1px solid #DDDCDC;
+}
+
+.dashboardModalTableItem {
+  display: flex;
+  border-bottom: 1px solid #DDDCDC;
+  color: #000;
+  font-family: Poppins , sans-serif;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+  padding: 15px 0;
+  margin: 0;
+}
+.dashboardModalTableItem  a:hover {
+  color: #000;
+  text-decoration: underline;
+}
+
+.dashboardModalTableItem:nth-child(odd) {
+  background-color: #F2F9FE;
+}
+
+.dashboardModalTableItem:nth-child(even) {
+  background-color: #D8EDFC;
+}
+
+.dashboardModalTableItem:hover {
+  transition: 0.3s ease-in-out;
+  background-color: #D8EDFC;
+}
+
+.dashboardModalTableContainer .dashboardModalTableItem:last-child {
+  border-bottom: none;
 }
 
 

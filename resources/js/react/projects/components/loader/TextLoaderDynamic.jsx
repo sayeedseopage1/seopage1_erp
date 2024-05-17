@@ -51,7 +51,7 @@ const TextLoaderDynamic = ({
 export default TextLoaderDynamic;
 
 TextLoaderDynamic.propTypes = {
-    number: PropTypes.number.isRequired,
+    number: PropTypes.number || undefined,
     widthDeference: PropTypes.number,
     className: PropTypes.string,
     height: PropTypes.number,

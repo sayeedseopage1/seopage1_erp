@@ -16,6 +16,7 @@ const CustomAntModal = ({
     modalStyles,
     classNames,
     parentClassName,
+    width = "75vw"
 }) => {
     return (
         <ConfigProvider
@@ -29,6 +30,7 @@ const CustomAntModal = ({
                 open={isModalOpen}
                 onCancel={closeModal}
                 centered={isCentered}
+                width={width}
                 footer={null}
                 className={`${parentClassName} ${title ?`customAntModalTitleWithClose` : "customAntModalTitleWithCloseHide" } custom-ant-modal `}
             >
@@ -48,4 +50,7 @@ CustomAntModal.propTypes = {
     classNames: PropTypes.object,
     parentClassName: PropTypes.string,
     title: PropTypes.string,
+    isCentered: PropTypes.bool,
+    children: PropTypes.node,
+    width: PropTypes.string,
 }

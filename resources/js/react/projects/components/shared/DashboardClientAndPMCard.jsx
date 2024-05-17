@@ -10,6 +10,7 @@ import PersonAvatar from "../PersonAvatar";
 import DashboardCardTitle from "../ui/DashboardCardTitle/DashboardCardTitle";
 
 const DashboardClientAndPMCard = ({ projectData, className = "" }) => {
+    const projectInfo = projectData?.projectData;
     return (
         <>
             <CardWrapper color="#ffffff" className={`${className}`}>
@@ -17,30 +18,30 @@ const DashboardClientAndPMCard = ({ projectData, className = "" }) => {
                 <div className="d-flex align-items-center py-4">
                     <div className="dashboardCardPersonImage">
                         <a
-                            href={`/account/clients/${projectData.client.client_id}`}
+                            href={`/account/clients/${projectInfo?.client?.client_id}`}
                         >
                             <PersonAvatar
-                                name={projectData.client.name}
-                                avatar={projectData.client.image_url}
+                                name={projectInfo?.client?.name}
+                                avatar={projectInfo?.client?.image_url}
                             />
                         </a>
                     </div>
                     <div className="d-flex flex-column ml-3">
                         <a
                             className="dashboardCardPersonName"
-                            href={`/account/clients/${projectData.client.client_id}`}
+                            href={`/account/clients/${projectInfo?.client?.client_id}`}
                         >
-                            {projectData.client.name}
+                            {projectInfo?.client?.name}
                         </a>
                         <div className="d-flex align-items-center dashboardCardPersonCountry">
                             <img
                                 src={`/flags/4x3/${
-                                    projectData.client.country.iso || "BD"
+                                    projectInfo?.client?.country?.iso || "BD"
                                 }.svg`}
                                 alt="client country flag"
                                 className="mr-1"
                             />
-                            <span>{projectData.client.country.nicename}</span>
+                            <span>{projectInfo?.client?.country?.nicename}</span>
                         </div>
                     </div>
                 </div>
@@ -53,30 +54,30 @@ const DashboardClientAndPMCard = ({ projectData, className = "" }) => {
                 <div className="d-flex align-items-center py-4">
                     <div className="dashboardCardPersonImage">
                         <a
-                            href={`/account/employees/${projectData.pm.pm_id}`}
+                            href={`/account/employees/${projectInfo?.pm?.pm_id}`}
                         >
                             <PersonAvatar
-                                name={projectData.pm.name}
-                                avatar={projectData.pm.image_url}
+                                name={projectInfo?.pm?.name}
+                                avatar={projectInfo?.pm?.image_url}
                             />
                         </a>
                     </div>
                     <div className="d-flex flex-column ml-3">
                         <a
                             className="dashboardCardPersonName"
-                            href={`/account/clients/${projectData.pm.client_id}`}
+                            href={`/account/clients/${projectInfo?.pm?.client_id}`}
                         >
-                            {projectData.pm.name}
+                            {projectInfo?.pm?.name}
                         </a>
                         <div className="d-flex align-items-center dashboardCardPersonCountry">
                             <img
                                 src={`/flags/4x3/${
-                                    projectData.pm.country.iso || "BD"
+                                    projectInfo?.pm?.country?.iso || "BD"
                                 }.svg`}
                                 alt="pm country flag"
                                 className="mr-1"
                             />
-                            <span>{projectData.client.country.nicename}</span>
+                            <span>{projectInfo?.client?.country?.nicename}</span>
                         </div>
                     </div>
                 </div>

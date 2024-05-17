@@ -7,15 +7,15 @@ import { LiaEdit } from "react-icons/lia";
 import Button from "../ui/customComponents/Button/Button";
 import CustomAntModal from "../ui/CustomAntModal/CustomAntModal";
 
-
 // Styles
 import style from "./styles/dashboardHeaderSection.module.css";
+import WorkingEnvironmentModal from "../modal/WorkingEnvironmentModal";
 
 
 // ShortName
 // WN - WorkingEnvironment;
 
-const DashboardHeaderSection = ({ projectType = "Fixed" }) => {
+const DashboardHeaderSection = ({ projectData, isLoading }) => {
     const [isWNModalOpen, setIsWNModalOpen] = React.useState(false);
 
     const handleOpenWNModal = () => {
@@ -38,7 +38,7 @@ const DashboardHeaderSection = ({ projectType = "Fixed" }) => {
                     onClick={() => {}}
                     className={`${style?.dashboardHeaderForType} ml-2`}
                 >
-                    Project Type: {projectType}
+                    Project Type: {projectData.projectType}
                 </Button>
             </div>
             <div className="d-flex mb-3 mb-md-0 ">
@@ -48,7 +48,7 @@ const DashboardHeaderSection = ({ projectType = "Fixed" }) => {
                 >
                     Mark as complete
                 </Button>
-                <div class={`dropdown ml-2  ${style.actionButtonDropdown}`}>
+                <div className={`dropdown ml-2  ${style.actionButtonDropdown}`}>
                     <button
                         className={`btn btn-lg bg-white  f-15 px-2 py-1 text-dark-grey text-capitalize rounded dropdown-toggle ${style?.dashboardHeaderButton} ${style.actionButton}`}
                         type="button"
@@ -61,7 +61,7 @@ const DashboardHeaderSection = ({ projectType = "Fixed" }) => {
                     <div
                         className="dropdown-menu dropdown-menu-right border-grey rounded b-shadow-4 p-0 "
                         aria-labelledby="dropdownMenuLink"
-                        tabindex="0"
+                        tabIndex="0"
                         x-placement="bottom-end"
                         style={{
                             position: "absolute",
@@ -80,8 +80,7 @@ const DashboardHeaderSection = ({ projectType = "Fixed" }) => {
                         </a>
                         <hr className="my-1" />
                         <a
-                            className="dropdown-item"
-                            href="javascript:;"
+                            className="dropdown-item"  
                             id="pinnedItem"
                             data-pinned="unpinned"
                         >
@@ -93,11 +92,14 @@ const DashboardHeaderSection = ({ projectType = "Fixed" }) => {
             </div>
 
             {/* Modal */}
-            <CustomAntModal
-                isModalOpen={isWNModalOpen}
-                closeModal={handleCloseWNModal}
-                // title="Working Environment"
-            />
+            {isWNModalOpen && (
+                <WorkingEnvironmentModal
+                    isModalOpen={isWNModalOpen}
+                    closeModal={handleCloseWNModal}
+                    modalData={projectData?.projectData?.working_environment}
+                    isLoading={isLoading}
+                />
+            )}
         </div>
     );
 };
@@ -105,5 +107,5 @@ const DashboardHeaderSection = ({ projectType = "Fixed" }) => {
 export default DashboardHeaderSection;
 
 DashboardHeaderSection.propTypes = {
-    projectType: PropTypes.string,
+    projectData: PropTypes.object,
 };

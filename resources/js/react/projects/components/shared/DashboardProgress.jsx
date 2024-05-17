@@ -14,12 +14,13 @@ import ProjectProgressChart from "../ui/ProjectProgressChart/ProjectProgressChar
 import { ProjectProgressStatus } from "../../constants";
 
 const DashboardProgress = ({ projectData, style, className="" }) => {
+    const projectInfo = projectData?.projectData;
     return (
         <CardWrapper color="#ffffff" className={`${className}`}>
             <DashboardCardTitle
                 title="Project Progress"
                 isBorderUse={true}
-                rightText={`Completed: ${projectData.project.progress}%`}
+                rightText={`Completed: ${projectInfo?.project?.progress}%`}
                 rightTextColor={"#70CA62"}
             />
             <div className="flexBetween my-3 dashboardProgressData">
@@ -28,14 +29,14 @@ const DashboardProgress = ({ projectData, style, className="" }) => {
                         <p>Start Date</p>
                         <span className="flexItemCenter">
                             <LuCalendarDays className="mr-1" />
-                            {projectData.project.start_date}
+                            {projectInfo?.project?.start_date}
                         </span>
                     </div>
                     <div className="flexColumn">
                         <p> Deadline</p>
                         <span className="flexItemCenter">
                             <LuCalendarDays className="mr-1" />{" "}
-                            {projectData.project.deadline}
+                            {projectInfo?.project?.deadline}
                         </span>
                     </div>
                 </div>
@@ -43,7 +44,7 @@ const DashboardProgress = ({ projectData, style, className="" }) => {
             </div>
 
             <div className={`${style.dashboardProgressStatusContainer} mt-2 mt-md-5`}>
-                {ProjectProgressStatus.map((status) => (
+                {ProjectProgressStatus?.map((status) => (
                     <DashboardProgressStatus
                         key={status.id}
                         title={status.name}
