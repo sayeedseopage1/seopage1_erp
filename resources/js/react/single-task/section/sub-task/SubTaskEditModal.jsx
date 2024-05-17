@@ -110,6 +110,17 @@ const SubTaskEditModal = ({ task, singleTask: taskDetails, onSubmit, isLoading, 
     const graphicWorkDetails = new Object(subTasks?.sub_task_details_graphic_work)
     // **************sub task details end**********
 
+    // *************** sub task for number of versions start ********
+    const { data: subTaskFromCreation } = useGetSubTasksQuery({ taskId: taskDetails?.id }, {
+        skip: !isSubTask
+    })
+    const [defaultNumberOfVersion, setDefaultNumberOfVersion] = useState(0);
+    useEffect(() => {
+        setDefaultNumberOfVersion(subTaskFromCreation?.sub_task_details_graphic_work?.number_of_versions)
+    }, [subTaskFromCreation])
+
+    //*************** sub task for number of versions end ***********
+
     const { data: graphicOptions } = useGetTypesOfGraphicWorksQuery("")
 
 
@@ -197,13 +208,10 @@ const SubTaskEditModal = ({ task, singleTask: taskDetails, onSubmit, isLoading, 
     const [themeTemplate, setThemeTemplate] = useState("")
     // state for ui/ux end
 
-    // TODO: send it to backend
-    console.log("numOfVersions: ", numOfVersions);
-
     // set state data default value from graphic designer start
     useEffect(() => {
         setBrandName(graphicWorkDetails?.brand_name)
-        // setNumOfVersions(graphicWorkDetails?.number_of_versions);
+        // setNumOfVersions(subTaskFromCreation?.sub_task_details_graphic_work?.number_of_versions);
         if (graphicWorkDetails?.reference) {
             setReferenceList(JSON.parse(graphicWorkDetails?.reference));
         }
@@ -306,6 +314,15 @@ const SubTaskEditModal = ({ task, singleTask: taskDetails, onSubmit, isLoading, 
         if (assignedTo && assignedTo?.isOverloaded) {
             err.assignedTo = overloadedUser(assignedTo.name, genderPronoun);
             count++;
+        }
+
+        if (taskCategory?.category_name == "Graphic Design") {
+            if (typeOfGraphicsCategory?.id == 1) {
+                if (!numOfVersions) {
+                    err.numOfVersions = "Number of versions is required";
+                    count++;
+                }
+            }
         }
 
         if (!description) showError('description');
@@ -615,8 +632,8 @@ const SubTaskEditModal = ({ task, singleTask: taskDetails, onSubmit, isLoading, 
                                             type="number"
                                             placeholder="Enter Number of versions"
                                             name="numOfVersions"
-                                            defaultValue={numOfVersions}
-                                            // readOnly={true}
+                                            defaultValue={defaultNumberOfVersion}
+                                            required={true}
                                             onChange={(e) => setNumOfVersions(e.target.value)}
                                         />
                                     </div>

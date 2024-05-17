@@ -8,10 +8,9 @@ import FileUploader from '../../file-upload/FileUploader';
 import { useGetTaskDetailsQuery, useGetTypesOfGraphicWorksQuery } from '../../services/api/SingleTaskPageApi';
 import './styles/guideline.css'
 import { useGetSubTasksQuery } from '../../services/api/tasksApiSlice';
-import { de } from '@faker-js/faker';
 import { validateUrl } from '../../projects/utils';
 
-const Guideline = ({ text, task, type = "", editorContainerClass, workEnv, singleTask }) => {
+const Guideline = ({ text, task, type = "", editorContainerClass, workEnv, singleTask, taskID }) => {
     const [expend, setExpend] = useState(false);
     let isLong = text?.length > 400;
     const showText = isLong ? text.slice(0, 400) + '...' : text;
@@ -24,16 +23,26 @@ const Guideline = ({ text, task, type = "", editorContainerClass, workEnv, singl
         skip: !isSubTask
     })
 
-
     // *************** sub task for number of versions start ********
     const { data: subTaskFromCreation } = useGetSubTasksQuery({ taskId: singleTask?.id }, {
         skip: !isSubTask
     })
 
-    console.log("subTaskFromCreation", subTaskFromCreation?.sub_task_details_graphic_work?.number_of_versions)
+    const { data: subTaskGenaral } = useGetSubTasksQuery({ taskId: taskID }, {
+        skip: !taskID
+    })
+
+    const [defaultNumberOfVersion, setDefaultNumberOfVersion] = useState(null);
+    useEffect(() => {
+        // if (subTaskFromCreation) {
+        setDefaultNumberOfVersion(subTaskFromCreation?.sub_task_details_graphic_work?.number_of_versions)
+        // }
+    }, [subTaskFromCreation])
+
+    useEffect(() => {
+        setDefaultNumberOfVersion(subTaskGenaral?.sub_task_details_graphic_work?.number_of_versions)
+    }, [subTaskGenaral])
     //*************** sub task for number of versions end ***********
-
-
 
     // sub task details graphic
     const graphicSubTaskDetails = new Object(subTasks?.sub_task_details_graphic_work)
@@ -49,8 +58,6 @@ const Guideline = ({ text, task, type = "", editorContainerClass, workEnv, singl
     const subUiUixDetails = new Object(mainTask?.task)
     // **************sub task details end**********
 
-
-
     // parent task details 
     const graphicWorkDetails = new Object(singleTask?.graphic_work_detail);
 
@@ -58,15 +65,6 @@ const Guideline = ({ text, task, type = "", editorContainerClass, workEnv, singl
     const commonGraphicWorkDetails = subTasks ? graphicSubTaskDetails : graphicWorkDetails
 
     const typeOfGraphicsCategoryName = graphicOptions?.find((item) => commonGraphicWorkDetails?.type_of_graphic_work_id === item?.id)?.name
-
-    // console.log("commonGraphicWorkDetails", commonGraphicWorkDetails)
-    // console.log("graphicSubTaskDetails", graphicSubTaskDetails)
-    // console.log("graphicWorkDetails", graphicWorkDetails)
-    // console.log("_.isEmpty(graphicWorkDetails)", _.isEmpty(graphicWorkDetails))
-    // console.log("isSubTask", isSubTask)
-    console.log("singleTask", singleTask)
-    console.log("subTask", subTasks)
-    console.log("graphicSubTaskDetails", graphicSubTaskDetails)
 
     const {
         brand_name,
@@ -139,7 +137,7 @@ const Guideline = ({ text, task, type = "", editorContainerClass, workEnv, singl
 
         {
             singleTask?.category?.category_name === "Graphic Design" && <div className="px-4 py-3" style={{ background: '#F3F5F9' }}>
-                <h6 className="mb-2">Graphic Work Details</h6>
+                <h6 className="mb-2">Graphic Work Details 2222</h6>
                 <hr />
                 <div className="row">
                     {
@@ -158,8 +156,8 @@ const Guideline = ({ text, task, type = "", editorContainerClass, workEnv, singl
                             <div className="col-12 col-lg-6 col-xl-4 mb-2 word-break">
                                 <span><strong>Number of Versions</strong>: <br />
                                     {
-                                        subTaskFromCreation?.sub_task_details_graphic_work?.number_of_versions
-                                            ? subTaskFromCreation?.sub_task_details_graphic_work?.number_of_versions
+                                        (defaultNumberOfVersion)
+                                            ? defaultNumberOfVersion
                                             : number_of_versions
                                     }
                                 </span>

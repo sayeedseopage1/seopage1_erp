@@ -132,11 +132,6 @@ const SubTaskForm = ({ close, isDesignerTask }) => {
         defaultFileTypesNeeded
     );
 
-    // TODO: send it to backend
-    console.log("numOfVersions: ", numOfVersions);
-    console.log("referenceList: ", referenceList);
-    console.log("referenceFile: ", referenceFile);
-
     const [textForDesign, setTextForDesign] = useState(defaultTextForDesign);
     const [imageForDesigner, setImageForDesigner] = useState(
         defaultImageForDesigner
