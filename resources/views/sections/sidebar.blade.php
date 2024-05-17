@@ -258,6 +258,9 @@
 
                                 <x-sub-menu-item :link="route('kpi-settings.index')" :text="__('Kpi Settings')" />
                             @endif --}}
+                            {{-- @if(Auth::user()->role_id == 1 || Auth::user()->role_id == 6 || Auth::user()->role_id == 8)
+                                <x-sub-menu-item :link="route('employee-evaluation.index')" :text="__('Employee Evaluation')" />
+                            @endif --}}
                         </div>
                     </x-menu-item>
                 @endif

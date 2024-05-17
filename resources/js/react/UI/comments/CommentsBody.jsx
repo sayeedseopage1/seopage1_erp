@@ -45,20 +45,20 @@ import axios from "axios";
 import { useCommentStore } from "./zustand/store";
 
 const CommentContext = createContext({
-    setScroll: () => {},
+    setScroll: () => { },
     selectedComments: [],
-    setSecletedComments: () => {},
+    setSecletedComments: () => { },
     mentionedComment: {},
-    setMentionedComment: () => {},
+    setMentionedComment: () => { },
     contextHolder: {},
-    setContextHolder: () => {},
+    setContextHolder: () => { },
     allComments: [],
     isImageModalOpen: false,
-    setIsImageModalOpen: () => {},
+    setIsImageModalOpen: () => { },
     imageModalCurrentFileUrl: "",
-    setImageModalCurrentFileUrl: () => {},
+    setImageModalCurrentFileUrl: () => { },
     refetchType: "",
-    setRefetchType: () => {},
+    setRefetchType: () => { },
 });
 export function useCommentContext() {
     return useContext(CommentContext);
@@ -109,6 +109,7 @@ const CommentsBody = ({
     const [refetchType, setRefetchType] = useState("refetch");
     // =================================================================
     // fetch this task from api
+
     useEffect(() => {
         axios
             .get(`/account/task/${taskId}/json?mode=basic`)
@@ -269,11 +270,10 @@ const CommentsBody = ({
         // console.log({ allSelectedComments });
         const allSelectedCommentsString = allSelectedComments.reduce(
             (total, comment, i, arr) => {
-                total += `${htmlToPreservedText(comment?.comment)}\n${
-                    comment?.user?.name
-                }, ${dayjs(comment?.created_date).format(
-                    "MMM DD, YYYY, hh:mm A"
-                )}`;
+                total += `${htmlToPreservedText(comment?.comment)}\n${comment?.user?.name
+                    }, ${dayjs(comment?.created_date).format(
+                        "MMM DD, YYYY, hh:mm A"
+                    )}`;
 
                 if (i < arr.length - 1) {
                     total += "\n\n\n";
@@ -479,7 +479,6 @@ const CommentsBody = ({
                 setAllComments(allComments);
             } else {
                 // Handle the case where allComments is not an array
-                console.error("allComments is not an array");
             }
         }
     };
@@ -573,7 +572,7 @@ const CommentsBody = ({
                         </svg>
                     </span>
 
-                    {!param?.taskId ? (
+                    {!param?.taskId || !taskId ? (
                         <span
                             onClick={() =>
                                 window.open(
@@ -615,9 +614,8 @@ const CommentsBody = ({
 
                     {showSearchBar ? (
                         <div
-                            className={`${
-                                style.commentsBody_header_searchBar_container
-                            } ${animation ? style.open : style.close}`}
+                            className={`${style.commentsBody_header_searchBar_container
+                                } ${animation ? style.open : style.close}`}
                         >
                             <input
                                 value={searchText}
@@ -665,7 +663,7 @@ const CommentsBody = ({
                     )}
 
                     {/* search btn */}
-                    {param?.taskId && showSearchBtn ? (
+                    {(param?.taskId || taskId) && showSearchBtn ? (
                         <span
                             onClick={() => {
                                 if (showSearchBar) {
@@ -699,7 +697,7 @@ const CommentsBody = ({
                     )}
 
                     {/* full screen btn */}
-                    {param?.taskId && showFullScreenBtn ? (
+                    {(param?.taskId || taskId) && showFullScreenBtn ? (
                         !fullScreenView ? (
                             <AiOutlineFullscreen
                                 onClick={() => setFullScreenView(true)}
@@ -803,8 +801,8 @@ const CommentsBody = ({
                                         idMatch={
                                             comment?.id ===
                                             searchIndexes[
-                                                searchIndexes.length -
-                                                    commentIndex
+                                            searchIndexes.length -
+                                            commentIndex
                                             ]
                                         }
                                         id={comment?.id}

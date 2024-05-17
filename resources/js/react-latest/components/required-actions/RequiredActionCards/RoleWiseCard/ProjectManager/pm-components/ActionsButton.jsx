@@ -3,38 +3,46 @@ import ModalWithBtnTemplate from "./ModalWithBtnTemplate";
 import style from "../../../../../../styles/required-action-card.module.css";
 import handleBtnDisable from "../../../../utils/handleBtnDisable";
 import CommentCancellation from "./CommentCancellation";
-import React, { useCallback } from "react";
+import React, { useCallback, useEffect } from "react";
 import ModalForCommentWithBtn from "./ModalForCommentWithBtn";
 import CommentSubmission from "./CommentSubmission";
 
+import { useDispatch } from "react-redux";
+
+import { useGetCommentsQuery } from "../../../../../../services/api/commentsApiSlice";
+import { useWindowSize } from "react-use";
+import EvaluationModal from "../../../EmployeeEvaluation/modal/EvaluationModal";
+import RelevantModal from "../../Developer/dev-components/RelevantModal";
+import CommentsBody from "../../../../../../../react/UI/comments/CommentsBody";
+import CommentBodyForPendingActions from "../../../../../../../react/UI/comments/CommentBodyForPendingActions";
+import CommentContainerDecider from "../../../../../../../react/UI/comments/CommentContainerDecider";
+import { useCommentStore } from "../../../../../../../react/UI/comments/zustand/store";
+import { setPendingActionId } from "../../../../../../services/features/pendingActionSlice";
+import CommentsBodyWithoutSendBox from "../../../../../../../react/UI/comments/CommentBodyWithoutSendBox";
+
 // action buttons
 const ActionsButton = ({ data }) => {
-    // window.location.assign();
+    const dispatch = useDispatch();
 
-    // return (
-    //     <>
-    //         <button className={style.action_btn}>Review</button>
-    //         <button className={style.action_btn}>Approve</button>
-    //         <button className={style.action_btn}>Deny</button>
-    //         <button className={style.action_btn}>Request Modifications</button>
-    //     </>
-    // );
+    const { commentState } = useCommentStore();
+    const [fullScreenView, setFullScreenView] = React.useState(false);
+    const [viewCommentModal, setViewCommentModal] = React.useState(false);
+    const [viewModal, setViewModal] = React.useState(false);
+    const [isRelevantModal, setIsRelevantModal] = React.useState(false);
+    const [isEvaluationModal, setIsEvaluationModal] = React.useState(false);
+    const { width } = useWindowSize();
+    const taskId = data?.task_id;
 
-    const handleModalWidth = useCallback(
-        (btn) => {
-            if (data?.code === "TCOA" && btn?.modal_form) {
-                // modal width for comment cancellation
-                return "816px";
-            } else if (data?.code === "TCOA" && !btn?.modal_form) {
-                // modal width for comment
-                return "1036px";
-            } else {
-                // modal width for others
-                return "35rem";
-            }
-        },
-        [data]
-    );
+    const {
+        data: comments,
+        isFetching,
+        isLoading,
+        refetch,
+    } = useGetCommentsQuery(taskId);
+
+    useEffect(() => {
+        refetch();
+    }, [commentState]);
 
     return (
         <>
@@ -59,38 +67,45 @@ const ActionsButton = ({ data }) => {
                     data?.code === "TCOA"
                 ) {
                     return (
-                        <ModalForCommentWithBtn
-                            key={i}
-                            btn_color={btn.button_color}
-                            btn_name={btn.button_name}
-                            modal_heading={data.heading}
-                            showCloseBtn={false}
-                            maxWidth={handleModalWidth(btn)}
-                            btn_Disable={handleBtnDisable(4)}
-                        >
-                            {(setIsOpen, isOpen) => {
-                                if (btn?.modal_form) {
-                                    return (
-                                        <CommentCancellation
-                                            setIsOpen={setIsOpen}
-                                            modal_data={btn}
-                                            data={data}
-                                        />
-                                    );
-                                } else if (!btn?.modal_data) {
-                                    return isOpen ? (
-                                        <CommentSubmission
-                                            setIsOpen={setIsOpen}
-                                            task_id={data?.task_id}
-                                            btn_data={btn}
-                                            authorization_id={data?.id}
-                                        />
-                                    ) : (
-                                        <></>
-                                    );
-                                }
-                            }}
-                        </ModalForCommentWithBtn>
+                        <div>
+                            {btn.button_name === "View and Reply" && (
+                                <button
+                                    disabled={handleBtnDisable(4)}
+                                    onClick={() => {
+                                        setViewCommentModal((prev) => !prev);
+                                        dispatch(setPendingActionId(data?.id));
+                                    }}
+                                    className={`${style.action_btn}`}
+                                >
+                                    View & Reply
+                                </button>
+                            )}
+
+                            {btn.button_name === "Not relevant to me" && (
+                                <button
+                                    disabled={handleBtnDisable(4)}
+                                    onClick={() => {
+                                        setIsRelevantModal((prev) => !prev);
+
+                                        dispatch(setPendingActionId(data?.id));
+                                    }}
+                                    className={`${style.action_btn}`}
+                                >
+                                    Not Relevant to me
+                                </button>
+                            )}
+                            {btn.button_name === "View" && (
+                                <button
+                                    disabled={handleBtnDisable(4)}
+                                    onClick={() =>
+                                        setViewModal((prev) => !prev)
+                                    }
+                                    className={`${style.action_btn}`}
+                                >
+                                    View
+                                </button>
+                            )}
+                        </div>
                     );
                 } else if (btn.button_type === "modal") {
                     return (
@@ -100,7 +115,7 @@ const ActionsButton = ({ data }) => {
                             btn_name={btn.button_name}
                             modal_heading={data.heading}
                             showBottomCloseBtn={false}
-                            maxWidth={handleModalWidth(btn)}
+                            // maxWidth={handleModalWidth(btn)}
                             btn_Disable={handleBtnDisable(4)}
                         >
                             {(setIsOpen) => {
@@ -118,6 +133,56 @@ const ActionsButton = ({ data }) => {
                     );
                 }
             })}
+
+            <CommentContainerDecider
+                fullScreenView={fullScreenView}
+                isOpen={viewCommentModal}
+                width={width}
+            >
+                <CommentBodyForPendingActions
+                    fullScreenView={fullScreenView}
+                    setFullScreenView={setFullScreenView}
+                    isOpen={viewCommentModal}
+                    close={() => setViewCommentModal(false)}
+                    comments={comments}
+                    loading={isLoading}
+                    fetching={isFetching}
+                    refetch={refetch}
+                    taskId={taskId}
+                    showFullScreenBtn={width <= 991 ? false : true}
+                    height={"89vh"}
+                    showCommentEditor={true}
+                    showSearchBtn={true}
+                />
+            </CommentContainerDecider>
+
+            {/* //this modal is for past button */}
+            <CommentContainerDecider
+                fullScreenView={fullScreenView}
+                isOpen={viewModal}
+                width={width}
+            >
+                <CommentsBodyWithoutSendBox
+                    fullScreenView={fullScreenView}
+                    setFullScreenView={setFullScreenView}
+                    isOpen={viewModal}
+                    close={() => setViewModal(false)}
+                    comments={comments}
+                    loading={isLoading}
+                    fetching={isFetching}
+                    refetch={refetch}
+                    taskId={taskId}
+                    showFullScreenBtn={width <= 991 ? false : true}
+                    height={"89vh"}
+                    showCommentEditor={true}
+                    showSearchBtn={true}
+                />
+            </CommentContainerDecider>
+
+            <RelevantModal
+                setIsRelevantModal={setIsRelevantModal}
+                isRelevantModal={isRelevantModal}
+            />
         </>
     );
 };

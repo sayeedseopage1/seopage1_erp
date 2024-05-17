@@ -1,6 +1,6 @@
 import { Listbox } from "@headlessui/react";
 import _ from "lodash";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { useParams } from "react-router-dom";
 import { toast } from "react-toastify";
@@ -20,6 +20,23 @@ import { convertTime } from "../../utils/converTime";
 import { CompareDate } from "../../utils/dateController";
 import AssginedToSelection from "./AssignedToSelection";
 import ProjectManagerAcknowledgementModal from "./ProjectManagerAcknowledgementModal";
+import TypeOfGraphicsWorkSelection from "./graphics-design-forms/TypeOfGraphicsWorkSelection";
+import TypeOfLogo from "./graphics-design-forms/TypeOfLogo";
+import FileTypesNeeded from "./graphics-design-forms/FileTypesNeeded";
+import ThemeTypeSelect from "./ui-ux-design-forms/ThemeTypeSelect";
+import { checkIsURL } from "../../utils/check-is-url";
+import CmsDropdown from "./ui-ux-design-forms/CmsDropdown";
+import { RiDeleteBinLine } from "react-icons/ri";
+// import { validateUrl } from "../utils";
+import FileUploadWithInput from "./ui/FileUploadWithInput";
+import { validateUrl } from "../utils";
+import CustomFileUpload from "./ui/CustomFileUpload";
+import FileExtensionMultiSelect from "./graphics-design-forms/FileExtensionMultiSelect";
+
+// const fileInputStyle = {
+//     height: "39px",
+//     zIndex: '0'
+// }
 
 const TaskCreationForm = ({ handleRefresh, isOpen, close, onSuccess }) => {
     const dispatch = useDispatch();
@@ -31,9 +48,53 @@ const TaskCreationForm = ({ handleRefresh, isOpen, close, onSuccess }) => {
     const [dueDate, setDueDate] = useState(null);
     const [project, setProject] = useState("");
     const [taskCategory, setTaskCategory] = useState("");
+
+    //state for graphic designer start
+
+    const [typeOfGraphicsCategory, setTypeOfGraphicsCategory] = useState("");
+    const [typeOfLogo, setTypeOfLogo] = useState("");
+    const [brandName, setBrandName] = useState("");
+    const [numOfVersions, setNumOfVersions] = useState(null);
+    // const [reference, setReference] = useState("");
+    const [referenceList, setReferenceList] = useState([{ reference: "" }]);
+    const [referenceFile, setReferenceFile] = useState([]);
+    const [fileTypesNeeded, setFileTypesNeeded] = useState([]);
+    const [fileType, setFileType] = useState("");
+
+    const [workableUrl, setWorkableUrl] = useState("");
+    const [textForDesign, setTextForDesign] = useState([]);
+    const [imageForDesigner, setImageForDesigner] = useState([]);
+
+    const [imgOrVidForWork, setImgOrVidForWork] = useState([]);
+
+    const [fontName, setFontName] = useState("");
+    const [fontUrl, setFontUrl] = useState("");
+    const [brandGuideline, setBrandGuideline] = useState([]);
+    const [illustration, setIllustration] = useState("");
+    const [others, setOthers] = useState("");
+    const [primaryColor, setPrimaryColor] = React.useState("#1D82F5");
+    const [primaryColorDescription, setPrimaryColorDescription] =
+        React.useState("");
+    const [secondaryColors, setSecondaryColors] = React.useState([
+        {
+            id: "egqsz",
+            color: "#1D82F5",
+            description: "",
+        },
+    ]);
+    const [fileExtension, setFileExtension] = useState([]);
+
+    // state for ui/ux start
+    // const [cms, setCms] = useState("")
+    const [cms, setCms] = useState("");
+    const [themeType, setThemeType] = useState("");
+    const [themeName, setThemeName] = useState("");
+    const [themeTemplate, setThemeTemplate] = useState("");
+    // state for ui/ux end
     const [assignedTo, setAssignedTo] = useState(null);
     const [description, setDescription] = useState("");
     const [status, setStatus] = useState("");
+
     const [priority, setPriority] = useState("Medium");
     const [estimateTimeHour, setEstimateTimeHour] = useState(0);
     const [estimateTimeMin, setEstimateTimeMin] = useState(0);
@@ -59,6 +120,7 @@ const TaskCreationForm = ({ handleRefresh, isOpen, close, onSuccess }) => {
     const [checkRestrictedWords, { isLoading: checking }] =
         useCheckRestrictedWordsMutation();
 
+    //TODO: clear form for new added fields
     const clearForm = () => {
         setTitle("");
         setMilestone(null);
@@ -72,6 +134,36 @@ const TaskCreationForm = ({ handleRefresh, isOpen, close, onSuccess }) => {
         setEstimateTimeMin(0);
         setFiles([]);
         setDescription("");
+        setTypeOfGraphicsCategory("");
+        setTypeOfLogo("");
+        setBrandName("");
+        setNumOfVersions(null);
+        setReferenceList([{ reference: "" }]);
+        setReferenceFile([]);
+        setFileTypesNeeded([]);
+        setTextForDesign([]);
+        setImageForDesigner([]);
+        setImgOrVidForWork([]);
+        setFontName("");
+        setFontUrl("");
+        setBrandGuideline([]);
+        setIllustration("");
+        setOthers("");
+        setPrimaryColor("#1D82F5");
+        setPrimaryColorDescription("");
+        setSecondaryColors([
+            {
+                id: "egqsz",
+                color: "#1D82F5",
+                description: "",
+            },
+        ]);
+        setCms("");
+        setThemeType("");
+        setThemeName("");
+        setThemeTemplate("");
+        setWorkableUrl("");
+        setFileExtension([]);
     };
     // handle change
     React.useEffect(() => {
@@ -122,6 +214,153 @@ const TaskCreationForm = ({ handleRefresh, isOpen, close, onSuccess }) => {
         if (!dueDate) {
             err.dueDate = "You have to select a due date";
             errCount++;
+        }
+
+        if (taskCategory?.category_name === "Graphic Design") {
+            if (!typeOfGraphicsCategory) {
+                err.typeOfGraphicsCategory =
+                    "You have to select Type of graphic work";
+                errCount++;
+            }
+            if (!referenceList[0]?.reference && _.isEmpty(referenceFile)) {
+                err.reference = "The reference field is required";
+                errCount++;
+            }
+
+            if (!fontName) {
+                err.fontName = "Font name is required";
+                errCount++;
+            }
+            if (_.isEmpty(fileExtension)) {
+                err.fileExtension = "File extension is required";
+                errCount++;
+            }
+            // if (!brandGuideline) {
+            //     err.brandGuideline = "Brand guideline is required";
+            //     errCount++;
+            // }
+
+            if (!primaryColor) {
+                err.primaryColor = "Primary color is required";
+                // toast.warn("You have to provide a primary color");
+                errCount++;
+            }
+            if (!primaryColorDescription) {
+                err.primaryColorDescription =
+                    "Primary color description is required";
+                // toast.warn("Primary color description is required");
+                errCount++;
+            }
+            // if (!secondaryColors[0]?.color) {
+            //     err.primaryColor = "Secondary color is required"
+            //     toast.warn("You have to provide at least one secondary color");
+            //     errCount++;
+            // }
+        }
+
+        if (typeOfGraphicsCategory?.id === 1) {
+            if (!typeOfLogo) {
+                err.typeOfLogo = "You have to select Type of logo";
+                errCount++;
+            }
+            if (!brandName) {
+                err.brandName = "The brand name field is required";
+                errCount++;
+            }
+            if (!numOfVersions) {
+                err.numOfVersions = "Number of versions is required";
+                errCount++;
+            }
+            if (_.isEmpty(fileTypesNeeded)) {
+                err.fileTypesNeeded = "File types is required";
+                errCount++;
+            }
+        }
+
+        if (
+            typeOfGraphicsCategory?.id === 2 ||
+            typeOfGraphicsCategory?.id === 3 ||
+            typeOfGraphicsCategory?.id === 4
+        ) {
+            if (_.isEmpty(textForDesign) && !workableUrl) {
+                err.textForDesign = "The text for design field is required";
+                errCount++;
+            }
+        }
+
+        if (
+            typeOfGraphicsCategory?.id === 5 ||
+            typeOfGraphicsCategory?.id === 6
+        ) {
+            if (_.isEmpty(imageForDesigner) && !workableUrl) {
+                err.imageForDesigner = "Image is required for designer";
+                errCount++;
+            }
+        }
+
+        if (typeOfGraphicsCategory?.id === 8) {
+            if (_.isEmpty(imgOrVidForWork) && !workableUrl) {
+                err.imgOrVidForWork = "Images/videos is required for work";
+                errCount++;
+            }
+        }
+
+        if (fontUrl) {
+            if (!checkIsURL(fontUrl)) {
+                errCount++;
+            }
+        }
+
+        if (workableUrl) {
+            if (!checkIsURL(workableUrl)) {
+                errCount++;
+            }
+        }
+
+        if (referenceList[0]?.reference) {
+            if (!checkIsURL(referenceList[0]?.reference)) {
+                errCount++;
+            }
+        }
+
+        if (typeOfGraphicsCategory?.id === 7) {
+            if (illustration === "") {
+                err.others = "Write Name of the illustration design work";
+                errCount++;
+            }
+        }
+        if (typeOfGraphicsCategory?.id === 9) {
+            if (others === "") {
+                err.others = "Write Name of the graphic design work";
+                errCount++;
+            }
+        }
+
+        if (taskCategory?.category_name === "UI/UIX Design") {
+            if (!cms) {
+                err.cms = "The CMS name field is required";
+                errCount++;
+            }
+            if (!themeType) {
+                err.themeType = "You have to select Theme";
+                errCount++;
+            }
+        }
+
+        if (themeType?.id === 2) {
+            if (!themeName) {
+                err.themeName = "The theme name field is required";
+                errCount++;
+            }
+            if (!themeTemplate) {
+                err.themeTemplate = "You have to provide theme template URL";
+                errCount++;
+            } else if (!checkIsURL(themeTemplate)) {
+                err.themeTemplate =
+                    "You have to provide a valid theme template URL";
+                toast.warn("You have to provide a valid theme template URL");
+                errCount++;
+            }
         }
 
         if (!assignedTo?.id) {
@@ -175,6 +414,55 @@ const TaskCreationForm = ({ handleRefresh, isOpen, close, onSuccess }) => {
         fd.append("sub_acknowledgement", data.subAcknowledgement);
         fd.append("need_authorization", data.authorization);
 
+        // graphics start
+        fd.append("type_of_graphic_work_id", typeOfGraphicsCategory?.id ?? "");
+        fd.append("type_of_logo", typeOfLogo?.type_name ?? "");
+        fd.append("brand_name", brandName ?? "");
+        fd.append("number_of_versions", numOfVersions ?? "");
+        fd.append(
+            "file_types_needed",
+            JSON.stringify([
+                ...fileTypesNeeded?.filter((type) => type !== "Others"),
+            ]) ?? ""
+        );
+        fd.append(
+            "reference",
+            JSON.stringify(
+                referenceList?.filter((ref) => ref?.reference !== "")
+            ) ?? ""
+        );
+        fd.append("font_name", fontName ?? "");
+        fd.append("font_url", fontUrl ?? "");
+        fd.append("design_instruction", (illustration || others) ?? "");
+        fd.append("primary_color", primaryColor ?? "");
+        fd.append("primary_color_description", primaryColorDescription ?? "");
+        fd.append("secondary_colors", JSON.stringify(secondaryColors) ?? "");
+        fd.append("workable_url", workableUrl ?? "");
+        fd.append("file_extensions", JSON.stringify(fileExtension ?? ""));
+
+        Array.from(textForDesign).forEach((file) => {
+            fd.append("attach_text_files[]", file);
+        });
+        Array.from(imageForDesigner).forEach((file) => {
+            fd.append("workable_image_files[]", file);
+        });
+        Array.from(imgOrVidForWork).forEach((file) => {
+            fd.append("workable_image_or_video_files[]", file);
+        });
+        Array.from(brandGuideline).forEach((file) => {
+            fd.append("brand_guideline_files[]", file);
+        });
+        Array.from(referenceFile).forEach((file) => {
+            fd.append("reference_files[]", file);
+        });
+        // graphics end
+
+        // ui/ux start
+        fd.append("cms", cms?.type_name ?? "");
+        fd.append("theme_name", themeName ?? "");
+        fd.append("theme_template_library_link", themeTemplate ?? "");
+        // ui/ux end
+
         Array.from(files).forEach((file) => {
             fd.append("file[]", file);
         });
@@ -198,10 +486,38 @@ const TaskCreationForm = ({ handleRefresh, isOpen, close, onSuccess }) => {
                     })
                     .catch((err) => {
                         if (err?.status === 422) {
+                            let errorMessage = "";
+                            if (
+                                err?.data["estimate_hours"] &&
+                                !err?.data["estimate_minutes"]
+                            ) {
+                                errorMessage =
+                                    "The estimate hours field is required.";
+                            } else if (
+                                !err?.data["estimate_hours"] &&
+                                err?.data["estimate_minutes"]
+                            ) {
+                                errorMessage =
+                                    "The estimate minutes field is required.";
+                            } else if (
+                                err?.data["estimate_hours"] &&
+                                err?.data["estimate_minutes"]
+                            ) {
+                                errorMessage =
+                                    "The estimated hours and minutes fields are required..";
+                            } else if (
+                                !err?.data["estimate_hours"] &&
+                                !err?.data["estimate_minutes"] &&
+                                err?.data["errors"]
+                            ) {
+                                errorMessage =
+                                    "Estimate hours cannot exceed from project allocation hours ";
+                            }
+
                             Swal.fire({
                                 position: "center",
                                 icon: "error",
-                                title: "Please fill out the all required fields",
+                                title: errorMessage,
                                 showConfirmButton: true,
                             });
                         }
@@ -298,6 +614,73 @@ const TaskCreationForm = ({ handleRefresh, isOpen, close, onSuccess }) => {
     const estimateError = (err) => {
         const text = _.head(err?.errors?.hours);
         return text;
+    };
+
+    // add secondary color
+    const addSecondaryColor = (e) => {
+        e.stopPropagation();
+        setSecondaryColors((prev) => [
+            ...prev,
+            {
+                id: (Math.random() + 1).toString(36).substring(7),
+                color: "#1D82F5",
+                description: "",
+            },
+        ]);
+    };
+
+    // handle secondary color change
+    const handleSecondaryColorChange = (e, id) => {
+        let newColors = _.map(secondaryColors, (item) =>
+            item.id === id
+                ? { id, color: e.target.value, description: "" }
+                : item
+        );
+        setSecondaryColors([...newColors]);
+    };
+
+    // handle secondary color description change
+    const handleSecondaryColorDescriptionChange = (e, editor, id) => {
+        let text = editor.getData();
+        let newColors = _.map(secondaryColors, (item) =>
+            item.id === id ? { ...item, description: text } : item
+        );
+        setSecondaryColors([...newColors]);
+    };
+
+    // remove secondary color
+    const removeSecondaryColor = (e, id) => {
+        let newColors = _.filter(secondaryColors, (item) => item.id !== id);
+        setSecondaryColors([...newColors]);
+    };
+
+    // color scheme
+    const onChange = (e, setState) => {
+        setState(e.target.value);
+    };
+
+    // add other file type
+    const handleAddOtherFileType = () => {
+        fileTypesNeeded.push(fileType);
+        setFileType("");
+    };
+
+    // reference
+    const handleReferenceChange = (e, index) => {
+        const { name, value } = e.target;
+        const list = [...referenceList];
+        list[index][name] = value;
+        setReferenceList(list);
+    };
+
+    const handleReferenceRemove = (index) => {
+        const list = [...referenceList];
+        list.splice(index, 1);
+        setReferenceList(list);
+    };
+
+    const handleReferenceAdd = () => {
+        setReferenceList([...referenceList, { reference: "" }]);
     };
 
     return (
@@ -397,7 +780,7 @@ const TaskCreationForm = ({ handleRefresh, isOpen, close, onSuccess }) => {
                                                             }}
                                                         >
                                                             {milestone?.milestone_title ??
-                                                                "--"}
+                                                                "Select a milestone"}
                                                         </span>
                                                         <div className="__icon">
                                                             <i className="fa-solid fa-sort"></i>
@@ -529,6 +912,1169 @@ const TaskCreationForm = ({ handleRefresh, isOpen, close, onSuccess }) => {
                                     </div>
                                 </div>
 
+                                {/* it will show conditionally here, when task category is graphics  */}
+                                {taskCategory
+                                    ? taskCategory?.category_name ===
+                                          "Graphic Design" && (
+                                          <>
+                                              {/* Type Of Graphics Work */}
+                                              <div className="col-12 col-md-6">
+                                                  <TypeOfGraphicsWorkSelection
+                                                      selected={
+                                                          typeOfGraphicsCategory
+                                                      }
+                                                      onSelect={
+                                                          setTypeOfGraphicsCategory
+                                                      }
+                                                      taskId={params?.projectId}
+                                                  />
+                                                  {formError?.typeOfGraphicsCategory && (
+                                                      <div
+                                                          style={{
+                                                              color: "red",
+                                                          }}
+                                                      >
+                                                          {
+                                                              formError?.typeOfGraphicsCategory
+                                                          }
+                                                      </div>
+                                                  )}
+                                              </div>
+                                              {/* for logo  */}
+                                              {typeOfGraphicsCategory?.id ===
+                                                  1 && (
+                                                  <>
+                                                      <div className="col-12 col-md-6">
+                                                          <TypeOfLogo
+                                                              selected={
+                                                                  typeOfLogo
+                                                              }
+                                                              onSelect={
+                                                                  setTypeOfLogo
+                                                              }
+                                                              taskId={
+                                                                  params?.projectId
+                                                              }
+                                                          />
+                                                          {formError?.typeOfLogo && (
+                                                              <div
+                                                                  style={{
+                                                                      color: "red",
+                                                                  }}
+                                                              >
+                                                                  {
+                                                                      formError?.typeOfLogo
+                                                                  }
+                                                              </div>
+                                                          )}
+                                                      </div>
+                                                      <div className="col-12 col-md-6">
+                                                          <Input
+                                                              id="brandName"
+                                                              label="Brand Name"
+                                                              type="text"
+                                                              placeholder="Enter brand name"
+                                                              name="brandName"
+                                                              required={true}
+                                                              value={brandName}
+                                                              error={
+                                                                  formError?.brandName
+                                                              }
+                                                              onChange={(e) =>
+                                                                  handleChange(
+                                                                      e,
+                                                                      setBrandName
+                                                                  )
+                                                              }
+                                                          />
+                                                      </div>
+
+                                                      <div className="col-12 col-md-6">
+                                                          <div
+                                                              className={`form-group my-3 w-100`}
+                                                          >
+                                                              <label
+                                                                  htmlFor={
+                                                                      "fileTypesNeeded"
+                                                                  }
+                                                                  className={`f-14 text-dark-gray mb-1`}
+                                                                  data-label="true"
+                                                              >
+                                                                  File Types
+                                                                  Needed
+                                                                  <sup className="f-14 mr-1">
+                                                                      *
+                                                                  </sup>
+                                                              </label>
+                                                              <FileTypesNeeded
+                                                                  className={`form-control height-35 w-100 f-14`}
+                                                                  id="fileTypesNeeded"
+                                                                  fileTypesNeeded={fileTypesNeeded?.filter(
+                                                                      (type) =>
+                                                                          type !==
+                                                                          "Others"
+                                                                  )}
+                                                                  setFileTypesNeeded={
+                                                                      setFileTypesNeeded
+                                                                  }
+                                                                  multiple
+                                                              />
+                                                              {formError?.fileTypesNeeded && (
+                                                                  <div
+                                                                      style={{
+                                                                          color: "red",
+                                                                      }}
+                                                                  >
+                                                                      {
+                                                                          formError?.fileTypesNeeded
+                                                                      }
+                                                                  </div>
+                                                              )}
+                                                          </div>
+                                                      </div>
+                                                      {fileTypesNeeded?.includes(
+                                                          "Others"
+                                                      ) && (
+                                                          <div className="col-12 col-md-6">
+                                                              <div
+                                                                  className={`form-group my-3 w-100`}
+                                                              >
+                                                                  <label
+                                                                      htmlFor="fileType"
+                                                                      className={`f-14 text-dark-gray mb-1`}
+                                                                      data-label="true"
+                                                                  >
+                                                                      Describe
+                                                                      The File
+                                                                      Type
+                                                                  </label>
+                                                                  <div className="d-flex align-items-center justify-content-between w-100">
+                                                                      <input
+                                                                          type="text"
+                                                                          className={`form-control height-35 f-14`}
+                                                                          placeholder={
+                                                                              "Describe the file type"
+                                                                          }
+                                                                          value={
+                                                                              fileType
+                                                                          }
+                                                                          onChange={(
+                                                                              e
+                                                                          ) =>
+                                                                              handleChange(
+                                                                                  e,
+                                                                                  setFileType
+                                                                              )
+                                                                          }
+                                                                      />
+                                                                      <button
+                                                                          style={{
+                                                                              marginLeft:
+                                                                                  "10px",
+                                                                              height: "39px",
+                                                                          }}
+                                                                          className="btn btn-success btn-sm"
+                                                                          onClick={
+                                                                              handleAddOtherFileType
+                                                                          }
+                                                                      >
+                                                                          Add
+                                                                      </button>
+                                                                  </div>
+                                                              </div>
+                                                          </div>
+                                                      )}
+                                                      <div className="col-12 col-md-6">
+                                                          <Input
+                                                              id="numOfVersions"
+                                                              label="Number of Versions"
+                                                              type="number"
+                                                              placeholder="Enter Number of versions"
+                                                              name="numOfVersions"
+                                                              required={true}
+                                                              value={
+                                                                  numOfVersions
+                                                              }
+                                                              error={
+                                                                  formError?.numOfVersions
+                                                              }
+                                                              onChange={(e) =>
+                                                                  handleChange(
+                                                                      e,
+                                                                      setNumOfVersions
+                                                                  )
+                                                              }
+                                                          />
+                                                      </div>
+                                                  </>
+                                              )}
+                                              {/* for Banner, Brochure or company profile */}
+                                              {(typeOfGraphicsCategory?.id ===
+                                                  2 ||
+                                                  typeOfGraphicsCategory?.id ===
+                                                      3 ||
+                                                  typeOfGraphicsCategory?.id ===
+                                                      4) && (
+                                                  <>
+                                                      <div className="col-12 col-md-6">
+                                                          <div
+                                                              className={`form-group my-3 w-100`}
+                                                          >
+                                                              <label
+                                                                  htmlFor={
+                                                                      "textForDesign"
+                                                                  }
+                                                                  className={`f-14 text-dark-gray mb-1`}
+                                                                  data-label="true"
+                                                              >
+                                                                  Attach text
+                                                                  that will be
+                                                                  used for the
+                                                                  design
+                                                                  <sup className="f-14 mr-1">
+                                                                      *
+                                                                  </sup>
+                                                              </label>
+                                                              <FileUploadWithInput
+                                                                  inputType="url"
+                                                                  placeholder="Enter the URL"
+                                                                  inputUrl={
+                                                                      workableUrl
+                                                                  }
+                                                                  setInputUrl={
+                                                                      setWorkableUrl
+                                                                  }
+                                                                  inputFiles={
+                                                                      textForDesign
+                                                                  }
+                                                                  setInputFiles={
+                                                                      setTextForDesign
+                                                                  }
+                                                              />
+                                                              {formError?.textForDesign && (
+                                                                  <div
+                                                                      style={{
+                                                                          color: "red",
+                                                                      }}
+                                                                  >
+                                                                      {
+                                                                          formError?.textForDesign
+                                                                      }
+                                                                  </div>
+                                                              )}
+                                                          </div>
+                                                      </div>
+                                                  </>
+                                              )}
+
+                                              {/* background removal or image retouching */}
+                                              {(typeOfGraphicsCategory?.id ===
+                                                  5 ||
+                                                  typeOfGraphicsCategory?.id ===
+                                                      6) && (
+                                                  <>
+                                                      <div className="col-12 col-md-6">
+                                                          <div
+                                                              className={`form-group my-3 w-100`}
+                                                          >
+                                                              <label
+                                                                  htmlFor={
+                                                                      "imageForDesigner"
+                                                                  }
+                                                                  className={`f-14 text-dark-gray mb-1`}
+                                                                  data-label="true"
+                                                              >
+                                                                  Image where
+                                                                  the designer
+                                                                  will work
+                                                                  <sup className="f-14 mr-1">
+                                                                      *
+                                                                  </sup>
+                                                              </label>
+                                                              <FileUploadWithInput
+                                                                  inputType="url"
+                                                                  placeholder="Enter the URL"
+                                                                  inputUrl={
+                                                                      workableUrl
+                                                                  }
+                                                                  setInputUrl={
+                                                                      setWorkableUrl
+                                                                  }
+                                                                  inputFiles={
+                                                                      imageForDesigner
+                                                                  }
+                                                                  setInputFiles={
+                                                                      setImageForDesigner
+                                                                  }
+                                                              />
+                                                              {formError?.imageForDesigner && (
+                                                                  <div
+                                                                      style={{
+                                                                          color: "red",
+                                                                      }}
+                                                                  >
+                                                                      {
+                                                                          formError?.imageForDesigner
+                                                                      }
+                                                                  </div>
+                                                              )}
+                                                          </div>
+                                                      </div>
+                                                  </>
+                                              )}
+
+                                              {/* motion graphics */}
+                                              {typeOfGraphicsCategory?.id ===
+                                                  8 && (
+                                                  <>
+                                                      <div className="col-12 col-md-6">
+                                                          <div
+                                                              className={`form-group my-3 w-100`}
+                                                          >
+                                                              <label
+                                                                  htmlFor={
+                                                                      "imgOrVidForWork"
+                                                                  }
+                                                                  className={`f-14 text-dark-gray mb-1`}
+                                                                  data-label="true"
+                                                              >
+                                                                  Images/videos
+                                                                  that will be
+                                                                  used for the
+                                                                  work
+                                                                  <sup className="f-14 mr-1">
+                                                                      *
+                                                                  </sup>
+                                                              </label>
+                                                              <FileUploadWithInput
+                                                                  inputType="url"
+                                                                  placeholder="Enter the URL"
+                                                                  inputUrl={
+                                                                      workableUrl
+                                                                  }
+                                                                  setInputUrl={
+                                                                      setWorkableUrl
+                                                                  }
+                                                                  inputFiles={
+                                                                      imgOrVidForWork
+                                                                  }
+                                                                  setInputFiles={
+                                                                      setImgOrVidForWork
+                                                                  }
+                                                              />
+                                                              {formError?.imgOrVidForWork && (
+                                                                  <div
+                                                                      style={{
+                                                                          color: "red",
+                                                                      }}
+                                                                  >
+                                                                      {
+                                                                          formError?.imgOrVidForWork
+                                                                      }
+                                                                  </div>
+                                                              )}
+                                                          </div>
+                                                      </div>
+                                                  </>
+                                              )}
+
+                                              {/* Illustration */}
+                                              {typeOfGraphicsCategory?.id ===
+                                                  7 && (
+                                                  <>
+                                                      <div className="col-12">
+                                                          <div className="form-group my-3">
+                                                              <label htmlFor="">
+                                                                  {" "}
+                                                                  Name of the
+                                                                  illustration
+                                                                  work!
+                                                                  <sup>
+                                                                      *
+                                                                  </sup>{" "}
+                                                              </label>
+                                                              <div
+                                                                  className="ck-editor-holder"
+                                                                  style={{
+                                                                      minHeight:
+                                                                          "50px",
+                                                                  }}
+                                                              >
+                                                                  <CKEditorComponent
+                                                                      data={
+                                                                          illustration
+                                                                      }
+                                                                      onChange={(
+                                                                          e,
+                                                                          editor
+                                                                      ) =>
+                                                                          setIllustration(
+                                                                              editor.getData()
+                                                                          )
+                                                                      }
+                                                                  />
+                                                              </div>
+                                                              {formError?.illustration && (
+                                                                  <div
+                                                                      style={{
+                                                                          color: "red",
+                                                                      }}
+                                                                  >
+                                                                      {
+                                                                          formError?.illustration
+                                                                      }
+                                                                  </div>
+                                                              )}
+                                                          </div>
+                                                      </div>
+                                                  </>
+                                              )}
+                                              {/* Others */}
+                                              {typeOfGraphicsCategory?.id ===
+                                                  9 && (
+                                                  <>
+                                                      <div className="col-12">
+                                                          <div className="form-group my-3">
+                                                              <label htmlFor="">
+                                                                  {" "}
+                                                                  Name of the
+                                                                  graphic design
+                                                                  work!
+                                                                  <sup>
+                                                                      *
+                                                                  </sup>{" "}
+                                                              </label>
+                                                              <div
+                                                                  className="ck-editor-holder"
+                                                                  style={{
+                                                                      minHeight:
+                                                                          "50px",
+                                                                  }}
+                                                              >
+                                                                  <CKEditorComponent
+                                                                      data={
+                                                                          others
+                                                                      }
+                                                                      onChange={(
+                                                                          e,
+                                                                          editor
+                                                                      ) =>
+                                                                          setOthers(
+                                                                              editor.getData()
+                                                                          )
+                                                                      }
+                                                                  />
+                                                              </div>
+                                                              {formError?.others && (
+                                                                  <div
+                                                                      style={{
+                                                                          color: "red",
+                                                                      }}
+                                                                  >
+                                                                      {
+                                                                          formError?.others
+                                                                      }
+                                                                  </div>
+                                                              )}
+                                                          </div>
+                                                      </div>
+                                                  </>
+                                              )}
+
+                                              {/* Reference */}
+                                              {
+                                                  <div className="col-12 col-md-6">
+                                                      <div
+                                                          className={`form-group my-3 w-100`}
+                                                      >
+                                                          <label
+                                                              htmlFor="fileType"
+                                                              className={`f-14 text-dark-gray mb-1`}
+                                                              data-label="true"
+                                                          >
+                                                              Reference
+                                                              <sup className="f-14 mr-1">
+                                                                  *
+                                                              </sup>
+                                                          </label>
+                                                          <div
+                                                              style={{
+                                                                  maxHeight:
+                                                                      "200px",
+                                                                  overflow:
+                                                                      "auto",
+                                                              }}
+                                                          >
+                                                              <div>
+                                                                  <CustomFileUpload
+                                                                      refInputFiles={
+                                                                          referenceFile
+                                                                      }
+                                                                      setRefInputFiles={
+                                                                          setReferenceFile
+                                                                      }
+                                                                  />
+                                                              </div>
+                                                              {referenceList.map(
+                                                                  (
+                                                                      singleReference,
+                                                                      index
+                                                                  ) => (
+                                                                      <div
+                                                                          key={
+                                                                              index
+                                                                          }
+                                                                      >
+                                                                          <div
+                                                                              className={`d-flex align-items-start justify-content-between w-100 ${
+                                                                                  index !==
+                                                                                      0 &&
+                                                                                  "mt-2"
+                                                                              }`}
+                                                                          >
+                                                                              <div className="d-flex flex-column justify-content-start align-items-start w-100">
+                                                                                  <input
+                                                                                      type="url"
+                                                                                      name="reference"
+                                                                                      className={`form-control height-35 f-14`}
+                                                                                      placeholder={
+                                                                                          "Enter Task Reference"
+                                                                                      }
+                                                                                      value={
+                                                                                          singleReference.reference
+                                                                                      }
+                                                                                      onChange={(
+                                                                                          e
+                                                                                      ) =>
+                                                                                          handleReferenceChange(
+                                                                                              e,
+                                                                                              index
+                                                                                          )
+                                                                                      }
+                                                                                  />
+                                                                                  {singleReference?.reference &&
+                                                                                      !validateUrl(
+                                                                                          singleReference?.reference
+                                                                                      ) && (
+                                                                                          <div
+                                                                                              style={{
+                                                                                                  color: "red",
+                                                                                              }}
+                                                                                          >
+                                                                                              Please
+                                                                                              enter
+                                                                                              a
+                                                                                              valid
+                                                                                              URL
+                                                                                          </div>
+                                                                                      )}
+                                                                              </div>
+                                                                              <div className="">
+                                                                                  {referenceList.length !==
+                                                                                      1 && (
+                                                                                      <button
+                                                                                          type="button"
+                                                                                          onClick={() =>
+                                                                                              handleReferenceRemove(
+                                                                                                  index
+                                                                                              )
+                                                                                          }
+                                                                                          className="btn btn-outline-danger btn-sm "
+                                                                                          style={{
+                                                                                              marginLeft:
+                                                                                                  "10px",
+                                                                                              height: "39px",
+                                                                                          }}
+                                                                                      >
+                                                                                          <RiDeleteBinLine />
+                                                                                      </button>
+                                                                                  )}
+                                                                              </div>
+                                                                          </div>
+                                                                          <div>
+                                                                              {referenceList.length -
+                                                                                  1 ===
+                                                                                  index && (
+                                                                                  <button
+                                                                                      type="button"
+                                                                                      onClick={
+                                                                                          handleReferenceAdd
+                                                                                      }
+                                                                                      className="btn btn-success btn-sm mt-2"
+                                                                                  >
+                                                                                      <span>
+                                                                                          +
+                                                                                      </span>
+                                                                                  </button>
+                                                                              )}
+                                                                          </div>
+                                                                      </div>
+                                                                  )
+                                                              )}
+                                                              {formError?.reference && (
+                                                                  <div
+                                                                      style={{
+                                                                          color: "red",
+                                                                      }}
+                                                                  >
+                                                                      {
+                                                                          formError?.reference
+                                                                      }
+                                                                  </div>
+                                                              )}
+                                                          </div>
+                                                      </div>
+                                                  </div>
+                                              }
+
+                                              {/* Font name */}
+                                              <div className="col-12 col-md-6">
+                                                  <Input
+                                                      id="fontName"
+                                                      label="Font Name"
+                                                      type="text"
+                                                      placeholder="Enter a font name"
+                                                      name="fontName"
+                                                      required={true}
+                                                      value={fontName}
+                                                      error={
+                                                          formError?.fontName
+                                                      }
+                                                      onChange={(e) =>
+                                                          handleChange(
+                                                              e,
+                                                              setFontName
+                                                          )
+                                                      }
+                                                  />
+                                              </div>
+
+                                              {/* font url  */}
+                                              <div className="col-12 col-md-6">
+                                                  <Input
+                                                      id="fontUrl"
+                                                      label="Font Url"
+                                                      type="url"
+                                                      placeholder="Enter font url"
+                                                      name="fontUrl"
+                                                      value={fontUrl}
+                                                      error={formError?.fontUrl}
+                                                      onChange={(e) =>
+                                                          handleChange(
+                                                              e,
+                                                              setFontUrl
+                                                          )
+                                                      }
+                                                      style={{
+                                                          marginBottom: "0px",
+                                                      }}
+                                                  />
+                                                  {fontUrl &&
+                                                      !validateUrl(fontUrl) && (
+                                                          <div
+                                                              style={{
+                                                                  color: "red",
+                                                                  marginTop:
+                                                                      "-13px",
+                                                              }}
+                                                          >
+                                                              Please enter a
+                                                              valid URL
+                                                          </div>
+                                                      )}
+                                              </div>
+
+                                              {/* Brand guideline */}
+                                              <div className="col-12">
+                                                  <div
+                                                      className={`form-group my-3 w-100`}
+                                                  >
+                                                      <label
+                                                          htmlFor={
+                                                              "brandGuideline"
+                                                          }
+                                                          className={`f-14 text-dark-gray mb-2`}
+                                                          data-label="true"
+                                                      >
+                                                          Brand guideline
+                                                      </label>
+                                                      <div
+                                                          style={{
+                                                              maxHeight:
+                                                                  "200px",
+                                                              overflow: "auto",
+                                                          }}
+                                                      >
+                                                          <UploadFilesInLine
+                                                              files={
+                                                                  brandGuideline
+                                                              }
+                                                              setFiles={
+                                                                  setBrandGuideline
+                                                              }
+                                                          />
+                                                      </div>
+                                                  </div>
+                                              </div>
+
+                                              {/* color scheme */}
+                                              <div className="col-12">
+                                                  <div className="form-group">
+                                                      <label
+                                                          htmlFor=""
+                                                          className={`f-14 text-dark-gray mb-2`}
+                                                          data-label="true"
+                                                      >
+                                                          Color Scheme
+                                                      </label>
+                                                      <React.Fragment>
+                                                          {/* primary color */}
+                                                          <div
+                                                              className="mt-3 p-3"
+                                                              style={{
+                                                                  background:
+                                                                      "#F9F9F9",
+                                                                  borderRadius:
+                                                                      "10px",
+                                                              }}
+                                                          >
+                                                              <div className="form-group">
+                                                                  <label
+                                                                      htmlFor=""
+                                                                      className="mb-2"
+                                                                      style={{
+                                                                          fontWeight: 600,
+                                                                          color: "#777",
+                                                                      }}
+                                                                  >
+                                                                      1. Primary
+                                                                      Color{" "}
+                                                                      <sup>
+                                                                          *
+                                                                      </sup>{" "}
+                                                                  </label>
+
+                                                                  <div className="form-group px-2">
+                                                                      <label htmlFor="">
+                                                                          Choose
+                                                                          Color:
+                                                                      </label>
+                                                                      <div className="input-group mb-3 col-12 col-md-6">
+                                                                          <input
+                                                                              type="text"
+                                                                              className="form-control"
+                                                                              placeholder="Type color code"
+                                                                              aria-label="Type color code"
+                                                                              aria-describedby="basic-addon2"
+                                                                              value={
+                                                                                  primaryColor
+                                                                              }
+                                                                              onChange={(
+                                                                                  e
+                                                                              ) =>
+                                                                                  onChange(
+                                                                                      e,
+                                                                                      setPrimaryColor
+                                                                                  )
+                                                                              }
+                                                                          />
+                                                                          <div className="input-group-append">
+                                                                              <span
+                                                                                  className="input-group-text px-1 border-0"
+                                                                                  id="basic-addon2"
+                                                                              >
+                                                                                  <input
+                                                                                      type="color"
+                                                                                      value={
+                                                                                          primaryColor
+                                                                                      }
+                                                                                      onChange={(
+                                                                                          e
+                                                                                      ) =>
+                                                                                          onChange(
+                                                                                              e,
+                                                                                              setPrimaryColor
+                                                                                          )
+                                                                                      }
+                                                                                      style={{
+                                                                                          width: "32px",
+                                                                                          border: "none",
+                                                                                      }}
+                                                                                  />
+                                                                              </span>
+                                                                          </div>
+                                                                      </div>
+                                                                      {formError?.primaryColor && (
+                                                                          <div
+                                                                              style={{
+                                                                                  color: "red",
+                                                                              }}
+                                                                          >
+                                                                              {
+                                                                                  formError?.primaryColor
+                                                                              }
+                                                                          </div>
+                                                                      )}
+                                                                  </div>
+
+                                                                  <div className="form-group pl-2">
+                                                                      <label htmlFor="">
+                                                                          Where
+                                                                          Should
+                                                                          Designer
+                                                                          Use
+                                                                          this
+                                                                          Color
+                                                                          <sup>
+                                                                              *
+                                                                          </sup>{" "}
+                                                                      </label>
+                                                                      <div className="ck-editor-holder">
+                                                                          <CKEditorComponent
+                                                                              onChange={(
+                                                                                  e,
+                                                                                  editor
+                                                                              ) =>
+                                                                                  setPrimaryColorDescription(
+                                                                                      editor.getData()
+                                                                                  )
+                                                                              }
+                                                                          />
+                                                                      </div>
+
+                                                                      {formError?.primaryColorDescription && (
+                                                                          <div
+                                                                              style={{
+                                                                                  color: "red",
+                                                                              }}
+                                                                          >
+                                                                              {
+                                                                                  formError?.primaryColorDescription
+                                                                              }
+                                                                          </div>
+                                                                      )}
+                                                                  </div>
+                                                              </div>
+                                                          </div>
+
+                                                          {/* secondary color */}
+                                                          <div
+                                                              className="mt-3 p-3"
+                                                              style={{
+                                                                  background:
+                                                                      "#F9F9F9",
+                                                                  borderRadius:
+                                                                      "10px",
+                                                              }}
+                                                          >
+                                                              <div className="form-group">
+                                                                  <label
+                                                                      htmlFor=""
+                                                                      className="mb-2"
+                                                                      style={{
+                                                                          fontWeight: 600,
+                                                                          color: "#777",
+                                                                      }}
+                                                                  >
+                                                                      2.
+                                                                      Secondary
+                                                                      Color{" "}
+                                                                      {/* <sup>*</sup>{" "} */}
+                                                                  </label>
+
+                                                                  {_.map(
+                                                                      secondaryColors,
+                                                                      (
+                                                                          item,
+                                                                          index
+                                                                      ) => (
+                                                                          <div
+                                                                              className="p-3"
+                                                                              key={
+                                                                                  item.id
+                                                                              }
+                                                                          >
+                                                                              <div className="form-group">
+                                                                                  <label htmlFor="">
+                                                                                      <b>
+                                                                                          {index +
+                                                                                              1}
+
+                                                                                          .
+                                                                                      </b>{" "}
+                                                                                      Choose
+                                                                                      Color:
+                                                                                  </label>
+                                                                                  <div className="d-flex align-items-center">
+                                                                                      <div className="input-group mb-3 pl-3 col-10 col-md-6">
+                                                                                          <input
+                                                                                              type="text"
+                                                                                              className="form-control"
+                                                                                              placeholder="Type color code"
+                                                                                              aria-label="Type color code"
+                                                                                              aria-describedby="basic-addon2"
+                                                                                              value={
+                                                                                                  item.color
+                                                                                              }
+                                                                                              onChange={(
+                                                                                                  e
+                                                                                              ) =>
+                                                                                                  handleSecondaryColorChange(
+                                                                                                      e,
+                                                                                                      item.id
+                                                                                                  )
+                                                                                              }
+                                                                                          />
+
+                                                                                          <div className="input-group-append">
+                                                                                              <span
+                                                                                                  className="input-group-text px-1 border-0"
+                                                                                                  id="basic-addon2"
+                                                                                              >
+                                                                                                  <input
+                                                                                                      type="color"
+                                                                                                      value={
+                                                                                                          item.color
+                                                                                                      }
+                                                                                                      onChange={(
+                                                                                                          e
+                                                                                                      ) =>
+                                                                                                          handleSecondaryColorChange(
+                                                                                                              e,
+                                                                                                              item.id
+                                                                                                          )
+                                                                                                      }
+                                                                                                      style={{
+                                                                                                          width: "32px",
+                                                                                                          border: "none",
+                                                                                                      }}
+                                                                                                  />
+                                                                                              </span>
+                                                                                          </div>
+                                                                                      </div>
+
+                                                                                      {_.size(
+                                                                                          secondaryColors
+                                                                                      ) >
+                                                                                          1 && (
+                                                                                          <button
+                                                                                              aria-label="remove"
+                                                                                              onClick={(
+                                                                                                  e
+                                                                                              ) =>
+                                                                                                  removeSecondaryColor(
+                                                                                                      e,
+                                                                                                      item.id
+                                                                                                  )
+                                                                                              }
+                                                                                              className="py-2 px-3 ml-auto rounded color_remove_btn"
+                                                                                          >
+                                                                                              <i className="fa-solid fa-trash-can" />
+                                                                                          </button>
+                                                                                      )}
+                                                                                  </div>
+                                                                              </div>
+
+                                                                              <div className="form-group pl-3">
+                                                                                  <label htmlFor="">
+                                                                                      Where
+                                                                                      Should
+                                                                                      Designer
+                                                                                      Use
+                                                                                      this
+                                                                                      Color{" "}
+                                                                                  </label>
+                                                                                  <div className="ck-editor-holder">
+                                                                                      <CKEditorComponent
+                                                                                          onChange={(
+                                                                                              e,
+                                                                                              editor
+                                                                                          ) =>
+                                                                                              handleSecondaryColorDescriptionChange(
+                                                                                                  e,
+                                                                                                  editor,
+                                                                                                  item.id
+                                                                                              )
+                                                                                          }
+                                                                                      />
+                                                                                  </div>
+
+                                                                                  {error?.sDescription && (
+                                                                                      <div
+                                                                                          className=""
+                                                                                          style={{
+                                                                                              color: "red",
+                                                                                          }}
+                                                                                      >
+                                                                                          {" "}
+                                                                                          {
+                                                                                              error?.sDescription
+                                                                                          }{" "}
+                                                                                      </div>
+                                                                                  )}
+                                                                              </div>
+                                                                          </div>
+                                                                      )
+                                                                  )}
+
+                                                                  <div className="d-flex align-items-center px-3">
+                                                                      <button
+                                                                          type="button"
+                                                                          onClick={
+                                                                              addSecondaryColor
+                                                                          }
+                                                                          className="bg-transparent text-primary hover-underline ml-auto"
+                                                                      >
+                                                                          +
+                                                                          Another
+                                                                          Color
+                                                                      </button>
+                                                                  </div>
+                                                              </div>
+                                                          </div>
+                                                      </React.Fragment>
+                                                  </div>
+                                              </div>
+                                              {/* end color scheme */}
+
+                                              {/* required file extension */}
+                                              <div className="col-12 col-md-6">
+                                                  <div
+                                                      className={`form-group my-3 w-100`}
+                                                  >
+                                                      <label
+                                                          htmlFor={
+                                                              "fileExtension"
+                                                          }
+                                                          className={`f-14 text-dark-gray mb-1`}
+                                                          data-label="true"
+                                                      >
+                                                          Required File
+                                                          Extension
+                                                          <sup className="f-14 mr-1">
+                                                              *
+                                                          </sup>
+                                                      </label>
+                                                      <FileExtensionMultiSelect
+                                                          className={`form-control height-35 w-100 f-14`}
+                                                          id="fileExtension"
+                                                          // fileExtension={fileExtension?.filter(type => type !== 'Others')}
+                                                          fileExtension={
+                                                              fileExtension
+                                                          }
+                                                          setFileExtension={
+                                                              setFileExtension
+                                                          }
+                                                          multiple
+                                                      />
+                                                      {formError?.fileExtension && (
+                                                          <div
+                                                              style={{
+                                                                  color: "red",
+                                                              }}
+                                                          >
+                                                              {
+                                                                  formError?.fileExtension
+                                                              }
+                                                          </div>
+                                                      )}
+                                                  </div>
+                                              </div>
+                                          </>
+                                      )
+                                    : null}
+
+                                {/* it will show conditionally here, when task category is UI/UIX Design  */}
+                                {taskCategory
+                                    ? taskCategory?.category_name ===
+                                          "UI/UIX Design" && (
+                                          <>
+                                              {/* CMS Category */}
+
+                                              {/* cms name  */}
+                                              <div className="col-12 col-md-6">
+                                                  <CmsDropdown
+                                                      selected={cms}
+                                                      onSelect={setCms}
+                                                  />
+                                                  {formError?.cms && (
+                                                      <div
+                                                          style={{
+                                                              color: "red",
+                                                          }}
+                                                      >
+                                                          {formError?.cms}
+                                                      </div>
+                                                  )}
+                                              </div>
+                                              <div className="col-12 col-md-6">
+                                                  <ThemeTypeSelect
+                                                      selected={themeType}
+                                                      onSelect={setThemeType}
+                                                  />
+                                                  {formError?.themeType && (
+                                                      <div
+                                                          style={{
+                                                              color: "red",
+                                                          }}
+                                                      >
+                                                          {formError?.themeType}
+                                                      </div>
+                                                  )}
+                                              </div>
+
+                                              {themeType?.id === 2 && (
+                                                  <>
+                                                      {/* theme name */}
+                                                      <div className="col-12 col-md-6">
+                                                          <Input
+                                                              id="themeName"
+                                                              label="Theme Name"
+                                                              type="text"
+                                                              placeholder="Enter a theme name"
+                                                              name="themeName"
+                                                              required={true}
+                                                              value={themeName}
+                                                              error={
+                                                                  formError?.themeName
+                                                              }
+                                                              onChange={(e) =>
+                                                                  handleChange(
+                                                                      e,
+                                                                      setThemeName
+                                                                  )
+                                                              }
+                                                          />
+                                                      </div>
+                                                      {/* theme template url */}
+                                                      <div className="col-12 col-md-6">
+                                                          <Input
+                                                              id="themeTemplate"
+                                                              label="Theme Template Library URL"
+                                                              type="url"
+                                                              placeholder="Enter Theme Template Library URL"
+                                                              name="themeTemplate"
+                                                              required={true}
+                                                              value={
+                                                                  themeTemplate
+                                                              }
+                                                              error={
+                                                                  formError?.themeTemplate
+                                                              }
+                                                              onChange={(e) =>
+                                                                  handleChange(
+                                                                      e,
+                                                                      setThemeTemplate
+                                                                  )
+                                                              }
+                                                          />
+                                                      </div>
+                                                  </>
+                                              )}
+                                          </>
+                                      )
+                                    : null}
+
                                 {/* assignee to */}
                                 <div className="col-12 col-md-6">
                                     <AssginedToSelection
@@ -593,9 +2139,9 @@ const TaskCreationForm = ({ handleRefresh, isOpen, close, onSuccess }) => {
                                             min
                                         </div>
 
-                                        <div style={{ color: "red" }}>
+                                        {/* <div style={{ color: "red" }}>
                                             {estimateError(required_error)}
-                                        </div>
+                                        </div> */}
                                         <div style={{ color: "#F01F0A" }}>
                                             Estimation time can't exceed{" "}
                                             {convertTime(

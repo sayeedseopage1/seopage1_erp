@@ -98,7 +98,7 @@ export const WonDealsTableColumns = [
         cell: ({ row }) => {
             const data = row.original;
             if (!data?.pm_id) {
-                return <EmptySpace> -- </EmptySpace>;
+                return <EmptySpace> Not Assigned Yet </EmptySpace>;
             }
 
             return (
@@ -124,11 +124,11 @@ export const WonDealsTableColumns = [
         accessorKey: "closing_date",
         cell: ({ row }) => {
             const data = row.original;
-            console.log("data in won deal table", data);
+
             const date = data?.closing_date ? (
                 dayjs(data?.closing_date).format(`DD-MM-YYYY hh:mm:ss A`)
             ) : (
-                <EmptySpace> -- </EmptySpace>
+                <EmptySpace> Not Closed Yet </EmptySpace>
             );
             return <CreatedAt>{date}</CreatedAt>;
         },

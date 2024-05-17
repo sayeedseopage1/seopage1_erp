@@ -215,17 +215,15 @@ const ProjectTasks = () => {
                                 <Dropdown.Menu className="sp1_table_tab--dd-menu">
                                     <Dropdown.Item
                                         onClick={() => setTableType("Tasks")}
-                                        className={`sp1_table_tab--dd-item ${
-                                            tableType === "Tasks" && "active"
-                                        }`}
+                                        className={`sp1_table_tab--dd-item ${tableType === "Tasks" && "active"
+                                            }`}
                                     >
                                         Tasks
                                     </Dropdown.Item>
                                     <Dropdown.Item
                                         onClick={() => setTableType("Subtasks")}
-                                        className={`sp1_table_tab--dd-item ${
-                                            tableType === "Subtasks" && "active"
-                                        }`}
+                                        className={`sp1_table_tab--dd-item ${tableType === "Subtasks" && "active"
+                                            }`}
                                     >
                                         Subtasks
                                     </Dropdown.Item>

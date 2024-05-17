@@ -1,0 +1,180 @@
+.cnx__btn {
+    display: inline-block;
+    padding: 10px 20px;
+    font-size: 16px;
+    font-weight: 600;
+    -webkit-text-decoration: none;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    border: 1px solid #1967f8;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    white-space: nowrap;
+}
+
+.cnx__btn:disabled{
+    cursor: not-allowed !important;
+    opacity: 0.6;
+}
+
+.cnx__btn > .cnx__btn_icon {
+    font-size: 18px;
+    padding: 0;
+    margin: 0;
+}
+
+.cnx__btn:hover {
+    cursor: pointer;
+    background-color: rgba(0, 0, 0, 0.8);
+    border-color: rgba(0, 0, 0, 0.8);
+}
+
+/* button veriant */
+
+/* primary */
+
+.cnx__btn_primary {
+    background-color: #1967f8;
+    border-color: #1967f8;
+    color: #fff;
+}
+
+.cnx__btn_primary:hover {
+    background-color: rgba(0, 0, 0, 0.8);
+    border-color: rgba(0, 0, 0, 0.8);
+}
+
+.cnx__btn_primary > .cnx__btn_icon {
+    color: #fff;
+}
+
+.cnx__btn_primary.cnx__btn_disabled{
+    background-color: #1967f8 !important;
+    border-color: #1967f8 !important;
+    color: #fff !important;
+}
+
+/* secondary */
+
+.cnx__btn_secondary,
+.cnx__btn_secondary.cnx__btn_disabled{
+    background-color: #e4e4e4;
+    border-color: #e4e4e4;
+    color: #000;
+}
+
+.cnx__btn_secondary:hover {
+    background-color: rgba(0, 0, 0, 0.8);
+    color: #fff;
+    border-color: rgba(0, 0, 0, 0.8);
+}
+
+.cnx__btn_secondary > .cnx__btn_icon {
+    color: #000;
+}
+
+/* tertiary */
+
+.cnx__btn_tertiary,
+.cnx__btn_tertiary.cnx__btn_tertiary { 
+    background-color: #fff;
+    border-color: #dadada;
+    color: #383838;
+}
+
+.cnx__btn_tertiary:hover {
+    background-color: #f1f1f1;
+    border-color: #dadada;
+}
+
+/* success */
+
+.cnx__btn_success,
+.cnx__btn_success.cnx__btn_tertiary {
+    background-color: #01a545;
+    border-color: #01a545;
+    color: #fff;
+}
+
+.cnx__btn_success:hover {
+    background-color: #018839;
+    border-color: #018839;
+}
+
+.cnx__btn_tertiary > .cnx__btn_icon {
+    color: #383838;
+}
+
+/* danger */
+
+.cnx__btn_danger,
+.cnx__btn_danger.cnx__btn_tertiary {
+    background-color: #ff3838;
+    border-color: #ff3838;
+    color: #fff;
+}
+
+.cnx__btn_danger:hover {
+    background-color: #e63232;
+    border-color: #e63232;
+}
+
+.cnx__btn_danger > .cnx__btn_icon {
+    color: #fff;
+}
+
+/* button sizes */
+
+.cnx__btn_lg, 
+.cnx__btn_lg.cnx__btn_disabled {
+    padding: 15px 30px !important;
+    font-size: 18px !important;
+}
+
+.cnx__btn_lg > .cnx__btn_icon {
+    font-size: 20px !important;
+}
+
+.cnx__btn_md,
+.cnx__btn_md.cnx__btn_disabled {
+    padding: 10px 20px !important;
+    font-size: 16px !important;
+}
+
+.cnx__btn_md > .cnx__btn_icon {
+    font-size: 16px !important;
+}
+
+.cnx__btn_sm,
+.cnx__btn_sm.cnx__btn_disabled {
+    padding: 5px 10px !important;
+    font-size: 14px !important;
+}
+
+.cnx__btn_sm > .cnx__btn_icon {
+    font-size: 14px !important;
+}
+
+/* disable */
+
+/* .cnx__btn_disabled.cnx__btn_disabled {
+    background-color: #e4e4e4;
+    border-color: #e4e4e4;
+    color: #000;
+    cursor: not-allowed;
+}
+
+.cnx__btn_success.cnx__btn_disabled.cnx__btn_disabled {
+    background-color: #3e9763;
+    border-color: #01a545;
+    color: #fff;
+    cursor: not-allowed;
+    opacity: 0.5;
+}*/
+
+.cnx__btn_loading{
+    cursor: progress !important;
+    opacity: 0.9 !important;
+} 

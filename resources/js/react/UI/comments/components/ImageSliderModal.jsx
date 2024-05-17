@@ -224,7 +224,11 @@ const ImageSlider = ({ imgFileList = [], targetIndex }) => {
                 <Swiper
                     onSwiper={setThumbsSwiper}
                     spaceBetween={0}
-                    slidesPerView={[...imgFileList].length<4?[...imgFileList].length:4}
+                    slidesPerView={
+                        [...imgFileList].length < 4
+                            ? [...imgFileList].length
+                            : 4
+                    }
                     freeMode={true}
                     watchSlidesProgress={true}
                     modules={[FreeMode, Navigation, Thumbs]}

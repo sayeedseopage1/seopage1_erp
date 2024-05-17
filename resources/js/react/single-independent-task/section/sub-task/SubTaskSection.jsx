@@ -124,8 +124,6 @@ const SubTaskSection = ({ status }) => {
 
     const Task = new SingleTask(task);
 
-    console.log("Task", Task);
-
     return (
         <div
             className="sp1_task_right_card mb-3"
@@ -183,9 +181,8 @@ const SubTaskSection = ({ status }) => {
                     style={{ zIndex: isTaskModalOpen ? "110" : "" }}
                 >
                     <i
-                        className={`fa-solid fa-circle-chevron-${
-                            isTaskModalOpen ? "right" : "left"
-                        }`}
+                        className={`fa-solid fa-circle-chevron-${isTaskModalOpen ? "right" : "left"
+                            }`}
                         style={{ color: "#276fec" }}
                     />
                 </button>

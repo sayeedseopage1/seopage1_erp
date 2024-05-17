@@ -1,19 +1,21 @@
-import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
+import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
 export const apiSlice = createApi({
-    reducerPath: 'api',
-    baseQuery: fetchBaseQuery({ baseUrl: '/' }),
+    reducerPath: "api",
+    baseQuery: fetchBaseQuery({ baseUrl: "/" }),
     keepUnusedDataFor: 60,
     tagTypes: [
-        'points_page_filter_options', 
-        'TASK_STATUS', 
-        'TASKS', 
-        'TASKSREPORT', 
-        "PMGUIDELINE", 
+        "LIVE_ACTIONS",
+        "EXPIRED_ACTIONS",
+        "PAST_ACTIONS",
+        "All_TASKS",
+        "points_page_filter_options",
+        "TASK_STATUS",
+        "TASKS",
+        "TASKSREPORT",
+        "PMGUIDELINE",
         "REVISIONS",
         "COMMENTS",
-        // "TASK_REPORT"
     ],
     endpoints: () => ({}),
 });
-
