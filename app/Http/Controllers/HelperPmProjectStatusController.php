@@ -476,7 +476,7 @@ class HelperPmProjectStatusController extends AccountBaseController
         // dd($milestone);
 
         if ($milestone->cost < 100) $goalDuration = 3;
-        else $goalDuration = 3 +  (int) (($milestone->cost - 100) / 100);
+        else $goalDuration = 3 +  (int) ($milestone->cost / 100);
 
         $goal = new ProjectPmGoal();
         $goal->project_id = $lastGoal->project_id;
