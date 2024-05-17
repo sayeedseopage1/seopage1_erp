@@ -14,11 +14,10 @@ const CashValueUpCrossEditModal = ({ upSaleCrossSaleTypes, antdModalOpen, setAnt
         register,
         handleSubmit,
         watch,
+        reset,
         formState: { errors },
     } = useForm()
 
-
-    // TODO: need to fix here 
     const onSubmit = async (data) => {
         try {
             const payload = {
@@ -34,6 +33,7 @@ const CashValueUpCrossEditModal = ({ upSaleCrossSaleTypes, antdModalOpen, setAnt
                 toast.warning(response.message);
             }
         } catch (error) {
+            console.log(error)
             toast.error("Failed to update");
         }
     }
@@ -48,10 +48,10 @@ const CashValueUpCrossEditModal = ({ upSaleCrossSaleTypes, antdModalOpen, setAnt
                 <form onSubmit={handleSubmit(onSubmit)}>
                     <h4 className="point_edit_modal_title">Cash value of every upsale/cross sale point:</h4>
                     <div className='point_edit_modal_content'>
-                        <p className="point_edit_modal_text">Current Value: <span style={{ fontWeight: '500', color: '#000', fontSize: '20px' }}>100 Taka</span></p>
+                        <p className="point_edit_modal_text">Current Value: <span style={{ fontWeight: '500', color: '#000', fontSize: '20px' }}>{upSaleCrossSaleTypes?.cash_value} Taka</span></p>
                         <p>New Value (Taka)</p>
                         {/* include validation with required or other standard HTML validation rules */}
-                        <input className='point_edit_modal_input' type='number' {...register("upsaleCrossSalePoint", { required: true })} placeholder='Write here ' />
+                        <input className='point_edit_modal_input' defaultValue={upSaleCrossSaleTypes?.cash_value} type='number' {...register("upsaleCrossSalePoint", { required: true })} placeholder='Write here ' />
                         {errors.upsaleCrossSalePoint && <span style={{ color: 'red', fontSize: '12px' }}>This field is required</span>}
                     </div>
                     <div className='pay_now_modal_footer'>
