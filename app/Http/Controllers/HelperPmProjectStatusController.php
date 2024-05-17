@@ -499,13 +499,20 @@ class HelperPmProjectStatusController extends AccountBaseController
     function deliverablePmGoalCreation(ProjectDeliverable $deliverable)
     {
         $preGoals = ProjectPmGoal::where('project_id', $deliverable->project_id);
-        $lastGoal = $preGoals->first();
         $goalCount = $preGoals->count();
-        if ($goalCount > 2) {
-            $days = ceil(($deliverable->estimation_time - 4) / 3);
-        }
-        else {
-            $days = ceil($deliverable->estimation_time / 3);
+        $lastGoal = $preGoals->first();
+
+        switch ($goalCount) {
+            case 2:
+                $days = ceil(($deliverable->estimation_time - 4) / 3);
+                break;
+            case $goalCount > 2:
+                $days = ceil($deliverable->estimation_time / 3);
+                break;
+
+            default:
+                return;
+                break;
         }
 
         $goal = new ProjectPmGoal();
