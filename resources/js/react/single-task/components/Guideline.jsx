@@ -47,11 +47,12 @@ const Guideline = ({ text, task, type = "", editorContainerClass, workEnv, singl
 
     const typeOfGraphicsCategoryName = graphicOptions?.find((item) => commonGraphicWorkDetails?.type_of_graphic_work_id === item?.id)?.name
 
-    console.log("commonGraphicWorkDetails", commonGraphicWorkDetails)
-    console.log("graphicSubTaskDetails", graphicSubTaskDetails)
-    console.log("graphicWorkDetails", graphicWorkDetails)
-    console.log("_.isEmpty(graphicWorkDetails)", _.isEmpty(graphicWorkDetails))
-    console.log("isSubTask", isSubTask)
+    // console.log("commonGraphicWorkDetails", commonGraphicWorkDetails)
+    // console.log("graphicSubTaskDetails", graphicSubTaskDetails)
+    // console.log("graphicWorkDetails", graphicWorkDetails)
+    // console.log("_.isEmpty(graphicWorkDetails)", _.isEmpty(graphicWorkDetails))
+    // console.log("isSubTask", isSubTask)
+    console.log("singleTask", singleTask)
 
     const {
         brand_name,

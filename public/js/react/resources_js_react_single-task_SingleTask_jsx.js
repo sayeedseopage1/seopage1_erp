@@ -2268,7 +2268,7 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
 
 var Guideline = function Guideline(_ref) {
-  var _graphicOptions$find, _console, _console2, _console3, _console4, _console5, _singleTask$category, _defaultRefFiles, _defaultRefFiles2, _defaultTextForDesign, _defaultTextForDesign2, _defaultImageForDesig, _defaultImageForDesig2, _defaultImgOrVidForWo, _defaultImgOrVidForWo2, _defaultBrandGuidelin, _defaultSecondaryColo, _defaultSecondaryColo2, _singleTask$category2, _singleTask$category3, _singleTask$category4;
+  var _graphicOptions$find, _console, _singleTask$category, _defaultRefFiles, _defaultRefFiles2, _defaultTextForDesign, _defaultTextForDesign2, _defaultImageForDesig, _defaultImageForDesig2, _defaultImgOrVidForWo, _defaultImgOrVidForWo2, _defaultBrandGuidelin, _defaultSecondaryColo, _defaultSecondaryColo2, _singleTask$category2, _singleTask$category3, _singleTask$category4;
   var text = _ref.text,
     task = _ref.task,
     _ref$type = _ref.type,
@@ -2318,16 +2318,13 @@ var Guideline = function Guideline(_ref) {
     return (commonGraphicWorkDetails === null || commonGraphicWorkDetails === void 0 ? void 0 : commonGraphicWorkDetails.type_of_graphic_work_id) === (item === null || item === void 0 ? void 0 : item.id);
   })) === null || _graphicOptions$find === void 0 ? void 0 : _graphicOptions$find.name;
 
+  // console.log("commonGraphicWorkDetails", commonGraphicWorkDetails)
+  // console.log("graphicSubTaskDetails", graphicSubTaskDetails)
+  // console.log("graphicWorkDetails", graphicWorkDetails)
+  // console.log("_.isEmpty(graphicWorkDetails)", _.isEmpty(graphicWorkDetails))
+  // console.log("isSubTask", isSubTask)
   /* eslint-disable */
-  (_console = console).log.apply(_console, _toConsumableArray(oo_oo("1746430765_50_4_50_69_4", "commonGraphicWorkDetails", commonGraphicWorkDetails)));
-  /* eslint-disable */
-  (_console2 = console).log.apply(_console2, _toConsumableArray(oo_oo("1746430765_51_4_51_63_4", "graphicSubTaskDetails", graphicSubTaskDetails)));
-  /* eslint-disable */
-  (_console3 = console).log.apply(_console3, _toConsumableArray(oo_oo("1746430765_52_4_52_57_4", "graphicWorkDetails", graphicWorkDetails)));
-  /* eslint-disable */
-  (_console4 = console).log.apply(_console4, _toConsumableArray(oo_oo("1746430765_53_4_53_79_4", "_.isEmpty(graphicWorkDetails)", lodash__WEBPACK_IMPORTED_MODULE_2___default().isEmpty(graphicWorkDetails))));
-  /* eslint-disable */
-  (_console5 = console).log.apply(_console5, _toConsumableArray(oo_oo("1746430765_54_4_54_39_4", "isSubTask", isSubTask)));
+  (_console = console).log.apply(_console, _toConsumableArray(oo_oo("968141646_55_4_55_41_4", "singleTask", singleTask)));
   var brand_name = commonGraphicWorkDetails.brand_name,
     created_at = commonGraphicWorkDetails.created_at,
     design_instruction = commonGraphicWorkDetails.design_instruction,
