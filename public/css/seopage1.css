@@ -1527,6 +1527,7 @@
 }
 .link_color {
   color: #2323ee !important;
+  cursor: pointer;
 }
 
 .skeleton-loading {

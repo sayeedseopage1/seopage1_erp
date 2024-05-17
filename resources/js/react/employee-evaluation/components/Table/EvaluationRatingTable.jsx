@@ -10,6 +10,7 @@ const EvaluationRatingTable = ({ data, averageRating }) => {
                     <tr>
                         <th>Task name</th>
                         <th>Assign date</th>
+                        <th>Task Status</th>
                         <th>Submission date</th>
                         <th>Total hours tracked</th>
                         <th>Completed work URL</th>
@@ -51,6 +52,17 @@ const EvaluationRatingTable = ({ data, averageRating }) => {
                             )}
                         </td>
                         <td>{data?.assign_date}</td>
+                        <td>
+                            <span
+                                className="badge text-white"
+                                style={{
+                                    background:
+                                        data?.task_board_column_color ?? "",
+                                }}
+                            >
+                                {data?.task_board_column_name ?? ""}
+                            </span>
+                        </td>
                         <td>{data.submission_date}</td>
                         <td>{convertTime(data?.total_min)}</td>
                         <td>
@@ -78,13 +90,16 @@ const EvaluationRatingTable = ({ data, averageRating }) => {
                                         <Popover.Panel>
                                             <div className="revision_popover_panel">
                                                 {JSON.parse(
-                                                    data.completed_work
-                                                ).map((data) => (
+                                                    data?.completed_work
+                                                ).map((data, index) => (
                                                     <div>
+                                                        <span>
+                                                            {index + 1}.
+                                                        </span>
                                                         <a
-                                                            className="hover-underline"
-                                                            href={data}
+                                                            className="link_color hover-underline mb-2"
                                                             target="_blank"
+                                                            href={data}
                                                         >
                                                             {data}
                                                         </a>
