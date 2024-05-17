@@ -39,7 +39,7 @@ const DailySubmissionItem = ({ item, setModalData, modalData }) => {
                 </span>
             </td>
             <td className="sp1_tlr_td" style={{ minWidth: "100px" }}>
-                {dayjs(item.submission_creation_date).format("MMM DD, YYYY")}
+                {dayjs(item.report_date).format("MMM DD, YYYY")}
             </td>
             <td className="sp1_tlr_td" style={{ minWidth: "50px" }}>
                 {modalData?.id === item.id ? (

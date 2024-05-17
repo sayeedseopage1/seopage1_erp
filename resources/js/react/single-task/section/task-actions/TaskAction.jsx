@@ -43,8 +43,10 @@ const TaskAction = ({ task, status }) => {
         task &&
         (task?.isSubtask
             ? checkMarkAsCompleteEnableStatus?.message ===
-              "Developer can complete this task"
+            "Developer can complete this task"
             : true);
+
+
 
     const onModalEditButtonClick = (e) => {
         e.preventDefault();
@@ -153,8 +155,8 @@ const TaskAction = ({ task, status }) => {
             {/* Subtask creation guideline */}
             {(loggedUser.isHasRolePermission(6) ||
                 loggedUser.isHasRolePermission(13)) && (
-                <SubtaskCreationControl task={task} />
-            )}
+                    <SubtaskCreationControl task={task} />
+                )}
 
             {/*********** Report Control ***********/}
 
