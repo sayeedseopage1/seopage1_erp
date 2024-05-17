@@ -15,9 +15,9 @@ import AssginedToSelection from "./AssignedToSelection";
 import DatePickerComponent from "./DatePicker";
 import PrioritySelection from "./PrioritySelection";
 import TaskCategorySelectionBox from "./TaskCategorySelectionBox";
-import './ckeditor.css';
+import "./ckeditor.css";
 
-const IndependentTaskCreationForm = ({ isOpen, close, onSuccess }) => {
+const IndependentTaskCreationForm = ({ userId, isOpen, close, onSuccess }) => {
     const dayjs = new CompareDate();
     //   form data
     const [title, setTitle] = useState("");
@@ -67,6 +67,7 @@ const IndependentTaskCreationForm = ({ isOpen, close, onSuccess }) => {
         handleResetForm();
     }, []);
 
+    console.log("useId", userId);
     const params = useParams();
     const [postIndependentTask, { isLoading, error }] =
         usePostIndependentTaskMutation();
@@ -137,7 +138,6 @@ const IndependentTaskCreationForm = ({ isOpen, close, onSuccess }) => {
             err.description = "Write a Description";
             errCount++;
         }
-
 
         if (!validator.isURL(loginUrl)) {
             err.loginUrl = "Enter a valid URL";
@@ -210,6 +210,7 @@ const IndependentTaskCreationForm = ({ isOpen, close, onSuccess }) => {
         // fd.append("deliverable_id", milestone?.deliverable_type ?? '');
         // fd.append("milestone_id", milestone?.id ?? '');
         fd.append("user_id", assignedTo?.id ?? "");
+        fd.append("evaluation_user_id", userId ?? "");
         fd.append("id", `U${window.Laravel.user.id}T${Date.now()}`);
         fd.append("isIndependent", 1);
         // fd.append("_method", "POST");
@@ -294,7 +295,8 @@ const IndependentTaskCreationForm = ({ isOpen, close, onSuccess }) => {
 
     // url shortener
     const getUrl = (url = "") => {
-        const urlPettern = /[(http(s)?):\/\/(www\.)?a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/gi;
+        const urlPettern =
+            /[(http(s)?):\/\/(www\.)?a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/gi;
 
         if (url) {
             if (urlPettern.test(url)) {
