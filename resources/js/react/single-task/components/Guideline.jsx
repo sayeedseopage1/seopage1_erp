@@ -132,6 +132,9 @@ const Guideline = ({ text, task, type = "", editorContainerClass, workEnv, singl
         setExpend(false)
     })
 
+    // console.log("defaultNumberOfVersion", defaultNumberOfVersion)
+    // console.log("singleTask", singleTask)
+
 
     // Graphics and Ui task Details for common use start********************************
     const GraphicsAndUiDetails = <>

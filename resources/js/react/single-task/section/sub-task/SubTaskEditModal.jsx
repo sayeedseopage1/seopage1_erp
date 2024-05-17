@@ -50,6 +50,7 @@ const EditFormProvider = ({ task, singleTask }) => {
         editSubtask({ data: formData, id: task?.id }).unwrap().then(res => {
             toast.success("Task Updated successfully!");
             close();
+            window.location.reload();
         }).catch((err) => {
             if (err?.status === 422) {
                 toast.warn("Please fill out all required fields")
@@ -392,7 +393,7 @@ const SubTaskEditModal = ({ task, singleTask: taskDetails, onSubmit, isLoading, 
 
     const { data: projects, isFetching: isFetchingMilestone } = useGetMilestoneDetailsQuery(task?.projectId)
 
-
+    console.log(numOfVersions)
 
     // handle uploaded file delete request
     const [deleteUplaodedFile] = useDeleteUplaodedFileMutation();
