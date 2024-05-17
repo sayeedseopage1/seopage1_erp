@@ -132,10 +132,8 @@ const EvaluationAcknowledgeModal = ({
 
             if (response?.status == 200) {
                 if (singleEvaluation?.managements_decision == "One more week") {
-                    console.log("response url", response.url);
-                    toast.success("Acknowledge successful!");
                     setAcknowledgement(false);
-                    increaseCount();
+
                     window.location.href = response.url;
                 } else {
                     toast.success("Acknowledge successful!");
@@ -391,7 +389,7 @@ const EvaluationAcknowledgeModal = ({
                         size="md"
                         className="ml-2"
                     >
-                        <div> Ok, Acknowledged it team lead</div>
+                        <div> Ok, Acknowledged it</div>
                     </Button>
                 )}
                 {auth.roleId === 6 && (
@@ -400,7 +398,7 @@ const EvaluationAcknowledgeModal = ({
                         size="md"
                         className="ml-2"
                     >
-                        <div> Ok, Acknowledged it lead dev</div>
+                        <div> Ok, Acknowledged it</div>
                     </Button>
                 )}
             </FooterButtons>
