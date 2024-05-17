@@ -44,29 +44,29 @@ export const EvaluationRevisionTableColumns = [
             );
         },
     },
-    {
-        id: "client",
-        header: "Client",
-        draggable: true,
-        sortable: true,
-        accessorFn: (row) => row.client.name,
-        cell: ({ row }) => {
-            const d = row.original;
+    // {
+    //     id: "client",
+    //     header: "Client",
+    //     draggable: true,
+    //     sortable: true,
+    //     accessorFn: (row) => row.client.name,
+    //     cell: ({ row }) => {
+    //         const d = row.original;
 
-            const person = d?.client;
+    //         const person = d?.client;
 
-            if (person) {
-                return (
-                    <PersonColumn
-                        name={person.name}
-                        avatar={person.image}
-                        slug=""
-                        profileLink={`/account/employees/${person.id}`}
-                    />
-                );
-            } else return <span> -- </span>;
-        },
-    },
+    //         if (person) {
+    //             return (
+    //                 <PersonColumn
+    //                     name={person.name}
+    //                     avatar={person.image}
+    //                     slug=""
+    //                     profileLink={`/account/employees/${person.id}`}
+    //                 />
+    //             );
+    //         } else return <span> -- </span>;
+    //     },
+    // },
     {
         id: "task",
         header: "Task",
@@ -220,29 +220,29 @@ export const EvaluationRevisionTableColumns = [
             } else return <span> -- </span>;
         },
     },
-    {
-        id: "project_manager",
-        header: "Project Manager",
-        draggable: true,
-        sortable: true,
-        accessorFn: (row) => row?.project_manager?.name,
-        cell: ({ row }) => {
-            const d = row.original;
+    // {
+    //     id: "project_manager",
+    //     header: "Project Manager",
+    //     draggable: true,
+    //     sortable: true,
+    //     accessorFn: (row) => row?.project_manager?.name,
+    //     cell: ({ row }) => {
+    //         const d = row.original;
 
-            const person = d?.project_manager;
+    //         const person = d?.project_manager;
 
-            if (person) {
-                return (
-                    <PersonColumn
-                        name={person.name}
-                        avatar={person.image}
-                        slug={person.designation}
-                        profileLink={`/account/employees/${person.id}`}
-                    />
-                );
-            } else return <span> -- </span>;
-        },
-    },
+    //         if (person) {
+    //             return (
+    //                 <PersonColumn
+    //                     name={person.name}
+    //                     avatar={person.image}
+    //                     slug={person.designation}
+    //                     profileLink={`/account/employees/${person.id}`}
+    //                 />
+    //             );
+    //         } else return <span> -- </span>;
+    //     },
+    // },
     {
         id: "lead_developer",
         header: "Lead Developer",
@@ -266,222 +266,222 @@ export const EvaluationRevisionTableColumns = [
             } else return <span> -- </span>;
         },
     },
-    {
-        id: "sales_executive",
-        header: "Sales Executive",
-        draggable: true,
-        sortable: true,
-        accessorFn: (row) => row.deal_added_by.name,
-        cell: ({ row }) => {
-            const d = row.original;
+    // {
+    //     id: "sales_executive",
+    //     header: "Sales Executive",
+    //     draggable: true,
+    //     sortable: true,
+    //     accessorFn: (row) => row.deal_added_by.name,
+    //     cell: ({ row }) => {
+    //         const d = row.original;
 
-            const person = d?.deal_added_by;
+    //         const person = d?.deal_added_by;
 
-            if (person) {
-                return (
-                    <PersonColumn
-                        name={person.name}
-                        avatar={person.image}
-                        slug={person.designation}
-                        profileLink={`/account/employees/${person.id}`}
-                    />
-                );
-            } else return <span> -- </span>;
-        },
-    },
-    {
-        id: "status",
-        header: "Action/Status",
-        draggable: true,
-        cell: ({ row, table }) => {
-            const data = row.original;
-            const user = window?.Laravel?.user;
+    //         if (person) {
+    //             return (
+    //                 <PersonColumn
+    //                     name={person.name}
+    //                     avatar={person.image}
+    //                     slug={person.designation}
+    //                     profileLink={`/account/employees/${person.id}`}
+    //                 />
+    //             );
+    //         } else return <span> -- </span>;
+    //     },
+    // },
+    // {
+    //     id: "status",
+    //     header: "Action/Status",
+    //     draggable: true,
+    //     cell: ({ row, table }) => {
+    //         const data = row.original;
+    //         const user = window?.Laravel?.user;
 
-            const actionAlreadyTaken =
-                data?.dispute_between === "SPR"
-                    ? data?.sale_accept || data?.sale_deny
-                    : data?.is_accept || data?.is_deny;
+    //         const actionAlreadyTaken =
+    //             data?.dispute_between === "SPR"
+    //                 ? data?.sale_accept || data?.sale_deny
+    //                 : data?.is_accept || data?.is_deny;
 
-            const hasPermissionToTakeAction =
-                Number(user?.id) === Number(data?.deal_added_by?.id);
+    //         const hasPermissionToTakeAction =
+    //             Number(user?.id) === Number(data?.deal_added_by?.id);
 
-            return (
-                <Switch>
-                    <Switch.Case
-                        condition={
-                            !hasPermissionToTakeAction || actionAlreadyTaken
-                        }
-                    >
-                        <Switch>
-                            {/* if sales accept */}
-                            <Switch.Case
-                                condition={
-                                    data.dispute_between === "SPR" &&
-                                    data.sale_accept
-                                }
-                            >
-                                <Popover>
-                                    <Popover.Button>
-                                        <div
-                                            className={`${styles.status} f-12`}
-                                        >
-                                            {`Accepted by ${data?.deal_added_by?.name}`}
-                                        </div>
-                                    </Popover.Button>
+    //         return (
+    //             <Switch>
+    //                 <Switch.Case
+    //                     condition={
+    //                         !hasPermissionToTakeAction || actionAlreadyTaken
+    //                     }
+    //                 >
+    //                     <Switch>
+    //                         {/* if sales accept */}
+    //                         <Switch.Case
+    //                             condition={
+    //                                 data.dispute_between === "SPR" &&
+    //                                 data.sale_accept
+    //                             }
+    //                         >
+    //                             <Popover>
+    //                                 <Popover.Button>
+    //                                     <div
+    //                                         className={`${styles.status} f-12`}
+    //                                     >
+    //                                         {`Accepted by ${data?.deal_added_by?.name}`}
+    //                                     </div>
+    //                                 </Popover.Button>
 
-                                    <Popover.Panel>
-                                        <div
-                                            className={
-                                                styles.revision_popover_panel
-                                            }
-                                        >
-                                            <div className={`f-12`}>
-                                                Accepted by{" "}
-                                                <a
-                                                    href={`/account/employees/${data?.deal_added_by?.id}`}
-                                                >
-                                                    {data?.deal_added_by?.name}
-                                                </a>
-                                            </div>
-                                        </div>
-                                    </Popover.Panel>
-                                </Popover>
-                            </Switch.Case>
+    //                                 <Popover.Panel>
+    //                                     <div
+    //                                         className={
+    //                                             styles.revision_popover_panel
+    //                                         }
+    //                                     >
+    //                                         <div className={`f-12`}>
+    //                                             Accepted by{" "}
+    //                                             <a
+    //                                                 href={`/account/employees/${data?.deal_added_by?.id}`}
+    //                                             >
+    //                                                 {data?.deal_added_by?.name}
+    //                                             </a>
+    //                                         </div>
+    //                                     </div>
+    //                                 </Popover.Panel>
+    //                             </Popover>
+    //                         </Switch.Case>
 
-                            {/* if sales deny */}
-                            <Switch.Case
-                                condition={
-                                    data.dispute_between === "SPR" &&
-                                    data.sale_deny
-                                }
-                            >
-                                <Popover>
-                                    <Popover.Button>
-                                        <div
-                                            className={`${styles.status} ${styles.deny} f-12`}
-                                        >
-                                            {`Denied by ${data?.deal_added_by?.name}`}
-                                        </div>
-                                    </Popover.Button>
+    //                         {/* if sales deny */}
+    //                         <Switch.Case
+    //                             condition={
+    //                                 data.dispute_between === "SPR" &&
+    //                                 data.sale_deny
+    //                             }
+    //                         >
+    //                             <Popover>
+    //                                 <Popover.Button>
+    //                                     <div
+    //                                         className={`${styles.status} ${styles.deny} f-12`}
+    //                                     >
+    //                                         {`Denied by ${data?.deal_added_by?.name}`}
+    //                                     </div>
+    //                                 </Popover.Button>
 
-                                    <Popover.Panel>
-                                        <div
-                                            className={
-                                                styles.revision_popover_panel
-                                            }
-                                        >
-                                            <div className={`f-12`}>
-                                                Denied by{" "}
-                                                <a
-                                                    href={`/account/employees/${data?.deal_added_by?.id}`}
-                                                >
-                                                    {data?.deal_added_by?.name}
-                                                </a>
-                                            </div>
-                                        </div>
-                                    </Popover.Panel>
-                                </Popover>
-                            </Switch.Case>
+    //                                 <Popover.Panel>
+    //                                     <div
+    //                                         className={
+    //                                             styles.revision_popover_panel
+    //                                         }
+    //                                     >
+    //                                         <div className={`f-12`}>
+    //                                             Denied by{" "}
+    //                                             <a
+    //                                                 href={`/account/employees/${data?.deal_added_by?.id}`}
+    //                                             >
+    //                                                 {data?.deal_added_by?.name}
+    //                                             </a>
+    //                                         </div>
+    //                                     </div>
+    //                                 </Popover.Panel>
+    //                             </Popover>
+    //                         </Switch.Case>
 
-                            {/* if revision accept by assignee */}
-                            <Switch.Case
-                                condition={
-                                    data.dispute_between !== "SPR" &&
-                                    data.is_accept
-                                }
-                            >
-                                <Popover>
-                                    <Popover.Button>
-                                        <div
-                                            className={`${styles.status} f-12`}
-                                        >
-                                            {`Accepted by ${data?.task_assign_to?.name}`}
-                                        </div>
-                                    </Popover.Button>
+    //                         {/* if revision accept by assignee */}
+    //                         <Switch.Case
+    //                             condition={
+    //                                 data.dispute_between !== "SPR" &&
+    //                                 data.is_accept
+    //                             }
+    //                         >
+    //                             <Popover>
+    //                                 <Popover.Button>
+    //                                     <div
+    //                                         className={`${styles.status} f-12`}
+    //                                     >
+    //                                         {`Accepted by ${data?.task_assign_to?.name}`}
+    //                                     </div>
+    //                                 </Popover.Button>
 
-                                    <Popover.Panel>
-                                        <div
-                                            className={
-                                                styles.revision_popover_panel
-                                            }
-                                        >
-                                            <div className={`f-12`}>
-                                                Accepted by{" "}
-                                                <a
-                                                    href={`/account/employees/${data?.task_assign_to?.id}`}
-                                                >
-                                                    {data?.task_assign_to?.name}
-                                                </a>
-                                            </div>
-                                        </div>
-                                    </Popover.Panel>
-                                </Popover>
-                            </Switch.Case>
+    //                                 <Popover.Panel>
+    //                                     <div
+    //                                         className={
+    //                                             styles.revision_popover_panel
+    //                                         }
+    //                                     >
+    //                                         <div className={`f-12`}>
+    //                                             Accepted by{" "}
+    //                                             <a
+    //                                                 href={`/account/employees/${data?.task_assign_to?.id}`}
+    //                                             >
+    //                                                 {data?.task_assign_to?.name}
+    //                                             </a>
+    //                                         </div>
+    //                                     </div>
+    //                                 </Popover.Panel>
+    //                             </Popover>
+    //                         </Switch.Case>
 
-                            {/* if revision accept by assignee */}
-                            <Switch.Case
-                                condition={
-                                    data.dispute_between !== "SPR" &&
-                                    data.is_deny
-                                }
-                            >
-                                <Popover>
-                                    <Popover.Button>
-                                        <div
-                                            className={`${styles.status} ${styles.deny} f-12`}
-                                        >
-                                            {`Denied by ${data?.task_assign_to?.name}`}
-                                        </div>
-                                    </Popover.Button>
+    //                         {/* if revision accept by assignee */}
+    //                         <Switch.Case
+    //                             condition={
+    //                                 data.dispute_between !== "SPR" &&
+    //                                 data.is_deny
+    //                             }
+    //                         >
+    //                             <Popover>
+    //                                 <Popover.Button>
+    //                                     <div
+    //                                         className={`${styles.status} ${styles.deny} f-12`}
+    //                                     >
+    //                                         {`Denied by ${data?.task_assign_to?.name}`}
+    //                                     </div>
+    //                                 </Popover.Button>
 
-                                    <Popover.Panel>
-                                        <div
-                                            className={
-                                                styles.revision_popover_panel
-                                            }
-                                        >
-                                            <div className={`f-12`}>
-                                                Denied by{" "}
-                                                <a
-                                                    href={`/account/employees/${data?.task_assign_to?.id}`}
-                                                >
-                                                    {data?.task_assign_to?.name}
-                                                </a>
-                                            </div>
-                                        </div>
-                                    </Popover.Panel>
-                                </Popover>
-                            </Switch.Case>
+    //                                 <Popover.Panel>
+    //                                     <div
+    //                                         className={
+    //                                             styles.revision_popover_panel
+    //                                         }
+    //                                     >
+    //                                         <div className={`f-12`}>
+    //                                             Denied by{" "}
+    //                                             <a
+    //                                                 href={`/account/employees/${data?.task_assign_to?.id}`}
+    //                                             >
+    //                                                 {data?.task_assign_to?.name}
+    //                                             </a>
+    //                                         </div>
+    //                                     </div>
+    //                                 </Popover.Panel>
+    //                             </Popover>
+    //                         </Switch.Case>
 
-                            {/* Pending */}
-                            <Switch.Case
-                                condition={
-                                    data.dispute_between !== "SPR"
-                                        ? data?.approval_status === "pending"
-                                        : !actionAlreadyTaken
-                                }
-                            >
-                                <div
-                                    className={`${styles.status} ${styles.pending} f-12`}
-                                >
-                                    {" "}
-                                    Pending{" "}
-                                </div>
-                            </Switch.Case>
-                        </Switch>
-                    </Switch.Case>
+    //                         {/* Pending */}
+    //                         <Switch.Case
+    //                             condition={
+    //                                 data.dispute_between !== "SPR"
+    //                                     ? data?.approval_status === "pending"
+    //                                     : !actionAlreadyTaken
+    //                             }
+    //                         >
+    //                             <div
+    //                                 className={`${styles.status} ${styles.pending} f-12`}
+    //                             >
+    //                                 {" "}
+    //                                 Pending{" "}
+    //                             </div>
+    //                         </Switch.Case>
+    //                     </Switch>
+    //                 </Switch.Case>
 
-                    <Switch.Case
-                        condition={
-                            data.dispute_between === "SPR" &&
-                            !actionAlreadyTaken &&
-                            hasPermissionToTakeAction
-                        }
-                    >
-                        <SaleActionButton row={data} table={table} />
-                    </Switch.Case>
-                </Switch>
-            );
-        },
-    },
+    //                 <Switch.Case
+    //                     condition={
+    //                         data.dispute_between === "SPR" &&
+    //                         !actionAlreadyTaken &&
+    //                         hasPermissionToTakeAction
+    //                     }
+    //                 >
+    //                     <SaleActionButton row={data} table={table} />
+    //                 </Switch.Case>
+    //             </Switch>
+    //         );
+    //     },
+    // },
 ];
