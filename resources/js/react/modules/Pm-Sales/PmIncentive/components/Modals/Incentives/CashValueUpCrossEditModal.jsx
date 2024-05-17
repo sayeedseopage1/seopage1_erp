@@ -57,7 +57,7 @@ const CashValueUpCrossEditModal = ({ upSaleCrossSaleTypes, antdModalOpen, setAnt
                     <div className='pay_now_modal_footer'>
                         <ButtonComponent type='submit' color='#1492E6' textColor='#fff' font='18px'>
                             {
-                                isEditIncentiveTypesLoading ? 'Loading...' : 'Update'
+                                isEditIncentiveTypesLoading ? 'Loading...' : 'Save'
                             }
                         </ButtonComponent>
                     </div>
