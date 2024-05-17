@@ -356,6 +356,9 @@ const SubTaskEditModal = ({ task, singleTask: taskDetails, onSubmit, isLoading, 
                 .querySelector("meta[name='csrf-token']")
                 .getAttribute("content")
         );
+        fd.append("type_of_graphic_work_id", graphicWorkDetails?.type_of_graphic_work_id);
+        fd.append("category_id", task?.category?.id);
+        fd.append("number_of_versions", numOfVersions ?? "");
         Array.from(files).forEach((file) => {
             fd.append("file[]", file);
         });

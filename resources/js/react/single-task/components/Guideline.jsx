@@ -20,9 +20,21 @@ const Guideline = ({ text, task, type = "", editorContainerClass, workEnv, singl
 
     // **************sub task details start**********
     const isSubTask = singleTask?.dependent_task_id
-    const { data: subTasks, isFetching } = useGetSubTasksQuery({ taskId: singleTask?.dependent_task_id }, {
+    const { data: subTasks } = useGetSubTasksQuery({ taskId: singleTask?.dependent_task_id }, {
         skip: !isSubTask
     })
+
+
+    // *************** sub task for number of versions start ********
+    const { data: subTaskFromCreation } = useGetSubTasksQuery({ taskId: singleTask?.id }, {
+        skip: !isSubTask
+    })
+
+    console.log("subTaskFromCreation", subTaskFromCreation?.sub_task_details_graphic_work?.number_of_versions)
+    //*************** sub task for number of versions end ***********
+
+
+
     // sub task details graphic
     const graphicSubTaskDetails = new Object(subTasks?.sub_task_details_graphic_work)
     // sub task details ui/uix 
@@ -37,13 +49,13 @@ const Guideline = ({ text, task, type = "", editorContainerClass, workEnv, singl
     const subUiUixDetails = new Object(mainTask?.task)
     // **************sub task details end**********
 
-    // console.log("subTask", subTasks)
+
 
     // parent task details 
     const graphicWorkDetails = new Object(singleTask?.graphic_work_detail);
 
-    const commonGraphicWorkDetails = _.isEmpty(graphicWorkDetails) ? graphicSubTaskDetails : graphicWorkDetails
-    // const commonGraphicWorkDetails = isSubTask ? graphicSubTaskDetails : graphicWorkDetails
+    // const commonGraphicWorkDetails = _.isEmpty(graphicWorkDetails) ? graphicSubTaskDetails : graphicWorkDetails
+    const commonGraphicWorkDetails = subTasks ? graphicSubTaskDetails : graphicWorkDetails
 
     const typeOfGraphicsCategoryName = graphicOptions?.find((item) => commonGraphicWorkDetails?.type_of_graphic_work_id === item?.id)?.name
 
@@ -53,6 +65,8 @@ const Guideline = ({ text, task, type = "", editorContainerClass, workEnv, singl
     // console.log("_.isEmpty(graphicWorkDetails)", _.isEmpty(graphicWorkDetails))
     // console.log("isSubTask", isSubTask)
     console.log("singleTask", singleTask)
+    console.log("subTask", subTasks)
+    console.log("graphicSubTaskDetails", graphicSubTaskDetails)
 
     const {
         brand_name,
@@ -142,10 +156,16 @@ const Guideline = ({ text, task, type = "", editorContainerClass, workEnv, singl
                                 <span><strong>Brand Name</strong>: <br /> {brand_name}</span>
                             </div>
                             <div className="col-12 col-lg-6 col-xl-4 mb-2 word-break">
-                                <span><strong>Number of Versions</strong>: <br /> {number_of_versions}</span>
+                                <span><strong>Number of Versions</strong>: <br />
+                                    {
+                                        subTaskFromCreation?.sub_task_details_graphic_work?.number_of_versions
+                                            ? subTaskFromCreation?.sub_task_details_graphic_work?.number_of_versions
+                                            : number_of_versions
+                                    }
+                                </span>
                             </div>
                             <div className="col-12 col-lg-6 col-xl-4 mb-2 word-break">
-                                <span><strong>File Types Needed</strong>: <br /> {defaultFileTypesNeeded.join(", ")}</span>
+                                <span><strong>File Types Needed</strong>: <br /> {defaultFileTypesNeeded?.join(", ")}</span>
                             </div>
                         </>
                     }
@@ -173,7 +193,7 @@ const Guideline = ({ text, task, type = "", editorContainerClass, workEnv, singl
                     }
                     {
                         defaultFileExtension && <div className="col-12 col-lg-6 col-xl-4 mb-2 word-break">
-                            <span><strong>Required File Extension</strong>: <br /> {defaultFileExtension.join(", ")}</span>
+                            <span><strong>Required File Extension</strong>: <br /> {defaultFileExtension?.join(", ")}</span>
                         </div>
                     }
                     {
