@@ -111,13 +111,15 @@ const SubTaskEditModal = ({ task, singleTask: taskDetails, onSubmit, isLoading, 
     // **************sub task details end**********
 
     // *************** sub task for number of versions start ********
-    const { data: subTaskFromCreation } = useGetSubTasksQuery({ taskId: taskDetails?.id }, {
+    const { data: subTaskFromCreation, isLoading: subTaskFromCreationLoading } = useGetSubTasksQuery({ taskId: taskDetails?.id }, {
         skip: !isSubTask
     })
-    const [defaultNumberOfVersion, setDefaultNumberOfVersion] = useState(null);
+
     useEffect(() => {
-        setDefaultNumberOfVersion(subTaskFromCreation?.sub_task_details_graphic_work?.number_of_versions)
-    }, [subTaskFromCreation])
+        if (subTaskFromCreation?.sub_task_details_graphic_work?.number_of_versions) {
+            setNumOfVersions(subTaskFromCreation?.sub_task_details_graphic_work?.number_of_versions)
+        }
+    }, [subTaskFromCreation?.sub_task_details_graphic_work?.number_of_versions])
 
     //*************** sub task for number of versions end ***********
 
@@ -183,7 +185,7 @@ const SubTaskEditModal = ({ task, singleTask: taskDetails, onSubmit, isLoading, 
     const [typeOfGraphicsCategory, setTypeOfGraphicsCategory] = useState("");
     const [typeOfLogo, setTypeOfLogo] = useState("");
     const [brandName, setBrandName] = useState("");
-    const [numOfVersions, setNumOfVersions] = useState(null);
+    const [numOfVersions, setNumOfVersions] = useState();
     const [referenceList, setReferenceList] = useState([{ reference: "" }]);
     const [referenceFile, setReferenceFile] = useState([]);
     const [fileTypesNeeded, setFileTypesNeeded] = React.useState([]);
@@ -208,7 +210,7 @@ const SubTaskEditModal = ({ task, singleTask: taskDetails, onSubmit, isLoading, 
     const [themeTemplate, setThemeTemplate] = useState("")
     // state for ui/ux end
 
-    // set state data default value from graphic designer start
+
     useEffect(() => {
         setBrandName(graphicWorkDetails?.brand_name)
         // setNumOfVersions(subTaskFromCreation?.sub_task_details_graphic_work?.number_of_versions);
@@ -387,7 +389,6 @@ const SubTaskEditModal = ({ task, singleTask: taskDetails, onSubmit, isLoading, 
         }
 
     };
-
 
     const { data: projects, isFetching: isFetchingMilestone } = useGetMilestoneDetailsQuery(task?.projectId)
 
@@ -626,16 +627,18 @@ const SubTaskEditModal = ({ task, singleTask: taskDetails, onSubmit, isLoading, 
                                     </div>
 
                                     <div className="col-12 col-md-6">
-                                        <Input
-                                            id="numOfVersions"
-                                            label="Number of Versions"
-                                            type="number"
-                                            placeholder="Enter Number of versions"
-                                            name="numOfVersions"
-                                            defaultValue={defaultNumberOfVersion}
-                                            required={true}
-                                            onChange={(e) => setNumOfVersions(e.target.value)}
-                                        />
+                                        {
+                                            subTaskFromCreationLoading ? "loading" : <Input
+                                                id="numOfVersions"
+                                                label="Number of Versions"
+                                                type="number"
+                                                placeholder="Enter Number of versions"
+                                                name="numOfVersions"
+                                                defaultValue={numOfVersions}
+                                                required={true}
+                                                onChange={(e) => setNumOfVersions(e.target.value)}
+                                            />
+                                        }
                                     </div>
                                 </>
                             }

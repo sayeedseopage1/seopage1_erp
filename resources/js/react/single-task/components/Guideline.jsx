@@ -33,6 +33,7 @@ const Guideline = ({ text, task, type = "", editorContainerClass, workEnv, singl
     })
 
     const [defaultNumberOfVersion, setDefaultNumberOfVersion] = useState(null);
+
     useEffect(() => {
         // if (subTaskFromCreation) {
         setDefaultNumberOfVersion(subTaskFromCreation?.sub_task_details_graphic_work?.number_of_versions)
@@ -42,6 +43,7 @@ const Guideline = ({ text, task, type = "", editorContainerClass, workEnv, singl
     useEffect(() => {
         setDefaultNumberOfVersion(subTaskGenaral?.sub_task_details_graphic_work?.number_of_versions)
     }, [subTaskGenaral])
+
     //*************** sub task for number of versions end ***********
 
     // sub task details graphic
@@ -160,6 +162,11 @@ const Guideline = ({ text, task, type = "", editorContainerClass, workEnv, singl
                                             ? defaultNumberOfVersion
                                             : number_of_versions
                                     }
+                                    {/* {
+                                        isSubTask ?
+                                            (defaultNumberOfVersion ? defaultNumberOfVersion : null) :
+                                            number_of_versions
+                                    } */}
                                 </span>
                             </div>
                             <div className="col-12 col-lg-6 col-xl-4 mb-2 word-break">

@@ -2317,6 +2317,7 @@ var Guideline = function Guideline(_ref) {
     var _subTaskGenaral$sub_t;
     setDefaultNumberOfVersion(subTaskGenaral === null || subTaskGenaral === void 0 || (_subTaskGenaral$sub_t = subTaskGenaral.sub_task_details_graphic_work) === null || _subTaskGenaral$sub_t === void 0 ? void 0 : _subTaskGenaral$sub_t.number_of_versions);
   }, [subTaskGenaral]);
+
   //*************** sub task for number of versions end ***********
 
   // sub task details graphic
@@ -11449,7 +11450,7 @@ var EditFormProvider = function EditFormProvider(_ref) {
 };
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (EditFormProvider);
 var SubTaskEditModal = function SubTaskEditModal(_ref2) {
-  var _required_error$title, _task$category2, _required_error$start, _required_error$start2, _required_error$due_d, _required_error$due_d2, _task$category3, _defaultSecondaryColo, _defaultSecondaryColo2, _defaultSecondaryColo3, _defaultSecondaryColo4, _task$category4;
+  var _subTaskFromCreation$3, _required_error$title, _task$category2, _required_error$start, _required_error$start2, _required_error$due_d, _required_error$due_d2, _task$category3, _defaultSecondaryColo, _defaultSecondaryColo2, _defaultSecondaryColo3, _defaultSecondaryColo4, _task$category4;
   var task = _ref2.task,
     taskDetails = _ref2.singleTask,
     onSubmit = _ref2.onSubmit,
@@ -11483,15 +11484,15 @@ var SubTaskEditModal = function SubTaskEditModal(_ref2) {
     }, {
       skip: !isSubTask
     }),
-    subTaskFromCreation = _useGetSubTasksQuery2.data;
-  var _useState = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)(null),
-    _useState2 = _slicedToArray(_useState, 2),
-    defaultNumberOfVersion = _useState2[0],
-    setDefaultNumberOfVersion = _useState2[1];
+    subTaskFromCreation = _useGetSubTasksQuery2.data,
+    subTaskFromCreationLoading = _useGetSubTasksQuery2.isLoading;
   (0,react__WEBPACK_IMPORTED_MODULE_1__.useEffect)(function () {
     var _subTaskFromCreation$;
-    setDefaultNumberOfVersion(subTaskFromCreation === null || subTaskFromCreation === void 0 || (_subTaskFromCreation$ = subTaskFromCreation.sub_task_details_graphic_work) === null || _subTaskFromCreation$ === void 0 ? void 0 : _subTaskFromCreation$.number_of_versions);
-  }, [subTaskFromCreation]);
+    if (subTaskFromCreation !== null && subTaskFromCreation !== void 0 && (_subTaskFromCreation$ = subTaskFromCreation.sub_task_details_graphic_work) !== null && _subTaskFromCreation$ !== void 0 && _subTaskFromCreation$.number_of_versions) {
+      var _subTaskFromCreation$2;
+      setNumOfVersions(subTaskFromCreation === null || subTaskFromCreation === void 0 || (_subTaskFromCreation$2 = subTaskFromCreation.sub_task_details_graphic_work) === null || _subTaskFromCreation$2 === void 0 ? void 0 : _subTaskFromCreation$2.number_of_versions);
+    }
+  }, [subTaskFromCreation === null || subTaskFromCreation === void 0 || (_subTaskFromCreation$3 = subTaskFromCreation.sub_task_details_graphic_work) === null || _subTaskFromCreation$3 === void 0 ? void 0 : _subTaskFromCreation$3.number_of_versions]);
 
   //*************** sub task for number of versions end ***********
 
@@ -11535,143 +11536,143 @@ var SubTaskEditModal = function SubTaskEditModal(_ref2) {
   // set default value for files and colors for graphic design end
 
   //form data
-  var _useState3 = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)(task.title),
-    _useState4 = _slicedToArray(_useState3, 2),
-    title = _useState4[0],
-    setTitle = _useState4[1];
-  var _useState5 = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)({
+  var _useState = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)(task.title),
+    _useState2 = _slicedToArray(_useState, 2),
+    title = _useState2[0],
+    setTitle = _useState2[1];
+  var _useState3 = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)({
       id: task.milestoneID,
       milestone_title: task.milestoneTitle
     }),
+    _useState4 = _slicedToArray(_useState3, 2),
+    milestone = _useState4[0],
+    setMilestone = _useState4[1];
+  var _useState5 = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)(task.parentTaskTitle),
     _useState6 = _slicedToArray(_useState5, 2),
-    milestone = _useState6[0],
-    setMilestone = _useState6[1];
-  var _useState7 = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)(task.parentTaskTitle),
+    parentTask = _useState6[0],
+    setParentTask = _useState6[1];
+  var _useState7 = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)(new Date(task.startDate)),
     _useState8 = _slicedToArray(_useState7, 2),
-    parentTask = _useState8[0],
-    setParentTask = _useState8[1];
-  var _useState9 = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)(new Date(task.startDate)),
+    startDate = _useState8[0],
+    setStateDate = _useState8[1];
+  var _useState9 = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)(new Date(task.dueDate)),
     _useState10 = _slicedToArray(_useState9, 2),
-    startDate = _useState10[0],
-    setStateDate = _useState10[1];
-  var _useState11 = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)(new Date(task.dueDate)),
+    dueDate = _useState10[0],
+    setDueDate = _useState10[1];
+  var _useState11 = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)(task.projectName),
     _useState12 = _slicedToArray(_useState11, 2),
-    dueDate = _useState12[0],
-    setDueDate = _useState12[1];
-  var _useState13 = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)(task.projectName),
-    _useState14 = _slicedToArray(_useState13, 2),
-    project = _useState14[0],
-    setProject = _useState14[1];
-  var _useState15 = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)({
+    project = _useState12[0],
+    setProject = _useState12[1];
+  var _useState13 = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)({
       id: task.category.id,
       category_name: task.category.name
     }),
-    _useState16 = _slicedToArray(_useState15, 2),
-    taskCategory = _useState16[0],
-    setTaskCategory = _useState16[1];
-  var _useState17 = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)({
+    _useState14 = _slicedToArray(_useState13, 2),
+    taskCategory = _useState14[0],
+    setTaskCategory = _useState14[1];
+  var _useState15 = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)({
       id: task.assigneeTo.id,
       name: task.assigneeTo.name
     }),
+    _useState16 = _slicedToArray(_useState15, 2),
+    assignedTo = _useState16[0],
+    setAssignedTo = _useState16[1];
+  var _useState17 = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)(task.description),
     _useState18 = _slicedToArray(_useState17, 2),
-    assignedTo = _useState18[0],
-    setAssignedTo = _useState18[1];
-  var _useState19 = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)(task.description),
+    description = _useState18[0],
+    setDescription = _useState18[1];
+  var _useState19 = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)(task.priority),
     _useState20 = _slicedToArray(_useState19, 2),
-    description = _useState20[0],
-    setDescription = _useState20[1];
-  var _useState21 = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)(task.priority),
+    priority = _useState20[0],
+    setPriority = _useState20[1];
+  var _useState21 = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)(task.estimateHours),
     _useState22 = _slicedToArray(_useState21, 2),
-    priority = _useState22[0],
-    setPriority = _useState22[1];
-  var _useState23 = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)(task.estimateHours),
+    estimateTimeHour = _useState22[0],
+    setEstimateTimeHour = _useState22[1];
+  var _useState23 = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)(task.estimateMinutes),
     _useState24 = _slicedToArray(_useState23, 2),
-    estimateTimeHour = _useState24[0],
-    setEstimateTimeHour = _useState24[1];
-  var _useState25 = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)(task.estimateMinutes),
+    estimateTimeMin = _useState24[0],
+    setEstimateTimeMin = _useState24[1];
+  var _useState25 = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)([]),
     _useState26 = _slicedToArray(_useState25, 2),
-    estimateTimeMin = _useState26[0],
-    setEstimateTimeMin = _useState26[1];
-  var _useState27 = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)([]),
-    _useState28 = _slicedToArray(_useState27, 2),
-    attachedFiles = _useState28[0],
-    setAttachedFiles = _useState28[1];
+    attachedFiles = _useState26[0],
+    setAttachedFiles = _useState26[1];
   var _React$useState = react__WEBPACK_IMPORTED_MODULE_1___default().useState([]),
     _React$useState2 = _slicedToArray(_React$useState, 2),
     files = _React$useState2[0],
     setFiles = _React$useState2[1];
-  var _useState29 = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)(null),
-    _useState30 = _slicedToArray(_useState29, 2),
-    error = _useState30[0],
-    setError = _useState30[1];
+  var _useState27 = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)(null),
+    _useState28 = _slicedToArray(_useState27, 2),
+    error = _useState28[0],
+    setError = _useState28[1];
 
   //state for graphic designer start
-  var _useState31 = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)(''),
+  var _useState29 = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)(''),
+    _useState30 = _slicedToArray(_useState29, 2),
+    workableUrl = _useState30[0],
+    setWorkableUrl = _useState30[1];
+  var _useState31 = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)(""),
     _useState32 = _slicedToArray(_useState31, 2),
-    workableUrl = _useState32[0],
-    setWorkableUrl = _useState32[1];
+    typeOfGraphicsCategory = _useState32[0],
+    setTypeOfGraphicsCategory = _useState32[1];
   var _useState33 = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)(""),
     _useState34 = _slicedToArray(_useState33, 2),
-    typeOfGraphicsCategory = _useState34[0],
-    setTypeOfGraphicsCategory = _useState34[1];
+    typeOfLogo = _useState34[0],
+    setTypeOfLogo = _useState34[1];
   var _useState35 = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)(""),
     _useState36 = _slicedToArray(_useState35, 2),
-    typeOfLogo = _useState36[0],
-    setTypeOfLogo = _useState36[1];
-  var _useState37 = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)(""),
+    brandName = _useState36[0],
+    setBrandName = _useState36[1];
+  var _useState37 = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)(),
     _useState38 = _slicedToArray(_useState37, 2),
-    brandName = _useState38[0],
-    setBrandName = _useState38[1];
-  var _useState39 = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)(null),
-    _useState40 = _slicedToArray(_useState39, 2),
-    numOfVersions = _useState40[0],
-    setNumOfVersions = _useState40[1];
-  var _useState41 = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)([{
+    numOfVersions = _useState38[0],
+    setNumOfVersions = _useState38[1];
+  var _useState39 = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)([{
       reference: ""
     }]),
+    _useState40 = _slicedToArray(_useState39, 2),
+    referenceList = _useState40[0],
+    setReferenceList = _useState40[1];
+  var _useState41 = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)([]),
     _useState42 = _slicedToArray(_useState41, 2),
-    referenceList = _useState42[0],
-    setReferenceList = _useState42[1];
-  var _useState43 = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)([]),
-    _useState44 = _slicedToArray(_useState43, 2),
-    referenceFile = _useState44[0],
-    setReferenceFile = _useState44[1];
+    referenceFile = _useState42[0],
+    setReferenceFile = _useState42[1];
   var _React$useState3 = react__WEBPACK_IMPORTED_MODULE_1___default().useState([]),
     _React$useState4 = _slicedToArray(_React$useState3, 2),
     fileTypesNeeded = _React$useState4[0],
     setFileTypesNeeded = _React$useState4[1];
+  var _useState43 = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)([]),
+    _useState44 = _slicedToArray(_useState43, 2),
+    textForDesign = _useState44[0],
+    setTextForDesign = _useState44[1];
   var _useState45 = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)([]),
     _useState46 = _slicedToArray(_useState45, 2),
-    textForDesign = _useState46[0],
-    setTextForDesign = _useState46[1];
+    imageForDesigner = _useState46[0],
+    setImageForDesigner = _useState46[1];
   var _useState47 = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)([]),
     _useState48 = _slicedToArray(_useState47, 2),
-    imageForDesigner = _useState48[0],
-    setImageForDesigner = _useState48[1];
-  var _useState49 = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)([]),
+    imgOrVidForWork = _useState48[0],
+    setImgOrVidForWork = _useState48[1];
+  var _useState49 = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)(''),
     _useState50 = _slicedToArray(_useState49, 2),
-    imgOrVidForWork = _useState50[0],
-    setImgOrVidForWork = _useState50[1];
+    fontName = _useState50[0],
+    setFontName = _useState50[1];
   var _useState51 = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)(''),
     _useState52 = _slicedToArray(_useState51, 2),
-    fontName = _useState52[0],
-    setFontName = _useState52[1];
-  var _useState53 = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)(''),
+    fontUrl = _useState52[0],
+    setFontUrl = _useState52[1];
+  var _useState53 = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)([]),
     _useState54 = _slicedToArray(_useState53, 2),
-    fontUrl = _useState54[0],
-    setFontUrl = _useState54[1];
-  var _useState55 = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)([]),
+    brandGuideline = _useState54[0],
+    setBrandGuideline = _useState54[1];
+  var _useState55 = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)(""),
     _useState56 = _slicedToArray(_useState55, 2),
-    brandGuideline = _useState56[0],
-    setBrandGuideline = _useState56[1];
+    illustration = _useState56[0],
+    setIllustration = _useState56[1];
   var _useState57 = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)(""),
     _useState58 = _slicedToArray(_useState57, 2),
-    illustration = _useState58[0],
-    setIllustration = _useState58[1];
-  var _useState59 = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)(""),
-    _useState60 = _slicedToArray(_useState59, 2),
-    others = _useState60[0],
-    setOthers = _useState60[1];
+    others = _useState58[0],
+    setOthers = _useState58[1];
   var _React$useState5 = react__WEBPACK_IMPORTED_MODULE_1___default().useState(""),
     _React$useState6 = _slicedToArray(_React$useState5, 2),
     primaryColor = _React$useState6[0],
@@ -11691,21 +11692,20 @@ var SubTaskEditModal = function SubTaskEditModal(_ref2) {
   //state for graphic designer end
 
   // state for ui/ux start
+  var _useState59 = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)(""),
+    _useState60 = _slicedToArray(_useState59, 2),
+    cms = _useState60[0],
+    setCms = _useState60[1];
   var _useState61 = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)(""),
     _useState62 = _slicedToArray(_useState61, 2),
-    cms = _useState62[0],
-    setCms = _useState62[1];
+    themeName = _useState62[0],
+    setThemeName = _useState62[1];
   var _useState63 = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)(""),
     _useState64 = _slicedToArray(_useState63, 2),
-    themeName = _useState64[0],
-    setThemeName = _useState64[1];
-  var _useState65 = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)(""),
-    _useState66 = _slicedToArray(_useState65, 2),
-    themeTemplate = _useState66[0],
-    setThemeTemplate = _useState66[1];
+    themeTemplate = _useState64[0],
+    setThemeTemplate = _useState64[1];
   // state for ui/ux end
 
-  // set state data default value from graphic designer start
   (0,react__WEBPACK_IMPORTED_MODULE_1__.useEffect)(function () {
     setBrandName(graphicWorkDetails === null || graphicWorkDetails === void 0 ? void 0 : graphicWorkDetails.brand_name);
     // setNumOfVersions(subTaskFromCreation?.sub_task_details_graphic_work?.number_of_versions);
@@ -12076,13 +12076,13 @@ var SubTaskEditModal = function SubTaskEditModal(_ref2) {
               })
             }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_26__.jsx)("div", {
               className: "col-12 col-md-6",
-              children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_26__.jsx)(_components_form_Input__WEBPACK_IMPORTED_MODULE_8__["default"], {
+              children: subTaskFromCreationLoading ? "loading" : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_26__.jsx)(_components_form_Input__WEBPACK_IMPORTED_MODULE_8__["default"], {
                 id: "numOfVersions",
                 label: "Number of Versions",
                 type: "number",
                 placeholder: "Enter Number of versions",
                 name: "numOfVersions",
-                defaultValue: defaultNumberOfVersion,
+                defaultValue: numOfVersions,
                 required: true,
                 onChange: function onChange(e) {
                   return setNumOfVersions(e.target.value);
