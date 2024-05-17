@@ -44,7 +44,8 @@ const EvaluationAcknowledgeModal = ({
         (state) => state.pendingActions.pendingActionId
     );
     const { increaseCount } = useCounterStore();
-    const [updatePendingAction] = useAcknowledgePendingActionsPastMutation();
+    const [updatePendingAction, { isLoading: isLoadingTeamLead }] =
+        useAcknowledgePendingActionsPastMutation();
     const DecisionColor = {
         Accepted: "green",
         Rejected: "red",
@@ -134,15 +135,13 @@ const EvaluationAcknowledgeModal = ({
                 if (singleEvaluation?.managements_decision == "One more week") {
                     setAcknowledgement(false);
 
-                    window.location.href = response.url;
+                    window.location.href = response?.url;
                 } else {
                     toast.success("Acknowledge successful!");
                     setAcknowledgement(false);
                     increaseCount();
                 }
             }
-
-            response?.url;
         } catch (error) {
             console.error("Error updating pending action:", error);
         }
@@ -386,6 +385,7 @@ const EvaluationAcknowledgeModal = ({
                 {auth.roleId === 8 && (
                     <Button
                         onClick={handleAcknowledgedItTeamLead}
+                        isLoading={isLoadingTeamLead}
                         size="md"
                         className="ml-2"
                     >
