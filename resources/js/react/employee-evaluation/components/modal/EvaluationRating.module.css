@@ -7,7 +7,7 @@
 
 .table {
   width: 100%;
-  font-size: 12px !important;
+  
 }
 
 .table th, .table td {
@@ -39,7 +39,8 @@
   margin-top: 30px;
   margin-bottom: 10px;
  margin-right: 20px;
-  padding-right: 20px;
+ margin-left: 20px;
+  
 
 }
 .rating_container_task_table{
