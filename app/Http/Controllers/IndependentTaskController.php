@@ -116,8 +116,8 @@ class IndependentTaskController extends AccountBaseController
             }
         }
 
-        if(Auth::user()->role_id == 8 && $request->user_id !=null){
-            $evaluation = EmployeeEvaluationTask::where('user_id',$request->user_id)->first();
+        if(Auth::user()->role_id == 8 && $request->evaluation_user_id !=null){
+            $evaluation = EmployeeEvaluationTask::where('user_id',$request->evaluation_user_id)->first();
             if($evaluation->managements_decision == 'One more week'){
                 $helper = new HelperPendingActionController();
                 $helper->evaluationAuthTeamLead($evaluation->id);
