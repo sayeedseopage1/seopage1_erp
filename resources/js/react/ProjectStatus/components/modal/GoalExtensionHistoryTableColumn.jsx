@@ -151,12 +151,12 @@ export const GoalExtensionHistoryTableColumn = [
     {
         id: "extension_req_for",
         header: "Extension Requested For (Days)",
-        accessorKey: "extension_req_for_days",
+        accessorKey: "extended_day",
         cell: ({ row }) => {
             const data = row?.original;
             return (
                 <span>
-                    {data?.extension_req_for_days ? `${data?.extension_req_for_days} Days` : "--"}
+                    {data?.extended_day ? `${data?.extended_day} Days` : "--"}
                 </span>
             );
         }
@@ -177,12 +177,12 @@ export const GoalExtensionHistoryTableColumn = [
     {
         id: "extension_req_authorized_for",
         header: "Extension Req. Authorized For (Days)",
-        accessorKey: "extension_req_auth_for_days",
+        accessorKey: "admin_extended_day",
         cell: ({ row }) => {
             const data = row?.original;
             return (
                 <span>
-                    {data.extension_req_auth_for_days ? `${data?.extension_req_auth_for_days} Days` : "--"}
+                    {data.admin_extended_day ? `${data?.admin_extended_day} Days` : "--"}
                 </span>
             );
         }

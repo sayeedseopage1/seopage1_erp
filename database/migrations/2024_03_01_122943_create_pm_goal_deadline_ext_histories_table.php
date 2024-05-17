@@ -26,6 +26,7 @@ return new class extends Migration
             $table->string('screenshot')->nullable();
             $table->dateTime('extension_req_auth_for')->nullable();
             $table->dateTime('new_deadline')->nullable();
+            $table->integer('admin_extended_day')->nullable();
             $table->string('new_duration')->nullable();
             $table->longText('extended_admin_comment')->nullable();
             $table->dateTime('extension_req_auth_on')->nullable();
