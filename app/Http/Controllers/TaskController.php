@@ -949,6 +949,7 @@ class TaskController extends AccountBaseController
             'project_time_logs.end_time',
             'task_submissions.created_at as task_submission_date',
             'tasks.updated_at as task_updated_at',
+            'perentTask.heading as perent_task_heading',
 
 
 
@@ -958,6 +959,7 @@ class TaskController extends AccountBaseController
         )
             ->where('tasks.subtask_id', '!=', null)
             ->join('tasks', 'tasks.subtask_id', 'sub_tasks.id')
+            ->join('tasks as perentTask', 'perentTask.id', 'sub_tasks.task_id')
             ->leftJoin('projects', 'projects.id', 'tasks.project_id')
             ->leftJoin('users as client', 'client.id', 'projects.client_id')
             ->leftJoin('users as ind_client', 'ind_client.id', 'tasks.client_id')
