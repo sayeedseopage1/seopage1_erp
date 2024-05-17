@@ -2,9 +2,12 @@
 
 namespace App\Console\Commands;
 
-use App\Models\CashPoint;
 use Carbon\Carbon;
+use App\Models\Task;
 use App\Models\User;
+use App\Models\Project;
+use App\Models\CashPoint;
+use App\Models\TaskRevision;
 use Illuminate\Console\Command;
 
 class DisbursePmIncentiveMonthly extends Command
@@ -40,8 +43,20 @@ class DisbursePmIncentiveMonthly extends Command
             $totalLostPoints = $cashPoints->sum('total_points_lost');
             $availablePoints = $totalEarnedPoints - $totalLostPoints;
             
-            // Revision vs task ratio (Need Discussion)
+            // Revision vs task ratio
+            $total_tasks = Task::select('tasks.id')
+            ->where('tasks.added_by', $user->id)
+            ->whereBetween('tasks.created_at', [$startDate, $endDate])
+            ->count();
 
+            $pm_revisions = TaskRevision::leftJoin('projects','projects.id','task_revisions.project_id')
+            ->where('projects.pm_id', $user->id)
+            ->where('task_revisions.final_responsible_person','PM')
+            ->whereBetween('task_revisions.created_at', [$startDate, $endDate])
+            ->count();
+
+            $revision_percent = number_format(( $pm_revisions / $total_tasks ) * 100, 2);
+            
         }
     }
 }
