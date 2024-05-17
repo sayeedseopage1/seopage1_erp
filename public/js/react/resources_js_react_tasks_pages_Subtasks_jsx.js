@@ -79,7 +79,7 @@ var SubTaskExportButton = function SubTaskExportButton(_ref) {
   var getData = function getData(deals) {
     var rows = [];
     lodash__WEBPACK_IMPORTED_MODULE_4___default().forEach(deals, function (d) {
-      var _d$heading, _d$subtasks_timer_act, _d$milestone_title, _d$deliverable_title, _d$project_name, _d$client_name, _d$pm_id_name, _dueDate, _ref2, _d$subtasks_hours_log, _d$added_by_name, _d$assigned_to_name, _d$column_name;
+      var _d$heading, _d$perent_task_headin, _d$subtasks_timer_act, _d$milestone_title, _d$deliverable_title, _d$project_name, _d$client_name, _d$pm_id_name, _dueDate, _ref2, _d$subtasks_hours_log, _d$added_by_name, _d$assigned_to_name, _d$column_name;
       var fieldStyle = {
         alignment: {
           wrapText: true,
@@ -168,6 +168,9 @@ var SubTaskExportButton = function SubTaskExportButton(_ref) {
         value: (_d$heading = d === null || d === void 0 ? void 0 : d.heading) !== null && _d$heading !== void 0 ? _d$heading : "--",
         style: fieldStyle
       }, {
+        value: (_d$perent_task_headin = d === null || d === void 0 ? void 0 : d.perent_task_heading) !== null && _d$perent_task_headin !== void 0 ? _d$perent_task_headin : "--",
+        style: fieldStyle
+      }, {
         value: (_d$subtasks_timer_act = d === null || d === void 0 ? void 0 : d.subtasks_timer_active) !== null && _d$subtasks_timer_act !== void 0 ? _d$subtasks_timer_act : "--",
         style: _objectSpread({}, fieldStyle)
       }, {
@@ -226,7 +229,12 @@ var SubTaskExportButton = function SubTaskExportButton(_ref) {
 
   // columns
   var columns = [{
-    title: "Task",
+    title: "Subtask",
+    width: {
+      wpx: 150
+    }
+  }, {
+    title: "Parent Task",
     width: {
       wpx: 150
     }
