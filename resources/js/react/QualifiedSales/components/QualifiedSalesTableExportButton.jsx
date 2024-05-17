@@ -4,16 +4,25 @@ import dayjs from "dayjs";
 import ReactExport from "react-data-export";
 import _, { fill } from "lodash";
 import styled from "styled-components";
-
+import axios from "axios";
 import Loader from "../../global/Loader";
 import { useExportableQualifiedSalesMutation } from "../../services/api/qualifiedSalesApiSlice";
 
 import { CompareDate } from "../../Insights/utils/dateController";
 import { convert } from "html-to-text";
+import { useGetAllUsersQuery } from "../../services/api/userSliceApi";
 const ExcelFile = ReactExport.ExcelFile;
 const ExcelSheet = ReactExport.ExcelFile.ExcelSheet;
 
 const QualifiedSalesTableExportButton = ({ filter }) => {
+    const { data: usersData } = useGetAllUsersQuery();
+
+    // Function to get the name by user ID
+    const getUserNameById = (userId) => {
+        const user = usersData.find((user) => user.id === userId);
+        return user ? user.name : "User not found";
+    };
+
     const dayjs2 = new CompareDate();
     const [isRender, setIsRender] = React.useState(false);
     const queryObject = _.pickBy(filter ?? {}, Boolean);
@@ -33,7 +42,7 @@ const QualifiedSalesTableExportButton = ({ filter }) => {
                 alignment: {
                     wrapText: true,
                     vertical: "center",
-                    horizontal: "top",
+                    horizontal: "center",
                 },
             };
 
@@ -52,6 +61,11 @@ const QualifiedSalesTableExportButton = ({ filter }) => {
                             color: { rgb: "00AA00" },
                             bold: true,
                         },
+                        alignment: {
+                            textRotation: 90,
+                            horizontal: "center",
+                            vertical: "center",
+                        },
                     };
                 } else if (!isPMAccepted || !isTopMApproved || !isSLApproved) {
                     // any of two accept
@@ -61,6 +75,11 @@ const QualifiedSalesTableExportButton = ({ filter }) => {
                                 color: { rgb: "FCBD01" },
                                 bold: true,
                             },
+                            alignment: {
+                                textRotation: 90,
+                                horizontal: "center",
+                                vertical: "center",
+                            },
                         };
                     }
 
@@ -68,6 +87,11 @@ const QualifiedSalesTableExportButton = ({ filter }) => {
                         font: {
                             color: { rgb: "1D82F5" },
                             bold: true,
+                        },
+                        alignment: {
+                            textRotation: 90,
+                            horizontal: "center",
+                            vertical: "center",
                         },
                     };
                 }
@@ -95,9 +119,9 @@ const QualifiedSalesTableExportButton = ({ filter }) => {
                 }
             };
 
-            const ApprovedOrPending = (row) => {
-                if (row) {
-                    return "Approved";
+            const ApprovedOrPending = (isApproved, approvedBy) => {
+                if (isApproved && approvedBy) {
+                    return `Approved by ${approvedBy}`;
                 } else {
                     return "Pending";
                 }
@@ -110,12 +134,22 @@ const QualifiedSalesTableExportButton = ({ filter }) => {
                             color: { rgb: "00AA00" },
                             bold: true,
                         },
+                        alignment: {
+                            textRotation: 90,
+                            horizontal: "center",
+                            vertical: "center",
+                        },
                     };
                 } else {
                     return {
                         font: {
                             color: { rgb: "1D82F5" },
                             bold: true,
+                        },
+                        alignment: {
+                            textRotation: 90,
+                            horizontal: "center",
+                            vertical: "center",
                         },
                     };
                 }
@@ -144,6 +178,7 @@ const QualifiedSalesTableExportButton = ({ filter }) => {
                                 ? " ( Hourly )"
                                 : ""
                         }` ?? "--",
+
                     style: {
                         ...fieldStyle,
                     },
@@ -153,7 +188,7 @@ const QualifiedSalesTableExportButton = ({ filter }) => {
                     style: fieldStyle,
                 },
                 {
-                    value: `$${Number(d["amount"]).toFixed(2)}` ?? "--",
+                    value: `${Number(d["amount"]).toFixed(2)}` ?? "--",
                     style: {
                         ...fieldStyle,
                         font: {
@@ -171,12 +206,15 @@ const QualifiedSalesTableExportButton = ({ filter }) => {
                 },
                 {
                     value:
-                        `$https://seopage1.net/account/deal-url/${d?.["deal_id"]}` ??
+                        `https://seopage1.net/account/deal-url/${d?.["deal_id"]}` ??
                         "--",
                     style: fieldStyle,
                 },
                 {
-                    value: ApprovedOrPending(d?.authorized_by_sales_lead),
+                    value: ApprovedOrPending(
+                        d?.authorized_by_sales_lead,
+                        getUserNameById(d?.sales_lead_id)
+                    ),
                     style: {
                         ...fieldStyle,
                         ...ApprovedOrPendingStyle(d?.authorized_by_sales_lead),
@@ -184,7 +222,10 @@ const QualifiedSalesTableExportButton = ({ filter }) => {
                 },
 
                 {
-                    value: ApprovedOrPending(d?.accepted_by_project_manager),
+                    value: ApprovedOrPending(
+                        d?.accepted_by_project_manager,
+                        d?.pm_name
+                    ),
                     style: {
                         ...fieldStyle,
                         ...ApprovedOrPendingStyle(
@@ -193,10 +234,13 @@ const QualifiedSalesTableExportButton = ({ filter }) => {
                     },
                 },
                 {
-                    value: ApprovedOrPending(d?.["authorized_by_admin"]),
+                    value: ApprovedOrPending(
+                        d?.authorized_by_admin,
+                        getUserNameById(d?.admin_id)
+                    ),
                     style: {
                         ...fieldStyle,
-                        ...ApprovedOrPendingStyle(d?.["authorized_by_admin"]),
+                        ...ApprovedOrPendingStyle(d?.authorized_by_admin),
                     },
                 },
                 {
