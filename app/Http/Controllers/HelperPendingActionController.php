@@ -1934,8 +1934,8 @@ class HelperPendingActionController extends AccountBaseController
                 $action->code = 'LDSEND';
                 $action->serial = 'LDSEND'.'x'.$key;
                 $action->item_name= 'New developer\'s evaluation!';
-                $action->heading= 'Lead Dedeloper '.$lead_dev->name.' has submitted evaluations for New Developer '.$new_dev->name.'!';
-                $action->message = 'Lead Dedeloper <a href="'.route('employees.show',$lead_dev->id).'">'.$lead_dev->name.'</a> has evaluated New Developer <a href="'.route('employees.show',$new_dev->id).'">'.$new_dev->name.'</a> on '.$formatted_date_time.'';
+                $action->heading= 'Lead Developer '.$lead_dev->name.' has submitted evaluations for New Developer '.$new_dev->name.'!';
+                $action->message = 'Lead Developer <a href="'.route('employees.show',$lead_dev->id).'">'.$lead_dev->name.'</a> has evaluated New Developer <a href="'.route('employees.show',$new_dev->id).'">'.$new_dev->name.'</a> on '.$formatted_date_time.'';
                 $action->timeframe= 24;
                 $action->client_id = $task->client_id;
                $action->task_id = $task->id;

@@ -563,7 +563,7 @@ class EvaluationController extends AccountBaseController
     public function storeAcknowledged(Request $request)
     {
         // dd($request->all());
-        // DB::beginTransaction();
+        DB::beginTransaction();
         $evaluation = EmployeeEvaluation::where('user_id',$request->user_id)->first();
         if($request->acknowledged == 'team_lead'){
             $evaluation->team_lead_acknowledged = 1;
@@ -625,7 +625,7 @@ class EvaluationController extends AccountBaseController
             }
         }
         return response()->json([
-            'url' => route('independent-task.index', ['status' => 'one_more_week', 'user_id' => $evaluation->user_id]),
+            'url' => url('account/independent/tasks?status=one_more_week&user_id='.$evaluation->user_id),
             'status' => 200
         ]);
     }
@@ -644,7 +644,7 @@ class EvaluationController extends AccountBaseController
     }
     public function employeeTaskRevision($id)
     {
-        $revision = TaskRevision::where('task_id',$id);
+        $revision = TaskRevision::where('task_id',$id)->get();
         return response()->json([
             'status' => 200,
             'data' => $revision

@@ -74,7 +74,7 @@ class IndependentTaskController extends AccountBaseController
      */
     public function store(Request $request)
     {
-        dd($request->all());
+        // dd($request->all());
         $ppTask = new PendingParentTasks();
         $ppTask->heading = $request->heading;
         $ppTask->description = $request->description;
