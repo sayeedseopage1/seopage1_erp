@@ -32,12 +32,12 @@ import { User } from "../../../utils/user-details";
 import { calenderOpen } from "./helper/calender_open";
 import TypeOfGraphicsWorkSelection from "../../../projects/components/graphics-design-forms/TypeOfGraphicsWorkSelection";
 import TypeOfLogo from "../../../projects/components/graphics-design-forms/TypeOfLogo";
-import FileTypesNeeded from "../../../projects/components/graphics-design-forms/FileTypesNeeded";
+// import FileTypesNeeded from "../../../projects/components/graphics-design-forms/FileTypesNeeded";
 import { ColorItem } from "../../components/PMGuideline";
 import FileUploader from "../../../file-upload/FileUploader";
 import FileUploadWithInput from "../../../projects/components/ui/FileUploadWithInput";
 import CustomFileUpload from "../../../projects/components/ui/CustomFileUpload";
-import FileExtensionMultiSelect from "../../../projects/components/graphics-design-forms/FileExtensionMultiSelect";
+// import FileExtensionMultiSelect from "../../../projects/components/graphics-design-forms/FileExtensionMultiSelect";
 
 const fileInputStyle = {
     height: "39px",
@@ -94,8 +94,6 @@ const SubTaskForm = ({ close, isDesignerTask }) => {
             (item) => item?.file_type == 5
         );
     }
-
-    // const [defaultBrandGuidelineFiles, setDefaultBrandGuidelineFiles] = useState(graphicWorkDetails?.graphic_task_files?.filter((item) => item?.file_type == 4))
 
     const dispatch = useDispatch();
     const dayjs = new CompareDate();

@@ -114,7 +114,7 @@ const SubTaskEditModal = ({ task, singleTask: taskDetails, onSubmit, isLoading, 
     const { data: subTaskFromCreation } = useGetSubTasksQuery({ taskId: taskDetails?.id }, {
         skip: !isSubTask
     })
-    const [defaultNumberOfVersion, setDefaultNumberOfVersion] = useState(0);
+    const [defaultNumberOfVersion, setDefaultNumberOfVersion] = useState(null);
     useEffect(() => {
         setDefaultNumberOfVersion(subTaskFromCreation?.sub_task_details_graphic_work?.number_of_versions)
     }, [subTaskFromCreation])
