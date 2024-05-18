@@ -1,28 +1,31 @@
 import React from 'react';
 import IncentiveBarChart from './Charts/IncentiveBarChart';
-import { idealVsAchievedChartData } from '../constants';
+// import { IncentiveFormattedData, idealVsAchievedChartData } from '../constants';
 import IncentiveThickChart from './Charts/IncentiveThickChart';
 import useIncentiveTypes from '../hooks/useIncentiveTypes';
+import { IncentiveFormattedData } from '../utils/formattedChartData';
+import { regularPointRangesForColor } from '../constants/rangesColor';
 
 const IdealVsAchieved = () => {
     const { regularIncentiveTypes, incentiveTypesLoading } = useIncentiveTypes();
-    // console.log(regularIncentiveTypes)
+
+    const regularChartData = IncentiveFormattedData(regularIncentiveTypes, regularPointRangesForColor)
+
+    console.log(regularChartData)
 
     return (
         <div className='ideal_vs_achieved_container'>
             <p className="section_title">
                 Ideal vs achieved :
             </p>
-            {idealVsAchievedChartData.map(item =>
-                <div key={item.id} className="chart_parent">
-                    {/* Ideal */}
+            {regularChartData?.map((item, ind) =>
+                <div key={ind} className="chart_parent">
                     <div className="chart_wrapper">
-                        <IncentiveBarChart chartData={item.ideal} />
+                        <IncentiveBarChart chartData={item?.ideal} />
                     </div>
-                    {/* Achieved */}
-                    <div className="chart_wrapper">
-                        <IncentiveThickChart chartData={item.achieved} />
-                    </div>
+                    {/* <div className="chart_wrapper">
+                        <IncentiveThickChart chartData={item?.achieved} />
+                    </div> */}
                 </div>
             )}
 

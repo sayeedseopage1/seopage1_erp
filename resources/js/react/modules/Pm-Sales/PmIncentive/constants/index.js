@@ -1,9 +1,6 @@
 const reVsTask = [10, 20, 22, 30, 40, 50, 60, 70, 80, 90, 100];
 const incentive = [0, 0, 50, 0, 0, 0, 0, 0, 0, 0];
 
-//rev=22
-//inc=50
-
 export const idealVsAchievedChartData = [
     {
         id: 1,
