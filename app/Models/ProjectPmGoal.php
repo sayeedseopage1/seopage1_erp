@@ -80,8 +80,8 @@ class ProjectPmGoal extends Model
             ],
             'extraGoal' => [
                 'code' => 'ERAG',
-                'name' => 'Extra Remaining Amount Goal.',
-                'type' => 'extra_reaming_amount_gaol',
+                'name' => 'Remaining amount has to be released.',
+                'type' => 'reaming_amount_gaol',
             ],
         ],
         'hourly' => [
