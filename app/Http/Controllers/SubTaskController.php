@@ -709,6 +709,29 @@ class SubTaskController extends AccountBaseController
         $task_s->dependent_task_id = $request->task_id;
         $task_s->subtask_id = $subTask->id;
         $task_s->save();
+
+        // Update Graphic Work Details for sub-task
+        if($request->category_id == 7){
+            $graphicWorkDetails = GraphicWorkDetails::updateOrCreate([
+                'task_id' => $task_s->id
+            ],[
+                'type_of_graphic_work_id' => $request->type_of_graphic_work_id,
+                'type_of_logo' => $request->type_of_logo ?? null,
+                'brand_name' => $request->brand_name ?? null,
+                'number_of_versions' => $request->number_of_versions ?? null,
+                'file_types_needed' => $request->file_types_needed ?? null,
+                'design_instruction' => $request->design_instruction ?? null,
+                'reference' => $request->reference ?? null,
+                'font_name' => $request->font_name ?? null,
+                'font_url' => $request->font_url ?? null,
+                'primary_color' => $request->primary_color ?? null,
+                'primary_color_description' => $request->primary_color_description ?? null,
+                'secondary_colors' => $request->secondary_colors ?? null,
+                'workable_url' => $request->workable_url ?? null,
+                'file_extensions' => $request->file_extensions ?? null
+            ]);
+        }
+
         $task_user= TaskUser::where('task_id',$task_s->id)->first();
         $task_user->user_id= $request->user_id;
         $task_user->save();

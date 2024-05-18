@@ -50,6 +50,7 @@ const EditFormProvider = ({ task, singleTask }) => {
         editSubtask({ data: formData, id: task?.id }).unwrap().then(res => {
             toast.success("Task Updated successfully!");
             close();
+            window.location.reload();
         }).catch((err) => {
             if (err?.status === 422) {
                 toast.warn("Please fill out all required fields")
@@ -109,6 +110,19 @@ const SubTaskEditModal = ({ task, singleTask: taskDetails, onSubmit, isLoading, 
     // sub task details 
     const graphicWorkDetails = new Object(subTasks?.sub_task_details_graphic_work)
     // **************sub task details end**********
+
+    // *************** sub task for number of versions start ********
+    const { data: subTaskFromCreation, isLoading: subTaskFromCreationLoading } = useGetSubTasksQuery({ taskId: taskDetails?.id }, {
+        skip: !isSubTask
+    })
+
+    useEffect(() => {
+        if (subTaskFromCreation?.sub_task_details_graphic_work?.number_of_versions) {
+            setNumOfVersions(subTaskFromCreation?.sub_task_details_graphic_work?.number_of_versions)
+        }
+    }, [subTaskFromCreation?.sub_task_details_graphic_work?.number_of_versions])
+
+    //*************** sub task for number of versions end ***********
 
     const { data: graphicOptions } = useGetTypesOfGraphicWorksQuery("")
 
@@ -172,7 +186,7 @@ const SubTaskEditModal = ({ task, singleTask: taskDetails, onSubmit, isLoading, 
     const [typeOfGraphicsCategory, setTypeOfGraphicsCategory] = useState("");
     const [typeOfLogo, setTypeOfLogo] = useState("");
     const [brandName, setBrandName] = useState("");
-    const [numOfVersions, setNumOfVersions] = useState(null);
+    const [numOfVersions, setNumOfVersions] = useState();
     const [referenceList, setReferenceList] = useState([{ reference: "" }]);
     const [referenceFile, setReferenceFile] = useState([]);
     const [fileTypesNeeded, setFileTypesNeeded] = React.useState([]);
@@ -198,10 +212,9 @@ const SubTaskEditModal = ({ task, singleTask: taskDetails, onSubmit, isLoading, 
     // state for ui/ux end
 
 
-    // set state data default value from graphic designer start
     useEffect(() => {
         setBrandName(graphicWorkDetails?.brand_name)
-        setNumOfVersions(graphicWorkDetails?.number_of_versions);
+        // setNumOfVersions(subTaskFromCreation?.sub_task_details_graphic_work?.number_of_versions);
         if (graphicWorkDetails?.reference) {
             setReferenceList(JSON.parse(graphicWorkDetails?.reference));
         }
@@ -306,6 +319,15 @@ const SubTaskEditModal = ({ task, singleTask: taskDetails, onSubmit, isLoading, 
             count++;
         }
 
+        if (taskCategory?.category_name == "Graphic Design") {
+            if (typeOfGraphicsCategory?.id == 1) {
+                if (!numOfVersions) {
+                    err.numOfVersions = "Number of versions is required";
+                    count++;
+                }
+            }
+        }
+
         if (!description) showError('description');
 
         if (estimation) {
@@ -354,6 +376,9 @@ const SubTaskEditModal = ({ task, singleTask: taskDetails, onSubmit, isLoading, 
                 .querySelector("meta[name='csrf-token']")
                 .getAttribute("content")
         );
+        fd.append("type_of_graphic_work_id", graphicWorkDetails?.type_of_graphic_work_id);
+        fd.append("category_id", task?.category?.id);
+        fd.append("number_of_versions", numOfVersions ?? "");
         Array.from(files).forEach((file) => {
             fd.append("file[]", file);
         });
@@ -366,10 +391,9 @@ const SubTaskEditModal = ({ task, singleTask: taskDetails, onSubmit, isLoading, 
 
     };
 
-
     const { data: projects, isFetching: isFetchingMilestone } = useGetMilestoneDetailsQuery(task?.projectId)
 
-
+    console.log(numOfVersions)
 
     // handle uploaded file delete request
     const [deleteUplaodedFile] = useDeleteUplaodedFileMutation();
@@ -604,15 +628,18 @@ const SubTaskEditModal = ({ task, singleTask: taskDetails, onSubmit, isLoading, 
                                     </div>
 
                                     <div className="col-12 col-md-6">
-                                        <Input
-                                            id="numOfVersions"
-                                            label="Number of Versions"
-                                            type="number"
-                                            placeholder="Enter Number of versions"
-                                            name="numOfVersions"
-                                            defaultValue={numOfVersions}
-                                            readOnly={true}
-                                        />
+                                        {
+                                            subTaskFromCreationLoading ? "loading" : <Input
+                                                id="numOfVersions"
+                                                label="Number of Versions"
+                                                type="number"
+                                                placeholder="Enter Number of versions"
+                                                name="numOfVersions"
+                                                defaultValue={numOfVersions}
+                                                required={true}
+                                                onChange={(e) => setNumOfVersions(e.target.value)}
+                                            />
+                                        }
                                     </div>
                                 </>
                             }

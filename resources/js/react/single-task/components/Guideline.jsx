@@ -8,10 +8,9 @@ import FileUploader from '../../file-upload/FileUploader';
 import { useGetTaskDetailsQuery, useGetTypesOfGraphicWorksQuery } from '../../services/api/SingleTaskPageApi';
 import './styles/guideline.css'
 import { useGetSubTasksQuery } from '../../services/api/tasksApiSlice';
-import { de } from '@faker-js/faker';
 import { validateUrl } from '../../projects/utils';
 
-const Guideline = ({ text, task, type = "", editorContainerClass, workEnv, singleTask }) => {
+const Guideline = ({ text, task, type = "", editorContainerClass, workEnv, singleTask, taskID }) => {
     const [expend, setExpend] = useState(false);
     let isLong = text?.length > 400;
     const showText = isLong ? text.slice(0, 400) + '...' : text;
@@ -20,9 +19,33 @@ const Guideline = ({ text, task, type = "", editorContainerClass, workEnv, singl
 
     // **************sub task details start**********
     const isSubTask = singleTask?.dependent_task_id
-    const { data: subTasks, isFetching } = useGetSubTasksQuery({ taskId: singleTask?.dependent_task_id }, {
+    const { data: subTasks } = useGetSubTasksQuery({ taskId: singleTask?.dependent_task_id }, {
         skip: !isSubTask
     })
+
+    // *************** sub task for number of versions start ********
+    const { data: subTaskFromCreation } = useGetSubTasksQuery({ taskId: singleTask?.id }, {
+        skip: !isSubTask
+    })
+
+    const { data: subTaskGenaral } = useGetSubTasksQuery({ taskId: taskID }, {
+        skip: !taskID
+    })
+
+    const [defaultNumberOfVersion, setDefaultNumberOfVersion] = useState(null);
+
+    useEffect(() => {
+        // if (subTaskFromCreation) {
+        setDefaultNumberOfVersion(subTaskFromCreation?.sub_task_details_graphic_work?.number_of_versions)
+        // }
+    }, [subTaskFromCreation])
+
+    useEffect(() => {
+        setDefaultNumberOfVersion(subTaskGenaral?.sub_task_details_graphic_work?.number_of_versions)
+    }, [subTaskGenaral])
+
+    //*************** sub task for number of versions end ***********
+
     // sub task details graphic
     const graphicSubTaskDetails = new Object(subTasks?.sub_task_details_graphic_work)
     // sub task details ui/uix 
@@ -40,7 +63,8 @@ const Guideline = ({ text, task, type = "", editorContainerClass, workEnv, singl
     // parent task details 
     const graphicWorkDetails = new Object(singleTask?.graphic_work_detail);
 
-    const commonGraphicWorkDetails = _.isEmpty(graphicWorkDetails) ? graphicSubTaskDetails : graphicWorkDetails
+    // const commonGraphicWorkDetails = _.isEmpty(graphicWorkDetails) ? graphicSubTaskDetails : graphicWorkDetails
+    const commonGraphicWorkDetails = subTasks ? graphicSubTaskDetails : graphicWorkDetails
 
     const typeOfGraphicsCategoryName = graphicOptions?.find((item) => commonGraphicWorkDetails?.type_of_graphic_work_id === item?.id)?.name
 
@@ -108,6 +132,9 @@ const Guideline = ({ text, task, type = "", editorContainerClass, workEnv, singl
         setExpend(false)
     })
 
+    // console.log("defaultNumberOfVersion", defaultNumberOfVersion)
+    // console.log("singleTask", singleTask)
+
 
     // Graphics and Ui task Details for common use start********************************
     const GraphicsAndUiDetails = <>
@@ -132,10 +159,21 @@ const Guideline = ({ text, task, type = "", editorContainerClass, workEnv, singl
                                 <span><strong>Brand Name</strong>: <br /> {brand_name}</span>
                             </div>
                             <div className="col-12 col-lg-6 col-xl-4 mb-2 word-break">
-                                <span><strong>Number of Versions</strong>: <br /> {number_of_versions}</span>
+                                <span><strong>Number of Versions</strong>: <br />
+                                    {
+                                        (defaultNumberOfVersion)
+                                            ? defaultNumberOfVersion
+                                            : number_of_versions
+                                    }
+                                    {/* {
+                                        isSubTask ?
+                                            (defaultNumberOfVersion ? defaultNumberOfVersion : null) :
+                                            number_of_versions
+                                    } */}
+                                </span>
                             </div>
                             <div className="col-12 col-lg-6 col-xl-4 mb-2 word-break">
-                                <span><strong>File Types Needed</strong>: <br /> {defaultFileTypesNeeded.join(", ")}</span>
+                                <span><strong>File Types Needed</strong>: <br /> {defaultFileTypesNeeded?.join(", ")}</span>
                             </div>
                         </>
                     }
@@ -163,7 +201,7 @@ const Guideline = ({ text, task, type = "", editorContainerClass, workEnv, singl
                     }
                     {
                         defaultFileExtension && <div className="col-12 col-lg-6 col-xl-4 mb-2 word-break">
-                            <span><strong>Required File Extension</strong>: <br /> {defaultFileExtension.join(", ")}</span>
+                            <span><strong>Required File Extension</strong>: <br /> {defaultFileExtension?.join(", ")}</span>
                         </div>
                     }
                     {
