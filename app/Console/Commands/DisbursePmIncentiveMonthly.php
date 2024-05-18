@@ -24,7 +24,7 @@ class DisbursePmIncentiveMonthly extends Command
      *
      * @var string
      */
-    protected $description = 'Command description';
+    protected $description = 'Disburse project manager incentive monthly basis';
 
     /**
      * Execute the console command.
@@ -57,6 +57,18 @@ class DisbursePmIncentiveMonthly extends Command
 
             $revision_percent = number_format(( $pm_revisions / $total_tasks ) * 100, 2);
             
+            // Goal achieve rate
+            $projects = Project::select(['id','project_name','pm_id','status','project_status'])
+            ->where([['pm_id', 209],['status', 'in progress'],['project_status', 'Accepted']])
+            ->withCount(['pmGoals as total_goals' => function($pmGoal){
+                return $pmGoal->where('goal_status', 0)->where('goal_end_date', '<=', now());
+            }])
+            ->withCount(['pmGoals as total_goals_met' => function($pmGoal){
+                return $pmGoal->where('goal_status', 1);
+            }])
+            ->get();
+
+            $goal_achieved_percent = ($projects->sum('total_goals_met') / $projects->sum('total_goals')) * 100;
         }
     }
 }

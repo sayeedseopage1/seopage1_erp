@@ -475,5 +475,8 @@ class Project extends BaseModel
         }
     }
 
-    
+    public function pmGoals()
+    {
+        return $this->hasMany(ProjectPmGoal::class, 'project_id');
+    }
 }
