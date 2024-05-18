@@ -23,9 +23,14 @@ const singleTaskPageApiSlice = apiSlice.injectEndpoints({
                 formData: true,
             }),
             // invalidatesTags: ["TASK_STATUS", "SUB_TASKS"],
+<<<<<<< HEAD
             invalidatesTags: ["TASK_STATUS"],
             //changed the invalidate tags to stop reloading whole page while creating a new subtask
             //it had to change due to show the server side error message on the input field of subtask name
+=======
+            //tag changed due to remove unnecessary reloading the page
+            invalidatesTags: ["TASK_STATUS"],
+>>>>>>> 0573b9797f70c89cd4c14893270cdb4623738f52
         }),
 
         // delete uploaded file
@@ -505,6 +510,18 @@ const singleTaskPageApiSlice = apiSlice.injectEndpoints({
                 method: "GET",
             }),
         }),
+
+        getTypesOfGraphicWorks: build.query({
+            query: () => `/type-of-graphic-works`,
+        }),
+
+        deleteGraphicsTaskFile: build.mutation({
+            query: (fileId) => ({
+                url: `/account/graphic-task-file/delete/${fileId}`,
+                method: "GET",
+            }),
+            // invalidatesTags: ["TASKS"],
+        }),
     }),
 });
 
@@ -560,4 +577,6 @@ export const {
     useGetWorkingEnvironmentQuery,
     useLazyGetWorkingEnvironmentQuery,
     useCheckWorkingReportMutation,
+    useGetTypesOfGraphicWorksQuery,
+    useDeleteGraphicsTaskFileMutation,
 } = singleTaskPageApiSlice;

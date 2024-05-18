@@ -1542,12 +1542,12 @@ class HelperPendingActionController extends AccountBaseController
 
      $client= User::where('id',$project->client_id)->first();
         $project_manager= User::where('id',$project->pm_id)->first();
-        $authorizer= User::where('role_id',6)->orderBy('id','desc')->first();
+        $authorizers = User::where('role_id',6)->get();
 
-
+        foreach ($authorizers as $key => $authorizer) {
             $action = new PendingAction();
             $action->code = 'STR';
-            $action->serial = 'STR'.'x0';
+            $action->serial = 'STR'.'x'.$key;
             $action->item_name= 'Removal of staging site';
             $action->heading= 'Removal of staging site!';
             $action->message = 'Staging site <a target="_blank" href="'.$project_submission->dummy_link.'">'.$project_submission->dummy_link.'</a> for client <a href="'.route('clients.show',$client->id).'">'.$client->name.'</a> should be Deleted (PM: <a href="'.route('employees.show',$project_manager->id).'">'.$project_manager->name.'</a>)';
@@ -1621,6 +1621,7 @@ class HelperPendingActionController extends AccountBaseController
 
 
         }
+    }
         public function NeedtoTaskAssign($developer)
         {
             $developer= User::where('id',$developer->id)->first();

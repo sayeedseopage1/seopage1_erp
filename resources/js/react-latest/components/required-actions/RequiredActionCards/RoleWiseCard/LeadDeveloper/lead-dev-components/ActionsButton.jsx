@@ -75,6 +75,7 @@ const ActionsButton = ({ data }) => {
                             {btn.button_name === "View and Reply" && (
                                 <button
                                     key={i}
+                                    disabled={handleBtnDisable(6)}
                                     onClick={() => {
                                         setViewCommentModal((prev) => !prev);
                                         dispatch(setPendingActionId(data?.id));
@@ -88,6 +89,7 @@ const ActionsButton = ({ data }) => {
                             {btn.button_name === "Not relevant to me" && (
                                 <button
                                     key={i}
+                                    disabled={handleBtnDisable(6)}
                                     onClick={() => {
                                         setIsRelevantModal((prev) => !prev);
 
@@ -101,6 +103,7 @@ const ActionsButton = ({ data }) => {
                             {btn.button_name === "View" && (
                                 <button
                                     key={i}
+                                    disabled={handleBtnDisable(6)}
                                     onClick={() =>
                                         setViewModal((prev) => !prev)
                                     }

@@ -386,9 +386,10 @@ class InvoiceController extends AccountBaseController
         $new_milestone->status= 'incomplete';
         $new_milestone->added_by = 1;
         $new_milestone->project_id = $update_milestone->project_id;
+        $new_milestone->parent_id = $update_milestone->parent_id ?? $update_milestone->id;
         $new_milestone->save();
 
-        $tasks= Task::where('milestone_id',$milestone_up->id)->where('status','incomplete')->get();
+        $tasks= Task::where('milestone_id',$milestone_up->id)->where('board_column_id', '!=', 4)->get();
         foreach ($tasks as $task) {
             $task_update= Task::find($task->id);
             $task_update->milestone_id = $new_milestone->id;
