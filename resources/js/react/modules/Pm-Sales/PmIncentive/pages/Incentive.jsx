@@ -47,9 +47,12 @@ const Incentive = () => {
                             <Switch.Case condition={filterByPeriod == "monthly"}>
                                 <div className='incentive_inner_wrapper'>
                                     <PointBanner />
+                                    {/******* This is regular incentive ***********/}
                                     <IdealVsAchieved />
                                     <StatsInfo />
+                                    {/******* This is UpSale CrossSale incentive ***********/}
                                     <UpsaleCrossSale />
+                                    {/******* This is Bonus Point incentive ***********/}
                                     <BonusPoints />
                                     <FinalIncentiveBanner />
                                 </div>

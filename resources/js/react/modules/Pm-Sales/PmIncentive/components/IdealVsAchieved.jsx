@@ -2,8 +2,12 @@ import React from 'react';
 import IncentiveBarChart from './Charts/IncentiveBarChart';
 import { idealVsAchievedChartData } from '../constants';
 import IncentiveThickChart from './Charts/IncentiveThickChart';
+import useIncentiveTypes from '../hooks/useIncentiveTypes';
 
 const IdealVsAchieved = () => {
+    const { regularIncentiveTypes, incentiveTypesLoading } = useIncentiveTypes();
+    // console.log(regularIncentiveTypes)
+
     return (
         <div className='ideal_vs_achieved_container'>
             <p className="section_title">
