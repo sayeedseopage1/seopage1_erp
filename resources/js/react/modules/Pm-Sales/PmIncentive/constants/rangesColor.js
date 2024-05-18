@@ -1,4 +1,4 @@
-export const regularPointRangesForColor = [
+export const chartRangesForColor = [
     {
         id: 1,
         ranges: [
@@ -174,4 +174,36 @@ export const regularPointRangesForColor = [
             },
         ],
     },
+    {
+        id: 8,
+        ranges: [
+            {
+                from: 0,
+                to: 3,
+                color: "#14B96A",
+            },
+            {
+                from: 3.1,
+                to: 4,
+                color: "#09F",
+            },
+            {
+                from: 4.1,
+                to: 5,
+                color: "#FEBC05",
+            },
+            {
+                from: 5.1,
+                to: 5.5,
+                color: "#09F",
+            },
+            {
+                from: 5.6,
+                to: 6,
+                color: "#14B96A",
+            },
+        ],
+    },
 ];
+
+// let colors = ["#FFA3A3", "#FEBC05", "#09F", "#14B96A"];

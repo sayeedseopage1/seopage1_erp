@@ -2,30 +2,33 @@ export const IncentiveFormattedData = (
     incentiveData,
     chartDataRangesForColor
 ) => {
-    const data = incentiveData?.incentive_criterias?.map((item) => {
+    const data = incentiveData?.incentive_criterias?.map((criteria) => {
         return {
-            title: item?.title,
+            title: criteria?.title,
             ideal: {
-                id: item?.id,
-                title: item?.title,
+                id: criteria?.id,
+                title: criteria?.title,
                 yTitle: "Incentive percentage",
                 chartTag: "Ideal",
                 series: [
                     {
-                        name: item?.title,
-                        data: item?.incentive_factors?.map((item) =>
-                            parseInt(item?.incentive_amount)
+                        name: criteria?.title,
+                        data: criteria?.incentive_factors?.map((factor) =>
+                            parseFloat(factor?.incentive_amount)
                         ),
                     },
                 ],
-                categories: item?.incentive_factors?.map(
-                    (item) =>
-                        `${parseInt(item?.lower_limit)}-${parseInt(
-                            item?.upper_limit
-                        )}%`
+                categories: criteria?.incentive_factors?.map(
+                    (factor) =>
+                        `${parseFloat(factor?.lower_limit)}-${
+                            criteria?.id > 7 ? "$" : ""
+                        }${parseFloat(factor?.upper_limit)}${
+                            criteria?.id <= 7 ? "%" : ""
+                        }`
                 ),
-                range: chartDataRangesForColor?.find((r) => r?.id == item?.id)
-                    ?.ranges,
+                range: chartDataRangesForColor?.find(
+                    (r) => r?.id == criteria?.id
+                )?.ranges,
             },
             achieved: null,
         };

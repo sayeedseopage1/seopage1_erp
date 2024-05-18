@@ -13,7 +13,9 @@ const useIncentiveTypes = () => {
 
 export default useIncentiveTypes;
 
-const apiDataSample = {
+
+//! This is garbage data for testing
+/* const apiDataSample = {
     "id": 1,
     "incentive_type_id": 1,
     "title": "Revision vs Task ratio",
@@ -91,9 +93,9 @@ const apiDataSample = {
             "updated_at": null
         }
     ]
-}
+} */
 
-export const idealVsAchievedChartData = [
+/* export const idealVsAchievedChartData = [
     {
         id: 1,
         title: "Revision Vs Task ratio",
@@ -142,4 +144,4 @@ export const idealVsAchievedChartData = [
             ],
         }
     },
-];
+]; */

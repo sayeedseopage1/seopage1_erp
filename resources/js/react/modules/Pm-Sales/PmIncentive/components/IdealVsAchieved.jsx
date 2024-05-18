@@ -1,18 +1,17 @@
 import React from 'react';
 import IncentiveBarChart from './Charts/IncentiveBarChart';
-// import { IncentiveFormattedData, idealVsAchievedChartData } from '../constants';
-import IncentiveThickChart from './Charts/IncentiveThickChart';
+// import IncentiveThickChart from './Charts/IncentiveThickChart';
 import useIncentiveTypes from '../hooks/useIncentiveTypes';
 import { IncentiveFormattedData } from '../utils/formattedChartData';
-import { regularPointRangesForColor } from '../constants/rangesColor';
+import { chartRangesForColor } from '../constants/rangesColor';
 
 const IdealVsAchieved = () => {
     const { regularIncentiveTypes, incentiveTypesLoading } = useIncentiveTypes();
 
-    const regularChartData = IncentiveFormattedData(regularIncentiveTypes, regularPointRangesForColor)
+    const regularChartData = IncentiveFormattedData(regularIncentiveTypes, chartRangesForColor)
 
-    console.log(regularChartData)
 
+    // TODO: handle loading state here as well
     return (
         <div className='ideal_vs_achieved_container'>
             <p className="section_title">
