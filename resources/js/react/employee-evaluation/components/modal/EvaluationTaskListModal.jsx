@@ -49,6 +49,7 @@ import EvaluationTaskTable from "../Table/EvaluationTaskTable";
 import useEmployeeEvaluation from "../../../zustand/store";
 import RatingSection from "./RatingSection";
 import RatingSectionStatic from "./RatingSectionStatic";
+import React from "react";
 
 const EvaluationTaskListModal = ({
     isEvaluationModal,
@@ -56,6 +57,9 @@ const EvaluationTaskListModal = ({
     singleEvaluation,
 }) => {
     const auth = useAuth();
+    const [cumulativeAverage, setCumulativeAverage] = React.useState(
+        singleEvaluation?.lead_dev_avg_rating
+    );
     const { evaluationObject } = useEmployeeEvaluation();
     const [teamLeadReview, setTeamLeadReview] = useState("");
     const [adminComment, setAdminComment] = useState("");
@@ -69,7 +73,6 @@ const EvaluationTaskListModal = ({
         obedience: singleEvaluation?.obedience ?? 0,
     });
 
-    // console.log("formdata", formData);
     const [
         taskRatingFinalSubmission,
         { isLoading: isLoadingLeadDevFinalSubmission },
@@ -99,6 +102,12 @@ const EvaluationTaskListModal = ({
                     Number(task.total_min) < 5 && task.submission_date !== null
                 );
             });
+            const cumulativeSum = tasksToRate?.reduce(
+                (acc, cur) => acc + Number(cur.avg_rating),
+                0
+            );
+            const average = cumulativeSum / tasksToRate.length;
+            setCumulativeAverage(average);
             const isAllTaskRated =
                 tasksToRate?.length ===
                 tasksToRate?.filter((task) => task.lead_dev_cmnt !== null)
@@ -331,7 +340,7 @@ const EvaluationTaskListModal = ({
                         <span>Cumulative Average:</span>
                         <span>
                             {" "}
-                            {singleEvaluation?.lead_dev_avg_rating ?? 0}
+                            {Number(cumulativeAverage)?.toFixed(2) ?? 0}
                         </span>
                     </span>
                 </EvalTableTitle>
