@@ -175,7 +175,6 @@ class IndependentTaskController extends AccountBaseController
                 $pendingParentTasks->client_name = $request->client;
             }
             $pendingParentTasks->save();
-            // dd($pendingParentTasks);
 
             $independent_task = new Task();
             $independent_task->heading = $pendingParentTasks->heading;
@@ -326,7 +325,6 @@ class IndependentTaskController extends AccountBaseController
         // received all conversation on $request->data variable
         $conversations = $request->data;
 
-        // update each conversation "has_update" & "seen" status
         foreach ($conversations as $conversation) {
             $query =  PendingParentTaskConversation::find($conversation["id"]);
             $query->has_update = false;
