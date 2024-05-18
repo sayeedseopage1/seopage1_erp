@@ -242,6 +242,7 @@ const IncentiveThickChart = ({ chartData }) => {
                     type="bar"
                     series={seriesFormate}
                     options={options}
+                    height={300}
                 ></Chart>
                 <div className="x_axis_arrow">
                     <img src={arrow1} className="chart_axis_icon" alt="arrow1" />

@@ -180,6 +180,7 @@ const IncentiveBarChart = ({ chartData }) => {
                     type="bar"
                     series={chartData.series}
                     options={options}
+                    height={300}
                 ></Chart>
 
                 <div className="x_axis_arrow">
