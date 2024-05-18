@@ -8,7 +8,6 @@ import Popover from "../../../../react-latest/ui/Popover";
 
 import EvaluationRatingPopover from "./EvaluationRatingPopover";
 import EvaluationRatingModal from "../modal/EvaluationRatingModal";
-
 const ActionEvaluationTaskTable = ({ data }) => {
     const hideEvaluationButton =
         Number(data?.total_min) < 5 && data?.submission_date === null;
