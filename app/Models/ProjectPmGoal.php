@@ -26,7 +26,8 @@ class ProjectPmGoal extends Model
                 [
                     'code' => 'FPMR',
                     'name' => 'At least 50% of the milestones have to be released.',
-                    'type' => '50%_milestone_value_released',
+                    'single' => 'One milestone has to be released.',
+                    'type' => 'milestone_value_released',
                 ],
                 [
                     'code' => 'MPMR',

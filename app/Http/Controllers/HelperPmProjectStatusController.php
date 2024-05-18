@@ -124,7 +124,10 @@ class HelperPmProjectStatusController extends AccountBaseController
 
                     if ($i < 6) {
                         $goal->goal_code = $goalCodes[$i]['code'];
-                        $goal->goal_name = $goalCodes[$i]['name'];
+
+                        if ($milestoneCount == 1 && $i == 2) $goal->goal_name = $goalCodes[$i]['single'];
+                        else $goal->goal_name = $goalCodes[$i]['name'];
+
                         $goal->goal_type = $goalCodes[$i]['type'];
                         $goal->goal_end_date = Carbon::parse($goal_start_date)->addDay($goalDurationArray[$i]);
                         $goal->duration = $goalDurationArray[$i];
@@ -413,7 +416,10 @@ class HelperPmProjectStatusController extends AccountBaseController
 
                 if ($i <= 5) {
                     $goal->goal_code = $goalCodes[$i]['code'];
-                    $goal->goal_name = $goalCodes[$i]['name'];
+
+                    if ($milestoneCount == 1 && $i == 2) $goal->goal_name = $goalCodes[$i]['single'];
+                    else $goal->goal_name = $goalCodes[$i]['name'];
+
                     $goal->goal_type = $goalCodes[$i]['type'];
                 } else {
                     $goal->goal_code = $goalCodes[5]['code'] . ($i - 5);
@@ -522,15 +528,15 @@ class HelperPmProjectStatusController extends AccountBaseController
         $goal->project_type = $lastGoal->project_type;
         $goal->project_category = $lastGoal->project_category;
 
-        $goal->goal_code = 'HP'.$goalCount;
-        $goal->goal_name = 'If at least '.$deliverable->estimation_time.' hours have been tracked';
-        $goal->goal_type = 'hourly_project_no'.$goalCount;
+        $goal->goal_code = 'HP' . $goalCount;
+        $goal->goal_name = 'If at least ' . $deliverable->estimation_time . ' hours have been tracked';
+        $goal->goal_type = 'hourly_project_no' . $goalCount;
         $goal->goal_start_date = $deliverable->created_at;
 
         $endDate = $goal->goal_start_date;
-        for ($i=0; $i < $days; $i++) {
+        for ($i = 0; $i < $days; $i++) {
             $endDate = Carbon::parse($endDate)->addDay(1);
-            if(Carbon::parse($endDate)->format("D") == "Sun") $endDate = Carbon::parse($endDate)->addDay(1);
+            if (Carbon::parse($endDate)->format("D") == "Sun") $endDate = Carbon::parse($endDate)->addDay(1);
         }
         $goal->goal_end_date = $endDate;
 
