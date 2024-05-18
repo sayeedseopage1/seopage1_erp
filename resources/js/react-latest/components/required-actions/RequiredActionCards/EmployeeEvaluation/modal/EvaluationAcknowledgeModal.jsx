@@ -129,6 +129,7 @@ const EvaluationAcknowledgeModal = ({
         try {
             const response = await updatePendingAction({
                 user_id: singleEvaluation?.user_id,
+                acknowledged: "team_lead",
             }).unwrap();
 
             if (response?.status == 200) {

@@ -8,7 +8,7 @@ use App\Models\TaskFile;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 use App\Helper\Files;
-use App\Models\EmployeeEvaluationTask;
+use App\Models\EmployeeEvaluation;
 use App\Models\PendingParentTaskConversation;
 use App\Models\SubTask;
 use App\Models\Task;
@@ -75,6 +75,7 @@ class IndependentTaskController extends AccountBaseController
     public function store(Request $request)
     {
         // dd($request->all());
+        // DB::beginTransaction();
         $ppTask = new PendingParentTasks();
         $ppTask->heading = $request->heading;
         $ppTask->description = $request->description;
@@ -92,6 +93,7 @@ class IndependentTaskController extends AccountBaseController
         $ppTask->password = $request->password;
         $ppTask->reference_site = $request->reference_site;
         $ppTask->independent_task_status = $request->isIndependent;
+        $ppTask->evaluation_user_id = $request->evaluation_user_id;
         $ppTask->save();
 
         if ($request->hasFile('file')) {
@@ -113,14 +115,6 @@ class IndependentTaskController extends AccountBaseController
                 Storage::disk('s3')->put('/' . $filename, file_get_contents($file));
 
                 $this->logTaskActivity($ppTask->id, $ppTask->user_id, 'fileActivity', $ppTask->board_column_id);
-            }
-        }
-
-        if(Auth::user()->role_id == 8 && $request->evaluation_user_id !=null){
-            $evaluation = EmployeeEvaluationTask::where('user_id',$request->evaluation_user_id)->first();
-            if($evaluation->managements_decision == 'One more week'){
-                $helper = new HelperPendingActionController();
-                $helper->evaluationAuthTeamLead($evaluation->id);
             }
         }
 
@@ -167,6 +161,7 @@ class IndependentTaskController extends AccountBaseController
      */
     public function update(Request $request, $id)
     {
+        // DB::beginTransaction();
         if($request->approval_status == 1){
             $pendingParentTasks = PendingParentTasks::find($id);
             $pendingParentTasks->start_date = $request->start_date;
@@ -249,6 +244,14 @@ class IndependentTaskController extends AccountBaseController
                 $pendingParentTasks->client_name = $request->client;
             }
             $pendingParentTasks->save();
+        }
+
+        if(Auth::user()->role_id == 8 && $pendingParentTasks->evaluation_user_id !=null){
+            $evaluation = EmployeeEvaluation::where('user_id',$pendingParentTasks->evaluation_user_id)->first();
+            if($evaluation->managements_decision == 'One more week'){
+                $helper = new HelperPendingActionController();
+                $helper->evaluationAuthTeamLead($evaluation->id);
+            }
         }
 
 
