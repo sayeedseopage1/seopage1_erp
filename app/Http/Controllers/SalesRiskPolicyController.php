@@ -663,10 +663,18 @@ class SalesRiskPolicyController extends AccountBaseController
 
     function renderQuestionList(Request $req)
     {
+
+        $deal = Deal::find($req->session()->get('deal_id'));
+        $dealStage = DealStage::where('lead_id', $deal->lead->id)->first();
+
         $data = SalesPolicyQuestion::parent()
+            ->where(function ($query) use ($dealStage) {
+
+                // excluding weekend question on Saturaday and Sunday deal's
+                if (!in_array(Carbon::parse($dealStage->updated_at)->format('D'), ['Sat', 'Sun'])) $query->whereNot('key', 'availableWeekend');
+            })
             ->get()->filter(fn ($item) => SalesRiskPolicy::find($item->policy_id)->status)
             ->map(function ($item) {
-
                 return [
                     'id' => $item->id,
                     'title' => $item->title,
@@ -682,7 +690,6 @@ class SalesRiskPolicyController extends AccountBaseController
                 ];
             })->toArray();
 
-        $deal = Deal::find($req->session()->get('deal_id'));
         $currency = Currency::find($deal->original_currency_id);
 
         return response()->json(['status' => 'success', 'data' => ['questionList' => array_values($data), 'currency' => [$currency->currency_code, $currency->currency_name, $currency->currency_symbol]]]);
