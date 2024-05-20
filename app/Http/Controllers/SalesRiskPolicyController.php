@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Country;
 use App\Models\Currency;
 use App\Models\Deal;
+use App\Models\DealStage;
 use App\Models\Lead;
 use App\Models\PolicyPointHistory;
 use App\Models\PolicyQuestionValue;
@@ -12,7 +13,7 @@ use App\Models\SalesPolicyQuestion;
 use App\Models\SalesRiskPolicy;
 use App\Models\Team;
 use App\Models\User;
-use DateTime;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Http\JsonResponse;
@@ -591,7 +592,7 @@ class SalesRiskPolicyController extends AccountBaseController
 
     function policyQuestionInputFields($policyId)
     {
-
+        /* TODO: fix  */
         $fields = [
             [
                 'label' => 'Title',
@@ -663,6 +664,14 @@ class SalesRiskPolicyController extends AccountBaseController
 
     function renderQuestionList(Request $req)
     {
+        /* note: this code will be removed. Added: 20-05-2024 */
+        if (!Schema::hasColumn('policy_question_values', 'submitted_by')) {
+            Schema::table('policy_question_values', function (Blueprint $table) {
+                $table->integer('submitted_by')->unsigned()->after('question_list');
+                $table->foreign('submitted_by')->on('users')->references('id')->onUpdate('no action')->onDelete('no action');
+            });
+        }
+        /* end */
 
         $deal = Deal::find($req->session()->get('deal_id'));
         $dealStage = DealStage::where('lead_id', $deal->lead->id)->first();
@@ -724,7 +733,8 @@ class SalesRiskPolicyController extends AccountBaseController
             PolicyQuestionValue::create([
                 'deal_id' => $dealId,
                 'values' => json_encode($req->all()),
-                'question_list' => json_encode(SalesPolicyQuestion::get())
+                'question_list' => json_encode(SalesPolicyQuestion::get()),
+                'submitted_by' => auth()->user()->id
             ]);
 
             // calculate point
@@ -1264,7 +1274,7 @@ class SalesRiskPolicyController extends AccountBaseController
                 endProjectBudget:
                 $points += (float) $pointValue;
                 $pointData['projectBudget']['points'] = $pointValue;
-                $pointData['projectBudget']['questionAnswer'][] = ['title' => 'What is the budget for this project?', 'value' => '$'. number_format($deal->amount, 2), 'parent_id' => null];
+                $pointData['projectBudget']['questionAnswer'][] = ['title' => 'What is the budget for this project?', 'value' => '$' . number_format($deal->amount, 2), 'parent_id' => null];
                 $data ? $pointData['projectBudget']['questionAnswer'][] = $data : '';
             } else
                 $message[] = "Project Budget policy is not added.";
@@ -1336,13 +1346,11 @@ class SalesRiskPolicyController extends AccountBaseController
 
                 $qsion = $questionList->firstWhere('id', $item->id);
                 if ($qsion) {
-                    if($qsion->key == 'milestone' && $qsion->type == 'list')
-                    {
+                    if ($qsion->key == 'milestone' && $qsion->type == 'list') {
                         $listItem = collect(json_decode($qsion->value));
                         $listItem = $listItem->firstWhere('id', $item->value);
                         $questionData[] = ['id' => $item->id, 'title' => $qsion->title, 'value' => $listItem->title, 'key' => $qsion->key];
-                    }
-                    else $questionData[] = ['id' => $item->id, 'title' => $qsion->title, 'value' => $item->value, 'key' => $qsion->key];
+                    } else $questionData[] = ['id' => $item->id, 'title' => $qsion->title, 'value' => $item->value, 'key' => $qsion->key];
                 }
             }
 
@@ -1413,6 +1421,7 @@ class SalesRiskPolicyController extends AccountBaseController
                     ];
 
                     if (auth()->user()->role_id == 1) {
+                        if($questionValue = PolicyQuestionValue::where('deal_id', $item->id)->first()) $data['submitted_by'] = $questionValue->submitted_by;
                         $data['points'] = self::calculatePolicyPoint($item->id)['points'];
                     }
 

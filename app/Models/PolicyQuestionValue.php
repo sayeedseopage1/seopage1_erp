@@ -9,5 +9,5 @@ class PolicyQuestionValue extends Model
 {
     use HasFactory;
 
-    protected $fillable = [ 'deal_id', 'values', 'question_list'];
+    protected $fillable = [ 'deal_id', 'values', 'question_list', 'submitted_by'];
 }

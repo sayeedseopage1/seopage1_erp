@@ -18,9 +18,11 @@ return new class extends Migration
             $table->bigInteger('deal_id')->unsigned();
             $table->text('values');
             $table->text('question_list');
+            $table->integer('submitted_by')->unsigned();
             $table->timestamps();
 
             $table->foreign('deal_id')->references('id')->on('deals')->onUpdate('no action')->onDelete('no action');
+            $table->foreign('submitted_by')->references('id')->on('users')->onUpdate('no action')->onDelete('on action');
         });
     }
 
