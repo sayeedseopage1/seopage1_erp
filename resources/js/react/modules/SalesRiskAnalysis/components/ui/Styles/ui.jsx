@@ -45,8 +45,6 @@ export const ModalInputLabel = styled.label`
     padding: 0px !important;
 `;
 
-
-
 export const ModalButton = styled.button`
     padding: 13px 20px;
     border-radius: 8px;
@@ -253,6 +251,89 @@ export const SaleRiskAuthorizeHeaderWrapper = styled.div`
     overflow-y: auto;
     box-shadow: 0 0 10px rgb(0 0 0 / 10%);
 
+    .beforeAuthorizeInfo:nth-child(1) {
+        flex: 0 0 33.33333333%;
+        max-width: 33.33333333%;
+    }
+    .beforeAuthorizeInfo:nth-child(2) {
+        flex: 0 0 33.33333333%;
+        max-width: 33.33333333%;
+    }
+    .beforeAuthorizeInfo:nth-child(3) {
+        flex: 0 0 16.66666667%;
+        max-width: 16.66666667%;
+    }
+    .beforeAuthorizeInfo:nth-child(4) {
+        flex: 0 0 16.66666667%;
+        max-width: 16.66666667%;
+    }
+
+    @media (min-width: 1419px) and (max-width: 1550px) {
+        &.beforeAuthorizeInfoContainer {
+            padding: 25px 15px;
+        }
+        .beforeAuthorizeInfo:nth-child(2) {
+            flex: 0 0 30.33333333%;
+            max-width: 30.33333333%;
+        }
+        .beforeAuthorizeInfo:nth-child(4) {
+            flex: 0 0 19.66666667%;
+            max-width: 19.66666667%;
+        }
+    }
+
+    @media screen and (max-width: 1419px) {
+        &.beforeAuthorizeInfoContainer {
+            flex: 0 0 100%;
+            max-width: 100%;
+        }
+    }
+    @media screen and (max-width: 1135px) {
+        &.beforeAuthorizeInfoContainer {
+            flex: 0 0 100%;
+            max-width: 100%;
+            padding: 25px 15px;
+        }
+        .beforeAuthorizeInfo:nth-child(2) {
+            flex: 0 0 30.33333333%;
+            max-width: 30.33333333%;
+        }
+        .beforeAuthorizeInfo:nth-child(4) {
+            flex: 0 0 19.66666667%;
+            max-width: 19.66666667%;
+        }
+    }
+
+    @media screen and (max-width: 768px) {
+        .beforeAuthorizeInfo:nth-child(1),
+        .beforeAuthorizeInfo:nth-child(2),
+        .beforeAuthorizeInfo:nth-child(3),
+        .beforeAuthorizeInfo:nth-child(4) {
+            flex: 0 0 100%;
+            max-width: 100%;
+        }
+    }
+
+    &.afterAuthorizeInfoContainer {
+        .afterAuthorizeInfo:nth-child(1),
+        .afterAuthorizeInfo:nth-child(2),
+        .afterAuthorizeInfo:nth-child(3),
+        .afterAuthorizeInfo:nth-child(4) {
+            flex: 0 0 25%;
+            max-width: 25%;
+        }
+
+        @media screen and (max-width: 768px) {
+            .afterAuthorizeInfo:nth-child(1),
+            .afterAuthorizeInfo:nth-child(2),
+            .afterAuthorizeInfo:nth-child(3),
+            .afterAuthorizeInfo:nth-child(4) {
+                flex: 0 0 100%;
+                max-width: 100%;
+            }
+        }
+    }
+
     div {
         display: flex;
         justify-content: center;
@@ -299,7 +380,85 @@ export const SaleRiskAuthorizeHeaderWrapper = styled.div`
             border-bottom: none !important;
             padding: 10px 0;
         }
-    
+    }
+`;
+
+export const SaleRiskAuthorizeHeaderButtonWrapper = styled.div`
+    display: flex;
+    &.afterAuthorizeInfoButtonContainer {
+        .afterAuthorizeInfoPointCrButton {
+            padding: 30px 40px !important;
+        }
+        @media (min-width: 1420px) and (max-width: 1774px) {
+            .afterAuthorizeInfoPointCrButton {
+                padding: 20px 40px !important;
+            }
+        }
+        @media (min-width: 1038px) and (max-width: 1419px) {
+            flex: 0 0 16.66666667%;
+            max-width: 16.66666667%;
+            .afterAuthorizeInfoPointCrButton {
+                padding: 10px 40px !important;
+            }
+        }
+    }
+
+    @media (min-width: 1420px) and (max-width: 1774px) {
+        .col-6:nth-child(2) .beforeAuthorizeInfoPointCrButton {
+            padding: 14px 40px !important;
+        }
+    }
+    @media (min-width: 991px) and (max-width: 1419px) {
+        margin-top: 20px;
+        flex: 0 0 100%;
+        max-width: 100%;
+        .beforeAuthorizeInfoPointCrButton {
+            padding: 20px !important;
+        }
+        .col-6:nth-child(1) {
+            padding-left: 0 !important;
+        }
+    }
+    @media (min-width: 769px) and (max-width: 991px) {
+        gap: 3px !important;
+        &.afterAuthorizeInfoButtonContainer {
+            margin-top: 20px !important;
+        }
+        .beforeAuthorizeInfoPointCrButton {
+            padding: 20px !important;
+        }
+        .col-6:nth-child(1) {
+            padding-left: 0 !important;
+        }
+    }
+    @media screen and (max-width: 768px) {
+        gap: 3px;
+        .beforeAuthorizeInfoPointCrButton {
+            padding: 20px !important;
+        }
+        .col-6:nth-child(1) {
+            padding-left: 0 !important;
+        }
+    }
+    &.beforeAuthorizeInfoButtonContainer {
+        @media screen and (max-width: 768px) {
+            .beforeAuthorizeInfoPointCrButton {
+                font-size: 12px !important;
+            }
+        }
+        @media (min-width: 393px) and (max-width: 430px) {
+            .col-6:nth-child(2) .beforeAuthorizeInfoPointCrButton {
+                padding: 11px 40px !important;
+            }
+        }
+        @media screen and (max-width: 388px) {
+            flex-direction: column !important;
+            gap: 5px;
+            .col-6 {
+                flex: 0 0 100%;
+                max-width: 100%;
+            }
+        }
     }
 `;
 
@@ -322,7 +481,7 @@ export const SaleRiskAuthorizeHeaderButton = styled.button`
     @media (min-width: 1201px) and (max-width: 1440px) {
         padding: 25px 20px;
     }
-    @media (min-width: 991px) and (max-width: 1200px){
+    @media (min-width: 991px) and (max-width: 1200px) {
         padding: 16px 20px;
     }
 `;
@@ -382,4 +541,4 @@ export const SaleRiskAuthorizeInfoContainer = styled.div`
     font-weight: 500;
     line-height: normal;
     width: fit-content;
-`
+`;

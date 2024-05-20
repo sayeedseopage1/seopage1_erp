@@ -24,6 +24,14 @@
   color: #fff !important;
 }
 
+.customBtn_primary_deActive {
+  border: 1px solid gray;
+  color: gray;
+}
+.customBtn_secondary_deActive {
+  border: 1px solid gray;
+  color: gray;
+}
 .customBtn_secondary {
   border: 1px solid #F66;
   color: #F66;

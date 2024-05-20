@@ -4,6 +4,7 @@ import PropTypes from "prop-types";
 // Ui components
 import {
     SaleRiskAuthorizeHeaderButton,
+    SaleRiskAuthorizeHeaderButtonWrapper,
     SaleRiskAuthorizeHeaderWrapper,
 } from "../ui/Styles/ui";
 import Popover from "../Popover";
@@ -51,8 +52,8 @@ const SaleRiskAuthorizeHeader = ({
                             headerData?.deal?.sale_analysis_status
                         )}
                     >
-                        <SaleRiskAuthorizeHeaderWrapper className="col-12 col-md-12 col-lg-8 d-flex flex-column flex-md-row mb-3 mb-md-3 mb-lg-0">
-                            <div className="col-12 col-md-4 col-lg-4 px-0">
+                        <SaleRiskAuthorizeHeaderWrapper className="col-12 col-md-12 col-lg-8 d-flex flex-column flex-md-row mb-3 mb-md-3 mb-lg-0 beforeAuthorizeInfoContainer">
+                            <div className="px-0 beforeAuthorizeInfo">
                                 <Popover>
                                     <Popover.Button>
                                         <p
@@ -78,7 +79,7 @@ const SaleRiskAuthorizeHeader = ({
                                     </Popover.Panel>
                                 </Popover>
                             </div>
-                            <div className="col-12 col-md-4 px-0 ">
+                            <div className="px-0 beforeAuthorizeInfo">
                                 <p className=" singleline-ellipsis">
                                     Sales Person :{" "}
                                     <span className="ml-1 ">
@@ -86,13 +87,13 @@ const SaleRiskAuthorizeHeader = ({
                                     </span>
                                 </p>
                             </div>
-                            <div className="col-12 col-md-2 px-0">
+                            <div className="px-0 beforeAuthorizeInfo">
                                 <p className="singleline-ellipsis">
                                     {" "}
                                     Deadline: {headerData?.deadline} Days
                                 </p>
                             </div>
-                            <div className="col-12 col-md-2 px-0">
+                            <div className="px-0 beforeAuthorizeInfo">
                                 <Popover>
                                     <Popover.Button>
                                         <p
@@ -113,9 +114,10 @@ const SaleRiskAuthorizeHeader = ({
                                 </Popover>
                             </div>
                         </SaleRiskAuthorizeHeaderWrapper>
-                        <div className="col-12 ol-md-4 col-lg-4 d-flex">
+                        <SaleRiskAuthorizeHeaderButtonWrapper className="col-12 ol-md-4 col-lg-4 d-flex px-0 beforeAuthorizeInfoButtonContainer">
                             <div className="col-6 px-0 pl-md-0 pl-lg-3 pr-md-0">
                                 <SaleRiskAuthorizeHeaderButton
+                                    className="beforeAuthorizeInfoPointCrButton"
                                     onClick={() => {
                                         window.location.href = `/account/sales-risk-policies`;
                                     }}
@@ -125,12 +127,13 @@ const SaleRiskAuthorizeHeader = ({
                             </div>
                             <div className="col-6 px-0 pl-md-0 pl-lg-3 pr-md-0">
                                 <SaleRiskAuthorizeHeaderButton
+                                    className="beforeAuthorizeInfoPointCrButton"
                                     onClick={handleOpenAuthorizeModal}
                                 >
-                                    Polices History
+                                    Policy & Point Criteria
                                 </SaleRiskAuthorizeHeaderButton>
                             </div>
-                        </div>
+                        </SaleRiskAuthorizeHeaderButtonWrapper>
                     </Switch.Case>
 
                     {/*
@@ -142,17 +145,17 @@ const SaleRiskAuthorizeHeader = ({
                             true
                         )}
                     >
-                        <SaleRiskAuthorizeHeaderWrapper className="col-12 col-md-12 col-lg-10 d-flex flex-column flex-md-row">
-                            <div className="col-12 col-md-3 px-0">
-                                <p className="singleline-ellipsis d-flex align-items-center">
+                        <SaleRiskAuthorizeHeaderWrapper className="col-12 col-md-12 col-lg-10 d-flex flex-column flex-md-row afterAuthorizeInfoContainer">
+                            <div className="afterAuthorizeInfo">
+                                <p className="singleline-ellipsis text-center">
                                     Sales Person :{" "}
                                     <span className="ml-1">
                                         {headerData?.user?.name}
                                     </span>
                                 </p>
                             </div>
-                            <div className="col-12 col-md-3 px-0">
-                                <p className="singleline-ellipsis d-flex align-items-center">
+                            <div className="afterAuthorizeInfo">
+                                <p className="singleline-ellipsis text-center">
                                     {" "}
                                     Authorize By :{" "}
                                     <span className="ml-1">
@@ -164,19 +167,19 @@ const SaleRiskAuthorizeHeader = ({
                                     </span>
                                 </p>
                             </div>
-                            <div className="col-12 col-md-3 px-0">
-                                <p className="singleline-ellipsis d-flex align-items-center">
+                            <div className="afterAuthorizeInfo">
+                                <p className="singleline-ellipsis text-center">
                                     {" "}
                                     Deadline: {headerData?.deadline} Days
                                 </p>
                             </div>
-                            <div className="col-12 col-md-3 px-0">
-                                <Popover >
+                            <div className="afterAuthorizeInfo">
+                                <Popover>
                                     <Popover.Button>
                                         <p
                                             className={`${popoverStyle.questionModal_popover_button} singleline-ellipsis`}
                                             style={{
-                                                padding: "5px 0"
+                                                padding: "5px 0",
                                             }}
                                         >
                                             Clients:{" "}
@@ -194,15 +197,16 @@ const SaleRiskAuthorizeHeader = ({
                                 </Popover>
                             </div>
                         </SaleRiskAuthorizeHeaderWrapper>
-                        <div className="col-12 ol-md-2 col-lg-2 d-flex mt-3 mt-md-0 px-">
+                        <SaleRiskAuthorizeHeaderButtonWrapper className="col-12 ol-md-2 col-lg-2 d-flex mt-3 mt-md-0 px-0 afterAuthorizeInfoButtonContainer">
                             <div className="col-12 px-0 pl-md-0 pl-lg-3 pr-md-0">
                                 <SaleRiskAuthorizeHeaderButton
+                                    className="afterAuthorizeInfoPointCrButton"
                                     onClick={handleOpenAuthorizeModal}
                                 >
-                                    Polices History
+                                    Policy & Point Criteria
                                 </SaleRiskAuthorizeHeaderButton>
                             </div>
-                        </div>
+                        </SaleRiskAuthorizeHeaderButtonWrapper>
                     </Switch.Case>
                 </Switch.Case>
             </Switch>

@@ -175,7 +175,7 @@ const SalesRiskAuthorize = () => {
     const FilterSaleRiskTableColumnByRole = () => {
         if (auth.getRoleId() === 1) {
             return SalesRiskAuthorizeColumns;
-        } else {
+        } else if ([7, 8].includes(auth.getRoleId())){
             return SalesRiskAuthorizeTableColumnsForUser;
         }
     };
@@ -213,7 +213,7 @@ const SalesRiskAuthorize = () => {
                     {/* 
                     Sale Risk Analysis Header for User after authorize and deny
                 */}
-                    <Switch.Case condition={auth.getRoleId() === 8}>
+                    <Switch.Case condition={[7, 8].includes(auth.getRoleId())}>
                         <SaleRiskAuthorizeHeaderForUser
                             headerData={metaInfo}
                             isLoading={isLoading}
@@ -318,7 +318,7 @@ const SalesRiskAuthorize = () => {
                             */}
                             <Switch.Case
                                 condition={
-                                    auth.getRoleId() === 8 &&
+                                    [7, 8].includes(auth.getRoleId()) &&
                                     getDealStatus(
                                         metaInfo?.deal?.sale_analysis_status
                                     )
@@ -453,8 +453,8 @@ const SalesRiskAuthorize = () => {
                             </Switch.Case>
 
                             {/* 
-                                                            Sale Risk Analysis for admin comment
-                                                        */}
+                                Sale Risk Analysis for admin comment
+                            */}
                             <div className="d-flex justify-content-center align-items-center">
                                 <Switch.Case
                                     condition={

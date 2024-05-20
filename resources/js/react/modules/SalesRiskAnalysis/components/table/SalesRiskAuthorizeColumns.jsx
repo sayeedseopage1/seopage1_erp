@@ -12,7 +12,7 @@ export const SalesRiskAuthorizeColumns = [
         cell: ({ row }) => {
             const data = row.original;
             return (
-                <table className="d-flex flex-column justify-content-center align-items-start">
+                <div className="d-flex flex-column justify-content-center align-items-start">
                     {data?.questionAnswer?.map((question) => {
                         return (
                             <Switch key={question.id}>
@@ -20,7 +20,7 @@ export const SalesRiskAuthorizeColumns = [
                                     condition={question?.parent_id !== null}
                                     key={question?.id}
                                 >
-                                    <td key={question?.id} className="py-3 ">
+                                    <div key={question?.id} className="py-3 pl-3">
                                         <Tooltip
                                             className="d-flex align-items-center"
                                             text={question?.title}
@@ -28,19 +28,19 @@ export const SalesRiskAuthorizeColumns = [
                                             <p
                                                 className="singleline-ellipsis"
                                                 style={
-                                                    customStyles.mainQuestion
+                                                    customStyles.subQuestion
                                                 }
                                             >
                                                 {question?.title}
                                             </p>
                                         </Tooltip>
-                                    </td>
+                                    </div>
                                 </Switch.Case>
                                 <Switch.Case
                                     condition={question?.parent_id === null}
                                     key={question?.id}
                                 >
-                                    <td key={question?.id} className="py-3 ">
+                                    <div key={question?.id} className="py-3 ">
                                         <Tooltip
                                             className="d-flex align-items-center"
                                             text={question?.title}
@@ -54,12 +54,12 @@ export const SalesRiskAuthorizeColumns = [
                                                 {question?.title}
                                             </p>
                                         </Tooltip>
-                                    </td>
+                                    </div>
                                 </Switch.Case>
                             </Switch>
                         );
                     })}
-                </table>
+                </div>
             );
         },
     },
@@ -70,18 +70,18 @@ export const SalesRiskAuthorizeColumns = [
         cell: ({ row }) => {
             const data = row.original;
             return (
-                <table className="d-flex flex-column justify-content-center align-items-center">
+                <div className="d-flex flex-column justify-content-center align-items-center">
                     {data?.questionAnswer?.map((question) => (
-                        <td key={question?.id} className="py-3">
+                        <div key={question?.id} className="py-3">
                             <p
                                 className="text-center"
                                 style={customStyles.subQuestion}
                             >
                                 { _.capitalize(question?.value) ?? "-"}
                             </p>
-                        </td>
+                        </div>
                     ))}
-                </table>
+                </div>
             );
         },
     },

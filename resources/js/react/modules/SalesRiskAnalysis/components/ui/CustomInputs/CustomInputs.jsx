@@ -55,109 +55,112 @@ const CustomInputs = ({
 
     const getCurrencySymbol = () => {
         if (currency?.length) {
-            return `${currency[2]} ${currency[0]}`;
+            return `${currency[0]}`;
         }
     };
 
     return (
         <div className="d-flex flex-column mb-4">
-            <CustomInputsLabel  className="d-inline" color={isChild ? "#b1b1b1" : "#000000"}>
+            <CustomInputsLabel
+                className="d-inline"
+                color={isChild ? "#b1b1b1" : "#000000"}
+            >
                 {label}{" "}
                 {props?.comment && (
-                        <Popover
-                            className={`${pStyle.questionShow} d-inline-block ml-1`}
+                    <Popover
+                        className={`${pStyle.questionShow} d-inline-block ml-1`}
+                    >
+                        <Popover.Button
+                            className={`${pStyle.questionShowInfoIcon} d-inline`}
                         >
-                            <Popover.Button
-                                className={`${pStyle.questionShowInfoIcon} d-inline`}
-                            >
-                                <div className="d-inline">
-                                    <i
-                                        className="fa-solid fa-circle-info "
-                                        style={{
-                                            color: "#8F8F8F",
-                                            fontSize: "16px",
-                                        }}
-                                    ></i>
-                                </div>
-                            </Popover.Button>
-                            <Popover.Panel placement="bottom-start">
-                                <div
-                                    className={`${pStyle.questionShowInfoPanel}`}
-                                >
-                                    <span>{props?.comment}</span>
-                                </div>
-                            </Popover.Panel>
-                        </Popover>
-                    )}
+                            <div className="d-inline">
+                                <i
+                                    className="fa-solid fa-circle-info "
+                                    style={{
+                                        color: "#8F8F8F",
+                                        fontSize: "16px",
+                                    }}
+                                ></i>
+                            </div>
+                        </Popover.Button>
+                        <Popover.Panel placement="bottom-start">
+                            <div className={`${pStyle.questionShowInfoPanel}`}>
+                                <span>{props?.comment}</span>
+                            </div>
+                        </Popover.Panel>
+                    </Popover>
+                )}
+                
+            </CustomInputsLabel>
+            <div className="d-flex align-items-center">
+                <Switch>
+                    <Switch.Case condition={type === "longText"}>
+                        <CustomInputsTextArea
+                            id={id}
+                            name={name}
+                            rows={9}
+                            cols={50}
+                            value={value}
+                            onChange={onChange}
+                            placeholder={placeholder}
+                            disabled={disabled}
+                            readOnly={readOnly}
+                            required={required}
+                            className={className}
+                            style={style}
+                            {...props}
+                        />
+                    </Switch.Case>
+                    <Switch.Case condition={type === "text"}>
+                        <CustomInputsInput
+                            id={id}
+                            name={name}
+                            value={value}
+                            type="text"
+                            onChange={onChange}
+                            placeholder={placeholder}
+                            disabled={disabled}
+                            readOnly={readOnly}
+                            required={required}
+                            className={className}
+                            style={style}
+                            {...props}
+                        />
+                    </Switch.Case>
+                    <Switch.Case condition={type === "numeric"}>
+                        <CustomInputsInput
+                            id={id}
+                            name={name}
+                            value={value}
+                            type="number"
+                            onKeyDown={handleOnkeypress}
+                            onChange={onChange}
+                            placeholder={placeholder}
+                            disabled={disabled}
+                            readOnly={readOnly}
+                            required={required}
+                            className={className}
+                            style={style}
+                            {...props}
+                        />
+                    </Switch.Case>
+                </Switch>
                 {isCurrencyHave.status && (
                     <span
-                        className="ml-2"
+                        className="ml-2 text-primary"
                         style={{
-                            color: "#000000",
-                            backgroundColor: "#c4de95",
-                            padding: "2px 12px",
                             borderRadius: "4px",
-                            fontSize: "14px",
+                            fontSize: "16px",
                             alignItems: "center",
+                            fontWeight: "500",
+                            fontFamily: "Poppins",
                             display: "flex",
                         }}
                     >
-                        Currency in {getCurrencySymbol()}
+                       {getCurrencySymbol()}
                     </span>
                 )}
-            </CustomInputsLabel>
-            <Switch>
-                <Switch.Case condition={type === "longText"}>
-                    <CustomInputsTextArea
-                        id={id}
-                        name={name}
-                        rows={9}
-                        cols={50}
-                        value={value}
-                        onChange={onChange}
-                        placeholder={placeholder}
-                        disabled={disabled}
-                        readOnly={readOnly}
-                        required={required}
-                        className={className}
-                        style={style}
-                        {...props}
-                    />
-                </Switch.Case>
-                <Switch.Case condition={type === "text"}>
-                    <CustomInputsInput
-                        id={id}
-                        name={name}
-                        value={value}
-                        type="text"
-                        onChange={onChange}
-                        placeholder={placeholder}
-                        disabled={disabled}
-                        readOnly={readOnly}
-                        required={required}
-                        className={className}
-                        style={style}
-                        {...props}
-                    />
-                </Switch.Case>
-                <Switch.Case condition={type === "numeric"}>
-                    <CustomInputsInput
-                        id={id}
-                        name={name}
-                        value={value}
-                        type="number"
-                        onKeyDown={handleOnkeypress}
-                        onChange={onChange}
-                        placeholder={placeholder}
-                        disabled={disabled}
-                        readOnly={readOnly}
-                        required={required}
-                        className={className}
-                        style={style}
-                        {...props}
-                    />
-                </Switch.Case>
-            </Switch>
+            </div>
             {isSubmitting && !value && (
                 <span
                     style={{ color: "red", fontSize: "14px", marginTop: "8px" }}

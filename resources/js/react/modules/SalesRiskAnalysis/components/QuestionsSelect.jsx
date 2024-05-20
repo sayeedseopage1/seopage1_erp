@@ -1,5 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
+import { IoCloseOutline } from "react-icons/io5";
 
 // ui components
 import Dropdown from "./Dropdown";
@@ -48,12 +49,14 @@ const QuestionsSelect = ({
                 >
                     <Tooltip
                         text={selected?.title}
-                        key="select-department-sal-risk"
+                        key="select-department-sal-risk "
+                        className="d-flex align-items-center w-100"
                     >
                         <span
                             data-toggle={"tooltip"}
                             id="select-department-sal-risk"
                             className="multiline-ellipsis text-hover-underline-color"
+                            style={{ width: "90%" }}
                         >
                             {selected?.title ? (
                                 <span>{selected?.title}</span>
@@ -61,6 +64,27 @@ const QuestionsSelect = ({
                                 data?.emptyOptionsLabel
                             )}
                         </span>
+                        {selected?.title ? (
+                            <span
+                                style={{
+                                    cursor: "pointer",
+                                    color: "gray",
+                                    width: "10%",
+                                }}
+                            >
+                                <IoCloseOutline
+                                    onClick={(e) => {
+                                        setSelected({
+                                            target: {
+                                                name: filedName,
+                                                value: null,
+                                            },
+                                        });
+                                    }}
+                                    size={30}
+                                />
+                            </span>
+                        ) : null}
                     </Tooltip>
                 </Dropdown.Toggle>
                 <Dropdown.Menu id="cnx_dropdown__menu_open__parentQuestion">

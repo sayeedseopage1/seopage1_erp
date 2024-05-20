@@ -88,6 +88,8 @@ const CustomButtons = ({
                     className={`btn mr-3 ${style.customBtn_outline} ${
                         value === "yes"
                             ? style.customBtn_primary_active
+                            : value === "no"
+                            ? style.customBtn_primary_deActive
                             : style.customBtn_primary
                     } `}
                     onClick={() => onChange("yes")}
@@ -99,6 +101,8 @@ const CustomButtons = ({
                     className={`btn ${style.customBtn_outline} ${
                         value === "no"
                             ? style.customBtn_secondary_active
+                            : value === "yes"
+                            ? style.customBtn_secondary_deActive
                             : style.customBtn_secondary
                     } `}
                     onClick={() => onChange("no")}

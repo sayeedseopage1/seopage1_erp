@@ -103,22 +103,7 @@ const CustomAccordion = ({
                             </Popover.Panel>
                         </Popover>
                     )}
-                {isCurrencyHave.status && (
-                    <span
-                        className="ml-2"
-                        style={{
-                            color: "#000000",
-                            backgroundColor: "#c4de95",
-                            padding: "2px 12px",
-                            borderRadius: "4px",
-                            fontSize: "14px",
-                            alignItems: "center",
-                            display: "flex",
-                        }}
-                    >
-                        Currency in {getCurrencySymbol()}
-                    </span>
-                )}
+               
             </CustomInputsLabel>
             <div className="sp1_task_card customAccordionWrapper mb-3">
                 <div

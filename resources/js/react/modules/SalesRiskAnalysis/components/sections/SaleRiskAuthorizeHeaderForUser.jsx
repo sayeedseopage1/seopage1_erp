@@ -21,6 +21,8 @@ const SaleRiskAuthorizeHeaderForUser = ({ headerData, isLoading }) => {
             : ["pending", "analysis"].includes(status);
     };
 
+    console.log("headerData", headerData);
+
     return (
         <Switch>
             <Switch.Case condition={isLoading}>
