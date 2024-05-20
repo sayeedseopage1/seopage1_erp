@@ -67,12 +67,6 @@ const ChartIdealVsAchievedEditModal = ({ antdModalOpen, showIdealVsAchievedEditM
         {
             id: '7',
             xAxisLowerLimit: 80,
-            xAxisUpperLimit: 90,
-            yAxisRatio: 0,
-        },
-        {
-            id: '8',
-            xAxisLowerLimit: 90,
             xAxisUpperLimit: 100,
             yAxisRatio: 0,
         },

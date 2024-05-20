@@ -43,9 +43,9 @@ export const IncentiveFormattedData = (
                             criteria?.id <= 7 ? "%" : ""
                         }`
                 ), */
-                range: chartDataRangesForColor?.find(
-                    (r) => r?.id == criteria?.id
-                )?.ranges,
+                // range: chartDataRangesForColor?.find(
+                //     (r) => r?.id == criteria?.id
+                // )?.ranges,
             },
             achieved: null,
         };

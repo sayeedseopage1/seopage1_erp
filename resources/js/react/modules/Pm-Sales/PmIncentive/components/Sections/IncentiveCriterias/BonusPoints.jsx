@@ -5,12 +5,12 @@ import IncentiveBarChart from '../../Charts/IncentiveBarChart';
 // import { bonusPointsChartData } from '../../../constants';
 import useIncentiveTypes from '../../../hooks/useIncentiveTypes';
 import { IncentiveFormattedData } from '../../../utils/formattedChartData';
-import { chartRangesForColor } from '../../../constants/rangesColor';
+// import { chartRangesForColor } from '../../../constants/rangesColor';
 
 const BonusPoints = () => {
     const { bonusIncentiveTypes, incentiveTypesLoading } = useIncentiveTypes();
 
-    const bonusPointsChartData = IncentiveFormattedData(bonusIncentiveTypes, chartRangesForColor)
+    const bonusPointsChartData = IncentiveFormattedData(bonusIncentiveTypes)
 
     return (
         <>

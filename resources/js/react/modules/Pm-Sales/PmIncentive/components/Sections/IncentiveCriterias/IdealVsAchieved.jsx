@@ -3,12 +3,11 @@ import IncentiveBarChart from '../../Charts/IncentiveBarChart';
 // import IncentiveThickChart from './Charts/IncentiveThickChart';
 import useIncentiveTypes from '../../../hooks/useIncentiveTypes';
 import { IncentiveFormattedData } from '../../../utils/formattedChartData';
-import { chartRangesForColor } from '../../../constants/rangesColor';
 
 const IdealVsAchieved = () => {
     const { regularIncentiveTypes, incentiveTypesLoading } = useIncentiveTypes();
 
-    const regularChartData = IncentiveFormattedData(regularIncentiveTypes, chartRangesForColor)
+    const regularChartData = IncentiveFormattedData(regularIncentiveTypes)
 
 
     // TODO: handle loading state here as well

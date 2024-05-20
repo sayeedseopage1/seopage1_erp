@@ -112,7 +112,28 @@ const IncentiveBarChart = ({ chartData }) => {
                     position: "top",
                 },
                 colors: {
-                    ranges: chartData?.range,
+                    ranges: [
+                        {
+                            from: 0,
+                            to: 49.99,
+                            color: "#ff3300",
+                        },
+                        {
+                            from: 50,
+                            to: 59.99,
+                            color: "#ff704d",
+                        },
+                        {
+                            from: 60,
+                            to: 79.99,
+                            color: "#ffff00",
+                        },
+                        {
+                            from: 80,
+                            to: Number.MAX_SAFE_INTEGER,
+                            color: "#00cc00",
+                        },
+                    ],
                 },
             },
         },
@@ -123,12 +144,12 @@ const IncentiveBarChart = ({ chartData }) => {
                 // Setting gradient from bottom to top
                 shade: "dark",
                 type: "vertical",
-                shadeIntensity: 0.5,
+                shadeIntensity: 0.9,
                 gradientToColors: ["#E1F3FF"],
                 inverseColors: false,
                 opacityFrom: 1,
                 opacityTo: 0.9,
-                stops: [0, 100],
+                stops: [50, 100],
             },
         },
         responsive: [

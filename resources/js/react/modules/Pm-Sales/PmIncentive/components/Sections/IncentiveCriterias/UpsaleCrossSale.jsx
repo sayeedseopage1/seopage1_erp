@@ -2,7 +2,7 @@ import React from 'react';
 import IncentiveBarChart from '../../Charts/IncentiveBarChart';
 // import IncentiveThickChart from '../../Charts/IncentiveThickChart';
 import useIncentiveTypes from '../../../hooks/useIncentiveTypes'
-import { chartRangesForColor } from '../../../constants/rangesColor';
+// import { chartRangesForColor } from '../../../constants/rangesColor';
 import UpsaleCrossSalePointBanner from './UpsaleCrossSalePointBanner';
 import { IncentiveFormattedData } from '../../../utils/formattedChartData';
 
@@ -10,7 +10,7 @@ import { IncentiveFormattedData } from '../../../utils/formattedChartData';
 const UpsaleCrossSale = () => {
     const { upSaleCrossSaleTypes, incentiveTypesLoading } = useIncentiveTypes();
 
-    const upSaleCrossSaleChartData = IncentiveFormattedData(upSaleCrossSaleTypes, chartRangesForColor)
+    const upSaleCrossSaleChartData = IncentiveFormattedData(upSaleCrossSaleTypes)
 
 
     // TODO: handle loading state here as well
