@@ -73,7 +73,7 @@
 }
 
 .pay_now_modal_header .pay_now_title {
-    font-family: Poppins;
+    font-family: Poppins, sans-serif;
     font-size: 24px;
     font-style: normal;
     font-weight: 500;
@@ -101,7 +101,7 @@
     background: #1077BB;
     padding: 11px 18px;
     color: #FFF;
-    font-family: Poppins;
+    font-family: Poppins, sans-serif;
     font-size: 18px;
     font-style: normal;
     font-weight: 600;
@@ -142,7 +142,7 @@
 .held_years_select .ant-select-selection-item {
     text-align: right !important;
     color: #000;
-    font-family: Poppins;
+    font-family: Poppins, sans-serif;
     font-size: 18px;
     font-style: normal;
     font-weight: 400;
@@ -153,7 +153,7 @@
 .held_years_header span,
 .held_amount_table_data {
     color: #000;
-    font-family: Poppins;
+    font-family: Poppins, sans-serif;
     font-size: 18px;
     font-style: normal;
     font-weight: 400;
@@ -162,7 +162,7 @@
 
 .incentive_swal_confirm {
     color: #000;
-    font-family: Poppins;
+    font-family: Poppins, sans-serif;
     font-size: 24px;
     font-style: normal;
     font-weight: 500;
@@ -172,7 +172,7 @@
 .incentive_swal_desc {
     color: #1492E6;
     text-align: center;
-    font-family: Poppins;
+    font-family: Poppins, sans-serif;
     font-size: 18px;
     font-style: normal;
     font-weight: 500;
@@ -182,14 +182,14 @@
 }
 
 .swal2-confirm-custom {
-    font-family: poppins;
+    font-family: poppins, sans-serif;
     border: 1px solid #1492E6 !important;
     background-color: #1492E6 !important;
     color: #fff !important;
 }
 
 .swal2-cancel-custom {
-    font-family: poppins;
+    font-family: poppins, sans-serif;
     border: 1px solid #1492E6 !important;
     color: #1492E6 !important;
     background-color: #fff !important;

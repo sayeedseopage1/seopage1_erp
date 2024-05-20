@@ -22,7 +22,7 @@ const CashValueUpCrossEditModal = ({ upSaleCrossSaleTypes, antdModalOpen, setAnt
         try {
             const payload = {
                 title: upSaleCrossSaleTypes?.title,
-                cash_value: data.upsaleCrossSalePoint
+                cash_value: data?.upsaleCrossSalePoint
             }
             const response = await editIncentiveTypes({ id: upSaleCrossSaleTypes?.id, payload }).unwrap();
             if (response?.status == 200) {

@@ -36,19 +36,20 @@ const EditXAxisModal = ({ xAxisStartAndEndValue, axisEditItem, chartAxisData, se
 
     const onSubmit = (data) => {
         if (validateFields(data)) {
-            const newData = {
-                ...axisEditItem,
-                xAxisLowerLimit: data.xAxisLowerLimit,
-                xAxisUpperLimit: data.xAxisUpperLimit
-            };
-
-            // Filter out items that need to be removed
-            const filteredData = chartAxisData.filter(item => item.id !== axisEditItem.id);
-
-            // Concatenate newData with filteredData
-            setChartAxisData([...filteredData, newData]);
+            setChartAxisData((prev) => {
+                const update = prev?.map(item => {
+                    if (item.id === axisEditItem.id) {
+                        return {
+                            ...item,
+                            xAxisLowerLimit: parseFloat(data.xAxisLowerLimit),
+                            xAxisUpperLimit: parseFloat(data.xAxisUpperLimit)
+                        }
+                    }
+                    return item
+                })
+                return update
+            });
             setAntdModalOpen(false);
-            // toast.success('X Axis Ratio updated successfully');
             reset();
         }
     };

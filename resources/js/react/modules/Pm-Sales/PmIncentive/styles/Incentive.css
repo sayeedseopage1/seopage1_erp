@@ -49,7 +49,7 @@
 .incentive_success_btn,
 .incentive_danger_btn {
     border-radius: 11px;
-    font-family: Poppins;
+    font-family: Poppins, sans-serif;
     font-size: 16px;
     font-style: normal;
     font-weight: 500;
@@ -312,7 +312,7 @@
 
 .chart_title {
     color: #000;
-    font-family: Poppins;
+    font-family: Poppins, sans-serif;
     font-size: 14px;
     font-style: normal;
     font-weight: 500;
@@ -334,7 +334,7 @@
 .chart_tooltip {
     color: #000;
     text-align: left;
-    font-family: Poppins;
+    font-family: Poppins, sans-serif;
     font-size: 12px;
     font-style: normal;
     font-weight: 400;
@@ -578,7 +578,7 @@
     gap: 10px;
     margin-bottom: 16px;
     color: #000;
-    font-family: Poppins;
+    font-family: Poppins, sans-serif;
     font-size: 14px;
     font-style: normal;
     font-weight: 500;
@@ -599,7 +599,7 @@
 .edit_chart_data_modal_title {
     text-align: center;
     color: #000;
-    font-family: Poppins;
+    font-family: Poppins, sans-serif;
     font-size: 32px;
     font-style: normal;
     font-weight: 500;
@@ -613,7 +613,7 @@
     gap: 10px;
     /* margin-top: 40px; */
     color: #000;
-    font-family: Poppins;
+    font-family: Poppins, sans-serif;
     font-size: 14px;
     font-style: normal;
     font-weight: 500;
@@ -623,7 +623,7 @@
 
 .edit_chart_data_sub_title {
     color: #000;
-    font-family: Poppins;
+    font-family: Poppins, sans-serif;
     font-size: 18px;
     font-style: normal;
     font-weight: 500;
@@ -632,7 +632,7 @@
 
 .point_edit_modal_title {
     color: #000;
-    font-family: Poppins;
+    font-family: Poppins, sans-serif;
     font-size: 20px;
     font-style: normal;
     font-weight: 500;
@@ -649,7 +649,7 @@
     justify-content: center;
     gap: 14px;
     color: #8F8F8F;
-    font-family: Poppins;
+    font-family: Poppins, sans-serif;
     font-size: 16px;
     font-style: normal;
     font-weight: 400;
@@ -666,7 +666,7 @@
     padding: 10px;
     margin: 0 auto;
     color: #8F8F8F;
-    font-family: Poppins;
+    font-family: Poppins, sans-serif;
     font-size: 16px;
     font-style: normal;
     font-weight: 400;
@@ -697,7 +697,7 @@
 
 .ideal_vs_achieved_chart_data_actions_range {
     color: #1492E6;
-    font-family: Poppins;
+    font-family: Poppins, sans-serif;
     font-size: 14px;
     font-style: normal;
     font-weight: 500;
@@ -725,7 +725,7 @@
 
 .ideal_vs_achieved_axis_data p {
     color: #1492E6;
-    font-family: Poppins;
+    font-family: Poppins, sans-serif;
     font-size: 14px;
     font-style: normal;
     font-weight: 400;
@@ -739,7 +739,7 @@
     padding: 8px 20px;
     border-radius: 5px;
     color: #FFF;
-    font-family: Poppins;
+    font-family: Poppins, sans-serif;
     font-size: 14px;
     font-style: normal;
     font-weight: 500;
@@ -758,7 +758,7 @@
     border-radius: 64px;
     background: #D9D9D9;
     color: #1E1E1E;
-    font-family: Poppins;
+    font-family: Poppins, sans-serif;
     font-size: 14px;
     font-style: normal;
     font-weight: 400;
@@ -769,7 +769,7 @@
 
 .ratio_text {
     color: #000;
-    font-family: Poppins;
+    font-family: Poppins, sans-serif;
     font-size: 20px;
     font-style: normal;
     font-weight: 400;
@@ -804,7 +804,7 @@
 
 .add_new_axis_item_modal_header h4 {
     color: #000;
-    font-family: Poppins;
+    font-family: Poppins, sans-serif;
     font-size: 20px;
     font-style: normal;
     font-weight: 500;
@@ -828,7 +828,7 @@
     text-align: center;
     margin-bottom: 10px;
     color: #8F8F8F;
-    font-family: Poppins;
+    font-family: Poppins, sans-serif;
     font-size: 14px;
     font-style: normal;
     font-weight: 400;
@@ -847,7 +847,7 @@
 .remove_axis_item_table_title,
 .remove_axis_item_table_data {
     color: #000;
-    font-family: Poppins;
+    font-family: Poppins, sans-serif;
     font-size: 16px;
     font-style: normal;
     font-weight: 500;

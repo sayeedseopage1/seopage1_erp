@@ -33,14 +33,17 @@ const RemoveRatioItemsModal = ({ chartAxisData, setChartAxisData, antdModalOpen,
 
     const rowSelection = {
         onChange: (selectedRowKeys, selectedRows) => {
-            console.log(selectedRowKeys)
+            // console.log(selectedRowKeys)
             setSelectedRowKeys(selectedRowKeys);
         },
         selectedRowKeys: selectedRowKeysState,
     };
 
+    console.log(chartAxisData)
+    console.log(selectedRowKeysState)
+
     const handleRemove = () => {
-        setChartAxisData(chartAxisData.filter(item => !selectedRowKeysState.includes(item.id)))
+        setChartAxisData(chartAxisData?.filter(item => !selectedRowKeysState.includes(item?.id)))
         setAntdModalOpen(false)
     }
 

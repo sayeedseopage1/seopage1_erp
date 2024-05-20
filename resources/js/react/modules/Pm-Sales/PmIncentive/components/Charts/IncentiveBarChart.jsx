@@ -190,7 +190,7 @@ const IncentiveBarChart = ({ chartData }) => {
                     {
                         dummyUserRole == 1 && <IncentiveEditButton onClick={() => showIdealVsAchievedEditModal(chartData?.id)} className={btn_class_edit}>Edit</IncentiveEditButton>
                     }
-                    <ChartIdealVsAchievedEditModal antdModalOpen={isIdealVsAchievedEditModalOpen} showIdealVsAchievedEditModal={showIdealVsAchievedEditModal} chartDataId={modalStateId} />
+
                     <button
                         className="chart_button"
                     >
@@ -218,6 +218,15 @@ const IncentiveBarChart = ({ chartData }) => {
                     <img src={arrow2} className="chart_axis_icon" alt="arrow2" />
                 </div>
             </div>
+
+            {
+                isIdealVsAchievedEditModalOpen &&
+                <ChartIdealVsAchievedEditModal
+                    antdModalOpen={isIdealVsAchievedEditModalOpen}
+                    showIdealVsAchievedEditModal={showIdealVsAchievedEditModal}
+                    chartDataId={modalStateId}
+                />
+            }
         </>
 
     );

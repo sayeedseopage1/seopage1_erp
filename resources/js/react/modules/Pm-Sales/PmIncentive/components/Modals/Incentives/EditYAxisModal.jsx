@@ -20,7 +20,7 @@ const EditYAxisModal = ({ axisEditItem, chartAxisData, setChartAxisData, antdMod
     const onSubmit = (data) => {
         const newData = {
             ...axisEditItem,
-            yAxisRatio: data.yAxisRatio,
+            yAxisRatio: parseFloat(data?.yAxisRatio),
         };
 
         // Filter out items that need to be removed

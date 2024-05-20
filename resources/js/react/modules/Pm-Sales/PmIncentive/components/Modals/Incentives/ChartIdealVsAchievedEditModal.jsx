@@ -1,6 +1,5 @@
 import { Empty, Modal } from 'antd';
-import React, { useState } from 'react';
-import { ButtonComponent } from '../../../../PointFactors/components/Styles/ui/ui';
+import React, { useEffect, useState } from 'react';
 import { RxCross1 } from "react-icons/rx";
 import AddNewAxisItemModal from './AddNewAxisItemModal';
 import EditXAxisModal from './EditXAxisModal';
@@ -10,12 +9,21 @@ import RemoveRatioItemsModal from './RemoveRatioItemsModal';
 import { toast } from 'react-toastify';
 import Swal from 'sweetalert2';
 import warningIcon from '../../../assets/warningIcon.svg'
-import useIncentiveTypes from '../../../hooks/useIncentiveTypes';
+import { useGetSingleIncentiveCriteriaQuery } from '../../../../../../services/api/Pm-Sales/PmIncentiveApiSlice';
+import Spinner from '../../../../PointFactors/components/loader/Spinner';
 
 const ChartIdealVsAchievedEditModal = ({ antdModalOpen, showIdealVsAchievedEditModal, chartDataId }) => {
-    console.log(chartDataId)
-    const { allIncentiveTypes, regularIncentiveTypes, incentiveTypesLoading } = useIncentiveTypes();
-    console.log(allIncentiveTypes)
+    const { data: singleCriteria, isLoading: isLoadingSingleCriteria } = useGetSingleIncentiveCriteriaQuery(chartDataId, { skip: !chartDataId })
+
+    const defaultChartAxisData = singleCriteria?.data?.incentive_factors?.map((item) => (
+        {
+            id: item.id,
+            xAxisLowerLimit: parseFloat(item?.lower_limit),
+            xAxisUpperLimit: parseFloat(item?.upper_limit),
+            yAxisRatio: parseFloat(item?.incentive_amount),
+            incentive_amount_type: item?.incentive_amount_type
+        }
+    )) || [];
 
     // Modal states for each modal
     const [addNewAxisDataModalOpen, setAddNewAxisDataModalOpen] = useState(false);
@@ -27,55 +35,26 @@ const ChartIdealVsAchievedEditModal = ({ antdModalOpen, showIdealVsAchievedEditM
     //state for x axis and y axis edit 
     const [axisEditItem, setAxisEditItem] = useState({})
     // x axis and y axis data state
-    const [chartAxisData, setChartAxisData] = useState([
-        {
-            id: '1',
-            xAxisLowerLimit: 0,
-            xAxisUpperLimit: 10,
-            yAxisRatio: 100,
-        },
-        {
-            id: '2',
-            xAxisLowerLimit: 10,
-            xAxisUpperLimit: 20,
-            yAxisRatio: 80,
-        },
-        {
-            id: '3',
-            xAxisLowerLimit: 20,
-            xAxisUpperLimit: 35,
-            yAxisRatio: 50,
-        },
-        {
-            id: '4',
-            xAxisLowerLimit: 35,
-            xAxisUpperLimit: 50,
-            yAxisRatio: 0,
-        },
-        {
-            id: '5',
-            xAxisLowerLimit: 50,
-            xAxisUpperLimit: 65,
-            yAxisRatio: 0,
-        },
-        {
-            id: '6',
-            xAxisLowerLimit: 65,
-            xAxisUpperLimit: 80,
-            yAxisRatio: 0,
-        },
-        {
-            id: '7',
-            xAxisLowerLimit: 80,
-            xAxisUpperLimit: 100,
-            yAxisRatio: 0,
-        },
-    ])
+    const [chartAxisData, setChartAxisData] = useState([])
 
     const [xAxisStartAndEndValue, setXAxisStartAndEndValue] = useState({
         xAxisStaring: 0,
         xAxisEnding: 100
     })
+
+    useEffect(() => {
+        if (defaultChartAxisData?.length > 0 && chartAxisData?.length == 0) {
+            setChartAxisData(prevState => {
+                // Check if prevState is the same as defaultChartAxisData to prevent re-rendering
+                if (JSON.stringify(prevState) !== JSON.stringify(defaultChartAxisData)) {
+                    return defaultChartAxisData;
+                }
+                return prevState;
+            });
+        }
+    }, [defaultChartAxisData]);
+
+    console.log(chartAxisData)
 
     // Function to close the modal visibility
     const handleCancel = () => {
@@ -194,22 +173,30 @@ const ChartIdealVsAchievedEditModal = ({ antdModalOpen, showIdealVsAchievedEditM
 
                 <div className='edit_chart_data_modal_content_wrapper'>
                     {
-                        chartAxisData?.length == 0 && <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />
-                    }
-                    {
-                        chartAxisData?.sort((a, b) => a?.xAxisLowerLimit - b?.xAxisLowerLimit)?.map((item) => (
-                            <div key={item?.id} className='edit_chart_data_modal_content ratio_card'>
-                                <div className='ratio_wrapper'>
-                                    <p className='ratio_text'>{item?.xAxisLowerLimit}-{item?.xAxisUpperLimit}%</p>
-                                    <button onClick={() => xAxisEditHandler(item)} className='ratio_edit_button'>Edit</button>
-
-                                </div>
-                                <div className='ratio_wrapper'>
-                                    <p className='ratio_text'>{item?.yAxisRatio}%</p>
-                                    <button onClick={() => yAxisEditHandler(item)} className='ratio_edit_button'>Edit</button>
-                                </div>
-                            </div>
-                        ))
+                        isLoadingSingleCriteria ? (
+                            <Spinner />
+                        ) : (
+                            chartAxisData?.length > 0 ? (
+                                // If data is available, map through it and render items
+                                chartAxisData
+                                    .sort((a, b) => a?.xAxisLowerLimit - b?.xAxisLowerLimit)
+                                    .map((item) => (
+                                        <div key={item?.id} className='edit_chart_data_modal_content ratio_card'>
+                                            <div className='ratio_wrapper'>
+                                                <p className='ratio_text'>{item?.xAxisLowerLimit}-{item?.xAxisUpperLimit}%</p>
+                                                <button onClick={() => xAxisEditHandler(item)} className='ratio_edit_button'>Edit</button>
+                                            </div>
+                                            <div className='ratio_wrapper'>
+                                                <p className='ratio_text'>{item?.yAxisRatio}%</p>
+                                                <button onClick={() => yAxisEditHandler(item)} className='ratio_edit_button'>Edit</button>
+                                            </div>
+                                        </div>
+                                    ))
+                            ) : (
+                                // If no data is available, show empty state
+                                <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />
+                            )
+                        )
                     }
                 </div>
             </div>
@@ -221,44 +208,44 @@ const ChartIdealVsAchievedEditModal = ({ antdModalOpen, showIdealVsAchievedEditM
             </div>
 
             {/* Modals for add, edit and remove */}
-            <AddNewAxisItemModal
+            {addNewAxisDataModalOpen && <AddNewAxisItemModal
                 xAxisStartAndEndValue={xAxisStartAndEndValue}
                 chartAxisData={chartAxisData}
                 setChartAxisData={setChartAxisData}
                 antdModalOpen={addNewAxisDataModalOpen}
                 setAntdModalOpen={setAddNewAxisDataModalOpen}
-            />
+            />}
 
-            <EditXAxisModal
+            {editXAxisDataModalOpen && <EditXAxisModal
                 xAxisStartAndEndValue={xAxisStartAndEndValue}
                 axisEditItem={axisEditItem}
                 chartAxisData={chartAxisData}
                 setChartAxisData={setChartAxisData}
                 antdModalOpen={editXAxisDataModalOpen}
                 setAntdModalOpen={setEditXAxisDataModalOpen}
-            />
+            />}
 
-            <EditYAxisModal
+            {editYAxisDataModalOpen && <EditYAxisModal
                 axisEditItem={axisEditItem}
                 chartAxisData={chartAxisData}
                 setChartAxisData={setChartAxisData}
                 antdModalOpen={editYAxisDataModalOpen}
                 setAntdModalOpen={setEditYAxisDataModalOpen}
-            />
+            />}
 
-            <SelectRatioRangeModal
+            {selectRatioRange && <SelectRatioRangeModal
                 xAxisStartAndEndValue={xAxisStartAndEndValue}
                 setXAxisStartAndEndValue={setXAxisStartAndEndValue}
                 antdModalOpen={selectRatioRange}
                 setAntdModalOpen={setSelectRatioRange}
-            />
+            />}
 
-            <RemoveRatioItemsModal
+            {removeRatioItemsModalOpen && <RemoveRatioItemsModal
                 chartAxisData={chartAxisData}
                 setChartAxisData={setChartAxisData}
                 antdModalOpen={removeRatioItemsModalOpen}
                 setAntdModalOpen={setRemoveRatioItemsModalOpen}
-            />
+            />}
 
         </Modal>
     );
