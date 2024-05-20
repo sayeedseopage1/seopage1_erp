@@ -179,7 +179,10 @@ class HelperPmProjectStatusController extends AccountBaseController
 
                     if ($i < 6) {
                         $goal->goal_code = $goalCodes[$i]['code'];
-                        $goal->goal_name = $goalCodes[$i]['name'];
+
+                        if ($milestoneCount == 1 && $i == 2) $goal->goal_name = $goalCodes[$i]['single'];
+                        else $goal->goal_name = $goalCodes[$i]['name'];
+
                         $goal->goal_type = $goalCodes[$i]['type'];
                         $goal->goal_end_date = Carbon::parse($goal_start_date)->addDay($goalDurationArray[$i]);
                         $goal->duration = $goalDurationArray[$i];
