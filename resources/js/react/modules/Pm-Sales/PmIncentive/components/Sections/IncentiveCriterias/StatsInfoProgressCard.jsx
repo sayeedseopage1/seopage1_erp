@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import GradientProgressBar from './GradientProgressBar';
-import AveragePointModal from './Modals/AveragePointModal';
+import AveragePointModal from '../../Modals/AveragePointModal';
 
 const StatsInfoProgressCard = ({ item }) => {
     const { title, achieved } = item || {}

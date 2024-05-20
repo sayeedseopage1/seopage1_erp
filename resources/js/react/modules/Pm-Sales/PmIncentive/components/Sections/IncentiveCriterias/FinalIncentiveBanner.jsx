@@ -1,5 +1,5 @@
 import React from 'react';
-import cashBag from '../assets/cashBag.svg'
+import cashBag from '../../../assets/cashBag.svg'
 
 
 const FinalIncentiveBanner = () => {

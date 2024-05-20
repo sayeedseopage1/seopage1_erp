@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import StatsInfoProgressCard from './StatsInfoProgressCard';
-import pointIconDark from '../assets/pointIconDark.svg'
+import pointIconDark from '../../../assets/pointIconDark.svg'
 import { IoInformationCircle } from "react-icons/io5";
-import RegularPointsModal from './Modals/RegularPointsModal';
-import IncentivePointModal from './Modals/IncentivePointModal';
-import { statsInfoData } from '../constants';
+import RegularPointsModal from '../../Modals/RegularPointsModal';
+import IncentivePointModal from '../../Modals/IncentivePointModal';
+import { statsInfoData } from '../../../constants';
 import { Popover } from 'antd';
 
 const StatsInfo = () => {

@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
-import pointIconDark from '../assets/pointIconDark.svg'
-import cashBag from '../assets/cashBag.svg'
-import UpsaleCrossSalePointModal from './Modals/UpsaleCrossSalePointModal';
-import IncentiveEditButton from './ui/IncentiveEditButton';
-import { dummyUserRole } from '../constants';
-import CashValueUpCrossEditModal from './Modals/Incentives/CashValueUpCrossEditModal';
-import useIncentiveTypes from '../hooks/useIncentiveTypes';
-import { Placeholder } from '../../../../global/Placeholder';
+import pointIconDark from '../../../assets/pointIconDark.svg'
+import cashBag from '../../../assets/cashBag.svg'
+import UpsaleCrossSalePointModal from '../../Modals/UpsaleCrossSalePointModal';
+import IncentiveEditButton from '../../ui/IncentiveEditButton';
+import { dummyUserRole } from '../../../constants';
+import CashValueUpCrossEditModal from '../../Modals/Incentives/CashValueUpCrossEditModal';
+import { Placeholder } from '../../../../../../global/Placeholder';
+import useIncentiveTypes from '../../../hooks/useIncentiveTypes';
 
 const UpsaleCrossSalePointBanner = () => {
     const [upsaleCrossSalePointsModalOpen, setUpsaleCrossSalePointsModalOpen] = useState(false);

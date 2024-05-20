@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import '../styles/Incentive.css'
-import { ButtonComponent } from '../../PointFactors/components/Styles/ui/ui';
-import PayNowModal from './Modals/HeldAmounts/PayNowModal';
+import '../../../styles/Incentive.css'
+import { ButtonComponent } from '../../../../PointFactors/components/Styles/ui/ui';
+import PayNowModal from '../../Modals/HeldAmounts/PayNowModal';
 
 
 const pointFilters = [

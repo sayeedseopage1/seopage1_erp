@@ -1,8 +1,8 @@
 import React from 'react';
 import BonusPointsPointBanner from './BonusPointsPointBanner';
-import IncentiveBarChart from './Charts/IncentiveBarChart';
-import IncentiveThickChart from './Charts/IncentiveThickChart';
-import { bonusPointsChartData } from '../constants';
+import IncentiveBarChart from '../../Charts/IncentiveBarChart';
+import IncentiveThickChart from '../../Charts/IncentiveThickChart';
+import { bonusPointsChartData } from '../../../constants';
 
 const BonusPoints = () => {
     return (

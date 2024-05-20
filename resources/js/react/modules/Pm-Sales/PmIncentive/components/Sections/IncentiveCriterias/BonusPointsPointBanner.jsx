@@ -1,14 +1,14 @@
 import React, { useState } from 'react';
-import pointIconDark from '../assets/pointIconDark.svg'
-import cashBag from '../assets/cashBag.svg'
+import pointIconDark from '../../../assets/pointIconDark.svg'
+import cashBag from '../../../assets/cashBag.svg'
 import { IoInformationCircle } from 'react-icons/io5';
-import FinalPointsModal from './Modals/FinalPointsModal';
+import FinalPointsModal from '../../Modals/FinalPointsModal';
 import { Popover } from 'antd';
-import IncentiveEditButton from './ui/IncentiveEditButton';
-import { dummyUserRole } from '../constants';
-import CashValueBonusEditModal from './Modals/Incentives/CashValueBonusEditModal';
-import useIncentiveTypes from '../hooks/useIncentiveTypes';
-import { Placeholder } from '../../../../global/Placeholder';
+import IncentiveEditButton from '../../ui/IncentiveEditButton';
+import { dummyUserRole } from '../../../constants';
+import CashValueBonusEditModal from '../../Modals/Incentives/CashValueBonusEditModal';
+import useIncentiveTypes from '../../../hooks/useIncentiveTypes';
+import { Placeholder } from '../../../../../../global/Placeholder';
 
 const BonusPointsPointBanner = () => {
     const [finalPointsModalOpen, setFinalPointsModalOpen] = useState(false);

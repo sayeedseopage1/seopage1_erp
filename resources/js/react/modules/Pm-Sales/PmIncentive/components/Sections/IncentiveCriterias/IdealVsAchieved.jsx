@@ -1,9 +1,9 @@
 import React from 'react';
-import IncentiveBarChart from './Charts/IncentiveBarChart';
+import IncentiveBarChart from '../../Charts/IncentiveBarChart';
 // import IncentiveThickChart from './Charts/IncentiveThickChart';
-import useIncentiveTypes from '../hooks/useIncentiveTypes';
-import { IncentiveFormattedData } from '../utils/formattedChartData';
-import { chartRangesForColor } from '../constants/rangesColor';
+import useIncentiveTypes from '../../../hooks/useIncentiveTypes';
+import { IncentiveFormattedData } from '../../../utils/formattedChartData';
+import { chartRangesForColor } from '../../../constants/rangesColor';
 
 const IdealVsAchieved = () => {
     const { regularIncentiveTypes, incentiveTypesLoading } = useIncentiveTypes();

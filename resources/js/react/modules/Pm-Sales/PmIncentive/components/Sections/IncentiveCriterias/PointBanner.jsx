@@ -1,12 +1,12 @@
-import "../styles/Incentive.css"
-import pointIcon from '../assets/pointIcon.svg'
-import takaIcon from '../assets/takaIcon.svg'
-import IncentiveEditButton from "./ui/IncentiveEditButton";
-import { dummyUserRole } from "../constants";
-import CashValuePointEditModal from "./Modals/Incentives/CashValuePointEditModal";
+import "../../../styles/Incentive.css"
+import pointIcon from '../../../assets/pointIcon.svg'
+import takaIcon from '../../../assets/takaIcon.svg'
+import IncentiveEditButton from "../../ui/IncentiveEditButton";
+import { dummyUserRole } from "../../../constants";
+import CashValuePointEditModal from "../../Modals/Incentives/CashValuePointEditModal";
 import { useState } from "react";
-import { Placeholder } from "../../../../global/Placeholder";
-import useIncentiveTypes from "../hooks/useIncentiveTypes";
+import { Placeholder } from "../../../../../../global/Placeholder";
+import useIncentiveTypes from "../../../hooks/useIncentiveTypes";
 
 const PointBanner = () => {
     const [editPointDataModalOpen, setEditPointDataModalOpen] = useState(false);

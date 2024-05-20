@@ -1,16 +1,16 @@
 import React, { useState } from 'react';
 import IncentiveFilter from '../components/IncentiveFilter';
-import PointBanner from '../components/PointBanner';
-import IdealVsAchieved from '../components/IdealVsAchieved';
-import StatsInfo from '../components/StatsInfo';
-import UpsaleCrossSale from '../components/UpsaleCrossSale';
-import BonusPoints from '../components/BonusPoints';
-import FinalIncentiveBanner from '../components/FinalIncentiveBanner';
+import PointBanner from '../components/Sections/IncentiveCriterias/PointBanner'
+import IdealVsAchieved from '../components/Sections/IncentiveCriterias/IdealVsAchieved';
+import StatsInfo from '../components/Sections/IncentiveCriterias/StatsInfo';
+import UpsaleCrossSale from '../components/Sections/IncentiveCriterias/UpsaleCrossSale';
+import BonusPoints from '../components/Sections/IncentiveCriterias/BonusPoints';
+import FinalIncentiveBanner from '../components/Sections/IncentiveCriterias/FinalIncentiveBanner';
 import Switch from '../../../../global/Switch';
-import IncentiveFactors from '../components/incentiveFactors/IncentiveFactors';
-import FilterBar from '../components/FilterBar';
+import IncentiveFactors from '../components/Sections/IncentiveFactors/IncentiveFactors';
 import HeldAmounts from '../components/Sections/HeldAmounts/HeldAmounts';
 import QuarterlyAndYearlyTable from '../components/Sections/QuarterlyAndYearly/QuarterlyAndYearlyTable';
+import FilterBar from '../components/Sections/IncentiveCriterias/FilterBar';
 
 const Incentive = () => {
     const [data, setData] = useState([]);
