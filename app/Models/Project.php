@@ -479,4 +479,9 @@ class Project extends BaseModel
     {
         return $this->hasMany(ProjectPmGoal::class, 'project_id');
     }
+
+    public function pmProject()
+    {
+        return $this->hasOne(PMProject::class, 'project_id');
+    }
 }

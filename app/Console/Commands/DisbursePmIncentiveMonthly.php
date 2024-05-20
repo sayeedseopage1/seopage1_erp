@@ -59,7 +59,7 @@ class DisbursePmIncentiveMonthly extends Command
             
             // Goal achieve rate
             $projects = Project::select(['id','project_name','pm_id','status','project_status'])
-            ->where([['pm_id', 209],['status', 'in progress'],['project_status', 'Accepted']])
+            ->where([['pm_id', $user->id],['status', 'in progress'],['project_status', 'Accepted']])
             ->withCount(['pmGoals as total_goals' => function($pmGoal){
                 return $pmGoal->where('goal_status', 0)->where('goal_end_date', '<=', now());
             }])
@@ -68,7 +68,26 @@ class DisbursePmIncentiveMonthly extends Command
             }])
             ->get();
 
-            $goal_achieved_percent = ($projects->sum('total_goals_met') / $projects->sum('total_goals')) * 100;
+            $goal_achieved_percent = number_format(($projects->sum('total_goals_met') / $projects->sum('total_goals')) * 100, 2); 
+
+            // Negative vs poisitive point
+            $negative_point_rete = number_format(($totalLostPoints / ($totalEarnedPoints + $totalLostPoints)) * 100, 2);
+
+            // Percentage of delayed project
+            $totalProjects = Project::select(['id','project_name','pm_id','status','project_status'])
+            ->where([['pm_id', $user->id],['status', 'in progress'],['project_status', 'Accepted']])
+            ->whereHas('pmProject')->count();
+
+            $delayedProjects = Project::select(['id','project_name','pm_id','status','project_status'])
+            ->where([['pm_id', $user->id],['status', 'in progress'],['project_status', 'Accepted']])
+            ->whereHas('pmProject', function($pmProject){
+                return $pmProject->where('delayed_status', 1);
+            })
+            ->count();
+                    
+            $delayed_project_percentage = number_format(($delayedProjects / $totalProjects) * 100, 2);
+            
+            
         }
     }
 }
