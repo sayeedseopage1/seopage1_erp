@@ -60,6 +60,7 @@ class ProjectPmGoal extends Model
                 [
                     'code' => 'FMR',
                     'name' => '1st milestone has to be released.',
+                    'single' => 'One milestone has to be released.',
                     'type' => '1st_milestone_released',
                 ],
                 [
