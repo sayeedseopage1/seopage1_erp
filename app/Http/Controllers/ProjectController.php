@@ -3341,7 +3341,7 @@ class ProjectController extends AccountBaseController
             $project->save();
 
             $text = Auth::user()->name . ' added project deliverable : ' . $deliverable->title;
-            $link = '<a style="color:blue" href="' . route('projects.show', $project->id) . '?tab=deliverable">' . $text . '</a>';
+            $link = '<a style="color:blue" href="' . route('projects.show', $project->id) . '?tab=deliverables">' . $text . '</a>';
             $this->logProjectActivity($project->id, $link);
 
             $users = User::where('role_id', 1)->get();
