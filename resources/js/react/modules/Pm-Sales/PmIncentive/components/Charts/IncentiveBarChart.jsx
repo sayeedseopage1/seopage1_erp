@@ -7,6 +7,7 @@ import { Popover } from "antd";
 import IncentiveEditButton from "../ui/IncentiveEditButton";
 import { dummyUserRole } from "../../constants";
 import ChartIdealVsAchievedEditModal from "../Modals/Incentives/ChartIdealVsAchievedEditModal";
+import PropTypes from "prop-types";
 
 const IncentiveBarChart = ({ chartData }) => {
     const chartRef = useRef(null);
@@ -18,7 +19,6 @@ const IncentiveBarChart = ({ chartData }) => {
         setModalStateData(chartDataFromParent)
         setIsIdealVsAchievedEditModalOpen(!isIdealVsAchievedEditModalOpen);
     };
-
 
     const options = {
         title: {
@@ -61,7 +61,7 @@ const IncentiveBarChart = ({ chartData }) => {
         yaxis: {
             labels: {
                 formatter: (val) => {
-                    return `${val}%`;
+                    return `${val}${chartData?.amountType == 1 ? "" : "%"}`;
                 },
                 style: {
                     fontSize: "10",
@@ -77,7 +77,7 @@ const IncentiveBarChart = ({ chartData }) => {
             enabled: true,
             enabledOnSeries: undefined,
             formatter: function (val) {
-                return `${val}%`;
+                return `${val}${chartData?.amountType == 1 ? "" : "%"}`;
             },
             textAnchor: "middle",
             distributed: false,
@@ -87,7 +87,15 @@ const IncentiveBarChart = ({ chartData }) => {
                 fontSize: "14px",
                 fontFamily: "poppins",
                 fontWeight: 500,
-                colors: ["#fff"],
+                colors: [
+                    function ({ seriesIndex, dataPointIndex, w }) {
+                        if (w.config.series[seriesIndex].data[dataPointIndex] > 0) {
+                            return "#fff";
+                        } else {
+                            return "#ff0014";
+                        }
+                    },
+                ]
             },
         },
 
@@ -140,7 +148,7 @@ const IncentiveBarChart = ({ chartData }) => {
 
     // Conditionally assigns a CSS class to a button based on the 'refId' property of 'chartData'.
     // If 'refId' is 8, 9, or 10, the button is assigned 'chart_button_secondary'. Otherwise, it gets 'chart_button'.
-    const btn_class_edit = (chartData?.refId === 8 || chartData?.refId === 9 || chartData?.refId === 10) ? "chart_button_secondary" : "chart_button"
+    const btn_class_edit = (chartData?.id === 8 || chartData?.id === 9 || chartData?.id === 10 || chartData?.id === 11 || chartData?.id === 12) ? "chart_button_secondary" : "chart_button"
 
 
     return (
@@ -195,3 +203,8 @@ const IncentiveBarChart = ({ chartData }) => {
 };
 
 export default IncentiveBarChart;
+
+IncentiveBarChart.propTypes = {
+    chartData: PropTypes.object,
+};
+

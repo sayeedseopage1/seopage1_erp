@@ -10,6 +10,8 @@ export const IncentiveFormattedData = (
                 title: criteria?.title,
                 yTitle: "Incentive percentage",
                 chartTag: "Ideal",
+                amountType:
+                    criteria?.incentive_factors?.[0]?.incentive_amount_type,
                 series: [
                     {
                         name: criteria?.title,

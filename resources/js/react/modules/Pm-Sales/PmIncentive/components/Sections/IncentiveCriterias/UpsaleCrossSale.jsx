@@ -23,8 +23,8 @@ const UpsaleCrossSale = () => {
             </div>
             <div className='chart_section_container'>
                 {
-                    upSaleCrossSaleChartData?.map(item => (
-                        <div key={item?.id} className="chart_parent">
+                    upSaleCrossSaleChartData?.map((item, ind) => (
+                        <div key={ind} className="chart_parent">
 
                             <div className="secondary_chart_wrapper">
                                 <IncentiveBarChart chartData={item?.ideal} />

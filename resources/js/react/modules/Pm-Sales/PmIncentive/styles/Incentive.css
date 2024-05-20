@@ -257,9 +257,9 @@
     left: -28%;
 }
 
-#bonus_points .chart_parent:first-child .y_axis_arrow {
+/* #bonus_points .chart_parent:first-child .y_axis_arrow {
     left: -25%
-}
+} */
 
 .chart_axis_title {
     font-size: 12px;
@@ -901,9 +901,9 @@
         left: -33%;
     }
 
-    #bonus_points .chart_parent:first-child .y_axis_arrow {
+    /* #bonus_points .chart_parent:first-child .y_axis_arrow {
         left: -30%
-    }
+    } */
 }
 
 @media only screen and (min-width: 1501px) and (max-width: 1600px) {
@@ -911,9 +911,9 @@
         left: -36%;
     }
 
-    #bonus_points .chart_parent:first-child .y_axis_arrow {
+    /* #bonus_points .chart_parent:first-child .y_axis_arrow {
         left: -33%
-    }
+    } */
 
     .chart_axis_icon {
         width: 18%;
@@ -926,9 +926,9 @@
         left: -40%;
     }
 
-    #bonus_points .chart_parent:first-child .y_axis_arrow {
+    /* #bonus_points .chart_parent:first-child .y_axis_arrow {
         left: -37%
-    }
+    } */
 
     .chart_axis_icon {
         width: 18%;
@@ -941,9 +941,9 @@
         left: -44%;
     }
 
-    #bonus_points .chart_parent:first-child .y_axis_arrow {
+    /* #bonus_points .chart_parent:first-child .y_axis_arrow {
         left: -41%
-    }
+    } */
 
     .chart_axis_icon {
         width: 18%;
@@ -956,9 +956,9 @@
         left: -49%;
     }
 
-    #bonus_points .chart_parent:first-child .y_axis_arrow {
+    /* #bonus_points .chart_parent:first-child .y_axis_arrow {
         left: -46%
-    }
+    } */
 
     .chart_axis_icon {
         width: 15%;
