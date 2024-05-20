@@ -5936,7 +5936,7 @@ public function updatePmBasicSEO(Request $request){
         }
 
         $text = Auth::user()->name . ' send project deliverable authorization request';
-        $link = '<a style="color:blue" href="' . route('projects.show', $project->id) . '?tab=deliverable">' . $text . '</a>';
+        $link = '<a style="color:blue" href="' . route('projects.show', $project->id) . '?tab=deliverables">' . $text . '</a>';
         $this->logProjectActivity($project->id, $link);
 
         return response()->json(['status' => 400]);
@@ -6065,7 +6065,7 @@ public function updatePmBasicSEO(Request $request){
 
 
         $text = Auth::user()->name . ' finally authorized project deliverable';
-        $link = '<a style="color:blue" href="' . route('projects.show', $project->id) . '?tab=deliverable">' . $text . '</a>';
+        $link = '<a style="color:blue" href="' . route('projects.show', $project->id) . '?tab=deliverables">' . $text . '</a>';
         $this->logProjectActivity($project->id, $link);
 
         $user = User::where('id', $project->pm_id)->first();
@@ -6144,13 +6144,16 @@ public function updatePmBasicSEO(Request $request){
     public function project_activity_time_log_ajax(Request $request)
     {
         $date = explode(' To ', $request->date_range);
+        $startDate = Carbon::createFromFormat($this->global->date_format, $date[0]);
+        $endDate = Carbon::createFromFormat($this->global->date_format, $date[1]);
+
         $activityLog = ProjectActivity::where('project_id', $request->project_id);
 
         if ($request->employee != 'all') {
             $activityLog->where('added_by', $request->employee);
         }
 
-        $activityLog = $activityLog->whereBetween('created_at', [Carbon::parse($date[0])->format('Y-m-d H:i:s'), Carbon::parse($date[1])->format('Y-m-d H:i:s')])
+        $activityLog = $activityLog->whereBetween('created_at', [$startDate, $endDate])
             ->orderBy('id', 'desc')
             ->get();
 
