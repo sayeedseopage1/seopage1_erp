@@ -11,12 +11,12 @@ import PropTypes from "prop-types";
 
 const IncentiveBarChart = ({ chartData }) => {
     const chartRef = useRef(null);
-    const [modalStateData, setModalStateData] = useState({});
+    const [modalStateId, setModalStateId] = useState(null);
 
     const [isIdealVsAchievedEditModalOpen, setIsIdealVsAchievedEditModalOpen] = useState(false);
 
-    const showIdealVsAchievedEditModal = (chartDataFromParent) => {
-        setModalStateData(chartDataFromParent)
+    const showIdealVsAchievedEditModal = (chartDataId) => {
+        setModalStateId(chartDataId)
         setIsIdealVsAchievedEditModalOpen(!isIdealVsAchievedEditModalOpen);
     };
 
@@ -167,9 +167,9 @@ const IncentiveBarChart = ({ chartData }) => {
                 </div>
                 <div className="incentive_button_wrapper">
                     {
-                        dummyUserRole == 1 && <IncentiveEditButton onClick={() => showIdealVsAchievedEditModal(chartData)} className={btn_class_edit}>Edit</IncentiveEditButton>
+                        dummyUserRole == 1 && <IncentiveEditButton onClick={() => showIdealVsAchievedEditModal(chartData?.id)} className={btn_class_edit}>Edit</IncentiveEditButton>
                     }
-                    <ChartIdealVsAchievedEditModal antdModalOpen={isIdealVsAchievedEditModalOpen} showIdealVsAchievedEditModal={showIdealVsAchievedEditModal} chartData={modalStateData} />
+                    <ChartIdealVsAchievedEditModal antdModalOpen={isIdealVsAchievedEditModalOpen} showIdealVsAchievedEditModal={showIdealVsAchievedEditModal} chartDataId={modalStateId} />
                     <button
                         className="chart_button"
                     >

@@ -10,9 +10,12 @@ import RemoveRatioItemsModal from './RemoveRatioItemsModal';
 import { toast } from 'react-toastify';
 import Swal from 'sweetalert2';
 import warningIcon from '../../../assets/warningIcon.svg'
+import useIncentiveTypes from '../../../hooks/useIncentiveTypes';
 
-const ChartIdealVsAchievedEditModal = ({ antdModalOpen, showIdealVsAchievedEditModal, chartData }) => {
-    // console.log(chartData)
+const ChartIdealVsAchievedEditModal = ({ antdModalOpen, showIdealVsAchievedEditModal, chartDataId }) => {
+    console.log(chartDataId)
+    const { allIncentiveTypes, regularIncentiveTypes, incentiveTypesLoading } = useIncentiveTypes();
+    console.log(allIncentiveTypes)
 
     // Modal states for each modal
     const [addNewAxisDataModalOpen, setAddNewAxisDataModalOpen] = useState(false);

@@ -12,7 +12,6 @@ const BonusPoints = () => {
 
     const bonusPointsChartData = IncentiveFormattedData(bonusIncentiveTypes, chartRangesForColor)
 
-    console.log(bonusPointsChartData)
     return (
         <>
             <div className="title_wrapper">

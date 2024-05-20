@@ -381,6 +381,24 @@
     .final_incentive_banner_wrapper .custom_divider_two {
         display: none;
     }
+
+    .edit_chart_data_modal_top {
+        flex-direction: column;
+    }
+
+    .ideal_vs_achieved_chart_data_actions {
+        max-width: 100%;
+    }
+
+    .ideal_vs_achieved_axis_data {
+        max-width: 100%;
+        align-items: flex-start;
+    }
+
+    .pay_now_modal_body {
+        max-height: 60vh;
+        overflow-y: scroll;
+    }
 }
 
 
@@ -530,5 +548,27 @@
 
     .final_incentive_banner_wrapper .custom_divider_two {
         display: none;
+    }
+
+    .chart_header {
+        flex-direction: column;
+    }
+
+    .edit_chart_data_modal_top {
+        flex-direction: column;
+    }
+
+    .ideal_vs_achieved_chart_data_actions {
+        max-width: 100%;
+    }
+
+    .ideal_vs_achieved_axis_data {
+        max-width: 100%;
+        align-items: flex-start;
+    }
+
+    .pay_now_modal_body {
+        max-height: 60vh;
+        overflow-y: scroll;
     }
 }
