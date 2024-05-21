@@ -465,7 +465,7 @@ class ContractController extends AccountBaseController
     public function storeLeadDeal(Request $request)
     {
         // dd($request->all());
-        \DB::beginTransaction();
+        DB::beginTransaction();
         $current_time = Carbon::now()->format('d-m-Y H:i:s');
         $award_date = strtotime($request->award_time);
         $aw_dt = date('Y-m-d H:i:s', $award_date);
@@ -521,6 +521,9 @@ class ContractController extends AccountBaseController
             $deal->deal_stage = $deal_stage->deal_stage + 1;
             $deal->comments = $deal_stage->comments;
             $deal->won_lost = 'Yes';
+            $deal->save();
+        } elseif ($deal_stage->deal_stage == 6) {
+            $deal->deal_stage = 6;
             $deal->save();
         } else {
             $deal->deal_stage = $deal_stage->deal_stage;

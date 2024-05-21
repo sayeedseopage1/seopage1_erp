@@ -700,6 +700,12 @@ class SalesRiskPolicyController extends AccountBaseController
             if ($calculation['points'] >= 0) {
                 $deal->sale_analysis_status = 'auto-authorized';
                 $deal->sale_authorize_on = date('Y-m-d h:i:s');
+
+                if ($dealStage = DealStage::where('lead_id', $deal->lead_id)->first()) {
+                    $dealStage->won_lost = 'Yes';
+                    $dealStage->status = 'pending';
+                    $dealStage->save();
+                }
             } else {
                 $deal->sale_analysis_status = 'analysis';
             }
@@ -879,7 +885,7 @@ class SalesRiskPolicyController extends AccountBaseController
                 $data[] = ['id' => $questions[0]->id, 'title' =>  $questions[0]->title, 'value' => 'yes', 'parent_id' => null];
             } else {
                 $data[] = ['id' => $questions[0]->id, 'title' =>  $questions[0]->title, 'value' => 'No', 'parent_id' => null];
-                // unseting first yes/no policy
+                // unsetting first yes/no policy
                 $policyIdList[$policy[0]->id] = $policy[0]->id;
 
                 // ------------------- percentage calculation
@@ -1427,8 +1433,21 @@ class SalesRiskPolicyController extends AccountBaseController
 
         if ($status == '1') {
             $deal->sale_analysis_status = 'authorized';
+            $deal->sale_authorize_on = date('Y-m-d h:i:s');
+
+            if ($dealStage = DealStage::where('lead_id', $deal->lead_id)->first()) {
+                $dealStage->won_lost = 'Yes';
+                $dealStage->status = 'pending';
+                $dealStage->save();
+            }
         } elseif ($status == '0') {
             $deal->sale_analysis_status = 'denied';
+
+            if ($dealStage = DealStage::where('lead_id', $deal->lead_id)->first()) {
+                $dealStage->won_lost = 'No';
+                $deal->deal_status="Lost";
+                $dealStage->save();
+            }
         }
 
         $deal->sale_authorize_by = auth()->user()->id;

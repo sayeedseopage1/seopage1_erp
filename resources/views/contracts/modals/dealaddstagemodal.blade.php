@@ -372,6 +372,7 @@
             'date': '{{$date}}',
             'deadline': document.getElementById('deadline').value,
             'id': {{$deal->id}},
+            'deal_stage': 6,
         }
 
         // console.log({data});
