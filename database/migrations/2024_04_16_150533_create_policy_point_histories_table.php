@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::create('policy_point_histories', function (Blueprint $table) {
             $table->id();
-            $table->bigInteger('deal_id');
+            $table->bigInteger('deal_id')->unsigned();
             $table->text('policy');
             $table->float('points', 8,2)->comment('actual gained points after calculation');
             $table->text('point_report');

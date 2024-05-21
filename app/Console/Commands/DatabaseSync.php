@@ -93,6 +93,18 @@ class DatabaseSync extends Command
         }
         echo "\nend";
 
+        $table = 'policy_question_values';
+        if(!Schema::hasColumn($table, 'submitted_by'))
+        {
+            echo "\nsubmitted_by column in $table";
+            Schema::table($table, function (Blueprint $table) {
+                $table->integer('submitted_by')->unsigned()->after('question_list');
+                $table->foreign('submitted_by')->on('users')->references('id')->onUpdate('no action')->onDelete('no action');
+            });
+            echo "\nend";
+        }
+
+        $this->info("\nDatabase sync for sales risk.");
         return Command::SUCCESS;
     }
 }
