@@ -80,7 +80,7 @@ class IncentiveFactorController extends Controller
 
             return response()->json([
                 'status' => 200,
-                'message' => 'The incentive factor updated successfully'
+                'message' => 'The incentive factor created successfully'
             ]);
         } catch (\Throwable $th) {
             //throw $th;
