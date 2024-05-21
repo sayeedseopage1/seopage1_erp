@@ -8,10 +8,7 @@ use App\Models\TaskRevision;
 use Illuminate\Http\Request;
 use App\Models\IncentiveType;
 use App\Models\IncentiveFactor;
-use App\Models\IncentiveCriteria;
 use App\Http\Controllers\Controller;
-use App\View\Components\Auth;
-use PayPal\Api\Incentive;
 
 class IncentiveFactorController extends Controller
 {
@@ -127,8 +124,7 @@ class IncentiveFactorController extends Controller
     public function destroy($id)
     {
         try {
-            $incentiveFactor = IncentiveFactor::where('id', $id)->delete();
-
+            IncentiveFactor::where('id', $id)->delete();
             return response()->json([
                 'status' => 200,
                 'message' => 'The incentive factor deleted successfully'
