@@ -2,7 +2,7 @@ import { useGetIncentiveFactorsQuery } from "../../../../services/api/Pm-Sales/P
 
 const useIncentiveTypes = () => {
     const { data: allIncentiveTypes, isLoading: incentiveTypesLoading } = useGetIncentiveFactorsQuery();
-    const incentiveTypesData = allIncentiveTypes?.data;
+    const incentiveTypesData = allIncentiveTypes?.data?.incentive_data;
 
     const regularIncentiveTypes = incentiveTypesData?.find((item) => item?.id == 1);
     const upSaleCrossSaleTypes = incentiveTypesData?.find((item) => item?.id == 2);
