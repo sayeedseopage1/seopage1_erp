@@ -665,41 +665,41 @@ class TimelogController extends AccountBaseController
         $actions = PendingAction::where('code','NTA')->where('past_status',0)->where('task_id',$task_status->id)->get();
         if($actions != null)
         {
-        foreach ($actions as $key => $action) {
-                $project= Project::where('id',$task_status->project_id)->first();
-                $client= User::where('id',$project->client_id)->first();
-                $project_manager= User::where('id',$project->pm_id)->first();
-                $action->authorized_by= Auth::id();
-                $action->authorized_at= Carbon::now();
-                $action->past_status = 1;
-                $action->save();
-                // $project_manager= User::where('id',$project->pm_id)->first();
-                // $client= User::where('id',$project->client_id)->first();
-                $authorize_by= User::where('id',$action->authorized_by)->first();
+            foreach ($actions as $key => $action) {
+                    $project= Project::where('id',$task_status->project_id)->first();
+                    $client= User::where('id',$project->client_id)->first();
+                    $project_manager= User::where('id',$project->pm_id)->first();
+                    $action->authorized_by= Auth::id();
+                    $action->authorized_at= Carbon::now();
+                    $action->past_status = 1;
+                    $action->save();
+                    // $project_manager= User::where('id',$project->pm_id)->first();
+                    // $client= User::where('id',$project->client_id)->first();
+                    $authorize_by= User::where('id',$action->authorized_by)->first();
 
-                $past_action= new PendingActionPast();
-                $past_action->item_name = $action->item_name;
-                $past_action->code = $action->code;
-                $past_action->serial = $action->serial;
-                $past_action->action_id = $action->id;
-                $past_action->heading = $action->heading;
-                $past_action->message = 'New task <a href="'.route('tasks.show',$task_status->id).'">'.$task_status->heading.'</a> assigned for client <a>'.$client->name.'</a> (PM <a href="'.route('employees.show',$project_manager->id).'">'.$project_manager->name.'</a>) has been started by developer <a href="'.route('employees.show',Auth::user()->id).'">'.Auth::user()->name.'</a>!';
-             //   $past_action->button = $action->button;
-                $past_action->timeframe = $action->timeframe;
-                $past_action->authorization_for = $action->authorization_for;
-                $past_action->authorized_by = $action->authorized_by;
-                $past_action->authorized_at = $action->authorized_at;
-                $past_action->expired_status = $action->expired_status;
-                $past_action->past_status = $action->past_status;
-                $past_action->project_id = $action->project_id;
-                $past_action->task_id = $action->task_id;
-                $past_action->client_id = $action->client_id;
-                $past_action->milestone_id = $action->milestone_id;
-                $past_action->save();
-               // dd($past_action);
+                    $past_action= new PendingActionPast();
+                    $past_action->item_name = $action->item_name;
+                    $past_action->code = $action->code;
+                    $past_action->serial = $action->serial;
+                    $past_action->action_id = $action->id;
+                    $past_action->heading = $action->heading;
+                    $past_action->message = 'New task <a href="'.route('tasks.show',$task_status->id).'">'.$task_status->heading.'</a> assigned for client <a>'.$client->name.'</a> (PM <a href="'.route('employees.show',$project_manager->id).'">'.$project_manager->name.'</a>) has been started by developer <a href="'.route('employees.show',Auth::user()->id).'">'.Auth::user()->name.'</a>!';
+                //   $past_action->button = $action->button;
+                    $past_action->timeframe = $action->timeframe;
+                    $past_action->authorization_for = $action->authorization_for;
+                    $past_action->authorized_by = $action->authorized_by;
+                    $past_action->authorized_at = $action->authorized_at;
+                    $past_action->expired_status = $action->expired_status;
+                    $past_action->past_status = $action->past_status;
+                    $past_action->project_id = $action->project_id;
+                    $past_action->task_id = $action->task_id;
+                    $past_action->client_id = $action->client_id;
+                    $past_action->milestone_id = $action->milestone_id;
+                    $past_action->save();
+                // dd($past_action);
 
+            }
         }
-    }
         $task_board_column= TaskboardColumn::where('id',$task_status->board_column_id)->first();
         //  dd($task_status);
           $timeLog = new ProjectTimeLog();
@@ -738,7 +738,7 @@ class TimelogController extends AccountBaseController
                 $timeLog->hourly_rate = 0;
                 $timeLog->memo = $task_status->heading;
                 $task_revision = TaskRevision::where('task_id',$request->task_id)->first();
-                //  /  dd($task_revision);
+                //    dd($task_revision);
                     if($task_revision != null)
                     {
 
@@ -748,6 +748,45 @@ class TimelogController extends AccountBaseController
 
                     }
                 $timeLog->save();
+
+                $checklogCount = ProjectTimeLog::where('task_id', $request->task_id)->count();
+
+                if($checklogCount == 1){
+                    $text = 'Developer ' . Auth::user()->name . ' started working on subtask ' . $request->memo;
+                    $link = '<a href="' . route('tasks.show', $request->task_id) . '">' . $text . '</a>';
+                    $this->logProjectActivity($timeLog->project_id, $link);
+                }
+
+                $revision = TaskRevision::where('task_id',$request->task_id)->orderBy('id','desc')->first();
+                if($revision != null){
+                    $revisionBy = User::where('id', $revision->added_by)->first();
+                    if($revision->revision_no == 1){
+                        $revision_number = '2nd';
+                    }elseif($revision->revision_no == 2){
+                        $revision_number = '3rd';
+                    }elseif($revision->revision_no == 3){
+                        $revision_number = '4th';
+                    }elseif($revision->revision_no == 4){
+                        $revision_number = '5th';
+                    }elseif($revision->revision_no == 5){
+                        $revision_number = '6th';
+                    }elseif($revision->revision_no == 6){
+                        $revision_number = '7th';
+                    }elseif($revision->revision_no == 7){
+                        $revision_number = '8th';
+                    }elseif($revision->revision_no == 8){
+                        $revision_number = '9th';
+                    }elseif($revision->revision_no == 9){
+                        $revision_number = '10th';
+                    }else{
+                        $revision_number = '11th';
+                    }
+                    $text = 'Developer ' . Auth::user()->name . ' started working on subtask ' . $request->memo . ' for the ' . $revision_number . ' time after a revision was given by ' . $revisionBy->name;
+                    $link = '<a href="' . route('tasks.show', $request->task_id) . '">' . $text . '</a>';
+                    $this->logProjectActivity($timeLog->project_id, $link);
+                }
+
+
 
                 if ($request->project_id != '') {
                     //$this->logProjectActivity($request->project_id, 'modules.tasks.timerStartedBy');
@@ -839,7 +878,10 @@ class TimelogController extends AccountBaseController
         }
 
         if (!is_null($timeLog->project_id)) {
-            $this->logProjectActivity($timeLog->project_id, 'modules.tasks.timerStoppedBy');
+            $task = Task::where('id',$timeLog->task_id)->first();
+            $text = 'Developer ' . Auth::user()->name . ' stopped the subtask ' . $task->heading . ' timer';
+            $link = '<a href="' . route('tasks.show', $timeLog->task_id) . '">' . $text . '</a>';
+            $this->logProjectActivity($timeLog->project_id, $link);
         }
 
         if (!is_null($timeLog->task_id)) {

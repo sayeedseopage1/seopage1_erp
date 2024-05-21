@@ -944,7 +944,7 @@ class TaskController extends AccountBaseController
 
         /**EMPLOYEE EVALUATION END */
 
-        $text = Auth::user()->name . ' mark task complete';
+        $text = Auth::user()->name . ' submitted task ' . $task->heading;
         $link = '<a href="' . route('tasks.show', $task->id) . '">' . $text . '</a>';
         if($task->independent_task_status == 0)
         {
@@ -1150,9 +1150,11 @@ class TaskController extends AccountBaseController
     }
 
 
-
-        $text = Auth::user()->name . ' mark task completed';
-        $link = '<a href="' . route('tasks.show', $task->id) . '">' . $text . '</a>';
+        $under_task = Task::where('id', $task_status->dependent_task_id)->first();
+        $subTaskUser = SubTask::where('id', $task_status->subtask_id)->first();
+        $findDev = User::where('id', $subTaskUser->assigned_to)->first();
+        $text = Auth::user()->name . ' Approved subtask ' . $task_status->heading .' under task '.$under_task->heading .' (Developer: '. $findDev->name . ')';
+        $link = '<a href="' . route('tasks.show', $task_status->id) . '">' . $text . '</a>';
         if ($task_status->independent_task_status != 1) {
             $this->logProjectActivity($task->task->project->id, $link);
         }
@@ -1199,6 +1201,7 @@ class TaskController extends AccountBaseController
      */
     public function TaskRevision(Request $request)
     {
+        // dd($request->all());
         // DB::beginTransaction();
  
          
@@ -1361,7 +1364,10 @@ class TaskController extends AccountBaseController
 
         $task_submission = TaskSubmission::where('task_id', $task_status->id)->first();
 
-        $text = Auth::user()->name . ' send revision request';
+        $revision_given_by = User::where('id',$request->against_to)->first();
+        $revision_sub_task = Task::where('id',$request->task_id)->first();
+        $revision_task = Task::where('id',$revision_sub_task->dependent_task_id)->first();
+        $text = 'Revision given to '. $revision_given_by->name . ' by ' . Auth::user()->name . ' for subtask ' . $revision_sub_task->heading . ' under task ' . $revision_task->heading;
         $link = '<a href="' . route('tasks.show', $task_status->id) . '">' . $text . '</a>';
         if ($task_status->project_id != null) {
             $this->logProjectActivity($task_status->project->id, $link);
