@@ -58,8 +58,6 @@ class SalesRiskPolicyController extends AccountBaseController
             Route::get('question/fields-type', 'questionInputField')->name('question.fields-type');
             Route::post('question/save', 'policyQuestionSave')->name('question.save');
 
-            Route::get('question-fields/{policyId}', 'policyQuestionInputFields')->name('question-fields');
-
             Route::post('question-fields/edit/{id}', 'policyQuestionEdit')->name('question-fields.edit');
             Route::get('question/list', 'questionList')->name('question.list');
 
@@ -432,10 +430,16 @@ class SalesRiskPolicyController extends AccountBaseController
     {
         $types = SalesPolicyQuestion::$types;
         $questionKeys = SalesRiskPolicy::$keys;
-        $policies = SalesRiskPolicy::whereNull('parent_id')->get(['id', 'title']);
+        $policies = SalesRiskPolicy::whereNull('parent_id')->get(['id', 'title', 'key']);
         $questionList = SalesPolicyQuestion::get(['id', 'title', 'key', 'type', 'value', 'parent_id', 'policy_id']);
 
-        return response()->json(['data' => compact('types', 'questionKeys', 'policies', 'questionList')]);
+        // get yes no rules
+        $yesNoRules = NULL;
+        if ($policy = SalesRiskPolicy::where('key', 'yesNoRules')->first()) {
+            $yesNoRules = SalesRiskPolicy::where('parent_id', $policy->id)->get(['id', 'title']);
+        }
+
+        return response()->json(['data' => compact('types', 'questionKeys', 'policies', 'questionList', 'yesNoRules')]);
     }
 
     function policyQuestionSave(Request $req)
@@ -554,13 +558,7 @@ class SalesRiskPolicyController extends AccountBaseController
             ]
         );
 
-        $response = ['status' => 'success', 'data' =>  $data];
-        // get yes no rules
-        if ($policy = SalesRiskPolicy::where('key', 'yesNoRules')->first()) {
-            $response['yesNoRules'] = SalesRiskPolicy::where('parent_id', $policy->id)->get(['id', 'title']);
-        }
-
-        return response()->json($response);
+        return response()->json(['status' => 'success', 'data' =>  $data]);
     }
 
     function questionListChild($parentId)
@@ -592,58 +590,6 @@ class SalesRiskPolicyController extends AccountBaseController
             });
         }
         return $list;
-    }
-
-    function policyQuestionInputFields($policyId)
-    {
-        /* TODO: fix  */
-        $fields = [
-            [
-                'label' => 'Title',
-                'name' => 'title',
-                'type' => 'input'
-            ],
-            [
-                'label' => 'Type',
-                'name' => 'type',
-                'type' => 'select',
-                'structure' => [
-                    [
-                        'label' => 'Text',
-                        'name' => 'text',
-                    ],
-                    [
-                        'label' => 'Yes/No',
-                        'name' => 'yes_no',
-                    ],
-                    [
-                        'label' => 'Numeric',
-                        'name' => 'Numeric',
-                    ],
-                    [
-                        'label' => 'List',
-                        'name' => 'list',
-                    ],
-                    [
-                        'label' => 'Long Text',
-                        'name' => 'long_text',
-                    ],
-                ]
-            ],
-            [
-                'label' => 'Parent Question',
-                'name' => 'parent_id',
-                'type' => 'select',
-                'structure' => SalesPolicyQuestion::where('policy_id', $policyId)->get(['id', 'title', 'type'])
-            ],
-            [
-                'label' => 'Comment',
-                'name' => 'comment',
-                'type' => 'input'
-            ],
-        ];
-
-        return response()->json($fields);
     }
 
     function salesPolicyQuestionRender(Request $req, $deal_id)
