@@ -584,62 +584,6 @@ return new class extends Migration
                 'upper_limit' => 100,
                 'incentive_amount_type' => 1,
                 'incentive_amount' => 60
-            ],
-            [
-                'id' => 71,
-                'incentive_criteria_id' => 12,
-                'lower_limit' => 0,
-                'upper_limit' => 5000,
-                'incentive_amount_type' => 2,
-                'incentive_amount' => 100
-            ],
-            [
-                'id' => 72,
-                'incentive_criteria_id' => 12,
-                'lower_limit' => 5000,
-                'upper_limit' => 10000,
-                'incentive_amount_type' => 2,
-                'incentive_amount' => 80
-            ],
-            [
-                'id' => 73,
-                'incentive_criteria_id' => 12,
-                'lower_limit' => 10000,
-                'upper_limit' => 15000,
-                'incentive_amount_type' => 2,
-                'incentive_amount' => 50
-            ],
-            [
-                'id' => 74,
-                'incentive_criteria_id' => 12,
-                'lower_limit' => 15000,
-                'upper_limit' => 20000,
-                'incentive_amount_type' => 2,
-                'incentive_amount' => 10
-            ],
-            [
-                'id' => 75,
-                'incentive_criteria_id' => 12,
-                'lower_limit' => 20000,
-                'upper_limit' => 25000,
-                'incentive_amount_type' => 2,
-                'incentive_amount' => 0
-            ],
-            [
-                'id' => 76,
-                'incentive_criteria_id' => 12,
-                'lower_limit' => 25000,
-                'upper_limit' => 30000,
-                'incentive_amount_type' => 2,
-                'incentive_amount' => 0
-            ],
-            [
-                'id' => 77,
-                'incentive_criteria_id' => 12,
-                'lower_limit' => 30000,
-                'upper_limit' => 35000,
-                'incentive_amount_type' => 2,
-                'incentive_amount' => 0
             ]
         ]);
     }
