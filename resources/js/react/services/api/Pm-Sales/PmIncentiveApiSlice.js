@@ -12,6 +12,7 @@ const pmSalesApiSlice = apiSlice.injectEndpoints({
         }),
         getSingleIncentiveCriteria: build.query({
             query: (id) => `/account/incentive-criteria/${id}`,
+            providesTags: ["GET_INCENTIVE_FACTORS"],
         }),
         editIncentiveTypes: build.mutation({
             query: ({ id, payload }) => ({

@@ -6,7 +6,7 @@ import { Modal } from 'antd';
 import { toast } from 'react-toastify';
 import { useEditIncentiveCriteriaMutation } from '../../../../../../services/api/Pm-Sales/PmIncentiveApiSlice';
 
-const SelectRatioRangeModal = ({ xAxisStartAndEndValue, setXAxisStartAndEndValue, antdModalOpen, setAntdModalOpen }) => {
+const SelectRatioRangeModal = ({ singleCriteria, chartDataId, antdModalOpen, setAntdModalOpen }) => {
     const [editIncentiveCriteria, { isLoading: isEditIncentiveCriteriaLoading }] = useEditIncentiveCriteriaMutation()
 
     const {
@@ -17,13 +17,33 @@ const SelectRatioRangeModal = ({ xAxisStartAndEndValue, setXAxisStartAndEndValue
         formState: { errors },
     } = useForm()
 
-    const onSubmit = (data) => {
-        if (Number(data?.xAxisStaring) >= Number(data?.xAxisEnding)) {
+    const onSubmit = async (data) => {
+        if (Number(data?.min_limit) >= Number(data?.max_limit)) {
             toast.error('Starting Point (X Axis) cannot be greater than or equal to Ending Point (X Axis)')
             return
         }
-        setXAxisStartAndEndValue(data)
-        toast.success('X Axis range changed');
+
+        try {
+            const payload = {
+                min_limit: parseFloat(data?.min_limit),
+                max_limit: parseFloat(data?.max_limit),
+            }
+            const response = await editIncentiveCriteria({ id: chartDataId, payload }).unwrap();
+            if (response?.status == 200) {
+                // toast.success(response.message);
+                toast.success('X Axis range updated successfully');
+                reset();
+                setAntdModalOpen(false)
+            } else {
+                toast.warning(response.message);
+            }
+        } catch (error) {
+            toast.error("Failed to update");
+        }
+
+
+        // setXAxisStartAndEndValue(data)
+
         reset()
         setAntdModalOpen(false)
     }
@@ -61,19 +81,19 @@ const SelectRatioRangeModal = ({ xAxisStartAndEndValue, setXAxisStartAndEndValue
                             <div className='select_ratio_range_modal_inputs'>
                                 <p className="axis_item_modal_inputs_title" style={{ marginBottom: '0' }}>Starting Point (X Axis)</p>
                                 <div className='d-flex align-items-center'>
-                                    <input defaultValue={xAxisStartAndEndValue?.xAxisStaring} className='point_edit_modal_input' style={{ width: '96px' }} type='number' {...register("xAxisStaring", { required: true })} />
+                                    <input defaultValue={singleCriteria?.data?.min_limit} className='point_edit_modal_input' style={{ width: '96px' }} type='number' {...register("min_limit", { required: true })} />
                                     <span className='axis_item_modal_inputs_title' style={{ margin: '0 0 0 7px' }}>%</span>
                                 </div>
                             </div>
-                            {errors.xAxisStaring && <p style={{ color: 'red', fontSize: '12px', textAlign: 'center' }}>This field is required</p>}
+                            {errors.min_limit && <p style={{ color: 'red', fontSize: '12px', textAlign: 'center' }}>This field is required</p>}
                             <div className='select_ratio_range_modal_inputs' style={{ marginTop: '18px' }}>
                                 <p className="axis_item_modal_inputs_title" style={{ marginBottom: '0' }}>Ending Point (X Axis)</p>
                                 <div className='d-flex align-items-center'>
-                                    <input defaultValue={xAxisStartAndEndValue?.xAxisEnding} className='point_edit_modal_input' style={{ width: '96px' }} type='number' {...register("xAxisEnding", { required: true })} />
+                                    <input defaultValue={singleCriteria?.data?.max_limit} className='point_edit_modal_input' style={{ width: '96px' }} type='number' {...register("max_limit", { required: true })} />
                                     <span className='axis_item_modal_inputs_title' style={{ margin: '0 0 0 7px' }}>%</span>
                                 </div>
                             </div>
-                            {errors.xAxisEnding && <p style={{ color: 'red', fontSize: '12px', textAlign: 'center' }}>This field is required</p>}
+                            {errors.max_limit && <p style={{ color: 'red', fontSize: '12px', textAlign: 'center' }}>This field is required</p>}
                         </div>
                         <div className='pay_now_modal_footer' style={{ marginTop: '18px' }}>
                             <ButtonComponent type='submit' color='#1492E6' textColor='#fff' font='14px'>Save</ButtonComponent>
@@ -89,8 +109,6 @@ const SelectRatioRangeModal = ({ xAxisStartAndEndValue, setXAxisStartAndEndValue
 export default SelectRatioRangeModal;
 
 SelectRatioRangeModal.propTypes = {
-    xAxisStartAndEndValue: PropTypes.object,
-    setXAxisStartAndEndValue: PropTypes.func,
     antdModalOpen: PropTypes.bool,
     setAntdModalOpen: PropTypes.func
 };

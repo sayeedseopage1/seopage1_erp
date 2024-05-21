@@ -39,10 +39,10 @@ const ChartIdealVsAchievedEditModal = ({ antdModalOpen, showIdealVsAchievedEditM
     // x axis and y axis data state
     const [chartAxisData, setChartAxisData] = useState([])
 
-    const [xAxisStartAndEndValue, setXAxisStartAndEndValue] = useState({
-        xAxisStaring: 0,
-        xAxisEnding: 100
-    })
+    // const [xAxisStartAndEndValue, setXAxisStartAndEndValue] = useState({
+    //     min_limit: 0,
+    //     max_limit: 100
+    // })
 
     useEffect(() => {
         if (defaultChartAxisData?.length > 0 && chartAxisData?.length == 0) {
@@ -78,19 +78,19 @@ const ChartIdealVsAchievedEditModal = ({ antdModalOpen, showIdealVsAchievedEditM
         const sortedChartData = chartAxisData.sort((a, b) => a.lower_limit - b.lower_limit);
 
         // Validation 0: Check if starting point is valid and ending point is valid
-        if ((Number(sortedChartData[0].lower_limit) < Number(xAxisStartAndEndValue.xAxisStaring)) || (Number(sortedChartData[sortedChartData.length - 1].upper_limit) > Number(xAxisStartAndEndValue.xAxisEnding))) {
-            toast.error(`X Axis range must be between ${xAxisStartAndEndValue?.xAxisStaring} and ${xAxisStartAndEndValue?.xAxisEnding}`);
+        if ((Number(sortedChartData[0].lower_limit) < Number(singleCriteria?.data?.min_limit)) || (Number(sortedChartData[sortedChartData.length - 1].upper_limit) > Number(singleCriteria?.data?.max_limit))) {
+            toast.error(`X Axis range must be between ${singleCriteria?.data?.min_limit} and ${singleCriteria?.data?.max_limit}`);
             return;
         }
 
         // Validation 1: Check if starting point is less than the minimum lower_limit
-        if (sortedChartData.length > 0 && Number(sortedChartData[0].lower_limit) > Number(xAxisStartAndEndValue.xAxisStaring)) {
+        if (sortedChartData.length > 0 && Number(sortedChartData[0].lower_limit) > Number(singleCriteria?.data?.min_limit)) {
             toast.error('Starting Point (X Axis) is invalid.');
             return;
         }
 
         // Validation 4: Check if ending point is greater than the maximum upper_limit
-        if (sortedChartData.length > 0 && Number(sortedChartData[sortedChartData.length - 1].upper_limit) < Number(xAxisStartAndEndValue.xAxisEnding)) {
+        if (sortedChartData.length > 0 && Number(sortedChartData[sortedChartData.length - 1].upper_limit) < Number(singleCriteria?.data?.max_limit)) {
             toast.error('Ending Point (X Axis) is invalid.');
             return;
         }
@@ -169,8 +169,8 @@ const ChartIdealVsAchievedEditModal = ({ antdModalOpen, showIdealVsAchievedEditM
                         <button onClick={() => setSelectRatioRange(true)} className='ideal_vs_achieved_chart_data_actions_range'>Select Range</button>
                     </div>
                     <div className='ideal_vs_achieved_axis_data'>
-                        <p>Starting Point (X Axis): <span>{xAxisStartAndEndValue?.xAxisStaring}</span>%</p>
-                        <p>Ending Point (X Axis): <span>{xAxisStartAndEndValue?.xAxisEnding}</span>%</p>
+                        <p>Starting Point (X Axis): <span>{singleCriteria?.data?.min_limit}</span>%</p>
+                        <p>Ending Point (X Axis): <span>{singleCriteria?.data?.max_limit}</span>%</p>
                     </div>
                 </div>
 
@@ -218,7 +218,7 @@ const ChartIdealVsAchievedEditModal = ({ antdModalOpen, showIdealVsAchievedEditM
 
             {/* Modals for add, edit and remove */}
             {addNewAxisDataModalOpen && <AddNewAxisItemModal
-                xAxisStartAndEndValue={xAxisStartAndEndValue}
+                singleCriteria={singleCriteria}
                 chartAxisData={chartAxisData}
                 setChartAxisData={setChartAxisData}
                 antdModalOpen={addNewAxisDataModalOpen}
@@ -226,7 +226,7 @@ const ChartIdealVsAchievedEditModal = ({ antdModalOpen, showIdealVsAchievedEditM
             />}
 
             {editXAxisDataModalOpen && <EditXAxisModal
-                xAxisStartAndEndValue={xAxisStartAndEndValue}
+                singleCriteria={singleCriteria}
                 axisEditItem={axisEditItem}
                 chartAxisData={chartAxisData}
                 setChartAxisData={setChartAxisData}
@@ -243,8 +243,9 @@ const ChartIdealVsAchievedEditModal = ({ antdModalOpen, showIdealVsAchievedEditM
             />}
 
             {selectRatioRange && <SelectRatioRangeModal
-                xAxisStartAndEndValue={xAxisStartAndEndValue}
-                setXAxisStartAndEndValue={setXAxisStartAndEndValue}
+                chartDataId={chartDataId}
+                singleCriteria={singleCriteria}
+                // setXAxisStartAndEndValue={setXAxisStartAndEndValue}
                 antdModalOpen={selectRatioRange}
                 setAntdModalOpen={setSelectRatioRange}
             />}

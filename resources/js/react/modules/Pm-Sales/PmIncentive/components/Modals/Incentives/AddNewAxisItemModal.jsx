@@ -6,7 +6,7 @@ import { Modal } from 'antd';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
-const AddNewAxisItemModal = ({ xAxisStartAndEndValue, chartAxisData, setChartAxisData, antdModalOpen, setAntdModalOpen, chartData }) => {
+const AddNewAxisItemModal = ({ singleCriteria, chartAxisData, setChartAxisData, antdModalOpen, setAntdModalOpen, chartData }) => {
     const {
         register,
         handleSubmit,
@@ -14,7 +14,7 @@ const AddNewAxisItemModal = ({ xAxisStartAndEndValue, chartAxisData, setChartAxi
         formState: { errors },
     } = useForm();
 
-    const { xAxisStaring, xAxisEnding } = xAxisStartAndEndValue || {};
+    const { min_limit, max_limit } = singleCriteria?.data || {};
 
     const validateFields = (data) => {
         let isValid = true;
@@ -24,8 +24,8 @@ const AddNewAxisItemModal = ({ xAxisStartAndEndValue, chartAxisData, setChartAxi
             isValid = false;
         }
 
-        if (Number(data.lower_limit) < Number(xAxisStaring) || Number(data.upper_limit) > Number(xAxisEnding)) {
-            toast.error(`X Axis range must be between ${xAxisStaring} and ${xAxisEnding}`);
+        if (Number(data.lower_limit) < Number(min_limit) || Number(data.upper_limit) > Number(max_limit)) {
+            toast.error(`X Axis range must be between ${min_limit} and ${max_limit}`);
             isValid = false;
         }
 

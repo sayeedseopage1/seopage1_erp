@@ -5,10 +5,10 @@ import { useForm } from 'react-hook-form';
 import { Modal } from 'antd';
 import { toast } from 'react-toastify';
 
-const EditXAxisModal = ({ xAxisStartAndEndValue, axisEditItem, chartAxisData, setChartAxisData, antdModalOpen, setAntdModalOpen }) => {
+const EditXAxisModal = ({ singleCriteria, axisEditItem, setChartAxisData, antdModalOpen, setAntdModalOpen }) => {
 
     const { lower_limit, upper_limit } = axisEditItem || {}
-    const { xAxisStaring, xAxisEnding } = xAxisStartAndEndValue || {};
+    const { min_limit, max_limit } = singleCriteria?.data || {};
 
     const {
         register,
@@ -26,8 +26,8 @@ const EditXAxisModal = ({ xAxisStartAndEndValue, axisEditItem, chartAxisData, se
             isValid = false;
         }
 
-        if (Number(data.lower_limit) < Number(xAxisStaring) || Number(data.upper_limit) > Number(xAxisEnding)) {
-            toast.error(`X Axis range must be between ${xAxisStaring} and ${xAxisEnding}`);
+        if (Number(data.lower_limit) < Number(min_limit) || Number(data.upper_limit) > Number(max_limit)) {
+            toast.error(`X Axis range must be between ${min_limit} and ${max_limit}`);
             isValid = false;
         }
 
