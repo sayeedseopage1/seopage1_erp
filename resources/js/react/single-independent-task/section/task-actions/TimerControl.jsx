@@ -45,23 +45,6 @@ const TimerControl = ({ task, timerStart, setTimerStart, auth }) => {
     const timerStatus = task?.ranningTimer?.status;
     const taskRunning = useMemo(() => timerStatus, [timerStatus]);
 
-    //expired time check and state change for new employee / Trainee
-
-    const expireDateForTrainer = localStorage.getItem("expireDateForTrainer");
-    useEffect(() => {
-        if (expireDateForTrainer) {
-            const expireDate = new Date(expireDateForTrainer);
-            const currentTime = new Date();
-            const timeDifference = expireDate.getTime() - currentTime.getTime();
-            setTimeLeft(Math.max(0, Math.floor(timeDifference / 1000)));
-
-            if (currentTime >= expireDate) {
-                setExpiredTimerForNewEmployee(true);
-                stopTimer();
-            }
-        }
-    }, [expireDateForTrainer]);
-
     useEffect(() => {
         if (taskRunning === "running") {
             let serverTime = task?.ranningTimer?.time;
@@ -337,6 +320,24 @@ const TimerControl = ({ task, timerStart, setTimerStart, auth }) => {
             document.getElementsByTagName("body")[0].style.cursor = "default";
         }
     }, [startTimerFirstCheckIsFetching, timerStartStatusIsLoading]);
+
+    //expired time check and state change for new employee / Trainee
+
+    const expireDateForTrainer = localStorage.getItem("expireDateForTrainer");
+    useEffect(() => {
+        if (expireDateForTrainer && timerId) {
+            const expireDate = new Date(expireDateForTrainer);
+            const currentTime = new Date();
+            const timeDifference = expireDate.getTime() - currentTime.getTime();
+            setTimeLeft(Math.max(0, Math.floor(timeDifference / 1000)));
+
+            if (currentTime >= expireDate) {
+                setExpiredTimerForNewEmployee(true);
+
+                stopTimer();
+            }
+        }
+    }, [expireDateForTrainer, timerId]);
 
     return (
         <React.Fragment>

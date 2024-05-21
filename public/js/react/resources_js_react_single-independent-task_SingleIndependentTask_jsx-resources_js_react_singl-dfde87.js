@@ -17808,22 +17808,6 @@ var TimerControl = function TimerControl(_ref) {
   var taskRunning = (0,react__WEBPACK_IMPORTED_MODULE_0__.useMemo)(function () {
     return timerStatus;
   }, [timerStatus]);
-
-  //expired time check and state change for new employee / Trainee
-
-  var expireDateForTrainer = localStorage.getItem("expireDateForTrainer");
-  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(function () {
-    if (expireDateForTrainer) {
-      var expireDate = new Date(expireDateForTrainer);
-      var currentTime = new Date();
-      var timeDifference = expireDate.getTime() - currentTime.getTime();
-      setTimeLeft(Math.max(0, Math.floor(timeDifference / 1000)));
-      if (currentTime >= expireDate) {
-        setExpiredTimerForNewEmployee(true);
-        stopTimer();
-      }
-    }
-  }, [expireDateForTrainer]);
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(function () {
     if (taskRunning === "running") {
       var _task$ranningTimer2, _task$ranningTimer3;
@@ -18039,6 +18023,22 @@ var TimerControl = function TimerControl(_ref) {
       document.getElementsByTagName("body")[0].style.cursor = "default";
     }
   }, [startTimerFirstCheckIsFetching, timerStartStatusIsLoading]);
+
+  //expired time check and state change for new employee / Trainee
+
+  var expireDateForTrainer = localStorage.getItem("expireDateForTrainer");
+  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(function () {
+    if (expireDateForTrainer && timerId) {
+      var expireDate = new Date(expireDateForTrainer);
+      var currentTime = new Date();
+      var timeDifference = expireDate.getTime() - currentTime.getTime();
+      setTimeLeft(Math.max(0, Math.floor(timeDifference / 1000)));
+      if (currentTime >= expireDate) {
+        setExpiredTimerForNewEmployee(true);
+        stopTimer();
+      }
+    }
+  }, [expireDateForTrainer, timerId]);
   return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsxs)((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), {
     children: [!timerStart ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsxs)((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), {
       children: [!timerStartStatusIsLoading && !startTimerFirstCheckIsFetching ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)("div", {
