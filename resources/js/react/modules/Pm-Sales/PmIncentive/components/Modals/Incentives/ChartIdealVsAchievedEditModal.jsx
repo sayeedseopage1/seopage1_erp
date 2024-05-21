@@ -169,8 +169,8 @@ const ChartIdealVsAchievedEditModal = ({ antdModalOpen, showIdealVsAchievedEditM
                         <button onClick={() => setSelectRatioRange(true)} className='ideal_vs_achieved_chart_data_actions_range'>Select Range</button>
                     </div>
                     <div className='ideal_vs_achieved_axis_data'>
-                        <p>Starting Point (X Axis): <span>{singleCriteria?.data?.min_limit}</span>%</p>
-                        <p>Ending Point (X Axis): <span>{singleCriteria?.data?.max_limit}</span>%</p>
+                        <p>Starting Point (X Axis): <span>{parseFloat(singleCriteria?.data?.min_limit)}</span>%</p>
+                        <p>Ending Point (X Axis): <span>{parseFloat(singleCriteria?.data?.max_limit)}</span>%</p>
                     </div>
                 </div>
 
