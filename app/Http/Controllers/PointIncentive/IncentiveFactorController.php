@@ -68,15 +68,7 @@ class IncentiveFactorController extends Controller
     public function store(Request $request)
     {
         try {
-            $incentiveFactor = IncentiveFactor::find($id);
-            $incentiveFactor->lower_limit = $request->lower_limit;
-            $incentiveFactor->upper_limit = $request->upper_limit;
-            $incentiveFactor->incentive_amount_type = $request->incentive_amount_type;
-            $incentiveFactor->incentive_amount = $request->incentive_amount;
-            $incentiveFactor->save();
-
             $referenceFactor = IncentiveFactor::where('incentive_criteria_id', $request->incentive_criteria_id)->first();
-
             IncentiveFactor::create([
                 'incentive_criteria_id' => $request->incentive_criteria_id,
                 'limit_type' => $referenceFactor->limit_type,
