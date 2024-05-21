@@ -89,7 +89,7 @@ const SalesRiskReport = () => {
             return SalesAnalysisReportTableColumns;
         }
         return SalesAnalysisReportTableColumns.filter(
-            (column) => column.id !== "gained_points"
+            (column) => column.id !== "gained_points" && column.id !== "submitted_by"
         );
     };
     // when satatus change then refetch data

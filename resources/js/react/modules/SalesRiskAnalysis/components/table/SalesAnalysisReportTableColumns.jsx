@@ -154,6 +154,28 @@ export const SalesAnalysisReportTableColumns = [
         },
     },
     {
+        id: "submitted_by",
+        header: "Submitted By",
+        accessorKey: "submitted_by",
+        cell: ({ row }) => {
+            const data = row?.original;
+            return (
+                <CreatedBy href={`/account/employees/${data?.submitted_by}`}>
+                    <Avatar
+                        type="circle"
+                        name={data?.submitted_by_name}
+                        src={
+                            data?.submitted_by_image
+                                ? `/user-uploads/avatar/${data?.submitted_by_image}`
+                                : null
+                        }
+                    />
+                    <span>{data?.submitted_by_name}</span>
+                </CreatedBy>
+            );
+        },
+    },
+    {
         id: "gained_points",
         header: "Gained Points",
         accessorKey: "gained_points",
