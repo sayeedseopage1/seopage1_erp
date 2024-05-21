@@ -876,9 +876,9 @@ class SalesRiskPolicyController extends AccountBaseController
                 $points += (float) $pointValue;
                 $policyIdList[$policy[0]->id] = $policy[0]->id;
 
-                $data[] = ['id' => $questions[0]->id, 'title' =>  $questions[0]->title, 'value' => 'yes'];
+                $data[] = ['id' => $questions[0]->id, 'title' =>  $questions[0]->title, 'value' => 'yes', 'parent_id' => null];
             } else {
-                $data[] = ['id' => $questions[0]->id, 'title' =>  $questions[0]->title, 'value' => 'No'];
+                $data[] = ['id' => $questions[0]->id, 'title' =>  $questions[0]->title, 'value' => 'No', 'parent_id' => null];
                 // unseting first yes/no policy
                 $policyIdList[$policy[0]->id] = $policy[0]->id;
 
