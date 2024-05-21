@@ -19,7 +19,7 @@ class IncentiveFactorController extends Controller
         $startDate = Carbon::now()->startOfMonth();
         $endDate = Carbon::now()->endOfMonth();
         $total_points = 500;
-        $data = IncentiveType::with('incentiveCriterias.incentiveFactors')->get()->map(function($incentiveType) use ($startDate, $endDate){
+        $incentiveData = IncentiveType::with('incentiveCriterias.incentiveFactors')->get()->map(function($incentiveType) use ($startDate, $endDate){
             $incentiveType->incentiveCriterias->map(function($incentiveCriteria) use ($startDate, $endDate){
                 
                 $incentiveCriteria->acquired_percent = 0; 
@@ -49,6 +49,10 @@ class IncentiveFactorController extends Controller
             });
             return $incentiveType;
         });
+
+        $data['total_points'] = $total_points;
+        $data['incentive_data'] = $incentiveData;
+
         return response()->json([
             'status' => 200,
             'data' => $data
