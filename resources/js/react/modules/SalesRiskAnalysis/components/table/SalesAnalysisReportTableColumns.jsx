@@ -477,6 +477,7 @@ export const SalesAnalysisReportTableColumns = [
                             );
                         }
                     }}
+                    target="_blank"
                 >
                     <GrView />
                     <span className="ml-2">View Report</span>

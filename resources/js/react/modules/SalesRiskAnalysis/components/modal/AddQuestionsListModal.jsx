@@ -141,6 +141,7 @@ const AddQuestionsListModal = ({
                         label: "Yes/No",
                         name: "yesNo",
                     },
+                    policy_id: policies?.data?.find(item => item?.key === value?.name)
                 });
             }
         } else {
@@ -378,6 +379,9 @@ const AddQuestionsListModal = ({
         }
     }, [isLoadingSinglePolicyData]);
 
+
+    console.log(singleQuestion)
+
     return (
         <CustomModal
             id="addQuestionsModal"
@@ -461,7 +465,7 @@ const AddQuestionsListModal = ({
                                     data={QuestionsTypes}
                                     selected={singleQuestion?.type}
                                     setSelected={handleChange}
-                                    isDisableUse={false}
+                                    isDisableUse={singleQuestion?.type?.name === "yesNo"}
                                 />
                             </ModalSelectContainer>
                             {singleQuestionValidation?.type && (
