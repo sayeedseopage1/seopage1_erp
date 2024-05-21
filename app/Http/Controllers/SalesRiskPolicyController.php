@@ -85,7 +85,6 @@ class SalesRiskPolicyController extends AccountBaseController
 
     function riskPolicyInputFields()
     {
-
         $department = Team::with('childs')->get()->map(function ($item) {
             return ['id' => $item->id, 'name' => $item->team_name];
         });
@@ -293,7 +292,6 @@ class SalesRiskPolicyController extends AccountBaseController
                     return response()->json(['status' => 'success', 'data' => SalesRiskPolicy::find($req->policy_id)]);
                 }
             }
-
 
             $itemsPaginated = SalesRiskPolicy::where('parent_id', null)->offset($req->input('limit', 10) * ($req->input('page', 1) - 1))->paginate($req->input('limit', 10));
             $itemsTransformed = $itemsPaginated
@@ -556,7 +554,13 @@ class SalesRiskPolicyController extends AccountBaseController
             ]
         );
 
-        return response()->json(['status' => 'success', 'data' =>  $data]);
+        $response = ['status' => 'success', 'data' =>  $data];
+        // get yes no rules
+        if ($policy = SalesRiskPolicy::where('key', 'yesNoRules')->first()) {
+            $response['yesNoRules'] = SalesRiskPolicy::where('parent_id', $policy->id)->get(['id', 'title']);
+        }
+
+        return response()->json($response);
     }
 
     function questionListChild($parentId)
@@ -679,7 +683,7 @@ class SalesRiskPolicyController extends AccountBaseController
         $data = SalesPolicyQuestion::parent()
             ->where(function ($query) use ($dealStage) {
 
-                // excluding weekend question on Saturaday and Sunday deal's
+                // excluding weekend question on Saturday and Sunday deal's
                 if (!in_array(Carbon::parse($dealStage->updated_at)->format('D'), ['Sat', 'Sun'])) $query->whereNot('key', 'availableWeekend');
             })
             ->get()->filter(fn ($item) => SalesRiskPolicy::find($item->policy_id)->status)
@@ -792,7 +796,7 @@ class SalesRiskPolicyController extends AccountBaseController
             }
         }
 
-        // format qustions values with index
+        // format questions values with index
         $questionAns = [];
         foreach (json_decode($questionValues->values) as $item) $questionAns[$item->id] = $item->value;
 
@@ -1282,7 +1286,7 @@ class SalesRiskPolicyController extends AccountBaseController
 
             $calculationData = ['points' => $points, 'pointData' => $pointData, 'policyIdList' => $policyIdList, 'message' => $message];
 
-            // store policy histroy
+            // store policy history
             self::policyHistoryStore($deal->id, $calculationData);
 
             return $calculationData;
@@ -1374,14 +1378,14 @@ class SalesRiskPolicyController extends AccountBaseController
             return response()->json(['status' => 'success', 'data' => array_merge($calculation, $data)]);
         } catch (\Throwable $th) {
             // throw $th;
-            return response()->json(['status' => 'error', 'message' => 'Internal error occured'], 500);
+            return response()->json(['status' => 'error', 'message' => 'Internal error occurred'], 500);
         }
     }
 
     function salesRiskReportList(Request $req)
     {
         if (url()->current() == route('account.sale-risk-policies.report-data')) {
-            $itemsPaginated = Deal::select('deals.id','client_id', 'client_name', 'deals.deal_id', 'sale_analysis_status', 'project_name', 'actual_amount', 'lead_id', 'award_time', 'sale_authorize_by', 'sale_authorize_on', 'sale_authorize_by')
+            $itemsPaginated = Deal::select('deals.id', 'client_id', 'client_name', 'deals.deal_id', 'sale_analysis_status', 'project_name', 'actual_amount', 'lead_id', 'award_time', 'sale_authorize_by', 'sale_authorize_on', 'sale_authorize_by', 'submitted_by')
                 ->whereIn('sale_analysis_status', ['analysis', 'authorized', 'auto-authorized', 'denied'])
                 ->leftJoin('policy_question_values as pqv', 'pqv.deal_id', 'deals.id')
                 ->where(function ($query) use ($req) {
@@ -1424,7 +1428,7 @@ class SalesRiskPolicyController extends AccountBaseController
 
                     if (auth()->user()->role_id == 1) {
                         $data['submitted_by'] = $item->submitted_by;
-                        $user = $item->submitted_by ? User::find($item->submitted_by) : (object)['name' => null, 'image'=> null];
+                        $user = $item->submitted_by ? User::find($item->submitted_by) : (object)['name' => null, 'image' => null];
                         $data['submitted_by_name'] = $user->name;
                         $data['submitted_by_image'] = $user->image;
                         $data['points'] = self::calculatePolicyPoint($item->id)['points'];

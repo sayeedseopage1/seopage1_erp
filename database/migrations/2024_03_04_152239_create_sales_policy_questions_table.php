@@ -19,7 +19,7 @@ return new class extends Migration
             $table->id();
             $table->string('title',1000);
             $table->enum('type', array_keys(SalesPolicyQuestion::$types));
-            $table->enum('key', array_keys(SalesRiskPolicy::$keys));
+            $table->string('key');
             $table->text('value')->nullable();
             $table->bigInteger('parent_id')->unsigned()->nullable();
             $table->integer('sequence')->default('1');

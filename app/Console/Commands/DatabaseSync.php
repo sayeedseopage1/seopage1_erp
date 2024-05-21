@@ -5,6 +5,7 @@ namespace App\Console\Commands;
 use App\Models\Deal;
 use App\Models\PolicyQuestionValue;
 use App\Models\SalesPolicyQuestion;
+use Carbon\Carbon;
 use Illuminate\Console\Command;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\DB;
@@ -33,48 +34,82 @@ class DatabaseSync extends Command
      */
     public function handle()
     {
+        $table = 'sales_risk_policies';
+        $columns = DB::select(DB::raw("SELECT COLUMN_NAME, DATA_TYPE FROM INFORMATION_SCHEMA.COLUMNS
+        WHERE TABLE_SCHEMA = '" . env('DB_DATABASE') . "' AND TABLE_NAME = '$table'"));
+        foreach ($columns as $column) {
+            if ($column->COLUMN_NAME == "key" && $column->DATA_TYPE != 'varchar') {
+                echo "\nChanging key column string in $table";
+                Schema::table($table, function (Blueprint $table) {
+                    $table->string('key')->nullable()->change();
+                });
+                echo "\nend";
+            }
+        }
 
         $table = 'sales_policy_questions';
-        echo "Changing title column length in $table";
-        Schema::table('sales_policy_questions', function (Blueprint $table) {
-            $table->string('title', 1000)->change();
-        });
-        echo "\nend";
+        $columns = DB::select(DB::raw("SELECT COLUMN_NAME, DATA_TYPE FROM INFORMATION_SCHEMA.COLUMNS
+        WHERE TABLE_SCHEMA = '" . env('DB_DATABASE') . "' AND TABLE_NAME = '$table'"));
+        foreach ($columns as $column) {
+            if ($column->COLUMN_NAME == "key" && $column->DATA_TYPE != 'varchar') {
+                echo "\nChanging key column string in $table";
+                Schema::table($table, function (Blueprint $table) {
+                    $table->string('key')->change();
+                });
+                echo "\nend";
+            }
+        }
 
-        $table = 'deals';
-        echo "\nChanging sale_analysis_status column enum list in $table";
-        DB::statement("ALTER TABLE `deals` CHANGE COLUMN `sale_analysis_status`
-        `sale_analysis_status` ENUM('previous-won','previous-denied','pending','analysis','authorized','auto-authorized','denied')
-        NOT NULL DEFAULT 'pending'
-        AFTER `authorization_status`;
-        ");
-        echo "\nend";
+        $columns = DB::select(DB::raw("SHOW COLUMNS FROM `$table`"));
+        foreach ($columns as $column) {
+            if ($column->Field == "title") {
+                $length = preg_replace('/[^0-9]/', '', $column->Type);
+                if ($length != 1000) {
+                    echo "Changing title column length in $table";
+                    Schema::table($table, function (Blueprint $table) {
+                        $table->string('title', 1000)->change();
+                    });
+                    echo "\nend";
+                }
+                break;
+            }
+        }
 
-        if(! Schema::hasColumn($table, 'sale_authorize_comment'))
-        {
+        // $table = 'deals';
+        // echo "\nChanging sale_analysis_status column enum list in $table";
+        // DB::statement("ALTER TABLE `deals` CHANGE COLUMN `sale_analysis_status`
+        // `sale_analysis_status` ENUM('previous-won','previous-denied','pending','analysis','authorized','auto-authorized','denied')
+        // NOT NULL DEFAULT 'pending'
+        // AFTER `authorization_status`;
+        // ");
+        // echo "\nend";
+
+        if (!Schema::hasColumn($table, 'sale_authorize_comment')) {
             echo "\nChanging sale_authorize_comment column in $table";
-
             Schema::table('deals', function (Blueprint $table) {
                 $table->tinyText('sale_authorize_comment')->nullable()->after('sale_authorize_on');
             });
             echo "\nend";
         }
 
-        echo "\nChanging previous sales_risk_policies status";
+        $temp = 0;
         $salesTableCreateDate = DB::table('migrations')->where('migration', '2024_03_04_151733_create_sales_risk_policies_table')->first() ?: (object)['created_at' => '2024-04-24 00:00:00'];
-        Deal::get()->each(function ($item) use($salesTableCreateDate) {
-            if (strtotime($item->created_at) < strtotime($salesTableCreateDate->created_at)) {
+        Deal::whereDate('created_at', '<', Carbon::parse($salesTableCreateDate->created_at)->format('Y-m-d'))->get()->each(function ($item) use (&$temp) {
+            if (! in_array($item->status, ['Accepted', 'Denied']) ) {
                 if ($item->status == 'Accepted') $item->sale_analysis_status = 'previous-won';
                 else if ($item->status == 'Denied') $item->sale_analysis_status = 'previous-denied';
-
                 $item->save();
+                $temp++;
             }
-
         });
-        echo "\nend";
+
+        if ($temp > 0) {
+            echo "\nChanging previous sales_risk_policies status. Total: $temp";
+            echo "\nend";
+        }
 
         $table = 'policy_question_values';
-        if(! Schema::hasColumn($table, 'question_list')){
+        if (!Schema::hasColumn($table, 'question_list')) {
             echo "\nAdding policy_question_values in $table";
             Schema::table($table, function () {
                 DB::statement("ALTER TABLE `policy_question_values`
@@ -86,7 +121,7 @@ class DatabaseSync extends Command
         // $questionList = PolicyQuestionValue::get() ?? [];
         echo "\nFilling question_list column in $table";
         foreach ((object) PolicyQuestionValue::get() as $item) {
-            if(! $item->question_list){
+            if ($item->question_list == null) {
                 $item->question_list = json_encode(SalesPolicyQuestion::get());
                 $item->save();
             }
@@ -94,8 +129,7 @@ class DatabaseSync extends Command
         echo "\nend";
 
         $table = 'policy_question_values';
-        if(!Schema::hasColumn($table, 'submitted_by'))
-        {
+        if (!Schema::hasColumn($table, 'submitted_by')) {
             echo "\nsubmitted_by column in $table";
             Schema::table($table, function (Blueprint $table) {
                 $table->integer('submitted_by')->unsigned()->after('question_list');
