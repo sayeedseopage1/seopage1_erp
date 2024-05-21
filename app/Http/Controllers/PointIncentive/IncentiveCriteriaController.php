@@ -19,7 +19,7 @@ class IncentiveCriteriaController extends Controller
     {
         try {
             $incentiveCriteria = IncentiveCriteria::find($id);
-            $incentiveCriteria->title = $request->title;
+            // $incentiveCriteria->title = $request->title;
             $incentiveCriteria->min_limit = $request->min_limit;
             $incentiveCriteria->max_limit = $request->max_limit;
             $incentiveCriteria->save();

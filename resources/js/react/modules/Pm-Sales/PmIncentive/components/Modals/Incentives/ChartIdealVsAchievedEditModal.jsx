@@ -9,13 +9,14 @@ import RemoveRatioItemsModal from './RemoveRatioItemsModal';
 import { toast } from 'react-toastify';
 import Swal from 'sweetalert2';
 import warningIcon from '../../../assets/warningIcon.svg'
-import { useEditIncentiveFactorsMutation, useGetSingleIncentiveCriteriaQuery } from '../../../../../../services/api/Pm-Sales/PmIncentiveApiSlice';
+import { useAddIncentiveFactorsMutation, useEditIncentiveFactorsMutation, useGetSingleIncentiveCriteriaQuery } from '../../../../../../services/api/Pm-Sales/PmIncentiveApiSlice';
 import Spinner from '../../../../PointFactors/components/loader/Spinner';
 
 const ChartIdealVsAchievedEditModal = ({ antdModalOpen, showIdealVsAchievedEditModal, chartDataId }) => {
     const { data: singleCriteria, isLoading: isLoadingSingleCriteria } = useGetSingleIncentiveCriteriaQuery(chartDataId, { skip: !chartDataId })
 
     const [editIncentiveFactors, { isLoading: isEditIncentiveFactorsLoading }] = useEditIncentiveFactorsMutation()
+    const [addIncentiveFactors, { isLoading: isAddIncentiveFactorsLoading }] = useAddIncentiveFactorsMutation()
 
     const defaultChartAxisData = singleCriteria?.data?.incentive_factors?.map((item) => (
         {
@@ -73,70 +74,99 @@ const ChartIdealVsAchievedEditModal = ({ antdModalOpen, showIdealVsAchievedEditM
     }
 
     //submit
-    const handleChartDataSave = () => {
-        // Sort chartAxisData based on lower_limit
-        const sortedChartData = chartAxisData.sort((a, b) => a.lower_limit - b.lower_limit);
+    const handleChartDataSave = async () => {
+        try {
+            // Sort chartAxisData based on lower_limit
+            const sortedChartData = chartAxisData.sort((a, b) => a.lower_limit - b.lower_limit);
 
-        // Validation 0: Check if starting point is valid and ending point is valid
-        if ((Number(sortedChartData[0].lower_limit) < Number(singleCriteria?.data?.min_limit)) || (Number(sortedChartData[sortedChartData.length - 1].upper_limit) > Number(singleCriteria?.data?.max_limit))) {
-            toast.error(`X Axis range must be between ${singleCriteria?.data?.min_limit} and ${singleCriteria?.data?.max_limit}`);
-            return;
-        }
-
-        // Validation 1: Check if starting point is less than the minimum lower_limit
-        if (sortedChartData.length > 0 && Number(sortedChartData[0].lower_limit) > Number(singleCriteria?.data?.min_limit)) {
-            toast.error('Starting Point (X Axis) is invalid.');
-            return;
-        }
-
-        // Validation 4: Check if ending point is greater than the maximum upper_limit
-        if (sortedChartData.length > 0 && Number(sortedChartData[sortedChartData.length - 1].upper_limit) < Number(singleCriteria?.data?.max_limit)) {
-            toast.error('Ending Point (X Axis) is invalid.');
-            return;
-        }
-
-        // Validation 2: Check for conflicts between ranges
-        for (let i = 0; i < sortedChartData.length - 1; i++) {
-            if (Number(sortedChartData[i].upper_limit) > Number(sortedChartData[i + 1].lower_limit)) {
-                toast.error('Conflicting ranges detected.');
+            // Validation 0: Check if the starting point is valid and the ending point is valid
+            if (
+                Number(sortedChartData[0].lower_limit) < Number(singleCriteria?.data?.min_limit) ||
+                Number(sortedChartData[sortedChartData.length - 1].upper_limit) > Number(singleCriteria?.data?.max_limit)
+            ) {
+                toast.error(`X Axis range must be between ${singleCriteria?.data?.min_limit} and ${singleCriteria?.data?.max_limit}`);
                 return;
             }
-        }
 
-        // Validation 3: Check for missing ranges
-        for (let i = 0; i < sortedChartData.length - 1; i++) {
-            if (Number(sortedChartData[i].upper_limit) <= Number(sortedChartData[i + 1].lower_limit) - 1) {
-                // toast.error('Missing range detected.');
-
-                Swal.fire({
-                    html: `     
-                            <p class="incentive_swal_desc text-dark">Please review the table entry again, as
-                            you're missing a percentage in the row.</p>
-                            `
-                    ,
-                    showCancelButton: true,
-                    confirmButtonText: "Try Again",
-                    cancelButtonText: "Cancel",
-                    customClass: {
-                        confirmButton: 'swal2-confirm-custom',
-                        cancelButton: 'swal2-cancel-custom',
-                        icon: 'swal2-icon-custom'
-                    },
-                    iconHtml: `<img src="${warningIcon}">`
-                })
+            // Validation 1: Check if the starting point is less than the minimum lower_limit
+            if (sortedChartData.length > 0 && Number(sortedChartData[0].lower_limit) > Number(singleCriteria?.data?.min_limit)) {
+                toast.error('Starting Point (X Axis) is invalid.');
                 return;
             }
+
+            // Validation 4: Check if the ending point is greater than the maximum upper_limit
+            if (sortedChartData.length > 0 && Number(sortedChartData[sortedChartData.length - 1].upper_limit) < Number(singleCriteria?.data?.max_limit)) {
+                toast.error('Ending Point (X Axis) is invalid.');
+                return;
+            }
+
+            // Validation 2: Check for conflicts between ranges
+            for (let i = 0; i < sortedChartData.length - 1; i++) {
+                if (Number(sortedChartData[i].upper_limit) > Number(sortedChartData[i + 1].lower_limit)) {
+                    toast.error('Conflicting ranges detected.');
+                    return;
+                }
+            }
+
+            // Validation 3: Check for missing ranges
+            for (let i = 0; i < sortedChartData.length - 1; i++) {
+                if (Number(sortedChartData[i].upper_limit) <= Number(sortedChartData[i + 1].lower_limit) - 1) {
+                    Swal.fire({
+                        html: `<p class="incentive_swal_desc text-dark">Please review the table entry again, as you're missing a percentage in the row.</p>`,
+                        showCancelButton: true,
+                        confirmButtonText: "Try Again",
+                        cancelButtonText: "Cancel",
+                        customClass: {
+                            confirmButton: 'swal2-confirm-custom',
+                            cancelButton: 'swal2-cancel-custom',
+                            icon: 'swal2-icon-custom'
+                        },
+                        iconHtml: `<img src="${warningIcon}">`
+                    });
+                    return;
+                }
+            }
+
+            // Separate the data into new entries and entries to be edited
+            const newDataForAdd = sortedChartData?.filter(item => isNaN(item?.id));
+            const dataForEdit = sortedChartData?.filter(item => !isNaN(item?.id));
+
+            // Handle API calls for editing existing data
+            await Promise.all(dataForEdit?.map(async (payload) => {
+                try {
+                    await editIncentiveFactors({ id: payload?.id, payload });
+                } catch (error) {
+                    toast.error(`Failed to update incentive factor with ID: ${payload.id}`);
+                    console.error(`Error updating incentive factor with ID: ${payload.id}`, error);
+                }
+            }));
+
+            // Handle API calls for adding new data
+            await Promise.all(newDataForAdd?.map(async (item) => {
+                const payload = {
+                    incentive_criteria_id: chartDataId,
+                    lower_limit: parseFloat(item?.lower_limit),
+                    upper_limit: parseFloat(item?.upper_limit),
+                    incentive_amount: parseFloat(item?.incentive_amount)
+                };
+                try {
+                    await addIncentiveFactors(payload);
+                } catch (error) {
+                    toast.error('Failed to add new incentive factor');
+                    console.error('Error adding new incentive factor', error);
+                }
+            }));
+
+            // If all API calls succeed, show success message and close the modal
+            toast.success('Chart data saved successfully.');
+            showIdealVsAchievedEditModal();
+        } catch (error) {
+            // General error handling
+            toast.error('An error occurred while saving chart data.');
+            console.error('Error in handleChartDataSave:', error);
         }
+    };
 
-        // If all validations passed, proceed with saving the data
-        console.log(sortedChartData);
-
-        sortedChartData?.map(payload => (
-            editIncentiveFactors({ id: payload?.id, payload })
-        ))
-        toast.success('Chart data saved successfully.');
-        // Add your save logic here
-    }
 
     return (
         <Modal className='pay_now_modal'
@@ -212,8 +242,10 @@ const ChartIdealVsAchievedEditModal = ({ antdModalOpen, showIdealVsAchievedEditM
 
             {/* Modal Footer */}
             <div className='pay_now_modal_footer'>
-                <button onClick={handleChartDataSave} className='chart_edit_modal_button'>Save</button>
-                <button onClick={handleCancel} className='chart_edit_modal_button_secondary'>Do it later</button>
+                <button disabled={isEditIncentiveFactorsLoading || isAddIncentiveFactorsLoading} onClick={handleChartDataSave} className='chart_edit_modal_button'>{
+                    isEditIncentiveFactorsLoading || isAddIncentiveFactorsLoading ? 'Saving...' : 'Save'
+                }</button>
+                <button disabled={isEditIncentiveFactorsLoading || isAddIncentiveFactorsLoading} onClick={handleCancel} className='chart_edit_modal_button_secondary'>Do it later</button>
             </div>
 
             {/* Modals for add, edit and remove */}

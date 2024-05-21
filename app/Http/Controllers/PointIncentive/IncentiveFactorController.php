@@ -11,6 +11,7 @@ use App\Models\IncentiveFactor;
 use App\Models\IncentiveCriteria;
 use App\Http\Controllers\Controller;
 use App\View\Components\Auth;
+use PayPal\Api\Incentive;
 
 class IncentiveFactorController extends Controller
 {
@@ -66,7 +67,28 @@ class IncentiveFactorController extends Controller
 
     public function store(Request $request)
     {
-        //
+        try {
+            $referenceFactor = IncentiveFactor::where('incentive_criteria_id', $request->incentive_criteria_id)->first();
+            IncentiveFactor::create([
+                'incentive_criteria_id' => $request->incentive_criteria_id,
+                'limit_type' => $referenceFactor->limit_type,
+                'lower_limit' => $request->lower_limit,
+                'upper_limit' => $request->upper_limit,
+                'incentive_amount_type' => $referenceFactor->incentive_amount_type,
+                'incentive_amount' => $request->incentive_amount,
+            ]);
+
+            return response()->json([
+                'status' => 200,
+                'message' => 'The incentive factor created successfully'
+            ]);
+        } catch (\Throwable $th) {
+            //throw $th;
+            return response()->json([
+                'status' => 400,
+                'message' => 'Something went wrong!'
+            ]);
+        }
     }
 
     public function show($id)
@@ -91,7 +113,7 @@ class IncentiveFactorController extends Controller
 
             return response()->json([
                 'status' => 200,
-                'message' => 'The incentive factor updated successfully'
+                'message' => 'The incentive factor created successfully'
             ]);
         } catch (\Throwable $th) {
             //throw $th;
@@ -104,6 +126,19 @@ class IncentiveFactorController extends Controller
 
     public function destroy($id)
     {
-        //
+        try {
+            $incentiveFactor = IncentiveFactor::where('id', $id)->delete();
+
+            return response()->json([
+                'status' => 200,
+                'message' => 'The incentive factor deleted successfully'
+            ]);
+        } catch (\Throwable $th) {
+            //throw $th;
+            return response()->json([
+                'status' => 400,
+                'message' => 'Something went wrong!'
+            ]);
+        }
     }
 }

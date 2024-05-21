@@ -5,6 +5,7 @@ import { useForm } from 'react-hook-form';
 import { Modal } from 'antd';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { useAddIncentiveFactorsMutation } from '../../../../../../services/api/Pm-Sales/PmIncentiveApiSlice';
 
 const AddNewAxisItemModal = ({ singleCriteria, chartAxisData, setChartAxisData, antdModalOpen, setAntdModalOpen, chartData }) => {
     const {

@@ -803,6 +803,11 @@
     border-bottom: 1px solid #E8E8E8;
 }
 
+.edit_chart_data_modal_content_wrapper {
+    max-height: 450px;
+    overflow-y: scroll;
+}
+
 .edit_chart_data_modal_content_wrapper .ratio_card:last-child {
     border-bottom: none;
 }

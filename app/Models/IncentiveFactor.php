@@ -11,6 +11,7 @@ class IncentiveFactor extends Model
 
     protected $fillable = [
         'incentive_criteria_id',
+        'limit_type',
         'lower_limit',
         'upper_limit',
         'incentive_amount_type',
