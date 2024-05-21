@@ -17836,6 +17836,39 @@ var TimerControl = function TimerControl(_ref) {
     }; // clear interval
   }, [timerStart]);
 
+  //expired time check and state change for new employee / Trainee
+  var _useState15 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(localStorage.getItem("expireDateForTrainer")),
+    _useState16 = _slicedToArray(_useState15, 2),
+    expireDateForTrainer = _useState16[0],
+    setExpireDateForTrainer = _useState16[1];
+  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(function () {
+    setExpireDateForTrainer(localStorage.getItem("expireDateForTrainer"));
+  }, [timerId, taskRunning]);
+  var intervalRef = (0,react__WEBPACK_IMPORTED_MODULE_0__.useRef)(null);
+  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(function () {
+    // Function to check the expiration status
+    var checkExpiration = function checkExpiration() {
+      if (expireDateForTrainer !== null) {
+        var expireDate = new Date(expireDateForTrainer);
+        var currentTime = new Date();
+        var timeDifference = expireDate.getTime() - currentTime.getTime();
+        setTimeLeft(Math.max(0, Math.floor(timeDifference / 1000)));
+        if (currentTime >= expireDate) {
+          setExpiredTimerForNewEmployee(true);
+          stopTimer();
+          clearInterval(intervalRef.current); // Stop the interval
+        }
+      }
+    };
+
+    // Check expiration immediately on mount
+    checkExpiration();
+    intervalRef.current = setInterval(checkExpiration, 10000);
+    return function () {
+      return clearInterval(intervalRef.current);
+    };
+  }, [expireDateForTrainer, timerId]);
+
   // time formating
   var timer = function timer() {
     var hours = Math.floor(seconds / 3600);
@@ -18023,22 +18056,6 @@ var TimerControl = function TimerControl(_ref) {
       document.getElementsByTagName("body")[0].style.cursor = "default";
     }
   }, [startTimerFirstCheckIsFetching, timerStartStatusIsLoading]);
-
-  //expired time check and state change for new employee / Trainee
-
-  var expireDateForTrainer = localStorage.getItem("expireDateForTrainer");
-  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(function () {
-    if (expireDateForTrainer && timerId) {
-      var expireDate = new Date(expireDateForTrainer);
-      var currentTime = new Date();
-      var timeDifference = expireDate.getTime() - currentTime.getTime();
-      setTimeLeft(Math.max(0, Math.floor(timeDifference / 1000)));
-      if (currentTime >= expireDate) {
-        setExpiredTimerForNewEmployee(true);
-        stopTimer();
-      }
-    }
-  }, [expireDateForTrainer, timerId]);
   return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsxs)((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), {
     children: [!timerStart ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsxs)((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), {
       children: [!timerStartStatusIsLoading && !startTimerFirstCheckIsFetching ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)("div", {

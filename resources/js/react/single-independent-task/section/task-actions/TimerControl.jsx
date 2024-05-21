@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from "react";
+import React, { useState, useEffect, useMemo, useRef } from "react";
 import Button from "../../components/Button";
 import StartTimerConfirmationModal from "./StartTimerConfirmationModal";
 import {
@@ -67,6 +67,42 @@ const TimerControl = ({ task, timerStart, setTimerStart, auth }) => {
         } else clearInterval(interval); // clear interval
         return () => clearInterval(interval); // clear interval
     }, [timerStart]);
+
+    //expired time check and state change for new employee / Trainee
+    const [expireDateForTrainer, setExpireDateForTrainer] = useState(
+        localStorage.getItem("expireDateForTrainer")
+    );
+
+    const intervalRef = useRef(null);
+    useEffect(() => {
+        setExpireDateForTrainer(localStorage.getItem("expireDateForTrainer"));
+    }, [timerId, taskRunning]);
+
+    useEffect(() => {
+        // Function to check the expiration status
+        const checkExpiration = () => {
+            if (expireDateForTrainer !== null) {
+                const expireDate = new Date(expireDateForTrainer);
+                const currentTime = new Date();
+                const timeDifference =
+                    expireDate.getTime() - currentTime.getTime();
+                setTimeLeft(Math.max(0, Math.floor(timeDifference / 1000)));
+
+                if (currentTime >= expireDate) {
+                    setExpiredTimerForNewEmployee(true);
+                    stopTimer();
+                    clearInterval(intervalRef.current); // Stop the interval
+                }
+            }
+        };
+
+        // Check expiration immediately on mount
+        checkExpiration();
+
+        intervalRef.current = setInterval(checkExpiration, 10000); //expire checking every 10 seconds
+
+        return () => clearInterval(intervalRef.current);
+    }, [expireDateForTrainer, timerId]);
 
     // time formating
     const timer = () => {
@@ -320,24 +356,6 @@ const TimerControl = ({ task, timerStart, setTimerStart, auth }) => {
             document.getElementsByTagName("body")[0].style.cursor = "default";
         }
     }, [startTimerFirstCheckIsFetching, timerStartStatusIsLoading]);
-
-    //expired time check and state change for new employee / Trainee
-
-    const expireDateForTrainer = localStorage.getItem("expireDateForTrainer");
-    useEffect(() => {
-        if (expireDateForTrainer && timerId) {
-            const expireDate = new Date(expireDateForTrainer);
-            const currentTime = new Date();
-            const timeDifference = expireDate.getTime() - currentTime.getTime();
-            setTimeLeft(Math.max(0, Math.floor(timeDifference / 1000)));
-
-            if (currentTime >= expireDate) {
-                setExpiredTimerForNewEmployee(true);
-
-                stopTimer();
-            }
-        }
-    }, [expireDateForTrainer, timerId]);
 
     return (
         <React.Fragment>
