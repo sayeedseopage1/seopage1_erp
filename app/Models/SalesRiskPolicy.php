@@ -45,6 +45,7 @@ class SalesRiskPolicy extends Model
         'clientCountry' => 'Client\'s Country',
         'projectDeadline' => 'Project Deadline',
         'projectBudget' => 'Project Budget',
+        'yesNoRules' => 'Yes No Rules',
     ];
 
     public function newEloquentBuilder($query)
