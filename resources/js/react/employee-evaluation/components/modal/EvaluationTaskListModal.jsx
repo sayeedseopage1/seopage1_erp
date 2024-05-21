@@ -94,20 +94,26 @@ const EvaluationTaskListModal = ({
     let tasksToRate = [];
     //to enable or disable button
 
+    // set average rating and calculating if all tasks are rated to enable confirm submission for lead developer
     useEffect(() => {
         if (data && data?.data) {
             const tasks = data?.data;
+            //filter tasks to rate based on total_min and submission_date not null
             tasksToRate = tasks?.filter((task) => {
                 return (
-                    Number(task.total_min) < 5 && task.submission_date !== null
+                    Number(task.total_min) < 60 && task.submission_date !== null
                 );
             });
+            //calculate average rating
             const cumulativeSum = tasksToRate?.reduce(
                 (acc, cur) => acc + Number(cur.avg_rating),
                 0
             );
+            //set average rating
             const average = cumulativeSum / tasksToRate.length;
             setCumulativeAverage(average);
+
+            //checking if all tasks are rated using the length of tasksToRate array and the length of tasksToRate array filtered by lead_dev_cmnt not null
             const isAllTaskRated =
                 tasksToRate?.length ===
                 tasksToRate?.filter((task) => task.lead_dev_cmnt !== null)
@@ -121,6 +127,7 @@ const EvaluationTaskListModal = ({
         pageSize: 10,
     });
 
+    //
     const formFields = [
         {
             label: "Communication",

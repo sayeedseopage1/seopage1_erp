@@ -17841,10 +17841,10 @@ var TimerControl = function TimerControl(_ref) {
     _useState16 = _slicedToArray(_useState15, 2),
     expireDateForTrainer = _useState16[0],
     setExpireDateForTrainer = _useState16[1];
+  var intervalRef = (0,react__WEBPACK_IMPORTED_MODULE_0__.useRef)(null);
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(function () {
     setExpireDateForTrainer(localStorage.getItem("expireDateForTrainer"));
   }, [timerId, taskRunning]);
-  var intervalRef = (0,react__WEBPACK_IMPORTED_MODULE_0__.useRef)(null);
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(function () {
     // Function to check the expiration status
     var checkExpiration = function checkExpiration() {
@@ -17863,7 +17863,8 @@ var TimerControl = function TimerControl(_ref) {
 
     // Check expiration immediately on mount
     checkExpiration();
-    intervalRef.current = setInterval(checkExpiration, 10000);
+    intervalRef.current = setInterval(checkExpiration, 10000); //expire checking every 10 seconds
+
     return function () {
       return clearInterval(intervalRef.current);
     };
