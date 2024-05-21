@@ -12,7 +12,9 @@ class IncentiveCriteria extends Model
 
     protected $fillable = [
         'incentive_type_id',
-        'title'
+        'title',
+        'min_limit',
+        'max_limit'
     ];
 
     public function incentiveFactors()
