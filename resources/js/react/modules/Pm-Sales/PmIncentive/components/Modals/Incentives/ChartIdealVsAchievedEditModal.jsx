@@ -9,18 +9,20 @@ import RemoveRatioItemsModal from './RemoveRatioItemsModal';
 import { toast } from 'react-toastify';
 import Swal from 'sweetalert2';
 import warningIcon from '../../../assets/warningIcon.svg'
-import { useGetSingleIncentiveCriteriaQuery } from '../../../../../../services/api/Pm-Sales/PmIncentiveApiSlice';
+import { useEditIncentiveFactorsMutation, useGetSingleIncentiveCriteriaQuery } from '../../../../../../services/api/Pm-Sales/PmIncentiveApiSlice';
 import Spinner from '../../../../PointFactors/components/loader/Spinner';
 
 const ChartIdealVsAchievedEditModal = ({ antdModalOpen, showIdealVsAchievedEditModal, chartDataId }) => {
     const { data: singleCriteria, isLoading: isLoadingSingleCriteria } = useGetSingleIncentiveCriteriaQuery(chartDataId, { skip: !chartDataId })
 
+    const [editIncentiveFactors, { isLoading: isEditIncentiveFactorsLoading }] = useEditIncentiveFactorsMutation()
+
     const defaultChartAxisData = singleCriteria?.data?.incentive_factors?.map((item) => (
         {
             id: item.id,
-            xAxisLowerLimit: parseFloat(item?.lower_limit),
-            xAxisUpperLimit: parseFloat(item?.upper_limit),
-            yAxisRatio: parseFloat(item?.incentive_amount),
+            lower_limit: parseFloat(item?.lower_limit),
+            upper_limit: parseFloat(item?.upper_limit),
+            incentive_amount: parseFloat(item?.incentive_amount),
             incentive_amount_type: item?.incentive_amount_type
         }
     )) || [];
@@ -72,30 +74,30 @@ const ChartIdealVsAchievedEditModal = ({ antdModalOpen, showIdealVsAchievedEditM
 
     //submit
     const handleChartDataSave = () => {
-        // Sort chartAxisData based on xAxisLowerLimit
-        const sortedChartData = chartAxisData.sort((a, b) => a.xAxisLowerLimit - b.xAxisLowerLimit);
+        // Sort chartAxisData based on lower_limit
+        const sortedChartData = chartAxisData.sort((a, b) => a.lower_limit - b.lower_limit);
 
         // Validation 0: Check if starting point is valid and ending point is valid
-        if ((Number(sortedChartData[0].xAxisLowerLimit) < Number(xAxisStartAndEndValue.xAxisStaring)) || (Number(sortedChartData[sortedChartData.length - 1].xAxisUpperLimit) > Number(xAxisStartAndEndValue.xAxisEnding))) {
+        if ((Number(sortedChartData[0].lower_limit) < Number(xAxisStartAndEndValue.xAxisStaring)) || (Number(sortedChartData[sortedChartData.length - 1].upper_limit) > Number(xAxisStartAndEndValue.xAxisEnding))) {
             toast.error(`X Axis range must be between ${xAxisStartAndEndValue?.xAxisStaring} and ${xAxisStartAndEndValue?.xAxisEnding}`);
             return;
         }
 
-        // Validation 1: Check if starting point is less than the minimum xAxisLowerLimit
-        if (sortedChartData.length > 0 && Number(sortedChartData[0].xAxisLowerLimit) > Number(xAxisStartAndEndValue.xAxisStaring)) {
+        // Validation 1: Check if starting point is less than the minimum lower_limit
+        if (sortedChartData.length > 0 && Number(sortedChartData[0].lower_limit) > Number(xAxisStartAndEndValue.xAxisStaring)) {
             toast.error('Starting Point (X Axis) is invalid.');
             return;
         }
 
-        // Validation 4: Check if ending point is greater than the maximum xAxisUpperLimit
-        if (sortedChartData.length > 0 && Number(sortedChartData[sortedChartData.length - 1].xAxisUpperLimit) < Number(xAxisStartAndEndValue.xAxisEnding)) {
+        // Validation 4: Check if ending point is greater than the maximum upper_limit
+        if (sortedChartData.length > 0 && Number(sortedChartData[sortedChartData.length - 1].upper_limit) < Number(xAxisStartAndEndValue.xAxisEnding)) {
             toast.error('Ending Point (X Axis) is invalid.');
             return;
         }
 
         // Validation 2: Check for conflicts between ranges
         for (let i = 0; i < sortedChartData.length - 1; i++) {
-            if (Number(sortedChartData[i].xAxisUpperLimit) > Number(sortedChartData[i + 1].xAxisLowerLimit)) {
+            if (Number(sortedChartData[i].upper_limit) > Number(sortedChartData[i + 1].lower_limit)) {
                 toast.error('Conflicting ranges detected.');
                 return;
             }
@@ -103,7 +105,7 @@ const ChartIdealVsAchievedEditModal = ({ antdModalOpen, showIdealVsAchievedEditM
 
         // Validation 3: Check for missing ranges
         for (let i = 0; i < sortedChartData.length - 1; i++) {
-            if (Number(sortedChartData[i].xAxisUpperLimit) <= Number(sortedChartData[i + 1].xAxisLowerLimit) - 1) {
+            if (Number(sortedChartData[i].upper_limit) <= Number(sortedChartData[i + 1].lower_limit) - 1) {
                 // toast.error('Missing range detected.');
 
                 Swal.fire({
@@ -128,6 +130,10 @@ const ChartIdealVsAchievedEditModal = ({ antdModalOpen, showIdealVsAchievedEditM
 
         // If all validations passed, proceed with saving the data
         console.log(sortedChartData);
+
+        sortedChartData?.map(payload => (
+            editIncentiveFactors({ id: payload?.id, payload })
+        ))
         toast.success('Chart data saved successfully.');
         // Add your save logic here
     }
@@ -182,15 +188,15 @@ const ChartIdealVsAchievedEditModal = ({ antdModalOpen, showIdealVsAchievedEditM
                             chartAxisData?.length > 0 ? (
                                 // If data is available, map through it and render items
                                 chartAxisData
-                                    .sort((a, b) => a?.xAxisLowerLimit - b?.xAxisLowerLimit)
+                                    .sort((a, b) => a?.lower_limit - b?.lower_limit)
                                     .map((item) => (
                                         <div key={item?.id} className='edit_chart_data_modal_content ratio_card'>
                                             <div className='ratio_wrapper'>
-                                                <p className='ratio_text'>{item?.xAxisLowerLimit}-{item?.xAxisUpperLimit}%</p>
+                                                <p className='ratio_text'>{item?.lower_limit}-{item?.upper_limit}%</p>
                                                 <button onClick={() => xAxisEditHandler(item)} className='ratio_edit_button'>Edit</button>
                                             </div>
                                             <div className='ratio_wrapper'>
-                                                <p className='ratio_text'>{item?.yAxisRatio}%</p>
+                                                <p className='ratio_text'>{item?.incentive_amount}%</p>
                                                 <button onClick={() => yAxisEditHandler(item)} className='ratio_edit_button'>Edit</button>
                                             </div>
                                         </div>

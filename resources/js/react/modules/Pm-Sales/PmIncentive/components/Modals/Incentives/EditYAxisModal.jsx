@@ -7,7 +7,7 @@ import { toast } from 'react-toastify';
 
 const EditYAxisModal = ({ axisEditItem, chartAxisData, setChartAxisData, antdModalOpen, setAntdModalOpen }) => {
 
-    const { yAxisRatio } = axisEditItem || {}
+    const { incentive_amount } = axisEditItem || {}
 
     const {
         register,
@@ -20,7 +20,7 @@ const EditYAxisModal = ({ axisEditItem, chartAxisData, setChartAxisData, antdMod
     const onSubmit = (data) => {
         const newData = {
             ...axisEditItem,
-            yAxisRatio: parseFloat(data?.yAxisRatio),
+            incentive_amount: parseFloat(data?.incentive_amount),
         };
 
         // Filter out items that need to be removed
@@ -64,12 +64,12 @@ const EditYAxisModal = ({ axisEditItem, chartAxisData, setChartAxisData, antdMod
                     <form onSubmit={handleSubmit(onSubmit)}>
                         <div style={{ marginBottom: '32px' }}>
                             {/* <p className='axis_item_modal_inputs_title'>X Axis ratio (Percentage)</p> */}
-                            <p className="axis_item_modal_inputs_title" style={{ fontSize: '16px' }}>Current Percentage: <span style={{ fontWeight: '500', color: '#000', fontSize: '20px' }}>{yAxisRatio}%</span></p>
+                            <p className="axis_item_modal_inputs_title" style={{ fontSize: '16px' }}>Current Percentage: <span style={{ fontWeight: '500', color: '#000', fontSize: '20px' }}>{incentive_amount}%</span></p>
                             <p className='axis_item_modal_inputs_title' style={{ fontSize: '16px' }}>New Percentage</p>
                             <div className='axis_item_modal_inputs_inner'>
                                 <div className='w-100'>
-                                    <input defaultValue={yAxisRatio} className='point_edit_modal_input' type='number' {...register("yAxisRatio", { required: true })} placeholder='Write here' />
-                                    {errors.yAxisRatio && <span style={{ color: 'red', fontSize: '12px' }}>This field is required</span>}
+                                    <input defaultValue={incentive_amount} className='point_edit_modal_input' type='number' {...register("incentive_amount", { required: true })} placeholder='Write here' />
+                                    {errors.incentive_amount && <span style={{ color: 'red', fontSize: '12px' }}>This field is required</span>}
                                 </div>
                             </div>
                         </div>

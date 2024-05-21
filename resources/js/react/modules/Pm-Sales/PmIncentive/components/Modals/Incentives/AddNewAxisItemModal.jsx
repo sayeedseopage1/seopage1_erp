@@ -19,12 +19,12 @@ const AddNewAxisItemModal = ({ xAxisStartAndEndValue, chartAxisData, setChartAxi
     const validateFields = (data) => {
         let isValid = true;
 
-        if (Number(data.xAxisLowerLimit) >= Number(data.xAxisUpperLimit) || Number(data.xAxisUpperLimit) < Number(data.xAxisLowerLimit)) {
+        if (Number(data.lower_limit) >= Number(data.upper_limit) || Number(data.upper_limit) < Number(data.lower_limit)) {
             toast.error('X Axis Lower Limit cannot be greater than or equal to Upper Limit');
             isValid = false;
         }
 
-        if (Number(data.xAxisLowerLimit) < Number(xAxisStaring) || Number(data.xAxisUpperLimit) > Number(xAxisEnding)) {
+        if (Number(data.lower_limit) < Number(xAxisStaring) || Number(data.upper_limit) > Number(xAxisEnding)) {
             toast.error(`X Axis range must be between ${xAxisStaring} and ${xAxisEnding}`);
             isValid = false;
         }
@@ -80,13 +80,13 @@ const AddNewAxisItemModal = ({ xAxisStartAndEndValue, chartAxisData, setChartAxi
                             <p className='axis_item_modal_inputs_title'>X Axis ratio (Percentage)</p>
                             <div className='axis_item_modal_inputs_inner'>
                                 <div className='w-50'>
-                                    <input className='point_edit_modal_input' type='number' {...register("xAxisLowerLimit", { required: true })} placeholder='Write here' />
-                                    {errors.xAxisLowerLimit && <span style={{ color: 'red', fontSize: '12px' }}>This field is required</span>}
+                                    <input className='point_edit_modal_input' type='number' {...register("lower_limit", { required: true })} placeholder='Write here' />
+                                    {errors.lower_limit && <span style={{ color: 'red', fontSize: '12px' }}>This field is required</span>}
                                 </div>
 
                                 <div className='w-50'>
-                                    <input className='point_edit_modal_input' type='number' {...register("xAxisUpperLimit", { required: true })} placeholder='Write here' />
-                                    {errors.xAxisUpperLimit && <span style={{ color: 'red', fontSize: '12px' }}>This field is required</span>}
+                                    <input className='point_edit_modal_input' type='number' {...register("upper_limit", { required: true })} placeholder='Write here' />
+                                    {errors.upper_limit && <span style={{ color: 'red', fontSize: '12px' }}>This field is required</span>}
                                 </div>
                             </div>
                         </div>
@@ -94,8 +94,8 @@ const AddNewAxisItemModal = ({ xAxisStartAndEndValue, chartAxisData, setChartAxi
                             <p className='axis_item_modal_inputs_title'>Y Axis ratio (Percentage)</p>
                             <div className='axis_item_modal_inputs_inner'>
                                 <div className='w-100'>
-                                    <input className='point_edit_modal_input' type='number' {...register("yAxisRatio", { required: true })} placeholder='Write here ' />
-                                    {errors.yAxisRatio && <span style={{ color: 'red', fontSize: '12px' }}>This field is required</span>}
+                                    <input className='point_edit_modal_input' type='number' {...register("incentive_amount", { required: true })} placeholder='Write here ' />
+                                    {errors.incentive_amount && <span style={{ color: 'red', fontSize: '12px' }}>This field is required</span>}
                                 </div>
                             </div>
                         </div>

@@ -176,7 +176,7 @@ const IncentiveBarChart = ({ chartData }) => {
         <>
             <div className="chart_header">
                 <div className="chart_title">
-                    <span>{chartData?.title}</span> {chartData?.title == "Deadline Miss Rate" && <Popover
+                    <span>{chartData?.title}</span> {chartData?.id == 6 && <Popover
                         content='Did he accept this? We may 
                         need time for planning, understanding requirements, creating deliverables etc.'
                         overlayStyle={{
