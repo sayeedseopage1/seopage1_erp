@@ -23,6 +23,7 @@ const SalesRiskAnalysisProvider = ({ children }) => {
     const { departments } = useSelector((state) => state.filterOptions);
     const [questionsAnswerType, setQuestionsAnswerType] = React.useState({});
     const [policies, setPolicies] = React.useState({});
+    const [yesNoRules, setYesNoRules] = React.useState([]);
     const [policyKeys, setPolicyKeys] = React.useState({});
     const [allQuestions, setAllQuestions] = React.useState({});
 
@@ -109,6 +110,16 @@ const SalesRiskAnalysisProvider = ({ children }) => {
                     };
                 }
             );
+
+            const yesNoRulesData = questionFieldsData?.data?.yesNoRules.map(
+                (rule) => {
+                    return {
+                        id: rule.id,
+                        title: rule.title,
+                        label: rule.title,
+                    };
+                }
+            )
             setAllQuestions({
                 label: "Parent Questions",
                 emptyOptionsLabel: "Select Parent Question",
@@ -127,6 +138,13 @@ const SalesRiskAnalysisProvider = ({ children }) => {
                 id: "question_type",
                 data: questionTypeData,
             });
+
+            setYesNoRules({
+                label: "Rule",
+                emptyOptionsLabel: "Select Rule",
+                id: "rule",
+                data: yesNoRulesData,
+            });
         }
     }, [questionFieldsData, isQuestionType]);
 
@@ -138,6 +156,7 @@ const SalesRiskAnalysisProvider = ({ children }) => {
             allQuestions,
             policyKeys,
             isSalesRiskInputsLoading,
+            yesNoRules
         };
     });
 

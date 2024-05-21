@@ -55,9 +55,8 @@ const AddQuestionsListModal = ({
     setIsQuestionUpdating,
 }) => {
     const modalRef = useRef(null);
-    const { questionsAnswerType, policies, allQuestions } = useContext(
-        SalesRiskAnalysisContext
-    );
+    const { questionsAnswerType, policies, allQuestions, yesNoRules } =
+        useContext(SalesRiskAnalysisContext);
     const [questions, setQuestions] = useState([]);
     const [isListEmpty, setIsListEmpty] = useState(false);
     const [yesNoValueEmpty, setYesNoValueEmpty] = useState(false);
@@ -68,6 +67,7 @@ const AddQuestionsListModal = ({
         placeholder: false,
         policy_id: false,
         isSubmitting: false,
+        yesNoRules: false,
     });
 
     const [
@@ -132,7 +132,6 @@ const AddQuestionsListModal = ({
             }
         } else if (name === "question_key") {
             if (value.name === "yesNoRules") {
-                console.log(policies)
                 setSingleQuestion({
                     ...singleQuestion,
                     [name]: value,
@@ -141,7 +140,34 @@ const AddQuestionsListModal = ({
                         label: "Yes/No",
                         name: "yesNo",
                     },
-                    policy_id: policies?.data?.find(item => item?.key === value?.name)
+                    policy_id: policies?.data?.find(
+                        (item) => item?.key === value?.name
+                    ),
+                });
+            } else {
+                setSingleQuestion({
+                    ...singleQuestion,
+                    [name]: value,
+                });
+            }
+        } else if (name === "policy_id") {
+            if (value?.key === "yesNoRules") {
+                setSingleQuestion({
+                    ...singleQuestion,
+                    type: {
+                        id: 2,
+                        label: "Yes/No",
+                        name: "yesNo",
+                    },
+                    question_key: questionsAnswerType?.data?.find(
+                        (item) => item?.name === "yesNoRules"
+                    ),
+                    [name]: value,
+                });
+            } else {
+                setSingleQuestion({
+                    ...singleQuestion,
+                    [name]: value,
                 });
             }
         } else {
@@ -214,6 +240,20 @@ const AddQuestionsListModal = ({
             return;
         }
 
+        if (
+            singleQuestion?.question_key?.name === "yesNoRules" &&
+            !singleQuestion?.rule_id
+        ) {
+            setSingleQuestionValidation((prev) => {
+                return {
+                    ...prev,
+                    isSubmitting: true,
+                    rule_id: true,
+                };
+            });
+            return;
+        }
+
         // Payload for Add Question
         const payload = {
             title: singleQuestion?.title,
@@ -247,6 +287,10 @@ const AddQuestionsListModal = ({
                 };
             });
             payload.value = JSON.stringify(updateId);
+        }
+
+        if (singleQuestion?.rule_id?.id) {
+            payload.rule_id = singleQuestion?.rule_id?.id;
         }
 
         try {
@@ -294,6 +338,7 @@ const AddQuestionsListModal = ({
             listItem: [],
             comment: "",
             policy_id: {},
+            rule_id: {},
         });
         setSingleQuestionValidation({
             title: false,
@@ -354,6 +399,11 @@ const AddQuestionsListModal = ({
             );
             setSingleQuestionValidation({
                 ...validation,
+                rule_id:
+                    singleQuestion?.question_key?.name === "yesNoRules" &&
+                    !singleQuestion?.rule_id
+                        ? true
+                        : false,
             });
         }
     }, [singleQuestion]);
@@ -379,8 +429,7 @@ const AddQuestionsListModal = ({
         }
     }, [isLoadingSinglePolicyData]);
 
-
-    console.log(singleQuestion)
+    console.log(singleQuestion);
 
     return (
         <CustomModal
@@ -465,7 +514,12 @@ const AddQuestionsListModal = ({
                                     data={QuestionsTypes}
                                     selected={singleQuestion?.type}
                                     setSelected={handleChange}
-                                    isDisableUse={singleQuestion?.type?.name === "yesNo"}
+                                    isDisableUse={
+                                        singleQuestion?.type?.name ===
+                                            "yesNo" &&
+                                        singleQuestion?.question_key?.name ===
+                                            "yesNoRules"
+                                    }
                                 />
                             </ModalSelectContainer>
                             {singleQuestionValidation?.type && (
@@ -639,7 +693,10 @@ const AddQuestionsListModal = ({
                                             data={policies}
                                             selected={singleQuestion?.policy_id}
                                             setSelected={handleChange}
-                                            isDisableUse={false}
+                                            isDisableUse={
+                                                singleQuestion?.question_key
+                                                    ?.name === "yesNoRules"
+                                            }
                                         />
                                     </ModalSelectContainer>
                                     {singleQuestionValidation?.policy_id && (
@@ -649,6 +706,36 @@ const AddQuestionsListModal = ({
                                     )}
                                 </div>
                             </div>
+                            <Switch.Case
+                                condition={
+                                    singleQuestion?.question_key?.name ===
+                                    "yesNoRules"
+                                }
+                            >
+                                <div className="row mb-4 align-items-first">
+                                    <ModalInputLabel className="col-4">
+                                        Rule List<sup>*</sup>{" "}
+                                    </ModalInputLabel>
+                                    <div className="col-8 px-0 flex-column">
+                                        <ModalSelectContainer>
+                                            <CustomDropDown
+                                                filedName="rule_id"
+                                                data={yesNoRules}
+                                                selected={
+                                                    singleQuestion?.rule_id
+                                                }
+                                                setSelected={handleChange}
+                                                isDisableUse={false}
+                                            />
+                                        </ModalSelectContainer>
+                                        {singleQuestionValidation?.rule_id && (
+                                            <p className="text-danger py-1">
+                                                Rule is required
+                                            </p>
+                                        )}
+                                    </div>
+                                </div>
+                            </Switch.Case>
                             <div className="row mb-4 align-items-first">
                                 <ModalInputLabel className="col-4">
                                     Placeholder <sup>*</sup>{" "}

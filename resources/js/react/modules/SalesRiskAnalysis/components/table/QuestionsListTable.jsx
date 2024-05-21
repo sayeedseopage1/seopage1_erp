@@ -37,7 +37,9 @@ const QuestionsListTable = ({
     onPageChange,
     handleOpenAddQuestionsModal,
 }) => {
-    const { questionsAnswerType } = useContext(SalesRiskAnalysisContext);
+    const { questionsAnswerType, yesNoRules } = useContext(
+        SalesRiskAnalysisContext
+    );
     const [sorting, setSorting] = React.useState([]);
     const [expanded, setExpanded] = React.useState({});
     const [data, setData] = React.useState(tableData?.data || []);
@@ -127,10 +129,10 @@ const QuestionsListTable = ({
                     id: row?.id,
                     title: row?.title,
                     parent_question: parent_question,
-                    type: QuestionsTypes?.data.find(
+                    type: QuestionsTypes?.data?.find(
                         (item) => item?.name === row?.type
                     ),
-                    question_key: questionsAnswerType.data.find(
+                    question_key: questionsAnswerType?.data?.find(
                         (item) => item?.name === row?.key
                     ),
                     policy_id: {
@@ -138,10 +140,13 @@ const QuestionsListTable = ({
                         title: row?.policy_title,
                         label: row?.policy_title,
                     },
+                    rule_id: yesNoRules?.data?.find(
+                        (item) => item?.name === row?.rule_id
+                    ),
                     parent_question_for: row?.value,
                     listItem: row.type === "list" ? row?.value : [],
                 };
-             
+
                 if (row?.parent_question?.type === "list") {
                     setSingleQuestion({
                         ...payload,
@@ -159,9 +164,7 @@ const QuestionsListTable = ({
 
     return (
         <React.Fragment>
-            <div
-                className="sp1_tasks_table_wrapper w-100"
-            >
+            <div className="sp1_tasks_table_wrapper w-100">
                 <table className="sp1_tasks_table">
                     {/* table Header */}
                     <thead

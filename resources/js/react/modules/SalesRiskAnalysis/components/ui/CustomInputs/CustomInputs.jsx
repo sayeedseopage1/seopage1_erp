@@ -155,6 +155,7 @@ const CustomInputs = ({
                             fontWeight: "500",
                             fontFamily: "Poppins",
                             display: "flex",
+                            backgroundColor: "#C4DE95",
                         }}
                     >
                        {getCurrencySymbol()}
