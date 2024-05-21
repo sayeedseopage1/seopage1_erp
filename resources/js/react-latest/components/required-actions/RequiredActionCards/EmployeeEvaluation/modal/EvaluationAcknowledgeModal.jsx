@@ -390,7 +390,7 @@ const EvaluationAcknowledgeModal = ({
                         size="md"
                         className="ml-2"
                     >
-                        <div> Ok, Acknowledged it</div>
+                        <div> Acknowledge and create a task</div>
                     </Button>
                 )}
                 {auth.roleId === 6 && (
