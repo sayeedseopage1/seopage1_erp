@@ -137,6 +137,7 @@ use App\Notifications\UpdateClientFormNotification;
 use App\Notifications\UpdateClientProductCategoryNotification;
 use App\Notifications\UpdateClientProductDescriptionNotification;
 use App\Models\ProjectPmGoal;
+use App\Models\TaskHistory;
 
 class ProjectController extends AccountBaseController
 {
@@ -6158,6 +6159,10 @@ public function updatePmBasicSEO(Request $request){
             ->get();
 
         $lead_deal_activity_log = LeadsDealsActivityLog::where('project_id', $request->project_id)->orderBy('id', 'desc')->get();
+        // $findTask = Task::where('project_id', $request->project_id)->first();
+        // $task_activity_log = TaskHistory::where('sub_task_id', $findTask->subtask_id)->orderBy('id', 'desc')->get();
+
+        // dd(count($task_activity_log));
 
         $view = view('projects.ajax.activity_log', compact('activityLog', 'lead_deal_activity_log'))->render();
 

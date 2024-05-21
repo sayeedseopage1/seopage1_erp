@@ -1935,7 +1935,6 @@ class TaskController extends AccountBaseController
     }
     public function StoreNewTask(Request $request)
     {
-        //  dd($request->all());
         try {
             //    DB::beginTransaction();
             $setting = global_setting();
@@ -2350,7 +2349,7 @@ class TaskController extends AccountBaseController
 
                         //need pending action
                     }
-                    $text = Auth::user()->name . ' assigned new task on ' . $assigned_to->name;
+                    $text = Auth::user()->name . ' assigned new task ('.$task->heading.') to ' . $assigned_to->name;
                     $link = '<a href="' . route('tasks.show', $task->id) . '">' . $text . '</a>';
                     $this->logProjectActivity($project->id, $link);
 
@@ -2373,7 +2372,7 @@ class TaskController extends AccountBaseController
 
                         //need pending action
                     }
-                    $text = Auth::user()->name . ' assigned new task on ' . $assigned_to->name;
+                    $text = Auth::user()->name . ' assigned new task ('.$task->heading.') to ' . $assigned_to->name;
                     $link = '<a href="' . route('tasks.show', $task->id) . '">' . $text . '</a>';
                     $this->logProjectActivity($project->id, $link);
 
