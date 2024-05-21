@@ -106,6 +106,8 @@ const EvaluationRatingModal = ({
         {
             label: "Quality of work (in the first chance)",
             value: formData.qw_first_chance,
+            hoverText:
+                "If someone's quality of work is in line with our expectation or in line with what was asked in the brief, he will get 10 out of 10.",
             onChange: (value) =>
                 setFormData({
                     ...formData,
@@ -116,6 +118,8 @@ const EvaluationRatingModal = ({
         {
             label: "Quality of work (After 1st revision)",
             value: formData.qw_first_revision,
+            hoverText:
+                "If someone's quality of work is in line with our expectation or in line with what was asked in the brief, he will get 10 out of 10.",
             onChange: (value) =>
                 setFormData({
                     ...formData,
@@ -126,6 +130,8 @@ const EvaluationRatingModal = ({
         {
             label: "Quality of work (After 2nd revision)",
             value: formData.qw_second_revision,
+            hoverText:
+                "If someone's quality of work is in line with our expectation or in line with what was asked in the brief, he will get 10 out of 10.",
             onChange: (value) =>
                 setFormData({
                     ...formData,
@@ -136,6 +142,8 @@ const EvaluationRatingModal = ({
         {
             label: "Speed of work",
             value: formData.speed_of_work,
+            hoverText:
+                "How fast can someone finish his assigned work and if that is okay as per his/her experience level. For example, if someone with very SEO knowledge can do yoast for a page in half an hour (properly), that should be good and he should get a good score here. Alternatively, if someone with 3 years of SEO knowledge wants to get a good score here, he/she should be able to complete yoast optimization for a page in 15-20 minutes. It's a relative score and depends on the experience/expertise level.",
             onChange: (value) =>
                 setFormData({
                     ...formData,
@@ -146,6 +154,8 @@ const EvaluationRatingModal = ({
         {
             label: "Ability to understand instruction",
             value: formData.understand_instruction,
+            hoverText:
+                "A smart employee will always share the problems/issues he/she notices when working on something problematic. For example, someone is working on collecting topics for the blog section and that's why he needs to open the blog sitemap to see what topics were covered previously. Now, after opening the sitemap, he found there are various unnecessary sitemaps that should be removed immediately. His primary job which is collecting blog topics doesnt require him to discuss this issue with his reporting boss. But if he has serious to his job and smart, he will go the extra mile and will share this problem with the top authority. Here, we need to rate employees based on their ability to identify problems and their willingness to share those with top authorities.",
             onChange: (value) =>
                 setFormData({
                     ...formData,

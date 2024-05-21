@@ -1,10 +1,29 @@
 import React from "react";
 import FractionalRating from "../../../global/FractionalRating";
+import { BsQuestionCircleFill } from "react-icons/bs";
+import Popover from "../../../../react-latest/ui/Popover";
 
-const RatingSectionStatic = ({ label, value, onChange }) => {
+const RatingSectionStatic = ({ label, value, onChange, hoverText }) => {
     return (
         <section>
-            <label style={{ fontWeight: "bold" }}>{label}</label>
+            <label style={{ fontWeight: "bold", fontSize: "16px" }}>
+                <Popover>
+                    <Popover.Button>
+                        <span className=" singleline-ellipsis">
+                            <span>{label}</span>
+                            <span className="ml-1 pe-auto">
+                                <BsQuestionCircleFill />
+                            </span>
+                        </span>
+                    </Popover.Button>
+
+                    <Popover.Panel>
+                        <div className="revision_popover_panel">
+                            <span>{hoverText}</span>
+                        </div>
+                    </Popover.Panel>
+                </Popover>
+            </label>
             <div className="d-flex flex-row">
                 <div className="pr-2">
                     <FractionalRating value={value} readonly={true} />

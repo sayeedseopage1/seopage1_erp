@@ -132,6 +132,8 @@ const EvaluationTaskListModal = ({
         {
             label: "Communication",
             value: formData.communication,
+            hoverText:
+                "Some of the employees may have serious communication issues. For example, they dont know what their problems are or even if they know, they dont ask those questions. Or when they are asked to do something, they dont get its meaning right hence end up doing a complete different thing. Employees with such communication problem will get a low score here.",
             onChange: (value) =>
                 setFormData({
                     ...formData,
@@ -141,6 +143,8 @@ const EvaluationTaskListModal = ({
         {
             label: "Professionalism",
             value: formData.professionalism,
+            hoverText:
+                "In the professional world, highly professional people are those who can take their jobs very seriously considering they are getting paid for their jobs, those that behave in a formal manner with their superiors, can keep their emotions under control, admit when they are wrong, Stay calm under the pressure, keep using phones or watching unnecessary youtube videos under check. We should rate employees based on similar things in this segment.",
             onChange: (value) =>
                 setFormData({
                     ...formData,
@@ -151,6 +155,8 @@ const EvaluationTaskListModal = ({
         {
             label: "Ability to identify issues",
             value: formData.identiey_issues,
+            hoverText:
+                "A smart employee will always share the problems/issues he/she notices when working on something problematic. For example, someone is working on collecting topics for the blog section and that's why he needs to open the blog sitemap to see what topics were covered previously. Now, after opening the sitemap, he found there are various unnecessary sitemaps that should be removed immediately. His primary job which is collecting blog topics doesnt require him to discuss this issue with his reporting boss. But if he has serious to his job and smart, he will go the extra mile and will share this problem with the top authority. Here, we need to rate employees based on their ability to identify problems and their willingness to share those with top authorities.",
             onChange: (value) =>
                 setFormData({
                     ...formData,
@@ -161,6 +167,8 @@ const EvaluationTaskListModal = ({
         {
             label: "Dedication",
             value: formData.dedication,
+            hoverText:
+                "How dedicated an employee is. For example, the reporting boss directly/indirectly expressed the urgency of a task and the employee needs to work 30-40 minutes extra to finish this. Or a task has to be finished in 2 hours time and the employee in charge should be able to finish this if he works seriously. But the work was not done on time and it was seen that the employee was using his phone repeatedly during this period and was apparently very relaxed. This means he/she doesnt think the problem of the company/reporting boss as his/her problem. In similar cases, they will get a low score here.",
             onChange: (value) =>
                 setFormData({
                     ...formData,
@@ -171,6 +179,8 @@ const EvaluationTaskListModal = ({
         {
             label: "Obedience",
             value: formData.obedience,
+            hoverText:
+                "From my experience, some of the new employees who actually dont have a good idea about their job somehow think they lot a lot about their field. In such cases, they have a tendency to get disobidient (which is visible in their body language like the response etc.) or pay close attention to what they are being asked. In such cases, it becomes really difficult to train them up to the standard we are expecting. If someone doesnt respect their reporting boss/top management and isn't willing to learn to do things the right way, they will get a low score here. However, if someone already knows his job very well but have a little bit of attitude/obidience issue, we can still rate him good here.",
             onChange: (value) =>
                 setFormData({
                     ...formData,
