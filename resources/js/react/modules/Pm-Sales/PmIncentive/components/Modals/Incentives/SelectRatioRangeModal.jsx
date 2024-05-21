@@ -4,8 +4,11 @@ import { ButtonComponent } from '../../../../PointFactors/components/Styles/ui/u
 import { useForm } from 'react-hook-form';
 import { Modal } from 'antd';
 import { toast } from 'react-toastify';
+import { useEditIncentiveCriteriaMutation } from '../../../../../../services/api/Pm-Sales/PmIncentiveApiSlice';
 
 const SelectRatioRangeModal = ({ xAxisStartAndEndValue, setXAxisStartAndEndValue, antdModalOpen, setAntdModalOpen }) => {
+
+    const [editIncentiveCriteria, { isLoading: isEditIncentiveCriteriaLoading }] = useEditIncentiveCriteriaMutation()
 
     const {
         register,
