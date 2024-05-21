@@ -34,6 +34,7 @@ import useCounterStore from "../../../../../Zustand/store";
 
 import { toast } from "react-toastify";
 import { useAcknowledgePendingActionsPastMutation } from "../../../../../services/api/pendingActionsApiSlice";
+import { EvaluationTaskTableColumns } from "../../../../../../react/employee-evaluation/components/Table/EvaluationTaskTableColumns";
 const EvaluationAcknowledgeModal = ({
     acknowledgement,
     setAcknowledgement,
@@ -149,15 +150,6 @@ const EvaluationAcknowledgeModal = ({
     };
 
     const EvaluationTableColumns = [
-        // {
-        //     header: "#",
-        //     accessorKey: "id",
-        //     cell: ({ row }) => {
-        //         const data = row.original;
-
-        //         return <ColumnContent>{data?.id}</ColumnContent>;
-        //     },
-        // },
         {
             id: "task_name",
             header: "Task Name",
@@ -262,11 +254,11 @@ const EvaluationAcknowledgeModal = ({
                 },
                 content: {
                     borderRadius: "10px",
-                    maxWidth: "80%",
+                    maxWidth: "100%",
                     height: "fit-content",
-                    maxHeight: "90vh",
+                    maxHeight: "100%",
                     margin: "auto auto",
-                    padding: "20px",
+                    padding: "10px",
                     overflowY: "auto",
                 },
             }}
@@ -293,7 +285,7 @@ const EvaluationAcknowledgeModal = ({
                 </EvalTableSubTitle>
                 <EvaluationTable
                     data={tasks}
-                    columns={[...EvaluationTableColumns]}
+                    columns={[...EvaluationTaskTableColumns]}
                     isLoading={isLoading}
                     onPageChange={onPageChange}
                     sorting={sorting}
