@@ -54,7 +54,7 @@ const ChartIdealVsAchievedEditModal = ({ antdModalOpen, showIdealVsAchievedEditM
         }
     }, [defaultChartAxisData]);
 
-    console.log(chartAxisData)
+    // console.log(chartAxisData)
 
     // Function to close the modal visibility
     const handleCancel = () => {
@@ -149,7 +149,10 @@ const ChartIdealVsAchievedEditModal = ({ antdModalOpen, showIdealVsAchievedEditM
             footer={null}
             centered={true}
         >
+            <div className='edit_chart_data_modal_alert'>All the lower limits have been marked as "greater than" and upper
+                limits have been marked as "Less than equal" by the system.</div>
             <div className='pay_now_modal_body' style={{ paddingTop: "0px" }}>
+
                 {/* Modal Top */}
                 <div className='edit_chart_data_modal_top'>
                     <div className='ideal_vs_achieved_chart_data_actions'>

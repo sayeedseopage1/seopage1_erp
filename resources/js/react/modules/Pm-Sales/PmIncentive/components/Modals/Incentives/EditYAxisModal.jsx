@@ -24,7 +24,7 @@ const EditYAxisModal = ({ axisEditItem, chartAxisData, setChartAxisData, antdMod
         };
 
         // Filter out items that need to be removed
-        const filteredData = chartAxisData.filter(item => item.id !== axisEditItem.id);
+        const filteredData = chartAxisData.filter(item => item.id != axisEditItem.id);
 
         // Concatenate newData with filteredData
         setChartAxisData([...filteredData, newData]);

@@ -596,6 +596,21 @@
     /* margin: 40px auto 0; */
 }
 
+.edit_chart_data_modal_alert {
+    margin-top: -20px;
+    margin-bottom: 25px;
+    color: #000;
+    text-align: center;
+    font-family: Poppins;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 21px;
+    border-radius: 5px;
+    border: 1px dashed #B2EBD0;
+    background: rgba(20, 185, 106, 0.10);
+}
+
 .edit_chart_data_modal_title {
     text-align: center;
     color: #000;
