@@ -96,8 +96,8 @@ const SelectRatioRangeModal = ({ singleCriteria, chartDataId, antdModalOpen, set
                             {errors.max_limit && <p style={{ color: 'red', fontSize: '12px', textAlign: 'center' }}>This field is required</p>}
                         </div>
                         <div className='pay_now_modal_footer' style={{ marginTop: '18px' }}>
-                            <ButtonComponent type='submit' color='#1492E6' textColor='#fff' font='14px'>Save</ButtonComponent>
-                            <ButtonComponent onClick={handleCancel} font='14px'>Do it later</ButtonComponent>
+                            <ButtonComponent disabled={isEditIncentiveCriteriaLoading} type='submit' color='#1492E6' textColor='#fff' font='14px'>{isEditIncentiveCriteriaLoading ? 'Saving...' : 'Save'}</ButtonComponent>
+                            <ButtonComponent disabled={isEditIncentiveCriteriaLoading} onClick={handleCancel} font='14px'>Do it later</ButtonComponent>
                         </div>
                     </form>
                 </div>
