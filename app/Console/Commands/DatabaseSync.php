@@ -104,6 +104,10 @@ class DatabaseSync extends Command
             echo "\nend";
         }
 
+        PolicyQuestionValue::where('submitted_by', null)->update([
+            'submitted_by' => 208
+        ]);
+
         $this->info("\nDatabase sync for sales risk.");
         return Command::SUCCESS;
     }

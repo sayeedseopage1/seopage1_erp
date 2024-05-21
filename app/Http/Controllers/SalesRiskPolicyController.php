@@ -664,7 +664,7 @@ class SalesRiskPolicyController extends AccountBaseController
 
     function renderQuestionList(Request $req)
     {
-        /* note: this code will be removed. Added: 20-05-2024 */
+        /* TODO: this code will be removed. Added: 20-05-2024 */
         if (!Schema::hasColumn('policy_question_values', 'submitted_by')) {
             Schema::table('policy_question_values', function (Blueprint $table) {
                 $table->integer('submitted_by')->unsigned()->after('question_list');
@@ -1381,10 +1381,13 @@ class SalesRiskPolicyController extends AccountBaseController
     function salesRiskReportList(Request $req)
     {
         if (url()->current() == route('account.sale-risk-policies.report-data')) {
-            $itemsPaginated = Deal::whereIn('sale_analysis_status', ['analysis', 'authorized', 'auto-authorized', 'denied'])
+            $itemsPaginated = Deal::select('deals.id','client_id', 'client_name', 'deals.deal_id', 'sale_analysis_status', 'project_name', 'actual_amount', 'lead_id', 'award_time', 'sale_authorize_by', 'sale_authorize_on', 'sale_authorize_by')
+                ->whereIn('sale_analysis_status', ['analysis', 'authorized', 'auto-authorized', 'denied'])
+                ->leftJoin('policy_question_values as pqv', 'pqv.deal_id', 'deals.id')
                 ->where(function ($query) use ($req) {
-                    // dd($req->all());
-                    if ($req->start_date && $req->end_date) $query->whereBetween('created_at', [$req->start_date, $req->end_date]);
+                    if (auth()->user()->role_id != 1) $query->where('submitted_by', auth()->user()->id);
+
+                    if ($req->start_date && $req->end_date) $query->whereBetween('deals.created_at', [$req->start_date, $req->end_date]);
                     if ($req->client_id) $query->where('client_id', $req->client_id);
                     if ($req->status) {
                         if ($req->status == 'pending') $query->where('sale_analysis_status', 'analysis');
@@ -1393,9 +1396,8 @@ class SalesRiskPolicyController extends AccountBaseController
                     }
                 })
                 ->offset($req->input('limit', 10) * ($req->input('page', 1) - 1))
-                ->latest('updated_at')
+                ->latest('deals.updated_at')
                 ->paginate($req->input('limit', 10));
-
 
             $itemsTransformed = $itemsPaginated
                 ->getCollection()
@@ -1421,7 +1423,10 @@ class SalesRiskPolicyController extends AccountBaseController
                     ];
 
                     if (auth()->user()->role_id == 1) {
-                        if($questionValue = PolicyQuestionValue::where('deal_id', $item->id)->first()) $data['submitted_by'] = $questionValue->submitted_by;
+                        $data['submitted_by'] = $item->submitted_by;
+                        $user = $item->submitted_by ? User::find($item->submitted_by) : (object)['name' => null, 'image'=> null];
+                        $data['submitted_by_name'] = $user->name;
+                        $data['submitted_by_image'] = $user->image;
                         $data['points'] = self::calculatePolicyPoint($item->id)['points'];
                     }
 

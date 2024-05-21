@@ -22,7 +22,7 @@ return new class extends Migration
             $table->timestamps();
 
             $table->foreign('deal_id')->references('id')->on('deals')->onUpdate('no action')->onDelete('no action');
-            $table->foreign('submitted_by')->references('id')->on('users')->onUpdate('no action')->onDelete('on action');
+            $table->foreign('submitted_by')->references('id')->on('users')->onUpdate('no action')->onDelete('no action');
         });
     }
 
