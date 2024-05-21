@@ -130,6 +130,19 @@ const AddQuestionsListModal = ({
                     parent_question_for: "",
                 });
             }
+        } else if (name === "question_key") {
+            if (value.name === "yesNoRules") {
+                console.log(policies)
+                setSingleQuestion({
+                    ...singleQuestion,
+                    [name]: value,
+                    type: {
+                        id: 2,
+                        label: "Yes/No",
+                        name: "yesNo",
+                    },
+                });
+            }
         } else {
             setSingleQuestion({ ...singleQuestion, [name]: value });
         }
@@ -248,7 +261,7 @@ const AddQuestionsListModal = ({
                 setIsQuestionUpdating(false);
             }
         } catch (error) {
-            console.log(error)
+            console.log(error);
             if (error.status === 403) {
                 const errorMessages = formatAPIErrors(error?.data?.data);
                 errorMessages.forEach((errorMessage) => {
@@ -310,7 +323,10 @@ const AddQuestionsListModal = ({
         isSaleAnalysisQuestionSaveLoading,
         isQuestionUpdating
     ) => {
-        if (isSaleAnalysisQuestionSaveLoading || isEditSinglePolicySalesRiskAnalysisLoading) {
+        if (
+            isSaleAnalysisQuestionSaveLoading ||
+            isEditSinglePolicySalesRiskAnalysisLoading
+        ) {
             return "Saving...";
         }
         if (isQuestionUpdating) {
@@ -319,7 +335,6 @@ const AddQuestionsListModal = ({
 
         return "Save Question";
     };
-
 
     // Set Placeholder
     useEffect(() => {

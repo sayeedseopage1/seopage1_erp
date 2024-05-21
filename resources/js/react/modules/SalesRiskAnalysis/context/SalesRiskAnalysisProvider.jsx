@@ -95,6 +95,7 @@ const SalesRiskAnalysisProvider = ({ children }) => {
                         id: policy.id,
                         title: policy.title,
                         label: policy.title,
+                        key: policy.key,
                     };
                 }
             );
