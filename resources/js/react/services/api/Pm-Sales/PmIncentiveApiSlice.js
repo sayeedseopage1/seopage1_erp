@@ -58,6 +58,16 @@ const pmSalesApiSlice = apiSlice.injectEndpoints({
             }),
             invalidatesTags: ["GET_INCENTIVE_FACTORS"],
         }),
+        deleteIncentiveFactor: build.mutation({
+            query: (id) => ({
+                url: `/account/incentive-factor/${id}`,
+                method: "DELETE",
+                headers: {
+                    "X-CSRF-TOKEN": _token,
+                },
+            }),
+            invalidatesTags: ["GET_INCENTIVE_FACTORS"],
+        }),
     }),
 });
 
@@ -68,4 +78,5 @@ export const {
     useEditIncentiveFactorsMutation,
     useEditIncentiveCriteriaMutation,
     useAddIncentiveFactorsMutation,
+    useDeleteIncentiveFactorMutation,
 } = pmSalesApiSlice;

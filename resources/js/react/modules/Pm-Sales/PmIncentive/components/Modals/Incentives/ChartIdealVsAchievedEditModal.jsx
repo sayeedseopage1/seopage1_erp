@@ -34,19 +34,15 @@ const ChartIdealVsAchievedEditModal = ({ antdModalOpen, showIdealVsAchievedEditM
     const [editYAxisDataModalOpen, setEditYAxisDataModalOpen] = useState(false);
     const [selectRatioRange, setSelectRatioRange] = useState(false);
     const [removeRatioItemsModalOpen, setRemoveRatioItemsModalOpen] = useState(false);
+    const [isAllItemsRemoved, setIsAllItemsRemoved] = useState(false);
 
     //state for x axis and y axis edit 
     const [axisEditItem, setAxisEditItem] = useState({})
     // x axis and y axis data state
     const [chartAxisData, setChartAxisData] = useState([])
 
-    // const [xAxisStartAndEndValue, setXAxisStartAndEndValue] = useState({
-    //     min_limit: 0,
-    //     max_limit: 100
-    // })
-
     useEffect(() => {
-        if (defaultChartAxisData?.length > 0 && chartAxisData?.length == 0) {
+        if (defaultChartAxisData?.length > 0 && chartAxisData?.length == 0 && !isAllItemsRemoved) {
             setChartAxisData(prevState => {
                 // Check if prevState is the same as defaultChartAxisData to prevent re-rendering
                 if (JSON.stringify(prevState) !== JSON.stringify(defaultChartAxisData)) {
@@ -56,8 +52,6 @@ const ChartIdealVsAchievedEditModal = ({ antdModalOpen, showIdealVsAchievedEditM
             });
         }
     }, [defaultChartAxisData]);
-
-    // console.log(chartAxisData)
 
     // Function to close the modal visibility
     const handleCancel = () => {
@@ -287,6 +281,7 @@ const ChartIdealVsAchievedEditModal = ({ antdModalOpen, showIdealVsAchievedEditM
                 setChartAxisData={setChartAxisData}
                 antdModalOpen={removeRatioItemsModalOpen}
                 setAntdModalOpen={setRemoveRatioItemsModalOpen}
+                setIsAllItemsRemoved={setIsAllItemsRemoved}
             />}
 
         </Modal>

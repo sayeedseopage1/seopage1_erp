@@ -2,9 +2,12 @@ import React, { useState } from 'react';
 import PropTypes from "prop-types";
 import { ButtonComponent } from '../../../../PointFactors/components/Styles/ui/ui';
 import { Modal, Table } from 'antd';
+import { useDeleteIncentiveFactorMutation } from '../../../../../../services/api/Pm-Sales/PmIncentiveApiSlice';
 
-const RemoveRatioItemsModal = ({ chartAxisData, setChartAxisData, antdModalOpen, setAntdModalOpen }) => {
+const RemoveRatioItemsModal = ({ chartAxisData, setChartAxisData, antdModalOpen, setAntdModalOpen, setIsAllItemsRemoved }) => {
     const [selectedRowKeysState, setSelectedRowKeys] = useState([]);
+
+    const [deleteIncentiveFactor, { isLoading: isDeleteIncentiveFactorLoading }] = useDeleteIncentiveFactorMutation()
 
 
     const columns = [
@@ -33,24 +36,30 @@ const RemoveRatioItemsModal = ({ chartAxisData, setChartAxisData, antdModalOpen,
 
     const rowSelection = {
         onChange: (selectedRowKeys, selectedRows) => {
-            // console.log(selectedRowKeys)
             setSelectedRowKeys(selectedRowKeys);
+            setIsAllItemsRemoved(selectedRowKeys?.length == chartAxisData?.length);
         },
         selectedRowKeys: selectedRowKeysState,
     };
 
-    console.log(chartAxisData)
-    console.log(selectedRowKeysState)
+    const handleRemove = async () => {
+        const selectedIdsForRemoteDelete = selectedRowKeysState?.filter(id => !isNaN(id));
 
-    const handleRemove = () => {
-        setChartAxisData(chartAxisData?.filter(item => !selectedRowKeysState.includes(item?.id)))
-        setAntdModalOpen(false)
-    }
+        // Awaiting all deletions to complete before updating the state
+        await Promise.all(selectedIdsForRemoteDelete?.map(id => deleteIncentiveFactor(id).unwrap()));
+
+        // Updating chartAxisData and clearing selectedRowKeysState after deletion
+        const updatedChartAxisData = chartAxisData?.filter(item => !selectedRowKeysState?.includes(item?.id));
+        setChartAxisData(updatedChartAxisData);
+        setSelectedRowKeys([]); // Clearing selectedRowKeysState
+        setAntdModalOpen(false);
+    };
+
 
     const handleCancel = () => {
-        setAntdModalOpen(false)
-        setSelectedRowKeys([])
-    }
+        setAntdModalOpen(false);
+        setSelectedRowKeys([]); // Clearing selectedRowKeysState on cancel
+    };
 
     return (
         <div>
@@ -80,8 +89,10 @@ const RemoveRatioItemsModal = ({ chartAxisData, setChartAxisData, antdModalOpen,
                         />
                     </div>
                     <div className='pay_now_modal_footer' style={{ marginTop: '30px' }}>
-                        <ButtonComponent onClick={handleRemove} color='#F66' border='1px solid #F66' textColor='#fff' font='14px'>Remove</ButtonComponent>
-                        <ButtonComponent onClick={handleCancel} font='14px'>Do it later</ButtonComponent>
+                        <ButtonComponent disabled={isDeleteIncentiveFactorLoading} onClick={handleRemove} color='#F66' border='1px solid #F66' textColor='#fff' font='14px'>{
+                            isDeleteIncentiveFactorLoading ? 'Removing...' : 'Remove'
+                        }</ButtonComponent>
+                        <ButtonComponent disabled={isDeleteIncentiveFactorLoading} onClick={handleCancel} font='14px'>Do it later</ButtonComponent>
                     </div>
 
                 </div>
@@ -93,6 +104,8 @@ const RemoveRatioItemsModal = ({ chartAxisData, setChartAxisData, antdModalOpen,
 export default RemoveRatioItemsModal;
 
 RemoveRatioItemsModal.propTypes = {
-    antdModalOpen: PropTypes.bool,
-    setAntdModalOpen: PropTypes.func
+    chartAxisData: PropTypes.array.isRequired, // Added required prop type validation
+    setChartAxisData: PropTypes.func.isRequired, // Added required prop type validation
+    antdModalOpen: PropTypes.bool.isRequired, // Added required prop type validation
+    setAntdModalOpen: PropTypes.func.isRequired, // Added required prop type validation
 };
