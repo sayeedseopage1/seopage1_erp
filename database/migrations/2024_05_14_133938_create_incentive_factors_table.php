@@ -614,7 +614,7 @@ return new class extends Migration
             [
                 'id' => 66,
                 'incentive_criteria_id' => 11,
-                'limit_type' => 1,
+                'limit_type' => 2,
                 'lower_limit' => 0,
                 'upper_limit' => 60,
                 'incentive_amount_type' => 1,
@@ -623,7 +623,7 @@ return new class extends Migration
             [
                 'id' => 67,
                 'incentive_criteria_id' => 11,
-                'limit_type' => 1,
+                'limit_type' => 2,
                 'lower_limit' => 60,
                 'upper_limit' => 65,
                 'incentive_amount_type' => 1,
@@ -632,7 +632,7 @@ return new class extends Migration
             [
                 'id' => 68,
                 'incentive_criteria_id' => 11,
-                'limit_type' => 1,
+                'limit_type' => 2,
                 'lower_limit' => 65,
                 'upper_limit' => 70,
                 'incentive_amount_type' => 1,
@@ -641,7 +641,7 @@ return new class extends Migration
             [
                 'id' => 69,
                 'incentive_criteria_id' => 11,
-                'limit_type' => 1,
+                'limit_type' => 2,
                 'lower_limit' => 70,
                 'upper_limit' => 75,
                 'incentive_amount_type' => 1,
@@ -650,7 +650,7 @@ return new class extends Migration
             [
                 'id' => 70,
                 'incentive_criteria_id' => 11,
-                'limit_type' => 1,
+                'limit_type' => 2,
                 'lower_limit' => 75,
                 'upper_limit' => 100,
                 'incentive_amount_type' => 1,

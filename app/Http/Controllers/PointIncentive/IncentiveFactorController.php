@@ -21,6 +21,7 @@ class IncentiveFactorController extends Controller
             $incentiveType->incentiveCriterias->map(function($incentiveCriteria) use ($startDate, $endDate){
                 
                 $incentiveCriteria->acquired_percent = 0; 
+                $incentiveCriteria->incentive_amount_type = null;
                 $incentiveCriteria->obtained_incentive = 0;
                 $user_id = 209;
                 if($incentiveCriteria->id == 1){
@@ -39,6 +40,7 @@ class IncentiveFactorController extends Controller
 
                     foreach($incentiveCriteria->incentiveFactors as $factor){
                         if(($incentiveCriteria->acquired_percent == 0 || $factor->lower_limit < $incentiveCriteria->acquired_percent) && $factor->upper_limit >= $incentiveCriteria->acquired_percent) {
+                            $incentiveCriteria->incentive_amount_type = $factor->incentive_amount_type;
                             $incentiveCriteria->obtained_incentive = $factor->incentive_amount;
                             break;
                         }
@@ -124,6 +126,7 @@ class IncentiveFactorController extends Controller
     public function destroy($id)
     {
         try {
+            $id = "4";
             IncentiveFactor::where('id', $id)->delete();
             return response()->json([
                 'status' => 200,
