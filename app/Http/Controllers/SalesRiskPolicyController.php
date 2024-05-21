@@ -876,9 +876,9 @@ class SalesRiskPolicyController extends AccountBaseController
                 $points += (float) $pointValue;
                 $policyIdList[$policy[0]->id] = $policy[0]->id;
 
-                $data[] = ['id' => $questions[0]->id, 'title' =>  $questions[0]->title, 'value' => 'yes', 'parent_id' => $questions[0]->parent_id];
+                $data[] = ['id' => $questions[0]->id, 'title' =>  $questions[0]->title, 'value' => 'yes'];
             } else {
-
+                $data[] = ['id' => $questions[0]->id, 'title' =>  $questions[0]->title, 'value' => 'No'];
                 // unseting first yes/no policy
                 $policyIdList[$policy[0]->id] = $policy[0]->id;
 
@@ -1189,7 +1189,7 @@ class SalesRiskPolicyController extends AccountBaseController
                             if ($deal->amount < $item->value) {
                                 $pointValue = $item->points;
                                 $policyIdList[$item->id] = $item->id;
-                                $data = ['title' => 'Less Then', 'value' => $item->value];
+                                $data = ['title' => 'Less Then', 'value' => $item->value, 'parent_id' => 'question_id'];
                                 goto endProjectBudget;
                             }
                             break;
@@ -1197,7 +1197,7 @@ class SalesRiskPolicyController extends AccountBaseController
                             if ($deal->amount > $item->value) {
                                 $pointValue = $item->points;
                                 $policyIdList[$item->id] = $item->id;
-                                $data = ['title' => 'Greater Then', 'value' => $item->value];
+                                $data = ['title' => 'Greater Then', 'value' => $item->value, 'parent_id' => 'question_id'];
                                 goto endProjectBudget;
                             }
                             break;
@@ -1205,7 +1205,7 @@ class SalesRiskPolicyController extends AccountBaseController
                             if ($deal->amount == $item->value) {
                                 $pointValue = $item->points;
                                 $policyIdList[$item->id] = $item->id;
-                                $data = ['title' => 'Fixed', 'value' => $item->value];
+                                $data = ['title' => 'Fixed', 'value' => $item->value, 'parent_id' => 'question_id'];
                                 goto endProjectBudget;
                             }
                             break;
