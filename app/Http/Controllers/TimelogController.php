@@ -22,6 +22,7 @@ use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Facades\Excel;
 use Auth;
 use App\Models\DeveloperStopTimer;
+use App\Models\EmployeeEvaluationTask;
 use App\Models\TaskRevision;
 use App\Models\PendingAction;
 use App\Models\PendingActionPast;
@@ -828,6 +829,21 @@ class TimelogController extends AccountBaseController
         $timeLog->total_minutes = ((int)$timeLog->total_hours * 60) + (int)($timeLog->end_time->diff($timeLog->start_time)->format('%i'));
         $timeLog->edited_by_user = $this->user->id;
         $timeLog->save();
+
+        /**EMPLOYEE EVALUATION START */
+        $taskFind = Task::where('id',$request->task_id)->where('u_id',null)->where('independent_task_status',1)->first(); //Find SubTask
+        if($taskFind != null){
+            $evaluation = EmployeeEvaluationTask::where('task_id',$taskFind->id)->first();
+            if($evaluation !=null)
+            {
+                $evaluation->total_hours = $timeLog->total_hours;
+                $evaluation->total_min = $timeLog->total_minutes;
+                $evaluation->save();
+            }
+        }
+
+        /**EMPLOYEE EVALUATION END */
+
         $html = $this->showActiveTimer()->render();
         return Reply::successWithData(__('messages.timerStoppedSuccessfully'), ['html' => $html, 'activeTimerCount' => $this->activeTimerCount]);
 
@@ -858,6 +874,20 @@ class TimelogController extends AccountBaseController
         $timeLog->total_minutes = ((int)$timeLog->total_hours * 60) + (int)($timeLog->end_time->diff($timeLog->start_time)->format('%i'));
         $timeLog->edited_by_user = $this->user->id;
         $timeLog->save();
+
+        /**EMPLOYEE EVALUATION START */
+        $taskFind = Task::where('id',$request->task_id)->where('u_id',null)->where('independent_task_status',1)->first(); //Find SubTask
+        if($taskFind != null){
+            $evaluation = EmployeeEvaluationTask::where('task_id',$taskFind->id)->first();
+            if($evaluation !=null)
+            {
+                $evaluation->total_hours = $timeLog->total_hours;
+                $evaluation->total_min = $timeLog->total_minutes;
+                $evaluation->save();
+            }
+        }
+
+        /**EMPLOYEE EVALUATION END */
 
         // Stop breaktime if active
         /** @phpstan-ignore-next-line */
