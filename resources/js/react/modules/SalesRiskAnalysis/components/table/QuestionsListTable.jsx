@@ -121,6 +121,8 @@ const QuestionsListTable = ({
                 setIsQuestionUpdating(true);
                 handleOpenAddQuestionsModal();
 
+               
+
                 const parent_question = allQuestions.find(
                     (item) => item?.id === row?.parent_id
                 );
@@ -146,6 +148,7 @@ const QuestionsListTable = ({
                     parent_question_for: row?.value,
                     listItem: row.type === "list" ? row?.value : [],
                 };
+
 
                 if (row?.parent_question?.type === "list") {
                     setSingleQuestion({
