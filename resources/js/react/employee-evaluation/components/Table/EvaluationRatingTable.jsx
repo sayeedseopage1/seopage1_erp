@@ -18,6 +18,7 @@ const EvaluationRatingTable = ({ data, averageRating }) => {
                             <th>Submission date</th>
                             <th>Total hours tracked</th>
                             <th>Completed work URL</th>
+                            <th>Screen recording URL of all submitted work</th>
                             <th>Revisions needed</th>
                             <th>Average rating</th>
                         </tr>
@@ -116,6 +117,62 @@ const EvaluationRatingTable = ({ data, averageRating }) => {
                                     </div>
                                 ) : (
                                     <span>Not Available</span>
+                                )}
+                            </td>
+
+                            <td>
+                                {data?.screen_record_links ? (
+                                    <div style={{ minWidth: "10rem" }}>
+                                        <Popover>
+                                            <Popover.Button>
+                                                <span className=" singleline-ellipsis link_color hover-underline">
+                                                    {data?.screen_record_links.map(
+                                                        (data) => (
+                                                            <div>
+                                                                <a
+                                                                    className="link_color hover-underline"
+                                                                    target="_blank"
+                                                                    href={data}
+                                                                >
+                                                                    {data}
+                                                                </a>
+                                                                <br />
+                                                            </div>
+                                                        )
+                                                    )}
+                                                </span>
+                                            </Popover.Button>
+
+                                            <Popover.Panel>
+                                                <div className="revision_popover_panel">
+                                                    {data?.screen_record_links.map(
+                                                        (data, index) => (
+                                                            <div key={index}>
+                                                                <span>
+                                                                    {index === 0
+                                                                        ? "Latest Submission"
+                                                                        : `Submission:`}
+                                                                    .
+                                                                </span>
+                                                                <a
+                                                                    className="link_color hover-underline mb-2"
+                                                                    target="_blank"
+                                                                    href={data}
+                                                                >
+                                                                    {data}
+                                                                </a>
+                                                                <br />
+                                                            </div>
+                                                        )
+                                                    )}
+                                                </div>
+                                            </Popover.Panel>
+                                        </Popover>
+                                    </div>
+                                ) : (
+                                    <span style={{ color: "red" }}>
+                                        Not Available
+                                    </span>
                                 )}
                             </td>
                             <td>
