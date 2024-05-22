@@ -77,7 +77,7 @@ const BonusPointsPointBanner = () => {
                     </span>
                     <div className="">
                         <p className='point_title point_details_wrapper' style={{ color: "#000000" }}>
-                            Final points: <span onClick={() => setFinalPointsModalOpen(true)} className='point_score clickable_link' style={{ color: "#1492E6" }}>
+                            Final points: <span onClick={() => setFinalPointsModalOpen(true)} className='point_score clickable_link' style={{ color: "#1492E6" }} role='button'>
                                 48pt
                             </span>
                         </p>

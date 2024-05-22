@@ -1,6 +1,6 @@
 import React from 'react';
 import IncentiveBarChart from '../../Charts/IncentiveBarChart';
-// import IncentiveThickChart from './Charts/IncentiveThickChart';
+import IncentiveThickChart from '../../Charts/IncentiveThickChart';
 import useIncentiveTypes from '../../../hooks/useIncentiveTypes';
 import { IncentiveFormattedData } from '../../../utils/formattedChartData';
 
@@ -21,9 +21,9 @@ const IdealVsAchieved = () => {
                     <div className="chart_wrapper">
                         <IncentiveBarChart chartData={item?.ideal} />
                     </div>
-                    {/* <div className="chart_wrapper">
+                    <div className="chart_wrapper">
                         <IncentiveThickChart chartData={item?.achieved} />
-                    </div> */}
+                    </div>
                 </div>
             )}
 

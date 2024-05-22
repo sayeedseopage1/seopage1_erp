@@ -170,10 +170,26 @@ const IncentiveThickChart = ({ chartData }) => {
                 borderRadiusApplication: "last",
                 colors: {
                     ranges: [
-                        { from: 0, to: 40, color: "#00A0EE" },
-                        { from: 41, to: 50, color: "#00A0EE" },
-                        { from: 51, to: 80, color: "#00A0EE" },
-                        { from: 81, to: 100, color: "#14B96A" },
+                        {
+                            from: 0,
+                            to: 49.99,
+                            color: "#ff3300",
+                        },
+                        {
+                            from: 50,
+                            to: 59.99,
+                            color: "#ff704d",
+                        },
+                        {
+                            from: 60,
+                            to: 79.99,
+                            color: "#ffff00",
+                        },
+                        {
+                            from: 80,
+                            to: Number.MAX_SAFE_INTEGER,
+                            color: "#00cc00",
+                        },
                     ],
                 },
                 dataLabels: {

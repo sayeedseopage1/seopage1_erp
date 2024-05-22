@@ -1,3 +1,13 @@
+function convertToShortTitle(title) {
+    // Split the title by spaces to get individual words
+    const words = title.split(" ");
+
+    // Map each word to its first character and join them with dots
+    const shortTitle = words.map((word) => word[0].toUpperCase()).join(".");
+
+    return shortTitle;
+}
+
 export const IncentiveFormattedData = (
     incentiveData,
     chartDataRangesForColor
@@ -47,7 +57,15 @@ export const IncentiveFormattedData = (
                 //     (r) => r?.id == criteria?.id
                 // )?.ranges,
             },
-            achieved: null,
+            achieved: {
+                id: criteria?.id,
+                title: criteria?.title,
+                yTitle: "Incentive percentage",
+                chartTag: "Achieved",
+                incentive: criteria?.obtained_incentive,
+                ratio: criteria?.acquired_percent,
+                shortTitle: convertToShortTitle(criteria?.title),
+            },
         };
     });
     return data;

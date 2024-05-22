@@ -107,6 +107,7 @@
         "recharts": "^2.5.0",
         "signature_pad": "^3.0.0-beta.4",
         "slick-carousel": "^1.8.1",
+        "sonarqube-scanner": "^3.5.0",
         "styled-components": "^5.3.9",
         "sweetalert2": "^11.10.1",
         "sweetalert2-react-content": "^5.0.7",
