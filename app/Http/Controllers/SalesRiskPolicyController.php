@@ -108,7 +108,7 @@ class SalesRiskPolicyController extends AccountBaseController
         $validator = Validator::make($req->all(), [
             'title' => 'required',
             'department' => 'required',
-            'key' => 'required|in:'. implode(',', array_keys(SalesRiskPolicy::$keys)),
+            'key' => 'required|in:' . implode(',', array_keys(SalesRiskPolicy::$keys)),
             'comment' => 'nullable',
             'ruleList' => 'required|array|min:1',
             'ruleList.*.policyType' => 'in:' . implode(',', SalesRiskPolicy::$types),
@@ -167,7 +167,7 @@ class SalesRiskPolicyController extends AccountBaseController
         $validator = Validator::make($req->all(), [
             'title' => 'required',
             'department' => 'required',
-            'key' => 'required|in:'. implode(',', array_keys(SalesRiskPolicy::$keys)),
+            'key' => 'required|in:' . implode(',', array_keys(SalesRiskPolicy::$keys)),
             'comment' => 'nullable',
             'ruleList' => 'required|array|min:1',
             'ruleList.*.policyType' => 'in:' . implode(',', SalesRiskPolicy::$types),
@@ -289,6 +289,26 @@ class SalesRiskPolicyController extends AccountBaseController
                 } else {
                     return response()->json(['status' => 'success', 'data' => SalesRiskPolicy::find($req->policy_id)]);
                 }
+            }
+
+            if ($req->key) {
+
+                $data = SalesRiskPolicy::where('key', $req->key)->get()->map(function ($item) {
+                    return [
+                        'id' => $item->id,
+                        'title' => $item->title,
+                        'key' => $item->key,
+                        'ruleList' => SalesRiskPolicy::where('parent_id', $item->id)->orderBy('sequence')->get(['id', 'title',  'type', 'parent_id', 'value_type', 'value', 'points', 'status', 'comment']),
+                        'department' => [
+                            'id' => $item->department,
+                            'name' => Team::with('childs')->find($item->department)->team_name
+                        ],
+                        'status' => $item->status,
+                        'comment' => $item->comment,
+                        'questionCount' => SalesPolicyQuestion::parent()->where('policy_id', $item->id)->count()
+                    ];
+                });
+                return response()->json(['status' => 'success', 'data' => $data]);
             }
 
             $itemsPaginated = SalesRiskPolicy::where('parent_id', null)->offset($req->input('limit', 10) * ($req->input('page', 1) - 1))->paginate($req->input('limit', 10));
@@ -446,8 +466,8 @@ class SalesRiskPolicyController extends AccountBaseController
     {
         $validator = Validator::make($req->all(), [
             'title' => 'required',
-            'key' => 'required|in:'. implode(',', array_keys(SalesRiskPolicy::$keys)),
-            'type' => 'required|in:'. implode(',', array_keys(SalesPolicyQuestion::$types)),
+            'key' => 'required|in:' . implode(',', array_keys(SalesRiskPolicy::$keys)),
+            'type' => 'required|in:' . implode(',', array_keys(SalesPolicyQuestion::$types)),
             'value' => 'nullable',
             'policy_id' => 'nullable',
             'parent_id' => 'nullable',
@@ -485,8 +505,8 @@ class SalesRiskPolicyController extends AccountBaseController
     {
         $validator = Validator::make($req->all(), [
             'title' => 'required',
-            'key' => 'required|in:'. implode(',', array_keys(SalesRiskPolicy::$keys)),
-            'type' => 'required|in:'. implode(',', array_keys(SalesPolicyQuestion::$types)),
+            'key' => 'required|in:' . implode(',', array_keys(SalesRiskPolicy::$keys)),
+            'type' => 'required|in:' . implode(',', array_keys(SalesPolicyQuestion::$types)),
             'value' => 'nullable',
             'policy_id' => 'nullable',
             'parent_id' => 'nullable',
@@ -1074,7 +1094,7 @@ class SalesRiskPolicyController extends AccountBaseController
                     }
                     $policyIdList[$policy[0]->id] = $value;
 
-                    $pointData[$item]['questionAnswer'][] = ['id' => $questions[0]->id, 'title' => $questions[0]->title, 'value' => $value, 'parent_id' => $questions[0]->parent_id];
+                    $pointData[$item]['questionAnswer'][] = ['id' => $questions[0]->id, 'title' => $questions[0]->title, 'value' => $value, 'parent_id' => null];
 
                     if (isset($questions[1]) && isset($questionAns[$questions[1]->id]))
                         $pointData[$item]['questionAnswer'][] = ['id' => $questions[1]->id, 'title' => $questions[1]->title, 'value' => $questionAns[$questions[1]->id], 'parent_id' => $questions[1]->parent_id];
@@ -1086,10 +1106,26 @@ class SalesRiskPolicyController extends AccountBaseController
                     $message[] = "$item questions are not added.";
                 }
             }
-
-
             // ---------------------------- end routeWork, availableWeekend, firstSubmission, acceptPriceProposal ------------------------------ //
 
+            // -------------------------------- yesNoRules ------------------------------ //
+            $questions = SalesPolicyQuestion::where('key', 'yesNoRules')->get();
+            foreach ((object) $questions as $item) {
+                // $rule_id = json_decode($item->value)->rule_id;
+                $rule = SalesRiskPolicy::where('id', $item->value)->first();
+                $value = $questionAns[$item->id];
+
+                if ($value == 'yes') {
+                    $points += (float) json_decode($rule->value)->yes->point;
+                    $pointData['yesNoRules']['points'] = json_decode($rule->value)->yes->point;
+                } else {
+                    $points += (float) json_decode($rule->value)->no->point;
+                    $pointData['yesNoRules']['points'] = json_decode($rule->value)->no->point;
+                }
+                $policyIdList[$rule->id] = $value;
+                $pointData['yesNoRules']['questionAnswer'][] = ['id' => $item->id, 'title' => $item->title, 'value' => $value, 'parent_id' => null];
+            }
+            // -------------------------------- end yesNoRules ------------------------------ //
 
             // ----------------------------- common calculations -------------------------- //
 
@@ -1448,7 +1484,7 @@ class SalesRiskPolicyController extends AccountBaseController
 
             if ($dealStage = DealStage::where('lead_id', $deal->lead_id)->first()) {
                 $dealStage->won_lost = 'No';
-                $deal->deal_status="Lost";
+                $deal->deal_status = "Lost";
                 $dealStage->save();
             }
         }
