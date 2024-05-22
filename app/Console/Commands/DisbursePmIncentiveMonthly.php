@@ -8,6 +8,7 @@ use App\Models\User;
 use App\Models\Project;
 use App\Models\CashPoint;
 use App\Models\IncentiveCriteria;
+use App\Models\ProgressiveIncentive;
 use App\Models\TaskRevision;
 use Illuminate\Console\Command;
 
@@ -37,12 +38,13 @@ class DisbursePmIncentiveMonthly extends Command
         $startDate = Carbon::now()->startOfMonth();
         $endDate = Carbon::now()->endOfMonth();
         $users = User::where('role_id',4)->get();
+        $now = now();
 
         foreach($users as $user){
             $cashPoints = CashPoint::whereNotNull('factor_id')->get();
             $totalEarnedPoints = $cashPoints->sum('total_points_earn');
             $totalLostPoints = $cashPoints->sum('total_points_lost');
-            $availablePoints = $totalEarnedPoints - $totalLostPoints;
+            $availablePoints = $totalEarnedPoints - $totalLostPoints + 500;
             
             // Revision vs task ratio
             $total_tasks = Task::select('tasks.id')
@@ -61,10 +63,17 @@ class DisbursePmIncentiveMonthly extends Command
             $incentiveCriteria = IncentiveCriteria::with('incentiveFactors')->find(1);
             foreach($incentiveCriteria->incentiveFactors as $incentiveFactor){
                 if(($revision_percent == 0 || $incentiveFactor->lower_limit < $revision_percent) && $incentiveFactor->upper_limit >= $revision_percent){
-                    dd($incentiveFactor->incentive_amount);
+                    ProgressiveIncentive::create([
+                        'date' => $now,
+                        'pm_id' => $user->id,
+                        'incentive_factor_id' => $incentiveFactor->id,
+                        'incentive_amount_type' => $incentiveFactor->incentive_amount_type,
+                        'incentive_amount' => $incentiveFactor->incentive_amount,
+                        'achieved_points' => $incentiveFactor->incentive_amount_type == 1 ? $incentiveFactor->incentive_amount : ($incentiveFactor->incentive_amount / $availablePoints) * 100,
+                    ]);
                 }
             }
-            
+            dd('success');
             // Goal achieve rate
             $projects = Project::select(['id','project_name','pm_id','status','project_status'])
             ->where([['pm_id', $user->id],['status', 'in progress'],['project_status', 'Accepted']])
