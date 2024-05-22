@@ -14435,39 +14435,47 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
 
 
-// import Swal from "sweetalert2";
 
 
 
 var MarkAsComplete = function MarkAsComplete(_ref) {
   var task = _ref.task,
     auth = _ref.auth;
-  // form data
-  var dispatch = (0,react_redux__WEBPACK_IMPORTED_MODULE_2__.useDispatch)();
-  var _useState = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)([""]),
+  // screen record url for trainee
+  var _useState = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)(""),
     _useState2 = _slicedToArray(_useState, 2),
-    links = _useState2[0],
-    setLinks = _useState2[1];
+    screenRecordUrl = _useState2[0],
+    setScreenRecordUrl = _useState2[1];
   var _useState3 = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)(""),
     _useState4 = _slicedToArray(_useState3, 2),
-    linkErr = _useState4[0],
-    setLinkErr = _useState4[1];
-  var _useState5 = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)(false),
+    screenRecordUrlErr = _useState4[0],
+    setScreenRecordUrlErr = _useState4[1];
+  // form data
+  var dispatch = (0,react_redux__WEBPACK_IMPORTED_MODULE_2__.useDispatch)();
+  var _useState5 = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)([""]),
     _useState6 = _slicedToArray(_useState5, 2),
-    isModalUrl = _useState6[0],
-    setIsModalUrl = _useState6[1];
-  var _useState7 = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)([]),
+    links = _useState6[0],
+    setLinks = _useState6[1];
+  var _useState7 = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)(""),
     _useState8 = _slicedToArray(_useState7, 2),
-    files = _useState8[0],
-    setFiles = _useState8[1];
-  var _useState9 = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)(""),
+    linkErr = _useState8[0],
+    setLinkErr = _useState8[1];
+  var _useState9 = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)(false),
     _useState10 = _slicedToArray(_useState9, 2),
-    comment = _useState10[0],
-    setComment = _useState10[1];
-  var _useState11 = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)(""),
+    isModalUrl = _useState10[0],
+    setIsModalUrl = _useState10[1];
+  var _useState11 = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)([]),
     _useState12 = _slicedToArray(_useState11, 2),
-    commentErr = _useState12[0],
-    setCommentErr = _useState12[1];
+    files = _useState12[0],
+    setFiles = _useState12[1];
+  var _useState13 = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)(""),
+    _useState14 = _slicedToArray(_useState13, 2),
+    comment = _useState14[0],
+    setComment = _useState14[1];
+  var _useState15 = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)(""),
+    _useState16 = _slicedToArray(_useState15, 2),
+    commentErr = _useState16[0],
+    setCommentErr = _useState16[1];
   var navigate = (0,react_router_dom__WEBPACK_IMPORTED_MODULE_14__.useNavigate)();
   var location = (0,react_router_dom__WEBPACK_IMPORTED_MODULE_14__.useLocation)();
   var _useMarkAsCompleteMut = (0,_services_api_SingleTaskPageApi__WEBPACK_IMPORTED_MODULE_6__.useMarkAsCompleteMutation)(),
@@ -14478,10 +14486,10 @@ var MarkAsComplete = function MarkAsComplete(_ref) {
     _useLazyCheckSubTaskS2 = _slicedToArray(_useLazyCheckSubTaskS, 2),
     checkSubTaskState = _useLazyCheckSubTaskS2[0],
     isFetching = _useLazyCheckSubTaskS2[1].isFetching;
-  var _useState13 = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)(false),
-    _useState14 = _slicedToArray(_useState13, 2),
-    markAsCompleteModaIsOpen = _useState14[0],
-    setMarkAsCompleteModalIsOpen = _useState14[1];
+  var _useState17 = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)(false),
+    _useState18 = _slicedToArray(_useState17, 2),
+    markAsCompleteModaIsOpen = _useState18[0],
+    setMarkAsCompleteModalIsOpen = _useState18[1];
 
   // open modal
   var open = function open() {
@@ -14511,44 +14519,8 @@ var MarkAsComplete = function MarkAsComplete(_ref) {
       if (Number(auth.getRoleId()) === 6) {
         checkSubTaskState(task === null || task === void 0 ? void 0 : task.id).unwrap().then(function (res) {
           if (res.status === "true" || res.status === true) {
-            // const htmlContent = (
-            //     <div className="__tostar_modal">
-            //         <strong>
-            //             You can't complete this task because you
-            //             have some pending subtask?
-            //         </strong>
-            //         <ul className="py-1">
-            //             {res.subtasks.map((el, idx) => (
-            //                 <li
-            //                     key={el.id}
-            //                     style={{
-            //                         listStyle: "unset",
-            //                         fontSize: "13px",
-            //                     }}
-            //                 >
-            //                     <a
-            //                         href={`/account/tasks/${el.id}`}
-            //                     >
-            //                         {idx + 1}. {el.heading}
-            //                     </a>{" "}
-            //                     (
-            //                     <a
-            //                         href={`/account/clients/${el.clientId}`}
-            //                     >
-            //                         {el.client_name}
-            //                     </a>
-            //                     )
-            //                 </li>
-            //             ))}
-            //         </ul>
-            //     </div>
-            // );
-            // toast.warn(htmlContent, {
-            //     position: "top-center",
-            //     icon: false,
-            // });
             sweetalert2__WEBPACK_IMPORTED_MODULE_12___default().fire({
-              icon: 'warning',
+              icon: "warning",
               title: "You can't complete this task because you\n                                have some pending subtask?"
             });
             close();
@@ -14562,10 +14534,6 @@ var MarkAsComplete = function MarkAsComplete(_ref) {
     } else {
       setMarkAsCompleteModalIsOpen(false);
     }
-    // }
-    // else{
-    //     setMarkAsCompleteModalIsOpen(false);
-    // }
   }, [isModalUrl]);
 
   // handle editor change
@@ -14585,6 +14553,10 @@ var MarkAsComplete = function MarkAsComplete(_ref) {
   var handleOnLinkInputChange = function handleOnLinkInputChange(e, index) {
     var _links = _toConsumableArray(links);
     _links[index] = e.target.value, setLinks(_links);
+  };
+  // handle screenRecord link change
+  var handleOnScreenRecordLinkInputChange = function handleOnScreenRecordLinkInputChange(e) {
+    setScreenRecordUrl(e.target.value);
   };
 
   // check validation
@@ -14609,6 +14581,11 @@ var MarkAsComplete = function MarkAsComplete(_ref) {
       react_toastify__WEBPACK_IMPORTED_MODULE_3__.toast.warn("Please describe what you've done!");
       valid = false;
     }
+    if (auth.roleId === 14 && !(0,_utils_check_is_url__WEBPACK_IMPORTED_MODULE_11__.checkIsURL)(screenRecordUrl)) {
+      react_toastify__WEBPACK_IMPORTED_MODULE_3__.toast.warn("Please provide a valid url");
+      setScreenRecordUrlErr("Please provide a valid url");
+      valid = false;
+    }
     return valid;
   };
 
@@ -14618,6 +14595,7 @@ var MarkAsComplete = function MarkAsComplete(_ref) {
     formData.append("text", comment);
     formData.append("user_id", auth === null || auth === void 0 ? void 0 : auth.getId());
     formData.append("task_id", task === null || task === void 0 ? void 0 : task.id);
+    formData.append("screen_record_link", screenRecordUrl);
     links.map(function (link) {
       return formData.append("link[]", link);
     });
@@ -14627,18 +14605,6 @@ var MarkAsComplete = function MarkAsComplete(_ref) {
     formData.append("_token", document.querySelector("meta[name='csrf-token']").getAttribute("content"));
     if (isValid()) {
       markAsComplete(formData).unwrap().then(function (res) {
-        // const Toast = Swal.mixin({
-        //     toast: true,
-        //     position: 'top-end',
-        //     showConfirmButton: false,
-        //     timer: 3000,
-        //     timerProgressBar: true,
-        // })
-
-        // Toast.fire({
-        //     icon: 'success',
-        //     title: 'Task submitted successfully'
-        // })
         var Toast = sweetalert2__WEBPACK_IMPORTED_MODULE_12___default().mixin({
           toast: true,
           position: "top-end",
@@ -14755,6 +14721,39 @@ var MarkAsComplete = function MarkAsComplete(_ref) {
                   children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_13__.jsx)("i", {
                     className: "fa-solid fa-circle-plus"
                   }), "Add Another Link"]
+                })]
+              }), auth.roleId === 14 && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_13__.jsxs)("div", {
+                className: "form-group",
+                children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_13__.jsxs)("label", {
+                  htmlFor: "exampleFormControlInput1",
+                  children: ["Screen recording of the last work done", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_13__.jsx)("sup", {
+                    children: "*"
+                  }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_13__.jsx)("span", {
+                    className: "ml-2",
+                    "data-toggle": "tooltip",
+                    "data-placement": "top",
+                    title: "Submit Screen recording of the last work done",
+                    "data-boundary": "window",
+                    style: {
+                      cursor: "pointer"
+                    },
+                    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_13__.jsx)("i", {
+                      className: "fa-regular fa-circle-question"
+                    })
+                  })]
+                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_13__.jsx)("input", {
+                  type: "text",
+                  className: "form-control py-2",
+                  id: "exampleFormControlInput1",
+                  placeholder: "--",
+                  value: screenRecordUrl,
+                  onChange: function onChange(e) {
+                    return handleOnScreenRecordLinkInputChange(e);
+                  }
+                }), screenRecordUrlErr && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_13__.jsx)("small", {
+                  id: "emailHelp",
+                  "class": "form-text text-danger",
+                  children: screenRecordUrlErr
                 })]
               }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_13__.jsxs)("div", {
                 className: "form-group",
