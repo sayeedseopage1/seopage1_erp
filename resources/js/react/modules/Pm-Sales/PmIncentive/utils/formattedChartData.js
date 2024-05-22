@@ -14,17 +14,18 @@ function convertToShortTitle(title) {
     return shortTitle;
 }
 
-export const IncentiveFormattedData = (
-    incentiveData,
-    chartDataRangesForColor
-) => {
+export const IncentiveFormattedData = (incentiveData) => {
     const data = incentiveData?.incentive_criterias?.map((criteria) => {
         return {
             title: criteria?.title,
             ideal: {
                 id: criteria?.id,
                 title: criteria?.title,
-                yTitle: "Incentive percentage",
+                yTitle: `${
+                    criteria?.title.includes("Bonus points")
+                        ? "Bonus Points"
+                        : "Incentive percentage"
+                }`,
                 chartTag: "Ideal",
                 amountType: criteria?.incentive_amount_type,
                 series: [
@@ -67,7 +68,11 @@ export const IncentiveFormattedData = (
             achieved: {
                 id: criteria?.id,
                 title: criteria?.title,
-                yTitle: "Incentive percentage",
+                yTitle: `${
+                    criteria?.title.includes("Bonus points")
+                        ? "Bonus Points"
+                        : "Incentive percentage"
+                }`,
                 chartTag: "Achieved",
                 incentive: criteria?.obtained_incentive,
                 ratio: criteria?.acquired_percent,
@@ -77,3 +82,17 @@ export const IncentiveFormattedData = (
     });
     return data;
 };
+
+// export const statsInfoData = (incentiveData) => {
+//     const data = incentiveData?.incentive_criterias?.map((criteria) => {
+//         return {
+//             average:null,
+//             stats_info:[
+//                 criteria?.incentive_factors?.map((factor) =>
+//                     parseFloat(factor?.incentive_amount)
+//                 ),
+//             ]
+//         };
+//     });
+//     return data;
+// };

@@ -1,10 +1,8 @@
-import React, { useState } from 'react';
+import React from 'react';
 import GradientProgressBar from './GradientProgressBar';
-import AveragePointModal from '../../Modals/AveragePointModal';
 
 const StatsInfoProgressCard = ({ item }) => {
     const { title, obtained_incentive, acquired_percent, incentive_factors } = item || {}
-    const [averagePointsModalOpen, setAveragePointsModalOpen] = useState(false);
 
     return (
         <div className="progress_card_wrapper">
@@ -14,19 +12,9 @@ const StatsInfoProgressCard = ({ item }) => {
                 </span>
             </div>
             <div className="w-100">
-                {
-                    title == "Average" ?
-                        <span onClick={() => setAveragePointsModalOpen(true)} className={`${parseFloat(obtained_incentive) > 0 ? 'progress_card_desc_pos' : 'progress_card_desc_neg'} stats_info_link`}>
-                            {parseFloat(obtained_incentive)}%
-                        </span>
-                        : <span className={`${parseFloat(obtained_incentive) > 0 ? 'progress_card_desc_pos' : 'progress_card_desc_neg'}`}>
-                            Achieved: {parseFloat(obtained_incentive)}%
-                        </span>
-                }
-                <AveragePointModal
-                    antdModalOpen={averagePointsModalOpen}
-                    setAntdModalOpen={setAveragePointsModalOpen}
-                />
+                <span className={`${parseFloat(obtained_incentive) > 0 ? 'progress_card_desc_pos' : 'progress_card_desc_neg'}`}>
+                    Achieved: {parseFloat(obtained_incentive)}%
+                </span>
             </div>
             <div className="progress_card_stats_wrapper">
                 <div className="progress_card_stats_inner">

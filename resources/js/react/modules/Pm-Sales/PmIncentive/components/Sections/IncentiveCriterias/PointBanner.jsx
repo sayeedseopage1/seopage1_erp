@@ -10,7 +10,7 @@ import { auth } from "../../../constants";
 
 const PointBanner = () => {
     const [editPointDataModalOpen, setEditPointDataModalOpen] = useState(false);
-    const { regularIncentiveTypes, incentiveTypesLoading } = useIncentiveTypes();
+    const { allIncentiveTypes, regularIncentiveTypes, incentiveTypesLoading } = useIncentiveTypes();
 
     return (
         <div className="point_banner">
@@ -19,7 +19,7 @@ const PointBanner = () => {
                     <img src={pointIcon} style={{ width: "24px", height: "24px" }} alt="pointIcon" />
                 </span>
                 <p className='point_title point_details_wrapper'>
-                    Your obtained points: <span className='point_score'>500 pt</span> &nbsp;
+                    Your obtained points: <span className='point_score'>{parseFloat(allIncentiveTypes?.data?.total_points)} pt</span> &nbsp;
                 </p>
             </div>
 

@@ -257,9 +257,10 @@
     left: -28%;
 }
 
-/* #bonus_points .chart_parent:first-child .y_axis_arrow {
+#bonus_points .chart_parent:nth-child(1) .y_axis_arrow,
+#bonus_points .chart_parent:nth-child(3) .y_axis_arrow {
     left: -25%
-} */
+}
 
 .chart_axis_title {
     font-size: 12px;
@@ -576,7 +577,7 @@
     justify-content: space-between;
     align-items: center;
     gap: 10px;
-    margin-bottom: 16px;
+    margin-bottom: 22px;
     color: #000;
     font-family: Poppins, sans-serif;
     font-size: 14px;
@@ -921,9 +922,10 @@
         left: -33%;
     }
 
-    /* #bonus_points .chart_parent:first-child .y_axis_arrow {
-        left: -30%
-    } */
+    #bonus_points .chart_parent:nth-child(1) .y_axis_arrow,
+    #bonus_points .chart_parent:nth-child(3) .y_axis_arrow {
+        left: -25%
+    }
 }
 
 @media only screen and (min-width: 1501px) and (max-width: 1600px) {
@@ -931,9 +933,10 @@
         left: -36%;
     }
 
-    /* #bonus_points .chart_parent:first-child .y_axis_arrow {
-        left: -33%
-    } */
+    #bonus_points .chart_parent:nth-child(1) .y_axis_arrow,
+    #bonus_points .chart_parent:nth-child(3) .y_axis_arrow {
+        left: -25%
+    }
 
     .chart_axis_icon {
         width: 18%;
@@ -946,9 +949,10 @@
         left: -40%;
     }
 
-    /* #bonus_points .chart_parent:first-child .y_axis_arrow {
-        left: -37%
-    } */
+    #bonus_points .chart_parent:nth-child(1) .y_axis_arrow,
+    #bonus_points .chart_parent:nth-child(3) .y_axis_arrow {
+        left: -25%
+    }
 
     .chart_axis_icon {
         width: 18%;
@@ -961,9 +965,10 @@
         left: -44%;
     }
 
-    /* #bonus_points .chart_parent:first-child .y_axis_arrow {
-        left: -41%
-    } */
+    #bonus_points .chart_parent:nth-child(1) .y_axis_arrow,
+    #bonus_points .chart_parent:nth-child(3) .y_axis_arrow {
+        left: -25%
+    }
 
     .chart_axis_icon {
         width: 18%;
@@ -976,9 +981,10 @@
         left: -49%;
     }
 
-    /* #bonus_points .chart_parent:first-child .y_axis_arrow {
-        left: -46%
-    } */
+    #bonus_points .chart_parent:nth-child(1) .y_axis_arrow,
+    #bonus_points .chart_parent:nth-child(3) .y_axis_arrow {
+        left: -25%
+    }
 
     .chart_axis_icon {
         width: 15%;
