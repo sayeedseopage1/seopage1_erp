@@ -139,6 +139,64 @@ export const EvaluationTaskTableColumns = [
         },
     },
     {
+        id: "screen_record_links",
+        header: "Screen recording URL of all submitted work",
+        accessorKey: "screen_record_links",
+
+        cell: ({ row: { original }, className }) => {
+            const Links = original?.screen_record_links;
+            return Links ? (
+                <div style={{ minWidth: "10rem" }}>
+                    <Popover>
+                        <Popover.Button>
+                            <span className=" singleline-ellipsis link_color hover-underline">
+                                {Links?.map((data) => (
+                                    <div>
+                                        <a
+                                            className="link_color hover-underline"
+                                            target="_blank"
+                                            href={data}
+                                        >
+                                            {data}
+                                        </a>
+                                        <br />
+                                    </div>
+                                ))}
+                            </span>
+                        </Popover.Button>
+
+                        <Popover.Panel>
+                            <div className="revision_popover_panel">
+                                {Links?.map((data, index) => (
+                                    <div key={index}>
+                                        <span>
+                                            {index === 0
+                                                ? "Latest Submission"
+                                                : `Submission: ${
+                                                      Links.length - index
+                                                  }`}
+                                            .
+                                        </span>
+                                        <a
+                                            className="link_color hover-underline mb-2"
+                                            target="_blank"
+                                            href={data}
+                                        >
+                                            {data}
+                                        </a>
+                                        <br />
+                                    </div>
+                                ))}
+                            </div>
+                        </Popover.Panel>
+                    </Popover>
+                </div>
+            ) : (
+                <span style={{ color: "red" }}>Not Available</span>
+            );
+        },
+    },
+    {
         id: "total_hours",
         header: "Total Hours Tracked",
         accessorKey: "total_hours",

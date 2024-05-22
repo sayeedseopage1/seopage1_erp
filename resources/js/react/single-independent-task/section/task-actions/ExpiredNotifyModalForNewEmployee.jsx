@@ -3,13 +3,14 @@ import ReactModal from "react-modal";
 import PendingTasksForTrainee from "./PendingTasksForTrainee";
 
 const ExpiredNotifyModalForNewEmployee = ({
+    expireDateForTrainer,
     showExpirationNotifyModal,
     setShowExpirationNotifyModal,
     timeLeft,
 }) => {
     const [isPendingModalOpen, setIsPendingModalOpen] = useState(false);
     useEffect(() => {
-        if (timeLeft <= 0) {
+        if (timeLeft < 0 && expireDateForTrainer !== null) {
             setShowExpirationNotifyModal(true);
         }
     }, [timeLeft]);
@@ -27,6 +28,7 @@ const ExpiredNotifyModalForNewEmployee = ({
             onRequestClose={closeModal}
             contentLabel="Expired Time Modal"
             shouldCloseOnOverlayClick={false}
+            ariaHideApp={false}
             style={{
                 overlay: {
                     backgroundColor: "rgba(0, 0, 0, 0.5)",

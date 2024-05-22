@@ -34,6 +34,10 @@ const TimerControl = ({ task, timerStart, setTimerStart, auth }) => {
         useState(false);
     const [expiredTimerForNewEmployee, setExpiredTimerForNewEmployee] =
         useState(false);
+    //expired time check and state change for new employee / Trainee
+    const [expireDateForTrainer, setExpireDateForTrainer] = useState(
+        localStorage.getItem("expireDateForTrainer")
+    );
 
     const [timerId, setTimerId] = useState(null);
     const [seconds, setSeconds] = useState(0);
@@ -59,6 +63,8 @@ const TimerControl = ({ task, timerStart, setTimerStart, auth }) => {
         }
     }, [taskRunning]);
 
+    // console.log("time left", timeLeft);
+    // console.log("expire date", expireDateForTrainer);
     //   timer control
     useEffect(() => {
         let interval = null;
@@ -70,11 +76,6 @@ const TimerControl = ({ task, timerStart, setTimerStart, auth }) => {
         } else clearInterval(interval); // clear interval
         return () => clearInterval(interval); // clear interval
     }, [timerStart]);
-
-    //expired time check and state change for new employee / Trainee
-    const [expireDateForTrainer, setExpireDateForTrainer] = useState(
-        localStorage.getItem("expireDateForTrainer")
-    );
 
     const intervalRef = useRef(null);
     useEffect(() => {
@@ -457,21 +458,29 @@ const TimerControl = ({ task, timerStart, setTimerStart, auth }) => {
                 startTimer={startTimerControl}
             />
 
-            <ExpiredTimeModalForNewEmployee
-                showExpirationWarningModal={showExpirationWarningModal}
-                setShowExpirationWarningModal={setShowExpirationWarningModal}
-                timeLeft={timeLeft}
-                setTimeLeft={setTimeLeft}
-                taskRunning={taskRunning}
-                task={task}
-                timerStatusForWarningModal={timerStatusForWarningModal}
-            />
-            <ExpiredNotifyModalForNewEmployee
-                expiredTimerForNewEmployee={expiredTimerForNewEmployee}
-                showExpirationNotifyModal={showExpirationNotifyModal}
-                setShowExpirationNotifyModal={setShowExpirationNotifyModal}
-                timeLeft={timeLeft}
-            />
+            {auth.roleId === 14 && (
+                <>
+                    <ExpiredTimeModalForNewEmployee
+                        showExpirationWarningModal={showExpirationWarningModal}
+                        setShowExpirationWarningModal={
+                            setShowExpirationWarningModal
+                        }
+                        timeLeft={timeLeft}
+                        setTimeLeft={setTimeLeft}
+                        taskRunning={taskRunning}
+                        task={task}
+                        timerStatusForWarningModal={timerStatusForWarningModal}
+                    />
+                    <ExpiredNotifyModalForNewEmployee
+                        expireDateForTrainer={expireDateForTrainer}
+                        showExpirationNotifyModal={showExpirationNotifyModal}
+                        setShowExpirationNotifyModal={
+                            setShowExpirationNotifyModal
+                        }
+                        timeLeft={timeLeft}
+                    />
+                </>
+            )}
         </React.Fragment>
     );
 };
