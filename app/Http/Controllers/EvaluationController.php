@@ -305,18 +305,13 @@ class EvaluationController extends AccountBaseController
         $evaluation_task->qw_second_revision = $request->qw_second_revision;
         $evaluation_task->speed_of_work = $request->speed_of_work;
         $evaluation_task->understand_instruction = $request->understand_instruction;
-        $evaluation_task->communication = $request->communication;
-        $evaluation_task->professionalism = $request->professionalism;
-        $evaluation_task->identiey_issues = $request->identiey_issues;
-        $evaluation_task->dedication = $request->dedication;
-        $evaluation_task->obedience = $request->obedience;
         $evaluation_task->lead_dev_cmnt = $request->lead_dev_cmnt;
         
         $total_ratings = array_sum([
-            $request->qw_first_chance,$request->qw_first_revision,$request->qw_second_revision,$request->speed_of_work,$request->understand_instruction,$request->communication,$request->professionalism,$request->identiey_issues,$request->dedication,$request->obedience
+            $request->qw_first_chance,$request->qw_first_revision,$request->qw_second_revision,$request->speed_of_work,$request->understand_instruction
         ]);
         $number_of_ratings = count([
-            $request->qw_first_chance,$request->qw_first_revision,$request->qw_second_revision,$request->speed_of_work,$request->understand_instruction,$request->communication,$request->professionalism,$request->identiey_issues,$request->dedication,$request->obedience
+            $request->qw_first_chance,$request->qw_first_revision,$request->qw_second_revision,$request->speed_of_work,$request->understand_instruction
         ]);
         $average_rating = $number_of_ratings > 0 ? $total_ratings / $number_of_ratings : 0;
         $evaluation_task->avg_rating = $average_rating;
