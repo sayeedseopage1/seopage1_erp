@@ -5,11 +5,12 @@ import arrow2 from '../../assets/arrow-2.svg'
 import { IoInformationCircle } from "react-icons/io5";
 import { Popover } from "antd";
 import IncentiveEditButton from "../ui/IncentiveEditButton";
-import { dummyUserRole } from "../../constants";
 import ChartIdealVsAchievedEditModal from "../Modals/Incentives/ChartIdealVsAchievedEditModal";
 import PropTypes from "prop-types";
+import { useAuth } from "../../../../../hooks/useAuth";
 
 const IncentiveBarChart = ({ chartData }) => {
+    const { auth } = useAuth()
     const chartRef = useRef(null);
     const [modalStateId, setModalStateId] = useState(null);
 
@@ -194,7 +195,7 @@ const IncentiveBarChart = ({ chartData }) => {
                 </div>
                 <div className="incentive_button_wrapper">
                     {
-                        dummyUserRole == 1 && <IncentiveEditButton onClick={() => showIdealVsAchievedEditModal(chartData?.id)} className={btn_class_edit}>Edit</IncentiveEditButton>
+                        auth?.isHasRolePermission(1) && <IncentiveEditButton onClick={() => showIdealVsAchievedEditModal(chartData?.id)} className={btn_class_edit}>Edit</IncentiveEditButton>
                     }
 
                     <button

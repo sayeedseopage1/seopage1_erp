@@ -5,12 +5,13 @@ import { IoInformationCircle } from 'react-icons/io5';
 import FinalPointsModal from '../../Modals/FinalPointsModal';
 import { Popover } from 'antd';
 import IncentiveEditButton from '../../ui/IncentiveEditButton';
-import { dummyUserRole } from '../../../constants';
 import CashValueBonusEditModal from '../../Modals/Incentives/CashValueBonusEditModal';
 import useIncentiveTypes from '../../../hooks/useIncentiveTypes';
 import { Placeholder } from '../../../../../../global/Placeholder';
+import { useAuth } from '../../../../../../hooks/useAuth';
 
 const BonusPointsPointBanner = () => {
+    const { auth } = useAuth()
     const [finalPointsModalOpen, setFinalPointsModalOpen] = useState(false);
     const [editBonusPointsModalOpen, setEditBonusPointsModalOpen] = useState(false);
 
@@ -100,7 +101,7 @@ const BonusPointsPointBanner = () => {
                             Cash value of every bonus  point: <span className='point_score' style={{ color: "#1492E6" }}>
                                 {bonusIncentiveTypes?.cash_value} Taka
                             </span> {
-                                dummyUserRole == 1 && <IncentiveEditButton onClick={() => setEditBonusPointsModalOpen(true)} className={`chart_button`}></IncentiveEditButton>
+                                auth?.isHasRolePermission(1) && <IncentiveEditButton onClick={() => setEditBonusPointsModalOpen(true)} className={`chart_button`}></IncentiveEditButton>
                             }
                         </p>
                     }

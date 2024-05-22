@@ -1,3 +1,5 @@
+import { User } from "../../../../../react/utils/user-details";
+// import { User } from "../../../utils/user-details";
 const reVsTask = [10, 20, 22, 30, 40, 50, 60, 70, 80, 90, 100];
 const incentive = [0, 0, 50, 0, 0, 0, 0, 0, 0, 0];
 
@@ -1186,6 +1188,9 @@ export const statsInfoData = {
 
 // TODO: it will be removed
 export const dummyUserRole = 1;
+
+//*** User role for permissions
+export const auth = new User(window?.Laravel?.user);
 
 // export const achivedBarChartData = [
 //     {

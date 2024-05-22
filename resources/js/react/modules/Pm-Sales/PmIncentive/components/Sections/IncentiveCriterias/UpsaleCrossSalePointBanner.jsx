@@ -3,12 +3,13 @@ import pointIconDark from '../../../assets/pointIconDark.svg'
 import cashBag from '../../../assets/cashBag.svg'
 import UpsaleCrossSalePointModal from '../../Modals/UpsaleCrossSalePointModal';
 import IncentiveEditButton from '../../ui/IncentiveEditButton';
-import { dummyUserRole } from '../../../constants';
 import CashValueUpCrossEditModal from '../../Modals/Incentives/CashValueUpCrossEditModal';
 import { Placeholder } from '../../../../../../global/Placeholder';
 import useIncentiveTypes from '../../../hooks/useIncentiveTypes';
+import { useAuth } from '../../../../../../hooks/useAuth';
 
 const UpsaleCrossSalePointBanner = () => {
+    const { auth } = useAuth()
     const [upsaleCrossSalePointsModalOpen, setUpsaleCrossSalePointsModalOpen] = useState(false);
     const [editUpsaleCrossSalePointsModalOpen, setEditUpsaleCrossSalePointsModalOpen] = useState(false);
 
@@ -45,7 +46,7 @@ const UpsaleCrossSalePointBanner = () => {
                             Cash value of every upsale/cross sale point: <span className='point_score' style={{ color: "#1492E6" }}>
                                 {upSaleCrossSaleTypes?.cash_value} Taka
                             </span> {
-                                dummyUserRole == 1 && <IncentiveEditButton onClick={() => setEditUpsaleCrossSalePointsModalOpen(true)} className={`chart_button`}></IncentiveEditButton>
+                                auth?.isHasRolePermission(1) && <IncentiveEditButton onClick={() => setEditUpsaleCrossSalePointsModalOpen(true)} className={`chart_button`}></IncentiveEditButton>
                             }
                         </p>
                     }

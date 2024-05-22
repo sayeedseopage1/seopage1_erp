@@ -2,15 +2,16 @@ import "../../../styles/Incentive.css"
 import pointIcon from '../../../assets/pointIcon.svg'
 import takaIcon from '../../../assets/takaIcon.svg'
 import IncentiveEditButton from "../../ui/IncentiveEditButton";
-import { dummyUserRole } from "../../../constants";
 import CashValuePointEditModal from "../../Modals/Incentives/CashValuePointEditModal";
 import { useState } from "react";
 import { Placeholder } from "../../../../../../global/Placeholder";
 import useIncentiveTypes from "../../../hooks/useIncentiveTypes";
+import { useAuth } from "../../../../../../hooks/useAuth";
 
 const PointBanner = () => {
     const [editPointDataModalOpen, setEditPointDataModalOpen] = useState(false);
     const { regularIncentiveTypes, incentiveTypesLoading } = useIncentiveTypes();
+    const { auth } = useAuth()
 
     return (
         <div className="point_banner">
@@ -31,7 +32,7 @@ const PointBanner = () => {
                     <p className='point_title point_details_wrapper'>
                         Cash value for every regular point: <span className='point_score'>
                             {regularIncentiveTypes?.cash_value} Taka
-                        </span> &nbsp; {dummyUserRole === 1 && (
+                        </span> &nbsp; {auth?.isHasRolePermission(1) && (
                             <IncentiveEditButton onClick={() => setEditPointDataModalOpen(true)} className="chart_button">
                             </IncentiveEditButton>
                         )}
