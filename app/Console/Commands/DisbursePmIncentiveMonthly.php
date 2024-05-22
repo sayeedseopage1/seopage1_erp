@@ -76,15 +76,17 @@ class DisbursePmIncentiveMonthly extends Command
             // Percentage of delayed project
             $delayed_project_percentage = Project::selectRaw('FORMAT((SUM(CASE WHEN p_m_projects.delayed_status = 1 THEN 1 ELSE 0 END) / SUM(CASE WHEN p_m_projects.delayed_status = NULL THEN 0 ELSE 1 END)) * 100, 2) as delayed_project_percentage')
             ->join('p_m_projects', 'p_m_projects.project_id', '=', 'projects.id')
-            ->where([['projects.pm_id', 209],['projects.status', 'in progress'],['projects.project_status', 'Accepted']])
+            ->where([['projects.pm_id', $user->id],['projects.status', 'in progress'],['projects.project_status', 'Accepted']])
             ->first()->delayed_project_percentage;
             
             // Milestone cancelation rate
             $milestone_cancelation_rate = Project::selectRaw('FORMAT((SUM(CASE WHEN project_milestones.status = "canceled" THEN 1 ELSE 0 END) / SUM(CASE WHEN project_milestones.status = "complete" THEN 1 ELSE 0 END)) * 100, 2) as milestone_cancelation_rate')
             ->join('project_milestones', 'projects.id', '=', 'project_milestones.project_id')
-            ->where([['projects.pm_id', 209],['projects.status', 'in progress'],['projects.project_status', 'Accepted']])
+            ->where([['projects.pm_id', $user->id],['projects.status', 'in progress'],['projects.project_status', 'Accepted']])
             ->whereBetween('project_milestones.created_at', [Carbon::now()->startOfMonth(), Carbon::now()->endOfMonth()])
             ->first()->milestone_cancelation_rate;
+
+            // 
         }
     }
 }
