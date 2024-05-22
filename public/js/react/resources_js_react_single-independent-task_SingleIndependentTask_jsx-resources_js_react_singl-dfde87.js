@@ -14635,7 +14635,8 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
 
 var ExpiredNotifyModalForNewEmployee = function ExpiredNotifyModalForNewEmployee(_ref) {
-  var showExpirationNotifyModal = _ref.showExpirationNotifyModal,
+  var expireDateForTrainer = _ref.expireDateForTrainer,
+    showExpirationNotifyModal = _ref.showExpirationNotifyModal,
     setShowExpirationNotifyModal = _ref.setShowExpirationNotifyModal,
     timeLeft = _ref.timeLeft;
   var _useState = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false),
@@ -14643,7 +14644,7 @@ var ExpiredNotifyModalForNewEmployee = function ExpiredNotifyModalForNewEmployee
     isPendingModalOpen = _useState2[0],
     setIsPendingModalOpen = _useState2[1];
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(function () {
-    if (timeLeft <= 0) {
+    if (timeLeft < 0 && expireDateForTrainer !== null) {
       setShowExpirationNotifyModal(true);
     }
   }, [timeLeft]);
@@ -14658,6 +14659,7 @@ var ExpiredNotifyModalForNewEmployee = function ExpiredNotifyModalForNewEmployee
     onRequestClose: closeModal,
     contentLabel: "Expired Time Modal",
     shouldCloseOnOverlayClick: false,
+    ariaHideApp: false,
     style: {
       overlay: {
         backgroundColor: "rgba(0, 0, 0, 0.5)",
@@ -14740,7 +14742,7 @@ var ExpiredTimeModalForNewEmployee = function ExpiredTimeModalForNewEmployee(_re
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(function () {
     var timer = setInterval(function () {
       setTimeLeft(function (prevTime) {
-        if (prevTime > 0) {
+        if (prevTime >= 0) {
           return prevTime - 1;
         } else {
           clearInterval(timer);
@@ -18332,6 +18334,7 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 // component
 
 
+
 var TimerControl = function TimerControl(_ref) {
   var _window, _task$ranningTimer;
   var task = _ref.task,
@@ -18359,18 +18362,23 @@ var TimerControl = function TimerControl(_ref) {
     _useState10 = _slicedToArray(_useState9, 2),
     expiredTimerForNewEmployee = _useState10[0],
     setExpiredTimerForNewEmployee = _useState10[1];
-  var _useState11 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(null),
+  //expired time check and state change for new employee / Trainee
+  var _useState11 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(localStorage.getItem("expireDateForTrainer")),
     _useState12 = _slicedToArray(_useState11, 2),
-    timerId = _useState12[0],
-    setTimerId = _useState12[1];
-  var _useState13 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(0),
+    expireDateForTrainer = _useState12[0],
+    setExpireDateForTrainer = _useState12[1];
+  var _useState13 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(null),
     _useState14 = _slicedToArray(_useState13, 2),
-    seconds = _useState14[0],
-    setSeconds = _useState14[1];
-  var _useState15 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false),
+    timerId = _useState14[0],
+    setTimerId = _useState14[1];
+  var _useState15 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(0),
     _useState16 = _slicedToArray(_useState15, 2),
-    isOpenConfirmationModal = _useState16[0],
-    setIsOpenConfirmationModal = _useState16[1];
+    seconds = _useState16[0],
+    setSeconds = _useState16[1];
+  var _useState17 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false),
+    _useState18 = _slicedToArray(_useState17, 2),
+    isOpenConfirmationModal = _useState18[0],
+    setIsOpenConfirmationModal = _useState18[1];
   var dispatch = (0,react_redux__WEBPACK_IMPORTED_MODULE_6__.useDispatch)();
   var dayjs = new _utils_dateController__WEBPACK_IMPORTED_MODULE_4__.CompareDate();
   var loggedUser = new _utils_user_details__WEBPACK_IMPORTED_MODULE_9__.User((_window = window) === null || _window === void 0 || (_window = _window.Laravel) === null || _window === void 0 ? void 0 : _window.user);
@@ -18391,6 +18399,8 @@ var TimerControl = function TimerControl(_ref) {
     }
   }, [taskRunning]);
 
+  // console.log("time left", timeLeft);
+  // console.log("expire date", expireDateForTrainer);
   //   timer control
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(function () {
     var interval = null;
@@ -18406,12 +18416,6 @@ var TimerControl = function TimerControl(_ref) {
       return clearInterval(interval);
     }; // clear interval
   }, [timerStart]);
-
-  //expired time check and state change for new employee / Trainee
-  var _useState17 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(localStorage.getItem("expireDateForTrainer")),
-    _useState18 = _slicedToArray(_useState17, 2),
-    expireDateForTrainer = _useState18[0],
-    setExpireDateForTrainer = _useState18[1];
   var intervalRef = (0,react__WEBPACK_IMPORTED_MODULE_0__.useRef)(null);
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(function () {
     setExpireDateForTrainer(localStorage.getItem("expireDateForTrainer"));
@@ -18711,19 +18715,21 @@ var TimerControl = function TimerControl(_ref) {
     }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_13__.jsx)(_stop_timer_LessTrackTimerModal__WEBPACK_IMPORTED_MODULE_8__["default"], {
       stopTimer: stopTimer,
       startTimer: startTimerControl
-    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_13__.jsx)(_ExpiredTimeModalForNewEmployee__WEBPACK_IMPORTED_MODULE_11__["default"], {
-      showExpirationWarningModal: showExpirationWarningModal,
-      setShowExpirationWarningModal: setShowExpirationWarningModal,
-      timeLeft: timeLeft,
-      setTimeLeft: setTimeLeft,
-      taskRunning: taskRunning,
-      task: task,
-      timerStatusForWarningModal: timerStatusForWarningModal
-    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_13__.jsx)(_ExpiredNotifyModalForNewEmployee__WEBPACK_IMPORTED_MODULE_12__["default"], {
-      expiredTimerForNewEmployee: expiredTimerForNewEmployee,
-      showExpirationNotifyModal: showExpirationNotifyModal,
-      setShowExpirationNotifyModal: setShowExpirationNotifyModal,
-      timeLeft: timeLeft
+    }), auth.roleId === 14 && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_13__.jsxs)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_13__.Fragment, {
+      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_13__.jsx)(_ExpiredTimeModalForNewEmployee__WEBPACK_IMPORTED_MODULE_11__["default"], {
+        showExpirationWarningModal: showExpirationWarningModal,
+        setShowExpirationWarningModal: setShowExpirationWarningModal,
+        timeLeft: timeLeft,
+        setTimeLeft: setTimeLeft,
+        taskRunning: taskRunning,
+        task: task,
+        timerStatusForWarningModal: timerStatusForWarningModal
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_13__.jsx)(_ExpiredNotifyModalForNewEmployee__WEBPACK_IMPORTED_MODULE_12__["default"], {
+        expireDateForTrainer: expireDateForTrainer,
+        showExpirationNotifyModal: showExpirationNotifyModal,
+        setShowExpirationNotifyModal: setShowExpirationNotifyModal,
+        timeLeft: timeLeft
+      })]
     })]
   });
 };
