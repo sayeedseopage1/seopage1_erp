@@ -7,6 +7,7 @@ use App\Models\Task;
 use App\Models\User;
 use App\Models\Project;
 use App\Models\CashPoint;
+use App\Models\IncentiveCriteria;
 use App\Models\TaskRevision;
 use Illuminate\Console\Command;
 
@@ -36,7 +37,7 @@ class DisbursePmIncentiveMonthly extends Command
         $startDate = Carbon::now()->startOfMonth();
         $endDate = Carbon::now()->endOfMonth();
         $users = User::where('role_id',4)->get();
-        
+
         foreach($users as $user){
             $cashPoints = CashPoint::whereNotNull('factor_id')->get();
             $totalEarnedPoints = $cashPoints->sum('total_points_earn');
@@ -56,6 +57,13 @@ class DisbursePmIncentiveMonthly extends Command
             ->count();
 
             $revision_percent = number_format(( $pm_revisions / $total_tasks ) * 100, 2);
+
+            $incentiveCriteria = IncentiveCriteria::with('incentiveFactors')->find(1);
+            foreach($incentiveCriteria->incentiveFactors as $incentiveFactor){
+                if(($revision_percent == 0 || $incentiveFactor->lower_limit < $revision_percent) && $incentiveFactor->upper_limit >= $revision_percent){
+                    dd($incentiveFactor->incentive_amount);
+                }
+            }
             
             // Goal achieve rate
             $projects = Project::select(['id','project_name','pm_id','status','project_status'])
