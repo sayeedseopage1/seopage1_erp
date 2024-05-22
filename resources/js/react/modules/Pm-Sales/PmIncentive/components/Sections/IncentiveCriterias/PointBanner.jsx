@@ -6,12 +6,11 @@ import CashValuePointEditModal from "../../Modals/Incentives/CashValuePointEditM
 import { useState } from "react";
 import { Placeholder } from "../../../../../../global/Placeholder";
 import useIncentiveTypes from "../../../hooks/useIncentiveTypes";
-import { useAuth } from "../../../../../../hooks/useAuth";
+import { auth } from "../../../constants";
 
 const PointBanner = () => {
     const [editPointDataModalOpen, setEditPointDataModalOpen] = useState(false);
     const { regularIncentiveTypes, incentiveTypesLoading } = useIncentiveTypes();
-    const { auth } = useAuth()
 
     return (
         <div className="point_banner">

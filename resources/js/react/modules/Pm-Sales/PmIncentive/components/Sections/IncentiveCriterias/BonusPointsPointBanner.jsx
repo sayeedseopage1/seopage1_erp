@@ -8,10 +8,9 @@ import IncentiveEditButton from '../../ui/IncentiveEditButton';
 import CashValueBonusEditModal from '../../Modals/Incentives/CashValueBonusEditModal';
 import useIncentiveTypes from '../../../hooks/useIncentiveTypes';
 import { Placeholder } from '../../../../../../global/Placeholder';
-import { useAuth } from '../../../../../../hooks/useAuth';
+import { auth } from '../../../constants';
 
 const BonusPointsPointBanner = () => {
-    const { auth } = useAuth()
     const [finalPointsModalOpen, setFinalPointsModalOpen] = useState(false);
     const [editBonusPointsModalOpen, setEditBonusPointsModalOpen] = useState(false);
 

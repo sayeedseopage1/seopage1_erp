@@ -7,10 +7,9 @@ import { Popover } from "antd";
 import IncentiveEditButton from "../ui/IncentiveEditButton";
 import ChartIdealVsAchievedEditModal from "../Modals/Incentives/ChartIdealVsAchievedEditModal";
 import PropTypes from "prop-types";
-import { useAuth } from "../../../../../hooks/useAuth";
+import { auth } from "../../constants";
 
 const IncentiveBarChart = ({ chartData }) => {
-    const { auth } = useAuth()
     const chartRef = useRef(null);
     const [modalStateId, setModalStateId] = useState(null);
 

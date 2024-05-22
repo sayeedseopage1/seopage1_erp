@@ -6,10 +6,9 @@ import IncentiveEditButton from '../../ui/IncentiveEditButton';
 import CashValueUpCrossEditModal from '../../Modals/Incentives/CashValueUpCrossEditModal';
 import { Placeholder } from '../../../../../../global/Placeholder';
 import useIncentiveTypes from '../../../hooks/useIncentiveTypes';
-import { useAuth } from '../../../../../../hooks/useAuth';
+import { auth } from '../../../constants';
 
 const UpsaleCrossSalePointBanner = () => {
-    const { auth } = useAuth()
     const [upsaleCrossSalePointsModalOpen, setUpsaleCrossSalePointsModalOpen] = useState(false);
     const [editUpsaleCrossSalePointsModalOpen, setEditUpsaleCrossSalePointsModalOpen] = useState(false);
 

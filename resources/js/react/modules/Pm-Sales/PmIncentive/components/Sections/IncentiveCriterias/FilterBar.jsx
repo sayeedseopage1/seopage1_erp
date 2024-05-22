@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import '../../../styles/Incentive.css'
 import { ButtonComponent } from '../../../../PointFactors/components/Styles/ui/ui';
 import PayNowModal from '../../Modals/HeldAmounts/PayNowModal';
-
+import { auth } from '../../../constants';
 
 const pointFilters = [
     {
@@ -29,7 +29,6 @@ const pointFilters = [
 ]
 
 const FilterBar = ({ tab, setTab, filterByPeriod, setFilterByPeriod }) => {
-
     const [isPayNowModalOpen, setIsPayNowModalOpen] = useState(false);
 
     const showPayNowModal = () => {
@@ -76,7 +75,7 @@ const FilterBar = ({ tab, setTab, filterByPeriod, setFilterByPeriod }) => {
             </div>}
 
             {
-                tab == "held_amount" && <div className='filter_bar_right'>
+                auth?.isHasRolePermission(1) && tab == "held_amount" && <div className='filter_bar_right'>
                     <button onClick={showPayNowModal} className='incentive_success_btn' style={{ width: "170px" }}>Pay Now</button>
                 </div>
             }
