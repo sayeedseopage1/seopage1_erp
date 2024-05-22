@@ -18569,7 +18569,8 @@ var TimerControl = function TimerControl(_ref) {
     //navigate(`/account/tasks/${task?.id}?modal=daily-submission&trigger=stop-button`);
     setTimerStatusForWarningModal(false);
     stopTimerApi({
-      timeId: timerId
+      timeId: timerId,
+      task_id: task === null || task === void 0 ? void 0 : task.id
     }).unwrap().then(function (res) {
       if ((res === null || res === void 0 ? void 0 : res.status) === "success" || (res === null || res === void 0 ? void 0 : res.status) === 200) {
         Toast.fire({
@@ -18719,6 +18720,7 @@ var TimerControl = function TimerControl(_ref) {
       task: task,
       timerStatusForWarningModal: timerStatusForWarningModal
     }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_13__.jsx)(_ExpiredNotifyModalForNewEmployee__WEBPACK_IMPORTED_MODULE_12__["default"], {
+      expiredTimerForNewEmployee: expiredTimerForNewEmployee,
       showExpirationNotifyModal: showExpirationNotifyModal,
       setShowExpirationNotifyModal: setShowExpirationNotifyModal,
       timeLeft: timeLeft

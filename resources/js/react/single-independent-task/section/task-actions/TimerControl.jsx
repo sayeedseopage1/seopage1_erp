@@ -285,7 +285,7 @@ const TimerControl = ({ task, timerStart, setTimerStart, auth }) => {
     const stopTimer = () => {
         //navigate(`/account/tasks/${task?.id}?modal=daily-submission&trigger=stop-button`);
         setTimerStatusForWarningModal(false);
-        stopTimerApi({ timeId: timerId })
+        stopTimerApi({ timeId: timerId, task_id: task?.id })
             .unwrap()
             .then((res) => {
                 if (res?.status === "success" || res?.status === 200) {
@@ -467,6 +467,7 @@ const TimerControl = ({ task, timerStart, setTimerStart, auth }) => {
                 timerStatusForWarningModal={timerStatusForWarningModal}
             />
             <ExpiredNotifyModalForNewEmployee
+                expiredTimerForNewEmployee={expiredTimerForNewEmployee}
                 showExpirationNotifyModal={showExpirationNotifyModal}
                 setShowExpirationNotifyModal={setShowExpirationNotifyModal}
                 timeLeft={timeLeft}
