@@ -11,14 +11,21 @@
 .customAntModalTitleWithCloseHide .ant-modal-close {
   display: none !important;
 }
+/* 
+  Custom Modal Title hide with close button
+*/
+.customAntModalTitleWithCloseHide .ant-modal-content {
+  padding: 0 !important;
+  border-radius: 10px !important;
+}
 
 /* 
   Custom Modal Title show with close button
 */
 .customAntModalTitleWithClose .ant-modal-title {
   color: #000 !important;
-  font-family: Poppins !important;
-  font-size: 32px !important;
+  font-family: Poppins, sans-serif !important;
+  font-size: 20px !important;
   font-style: normal !important;
   font-weight: 500 !important;
   line-height: normal !important;
@@ -42,21 +49,38 @@
   display: flex;
   flex-direction: column;
   border-top: 1px solid #DDDCDC;
+  scrollbar-width: thin;
+  scrollbar-color: #99BCD4 transparent;
+  scroll-behavior: smooth !important;
 }
 
+.dashboardModalTableContainer::-webkit-scrollbar {
+  width: 10px !important;
+  scroll-behavior: smooth !important;
+}
+
+.dashboardModalTableContainer::-webkit-scrollbar-thumb {
+  background-color: #ccc !important;
+  border-radius: 10px !important;
+}
+.dashboardModalTableContainer::-webkit-scrollbar-track {
+  background-color: transparent !important;
+  
+}
 .dashboardModalTableItem {
   display: flex;
   border-bottom: 1px solid #DDDCDC;
   color: #000;
-  font-family: Poppins , sans-serif;
-  font-size: 16px;
+  font-family: Poppins, sans-serif;
+  font-size: 14px;
   font-style: normal;
   font-weight: 400;
   line-height: normal;
   padding: 15px 0;
   margin: 0;
 }
-.dashboardModalTableItem  a:hover {
+
+.dashboardModalTableItem a:hover {
   color: #000;
   text-decoration: underline;
 }
@@ -76,6 +100,43 @@
 
 .dashboardModalTableContainer .dashboardModalTableItem:last-child {
   border-bottom: none;
+}
+
+.dashboardModalTableContainer .dashboardModalTableItem p {
+  color: #000;
+  font-family: Poppins, sans-serif;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+  padding: 15px 0;
+  margin: 0;
+}
+
+
+.dashboardModalTableContainer .dashboardModalTableItem p {
+  color: #000;
+  font-family: Poppins, sans-serif;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+  padding: 15px 0;
+  margin: 0;
+}
+
+.dashboardModalTableContainer .dashboardModalTableItem ol li {
+  margin-left: 20px !important;
+  padding: 5px 0 !important;
+  list-style: auto !important;
+}
+.dashboardModalTableContainer .dashboardModalTableItem .dangerouslySetInnerStyle p {
+  padding: 0 !important;
+}
+.dashboardModalTableContainer .dashboardModalTableItem .dangerouslySetInnerStyle ul li {
+  margin-left: 20px !important;
+  padding: 5px 0 !important;
+  list-style-type: disc !important;
 }
 
 

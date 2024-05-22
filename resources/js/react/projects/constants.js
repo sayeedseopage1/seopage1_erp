@@ -98,7 +98,7 @@ export const ProjectData = [
                     description7: `<p>You can take from the existing site, but I asked the raw logo file. If he can't provide the raw file, we will sell our logo service, also the logo doesn't look good, we will try to sell this logo service after the project is accepted. Please let me know once you accept the project.&nbsp;</p>`,
                     description8: `<p>We should be able to get seo and google ad work from him if this project goes well, he should be a well paying client&nbsp;&nbsp;</p>`,
                     description9: `<p>Asked for partial release as you show progress of the work.</p>`,
-            
+
                 },
                 project_summary: `<p><strong>We need to fix the product main Image to high resulation dynamically.</strong><br>
                 <strong>Website:</strong>&nbsp;https://homedesignstoreflorida.com/</p>
@@ -133,28 +133,109 @@ export const ProjectData = [
                 site_url: "https://homedesignstoreflorida.com/",
                 frontend_password: "Shopify123//",
                 login_url: "https://homedesignstoreflorida.com/admin",
-                email:"seopageone@gamil.com",
+                email: "seopageone@gamil.com",
                 password: "Isla24680!!!",
             },
-            pm_task_guideline : {
+            pm_task_guideline: {
                 theme_details: 1,
                 theme_name: "Broadcast",
                 theme_url: "https://woodmart.xtemos.com/",
-                design: "https://www.figma.com/file/84u4UfttYreAuNQ3bAlHgF/Laconic.-Website-Notes?type=design&node-id=0%3A1&mode=design&t=Mc8ZnMp5TFJjkmWJ-1",
+                design_details: 1,
+                design: "The Reference Site That Has to Be Clone",
                 xd_url: "https://xd.adobe.com/view/1b1b4b3b-0b3b-4b3b-8b3b-3b3b3b3b3b3b/",
                 drive_url: "https://drive.google.com/drive/folders/1b1b4b3b-0b3b-4b3b-8b3b-3b3b3b3b3b3b",
-                reference_link: ["https:\/\/www.nietiet.gmbh\/","https:\/\/kapsafill.de\/"],
+                reference_link: ["https:\/\/www.nietiet.gmbh\/", "https:\/\/kapsafill.de\/"],
                 instruction: `<p>This is not a reference for cloning or doing the design same, we just take inspiration from the color and the way the wordings are.&nbsp;</p>`,
                 primary_color: "#610D14",
                 primary_color_description: `<p>Theme-based color. use color from the theme demo</p>`,
-                color: 1,
-                color: `["#222222","#FFFFFF","#C09631"]`,
-                color_description: ["<p>Body text color<\/p>","<p>Dark background text color<\/p>","<p>Dark background title color. Same as demo<\/p>"],
+                color_schema: 1,
+                color: ["#222222", "#FFFFFF", "#C09631"],
+                color_description: ["<p>Body text color<\/p>", "<p>Dark background text color<\/p>", "<p>Dark background title color. Same as demo<\/p>"],
                 plugin_research: 1,
                 plugin_name: "TranslatePress",
                 plugin_url: "https://wordpress.org/plugins/translatepress-multilingual/",
                 google_drive_link: "https://drive.google.com/drive/folders/1b1b4b3b-0b3b-4b3b-8b3b-3b3b3b3b3b3b",
                 instruction_plugin: `<p>You can use this plugin for migrating the website</p>`
+            },
+            task_guideline_authorization: [
+                {
+                    id: 1,
+                    task_guideline_id: 1,
+                    project_id: 1,
+                    name: "Theme Details",
+                    status: null,
+                },
+                {
+                    id: 2,
+                    task_guideline_id: 1,
+                    project_id: 1,
+                    name: "Design Details",
+                    status: null,
+
+                },
+                {
+                    id: 3,
+                    task_guideline_id: 1,
+                    project_id: 1,
+                    name: "Color Schema",
+                    status: null,
+                },
+                {
+                    id: 4,
+                    task_guideline_id: 1,
+                    project_id: 1,
+                    name: "Plugin Research",
+                    status: null,
+                }
+            ],
+            project_submission: {
+                actual_link: "https://homedesignstoreflorida.com/",
+                dummy_link: "https://homedesignstoreflorida.com/",
+                qc_protocol: 1,
+                login_yes: 1,
+                login_information: 1,
+                login_url: "https://homedesignstoreflorida.com/admin",
+                login: 'ian_truckyeah@test.com',
+                password: "Isla24680!!!",
+                screenshot: "https://prnt.sc/3FwufLmLIirf",
+                drive_yes: 1,
+                drive_information: 1,
+                google_link: "https://drive.google.com/drive/folders/1b1b4b3b-0b3b-4b3b-8b3b-3b3b3b3b3b3b",
+                rating: 5,
+                comments: `I had to fix many things like the slider button icon, Button style, and Bioimage. 
+                It took much time compared to the task difficulties.`,
+                requirements: 10,
+                comments2: `ok`,
+                price: 8,
+                comments3: `ok`,
+                niche: "E-commerce",
+                category_name: "E-commerce",
+                dummy_information: 1,
+                notify: 1,
+                actual_yes: 1,
+                admin_comment: `<p>Yes, This website functions are very complex... There are lots of data that is much problems and not properly sequenced&nbsp;</p>`,
+            },
+            project_portfolio: {
+                cms_name: "WordPress",
+                website_type: "E-commerce",
+                category_name: "E-commerce",
+                main_page_number: 5,
+                main_page_name: "Home Page",
+                secondary_page_number: 5,
+                secondary_page_name: "About Page",
+                backup_email_address: 'admin@gmail.com',
+                day_interval: "Every 7 days",
+                description: `<p>Yes, This website functions are very complex... There are lots of data that is much problems and not properly sequenced&nbsp;</p>`,
+                theme_id: 1,
+                website_theme: {
+                    theme_name: "Broadcast",
+                    theme_url: "https://woodmart.xtemos.com/",
+                },
+                theme_name: null,
+                theme_url: null,
+                plugin_information: 1,
+                plugin_name: "TranslatePress",
+                plugin_url: "https://wordpress.org/plugins/translatepress-multilingual/",
             }
 
         }
@@ -229,7 +310,7 @@ export const ProjectData = [
                     description7: `<p>You can take from the existing site, but I asked the raw logo file. If he can't provide the raw file, we will sell our logo service, also the logo doesn't look good, we will try to sell this logo service after the project is accepted. Please let me know once you accept the project.&nbsp;</p>`,
                     description8: `<p>We should be able to get seo and google ad work from him if this project goes well, he should be a well paying client&nbsp;&nbsp;</p>`,
                     description9: `<p>Asked for partial release as you show progress of the work.</p>`,
-            
+
                 },
                 project_summary: `<p><strong>We need to fix the product main Image to high resulation dynamically.</strong><br>
                 <strong>Website:</strong>&nbsp;https://homedesignstoreflorida.com/</p>
@@ -264,28 +345,109 @@ export const ProjectData = [
                 site_url: "https://homedesignstoreflorida.com/",
                 frontend_password: "Shopify123//",
                 login_url: "https://homedesignstoreflorida.com/admin",
-                email:"seopageone@gamil.com",
+                email: "seopageone@gamil.com",
                 password: "Isla24680!!!",
             },
-            pm_task_guideline : {
+            pm_task_guideline: {
                 theme_details: 1,
                 theme_name: "Broadcast",
                 theme_url: "https://woodmart.xtemos.com/",
-                design: "https://www.figma.com/file/84u4UfttYreAuNQ3bAlHgF/Laconic.-Website-Notes?type=design&node-id=0%3A1&mode=design&t=Mc8ZnMp5TFJjkmWJ-1",
+                design_details: 1,
+                design: "The Reference Site That Has to Be Clone",
                 xd_url: "https://xd.adobe.com/view/1b1b4b3b-0b3b-4b3b-8b3b-3b3b3b3b3b3b/",
                 drive_url: "https://drive.google.com/drive/folders/1b1b4b3b-0b3b-4b3b-8b3b-3b3b3b3b3b3b",
-                reference_link: ["https:\/\/www.nietiet.gmbh\/","https:\/\/kapsafill.de\/"],
+                reference_link: ["https:\/\/www.nietiet.gmbh\/", "https:\/\/kapsafill.de\/"],
                 instruction: `<p>This is not a reference for cloning or doing the design same, we just take inspiration from the color and the way the wordings are.&nbsp;</p>`,
                 primary_color: "#610D14",
                 primary_color_description: `<p>Theme-based color. use color from the theme demo</p>`,
-                color: 1,
-                color: `["#222222","#FFFFFF","#C09631"]`,
-                color_description: ["<p>Body text color<\/p>","<p>Dark background text color<\/p>","<p>Dark background title color. Same as demo<\/p>"],
+                color_schema: 1,
+                color: ["#222222", "#FFFFFF", "#C09631"],
+                color_description: ["<p>Body text color<\/p>", "<p>Dark background text color<\/p>", "<p>Dark background title color. Same as demo<\/p>"],
                 plugin_research: 1,
                 plugin_name: "TranslatePress",
                 plugin_url: "https://wordpress.org/plugins/translatepress-multilingual/",
                 google_drive_link: "https://drive.google.com/drive/folders/1b1b4b3b-0b3b-4b3b-8b3b-3b3b3b3b3b3b",
                 instruction_plugin: `<p>You can use this plugin for migrating the website</p>`
+            },
+            task_guideline_authorization: [
+                {
+                    id: 1,
+                    task_guideline_id: 1,
+                    project_id: 1,
+                    name: "Theme Details",
+                    status: null,
+                },
+                {
+                    id: 2,
+                    task_guideline_id: 1,
+                    project_id: 1,
+                    name: "Design Details",
+                    status: null,
+
+                },
+                {
+                    id: 3,
+                    task_guideline_id: 1,
+                    project_id: 1,
+                    name: "Color Schema",
+                    status: null,
+                },
+                {
+                    id: 4,
+                    task_guideline_id: 1,
+                    project_id: 1,
+                    name: "Plugin Research",
+                    status: null,
+                }
+            ],
+            project_submission: {
+                actual_link: "https://homedesignstoreflorida.com/",
+                dummy_link: "https://homedesignstoreflorida.com/",
+                qc_protocol: 1,
+                login_yes: 1,
+                login_information: 1,
+                login_url: "https://homedesignstoreflorida.com/admin",
+                login: 'ian_truckyeah@test.com',
+                password: "Isla24680!!!",
+                screenshot: "https://prnt.sc/3FwufLmLIirf",
+                drive_yes: 1,
+                drive_information: 1,
+                google_link: "https://drive.google.com/drive/folders/1b1b4b3b-0b3b-4b3b-8b3b-3b3b3b3b3b3b",
+                rating: 5,
+                comments: `I had to fix many things like the slider button icon, Button style, and Bioimage. 
+                It took much time compared to the task difficulties.`,
+                requirements: 10,
+                comments2: `ok`,
+                price: 8,
+                comments3: `ok`,
+                niche: "E-commerce",
+                category_name: "E-commerce",
+                dummy_information: 1,
+                notify: 1,
+                actual_yes: 1,
+                admin_comment: `<p>Yes, This website functions are very complex... There are lots of data that is much problems and not properly sequenced&nbsp;</p>`,
+            },
+            project_portfolio: {
+                cms_name: "WordPress",
+                website_type: "E-commerce",
+                category_name: "E-commerce",
+                main_page_number: 5,
+                main_page_name: "Home Page",
+                secondary_page_number: 5,
+                secondary_page_name: "About Page",
+                backup_email_address: 'admin@gmail.com',
+                day_interval: "Every 7 days",
+                description: `<p>Yes, This website functions are very complex... There are lots of data that is much problems and not properly sequenced&nbsp;</p>`,
+                theme_id: 1,
+                website_theme: {
+                    theme_name: "Broadcast",
+                    theme_url: "https://woodmart.xtemos.com/",
+                },
+                theme_name: null,
+                theme_url: null,
+                plugin_information: 1,
+                plugin_name: "TranslatePress",
+                plugin_url: "https://wordpress.org/plugins/translatepress-multilingual/",
             }
 
 
@@ -293,6 +455,82 @@ export const ProjectData = [
     }
 
 ]
+
+
+export const ProjectDeadlineHistoryDummyData = [
+    {
+        id: 1,
+        previous_deadline: "2021-09-30",
+        requested_on: "2021-09-20",
+        reason: `<p>You can use this plugin for migrating the website</p>`,
+        request_status: "Approved",
+        approved_on: "2021-09-21",
+        approved_by_name: "Belayat Hossain",
+        extended_deadline: "2021-10-05",
+        approved_by_id: 1,
+        approved_by_photo: "https://www.freelancer.com/u/mbjsolutions?from=messaging&ref_project_id=38007534",
+    },
+    {
+        id: 2,
+        previous_deadline: "2021-09-30",
+        requested_on: "2021-09-20",
+        reason: `<p>You can use this plugin for migrating the website</p>`,
+        request_status: "Approved",
+        approved_on: "2021-09-21",
+        approved_by_name: "Belayat Hossain",
+        extended_deadline: "2021-10-05",
+        approved_by_id: 1,
+        approved_by_photo: "https://www.freelancer.com/u/mbjsolutions?from=messaging&ref_project_id=38007534",
+    },
+    {
+        id: 3,
+        previous_deadline: "2021-09-30",
+        requested_on: "2021-09-21",
+        reason: `<p>You can use this plugin for migrating the website</p>`,
+        request_status: "Approved",
+        approved_on: "2021-09-22",
+        approved_by_name: "John Doe",
+        extended_deadline: "2021-10-05",
+        approved_by_id: 2,
+        approved_by_photo: "https://www.example.com/user2",
+    },
+    {
+        id: 4,
+        previous_deadline: "2021-09-30",
+        requested_on: "2021-09-21",
+        reason: `<p>You can use this plugin for migrating the website</p>`,
+        request_status: "Approved",
+        approved_on: "2021-09-22",
+        approved_by_name: "John Doe",
+        extended_deadline: "2021-10-05",
+        approved_by_id: 2,
+        approved_by_photo: "https://www.example.com/user2",
+    },
+    {
+        id: 5,
+        previous_deadline: "2021-09-30",
+        requested_on: "2021-09-22",
+        reason: `<p>You can use this plugin for migrating the website</p>`,
+        request_status: "Approved",
+        approved_on: "2021-09-23",
+        approved_by_name: "Jane Smith",
+        extended_deadline: "2021-10-05",
+        approved_by_id: 3,
+        approved_by_photo: "https://www.example.com/user3",
+    },
+    {
+        id: 6,
+        previous_deadline: "2021-09-30",
+        requested_on: "2021-09-22",
+        reason: `<p>You can use this plugin for migrating the website</p>`,
+        request_status: "Approved",
+        approved_on: "2021-09-23",
+        approved_by_name: "Jane Smith",
+        extended_deadline: "2021-10-05",
+        approved_by_id: 3,
+        approved_by_photo: "https://www.example.com/user3",
+    }
+];
 
 
 
@@ -311,21 +549,21 @@ export const DetailsSalesExecutiveConstant = {
     },
     clientConcern: {
         title: "Any particular focus/concern of the client",
-        infoText: "Examples: 1. The client is very concerned about the final look & feel so needs to be careful with the design 2. The client is very concerned if the booking functionality will work the way he wants. ", 
+        infoText: "Examples: 1. The client is very concerned about the final look & feel so needs to be careful with the design 2. The client is very concerned if the booking functionality will work the way he wants. ",
     },
-    logoReference:{
-        title: "Logo Reference", 
+    logoReference: {
+        title: "Logo Reference",
         infoText: "Upload the google drive link here. Always ask for PSD and AI files so they are editable",
     },
-    requiredLogins:{
-        title: "Required Logins", 
+    requiredLogins: {
+        title: "Required Logins",
         infoText: "Whichever of these are applicable: Wordpress, FTP, Cpanel, shopify, Domain register",
     },
-    involvedProject : {
+    involvedProject: {
         title: "If there is any cross-departmental work involved in this project",
         infoText: "Example: SEO, Content writing, design, google ads, social media marketing, email marketing & anything else that is not explicitly included in web development",
     },
-} 
+}
 
 
 
@@ -392,12 +630,12 @@ export const ProjectProgressStatus = [
 export const HourlyProjectSalesData = [
     {
         id: 1,
-        question : "Is the amount of work he expects per hour realistic?",
+        question: "Is the amount of work he expects per hour realistic?",
         answer: "Asked for 8-10 hours for the mockup task.",
     },
     {
         id: 2,
-        question : `Does the client have any certain amount of hours on mind for the
+        question: `Does the client have any certain amount of hours on mind for the
         first set of tasks?`,
         answer: "Not like this, she gave a small task and needs to be done in 1-2 days."
     },

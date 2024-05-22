@@ -5,32 +5,37 @@ import { LiaEdit } from "react-icons/lia";
 
 // Components - Custom
 import Button from "../ui/customComponents/Button/Button";
-import CustomAntModal from "../ui/CustomAntModal/CustomAntModal";
 
 // Styles
 import style from "./styles/dashboardHeaderSection.module.css";
-import WorkingEnvironmentModal from "../modal/WorkingEnvironmentModal";
 
+// Components - Modal
+import WorkingEnvironmentModal from "../modal/WorkingEnvironmentModal";
+import TaskGuidelineNeedsAuthorizedAdmin from "../modal/TaskGuidelineNeedsAuthorizedAdmin";
 
 // ShortName
 // WN - WorkingEnvironment;
+// TGABA - TaskGuidelineNeedsAuthorizedByAdmin;
 
 const DashboardHeaderSection = ({ projectData, isLoading }) => {
     const [isWNModalOpen, setIsWNModalOpen] = React.useState(false);
+    const [isTGABAModalOpen, setIsTGABAModalOpen] = React.useState(false);
 
-    const handleOpenWNModal = () => {
-        setIsWNModalOpen(true);
+     // Handle Modal Open and Close Function with Action Function as Parameter (if needed)
+    const handleModal = (setModalOpenFunc, isOpen, action) => {
+        setModalOpenFunc(isOpen);
+        if (action) {
+            action();
+        }
     };
-    const handleCloseWNModal = () => {
-        setIsWNModalOpen(false);
-    };
+
 
     return (
         <div className="d-flex flex-column flex-md-row justify-content-md-between mb-4">
             <div className="d-flex mb-3 mb-md-0">
                 <Button
-                    onClick={handleOpenWNModal}
-                    className={`${style?.dashboardHeaderButton} `}
+                    onClick={()  => handleModal(setIsWNModalOpen, true)}
+                    className={`${style?.dashboardHeaderButton}`}
                 >
                     Working Environment
                 </Button>
@@ -43,11 +48,12 @@ const DashboardHeaderSection = ({ projectData, isLoading }) => {
             </div>
             <div className="d-flex mb-3 mb-md-0 ">
                 <Button
-                    onClick={() => {}}
+                    onClick={()  => handleModal(setIsTGABAModalOpen, true)}
                     className={`${style?.dashboardHeaderButton}`}
                 >
                     Mark as complete
                 </Button>
+                {/* Action DropDown */}
                 <div className={`dropdown ml-2  ${style.actionButtonDropdown}`}>
                     <button
                         className={`btn btn-lg bg-white  f-15 px-2 py-1 text-dark-grey text-capitalize rounded dropdown-toggle ${style?.dashboardHeaderButton} ${style.actionButton}`}
@@ -61,7 +67,6 @@ const DashboardHeaderSection = ({ projectData, isLoading }) => {
                     <div
                         className="dropdown-menu dropdown-menu-right border-grey rounded b-shadow-4 p-0 "
                         aria-labelledby="dropdownMenuLink"
-                        tabIndex="0"
                         x-placement="bottom-end"
                         style={{
                             position: "absolute",
@@ -80,7 +85,7 @@ const DashboardHeaderSection = ({ projectData, isLoading }) => {
                         </a>
                         <hr className="my-1" />
                         <a
-                            className="dropdown-item"  
+                            className="dropdown-item"
                             id="pinnedItem"
                             data-pinned="unpinned"
                         >
@@ -92,14 +97,30 @@ const DashboardHeaderSection = ({ projectData, isLoading }) => {
             </div>
 
             {/* Modal */}
+
+            {/* Working Environment Modal */}
             {isWNModalOpen && (
                 <WorkingEnvironmentModal
                     isModalOpen={isWNModalOpen}
-                    closeModal={handleCloseWNModal}
+                    closeModal={()  => handleModal(setIsWNModalOpen, false)}
                     modalData={projectData?.projectData?.working_environment}
                     isLoading={isLoading}
                 />
             )}
+            {/* End Working Environment Modal */}
+
+            {/* Top Management Pm Task Guideline Authorization */}
+            {isTGABAModalOpen && (
+                <TaskGuidelineNeedsAuthorizedAdmin
+                    isModalOpen={isTGABAModalOpen}
+                    closeModal={() => handleModal(setIsTGABAModalOpen, false)}
+                    modalData={
+                        projectData?.projectData?.task_guideline_authorization
+                    }
+                    isLoading={isLoading}
+                />
+            )}
+            {/* End Top Management Pm Task Guideline Authorization */}
         </div>
     );
 };

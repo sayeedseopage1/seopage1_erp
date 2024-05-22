@@ -58,7 +58,6 @@ const DashboardDataTable = ({
         data,
         columns,
         state: {
-            sorting,
             expanded,
             columnOrder,
             tableName,
@@ -68,9 +67,7 @@ const DashboardDataTable = ({
         getSubRows: (row) => row.subtasks,
         onColumnOrderChange: setColumnOrder,
         getCoreRowModel: getCoreRowModel(),
-        getFilteredRowModel: getFilteredRowModel(),
         getExpandedRowModel: getExpandedRowModel(),
-        getSortedRowModel: getSortedRowModel(),
     });
 
     return (

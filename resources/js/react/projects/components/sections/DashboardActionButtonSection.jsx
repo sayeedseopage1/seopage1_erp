@@ -9,28 +9,33 @@ import Button from "../ui/customComponents/Button/Button";
 
 // Style
 import style from "./styles/dashboardActionButtonSection.module.css";
-import PMTaskGuidelineModal from "../modal/PMTaskGuidelineModal";
 
-const DashboardActionButtonSection = ({
-    projectData,
-    isLoading
-}) => {
+// Components - Modal
+import PMTaskGuidelineModal from "../modal/PMTaskGuidelineModal";
+import ProjectCompletionModal from "../modal/ProjectCompletionModal";
+
+const DashboardActionButtonSection = ({ projectData, isLoading }) => {
     const [isPmTaskGuidelineModalOpen, setIsPmTaskGuidelineModalOpen] =
         React.useState(false);
 
-    const handleOpenPmTaskGuidelineModal = () => {
-        setIsPmTaskGuidelineModalOpen(true);
-    };
+    const [isProjectCompletionModalOpen, setIsProjectCompletionModalOpen] =
+        React.useState(false);
 
-    const handleClosePmTaskGuidelineModal = () => {
-        setIsPmTaskGuidelineModalOpen(false);
+    // Handle Modal Open and Close Function with Action Function as Parameter (if needed)
+    const handleModal = (setModalOpenFunc, isOpen, action) => {
+        setModalOpenFunc(isOpen);
+        if (action) {
+            action();
+        }
     };
 
     return (
         <div className={`${style.dashboardActionButtonSection} mb-4`}>
             <SectionContainer className={`${style.dashboardActionLeftButton}`}>
                 <Button
-                    onClick={handleOpenPmTaskGuidelineModal}
+                    onClick={() =>
+                        handleModal(setIsPmTaskGuidelineModalOpen, true)
+                    }
                     className={`${style.dashboardActionButton}`}
                 >
                     PM Task Guideline
@@ -50,7 +55,9 @@ const DashboardActionButtonSection = ({
                     QC Form
                 </Button>
                 <Button
-                    onClick={() => {}}
+                    onClick={() =>
+                        handleModal(setIsProjectCompletionModalOpen, true)
+                    }
                     className={`${style.dashboardActionButton}`}
                 >
                     Completion Form
@@ -64,21 +71,36 @@ const DashboardActionButtonSection = ({
             </SectionContainer>
 
             {/* Modal */}
+            {/* Pm Task Guideline */}
+            {isPmTaskGuidelineModalOpen && (
+                <PMTaskGuidelineModal
+                    isModalOpen={isPmTaskGuidelineModalOpen}
+                    closeModal={() =>
+                        handleModal(setIsPmTaskGuidelineModalOpen, false)
+                    }
+                    modalData={projectData?.projectData?.pm_task_guideline}
+                    isLoading={isLoading}
+                />
+            )}
 
-            <PMTaskGuidelineModal
-                isModalOpen={isPmTaskGuidelineModalOpen}
-                closeModal={handleClosePmTaskGuidelineModal}
-                modalData={projectData?.projectData?.pm_task_guideline}
-                isLoading={isLoading}
-            />
+            {/* Project Completion */}
+            {isProjectCompletionModalOpen && (
+                <ProjectCompletionModal
+                    isModalOpen={isProjectCompletionModalOpen}
+                    closeModal={() =>
+                        handleModal(setIsProjectCompletionModalOpen, false)
+                    }
+                    modalData={projectData?.projectData}
+                    isLoading={isLoading}
+                />
+            )}
         </div>
     );
 };
 
 export default DashboardActionButtonSection;
 
-
 DashboardActionButtonSection.propTypes = {
     projectData: PropTypes.object,
     isLoading: PropTypes.bool,
-}
+};

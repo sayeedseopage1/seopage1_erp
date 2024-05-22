@@ -9,7 +9,11 @@ import { SectionContainer } from "../ui/styledComponents";
 
 // style
 import style from "./styles/dashboardFreelancerInfoSection.module.css";
+
+// Helper
 import { handleLoadingComponent } from "../../helper";
+
+// Components - Loader
 import TextLoaderDynamic from "../loader/TextLoaderDynamic";
 
 const DashboardFreelancerInfoSection = ({ projectData, isLoading }) => {

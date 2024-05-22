@@ -4,7 +4,6 @@ import PropTypes from "prop-types";
 // UI Components - Custom
 import {
     CardWrapper,
-    SectionContainer,
     SectionWrapper,
 } from "../ui/styledComponents";
 
@@ -21,7 +20,11 @@ import { HourlyProjectSalesData, ProjectBudgetData } from "../../constants";
 
 // style
 import style from "./styles/dashboardProjectInfoHourlySection.module.css";
+
+// Helper
 import { handleLoadingComponent } from "../../helper";
+
+// Components - Loader
 import TextLoaderDynamic from "../loader/TextLoaderDynamic";
 
 const DashboardProjectInfoHourlySection = ({ projectData, isLoading }) => {

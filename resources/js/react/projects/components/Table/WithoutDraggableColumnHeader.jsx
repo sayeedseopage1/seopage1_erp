@@ -74,27 +74,6 @@ const WithoutDraggableColumnHeader = ({
                               )}
                     </div>
                 </div>
-                {column.id !== "expend" && column.id !== "action" && (
-                    <button
-                        {...{
-                            onClick: header.column.getToggleSortingHandler(),
-                            className: "sp1_tasks_column_sort_btn pl-1",
-                        }}
-                    >
-                        {header.column.getIsSorted() ? (
-                            {
-                                asc: (
-                                    <span className="table_asc_dec asc"></span>
-                                ),
-                                desc: (
-                                    <span className="table_asc_dec dec"></span>
-                                ),
-                            }[header.column.getIsSorted()] ?? null
-                        ) : (
-                            <span className="table_asc_dec"></span>
-                        )}
-                    </button>
-                )}
             </div>
         </th>
     );

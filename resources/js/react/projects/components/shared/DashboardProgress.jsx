@@ -13,8 +13,22 @@ import ProjectProgressChart from "../ui/ProjectProgressChart/ProjectProgressChar
 // Constants
 import { ProjectProgressStatus } from "../../constants";
 
-const DashboardProgress = ({ projectData, style, className="" }) => {
+// Modal
+import DeadlineChangeHistoryModal from "../modal/DeadlineChangeHistoryModal";
+
+const DashboardProgress = ({ projectData, style, className = "" }) => {
+    const [isDeadlineHistoryModalOpen, setIsDeadlineHistoryOpen] =
+        React.useState(false);
     const projectInfo = projectData?.projectData;
+
+    // Modal Handlers
+    const handleDeadlineHistoryModalOpen = () => {
+        setIsDeadlineHistoryOpen(true);
+    };
+    const handleDeadlineHistoryModalClose = () => {
+        setIsDeadlineHistoryOpen(false);
+    };
+
     return (
         <CardWrapper color="#ffffff" className={`${className}`}>
             <DashboardCardTitle
@@ -34,16 +48,27 @@ const DashboardProgress = ({ projectData, style, className="" }) => {
                     </div>
                     <div className="flexColumn">
                         <p> Deadline</p>
-                        <span className="flexItemCenter">
+                        <button
+                            className="flexItemCenter cursor-pointer deadlineBtn"
+                            style={{
+                                color:
+                                    new Date(projectInfo?.project?.deadline) <
+                                    new Date()
+                                        ? "#FF0000"
+                                        : "#000000",
+                            }}
+                            onClick={handleDeadlineHistoryModalOpen}
+                        >
                             <LuCalendarDays className="mr-1" />{" "}
                             {projectInfo?.project?.deadline}
-                        </span>
+                        </button>
                     </div>
                 </div>
                 <ProjectProgressChart />
             </div>
-
-            <div className={`${style.dashboardProgressStatusContainer} mt-2 mt-md-5`}>
+            <div
+                className={`${style.dashboardProgressStatusContainer} mt-2 mt-md-5`}
+            >
                 {ProjectProgressStatus?.map((status) => (
                     <DashboardProgressStatus
                         key={status.id}
@@ -52,6 +77,15 @@ const DashboardProgress = ({ projectData, style, className="" }) => {
                     />
                 ))}
             </div>
+
+            {/* Deadline Change History Modal */}
+
+            <DeadlineChangeHistoryModal
+                isModalOpen={isDeadlineHistoryModalOpen}
+                closeModal={handleDeadlineHistoryModalClose}
+                modalData={projectInfo?.project}
+                isLoading={false}
+            />
         </CardWrapper>
     );
 };

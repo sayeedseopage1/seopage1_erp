@@ -214,6 +214,18 @@ export const CardWrapper = styled.div`
         
       }
 
+      button{
+        background: none;
+        border: none;
+        padding: 0;
+        cursor: pointer;
+        font-family: Poppins, sans-serif;
+        font-size: 16px;
+        font-style: normal;
+        font-weight: 400;
+        line-height: normal;
+      }
+
       span {
         color: ${props => props.textColor || "#000"};   
         font-family: Poppins;
@@ -236,6 +248,8 @@ export const CardWrapper = styled.div`
     }
   }
 
+
+  
 
 `
 
@@ -269,4 +283,223 @@ export const CardTitle = styled.div`
     font-size: 14px;
   }
 
+`
+
+export const ModalContentContainer = styled.div`
+  padding: 16px 30px ;
+
+  .modalContentWrapper{
+    max-height: 70vh;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    scrollbar-width: thin;
+    scrollbar-color: #99BCD4 transparent;
+    scroll-behavior: smooth !important;
+    &::-webkit-scrollbar {
+      width: 10px !important;
+      scroll-behavior: smooth !important;
+    }
+    &::-webkit-scrollbar-thumb {
+      background-color: #ccc !important;
+      border-radius: 10px !important;
+    }
+    &::-webkit-scrollbar-track {
+      background-color: transparent !important;
+    }
+    .modalSectionHeader{
+      color: #000;
+      font-family: Poppins, sans-serif;
+      font-size: 16px;
+      font-style: normal;
+      font-weight: 500;
+      line-height: normal;
+    }
+
+    
+  }
+  
+  .TGABAHeaderContainer{
+      border-top: 1px solid #DDDCDC;
+      background: #1D82F5;
+      width: 100%;
+      padding: 17px 0;
+
+      h6 {
+        color: #FFF;
+        font-family: Poppins, sans-serif;
+        font-size: 16px;
+        font-style: normal;
+        font-weight: 500;
+        line-height: normal;
+        margin-bottom: 0;
+      }
+    }
+  .TGABAContentContainer{
+    @media screen and (max-width: 768px) {
+      width: 896px;
+      max-width: 896px;
+      scrollbar-width: thin;
+      scrollbar-color: #99BCD4 transparent;
+      scroll-behavior: smooth !important;
+      -webkit-border-radius: 5px;
+      overflow: hidden;
+
+      &::-webkit-scrollbar {
+        width: 10px !important;
+        scroll-behavior: smooth !important;
+      }
+
+      &::-webkit-scrollbar-thumb {
+        background-color: #ccc !important;
+        border-radius: 10px !important;
+      }
+      ::-webkit-scrollbar-track {
+        background-color: transparent !important;
+        border-radius: 10px !important;
+      } 
+      .col-6{
+        flex: 0 0 35% !important;
+        max-width: 35% !important;
+      }
+      .col-2{
+        flex: 0 0 15% !important;
+        max-width: 15% !important;
+      }
+      .col-4{
+        flex: 0 0 50% !important;
+        max-width: 50% !important; 
+        display: flex;
+        justify-content: center;
+      }
+    }
+
+  }
+
+  .modalContentHeader{
+    border-radius: 8px;
+    border: 1px dashed #1492E6;
+    background: #D8EDFC;
+    color: #1492E6;
+    font-family: Poppins , sans-serif;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+    padding: 19px 30px;
+    mask-border: 1px solid #1492E6;
+    margin-bottom: 24px;
+
+
+    p {
+      display: flex;
+      align-items: center;
+      margin-bottom: 0;
+      a{
+        color: #1492E6;
+        text-decoration: underline;
+        margin-left: 5px;
+      }
+
+      @media screen and (max-width: 768px) {
+        font-size: 14px;
+        a {
+          width: 55%;
+        }
+      }
+    }
+    
+
+
+   
+
+    
+
+
+    
+  }
+
+
+ 
+  .modalContentTable{
+    border-radius: 21px;
+    border: 1px solid #D8D8D8;
+    background: #F3FAFF;
+    padding: 19px 30px;
+
+    
+
+    table {
+      border-collapse: collapse;
+      thead{
+        tr {
+          color: #000;
+          font-family: Poppins, sans-serif;
+          font-size: 14px;
+          font-style: normal;
+          font-weight: 500;
+          line-height: normal;
+
+          th{
+            padding:  15px;
+            border-bottom: 1px solid #D8D8D8;
+          }
+          th:nth-child(1){
+            width: 5%;
+          }
+          th:nth-child(2){
+            width: 45%;
+          }
+          th:nth-child(3){
+            width: 50%;
+          }
+        }
+      }
+      tbody{
+        tr {
+          color: #000;
+          font-family: Poppins, sans-serif;
+          font-size: 14px;
+          font-style: normal;
+          font-weight: 400;
+          line-height: normal;
+          border-collapse: collapse;
+          td{
+            padding:  15px;
+            border-bottom: 1px solid #D8D8D8;
+          }
+          td:nth-child(1){
+            width: 5%;
+          }
+          td:nth-child(2){
+            width: 45%;
+          }
+          td:nth-child(3){
+            width: 50%;
+          }
+          &:nth-child(odd){
+            background: #D8EDFC;
+          }
+          &:nth-child(even){
+            background: #F3FAFF;
+          }
+          &:hover{
+            background: #D8EDFC;
+          }
+         
+        }
+      }
+    }
+  }
+
+
+  /* Utility Class */
+
+  .verticalAlignTop{
+    vertical-align: top;
+  }
+  .w-65{
+    width: 65% !important;
+  }
+  
 `
