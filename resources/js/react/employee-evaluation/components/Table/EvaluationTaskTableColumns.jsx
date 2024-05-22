@@ -146,7 +146,7 @@ export const EvaluationTaskTableColumns = [
         cell: ({ row: { original }, className }) => {
             const Links = original?.screen_record_links;
             return Links ? (
-                <div style={{ minWidth: "10rem" }}>
+                <div style={{ minWidth: "10rem", width: "100px" }}>
                     <Popover>
                         <Popover.Button>
                             <span className=" singleline-ellipsis link_color hover-underline">
