@@ -91,7 +91,12 @@ class DisbursePmIncentiveMonthly extends Command
             $projects = Project::where([['projects.pm_id', $user->id],['projects.status', 'in progress'],['projects.project_status', 'Accepted']])->get();
             $deadline_miss_rate = number_format(($projects->where('deadline', '<', now())->count() / $projects->count()) * 100, 2);
             
-            
+            // Client retention rate 
+            $pm_created_clients = Project::where('added_by', $user->id)->where('created_at', '>=', Carbon::now()->startOfMonth())->pluck('client_id');
+            $pm_assigned_clients = Project::where('pm_id', $user->id)->whereIn('client_id', $pm_created_clients)->where('created_at', '>=', Carbon::now()->startOfMonth())->pluck('client_id')->toArray();
+            $retension_this_month = count(array_keys(array_filter(array_count_values($pm_assigned_clients), fn($count) => $count > 1)));
+            $client_retention_rate = number_format(((Project::whereIn('client_id', $pm_created_clients)->where('pm_id', $user->id)->where('created_at', '<=', Carbon::now()->startOfMonth())->pluck('client_id')->count() + $retension_this_month) / $pm_created_clients->count())*100, 2);
+            dd($client_retention_rate);
         }
     }
 }
