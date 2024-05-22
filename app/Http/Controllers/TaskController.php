@@ -823,7 +823,7 @@ class TaskController extends AccountBaseController
             $task_submit->user_id = $request->user_id;
 
             //$task_submit->table=$request->table;
-            //$task_submit->list=$request->list;
+            $task_submit->screen_record_link = $request->screen_record_link;
             $task_submit->text = $request->text;
             if ($order == null) {
                 $task_submit->submission_no = 1;
