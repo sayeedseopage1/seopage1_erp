@@ -161,16 +161,33 @@ class EvaluationController extends AccountBaseController
         ]);
     }
 
-    public function getEmployeeTask($id)
+   public function getEmployeeTask($id)
     {
-        $data = EmployeeEvaluationTask::select('employee_evaluation_tasks.*','taskboard_columns.id as task_board_column_id','taskboard_columns.column_name as task_board_column_name','taskboard_columns.slug as task_board_column_slug','taskboard_columns.label_color as task_board_column_color','taskboard_columns.priority as task_board_column_priority')
-            ->leftJoin('tasks','employee_evaluation_tasks.task_id','tasks.id')
-            ->leftJoin('taskboard_columns','tasks.board_column_id','taskboard_columns.id')
-            ->where('user_id',$id)
-            ->get();
+        $data = EmployeeEvaluationTask::select(
+            'employee_evaluation_tasks.*',
+            'taskboard_columns.id as task_board_column_id',
+            'taskboard_columns.column_name as task_board_column_name',
+            'taskboard_columns.slug as task_board_column_slug',
+            'taskboard_columns.label_color as task_board_column_color',
+            'taskboard_columns.priority as task_board_column_priority',
+            'task_submissions.screen_record_link',
+            'tasks.id as task_id'
+        )
+        ->leftJoin('tasks', 'employee_evaluation_tasks.task_id', 'tasks.id')
+        ->leftJoin('taskboard_columns', 'tasks.board_column_id', 'taskboard_columns.id')
+        ->leftJoin('task_submissions', 'tasks.id', 'task_submissions.task_id')
+        ->where('employee_evaluation_tasks.user_id', $id)
+        ->get();
+
+        $groupedData = $data->groupBy('task_id')->map(function ($tasks) {
+            $firstTask = $tasks->first();
+            $firstTask->screen_record_links = $tasks->pluck('screen_record_link')->filter()->values()->toArray();
+            unset($firstTask->screen_record_link);
+            return $firstTask;
+        })->values();
 
         return response()->json([
-            'data' => $data,
+            'data' => $groupedData,
             'status' => 200
         ]);
     }
