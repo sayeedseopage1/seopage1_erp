@@ -26,8 +26,7 @@ export const IncentiveFormattedData = (
                 title: criteria?.title,
                 yTitle: "Incentive percentage",
                 chartTag: "Ideal",
-                amountType:
-                    criteria?.incentive_factors?.[0]?.incentive_amount_type,
+                amountType: criteria?.incentive_amount_type,
                 series: [
                     {
                         name: criteria?.title,
@@ -47,8 +46,10 @@ export const IncentiveFormattedData = (
                         }
 
                         return `${lowerLimit}-${
-                            criteria?.id > 7 ? "$" : ""
-                        }${upperLimit}${criteria?.id <= 7 ? "%" : ""}`;
+                            parseFloat(factor?.limit_type) == 1 ? "$" : ""
+                        }${upperLimit}${
+                            parseFloat(factor?.limit_type) == 2 ? "%" : ""
+                        }`;
                     }
                 ),
                 /* categories: criteria?.incentive_factors?.map(

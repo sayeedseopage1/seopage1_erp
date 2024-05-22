@@ -3,24 +3,24 @@ import GradientProgressBar from './GradientProgressBar';
 import AveragePointModal from '../../Modals/AveragePointModal';
 
 const StatsInfoProgressCard = ({ item }) => {
-    const { title, achieved } = item || {}
+    const { title, obtained_incentive, acquired_percent, incentive_factors } = item || {}
     const [averagePointsModalOpen, setAveragePointsModalOpen] = useState(false);
 
     return (
         <div className="progress_card_wrapper">
             <div className="progress_card_desc_wrapper">
-                <span className={`${achieved > 0 ? 'progress_card_desc_pos' : 'progress_card_desc_neg'}`}>
+                <span className={`${parseFloat(obtained_incentive) > 0 ? 'progress_card_desc_pos' : 'progress_card_desc_neg'}`}>
                     {title}:
                 </span>
             </div>
             <div className="w-100">
                 {
                     title == "Average" ?
-                        <span onClick={() => setAveragePointsModalOpen(true)} className={`${achieved > 0 ? 'progress_card_desc_pos' : 'progress_card_desc_neg'} stats_info_link`}>
-                            {achieved}%
+                        <span onClick={() => setAveragePointsModalOpen(true)} className={`${parseFloat(obtained_incentive) > 0 ? 'progress_card_desc_pos' : 'progress_card_desc_neg'} stats_info_link`}>
+                            {parseFloat(obtained_incentive)}%
                         </span>
-                        : <span className={`${achieved > 0 ? 'progress_card_desc_pos' : 'progress_card_desc_neg'}`}>
-                            Achieved: {achieved}%
+                        : <span className={`${parseFloat(obtained_incentive) > 0 ? 'progress_card_desc_pos' : 'progress_card_desc_neg'}`}>
+                            Achieved: {parseFloat(obtained_incentive)}%
                         </span>
                 }
                 <AveragePointModal
@@ -31,9 +31,9 @@ const StatsInfoProgressCard = ({ item }) => {
             <div className="progress_card_stats_wrapper">
                 <div className="progress_card_stats_inner">
                     <label>{title}</label>
-                    <label>{achieved}/100%</label>
+                    <label>{parseFloat(acquired_percent)}/{parseFloat(incentive_factors[incentive_factors.length - 1]?.upper_limit)}%</label>
                 </div>
-                <GradientProgressBar progress={achieved} />
+                <GradientProgressBar progress={parseFloat(acquired_percent)} />
             </div>
         </div>
     );

@@ -6,17 +6,23 @@ import RegularPointsModal from '../../Modals/RegularPointsModal';
 import IncentivePointModal from '../../Modals/IncentivePointModal';
 import { statsInfoData } from '../../../constants';
 import { Popover } from 'antd';
+import useIncentiveTypes from '../../../hooks/useIncentiveTypes';
 
 const StatsInfo = () => {
     const [regularPointsModalOpen, setRegularPointsModalOpen] = useState(false);
     const [incentivePointsModalOpen, setIncentivePointsModalOpen] = useState(false);
+    const { regularIncentiveTypes, incentiveTypesLoading } = useIncentiveTypes();
 
     return (
         <div className='stats_info_wrapper'>
             {/* point stats */}
             <div className='stats_info_outer'>
-                {
+                {/* TODO: implement loading here as well  */}
+                {/* {
                     statsInfoData?.stats_info?.map((item) => <StatsInfoProgressCard key={item?.id} item={item} />)
+                } */}
+                {
+                    regularIncentiveTypes?.incentive_criterias?.map((item) => <StatsInfoProgressCard key={item?.id} item={item} />)
                 }
             </div>
             {/* point score */}

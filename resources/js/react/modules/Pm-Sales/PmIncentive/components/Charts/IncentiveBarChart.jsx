@@ -20,6 +20,8 @@ const IncentiveBarChart = ({ chartData }) => {
         setIsIdealVsAchievedEditModalOpen(!isIdealVsAchievedEditModalOpen);
     };
 
+    // console.log(), "chartData");
+
     const options = {
         title: {
             // text: chartData.title,
@@ -70,7 +72,8 @@ const IncentiveBarChart = ({ chartData }) => {
                     colors: ["#000000"],
                 },
             },
-            stepSize: 20
+            // stepSize: Math.max(...chartData?.series[0]?.data) > 20 ? 20 : Math.max(...chartData?.series[0]?.data),
+            stepSize: Math.max(...chartData?.series[0]?.data) > 10 ? 20 : 2,
         },
 
         dataLabels: {

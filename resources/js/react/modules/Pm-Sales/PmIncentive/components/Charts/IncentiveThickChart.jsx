@@ -123,7 +123,7 @@ const IncentiveThickChart = ({ chartData }) => {
         },
         yaxis: {
             // tickAmount: 5,
-            max: 120,
+            // max: 120,
             labels: {
                 formatter: (val) => `${val}%`,
                 style: {
