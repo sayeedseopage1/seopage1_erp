@@ -20,6 +20,7 @@ import { User } from "../../../utils/user-details";
 import { useNavigate } from "react-router-dom";
 import { workingReportError } from "../helper/timer-start-working-report-error-toaster";
 import ExpiredTimeModalForNewEmployee from "./ExpiredTimeModalForNewEmployee";
+import ExpiredNotifyModalForNewEmployee from "./ExpiredNotifyModalForNewEmployee";
 
 // component
 const TimerControl = ({ task, timerStart, setTimerStart, auth }) => {
@@ -28,6 +29,8 @@ const TimerControl = ({ task, timerStart, setTimerStart, auth }) => {
         useState(true);
     const [timeLeft, setTimeLeft] = useState(0);
     const [showExpirationWarningModal, setShowExpirationWarningModal] =
+        useState(false);
+    const [showExpirationNotifyModal, setShowExpirationNotifyModal] =
         useState(false);
     const [expiredTimerForNewEmployee, setExpiredTimerForNewEmployee] =
         useState(false);
@@ -462,6 +465,11 @@ const TimerControl = ({ task, timerStart, setTimerStart, auth }) => {
                 taskRunning={taskRunning}
                 task={task}
                 timerStatusForWarningModal={timerStatusForWarningModal}
+            />
+            <ExpiredNotifyModalForNewEmployee
+                showExpirationNotifyModal={showExpirationNotifyModal}
+                setShowExpirationNotifyModal={setShowExpirationNotifyModal}
+                timeLeft={timeLeft}
             />
         </React.Fragment>
     );
