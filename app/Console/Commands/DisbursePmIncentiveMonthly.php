@@ -71,7 +71,8 @@ class DisbursePmIncentiveMonthly extends Command
             $goal_achieved_percent = $projects->sum('total_goals') ? number_format(($projects->sum('total_goals_met') / $projects->sum('total_goals')) * 100, 2) : 0; 
 
             // Negative vs poisitive point
-            $negative_point_rete = number_format(($totalLostPoints / ($totalEarnedPoints + $totalLostPoints)) * 100, 2);
+            $total_points = $totalEarnedPoints + $totalLostPoints;
+            $negative_point_rete = $total_points ? number_format(($totalLostPoints / $total_points) * 100, 2) : 0;
 
             // Percentage of delayed project
             $delayed_project_percentage = Project::selectRaw('FORMAT((SUM(CASE WHEN p_m_projects.delayed_status = 1 THEN 1 ELSE 0 END) / SUM(CASE WHEN p_m_projects.delayed_status = NULL THEN 0 ELSE 1 END)) * 100, 2) as delayed_project_percentage')
@@ -86,7 +87,11 @@ class DisbursePmIncentiveMonthly extends Command
             ->whereBetween('project_milestones.created_at', [Carbon::now()->startOfMonth(), Carbon::now()->endOfMonth()])
             ->first()->milestone_cancelation_rate;
 
-            // 
+            // Project dateline miss rate
+            $projects = Project::where([['projects.pm_id', $user->id],['projects.status', 'in progress'],['projects.project_status', 'Accepted']])->get();
+            $deadline_miss_rate = number_format(($projects->where('deadline', '<', now())->count() / $projects->count()) * 100, 2);
+            
+            
         }
     }
 }
