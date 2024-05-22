@@ -175,6 +175,7 @@ const AddNewPolicyModal = ({
                     ) : (
                         ""
                     )}
+                    
 
                     <div className="row mb-4 align-items-center">
                         <ModalInputLabel className="col-4">
@@ -187,7 +188,7 @@ const AddNewPolicyModal = ({
                                     data={PolicyTypeItems}
                                     selected={newPolicyData?.policyType}
                                     setSelected={handleChange}
-                                    isDisableUse={false}
+                                    isDisableUse={newPolicyData?.key?.name === "yesNoRules"}
                                 />
                             </ModalSelectContainer>
                             {newPolicyDataValidation?.policyType && (

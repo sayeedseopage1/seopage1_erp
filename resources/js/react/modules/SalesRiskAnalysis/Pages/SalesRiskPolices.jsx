@@ -24,6 +24,7 @@ import { addNewRulesValidation } from "../helper/createFromValidation";
 // styles
 import "../components/Styles/SalesRiskAnalysis.css";
 import AddQuestionsListModal from "../components/modal/AddQuestionsListModal";
+import { PolicyTypeItems } from "../constant";
 
 const inputSateData = {
     mainDetails: {
@@ -172,11 +173,32 @@ const SalesRiskPolices = () => {
             name === "key" ||
             name === "comment"
         ) {
-            setNewPolicyData({ ...newPolicyData, [name]: value });
-            setNewPolicyMainDetails({
-                ...newPolicyMainDetails,
-                [name]: value,
-            });
+            if (name === "key") {
+                if (value.name === "yesNoRules") {
+                    setNewPolicyData({
+                        ...newPolicyData,
+                        policyType: PolicyTypeItems?.data?.find((item) =>
+                            item?.name?.includes("yesNo")
+                        ),
+                        [name]: value,
+                    });
+                } else {
+                    setNewPolicyData({
+                        ...newPolicyData,
+                        [name]: value,
+                    });
+                }
+                setNewPolicyMainDetails({
+                    ...newPolicyMainDetails,
+                    [name]: value,
+                });
+            } else {
+                setNewPolicyData({ ...newPolicyData, [name]: value });
+                setNewPolicyMainDetails({
+                    ...newPolicyMainDetails,
+                    [name]: value,
+                });
+            }
         } else if (name === "policyType") {
             // add default value for valueType on policy type change when if have any rules data on the form
             setNewPolicyData({

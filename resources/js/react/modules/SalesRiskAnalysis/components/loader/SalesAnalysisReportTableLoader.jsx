@@ -45,6 +45,23 @@ export default function SalesAnalysisReportTableLoader({ prevItemLength = 7 }) {
             </td>
             {auth.getRoleId() === 1 && (
                 <td className="sp1_tasks_td">
+                    <div className="d-flex align-items-center">
+                        <Placeholder
+                            width="30px"
+                            height="30px"
+                            type="circle"
+                            className="mb-0"
+                        />
+                        <Placeholder
+                            width="80px"
+                            height="13px"
+                            className="ml-1"
+                        />
+                    </div>
+                </td>
+            )}
+            {auth.getRoleId() === 1 && (
+                <td className="sp1_tasks_td">
                     <Placeholder width="80px" height="13px" className="mb-1" />
                 </td>
             )}

@@ -13,12 +13,9 @@ import {
     setFilterOptionsState,
 } from "../../../services/features/filterOptionSlice";
 
-
 export const SalesRiskAnalysisContext = createContext({});
 
-
 const SalesRiskAnalysisProvider = ({ children }) => {
-
     const dispatch = useDispatch();
     const { departments } = useSelector((state) => state.filterOptions);
     const [questionsAnswerType, setQuestionsAnswerType] = React.useState({});
@@ -83,13 +80,23 @@ const SalesRiskAnalysisProvider = ({ children }) => {
         if (questionFieldsData && !isQuestionType) {
             const questionTypeData = Object.entries(
                 questionFieldsData?.data?.questionKeys
-            ).map(([key, value], index) => {
-                return {
-                    id: index + 1,
-                    name: key,
-                    label: value,
-                };
-            });
+            )
+                .filter(
+                    ([key]) =>
+                        !(
+                            key === "yesNoRules" &&
+                            !questionFieldsData?.data?.yesNoRules.length
+                        )
+                )
+                .map(([key, value], index) => {
+                    return {
+                        id: index + 1,
+                        name: key,
+                        label: value,
+                    };f
+                });
+            console.log(questionTypeData);
+
             const policyList = questionFieldsData?.data?.policies.map(
                 (policy) => {
                     return {
@@ -119,7 +126,7 @@ const SalesRiskAnalysisProvider = ({ children }) => {
                         label: rule.title,
                     };
                 }
-            )
+            );
             setAllQuestions({
                 label: "Parent Questions",
                 emptyOptionsLabel: "Select Parent Question",
@@ -148,7 +155,6 @@ const SalesRiskAnalysisProvider = ({ children }) => {
         }
     }, [questionFieldsData, isQuestionType]);
 
-
     const SalesRiskAnalysisValue = React.useMemo(() => {
         return {
             questionsAnswerType,
@@ -156,7 +162,7 @@ const SalesRiskAnalysisProvider = ({ children }) => {
             allQuestions,
             policyKeys,
             isSalesRiskInputsLoading,
-            yesNoRules
+            yesNoRules,
         };
     });
 
