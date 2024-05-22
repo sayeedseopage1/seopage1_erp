@@ -759,7 +759,7 @@
                     <div class="deal_item ">
                         <h3>Deal Status</h3><br>
                         @if ($salesDeal)
-                            <input type="hidden" value="{{ $salesDeal ? $salesDeal->id : null }}">
+                            <input type="hidden" value="{{ $salesDeal->id }}">
                             @if ($salesDeal->sale_analysis_status == 'analysis')
                                 @if (auth()->user()->role_id == 1)
                                     <div class="text-center">

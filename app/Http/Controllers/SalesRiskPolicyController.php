@@ -108,7 +108,7 @@ class SalesRiskPolicyController extends AccountBaseController
         $validator = Validator::make($req->all(), [
             'title' => 'required',
             'department' => 'required',
-            'key' => 'required',
+            'key' => 'required|in:'. implode(',', array_keys(SalesRiskPolicy::$keys)),
             'comment' => 'nullable',
             'ruleList' => 'required|array|min:1',
             'ruleList.*.policyType' => 'in:' . implode(',', SalesRiskPolicy::$types),
@@ -167,7 +167,7 @@ class SalesRiskPolicyController extends AccountBaseController
         $validator = Validator::make($req->all(), [
             'title' => 'required',
             'department' => 'required',
-            'key' => 'required',
+            'key' => 'required|in:'. implode(',', array_keys(SalesRiskPolicy::$keys)),
             'comment' => 'nullable',
             'ruleList' => 'required|array|min:1',
             'ruleList.*.policyType' => 'in:' . implode(',', SalesRiskPolicy::$types),
@@ -434,7 +434,7 @@ class SalesRiskPolicyController extends AccountBaseController
         $questionList = SalesPolicyQuestion::get(['id', 'title', 'key', 'type', 'value', 'parent_id', 'policy_id']);
 
         // get yes no rules
-        $yesNoRules = NULL;
+        $yesNoRules = [];
         if ($policy = SalesRiskPolicy::where('key', 'yesNoRules')->first()) {
             $yesNoRules = SalesRiskPolicy::where('parent_id', $policy->id)->get(['id', 'title']);
         }
@@ -446,8 +446,8 @@ class SalesRiskPolicyController extends AccountBaseController
     {
         $validator = Validator::make($req->all(), [
             'title' => 'required',
-            'key' => 'required',
-            'type' => 'required',
+            'key' => 'required|in:'. implode(',', array_keys(SalesRiskPolicy::$keys)),
+            'type' => 'required|in:'. implode(',', array_keys(SalesPolicyQuestion::$types)),
             'value' => 'nullable',
             'policy_id' => 'nullable',
             'parent_id' => 'nullable',
@@ -460,7 +460,7 @@ class SalesRiskPolicyController extends AccountBaseController
         }
 
         try {
-            SalesPolicyQuestion::create([
+            $data = [
                 'title' => $req->title,
                 'key' => $req->key,
                 'type' => $req->type,
@@ -470,8 +470,11 @@ class SalesRiskPolicyController extends AccountBaseController
                 'policy_id' => $req->policy_id,
                 'placeholder' => $req->placeholder,
                 'comment' => $req->comment
-            ]);
+            ];
+
+            SalesPolicyQuestion::create($data);
         } catch (\Throwable $th) {
+            // throw $th;
             return response()->json(['status' => 'error', 'message' => 'Data not saved correctly.'], 500);
         }
 
@@ -482,8 +485,8 @@ class SalesRiskPolicyController extends AccountBaseController
     {
         $validator = Validator::make($req->all(), [
             'title' => 'required',
-            'key' => 'required',
-            'type' => 'required',
+            'key' => 'required|in:'. implode(',', array_keys(SalesRiskPolicy::$keys)),
+            'type' => 'required|in:'. implode(',', array_keys(SalesPolicyQuestion::$types)),
             'value' => 'nullable',
             'policy_id' => 'nullable',
             'parent_id' => 'nullable',
@@ -529,13 +532,12 @@ class SalesRiskPolicyController extends AccountBaseController
         $itemsTransformed = $itemsPaginated
             ->getCollection()
             ->map(function ($item) {
-
-                return [
+                $data = [
                     'id' => $item->id,
                     'title' => $item->title,
                     'key' => $item->key,
                     'type' => $item->type,
-                    'value' => json_decode($item->value) ? json_decode($item->value) : $item->value,
+                    'value' => json_decode($item->value) ?: $item->value,
                     'placeholder' => $item->placeholder,
                     'parent_id' => $item->parent_id,
                     'policy_id' => $item->policy_id,
@@ -543,6 +545,7 @@ class SalesRiskPolicyController extends AccountBaseController
                     'comment' => $item->comment,
                     'questions' => self::questionListChild($item->id)
                 ];
+                return $data;
             })->toArray();
 
         $data = new \Illuminate\Pagination\LengthAwarePaginator(
@@ -628,13 +631,12 @@ class SalesRiskPolicyController extends AccountBaseController
 
         $data = SalesPolicyQuestion::parent()
             ->where(function ($query) use ($dealStage) {
-
                 // excluding weekend question on Saturday and Sunday deal's
                 if (!in_array(Carbon::parse($dealStage->updated_at)->format('D'), ['Sat', 'Sun'])) $query->whereNot('key', 'availableWeekend');
             })
             ->get()->filter(fn ($item) => SalesRiskPolicy::find($item->policy_id)->status)
             ->map(function ($item) {
-                return [
+                $data = [
                     'id' => $item->id,
                     'title' => $item->title,
                     'key' => $item->key,
@@ -647,6 +649,7 @@ class SalesRiskPolicyController extends AccountBaseController
                     'comment' => $item->comment,
                     'questions' => self::questionListChild($item->id)
                 ];
+                return $data;
             })->toArray();
 
         $currency = Currency::find($deal->original_currency_id);
