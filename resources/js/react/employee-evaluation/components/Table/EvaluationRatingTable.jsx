@@ -151,10 +151,7 @@ const EvaluationRatingTable = ({ data, averageRating }) => {
                                                                 <span>
                                                                     {index === 0
                                                                         ? "Latest Submission"
-                                                                        : `Submission: ${
-                                                                              data.length -
-                                                                              index
-                                                                          }`}
+                                                                        : `Submission:`}
                                                                     .
                                                                 </span>
                                                                 <a
