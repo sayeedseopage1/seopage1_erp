@@ -1,8 +1,7 @@
 import React from 'react';
 import IncentiveBarChart from '../../Charts/IncentiveBarChart';
-// import IncentiveThickChart from '../../Charts/IncentiveThickChart';
+import IncentiveThickChart from '../../Charts/IncentiveThickChart';
 import useIncentiveTypes from '../../../hooks/useIncentiveTypes'
-// import { chartRangesForColor } from '../../../constants/rangesColor';
 import UpsaleCrossSalePointBanner from './UpsaleCrossSalePointBanner';
 import { IncentiveFormattedData } from '../../../utils/formattedChartData';
 
@@ -30,9 +29,9 @@ const UpsaleCrossSale = () => {
                                 <IncentiveBarChart chartData={item?.ideal} />
                             </div>
 
-                            {/* <div className="secondary_chart_wrapper">
+                            <div className="secondary_chart_wrapper">
                                 <IncentiveThickChart chartData={item?.achieved} />
-                            </div> */}
+                            </div>
                         </div>
 
                     ))

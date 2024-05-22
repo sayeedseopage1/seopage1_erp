@@ -160,7 +160,13 @@ const IncentiveBarChart = ({ chartData }) => {
                         bar: {
                             borderRadius: 2,
                         },
-                    }
+                    },
+                    dataLabels: {
+                        style: {
+                            fontSize: "10px",
+                            fontWeight: 400,
+                        },
+                    },
                 }
             }
         ]

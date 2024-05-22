@@ -1,4 +1,10 @@
 function convertToShortTitle(title) {
+    if (title.includes(" < 6000")) {
+        title = title.replace(" < 6000", "");
+    }
+    if (title.includes(" > 6000")) {
+        title = title.replace(" > 6000", "");
+    }
     // Split the title by spaces to get individual words
     const words = title.split(" ");
 
