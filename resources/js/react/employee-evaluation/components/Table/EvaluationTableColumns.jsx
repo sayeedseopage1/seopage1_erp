@@ -5,7 +5,10 @@ import { User } from "../../../utils/user-details";
 import FormatDate from "../../../utils/FormateDate";
 import { convertTime } from "../../../utils/converTime";
 import ActionEvaluationTable from "./ActionEvaluationTable";
+import AverageRatingSecondaryMetrics from "./AverageRatingSecondaryMetrics";
+import AverageRating from "./AverageRating";
 const auth = new User(window.Laravel.user);
+
 export const EvaluationTableColumns = [
     {
         id: "user_name",
@@ -100,7 +103,20 @@ export const EvaluationTableColumns = [
             const data = row.original;
             return (
                 <div style={{ marginLeft: "50px" }}>
-                    {data?.lead_dev_avg_rating}
+                    <AverageRating data={data} />
+                </div>
+            );
+        },
+    },
+    {
+        id: "communication",
+        header: "Avg. ratings for secondary metrics",
+        accessorKey: "communication",
+        cell: ({ row }) => {
+            const data = row.original;
+            return (
+                <div style={{ marginLeft: "50px" }}>
+                    <AverageRatingSecondaryMetrics data={data} />
                 </div>
             );
         },
