@@ -10,7 +10,7 @@ import PMGuideline from "../../../components/PMGuideline";
 import FileUploader from "../../../../file-upload/FileUploader";
 import { useAuth } from "../../../../hooks/useAuth";
 
-const Genarel = ({ task, isFetching, singleTask }) => {
+const Genarel = ({ task, isFetching, singleTask, taskID }) => {
     const loggedUser = new User(window?.Laravel?.user);
     const auth = useAuth();
 
@@ -439,6 +439,7 @@ const Genarel = ({ task, isFetching, singleTask }) => {
                         task={task}
                         type="TASK_DESCRIPTION"
                         singleTask={singleTask}
+                        taskID={taskID}
                     />
                     {_.size(task?.attachments) > 0 ? (
                         <div className="mt-3">
