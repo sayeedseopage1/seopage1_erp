@@ -57,7 +57,7 @@ return new class extends Migration
                 'id' => 4,
                 'incentive_criteria_id' => 1,
                 'limit_type' => 2,
-                'lower_limit' => 30,
+                'lower_limit' => 35,
                 'upper_limit' => 50,
                 'incentive_amount_type' => 2,
                 'incentive_amount' => 0
