@@ -6,11 +6,18 @@ Popover;
 const RatingSection = ({ label, value, onChange, hoverText }) => {
     return (
         <section>
-            <label style={{ fontWeight: "bold", fontSize: "16px" }}>
+            <label
+                style={{
+                    fontWeight: "bold",
+                    fontSize: "16px",
+                    display: "flex",
+                }}
+            >
+                <div>{label}</div>
+
                 <Popover>
                     <Popover.Button>
                         <span className=" singleline-ellipsis">
-                            <span>{label}</span>
                             <span className="ml-1 pe-auto">
                                 <BsQuestionCircleFill />
                             </span>
