@@ -24,8 +24,7 @@ class Incentive
                         'pm_id' => $pm_id,
                         'incentive_factor_id' => $incentiveFactor->id,
                         'incentive_amount_type' => $incentiveFactor->incentive_amount_type,
-                        'incentive_amount' => $incentiveFactor->incentive_amount,
-                        'achieved_points' => $incentiveFactor->incentive_amount_type == 1 ? $incentiveFactor->incentive_amount : ($incentiveFactor->incentive_amount / $availablePoints) * 100,
+                        'incentive_amount' => $incentiveFactor->incentive_amount
                     ]);
                 }
             }
