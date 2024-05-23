@@ -666,11 +666,10 @@ class EvaluationController extends AccountBaseController
         foreach($tasks as $task)
         {
             $revision = TaskRevision::where('task_id',$task->id)->get();
-            $task->revision = $revision;
         }
         return response()->json([
             'status' => 200,
-            'data' => $tasks
+            'data' => $revision
             ]);
     }
 
