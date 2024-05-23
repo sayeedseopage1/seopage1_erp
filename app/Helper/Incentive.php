@@ -11,12 +11,8 @@ class Incentive
     public static function progressiveStore($incentiveCriteriaId, $pm_id, $comparable_value, $now = null)
     {
         try {
-            $cashPoints = CashPoint::whereNotNull('factor_id')->get();
-            $totalEarnedPoints = $cashPoints->sum('total_points_earn');
-            $totalLostPoints = $cashPoints->sum('total_points_lost');
-            $availablePoints = $totalEarnedPoints - $totalLostPoints + 500;
-
             $incentiveCriteria = IncentiveCriteria::with('incentiveFactors')->find($incentiveCriteriaId);
+            $incentiveAmount = 0;
             foreach($incentiveCriteria->incentiveFactors as $incentiveFactor){
                 if(($comparable_value == 0 || $incentiveFactor->lower_limit < $comparable_value) && $incentiveFactor->upper_limit >= $comparable_value){
                     ProgressiveIncentive::create([
@@ -27,10 +23,11 @@ class Incentive
                         'incentive_amount_type' => $incentiveFactor->incentive_amount_type,
                         'incentive_amount' => $incentiveFactor->incentive_amount
                     ]);
+                    $incentiveAmount = $incentiveFactor->incentive_amount;
                     break;
                 }
             }
-            return true;
+            return $incentiveAmount;
         } catch (\Throwable $th) {
             // throw $th;
             return false;
