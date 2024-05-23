@@ -1155,7 +1155,7 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
     Route::post('employee-task-evaluation-update', [EvaluationController::class,'updateEmployeeTaskEvaluation']);
     Route::post('employee-evaluation-team-lead-cmnt', [EvaluationController::class,'storeTeamLeadCmnt']);
     Route::post('employee-evaluation-authorization', [EvaluationController::class,'storeAuthorization']);
-    Route::post('employee-evaluation-acknowledged', [EvaluationController::class,'storeAcknowledged']);
+    Route::post('employee-evaluation-acknowledged', [EvaluationController::class,'storeTeamLeadAcknowledged']);
     Route::get('employee-evaluation-user/{id}', [EvaluationController::class,'getEmployeeUser']);
     Route::get('employee-task-revision/{id}', [EvaluationController::class,'employeeTaskRevision']);
     Route::get('evaluation-total-revision/{id}', [EvaluationController::class,'totalRevision']);

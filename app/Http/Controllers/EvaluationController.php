@@ -569,9 +569,9 @@ class EvaluationController extends AccountBaseController
             ]);
         }
     }
-    public function storeAcknowledged(Request $request)
+    public function storeTeamLeadAcknowledged(Request $request)
     {
-        dd($request->all());
+        // dd($request->all());
         // DB::beginTransaction();
         $evaluation = EmployeeEvaluation::where('user_id',$request->user_id)->first();
         if($request->acknowledged == 'team_lead'){
@@ -605,8 +605,8 @@ class EvaluationController extends AccountBaseController
                 $past_action->message = 'Top Management <a href="'.route('employees.show',$authorize_by->id).'">'.$authorize_by->name.'</a> has authorized New Developer <a href="'.route('employees.show',$dev->id).'">'.$dev->name.'</a> for real work from ';
             }elseif($evaluation->employee_status == 2)
             {
-                $past_action->heading= 'Top Management '.$top_management->name.' has extended the trial period for New Developer '.$dev->name.'!';
-                $past_action->message = 'Top Management <a href="'.route('employees.show',$top_management->id).'">'.$top_management->name.'</a> has extended the trial period one more week for New Developer <a href="'.route('employees.show',$dev->id).'">'.$dev->name.'</a> from ';
+                $past_action->heading= 'Top Management '.$top_management->name.' has extended & created a new task for the trial period for New Developer '.$dev->name.'!';
+                $past_action->message = 'Top Management <a href="'.route('employees.show',$top_management->id).'">'.$top_management->name.'</a> has extended & created a new task for New Developer <a href="'.route('employees.show',$dev->id).'">'.$dev->name.'</a> from ';
             }else{
                 $past_action->heading= 'New Developer '.$dev->name.' was rejected for real work by Top Management '.$top_management->name.'!';
                 $past_action->message = 'Top Management <a href="'.route('employees.show',$top_management->id).'">'.$top_management->name.'</a> has authorized New Developer <a href="'.route('employees.show',$dev->id).'">'.$dev->name.'</a> for real work from ';
@@ -633,10 +633,17 @@ class EvaluationController extends AccountBaseController
             $past_action->save();
             }
         }
-        return response()->json([
-            'url' => url('account/independent/tasks?status=one_more_week&user_id='.$evaluation->user_id),
-            'status' => 200
-        ]);
+        if(Auth::user()->role_id == 8){
+            return response()->json([
+                'url' => url('account/independent/tasks?status=one_more_week&user_id='.$evaluation->user_id),
+                'status' => 200
+            ]);
+        }else{
+            return response()->json([
+                'url' => route('tasks.show', $past_action->task_id),
+                'status' => 200
+            ]);
+        }
     }
     public function getEmployeeUser($id)
     {

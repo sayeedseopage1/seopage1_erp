@@ -249,7 +249,7 @@ class IndependentTaskController extends AccountBaseController
             $evaluation = EmployeeEvaluation::where('user_id',$pendingParentTasks->evaluation_user_id)->first();
             if($evaluation->managements_decision == 'One more week'){
                 $helper = new HelperPendingActionController();
-                $helper->evaluationAuthTeamLead($evaluation->id);
+                $helper->evaluationAuthTeamLead($evaluation->id, $independent_task->id);
             }
         }
 

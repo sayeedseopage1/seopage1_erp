@@ -2096,7 +2096,7 @@ class HelperPendingActionController extends AccountBaseController
                 $action->authorization_for= $authorizer->id;
                 $button = [
                     [
-                        'button_name' => 'Acknowledge It',
+                        'button_name' => 'Acknowledge & create a task',
                         'button_color' => 'primary',
                         'button_type' => 'modal',
                         'button_url' => '',
@@ -2108,7 +2108,7 @@ class HelperPendingActionController extends AccountBaseController
                 $action->save();
             }
         }
-        public function evaluationAuthTeamLead($evaluation_task)
+        public function evaluationAuthTeamLead($evaluation_task, $taskId)
         {
             $evaluation_task = EmployeeEvaluationTask::where('id',$evaluation_task)->first(); 
             $new_dev = User::where('id',$evaluation_task->user_id)->first(); 
@@ -2116,7 +2116,7 @@ class HelperPendingActionController extends AccountBaseController
             $evaluation = EmployeeEvaluation::where('user_id',$evaluation_task->user_id)->first(); 
             $top_management = User::where('id',Auth::user()->id)->first(); 
             $team_lead = User::where('id',$evaluation->team_lead_id)->first();
-            $task = Task::where('id',$evaluation_task->task_id)->first();
+            $task = Task::where('id',$taskId)->first();
             $authorizers = User::where('role_id', 6)->get();
             $updated_at = Carbon::parse($evaluation_task->updated_at);
             $formatted_date_time = $updated_at->format('d F Y \a\t g:i A');
@@ -2125,8 +2125,8 @@ class HelperPendingActionController extends AccountBaseController
                 $action->code = 'EEFA';
                 $action->serial = 'EEFA'.'x'.$key;
                 $action->item_name= 'Evaluation extend for admin!';
-                $action->heading= 'Top Management '.$top_management->name.' has extended the trial period for New Developer '.$new_dev->name.'!';
-                $action->message = 'Top Management <a href="'.route('employees.show',$top_management->id).'">'.$top_management->name.'</a> has extended the trial period for one more week for New Developer <a href="'.route('employees.show',$new_dev->id).'">'.$new_dev->name.'</a> from '.$formatted_date_time.'';
+                $action->heading= 'Sales Lead '.$top_management->name.' has extended the trial period and created a new task to re-evaluate the New Developer '.$new_dev->name.'!';
+                $action->message = 'Sales Lead <a href="'.route('employees.show',$top_management->id).'">'.$top_management->name.'</a> has extended the trial period and created a new task to re-evaluate the New Developer <a href="'.route('employees.show',$new_dev->id).'">'.$new_dev->name.'</a>';
                 $action->timeframe= 24;
                 $action->client_id = $task->client_id;
                 $action->task_id = $task->id;
@@ -2134,7 +2134,7 @@ class HelperPendingActionController extends AccountBaseController
                 $action->authorization_for= $authorizer->id;
                 $button = [
                     [
-                        'button_name' => 'Acknowledge & create a task',
+                        'button_name' => 'Acknowledge & create sub-tasks',
                         'button_color' => 'primary',
                         'button_type' => 'modal',
                         'button_url' => '',
