@@ -110,18 +110,18 @@ class EvaluationController extends AccountBaseController
         $endDate = $request->end_date ?? null;
         $limit = $request->limit ??  10;
 
-        $evaluationQuery = EmployeeEvaluation::select('employee_evaluations.*','added_by.id as added_by_id','added_by.name as added_by_name')
+        $evaluationQuery = EmployeeEvaluation::select('employee_evaluations.*','added_by.id as added_by_id','added_by.name as added_by_name','tasks.id as task_id')
                     ->selectRaw('MIN(sub_tasks.created_at) as first_task_assign_on')
                     ->selectRaw('MIN(project_time_logs.created_at) as started_working_on')
                     ->selectRaw('COUNT(DISTINCT task_users.id) as total_task_assigned')
-                    ->selectRaw('COUNT(DISTINCT CASE WHEN tasks.board_column_id = 4 THEN tasks.id END) as total_task_submit')
+                    ->selectRaw('COUNT(DISTINCT employee_evaluation_tasks.submission_date) as total_task_submit')
 
+                    ->leftJoin('employee_evaluation_tasks', 'employee_evaluations.user_id', '=', 'employee_evaluation_tasks.user_id')
                     ->leftJoin('sub_tasks', 'employee_evaluations.user_id', '=', 'sub_tasks.assigned_to')
-                    ->leftJoin('tasks', 'sub_tasks.id', '=', 'tasks.subtask_id')
+                    ->leftJoin('tasks', 'sub_tasks.task_id', '=', 'tasks.id')
                     ->leftJoin('users as added_by', 'sub_tasks.added_by', '=', 'added_by.id')
                     ->leftJoin('project_time_logs', 'employee_evaluations.user_id', '=', 'project_time_logs.user_id')
                     ->leftJoin('task_users', 'employee_evaluations.user_id', '=', 'task_users.user_id')
-                    // ->where('tasks.board_column_id', 4)
                     ->groupBy('employee_evaluations.id');
                     if ($startDate !== null && $endDate !== null) {
                         $evaluationQuery->where(function ($query) use ($startDate, $endDate) {
@@ -149,7 +149,6 @@ class EvaluationController extends AccountBaseController
                         $data->total_hours = $total_hours;
                         $data->total_minutes = $total_min;
                         $data->total_revision = $revision;
-                        $data->task_id = $taskUser->task_id;
                         }
                     }
             
@@ -216,7 +215,7 @@ class EvaluationController extends AccountBaseController
     public function storeSubmissionEvaluation(Request $request)
     {
         // dd($request->all());
-        DB::beginTransaction();
+        // DB::beginTransaction();
         $task_sum = EmployeeEvaluationTask::where('user_id',$request->user_id)->sum('avg_rating');
         $task_count = EmployeeEvaluationTask::where('user_id',$request->user_id)->count('avg_rating');
         $avg_rating = $task_count > 0 ? $task_sum / $task_count : 0;
@@ -237,7 +236,6 @@ class EvaluationController extends AccountBaseController
         // ]);
         // $average_rating = $number_of_ratings > 0 ? $total_ratings / $number_of_ratings : 0;
         $employee_evaluation->lead_dev_avg_rating = $avg_rating;
-        dd($employee_evaluation->lead_dev_avg_rating);
         $employee_evaluation->save();
 
         $evaluation_task = EmployeeEvaluationTask::where('user_id',$request->user_id)->first();
@@ -573,7 +571,7 @@ class EvaluationController extends AccountBaseController
     }
     public function storeAcknowledged(Request $request)
     {
-        // dd($request->all());
+        dd($request->all());
         // DB::beginTransaction();
         $evaluation = EmployeeEvaluation::where('user_id',$request->user_id)->first();
         if($request->acknowledged == 'team_lead'){
