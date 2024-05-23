@@ -1,6 +1,7 @@
 import React from 'react';
 import CustomAntdModal from '../ui/CustomAntdModal';
 
+
 const RegularPointsModal = ({ antdModalOpen, setAntdModalOpen }) => {
 
     return (

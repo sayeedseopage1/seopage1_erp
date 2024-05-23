@@ -1,66 +1,14 @@
-/* import React, { useEffect } from 'react';
-import CustomAntdModal from '../ui/CustomAntdModal';
-
-const AveragePointModal = ({ antdModalOpen, setAntdModalOpen, averagePoints, setAveragePoints, item: statsInfoData }) => {
-    const { incentive_criterias } = statsInfoData || {}
-
-    useEffect(() => {
-        if (incentive_criterias) {
-            const totalIncentive = incentive_criterias?.reduce((acc, item) => acc + parseFloat(item?.obtained_incentive), 0);
-            const failMinimumSlab = incentive_criterias?.some((item) => parseFloat(item?.obtained_incentive) <= 0);
-
-            if (failMinimumSlab) {
-                setAveragePoints(0);
-            } else {
-                setAveragePoints(totalIncentive / incentive_criterias?.length);
-            }
-        }
-    }, [incentive_criterias]);
-
-    return (
-        <div>
-            <CustomAntdModal
-                title="Total incentive average:"
-                antdModalOpen={antdModalOpen}
-                setAntdModalOpen={setAntdModalOpen}
-            >
-                <div style={{ marginTop: '32px' }}>
-                    {incentive_criterias?.map((item) => (
-                        <div key={item?.id} className="modal_point_row">
-                            <p>{item?.title}: </p>{" "}
-                            <span className={`${parseFloat(item?.obtained_incentive) > 0 ? 'progress_card_desc_pos' : 'progress_card_desc_neg'}`} >
-                                {parseFloat(item?.obtained_incentive)}%
-                            </span>
-                        </div>
-                    ))}
-                    <hr />
-                    <div className="modal_point_row">
-                        <p>Total incentive average:
-                            <span>
-                                ({incentive_criterias?.map(item => `${parseFloat(item?.obtained_incentive)}%`).join(' + ')})
-                                / {incentive_criterias?.length}
-                            </span>
-                        </p>
-                        <span className={`${averagePoints > 0 ? 'progress_card_desc_pos' : 'progress_card_desc_neg'}`}>{averagePoints}%</span>
-                    </div>
-                </div>
-                <p className="modal_point_note">
-                    <span style={{ color: '#FF6666' }}>**</span>For regular points, if you fail to maintain the minimum incentive slab for any of the criteria, your overall incentive percentage will be zero
-                </p>
-            </CustomAntdModal>
-        </div>
-    );
-};
-
-export default AveragePointModal; */
-
-
 import React, { useEffect } from 'react';
 import CustomAntdModal from '../ui/CustomAntdModal';
+import { useDispatch, useSelector } from 'react-redux';
+import { regularPointAverage } from '../../../../../services/features/Pm-Sales/PmIncentiveSlice';
 
-const AveragePointModal = ({ antdModalOpen, setAntdModalOpen, averagePoints, setAveragePoints, item: statsInfoData }) => {
+const AveragePointModal = ({ antdModalOpen, setAntdModalOpen, item: statsInfoData }) => {
+    const dispatch = useDispatch();
+    const pmIncentive = useSelector((state) => state.pmIncentive)
     // Destructure incentive_criterias from statsInfoData, or set it to an empty object if statsInfoData is undefined
     const { incentive_criterias } = statsInfoData || {};
+    console.log("regularPointFromRedux", pmIncentive?.regularPointAverage)
 
     useEffect(() => {
         // Only run the effect if incentive_criterias is defined
@@ -72,12 +20,12 @@ const AveragePointModal = ({ antdModalOpen, setAntdModalOpen, averagePoints, set
 
             // If any item failed the minimum slab, set average points to 0, otherwise calculate the average
             if (failMinimumSlab) {
-                setAveragePoints(0);
+                dispatch(regularPointAverage(0));
             } else {
-                setAveragePoints(totalIncentive / incentive_criterias?.length);
+                dispatch(regularPointAverage(totalIncentive / incentive_criterias?.length));
             }
         }
-    }, [incentive_criterias, setAveragePoints]); // Depend on incentive_criterias and setAveragePoints
+    }, [incentive_criterias]); // Depend on incentive_criterias and setAveragePoints
 
     return (
         <div>
@@ -108,7 +56,7 @@ const AveragePointModal = ({ antdModalOpen, setAntdModalOpen, averagePoints, set
                             </span>
                         </p>
                         {/* Apply a class based on whether the averagePoints is positive or not */}
-                        <span className={`${averagePoints > 0 ? 'progress_card_desc_pos' : 'progress_card_desc_neg'}`}>{averagePoints}%</span>
+                        <span className={`${pmIncentive?.regularPointAverage > 0 ? 'progress_card_desc_pos' : 'progress_card_desc_neg'}`}>{pmIncentive?.regularPointAverage}%</span>
                     </div>
                 </div>
                 {/* Render a note about the incentive slab rule */}

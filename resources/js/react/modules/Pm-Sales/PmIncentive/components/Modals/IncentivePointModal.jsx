@@ -1,7 +1,18 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import CustomAntdModal from '../ui/CustomAntdModal';
+import useIncentiveTypes from '../../hooks/useIncentiveTypes';
+import { useDispatch } from 'react-redux';
+import { regularIncentivePoints } from '../../../../../services/features/Pm-Sales/PmIncentiveSlice';
 
-const IncentivePointModal = ({ antdModalOpen, setAntdModalOpen }) => {
+
+const IncentivePointModal = ({ antdModalOpen, setAntdModalOpen, regularPointAverage, regularIncentivePoints: regularIncentivePointsData }) => {
+    const { allIncentiveTypes, incentiveTypesLoading } = useIncentiveTypes();
+    const dispatch = useDispatch();
+
+    useEffect(() => {
+        dispatch(regularIncentivePoints((allIncentiveTypes?.data?.total_points * regularPointAverage) / 100));
+    }, [allIncentiveTypes]);
+
 
     return (
         <div>
@@ -13,16 +24,16 @@ const IncentivePointModal = ({ antdModalOpen, setAntdModalOpen }) => {
                 <>
                     <div className="modal_point_row">
                         <p>Your obtained points: </p>{" "}
-                        <span className="text-sm">500</span>
+                        <span className="text-sm">{parseFloat(allIncentiveTypes?.data?.total_points)}</span>
                     </div>
                     <div className="modal_point_row">
                         <p>incentive points: </p>{" "}
-                        <span className="text-sm">80%</span>
+                        <span className={`${regularPointAverage > 0 ? 'progress_card_desc_pos' : 'progress_card_desc_neg'}`}>{regularPointAverage}%</span>
                     </div>
                     <hr />
                     <div className="modal_point_row">
-                        <p>Your actual incentive points: <span>(500*80)</span></p>{" "}
-                        <span className="text-sm">400</span>
+                        <p>Your actual incentive points: <span>({parseFloat(allIncentiveTypes?.data?.total_points)}*{regularPointAverage}%)</span></p>{" "}
+                        <span className={`${regularIncentivePointsData > 0 ? 'progress_card_desc_pos' : 'progress_card_desc_neg'}`}>{regularIncentivePointsData}</span>
                     </div>
                 </>
             </CustomAntdModal>

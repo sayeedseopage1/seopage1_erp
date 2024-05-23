@@ -2,17 +2,18 @@ import React, { useState } from 'react';
 import StatsInfoProgressCard from './StatsInfoProgressCard';
 import pointIconDark from '../../../assets/pointIconDark.svg'
 import { IoInformationCircle } from "react-icons/io5";
-import RegularPointsModal from '../../Modals/RegularPointsModal';
 import IncentivePointModal from '../../Modals/IncentivePointModal';
-import { statsInfoData } from '../../../constants';
 import { Popover } from 'antd';
 import useIncentiveTypes from '../../../hooks/useIncentiveTypes';
 import AverageProgressCard from './AverageProgressCard';
+import { useSelector } from 'react-redux';
 
 const StatsInfo = () => {
-    const [regularPointsModalOpen, setRegularPointsModalOpen] = useState(false);
+    const pmIncentive = useSelector((state) => state.pmIncentive)
     const [incentivePointsModalOpen, setIncentivePointsModalOpen] = useState(false);
-    const { regularIncentiveTypes, incentiveTypesLoading } = useIncentiveTypes();
+    const { allIncentiveTypes, regularIncentiveTypes, incentiveTypesLoading } = useIncentiveTypes();
+
+    const { regularPointAverage, regularIncentivePoints } = pmIncentive || {}
 
     return (
         <div className='stats_info_wrapper'>
@@ -22,7 +23,7 @@ const StatsInfo = () => {
                 {
                     regularIncentiveTypes?.incentive_criterias?.map((item) => <StatsInfoProgressCard key={item?.id} item={item} />)
                 }
-                <AverageProgressCard item={regularIncentiveTypes} />
+                <AverageProgressCard item={regularIncentiveTypes} regularPointAverage={regularPointAverage} />
             </div>
             {/* point score */}
             <div className='stats_score_outer'>
@@ -34,16 +35,10 @@ const StatsInfo = () => {
                         </span>
                         <div className="">
                             <p className="stats_info_desc point_details_wrapper">Your Regular points: <span
-                                onClick={() => setRegularPointsModalOpen(true)}
-                                className="stats_info_link"
-                            >
-                                80pt
+                                className='stats_info_link' style={{ textDecoration: 'none' }}>
+                                {parseFloat(allIncentiveTypes?.data?.total_points)}pt
                             </span></p>
                         </div>
-                        <RegularPointsModal
-                            antdModalOpen={regularPointsModalOpen}
-                            setAntdModalOpen={setRegularPointsModalOpen}
-                        />
                     </div>
                     {/* Your actual incentive points  */}
                     <div className="stats_score_child">
@@ -53,7 +48,7 @@ const StatsInfo = () => {
                         <div className="">
                             <p className="stats_info_desc point_details_wrapper">
                                 Your actual incentive points: <span className="stats_info_link" onClick={() => setIncentivePointsModalOpen(true)}>
-                                    400pt
+                                    {regularIncentivePoints}pt
                                 </span>
                                 <Popover
                                     content='This is after multiplying your regular points with the average percentage calculated earlier'
@@ -63,11 +58,6 @@ const StatsInfo = () => {
                                 >
                                     <IoInformationCircle className='informationCircle' />
                                 </Popover>
-                                {/* <span
-                                    title='This is after multiplying your regular points with the average percentage calculated earlier'
-                                >
-                                    <IoInformationCircle className='informationCircle' />
-                                </span> */}
                             </p>
                             <div
                                 className="d-flex align-items-center"
@@ -77,6 +67,8 @@ const StatsInfo = () => {
                             <IncentivePointModal
                                 antdModalOpen={incentivePointsModalOpen}
                                 setAntdModalOpen={setIncentivePointsModalOpen}
+                                regularPointAverage={regularPointAverage}
+                                regularIncentivePoints={regularIncentivePoints}
                             />
                         </div>
                     </div>
