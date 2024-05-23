@@ -7,13 +7,11 @@ import { EvaluationRevisionTableColumns } from "../Table/EvaluationRevisionTable
 import Card from "../../../global/Card";
 import styles from "../../../../react/tasks/components/PrimaryPageAuthorization.module.css";
 const RevisionModalBody = ({
-    data,
+    taskId,
     isEvaluationRevisionModal,
     setIsEvaluationRevisionModal,
 }) => {
-    const { data: revisionData, isLoading } = useGetRevisionListQuery(
-        data?.task_id
-    );
+    const { data: revisionData, isLoading } = useGetRevisionListQuery(taskId);
 
     const Revisions = revisionData?.data;
     const [sorting, setSorting] = useState([]);

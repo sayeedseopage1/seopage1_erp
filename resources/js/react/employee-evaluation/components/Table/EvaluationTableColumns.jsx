@@ -7,6 +7,7 @@ import { convertTime } from "../../../utils/converTime";
 import ActionEvaluationTable from "./ActionEvaluationTable";
 import AverageRatingSecondaryMetrics from "./AverageRatingSecondaryMetrics";
 import AverageRating from "./AverageRating";
+import EvaluationRevisionModal from "../modal/EvaluationRevisionModal";
 const auth = new User(window.Laravel.user);
 
 export const EvaluationTableColumns = [
@@ -61,7 +62,11 @@ export const EvaluationTableColumns = [
         accessorKey: "total_task_assigned",
         cell: ({ row }) => {
             const data = row.original;
-            return <div>{data?.total_task_assigned}</div>;
+            return (
+                <div style={{ marginLeft: "50px" }}>
+                    <div>{data?.total_task_assigned}</div>
+                </div>
+            );
         },
     },
     {
@@ -70,7 +75,11 @@ export const EvaluationTableColumns = [
         accessorKey: "total_task_submit",
         cell: ({ row }) => {
             const data = row.original;
-            return <div>{data?.total_task_submit}</div>;
+            return (
+                <div style={{ marginLeft: "50px" }}>
+                    <div>{data?.total_task_submit}</div>
+                </div>
+            );
         },
     },
     {
@@ -92,7 +101,11 @@ export const EvaluationTableColumns = [
         accessorKey: "total_revision",
         cell: ({ row }) => {
             const data = row.original;
-            return <div>{data?.total_revision}</div>;
+            return (
+                <div style={{ marginLeft: "50px" }}>
+                    <EvaluationRevisionModal data={data} />
+                </div>
+            );
         },
     },
     {

@@ -134,6 +134,25 @@ const ActionsButton = ({ data }) => {
                     );
                 } else if (btn.button_type === "modal") {
                     return (
+                        <div>
+                            {btn.button_name ===
+                                "Acknowledge & create sub-tasks" && (
+                                <button
+                                    key={i}
+                                    onClick={() => {
+                                        setPendingAction(data);
+                                        setAcknowledgement((prev) => !prev);
+                                        dispatch(setPendingActionId(data?.id));
+                                    }}
+                                    className={`${style.action_btn}`}
+                                >
+                                    Acknowledge & create sub-tasks
+                                </button>
+                            )}
+                        </div>
+                    );
+                } else if (btn.button_type === "modal") {
+                    return (
                         <ModalWithBtnTemplate
                             key={i}
                             btn_color={btn.button_color}
