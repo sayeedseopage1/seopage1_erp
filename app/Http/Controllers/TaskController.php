@@ -945,14 +945,12 @@ class TaskController extends AccountBaseController
 
         /**EMPLOYEE EVALUATION START */
         $taskFind = Task::where('id',$request->task_id)->where('u_id',null)->where('independent_task_status',1)->first(); //Find SubTask
-        $task_revision_count = TaskRevision::where('task_id',$taskFind->id)->count();
         if($taskFind != null){
             $evaluation = EmployeeEvaluationTask::where('task_id',$taskFind->id)->first();
             if($evaluation !=null)
             {
                 $evaluation->submission_date = $task_submit->created_at;
                 $evaluation->completed_work = json_encode($request->link);
-                $evaluation->revision_number = $task_revision_count;
                 $evaluation->status = 1; // IF STATUS 1 THAT MEANS EVALUTE DISPLAY
                 $evaluation->save();
             }
@@ -1215,6 +1213,7 @@ class TaskController extends AccountBaseController
      */
     public function TaskRevision(Request $request)
     {
+        // dd($request->all());
         // DB::beginTransaction();
  
          
@@ -1314,6 +1313,19 @@ class TaskController extends AccountBaseController
         //     $task_revision->final_responsible_person = '';
         // }  
         $task_revision->save();
+
+        /**EMPLOYEE EVALUATION START */
+        $taskFind = Task::where('id',$request->task_id)->where('u_id',null)->where('independent_task_status',1)->first(); 
+        if($taskFind != null){
+            $evaluation = EmployeeEvaluationTask::where('task_id',$taskFind->id)->first();
+            if($evaluation !=null)
+            {
+                $evaluation->revision_number = $task_revision->revision_no;
+                $evaluation->save();
+            }
+        }
+
+        /**EMPLOYEE EVALUATION END */
  
         //need pending action
 
