@@ -116,14 +116,27 @@ const EvaluationAcknowledgeModal = ({
         setPagination(paginate);
     };
 
-    const handleAcknowledgedItLeadDev = () => {
-        updatePendingAction({
-            acknowledged: "lead_dev",
-            user_id: singleEvaluation?.user_id,
-        });
-        toast.success("Acknowledge successful!");
-        setAcknowledgement(false);
-        increaseCount();
+    const handleAcknowledgedItLeadDev = async () => {
+        try {
+            const response = await updatePendingAction({
+                user_id: singleEvaluation?.user_id,
+                acknowledged: "team_lead",
+            }).unwrap();
+
+            if (response?.status == 200) {
+                if (singleEvaluation?.managements_decision == "One more week") {
+                    setAcknowledgement(false);
+
+                    window.location.href = response?.url;
+                } else {
+                    toast.success("Acknowledge successful!");
+                    setAcknowledgement(false);
+                    increaseCount();
+                }
+            }
+        } catch (error) {
+            console.error("Error updating pending action:", error);
+        }
     };
 
     const handleAcknowledgedItTeamLead = async () => {
@@ -148,101 +161,6 @@ const EvaluationAcknowledgeModal = ({
             console.error("Error updating pending action:", error);
         }
     };
-
-    const EvaluationTableColumns = [
-        {
-            id: "task_name",
-            header: "Task Name",
-            accessorKey: "task_name",
-            cell: ({ row }) => {
-                const data = row.original;
-
-                return <div>{data?.task_name}</div>;
-            },
-        },
-        {
-            id: "assign_date",
-            header: "Assign Date",
-            accessorKey: "assign_date",
-            cell: ({ row }) => {
-                const data = row.original;
-                return <div>{data?.assign_date}</div>;
-            },
-        },
-        {
-            id: "submission_date",
-            header: "Submission Date",
-            accessorKey: "submission_date",
-            cell: ({ row }) => {
-                const data = row.original;
-                return <div>{data?.submission_date}</div>;
-            },
-        },
-        {
-            id: "completed_work",
-            header: "Completed Work Link",
-            accessorKey: "completed_work",
-            cell: ({ row }) => {
-                const data = row.original;
-                if (data?.completed_work) {
-                    return JSON.parse(data.completed_work).map((data) => (
-                        <div>
-                            <a href={data}>{data}</a>
-                            <br />
-                        </div>
-                    ));
-                } else {
-                    return "--";
-                }
-            },
-        },
-        {
-            id: "total_hours",
-            header: "Total Hours Tracked",
-            accessorKey: "total_hours",
-            cell: ({ row }) => {
-                const data = row.original;
-                return (
-                    <div>
-                        {`${data?.total_hours || 0} hr ${
-                            data?.total_min || 0
-                        } min`}
-                    </div>
-                );
-            },
-        },
-
-        {
-            id: "revision_number",
-            header: "Revisions Needed",
-            accessorKey: "revision_number",
-            cell: ({ row }) => {
-                const data = row.original;
-
-                return (
-                    <div style={{ marginLeft: "30%" }}>
-                        {data?.revision_number}
-                    </div>
-                );
-            },
-        },
-
-        {
-            header: "Ratings",
-            accessorKey: "action",
-
-            cell: ({ row }) => {
-                const data = row.original;
-
-                return (
-                    <ActionDropdown
-                        data={data}
-                        singleEvaluation={singleEvaluation}
-                    />
-                );
-            },
-        },
-    ];
 
     return (
         <ReactModal
@@ -382,7 +300,13 @@ const EvaluationAcknowledgeModal = ({
                         size="md"
                         className="ml-2"
                     >
-                        <div> Acknowledge and create a task</div>
+                        <div>
+                            {" "}
+                            {singleEvaluation?.managements_decision ===
+                            "One more week"
+                                ? "Acknowledge & create a task"
+                                : "Ok,Acknowledged it"}
+                        </div>
                     </Button>
                 )}
                 {auth.roleId === 6 && (
@@ -391,7 +315,13 @@ const EvaluationAcknowledgeModal = ({
                         size="md"
                         className="ml-2"
                     >
-                        <div> Ok, Acknowledged it</div>
+                        <div>
+                            {" "}
+                            {singleEvaluation?.managements_decision ===
+                            "One more week"
+                                ? "Acknowledge & create sub-tasks"
+                                : "Ok, Acknowledged it"}
+                        </div>
                     </Button>
                 )}
             </FooterButtons>
