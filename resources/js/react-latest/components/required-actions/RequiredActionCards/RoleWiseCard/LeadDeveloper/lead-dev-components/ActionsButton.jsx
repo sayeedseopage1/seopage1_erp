@@ -130,11 +130,6 @@ const ActionsButton = ({ data }) => {
                                     Acknowledge It
                                 </button>
                             )}
-                        </div>
-                    );
-                } else if (btn.button_type === "modal") {
-                    return (
-                        <div>
                             {btn.button_name ===
                                 "Acknowledge & create sub-tasks" && (
                                 <button
