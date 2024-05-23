@@ -121,9 +121,8 @@ class EvaluationController extends AccountBaseController
                     ->leftJoin('users as added_by', 'sub_tasks.added_by', '=', 'added_by.id')
                     ->leftJoin('project_time_logs', 'employee_evaluations.user_id', '=', 'project_time_logs.user_id')
                     ->leftJoin('task_users', 'employee_evaluations.user_id', '=', 'task_users.user_id')
-                    ->where('tasks.board_column_id', 4)
+                    // ->where('tasks.board_column_id', 4)
                     ->groupBy('employee_evaluations.id');
-
                     if ($startDate !== null && $endDate !== null) {
                         $evaluationQuery->where(function ($query) use ($startDate, $endDate) {
                             $query->whereBetween(DB::raw('DATE(employee_evaluations.`created_at`)'), [$startDate, $endDate]);
@@ -217,7 +216,7 @@ class EvaluationController extends AccountBaseController
     public function storeSubmissionEvaluation(Request $request)
     {
         // dd($request->all());
-        // DB::beginTransaction();
+        DB::beginTransaction();
         $task_sum = EmployeeEvaluationTask::where('user_id',$request->user_id)->sum('avg_rating');
         $task_count = EmployeeEvaluationTask::where('user_id',$request->user_id)->count('avg_rating');
         $avg_rating = $task_count > 0 ? $task_sum / $task_count : 0;
@@ -230,14 +229,15 @@ class EvaluationController extends AccountBaseController
         $employee_evaluation->identiey_issues = $request->identiey_issues;
         $employee_evaluation->dedication = $request->dedication;
         $employee_evaluation->obedience = $request->obedience;
-        $total_ratings = array_sum([
-            $request->communication,$request->professionalism,$request->identiey_issues,$request->dedication,$request->obedience
-        ]);
-        $number_of_ratings = count([
-            $request->communication,$request->professionalism,$request->identiey_issues,$request->dedication,$request->obedience
-        ]);
-        $average_rating = $number_of_ratings > 0 ? $total_ratings / $number_of_ratings : 0;
-        $employee_evaluation->lead_dev_avg_rating = ($average_rating + $avg_rating) / 2;
+        // $total_ratings = array_sum([
+        //     $request->communication,$request->professionalism,$request->identiey_issues,$request->dedication,$request->obedience
+        // ]);
+        // $number_of_ratings = count([
+        //     $request->communication,$request->professionalism,$request->identiey_issues,$request->dedication,$request->obedience
+        // ]);
+        // $average_rating = $number_of_ratings > 0 ? $total_ratings / $number_of_ratings : 0;
+        $employee_evaluation->lead_dev_avg_rating = $avg_rating;
+        dd($employee_evaluation->lead_dev_avg_rating);
         $employee_evaluation->save();
 
         $evaluation_task = EmployeeEvaluationTask::where('user_id',$request->user_id)->first();
