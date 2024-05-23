@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands;
 
+use App\Helper\Incentive;
 use Carbon\Carbon;
 use App\Models\Task;
 use App\Models\User;
@@ -59,21 +60,9 @@ class DisbursePmIncentiveMonthly extends Command
             ->count();
 
             $revision_percent = number_format(( $pm_revisions / $total_tasks ) * 100, 2);
+            // Incentive::progressiveStore(1, $user->id, $revision_percent, $now);
+            // End
 
-            $incentiveCriteria = IncentiveCriteria::with('incentiveFactors')->find(1);
-            foreach($incentiveCriteria->incentiveFactors as $incentiveFactor){
-                if(($revision_percent == 0 || $incentiveFactor->lower_limit < $revision_percent) && $incentiveFactor->upper_limit >= $revision_percent){
-                    ProgressiveIncentive::create([
-                        'date' => $now,
-                        'pm_id' => $user->id,
-                        'incentive_factor_id' => $incentiveFactor->id,
-                        'incentive_amount_type' => $incentiveFactor->incentive_amount_type,
-                        'incentive_amount' => $incentiveFactor->incentive_amount,
-                        'achieved_points' => $incentiveFactor->incentive_amount_type == 1 ? $incentiveFactor->incentive_amount : ($incentiveFactor->incentive_amount / $availablePoints) * 100,
-                    ]);
-                }
-            }
-            dd('success');
             // Goal achieve rate
             $projects = Project::select(['id','project_name','pm_id','status','project_status'])
             ->where([['pm_id', $user->id],['status', 'in progress'],['project_status', 'Accepted']])
@@ -85,7 +74,9 @@ class DisbursePmIncentiveMonthly extends Command
             }])
             ->get();
 
-            $goal_achieved_percent = $projects->sum('total_goals') ? number_format(($projects->sum('total_goals_met') / $projects->sum('total_goals')) * 100, 2) : 0; 
+            $goal_achieved_percent = $projects->sum('total_goals') ? number_format(($projects->sum('total_goals_met') / $projects->sum('total_goals')) * 100, 2) : 0;
+            Incentive::progressiveStore(2, $user->id, $goal_achieved_percent, $now);
+            // End
 
             // Negative vs poisitive point
             $total_points = $totalEarnedPoints + $totalLostPoints;
