@@ -23,9 +23,11 @@ class Incentive
                         'date' => $now,
                         'pm_id' => $pm_id,
                         'incentive_factor_id' => $incentiveFactor->id,
+                        'acquired_value' => $comparable_value,
                         'incentive_amount_type' => $incentiveFactor->incentive_amount_type,
                         'incentive_amount' => $incentiveFactor->incentive_amount
                     ]);
+                    break;
                 }
             }
             return true;
