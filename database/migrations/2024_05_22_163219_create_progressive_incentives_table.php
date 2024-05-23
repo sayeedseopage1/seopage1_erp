@@ -20,7 +20,6 @@ return new class extends Migration
             $table->foreignId('incentive_factor_id')->nullable()->constrained();
             $table->unsignedTinyInteger('incentive_amount_type')->nullable()->comment('1 = Static, 2 = Percentage');
             $table->decimal('incentive_amount')->default(0);
-            $table->decimal('achieved_points')->default(0);
             $table->timestamps();
         });
     }
