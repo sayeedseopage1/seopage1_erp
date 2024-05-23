@@ -85,6 +85,8 @@ export const IncentiveFormattedData = (incentiveData) => {
                 incentive: criteria?.obtained_incentive,
                 ratio: criteria?.acquired_percent,
                 shortTitle: convertToShortTitle(criteria?.title),
+                amountType:
+                    criteria?.incentive_factors[0]?.incentive_amount_type,
                 limitType: criteria?.incentive_factors?.[0]?.limit_type,
                 series: [
                     {
