@@ -81,6 +81,24 @@ const ActionsButton = ({ data }) => {
                 } else if (btn.button_type === "modal") {
                     return (
                         <div>
+                            {btn.button_name ===
+                                "Acknowledge & create a task" && (
+                                <button
+                                    key={i}
+                                    onClick={() => {
+                                        setAcknowledgement((prev) => !prev);
+                                        dispatch(setPendingActionId(data?.id));
+                                    }}
+                                    className={`${style.action_btn}`}
+                                >
+                                    Acknowledge & create a task
+                                </button>
+                            )}
+                        </div>
+                    );
+                } else if (btn.button_type === "modal") {
+                    return (
+                        <div>
                             {btn.button_name === "View and Reply" && (
                                 <button
                                     disabled={handleBtnDisable(8)}
