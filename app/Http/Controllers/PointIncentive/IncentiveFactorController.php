@@ -4,6 +4,7 @@ namespace App\Http\Controllers\PointIncentive;
 
 use Carbon\Carbon;
 use App\Models\Task;
+use App\Helper\Incentive;
 use App\Models\TaskRevision;
 use Illuminate\Http\Request;
 use App\Models\IncentiveType;
@@ -14,38 +15,10 @@ class IncentiveFactorController extends Controller
 {
     public function index()
     {
-        $startDate = Carbon::now()->startOfMonth();
-        $endDate = Carbon::now()->endOfMonth();
         $total_points = 500;
-        $incentiveData = IncentiveType::with('incentiveCriterias.incentiveFactors')->get()->map(function($incentiveType) use ($startDate, $endDate){
-            $incentiveType->incentiveCriterias->map(function($incentiveCriteria) use ($startDate, $endDate){
-                
-                $incentiveCriteria->acquired_percent = 0; 
-                $incentiveCriteria->incentive_amount_type = null;
-                $incentiveCriteria->obtained_incentive = 0;
-                $user_id = 209;
-                if($incentiveCriteria->id == 1){
-                    $total_tasks = Task::select('tasks.id')
-                    ->where('tasks.added_by', $user_id)
-                    ->whereBetween('tasks.created_at', [$startDate, $endDate])
-                    ->count();
-                    
-                    $pm_revisions = TaskRevision::leftJoin('projects','projects.id','task_revisions.project_id')
-                    ->where('projects.pm_id', $user_id)
-                    ->where('task_revisions.final_responsible_person','PM')
-                    ->whereBetween('task_revisions.created_at', [$startDate, $endDate])
-                    ->count();
-
-                    $incentiveCriteria->acquired_percent = number_format(( $pm_revisions / $total_tasks ) * 100, 2);
-
-                    foreach($incentiveCriteria->incentiveFactors as $factor){
-                        if(($incentiveCriteria->acquired_percent == 0 || $factor->lower_limit < $incentiveCriteria->acquired_percent) && $factor->upper_limit >= $incentiveCriteria->acquired_percent) {
-                            $incentiveCriteria->incentive_amount_type = $factor->incentive_amount_type;
-                            $incentiveCriteria->obtained_incentive = $factor->incentive_amount;
-                            break;
-                        }
-                    }
-                }
+        $incentiveData = IncentiveType::with('incentiveCriterias.incentiveFactors')->get()->map(function($incentiveType){
+            $incentiveType->incentiveCriterias->map(function($incentiveCriteria){
+                Incentive::progressiveCalculation($incentiveCriteria, $incentiveCriteria->acquired_percent);
             });
             return $incentiveType;
         });
