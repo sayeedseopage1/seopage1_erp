@@ -144,8 +144,8 @@ class EvaluationController extends AccountBaseController
                     foreach($employeeEvaluations as $data){
                         $taskUser = TaskUser::where('user_id',$data->user_id)->first();
                         if($taskUser !=null){
-                        $total_hours = ProjectTimeLog::where('user_id', $data->user_id)->sum('total_hours');
-                        $total_min = ProjectTimeLog::where('user_id', $data->user_id)->sum('total_minutes');
+                        $total_hours = EmployeeEvaluationTask::where('user_id', $taskUser->user_id)->sum('total_hours');
+                        $total_min = EmployeeEvaluationTask::where('user_id', $taskUser->user_id)->sum('total_min');
                         $revision = EmployeeEvaluationTask::where('user_id', $taskUser->user_id)->sum('revision_number');
                         $data->total_hours = $total_hours;
                         $data->total_minutes = $total_min;
