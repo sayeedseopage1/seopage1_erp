@@ -20,7 +20,7 @@ const IncentiveBarChart = ({ chartData }) => {
         setIsIdealVsAchievedEditModalOpen(!isIdealVsAchievedEditModalOpen);
     };
 
-    // console.log(), "chartData");
+    console.log(chartData?.amountType)
 
     const options = {
         title: {
@@ -47,7 +47,7 @@ const IncentiveBarChart = ({ chartData }) => {
         },
         grid: { show: !0, strokeDashArray: 3, position: "back" },
         xaxis: {
-            categories: chartData.categories,
+            categories: chartData?.categories,
             labels: {
                 formatter: (val) => {
                     return `${val}`;
@@ -216,7 +216,7 @@ const IncentiveBarChart = ({ chartData }) => {
                 <Chart
                     ref={chartRef}
                     type="bar"
-                    series={chartData.series}
+                    series={chartData?.series}
                     options={options}
                     height={300}
                 ></Chart>

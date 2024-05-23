@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { useRef } from "react";
 import Chart from "react-apexcharts";
 import arrow1 from '../../assets/arrow-1.svg'
 import arrow2 from '../../assets/arrow-2.svg'
@@ -17,41 +17,38 @@ const IncentiveThickChart = ({ chartData }) => {
 
     const isAllZero = chartData?.incentive == 0;
 
-
-    const dummyData = [
-        [0, 0],
-        [10, 0],
-        [20, 0],
-        [30, 0],
-        [40, 0],
-        [50, 0],
-        [60, 0],
-        [70, 0],
-        [80, 0],
-        [90, 0],
-        [100, 0],
-    ];
-
-    const formatData = () => {
-        let indexData = [];
-        const copyArray = [...dummyData];
-        copyArray.forEach((item, index) => {
-            if (item[0] <= chartData.ratio) {
-                indexData.push(index);
+    const helper = () => {
+        const acquired_percent = parseFloat(chartData.ratio)
+        const datas = []
+        chartData.incentive_factors.forEach((item, index) => {
+            if (index === 0) {
+                datas.push(parseFloat(item.lower_limit))
             }
-        });
-        copyArray[indexData.length - 1] = [chartData.ratio, chartData.incentive];
-        return copyArray;
-    };
+            datas.push(parseFloat(item.upper_limit))
+        })
+        let indexData = [];
+        let newData = []
+        const format = [...datas]
+        format.map((item, index) => {
+            if (item <= acquired_percent) {
+                indexData.push(index)
+            }
+            newData.push([item, 0])
+        })
+        if (indexData.length > 0) {
+            const index = indexData[indexData.length - 1]
+            newData[index] = [chartData.ratio, chartData.incentive];
+        }
 
+        return newData
+    }
 
-    const seriesFormate = [
+    const newSeries = [
         {
             name: chartData.title,
-            data: formatData()
+            data: helper()
         }
     ]
-
 
     const options = {
         title: {
@@ -95,10 +92,11 @@ const IncentiveThickChart = ({ chartData }) => {
         },
         grid: { show: !0, strokeDashArray: 3, position: "back" },
         xaxis: {
+            categories: chartData?.id > 7 ? chartData?.categories : [],
             tickPlacement: "on",
             labels: {
                 formatter: (g) => {
-                    return Math.round(g);
+                    return `${chartData?.id > 7 ? g : Math.round(g) + "%"}`;
                 },
                 style: {
                     fontSize: "10",
@@ -138,26 +136,20 @@ const IncentiveThickChart = ({ chartData }) => {
         },
         dataLabels: {
             enabled: true,
-            // enabledOnSeries: void 0,
             formatter: function (val, opts) {
                 // Apply special case for the first bar when all values are zero
                 if (isAllZero && opts.dataPointIndex === 0) {
                     return `⬤ ${chartData?.shortTitle}: ${chartData?.ybarDataValueType == "money" ? "$" : ""}${chartData?.ratio}${chartData?.ybarDataValueType == "percent" ? "%" : ""}`;
                 }
-                // return val ? `${chartData?.ratio}%, ${val}%` : "";
                 return val ? `${chartData?.ratio}%, ${val}%` : "";
-                // return val ? `${opts.w.globals.labels[opts.dataPointIndex]}, ${val}%` : "";
             },
-            // textAnchor: "middle",
-            // distributed: !1,
             offsetY: -25,
-            offsetX: 0,
+            offsetX: isAllZero ? 15 : 0,
             style: {
                 fontSize: "14px",
                 fontFamily: "poppins",
                 fontWeight: 500,
-                colors: isAllZero ? ['#FF0000'] : ["#1492E6"]
-                // colors: ["#1492E6"]
+                colors: isAllZero ? ['#FF0000'] : ["#1492E6"],
             },
         },
         plotOptions: {
@@ -256,7 +248,7 @@ const IncentiveThickChart = ({ chartData }) => {
                 <Chart
                     ref={chartRef}
                     type="bar"
-                    series={seriesFormate}
+                    series={chartData?.id > 7 ? chartData?.series : newSeries}
                     options={options}
                     height={300}
                 ></Chart>
@@ -266,7 +258,7 @@ const IncentiveThickChart = ({ chartData }) => {
                     <img src={arrow2} className="chart_axis_icon" alt="arrow2" />
                 </div>
 
-                <p className="chart_ratio">{chartData.title}: <span className={`${chartData?.ratio > 0 ? "chart_ratio_value_pos" : "chart_ratio_value_neg"}`}>{chartData?.ybarDataValueType == "money" ? "$" : ""}{chartData?.ratio}{chartData?.ybarDataValueType == "percent" ? "%" : ""}</span></p>
+                <p className="chart_ratio">{chartData.title}: <span className={`${chartData?.ratio > 0 ? "chart_ratio_value_pos" : "chart_ratio_value_neg"}`}>{chartData?.limitType == 1 ? "$" : ""}{chartData?.ratio}{chartData?.limitType == 2 ? "%" : ""}</span></p>
 
             </div>
         </>
