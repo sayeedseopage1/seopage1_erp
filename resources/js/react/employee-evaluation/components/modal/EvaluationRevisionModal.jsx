@@ -1,7 +1,7 @@
 import React from "react";
 import ReactModal from "react-modal";
 import RevisionModalBody from "./RevisionModalBody";
-const EvaluationTaskRevisionModal = ({ data }) => {
+const EvaluationRevisionModal = ({ data }) => {
     const [isEvaluationRevisionModal, setIsEvaluationRevisionModal] =
         React.useState(false);
     return (
@@ -10,7 +10,7 @@ const EvaluationTaskRevisionModal = ({ data }) => {
                 onClick={() => setIsEvaluationRevisionModal(true)}
                 className="link_color"
             >
-                {data?.revision_number ?? "0"}
+                {data?.total_revision ?? "0"}
             </div>
 
             <RevisionModalBody
@@ -22,4 +22,4 @@ const EvaluationTaskRevisionModal = ({ data }) => {
     );
 };
 
-export default EvaluationTaskRevisionModal;
+export default EvaluationRevisionModal;
