@@ -114,16 +114,14 @@ class EvaluationController extends AccountBaseController
                     ->selectRaw('MIN(sub_tasks.created_at) as first_task_assign_on')
                     ->selectRaw('MIN(project_time_logs.created_at) as started_working_on')
                     ->selectRaw('COUNT(DISTINCT task_users.id) as total_task_assigned')
-                    ->selectRaw('COUNT(DISTINCT task_submissions.user_id) as total_task_submit')
+                    ->selectRaw('COUNT(DISTINCT CASE WHEN tasks.board_column_id = 4 THEN tasks.id END) as total_task_submit')
 
                     ->leftJoin('sub_tasks', 'employee_evaluations.user_id', '=', 'sub_tasks.assigned_to')
+                    ->leftJoin('tasks', 'sub_tasks.id', '=', 'tasks.subtask_id')
                     ->leftJoin('users as added_by', 'sub_tasks.added_by', '=', 'added_by.id')
                     ->leftJoin('project_time_logs', 'employee_evaluations.user_id', '=', 'project_time_logs.user_id')
                     ->leftJoin('task_users', 'employee_evaluations.user_id', '=', 'task_users.user_id')
-                    ->leftJoin('task_submissions', function($join) {
-                        $join->on('employee_evaluations.user_id', '=', 'task_submissions.user_id')
-                             ->whereNotNull('task_submissions.text');
-                    })
+                    ->where('tasks.board_column_id', 4)
                     ->groupBy('employee_evaluations.id');
 
                     if ($startDate !== null && $endDate !== null) {
