@@ -110,7 +110,7 @@ class EvaluationController extends AccountBaseController
         $endDate = $request->end_date ?? null;
         $limit = $request->limit ??  10;
 
-        $evaluationQuery = EmployeeEvaluation::select('employee_evaluations.*','added_by.id as added_by_id','added_by.name as added_by_name','tasks.id as task_id')
+        $evaluationQuery = EmployeeEvaluation::select('employee_evaluations.*','added_by.id as added_by_id','added_by.name as added_by_name','tasks.id as task_id','roles.name as role_name')
                     ->selectRaw('MIN(sub_tasks.created_at) as first_task_assign_on')
                     ->selectRaw('MIN(project_time_logs.created_at) as started_working_on')
                     ->selectRaw('COUNT(DISTINCT task_users.id) as total_task_assigned')
@@ -120,6 +120,7 @@ class EvaluationController extends AccountBaseController
                     ->leftJoin('sub_tasks', 'employee_evaluations.user_id', '=', 'sub_tasks.assigned_to')
                     ->leftJoin('tasks', 'sub_tasks.task_id', '=', 'tasks.id')
                     ->leftJoin('users as added_by', 'sub_tasks.added_by', '=', 'added_by.id')
+                    ->leftJoin('roles', 'employee_evaluations.role', '=', 'roles.id')
                     ->leftJoin('project_time_logs', 'employee_evaluations.user_id', '=', 'project_time_logs.user_id')
                     ->leftJoin('task_users', 'employee_evaluations.user_id', '=', 'task_users.user_id')
                     ->groupBy('employee_evaluations.id');
@@ -581,8 +582,10 @@ class EvaluationController extends AccountBaseController
         }
         $evaluation->save();
 
+
         $evaluation_task = EmployeeEvaluationTask::where('user_id',$request->user_id)->first();
-        $actions = PendingAction::where('task_id',$evaluation_task->task_id)->whereIn('code', ['EAFA', 'ERFA', 'EEFA'])->where('past_status',0)->get();
+        $actions = PendingAction::where('developer_id',$request->user_id)->whereIn('code', ['EAFA', 'ERFA', 'EEFA'])->where('past_status',0)->get();
+        // dd($actions);
         if($actions != null)
         {
             foreach ($actions as $key => $action) {
@@ -640,7 +643,7 @@ class EvaluationController extends AccountBaseController
             ]);
         }else{
             return response()->json([
-                'url' => route('tasks.show', $past_action->task_id),
+                'url' => route('tasks.show', $actions[0]->task_id),
                 'status' => 200
             ]);
         }

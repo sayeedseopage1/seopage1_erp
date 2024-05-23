@@ -245,7 +245,7 @@ class IndependentTaskController extends AccountBaseController
             $pendingParentTasks->save();
         }
 
-        if(Auth::user()->role_id == 8 && $pendingParentTasks->evaluation_user_id !=null){
+        if(Auth::user()->role_id == 1 || Auth::user()->role_id == 8 && $pendingParentTasks->evaluation_user_id !=null){
             $evaluation = EmployeeEvaluation::where('user_id',$pendingParentTasks->evaluation_user_id)->first();
             if($evaluation->managements_decision == 'One more week'){
                 $helper = new HelperPendingActionController();

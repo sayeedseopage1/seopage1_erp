@@ -16,6 +16,7 @@ return new class extends Migration
         Schema::create('employee_evaluations', function (Blueprint $table) {
             $table->id();
             $table->integer('user_id');
+            $table->integer('role');
             $table->string('user_name');
             $table->dateTime('join_date');
             $table->dateTime('start_date')->nullable();
