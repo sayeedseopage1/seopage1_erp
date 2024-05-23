@@ -662,7 +662,6 @@
                                         </td>
                                         <td>
                                             @if ($project_portfolio && $project_portfolio->plugin_list && $project_portfolio->plugin_list != 'null')
-
                                                 @foreach ( json_decode($project_portfolio->plugin_list ?? []) as $item)
                                                     @php
                                                         $website_plugin = App\Models\ProjectWebsitePlugin::find($item);

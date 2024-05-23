@@ -94,7 +94,7 @@ export const ProjectData = [
                     <p>&nbsp;</p>`,
                     description4: `<p><a href="https://www.freelancer.com/users/l.php?url=https:%2F%2Fwww.kolkol.co.za%2Fhottubs.php&amp;sig=b23b9c4a06c889e25185e8de2c797744ec1c23d38f973deb396635d88f4d2fe9" target="_blank">https://www.kolkol.co.za/hottubs.php</a></p>`,
                     description5: `<p>Please complete the project before mid-next week.&nbsp;</p>`,
-                    description6: `<ol><li>Godaddy:</li><li>User:&nbsp;john@cartagenafishing.com</li><li>Pass:&nbsp;Isla24680!!!</li></ol><div>WordPress:</div><div>URL:&nbsp;https://cartagenafishing.com/wp-admin</div><div>User:&nbsp;john@cartagenafishing.com</div><div>Pass:&nbsp;I2n%w4yQZdG0K0IPt4UEVeGm</div><app-messaging-message-details _ngcontent-webapp-c215="" _nghost-webapp-c178="" class="ng-star-inserted" style="display: flex; float: right; margin-left: 8px; color: rgb(0, 0, 0); font-family: Roboto, &quot;Helvetica Neue&quot;, Helvetica, Arial, sans-serif; font-size: medium; background-color: rgb(240, 240, 240);"></app-messaging-message-details>`,
+                    description6: `<ol><li>Godaddy:</li><li>User:&nbsp;john@cartagenafishing.com</li><li>Pass:&nbsp;Isla24680!!!</li></ol><div>WordPress:</div><div>URL:&nbsp;https://cartagenafishing.com/wp-admin</div><div>User:&nbsp;john@cartagenafishing.com</div><div>Pass:&nbsp;I2n%w4yQZdG0K0IPt4UEVeGm</div>`,
                     description7: `<p>You can take from the existing site, but I asked the raw logo file. If he can't provide the raw file, we will sell our logo service, also the logo doesn't look good, we will try to sell this logo service after the project is accepted. Please let me know once you accept the project.&nbsp;</p>`,
                     description8: `<p>We should be able to get seo and google ad work from him if this project goes well, he should be a well paying client&nbsp;&nbsp;</p>`,
                     description9: `<p>Asked for partial release as you show progress of the work.</p>`,
@@ -213,7 +213,8 @@ export const ProjectData = [
                 dummy_information: 1,
                 notify: 1,
                 actual_yes: 1,
-                admin_comment: `<p>Yes, This website functions are very complex... There are lots of data that is much problems and not properly sequenced&nbsp;</p>`,
+                admin_comment: null,
+                // admin_comment: `<p>Yes, This website functions are very complex... There are lots of data that is much problems and not properly sequenced&nbsp;</p>`,
             },
             project_portfolio: {
                 cms_name: "WordPress",
@@ -233,6 +234,16 @@ export const ProjectData = [
                 },
                 theme_name: null,
                 theme_url: null,
+                plugin_list: [
+                    {
+                        plugin_name: "TranslatePress",
+                        plugin_url: "https://wordpress.org/plugins/translatepress-multilingual/",
+                    },
+                    {
+                        plugin_name: "TranslatePress",
+                        plugin_url: "https://wordpress.org/plugins/translatepress-multilingual/",
+                    }
+                ],
                 plugin_information: 1,
                 plugin_name: "TranslatePress",
                 plugin_url: "https://wordpress.org/plugins/translatepress-multilingual/",
@@ -425,7 +436,8 @@ export const ProjectData = [
                 dummy_information: 1,
                 notify: 1,
                 actual_yes: 1,
-                admin_comment: `<p>Yes, This website functions are very complex... There are lots of data that is much problems and not properly sequenced&nbsp;</p>`,
+                admin_comment: null,
+                // admin_comment: `<p>Yes, This website functions are very complex... There are lots of data that is much problems and not properly sequenced&nbsp;</p>`,
             },
             project_portfolio: {
                 cms_name: "WordPress",
@@ -448,6 +460,16 @@ export const ProjectData = [
                 plugin_information: 1,
                 plugin_name: "TranslatePress",
                 plugin_url: "https://wordpress.org/plugins/translatepress-multilingual/",
+                plugin_list: [
+                    {
+                        plugin_name: "TranslatePress",
+                        plugin_url: "https://wordpress.org/plugins/translatepress-multilingual/",
+                    },
+                    {
+                        plugin_name: "TranslatePress",
+                        plugin_url: "https://wordpress.org/plugins/translatepress-multilingual/",
+                    }
+                ],
             }
 
 
@@ -885,4 +907,6 @@ export const DashboardMileStoneTableData = [
         "status": "Unpaid"
     }
 ]
+
+
 

@@ -1,7 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 
-// UI Components - Custom
+// UI Components - Styled Components
 import { SectionContainer } from "../ui/styledComponents";
 
 // Components - UI - Custom
@@ -13,12 +13,17 @@ import style from "./styles/dashboardActionButtonSection.module.css";
 // Components - Modal
 import PMTaskGuidelineModal from "../modal/PMTaskGuidelineModal";
 import ProjectCompletionModal from "../modal/ProjectCompletionModal";
+import ProjectDeadlineExtensionModal from "../modal/ProjectDeadlineExtensionModal";
+
+// Modal Names
+// ProjectDE = Project Deadline Extension
 
 const DashboardActionButtonSection = ({ projectData, isLoading }) => {
     const [isPmTaskGuidelineModalOpen, setIsPmTaskGuidelineModalOpen] =
         React.useState(false);
-
     const [isProjectCompletionModalOpen, setIsProjectCompletionModalOpen] =
+        React.useState(false);
+    const [isProjectDEModalOpen, setIsProjectDEModalOpen] =
         React.useState(false);
 
     // Handle Modal Open and Close Function with Action Function as Parameter (if needed)
@@ -41,7 +46,7 @@ const DashboardActionButtonSection = ({ projectData, isLoading }) => {
                     PM Task Guideline
                 </Button>
                 <Button
-                    onClick={() => {}}
+                    onClick={() => handleModal(setIsProjectDEModalOpen, true)}
                     className={`${style.dashboardActionButton}`}
                 >
                     Project Deadline Ext. Request
@@ -82,7 +87,6 @@ const DashboardActionButtonSection = ({ projectData, isLoading }) => {
                     isLoading={isLoading}
                 />
             )}
-
             {/* Project Completion */}
             {isProjectCompletionModalOpen && (
                 <ProjectCompletionModal
@@ -91,9 +95,16 @@ const DashboardActionButtonSection = ({ projectData, isLoading }) => {
                         handleModal(setIsProjectCompletionModalOpen, false)
                     }
                     modalData={projectData?.projectData}
-                    isLoading={isLoading}
+                    isLoading={false}
                 />
             )}
+            {/* Project Deadline Extension Form */}
+            <ProjectDeadlineExtensionModal
+                isModalOpen={isProjectDEModalOpen}
+                closeModal={() => handleModal(setIsProjectDEModalOpen, false)}
+                modalData={projectData?.projectData?.project}
+                isLoading={isLoading}
+            />
         </div>
     );
 };

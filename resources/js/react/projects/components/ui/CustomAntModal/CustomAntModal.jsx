@@ -1,11 +1,8 @@
-import { Button, ConfigProvider, Modal, Space } from "antd";
-import { createStyles, useTheme } from "antd-style";
+import { ConfigProvider, Modal,  } from "antd";
 import PropTypes from "prop-types";
-
 
 // Styles
 import "./customAntModal.css";
-
 
 const CustomAntModal = ({
     isModalOpen,
@@ -16,7 +13,8 @@ const CustomAntModal = ({
     modalStyles,
     classNames,
     parentClassName,
-    width = "75vw"
+    width = "75vw",
+    height = "75vh",
 }) => {
     return (
         <ConfigProvider
@@ -32,7 +30,16 @@ const CustomAntModal = ({
                 centered={isCentered}
                 width={width}
                 footer={null}
-                className={`${parentClassName} ${title ?`customAntModalTitleWithClose` : "customAntModalTitleWithCloseHide" } custom-ant-modal `}
+                styles={{
+                    body: {
+                        maxHeight: height,
+                    },
+                }}
+                className={`${parentClassName} ${
+                    title
+                        ? `customAntModalTitleWithClose`
+                        : "customAntModalTitleWithCloseHide"
+                } custom-ant-modal `}
             >
                 {children}
             </Modal>
@@ -41,7 +48,6 @@ const CustomAntModal = ({
 };
 
 export default CustomAntModal;
-
 
 CustomAntModal.propTypes = {
     isModalOpen: PropTypes.bool,
@@ -53,4 +59,6 @@ CustomAntModal.propTypes = {
     isCentered: PropTypes.bool,
     children: PropTypes.node,
     width: PropTypes.string,
-}
+    height: PropTypes.string,
+};
+

@@ -11,6 +11,7 @@
 .customAntModalTitleWithCloseHide .ant-modal-close {
   display: none !important;
 }
+
 /* 
   Custom Modal Title hide with close button
 */
@@ -42,6 +43,9 @@
 
 
 
+
+
+
 /* 
     Dashboard Modal Table Styles
 */
@@ -63,10 +67,12 @@
   background-color: #ccc !important;
   border-radius: 10px !important;
 }
+
 .dashboardModalTableContainer::-webkit-scrollbar-track {
   background-color: transparent !important;
-  
+
 }
+
 .dashboardModalTableItem {
   display: flex;
   border-bottom: 1px solid #DDDCDC;
@@ -130,13 +136,27 @@
   padding: 5px 0 !important;
   list-style: auto !important;
 }
+
 .dashboardModalTableContainer .dashboardModalTableItem .dangerouslySetInnerStyle p {
   padding: 0 !important;
 }
+
 .dashboardModalTableContainer .dashboardModalTableItem .dangerouslySetInnerStyle ul li {
   margin-left: 20px !important;
   padding: 5px 0 !important;
   list-style-type: disc !important;
+}
+
+
+/* Each Modal Style */
+.projectCompletionModal .ant-modal-content {
+  overflow-y: auto !important;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.projectCompletionModal .ant-modal-content::-webkit-scrollbar {
+  display: none;
 }
 
 

@@ -27,6 +27,7 @@ const PMTaskGuidelineModal = ({
             isModalOpen={isModalOpen}
             closeModal={closeModal}
             width="956px"
+            height="auto"
         >
             <CustomModalHeader
                 title="Parent Task Guideline"

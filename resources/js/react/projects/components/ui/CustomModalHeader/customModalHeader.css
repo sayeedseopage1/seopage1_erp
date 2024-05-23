@@ -8,6 +8,12 @@
   border-radius: 8px 8px 0 0;
 }
 
+.customModalHeaderWithSticky{
+  position: sticky;
+  top: 0;
+  z-index: 5;
+}
+
 .customModalHeader h2 {
   font-family: Poppins, sans-serif;
   font-size: 24px;

@@ -408,29 +408,46 @@ export const ModalContentContainer = styled.div`
         }
       }
     }
-    
 
+    @media screen  and (max-width: 768px) {
+      padding: 19px 20px;
+    }
 
-   
-
-    
-
-
-    
   }
-
-
- 
   .modalContentTable{
     border-radius: 21px;
     border: 1px solid #D8D8D8;
     background: #F3FAFF;
     padding: 19px 30px;
 
-    
 
     table {
       border-collapse: collapse;
+      display: block;
+      height: 52vh;
+      overflow: auto;
+      scrollbar-width: thin;
+      scrollbar-color: #99BCD4 transparent;
+      scroll-behavior: smooth !important;
+      border-radius: 10px !important;
+      -webkit-border-radius: 5px;
+
+      &::-webkit-scrollbar {
+        width: 10px !important;
+        scroll-behavior: smooth !important;
+      }
+
+      &::-webkit-scrollbar-thumb {
+        border-radius: 10px !important;
+        background-color: #ccc !important;
+        box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+      }
+      ::-webkit-scrollbar-track {
+        background-color: transparent !important;
+        border-radius: 10px !important;
+        box-shadow: inset 0 0 5px grey; 
+      }
+
       thead{
         tr {
           color: #000;
@@ -439,10 +456,14 @@ export const ModalContentContainer = styled.div`
           font-style: normal;
           font-weight: 500;
           line-height: normal;
-
+        
           th{
             padding:  15px;
             border-bottom: 1px solid #D8D8D8;
+            position: sticky; 
+            background-color: #F3FAFF;
+            top: -1px;
+            z-index: 1;
           }
           th:nth-child(1){
             width: 5%;
@@ -488,13 +509,110 @@ export const ModalContentContainer = styled.div`
           }
          
         }
+        tr:last-child{
+          td{
+            border-bottom: none;
+          }
+        
+        }
       }
     }
+
+    @media screen  and (max-width: 768px) {
+      padding: 19px 20px;
+    }
+    
+  }
+
+  .modalButtonContainer{
+    display: flex;
+    justify-content: flex-start;
+    gap: 10px;
   }
 
 
-  /* Utility Class */
+  /* Project Deadline modal */
 
+  .deadlineInfo{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+    margin-bottom: 20px;
+
+    .deadlineInfo__deadline{
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      width: 100%;
+
+      label{
+        color: #000;
+        font-family: Poppins, sans-serif;
+        font-size: 16px;
+        font-style: normal;
+        font-weight: 500;
+        line-height: normal;
+        sup{
+          color: red;
+        }
+      }
+
+      input{
+        border-radius: 3px;
+        border: 1px solid #DDDCDC;
+        background: #FFF;
+        padding: 10px;
+        color: #626262;
+        font-family: Poppins, sans-serif;
+        font-size: 16px;
+        font-style: normal;
+        font-weight: 400;
+        line-height: normal;
+      }
+      .isDisabled{
+        background: #F1F1F1;
+      }
+      .ant-picker{
+        padding: 0px 10px 0px;;
+        border-radius: 3px;
+        input{
+          border: none;
+          padding: 10px 0;
+        }
+      }
+    }
+
+    @media screen and (max-width: 768px) {
+      flex-direction: column;
+      gap: 10px;
+    }
+  
+  }
+
+  .deadlineExtensionOptions{
+    h6{
+      color: #000;
+      font-family: Poppins , sans-serif;
+      font-size: 16px;
+      font-style: normal;
+      font-weight: 500;
+      line-height: normal;
+      sup{
+        color: red;
+      }
+    }
+    span{
+      color: #000;
+      font-family: Poppins, sans-serif;
+      font-size: 16px;
+      font-style: normal;
+      font-weight: 400;
+      line-height: normal;
+    }
+  }
+
+  /* Utility Class */
   .verticalAlignTop{
     vertical-align: top;
   }
