@@ -11,8 +11,8 @@ import { auth } from '../../../constants';
 const UpsaleCrossSalePointBanner = () => {
     const [upsaleCrossSalePointsModalOpen, setUpsaleCrossSalePointsModalOpen] = useState(false);
     const [editUpsaleCrossSalePointsModalOpen, setEditUpsaleCrossSalePointsModalOpen] = useState(false);
-
     const { upSaleCrossSaleTypes, incentiveTypesLoading } = useIncentiveTypes();
+    const [upsaleCrossSalePoints, setUpsaleCrossSalePoints] = useState(0);
 
     return (
         <div className="secondary_point_banner">
@@ -23,11 +23,15 @@ const UpsaleCrossSalePointBanner = () => {
                     </span>
                     <div className="">
                         <p className='point_title point_details_wrapper' style={{ color: "#000000" }}>Your upsale/cross sales points: <span onClick={() => setUpsaleCrossSalePointsModalOpen(true)} className='point_score clickable_link' style={{ color: "#1492E6" }}>
-                            60.05pt
+                            {upsaleCrossSalePoints}pt
                         </span></p>
 
-                        <UpsaleCrossSalePointModal antdModalOpen={upsaleCrossSalePointsModalOpen}
+                        <UpsaleCrossSalePointModal
+                            antdModalOpen={upsaleCrossSalePointsModalOpen}
                             setAntdModalOpen={setUpsaleCrossSalePointsModalOpen}
+                            upsaleCrossSalePoints={upsaleCrossSalePoints}
+                            setUpsaleCrossSalePoints={setUpsaleCrossSalePoints}
+                            item={upSaleCrossSaleTypes}
                         />
                     </div>
                 </div>
@@ -42,8 +46,8 @@ const UpsaleCrossSalePointBanner = () => {
                     </span>
                     {
                         incentiveTypesLoading ? <Placeholder width="60%" height={28} /> : <p className='point_title point_details_wrapper' style={{ color: "#000000" }}>
-                            Cash value of every upsale/cross sale point: <span className='point_score' style={{ color: "#1492E6" }}>
-                                {upSaleCrossSaleTypes?.cash_value} Taka
+                            Cash value: <span className='point_score' style={{ color: "#1492E6" }}>
+                                {parseFloat(upSaleCrossSaleTypes?.cash_value)} Taka
                             </span> {
                                 auth?.isHasRolePermission(1) && <IncentiveEditButton onClick={() => setEditUpsaleCrossSalePointsModalOpen(true)} className={`chart_button`}></IncentiveEditButton>
                             }

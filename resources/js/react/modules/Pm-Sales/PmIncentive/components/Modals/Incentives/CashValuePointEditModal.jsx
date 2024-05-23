@@ -26,9 +26,9 @@ const CashValuePointEditModal = ({ regularIncentiveTypes, antdModalOpen, setAntd
             }
             const response = await editIncentiveTypes({ id: regularIncentiveTypes?.id, payload }).unwrap();
             if (response?.status == 200) {
-                toast.success(response.message);
-                reset();
                 setAntdModalOpen(false)
+                reset();
+                toast.success(response.message);
             } else {
                 toast.warning(response.message);
             }
@@ -47,10 +47,10 @@ const CashValuePointEditModal = ({ regularIncentiveTypes, antdModalOpen, setAntd
                 <form onSubmit={handleSubmit(onSubmit)}>
                     <h4 className="point_edit_modal_title">Cash value for every regular point:</h4>
                     <div className='point_edit_modal_content'>
-                        <p className="point_edit_modal_text">Current Value: <span style={{ fontWeight: '500', color: '#000', fontSize: '20px' }}>{regularIncentiveTypes?.cash_value} Taka</span></p>
+                        <p className="point_edit_modal_text">Current Value: <span style={{ fontWeight: '500', color: '#000', fontSize: '20px' }}>{parseFloat(regularIncentiveTypes?.cash_value)} Taka</span></p>
                         <p>New Value (Taka)</p>
                         {/* include validation with required or other standard HTML validation rules */}
-                        <input className='point_edit_modal_input' defaultValue={regularIncentiveTypes?.cash_value} type='number' {...register("regularPoint", { required: true })} placeholder='Write here ' />
+                        <input className='point_edit_modal_input' defaultValue={parseFloat(regularIncentiveTypes?.cash_value)} type='number' {...register("regularPoint", { required: true })} placeholder='Write here ' />
                         {errors.regularPoint && <span style={{ color: 'red', fontSize: '12px' }}>This field is required</span>}
                     </div>
                     <div className='pay_now_modal_footer'>

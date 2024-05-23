@@ -97,8 +97,8 @@ const BonusPointsPointBanner = () => {
                     </span>
                     {
                         incentiveTypesLoading ? <Placeholder width="60%" height={28} /> : <p className='point_title point_details_wrapper' style={{ color: "#000000" }}>
-                            Cash value of every bonus  point: <span className='point_score' style={{ color: "#1492E6" }}>
-                                {bonusIncentiveTypes?.cash_value} Taka
+                            Cash value: <span className='point_score' style={{ color: "#1492E6" }}>
+                                {parseFloat(bonusIncentiveTypes?.cash_value)} Taka
                             </span> {
                                 auth?.isHasRolePermission(1) && <IncentiveEditButton onClick={() => setEditBonusPointsModalOpen(true)} className={`chart_button`}></IncentiveEditButton>
                             }

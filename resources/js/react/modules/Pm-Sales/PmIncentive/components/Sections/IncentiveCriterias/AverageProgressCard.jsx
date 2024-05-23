@@ -6,7 +6,6 @@ const AverageProgressCard = ({ item }) => {
     // const { title, obtained_incentive, acquired_percent, incentive_factors } = item || {}
     const [averagePointsModalOpen, setAveragePointsModalOpen] = useState(false);
     const [averagePoints, setAveragePoints] = useState(0);
-    console.log(item)
 
     return (
         <div className="progress_card_wrapper">

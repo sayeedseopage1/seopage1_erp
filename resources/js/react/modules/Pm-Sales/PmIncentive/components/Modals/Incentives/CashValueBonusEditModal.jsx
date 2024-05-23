@@ -48,10 +48,10 @@ const CashValueBonusEditModal = ({ bonusIncentiveTypes, antdModalOpen, setAntdMo
                 <form onSubmit={handleSubmit(onSubmit)}>
                     <h4 className="point_edit_modal_title">Cash value of every bonus  point:</h4>
                     <div className='point_edit_modal_content'>
-                        <p className="point_edit_modal_text">Current Value: <span style={{ fontWeight: '500', color: '#000', fontSize: '20px' }}>{bonusIncentiveTypes?.cash_value} Taka</span></p>
+                        <p className="point_edit_modal_text">Current Value: <span style={{ fontWeight: '500', color: '#000', fontSize: '20px' }}>{parseFloat(bonusIncentiveTypes?.cash_value)} Taka</span></p>
                         <p>New Value (Taka)</p>
                         {/* include validation with required or other standard HTML validation rules */}
-                        <input className='point_edit_modal_input' type='number' defaultValue={bonusIncentiveTypes?.cash_value} {...register("bonusPoint", { required: true })} placeholder='Write here ' />
+                        <input className='point_edit_modal_input' type='number' defaultValue={parseFloat(bonusIncentiveTypes?.cash_value)} {...register("bonusPoint", { required: true })} placeholder='Write here ' />
                         {errors.bonusPoint && <span style={{ color: 'red', fontSize: '12px' }}>This field is required</span>}
                     </div>
                     <div className='pay_now_modal_footer'>
