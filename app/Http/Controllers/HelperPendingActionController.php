@@ -2134,7 +2134,7 @@ class HelperPendingActionController extends AccountBaseController
                 $action->authorization_for= $authorizer->id;
                 $button = [
                     [
-                        'button_name' => 'Acknowledge & create a tasks',
+                        'button_name' => 'Acknowledge & create a task',
                         'button_color' => 'primary',
                         'button_type' => 'modal',
                         'button_url' => '',
