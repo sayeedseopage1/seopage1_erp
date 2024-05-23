@@ -13,7 +13,7 @@ class ProgressiveIncentive extends Model
         'date',
         'pm_id',
         'incentive_factor_id',
-        'aquired_value',
+        'acquired_value',
         'incentive_amount_type',
         'incentive_amount'
     ];
