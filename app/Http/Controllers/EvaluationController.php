@@ -660,4 +660,18 @@ class EvaluationController extends AccountBaseController
             ]);
     }
 
+    public function totalRevision($id)
+    {
+        $tasks = Task::where('dependent_task_id', $id)->get();
+        foreach($tasks as $task)
+        {
+            $revision = TaskRevision::where('task_id',$task->id)->get();
+            $task->revision = $revision;
+        }
+        return response()->json([
+            'status' => 200,
+            'data' => $tasks
+            ]);
+    }
+
 }
