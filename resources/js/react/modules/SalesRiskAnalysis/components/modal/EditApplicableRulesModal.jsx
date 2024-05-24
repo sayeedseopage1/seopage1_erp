@@ -117,10 +117,33 @@ const EditApplicableRulesModal = ({
                             <ModalSelectContainer>
                                 <CustomDropDown
                                     filedName="policyType"
-                                    data={PolicyTypeItems}
+                                    data={{
+                                        ...PolicyTypeItems,
+                                        data: PolicyTypeItems?.data?.map(
+                                            (item) => {
+                                                const isYesNoRule =
+                                                    editRuleData?.key?.name ===
+                                                    "yesNoRules";
+                                                const isItemYesNo =
+                                                    item?.name.includes(
+                                                        "yesNo"
+                                                    );
+                                                const disabled = isYesNoRule
+                                                    ? !isItemYesNo
+                                                    : false;
+
+                                                return {
+                                                    ...item,
+                                                    disabled,
+                                                };
+                                            }
+                                        ),
+                                    }}
                                     selected={editRuleData?.policyType}
                                     setSelected={handleChange}
-                                    isDisableUse={false}
+                                    isDisableUse={
+                                        editRuleData?.key?.name === "yesNoRules"
+                                    }
                                 />
                             </ModalSelectContainer>
                         </div>
