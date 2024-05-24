@@ -211,7 +211,7 @@ const EditPolicyModal = ({
                                     isDisableUse={
                                         editPolicyData?.key?.name ===
                                             "yesNoRules" &&
-                                        !editPolicyData?.length
+                                        !editPolicyInputData?.length
                                     }
                                 />
                             </ModalSelectContainer>

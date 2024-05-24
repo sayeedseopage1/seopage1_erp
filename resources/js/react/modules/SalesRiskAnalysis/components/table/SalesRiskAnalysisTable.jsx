@@ -47,6 +47,7 @@ import { generateUniqueString } from "../../../../utils/customUidGenerate";
 
 // context
 import { SalesRiskAnalysisContext } from "../../context/SalesRiskAnalysisProvider";
+import { PolicyTypeItems } from "../../constant";
 
 const inputSateData = {
     inputState: {
@@ -259,6 +260,15 @@ const SalesRiskAnalysisTable = ({
                 // function to format data
                 const updateData = formatEditPolicyData(data);
                 setEditPolicyInputData(updateData);
+                if (data.key === "yesNoRules") {
+                    setEditPolicyData({
+                        ...inputSateData.inputState,
+                        key: policyKeys?.data?.find(
+                            (item) => item.name === data.key
+                        ),
+                    });
+                }
+
                 setEditPolicyDefaultData({
                     policyName: data.title,
                     department: {
@@ -271,6 +281,7 @@ const SalesRiskAnalysisTable = ({
                         (item) => item.name === data.key
                     ),
                 });
+
                 setEditPolicyModalOpen(true);
             },
             handleEditCountryList: (data, selectedRule) => {
@@ -416,6 +427,16 @@ const SalesRiskAnalysisTable = ({
                 setEditPolicyDefaultData([]);
                 setIsFocusedOnTitleInput(false);
                 break;
+            case "specialRules":
+                setEditPolicyData({
+                    ...inputSateData.inputState,
+                    key: policyKeys?.data?.find(
+                        (item) => item.name === editPolicyData.key.name
+                    ),
+                });
+                setEditPolicyDataValidation(inputSateData.inputValidation);
+                setIsFocusedOnTitleInput(false);
+                break;
             case "ruleInputs":
                 setEditRuleData({});
                 setEditRuleDataValidation(inputSateData.inputValidation);
@@ -469,7 +490,11 @@ const SalesRiskAnalysisTable = ({
             });
             setIsRuleUpdating(false);
             setEditPolicyInputData(updatedData);
-            resetFormForPolicy("single");
+            if (editPolicyData?.key?.name === "yesNoRules") {
+                resetFormForPolicy("specialRules");
+            } else {
+                resetFormForPolicy("single");
+            }
         } else {
             setEditPolicyInputData([
                 ...editPolicyInputData,
@@ -478,7 +503,12 @@ const SalesRiskAnalysisTable = ({
                     id: generateUniqueString(15),
                 },
             ]);
-            resetFormForPolicy("single");
+
+            if (editPolicyData?.key?.name === "yesNoRules") {
+                resetFormForPolicy("specialRules");
+            } else {
+                resetFormForPolicy("single");
+            }
         }
     };
 
@@ -494,7 +524,6 @@ const SalesRiskAnalysisTable = ({
             payloadForMainDataValidation,
             editPolicyDataValidation
         );
-
 
         if (
             Object.entries(validation).some(

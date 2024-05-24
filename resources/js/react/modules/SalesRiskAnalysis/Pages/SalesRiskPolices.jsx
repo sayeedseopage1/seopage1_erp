@@ -130,7 +130,6 @@ const SalesRiskPolices = () => {
         useAddSalesRiskAnalysisRuleMutation();
 
     // get Single Policy Sales Risk Analysis Query by policy id or key
-
     const [
         getSinglePolicy,
         {
@@ -201,7 +200,6 @@ const SalesRiskPolices = () => {
             if (name === "key") {
                 if (value.name === "yesNoRules") {
                    const singlePolicyDataAll = await getSinglePolicyDataByIDorKey(value.name);
-                    console.log(singlePolicyDataAll?.data?.data)
                     if (singlePolicyDataAll?.data?.data?.length) {
                         const formattedRules = formatMultipleRuleData(singlePolicyDataAll?.data?.data[0], policyKeys)
                         setNewPolicyInputData(formattedRules);
@@ -256,7 +254,7 @@ const SalesRiskPolices = () => {
     };
 
 
-    console.log(newPolicyInputData)
+    
 
     const autoGenerateTitle = (data) => {
         return `${data?.policyType?.label} ${
