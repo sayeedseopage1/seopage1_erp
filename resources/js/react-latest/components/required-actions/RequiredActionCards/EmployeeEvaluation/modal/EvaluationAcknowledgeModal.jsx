@@ -320,7 +320,7 @@ const EvaluationAcknowledgeModal = ({
                             {singleEvaluation?.managements_decision ===
                             "One more week"
                                 ? "Acknowledge & create sub-tasks"
-                                : "Ok, Acknowledged it"}
+                                : "Ok,Acknowledged it"}
                         </div>
                     </Button>
                 )}
