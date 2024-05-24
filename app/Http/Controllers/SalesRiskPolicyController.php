@@ -456,7 +456,8 @@ class SalesRiskPolicyController extends AccountBaseController
         // get yes no rules
         $yesNoRules = [];
         if ($policy = SalesRiskPolicy::where('key', 'yesNoRules')->first()) {
-            $yesNoRules = SalesRiskPolicy::where('parent_id', $policy->id)->get(['id', 'title']);
+            $freeRuleIds = SalesPolicyQuestion::where('key', 'yesNoRules')->pluck('value');
+            $yesNoRules = SalesRiskPolicy::where('parent_id', $policy->id)->whereNotIn('id', $freeRuleIds)->get(['id', 'title']);
         }
 
         return response()->json(['data' => compact('types', 'questionKeys', 'policies', 'questionList', 'yesNoRules')]);
