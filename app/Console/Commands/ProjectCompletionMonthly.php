@@ -40,7 +40,7 @@ class ProjectCompletionMonthly extends Command
             })
             ->where('pm_id', $user->id)
             ->whereIn('status', ['finished', 'partially finished'])
-            ->whereBetween('updated_at', [Carbon::now()->startOfMonth(), Carbon::now()->endOfMonth()])->orderBy('id', 'desc')->first()->id;
+            ->whereBetween('updated_at', [Carbon::now()->startOfMonth(), Carbon::now()->endOfMonth()])->orderBy('id', 'desc')->first()->id ?? null;
 
             $project = Project::whereHas('deal', function($deal){
                 return $deal->where('project_type', 'fixed');
