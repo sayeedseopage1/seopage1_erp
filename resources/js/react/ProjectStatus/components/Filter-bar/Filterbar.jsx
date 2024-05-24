@@ -8,6 +8,7 @@ import { useWindowSize } from "react-use";
 import DateTypeFilter from "./DateTypeFilter";
 import { useAuth } from "../../../hooks/useAuth";
 import SearchBox from "../Searchbox";
+import Switch from "../Switch";
 
 const Filterbar = ({ onFilter, page = "tasks" }) => {
     const [isOpen, setIsOpen] = React.useState(false);
@@ -28,6 +29,7 @@ const Filterbar = ({ onFilter, page = "tasks" }) => {
     const { width } = useWindowSize();
 
     const isDev = _.includes([5], Number(window?.Laravel?.user?.role_id));
+    const isHigherRole = _.includes([1,8], Number(window?.Laravel?.user?.role_id));
     const auth = useAuth();
 
     // MEMORIZE VALUES
@@ -59,15 +61,19 @@ const Filterbar = ({ onFilter, page = "tasks" }) => {
         _client,
         _leadDeveloper,
         _pm,
-        _status
+        _status,
     ]);
 
     // console.log(developer)
     useLayoutEffect(() => {
-        if(page === "subtasks" && auth.getRoleId() === 5 && window !== undefined) {
+        if (
+            page === "subtasks" &&
+            auth.getRoleId() === 5 &&
+            window !== undefined
+        ) {
             setDeveloper(window.Laravel.user);
         }
-    }, [])
+    }, []);
 
     return (
         <div className="sp1_task_filter_bar">
@@ -90,14 +96,18 @@ const Filterbar = ({ onFilter, page = "tasks" }) => {
                         roleIds={null}
                     />
 
-                    <HDivider />
-                    {/* Project Manager Dropdown */}
-                    <UserFilter
-                        title="Project Manager"
-                        state={pm}
-                        setState={setPm}
-                        roleIds={[4]}
-                    />
+                    <Switch>
+                        <Switch.Case condition={isHigherRole}>
+                            <HDivider />
+                            {/* Project Manager Dropdown */}
+                            <UserFilter
+                                title="Project Manager"
+                                state={pm}
+                                setState={setPm}
+                                roleIds={[4]}
+                            />
+                        </Switch.Case>
+                    </Switch>
                     <HDivider />
                     {/* Search box */}
                     <SearchBox
@@ -106,7 +116,6 @@ const Filterbar = ({ onFilter, page = "tasks" }) => {
                         className="tasks_search_bar"
                     />
                     <HDivider />
-
                 </React.Fragment>
             )}
 

@@ -31,7 +31,6 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
 
 
-
 var ProjectSelectionList = function ProjectSelectionList(_ref) {
   var project = _ref.project,
     setProject = _ref.setProject;

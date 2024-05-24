@@ -21,8 +21,6 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-
-
 var TimeLogItem = function TimeLogItem(_ref) {
   var log = _ref.log;
   var user = log !== null && log !== void 0 && log.user ? new _utils_user_details__WEBPACK_IMPORTED_MODULE_1__.User(log.user) : null;

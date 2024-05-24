@@ -27,7 +27,6 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-
 var Comments = function Comments(_ref) {
   var task = _ref.task,
     onCommentPost = _ref.onCommentPost;
