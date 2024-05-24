@@ -1,349 +1,40 @@
-export const chartRangesForColor = [
+export const rangesForLongValue = [
     {
-        id: 1,
-        ranges: [
-            {
-                from: 0,
-                to: 40,
-                color: "#FFA3A3",
-            },
-            {
-                from: 41,
-                to: 50,
-                color: "#FEBC05",
-            },
-            {
-                from: 51,
-                to: 80,
-                color: "#09F",
-            },
-            {
-                from: 81,
-                to: 100,
-                color: "#14B96A",
-            },
-        ],
+        from: 0,
+        to: 49.99,
+        color: "#ff3300",
     },
     {
-        id: 2,
-        ranges: [
-            {
-                from: 0,
-                to: 20,
-                color: "#FFA3A3",
-            },
-            {
-                from: 21,
-                to: 50,
-                color: "#FEBC05",
-            },
-            {
-                from: 51,
-                to: 80,
-                color: "#09F",
-            },
-            {
-                from: 81,
-                to: 100,
-                color: "#14B96A",
-            },
-        ],
+        from: 50,
+        to: 59.99,
+        color: "#ff704d",
     },
     {
-        id: 3,
-        ranges: [
-            {
-                from: 0,
-                to: 40,
-                color: "#FFA3A3",
-            },
-            {
-                from: 41,
-                to: 50,
-                color: "#FEBC05",
-            },
-            {
-                from: 51,
-                to: 80,
-                color: "#09F",
-            },
-            {
-                from: 81,
-                to: 100,
-                color: "#14B96A",
-            },
-        ],
+        from: 60,
+        to: 79.99,
+        color: "#ffff00",
     },
     {
-        id: 4,
-        ranges: [
-            {
-                from: 0,
-                to: 40,
-                color: "#FFA3A3",
-            },
-            {
-                from: 41,
-                to: 50,
-                color: "#FEBC05",
-            },
-            {
-                from: 51,
-                to: 80,
-                color: "#09F",
-            },
-            {
-                from: 81,
-                to: 120,
-                color: "#14B96A",
-            },
-        ],
-    },
-    {
-        id: 5,
-        ranges: [
-            {
-                from: 0,
-                to: 19,
-                color: "#FFA3A3",
-            },
-            {
-                from: 20,
-                to: 49,
-                color: "#FEBC05",
-            },
-            {
-                from: 50,
-                to: 80,
-                color: "#09F",
-            },
-            {
-                from: 81,
-                to: 120,
-                color: "#14B96A",
-            },
-        ],
-    },
-    {
-        id: 6,
-        ranges: [
-            {
-                from: 0,
-                to: 19,
-                color: "#FFA3A3",
-            },
-            {
-                from: 20,
-                to: 49,
-                color: "#FEBC05",
-            },
-            {
-                from: 50,
-                to: 80,
-                color: "#09F",
-            },
-            {
-                from: 81,
-                to: 120,
-                color: "#14B96A",
-            },
-        ],
-    },
-    {
-        id: 7,
-        ranges: [
-            {
-                from: 0,
-                to: 40,
-                color: "#FFA3A3",
-            },
-            {
-                from: 41,
-                to: 50,
-                color: "#FEBC05",
-            },
-            {
-                from: 51,
-                to: 80,
-                color: "#09F",
-            },
-            {
-                from: 81,
-                to: 120,
-                color: "#14B96A",
-            },
-        ],
-    },
-    {
-        id: 8,
-        ranges: [
-            {
-                from: 0,
-                to: 3,
-                color: "#14B96A",
-            },
-            {
-                from: 3.1,
-                to: 4,
-                color: "#09F",
-            },
-            {
-                from: 4.1,
-                to: 5,
-                color: "#FEBC05",
-            },
-            {
-                from: 5.1,
-                to: 5.5,
-                color: "#09F",
-            },
-            {
-                from: 5.6,
-                to: 6,
-                color: "#14B96A",
-            },
-        ],
-    },
-    {
-        id: 9,
-        ranges: [
-            {
-                from: 0,
-                to: 20,
-                color: "#FFA3A3",
-            },
-            {
-                from: 20,
-                to: 40,
-                color: "#09F",
-            },
-            {
-                from: 40,
-                to: 60,
-                color: "#FEBC05",
-            },
-            {
-                from: 60,
-                to: 80,
-                color: "#09F",
-            },
-            {
-                from: 80,
-                to: 100,
-                color: "#14B96A",
-            },
-            {
-                from: 100,
-                to: 120,
-                color: "#14B96A",
-            },
-        ],
-    },
-    {
-        id: 10,
-        ranges: [
-            {
-                from: 0,
-                to: 20,
-                color: "#FFA3A3",
-            },
-            {
-                from: 20,
-                to: 40,
-                color: "#09F",
-            },
-            {
-                from: 40,
-                to: 60,
-                color: "#FEBC05",
-            },
-            {
-                from: 60,
-                to: 80,
-                color: "#09F",
-            },
-            {
-                from: 80,
-                to: 100,
-                color: "#14B96A",
-            },
-            {
-                from: 100,
-                to: 120,
-                color: "#14B96A",
-            },
-        ],
-    },
-    {
-        id: 11,
-        ranges: [
-            {
-                from: 0,
-                to: 20,
-                color: "#FFA3A3",
-            },
-            {
-                from: 20,
-                to: 40,
-                color: "#09F",
-            },
-            {
-                from: 40,
-                to: 60,
-                color: "#FEBC05",
-            },
-            {
-                from: 60,
-                to: 80,
-                color: "#09F",
-            },
-            {
-                from: 80,
-                to: 100,
-                color: "#14B96A",
-            },
-            {
-                from: 100,
-                to: 120,
-                color: "#14B96A",
-            },
-        ],
-    },
-    {
-        id: 12,
-        ranges: [
-            {
-                from: 0,
-                to: 20,
-                color: "#FFA3A3",
-            },
-            {
-                from: 20,
-                to: 40,
-                color: "#09F",
-            },
-            {
-                from: 40,
-                to: 60,
-                color: "#FEBC05",
-            },
-            {
-                from: 60,
-                to: 80,
-                color: "#09F",
-            },
-            {
-                from: 80,
-                to: 100,
-                color: "#14B96A",
-            },
-            {
-                from: 100,
-                to: 120,
-                color: "#14B96A",
-            },
-        ],
+        from: 80,
+        to: Number.MAX_SAFE_INTEGER,
+        color: "#00cc00",
     },
 ];
 
-// let colors = ["#FFA3A3", "#FEBC05", "#09F", "#14B96A"];
+export const rangesForShortValue = [
+    {
+        from: 0,
+        to: 3.99,
+        color: "#ff3300",
+    },
+    {
+        from: 4,
+        to: 5.4,
+        color: "#ffff00",
+    },
+    {
+        from: 5.5,
+        to: Number.MAX_SAFE_INTEGER,
+        color: "#00cc00",
+    },
+];
