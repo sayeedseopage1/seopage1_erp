@@ -41,7 +41,7 @@ const EditPolicyModal = ({
     editPolicyDataValidation,
     editPolicyDefaultData,
     editPolicyAction,
-    setIsFocusedOnTitleInput
+    setIsFocusedOnTitleInput,
 }) => {
     const {
         setEditPolicyData,
@@ -184,15 +184,40 @@ const EditPolicyModal = ({
                             <ModalSelectContainer>
                                 <CustomDropDown
                                     filedName="policyType"
-                                    data={PolicyTypeItems}
+                                    data={{
+                                        ...PolicyTypeItems,
+                                        data: PolicyTypeItems?.data?.map(
+                                            (item) => {
+                                                const isYesNoRule =
+                                                editPolicyData?.key?.name ===
+                                                    "yesNoRules";
+                                                const isItemYesNo =
+                                                    item?.name.includes(
+                                                        "yesNo"
+                                                    );
+                                                const disabled = isYesNoRule
+                                                    ? !isItemYesNo
+                                                    : false;
+
+                                                return {
+                                                    ...item,
+                                                    disabled,
+                                                };
+                                            }
+                                        ),
+                                    }}
                                     selected={editPolicyData?.policyType}
                                     setSelected={handlePolicyEditChange}
-                                    isDisableUse={false}
+                                    isDisableUse={
+                                        editPolicyData?.key?.name ===
+                                            "yesNoRules" &&
+                                        !editPolicyData?.length
+                                    }
                                 />
                             </ModalSelectContainer>
                             {editPolicyDataValidation?.policyType && (
                                 <p className="text-danger">
-                                    Policy type is required
+                                    Rule type is required
                                 </p>
                             )}
                         </div>
@@ -263,5 +288,5 @@ EditPolicyModal.propTypes = {
     editPolicyDataValidation: PropTypes.object,
     editPolicyDefaultData: PropTypes.object,
     editPolicyAction: PropTypes.object,
-    setIsFocusedOnTitleInput: PropTypes.func
+    setIsFocusedOnTitleInput: PropTypes.func,
 };

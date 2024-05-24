@@ -12,7 +12,7 @@ const salesRiskAnalysisApiSlice = apiSlice.injectEndpoints({
             providesTags: ["GET_SALES_RISK_ANALYSIS_RULES"],
         }),
         getSinglePolicySalesRiskAnalysis: build.query({
-            query: (policyId) => `/account/sales-risk-policies/rule-list?policy_id=${policyId}`,
+            query: (query) => `/account/sales-risk-policies/rule-list?${query}`,
         }),
         getSalesRiskAnalysisInputs: build.query({
             query: (query) => `/account/sales-risk-policies/input-fields`,
@@ -222,6 +222,7 @@ export const {
     useSinglePolicyQuestionsQuery,
     useQuestionAddonPolicyMutation,
     useGetSinglePolicySalesRiskAnalysisQuery,
+    useLazyGetSinglePolicySalesRiskAnalysisQuery,
     usePolicyQuestionsListByPolicyIdQuery,
     usePolicyQuestionsListQuery,
     useEditQuestionSalesRiskAnalysisMutation,

@@ -70,19 +70,20 @@ const AddQuestionsListModal = ({
         yesNoRules: false,
     });
 
-    console.log(addQuestionsData)
-
     const [
         editSinglePolicySalesRiskAnalysis,
         { isLoading: isEditSinglePolicySalesRiskAnalysisLoading },
     ] = useEditQuestionSalesRiskAnalysisMutation();
 
     const { data: singlePolicyData, isLoading: isLoadingSinglePolicyData } =
-        useGetSinglePolicySalesRiskAnalysisQuery(addQuestionsData?.id, {
-            skip: !addQuestionsData?.id,
-            staleTime: 0,
-            refetchOnMountOrArgChange: true,
-        });
+        useGetSinglePolicySalesRiskAnalysisQuery(
+            `policy_id=${addQuestionsData?.id}`,
+            {
+                skip: !addQuestionsData?.id,
+                staleTime: 0,
+                refetchOnMountOrArgChange: true,
+            }
+        );
 
     const [
         saleAnalysisQuestionSave,
@@ -307,7 +308,6 @@ const AddQuestionsListModal = ({
                 setIsQuestionUpdating(false);
             }
         } catch (error) {
-            console.log(error);
             if (error.status === 403) {
                 const errorMessages = formatAPIErrors(error?.data?.data);
                 errorMessages.forEach((errorMessage) => {
@@ -347,7 +347,6 @@ const AddQuestionsListModal = ({
             question_key: false,
             placeholder: false,
             isSubmitting: false,
-
         });
     };
 
@@ -430,8 +429,6 @@ const AddQuestionsListModal = ({
             }));
         }
     }, [isLoadingSinglePolicyData]);
-
-    console.log(singleQuestion);
 
     return (
         <CustomModal

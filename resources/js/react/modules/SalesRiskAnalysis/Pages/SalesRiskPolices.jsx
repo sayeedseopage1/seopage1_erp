@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo } from "react";
+import React, { useContext, useEffect, useMemo } from "react";
 import { toast } from "react-toastify";
 
 // ui components
@@ -9,6 +9,7 @@ import { SalesRiskAnalysisContainer } from "../components/ui/Styles/ui";
 import {
     useAddSalesRiskAnalysisRuleMutation,
     useGetSalesRiskAnalysisRulesQuery,
+    useLazyGetSinglePolicySalesRiskAnalysisQuery,
 } from "../../../services/api/salesRiskAnalysisSlice";
 
 // table
@@ -25,6 +26,8 @@ import { addNewRulesValidation } from "../helper/createFromValidation";
 import "../components/Styles/SalesRiskAnalysis.css";
 import AddQuestionsListModal from "../components/modal/AddQuestionsListModal";
 import { PolicyTypeItems } from "../constant";
+import { formatMultipleRuleData } from "../helper/formatEditPolicyData";
+import { SalesRiskAnalysisContext } from "../context/SalesRiskAnalysisProvider";
 
 const inputSateData = {
     mainDetails: {
@@ -79,6 +82,7 @@ const inputSateData = {
 };
 
 const SalesRiskPolices = () => {
+    const { policyKeys } = useContext(SalesRiskAnalysisContext);
     const [{ pageIndex, pageSize }, setPagination] = React.useState({
         pageIndex: 0,
         pageSize: 10,
@@ -125,6 +129,27 @@ const SalesRiskPolices = () => {
     const [submitData, { isLoading: isLoadingAddSalesRiskAnalysisRule }] =
         useAddSalesRiskAnalysisRuleMutation();
 
+    // get Single Policy Sales Risk Analysis Query by policy id or key
+
+    const [
+        getSinglePolicy,
+        {
+            data: singlePolicyDataByIDorKey,
+            isLoading: isLoadingSinglePolicyDataByIDorKey,
+        },
+    ] = useLazyGetSinglePolicySalesRiskAnalysisQuery();
+
+
+    const getSinglePolicyDataByIDorKey = async (key) => {
+        try {
+            const response = await getSinglePolicy(`key=${key}`);
+            return response;
+        } catch (error) {
+            return error;
+        }
+    }
+
+
     const resetFormForPolicy = (type) => {
         switch (type) {
             case "single":
@@ -164,7 +189,7 @@ const SalesRiskPolices = () => {
     };
 
     // handle input change
-    const handleChange = (e) => {
+    const handleChange = async (e) => {
         const { name, value } = e.target;
         // for testing
         if (
@@ -175,6 +200,12 @@ const SalesRiskPolices = () => {
         ) {
             if (name === "key") {
                 if (value.name === "yesNoRules") {
+                   const singlePolicyDataAll = await getSinglePolicyDataByIDorKey(value.name);
+                    console.log(singlePolicyDataAll?.data?.data)
+                    if (singlePolicyDataAll?.data?.data?.length) {
+                        const formattedRules = formatMultipleRuleData(singlePolicyDataAll?.data?.data[0], policyKeys)
+                        setNewPolicyInputData(formattedRules);
+                    }
                     setNewPolicyData({
                         ...newPolicyData,
                         policyType: PolicyTypeItems?.data?.find((item) =>
@@ -223,6 +254,9 @@ const SalesRiskPolices = () => {
             });
         }
     };
+
+
+    console.log(newPolicyInputData)
 
     const autoGenerateTitle = (data) => {
         return `${data?.policyType?.label} ${

@@ -95,7 +95,6 @@ const SalesRiskAnalysisProvider = ({ children }) => {
                         label: value,
                     };f
                 });
-            console.log(questionTypeData);
 
             const policyList = questionFieldsData?.data?.policies.map(
                 (policy) => {

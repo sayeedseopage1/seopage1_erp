@@ -30,8 +30,6 @@ import { NewRulesModalTableColumnsData } from "../table/NewRulesModalTableColumn
 import NewPolicyModalInputsContainer from "../sections/NewPolicyModalInputsContainer";
 import { SalesRiskAnalysisContext } from "../../context/SalesRiskAnalysisProvider";
 
-
-
 const AddNewPolicyModal = ({
     open,
     closeModal,
@@ -62,7 +60,6 @@ const AddNewPolicyModal = ({
             allSelectedCountries.push(item?.countries);
         }
     });
-
 
     return (
         <CustomModal
@@ -135,7 +132,7 @@ const AddNewPolicyModal = ({
                             </ModalSelectContainer>
                             {newPolicyDataValidation?.key && (
                                 <p className="text-danger">
-                                    Policy key is required
+                                    Rule key is required
                                 </p>
                             )}
                         </div>
@@ -175,7 +172,6 @@ const AddNewPolicyModal = ({
                     ) : (
                         ""
                     )}
-                    
 
                     <div className="row mb-4 align-items-center">
                         <ModalInputLabel className="col-4">
@@ -185,10 +181,35 @@ const AddNewPolicyModal = ({
                             <ModalSelectContainer>
                                 <CustomDropDown
                                     filedName="policyType"
-                                    data={PolicyTypeItems}
+                                    data={{
+                                        ...PolicyTypeItems,
+                                        data: PolicyTypeItems?.data?.map(
+                                            (item) => {
+                                                const isYesNoRule =
+                                                    newPolicyData?.key?.name ===
+                                                    "yesNoRules";
+                                                const isItemYesNo =
+                                                    item?.name.includes(
+                                                        "yesNo"
+                                                    );
+                                                const disabled = isYesNoRule
+                                                    ? !isItemYesNo
+                                                    : false;
+
+                                                return {
+                                                    ...item,
+                                                    disabled,
+                                                };
+                                            }
+                                        ),
+                                    }}
                                     selected={newPolicyData?.policyType}
                                     setSelected={handleChange}
-                                    isDisableUse={newPolicyData?.key?.name === "yesNoRules"}
+                                    isDisableUse={
+                                        newPolicyData?.key?.name ===
+                                            "yesNoRules" &&
+                                        !newPolicyInputData?.length
+                                    }
                                 />
                             </ModalSelectContainer>
                             {newPolicyDataValidation?.policyType && (

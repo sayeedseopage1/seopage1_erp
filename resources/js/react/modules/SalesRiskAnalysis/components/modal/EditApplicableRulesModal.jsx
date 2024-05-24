@@ -44,12 +44,14 @@ const EditApplicableRulesModal = ({
     ...props
 }) => {
     const { policyKeys } = useContext(SalesRiskAnalysisContext);
-    const { data: singlePolicyData} =
-        useGetSinglePolicySalesRiskAnalysisQuery(editRuleData?.policyId, {
+    const { data: singlePolicyData } = useGetSinglePolicySalesRiskAnalysisQuery(
+        `policy_id=${editRuleData?.policyId}`,
+        {
             skip: !editRuleData?.policyId,
             staleTime: 0,
             refetchOnMountOrArgChange: true,
-        });
+        }
+    );
 
     React.useEffect(() => {
         if (singlePolicyData?.data?.length) {

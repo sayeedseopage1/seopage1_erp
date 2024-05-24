@@ -23,9 +23,7 @@ const formatValueType = (item) => {
 }
 
 export const formatEditPolicyData = (data) => {
-
   let policies = []
-
   data.ruleList.map((item) => {
     let payload = {
       id: item.id,
@@ -52,7 +50,6 @@ export const formatEditPolicyData = (data) => {
       points: item.points,
 
     }
-
     policies.push(payload)
   });
 
@@ -60,6 +57,40 @@ export const formatEditPolicyData = (data) => {
 
 }
 
+
+export const formatMultipleRuleData = (data ,policyKeys) => {
+  let singlePolicy = []
+  data.ruleList.map((item) => {
+    let payload = {
+      id: item.id,
+      policyName: data.title,
+      department: data.department,
+      comment: item.comment,
+      key: policyKeys?.data.find(item => item.name === data.key),
+      policyType: PolicyTypeItems?.data?.find((policy) => policy.name === item.type),
+      title: item.title,
+      valueType: formatValueType(item),
+      value: !_.includes(
+        ["range", "yesNo", "list"],
+        item.type
+      )
+        ? item.value
+        : "",
+      from: item?.type === "range" ? item.value.split(', ')[0] : "",
+      to: item?.type === "range" ? item.value.split(', ')[1] : "",
+      yes: item?.type === "yesNo" ? getYesNoValue(item, "yes", "point") : "",
+      no: item?.type === "yesNo" ? getYesNoValue(item, "no", "point") : '',
+      yesComment: item.type === 'yesNo' ? getYesNoValue(item, "yes", "comment") : "",
+      noComment: item.type === 'yesNo' ? getYesNoValue(item, "no", "comment") : "",
+      ruleComment: item.type === 'yesNo' ? "" : item.comment,
+      countries: item.type === 'list' ? FormatJsonCountry(item?.value) : [],
+      points: item.points,
+
+    }
+    singlePolicy.push(payload)
+  });
+  return singlePolicy
+}
 
 export const formatEditRuleData = (data, selectedRow) => {
 

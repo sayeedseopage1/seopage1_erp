@@ -68,7 +68,7 @@ const DropdownItem = ({
             onMouseUp={handleMouseUp}
             onClick={handleClick}
             className={`cnx_dropdown__item ${
-                disabled ? "cnx_dropdown__item_disabled}" : ""
+                disabled ? "cnx_dropdown__item_disabled" : ""
             } ${className}`}
             role="button"
             tabIndex={0}

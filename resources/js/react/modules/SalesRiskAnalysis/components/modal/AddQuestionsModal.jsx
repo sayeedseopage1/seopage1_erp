@@ -8,10 +8,7 @@ import CustomModal from "../ui/CustomModal/CustomModal";
 // sections components
 
 // local styled components
-import {
-    ModalTitle,
-} from "../ui/Styles/ui";
-
+import { ModalTitle } from "../ui/Styles/ui";
 
 // api services
 import {
@@ -58,17 +55,15 @@ const AddQuestionsModal = ({
         isSubmitting: false,
     });
 
-    
-
-
     const { data: singlePolicyData, isLoading: isLoadingSinglePolicyData } =
-        useGetSinglePolicySalesRiskAnalysisQuery(addQuestionsData?.id, {
-            skip: !addQuestionsData?.id,
-            staleTime: 0,
-            refetchOnMountOrArgChange: true,
-        });
-
-    
+        useGetSinglePolicySalesRiskAnalysisQuery(
+            `policy_id=${addQuestionsData?.id}`,
+            {
+                skip: !addQuestionsData?.id,
+                staleTime: 0,
+                refetchOnMountOrArgChange: true,
+            }
+        );
 
     // make query string
     const queryString = (object) => {
@@ -81,7 +76,8 @@ const AddQuestionsModal = ({
         useSaleAnalysisQuestionsListQuery(
             queryString({
                 page: pageIndex + 1,
-                limit: pageSize,policy_id: addQuestionsData?.id,
+                limit: pageSize,
+                policy_id: addQuestionsData?.id,
             }),
             {
                 skip: !addQuestionsData?.id,
@@ -100,9 +96,6 @@ const AddQuestionsModal = ({
             setQuestions(formatQuestionsList);
         }
     }, [questionsList?.data]);
-
-
-
 
     // Scroll to Bottom
     const handleScrollToBottom = () => {

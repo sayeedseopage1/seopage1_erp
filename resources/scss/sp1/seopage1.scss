@@ -165,6 +165,10 @@ abbr{
   -moz-user-select: none;
   user-select: none;
 }
+.cnx_dropdown__item_disabled{
+  pointer-events: none;
+  opacity: 0.5;
+}
 
 .font-medium{
   font-weight: 500;
