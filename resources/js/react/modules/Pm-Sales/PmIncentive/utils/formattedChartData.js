@@ -15,7 +15,6 @@ function convertToShortTitle(title) {
 }
 
 function createIncentiveArray(arr, incentive) {
-    console.log(arr, incentive);
     // Create a new array with the same length as the input array, initialized with zeros
     let newArr = new Array(arr.length).fill(0);
 
@@ -26,8 +25,6 @@ function createIncentiveArray(arr, incentive) {
             newArr[i] = parseFloat(incentive);
         }
     }
-
-    console.log(newArr);
 
     return newArr;
 }

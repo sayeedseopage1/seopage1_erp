@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import StatsInfoProgressCard from './StatsInfoProgressCard';
 import pointIconDark from '../../../assets/pointIconDark.svg'
 import { IoInformationCircle } from "react-icons/io5";
@@ -6,14 +6,23 @@ import IncentivePointModal from '../../Modals/IncentivePointModal';
 import { Popover } from 'antd';
 import useIncentiveTypes from '../../../hooks/useIncentiveTypes';
 import AverageProgressCard from './AverageProgressCard';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { regularIncentivePoints } from '../../../../../../services/features/Pm-Sales/PmIncentiveSlice';
 
 const StatsInfo = () => {
     const pmIncentive = useSelector((state) => state.pmIncentive)
     const [incentivePointsModalOpen, setIncentivePointsModalOpen] = useState(false);
     const { allIncentiveTypes, regularIncentiveTypes, incentiveTypesLoading } = useIncentiveTypes();
 
-    const { regularPointAverage, regularIncentivePoints } = pmIncentive || {}
+    const { regularPointAverage, regularIncentivePoints: regularIncentivePointsData } = pmIncentive || {}
+
+    const dispatch = useDispatch();
+
+    useEffect(() => {
+        if (allIncentiveTypes) {
+            dispatch(regularIncentivePoints((parseFloat(allIncentiveTypes?.data?.total_points) * regularPointAverage) / 100));
+        }
+    }, [allIncentiveTypes, regularPointAverage]);
 
     return (
         <div className='stats_info_wrapper'>
@@ -47,8 +56,8 @@ const StatsInfo = () => {
                         </span>
                         <div className="">
                             <p className="stats_info_desc point_details_wrapper">
-                                Your actual incentive points: <span className="stats_info_link" onClick={() => setIncentivePointsModalOpen(true)}>
-                                    {regularIncentivePoints}pt
+                                Your actual incentive points: <span className={`${regularIncentivePointsData > 0 ? 'progress_card_desc_pos' : 'progress_card_desc_neg'} stats_info_link`} onClick={() => setIncentivePointsModalOpen(true)}>
+                                    {regularIncentivePointsData}pt
                                 </span>
                                 <Popover
                                     content='This is after multiplying your regular points with the average percentage calculated earlier'
@@ -68,7 +77,8 @@ const StatsInfo = () => {
                                 antdModalOpen={incentivePointsModalOpen}
                                 setAntdModalOpen={setIncentivePointsModalOpen}
                                 regularPointAverage={regularPointAverage}
-                                regularIncentivePoints={regularIncentivePoints}
+                                regularIncentivePointsData={regularIncentivePointsData}
+                                totalPoints={parseFloat(allIncentiveTypes?.data?.total_points)}
                             />
                         </div>
                     </div>

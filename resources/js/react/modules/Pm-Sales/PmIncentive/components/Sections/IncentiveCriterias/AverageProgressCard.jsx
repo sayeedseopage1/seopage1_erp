@@ -14,7 +14,7 @@ const AverageProgressCard = ({ item, regularPointAverage }) => {
             </div>
             <div className="w-100">
                 <span onClick={() => setAveragePointsModalOpen(true)} className={`${regularPointAverage > 0 ? 'progress_card_desc_pos' : 'progress_card_desc_neg'} stats_info_link`}>
-                    {0}%
+                    {regularPointAverage}%
                 </span>
 
                 <AveragePointModal
@@ -28,7 +28,7 @@ const AverageProgressCard = ({ item, regularPointAverage }) => {
                     <label>Average</label>
                     <label>{regularPointAverage}/100%</label>
                 </div>
-                <GradientProgressBar progress={0} />
+                <GradientProgressBar incentive={regularPointAverage} isAverage={true} />
             </div>
         </div>
     );

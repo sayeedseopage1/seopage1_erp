@@ -5,13 +5,18 @@ import { useDispatch } from 'react-redux';
 import { regularIncentivePoints } from '../../../../../services/features/Pm-Sales/PmIncentiveSlice';
 
 
-const IncentivePointModal = ({ antdModalOpen, setAntdModalOpen, regularPointAverage, regularIncentivePoints: regularIncentivePointsData }) => {
+const IncentivePointModal = ({ antdModalOpen, setAntdModalOpen, regularPointAverage, regularIncentivePointsData, totalPoints }) => {
     const { allIncentiveTypes, incentiveTypesLoading } = useIncentiveTypes();
-    const dispatch = useDispatch();
+    // const dispatch = useDispatch();
 
-    useEffect(() => {
-        dispatch(regularIncentivePoints((allIncentiveTypes?.data?.total_points * regularPointAverage) / 100));
-    }, [allIncentiveTypes]);
+    // useEffect(() => {
+    //     console.log(allIncentiveTypes?.data?.total_points)
+    //     console.log(regularPointAverage)
+    //     if (allIncentiveTypes?.data?.total_points) {
+    //         dispatch(regularIncentivePoints((parseFloat(allIncentiveTypes?.data?.total_points) * regularPointAverage) / 100));
+    //     }
+
+    // }, [allIncentiveTypes?.data?.total_points]);
 
 
     return (
@@ -24,7 +29,7 @@ const IncentivePointModal = ({ antdModalOpen, setAntdModalOpen, regularPointAver
                 <>
                     <div className="modal_point_row">
                         <p>Your obtained points: </p>{" "}
-                        <span className="text-sm">{parseFloat(allIncentiveTypes?.data?.total_points)}</span>
+                        <span className="text-sm">{totalPoints}</span>
                     </div>
                     <div className="modal_point_row">
                         <p>incentive points: </p>{" "}
@@ -32,7 +37,7 @@ const IncentivePointModal = ({ antdModalOpen, setAntdModalOpen, regularPointAver
                     </div>
                     <hr />
                     <div className="modal_point_row">
-                        <p>Your actual incentive points: <span>({parseFloat(allIncentiveTypes?.data?.total_points)}*{regularPointAverage}%)</span></p>{" "}
+                        <p>Your actual incentive points: <span>({totalPoints}*{regularPointAverage}%)</span></p>{" "}
                         <span className={`${regularIncentivePointsData > 0 ? 'progress_card_desc_pos' : 'progress_card_desc_neg'}`}>{regularIncentivePointsData}</span>
                     </div>
                 </>
