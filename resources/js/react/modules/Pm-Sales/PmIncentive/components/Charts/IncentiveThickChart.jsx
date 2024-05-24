@@ -92,11 +92,13 @@ const IncentiveThickChart = ({ chartData }) => {
         },
         grid: { show: !0, strokeDashArray: 3, position: "back" },
         xaxis: {
-            categories: chartData?.id > 7 ? chartData?.categories : [],
+            // categories: chartData?.id > 7 ? chartData?.categories : [],
+            categories: chartData?.categories,
             tickPlacement: "on",
             labels: {
                 formatter: (g) => {
-                    return `${chartData?.id > 7 ? g : Math.round(g) + "%"}`;
+                    // return `${chartData?.id > 7 ? g : Math.round(g) + "%"}`;
+                    return `${g}`;
                 },
                 style: {
                     fontSize: "10",
@@ -248,7 +250,8 @@ const IncentiveThickChart = ({ chartData }) => {
                 <Chart
                     ref={chartRef}
                     type="bar"
-                    series={chartData?.id > 7 ? chartData?.series : newSeries}
+                    // series={chartData?.id > 7 ? chartData?.series : newSeries}
+                    series={chartData?.series}
                     options={options}
                     height={300}
                 ></Chart>

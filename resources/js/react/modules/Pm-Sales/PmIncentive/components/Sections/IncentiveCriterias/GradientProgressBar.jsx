@@ -1,4 +1,4 @@
-const GradientProgressBar = ({ progress }) => {
+const GradientProgressBar = ({ progress, incentive }) => {
     // const progressBarWidth = `${progress}%`;
 
     const progressBarOuterStyle = {
