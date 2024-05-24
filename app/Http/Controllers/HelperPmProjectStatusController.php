@@ -534,16 +534,17 @@ class HelperPmProjectStatusController extends AccountBaseController
         $goal->goal_code = 'HP' . $goalCount;
         $goal->goal_name = 'If at least ' . $deliverable->estimation_time . ' hours have been tracked';
         $goal->goal_type = 'hourly_project_no' . $goalCount;
-        $goal->goal_start_date = $deliverable->created_at;
+        $goal->goal_start_date = $lastGoal->goal_start_date;
 
-        $endDate = $goal->goal_start_date;
+        $endDate = $deliverable->created_at;
         for ($i = 0; $i < $days; $i++) {
             $endDate = Carbon::parse($endDate)->addDay(1);
             if (Carbon::parse($endDate)->format("D") == "Sun") $endDate = Carbon::parse($endDate)->addDay(1);
         }
         $goal->goal_end_date = $endDate;
 
-        $goal->duration = $days;
+        $duration = (strtotime($goal->goal_end_date) - strtotime($goal->goal_start_date))/ 86400;
+        $goal->duration = number_format($duration, 2);
         $goal->added_by = Auth::user()->id;
         $goal->save();
     }
