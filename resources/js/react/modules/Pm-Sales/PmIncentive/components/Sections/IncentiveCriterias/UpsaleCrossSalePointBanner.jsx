@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import pointIconDark from '../../../assets/pointIconDark.svg'
 import cashBag from '../../../assets/cashBag.svg'
 import UpsaleCrossSalePointModal from '../../Modals/UpsaleCrossSalePointModal';
@@ -7,12 +7,26 @@ import CashValueUpCrossEditModal from '../../Modals/Incentives/CashValueUpCrossE
 import { Placeholder } from '../../../../../../global/Placeholder';
 import useIncentiveTypes from '../../../hooks/useIncentiveTypes';
 import { auth } from '../../../constants';
+import { useDispatch, useSelector } from 'react-redux';
+import { upSaleCrossSalePoints } from '../../../../../../services/features/Pm-Sales/PmIncentiveSlice';
+// import { upSaleCrossSalePoints } from '../../../../../../services/features/Pm-Sales/PmIncentiveSlice';
 
 const UpsaleCrossSalePointBanner = () => {
     const [upsaleCrossSalePointsModalOpen, setUpsaleCrossSalePointsModalOpen] = useState(false);
     const [editUpsaleCrossSalePointsModalOpen, setEditUpsaleCrossSalePointsModalOpen] = useState(false);
     const { upSaleCrossSaleTypes, incentiveTypesLoading } = useIncentiveTypes();
-    const [upsaleCrossSalePoints, setUpsaleCrossSalePoints] = useState(0);
+    const { incentive_criterias } = upSaleCrossSaleTypes || {};
+
+    const pmIncentive = useSelector((state) => state.pmIncentive)
+    const dispatch = useDispatch();
+
+    const { upSaleCrossSalePoints: upsaleCrossSalePointsData } = pmIncentive || {}
+
+    useEffect(() => {
+        if (upSaleCrossSaleTypes) {
+            dispatch(upSaleCrossSalePoints((parseFloat(incentive_criterias[0]?.acquired_percent) * parseFloat(incentive_criterias[0]?.obtained_incentive)) / 100));
+        }
+    }, [upSaleCrossSaleTypes, incentive_criterias]);
 
     return (
         <div className="secondary_point_banner">
@@ -23,15 +37,14 @@ const UpsaleCrossSalePointBanner = () => {
                     </span>
                     <div className="">
                         <p className='point_title point_details_wrapper' style={{ color: "#000000" }}>Your upsale/cross sales points: <span onClick={() => setUpsaleCrossSalePointsModalOpen(true)} className='point_score clickable_link' style={{ color: "#1492E6" }}>
-                            {upsaleCrossSalePoints}pt
+                            {upsaleCrossSalePointsData}pt
                         </span></p>
 
                         <UpsaleCrossSalePointModal
                             antdModalOpen={upsaleCrossSalePointsModalOpen}
                             setAntdModalOpen={setUpsaleCrossSalePointsModalOpen}
-                            upsaleCrossSalePoints={upsaleCrossSalePoints}
-                            setUpsaleCrossSalePoints={setUpsaleCrossSalePoints}
-                            item={upSaleCrossSaleTypes}
+                            upSaleCrossSaleTypes={upSaleCrossSaleTypes}
+                            upsaleCrossSalePointsData={upsaleCrossSalePointsData}
                         />
                     </div>
                 </div>

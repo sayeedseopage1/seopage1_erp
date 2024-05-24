@@ -1,22 +1,18 @@
 import React, { useEffect, useState } from 'react';
 import CustomAntdModal from '../ui/CustomAntdModal';
 
-const UpsaleCrossSalePointModal = ({ antdModalOpen, setAntdModalOpen, upsaleCrossSalePoints, setUpsaleCrossSalePoints, item: upsaleCrossSaleData }) => {
+const UpsaleCrossSalePointModal = ({ antdModalOpen, setAntdModalOpen, upsaleCrossSalePointsData, upSaleCrossSaleTypes }) => {
+    const { incentive_criterias } = upSaleCrossSaleTypes || {};
 
-    const { incentive_criterias } = upsaleCrossSaleData || {};
-    const [upsaleCrossSale, setUpsaleCrossSale] = useState(0);
-    const [upsaleCrossSaleIncentive, setUpsaleCrossSaleIncentive] = useState(0);
+    const [upsaleCrossSale, setUpsaleCrossSale] = useState(0)
+    const [upsaleCrossSaleIncentive, setUpsaleCrossSaleIncentive] = useState(0)
 
     useEffect(() => {
-        // Only run the effect if incentive_criterias is defined
         if (incentive_criterias) {
-            setUpsaleCrossSale(incentive_criterias[0].acquired_percent);
-            setUpsaleCrossSaleIncentive(incentive_criterias[0].obtained_incentive);
-
-            setUpsaleCrossSalePoints((upsaleCrossSale * upsaleCrossSaleIncentive) / 100);
-
+            setUpsaleCrossSale(parseFloat(incentive_criterias[0]?.acquired_percent))
+            setUpsaleCrossSaleIncentive(parseFloat(incentive_criterias[0]?.obtained_incentive))
         }
-    }, [incentive_criterias, setUpsaleCrossSalePoints]);
+    }, [incentive_criterias])
 
     return (
         <div>
@@ -32,12 +28,12 @@ const UpsaleCrossSalePointModal = ({ antdModalOpen, setAntdModalOpen, upsaleCros
                     </div>
                     <div className="modal_point_row">
                         <p>incentive: </p>{" "}
-                        <span className="text-sm">{upsaleCrossSaleIncentive}%</span>
+                        <span className={`${upsaleCrossSaleIncentive > 0 ? 'progress_card_desc_pos' : 'progress_card_desc_neg'}`}>{upsaleCrossSaleIncentive}%</span>
                     </div>
                     <hr />
                     <div className="modal_point_row">
                         <p>Upsale/cross sale point: <span>({upsaleCrossSale}*{upsaleCrossSaleIncentive}%)</span></p>{" "}
-                        <span className="text-sm">{upsaleCrossSalePoints}</span>
+                        <span className={`${upsaleCrossSaleIncentive > 0 ? 'progress_card_desc_pos' : 'progress_card_desc_neg'}`}>{upsaleCrossSalePointsData}</span>
                     </div>
                 </div>
             </CustomAntdModal>

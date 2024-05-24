@@ -10,13 +10,13 @@ import { useDispatch, useSelector } from 'react-redux';
 import { regularIncentivePoints } from '../../../../../../services/features/Pm-Sales/PmIncentiveSlice';
 
 const StatsInfo = () => {
-    const pmIncentive = useSelector((state) => state.pmIncentive)
     const [incentivePointsModalOpen, setIncentivePointsModalOpen] = useState(false);
     const { allIncentiveTypes, regularIncentiveTypes, incentiveTypesLoading } = useIncentiveTypes();
 
-    const { regularPointAverage, regularIncentivePoints: regularIncentivePointsData } = pmIncentive || {}
-
+    const pmIncentive = useSelector((state) => state.pmIncentive)
     const dispatch = useDispatch();
+
+    const { regularPointAverage, regularIncentivePoints: regularIncentivePointsData } = pmIncentive || {}
 
     useEffect(() => {
         if (allIncentiveTypes) {
