@@ -474,6 +474,17 @@ export const ModalContentContainer = styled.div`
           th:nth-child(3){
             width: 50%;
           }
+          .projectQCSModal:nth-child(1)  {
+            width: 5% !important;
+
+          }
+        .projectQCSModal:nth-child(2) {
+          width: 70% !important;
+        
+        }
+        .projectQCSModal:nth-child(3) {
+            width: 25% !important;
+        }
         }
       }
       tbody{
@@ -498,6 +509,21 @@ export const ModalContentContainer = styled.div`
           td:nth-child(3){
             width: 50%;
           }
+          .projectQCSModal:nth-child(1)  {
+            
+              width: 5% !important;
+          
+          }
+          .projectQCSModal:nth-child(2) {
+           
+            width: 70% !important;
+          
+          }
+          .projectQCSModal:nth-child(3) {
+              width: 25% !important;
+            
+          }
+
           &:nth-child(odd){
             background: #D8EDFC;
           }
@@ -610,6 +636,19 @@ export const ModalContentContainer = styled.div`
       font-weight: 400;
       line-height: normal;
     }
+  }
+
+
+  .stepHeader{
+    h3 {
+      color: #000;
+      font-family: Poppins, sans-serif;
+      font-size: 16px;
+      font-style: normal;
+      font-weight: 500;
+      line-height: normal;
+    }
+    margin-bottom: 20px;
   }
 
   /* Utility Class */

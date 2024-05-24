@@ -14,9 +14,13 @@ import style from "./styles/dashboardActionButtonSection.module.css";
 import PMTaskGuidelineModal from "../modal/PMTaskGuidelineModal";
 import ProjectCompletionModal from "../modal/ProjectCompletionModal";
 import ProjectDeadlineExtensionModal from "../modal/ProjectDeadlineExtensionModal";
+import ProjectQCSubmissionFormModal from "../modal/ProjectQCSubmissionFormModal";
+import { ProjectQualityControlDummyData } from "../../constants";
+
 
 // Modal Names
 // ProjectDE = Project Deadline Extension
+// ProjectQCSF = Project QC Submission Form
 
 const DashboardActionButtonSection = ({ projectData, isLoading }) => {
     const [isPmTaskGuidelineModalOpen, setIsPmTaskGuidelineModalOpen] =
@@ -25,6 +29,9 @@ const DashboardActionButtonSection = ({ projectData, isLoading }) => {
         React.useState(false);
     const [isProjectDEModalOpen, setIsProjectDEModalOpen] =
         React.useState(false);
+    const [isProjectQCSFModalOpen, setIsProjectQCSFModalOpen] = React.useState(
+        false
+    )
 
     // Handle Modal Open and Close Function with Action Function as Parameter (if needed)
     const handleModal = (setModalOpenFunc, isOpen, action) => {
@@ -54,7 +61,7 @@ const DashboardActionButtonSection = ({ projectData, isLoading }) => {
             </SectionContainer>
             <SectionContainer className={`${style.dashboardActionRightButton}`}>
                 <Button
-                    onClick={() => {}}
+                    onClick={() => handleModal(setIsProjectQCSFModalOpen, true)}
                     className={`${style.dashboardActionButton}`}
                 >
                     QC Form
@@ -99,11 +106,21 @@ const DashboardActionButtonSection = ({ projectData, isLoading }) => {
                 />
             )}
             {/* Project Deadline Extension Form */}
-            <ProjectDeadlineExtensionModal
-                isModalOpen={isProjectDEModalOpen}
-                closeModal={() => handleModal(setIsProjectDEModalOpen, false)}
-                modalData={projectData?.projectData?.project}
-                isLoading={isLoading}
+            {isProjectDEModalOpen && (
+                <ProjectDeadlineExtensionModal
+                    isModalOpen={isProjectDEModalOpen}
+                    closeModal={() =>
+                        handleModal(setIsProjectDEModalOpen, false)
+                    }
+                    modalData={projectData?.projectData?.project}
+                    isLoading={isLoading}
+                />
+            )}
+
+            <ProjectQCSubmissionFormModal
+                isModalOpen={isProjectQCSFModalOpen}
+                closeModal={() => handleModal(setIsProjectQCSFModalOpen, false)}
+                modalData={ProjectQualityControlDummyData}
             />
         </div>
     );

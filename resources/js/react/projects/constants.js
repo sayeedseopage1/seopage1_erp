@@ -247,7 +247,8 @@ export const ProjectData = [
                 plugin_information: 1,
                 plugin_name: "TranslatePress",
                 plugin_url: "https://wordpress.org/plugins/translatepress-multilingual/",
-            }
+            },
+
 
         }
     },
@@ -477,6 +478,171 @@ export const ProjectData = [
     }
 
 ]
+
+
+export const ProjectQualityControlDummyData = {
+    stepOne: [
+        {
+            id: 1,
+            title: 'Checked the site is loading with https:// or not? If not, please add SSL and confirm.',
+            key: 'site_https',
+            value: null,
+            isDangerHtml: false,
+        },
+        {
+            id: 2,
+            title: "Checked the site is loading with favicon or not? If not, please add and confirm.",
+            key: 'favicon',
+            value: null,
+            isDangerHtml: false,
+        },
+        {
+            id: 3,
+            title: `Checked whether the client was using web mails or not? If yes, 
+        please confirm that the webmail is working perfectly.`,
+            key: 'webmail',
+            value: null,
+            isDangerHtml: false,
+        },
+        {
+            id: 4,
+            title: `Checked whether the contact forms are working properly? If not, please add your
+        own email and test that it's working properly with captcha. After testing, 
+        add client's email.`,
+            key: 'contact_form',
+            value: null,
+            isDangerHtml: false,
+        },
+        {
+            id: 5,
+            title: `Checked the social media links are working perfectly? If not, please check that
+        those links are working perfectly and confirm.`,
+            key: 'social_media',
+            value: null,
+            isDangerHtml: false,
+        },
+        {
+            id: 6,
+            title: `Checked whether the login, register, other top bar links, and footer links are
+        working properly or not? If not, please fix it and confirm`,
+
+            key: 'login_link',
+            value: null,
+            isDangerHtml: false,
+        },
+        {
+            id: 7,
+            title: `Visited the website and scroll down from the top to bottom for all main pages like
+        home, about, service, product page, product category page and confirm that
+        images and the sections are aligned properly.`,
+            key: 'scroll_down',
+            value: null,
+            isDangerHtml: false,
+        },
+        {
+            id: 8,
+            title: `Checked whether there is any lorem ipsum text or not? If not, please fix them. If
+        agreement was to keep lorem ipsum text, keep them as agreement says.`,
+            key: 'lorem_text',
+            value: null,
+            isDangerHtml: false,
+        },
+        {
+            id: 9,
+            title: `<p>Did you check if there are any logical issues like need attention or not? If not
+        checked, please check for issues and fix them. Example Issue (In this case, this
+        form field will allow registration from people whose credit card will expire in a few
+        months (4 months). Nobody else will be able to register/reserve a vehicle. For
+        example, I personally have a few credit cards and the earliest expiration date is
+        in 2024. So if I want to reserve a vehicle here, I can’t because there is no provision
+         to pick a year after 2022. Look for such logical issues on the site, specially in the
+        sections where there are functionalities.</p>
+        <br/>
+        <p> Screenshot:  <a href="https://prnt.sc/ZCOCTbJiQorn" target="_blank">https://prnt.sc/ZCOCTbJiQorn</a> </p>`,
+            key: 'logical_issues',
+            value: null,
+            isDangerHtml: true,
+        },
+        {
+            id: 10,
+            title: `Checked the site's loading speed? If not, run test on GTmetrix and make sure the
+        score is more than 55 and check Pingdom tool to check the page size. Ensure that
+        the site meet our highest standard.`,
+            loading_speed: null,
+            key: 'loading_speed',
+            value: null,
+            isDangerHtml: false,
+        },
+        {
+            id: 11,
+            title: `Visited the website and scroll down from the top to bottom for all main pages like
+        home, about, service, product page, product category page and confirm that
+        images and the sections are aligned properly.`,
+            mobile_speed: null,
+            key: 'mobile_speed',
+            value: null,
+            isDangerHtml: false,
+        }
+    ],
+    stepTwo: [
+        {
+            id: 1,
+            title: `Checked if the site was already migrated to the live server or not. If yes, make sure
+        it is indexed and followed for search engines. Our developers normally no index a
+        site from 2 places. One, from the “Reading” menu under “settings” where they select
+        the option “Discourage search engines to crawl this site”. Another is robots txt. Here
+        is its written “Disallow: /”, that means the entire site is blocked for bots. Need to
+        remove both to make the site crawlable for the bots.`,
+            key: 'migration',
+            value: null,
+            isDangerHtml: false,
+        },
+        {
+            id: 2,
+            title: `Checking if all the links are working fine or not? In many cases, we saw that there
+        are hashtag links, and IP address links even after the site is migrated. Please run
+        a full-site check and fix where needed.`,
+            key: 'links_working',
+            value: null,
+            isDangerHtml: false,
+        },
+        {
+            id: 3,
+            title: `Added a backup plugin that can store and send backups to clients' email once per
+        week. Ask the client for the email where he wants the backups to be stored.`,
+            key: 'backup_plugin',
+            value: null,
+            isDangerHtml: false,
+        },
+        {
+            id: 4,
+            title: `Add an uptime monitoring plugin. Add client's email and 1-2 of our emails there,
+        including developers@seopage1.net and Rajat07me@gmail.com So both clients,
+        and we get notified as soon as the site is down.`,
+            key: 'uptime_monitoring',
+            value: null,
+            isDangerHtml: false,
+        },
+        {
+            id: 5,
+            title: `Keep a backup of the final website (This may be needed in case the client comes
+          back after a few months and claims something was not done after that thing got
+          messed up somehow).`,
+            key: 'final_backup',
+            value: null,
+            isDangerHtml: false,
+        },
+        {
+            id: 6,
+            title: `<p>Fill in the site title and tagline.</p> <br/> <p>GGo to settings>General to find this: <a href="https://prnt.sc/xFoLFQjiqiLj" target="_blank">https://prnt.sc/xFoLFQjiqiLj </a> </p> <p>Put a nice title of 60 characters max in the title field
+        (based on competitors) and a relevant tagline/slogan. For the tagline, you can check
+        with the client or if the client asks to put any of our choice, we can just put it.</p>`,
+            key: 'slogan',
+            value: null,
+            isDangerHtml: true,
+        }
+    ]
+}
 
 
 export const ProjectDeadlineHistoryDummyData = [

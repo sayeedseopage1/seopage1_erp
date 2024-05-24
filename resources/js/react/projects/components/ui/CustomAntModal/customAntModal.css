@@ -159,6 +159,16 @@
   display: none;
 }
 
+.projectQCSubmissionForm .ant-modal-content {
+  overflow-y: auto !important;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.projectQCSubmissionForm .ant-modal-content::-webkit-scrollbar {
+  display: none;
+}
+
 
 
 @media screen and (max-width: 768px) {
