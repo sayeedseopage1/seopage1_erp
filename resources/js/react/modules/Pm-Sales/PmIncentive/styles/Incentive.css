@@ -446,7 +446,7 @@
     font-weight: 600;
     text-decoration: underline;
     cursor: pointer;
-    color: #FF6666;
+    /* color: #FF6666; */
 }
 
 .stats_info_note {

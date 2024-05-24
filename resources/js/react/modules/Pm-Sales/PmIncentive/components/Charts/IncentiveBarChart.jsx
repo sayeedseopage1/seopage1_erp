@@ -20,8 +20,6 @@ const IncentiveBarChart = ({ chartData }) => {
         setIsIdealVsAchievedEditModalOpen(!isIdealVsAchievedEditModalOpen);
     };
 
-    console.log(chartData?.amountType)
-
     const options = {
         title: {
             // text: chartData.title,

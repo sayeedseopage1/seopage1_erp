@@ -1,19 +1,19 @@
-const GradientProgressBar = ({ progress, incentive }) => {
+const GradientProgressBar = ({ progress, incentive, isAverage }) => {
     // const progressBarWidth = `${progress}%`;
 
     const progressBarOuterStyle = {
         width: "100%",
         borderTopRightRadius: ".375rem",
         borderBottomRightRadius: ".375rem",
-        backgroundColor: `${progress > 0 ? "#ffffff" : "#FFDADA"}`,
+        backgroundColor: `${incentive > 0 ? "#ffffff" : "#FFDADA"}`,
         overflow: "hidden",
     }
     const progressBarInnerStyle = {
-        width: `${progress}%`,
+        width: `${isAverage ? incentive : progress}%`,
         height: "15px",
         borderTopRightRadius: ".375rem",
         borderBottomRightRadius: ".375rem",
-        background: `${progress > 0 ? "linear-gradient(to left, #00A0EE, #00A0EE66)" : "linear-gradient(to left, #FF6666, #dd8787)"}`,
+        background: `${incentive > 0 ? "linear-gradient(to left, #00A0EE, #00A0EE66)" : "linear-gradient(to left, #FF6666, #dd8787)"}`,
     }
 
     return (

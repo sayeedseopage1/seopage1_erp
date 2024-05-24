@@ -99,6 +99,7 @@ class Incentive
                 self::findIncentive($incentiveCriteria);
             }
 
+            $incentiveCriteria->obtained_incentive = 50;
 
         } catch (\Throwable $th) {
             // throw $th;
