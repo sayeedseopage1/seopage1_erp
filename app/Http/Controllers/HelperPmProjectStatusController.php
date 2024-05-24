@@ -22,7 +22,7 @@ class HelperPmProjectStatusController extends AccountBaseController
     {
         /**
          * total goal count
-         * ragular
+         * regular
          * Milestone -> goals
          * 1 - 2+1 = 3
          * 2 - 2 +1(1) +1(1) = 4
@@ -65,7 +65,7 @@ class HelperPmProjectStatusController extends AccountBaseController
         // --------------- calculate total number of days for the project --------------------- //
         $extraGoal = $milestoneSum < $findDeal->actual_amount ? 1 : 0;
 
-        $totalRequiedDayes = self::calculateProjectRequiedDays($pmGoalSetting->category, $milestoneCount + $extraGoal);
+        $totalRequiredDays = self::calculateProjectRequiredDays($pmGoalSetting->category, $milestoneCount + $extraGoal);
         // ------------- end -------------- //
 
         $pm_project = PMProject::where('project_id', $findProject->id)->first();
@@ -79,7 +79,7 @@ class HelperPmProjectStatusController extends AccountBaseController
         $diff = date_diff($d1, $d2);
         $totalProjectDays = (int) $diff->format("%a");
 
-        if ($totalRequiedDayes !== 0 && $totalRequiedDayes > $totalProjectDays) {
+        if ($totalRequiredDays !== 0 && $totalRequiredDays > $totalProjectDays) {
             return self::createShortDeadlinePmGoals($pmGoalSetting->category, $findProject, $findDeal, $pm_project, $milestoneCount, $extraGoal, $totalProjectDays);
         }
         // check end
@@ -308,14 +308,14 @@ class HelperPmProjectStatusController extends AccountBaseController
                 return $project->project_acceptance_time;
                 break;
             case '5':
-                $incressesRequest = AwardTimeIncress::where('deal_id', $deal->id)->first();
-                if (!$incressesRequest) throw new Exception('Award Time Incress data not found');
-                return $incressesRequest->updated_at;
+                $increaseRequest = AwardTimeIncress::where('deal_id', $deal->id)->first();
+                if (!$increaseRequest) throw new Exception('Award Time Increase data not found');
+                return $increaseRequest->updated_at;
                 break;
         }
     }
 
-    function calculateProjectRequiedDays($priorityType, $milestoneCount)
+    function calculateProjectRequiredDays($priorityType, $milestoneCount)
     {
         if (
             $milestoneCount <= 0 ||

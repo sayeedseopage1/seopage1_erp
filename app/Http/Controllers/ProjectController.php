@@ -1895,8 +1895,8 @@ class ProjectController extends AccountBaseController
                 } else throw new Exception("Deal budget not found.");
             }
             else {
-                $pmGoalSetting = PmGoalSetting::where('project_type', 'hourly')->where('initial_value', '<=', $findProject->project_budget)
-                        ->where('end_value', '>=', $findProject->project_budget)
+                $pmGoalSetting = PmGoalSetting::where('project_type', 'hourly')->where('initial_value', '<=', $findDeal->hourly_rate)
+                        ->where('end_value', '>=', $findDeal->hourly_rate)
                         ->first();
 
                 $project_status_helper = new HelperPmProjectStatusController();
