@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import pointIconDark from '../../../assets/pointIconDark.svg'
 import cashBag from '../../../assets/cashBag.svg'
 import { IoInformationCircle } from 'react-icons/io5';
@@ -9,12 +9,31 @@ import CashValueBonusEditModal from '../../Modals/Incentives/CashValueBonusEditM
 import useIncentiveTypes from '../../../hooks/useIncentiveTypes';
 import { Placeholder } from '../../../../../../global/Placeholder';
 import { auth } from '../../../constants';
+import { useDispatch, useSelector } from 'react-redux';
+import { bonusPointsPoints } from '../../../../../../services/features/Pm-Sales/PmIncentiveSlice';
 
 const BonusPointsPointBanner = () => {
     const [finalPointsModalOpen, setFinalPointsModalOpen] = useState(false);
     const [editBonusPointsModalOpen, setEditBonusPointsModalOpen] = useState(false);
 
     const { bonusIncentiveTypes, incentiveTypesLoading } = useIncentiveTypes();
+    const { incentive_criterias } = bonusIncentiveTypes || {};
+
+    const unreleasedIncentive = incentive_criterias?.find((item) => item?.id == 10)?.obtained_incentive;
+
+    //TODO: This will replace with the actual data from the backend
+    const bonusPointsAcquired = incentive_criterias?.find((item) => item?.id == 11)?.acquired_percent;
+
+    const pmIncentive = useSelector((state) => state.pmIncentive)
+    const dispatch = useDispatch();
+
+    const { bonusPointsPoints: bonusPointsData } = pmIncentive || {}
+
+    useEffect(() => {
+        if (bonusIncentiveTypes) {
+            dispatch(bonusPointsPoints((parseFloat(bonusPointsAcquired) * parseFloat(unreleasedIncentive)) / 100));
+        }
+    }, [bonusIncentiveTypes, incentive_criterias]);
 
     return (
         <div className="secondary_point_banner_bonus">
@@ -25,7 +44,7 @@ const BonusPointsPointBanner = () => {
                     </span>
                     <div className="">
                         <p className='point_title point_details_wrapper' style={{ color: "#000000" }}>Your bonus points: <span className='point_score' style={{ color: "#1492E6" }}>
-                            60.05pt
+                            {bonusPointsAcquired}pt
                         </span>
                             <Popover
                                 content='This value is Bonus Points Based 
@@ -52,7 +71,7 @@ const BonusPointsPointBanner = () => {
                     <div className="">
                         <p className='point_title point_details_wrapper' style={{ color: "#000000" }}>
                             Incentive Percentage: <span className='point_score' style={{ color: "#1492E6" }}>
-                                80%
+                                {parseFloat(unreleasedIncentive)}%
                             </span>
                             <Popover
                                 content='This value is Unreleased Payment Amount'
@@ -78,12 +97,17 @@ const BonusPointsPointBanner = () => {
                     <div className="">
                         <p className='point_title point_details_wrapper' style={{ color: "#000000" }}>
                             Final points: <span onClick={() => setFinalPointsModalOpen(true)} className='point_score clickable_link' style={{ color: "#1492E6" }} role='button'>
-                                48pt
+                                {bonusPointsData}pt
                             </span>
                         </p>
 
-                        <FinalPointsModal antdModalOpen={finalPointsModalOpen}
-                            setAntdModalOpen={setFinalPointsModalOpen} />
+                        <FinalPointsModal
+                            antdModalOpen={finalPointsModalOpen}
+                            setAntdModalOpen={setFinalPointsModalOpen}
+                            unreleasedIncentive={unreleasedIncentive}
+                            bonusPointsAcquired={bonusPointsAcquired}
+                            bonusPointsData={bonusPointsData}
+                        />
                     </div>
                 </div>
             </div>
