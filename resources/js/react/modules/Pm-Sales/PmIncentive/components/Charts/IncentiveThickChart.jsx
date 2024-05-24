@@ -66,7 +66,7 @@ const IncentiveThickChart = ({ chartData }) => {
                 return (
                     `
                         <div class="chart_tooltip">
-                            <p>${chartData.title} ${chartData?.ybarDataValueType == "money" ? "$" : ""}${chartData?.ratio}${chartData?.ybarDataValueType == "percent" ? "%" : ""}</p>
+                            <p>${chartData.title} ${chartData?.limitType == 1 ? "$" : ""}${chartData?.ratio}${chartData?.limitType == 2 ? "%" : ""}</p>
                             <p>${chartData?.yTitle} : ${series[seriesIndex][dataPointIndex]}% </p>
                         </div>
                     `
