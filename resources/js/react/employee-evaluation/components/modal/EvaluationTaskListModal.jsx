@@ -57,6 +57,12 @@ const EvaluationTaskListModal = ({
     setIsEvaluationModal,
     singleEvaluation,
 }) => {
+    const [dateExpired, setDateExpired] = React.useState(false);
+    React.useEffect(() => {
+        setDateExpired(new Date(singleEvaluation?.exp_date) < Date.now());
+    }, [singleEvaluation]);
+    // console.log(singleEvaluation?.user_name, dateExpired);
+
     const auth = useAuth();
     const [cumulativeAverage, setCumulativeAverage] = React.useState(
         singleEvaluation?.lead_dev_avg_rating
@@ -110,8 +116,11 @@ const EvaluationTaskListModal = ({
                 (acc, cur) => acc + Number(cur.avg_rating),
                 0
             );
+
+            console.log("cumulative sum", cumulativeSum);
+            console.log("tasks length", tasksToRate?.length);
             //set average rating
-            const average = cumulativeSum / tasksToRate.length;
+            const average = cumulativeSum / tasksToRate?.length;
             setCumulativeAverage(average);
 
             //checking if all tasks are rated using the length of tasksToRate array and the length of tasksToRate array filtered by lead_dev_cmnt not null
@@ -538,8 +547,9 @@ const EvaluationTaskListModal = ({
                             className="ml-2"
                             disabled={
                                 !isAllTaskRated ||
-                                singleEvaluation.ld_submission_status === 1 ||
-                                isLoadingLeadDevFinalSubmission
+                                singleEvaluation?.ld_submission_status === 1 ||
+                                isLoadingLeadDevFinalSubmission ||
+                                !dateExpired
                             }
                         >
                             {isLoadingLeadDevFinalSubmission

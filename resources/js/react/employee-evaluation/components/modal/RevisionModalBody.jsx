@@ -2,18 +2,15 @@ import React, { useState } from "react";
 
 import ReactModal from "react-modal";
 import RevisionTable from "../Table/RevisionTable";
-import { useGetRevisionListQuery } from "../../../services/api/EvaluationApiSlice";
 import { EvaluationRevisionTableColumns } from "../Table/EvaluationRevisionTableColumns";
 import Card from "../../../global/Card";
 import styles from "../../../../react/tasks/components/PrimaryPageAuthorization.module.css";
 const RevisionModalBody = ({
-    taskId,
+    revisions,
+    isLoading,
     isEvaluationRevisionModal,
     setIsEvaluationRevisionModal,
 }) => {
-    const { data: revisionData, isLoading } = useGetRevisionListQuery(taskId);
-
-    const Revisions = revisionData?.data;
     const [sorting, setSorting] = useState([]);
     const onPageChange = (paginate) => {
         setPagination(paginate);
@@ -30,11 +27,11 @@ const RevisionModalBody = ({
                     },
                     content: {
                         borderRadius: "10px",
-                        maxWidth: "820px",
+                        maxWidth: "800px",
                         height: "fit-content",
                         maxHeight: "100%",
                         margin: "auto auto",
-                        padding: "10px",
+                        padding: "0px",
                         overflowY: "auto",
                     },
                 }}
@@ -42,7 +39,7 @@ const RevisionModalBody = ({
                 onRequestClose={() => setIsEvaluationRevisionModal(false)}
                 ariaHideApp={false}
             >
-                <Card className={styles.card}>
+                <Card className={styles.revision_card}>
                     <Card.Head
                         onClose={() => setIsEvaluationRevisionModal(false)}
                         className={styles.card_head}
@@ -52,7 +49,7 @@ const RevisionModalBody = ({
 
                     <Card.Body className={styles.card_body}>
                         <RevisionTable
-                            data={Revisions}
+                            data={revisions}
                             columns={[...EvaluationRevisionTableColumns]}
                             isLoading={isLoading}
                             onPageChange={onPageChange}
