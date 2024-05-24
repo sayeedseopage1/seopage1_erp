@@ -8,6 +8,7 @@ import { SalesRiskAnalysisContainer } from "../components/ui/Styles/ui";
 // api
 import {
     useAddSalesRiskAnalysisRuleMutation,
+    useEditSinglePolicySalesRiskAnalysisMutation,
     useGetSalesRiskAnalysisRulesQuery,
     useLazyGetSinglePolicySalesRiskAnalysisQuery,
 } from "../../../services/api/salesRiskAnalysisSlice";
@@ -26,8 +27,12 @@ import { addNewRulesValidation } from "../helper/createFromValidation";
 import "../components/Styles/SalesRiskAnalysis.css";
 import AddQuestionsListModal from "../components/modal/AddQuestionsListModal";
 import { PolicyTypeItems } from "../constant";
-import { formatMultipleRuleData } from "../helper/formatEditPolicyData";
+import {
+    formatEditPolicyDataPayload,
+    formatMultipleRuleData,
+} from "../helper/formatEditPolicyData";
 import { SalesRiskAnalysisContext } from "../context/SalesRiskAnalysisProvider";
+import { generateUniqueString } from "../../../utils/customUidGenerate";
 
 const inputSateData = {
     mainDetails: {
@@ -88,6 +93,8 @@ const SalesRiskPolices = () => {
         pageSize: 10,
     });
     const [isRuleUpdating, setIsRuleUpdating] = React.useState(false);
+    const [isPolicyUpdating, setIsPolicyUpdating] = React.useState(false);
+    const [newPolicyDeleteData, setNewPolicyDeleteData] = React.useState([]);
 
     // modal open close state
     const [addNewPolicyModalOpen, setAddNewPolicyModalOpen] =
@@ -129,6 +136,12 @@ const SalesRiskPolices = () => {
     const [submitData, { isLoading: isLoadingAddSalesRiskAnalysisRule }] =
         useAddSalesRiskAnalysisRuleMutation();
 
+    // Update dd sales risk analysis rule mutation
+    const [
+        submitPolicyData,
+        { isLoading: isLoadingEditSalesRiskAnalysisPolicy },
+    ] = useEditSinglePolicySalesRiskAnalysisMutation();
+
     // get Single Policy Sales Risk Analysis Query by policy id or key
     const [
         getSinglePolicy,
@@ -138,7 +151,6 @@ const SalesRiskPolices = () => {
         },
     ] = useLazyGetSinglePolicySalesRiskAnalysisQuery();
 
-
     const getSinglePolicyDataByIDorKey = async (key) => {
         try {
             const response = await getSinglePolicy(`key=${key}`);
@@ -146,8 +158,7 @@ const SalesRiskPolices = () => {
         } catch (error) {
             return error;
         }
-    }
-
+    };
 
     const resetFormForPolicy = (type) => {
         switch (type) {
@@ -199,10 +210,20 @@ const SalesRiskPolices = () => {
         ) {
             if (name === "key") {
                 if (value.name === "yesNoRules") {
-                   const singlePolicyDataAll = await getSinglePolicyDataByIDorKey(value.name);
+
+                    const singlePolicyDataAll =
+                        await getSinglePolicyDataByIDorKey(value.name);
                     if (singlePolicyDataAll?.data?.data?.length) {
-                        const formattedRules = formatMultipleRuleData(singlePolicyDataAll?.data?.data[0], policyKeys)
+                        const formattedRules = formatMultipleRuleData(
+                            singlePolicyDataAll?.data?.data[0],
+                            policyKeys
+                        );
                         setNewPolicyInputData(formattedRules);
+                        setNewPolicyMainDetails({
+                            ...newPolicyMainDetails,
+                            id: singlePolicyDataAll?.data?.data[0]?.id,
+                            key: value,
+                        });
                     }
                     setNewPolicyData({
                         ...newPolicyData,
@@ -211,16 +232,18 @@ const SalesRiskPolices = () => {
                         ),
                         [name]: value,
                     });
+                    setIsPolicyUpdating(true);
                 } else {
                     setNewPolicyData({
                         ...newPolicyData,
                         [name]: value,
                     });
+                    setNewPolicyMainDetails({
+                        ...newPolicyMainDetails,
+                        id: newPolicyMainDetails.id || "",
+                        [name]: value,
+                    });
                 }
-                setNewPolicyMainDetails({
-                    ...newPolicyMainDetails,
-                    [name]: value,
-                });
             } else {
                 setNewPolicyData({ ...newPolicyData, [name]: value });
                 setNewPolicyMainDetails({
@@ -253,8 +276,6 @@ const SalesRiskPolices = () => {
         }
     };
 
-
-    
 
     const autoGenerateTitle = (data) => {
         return `${data?.policyType?.label} ${
@@ -305,7 +326,7 @@ const SalesRiskPolices = () => {
                 ...newPolicyInputData,
                 {
                     ...newPolicyData,
-                    id: Math.random().toString(36).substring(7),
+                    id: generateUniqueString(15),
                 },
             ]);
         }
@@ -379,7 +400,7 @@ const SalesRiskPolices = () => {
 
         try {
             // prepare payload for api
-            const payload = {
+            let payload = {
                 title: newPolicyMainDetails.policyName,
                 department: newPolicyMainDetails.department?.id,
                 comment: newPolicyMainDetails.comment,
@@ -388,10 +409,28 @@ const SalesRiskPolices = () => {
                     formatRuleForPayload(item)
                 ),
             };
+            //  prepare payload for edit policy only if policy is yesNoRules
+            if (isPolicyUpdating) {
+                payload = formatEditPolicyDataPayload(
+                    newPolicyMainDetails,
+                    newPolicyInputData,
+                    newPolicyDeleteData
+                );
+            }
 
-            const response = await submitData(payload);
+            const addOrUpdatePolicy = isPolicyUpdating
+                ? submitPolicyData
+                : submitData;
+
+            const response = await addOrUpdatePolicy(payload);
             if (response?.data) {
-                toast.success("New policy added successfully");
+                if (isPolicyUpdating) {
+                    toast.success("Policy updated successfully");
+                    setNewPolicyDeleteData([]);
+                    setIsPolicyUpdating(false);
+                } else {
+                    toast.success("New policy added successfully");
+                }
                 handleAddNewPolicyModal();
                 setNewPolicyInputData([]);
                 resetFormForPolicy("all");
@@ -537,9 +576,10 @@ const SalesRiskPolices = () => {
                     isRuleUpdating={isRuleUpdating}
                     closeModal={handleAddNewPolicyModal}
                     newPolicyInputData={newPolicyInputData}
+                    isPolicyUpdating={isPolicyUpdating}
                     newPolicyDataValidation={newPolicyDataValidation}
                     isLoadingAddSalesRiskAnalysisRule={
-                        isLoadingAddSalesRiskAnalysisRule
+                        isLoadingAddSalesRiskAnalysisRule || isLoadingEditSalesRiskAnalysisPolicy || isLoadingSinglePolicyDataByIDorKey
                     }
                     handlerAction={{
                         handleChange,
@@ -549,6 +589,7 @@ const SalesRiskPolices = () => {
                         handleAddRuleOnPolicy,
                         setNewPolicyInputData,
                         handleCancelRuleOnPolicy,
+                        setNewPolicyDeleteData,
                     }}
                 />
             )}
