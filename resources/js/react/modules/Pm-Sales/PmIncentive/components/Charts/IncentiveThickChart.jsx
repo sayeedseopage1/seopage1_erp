@@ -121,7 +121,7 @@ const IncentiveThickChart = ({ chartData }) => {
         },
         yaxis: {
             // tickAmount: 5,
-            // max: 120,
+            max: 120,
             labels: {
                 formatter: (val) => `${val}%`,
                 style: {
@@ -258,7 +258,7 @@ const IncentiveThickChart = ({ chartData }) => {
                     <img src={arrow2} className="chart_axis_icon" alt="arrow2" />
                 </div>
 
-                <p className="chart_ratio">{chartData.title}: <span className={`${chartData?.ratio > 0 ? "chart_ratio_value_pos" : "chart_ratio_value_neg"}`}>{chartData?.limitType == 1 ? "$" : ""}{chartData?.ratio}{chartData?.limitType == 2 ? "%" : ""}</span></p>
+                <p className="chart_ratio">{chartData.title}: <span className={`${chartData?.incentive > 0 ? "chart_ratio_value_pos" : "chart_ratio_value_neg"}`}>{chartData?.limitType == 1 ? "$" : ""}{chartData?.ratio}{chartData?.limitType == 2 ? "%" : ""}</span></p>
 
             </div>
         </>
