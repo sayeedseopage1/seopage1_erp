@@ -25,20 +25,45 @@ align-items: flex-start;
 gap: 24px;
 `
 export const ButtonComponent = styled.button`
-width:145px;
-height: 52px;
+min-width: 145px;
 border-radius: 8px;
-border: 1px solid #1492E6;
+border: ${(props) => props.border || "1px solid #1492E6"};
 background-color: ${(props) => props.color || "transparent"};
-padding: 10px;
-font-size: 14px;
+padding: 15px 20px;
+font-size: ${(props) => props.font || "14px"};
 font-weight: 500;
 color: ${(props) => props.textColor ? "#fff" : "#1492E6"};
 
-@media (max-width: 600px) {
-width:90px;
-height: 42px;
+@media  (max-width: 1400px) {
+    min-width: 100px;
   }
+
+@media (min-width: 769px) and (max-width: 1199px) {
+font-size: 12px;
+padding: 10px 15px;
+  }
+
+
+@media (max-width: 768px) {
+font-size: 12px;
+padding: 8px 12px;
+white-space: nowrap;
+overflow: hidden;
+text-overflow: ellipsis;
+max-width: 100px;
+  }
+
+@media (max-width: 576px) {
+    min-width: 120px;
+  }
+
+@media (max-width:414px) {
+    min-width: 100px;
+  }
+
+  &:disabled {
+        cursor: not-allowed;
+    }
 `
 
 export const AddNewSectionCointainer = styled.div`

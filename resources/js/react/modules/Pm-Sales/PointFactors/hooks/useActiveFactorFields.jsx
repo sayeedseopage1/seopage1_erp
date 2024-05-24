@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
-import { useGetFactorsFieldsByCriteriaQuery } from "../../../../services/api/pmSalesApiSlice";
 import { filterNullValues } from "../utils/removeNull";
+import { useGetFactorsFieldsByCriteriaQuery } from "../../../../services/api/Pm-Sales/pmSalesApiSlice";
 
 const useActiveFactorFields = ({ newFactorData }) => {
     const [activeCriteriaId, setActiveCriteria] = useState(null)

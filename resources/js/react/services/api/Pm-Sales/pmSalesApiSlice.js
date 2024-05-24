@@ -1,4 +1,4 @@
-import { apiSlice } from "./apiSlice";
+import { apiSlice } from "../apiSlice";
 
 const _token = document
     .querySelector("meta[name='csrf-token']")

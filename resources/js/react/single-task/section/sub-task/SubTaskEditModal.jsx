@@ -366,10 +366,7 @@ const SubTaskEditModal = ({ task, singleTask: taskDetails, onSubmit, isLoading, 
 
     };
 
-
     const { data: projects, isFetching: isFetchingMilestone } = useGetMilestoneDetailsQuery(task?.projectId)
-
-
 
     // handle uploaded file delete request
     const [deleteUplaodedFile] = useDeleteUplaodedFileMutation();

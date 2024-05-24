@@ -32,6 +32,10 @@ grumphp.yml
 storage/reviewed
 *.bak
 
+# Fot testing
+docker-compose.yml
+sonarqube-scanner.js
+.scannerwork
 
 __TODO__
 package-lock.json

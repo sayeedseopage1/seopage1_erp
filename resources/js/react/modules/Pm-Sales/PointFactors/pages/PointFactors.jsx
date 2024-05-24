@@ -4,13 +4,13 @@ import { PointFactorsColumns } from '../components/table/PointFactorsColumns';
 import TopSection from '../components/sectionComponents/TopSection';
 import { AddButton, AddNewSectionCointainer } from '../components/Styles/ui/ui';
 import AddNewItemsModal from '../components/modal/AddNewItemsModal';
-import { useCreatePmPointFactorMutation, useGetFactorsFieldsByCriteriaQuery, useGetPmPointFactorsQuery } from '../../../../services/api/pmSalesApiSlice';
 import { useEffect } from 'react';
 import _ from 'lodash';
 import { toast } from 'react-toastify';
 import useActiveFactorFields from '../hooks/useActiveFactorFields';
 import { validationFormator } from '../utils/validationFormator';
 import { filterNullValues } from '../utils/removeNull';
+import { useCreatePmPointFactorMutation, useGetFactorsFieldsByCriteriaQuery, useGetPmPointFactorsQuery } from '../../../../services/api/Pm-Sales/pmSalesApiSlice';
 // import { HourlyPointFactorsColumns } from '../components/table/HourlyPointFactorsColumns';
 
 const PointFactors = () => {
@@ -223,10 +223,13 @@ const PointFactors = () => {
                 status: parseInt(newFactorData?.status) ?? 1,
             }
             const response = await createPmPointFactor(payload).unwrap();
+
             if (response?.status == 200) {
                 toast.success(response.message);
                 handleAddNewItemModal();
                 resetFormState();
+            } else {
+                toast.warning(response.message);
             }
         } catch (error) {
             toast.error("Failed to add new item");

@@ -36,8 +36,8 @@ import { useState } from "react";
 import PmPointFactorsTableLoader from "../loader/PmPointFactorsTableLoader";
 import EditFactorModal from "../modal/EditFactorModal";
 import { LimitUnits } from "../../constant";
-import { useGetSinglePmPointFactorQuery, useUpdatePmPointfactorMutation } from "../../../../../services/api/pmSalesApiSlice";
 import { validationFormator } from "../../utils/validationFormator";
+import { useGetSinglePmPointFactorQuery, useUpdatePmPointfactorMutation } from "../../../../../services/api/Pm-Sales/pmSalesApiSlice";
 
 const PointFactorsTable = ({
     isLoading,
@@ -231,9 +231,12 @@ const PointFactorsTable = ({
             }
 
             const response = await updatePmPointfactor({ id: editFactorData?.id, payload }).unwrap();
+
             if (response?.status == 200) {
                 toast.success(response.message);
                 handleCloseEditFactorModal();
+            } else {
+                toast.warning(response.message);
             }
         } catch (error) {
             toast.error("Failed to update item");

@@ -1,0 +1,200 @@
+.held_amount_table_wrapper {
+    width: 100%;
+    overflow-x: auto;
+    border-radius: 16px;
+}
+
+.held_amount_table {
+    width: 100%;
+    background: #F7FAFF;
+    border: none;
+    border-collapse: collapse !important;
+}
+
+.held_amount_table thead {
+    height: 96px;
+    color: #FFF;
+    font-style: normal;
+    font-size: 16px;
+    font-weight: 500;
+    line-height: normal;
+}
+
+.held_amount_table th {
+    background-color: #1492E6 !important;
+    text-wrap: nowrap !important;
+    text-align: center !important;
+    border: 1px solid #ddd;
+    text-wrap: nowrap;
+    padding: 10px;
+}
+
+.held_amount_table td {
+    padding: 10px 15px;
+    font-size: 0.8em;
+    border: 1px solid #ddd;
+    color: #000;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+    text-wrap: nowrap;
+    text-align: center;
+}
+
+.held_amount_table td:first-child {
+    text-align: left;
+}
+
+.held_amount_table td:first-child,
+.held_amount_table td:last-child {
+    border-bottom: 0;
+    border-left: 0;
+    border-right: 0;
+}
+
+.held_amount_table tr:last-child td {
+    border-bottom: 0;
+}
+
+/* pay now modal  */
+
+.pay_now_modal .ant-modal-header {
+    background: #1492E6;
+    /* color: #FFFFFF; */
+    padding: 16px 30px;
+}
+
+.pay_now_modal_header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    color: #fff;
+}
+
+.pay_now_modal_header .pay_now_title {
+    font-family: Poppins, sans-serif;
+    font-size: 24px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+}
+
+.pay_now_modal .ant-modal-content {
+    padding: 0px;
+}
+
+.pay_now_modal .ant-modal-body {
+    padding: 24px;
+}
+
+.pay_now_modal_footer {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+
+.pay_now_modal .pay_now_balance_wrapper {
+    border-radius: 15px;
+    border: 1px solid rgba(255, 255, 255, 0.50);
+    background: #1077BB;
+    padding: 11px 18px;
+    color: #FFF;
+    font-family: Poppins, sans-serif;
+    font-size: 18px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: normal;
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+
+.pay_now_balance_title {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.pay_now_modal_body {
+    padding: 26px 0px;
+}
+
+/* Hide Table Header */
+.hide-table-header .ant-table-thead {
+    display: none;
+}
+
+.held_years_select .ant-select-selector {
+    background-color: transparent !important;
+    border: 0 !important;
+}
+
+.ant-select-focused:where(.css-dev-only-do-not-override-1u00c9r).ant-select-outlined:not(.ant-select-disabled):not(.ant-select-customize-input):not(.ant-pagination-size-changer) .ant-select-selector {
+    box-shadow: none;
+    outline: 0;
+}
+
+.held_years_select .ant-select-selection-item {
+    text-align: right !important;
+    color: #000;
+    font-family: Poppins, sans-serif;
+    font-size: 18px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+    margin-right: 12px;
+}
+
+.held_years_header span,
+.held_amount_table_data {
+    color: #000;
+    font-family: Poppins, sans-serif;
+    font-size: 18px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+}
+
+.incentive_swal_confirm {
+    color: #000;
+    font-family: Poppins, sans-serif;
+    font-size: 24px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+}
+
+.incentive_swal_desc {
+    color: #1492E6;
+    text-align: center;
+    font-family: Poppins, sans-serif;
+    font-size: 18px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+    margin-top: 15px;
+    margin-bottom: 15px;
+}
+
+.swal2-confirm-custom {
+    font-family: poppins, sans-serif;
+    border: 1px solid #1492E6 !important;
+    background-color: #1492E6 !important;
+    color: #fff !important;
+}
+
+.swal2-cancel-custom {
+    font-family: poppins, sans-serif;
+    border: 1px solid #1492E6 !important;
+    color: #1492E6 !important;
+    background-color: #fff !important;
+}
+
+.swal2-cancel-custom :hover {
+    background-color: #fff !important;
+}

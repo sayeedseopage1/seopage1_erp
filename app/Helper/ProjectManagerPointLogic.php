@@ -13,6 +13,7 @@ class ProjectManagerPointLogic
     public static function distribute($criteriaId, $projectId, $comparable_value, $points = null)
     {
         $project = Project::with('deal:id,project_type')->find($projectId);
+        if(!$project) return false;
         $criteria = Criteria::with(['factors' => function($factor) use ($project){
             return $factor->where('project_type', $project->deal->project_type == 'fixed' ? 1 : 2);
         }])->find($criteriaId);
