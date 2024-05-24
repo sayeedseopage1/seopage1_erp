@@ -104,6 +104,8 @@ class EvaluationController extends AccountBaseController
     {
         //
     }
+
+
     public function getAllEvaluation(Request $request)
     {
         $startDate = $request->start_date ?? null;
@@ -158,6 +160,50 @@ class EvaluationController extends AccountBaseController
             'status' => 200
         ]);
     }
+
+
+    public function getSingleEvaluation($user_id)
+    {
+        $evaluationQuery = EmployeeEvaluation::select('employee_evaluations.*', 'added_by.id as added_by_id', 'added_by.name as added_by_name', 'tasks.id as task_id', 'roles.name as role_name')
+        ->selectRaw('MIN(sub_tasks.created_at) as first_task_assign_on')
+        ->selectRaw('MIN(project_time_logs.created_at) as started_working_on')
+        ->selectRaw('COUNT(DISTINCT task_users.id) as total_task_assigned')
+        ->selectRaw('COUNT(DISTINCT employee_evaluation_tasks.submission_date) as total_task_submit')
+
+        ->leftJoin('employee_evaluation_tasks', 'employee_evaluations.user_id', '=', 'employee_evaluation_tasks.user_id')
+        ->leftJoin('sub_tasks', 'employee_evaluations.user_id', '=', 'sub_tasks.assigned_to')
+        ->leftJoin('tasks', 'sub_tasks.task_id', '=', 'tasks.id')
+        ->leftJoin('users as added_by', 'sub_tasks.added_by', '=', 'added_by.id')
+        ->leftJoin('roles', 'employee_evaluations.role', '=', 'roles.id')
+        ->leftJoin('project_time_logs', 'employee_evaluations.user_id', '=', 'project_time_logs.user_id')
+        ->leftJoin('task_users', 'employee_evaluations.user_id', '=', 'task_users.user_id')
+        ->where('employee_evaluations.user_id', $user_id)
+            ->groupBy('employee_evaluations.id');
+
+        // Rest of your query
+
+        $employeeEvaluations = $evaluationQuery->get();
+
+        foreach ($employeeEvaluations as $data) {
+            $taskUser = TaskUser::where('user_id', $data->user_id)->first();
+            if ($taskUser != null) {
+                $total_hours = EmployeeEvaluationTask::where('user_id', $taskUser->user_id)->sum('total_hours');
+                $total_min = EmployeeEvaluationTask::where('user_id', $taskUser->user_id)->sum('total_min');
+                $revision = EmployeeEvaluationTask::where('user_id', $taskUser->user_id)->sum('revision_number');
+                $data->total_hours = $total_hours;
+                $data->total_minutes = $total_min;
+                $data->total_revision = $revision;
+            }
+        }
+
+        return response()->json([
+            'data' => $employeeEvaluations,
+            'status' => 200
+        ]);
+    }
+
+
+
 
    public function getEmployeeTask($id)
     {
