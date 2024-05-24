@@ -16,9 +16,7 @@ const TotalTaskAssigned = ({ data }) => {
         isFetching,
     } = useGetTaskListQuery(data?.user_id);
 
-    const Tasks = TaskList?.data.filter(
-        (item) => item.submission_date !== null
-    );
+    const Tasks = TaskList?.data;
     const [isOpen, setIsOpen] = useState(false);
     const [sorting, setSorting] = useState([]);
     const onPageChange = (paginate) => {

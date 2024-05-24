@@ -14,7 +14,9 @@ const TotalTaskSubmitted = ({ data }) => {
         isLoading,
         isFetching,
     } = useGetTaskListQuery(data?.user_id);
-    const Tasks = TaskList?.data;
+    const Tasks = TaskList?.data.filter(
+        (item) => item.submission_date !== null
+    );
     const [isOpen, setIsOpen] = useState(false);
     const [sorting, setSorting] = useState([]);
 
