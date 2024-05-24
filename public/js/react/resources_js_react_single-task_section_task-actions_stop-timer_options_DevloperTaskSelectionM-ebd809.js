@@ -33,7 +33,6 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
 
 
-
 var DevloperTaskSelectionMenu = function DevloperTaskSelectionMenu(_ref) {
   var _window;
   var task = _ref.task,

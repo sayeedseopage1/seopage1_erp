@@ -1,3 +1,4 @@
+import React from "react";
 import style from "./customButtons.module.css";
 import PropTypes from "prop-types";
 

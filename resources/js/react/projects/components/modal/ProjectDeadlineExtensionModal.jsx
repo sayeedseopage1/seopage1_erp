@@ -8,13 +8,22 @@ import CustomModalHeader from "../ui/CustomModalHeader/CustomModalHeader";
 
 // Components - Styled Components
 import { ModalContentContainer } from "../ui/styledComponents";
-import CustomTextArea from "../ui/CustomTextArea/CustomTextArea";
+
+// Components - Global
 import Loader from "../../../global/Loader";
+
+// Components - Custom 
 import SingleButton from "../ui/CustomButton/SingleButton";
+import CustomTextArea from "../ui/CustomTextArea/CustomTextArea";
+
+
+// Helpers
 import {
     isStateAllHaveValue,
     markEmptyFieldsValidation,
 } from "../../../utils/stateValidation";
+
+// Toast
 import { toast } from "react-toastify";
 
 const ProjectDeadlineExtensionModal = ({

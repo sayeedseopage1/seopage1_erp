@@ -33,7 +33,6 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
 
 
-
 var UserSelectionList = function UserSelectionList(_ref) {
   var _user2;
   var person = _ref.person,

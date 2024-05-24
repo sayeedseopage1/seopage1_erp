@@ -31,8 +31,8 @@ grumphp.yml
 /bootstrap/cache/*
 storage/reviewed
 *.bak
-
 .scannerwork
+coverage
 
 __TODO__
 package-lock.json

@@ -21,7 +21,6 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-
 var InnerHistoryItem = function InnerHistoryItem(_ref) {
   var _history$board_column, _history$board_column2, _history$board_column3;
   var history = _ref.history;
