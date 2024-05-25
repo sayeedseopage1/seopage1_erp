@@ -215,6 +215,7 @@ use App\Http\Controllers\PointIncentive\GetPmCashPointController;
 use App\Http\Controllers\PointIncentive\PmIncentiveViewController;
 use App\Http\Controllers\PointIncentive\GetPmPointCriteriaController;
 use App\Http\Controllers\PointIncentive\GetCriteriaWiseFactorController;
+use App\Http\Controllers\PointIncentive\GetPmByDepartmentController;
 use App\Http\Controllers\PointIncentive\IncentiveCriteriaController;
 use App\Http\Controllers\PointIncentive\IncentiveFactorController;
 use App\Http\Controllers\PointIncentive\IncentiveTypeController;
@@ -1562,6 +1563,7 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
     Route::get('pm-point-factors', PmPointFactorViewController::class)->name('project.manager.point.factors');
     Route::resource('pm-point-factor', PmPointFactorController::class)->only(['index','store','show','edit','update']);
     Route::get('project-manager-points', [ProjectManagerPointController::class, 'index'])->name('project.manager.points');
+    Route::get('get-pm-by-department/{departmetnId}', GetPmByDepartmentController::class)->name('get.pm.by.department');
     Route::get('get-criteria-wise-factor/{id}', GetCriteriaWiseFactorController::class)->name('get.criteria.wise.factor');
     Route::resource('pm-point-criteria', CriteriaController::class)->only(['index']);
     Route::get('get-pm-cashpoint', GetPmCashPointController::class)->name('get.pm.cashpoint');
