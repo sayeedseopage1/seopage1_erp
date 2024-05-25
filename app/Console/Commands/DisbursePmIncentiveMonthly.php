@@ -2,16 +2,17 @@
 
 namespace App\Console\Commands;
 
-use App\Helper\Incentive;
 use Carbon\Carbon;
 use App\Models\Task;
 use App\Models\User;
 use App\Models\Project;
+use App\Helper\Incentive;
 use App\Models\CashPoint;
-use App\Models\IncentiveCriteria;
-use App\Models\ProgressiveIncentive;
 use App\Models\TaskRevision;
 use Illuminate\Console\Command;
+use App\Models\ProjectMilestone;
+use App\Models\IncentiveCriteria;
+use App\Models\ProgressiveIncentive;
 
 class DisbursePmIncentiveMonthly extends Command
 {
@@ -115,12 +116,27 @@ class DisbursePmIncentiveMonthly extends Command
             $client_retention_rate = $pm_created_clients->count() ? number_format(((Project::whereIn('client_id', $pm_created_clients)->where('pm_id', $user->id)->where('created_at', '<=', Carbon::now()->startOfMonth())->pluck('client_id')->count() + $retension_this_month) / $pm_created_clients->count())*100, 2) : 0;
             $obtainedIncentive[] = Incentive::progressiveStore(7, $user->id, $client_retention_rate, $now);
             // End
+
+            // Upsale/Cross sale amount
+            $upsale_amount = ProjectMilestone::select('project_milestones.*')
+            ->join('projects','projects.id','project_milestones.project_id')
+            ->join('deals','deals.id','projects.deal_id')
+            ->where('deals.project_type','fixed')
+            ->where('projects.pm_id', 209)
+            ->where('project_milestones.added_by', 209)
+            ->where('project_milestones.status','!=','canceled')
+            ->whereBetween('project_milestones.created_at', [$startDate, $endDate])
+            ->sum('project_milestones.cost');
+            $obtainedIncentive[] = Incentive::progressiveStore(8, $user->id, $upsale_amount, $now);
+            // End
             
-            if (in_array(0, $obtainedIncentive)) {
-                dd(0);
-            } else {
-                dd(array_sum($obtainedIncentive) / count($obtainedIncentive));
-            }
+            dd($obtainedIncentive);
+            
+            // if (in_array(0, $obtainedIncentive)) {
+            //     dd(0);
+            // } else {
+            //     dd(array_sum($obtainedIncentive) / count($obtainedIncentive));
+            // }
         }
     }
 }
