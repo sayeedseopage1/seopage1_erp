@@ -109,16 +109,16 @@ export default function CashPointsFilter({
                     onApply={() => { }}
                 />
             </FilterItem>
-            <FilterItem className='border-right-0'>
+            <FilterItem className='border-right-0 hide'>
                 <DeptFilter department={depAndEmployees?.department} handleChange={handleDeptChange} isFetching={isDepAndEmployeesFetching} />
             </FilterItem>
-            <FilterItem className='border-right-0'>
+            <FilterItem className='border-right-0 hide'>
                 <EmployeeFilter pmByDeptData={pmByDeptData} handleChange={handlePmChange} isFetching={isPmByDeptLoading} />
             </FilterItem>
-            <FilterItem className='border-right-0'>
+            <FilterItem className='border-right-0 hide'>
                 <CreditDebitFilter handleChange={handleCreditDebitChange} />
             </FilterItem>
-            <FilterItem className='border-right-0'>
+            <FilterItem className='border-right-0 hide'>
                 <div className='point_selector_container'>
                     <div className='point_selector_label_container'>
                         <img src={pointIcon} alt="User Icon" style={{ width: '17px', height: '17px' }} />
@@ -159,17 +159,32 @@ export default function CashPointsFilter({
 
 
                                     <FilterItem className='w-100 border-right-0'>
-                                        <DeptFilter depAndEmployees={depAndEmployees} handleChange={handleDeptChange} isFetching={isDepAndEmployeesFetching} />
+                                        <DeptFilter department={depAndEmployees?.department} handleChange={handleDeptChange} isFetching={isDepAndEmployeesFetching} />
+                                    </FilterItem>
+                                    <FilterItem className='w-100 border-right-0'>
+                                        <EmployeeFilter pmByDeptData={pmByDeptData} handleChange={handlePmChange} isFetching={isPmByDeptLoading} />
+                                    </FilterItem>
+                                    <FilterItem className='w-100 border-right-0'>
+                                        <CreditDebitFilter handleChange={handleCreditDebitChange} />
+                                    </FilterItem>
+                                    <FilterItem className='w-100 border-right-0'>
+                                        <div className='point_selector_container'>
+                                            <div className='point_selector_label_container'>
+                                                <img src={pointIcon} alt="User Icon" style={{ width: '17px', height: '17px' }} />
+                                                <span className='point_selector_label'>Points gained as:</span>
+                                            </div>
+                                            <span className='point_selector_item' style={{ color: '#B1B1B1', marginLeft: '4px' }}>Individual</span>
+                                        </div>
                                     </FilterItem>
 
 
-                                    <FilterItem className='hide d-flex align-items-center w-100 border-right-0'>
+                                    {/* <FilterItem className='hide d-flex align-items-center w-100 border-right-0'>
                                         <span className='mr-2 w-100'>Credit/Debit: <span className='d-block font-weight-bold border py-2 px-2 w-100' >Point Earned </span> </span>
                                     </FilterItem>
 
                                     <FilterItem className='hide d-flex align-items-center w-100 border-right-0'>
                                         <span className='mr-2 w-100'>Points gained as: <span className='d-block font-weight-bold border py-2 px-2 w-100'>Individual</span> </span>
-                                    </FilterItem>
+                                    </FilterItem> */}
 
                                 </div>
                             </aside>
@@ -207,25 +222,13 @@ export default function CashPointsFilter({
 
                                 <div className="sp1__pp_filter_sidebar_items">
                                     <FilterItem className='w-100 border-right-0'>
-                                        <UserFilter
-                                            title="Client"
-                                            state={client}
-                                            setState={setClient}
-                                            sidebarIsOpen={sidebarIsOpen}
-                                            roleIds={null}
-                                        />
-                                    </FilterItem>
-                                    <FilterItem className='w-100 border-right-0'>
-                                        <TypeFilter
-                                            value={type}
-                                            onChange={setType}
-                                            sidebarIsOpen={sidebarIsOpen}
-                                            data={[
-                                                { id: "Bonus", title: "Bonus" },
-                                                { id: "Regular", title: "Regular" },
-                                                { id: "Authorization", title: "Authorization" }
-                                            ]}
-                                        />
+                                        <div className='point_selector_container'>
+                                            <div className='point_selector_label_container'>
+                                                <img src={pointIcon} alt="User Icon" style={{ width: '17px', height: '17px' }} />
+                                                <span className='point_selector_label'>Points gained as:</span>
+                                            </div>
+                                            <span className='point_selector_item' style={{ color: '#B1B1B1', marginLeft: '4px' }}>Individual</span>
+                                        </div>
                                     </FilterItem>
                                 </div>
                             </aside>
