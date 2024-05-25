@@ -18,10 +18,10 @@ const IncentiveThickChart = ({ chartData }) => {
     const isAllZero = chartData?.incentive == 0;
 
     const helper = () => {
-        const acquired_percent = parseFloat(chartData.ratio)
+        const acquired_percent = parseFloat(chartData?.ratio)
         const datas = []
         chartData.incentive_factors.forEach((item, index) => {
-            if (index === 0) {
+            if (index == 0) {
                 datas.push(parseFloat(item.lower_limit))
             }
             datas.push(parseFloat(item.upper_limit))
@@ -38,6 +38,11 @@ const IncentiveThickChart = ({ chartData }) => {
         if (indexData.length > 0) {
             const index = indexData[indexData.length - 1]
             newData[index] = [chartData.ratio, chartData.incentive];
+        }
+        if (newData?.length) {
+            if (parseFloat(newData[0][0]) >= 0) {
+                newData.unshift([0, 0])
+            }
         }
 
         return newData
@@ -66,7 +71,7 @@ const IncentiveThickChart = ({ chartData }) => {
                 return (
                     `
                         <div class="chart_tooltip">
-                            <p>${chartData.title} ${chartData?.ybarDataValueType == "money" ? "$" : ""}${chartData?.ratio}${chartData?.ybarDataValueType == "percent" ? "%" : ""}</p>
+                            <p>${chartData.title} ${chartData?.limitType == 1 ? "$" : ""}${chartData?.ratio}${chartData?.limitType == 2 ? "%" : ""}</p>
                             <p>${chartData?.yTitle} : ${series[seriesIndex][dataPointIndex]}% </p>
                         </div>
                     `
@@ -93,12 +98,13 @@ const IncentiveThickChart = ({ chartData }) => {
         grid: { show: !0, strokeDashArray: 3, position: "back" },
         xaxis: {
             // categories: chartData?.id > 7 ? chartData?.categories : [],
-            categories: chartData?.categories,
+            // categories: chartData?.categories,
             tickPlacement: "on",
             labels: {
                 formatter: (g) => {
                     // return `${chartData?.id > 7 ? g : Math.round(g) + "%"}`;
-                    return `${g}`;
+                    // return `${g}`;
+                    return `${chartData?.limitType == 1 ? "$" : ""} ${Math.round(g)} ${chartData?.limitType == 2 ? "%" : ""}`;
                 },
                 style: {
                     fontSize: "10",
@@ -146,7 +152,7 @@ const IncentiveThickChart = ({ chartData }) => {
                 return val ? `${chartData?.limitType == 1 ? "$" : ""}${chartData?.ratio}${chartData?.limitType == 2 ? "%" : ""}, ${val}${chartData?.amountType == 1 ? "" : "%"}` : "";
             },
             offsetY: -25,
-            offsetX: isAllZero ? 15 : 0,
+            offsetX: isAllZero ? 10 : 0,
             style: {
                 fontSize: "14px",
                 fontFamily: "poppins",
@@ -251,7 +257,8 @@ const IncentiveThickChart = ({ chartData }) => {
                     ref={chartRef}
                     type="bar"
                     // series={chartData?.id > 7 ? chartData?.series : newSeries}
-                    series={chartData?.series}
+                    // series={chartData?.series}
+                    series={newSeries}
                     options={options}
                     height={300}
                 ></Chart>

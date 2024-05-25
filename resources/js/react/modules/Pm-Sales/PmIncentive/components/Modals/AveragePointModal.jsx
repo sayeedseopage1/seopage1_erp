@@ -8,7 +8,6 @@ const AveragePointModal = ({ antdModalOpen, setAntdModalOpen, item: statsInfoDat
     const pmIncentive = useSelector((state) => state.pmIncentive)
     // Destructure incentive_criterias from statsInfoData, or set it to an empty object if statsInfoData is undefined
     const { incentive_criterias } = statsInfoData || {};
-    console.log("regularPointFromRedux", pmIncentive?.regularPointAverage)
 
     useEffect(() => {
         // Only run the effect if incentive_criterias is defined

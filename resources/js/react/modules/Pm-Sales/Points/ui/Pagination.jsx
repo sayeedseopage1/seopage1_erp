@@ -14,10 +14,10 @@ const Pagination = ({ data, setCurrentPageData, numOfPerPageRow = 10, sortConfig
 
     const paginate = (data, currentPage, nPaginate) => {
         // TODO: this sorting can remove later
-        if (data.length <= nPaginate) return data?.sort((a, b) => a.id - b.id);
+        if (data.length <= nPaginate) return data?.sort((a, b) => b.id - a.id);
         const startIndex = (currentPage - 1) * nPaginate;
         // TODO: this sorting can remove later
-        return data?.sort((a, b) => a.id - b.id).slice(startIndex, startIndex + nPaginate);
+        return data?.sort((a, b) => b.id - a.id).slice(startIndex, startIndex + nPaginate);
     };
 
     const sortData = (data) => {

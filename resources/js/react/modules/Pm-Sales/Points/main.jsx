@@ -10,6 +10,7 @@ import { HTML5Backend } from 'react-dnd-html5-backend';
 import { store } from '../../../services/store';
 import { useUsers } from '../../../hooks/useUsers';
 import PmCashPoints from './pages/PmCashPoints';
+import '../Points/styles/points.css'
 
 
 const Content = () => {

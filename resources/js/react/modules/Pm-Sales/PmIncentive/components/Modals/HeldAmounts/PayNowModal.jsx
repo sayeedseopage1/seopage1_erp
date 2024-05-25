@@ -133,7 +133,7 @@ const PayNowModal = ({ antdModalOpen, showPayNowModal }) => {
                         className='held_years_select'
                         value={defaultHeldYear}
                         style={{ width: 120 }}>
-                        {held_years.map(item => (
+                        {held_years?.map(item => (
                             <Option value={item.year} key={item._id}>{item.year}</Option>
                         ))}
                     </Select>
