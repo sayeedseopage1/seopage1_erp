@@ -19,6 +19,7 @@ import { useGetPmByDeptQuery, useGetPmCashPointsQuery } from '../../../../servic
 import DeptFilter from './Filter/DeptFilter.jsx';
 import EmployeeFilter from './Filter/EmployeeFilter.jsx';
 import CreditDebitFilter from './Filter/CreditDebitFilter.jsx';
+import pointIcon from '../assets/point1.svg'
 
 
 
@@ -116,6 +117,15 @@ export default function CashPointsFilter({
             </FilterItem>
             <FilterItem className='border-right-0'>
                 <CreditDebitFilter handleChange={handleCreditDebitChange} />
+            </FilterItem>
+            <FilterItem className='border-right-0'>
+                <div className='point_selector_container'>
+                    <div className='point_selector_label_container'>
+                        <img src={pointIcon} alt="User Icon" style={{ width: '17px', height: '17px' }} />
+                        <span className='point_selector_label'>Points gained as:</span>
+                    </div>
+                    <span className='point_selector_item' style={{ color: '#B1B1B1', marginLeft: '4px' }}>Individual</span>
+                </div>
             </FilterItem>
 
             {/* sidebar */}
