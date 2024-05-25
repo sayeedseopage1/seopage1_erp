@@ -7,6 +7,7 @@ use App\Models\Task;
 use App\Models\Project;
 use App\Models\CashPoint;
 use App\Models\TaskRevision;
+use App\Models\ProjectMilestone;
 use App\Models\IncentiveCriteria;
 use App\Models\ProgressiveIncentive;
 
@@ -96,6 +97,17 @@ class Incentive
                 $pm_assigned_clients = Project::where('pm_id', $user_id)->whereIn('client_id', $pm_created_clients)->where('created_at', '>=', Carbon::now()->startOfMonth())->pluck('client_id')->toArray();
                 $retension_this_month = count(array_keys(array_filter(array_count_values($pm_assigned_clients), fn($count) => $count > 1)));
                 $incentiveCriteria->acquired_percent = $pm_created_clients->count() ? number_format(((Project::whereIn('client_id', $pm_created_clients)->where('pm_id', $user_id)->where('created_at', '<=', Carbon::now()->startOfMonth())->pluck('client_id')->count() + $retension_this_month) / $pm_created_clients->count())*100, 2) : 0;
+                self::findIncentive($incentiveCriteria);
+            }elseif($incentiveCriteria->id == 8){
+                $incentiveCriteria->acquired_percent = ProjectMilestone::select('project_milestones.*')
+                ->join('projects','projects.id','project_milestones.project_id')
+                ->join('deals','deals.id','projects.deal_id')
+                ->where('deals.project_type','fixed')
+                ->where('projects.pm_id', 209)
+                ->where('project_milestones.added_by', 209)
+                ->where('project_milestones.status','!=','canceled')
+                ->whereBetween('project_milestones.created_at', [$startDate, $endDate])
+                ->sum('project_milestones.cost');
                 self::findIncentive($incentiveCriteria);
             }
 
