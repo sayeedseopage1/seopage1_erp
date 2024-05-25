@@ -546,9 +546,10 @@ const EvaluationTaskListModal = ({
                             size="md"
                             className="ml-2"
                             disabled={
-                                !isAllTaskRated ||
-                                singleEvaluation?.ld_submission_status === 1 ||
-                                isLoadingLeadDevFinalSubmission ||
+                                (!isAllTaskRated ||
+                                    singleEvaluation?.ld_submission_status ===
+                                        1 ||
+                                    isLoadingLeadDevFinalSubmission) &&
                                 !dateExpired
                             }
                         >
