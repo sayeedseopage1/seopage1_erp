@@ -15,7 +15,7 @@ import TypeFilter from './TypeFilter';
 
 import { useUsers } from '../../../../hooks/useUsers.jsx';
 import { useAuth } from '../../../../hooks/useAuth.jsx';
-import { useGetPmCashPointsQuery } from '../../../../services/api/Pm-Sales/pmSalesApiSlice.js';
+import { useGetPmByDeptQuery, useGetPmCashPointsQuery } from '../../../../services/api/Pm-Sales/pmSalesApiSlice.js';
 import DeptFilter from './Filter/DeptFilter.jsx';
 import EmployeeFilter from './Filter/EmployeeFilter.jsx';
 
@@ -26,19 +26,22 @@ export default function CashPointsFilter({
     setIsDataFetching
 }) {
     const auth = useAuth();
+    const [dept, setDept] = useState(1);
+    // get pm by department 
+    const { data: pmByDept, isFetching: isPmByDeptLoading } = useGetPmByDeptQuery(dept)
+    const pmByDeptData = pmByDept?.data
     // const { departments, shift, employees } = useSelector(s => s.pointPageFilterOption);
     const { getUserById, usersObject, usersIsFetching } = useUsers();
     const dispatch = useDispatch();
     const [startDate, setStartDate] = useState(null);
     const [endDate, setEndDate] = useState(null);
-    const [shiftEmployee, setShiftEmployee] = useState([]);
     const [client, setClient] = useState(null);
     const [type, setType] = useState(null);
-    const [dept, setDept] = useState(null);
-    const [selectedShift, setSelectedShift] = useState(null);
-    const [selectedEmployee, setSelectedEmployee] = useState(null);
-    const [employeeLoading, setEmployeeLoading] = useState(true);
-    const [project, setProject] = useState(null);
+
+    // const [selectedShift, setSelectedShift] = useState(null);
+    const [selectedEmployee, setSelectedEmployee] = useState();
+    // const [employeeLoading, setEmployeeLoading] = useState(true);
+    // const [project, setProject] = useState(null);
 
     // table data
     const { data: pmCashPoints, isLoading: dataFetchingStateIsLoading } = useGetPmCashPointsQuery()
@@ -53,9 +56,16 @@ export default function CashPointsFilter({
         }
     }, [tableData, dataFetchingStateIsLoading])
 
+    useEffect(() => {
+        if (pmByDeptData && !isPmByDeptLoading) {
+            setSelectedEmployee(pmByDeptData[0]?.id)
+        }
+    }, [pmByDeptData, isPmByDeptLoading])
+
     // console.log(tableData)
     // console.log("start", startDate)
     // console.log("end", endDate)
+    console.log("selectedEmployee", selectedEmployee)
 
 
     // sidebar
@@ -71,11 +81,14 @@ export default function CashPointsFilter({
         // skip: departments?.length && shift?.length && employees.length
     });
 
-    console.log("depAndEmployees", depAndEmployees)
+
 
     const handleDeptChange = (value) => {
-        console.log(`selected ${value}`);
+        // console.log(`selected ${value}`);
         setDept(value);
+    };
+    const handlePmChange = (value) => {
+        setSelectedEmployee(value);
     };
 
     return (
@@ -93,7 +106,7 @@ export default function CashPointsFilter({
                 <DeptFilter depAndEmployees={depAndEmployees} handleChange={handleDeptChange} isFetching={isDepAndEmployeesFetching} />
             </FilterItem>
             <FilterItem className='border-right-0'>
-                {/* <EmployeeFilter depAndEmployees={depAndEmployees} handleChange={handleDeptChange} /> */}
+                <EmployeeFilter pmByDeptData={pmByDeptData} handleChange={handlePmChange} isFetching={isPmByDeptLoading} />
             </FilterItem>
 
 

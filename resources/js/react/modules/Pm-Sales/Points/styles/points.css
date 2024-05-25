@@ -15,7 +15,8 @@
     /* gap: 4px; */
 }
 
-.points_selector .ant-select-selection-item {
+.points_selector .ant-select-selection-item,
+.point_selector_item {
     overflow: hidden;
     color: #1492E6;
     text-overflow: ellipsis;
