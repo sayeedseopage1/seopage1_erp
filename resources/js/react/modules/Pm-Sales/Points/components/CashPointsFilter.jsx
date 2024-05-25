@@ -18,6 +18,7 @@ import { useAuth } from '../../../../hooks/useAuth.jsx';
 import { useGetPmByDeptQuery, useGetPmCashPointsQuery } from '../../../../services/api/Pm-Sales/pmSalesApiSlice.js';
 import DeptFilter from './Filter/DeptFilter.jsx';
 import EmployeeFilter from './Filter/EmployeeFilter.jsx';
+import CreditDebitFilter from './Filter/CreditDebitFilter.jsx';
 
 
 
@@ -37,6 +38,7 @@ export default function CashPointsFilter({
     const [endDate, setEndDate] = useState(null);
     const [client, setClient] = useState(null);
     const [type, setType] = useState(null);
+    const [creditDebit, setCreditDebit] = useState(null);
 
     // const [selectedShift, setSelectedShift] = useState(null);
     const [selectedEmployee, setSelectedEmployee] = useState();
@@ -65,7 +67,8 @@ export default function CashPointsFilter({
     // console.log(tableData)
     // console.log("start", startDate)
     // console.log("end", endDate)
-    console.log("selectedEmployee", selectedEmployee)
+    // console.log("selectedEmployee", selectedEmployee)
+    // console.log("creditDebit", creditDebit)
 
 
     // sidebar
@@ -90,6 +93,9 @@ export default function CashPointsFilter({
     const handlePmChange = (value) => {
         setSelectedEmployee(value);
     };
+    const handleCreditDebitChange = (value) => {
+        setCreditDebit(value);
+    };
 
     return (
         <div className='sp1__pp_filter_bar'>
@@ -103,14 +109,14 @@ export default function CashPointsFilter({
                 />
             </FilterItem>
             <FilterItem className='border-right-0'>
-                <DeptFilter depAndEmployees={depAndEmployees} handleChange={handleDeptChange} isFetching={isDepAndEmployeesFetching} />
+                <DeptFilter department={depAndEmployees?.department} handleChange={handleDeptChange} isFetching={isDepAndEmployeesFetching} />
             </FilterItem>
             <FilterItem className='border-right-0'>
                 <EmployeeFilter pmByDeptData={pmByDeptData} handleChange={handlePmChange} isFetching={isPmByDeptLoading} />
             </FilterItem>
-
-
-
+            <FilterItem className='border-right-0'>
+                <CreditDebitFilter handleChange={handleCreditDebitChange} />
+            </FilterItem>
 
             {/* sidebar */}
             {
