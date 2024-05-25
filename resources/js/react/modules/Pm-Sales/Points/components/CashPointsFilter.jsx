@@ -130,7 +130,7 @@ export default function CashPointsFilter({
 
 
                                     <FilterItem className='w-100 border-right-0'>
-
+                                        <DeptFilter depAndEmployees={depAndEmployees} handleChange={handleDeptChange} isFetching={isDepAndEmployeesFetching} />
                                     </FilterItem>
 
 
