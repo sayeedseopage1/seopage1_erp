@@ -37,6 +37,7 @@ export const apiSlice = createApi({
         "ALL_TASKS",
         "ALL_EVALUATION",
         "ALL_REVISION",
+        "EVALUATION_HISTORY",
     ],
     endpoints: () => ({}),
 });
