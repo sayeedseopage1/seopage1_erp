@@ -5,7 +5,14 @@ import ReactModal from "react-modal";
 import Card from "../../../global/Card";
 import styles from "../../../../react/tasks/components/PrimaryPageAuthorization.module.css";
 import RoundHistoryTable from "../Table/RoundHistoryTable";
+import { EvaluationRoundHistoryTableColumns } from "../Table/EvaluationRoundHistoryColumns";
+import { useGetEvaluationHistoryQuery } from "../../../services/api/EvaluationApiSlice";
+
 const EvaluationRoundHistoryModal = ({ data }) => {
+    const { data: RoundHistory, isLoading } = useGetEvaluationHistoryQuery(
+        data?.user_id
+    );
+    const roundData = RoundHistory?.data;
     const [sorting, setSorting] = useState([]);
     const onPageChange = (paginate) => {
         setPagination(paginate);
@@ -51,9 +58,9 @@ const EvaluationRoundHistoryModal = ({ data }) => {
 
                     <Card.Body className={styles.card_body}>
                         <RoundHistoryTable
-                            // data={revisions}
-                            // columns={[...columns]}
-                            // isLoading={isLoading}
+                            data={roundData}
+                            columns={[...EvaluationRoundHistoryTableColumns]}
+                            isLoading={isLoading}
                             onPageChange={onPageChange}
                             sorting={sorting}
                             tableName="Revision Table"
@@ -67,47 +74,3 @@ const EvaluationRoundHistoryModal = ({ data }) => {
 };
 
 export default EvaluationRoundHistoryModal;
-
-const RoundHistoryTableColumns = [
-    {
-        id: "role_name",
-        header: "Role",
-        accessorKey: "role_name",
-        cell: ({ row }) => {
-            const data = row.original;
-
-            return data?.role_name ? (
-                <span>{data?.role_name}</span>
-            ) : (
-                <span>Trainee</span>
-            );
-        },
-    },
-    {
-        id: "join_date",
-        header: "Joining Date",
-        accessorKey: "join_date",
-        cell: ({ row }) => {
-            const data = row.original;
-            return <div>{FormatDate(data?.join_date)}</div>;
-        },
-    },
-    {
-        id: "first_task_assign_on",
-        header: "First Task Assigned On",
-        accessorKey: "first_task_assign_on",
-        cell: ({ row }) => {
-            const data = row.original;
-            return <div>{FormatDate(data?.first_task_assign_on)}</div>;
-        },
-    },
-    {
-        id: "started_working_on",
-        header: "Started Working On",
-        accessorKey: "started_working_on",
-        cell: ({ row }) => {
-            const data = row.original;
-            return <div>{FormatDate(data?.started_working_on)}</div>;
-        },
-    },
-];

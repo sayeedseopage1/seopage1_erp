@@ -1,0 +1,153 @@
+import CommentModal from "./CommentModal";
+
+import { convertTime } from "../../../utils/converTime";
+import ActionEvaluationTable from "./ActionEvaluationTable";
+import AverageRatingSecondaryMetrics from "./AverageRatingSecondaryMetrics";
+import AverageRating from "./AverageRating";
+import EvaluationRevisionModal from "../modal/EvaluationRevisionModal";
+import AssignedTasksData from "./AssignedTasksData";
+import SubmittedTasksData from "./SubmittedTasksData";
+import { User } from "../../../utils/user-details";
+import ActionEvaluationRequiredRoundTable from "./ActionEvaluationRequiredRoundTable";
+const auth = new User(window.Laravel.user);
+export const EvaluationRoundHistoryTableColumns = [
+    {
+        id: "id",
+        header: "Round",
+        accessorKey: "id",
+        cell: ({ row }) => {
+            const data = row.original;
+            return <div>Round-{data?.id}</div>;
+        },
+    },
+    {
+        id: "total_task_assigned",
+        header: "Total Task Assigned",
+        accessorKey: "total_task_assigned",
+        cell: ({ row }) => {
+            const data = row.original;
+            return (
+                <div style={{ marginLeft: "50px" }}>
+                    <AssignedTasksData data={data} />
+                </div>
+            );
+        },
+    },
+    {
+        id: "total_task_submit",
+        header: "Total Task Submitted",
+        accessorKey: "total_task_submit",
+        cell: ({ row }) => {
+            const data = row.original;
+            return (
+                <div style={{ marginLeft: "50px" }}>
+                    <SubmittedTasksData data={data} />
+                </div>
+            );
+        },
+    },
+    {
+        id: "total_minutes",
+        header: "Total Hours Tracked",
+        accessorKey: "total_minutes",
+        cell: ({ row }) => {
+            const data = row?.original;
+            return (
+                <div style={{ marginLeft: "50px" }}>
+                    {convertTime(data?.total_minutes)}
+                </div>
+            );
+        },
+    },
+    {
+        id: "total_revision",
+        header: "Total Number of Revisions",
+        accessorKey: "total_revision",
+        cell: ({ row }) => {
+            const data = row.original;
+            return (
+                <div style={{ marginLeft: "50px" }}>
+                    <EvaluationRevisionModal data={data} />
+                </div>
+            );
+        },
+    },
+    {
+        id: "lead_dev_avg_rating",
+        header: "Lead Developer Average Rating",
+        accessorKey: "lead_dev_avg_rating",
+        cell: ({ row }) => {
+            const data = row.original;
+            return (
+                <div style={{ marginLeft: "50px" }}>
+                    <AverageRating data={data} />
+                </div>
+            );
+        },
+    },
+    {
+        id: "communication",
+        header: "Avg. ratings for secondary metrics",
+        accessorKey: "communication",
+        cell: ({ row }) => {
+            const data = row.original;
+            return (
+                <div style={{ marginLeft: "50px" }}>
+                    <AverageRatingSecondaryMetrics data={data} />
+                </div>
+            );
+        },
+    },
+    {
+        id: "team_lead_cmnt",
+        header: "Team Lead Comment",
+        accessorKey: "team_lead_cmnt",
+        cell: ({ row }) => {
+            const data = row.original;
+
+            if (auth.roleId !== 6) {
+                return <CommentModal comment={data?.team_lead_cmnt} />;
+            } else {
+                return <div style={{ marginLeft: "50px" }}>N/A</div>;
+            }
+        },
+    },
+
+    {
+        id: "managements_cmnt",
+        header: "Managements Comment",
+        accessorKey: "managements_cmnt",
+        cell: ({ row }) => {
+            const data = row.original;
+
+            return <CommentModal comment={data?.managements_cmnt} />;
+        },
+    },
+    {
+        id: "accept_rejected",
+        header: "Accepted/Rejected Date",
+        accessorKey: "accept_rejected",
+        cell: ({ row }) => {
+            const data = row.original;
+            return (
+                <div>
+                    {data?.accept_rejected === ""
+                        ? "--"
+                        : data?.accept_rejected}
+                </div>
+            );
+        },
+    },
+
+    {
+        id: "action",
+        header: "Status",
+        accessorKey: "action",
+
+        cell: ({ row }) => {
+            const data = row.original;
+
+            return <ActionEvaluationRequiredRoundTable data={data} />;
+        },
+    },
+];
