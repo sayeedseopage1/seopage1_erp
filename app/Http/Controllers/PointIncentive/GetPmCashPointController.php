@@ -35,7 +35,7 @@ class GetPmCashPointController extends Controller
             ->where('cash_points.user_id', $userId)
             ->whereBetween('cash_points.created_at', [$startDate, $endDate])
             ->orderBy('cash_points.id', 'desc')
-            ->get()
+            ->paginate(10)
         ]);
     }
 }
