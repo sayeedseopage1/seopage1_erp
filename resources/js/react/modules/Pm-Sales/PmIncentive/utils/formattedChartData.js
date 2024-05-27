@@ -52,6 +52,9 @@ export const IncentiveFormattedData = (incentiveData) => {
                         ),
                     },
                 ],
+                seriesData: criteria?.incentive_factors?.map((factor) =>
+                    parseFloat(factor?.incentive_amount)
+                ),
                 categories: criteria?.incentive_factors?.map(
                     (factor, index, array) => {
                         const isLastFactor = index === array?.length - 1;

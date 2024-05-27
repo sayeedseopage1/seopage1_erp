@@ -24,7 +24,7 @@ export const rangesForLongValue = [
 
 export const gradientColors = [
     {
-        colors: ["#FF0000", "#FFC0C0"],
+        colors: ["#FF0000", "#FFD3DE"],
     },
     {
         colors: ["#F95E85", "#FFC0C0"],
@@ -64,16 +64,16 @@ export const rangesForShortValue = [
     {
         from: 0,
         to: 3.99,
-        color: "#ff3300",
+        color: "#FF0000",
     },
     {
         from: 4,
         to: 5.4,
-        color: "#ffff00",
+        color: "#F8C332",
     },
     {
         from: 5.5,
         to: Number.MAX_SAFE_INTEGER,
-        color: "#00cc00",
+        color: "#7AD943",
     },
 ];

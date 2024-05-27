@@ -8,7 +8,7 @@ import IncentiveEditButton from "../ui/IncentiveEditButton";
 import ChartIdealVsAchievedEditModal from "../Modals/Incentives/ChartIdealVsAchievedEditModal";
 import PropTypes from "prop-types";
 import { auth } from "../../constants";
-import { rangesForLongValue, rangesForShortValue } from "../../constants/rangesColor";
+import { gradientColors, rangesForLongValue, rangesForShortValue } from "../../constants/rangesColor";
 
 const IncentiveBarChart = ({ chartData }) => {
     const chartRef = useRef(null);
@@ -21,6 +21,34 @@ const IncentiveBarChart = ({ chartData }) => {
         setIsIdealVsAchievedEditModalOpen(!isIdealVsAchievedEditModalOpen);
     };
 
+
+
+
+    // Define colors and gradient stops based on the value
+    const getColorStops = (value) => {
+        if (value < 50) {
+            return ['#FFC0C0', '#FF0000'];
+        } else if (value >= 50 && value < 60) {
+            return ['#FFC0C0', '#F95E85'];
+        } else if (value >= 60 && value < 80) {
+            return ['#FB8332', '#F8C332'];
+        } else {
+            return ['#2BC89B', '#7AD943'];
+        }
+    };
+
+    const getColorStopsMini = (value) => {
+        if (value < 4) {
+            return ['#FFC0C0', '#FF0000'];
+        } else if (value >= 4 && value < 5.5) {
+            return ['#FB8332', '#F8C332'];
+        } else {
+            return ['#2BC89B', '#7AD943'];
+        }
+    };
+
+    const colors = chartData?.seriesData?.map(chartData?.id == 8 ? getColorStopsMini : getColorStops);
+
     const options = {
         title: {
             // text: chartData.title,
@@ -31,6 +59,13 @@ const IncentiveBarChart = ({ chartData }) => {
                 color: "#1492E6",
             },
         },
+        series: [
+            {
+                name: chartData?.title,
+                data: chartData?.seriesData
+            }
+        ]
+        ,
         states: {
             hover: {
                 filter: {
@@ -43,6 +78,9 @@ const IncentiveBarChart = ({ chartData }) => {
             toolbar: {
                 show: false,
             },
+        },
+        legend: {
+            show: false
         },
         grid: { show: !0, strokeDashArray: 3, position: "back" },
         xaxis: {
@@ -106,32 +144,29 @@ const IncentiveBarChart = ({ chartData }) => {
                 horizontal: false,
                 // columnWidth: "55%",
                 endingShape: "rounded",
-                distributed: false,
+                distributed: true,
                 borderRadius: 10,
                 borderRadiusApplication: "last",
                 // borderRadiusWhenStacked: 'last',
                 dataLabels: {
                     position: "top",
                 },
-                colors: {
-                    ranges: chartData?.id == 8 ? rangesForShortValue : rangesForLongValue,
-                },
             },
         },
 
         fill: {
-            type: "gradient",
+            type: 'gradient',
             gradient: {
-                // Setting gradient from bottom to top
-                shade: "dark",
+                shade: 'light',
                 type: "vertical",
-                shadeIntensity: 0.9,
-                gradientToColors: ["#E1F3FF"],
-                inverseColors: false,
+                shadeIntensity: 0.7,
+                gradientToColors: colors.map(c => c[1]),
+                inverseColors: true,
                 opacityFrom: 1,
-                opacityTo: 0.9,
-                stops: [50, 100],
+                opacityTo: 1,
+                stops: [50, 100]
             },
+            colors: colors.map(c => c[0])
         },
         responsive: [
             {
@@ -194,7 +229,7 @@ const IncentiveBarChart = ({ chartData }) => {
                 <Chart
                     ref={chartRef}
                     type="bar"
-                    series={chartData?.series}
+                    series={options?.series}
                     options={options}
                     height={300}
                 ></Chart>
