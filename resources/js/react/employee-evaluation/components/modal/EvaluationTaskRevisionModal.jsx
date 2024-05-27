@@ -2,6 +2,7 @@ import React from "react";
 
 import RevisionModalBody from "./RevisionModalBody";
 import { useGetRevisionListQuery } from "../../../services/api/EvaluationApiSlice";
+import { EvaluationRevisionTableColumns } from "../Table/EvaluationRevisionTableColumns";
 
 const EvaluationTaskRevisionModal = ({ data }) => {
     const [isEvaluationRevisionModal, setIsEvaluationRevisionModal] =
@@ -21,6 +22,7 @@ const EvaluationTaskRevisionModal = ({ data }) => {
             </div>
 
             <RevisionModalBody
+                columns={EvaluationRevisionTableColumns}
                 revisions={Revisions}
                 isLoading={isLoading}
                 isEvaluationRevisionModal={isEvaluationRevisionModal}

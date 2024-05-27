@@ -4,6 +4,7 @@ import { convertTime } from "../../../utils/converTime";
 import styles from "../modal/EvaluationRating.module.css";
 import RevisionModalBody from "../modal/RevisionModalBody";
 import { useGetRevisionListQuery } from "../../../services/api/EvaluationApiSlice";
+import { EvaluationRevisionTableColumns } from "./EvaluationRevisionTableColumns";
 
 const EvaluationRatingTable = ({ data, averageRating }) => {
     const [isEvaluationRevisionModal, setIsEvaluationRevisionModal] =
@@ -200,6 +201,7 @@ const EvaluationRatingTable = ({ data, averageRating }) => {
                 </table>
             </div>
             <RevisionModalBody
+                columns={EvaluationRevisionTableColumns}
                 revisions={Revisions}
                 isLoading={isLoading}
                 isEvaluationRevisionModal={isEvaluationRevisionModal}
