@@ -753,5 +753,13 @@ class EvaluationController extends AccountBaseController
             'data' => $revisions
         ]);
     }
+    public function totalTask($id)
+    {
+        $tasks = EmployeeEvaluationTask::where('task_id', $id)->get();
+        return response()->json([
+            'status' => 200,
+            'data' => $tasks
+        ]);
+    }
 
 }
