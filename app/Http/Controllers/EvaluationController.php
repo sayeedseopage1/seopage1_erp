@@ -580,9 +580,11 @@ class EvaluationController extends AccountBaseController
 
         }else{
             $evaluation = EmployeeEvaluation::where('user_id',$request->user_id)->first();
+            $old_exp_date = $evaluation->exp_date;
             $evaluation->managements_cmnt = $request->managements_cmnt;
             $evaluation->managements_decision = 'One more week';
             $evaluation->accept_rejected = Carbon::now();
+            $evaluation->exp_date = Carbon::parse($evaluation->exp_date)->addHours(1); 
             $evaluation->managements_id = Auth::user()->id;
             $evaluation->managements_name = Auth::user()->name;
             $evaluation->managements_auth_at = Carbon::now();
@@ -591,25 +593,28 @@ class EvaluationController extends AccountBaseController
 
             $history = new EvaluationHistory();
             $history->user_id = $evaluation->user_id;  
-            $history->start_date = $evaluation->start_date;  
-            $history->exp_date = $evaluation->exp_date;  
+            $history->exp_date = $old_exp_date;  
             $history->communication = $evaluation->communication;  
             $history->professionalism = $evaluation->professionalism;  
             $history->identiey_issues = $evaluation->identiey_issues;  
             $history->dedication = $evaluation->dedication;  
             $history->obedience = $evaluation->obedience;  
-            $history->lead_dev_avg_rating = $evaluation->lead_dev_avg_rating;  
-            $history->team_lead_cmnt = $evaluation->team_lead_cmnt;  
-            $history->managements_cmnt = $evaluation->managements_cmnt;  
+            $history->lead_dev_avg_rating = $evaluation->lead_dev_avg_rating;
             $history->managements_decision = $evaluation->managements_decision;  
             $history->managements_id = $evaluation->managements_id;  
             $history->managements_name = $evaluation->managements_name;  
             $history->managements_auth_at = $evaluation->managements_auth_at;  
             $history->accept_rejected = $evaluation->accept_rejected;  
+            $history->pending_action_sending_time = $evaluation->pending_action_sending_time;  
             $history->ld_submission_status = $evaluation->ld_submission_status;  
+            $history->lead_dev_id = $evaluation->lead_dev_id;  
+            $history->team_lead_id = $evaluation->team_lead_id;  
+            $history->lead_dev_acknowledged = $evaluation->lead_dev_acknowledged;  
+            $history->team_lead_acknowledged = $evaluation->team_lead_acknowledged;  
+            $history->team_lead_cmnt_at = $evaluation->team_lead_cmnt_at;  
+            $history->team_lead_status = $evaluation->team_lead_status;  
             $history->employee_status = $evaluation->employee_status;  
             $history->save();
-
 
             $evaluation_task = EmployeeEvaluationTask::where('user_id',$request->user_id)->first();
             $actions = PendingAction::where('code','TLSDE')->where('task_id',$evaluation_task->task_id)->where('past_status',0)->get();
