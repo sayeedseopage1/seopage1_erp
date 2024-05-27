@@ -52,7 +52,8 @@ const Filterbar = ({ onFilter, page = "tasks" }) => {
             assignee_by_name: _leadDeveloper?.name,
             pm_id: _pm?.id,
             pm_name: _pm?.name,
-            status: _status?.name,
+            status: _status?.id,
+            status_name: _status?.column_name,
             date_filter_by,
         };
 
