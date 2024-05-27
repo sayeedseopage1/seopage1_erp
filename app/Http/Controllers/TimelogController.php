@@ -767,7 +767,7 @@ class TimelogController extends AccountBaseController
                         $evaluation->start_date = $timeLog->start_time;
                         $emp_start_task = $evaluation->start_date;
 
-                        $exp_date = Carbon::parse($emp_start_task)->addHours(2);
+                        $exp_date = Carbon::parse($emp_start_task)->addHours(1);
                         $countSundays = 0;
                         $currentDate = $emp_start_task->copy(); 
                         while ($currentDate->lte($exp_date)) {
