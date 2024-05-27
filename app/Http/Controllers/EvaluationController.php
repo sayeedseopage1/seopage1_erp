@@ -719,10 +719,14 @@ class EvaluationController extends AccountBaseController
     public function totalRevision($id)
     {
         $tasks = Task::where('dependent_task_id', $id)->get()->pluck('id');
-        $revision = TaskRevision::whereIn('task_id', $tasks)->get();
+        $revisions = TaskRevision::whereIn('task_id', $tasks)->get();
+        foreach($revisions as $revision)
+        {
+            $revision->task_heading = Task::where('id', $revision->task_id)->select('task_heading')->first();
+        }
         return response()->json([
             'status' => 200,
-            'data' => $revision
+            'data' => $revisions
         ]);
     }
 
