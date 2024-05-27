@@ -1166,7 +1166,8 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
     Route::get('employee-evaluation-user/{id}', [EvaluationController::class,'getEmployeeUser']);
     Route::get('employee-task-revision/{id}', [EvaluationController::class,'employeeTaskRevision']);
     Route::get('evaluation-total-revision/{id}', [EvaluationController::class,'totalRevision']);
-    Route::get('evaluation-total-task/{id}', [EvaluationController::class,'EmployeeEvaluationTask']);
+    Route::get('evaluation-task/{id}', [EvaluationController::class,'EmployeeEvaluationTask']);
+    Route::get('evaluation-history/{id}', [EvaluationController::class,'EmployeeEvaluationHistory']);
     //Pm goal Settings
     Route::resource('pm-goal-setting', PmGoalSetingController::class);
     Route::post('pm-goal-setting-update',[PmGoalSetingController::class,'pmGoalUpdate'])->name('pm-goal-setting-update');
