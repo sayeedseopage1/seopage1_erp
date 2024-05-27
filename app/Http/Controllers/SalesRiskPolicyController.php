@@ -1480,6 +1480,12 @@ class SalesRiskPolicyController extends AccountBaseController
                 $dealStage->status = 'pending';
                 $dealStage->save();
             }
+
+            if ($deal->is_final) {
+                $deal->is_drafted = 0;
+                $deal->authorization_status = 2;
+                $deal->released_at = Carbon::now();
+            }
         } elseif ($status == '0') {
             $deal->sale_analysis_status = 'denied';
 

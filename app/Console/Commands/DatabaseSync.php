@@ -75,7 +75,6 @@ class DatabaseSync extends Command
             }
         }
 
-        // $table = 'deals';
         // echo "\nChanging sale_analysis_status column enum list in $table";
         // DB::statement("ALTER TABLE `deals` CHANGE COLUMN `sale_analysis_status`
         // `sale_analysis_status` ENUM('previous-won','previous-denied','pending','analysis','authorized','auto-authorized','denied')
@@ -83,7 +82,7 @@ class DatabaseSync extends Command
         // AFTER `authorization_status`;
         // ");
         // echo "\nend";
-
+        $table = 'deals';
         if (!Schema::hasColumn($table, 'sale_authorize_comment')) {
             echo "\nChanging sale_authorize_comment column in $table";
             Schema::table('deals', function (Blueprint $table) {
@@ -141,6 +140,15 @@ class DatabaseSync extends Command
         PolicyQuestionValue::where('submitted_by', null)->update([
             'submitted_by' => 208
         ]);
+
+        $table = 'deals';
+        if (!Schema::hasColumn($table, 'is_final')) {
+            echo "\nis_final column in $table";
+            Schema::table($table, function (Blueprint $table) {
+                $table->boolean('is_final')->default('0')->after('sale_authorize_comment');
+            });
+            echo "\nend";
+        }
 
         $this->info("\nDatabase sync for sales risk.");
         return Command::SUCCESS;

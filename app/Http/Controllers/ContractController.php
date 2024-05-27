@@ -1221,6 +1221,7 @@ class ContractController extends AccountBaseController
             $deal->description7 = $request->description7;
             $deal->description8 = $request->description8;
             $deal->description9 = $request->description9;
+            $deal->is_final = $request->is_final;
 
             $deal->save();
            // dd($deal);
