@@ -97,7 +97,13 @@ const EvaluationRequiredRoundsTaskListModal = ({
         singleEvaluation?.user_id
     );
 
-    const Tasks = data?.data;
+    const Tasks = data?.data.filter((task) => {
+        const taskCreatedAt = new Date(task.created_at);
+        return (
+            taskCreatedAt >= new Date(singleEvaluation?.start_date) &&
+            taskCreatedAt <= new Date(singleEvaluation?.exp_date)
+        );
+    });
     let tasksToRate = [];
     //to enable or disable button
 
