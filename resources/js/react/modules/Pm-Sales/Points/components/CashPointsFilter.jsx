@@ -27,6 +27,7 @@ export default function CashPointsFilter({
     setData,
     setIsDataFetching
 }) {
+    const [query, setQuery] = useState({});
     const auth = useAuth();
     const [dept, setDept] = useState(1);
     // get pm by department 
@@ -42,12 +43,12 @@ export default function CashPointsFilter({
     const [creditDebit, setCreditDebit] = useState(null);
 
     // const [selectedShift, setSelectedShift] = useState(null);
-    const [selectedEmployee, setSelectedEmployee] = useState();
+    const [selectedEmployee, setSelectedEmployee] = useState("");
     // const [employeeLoading, setEmployeeLoading] = useState(true);
     // const [project, setProject] = useState(null);
 
     // table data
-    const { data: pmCashPoints, isLoading: dataFetchingStateIsLoading } = useGetPmCashPointsQuery()
+    const { data: pmCashPoints, isLoading: dataFetchingStateIsLoading } = useGetPmCashPointsQuery(query)
     const tableData = pmCashPoints?.data
 
     // set table data
@@ -61,9 +62,10 @@ export default function CashPointsFilter({
 
     useEffect(() => {
         if (pmByDeptData && !isPmByDeptLoading) {
-            setSelectedEmployee(pmByDeptData[0]?.id)
+            setSelectedEmployee(pmByDeptData[0]?.id);
+            setQuery(prevQuery => ({ ...prevQuery, user_id: pmByDeptData[0]?.id }));
         }
-    }, [pmByDeptData, isPmByDeptLoading])
+    }, [pmByDeptData, isPmByDeptLoading]);
 
     // console.log(tableData)
     // console.log("start", startDate)
@@ -85,17 +87,31 @@ export default function CashPointsFilter({
         // skip: departments?.length && shift?.length && employees.length
     });
 
-
+    useEffect(() => {
+        setQuery(prevQuery => ({
+            ...prevQuery,
+            start_date: startDate,
+            end_date: endDate,
+            dept_id: dept,
+            credit_debit: creditDebit,
+            user_id: selectedEmployee
+        }));
+    }, [startDate, endDate, dept, creditDebit, selectedEmployee]);
 
     const handleDeptChange = (value) => {
-        // console.log(`selected ${value}`);
         setDept(value);
+        setSelectedEmployee("");
+        setQuery(prevQuery => ({ ...prevQuery, dept_id: value, user_id: "" }));
     };
+
     const handlePmChange = (value) => {
         setSelectedEmployee(value);
+        setQuery(prevQuery => ({ ...prevQuery, user_id: value }));
     };
+
     const handleCreditDebitChange = (value) => {
         setCreditDebit(value);
+        setQuery(prevQuery => ({ ...prevQuery, point_type: value }));
     };
 
     return (
