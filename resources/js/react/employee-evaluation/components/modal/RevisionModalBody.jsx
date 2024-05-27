@@ -6,6 +6,7 @@ import { EvaluationRevisionTableColumns } from "../Table/EvaluationRevisionTable
 import Card from "../../../global/Card";
 import styles from "../../../../react/tasks/components/PrimaryPageAuthorization.module.css";
 const RevisionModalBody = ({
+    columns,
     revisions,
     isLoading,
     isEvaluationRevisionModal,
@@ -50,7 +51,7 @@ const RevisionModalBody = ({
                     <Card.Body className={styles.card_body}>
                         <RevisionTable
                             data={revisions}
-                            columns={[...EvaluationRevisionTableColumns]}
+                            columns={[...columns]}
                             isLoading={isLoading}
                             onPageChange={onPageChange}
                             sorting={sorting}

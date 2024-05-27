@@ -10,6 +10,7 @@ import AverageRating from "./AverageRating";
 import EvaluationRevisionModal from "../modal/EvaluationRevisionModal";
 import TotalTaskAssigned from "./TotalTaskAssigned";
 import TotalTaskSubmitted from "./TotalTaskSubmitted";
+import EvaluationRoundHistoryModal from "../modal/EvaluationRoundHistoryModal";
 const auth = new User(window.Laravel.user);
 
 export const EvaluationTableColumns = [
@@ -70,6 +71,15 @@ export const EvaluationTableColumns = [
         cell: ({ row }) => {
             const data = row.original;
             return <div>{FormatDate(data?.started_working_on)}</div>;
+        },
+    },
+    {
+        id: "task_id",
+        header: "Round required",
+        accessorKey: "task_id",
+        cell: ({ row }) => {
+            const data = row.original;
+            return <EvaluationRoundHistoryModal data={data} />;
         },
     },
     {
