@@ -1148,6 +1148,7 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
     
     Route::resource('employee-evaluation', EvaluationController::class);
     Route::get('get-all-evaluation', [EvaluationController::class,'getAllEvaluation']);
+    Route::get('get-single-evaluation/{user_id}', [EvaluationController::class, 'getSingleEvaluation']);
     Route::get('employee-evaluation-task/{id}', [EvaluationController::class,'getEmployeeTask']);
     Route::post('employee-task-evaluation-store', [EvaluationController::class,'storeEmployeeTaskEvaluation']);
     Route::post('employee-evaluation-submission-store', [EvaluationController::class,'storeSubmissionEvaluation']);

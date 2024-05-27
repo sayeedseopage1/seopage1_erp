@@ -21,9 +21,18 @@ import { useNavigate } from "react-router-dom";
 import { workingReportError } from "../helper/timer-start-working-report-error-toaster";
 import ExpiredTimeModalForNewEmployee from "./ExpiredTimeModalForNewEmployee";
 import ExpiredNotifyModalForNewEmployee from "./ExpiredNotifyModalForNewEmployee";
+import { useGetSingleEvaluationQuery } from "../../../services/api/EvaluationApiSlice";
 
 // component
 const TimerControl = ({ task, timerStart, setTimerStart, auth }) => {
+    const { data: EvaluationData, isLoading } = useGetSingleEvaluationQuery(
+        auth?.id
+    );
+
+    const expireDate = EvaluationData?.data[0]?.exp_date;
+    // console.log("auth", auth?.id);
+    // console.log("evaluation data", EvaluationData);
+    // console.log("expire date", expireDate);
     //new employee timer hiding and warning modal showing
     const [timerStatusForWarningModal, setTimerStatusForWarningModal] =
         useState(true);
@@ -35,10 +44,10 @@ const TimerControl = ({ task, timerStart, setTimerStart, auth }) => {
     const [expiredTimerForNewEmployee, setExpiredTimerForNewEmployee] =
         useState(false);
     //expired time check and state change for new employee / Trainee
-    const [expireDateForTrainer, setExpireDateForTrainer] = useState(
-        localStorage.getItem("expireDateForTrainer")
-    );
+    const [expireDateForTrainer, setExpireDateForTrainer] =
+        useState(expireDate);
 
+    console.log("expired date", expireDateForTrainer);
     const [timerId, setTimerId] = useState(null);
     const [seconds, setSeconds] = useState(0);
     const [isOpenConfirmationModal, setIsOpenConfirmationModal] =
@@ -79,8 +88,8 @@ const TimerControl = ({ task, timerStart, setTimerStart, auth }) => {
 
     const intervalRef = useRef(null);
     useEffect(() => {
-        setExpireDateForTrainer(localStorage.getItem("expireDateForTrainer"));
-    }, [timerId, taskRunning]);
+        setExpireDateForTrainer(expireDate);
+    }, [timerId, taskRunning, expireDate]);
 
     useEffect(() => {
         // Function to check the expiration status
@@ -103,7 +112,7 @@ const TimerControl = ({ task, timerStart, setTimerStart, auth }) => {
         // Check expiration immediately on mount
         checkExpiration();
 
-        intervalRef.current = setInterval(checkExpiration, 10000); //expire checking every 10 seconds
+        intervalRef.current = setInterval(checkExpiration, 1000); //expire checking every 1 seconds
 
         return () => clearInterval(intervalRef.current);
     }, [expireDateForTrainer, timerId]);
@@ -178,10 +187,10 @@ const TimerControl = ({ task, timerStart, setTimerStart, auth }) => {
                             setTimerStart(true);
                             setTimerId(res?.id);
                             dispatch(setTaskStatus(res?.task_status));
-                            localStorage.setItem(
-                                "expireDateForTrainer",
-                                res?.evaluation
-                            );
+                            // localStorage.setItem(
+                            //     "expireDateForTrainer",
+                            //     res?.evaluation
+                            // );
                             Toast.fire({
                                 icon: "success",
                                 title: _.startCase(res?.message),

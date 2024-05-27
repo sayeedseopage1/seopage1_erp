@@ -1,9 +1,16 @@
 import React from "react";
-import ReactModal from "react-modal";
+
 import RevisionModalBody from "./RevisionModalBody";
+import { useGetAllRevisionListQuery } from "../../../services/api/EvaluationApiSlice";
+
 const EvaluationRevisionModal = ({ data }) => {
     const [isEvaluationRevisionModal, setIsEvaluationRevisionModal] =
         React.useState(false);
+    const { data: revisionData, isLoading } = useGetAllRevisionListQuery(
+        data?.task_id
+    );
+
+    const Revisions = revisionData?.data;
     return (
         <>
             <div
@@ -14,7 +21,8 @@ const EvaluationRevisionModal = ({ data }) => {
             </div>
 
             <RevisionModalBody
-                taskId={data?.task_id}
+                revisions={Revisions}
+                isLoading={isLoading}
                 isEvaluationRevisionModal={isEvaluationRevisionModal}
                 setIsEvaluationRevisionModal={setIsEvaluationRevisionModal}
             />

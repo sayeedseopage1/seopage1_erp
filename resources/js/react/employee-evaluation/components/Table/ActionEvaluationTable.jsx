@@ -27,7 +27,7 @@ const ActionEvaluationTable = ({ data, table }) => {
     const auth = useAuth();
     const [toolTipTeamLead, setToolTipTeamLead] = React.useState("");
     const [toolTipAdmin, setToolTipAdmin] = React.useState("");
-    const [buttonVariant, setButtonVariant] = React.useState("");
+    const [buttonVariant, setButtonVariant] = React.useState("primary");
     const handleEvaluationClick = () => {
         setIsEvaluationModal((prev) => !prev);
         setEvaluationObject(data);

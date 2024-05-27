@@ -57,6 +57,12 @@ const EvaluationTaskListModal = ({
     setIsEvaluationModal,
     singleEvaluation,
 }) => {
+    const [dateExpired, setDateExpired] = React.useState(false);
+    React.useEffect(() => {
+        setDateExpired(new Date(singleEvaluation?.exp_date) < Date.now());
+    }, [singleEvaluation]);
+    // console.log(singleEvaluation?.user_name, dateExpired);
+
     const auth = useAuth();
     const [cumulativeAverage, setCumulativeAverage] = React.useState(
         singleEvaluation?.lead_dev_avg_rating
@@ -110,8 +116,9 @@ const EvaluationTaskListModal = ({
                 (acc, cur) => acc + Number(cur.avg_rating),
                 0
             );
+
             //set average rating
-            const average = cumulativeSum / tasksToRate.length;
+            const average = cumulativeSum / tasksToRate?.length;
             setCumulativeAverage(average);
 
             //checking if all tasks are rated using the length of tasksToRate array and the length of tasksToRate array filtered by lead_dev_cmnt not null
@@ -128,7 +135,12 @@ const EvaluationTaskListModal = ({
         pageSize: 10,
     });
 
-    //
+    const confirmButtonDisabled = !isAllTaskRated || !dateExpired;
+
+    console.log("is all task rated", isAllTaskRated);
+    console.log("date expired", dateExpired);
+    console.log("confirm button disabled", confirmButtonDisabled);
+
     const formFields = [
         {
             label: "Communication",
@@ -341,6 +353,7 @@ const EvaluationTaskListModal = ({
                     overflowY: "auto",
                 },
             }}
+            ariaHideApp={false}
             isOpen={isEvaluationModal}
             onRequestClose={() => setIsEvaluationModal(false)}
         >
@@ -531,24 +544,19 @@ const EvaluationTaskListModal = ({
                     </Button>
 
                     {/* lead dev submit button start */}
-                    {auth.roleId === 6 && (
-                        <Button
-                            onClick={handleLeadDevFinalSubmission}
-                            size="md"
-                            className="ml-2"
-                            disabled={
-                                !isAllTaskRated ||
-                                singleEvaluation.ld_submission_status === 1 ||
-                                isLoadingLeadDevFinalSubmission
-                            }
-                        >
-                            {isLoadingLeadDevFinalSubmission
-                                ? "Submitting..."
-                                : singleEvaluation.ld_submission_status === 1
-                                ? "Submitted"
-                                : "Confirm Submission"}
-                        </Button>
-                    )}
+                    {auth.roleId === 6 &&
+                        singleEvaluation.ld_submission_status !== 1 && (
+                            <Button
+                                onClick={handleLeadDevFinalSubmission}
+                                size="md"
+                                className="ml-2"
+                                disabled={confirmButtonDisabled}
+                            >
+                                {isLoadingLeadDevFinalSubmission
+                                    ? "Submitting..."
+                                    : "Confirm Submission"}
+                            </Button>
+                        )}
 
                     {/* lead dev submit button end */}
 

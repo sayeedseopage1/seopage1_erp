@@ -32,6 +32,20 @@ export const EvaluationTableColumns = [
         },
     },
     {
+        id: "role_name",
+        header: "Role",
+        accessorKey: "role_name",
+        cell: ({ row }) => {
+            const data = row.original;
+
+            return data?.role_name ? (
+                <span>{data?.role_name}</span>
+            ) : (
+                <span>Trainee</span>
+            );
+        },
+    },
+    {
         id: "join_date",
         header: "Joining Date",
         accessorKey: "join_date",

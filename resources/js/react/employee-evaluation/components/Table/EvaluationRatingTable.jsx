@@ -3,9 +3,16 @@ import Popover from "../../../../react-latest/ui/Popover";
 import { convertTime } from "../../../utils/converTime";
 import styles from "../modal/EvaluationRating.module.css";
 import RevisionModalBody from "../modal/RevisionModalBody";
+import { useGetRevisionListQuery } from "../../../services/api/EvaluationApiSlice";
+
 const EvaluationRatingTable = ({ data, averageRating }) => {
     const [isEvaluationRevisionModal, setIsEvaluationRevisionModal] =
         React.useState(false);
+    const { data: revisionData, isLoading } = useGetRevisionListQuery(
+        data?.task_id
+    );
+
+    const Revisions = revisionData?.data;
     return (
         <>
             <div className={styles.tableContainer}>
@@ -193,7 +200,8 @@ const EvaluationRatingTable = ({ data, averageRating }) => {
                 </table>
             </div>
             <RevisionModalBody
-                data={data}
+                revisions={Revisions}
+                isLoading={isLoading}
                 isEvaluationRevisionModal={isEvaluationRevisionModal}
                 setIsEvaluationRevisionModal={setIsEvaluationRevisionModal}
             />

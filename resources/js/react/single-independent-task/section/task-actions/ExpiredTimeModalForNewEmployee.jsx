@@ -84,8 +84,14 @@ const ExpiredTimeModalForNewEmployee = ({
                 Your timer will be stopped by the system after
             </h2>
             <h3 style={{ marginBottom: "20px" }}>
-                <span style={{ color: "red" }}>{minutes}</span> minutes{" "}
-                <span style={{ color: "red" }}>{seconds}</span> seconds.
+                <span style={{ color: "red" }}>
+                    {minutes === -1 ? 0 : minutes}
+                </span>{" "}
+                minutes{" "}
+                <span style={{ color: "red" }}>
+                    {seconds === -1 ? 0 : seconds}
+                </span>{" "}
+                seconds.
             </h3>
             <h6>
                 Please complete your task, stop the timer yourself and submit

@@ -96,8 +96,8 @@ export const EvaluationTaskTableColumns = [
                         <Popover.Button>
                             <span className=" singleline-ellipsis link_color hover-underline">
                                 {JSON.parse(original?.completed_work).map(
-                                    (data) => (
-                                        <div>
+                                    (data, index) => (
+                                        <div key={index}>
                                             <a
                                                 className="link_color hover-underline"
                                                 target="_blank"
@@ -116,7 +116,7 @@ export const EvaluationTaskTableColumns = [
                             <div className="revision_popover_panel">
                                 {JSON.parse(original.completed_work).map(
                                     (data, index) => (
-                                        <div>
+                                        <div key={index}>
                                             <span>{index + 1}.</span>
                                             <a
                                                 className="link_color hover-underline mb-2"
@@ -150,8 +150,8 @@ export const EvaluationTaskTableColumns = [
                     <Popover>
                         <Popover.Button>
                             <span className=" singleline-ellipsis link_color hover-underline">
-                                {Links?.map((data) => (
-                                    <div>
+                                {Links?.map((data, index) => (
+                                    <div key={index}>
                                         <a
                                             className="link_color hover-underline"
                                             target="_blank"
