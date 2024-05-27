@@ -722,7 +722,7 @@ class EvaluationController extends AccountBaseController
         $revisions = TaskRevision::whereIn('task_id', $tasks)->get();
         foreach($revisions as $revision)
         {
-            $revision->task_heading = Task::where('id', $revision->task_id)->select('heading')->first();
+            $revision->task_heading = Task::where('id', $revision->task_id)->value('heading');
         }
         return response()->json([
             'status' => 200,
