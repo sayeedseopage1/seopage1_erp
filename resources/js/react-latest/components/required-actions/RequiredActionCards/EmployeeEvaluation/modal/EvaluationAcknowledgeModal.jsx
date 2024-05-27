@@ -45,7 +45,7 @@ const EvaluationAcknowledgeModal = ({
         (state) => state.pendingActions.pendingActionId
     );
     const { increaseCount } = useCounterStore();
-    const [updatePendingAction, { isLoading: isLoadingTeamLead }] =
+    const [updatePendingAction, { isLoading: isLoadingTeamLeadAndLeadDev }] =
         useAcknowledgePendingActionsPastMutation();
     const DecisionColor = {
         Accepted: "green",
@@ -126,8 +126,8 @@ const EvaluationAcknowledgeModal = ({
             if (response?.status == 200) {
                 if (singleEvaluation?.managements_decision == "One more week") {
                     setAcknowledgement(false);
-
-                    window.location.href = response?.url;
+                    increaseCount();
+                    window.open(response?.url, "_blank");
                 } else {
                     toast.success("Acknowledge successful!");
                     setAcknowledgement(false);
@@ -149,8 +149,8 @@ const EvaluationAcknowledgeModal = ({
             if (response?.status == 200) {
                 if (singleEvaluation?.managements_decision == "One more week") {
                     setAcknowledgement(false);
-
-                    window.location.href = response?.url;
+                    increaseCount();
+                    window.open(response?.url, "_blank");
                 } else {
                     toast.success("Acknowledge successful!");
                     setAcknowledgement(false);
@@ -296,7 +296,7 @@ const EvaluationAcknowledgeModal = ({
                 {auth.roleId === 8 && (
                     <Button
                         onClick={handleAcknowledgedItTeamLead}
-                        isLoading={isLoadingTeamLead}
+                        isLoading={isLoadingTeamLeadAndLeadDev}
                         size="md"
                         className="ml-2"
                     >
@@ -312,6 +312,7 @@ const EvaluationAcknowledgeModal = ({
                 {auth.roleId === 6 && (
                     <Button
                         onClick={handleAcknowledgedItLeadDev}
+                        isLoading={isLoadingTeamLeadAndLeadDev}
                         size="md"
                         className="ml-2"
                     >
