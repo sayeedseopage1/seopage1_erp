@@ -785,7 +785,7 @@ class EvaluationController extends AccountBaseController
     }
     public function EmployeeEvaluationHistory($id)
     {
-        $history = EvaluationHistory::where('user_id', $id)->ordreBy('id', 'desc')->get();
+        $history = EvaluationHistory::where('user_id', $id)->orderBy('id', 'desc')->get();
 
         return response()->json([
             'status' => 200,
