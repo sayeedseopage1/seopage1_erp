@@ -74,9 +74,9 @@ export const EvaluationTableColumns = [
         },
     },
     {
-        id: "task_id",
+        id: "round_requied",
         header: "Round required",
-        accessorKey: "task_id",
+        accessorKey: "round_requied",
         cell: ({ row }) => {
             const data = row.original;
             return <EvaluationRoundHistoryModal data={data} />;

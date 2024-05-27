@@ -137,10 +137,6 @@ const EvaluationTaskListModal = ({
 
     const confirmButtonDisabled = !isAllTaskRated || !dateExpired;
 
-    console.log("is all task rated", isAllTaskRated);
-    console.log("date expired", dateExpired);
-    console.log("confirm button disabled", confirmButtonDisabled);
-
     const formFields = [
         {
             label: "Communication",

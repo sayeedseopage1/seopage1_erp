@@ -13,8 +13,12 @@ const EvaluationRoundHistoryModal = ({ data }) => {
     const [isOpen, setIsOpen] = useState(false);
     return (
         <div>
-            <div className="link_color ml-2" onClick={() => setIsOpen(true)}>
-                {data?.required_round}
+            <div
+                style={{ marginLeft: "50px" }}
+                className="link_color"
+                onClick={() => setIsOpen(true)}
+            >
+                {data?.round_requied}
             </div>
             <ReactModal
                 style={{
@@ -25,7 +29,7 @@ const EvaluationRoundHistoryModal = ({ data }) => {
                     },
                     content: {
                         borderRadius: "10px",
-                        maxWidth: "800px",
+
                         height: "fit-content",
                         maxHeight: "100%",
                         margin: "auto auto",
@@ -63,3 +67,47 @@ const EvaluationRoundHistoryModal = ({ data }) => {
 };
 
 export default EvaluationRoundHistoryModal;
+
+const RoundHistoryTableColumns = [
+    {
+        id: "role_name",
+        header: "Role",
+        accessorKey: "role_name",
+        cell: ({ row }) => {
+            const data = row.original;
+
+            return data?.role_name ? (
+                <span>{data?.role_name}</span>
+            ) : (
+                <span>Trainee</span>
+            );
+        },
+    },
+    {
+        id: "join_date",
+        header: "Joining Date",
+        accessorKey: "join_date",
+        cell: ({ row }) => {
+            const data = row.original;
+            return <div>{FormatDate(data?.join_date)}</div>;
+        },
+    },
+    {
+        id: "first_task_assign_on",
+        header: "First Task Assigned On",
+        accessorKey: "first_task_assign_on",
+        cell: ({ row }) => {
+            const data = row.original;
+            return <div>{FormatDate(data?.first_task_assign_on)}</div>;
+        },
+    },
+    {
+        id: "started_working_on",
+        header: "Started Working On",
+        accessorKey: "started_working_on",
+        cell: ({ row }) => {
+            const data = row.original;
+            return <div>{FormatDate(data?.started_working_on)}</div>;
+        },
+    },
+];

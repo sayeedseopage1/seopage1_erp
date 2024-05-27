@@ -133,4 +133,34 @@ export const EvaluationRevisionTableColumnsWithTasks = [
             );
         },
     },
+    {
+        id: "task_id",
+        header: "Average Rating",
+        draggable: true,
+        sortable: true,
+
+        cell: ({ row }) => {
+            const data = row.original;
+            return (
+                <Popover>
+                    <Popover.Button>
+                        <a
+                            href={`/account/employees/2252`}
+                            className="text-primary"
+                        >
+                            Hasnain Islam Dolon
+                        </a>
+                    </Popover.Button>
+
+                    <Popover.Panel>
+                        <div className={styles.revision_popover_panel}>
+                            <a href={`/account/employees/2252`}>
+                                Hasnain Islam Dolon
+                            </a>
+                        </div>
+                    </Popover.Panel>
+                </Popover>
+            );
+        },
+    },
 ];
