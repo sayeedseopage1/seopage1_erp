@@ -27,7 +27,10 @@ export const RevisionTableColumns = [
                 <Popover>
                     <Popover.Button>
                         <a href={`/account/projects/${data?.project_id}`}>
-                            <span className="multiline-ellipsis">
+                            <span
+                                className="multiline-ellipsis"
+                                style={{ color: "#3366CC" }}
+                            >
                                 {row.getValue()}
                             </span>
                         </a>
@@ -83,6 +86,9 @@ export const RevisionTableColumns = [
                             className="multiline-ellipsis"
                         >
                             {data.heading}
+                            <span style={{ color: "#3366CC" }}>
+                                {data.heading}
+                            </span>
                         </a>
                     </Popover.Button>
 
@@ -298,12 +304,12 @@ export const RevisionTableColumns = [
             const user = window?.Laravel?.user;
 
             const actionAlreadyTaken =
-                data?.dispute_between === "SPR"
-                    ? data?.sale_accept || data?.sale_deny
-                    : data?.is_accept || data?.is_deny;
+                data.dispute_between === "SPR"
+                    ? data.sale_accept || data.sale_deny
+                    : data.is_accept || data.is_deny;
 
             const hasPermissionToTakeAction =
-                Number(user?.id) === Number(data?.deal_added_by?.id);
+                Number(user.id) === Number(data?.deal_added_by?.id);
 
             return (
                 <Switch>

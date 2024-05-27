@@ -1,61 +1,73 @@
-import { apiSlice } from "./apiSlice";            
-
+import { apiSlice } from "./apiSlice";
 
 const revisionCalculatorApiSlice = apiSlice.injectEndpoints({
     endpoints: (build) => ({
-       getRevisionCalculatorData: build.query({
+        getRevisionCalculatorData: build.query({
             query: (query) => `/account/revision-calculator-data${query}`,
-       }),
+        }),
 
-       projectElaborationData: build.query({
-            query: query => `/account/revision-calculator-data/assigne-project-count${query}`,
-       }),
+        projectElaborationData: build.query({
+            query: (query) =>
+                `/account/revision-calculator-data/assigne-project-count${query}`,
+        }),
 
-       getRevisionCalculatorTaskWiseData: build.query({
-            query: query => `/account/revision-calculator-data/no-of-tasks${query}`,
-       }),
-       getRevisionCalculatorRevisionWiseData: build.query({
-            query: query => `/account/revision-calculator-data/no-of-revisions${query}`,
+        getRevisionCalculatorTaskWiseData: build.query({
+            query: (query) =>
+                `/account/revision-calculator-data/no-of-tasks${query}`,
+        }),
+        getRevisionCalculatorRevisionWiseData: build.query({
+            query: (query) =>
+                `/account/revision-calculator-data/no-of-revisions${query}`,
         }),
         getRevisionCalculatorDataSalesIssues: build.query({
-            query: query => `/account/revision-calculator-data/sales-issues${query}`,
+            query: (query) =>
+                `/account/revision-calculator-data/sales-issues${query}`,
         }),
-        
+
         getRevisionCalculatorDataPmIssues: build.query({
-            query: query => `/account/revision-calculator-data/pm-issues${query}`,
+            query: (query) =>
+                `/account/revision-calculator-data/pm-issues${query}`,
         }),
-         
+
         getRevisionCalculatorDataClientIssues: build.query({
-            query: query => `/account/revision-calculator-data/client-issues${query}`,
-        }), 
+            query: (query) =>
+                `/account/revision-calculator-data/client-issues${query}`,
+        }),
 
         getRevisionCalculatorDataLeadIssues: build.query({
-            query: query => `/account/revision-calculator-data/ldev-issues${query}`,
+            query: (query) =>
+                `/account/revision-calculator-data/ldev-issues${query}`,
         }),
- 
 
         getRevisionCalculatorDataDevIssues: build.query({
-            query: query => `/account/revision-calculator-data/dev-issues${query}`,
+            query: (query) =>
+                `/account/revision-calculator-data/dev-issues${query}`,
         }),
 
-        
         getRevisionCalculatorDataTotalDispute: build.query({
-            query: query => `/account/revision-calculator-data/total-dispute${query}`,
+            query: (query) =>
+                `/account/revision-calculator-data/total-dispute${query}`,
         }),
 
         getRevisionCalculatorDataTotalUnsolveDispute: build.query({
-            query: query => `/account/revision-calculator-data/dispute-not-resolve${query}`,
+            query: (query) =>
+                `/account/revision-calculator-data/dispute-not-resolve${query}`,
         }),
 
         getPendingRevisionData: build.query({
-            query: query => `/account/revision-calculator-data/pending-issues${query}`
-        })
-    })
-}) ; 
+            query: (query) =>
+                `/account/revision-calculator-data/pending-issues${query}`,
+        }),
+        exportTableRevisionCalculator: build.mutation({
+            query: (query) => ({
+                url: `/account/export-revision-calculator-data?${query}`,
+                method: "GET",
+            }),
+        }),
+    }),
+});
 
-
-
-export const { 
+export const {
     useLazyGetRevisionCalculatorDataQuery,
     useGetRevisionCalculatorDataQuery,
     useLazyProjectElaborationDataQuery,
@@ -71,6 +83,7 @@ export const {
     useLazyGetRevisionCalculatorDataSalesIssuesQuery,
     useLazyGetRevisionCalculatorDataTotalDisputeQuery,
     useLazyGetRevisionCalculatorDataTotalUnsolveDisputeQuery,
-    useLazyGetPendingRevisionDataQuery
-} = revisionCalculatorApiSlice;
+    useLazyGetPendingRevisionDataQuery,
 
+    useExportTableRevisionCalculatorMutation,
+} = revisionCalculatorApiSlice;

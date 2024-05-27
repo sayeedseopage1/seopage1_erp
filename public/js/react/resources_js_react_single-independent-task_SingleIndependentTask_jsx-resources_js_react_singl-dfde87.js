@@ -15298,6 +15298,7 @@ var MarkAsComplete = function MarkAsComplete(_ref) {
   });
 };
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (MarkAsComplete);
+<<<<<<< HEAD
 
 /***/ }),
 
@@ -15413,6 +15414,8 @@ var PendingTasksForTrainee = function PendingTasksForTrainee(_ref) {
   });
 };
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (PendingTasksForTrainee);
+=======
+>>>>>>> e368633721f194fbed8afab6a861c6a91a35fd04
 
 /***/ }),
 
@@ -16907,6 +16910,10 @@ var DeveloperRevisionView = function DeveloperRevisionView(_ref) {
       }
     } else return "Revision By Lead Developer";
   };
+<<<<<<< HEAD
+=======
+  console.log("revision", revision);
+>>>>>>> e368633721f194fbed8afab6a861c6a91a35fd04
   return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), {
     children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsxs)("div", {
       className: "sp1_single_task--modal-panel",

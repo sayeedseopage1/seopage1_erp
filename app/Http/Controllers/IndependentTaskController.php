@@ -472,6 +472,98 @@ class IndependentTaskController extends AccountBaseController
             'status'=>200
         ]);
     }
+    public function exportIndependentTask(Request $request){
+       
+        $startDate = $request->input('start_date', null);
+        $endDate = $request->input('end_date', null);
+        $assignee_to = $request->input('assignee_to', null);
+        $assignee_by = $request->input('assignee_by', null);
+
+
+        $clientId = $request->input('client_name', null);
+        $status = $request->input('status', null);
+        $tasks = DB::table('tasks')
+                            ->leftJoin('users as assignedBy','tasks.added_by','assignedBy.id')
+                            ->leftJoin('task_users','tasks.id','task_users.task_id')
+                            ->leftJoin('users as assignedTo','task_users.user_id','assignedTo.id')
+                            ->leftJoin('users as client','tasks.client_id','client.id')
+                            ->leftJoin('taskboard_columns','tasks.board_column_id','taskboard_columns.id')
+                            ->leftJoin('pending_parent_tasks','tasks.pp_task_id','pending_parent_tasks.id')
+                            ->select('tasks.id','tasks.u_id','tasks.heading','tasks.description','tasks.start_date','tasks.due_date','taskboard_columns.id as board_column_id','taskboard_columns.column_name as board_column_name','taskboard_columns.label_color as board_column_label_color','assignedBy.id as assigned_by_id','assignedBy.name as assigned_by_name','assignedBy.image as assigned_by_avator','assignedTo.id as assigned_to_id','assignedTo.name as assigned_to_name','assignedTo.image as assigned_to_avator','client.id as existing_client_id','client.name as existing_client_name','client.image as existing_client_avator','tasks.client_name as new_client','pending_parent_tasks.created_at as creation_date',
+                            DB::raw('(SELECT COUNT(sub_tasks.id) FROM sub_tasks WHERE sub_tasks.task_id = tasks.id) as subtasks_count'),
+                            )
+                            ->where('tasks.independent_task_status',1)
+                            ->whereNull('tasks.subtask_id');
+
+                            if(!is_null($startDate) && !is_null($endDate) &&  $startDate == $endDate)
+                            {
+
+
+                                $tasks = $tasks->whereDate('tasks.created_at', '=', Carbon::parse($startDate)->format('Y-m-d'));
+
+                            }else
+                            {
+                                if (!is_null($startDate)) {
+                                    $tasks = $tasks->whereDate('tasks.created_at', '>=', Carbon::parse($startDate)->format('Y-m-d'));
+                                }
+                                if (!is_null($endDate)) {
+                                    $tasks = $tasks->whereDate('tasks.created_at', '<=', Carbon::parse($endDate)->format('Y-m-d'));
+                                }
+
+                            }
+
+                            if (!is_null($assignee_to)) {
+                                $tasks = $tasks->where('task_users.user_id', $assignee_to);
+                            }
+                            if (!is_null($assignee_by)) {
+                                $tasks = $tasks->where('tasks.added_by', $assignee_by);
+                            }
+                            if (!is_null($clientId)) {
+                                $tasks = $tasks->where('tasks.client_name', $clientId)->orWhere('client.name',$clientId);
+                            }
+
+                            if(!is_null($status))
+                            {
+                                if($status == 11)
+                                {
+                                    $tasks = $tasks;
+
+                                }elseif ($status== 10) {
+                                    $tasks = $tasks->where('tasks.board_column_id','!=',4);
+                                }elseif ($status == 1) {
+                                    $tasks = $tasks->where('tasks.board_column_id',1);
+                                }elseif ($status == 2) {
+                                    $tasks = $tasks->where('tasks.board_column_id',2);
+                                }elseif ($status == 3) {
+                                    $tasks = $tasks->where('tasks.board_column_id',3);
+                                }elseif ($status == 4) {
+                                    $tasks = $tasks->where('tasks.board_column_id',4);
+                                }elseif ($status == 6) {
+                                    $tasks = $tasks->where('tasks.board_column_id',6);
+                                }elseif ($status == 7) {
+                                    $tasks = $tasks->where('tasks.board_column_id',7);
+                                }elseif ($status == 8) {
+                                    $tasks = $tasks->where('tasks.board_column_id',8);
+                                }
+                                elseif($status == 9) {
+                                    $tasks = $tasks->where('tasks.board_column_id',9);
+                                }
+
+                            }
+                            if(Auth::user()->role_id == 9 || Auth::user()->role_id == 10)
+                            {
+                                $tasks = $tasks->where('task_users.user_id',Auth::id())->orderBy('tasks.created_at', 'desc')->get();
+
+                            }else {
+                                $tasks = $tasks->orderBy('tasks.created_at', 'desc')
+                                ->get();
+                            }
+
+        return response()->json([
+            'data'=>$tasks,
+            'status'=>200
+        ]);
+    }
 
     public function clients()
     {

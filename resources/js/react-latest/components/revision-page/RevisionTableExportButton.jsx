@@ -1,0 +1,287 @@
+import React from "react";
+import ReactDOM from "react-dom";
+import dayjs from "dayjs";
+import ReactExport from "react-data-export";
+import _, { fill } from "lodash";
+import styled from "styled-components";
+
+import Loader from "../../../react/global/Loader";
+import { CompareDate } from "../../../react/Insights/utils/dateController";
+
+import { useExportTableRevisionMutation } from "../../services/api/revisionApiSlice";
+
+const ExcelFile = ReactExport.ExcelFile;
+const ExcelSheet = ReactExport.ExcelFile.ExcelSheet;
+
+const RevisionTableExportButton = ({ filter }) => {
+    const dayjs2 = new CompareDate();
+    const [isRender, setIsRender] = React.useState(false);
+    const queryObject = _.pickBy(filter ?? {}, Boolean);
+    const query = new URLSearchParams(queryObject).toString();
+
+    const [getRevisions, { data, isLoading }] =
+        useExportTableRevisionMutation();
+
+    const Revisions = data?.data;
+
+    // get deals
+    const getData = (deals) => {
+        let rows = [];
+
+        _.forEach(deals, (d) => {
+            const fieldStyle = {
+                alignment: {
+                    wrapText: true,
+                    vertical: "center",
+                    horizontal: "center",
+                },
+            };
+
+            const Status = (row) => {
+                const data = row;
+                const user = window?.Laravel?.user;
+
+                const actionAlreadyTaken =
+                    data?.dispute_between === "SPR"
+                        ? data?.sale_accept || data?.sale_deny
+                        : data?.is_accept || data?.is_deny;
+
+                const hasPermissionToTakeAction =
+                    Number(user?.id) === Number(data?.deal_added_by?.id);
+                if (data?.approval_status === "pending") {
+                    return "Pending";
+                } else if (!hasPermissionToTakeAction || actionAlreadyTaken) {
+                    return `Accepted By ${data?.deal_added_by?.name}`;
+                } else if (data?.dispute_between === "SPR" && data?.sale_deny) {
+                    return `Denied By ${data?.deal_added_by?.name}`;
+                } else if (data?.dispute_between !== "SPR" && data?.is_accept) {
+                    return `Accepted by ${data?.task_assign_to?.name}`;
+                } else if (data?.dispute_between !== "SPR" && data?.is_accept) {
+                    return `Accepted by ${data?.task_assign_to?.name}`;
+                } else if (
+                    data?.dispute_between !== "SPR"
+                        ? data?.approval_status === "pending"
+                        : !actionAlreadyTaken
+                ) {
+                    return "Pending";
+                } else if (
+                    data?.dispute_between === "SPR" &&
+                    !actionAlreadyTaken &&
+                    hasPermissionToTakeAction
+                ) {
+                    return " Sales Status";
+                }
+            };
+
+            const revisionDueTo = (d) => {
+                const person = d?.dispute_between
+                    ? d?.sale_person
+                        ? d?.sale_person.name
+                        : d?.task_assign_to.name
+                    : null;
+                return person || "--";
+            };
+
+            const statusStyle = (data) => {
+                if (data?.approval_status === "pending") {
+                    return {
+                        font: {
+                            color: { rgb: "fada25" },
+                            bold: true,
+                        },
+                    };
+                } else {
+                    return {
+                        font: {
+                            color: { rgb: "49db2c" },
+                            bold: true,
+                        },
+                    };
+                }
+            };
+            const date = (_data) =>
+                _data ? dayjs(_data).format(`DD-MM-YYYY hh:mm:ss A`) : "--";
+
+            const convertHTMLToText = (html) => {
+                const tempElement = document.createElement("div");
+                tempElement.innerHTML = html;
+                const text =
+                    tempElement.textContent || tempElement.innerText || "";
+                return text;
+            };
+
+            let row = [
+                {
+                    value: d?.id ?? "--",
+                    style: fieldStyle,
+                },
+                {
+                    value: d?.project_name ?? "--",
+                    style: {
+                        ...fieldStyle,
+                    },
+                },
+                {
+                    value: d?.client?.name ?? "--",
+                    style: fieldStyle,
+                },
+                {
+                    value: d?.heading ?? "--",
+                    style: fieldStyle,
+                },
+                {
+                    value:
+                        convertHTMLToText(d?.pm_comment || d?.lead_comment) ??
+                        "--",
+                    style: fieldStyle,
+                },
+                {
+                    value: d?.revision_acknowledgement ?? "--",
+                    style: fieldStyle,
+                },
+                {
+                    value: d?.project_manager?.name ?? "--",
+                    style: fieldStyle,
+                },
+                {
+                    value: revisionDueTo(d),
+                    style: {
+                        ...fieldStyle,
+                    },
+                },
+
+                {
+                    value: d?.project_manager?.name ?? "--",
+                    style: fieldStyle,
+                },
+                {
+                    value: d?.lead_developer?.name ?? "--",
+                    style: {
+                        ...fieldStyle,
+                    },
+                },
+                {
+                    value: d?.deal_added_by?.name ?? "--",
+
+                    style: {
+                        ...fieldStyle,
+                    },
+                },
+                {
+                    value: Status(d),
+
+                    style: {
+                        ...fieldStyle,
+                        ...statusStyle(d),
+                    },
+                },
+            ];
+            rows.push(row);
+        });
+
+        return rows;
+    };
+
+    // columns
+    const columns = [
+        { title: "Id" },
+        { title: "Project", width: { wpx: 200 } },
+        { title: "Client" },
+        { title: "Task", width: { wpx: 150 } },
+        { title: "Revision", width: { wpx: 300 } },
+        { title: "Revision reason", width: { wpx: 200 } },
+        { title: "Revision Provided By" },
+        { title: "Revision Due To" },
+        { title: "Project Manager" },
+        { title: "Lead Developer" },
+        { title: "Sales Executive" },
+        { title: "Action/Status", width: { wpx: 150 } },
+    ];
+
+    // multi data set
+    const multiDataSet = [
+        {
+            columns: [
+                { title: "Filter" },
+                { title: "Date" },
+                { title: "Project Manager" },
+                { title: "Client" },
+                { title: "Revision Raised By" },
+                { title: "Revision Against To" },
+                { title: "Lead Developer" },
+            ],
+            data: [
+                [
+                    {
+                        value: `--`,
+                    },
+
+                    {
+                        value: `${dayjs(filter?.startDate).format(
+                            "MMM-DD-YYYY"
+                        )} to ${dayjs(filter?.endDate).format("MMM-DD-YYYY")}`,
+                        style: {
+                            font: {
+                                bold: true,
+                            },
+                        },
+                    },
+                    { value: filter?.project_manager_name ?? "--" },
+                    { value: filter?.client_name ?? "--" },
+                    { value: filter?.raised_by_name ?? "--" },
+                    { value: filter?.against_to_name ?? "--" },
+                    { value: filter?.lead_name ?? "--" },
+                ],
+            ],
+        },
+        {
+            xSteps: 0,
+            ySteps: 2,
+            columns: columns,
+            data: getData(Revisions),
+        },
+    ];
+
+    const handleRender = async () => {
+        setIsRender(false);
+        await getRevisions(query).unwrap();
+        setIsRender(true);
+    };
+
+    return (
+        <React.Fragment>
+            <ExportButton onClick={handleRender}>
+                {isLoading ? (
+                    <>
+                        <Loader title="Processing..." />
+                    </>
+                ) : (
+                    <>
+                        <i className="fa-solid fa-download" /> Export To Excel
+                    </>
+                )}
+            </ExportButton>
+
+            {isRender && !isLoading && Revisions?.length > 0 && (
+                <ExcelFile filename="Revision_table" hideElement={true}>
+                    <ExcelSheet dataSet={multiDataSet} name="Revision table" />
+                </ExcelFile>
+            )}
+        </React.Fragment>
+    );
+};
+
+export default RevisionTableExportButton;
+
+const ExportButton = styled.button`
+    margin-bottom: 20px;
+    width: 140px;
+    padding: 6px 10px;
+    border-radius: 3px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    /* color: #DAF7A6; */
+    color: #000;
+    background-color: #c4de95;
+`;

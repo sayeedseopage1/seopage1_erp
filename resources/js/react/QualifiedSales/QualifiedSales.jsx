@@ -3,10 +3,11 @@ import { useUsers } from "../hooks/useUsers";
 import { useLazyGetQualifiedSalesQuery } from "../services/api/qualifiedSalesApiSlice";
 import QualifiedSalesFilterbar from "./components/QualifiedSalesFilterbar";
 import QualifiedSalesTable from "./table/QualifiedSalesTable";
+import QualifiedSalesTableExportButton from "./components/QualifiedSalesTableExportButton";
 
 const QualifiedSales = () => {
     const { users, usersObject, usersIsFetching } = useUsers();
-
+    const [filter, setFilter] = React.useState(null);
     const [getQualifiedSales, { data, isFetching }] =
         useLazyGetQualifiedSalesQuery();
 
@@ -20,8 +21,11 @@ const QualifiedSales = () => {
 
         let query = new URLSearchParams(f).toString();
         getQualifiedSales(query);
+
+        setFilter(f);
     };
 
+    // console.log("filter", filter);
     return (
         <div className="d-flex flex-column position-relative">
             {usersIsFetching ? (
@@ -32,10 +36,11 @@ const QualifiedSales = () => {
                     loading...
                 </div>
             ) : null}
+
             <QualifiedSalesFilterbar onFilter={handleOnFilter} />
 
-            {/*table section */}
             <div className="p-4">
+                <QualifiedSalesTableExportButton filter={filter} />
                 <QualifiedSalesTable
                     data={data || []}
                     users={users || []}

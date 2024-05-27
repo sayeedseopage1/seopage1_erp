@@ -96,6 +96,7 @@ export const DailyWorkReport = () => {
     return (
         <React.Fragment>
             <Toaster />
+            {/* hide  modal for roll id 14 , trainee . as babu sir instructions. */}
             {auth.roleId !== 14 && (
                 <WorkStatusConfirmationModal
                     showAcknowledgementReminder={showAcknowledgementReminder}
