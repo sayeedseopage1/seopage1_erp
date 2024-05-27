@@ -8,9 +8,10 @@ import ActionEvaluationTable from "./ActionEvaluationTable";
 import AverageRatingSecondaryMetrics from "./AverageRatingSecondaryMetrics";
 import AverageRating from "./AverageRating";
 import EvaluationRevisionModal from "../modal/EvaluationRevisionModal";
-import TotalTaskAssigned from "./TotalTaskAssigned";
-import TotalTaskSubmitted from "./TotalTaskSubmitted";
+
 import EvaluationRoundHistoryModal from "../modal/EvaluationRoundHistoryModal";
+import AssignedTasksData from "./AssignedTasksData";
+import SubmittedTasksData from "./SubmittedTasksData";
 const auth = new User(window.Laravel.user);
 
 export const EvaluationTableColumns = [
@@ -90,7 +91,7 @@ export const EvaluationTableColumns = [
             const data = row.original;
             return (
                 <div style={{ marginLeft: "50px" }}>
-                    <TotalTaskAssigned data={data} />
+                    <AssignedTasksData data={data} />
                 </div>
             );
         },
@@ -103,7 +104,7 @@ export const EvaluationTableColumns = [
             const data = row.original;
             return (
                 <div style={{ marginLeft: "50px" }}>
-                    <TotalTaskSubmitted data={data} />
+                    <SubmittedTasksData data={data} />
                 </div>
             );
         },

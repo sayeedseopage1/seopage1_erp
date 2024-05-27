@@ -6,6 +6,9 @@ const evaluationApiSlice = apiSlice.injectEndpoints({
             query: (userId) => `account/employee-evaluation-task/${userId}`,
             providesTags: ["ALL_TASKS"],
         }),
+        getSingleTask: build.query({
+            query: (taskId) => `account/evaluation-task/${taskId}`,
+        }),
         storeTaskRating: build.mutation({
             query: (data) => ({
                 url: `account/employee-task-evaluation-store`,
@@ -94,11 +97,16 @@ const evaluationApiSlice = apiSlice.injectEndpoints({
             query: (taskId) => `account/evaluation-total-revision/${taskId}`,
             providesTags: ["ALL_REVISION"],
         }),
+        getEvaluationHistory: build.query({
+            query: (userId) => `account/evaluation-history/${userId}`,
+            providesTags: ["EVALUATION_HISTORY"],
+        }),
     }),
 });
 
 export const {
     useGetTaskListQuery,
+    useGetSingleTaskQuery,
     useStoreTaskRatingMutation,
     useStoreTeamLeadReviewMutation,
     useStoreAdminAuthorizedMutation,
@@ -111,4 +119,5 @@ export const {
     useGetRevisionListQuery,
     useGetAllRevisionListQuery,
     useGetSingleEvaluationQuery,
+    useGetEvaluationHistoryQuery,
 } = evaluationApiSlice;

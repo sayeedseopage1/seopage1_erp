@@ -9,14 +9,7 @@ import TaskTableAssigned from "./TaskTableAssigned";
 import Popover from "../../../../react-latest/ui/Popover";
 import { convertTime } from "../../../utils/converTime";
 
-const TotalTaskAssigned = ({ data }) => {
-    const {
-        data: TaskList,
-        isLoading,
-        isFetching,
-    } = useGetTaskListQuery(data?.user_id);
-
-    const Tasks = TaskList?.data;
+const TaskModalComponent = ({ Tasks, isLoading, title, taskNumbers }) => {
     const [isOpen, setIsOpen] = useState(false);
     const [sorting, setSorting] = useState([]);
     const onPageChange = (paginate) => {
@@ -24,7 +17,7 @@ const TotalTaskAssigned = ({ data }) => {
     };
     return (
         <div onClick={() => setIsOpen(true)} className="link_color">
-            {data?.total_task_assigned}
+            {taskNumbers}
 
             <ReactModal
                 style={{
@@ -63,7 +56,7 @@ const TotalTaskAssigned = ({ data }) => {
                             isLoading={isLoading}
                             onPageChange={onPageChange}
                             sorting={sorting}
-                            tableName="Total Task Assigned Table"
+                            tableName={`${title}Table`}
                             setSorting={setSorting}
                         />
                     </Card.Body>
@@ -73,7 +66,7 @@ const TotalTaskAssigned = ({ data }) => {
     );
 };
 
-export default TotalTaskAssigned;
+export default TaskModalComponent;
 
 const TotalTaskAssignedColumns = [
     {
