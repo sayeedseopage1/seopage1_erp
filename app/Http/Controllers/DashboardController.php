@@ -654,7 +654,7 @@ class DashboardController extends AccountBaseController
         return response()->json([
             'data' => [
                 'check_in_check_out' => [
-                    'check_in_status' => $user ? true : false,
+                    'check_in_status' => (Auth::user()->role_id == 14) ? true : ($user ? true : false),
                     'data' => $user,
                 ],
                 'daily_task_report' => [
