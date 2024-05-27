@@ -507,6 +507,27 @@ class EvaluationController extends AccountBaseController
             $evaluation->employee_status = 3;
             $evaluation->save();
 
+            $history = new EvaluationHistory();
+            $history->user_id = $evaluation->user_id;  
+            $history->start_date = $evaluation->start_date;  
+            $history->exp_date = $evaluation->exp_date;  
+            $history->communication = $evaluation->communication;  
+            $history->professionalism = $evaluation->professionalism;  
+            $history->identiey_issues = $evaluation->identiey_issues;  
+            $history->dedication = $evaluation->dedication;  
+            $history->obedience = $evaluation->obedience;  
+            $history->lead_dev_avg_rating = $evaluation->lead_dev_avg_rating;  
+            $history->team_lead_cmnt = $evaluation->team_lead_cmnt;  
+            $history->managements_cmnt = $evaluation->managements_cmnt;  
+            $history->managements_decision = $evaluation->managements_decision;  
+            $history->managements_id = $evaluation->managements_id;  
+            $history->managements_name = $evaluation->managements_name;  
+            $history->managements_auth_at = $evaluation->managements_auth_at;  
+            $history->accept_rejected = $evaluation->accept_rejected;  
+            $history->ld_submission_status = $evaluation->ld_submission_status;  
+            $history->employee_status = $evaluation->employee_status;  
+            $history->save();
+
             $evaluation_task = EmployeeEvaluationTask::where('user_id',$request->user_id)->first();
             $actions = PendingAction::where('code','TLSDE')->where('task_id',$evaluation_task->task_id)->where('past_status',0)->get();
             if($actions != null)
@@ -570,6 +591,7 @@ class EvaluationController extends AccountBaseController
 
             $history = new EvaluationHistory();
             $history->user_id = $evaluation->user_id;  
+            $history->start_date = $evaluation->start_date;  
             $history->exp_date = $evaluation->exp_date;  
             $history->communication = $evaluation->communication;  
             $history->professionalism = $evaluation->professionalism;  
@@ -763,7 +785,12 @@ class EvaluationController extends AccountBaseController
     }
     public function EmployeeEvaluationHistory($id)
     {
-        dd($id);
+        $history = EvaluationHistory::where('user_id', $id)->get();
+
+        return response()->json([
+            'status' => 200,
+            'data' => $history
+        ]);
     }
 
 }
