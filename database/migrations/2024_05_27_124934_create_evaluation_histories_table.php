@@ -17,6 +17,7 @@ return new class extends Migration
             $table->id();
             $table->integer('user_id');
             $table->string('user_name')->nullable();
+            $table->integer('parent_task_id')->nullable();
             $table->dateTime('start_date')->nullable();
             $table->dateTime('exp_date')->nullable();
             $table->decimal('communication')->nullable();

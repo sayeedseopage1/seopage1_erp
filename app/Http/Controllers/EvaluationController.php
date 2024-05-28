@@ -570,6 +570,7 @@ class EvaluationController extends AccountBaseController
 
                 $history = new EvaluationHistory();
                 $history->user_id = $evaluation->user_id;  
+                $history->parent_task_id = $request->parent_task_id;  
                 $history->user_name = $evaluation->user_name;  
                 $history->start_date = $evaluation->start_date;  
                 $history->exp_date = $old_exp_date;  
@@ -804,11 +805,7 @@ class EvaluationController extends AccountBaseController
     }
     public function EmployeeEvaluationHistory($id)
     {
-        $history = EvaluationHistory::select('evaluation_histories.*','tasks.id as task_id')
-        ->leftJoin('sub_tasks', 'evaluation_histories.user_id', '=', 'sub_tasks.assigned_to')
-        ->leftJoin('tasks', 'sub_tasks.task_id', '=', 'tasks.id')
-        ->where('user_id', $id)
-        ->get();
+        $history = EvaluationHistory::where('user_id', $id)->get();
 
         return response()->json([
             'status' => 200,
