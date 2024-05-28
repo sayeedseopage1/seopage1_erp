@@ -97,7 +97,21 @@ const EvaluationRequiredRoundsTaskListModal = ({
         singleEvaluation?.user_id
     );
 
+    const [tasksList, setTaskList] = useState([]);
     const Tasks = data?.data;
+
+    useEffect(() => {
+        setTaskList(
+            Tasks.filter((task) => {
+                const taskCreatedAt = new Date(task.created_at);
+                return (
+                    taskCreatedAt >= new Date(singleEvaluation?.start_date) &&
+                    taskCreatedAt <= new Date(singleEvaluation?.exp_date)
+                );
+            })
+        );
+    }, [singleEvaluation, Tasks]);
+
     let tasksToRate = [];
     //to enable or disable button
 
@@ -331,6 +345,7 @@ const EvaluationRequiredRoundsTaskListModal = ({
                 );
             });
     };
+    console.log("taskLists", tasksList);
     return (
         <ReactModal
             style={{
@@ -367,7 +382,7 @@ const EvaluationRequiredRoundsTaskListModal = ({
                     </span>
                 </EvalTableTitle>
                 <EvaluationTaskTable
-                    data={Tasks}
+                    data={tasksList}
                     columns={[...EvaluationTaskTableColumns]}
                     isLoading={isLoading}
                     onPageChange={onPageChange}

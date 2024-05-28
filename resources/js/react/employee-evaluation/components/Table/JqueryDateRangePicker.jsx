@@ -6,7 +6,7 @@ const JqueryDateRangePicker = ({
     startDate,
     endDate,
     setStartDate,
-    setEndDate, 
+    setEndDate,
 }) => {
     const handleTimePicker = () => {
         if (window.$) {
@@ -15,7 +15,7 @@ const JqueryDateRangePicker = ({
             // let today = moment().format('D');
 
             $(function () {
-                let start = moment().subtract(7, "day");
+                let start = moment().subtract(365, "day");
                 let end = moment();
 
                 // if(today > 20){
@@ -96,6 +96,14 @@ const JqueryDateRangePicker = ({
                             "Last Month": [
                                 moment().subtract(1, "month").startOf("month"),
                                 moment().subtract(1, "month").endOf("month"),
+                            ],
+                            "This Year": [
+                                moment().startOf("year"),
+                                moment().endOf("year"),
+                            ],
+                            "Last Year": [
+                                moment().subtract(1, "year").startOf("year"),
+                                moment().subtract(1, "year").endOf("year"),
                             ],
                         },
                     },

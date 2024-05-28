@@ -1,5 +1,5 @@
 //mitul work start
-import { useNavigate } from "react-router-dom";
+
 import ReactModal from "react-modal";
 import React, { useEffect, useState } from "react";
 import {
@@ -10,7 +10,7 @@ import {
     ReviewTableSubTitleDate,
     FooterButtons,
 } from "../Table/ui";
-import { useSelector } from "react-redux";
+
 import Button from "../../../../../ui/Button";
 
 import { useAuth } from "../../../../../../react/hooks/useAuth";
@@ -29,7 +29,6 @@ import axios from "axios";
 import FormatDate from "../../../../../../react/UI/comments/utils/FormatDate";
 import useEmployeeEvaluation from "../../../../../../react/zustand/store";
 
-import ActionDropdown from "../Table/ActionDropdown";
 import useCounterStore from "../../../../../Zustand/store";
 
 import { toast } from "react-toastify";
@@ -40,12 +39,8 @@ const EvaluationAcknowledgeModal = ({
     setAcknowledgement,
     developerId,
 }) => {
-    const navigate = useNavigate();
-    const pendingActionId = useSelector(
-        (state) => state.pendingActions.pendingActionId
-    );
     const { increaseCount } = useCounterStore();
-    const [updatePendingAction, { isLoading: isLoadingTeamLead }] =
+    const [updatePendingAction, { isLoading: isLoadingTeamLeadAndLeadDev }] =
         useAcknowledgePendingActionsPastMutation();
     const DecisionColor = {
         Accepted: "green",
@@ -60,15 +55,20 @@ const EvaluationAcknowledgeModal = ({
     const auth = useAuth();
     const { setEvaluationObject } = useEmployeeEvaluation();
 
-    const [evaluations, setEvaluations] = useState([]);
     const [singleEvaluation, setSingleEvaluation] = useState(null);
     const [tasks, setTasks] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await axios.get("/account/get-all-evaluation");
-                setEvaluations(response.data.data.data);
+                if (developerId) {
+                    const response = await axios.get(
+                        `/account/evaluation-history/${developerId}`
+                    );
+                    console.log(response);
+                    setSingleEvaluation(response?.data.data[0]);
+                    setEvaluationObject(response?.data.data[0]);
+                }
             } catch (error) {
                 console.error("Error fetching evaluations:", error);
             }
@@ -77,16 +77,7 @@ const EvaluationAcknowledgeModal = ({
         fetchData();
     }, []);
 
-    useEffect(() => {
-        if (!evaluations.length) return;
-
-        const singleEv = evaluations.find(
-            (evaluation) => evaluation.user_id === developerId
-        );
-        setSingleEvaluation(singleEv || null);
-        setEvaluationObject(singleEv || null);
-    }, [evaluations]);
-
+    console.log("singleEvaluation", singleEvaluation);
     useEffect(() => {
         const fetchTasks = async () => {
             setIsLoading(true);
@@ -126,8 +117,8 @@ const EvaluationAcknowledgeModal = ({
             if (response?.status == 200) {
                 if (singleEvaluation?.managements_decision == "One more week") {
                     setAcknowledgement(false);
-
-                    window.location.href = response?.url;
+                    increaseCount();
+                    window.open(response?.url, "_blank");
                 } else {
                     toast.success("Acknowledge successful!");
                     setAcknowledgement(false);
@@ -149,8 +140,8 @@ const EvaluationAcknowledgeModal = ({
             if (response?.status == 200) {
                 if (singleEvaluation?.managements_decision == "One more week") {
                     setAcknowledgement(false);
-
-                    window.location.href = response?.url;
+                    increaseCount();
+                    window.open(response?.url, "_blank");
                 } else {
                     toast.success("Acknowledge successful!");
                     setAcknowledgement(false);
@@ -180,6 +171,7 @@ const EvaluationAcknowledgeModal = ({
                     overflowY: "auto",
                 },
             }}
+            ariaHideApp={false}
             isOpen={acknowledgement}
             onRequestClose={() => setAcknowledgement(false)}
         >
@@ -296,7 +288,7 @@ const EvaluationAcknowledgeModal = ({
                 {auth.roleId === 8 && (
                     <Button
                         onClick={handleAcknowledgedItTeamLead}
-                        isLoading={isLoadingTeamLead}
+                        isLoading={isLoadingTeamLeadAndLeadDev}
                         size="md"
                         className="ml-2"
                     >
@@ -312,6 +304,7 @@ const EvaluationAcknowledgeModal = ({
                 {auth.roleId === 6 && (
                     <Button
                         onClick={handleAcknowledgedItLeadDev}
+                        isLoading={isLoadingTeamLeadAndLeadDev}
                         size="md"
                         className="ml-2"
                     >
