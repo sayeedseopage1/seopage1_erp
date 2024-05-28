@@ -18,7 +18,7 @@ const PmCashPoints = () => {
 
     const onPageChange = (paginate) => {
         setPagination(paginate);
-        setQuery(prev => ({ ...prev, limit: pageSize, page: pageIndex + 1 }));
+        setQuery(prev => ({ ...prev, per_page: pageSize, page: pageIndex + 1 }));
         // setQuery({ ...query, limit: pageSize, page: pageIndex + 1 });
     };
 

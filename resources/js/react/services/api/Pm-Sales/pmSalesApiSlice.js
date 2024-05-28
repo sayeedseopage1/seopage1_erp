@@ -55,7 +55,7 @@ const pmSalesApiSlice = apiSlice.injectEndpoints({
                         ...(data?.point_type && {
                             point_type: data.point_type,
                         }),
-                        ...(data?.limit && { limit: data.limit }),
+                        ...(data?.per_page && { per_page: data.per_page }),
                         ...(data?.page && { page: data.page }),
                     });
                 }
