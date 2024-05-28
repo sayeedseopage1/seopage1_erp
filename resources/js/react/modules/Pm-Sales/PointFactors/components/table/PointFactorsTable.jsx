@@ -230,6 +230,8 @@ const PointFactorsTable = ({
                 status: parseInt(editFactorData?.status) ?? null,
             }
 
+            // console.log("payload: ", payload)
+
             const response = await updatePmPointfactor({ id: editFactorData?.id, payload }).unwrap();
 
             if (response?.status == 200) {
@@ -251,19 +253,19 @@ const PointFactorsTable = ({
         }
     }, [editFactorData]);
 
-    useEffect(() => {
-        if (editFactorData?.infiniteValueDown) {
-            if (editFactorData?.lower_limit && !editFactorData?.infiniteValueUp && !editFactorData?.upper_limit) {
-                setEditFactorData(prev => ({ ...prev, lower_limit: editFactorData.lower_limit }));
-            }
-            if (editFactorData?.upper_limit && !editFactorData?.infiniteValueUp) {
-                setEditFactorData(prev => ({ ...prev, lower_limit: editFactorData.upper_limit }));
-            }
-        }
-        if (editFactorData?.infiniteValueUp && editFactorData?.lower_limit && !editFactorData?.infiniteValueDown) {
-            setEditFactorData(prev => ({ ...prev, upper_limit: editFactorData.lower_limit }));
-        }
-    }, [editFactorData?.infiniteValueUp, editFactorData?.infiniteValueDown, editFactorData?.lower_limit, editFactorData?.upper_limit]);
+    // useEffect(() => {
+    //     if (editFactorData?.infiniteValueDown) {
+    //         if (editFactorData?.lower_limit && !editFactorData?.infiniteValueUp && !editFactorData?.upper_limit) {
+    //             setEditFactorData(prev => ({ ...prev, lower_limit: editFactorData.lower_limit }));
+    //         }
+    //         if (editFactorData?.upper_limit && !editFactorData?.infiniteValueUp) {
+    //             setEditFactorData(prev => ({ ...prev, lower_limit: editFactorData.upper_limit }));
+    //         }
+    //     }
+    //     if (editFactorData?.infiniteValueUp && editFactorData?.lower_limit && !editFactorData?.infiniteValueDown) {
+    //         setEditFactorData(prev => ({ ...prev, upper_limit: editFactorData.lower_limit }));
+    //     }
+    // }, [editFactorData?.infiniteValueUp, editFactorData?.infiniteValueDown, editFactorData?.lower_limit, editFactorData?.upper_limit]);
 
     return (
         <React.Fragment>
