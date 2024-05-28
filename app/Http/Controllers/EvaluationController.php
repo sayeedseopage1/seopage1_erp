@@ -149,7 +149,7 @@ class EvaluationController extends AccountBaseController
                         if($taskUser !=null){
                         $total_hours = EmployeeEvaluationTask::where('user_id', $taskUser->user_id)->sum('total_hours');
                         $total_min = EmployeeEvaluationTask::where('user_id', $taskUser->user_id)->sum('total_min');
-                        $revision = EmployeeEvaluationTask::where('user_id', $taskUser->user_id)->sum('revision_number');
+                        $revision = EmployeeEvaluationTask::where('user_id', $taskUser->user_id)->latest()->value('revision_number');
                         $history = EvaluationHistory::where('user_id', $taskUser->user_id)->count();
                         $data->total_hours = $total_hours;
                         $data->total_minutes = $total_min;
