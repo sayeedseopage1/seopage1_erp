@@ -570,7 +570,7 @@ class EvaluationController extends AccountBaseController
 
                 $history = new EvaluationHistory();
                 $history->user_id = $evaluation->user_id;  
-                $history->parent_task_id = $request->parent_task_id;  
+                $history->parent_task_id = $request->task_id;  
                 $history->user_name = $evaluation->user_name;  
                 $history->start_date = $evaluation->start_date;  
                 $history->exp_date = $old_exp_date;  
