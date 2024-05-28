@@ -1,5 +1,5 @@
 //mitul work start
-import { useNavigate } from "react-router-dom";
+
 import ReactModal from "react-modal";
 import React, { useEffect, useState } from "react";
 import {
@@ -10,7 +10,7 @@ import {
     ReviewTableSubTitleDate,
     FooterButtons,
 } from "../Table/ui";
-import { useSelector } from "react-redux";
+
 import Button from "../../../../../ui/Button";
 
 import { useAuth } from "../../../../../../react/hooks/useAuth";
@@ -29,7 +29,6 @@ import axios from "axios";
 import FormatDate from "../../../../../../react/UI/comments/utils/FormatDate";
 import useEmployeeEvaluation from "../../../../../../react/zustand/store";
 
-import ActionDropdown from "../Table/ActionDropdown";
 import useCounterStore from "../../../../../Zustand/store";
 
 import { toast } from "react-toastify";
@@ -40,10 +39,6 @@ const EvaluationAcknowledgeModal = ({
     setAcknowledgement,
     developerId,
 }) => {
-    const navigate = useNavigate();
-    const pendingActionId = useSelector(
-        (state) => state.pendingActions.pendingActionId
-    );
     const { increaseCount } = useCounterStore();
     const [updatePendingAction, { isLoading: isLoadingTeamLeadAndLeadDev }] =
         useAcknowledgePendingActionsPastMutation();
@@ -60,15 +55,20 @@ const EvaluationAcknowledgeModal = ({
     const auth = useAuth();
     const { setEvaluationObject } = useEmployeeEvaluation();
 
-    const [evaluations, setEvaluations] = useState([]);
     const [singleEvaluation, setSingleEvaluation] = useState(null);
     const [tasks, setTasks] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await axios.get("/account/get-all-evaluation");
-                setEvaluations(response.data.data.data);
+                if (developerId) {
+                    const response = await axios.get(
+                        `/account/get-single-evaluation/${developerId}`
+                    );
+                    console.log(response);
+                    setSingleEvaluation(response?.data.data[0]);
+                    setEvaluationObject(response?.data.data[0]);
+                }
             } catch (error) {
                 console.error("Error fetching evaluations:", error);
             }
@@ -76,16 +76,6 @@ const EvaluationAcknowledgeModal = ({
 
         fetchData();
     }, []);
-
-    useEffect(() => {
-        if (!evaluations.length) return;
-
-        const singleEv = evaluations.find(
-            (evaluation) => evaluation.user_id === developerId
-        );
-        setSingleEvaluation(singleEv || null);
-        setEvaluationObject(singleEv || null);
-    }, [evaluations]);
 
     useEffect(() => {
         const fetchTasks = async () => {
@@ -180,6 +170,7 @@ const EvaluationAcknowledgeModal = ({
                     overflowY: "auto",
                 },
             }}
+            ariaHideApp={false}
             isOpen={acknowledgement}
             onRequestClose={() => setAcknowledgement(false)}
         >
