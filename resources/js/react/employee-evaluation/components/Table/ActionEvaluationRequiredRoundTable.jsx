@@ -10,7 +10,7 @@ import useEmployeeEvaluation from "../../../zustand/store";
 import EvaluationTaskListModal from "../modal/EvaluationTaskListModal";
 import EvaluationRequiredRoundsTaskListModal from "../modal/EvaluationRequiredRoundsTaskListModal";
 
-const ActionEvaluationRequiredRoundTable = ({ data, table }) => {
+const ActionEvaluationRequiredRoundTable = ({ data, round }) => {
     const [isEvaluationModal, setIsEvaluationModal] = useState(false);
     const { setEvaluationObject } = useEmployeeEvaluation();
     const location = useLocation();
@@ -287,6 +287,7 @@ const ActionEvaluationRequiredRoundTable = ({ data, table }) => {
             </div>
 
             <EvaluationRequiredRoundsTaskListModal
+                round={round}
                 singleEvaluation={data}
                 setIsEvaluationModal={setIsEvaluationModal}
                 isEvaluationModal={isEvaluationModal}

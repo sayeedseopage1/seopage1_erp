@@ -96,17 +96,28 @@ const EvaluationTaskListModal = ({
     const { data, isLoading, isFetching } = useGetTaskListQuery(
         singleEvaluation?.user_id
     );
+    const [latestRoundTasks, setLatestRoundTasks] = useState([]);
 
-    const Tasks = data?.data;
-    let tasksToRate = [];
-    //to enable or disable button
-
-    // set average rating and calculating if all tasks are rated to enable confirm submission for lead developer
     useEffect(() => {
-        if (data && data?.data) {
-            const tasks = data?.data;
-            //filter tasks to rate based on total_min and submission_date not null
-            tasksToRate = tasks?.filter((task) => {
+        if (data?.data) {
+            // Find the latest round number
+            const latestRound = Math.max(
+                ...data.data.map((task) => task.round)
+            );
+
+            // Filter tasks that have the latest round
+            const tasks = data.data.filter(
+                (task) => task.round === latestRound
+            );
+
+            setLatestRoundTasks(tasks);
+        }
+    }, [data]);
+
+    let tasksToRate = [];
+    useEffect(() => {
+        if (latestRoundTasks) {
+            tasksToRate = latestRoundTasks?.filter((task) => {
                 return (
                     Number(task.total_min) < 60 && task.submission_date !== null
                 );
@@ -127,8 +138,10 @@ const EvaluationTaskListModal = ({
                 tasksToRate?.filter((task) => task.lead_dev_cmnt !== null)
                     .length;
             setIsAllTaskRated(isAllTaskRated);
+
+            console.log(tasksToRate, cumulativeSum, average, isAllTaskRated);
         }
-    }, [data]);
+    }, [latestRoundTasks]);
 
     const [{ pageIndex, pageSize }, setPagination] = useState({
         pageIndex: 0,
@@ -367,7 +380,7 @@ const EvaluationTaskListModal = ({
                     </span>
                 </EvalTableTitle>
                 <EvaluationTaskTable
-                    data={Tasks}
+                    data={latestRoundTasks}
                     columns={[...EvaluationTaskTableColumns]}
                     isLoading={isLoading}
                     onPageChange={onPageChange}

@@ -9,26 +9,32 @@ import AssignedTasksData from "./AssignedTasksData";
 import SubmittedTasksData from "./SubmittedTasksData";
 import { User } from "../../../utils/user-details";
 import ActionEvaluationRequiredRoundTable from "./ActionEvaluationRequiredRoundTable";
+import AssignedTasksDataRequiredRound from "./AssignedTasksDataRequiredRound";
+import SubmittedTasksDataRequiredRound from "./SubmittedTasksDataRequiredRound";
+import TotalMinRequiredRound from "./TotalMinRequiredRound";
 const auth = new User(window.Laravel.user);
 export const EvaluationRoundHistoryTableColumns = [
     {
         id: "id",
-        header: "Round",
+        header: "Extended Round",
         accessorKey: "id",
         cell: ({ row }) => {
-            const data = row.original;
-            return <div>Round-{data?.id}</div>;
+            return <div>Round-{row.index + 1}</div>;
         },
     },
     {
         id: "total_task_assigned",
+
         header: "Total Task Assigned",
         accessorKey: "total_task_assigned",
         cell: ({ row }) => {
             const data = row.original;
             return (
                 <div style={{ marginLeft: "50px" }}>
-                    <AssignedTasksData data={data} />
+                    <AssignedTasksDataRequiredRound
+                        data={data}
+                        round={row.index + 1}
+                    />
                 </div>
             );
         },
@@ -41,7 +47,10 @@ export const EvaluationRoundHistoryTableColumns = [
             const data = row.original;
             return (
                 <div style={{ marginLeft: "50px" }}>
-                    <SubmittedTasksData data={data} />
+                    <SubmittedTasksDataRequiredRound
+                        data={data}
+                        round={row.index + 1}
+                    />
                 </div>
             );
         },
@@ -54,7 +63,7 @@ export const EvaluationRoundHistoryTableColumns = [
             const data = row?.original;
             return (
                 <div style={{ marginLeft: "50px" }}>
-                    {convertTime(data?.total_minutes)}
+                    <TotalMinRequiredRound data={data} round={row.index + 1} />
                 </div>
             );
         },
@@ -67,7 +76,10 @@ export const EvaluationRoundHistoryTableColumns = [
             const data = row.original;
             return (
                 <div style={{ marginLeft: "50px" }}>
-                    <EvaluationRevisionModal data={data} />
+                    <EvaluationRevisionModal
+                        data={data}
+                        round={row.index + 1}
+                    />
                 </div>
             );
         },
@@ -125,7 +137,7 @@ export const EvaluationRoundHistoryTableColumns = [
     },
     {
         id: "accept_rejected",
-        header: "Accepted/Rejected Date",
+        header: "Extended Date",
         accessorKey: "accept_rejected",
         cell: ({ row }) => {
             const data = row.original;
@@ -147,7 +159,12 @@ export const EvaluationRoundHistoryTableColumns = [
         cell: ({ row }) => {
             const data = row.original;
 
-            return <ActionEvaluationRequiredRoundTable data={data} />;
+            return (
+                <ActionEvaluationRequiredRoundTable
+                    data={data}
+                    round={row.index + 1}
+                />
+            );
         },
     },
 ];
