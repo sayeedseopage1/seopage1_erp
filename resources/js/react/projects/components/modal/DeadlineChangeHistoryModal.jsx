@@ -1,8 +1,8 @@
-import React from "react";
+import React, { useEffect } from "react";
+import PropTypes from "prop-types";
 
 // UI Components - Custom
 import CustomAntModal from "../ui/CustomAntModal/CustomAntModal";
-
 
 // Constants
 import { ProjectDeadlineHistoryDummyData } from "../../constants";
@@ -11,16 +11,40 @@ import { ProjectDeadlineHistoryDummyData } from "../../constants";
 import DashboardDataTable from "../Table/DashboardDataTable";
 import { DashBoardDeadlineHistoryModalColumns } from "../Table/DashBoardDeadlineHistoryModalColumns";
 
-
 // style
 import "./styles/deadlineChangeHistoryModal.css";
 
-const DeadlineChangeHistoryModal = ({
-    isModalOpen,
-    closeModal,
-    modalData,
-    isLoading,
-}) => {
+const DeadlineChangeHistoryModal = ({ isModalOpen, closeModal }) => {
+    const [projectDeadlineHistory, setProjectDeadlineHistory] = React.useState(
+        []
+    );
+    const [isLoading, setIsLoading] = React.useState(true);
+
+    // Dummy Fetch Data
+    const dataPromise = new Promise((resolve, reject) => {
+        setTimeout(() => {
+            resolve(ProjectDeadlineHistoryDummyData);
+        }, 5000);
+    });
+
+    // Fetch Data Deadline Change History
+    const fetchData = async () => {
+        setIsLoading(true);
+        try {
+            const data = await dataPromise;
+            setProjectDeadlineHistory(data);
+            setIsLoading(false);
+        } catch (error) {
+            console.error("Error fetching data: ", error);
+        }
+    };
+
+    useEffect(() => {
+        if (isModalOpen) {
+            fetchData();
+        }
+    }, [isModalOpen]);
+
     return (
         <CustomAntModal
             isModalOpen={isModalOpen}
@@ -34,8 +58,9 @@ const DeadlineChangeHistoryModal = ({
                     <DashboardDataTable
                         tableColumns={DashBoardDeadlineHistoryModalColumns}
                         tableName="Deadline Change History"
-                        tableData={ProjectDeadlineHistoryDummyData}
+                        tableData={projectDeadlineHistory}
                         isLoading={isLoading}
+                        tableHight="50vh"
                     />
                 </div>
             </div>
@@ -44,3 +69,8 @@ const DeadlineChangeHistoryModal = ({
 };
 
 export default DeadlineChangeHistoryModal;
+
+DeadlineChangeHistoryModal.propTypes = {
+    isModalOpen: PropTypes.bool.isRequired,
+    closeModal: PropTypes.func.isRequired,
+};

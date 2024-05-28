@@ -46,7 +46,7 @@ const Panel = ({ children, className, placement = "auto", ...props }) => {
             ref={setPopperElement}
             style={{
                 ...styles.popper,
-                zIndex: 999,
+                zIndex: 1000,
                 width: "fit-content",
                 paddingTop: "10px",
             }}

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import PropTypes from "prop-types";
 
 // Components - Custom
@@ -10,12 +10,45 @@ import { Placeholder } from "../../../global/Placeholder";
 // helper
 import { handleLoadingComponent } from "../../helper";
 
-const WorkingEnvironmentModal = ({
-    isModalOpen,
-    closeModal,
-    modalData,
-    isLoading,
-}) => {
+/**
+ *  Working Environment Modal
+ *  @param {boolean} isModalOpen - Modal Open State
+ *  @param {function} closeModal - Close Modal Event Handler
+ *  @param {object} modalData - Modal Data
+ *  @returns {JSX.Element}
+ *   @description Working Environment Modal component to render working environment modal
+ */
+
+const WorkingEnvironmentModal = ({ isModalOpen, closeModal, modalData }) => {
+    const [workingEnvironmentData, setWorkingEnvironmentData] =
+        React.useState();
+    const [isLoading, setIsLoading] = React.useState(true);
+
+    // Dummy Fetch Data
+    const dataPromise = new Promise((resolve, reject) => {
+        setTimeout(() => {
+            resolve(modalData);
+        }, 5000);
+    });
+
+    // Fetch Data Deadline Change History
+    const fetchData = async () => {
+        setIsLoading(true);
+        try {
+            const data = await dataPromise;
+            setWorkingEnvironmentData(data);
+            setIsLoading(false);
+        } catch (error) {
+            console.error("Error fetching data: ", error);
+        }
+    };
+
+    useEffect(() => {
+        if (isModalOpen) {
+            fetchData();
+        }
+    }, []);
+
     return (
         <CustomAntModal
             title="Working Environment"
@@ -31,11 +64,11 @@ const WorkingEnvironmentModal = ({
                             isLoading,
                             <Placeholder width="80%" height="16px" />,
                             <a
-                                href={modalData?.site_url}
+                                href={workingEnvironmentData?.site_url}
                                 target="_blank"
                                 rel="noreferrer"
                             >
-                                {modalData?.site_url}
+                                {workingEnvironmentData?.site_url}
                             </a>
                         )}
                     </div>
@@ -47,11 +80,11 @@ const WorkingEnvironmentModal = ({
                             isLoading,
                             <Placeholder width="80%" height="16px" />,
                             <a
-                                href={modalData?.login_url}
+                                href={workingEnvironmentData?.login_url}
                                 target="_blank"
                                 rel="noreferrer"
                             >
-                                {modalData?.login_url}
+                                {workingEnvironmentData?.login_url}
                             </a>
                         )}
                     </div>
@@ -64,7 +97,7 @@ const WorkingEnvironmentModal = ({
                             isLoading,
                             <Placeholder width="80%" height="16px" />,
                             <span className="singleline-ellipses">
-                                {modalData?.frontend_password}
+                                {workingEnvironmentData?.frontend_password}
                             </span>
                         )}
                     </div>
@@ -77,7 +110,7 @@ const WorkingEnvironmentModal = ({
                             isLoading,
                             <Placeholder width="80%" height="16px" />,
                             <span className="singleline-ellipses">
-                                {modalData?.email}
+                                {workingEnvironmentData?.email}
                             </span>
                         )}
                     </div>
@@ -90,7 +123,7 @@ const WorkingEnvironmentModal = ({
                             isLoading,
                             <Placeholder width="80%" height="16px" />,
                             <span className="singleline-ellipses">
-                                {modalData?.password}
+                                {workingEnvironmentData?.password}
                             </span>
                         )}
                     </div>
@@ -106,5 +139,4 @@ WorkingEnvironmentModal.propTypes = {
     isModalOpen: PropTypes.bool,
     closeModal: PropTypes.func,
     modalData: PropTypes.object,
-    isLoading: PropTypes.bool,
 };

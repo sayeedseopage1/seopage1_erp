@@ -634,16 +634,190 @@ export const ProjectQualityControlDummyData = {
         },
         {
             id: 6,
-            title: `<p>Fill in the site title and tagline.</p> <br/> <p>GGo to settings>General to find this: <a href="https://prnt.sc/xFoLFQjiqiLj" target="_blank">https://prnt.sc/xFoLFQjiqiLj </a> </p> <p>Put a nice title of 60 characters max in the title field
+            title: `<p>Fill in the site title and tagline.</p>  <br/> <p>Go to settings</p> <br/>
+            <p>General to find this: <a href="https://prnt.sc/xFoLFQjiqiLj" target="_blank">https://prnt.sc/xFoLFQjiqiLj </a> </p> <p>Put a nice title of 60 characters max in the title field
         (based on competitors) and a relevant tagline/slogan. For the tagline, you can check
         with the client or if the client asks to put any of our choice, we can just put it.</p>`,
             key: 'slogan',
             value: null,
             isDangerHtml: true,
         }
-    ]
+    ],
+
 }
 
+
+export const ProjectDisputeAuthorizationsData = [
+    {
+        id: 1,
+        title: "Dispute Date",
+        key: "dispute_date",
+        value: null,
+    },
+    {
+        id: 2,
+        title: "Client User Name",
+        key: "client_username",
+        value: null,
+    },
+    {
+        id: 3,
+        title: "Project Value",
+        key: "project_value",
+        value: null,
+    },
+    {
+        id: 4,
+        title: "What Was The Project About!",
+        key: "description1",
+        value: null,
+    },
+    {
+        id: 5,
+        title: "What percentage of the amount is in dispute? Also, write the amount in dispute separately.(for example 60% and 300 USD)",
+        key: "description2",
+        value: null,
+    },
+    {
+        id: 6,
+        title: "Did they release the amount that is not in dispute? Or did they release any amount at all? ",
+        key: "description3",
+        value: null,
+    },
+    {
+        id: 7,
+        title: `Which Phase We Were At When This Issue Occurred?
+        (Requirements Define, Research/Planning, Execution
+        (Mention The Percentage Of Execution That Was Done),
+        QC, Revisions And Feedback)`,
+        key: "description4",
+        value: null,
+    },
+    {
+        id: 8,
+        title: `What Is The Issue Here? (Dispute/Milestone
+        Cancelation/Project Cancelation/Client
+        Complaining To Freelancer.Com)`,
+        key: "description5",
+        value: null,
+    },
+    {
+        id: 9,
+        title: `According To You, Which Of Our Team/Individuals Is 
+        Responsible For This Exactly? (You Could Not Manage
+        The Project Properly/The Sales Team Brought The Wrong
+        Project/The Developers Messed Up Or
+        Anything Else. Write In Detail)`,
+        key: "description6",
+        value: null,
+    },
+    {
+        id: 10,
+        title: `Was The Work Delivered Fully To The Clients Satisfaction
+        And As Per The Agreed Job Scope?`,
+        key: "description7",
+        value: null,
+    },
+    {
+        id: 11,
+        title: `What Was The Deadline And Was The Deadline Met?`,
+        key: "description8",
+        value: null,
+    },
+    {
+        id: 12,
+        title: `What Was The Work About (You Can Share
+            The Instruction File) (Optional)`,
+        key: "description9",
+        value: null,
+    },{
+        id: 13,
+        title: `Describe The Reason Why We Are Here. In Other Words,
+        Write Down Why The Client Is This Much Dissatisfied And
+        Thinks Of Such Extreme Steps.`,
+        key: "description10",
+        value: null,
+    },
+    {
+        id: 14,
+        title: `When Did The Client Get Dissatisfied The 1st Time (Write
+            The Date, The Reason, What He Demanded And What
+            Measures Were Taken From Your Side After That)`,
+        key: "description11",
+        value: null,
+    },
+    {
+        id: 15,
+        title: `When Did The Client Get Dissatisfied The 2nd Time?
+        (Write Down The Date, The Reason, What He Demanded
+        And What Measures Were Taken After That)`,
+        key: "description12",
+        value: null,
+    },
+    {
+        id: 16,
+        title: `When Did The Client Get Dissatisfied The 3rd Time?
+        (Write Down The Date, The Reason, What He Demanded
+        And What Measures Were Taken From Your Side After That)`,
+        key: "description13",
+        value: null,
+    },
+    {
+        id: 17,
+        title: `List Down Your Weaknesses/Shortcomings/Lackings
+        During This Project. Please Be Honest And Do Not Hide
+        Anything. That Is In The Best Interest
+        Of You And The Company!`,
+        key: "description14",
+        value: null,
+    },
+    {
+        id: 18,
+        title: `If We Have To Win Here, What Is The Percentage And
+        Value Of The Amount We Should Realistically Claim
+        (According To You)?`,
+        key: "description15",
+        value: null,
+    },
+    {
+        id: 19,
+        title: `Write Down Anything That You Did Not Specifically
+        Mention Above. Remember, If We Are Not Aware Of
+        Anything And The Client Blindsides Us During The
+        Arbitration, The Case Will Become Very Weak And It
+        Will Be Close To Impossible For Us To Win It!`,
+        key: "description16",
+        value: null,
+    },
+    {
+        id: 20,
+        title: `Please Confirm All The Above Details Are Correct &
+        Complete & No Information Was Hidden For The Client
+        To Blindside Us. Repetition Of Such Things May Lead To
+        Tougher Actions From The Company As In
+        A Showcause Letter, Cash Penalty Etc.`,
+        key: "description17",
+        value: null,
+    },
+    {
+        id: 21,
+        title: `Project Manager Name`,
+        key: "pm_name",
+        value: null,
+    },
+    {
+        id: 22,
+        title: `Project Manager Email`,
+        key: "pm_email",
+        value: null,
+    },
+    {
+        id: 23,
+        title: `Admin Comment`,
+        key: "dispute_admin_comment",
+        value: null,
+    }
+]
 
 export const ProjectDeadlineHistoryDummyData = [
     {
@@ -651,12 +825,12 @@ export const ProjectDeadlineHistoryDummyData = [
         previous_deadline: "2021-09-30",
         requested_on: "2021-09-20",
         reason: `<p>You can use this plugin for migrating the website</p>`,
-        request_status: "Approved",
-        approved_on: "2021-09-21",
-        approved_by_name: "Belayat Hossain",
-        extended_deadline: "2021-10-05",
-        approved_by_id: 1,
-        approved_by_photo: "https://www.freelancer.com/u/mbjsolutions?from=messaging&ref_project_id=38007534",
+        request_status: "Pending",
+        approved_on: null,
+        approved_by_name: null,
+        extended_deadline: null,
+        approved_by_id: null,
+        approved_by_photo: null,
     },
     {
         id: 2,

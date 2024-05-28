@@ -34,3 +34,13 @@
 .customModalHeader svg {
   fill: white;
 }
+
+@media screen and (max-width: 768px) {
+  .customModalHeader {
+    padding: 16px 20px;
+  }
+  .customModalHeader h2 {
+    font-size: 20px;
+  }
+  
+}

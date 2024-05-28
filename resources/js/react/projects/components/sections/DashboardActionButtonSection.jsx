@@ -15,23 +15,39 @@ import PMTaskGuidelineModal from "../modal/PMTaskGuidelineModal";
 import ProjectCompletionModal from "../modal/ProjectCompletionModal";
 import ProjectDeadlineExtensionModal from "../modal/ProjectDeadlineExtensionModal";
 import ProjectQCSubmissionFormModal from "../modal/ProjectQCSubmissionFormModal";
-import { ProjectQualityControlDummyData } from "../../constants";
-
+import DisputeProjectFromModal from "../modal/DisputeProjectFromModal";
+import DisputeProjectAuthorizeModal from "../modal/DisputeProjectAuthorizeModal";
 
 // Modal Names
 // ProjectDE = Project Deadline Extension
 // ProjectQCSF = Project QC Submission Form
 
+
+
+
+
 const DashboardActionButtonSection = ({ projectData, isLoading }) => {
+    // Dummy for Dispute Project Authorization Modal
+    const [dummyDisputeData, setDummyDisputeData] = React.useState({
+        isDisputeSubmitted: false,
+        disputeData: {},
+    });
+
+    // Modal Open State Variables
     const [isPmTaskGuidelineModalOpen, setIsPmTaskGuidelineModalOpen] =
         React.useState(false);
     const [isProjectCompletionModalOpen, setIsProjectCompletionModalOpen] =
         React.useState(false);
     const [isProjectDEModalOpen, setIsProjectDEModalOpen] =
         React.useState(false);
-    const [isProjectQCSFModalOpen, setIsProjectQCSFModalOpen] = React.useState(
-        false
-    )
+    const [isProjectQCSFModalOpen, setIsProjectQCSFModalOpen] =
+        React.useState(false);
+    const [isDisputeProjectModalOpen, setIsDisputeProjectModalOpen] =
+        React.useState(false);
+    const [
+        isDisputeProjectAuthorizeModalOpen,
+        setIsDisputeProjectAuthorizeModalOpen,
+    ] = React.useState(false);
 
     // Handle Modal Open and Close Function with Action Function as Parameter (if needed)
     const handleModal = (setModalOpenFunc, isOpen, action) => {
@@ -75,7 +91,14 @@ const DashboardActionButtonSection = ({ projectData, isLoading }) => {
                     Completion Form
                 </Button>
                 <Button
-                    onClick={() => {}}
+                    onClick={() =>
+                        handleModal(
+                            dummyDisputeData.isDisputeSubmitted // This is a dummy data to check if the dispute is submitted or not
+                                ? setIsDisputeProjectAuthorizeModalOpen
+                                : setIsDisputeProjectModalOpen,
+                            true
+                        )
+                    }
                     className={`${style.dashboardActionButton}`}
                 >
                     Dispute Form
@@ -117,11 +140,43 @@ const DashboardActionButtonSection = ({ projectData, isLoading }) => {
                 />
             )}
 
-            <ProjectQCSubmissionFormModal
-                isModalOpen={isProjectQCSFModalOpen}
-                closeModal={() => handleModal(setIsProjectQCSFModalOpen, false)}
-                modalData={ProjectQualityControlDummyData}
-            />
+            {/* Project QC Submission Form */}
+
+            {isProjectQCSFModalOpen && (
+                <ProjectQCSubmissionFormModal
+                    isModalOpen={isProjectQCSFModalOpen}
+                    closeModal={() =>
+                        handleModal(setIsProjectQCSFModalOpen, false)
+                    }
+                />
+            )}
+
+            {/* Dispute Project Form */}
+
+            {isDisputeProjectModalOpen && (
+                <DisputeProjectFromModal
+                    isModalOpen={isDisputeProjectModalOpen}
+                    closeModal={() =>
+                        handleModal(setIsDisputeProjectModalOpen, false)
+                    }
+                    setDummyDisputeData={setDummyDisputeData}
+                />
+            )}
+
+            {/* Dispute Project Authorization Form */}
+
+            {isDisputeProjectAuthorizeModalOpen && (
+                <DisputeProjectAuthorizeModal
+                    isModalOpen={isDisputeProjectAuthorizeModalOpen}
+                    closeModal={() =>
+                        handleModal(
+                            setIsDisputeProjectAuthorizeModalOpen,
+                            false
+                        )
+                    }
+                    payloadData={dummyDisputeData?.disputeData}
+                />
+            )}
         </div>
     );
 };

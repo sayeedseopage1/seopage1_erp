@@ -6,6 +6,17 @@ import PropTypes from "prop-types";
 
 import "./customCopyToClipboard.css";
 
+/**
+ *  CustomCopyToClipboard component
+ *  @param {string} text - Text to be copied
+ *  @param {function} onCopy - OnCopy event handler
+ *  @param {object} options - Options for the copy
+ *  @param {string} className - Additional class name
+ *  @returns {JSX.Element}
+ *  @description CustomCopyToClipboard component to copy text to clipboard
+ *
+ */
+
 const CustomCopyToClipboard = ({
     text,
     onCopy,

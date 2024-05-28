@@ -2,11 +2,16 @@ import React from "react";
 import PropTypes from "prop-types";
 import { BsInfoCircle } from "react-icons/bs";
 
-// Components - custom
+// Components - Styled Components
 import { CardTitle } from "../styledComponents";
+
+// Components - Global
 import Switch from "../../../../global/Switch";
+
+// Components - UI - Popover
 import Popover from "../../Popover";
 
+// Styles
 import style from "../../popover.module.css";
 
 const DashboardCardTitle = ({

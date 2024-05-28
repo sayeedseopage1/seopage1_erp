@@ -286,7 +286,28 @@ export const CardTitle = styled.div`
 `
 
 export const ModalContentContainer = styled.div`
-  padding: 16px 30px ;
+  padding: ${props => props.padding || "16px 30px"};
+  background: ${props => props.color || "#F3FAFF"};
+  scrollbar-width: thin;
+  scrollbar-color: #99BCD4 transparent;
+  scroll-behavior: smooth !important;
+  border-radius: 8px !important;
+  -webkit-border-radius: 5px;
+
+  &::-webkit-scrollbar {
+    width: 10px !important;
+    scroll-behavior: smooth !important;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background-color: #ccc !important;
+    border-radius: 10px !important;
+  }
+  ::-webkit-scrollbar-track {
+    background-color: transparent !important;
+    border-radius: 10px !important;
+  }
+
 
   .modalContentWrapper{
     max-height: 70vh;
@@ -478,13 +499,24 @@ export const ModalContentContainer = styled.div`
             width: 5% !important;
 
           }
-        .projectQCSModal:nth-child(2) {
-          width: 70% !important;
-        
-        }
-        .projectQCSModal:nth-child(3) {
-            width: 25% !important;
-        }
+          .projectQCSModal:nth-child(2) {
+            width: 70% !important;
+          
+          }
+          .projectQCSModal:nth-child(3) {
+              width: 25% !important;
+          }
+          .projectDisputeModal:nth-child(1)  {
+            width: 5% !important;
+
+          }
+          .projectDisputeModal:nth-child(2) {
+            width: 60% !important;
+          
+          }
+          .projectDisputeModal:nth-child(3) {
+              width: 35% !important;
+          }
         }
       }
       tbody{
@@ -522,6 +554,17 @@ export const ModalContentContainer = styled.div`
           .projectQCSModal:nth-child(3) {
               width: 25% !important;
             
+          }
+          .projectDisputeModal:nth-child(1)  {
+            width: 5% !important;
+
+          }
+          .projectDisputeModal:nth-child(2) {
+            width: 60% !important;
+          
+          }
+          .projectDisputeModal:nth-child(3) {
+              width: 35% !important;
           }
 
           &:nth-child(odd){
@@ -651,12 +694,55 @@ export const ModalContentContainer = styled.div`
     margin-bottom: 20px;
   }
 
+  /* Dispute Project */
+
+  .disputeProjectInfoHeader{ 
+    text-align: center;
+    margin-bottom: 24px;
+    h6{
+      color: #000;
+      font-family: Poppins, sans-serif;
+      font-size: 22px;
+      font-style: normal;
+      font-weight: 500;
+      line-height: normal;
+      margin-bottom: 12px;
+    }
+    p{
+      color: #F00;
+      font-family: Poppins, sans-serif;
+      font-size: 14px;
+      font-style: normal;
+      font-weight: 400;
+      line-height: normal;
+    }
+  
+  }
+  .modalInputContainer{
+    display: flex;
+    gap: 10px;
+    flex: 1;
+
+    div{
+      width: 50%;
+    }
+  }
+
   /* Utility Class */
   .verticalAlignTop{
     vertical-align: top;
   }
   .w-65{
     width: 65% !important;
+  }
+
+  &.borderRadiusBottom{
+    border-radius: 0 0 8px 8px;
+  }
+
+
+  @media screen and (max-width: 768px) {
+    padding: 16px 20px;
   }
   
 `

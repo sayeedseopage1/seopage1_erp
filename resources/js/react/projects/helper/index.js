@@ -20,4 +20,5 @@ export const handleLoadingComponent = (isLoading, loadingComponent, renderDataCo
   }
 }
 
-export const htmlTagRegex = /<\/?([a-z][a-z0-9]*)\b[^>]*>/gi;
+// export const htmlTagRegex = /<\/?([a-z][a-z0-9]*)\b[^>]*>/gi;
+export const htmlTagRegex = /<\/?[a-z][\s\S]*>/i;

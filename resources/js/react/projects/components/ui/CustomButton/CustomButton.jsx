@@ -4,6 +4,17 @@ import PropTypes from "prop-types";
 // styles
 import style from "./customButtons.module.css";
 
+/**
+ * 
+ *  CustomButton component
+ *  @param {number} value - Value of the button
+ *  @param {function} onChange - OnChange event handler
+ *  @returns {JSX.Element}
+ * 
+ *  @description CustomButton component to render custom buttons
+ */
+
+
 const CustomButton = ({ value, onChange }) => {
     return (
         <div className="d-flex">

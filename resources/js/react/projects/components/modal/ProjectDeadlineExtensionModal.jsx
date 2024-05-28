@@ -12,10 +12,9 @@ import { ModalContentContainer } from "../ui/styledComponents";
 // Components - Global
 import Loader from "../../../global/Loader";
 
-// Components - Custom 
+// Components - Custom
 import SingleButton from "../ui/CustomButton/SingleButton";
 import CustomTextArea from "../ui/CustomTextArea/CustomTextArea";
-
 
 // Helpers
 import {
@@ -30,7 +29,6 @@ const ProjectDeadlineExtensionModal = ({
     isModalOpen,
     closeModal,
     modalData,
-    isLoading,
 }) => {
     const [deadlineExtensionData, setDeadlineExtensionData] = useState({
         newDeadline: null,
@@ -60,7 +58,6 @@ const ProjectDeadlineExtensionModal = ({
             return;
         }
         setIsSubmitting(true);
-
         try {
             // TODO: API Call Here
             setTimeout(() => {
@@ -76,9 +73,10 @@ const ProjectDeadlineExtensionModal = ({
             toast.error("An error occurred. Please try again later");
         }
 
-        // API Call
+        
     };
 
+    // Validation on Submit
     useEffect(() => {
         if (deadLineExtensionDataValidation.isSubmitting) {
             const validation = markEmptyFieldsValidation(deadlineExtensionData);
@@ -89,6 +87,8 @@ const ProjectDeadlineExtensionModal = ({
         }
     }, [deadlineExtensionData, deadLineExtensionDataValidation.isSubmitting]);
 
+
+    // Reset Data
     const resetData = () => {
         setDeadlineExtensionData({
             newDeadline: null,
@@ -109,12 +109,17 @@ const ProjectDeadlineExtensionModal = ({
             closeModal={closeModal}
             width="956px"
             height="auto"
+            data_testid="project-deadline-extension-modal"
         >
             <CustomModalHeader
                 title="Project Deadline Extension Form"
                 closeModal={closeModal}
             />
-            <ModalContentContainer>
+            <ModalContentContainer
+                style={{
+                    borderRadius: "0 0 8px 8px",
+                }}
+            >
                 <div className="deadlineInfo mb-1">
                     <div className="deadlineInfo__deadline mb-2">
                         <label htmlFor="oldDeadline">Current Deadline</label>

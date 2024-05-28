@@ -1,7 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
 
-
 // UI Components - Custom
 import { CardWrapper } from "../ui/styledComponents";
 import PersonAvatar from "../PersonAvatar";
@@ -9,6 +8,14 @@ import PersonAvatar from "../PersonAvatar";
 // Components - UI - Shared
 import DashboardCardTitle from "../ui/DashboardCardTitle/DashboardCardTitle";
 
+/**
+ * DashboardClientAndPMCard component
+ * @param {object} projectData - Project data
+ * @param {string} className - Additional class name
+ * @returns {JSX.Element}
+ * @description DashboardClientAndPMCard component to render client and project manager card
+ *
+ */
 const DashboardClientAndPMCard = ({ projectData, className = "" }) => {
     const projectInfo = projectData?.projectData;
     return (
@@ -41,7 +48,9 @@ const DashboardClientAndPMCard = ({ projectData, className = "" }) => {
                                 alt="client country flag"
                                 className="mr-1"
                             />
-                            <span>{projectInfo?.client?.country?.nicename}</span>
+                            <span>
+                                {projectInfo?.client?.country?.nicename}
+                            </span>
                         </div>
                     </div>
                 </div>
@@ -65,7 +74,7 @@ const DashboardClientAndPMCard = ({ projectData, className = "" }) => {
                     <div className="d-flex flex-column ml-3">
                         <a
                             className="dashboardCardPersonName"
-                            href={`/account/clients/${projectInfo?.pm?.client_id}`}
+                            href={`/account/employees/${projectInfo?.pm?.client_id}`}
                         >
                             {projectInfo?.pm?.name}
                         </a>
@@ -77,7 +86,9 @@ const DashboardClientAndPMCard = ({ projectData, className = "" }) => {
                                 alt="pm country flag"
                                 className="mr-1"
                             />
-                            <span>{projectInfo?.client?.country?.nicename}</span>
+                            <span>
+                                {projectInfo?.client?.country?.nicename}
+                            </span>
                         </div>
                     </div>
                 </div>

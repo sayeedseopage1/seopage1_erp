@@ -1,0 +1,36 @@
+.customInput {
+  border-radius: 3px;
+  border: 1px solid #DDDCDC;
+  padding: 10px;
+  width: 100%;
+  color: #626262;
+  font-family: Poppins, sans-serif;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+}
+
+.customInputTextArea {
+  border-radius: 3px;
+  border: 1px solid #DDDCDC;
+  padding: 10px;
+  width: 100%;
+  color: #626262;
+  font-family: Poppins, sans-serif;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+  resize: none  !important;
+}
+
+
+.customInputLabel {
+  color: #000;
+  font-family: Poppins, sans-serif;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+}

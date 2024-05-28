@@ -22,6 +22,7 @@ const DashboardDataTable = ({
     tableData,
     tableColumns,
     isLoading,
+    tableHight = "30vh",
 }) => {
     const [sorting, setSorting] = React.useState([]);
     const [expanded, setExpanded] = React.useState({});
@@ -76,7 +77,7 @@ const DashboardDataTable = ({
                 className="sp1_tasks_table_wrapper dashboardDataTable"
                 style={{
                     height: "100%",
-                    maxHeight: "30vh",
+                    maxHeight: tableHight,
                     overflow: "auto",
                 }}
             >
@@ -166,4 +167,5 @@ DashboardDataTable.propTypes = {
     tableData: PropTypes.array,
     tableColumns: PropTypes.array,
     isLoading: PropTypes.bool,
+    tableHight: PropTypes.string,
 };

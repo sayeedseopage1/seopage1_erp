@@ -1,5 +1,6 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import PropTypes from "prop-types";
+import { toast } from "react-toastify";
 
 // Components - Custom
 import CustomAntModal from "../ui/CustomAntModal/CustomAntModal";
@@ -19,16 +20,15 @@ import { Placeholder } from "../../../global/Placeholder";
 // Components - UI - Global
 import Switch from "../../../global/Switch";
 import Loader from "../../../global/Loader";
-import { toast } from "react-toastify";
 
-const ProjectCompletionModal = ({
-    isModalOpen,
-    closeModal,
-    modalData,
-    isLoading = true,
-}) => {
+const ProjectCompletionModal = ({ isModalOpen, closeModal, modalData }) => {
+    const [isLoading, setIsLoading] = useState(true);
     const [adminComment, setAdminComment] = useState("");
-    const { project_submission, project_portfolio } = modalData;
+    const [projectCompletionData, setProjectCompletionData] = useState({
+        project_submission: {},
+        project_portfolio: {},
+    });
+    const { project_submission, project_portfolio } = projectCompletionData;
     const [isSubmitting, setIsSubmitting] = useState(false);
 
     // Handle Admin Comment
@@ -37,7 +37,15 @@ const ProjectCompletionModal = ({
         try {
             // TODO: Implement the API call to submit the admin comment
             setTimeout(() => {
-                project_submission.admin_comment = adminComment;
+                setProjectCompletionData(prev => {
+                    return {
+                        ...prev,
+                        project_submission: {
+                            ...prev.project_submission,
+                            admin_comment: adminComment,
+                        },
+                    };
+                });
                 setIsSubmitting(false);
                 toast.success("Project Completion Authorized Successfully");
             }, 5000);
@@ -45,6 +53,32 @@ const ProjectCompletionModal = ({
             console.log(error);
         }
     };
+
+    // Dummy Fetch Data
+    const dataPromise = new Promise((resolve, reject) => {
+        setTimeout(() => {
+            resolve(modalData);
+        }, 5000);
+    });
+
+    // Fetch Data Deadline Change History
+    const fetchData = async () => {
+        setIsLoading(true);
+        try {
+            const data = await dataPromise;
+            setProjectCompletionData(data);
+            setIsLoading(false);
+        } catch (error) {
+            console.error("Error fetching data: ", error);
+        }
+    };
+
+    // Fetch Data on Modal Open
+    useEffect(() => {
+        if (isModalOpen) {
+            fetchData();
+        }
+    }, []);
 
     return (
         <CustomAntModal

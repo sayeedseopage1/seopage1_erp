@@ -9,13 +9,23 @@ import CustomModalHeader from "../ui/CustomModalHeader/CustomModalHeader";
 import { ModalContentContainer } from "../ui/styledComponents";
 import CustomButton from "../ui/CustomButton/CustomButton";
 
+/**
+ *  TaskGuidelineNeedsAuthorizedAdmin component
+ *  @param {boolean} isModalOpen - Modal Open State
+ *  @param {function} closeModal - Close Modal Event Handler
+ *  @param {array} modalData - Modal Data
+ *  @returns {JSX.Element}
+ *  @description TaskGuidelineNeedsAuthorizedAdmin component to render task guideline needs authorized by admin modal
+ */
+
 const TaskGuidelineNeedsAuthorizedAdmin = ({
     isModalOpen,
     closeModal,
     modalData,
-    isLoading,
 }) => {
     const [inputData, setInputData] = React.useState(modalData);
+
+    // Handle Input Change
     const handleInputChange = (item, value) => {
         const updatedData = inputData.map((data) => {
             if (data.id === item.id) {
@@ -36,7 +46,7 @@ const TaskGuidelineNeedsAuthorizedAdmin = ({
                 title="Task Guideline Needs to be Authorized by Admin"
                 closeModal={closeModal}
             />
-            <ModalContentContainer className="mt-2">
+            <ModalContentContainer className="mt-2 borderRadiusBottom">
                 <div className="d-flex justify-content-center align-items-center TGABAHeaderContainer">
                     <h6>Submitted Information</h6>
                 </div>

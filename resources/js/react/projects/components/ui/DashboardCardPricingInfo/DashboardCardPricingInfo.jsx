@@ -3,7 +3,11 @@ import PropTypes from "prop-types";
 
 // style
 import "./dashboardCardPricingInfo.css";
+
+// helper
 import { handleLoadingComponent } from "../../../helper";
+
+// loader
 import TextLoaderDynamic from "../../loader/TextLoaderDynamic";
 
 const DashboardCardPricingInfo = ({

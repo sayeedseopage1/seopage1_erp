@@ -1,12 +1,13 @@
 import React from "react";
 import PropTypes from "prop-types";
 
-const PersonAvatar = ({ avatar, name, url }) => {
+const PersonAvatar = ({ avatar, name, url, imageClass = "", imageParentClass = "" }) => {
     return (
         <div className="d-flex align-items-center">
             <div className="">
                 {avatar ? (
                     <div
+                        className={`${imageParentClass}`}
                         style={{
                             borderRadius: "4px",
                         }}
@@ -15,6 +16,7 @@ const PersonAvatar = ({ avatar, name, url }) => {
                             src={`/user-uploads/avatar/${avatar}`}
                             alt={name}
                             width="40px"
+                            className={`${imageClass}`}
                             onError={(e) => {
                                 e.target.src = "/img/avatar.png";
                                 e.target.alt =

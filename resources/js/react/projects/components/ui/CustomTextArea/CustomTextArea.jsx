@@ -3,6 +3,8 @@ import PropTypes from "prop-types";
 
 // style
 import "./customTextArea.css";
+
+// Components - Global
 import Switch from "../../../../global/Switch";
 
 // Helper
@@ -67,4 +69,8 @@ CustomTextArea.propTypes = {
     rows: PropTypes.number,
     cols: PropTypes.number,
     isRequired : PropTypes.bool,
+    parentClass: PropTypes.string,
+    isDisabled: PropTypes.bool,
+    isDangerHtml: PropTypes.bool,
+    className: PropTypes.string,
 };

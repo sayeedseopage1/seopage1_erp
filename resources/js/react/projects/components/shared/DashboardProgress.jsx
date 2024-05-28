@@ -16,6 +16,16 @@ import { ProjectProgressStatus } from "../../constants";
 // Modal
 import DeadlineChangeHistoryModal from "../modal/DeadlineChangeHistoryModal";
 
+/**
+ *
+ *  DashboardProgress component
+ *  @param {object} projectData - Project data
+ *  @param {object} style - Styles for the component
+ *  @param {string} className - Additional class name
+ *  @returns {JSX.Element}
+ *  @description DashboardProgress component to render project progress
+ */
+
 const DashboardProgress = ({ projectData, style, className = "" }) => {
     const [isDeadlineHistoryModalOpen, setIsDeadlineHistoryOpen] =
         React.useState(false);

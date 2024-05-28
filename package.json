@@ -8,7 +8,7 @@
         "hot": "mix watch --hot",
         "prod": "npm run production",
         "production": "mix --production",
-        "test": "jest --detectOpenHandles"
+        "test": "jest --coverage --all "
     },
     "devDependencies": {
         "@ckeditor/ckeditor5-alignment": "^38.0.1",
@@ -47,6 +47,7 @@
         "@smastrom/react-rating": "^1.3.1",
         "@tanstack/react-table": "^8.8.5",
         "@testing-library/react": "^15.0.7",
+        "@testing-library/user-event": "^14.5.2",
         "antd": "^5.17.2",
         "antd-style": "^3.6.2",
         "autolinker": "^4.0.0",
