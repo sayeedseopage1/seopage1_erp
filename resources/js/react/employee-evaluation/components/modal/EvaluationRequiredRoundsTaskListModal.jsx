@@ -53,6 +53,7 @@ import React from "react";
 import { ratingHoverText } from "../../../utils/ratingHoverText";
 
 const EvaluationRequiredRoundsTaskListModal = ({
+    round,
     isEvaluationModal,
     setIsEvaluationModal,
     singleEvaluation,
@@ -98,18 +99,10 @@ const EvaluationRequiredRoundsTaskListModal = ({
     );
 
     const [tasksList, setTaskList] = useState([]);
-    const Tasks = data?.data;
+    const Tasks = data?.data.filter((task) => task.round === round);
 
     useEffect(() => {
-        setTaskList(
-            Tasks.filter((task) => {
-                const taskCreatedAt = new Date(task.created_at);
-                return (
-                    taskCreatedAt >= new Date(singleEvaluation?.start_date) &&
-                    taskCreatedAt <= new Date(singleEvaluation?.exp_date)
-                );
-            })
-        );
+        setTaskList(Tasks);
     }, [singleEvaluation, Tasks]);
 
     let tasksToRate = [];
@@ -118,7 +111,7 @@ const EvaluationRequiredRoundsTaskListModal = ({
     // set average rating and calculating if all tasks are rated to enable confirm submission for lead developer
     useEffect(() => {
         if (data && data?.data) {
-            const tasks = data?.data;
+            const tasks = data?.data.filter((task) => task.round === round);
             //filter tasks to rate based on total_min and submission_date not null
             tasksToRate = tasks?.filter((task) => {
                 return (
