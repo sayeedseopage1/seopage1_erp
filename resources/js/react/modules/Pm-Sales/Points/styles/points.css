@@ -54,6 +54,11 @@
     padding: 18px 0px;
 }
 
+.point_table_data strong {
+    color: #1492E6;
+    font-weight: 400;
+}
+
 .point_table_data_neg {
     color: #F66;
 }
