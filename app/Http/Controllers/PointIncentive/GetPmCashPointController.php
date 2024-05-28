@@ -39,7 +39,7 @@ class GetPmCashPointController extends Controller
                 return $query->where($fieled_name, '!=', 0);
             })
             ->orderBy('cash_points.id', 'desc')
-            ->paginate(10)
+            ->paginate($request->per_page??10)
         ]);
     }
 }
