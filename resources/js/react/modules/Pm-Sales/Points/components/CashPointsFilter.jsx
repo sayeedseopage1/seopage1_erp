@@ -20,15 +20,15 @@ import DeptFilter from './Filter/DeptFilter.jsx';
 import EmployeeFilter from './Filter/EmployeeFilter.jsx';
 import CreditDebitFilter from './Filter/CreditDebitFilter.jsx';
 import pointIcon from '../assets/point1.svg'
-
+import { auth } from '../constants/index.js';
+import userIcon from '../assets/tag-user.svg'
 
 
 export default function CashPointsFilter({
-    setData,
-    setIsDataFetching
+    setQuery
 }) {
-    const [query, setQuery] = useState({});
-    const auth = useAuth();
+
+    // const auth = useAuth();
     const [dept, setDept] = useState(1);
     // get pm by department 
     const { data: pmByDept, isFetching: isPmByDeptLoading } = useGetPmByDeptQuery(dept)
@@ -47,21 +47,9 @@ export default function CashPointsFilter({
     // const [employeeLoading, setEmployeeLoading] = useState(true);
     // const [project, setProject] = useState(null);
 
-    // table data
-    const { data: pmCashPoints, isLoading: dataFetchingStateIsLoading } = useGetPmCashPointsQuery(query)
-    const tableData = pmCashPoints?.data?.data
-
-    // set table data
-    useEffect(() => {
-        setIsDataFetching(dataFetchingStateIsLoading);
-        if (tableData && !dataFetchingStateIsLoading) {
-            setData(tableData);
-            setIsDataFetching(false)
-        }
-    }, [tableData, dataFetchingStateIsLoading])
 
     useEffect(() => {
-        if (pmByDeptData && !isPmByDeptLoading) {
+        if (auth?.isHasRolePermission(1) && pmByDeptData && !isPmByDeptLoading) {
             setSelectedEmployee(pmByDeptData[0]?.id);
             setQuery(prevQuery => ({ ...prevQuery, user_id: pmByDeptData[0]?.id }));
         }
@@ -72,6 +60,7 @@ export default function CashPointsFilter({
     // console.log("end", endDate)
     // console.log("selectedEmployee", selectedEmployee)
     // console.log("creditDebit", creditDebit)
+    // console.log(auth)
 
 
     // sidebar
@@ -97,6 +86,12 @@ export default function CashPointsFilter({
             user_id: selectedEmployee
         }));
     }, [startDate, endDate, dept, creditDebit, selectedEmployee]);
+
+    useEffect(() => {
+        if (auth?.isHasRolePermission(4)) {
+            setQuery(prevQuery => ({ ...prevQuery, user_id: auth?.userId }));
+        }
+    }, [auth?.userId, startDate]);
 
     const handleDeptChange = (value) => {
         setDept(value);
@@ -125,15 +120,34 @@ export default function CashPointsFilter({
                     onApply={() => { }}
                 />
             </FilterItem>
-            <FilterItem className='border-right-0 hide'>
-                <DeptFilter department={depAndEmployees?.department} handleChange={handleDeptChange} isFetching={isDepAndEmployeesFetching} />
-            </FilterItem>
-            <FilterItem className='border-right-0 hide'>
-                <EmployeeFilter pmByDeptData={pmByDeptData} handleChange={handlePmChange} isFetching={isPmByDeptLoading} />
-            </FilterItem>
-            <FilterItem className='border-right-0 hide'>
-                <CreditDebitFilter handleChange={handleCreditDebitChange} />
-            </FilterItem>
+
+            {
+                auth?.isHasRolePermission(1) && <>
+                    <FilterItem className='border-right-0 hide'>
+                        <DeptFilter department={depAndEmployees?.department} handleChange={handleDeptChange} isFetching={isDepAndEmployeesFetching} />
+                    </FilterItem>
+                    <FilterItem className='border-right-0 hide'>
+                        <EmployeeFilter pmByDeptData={pmByDeptData} handleChange={handlePmChange} isFetching={isPmByDeptLoading} />
+                    </FilterItem>
+                    <FilterItem className='border-right-0 hide'>
+                        <CreditDebitFilter handleChange={handleCreditDebitChange} />
+                    </FilterItem>
+                </>
+            }
+            {
+                auth?.isHasRolePermission(4) && <>
+                    <FilterItem className='border-right-0 hide'>
+                        <div className='point_selector_container'>
+                            <div className='point_selector_label_container'>
+                                <img src={userIcon} alt="User Icon" style={{ width: '17px', height: '17px' }} />
+                                <span className='point_selector_label'>Employee:</span>
+                            </div>
+                            <span className='point_selector_item' style={{ color: '#B1B1B1', marginLeft: '4px' }}>{auth?.name}</span>
+                        </div>
+                    </FilterItem>
+                </>
+            }
+
             <FilterItem className='border-right-0 hide'>
                 <div className='point_selector_container'>
                     <div className='point_selector_label_container'>
@@ -146,7 +160,7 @@ export default function CashPointsFilter({
 
             {/* sidebar */}
             {
-                Number(window?.Laravel?.user?.role_id) === 1 &&
+                auth?.isHasRolePermission(1) &&
                 <div className='sp1__pp_filter_sidebar_container'>
                     <div
                         className='sp1__pp_filter_sidebar_toggle'
@@ -157,7 +171,7 @@ export default function CashPointsFilter({
                     </div>
 
                     {
-                        Number(window?.Laravel?.user?.role_id === 1) && sidebarIsOpen && (
+                        auth?.isHasRolePermission(1) && sidebarIsOpen && (
                             <aside className='sp1__pp_filter_sidebar'>
                                 <div className='sp1__pp_filter_sidebar_header'>
                                     <span>Filters</span>
@@ -193,15 +207,6 @@ export default function CashPointsFilter({
                                         </div>
                                     </FilterItem>
 
-
-                                    {/* <FilterItem className='hide d-flex align-items-center w-100 border-right-0'>
-                                        <span className='mr-2 w-100'>Credit/Debit: <span className='d-block font-weight-bold border py-2 px-2 w-100' >Point Earned </span> </span>
-                                    </FilterItem>
-
-                                    <FilterItem className='hide d-flex align-items-center w-100 border-right-0'>
-                                        <span className='mr-2 w-100'>Points gained as: <span className='d-block font-weight-bold border py-2 px-2 w-100'>Individual</span> </span>
-                                    </FilterItem> */}
-
                                 </div>
                             </aside>
                         )
@@ -211,7 +216,7 @@ export default function CashPointsFilter({
 
             {/* sidebar */}
             {
-                _.includes([7, 8], auth.getRoleId()) &&
+                auth.getRoleId(4) &&
                 <div className='sp1__pp_filter_sidebar_container'>
                     <div
                         className='sp1__pp_filter_sidebar_toggle'
@@ -222,7 +227,7 @@ export default function CashPointsFilter({
                     </div>
 
                     {
-                        _.includes([7, 8], auth.getRoleId()) && sidebarIsOpen && (
+                        auth.getRoleId(4) && sidebarIsOpen && (
                             <aside className='sp1__pp_filter_sidebar'>
                                 <div className='sp1__pp_filter_sidebar_header'>
                                     <span>Filters</span>
@@ -237,6 +242,15 @@ export default function CashPointsFilter({
                                 </div>
 
                                 <div className="sp1__pp_filter_sidebar_items">
+                                    <FilterItem className='w-100 border-right-0'>
+                                        <div className='point_selector_container'>
+                                            <div className='point_selector_label_container'>
+                                                <img src={userIcon} alt="User Icon" style={{ width: '17px', height: '17px' }} />
+                                                <span className='point_selector_label'>Employee:</span>
+                                            </div>
+                                            <span className='point_selector_item' style={{ color: '#B1B1B1', marginLeft: '4px' }}>{auth?.name}</span>
+                                        </div>
+                                    </FilterItem>
                                     <FilterItem className='w-100 border-right-0'>
                                         <div className='point_selector_container'>
                                             <div className='point_selector_label_container'>

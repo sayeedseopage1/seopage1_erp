@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState } from 'react';
+import React, { createContext, useContext, useEffect, useMemo, useState } from 'react';
 import {
     closestCenter,
     DndContext,
@@ -19,6 +19,7 @@ import moment from 'moment/moment';
 import PointHistoryTableLoader from '../loader/PointHistoryTableLoader';
 import upArrowIcon from '../../assets/upArrow.svg';
 import downArrowIcon from '../../assets/downArrow.svg';
+import PointHistoryTablePagination from '../PointHistoryTablePagination';
 
 
 const DragIndexContext = createContext({ active: -1, over: -1 });
@@ -61,18 +62,21 @@ const baseColumns = [
     {
         title: 'ID',
         dataIndex: 'id',
+        key: 'id',
         render: (text) => <span className='point_table_data'>{text}</span>,
         sorter: (a, b) => a.id - b.id,
     },
     {
         title: 'Date',
         dataIndex: 'created_at',
+        key: 'created_at',
         render: (text) => <span className='point_table_data'>{moment(text).format("DD-MM-YYYY")}</span>,
         sorter: (a, b) => moment(a.created_at).unix() - moment(b.created_at).unix(),
     },
     {
         title: 'Actions',
         dataIndex: 'activity',
+        key: 'activity',
         render: (text) => {
             if (text) {
                 return <span className='point_table_data' dangerouslySetInnerHTML={{ __html: text }} />
@@ -84,6 +88,7 @@ const baseColumns = [
     {
         title: 'Point earned',
         dataIndex: 'total_points_earn',
+        key: 'total_points_earn',
         render: (text) => <div className='point_table_data point_table_data_arrow'>
             <p>{text}</p>
             <img src={parseFloat(text) > 0 ? upArrowIcon : downArrowIcon} alt="up/down" />
@@ -94,6 +99,7 @@ const baseColumns = [
     {
         title: 'Point Lost',
         dataIndex: 'total_points_lost',
+        key: 'total_points_lost',
         render: (text) => <span className={`${parseFloat(text) > 0 ? 'point_table_data_neg' : ''} point_table_data`}>{text}</span>,
         sorter: (a, b) => parseFloat(a.total_points_lost) - parseFloat(b.total_points_lost),
         align: 'center'
@@ -101,14 +107,57 @@ const baseColumns = [
     {
         title: 'Balance Point',
         dataIndex: 'cumulative_balance',
+        key: 'cumulative_balance',
         render: (text) => <span className={`${parseFloat(text) < 1 ? 'point_table_data_neg' : ''} point_table_data`}>{text}</span>,
         sorter: (a, b) => parseFloat(a.cumulative_balance) - parseFloat(b.cumulative_balance),
         align: 'center'
     },
 ];
 
-const PointHistoryTable = ({ data, isLoading }) => {
+const PointHistoryTable = ({ data, isLoading, onPageChange }) => {
     const [dragIndex, setDragIndex] = useState({ active: -1, over: -1 });
+    const [skipPageReset, setSkipPageReset] = useState(false);
+    const [{ pageIndex, pageSize }, setPagination] = useState({
+        pageIndex: 0,
+        pageSize: 10,
+    });
+
+
+    // on pagination
+    const handlePageChange = ({ selected }) => {
+        const paginate = {
+            pageIndex: selected,
+            pageSize,
+        };
+
+        setPagination({ ...paginate, pageIndex: 0 });
+        onPageChange(paginate);
+    };
+
+    // handle page size change
+    const handlePageSizeChange = (e) => {
+        e.preventDefault();
+
+        const paginate = {
+            pageIndex,
+            pageSize: e.target.value,
+        };
+        setPagination({ ...paginate, pageIndex: 0 });
+        onPageChange(paginate);
+    };
+
+    // pagination
+    // const pagination = useMemo(
+    //     () => ({ pageIndex, pageSize }),
+    //     [pageIndex, pageSize]
+    // );
+
+    // clear skipPageReset
+    useEffect(() => {
+        if (skipPageReset) {
+            setSkipPageReset(false);
+        }
+    }, [data]);
 
     const [columns, setColumns] = useState(() =>
         baseColumns.map((column, i) => ({
@@ -150,10 +199,10 @@ const PointHistoryTable = ({ data, isLoading }) => {
     };
 
     if (isLoading) {
-        return <table className='cnx__table_body'><PointHistoryTableLoader /></table>
+        return <table className='cnx__table_body'><tbody><PointHistoryTableLoader /></tbody></table>
     }
 
-    const rowClassName = (record, index) => (index % 2 === 0 ? 'table-row-odd' : '');
+    const rowClassName = (_record, index) => (index % 2 === 0 ? 'table-row-odd' : '');
 
     return (
         <div className="cnx__table_wrapper" style={{ padding: '16px' }}>
@@ -176,9 +225,9 @@ const PointHistoryTable = ({ data, isLoading }) => {
                     <SortableContext items={columns.map((i) => i.key)} strategy={horizontalListSortingStrategy}>
                         <DragIndexContext.Provider value={dragIndex}>
                             <Table
-                                rowKey="key"
+                                rowKey="id"
                                 columns={columns}
-                                dataSource={data}
+                                dataSource={data?.data}
                                 components={{
                                     header: { cell: TableHeaderCell },
                                     body: { cell: TableBodyCell },
@@ -196,9 +245,12 @@ const PointHistoryTable = ({ data, isLoading }) => {
                     </DragOverlay>
                 </DndContext>
             </ConfigProvider>
-            <div>
-                Pagination will add here
-            </div>
+            <PointHistoryTablePagination
+                tableData={data}
+                handlePageSizeChange={handlePageSizeChange}
+                handlePageChange={handlePageChange}
+                pageSize={pageSize}
+            />
         </div>
     );
 };

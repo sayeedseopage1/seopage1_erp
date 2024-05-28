@@ -55,11 +55,13 @@ const pmSalesApiSlice = apiSlice.injectEndpoints({
                         ...(data?.point_type && {
                             point_type: data.point_type,
                         }),
+                        ...(data?.limit && { limit: data.limit }),
+                        ...(data?.page && { page: data.page }),
                     });
                 }
 
                 return {
-                    url: `/account/get-pm-cashpoint?${searchParams}`,
+                    url: `/account/get-pm-cashpoint?${searchParams.toString()}`,
                     method: "GET",
                 };
             },
