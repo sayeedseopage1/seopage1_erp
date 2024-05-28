@@ -278,13 +278,6 @@ class EvaluationController extends AccountBaseController
         $employee_evaluation->identiey_issues = $request->identiey_issues;
         $employee_evaluation->dedication = $request->dedication;
         $employee_evaluation->obedience = $request->obedience;
-        // $total_ratings = array_sum([
-        //     $request->communication,$request->professionalism,$request->identiey_issues,$request->dedication,$request->obedience
-        // ]);
-        // $number_of_ratings = count([
-        //     $request->communication,$request->professionalism,$request->identiey_issues,$request->dedication,$request->obedience
-        // ]);
-        // $average_rating = $number_of_ratings > 0 ? $total_ratings / $number_of_ratings : 0;
         $employee_evaluation->lead_dev_avg_rating = $avg_rating;
         $employee_evaluation->save();
 
@@ -506,27 +499,6 @@ class EvaluationController extends AccountBaseController
             $evaluation->managements_auth_at = Carbon::now();
             $evaluation->employee_status = 3;
             $evaluation->save();
-
-            $history = new EvaluationHistory();
-            $history->user_id = $evaluation->user_id;  
-            $history->start_date = $evaluation->start_date;  
-            $history->exp_date = $evaluation->exp_date;  
-            $history->communication = $evaluation->communication;  
-            $history->professionalism = $evaluation->professionalism;  
-            $history->identiey_issues = $evaluation->identiey_issues;  
-            $history->dedication = $evaluation->dedication;  
-            $history->obedience = $evaluation->obedience;  
-            $history->lead_dev_avg_rating = $evaluation->lead_dev_avg_rating;  
-            $history->team_lead_cmnt = $evaluation->team_lead_cmnt;  
-            $history->managements_cmnt = $evaluation->managements_cmnt;  
-            $history->managements_decision = $evaluation->managements_decision;  
-            $history->managements_id = $evaluation->managements_id;  
-            $history->managements_name = $evaluation->managements_name;  
-            $history->managements_auth_at = $evaluation->managements_auth_at;  
-            $history->accept_rejected = $evaluation->accept_rejected;  
-            $history->ld_submission_status = $evaluation->ld_submission_status;  
-            $history->employee_status = $evaluation->employee_status;  
-            $history->save();
 
             $evaluation_task = EmployeeEvaluationTask::where('user_id',$request->user_id)->first();
             $actions = PendingAction::where('code','TLSDE')->where('task_id',$evaluation_task->task_id)->where('past_status',0)->get();
@@ -832,7 +804,11 @@ class EvaluationController extends AccountBaseController
     }
     public function EmployeeEvaluationHistory($id)
     {
-        $history = EvaluationHistory::where('user_id', $id)->orderBy('id', 'desc')->get();
+        $history = EvaluationHistory::select('evaluation_histories.*','tasks.id as task_id')
+        ->leftJoin('sub_tasks', 'evaluation_histories.user_id', '=', 'sub_tasks.assigned_to')
+        ->leftJoin('tasks', 'sub_tasks.task_id', '=', 'tasks.id')
+        ->where('user_id', $id)
+        ->get();
 
         return response()->json([
             'status' => 200,
