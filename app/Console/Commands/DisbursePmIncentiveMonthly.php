@@ -12,6 +12,7 @@ use App\Models\TaskRevision;
 use Illuminate\Console\Command;
 use App\Models\ProjectMilestone;
 use App\Models\IncentiveCriteria;
+use Illuminate\Support\Facades\DB;
 use App\Models\ProgressiveIncentive;
 
 class DisbursePmIncentiveMonthly extends Command
@@ -127,10 +128,22 @@ class DisbursePmIncentiveMonthly extends Command
             ->where('project_milestones.status','!=','canceled')
             ->whereBetween('project_milestones.created_at', [$startDate, $endDate])
             ->sum('project_milestones.cost');
-            $obtainedIncentive[] = Incentive::progressiveStore(8, $user->id, $upsale_amount, $now);
+            $upsale_amount_incentive = Incentive::progressiveStore(8, $user->id, $upsale_amount, $now);
             // End
             
-            dd($obtainedIncentive);
+            // Bonus points based on released amount
+            $released_amount_this_month = DB::table('users')
+            ->join('projects', 'users.id', '=', 'projects.pm_id')
+            ->join('project_milestones', 'projects.id', '=', 'project_milestones.project_id')
+            ->join('payments', 'project_milestones.invoice_id', '=', 'payments.invoice_id')
+            //->whereNotNull('project_milestones.invoice_id')
+            ->whereBetween('payments.paid_on', [$startDate, $endDate])
+            ->where('payments.added_by', $user->id)
+            ->whereNot('project_milestones.status', 'canceled')
+            ->where('projects.project_status','Accepted')
+            ->sum('project_milestones.cost');
+            $bonus_points = Incentive::progressiveStore(9, $user->id, $released_amount_this_month, $now);
+            // End
             
             // if (in_array(0, $obtainedIncentive)) {
             //     dd(0);

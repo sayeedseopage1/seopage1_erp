@@ -182,7 +182,7 @@ const AddNewItemsModal = ({
                                     value={newFactorData?.lower_limit}
                                     onChange={handleChange}
                                     placeholder="Write Here"
-                                    disabled={(!newFactorData?.infiniteValueUp && newFactorData?.infiniteValueDown)}
+                                // disabled={(!newFactorData?.infiniteValueUp && newFactorData?.infiniteValueDown)}
                                 />
                                 {newFactorDataValidation?.lower_limit && (
                                     <p className="text-danger">
@@ -221,8 +221,8 @@ const AddNewItemsModal = ({
                                     value={newFactorData?.upper_limit}
                                     onChange={handleChange}
                                     placeholder="Write Here"
-                                    // title={newFactorData?.lower_limit ? "Upper limit must be greater than lower limit" : "Please enter lower limit first"}
-                                    disabled={(newFactorData?.infiniteValueUp && !newFactorData?.infiniteValueDown)}
+                                // title={newFactorData?.lower_limit ? "Upper limit must be greater than lower limit" : "Please enter lower limit first"}
+                                // disabled={(newFactorData?.infiniteValueUp && !newFactorData?.infiniteValueDown)}
                                 />
                                 {newFactorDataValidation?.upper_limit && (
                                     <p className="text-danger">

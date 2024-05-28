@@ -1,8 +1,10 @@
 <?php
 
+use Carbon\Carbon;
 use App\Models\Project;
 use Route as GlobalRoute;
 use App\Models\ProjectTimeLog;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\CrossDeptWork;
 use App\Helper\ProjectManagerPointLogic;
@@ -193,16 +195,16 @@ use App\Http\Controllers\TicketEmailSettingController;
 use App\Http\Controllers\NotificationSettingController;
 use App\Http\Controllers\Payment\FlutterwaveController;
 use App\Http\Controllers\ProjectManagerPointController;
+
 use App\Http\Controllers\ProjectTemplateTaskController;
 use App\Http\Controllers\ProjectTimelogBreakController;
-
 use App\Http\Controllers\NonCashPointSettingsController;
 use App\Http\Controllers\TicketReplyTemplatesController;
 use App\Http\Controllers\DatabaseBackupSettingController;
 use App\Http\Controllers\EmployeeShiftScheduleController;
+
 use App\Http\Controllers\GoogleCalendarSettingController;
 use App\Http\Controllers\IncomeVsExpenseReportController;
-
 use App\Http\Controllers\KnowledgeBaseCategoryController;
 use App\Http\Controllers\OfflinePaymentSettingController;
 use App\Http\Controllers\Payment\StripeWebhookController;
@@ -211,14 +213,14 @@ use App\Http\Controllers\ProjectTemplateSubTaskController;
 use App\Http\Controllers\PointIncentive\CriteriaController;
 use App\Http\Controllers\PaymentGatewayCredentialController;
 use App\Http\Controllers\EmployeeShiftChangeRequestController;
+use App\Http\Controllers\PointIncentive\IncentiveTypeController;
 use App\Http\Controllers\PointIncentive\GetPmCashPointController;
+use App\Http\Controllers\PointIncentive\IncentiveFactorController;
 use App\Http\Controllers\PointIncentive\PmIncentiveViewController;
-use App\Http\Controllers\PointIncentive\GetPmPointCriteriaController;
-use App\Http\Controllers\PointIncentive\GetCriteriaWiseFactorController;
 use App\Http\Controllers\PointIncentive\GetPmByDepartmentController;
 use App\Http\Controllers\PointIncentive\IncentiveCriteriaController;
-use App\Http\Controllers\PointIncentive\IncentiveFactorController;
-use App\Http\Controllers\PointIncentive\IncentiveTypeController;
+use App\Http\Controllers\PointIncentive\GetPmPointCriteriaController;
+use App\Http\Controllers\PointIncentive\GetCriteriaWiseFactorController;
 
 /*
 |--------------------------------------------------------------------------
@@ -1869,8 +1871,54 @@ Route::get('test-point/{factorId}/{projectId}/{comparable_value}', function($fac
 });
 
 Route::get('test-calculation/{taskId}', function ($taskId){
-    $task = \App\Models\Task::find($taskId);
-    $task->board_column_id = $task->board_column_id == 6 ? 8 : 6;
-    $task->save();
-    dd('Success');
+    $startDate = Carbon::now()->startOfMonth();
+    $endDate = Carbon::now()->endOfMonth();
+    $user_id = 209;
+    
+    $released_amount_this_month = DB::table('users')
+    ->join('projects', 'users.id', '=', 'projects.pm_id')
+    ->join('project_milestones', 'projects.id', '=', 'project_milestones.project_id')
+    ->join('payments', 'project_milestones.invoice_id', '=', 'payments.invoice_id')
+    //->whereNotNull('project_milestones.invoice_id')
+    ->whereBetween('payments.paid_on', [$startDate, $endDate])
+    ->where('payments.added_by', $user_id)
+    ->whereNot('project_milestones.status', 'canceled')
+    ->where('projects.project_status','Accepted')
+    ->sum('project_milestones.cost');
+
+    $remain_unreleased_amount_last_months = DB::table('projects')
+    ->join('project_milestones', 'projects.id', '=', 'project_milestones.project_id')
+    ->leftJoin('payments', 'project_milestones.invoice_id', '=', 'payments.invoice_id')
+    ->where('project_milestones.created_at', '<', $startDate)
+    ->where(function ($q1) use ($startDate) {
+        $q1->whereNull('payments.paid_on')
+            ->orWhere('payments.paid_on', '>', $startDate);
+    })
+    ->whereNot('project_milestones.status', 'canceled')
+    ->where('projects.pm_id', $user_id)
+    ->where('projects.project_status','Accepted')
+    ->sum('project_milestones.cost');
+
+    $assigned_amount_this_month = Project::join('project_milestones', 'projects.id', '=', 'project_milestones.project_id')
+    ->where('projects.pm_id', $user_id)
+    ->whereBetween('project_milestones.created_at', [$startDate, $endDate])
+    ->where('projects.project_status','Accepted')
+    ->sum('cost');
+    
+    $released_amount_this_month_assigned = DB::table('users')
+    ->join('projects', 'users.id', '=', 'projects.pm_id')
+    ->join('project_milestones', 'projects.id', '=', 'project_milestones.project_id')
+    ->join('payments', 'project_milestones.invoice_id', '=', 'payments.invoice_id')
+    //->whereNotNull('project_milestones.invoice_id')
+    ->whereBetween('project_milestones.created_at', [$startDate, $endDate])
+    ->whereBetween('payments.paid_on', [$startDate, $endDate])
+    ->where('payments.added_by', $user_id)
+    ->whereNot('project_milestones.status', 'canceled')
+    ->where('projects.project_status','Accepted')
+    ->sum('project_milestones.cost');
+
+    // $task = \App\Models\Task::find($taskId);
+    // $task->board_column_id = $task->board_column_id == 6 ? 8 : 6;
+    // $task->save();
+    // dd('Success');
 });

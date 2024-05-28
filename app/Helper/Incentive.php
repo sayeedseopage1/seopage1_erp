@@ -9,6 +9,7 @@ use App\Models\CashPoint;
 use App\Models\TaskRevision;
 use App\Models\ProjectMilestone;
 use App\Models\IncentiveCriteria;
+use Illuminate\Support\Facades\DB;
 use App\Models\ProgressiveIncentive;
 
 class Incentive
@@ -103,10 +104,21 @@ class Incentive
                 ->join('projects','projects.id','project_milestones.project_id')
                 ->join('deals','deals.id','projects.deal_id')
                 ->where('deals.project_type','fixed')
-                ->where('projects.pm_id', 209)
-                ->where('project_milestones.added_by', 209)
+                ->where('projects.pm_id', $user_id)
+                ->where('project_milestones.added_by', $user_id)
                 ->where('project_milestones.status','!=','canceled')
                 ->whereBetween('project_milestones.created_at', [$startDate, $endDate])
+                ->sum('project_milestones.cost');
+                self::findIncentive($incentiveCriteria);
+            }elseif($incentiveCriteria->id == 9){
+                $incentiveCriteria->acquired_percent = DB::table('users')
+                ->join('projects', 'users.id', '=', 'projects.pm_id')
+                ->join('project_milestones', 'projects.id', '=', 'project_milestones.project_id')
+                ->join('payments', 'project_milestones.invoice_id', '=', 'payments.invoice_id')
+                ->whereBetween('payments.paid_on', [$startDate, $endDate])
+                ->where('payments.added_by', $user_id)
+                ->whereNot('project_milestones.status', 'canceled')
+                ->where('projects.project_status','Accepted')
                 ->sum('project_milestones.cost');
                 self::findIncentive($incentiveCriteria);
             }

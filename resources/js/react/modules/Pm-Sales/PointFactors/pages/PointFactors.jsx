@@ -222,6 +222,7 @@ const PointFactors = () => {
                 points: parseFloat(newFactorData?.points) ?? null,
                 status: parseInt(newFactorData?.status) ?? 1,
             }
+            // console.log("payload", payload)
             const response = await createPmPointFactor(payload).unwrap();
 
             if (response?.status == 200) {
@@ -257,19 +258,19 @@ const PointFactors = () => {
 
 
 
-    useEffect(() => {
-        if (newFactorData?.infiniteValueDown) {
-            if (newFactorData?.lower_limit && !newFactorData?.infiniteValueUp && !newFactorData?.upper_limit) {
-                setNewFactorData(prev => ({ ...prev, lower_limit: newFactorData.lower_limit }));
-            }
-            if (newFactorData?.upper_limit && !newFactorData?.infiniteValueUp) {
-                setNewFactorData(prev => ({ ...prev, lower_limit: newFactorData.upper_limit }));
-            }
-        }
-        if (newFactorData?.infiniteValueUp && newFactorData?.lower_limit && !newFactorData?.infiniteValueDown) {
-            setNewFactorData(prev => ({ ...prev, upper_limit: newFactorData.lower_limit }));
-        }
-    }, [newFactorData?.infiniteValueUp, newFactorData?.infiniteValueDown, newFactorData?.lower_limit, newFactorData?.upper_limit]);
+    // useEffect(() => {
+    //     if (newFactorData?.infiniteValueDown) {
+    //         if (newFactorData?.lower_limit && !newFactorData?.infiniteValueUp && !newFactorData?.upper_limit) {
+    //             setNewFactorData(prev => ({ ...prev, lower_limit: newFactorData.lower_limit }));
+    //         }
+    //         if (newFactorData?.upper_limit && !newFactorData?.infiniteValueUp) {
+    //             setNewFactorData(prev => ({ ...prev, lower_limit: newFactorData.upper_limit }));
+    //         }
+    //     }
+    //     if (newFactorData?.infiniteValueUp && newFactorData?.lower_limit && !newFactorData?.infiniteValueDown) {
+    //         setNewFactorData(prev => ({ ...prev, upper_limit: newFactorData.lower_limit }));
+    //     }
+    // }, [newFactorData?.infiniteValueUp, newFactorData?.infiniteValueDown, newFactorData?.lower_limit, newFactorData?.upper_limit]);
 
     return (
         <section>
