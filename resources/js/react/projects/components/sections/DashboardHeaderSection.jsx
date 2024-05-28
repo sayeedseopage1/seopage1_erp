@@ -17,7 +17,7 @@ import TaskGuidelineNeedsAuthorizedAdmin from "../modal/TaskGuidelineNeedsAuthor
 // WN - WorkingEnvironment;
 // TGABA - TaskGuidelineNeedsAuthorizedByAdmin;
 
-const DashboardHeaderSection = ({ projectData, isLoading }) => {
+const DashboardHeaderSection = ({ projectData, isLoading, setDummyTypeChange }) => {
     const [isWNModalOpen, setIsWNModalOpen] = React.useState(false);
     const [isTGABAModalOpen, setIsTGABAModalOpen] = React.useState(false);
 
@@ -40,7 +40,9 @@ const DashboardHeaderSection = ({ projectData, isLoading }) => {
                     Working Environment
                 </Button>
                 <Button
-                    onClick={() => {}}
+                    onClick={() => {
+                        setDummyTypeChange((prev) => (prev === 0 ? 1 : 0));
+                    }}
                     className={`${style?.dashboardHeaderForType} ml-2`}
                 >
                     Project Type: {projectData.projectType}
@@ -129,4 +131,5 @@ export default DashboardHeaderSection;
 
 DashboardHeaderSection.propTypes = {
     projectData: PropTypes.object,
+    setDummyTypeChange: PropTypes.func,
 };

@@ -8,9 +8,36 @@ export const SectionWrapper = styled.div`
   background-color: ${props => props.theme.colors.sectionBg};
   border-radius: 9px;
 
-  @media (max-width: 768px) {
-    padding: 16px;
+
+  &.projectHourlyContainer{
+    display: flex;
   }
+
+  
+  @media (min-width: 769px) and (max-width: 1459px) {
+    &.projectHourlyContainer {
+      display: flex;
+      flex-direction: column;
+    }
+    .projectHourlyRightContainer{
+      padding-left: 0px !important;
+      padding-top: 16px !important;
+      flex-direction: row !important;
+    }
+  }
+
+  @media screen and (max-width: 768px) {
+    .projectHourlyRightContainer{
+      padding-left: 0px !important;
+      padding-top: 16px !important;
+      flex-direction: column !important;
+    }
+    &.projectHourlyContainer {
+      display: flex;
+      flex-direction: column;
+    }
+  }
+
 `
 
 export const SectionContainer = styled.div`
@@ -248,6 +275,13 @@ export const CardWrapper = styled.div`
     }
   }
 
+  &.estimateHourlyRateContainer{
+      display: flex;
+      flex-direction: row !important;
+  }
+
+
+
   @media (min-width: 1590px) and (max-width: 1920px) {
     &.earningExpensesCard{
        .dashboardCardPricingInfo:nth-child(3){
@@ -256,6 +290,14 @@ export const CardWrapper = styled.div`
     }
 
   }
+  @media screen and (max-width: 1890px) {
+    &.estimateHourlyRateContainer{
+      display: flex;
+      flex-direction: column !important;
+    }
+  }
+
+
   @media (min-width: 1069px) and (max-width: 1589px) {
     &.estimatedTimeHoursLoggedCard{
       flex: 0 0 34%;

@@ -30,8 +30,8 @@ import TextLoaderDynamic from "../loader/TextLoaderDynamic";
 const DashboardProjectInfoHourlySection = ({ projectData, isLoading }) => {
     return (
         <React.Fragment>
-            <SectionWrapper className="my-4 row m-0">
-                <div className="d-flex flex-column col-12 col-md-8 px-0">
+            <SectionWrapper className="my-4 m-0 projectHourlyContainer">
+                <div className={`px-0 ${style.projectHourlyLeft}`}>
                     <div className="d-flex row px-0 h-100 m-0">
                         <div
                             className="d-flex flex-column col-12 col-md-3 px-0"
@@ -214,9 +214,9 @@ const DashboardProjectInfoHourlySection = ({ projectData, isLoading }) => {
                         </div>
                     </div>
                 </div>
-                <div className="d-flex flex-column col-12 col-md-4 px-0">
+                <div className={`px-0 ${style.projectHourlyRight}`}>
                     <div
-                        className="col-12 d-flex flex-column px-0 pl-md-3 pr-md-0 mt-3 mt-md-0"
+                        className="col-12 d-flex flex-column px-0 pl-md-3 pr-md-0 mt-3 mt-md-0 projectHourlyRightContainer"
                         style={{
                             gap: "16px",
                         }}
@@ -224,9 +224,9 @@ const DashboardProjectInfoHourlySection = ({ projectData, isLoading }) => {
                         <CardWrapper
                             color="#ffffff"
                             gap="16px"
-                            className="d-flex flex-column flex-md-row"
+                            className="d-flex flex-row estimateHourlyRateContainer"
                         >
-                            <div>
+                            <div className="w-100 w-md-50">
                                 <DashboardCardTitle
                                     title="Estimated Hours (Set 1)"
                                     isBorderUse={true}
@@ -249,7 +249,7 @@ const DashboardProjectInfoHourlySection = ({ projectData, isLoading }) => {
                                     </div>
                                 </div>
                             </div>
-                            <div>
+                            <div className="w-100 w-md-50">
                                 <DashboardCardTitle
                                     title="Hourly Rate"
                                     isBorderUse={true}

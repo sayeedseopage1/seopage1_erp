@@ -13,23 +13,25 @@ import DashboardProjectInfoHourlySection from "../components/sections/DashboardP
 // Constants
 import { ProjectData, projectData } from "../constants";
 
-
 // Components - UI - Custom
 import Switch from "../../global/Switch";
 
-
 const ProjectDashboard = () => {
-    const projectData = ProjectData[1];
+    const [dummyTypeChange, setDummyTypeChange] = React.useState(0);
+    const projectData = ProjectData[dummyTypeChange];
     const [isLoading, setIsLoading] = React.useState(false);
 
-    
     setTimeout(() => {
         setIsLoading(false);
     }, 16000);
 
     return (
         <section>
-            <DashboardHeaderSection isLoading={isLoading} projectData={projectData} />
+            <DashboardHeaderSection
+                setDummyTypeChange={setDummyTypeChange}
+                isLoading={isLoading}
+                projectData={projectData}
+            />
             <Switch>
                 <Switch.Case condition={projectData?.projectType === "Fixed"}>
                     <DashboardProjectInfoFixedSection
@@ -44,11 +46,23 @@ const ProjectDashboard = () => {
                     />
                 </Switch.Case>
             </Switch>
-            <DashboardActionButtonSection projectData={projectData} isLoading={isLoading}  />
-            <DashboardTaskAndMileStoneSection isLoading={isLoading}  />
-            <DashboardFreelancerInfoSection isLoading={isLoading} projectData={projectData} />
-            <DashboardProjectGuideAndChallengeSection isLoading={isLoading} projectData={projectData} />
-            <DashboardSalesAndPMInfoSection isLoading={isLoading} projectData={projectData} />
+            <DashboardActionButtonSection
+                projectData={projectData}
+                isLoading={isLoading}
+            />
+            <DashboardTaskAndMileStoneSection isLoading={isLoading} />
+            <DashboardFreelancerInfoSection
+                isLoading={isLoading}
+                projectData={projectData}
+            />
+            <DashboardProjectGuideAndChallengeSection
+                isLoading={isLoading}
+                projectData={projectData}
+            />
+            <DashboardSalesAndPMInfoSection
+                isLoading={isLoading}
+                projectData={projectData}
+            />
         </section>
     );
 };
