@@ -40,7 +40,7 @@ export default function CashPointsFilter({
     const [endDate, setEndDate] = useState(null);
     const [client, setClient] = useState(null);
     const [type, setType] = useState(null);
-    const [creditDebit, setCreditDebit] = useState(null);
+    const [creditDebit, setCreditDebit] = useState("");
 
     // const [selectedShift, setSelectedShift] = useState(null);
     const [selectedEmployee, setSelectedEmployee] = useState("");
@@ -49,7 +49,7 @@ export default function CashPointsFilter({
 
     // table data
     const { data: pmCashPoints, isLoading: dataFetchingStateIsLoading } = useGetPmCashPointsQuery(query)
-    const tableData = pmCashPoints?.data
+    const tableData = pmCashPoints?.data?.data
 
     // set table data
     useEffect(() => {

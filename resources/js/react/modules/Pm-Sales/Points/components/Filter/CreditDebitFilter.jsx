@@ -5,7 +5,7 @@ const CreditDebitFilter = ({ handleChange }) => {
     const creditOrDebit = [
         {
             id: 0,
-            value: null,
+            value: '',
             label: 'All'
         },
         {

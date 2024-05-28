@@ -3,6 +3,8 @@ import DataTable from '../ui/DataTable'
 import CashPointsFilter from '../components/CashPointsFilter';
 import PointPageNavbar from '../components/Navbar';
 import { TableColumns } from '../ui/TableColumns';
+import PointHistoryTable from '../components/table/PointHistoryTable';
+import PointHistoryTableLoader from '../components/loader/PointHistoryTableLoader';
 
 const PmCashPoints = () => {
     // const [totalPointData, setTotalPointData] = React.useState({});
@@ -22,12 +24,14 @@ const PmCashPoints = () => {
             <div className='sp1_point_page_container'>
                 <PointPageNavbar />
                 <main className='sp1_point_page_main'>
-                    <div className="" style={{ padding: '16px' }}>
-                        <DataTable
+                    <div className="cnx__table_wrapper" style={{ padding: '16px' }}>
+                        {/* <DataTable
                             data={data}
                             isLoading={isDataFetching}
                             defaultColumns={TableColumns}
-                        />
+                        /> */}
+
+                        <PointHistoryTable data={data} isLoading={isDataFetching} />
                     </div>
                 </main>
             </div>
