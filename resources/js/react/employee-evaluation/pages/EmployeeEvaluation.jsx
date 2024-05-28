@@ -85,7 +85,7 @@ const EmployeeEvaluation = () => {
         setPagination(paginate);
     };
 
-    console.log("filter data", filter);
+    // console.log("filter data", filter);
     return (
         <>
             <EvaluationTableFilterBar setFilter={setFilter} />

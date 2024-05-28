@@ -139,7 +139,7 @@ const EvaluationTaskListModal = ({
                     .length;
             setIsAllTaskRated(isAllTaskRated);
 
-            console.log(tasksToRate, cumulativeSum, average, isAllTaskRated);
+            // console.log(tasksToRate, cumulativeSum, average, isAllTaskRated);
         }
     }, [latestRoundTasks]);
 
@@ -345,7 +345,7 @@ const EvaluationTaskListModal = ({
                 );
             });
     };
-    console.log("single evalu", singleEvaluation);
+
     return (
         <ReactModal
             style={{

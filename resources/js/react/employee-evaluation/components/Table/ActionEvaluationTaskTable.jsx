@@ -10,7 +10,11 @@ import EvaluationRatingPopover from "./EvaluationRatingPopover";
 import EvaluationRatingModal from "../modal/EvaluationRatingModal";
 const ActionEvaluationTaskTable = ({ data }) => {
     const hideEvaluationButton =
-        Number(data?.total_min) < 60 && data?.submission_date === null;
+        Number(data?.total_min) < 60 &&
+        (data?.submission_date === null ||
+            data?.task_board_column_id == 1 ||
+            data?.task_board_column_id == 2 ||
+            data?.task_board_column_id == 3);
     const auth = useAuth();
     const [isSingleEvaluationModalOpen, setSingleEvaluationModalOpen] =
         useState(false);

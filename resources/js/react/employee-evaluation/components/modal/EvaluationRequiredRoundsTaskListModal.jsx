@@ -338,7 +338,7 @@ const EvaluationRequiredRoundsTaskListModal = ({
                 );
             });
     };
-    console.log("taskLists", tasksList);
+    // console.log("taskLists", tasksList);
     return (
         <ReactModal
             style={{

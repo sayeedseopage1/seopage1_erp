@@ -15,7 +15,7 @@ const AverageRatingRevision = ({ data }) => {
     const singleTask = Task?.data[0];
     const [isRatingModalOpen, setIsRatingModalOpen] = useState(false);
 
-    console.log("single task", singleTask);
+    // console.log("single task", singleTask);
     const formFields = [
         {
             label: "Quality of work (in the first chance)",
