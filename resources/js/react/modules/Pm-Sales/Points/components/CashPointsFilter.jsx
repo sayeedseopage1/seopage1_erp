@@ -216,7 +216,7 @@ export default function CashPointsFilter({
 
             {/* sidebar */}
             {
-                auth.getRoleId(4) &&
+                auth?.isHasRolePermission(4) &&
                 <div className='sp1__pp_filter_sidebar_container'>
                     <div
                         className='sp1__pp_filter_sidebar_toggle'
@@ -227,7 +227,7 @@ export default function CashPointsFilter({
                     </div>
 
                     {
-                        auth.getRoleId(4) && sidebarIsOpen && (
+                        auth?.isHasRolePermission(4) && sidebarIsOpen && (
                             <aside className='sp1__pp_filter_sidebar'>
                                 <div className='sp1__pp_filter_sidebar_header'>
                                     <span>Filters</span>
