@@ -329,6 +329,7 @@ const EvaluationTaskListModal = ({
         await adminExtended({
             user_id: singleEvaluation.user_id,
             managements_cmnt: adminComment,
+            task_id: singleEvaluation.task_id,
             _token: document
                 .querySelector("meta[name='csrf-token']")
                 .getAttribute("content"),
@@ -344,6 +345,7 @@ const EvaluationTaskListModal = ({
                 );
             });
     };
+    console.log("single evalu", singleEvaluation);
     return (
         <ReactModal
             style={{
