@@ -814,7 +814,7 @@ class TimelogController extends AccountBaseController
 
     public function stopTimer(Request $request)
     {
-    // dd($request);
+    // dd($request->all());
      if(Auth::user()->role_id == 1)
      {
         $timeId = $request->timeId;
