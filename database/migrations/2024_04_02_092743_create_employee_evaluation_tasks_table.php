@@ -30,6 +30,7 @@ return new class extends Migration
             $table->decimal('speed_of_work')->nullable();
             $table->decimal('understand_instruction')->nullable();
             $table->integer('lead_dev_id')->nullable();
+            $table->integer('round')->nullable();
             $table->longText('lead_dev_cmnt')->nullable();
             $table->decimal('avg_rating')->nullable();
             $table->integer('status')->default(0);

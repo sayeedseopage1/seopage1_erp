@@ -579,87 +579,121 @@ class EvaluationController extends AccountBaseController
             ]);
 
         }else{
-            $evaluation = EmployeeEvaluation::where('user_id',$request->user_id)->first();
-            $old_exp_date = $evaluation->exp_date;
-            $evaluation->managements_cmnt = $request->managements_cmnt;
-            $evaluation->managements_decision = 'One more week';
-            $evaluation->accept_rejected = Carbon::now();
-            $evaluation->exp_date = Carbon::parse($evaluation->exp_date)->addHours(1); 
-            $evaluation->managements_id = Auth::user()->id;
-            $evaluation->managements_name = Auth::user()->name;
-            $evaluation->managements_auth_at = Carbon::now();
-            $evaluation->employee_status = 2;
-            $evaluation->save();
-
-            $history = new EvaluationHistory();
-            $history->user_id = $evaluation->user_id;  
-            $history->exp_date = $old_exp_date;  
-            $history->communication = $evaluation->communication;  
-            $history->professionalism = $evaluation->professionalism;  
-            $history->identiey_issues = $evaluation->identiey_issues;  
-            $history->dedication = $evaluation->dedication;  
-            $history->obedience = $evaluation->obedience;  
-            $history->lead_dev_avg_rating = $evaluation->lead_dev_avg_rating;
-            $history->managements_decision = $evaluation->managements_decision;  
-            $history->managements_id = $evaluation->managements_id;  
-            $history->managements_name = $evaluation->managements_name;  
-            $history->managements_auth_at = $evaluation->managements_auth_at;  
-            $history->accept_rejected = $evaluation->accept_rejected;  
-            $history->pending_action_sending_time = $evaluation->pending_action_sending_time;  
-            $history->ld_submission_status = $evaluation->ld_submission_status;  
-            $history->lead_dev_id = $evaluation->lead_dev_id;  
-            $history->team_lead_id = $evaluation->team_lead_id;  
-            $history->lead_dev_acknowledged = $evaluation->lead_dev_acknowledged;  
-            $history->team_lead_acknowledged = $evaluation->team_lead_acknowledged;  
-            $history->team_lead_cmnt_at = $evaluation->team_lead_cmnt_at;  
-            $history->team_lead_status = $evaluation->team_lead_status;  
-            $history->employee_status = $evaluation->employee_status;  
-            $history->save();
-
-            $evaluation_task = EmployeeEvaluationTask::where('user_id',$request->user_id)->first();
-            $actions = PendingAction::where('code','TLSDE')->where('task_id',$evaluation_task->task_id)->where('past_status',0)->get();
-            if($actions != null)
+            DB::transaction(function () use ($request) 
             {
-                foreach ($actions as $key => $action) {
-                $action->authorized_by= Auth::id();
-                $action->authorized_at= Carbon::now();
-                $action->past_status = 1;
-                $action->save();
-                $authorize_by= User::where('id',$action->authorized_by)->first();
-                $teamLead= User::where('id',$evaluation->team_lead_id)->first();
-                $dev= User::where('id',$evaluation->user_id)->first();
-                    
-                $past_action= new PendingActionPast();
-                $past_action->item_name = $action->item_name;
-                $past_action->code = $action->code;
-                $past_action->serial = $action->serial;
-                $past_action->action_id = $action->id;
-                $past_action->heading= 'Top Management '.$authorize_by->name.' has extended the trial period for New Developer '.$dev->name.'!';
-                $past_action->message = 'Top Management <a href="'.route('employees.show',$authorize_by->id).'">'.$authorize_by->name.'</a> has extended the trial period for one more week for New Developer <a href="'.route('employees.show',$dev->id).'">'.$dev->name.'</a> from ';
-                $past_action->timeframe = $action->timeframe;
-                $past_action->authorization_for = $action->authorization_for;
-                $past_action->authorized_by = $action->authorized_by;
-                $past_action->authorized_at = $action->authorized_at;
-                $past_action->expired_status = $action->expired_status;
-                $past_action->past_status = $action->past_status;
-                $past_action->task_id = $action->task_id;
-                $past_action->developer_id = $action->developer_id;
-                $past_action->client_id = $action->client_id;
-                $button = [
-                    [
-                        'button_name' => 'See Evaluations',
-                        'button_color' => 'primary',
-                        'button_type' => 'redirect_url',
-                        'button_url' => route('employee-evaluation.index'),
-                        'button_url' => route('employee-evaluation.index', ['user_id' => $dev->id, 'show' => 'all']),
-                    ],
-                ];
-                $past_action->button = json_encode($button);
-                $past_action->save();
+                // DB::beginTransaction();
+                $evaluation = EmployeeEvaluation::where('user_id',$request->user_id)->first();
+                $old_exp_date = $evaluation->exp_date;
+                $evaluation->managements_cmnt = $request->managements_cmnt;
+                $evaluation->managements_decision = 'One more week';
+                $evaluation->accept_rejected = Carbon::now();
+                $evaluation->exp_date = Carbon::parse($evaluation->exp_date)->addHours(1); 
+                $evaluation->managements_id = Auth::user()->id;
+                $evaluation->managements_name = Auth::user()->name;
+                $evaluation->managements_auth_at = Carbon::now();
+                $evaluation->employee_status = 2;
+                $evaluation->save();
+
+                // dd($evaluation);
+
+                $history = new EvaluationHistory();
+                $history->user_id = $evaluation->user_id;  
+                $history->start_date = $evaluation->start_date;  
+                $history->exp_date = $old_exp_date;  
+                $history->communication = $evaluation->communication;  
+                $history->professionalism = $evaluation->professionalism;  
+                $history->identiey_issues = $evaluation->identiey_issues;  
+                $history->dedication = $evaluation->dedication;  
+                $history->obedience = $evaluation->obedience;  
+                $history->team_lead_cmnt = $evaluation->team_lead_cmnt;  
+                $history->managements_cmnt = $evaluation->managements_cmnt;  
+                $history->lead_dev_avg_rating = $evaluation->lead_dev_avg_rating;
+                $history->managements_decision = $evaluation->managements_decision;  
+                $history->managements_id = $evaluation->managements_id;  
+                $history->managements_name = $evaluation->managements_name;  
+                $history->managements_auth_at = $evaluation->managements_auth_at;  
+                $history->accept_rejected = $evaluation->accept_rejected;  
+                $history->pending_action_sending_time = $evaluation->pending_action_sending_time;  
+                $history->ld_submission_status = $evaluation->ld_submission_status;  
+                $history->lead_dev_id = $evaluation->lead_dev_id;  
+                $history->team_lead_id = $evaluation->team_lead_id;  
+                $history->lead_dev_acknowledged = $evaluation->lead_dev_acknowledged;  
+                $history->team_lead_acknowledged = $evaluation->team_lead_acknowledged;  
+                $history->team_lead_cmnt_at = $evaluation->team_lead_cmnt_at;  
+                $history->team_lead_status = $evaluation->team_lead_status;  
+                $history->employee_status = $evaluation->employee_status;  
+                $history->save();
+
+                $evaluation_task = EmployeeEvaluationTask::where('user_id',$request->user_id)->first();
+                $actions = PendingAction::where('code','TLSDE')->where('task_id',$evaluation_task->task_id)->where('past_status',0)->get();
+                if($actions != null)
+                {
+                    foreach ($actions as $key => $action) {
+                    $action->authorized_by= Auth::id();
+                    $action->authorized_at= Carbon::now();
+                    $action->past_status = 1;
+                    $action->save();
+                    $authorize_by= User::where('id',$action->authorized_by)->first();
+                    $teamLead= User::where('id',$evaluation->team_lead_id)->first();
+                    $dev= User::where('id',$evaluation->user_id)->first();
+                        
+                    $past_action= new PendingActionPast();
+                    $past_action->item_name = $action->item_name;
+                    $past_action->code = $action->code;
+                    $past_action->serial = $action->serial;
+                    $past_action->action_id = $action->id;
+                    $past_action->heading= 'Top Management '.$authorize_by->name.' has extended the trial period for New Developer '.$dev->name.'!';
+                    $past_action->message = 'Top Management <a href="'.route('employees.show',$authorize_by->id).'">'.$authorize_by->name.'</a> has extended the trial period for one more week for New Developer <a href="'.route('employees.show',$dev->id).'">'.$dev->name.'</a> from ';
+                    $past_action->timeframe = $action->timeframe;
+                    $past_action->authorization_for = $action->authorization_for;
+                    $past_action->authorized_by = $action->authorized_by;
+                    $past_action->authorized_at = $action->authorized_at;
+                    $past_action->expired_status = $action->expired_status;
+                    $past_action->past_status = $action->past_status;
+                    $past_action->task_id = $action->task_id;
+                    $past_action->developer_id = $action->developer_id;
+                    $past_action->client_id = $action->client_id;
+                    $button = [
+                        [
+                            'button_name' => 'See Evaluations',
+                            'button_color' => 'primary',
+                            'button_type' => 'redirect_url',
+                            'button_url' => route('employee-evaluation.index'),
+                            'button_url' => route('employee-evaluation.index', ['user_id' => $dev->id, 'show' => 'all']),
+                        ],
+                    ];
+                    $past_action->button = json_encode($button);
+                    $past_action->save();
+                    }
                 }
-            }
-            $helper = new HelperPendingActionController();
-            $helper->evaluationExtendForAdmin($evaluation_task->id);
+                $helper = new HelperPendingActionController();
+                $helper->evaluationExtendForAdmin($evaluation_task->id);
+
+                
+                $evaluation->communication = null;
+                $evaluation->professionalism = null;
+                $evaluation->identiey_issues = null;
+                $evaluation->dedication = null;
+                $evaluation->obedience = null;
+                $evaluation->lead_dev_avg_rating = null;
+                $evaluation->team_lead_cmnt = null;
+                $evaluation->managements_cmnt = null;
+                $evaluation->managements_decision = null;
+                $evaluation->managements_id = null;
+                $evaluation->managements_name = null;
+                $evaluation->managements_auth_at = null;
+                $evaluation->accept_rejected = null;
+                $evaluation->pending_action_sending_time = null;
+                $evaluation->ld_submission_status = 0;
+                $evaluation->lead_dev_id = null;
+                $evaluation->team_lead_id = null;
+                $evaluation->team_lead_cmnt_at = null;
+                $evaluation->team_lead_status = 0;
+                $evaluation->employee_status = 0; 
+                $evaluation->save();
+
+                // dd($evaluation);
+            });
 
             return response()->json([
                 'message' => 'Top management extend successfully',

@@ -16,6 +16,7 @@ return new class extends Migration
         Schema::create('evaluation_histories', function (Blueprint $table) {
             $table->id();
             $table->integer('user_id');
+            $table->dateTime('start_date')->nullable();
             $table->dateTime('exp_date')->nullable();
             $table->decimal('communication')->nullable();
             $table->decimal('professionalism')->nullable();

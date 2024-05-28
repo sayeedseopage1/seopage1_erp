@@ -28,6 +28,7 @@ use Illuminate\Support\Facades\DB;
 use App\Models\AuthorizationAction;
 use Illuminate\Support\Facades\Storage;
 use App\Http\Requests\SubTask\StoreSubTask;
+use App\Models\EvaluationHistory;
 use App\Notifications\PrimaryPageNotification;
 
 class SubTaskController extends AccountBaseController
@@ -523,11 +524,13 @@ class SubTaskController extends AccountBaseController
             /**EMPLOYEE EVALUATION START */
             $taskFind = Task::where('subtask_id',$subTask->id)->where('u_id',null)->where('independent_task_status',1)->first(); //Find SubTask
             if($taskFind != null){
+                $evaluation_history = EvaluationHistory::where('user_id', $subTask->assigned_to)->count();
                 $evaluation_task = new EmployeeEvaluationTask();
                 $evaluation_task->user_id = $subTask->assigned_to;
                 $evaluation_task->task_id = $taskFind->id;
                 $evaluation_task->task_name = $taskFind->heading;
                 $evaluation_task->assign_date = $taskFind->created_at;
+                $evaluation_task->round = $evaluation_history + 1;
                 $evaluation_task->save();
             }
             /**EMPLOYEE EVALUATION END */
