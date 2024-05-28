@@ -676,6 +676,7 @@ class EvaluationController extends AccountBaseController
 
 
         $evaluation_task = EmployeeEvaluationTask::where('user_id',$request->user_id)->first();
+        $evaluation_history = EvaluationHistory::where('user_id', $request->user_id)->first();
         $actions = PendingAction::where('developer_id',$request->user_id)->whereIn('code', ['EAFA', 'ERFA', 'EEFA'])->where('past_status',0)->get();
         // dd($actions);
         if($actions != null)
@@ -687,6 +688,10 @@ class EvaluationController extends AccountBaseController
             $action->save();
             $authorize_by= User::where('id',$action->authorized_by)->first();
             $top_management= User::where('id',$evaluation->managements_id)->first();
+            if($top_management == null)
+            {
+                $top_management = User::where('id', $evaluation_history->managements_id)->first();
+            }
             $dev= User::where('id',$evaluation->user_id)->first();
                 
             $past_action= new PendingActionPast();
@@ -698,11 +703,13 @@ class EvaluationController extends AccountBaseController
             {
                 $past_action->heading= 'New Developer '.$dev->name.' was authorize for real work by Top Management '.$authorize_by->name.'!';
                 $past_action->message = 'Top Management <a href="'.route('employees.show',$authorize_by->id).'">'.$authorize_by->name.'</a> has authorized New Developer <a href="'.route('employees.show',$dev->id).'">'.$dev->name.'</a> for real work from ';
-            }elseif($evaluation->employee_status == 2)
+            }
+            if($evaluation_history->employee_status == 2)
             {
                 $past_action->heading= 'Top Management '.$top_management->name.' has extended & created a new task for the trial period for New Developer '.$dev->name.'!';
                 $past_action->message = 'Top Management <a href="'.route('employees.show',$top_management->id).'">'.$top_management->name.'</a> has extended & created a new task for New Developer <a href="'.route('employees.show',$dev->id).'">'.$dev->name.'</a> from ';
-            }else{
+            }
+            if ($evaluation->employee_status == 3) {
                 $past_action->heading= 'New Developer '.$dev->name.' was rejected for real work by Top Management '.$top_management->name.'!';
                 $past_action->message = 'Top Management <a href="'.route('employees.show',$top_management->id).'">'.$top_management->name.'</a> has authorized New Developer <a href="'.route('employees.show',$dev->id).'">'.$dev->name.'</a> for real work from ';
             }
