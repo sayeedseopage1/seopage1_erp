@@ -37,7 +37,7 @@
 
 }
 
-/* @media screen and (max-width: 1589px) {
+@media (min-width: 1251px) and (max-width: 1589px) {
   .clientInfoCard {
     flex: 0 0 25%;
     max-width: 25%;
@@ -53,26 +53,118 @@
     max-width: 25%;
     justify-content: space-between;
   }
+
   .timeEarningInfoCard {
     flex: 0 0 100%;
     max-width: 100%;
-    padding-left: 0px; 
+    padding-left: 0px;
     padding-top: 16px;
-  }
-  .timeEarningInfoCard div:first-child {
-    width: 40%;
-    flex-direction: column !important;
+    display: flex;
+    flex-direction: row !important;
   }
 
-}  */
+  .estimatedTimeHoursLoggedCard {
+    width: 45% !important;
+    max-width: 45% !important;
+  }
+
+  .earningExpensesCard {
+    width: 55% !important;
+    max-width: 55% !important;
+  }
+}
 
 
+@media (min-width: 769px) and (max-width: 1250px) {
+  .clientInfoCard {
+    flex: 0 0 35%;
+    max-width: 35%;
+  }
 
+  .projectProgressInfoCard {
+    flex: 0 0 65%;
+    max-width: 65%;
+    padding-right: 0px !important;
+  }
+
+
+  .projectBudgetInfoCard {
+    flex: 0 0 100%;
+    max-width: 100%;
+    padding-left: 0px;
+    padding-top: 16px;
+    display: flex;
+    flex-direction: row !important;
+    gap: 16px !important;
+  }
+
+  .timeEarningInfoCard {
+    flex: 0 0 100%;
+    max-width: 100%;
+    padding-left: 0px;
+    padding-top: 16px;
+    display: flex;
+    flex-direction: row !important;
+  }
+
+  .estimatedTimeHoursLoggedCard {
+    width: 45% !important;
+    max-width: 45% !important;
+  }
+
+  .earningExpensesCard {
+    width: 55% !important;
+    max-width: 55% !important;
+  }
+}
+
+/* @media (min-width:769px) and (max-width: 840px){
+  .clientInfoCard {
+    flex: 0 0 35%;
+    max-width: 35%;
+  }
+
+  .projectProgressInfoCard {
+    flex: 0 0 65%;
+    max-width: 65%;
+    padding-right: 0px !important;
+  }
+
+  .projectBudgetInfoCard {
+    flex: 0 0 100%;
+    max-width: 100%;
+    padding-left: 0px;
+    padding-top: 16px;
+    display: flex;
+    flex-direction: row !important;
+    gap: 16px !important;
+  }
+
+  .timeEarningInfoCard {
+    flex: 0 0 100%;
+    max-width: 100%;
+    padding-left: 0px;
+    padding-top: 16px;
+    display: flex;
+    flex-direction: row !important;
+  }
+
+  .estimatedTimeHoursLoggedCard {
+    width: 45% !important;
+    max-width: 45% !important;
+  }
+
+  .earningExpensesCard {
+    width: 55% !important;
+    max-width: 55% !important;
+  }
+} */
 
 @media screen and (max-width: 768px) {
   .dashboardProgressStatusContainer {
     grid-template-columns: repeat(2, 1fr);
   }
+
   .clientInfoCard {
     flex: 0 0 100%;
     max-width: 100%;
@@ -82,6 +174,8 @@
   .projectProgressInfoCard {
     flex: 0 0 100%;
     max-width: 100%;
+    gap: 24px;
+    padding: 16px 0px !important;
   }
 
   .projectBudgetInfoCard {
@@ -90,10 +184,12 @@
     gap: 24px;
     justify-content: space-between;
   }
+
   .timeEarningInfoCard {
     flex: 0 0 100%;
     max-width: 100%;
     padding-left: 0px;
     gap: 24px;
+    flex-direction: column;
   }
 }

@@ -32,6 +32,19 @@
   line-height: normal;
 }
 
+@media (min-width: 1590px) and (max-width: 1920px){
+  
+} 
+
+
+@media screen and (max-width: 1589px) {
+  .dashboardCardPricingInfo h5 {
+    font-size: 14px;
+  }
+}
+
+
+
 @media screen and (max-width: 768px) {
   .dashboardCardPricingInfo:first-child {
     margin-bottom: 16px;

@@ -170,7 +170,7 @@ const DisputeProjectFromModal = ({
             isModalOpen={isModalOpen}
             closeModal={closeModal}
             isCentered={true}
-            width="70vw"
+            width="1344px"
             height="86vh"
             parentClassName="disputeProjectModal"
         >

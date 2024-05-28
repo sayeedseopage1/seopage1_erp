@@ -229,10 +229,11 @@ const DashboardProjectInfoFixedSection = ({ projectData }) => {
                 </div>
                 <div
                     className={`d-flex flex-column justify-content-between mt-4 mt-md-0  ${style.timeEarningInfoCard}`}
+                    id="timeEarningInfoCard"
                 >
                     <CardWrapper
                         color="#ffffff"
-                        className="d-flex justify-content-between flex-column flex-md-row"
+                        className="d-flex justify-content-between flex-column flex-md-row estimatedTimeHoursLoggedCard"
                     >
                         {ProjectBudgetData.hours_logged.map((logInfo) => (
                             <div
@@ -254,15 +255,14 @@ const DashboardProjectInfoFixedSection = ({ projectData }) => {
                     </CardWrapper>
                     <CardWrapper
                         color="#ffffff"
-                        className="d-flex flex-column"
+                        className="d-flex flex-column earningExpensesCard"
                     >
                         <DashboardCardTitle
                             title="Earnings & Expenses"
                             isBorderUse={true}
                         />
-                        <div className="d-flex justify-content-between py-3">
+                        <div className="d-flex justify-content-between flex-wrap py-3">
                             {ProjectBudgetData.earning_expenses
-                                .slice(0, 2)
                                 .map((moneyInfo) => (
                                     <DashboardCardPricingInfo
                                         key={moneyInfo.id}
@@ -276,7 +276,7 @@ const DashboardProjectInfoFixedSection = ({ projectData }) => {
                                     />
                                 ))}
                         </div>
-                        <div className="d-flex">
+                        {/* <div className="d-flex">
                             {ProjectBudgetData.earning_expenses
                                 .slice(2, 3)
                                 .map((moneyInfo) => (
@@ -291,7 +291,7 @@ const DashboardProjectInfoFixedSection = ({ projectData }) => {
                                         }
                                     />
                                 ))}
-                        </div>
+                        </div> */}
                     </CardWrapper>
                 </div>
             </SectionWrapper>

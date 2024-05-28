@@ -248,6 +248,35 @@ export const CardWrapper = styled.div`
     }
   }
 
+  @media (min-width: 1590px) and (max-width: 1920px) {
+    &.earningExpensesCard{
+       .dashboardCardPricingInfo:nth-child(3){
+        margin-top: 14px !important;
+       }
+    }
+
+  }
+  @media (min-width: 1069px) and (max-width: 1589px) {
+    &.estimatedTimeHoursLoggedCard{
+      flex: 0 0 34%;
+      max-width: 36%;
+    }
+    &.earningExpensesCard{
+      flex: 0 0 65%;
+      max-width: 66%;
+    }
+  }
+
+  @media (min-width: 769px) and (max-width: 1068px) {
+    &.estimatedTimeHoursLoggedCard{
+      flex: 0 0 40%;
+      max-width: 42%;
+    }
+    &.earningExpensesCard{
+      flex: 0 0 58%;
+      max-width: 60%;
+    }
+  }
 
   
 
@@ -725,6 +754,16 @@ export const ModalContentContainer = styled.div`
 
     div{
       width: 50%;
+    }
+
+    @media screen and (max-width: 768px) {
+      flex-direction: column;
+      gap: 10px;
+       
+      div{
+        width: 100%;
+      
+      }
     }
   }
 
