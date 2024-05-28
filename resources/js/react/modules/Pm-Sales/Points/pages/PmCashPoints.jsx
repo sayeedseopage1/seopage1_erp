@@ -4,6 +4,7 @@ import CashPointsFilter from '../components/CashPointsFilter';
 import PointPageNavbar from '../components/Navbar';
 import PointHistoryTable from '../components/table/PointHistoryTable';
 import { useGetPmCashPointsQuery } from '../../../../services/api/Pm-Sales/pmSalesApiSlice';
+import PointHistoryTablePagination from '../components/PointHistoryTablePagination';
 
 const PmCashPoints = () => {
     const [query, setQuery] = useState({});
@@ -16,10 +17,35 @@ const PmCashPoints = () => {
     const { data: pmCashPoints, isLoading: dataFetchingStateIsLoading } = useGetPmCashPointsQuery(query)
     const tableData = pmCashPoints?.data
 
-    const onPageChange = (paginate) => {
-        setPagination(paginate);
-        setQuery(prev => ({ ...prev, per_page: pageSize, page: pageIndex + 1 }));
-        // setQuery({ ...query, limit: pageSize, page: pageIndex + 1 });
+    // const onPageChange = (paginate) => {
+    //     setPagination(paginate);
+    //     setQuery(prev => ({ ...prev, per_page: pageSize, page: pageIndex + 1 }));
+    //     // setQuery({ ...query, limit: pageSize, page: pageIndex + 1 });
+    // };
+
+    const onPageChange = ({ selected }) => {
+        setPagination(prev => {
+            const newPagination = { ...prev, pageIndex: selected };
+            setQuery(prevQuery => ({
+                ...prevQuery,
+                per_page: newPagination.pageSize,
+                page: newPagination.pageIndex + 1,
+            }));
+            return newPagination;
+        });
+    };
+
+    const handlePageSizeChange = (e) => {
+        const newPageSize = parseInt(e.target.value, 10);
+        setPagination(prev => {
+            const newPagination = { ...prev, pageSize: newPageSize, pageIndex: 0 };
+            setQuery(prevQuery => ({
+                ...prevQuery,
+                per_page: newPageSize,
+                page: 1,
+            }));
+            return newPagination;
+        });
     };
 
     return (
@@ -39,6 +65,12 @@ const PmCashPoints = () => {
                         /> */}
 
                     <PointHistoryTable data={tableData} isLoading={dataFetchingStateIsLoading} onPageChange={onPageChange} />
+                    <PointHistoryTablePagination
+                        tableData={tableData}
+                        handlePageSizeChange={handlePageSizeChange}
+                        handlePageChange={onPageChange}
+                        pageSize={pageSize}
+                    />
                 </main>
             </div>
         </div>

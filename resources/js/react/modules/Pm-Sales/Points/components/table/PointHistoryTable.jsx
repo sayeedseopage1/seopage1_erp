@@ -90,7 +90,7 @@ const baseColumns = [
         dataIndex: 'total_points_earn',
         key: 'total_points_earn',
         render: (text) => <div className='point_table_data point_table_data_arrow'>
-            <p>{text}</p>
+            <p>{parseFloat(text)?.toFixed(2)}</p>
             <img src={parseFloat(text) > 0 ? upArrowIcon : downArrowIcon} alt="up/down" />
         </div>,
         sorter: (a, b) => parseFloat(a.total_points_earn) - parseFloat(b.total_points_earn),
@@ -100,7 +100,7 @@ const baseColumns = [
         title: 'Point Lost',
         dataIndex: 'total_points_lost',
         key: 'total_points_lost',
-        render: (text) => <span className={`${parseFloat(text) > 0 ? 'point_table_data_neg' : ''} point_table_data`}>{text}</span>,
+        render: (text) => <span className={`${parseFloat(text) > 0 ? 'point_table_data_neg' : ''} point_table_data`}>{parseFloat(text)?.toFixed(2)}</span>,
         sorter: (a, b) => parseFloat(a.total_points_lost) - parseFloat(b.total_points_lost),
         align: 'center'
     },
@@ -108,7 +108,7 @@ const baseColumns = [
         title: 'Balance Point',
         dataIndex: 'cumulative_balance',
         key: 'cumulative_balance',
-        render: (text) => <span className={`${parseFloat(text) < 1 ? 'point_table_data_neg' : ''} point_table_data`}>{text}</span>,
+        render: (text) => <span className={`${parseFloat(text) < 1 ? 'point_table_data_neg' : ''} point_table_data`}>{parseFloat(text)?.toFixed(2)}</span>,
         sorter: (a, b) => parseFloat(a.cumulative_balance) - parseFloat(b.cumulative_balance),
         align: 'center'
     },
@@ -116,35 +116,35 @@ const baseColumns = [
 
 const PointHistoryTable = ({ data, isLoading, onPageChange }) => {
     const [dragIndex, setDragIndex] = useState({ active: -1, over: -1 });
-    const [skipPageReset, setSkipPageReset] = useState(false);
-    const [{ pageIndex, pageSize }, setPagination] = useState({
-        pageIndex: 0,
-        pageSize: 10,
-    });
+    // const [skipPageReset, setSkipPageReset] = useState(false);
+    // const [{ pageIndex, pageSize }, setPagination] = useState({
+    //     pageIndex: 0,
+    //     pageSize: 10,
+    // });
 
 
     // on pagination
-    const handlePageChange = ({ selected }) => {
-        const paginate = {
-            pageIndex: selected,
-            pageSize,
-        };
+    // const handlePageChange = ({ selected }) => {
+    //     const paginate = {
+    //         pageIndex: selected,
+    //         pageSize,
+    //     };
 
-        setPagination({ ...paginate, pageIndex: 0 });
-        onPageChange(paginate);
-    };
+    //     setPagination({ ...paginate, pageIndex: 0 });
+    //     onPageChange(paginate);
+    // };
 
-    // handle page size change
-    const handlePageSizeChange = (e) => {
-        e.preventDefault();
+    // // handle page size change
+    // const handlePageSizeChange = (e) => {
+    //     e.preventDefault();
 
-        const paginate = {
-            pageIndex,
-            pageSize: e.target.value,
-        };
-        setPagination({ ...paginate, pageIndex: 0 });
-        onPageChange(paginate);
-    };
+    //     const paginate = {
+    //         pageIndex,
+    //         pageSize: e.target.value,
+    //     };
+    //     setPagination({ ...paginate, pageIndex: 0 });
+    //     onPageChange(paginate);
+    // };
 
     // pagination
     // const pagination = useMemo(
@@ -153,11 +153,11 @@ const PointHistoryTable = ({ data, isLoading, onPageChange }) => {
     // );
 
     // clear skipPageReset
-    useEffect(() => {
-        if (skipPageReset) {
-            setSkipPageReset(false);
-        }
-    }, [data]);
+    // useEffect(() => {
+    //     if (skipPageReset) {
+    //         setSkipPageReset(false);
+    //     }
+    // }, [data]);
 
     const [columns, setColumns] = useState(() =>
         baseColumns.map((column, i) => ({
@@ -245,12 +245,12 @@ const PointHistoryTable = ({ data, isLoading, onPageChange }) => {
                     </DragOverlay>
                 </DndContext>
             </ConfigProvider>
-            <PointHistoryTablePagination
+            {/* <PointHistoryTablePagination
                 tableData={data}
                 handlePageSizeChange={handlePageSizeChange}
                 handlePageChange={handlePageChange}
                 pageSize={pageSize}
-            />
+            /> */}
         </div>
     );
 };
