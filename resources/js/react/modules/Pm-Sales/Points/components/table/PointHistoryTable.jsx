@@ -14,9 +14,11 @@ import {
     SortableContext,
     useSortable,
 } from '@dnd-kit/sortable';
-import { Table } from 'antd';
+import { ConfigProvider, Table } from 'antd';
 import moment from 'moment/moment';
 import PointHistoryTableLoader from '../loader/PointHistoryTableLoader';
+import upArrowIcon from '../../assets/upArrow.svg';
+import downArrowIcon from '../../assets/downArrow.svg';
 
 
 const DragIndexContext = createContext({ active: -1, over: -1 });
@@ -55,52 +57,18 @@ const TableHeaderCell = (props) => {
     return <th {...props} ref={setNodeRef} style={style} {...attributes} {...listeners} />;
 };
 
-// const dataSource = [
-//     {
-//         key: '1',
-//         name: 'John Brown',
-//         gender: 'male',
-//         age: 32,
-//         email: 'John Brown@example.com',
-//         address: 'London No. 1 Lake Park',
-//     },
-//     {
-//         key: '2',
-//         name: 'Jim Green',
-//         gender: 'female',
-//         age: 42,
-//         email: 'jimGreen@example.com',
-//         address: 'London No. 1 Lake Park',
-//     },
-//     {
-//         key: '3',
-//         name: 'Joe Black',
-//         gender: 'female',
-//         age: 32,
-//         email: 'JoeBlack@example.com',
-//         address: 'Sidney No. 1 Lake Park',
-//     },
-//     {
-//         key: '4',
-//         name: 'George Hcc',
-//         gender: 'male',
-//         age: 20,
-//         email: 'george@example.com',
-//         address: 'Sidney No. 1 Lake Park',
-//     },
-// ];
-
 const baseColumns = [
     {
         title: 'ID',
         dataIndex: 'id',
         render: (text) => <span className='point_table_data'>{text}</span>,
-        sorter: (a, b) => a.id - b.id
+        sorter: (a, b) => a.id - b.id,
     },
     {
         title: 'Date',
         dataIndex: 'created_at',
-        render: (text) => <span className='point_table_data'>{moment(text).format("DD-MM-YYYY")}</span>
+        render: (text) => <span className='point_table_data'>{moment(text).format("DD-MM-YYYY")}</span>,
+        sorter: (a, b) => moment(a.created_at).unix() - moment(b.created_at).unix(),
     },
     {
         title: 'Actions',
@@ -111,22 +79,31 @@ const baseColumns = [
             } else {
                 return <span className='point_table_data'> N/A </span>
             }
-        }
+        },
     },
     {
         title: 'Point earned',
         dataIndex: 'total_points_earn',
-        render: (text) => <span className='point_table_data'>{text}</span>
+        render: (text) => <div className='point_table_data point_table_data_arrow'>
+            <p>{text}</p>
+            <img src={parseFloat(text) > 0 ? upArrowIcon : downArrowIcon} alt="up/down" />
+        </div>,
+        sorter: (a, b) => parseFloat(a.total_points_earn) - parseFloat(b.total_points_earn),
+        align: 'center'
     },
     {
         title: 'Point Lost',
         dataIndex: 'total_points_lost',
-        render: (text) => <span className='point_table_data'>{text}</span>
+        render: (text) => <span className={`${parseFloat(text) > 0 ? 'point_table_data_neg' : ''} point_table_data`}>{text}</span>,
+        sorter: (a, b) => parseFloat(a.total_points_lost) - parseFloat(b.total_points_lost),
+        align: 'center'
     },
     {
         title: 'Balance Point',
         dataIndex: 'cumulative_balance',
-        render: (text) => <span className='point_table_data'>{text}</span>
+        render: (text) => <span className={`${parseFloat(text) < 1 ? 'point_table_data_neg' : ''} point_table_data`}>{text}</span>,
+        sorter: (a, b) => parseFloat(a.cumulative_balance) - parseFloat(b.cumulative_balance),
+        align: 'center'
     },
 ];
 
@@ -176,35 +153,53 @@ const PointHistoryTable = ({ data, isLoading }) => {
         return <table className='cnx__table_body'><PointHistoryTableLoader /></table>
     }
 
+    const rowClassName = (record, index) => (index % 2 === 0 ? 'table-row-odd' : '');
+
     return (
-        <DndContext
-            sensors={sensors}
-            modifiers={[restrictToHorizontalAxis]}
-            onDragEnd={onDragEnd}
-            onDragOver={onDragOver}
-            collisionDetection={closestCenter}
-        >
-            <SortableContext items={columns.map((i) => i.key)} strategy={horizontalListSortingStrategy}>
-                <DragIndexContext.Provider value={dragIndex}>
-                    <Table
-                        rowKey="key"
-                        columns={columns}
-                        dataSource={data}
-                        components={{
-                            header: { cell: TableHeaderCell },
-                            body: { cell: TableBodyCell },
-                        }}
-                        pagination={false}
-                        scroll={{ x: 1024, y: 1000 }}
-                    />
-                </DragIndexContext.Provider>
-            </SortableContext>
-            <DragOverlay>
-                <th style={{ backgroundColor: 'gray', padding: 16 }}>
-                    {columns[columns.findIndex((i) => i.key === dragIndex.active)]?.title}
-                </th>
-            </DragOverlay>
-        </DndContext>
+        <div className="cnx__table_wrapper" style={{ padding: '16px' }}>
+            <ConfigProvider
+                theme={{
+                    components: {
+                        Table: {
+                            headerBg: '#fff'
+                        },
+                    },
+                }}
+            >
+                <DndContext
+                    sensors={sensors}
+                    modifiers={[restrictToHorizontalAxis]}
+                    onDragEnd={onDragEnd}
+                    onDragOver={onDragOver}
+                    collisionDetection={closestCenter}
+                >
+                    <SortableContext items={columns.map((i) => i.key)} strategy={horizontalListSortingStrategy}>
+                        <DragIndexContext.Provider value={dragIndex}>
+                            <Table
+                                rowKey="key"
+                                columns={columns}
+                                dataSource={data}
+                                components={{
+                                    header: { cell: TableHeaderCell },
+                                    body: { cell: TableBodyCell },
+                                }}
+                                pagination={false}
+                                scroll={{ x: 1024, y: 1000 }}
+                                rowClassName={rowClassName}
+                            />
+                        </DragIndexContext.Provider>
+                    </SortableContext>
+                    <DragOverlay>
+                        <th style={{ backgroundColor: 'gray', padding: 16 }}>
+                            {columns[columns.findIndex((i) => i.key === dragIndex.active)]?.title}
+                        </th>
+                    </DragOverlay>
+                </DndContext>
+            </ConfigProvider>
+            <div>
+                Pagination will add here
+            </div>
+        </div>
     );
 };
 

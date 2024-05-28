@@ -24,15 +24,14 @@ const PmCashPoints = () => {
             <div className='sp1_point_page_container'>
                 <PointPageNavbar />
                 <main className='sp1_point_page_main'>
-                    <div className="cnx__table_wrapper" style={{ padding: '16px' }}>
-                        {/* <DataTable
+
+                    {/* <DataTable
                             data={data}
                             isLoading={isDataFetching}
                             defaultColumns={TableColumns}
                         /> */}
 
-                        <PointHistoryTable data={data} isLoading={isDataFetching} />
-                    </div>
+                    <PointHistoryTable data={data} isLoading={isDataFetching} />
                 </main>
             </div>
         </div>
