@@ -348,7 +348,8 @@ const DashboardSalesAndPMInfoSection = ({ projectData, isLoading }) => {
                     <SectionContainer>
                         <DashboardCardTitle
                             title="Any other notes for the project manager/technical team"
-                            isBorderUse={false}
+                            isBorderUse={true}
+                            borderType="dotted"
                         />
                         {handleLoadingComponent(
                             isLoading,

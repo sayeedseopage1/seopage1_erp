@@ -23,7 +23,7 @@ const SingleButton = ({
     type = "primary",
     props,
 }) => {
-    const handleClass = () => {
+    const handleClass = (type) => {
         switch (type) {
             case "primary":
                 return style.customBtn_primary_active;

@@ -55,7 +55,7 @@ const DashboardProjectGuideAndChallengeSection = ({
                         />
                     </SectionContentContainer>,
                     <SectionContentContainer
-                        color="linear-gradient(0deg, #F2F9FE 0%, #F2F9FE 100%), #D9D9D9"
+                        color="#FFF"
                         maxHeight="35vh"
                         className="pt-3"
                         dangerouslySetInnerHTML={{
