@@ -6,6 +6,7 @@ import { Popover } from "antd";
 import { IoInformationCircle } from "react-icons/io5";
 import line18 from '../../assets/Line18.svg'
 import line19 from '../../assets/Line19.svg'
+import { rangesForLongValue, rangesForShortValue } from "../../constants/rangesColor";
 
 const IncentiveThickChart = ({ chartData }) => {
     const chartRef = useRef(null);
@@ -16,6 +17,8 @@ const IncentiveThickChart = ({ chartData }) => {
     //         return series.data.every(value => value === 0);
     //     });
     // };
+
+    console.log(chartData)
 
     const isAllZero = chartData?.incentive == 0;
 
@@ -131,7 +134,7 @@ const IncentiveThickChart = ({ chartData }) => {
         },
         yaxis: {
             // tickAmount: 5,
-            max: 120,
+            max: Math.max(...chartData?.series?.[0]?.data) > 10 ? 120 : 10,
             labels: {
                 formatter: (val) => `${val}%`,
                 style: {
@@ -142,7 +145,8 @@ const IncentiveThickChart = ({ chartData }) => {
 
                 }
             },
-            stepSize: 20
+            // stepSize: 20
+            stepSize: Math.max(...chartData?.series?.[0]?.data) > 10 ? 20 : 2,
         },
         dataLabels: {
             enabled: true,
@@ -171,28 +175,7 @@ const IncentiveThickChart = ({ chartData }) => {
                 columnWidth: "9px",
                 borderRadiusApplication: "last",
                 colors: {
-                    ranges: [
-                        {
-                            from: 0,
-                            to: 49.99,
-                            color: "#ff3300",
-                        },
-                        {
-                            from: 50,
-                            to: 59.99,
-                            color: "#ff704d",
-                        },
-                        {
-                            from: 60,
-                            to: 79.99,
-                            color: "#ffff00",
-                        },
-                        {
-                            from: 80,
-                            to: Number.MAX_SAFE_INTEGER,
-                            color: "#00cc00",
-                        },
-                    ],
+                    ranges: chartData?.id == 8 ? rangesForShortValue : rangesForLongValue
                 },
                 dataLabels: {
                     position: "top",
