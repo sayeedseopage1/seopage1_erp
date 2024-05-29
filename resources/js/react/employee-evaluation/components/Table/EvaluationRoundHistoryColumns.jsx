@@ -14,7 +14,7 @@ const auth = new User(window.Laravel.user);
 export const EvaluationRoundHistoryTableColumns = [
     {
         id: "id",
-        header: "Round",
+        header: "Round No.",
         accessorKey: "id",
         cell: ({ row }) => {
             return <div>Round-{row.index + 1}</div>;
