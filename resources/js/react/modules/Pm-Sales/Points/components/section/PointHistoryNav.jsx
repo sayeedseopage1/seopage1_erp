@@ -3,6 +3,7 @@ import React from 'react';
 import { Placeholder } from '../../../../../global/Placeholder';
 import { ButtonComponent } from '../../../PointFactors/components/Styles/ui/ui';
 
+// TODO: points will come from api
 const PointHistoryNav = ({ navActive, setNavActive, data, isLoading }) => {
     // const balancePoints = data?.reduce((prev, curr) => prev + Number(curr?.cumulative_balance), 0);
     const balancePoints = data?.length ? data[0]?.cumulative_balance : 0;
