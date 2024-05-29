@@ -63,6 +63,10 @@
     color: #F66;
 }
 
+.point_table_data_pos {
+    color: #70CA62;
+}
+
 .point_table_data_arrow {
     display: flex;
     align-items: center;
@@ -72,4 +76,47 @@
 
 .table-row-odd {
     background-color: #F2F9FE;
+}
+
+/* point history banner  */
+.point_history_nav_container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.point_history_banner {
+    border-radius: 8px;
+    background: #FFF;
+    padding: 5px 20px;
+    max-width: 963px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    flex: 1;
+}
+
+.point_history_banner_item {
+    color: #000;
+    font-family: Poppins, sans-serif;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.point_history_nav {
+    /* max-width: 589px; */
+    /* flex: 1; */
+    display: flex;
+    align-items: center;
+    gap: 17px;
+    justify-content: space-between;
 }

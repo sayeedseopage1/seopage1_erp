@@ -5,8 +5,10 @@ import PointPageNavbar from '../components/Navbar';
 import PointHistoryTable from '../components/table/PointHistoryTable';
 import { useGetPmCashPointsQuery } from '../../../../services/api/Pm-Sales/pmSalesApiSlice';
 import PointHistoryTablePagination from '../components/PointHistoryTablePagination';
+import PointHistoryNav from '../components/section/PointHistoryNav';
 
 const PmCashPoints = () => {
+    const [navActive, setNavActive] = useState("Cash Point");
     const [query, setQuery] = useState({});
     const [{ pageIndex, pageSize }, setPagination] = useState({
         pageIndex: 0,
@@ -50,7 +52,8 @@ const PmCashPoints = () => {
             />
 
             <div className='sp1_point_page_container'>
-                <PointPageNavbar />
+                {/* <PointPageNavbar /> */}
+                <PointHistoryNav navActive={navActive} setNavActive={setNavActive} data={tableData?.data} isLoading={dataFetchingStateIsLoading} />
                 <main className='sp1_point_page_main'>
 
                     {/* <DataTable
