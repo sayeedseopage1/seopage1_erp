@@ -21,9 +21,6 @@ const IncentiveBarChart = ({ chartData }) => {
         setIsIdealVsAchievedEditModalOpen(!isIdealVsAchievedEditModalOpen);
     };
 
-
-
-
     // Define colors and gradient stops based on the value
     const getColorStops = (value) => {
         if (value < 50) {

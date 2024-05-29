@@ -21,8 +21,11 @@ const BonusPointsPointBanner = () => {
 
     const unreleasedIncentive = incentive_criterias?.find((item) => item?.id == 10)?.obtained_incentive;
 
+    // console.log(incentive_criterias)
+
     //TODO: This will replace with the actual data from the backend
-    const bonusPointsAcquired = incentive_criterias?.find((item) => item?.id == 11)?.acquired_percent;
+    // const bonusPointsAcquired = incentive_criterias?.find((item) => item?.id == 9 || item?.id == 11)?.acquired_percent;
+    const bonusPointsAcquired = incentive_criterias?.filter(item => item?.id === 9 || item?.id === 11)?.[0]?.acquired_percent;
 
     const pmIncentive = useSelector((state) => state.pmIncentive)
     const dispatch = useDispatch();
