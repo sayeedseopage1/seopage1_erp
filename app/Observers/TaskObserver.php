@@ -83,12 +83,12 @@ class TaskObserver
 
             if ($task->project_id) {
                 // Calculate project progress if enabled
-                $mainTask = Task::where('id', $task->dependent_task_id)->first();
-                $subTask = SubTask::where('id', $task->subtask_id)->first();
-                $assigned_to = User::find($subTask->assigned_to);
-                $text = 'Subtask ' .$task->heading. ' has been created against task ' . $mainTask->heading . ' and assigned to ' . $assigned_to->name;
-                $link = '<a href="' . route('tasks.show', $task->id) . '">' . $text . '</a>';
-                $log->logProjectActivity($task->project_id, $link);
+                // $mainTask = Task::where('id', $task->dependent_task_id)->first();
+                // $subTask = SubTask::where('id', $task->subtask_id)->first();
+                // $assigned_to = User::find($subTask->assigned_to);
+                // $text = 'Subtask ' .$task->heading. ' has been created against task ' . $mainTask->heading . ' and assigned to ' . $assigned_to->name;
+                // $link = '<a href="' . route('tasks.show', $task->id) . '">' . $text . '</a>';
+                // $log->logProjectActivity($task->project_id, $link);
                 $this->calculateProjectProgress($task->project_id);
             }
 

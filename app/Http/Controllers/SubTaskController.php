@@ -518,6 +518,11 @@ class SubTaskController extends AccountBaseController
             // $actions = PendingAction::where('serial','NTTAx'.$request->user_id)->where('past_status',0)->get();
             // dd($actions);
 
+            $assigned_to = User::find($subTask->assigned_to);
+            $text = 'Subtask ' .$subTask->title. ' has been created against task ' . $parent_task->heading . ' and assigned to ' . $assigned_to->name;
+            $link = '<a href="' . route('tasks.show', $task->id) . '">' . $text . '</a>';
+            $this->logProjectActivity($task->project_id, $link);
+
             $task = $subTask->task;
             $this->logTaskActivity($task->id, $this->user->id, 'subTaskCreateActivity', $task->board_column_id, $subTask->id);
 
