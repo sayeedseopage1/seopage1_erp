@@ -19,14 +19,14 @@ const SubmittedTasksData = ({ data }) => {
             );
 
             // Filter tasks that have the latest round
-            const tasks = TaskList.data.filter(
+            const tasks = TaskList?.data.filter(
                 (task) =>
                     task.round === latestRound && task.submission_date !== null
             );
 
             setLatestRoundTasks(tasks);
         }
-    }, [data]);
+    }, [TaskList]);
 
     return (
         <TaskModalComponent
