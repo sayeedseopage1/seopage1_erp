@@ -77,7 +77,7 @@ const AverageRatingRequiredRound = ({ data, round }) => {
                 onClick={() => setIsRatingModalOpen(true)}
                 className="link_color"
             >
-                {totalAverage}
+                {totalAverage.toFixed(2) ?? "N/A"}
             </div>
             <ReactModal
                 style={{

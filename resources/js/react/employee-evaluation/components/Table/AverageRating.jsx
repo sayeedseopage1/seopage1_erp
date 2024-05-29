@@ -104,7 +104,7 @@ const AverageRating = ({ data }) => {
                 onClick={() => setIsRatingModalOpen(true)}
                 className="link_color"
             >
-                {totalAverage ?? "N/A"}
+                {totalAverage.toFixed(2) ?? "N/A"}
             </div>
             <ReactModal
                 style={{
