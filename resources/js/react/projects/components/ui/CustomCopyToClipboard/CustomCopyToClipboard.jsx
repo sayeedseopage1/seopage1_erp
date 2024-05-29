@@ -1,7 +1,6 @@
 import React from "react";
 import { useCopyToClipboard } from "react-use";
-import { MdOutlineContentCopy } from "react-icons/md";
-import { MdDone } from "react-icons/md";
+import { MdOutlineContentCopy, MdDone } from "react-icons/md";
 import PropTypes from "prop-types";
 
 import "./customCopyToClipboard.css";
@@ -23,7 +22,7 @@ const CustomCopyToClipboard = ({
     options = { format: "text/plain" },
     className = "",
 }) => {
-    const [state, copyToClipboard] = useCopyToClipboard();
+    const [copyToClipboard] = useCopyToClipboard();
     const [isCopied, setIsCopied] = React.useState(false);
 
     const handleCopy = () => {
@@ -51,4 +50,5 @@ CustomCopyToClipboard.propTypes = {
     text: PropTypes.any,
     onCopy: PropTypes.func,
     options: PropTypes.object,
+    className: PropTypes.string,
 };

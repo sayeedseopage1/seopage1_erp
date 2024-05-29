@@ -21,7 +21,6 @@ import {
 } from "../../../utils/stateValidation";
 import isEmail from "validator/lib/isEmail";
 
-
 const data = {
     client_username: "",
     project_value: "",
@@ -82,7 +81,6 @@ const fontDataValidation = {
  *
  */
 
-
 const DisputeProjectFromModal = ({
     isModalOpen,
     closeModal,
@@ -105,7 +103,7 @@ const DisputeProjectFromModal = ({
         const { description9, ...rest } = formData;
         const isEmpty = isStateAllHaveValue(rest);
         if (isEmpty) {
-            const validation = markEmptyFieldsValidation(rest)
+            const validation = markEmptyFieldsValidation(rest);
             setFormValidation({
                 ...formValidation,
                 ...validation,
@@ -118,8 +116,10 @@ const DisputeProjectFromModal = ({
         if (!isEmail(formData.pm_email)) {
             setFormValidation({
                 ...formValidation,
-                pm_email: true,
-                isEmailInValid: true,
+                isSubmitting: true,
+                isEmailInValid: formData.pm_email
+                    ? isEmailInvalid(formData.pm_email)
+                    : false,
             });
             toast.error("Invalid Email");
             return;
@@ -132,11 +132,11 @@ const DisputeProjectFromModal = ({
                 closeModal();
                 setDummyDisputeData({
                     isDisputeSubmitted: true,
-                    disputeData:{
+                    disputeData: {
                         ...formData,
                         dispute_date: new Date().toLocaleDateString(),
-                    }
-                })
+                    },
+                });
                 toast.success("Dispute Form Submitted Successfully");
                 resetData();
             }, 2000);
@@ -148,6 +148,11 @@ const DisputeProjectFromModal = ({
     const resetData = () => {
         setFormData(data);
         setFormValidation(fontDataValidation);
+    };
+
+    function isEmailInvalid(email) {
+        console.log("isEmailInvalid", email, isEmail(email));
+        return !isEmail(email);
     }
 
     useEffect(() => {
@@ -157,13 +162,16 @@ const DisputeProjectFromModal = ({
                 ...formValidation,
                 ...validation,
                 isEmailInValid: formData.pm_email
-                    ? !isEmail(formData.pm_email)
-                        ? true
-                        : false
+                    ? isEmailInvalid(formData.pm_email)
                     : false,
             });
         }
-    }, [formData, formValidation.isSubmitting, formValidation.pm_email]);
+    }, [
+        formData,
+        formValidation.isSubmitting,
+        formValidation.pm_email,
+        formData.pm_email,
+    ]);
 
     return (
         <CustomAntModal

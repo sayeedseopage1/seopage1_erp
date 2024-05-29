@@ -57,4 +57,6 @@ PersonAvatar.propTypes = {
     avatar: PropTypes.string,
     name: PropTypes.string,
     url: PropTypes.string,
+    imageClass: PropTypes.string,
+    imageParentClass: PropTypes.string,
 };

@@ -29,7 +29,7 @@ describe("Parent Task Guideline", () => {
 
   it("should render all the sections", () => {
 
-    const { getByText } = render(
+    render(
       <PMTaskGuidelineModal
         isModalOpen={true}
         closeModal={() => { }}

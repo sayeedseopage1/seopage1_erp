@@ -86,5 +86,4 @@ TaskGuidelineNeedsAuthorizedAdmin.propTypes = {
     isModalOpen: PropTypes.bool,
     closeModal: PropTypes.func,
     modalData: PropTypes.arrayOf(PropTypes.object),
-    isLoading: PropTypes.bool,
 };

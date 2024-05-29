@@ -278,6 +278,5 @@ export default DisputeProjectAuthorizeModal;
 DisputeProjectAuthorizeModal.propTypes = {
     isModalOpen: PropTypes.bool.isRequired,
     closeModal: PropTypes.func.isRequired,
-    modalData: PropTypes.object,
-    isLoading: PropTypes.bool,
+    payloadData: PropTypes.object,
 };

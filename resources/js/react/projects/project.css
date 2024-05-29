@@ -44,13 +44,6 @@
     background-color: #eff1f6;
 }
 
-.sp1_project_task_table{
-    /* border-left: 1px solid #e9eaec; */
-    color: #777;
-    border-radius: 0;
-    padding-top: 3px;
-    padding-bottom: 3px;
-}
 
 .sp1_tasks_filter_container{
     padding: 10px;
@@ -70,6 +63,10 @@
     font-size: 14px;
     padding: 0px 10px;
     height: 35px;
+    color: #777;
+    border-radius: 0;
+    padding-top: 3px;
+    padding-bottom: 3px;
 }
 
 .sp1_tasks_filter_item{

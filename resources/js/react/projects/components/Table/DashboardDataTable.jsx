@@ -3,9 +3,7 @@ import PropTypes from "prop-types";
 import {
     useReactTable,
     getCoreRowModel,
-    getFilteredRowModel,
     getExpandedRowModel,
-    getSortedRowModel,
     flexRender,
 } from "@tanstack/react-table";
 
@@ -24,7 +22,6 @@ const DashboardDataTable = ({
     isLoading,
     tableHight = "30vh",
 }) => {
-    const [sorting, setSorting] = React.useState([]);
     const [expanded, setExpanded] = React.useState({});
     const [skipPageReset, setSkipPageReset] = React.useState(false);
     const [data, setData] = React.useState(tableData || []);
@@ -72,91 +69,88 @@ const DashboardDataTable = ({
     });
 
     return (
-        <>
-            <div
-                className="sp1_tasks_table_wrapper dashboardDataTable"
-                style={{
-                    height: "100%",
-                    maxHeight: tableHight,
-                    overflow: "auto",
-                }}
-            >
-                <table className="sp1_tasks_table">
-                    {/* table Header */}
-                    <thead
-                        className="sp1_tasks_thead"
-                        style={{
-                            zIndex: 0,
-                        }}
-                    >
-                        {table.getHeaderGroups().map((headerGroup) => (
-                            <tr key={headerGroup.id} className="sp1_tasks_tr">
-                                {headerGroup.headers.map((header) => {
-                                    return (
-                                        <WithoutDraggableColumnHeader
-                                            header={header}
-                                            table={table}
-                                            key={header.id}
-                                        />
-                                    );
-                                })}
-                            </tr>
-                        ))}
-                    </thead>
-                    {/* table Body */}
-                    <tbody
-                        className="sp1_tasks_tbody"
-                        style={{
-                            height: "100%",
-                            maxHeight: "100%",
-                        }}
-                    >
-                        {" "}
-                        {!isLoading &&
-                            table.getRowModel().rows.map((row) => {
+        <div
+            className="sp1_tasks_table_wrapper dashboardDataTable"
+            style={{
+                height: "100%",
+                maxHeight: tableHight,
+                overflow: "auto",
+            }}
+        >
+            <table className="sp1_tasks_table">
+                {/* table Header */}
+                <thead
+                    className="sp1_tasks_thead"
+                    style={{
+                        zIndex: 0,
+                    }}
+                >
+                    {table.getHeaderGroups().map((headerGroup) => (
+                        <tr key={headerGroup.id} className="sp1_tasks_tr">
+                            {headerGroup.headers.map((header) => {
                                 return (
-                                    <tr
-                                        className={`sp1_tasks_tr ${
-                                            row.parentId !== undefined
-                                                ? "expended_row"
-                                                : ""
-                                        } ${
-                                            row.getIsExpanded()
-                                                ? "expended_parent_row"
-                                                : ""
-                                        }`}
-                                        key={row.id}
-                                    >
-                                        {row.getVisibleCells().map((cell) => {
-                                            return (
-                                                <td
-                                                    key={cell.id}
-                                                    className="px-2 sp1_tasks_td"
-                                                >
-                                                    {flexRender(
-                                                        cell.column.columnDef
-                                                            .cell,
-                                                        cell.getContext()
-                                                    )}
-                                                </td>
-                                            );
-                                        })}
-                                    </tr>
+                                    <WithoutDraggableColumnHeader
+                                        header={header}
+                                        table={table}
+                                        key={header.id}
+                                    />
                                 );
                             })}
-                        {isLoading && (
-                            <TaskListTableLoader
-                                prevItemLength={data?.length}
-                                tableCol={tableColumns}
-                            />
-                        )}
-                    </tbody>
-                </table>
-                {!isLoading && _.size(table.getRowModel().rows) === 0 && (
-                    <EmptyTable />
-                )}
-            </div>
-        </>
+                        </tr>
+                    ))}
+                </thead>
+                {/* table Body */}
+                <tbody
+                    className="sp1_tasks_tbody"
+                    style={{
+                        height: "100%",
+                        maxHeight: "100%",
+                    }}
+                >
+                    {" "}
+                    {!isLoading &&
+                        table.getRowModel().rows.map((row) => {
+                            return (
+                                <tr
+                                    className={`sp1_tasks_tr ${
+                                        row.parentId !== undefined
+                                            ? "expended_row"
+                                            : ""
+                                    } ${
+                                        row.getIsExpanded()
+                                            ? "expended_parent_row"
+                                            : ""
+                                    }`}
+                                    key={row.id}
+                                >
+                                    {row.getVisibleCells().map((cell) => {
+                                        return (
+                                            <td
+                                                key={cell.id}
+                                                className="px-2 sp1_tasks_td"
+                                            >
+                                                {flexRender(
+                                                    cell.column.columnDef.cell,
+                                                    cell.getContext()
+                                                )}
+                                            </td>
+                                        );
+                                    })}
+                                </tr>
+                            );
+                        })}
+                    {isLoading && (
+                        <TaskListTableLoader
+                            prevItemLength={data?.length}
+                            tableCol={tableColumns}
+                        />
+                    )}
+                </tbody>
+            </table>
+            {!isLoading && _.size(table.getRowModel().rows) === 0 && (
+                <EmptyTable />
+            )}
+        </div>
     );
 };
 

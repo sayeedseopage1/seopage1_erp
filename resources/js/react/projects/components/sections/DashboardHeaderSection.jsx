@@ -69,7 +69,6 @@ const DashboardHeaderSection = ({ projectData, isLoading, setDummyTypeChange }) 
                     <div
                         className="dropdown-menu dropdown-menu-right border-grey rounded b-shadow-4 p-0 "
                         aria-labelledby="dropdownMenuLink"
-                        x-placement="bottom-end"
                         style={{
                             position: "absolute",
                             willChange: "transform",
@@ -90,6 +89,7 @@ const DashboardHeaderSection = ({ projectData, isLoading, setDummyTypeChange }) 
                             className="dropdown-item"
                             id="pinnedItem"
                             data-pinned="unpinned"
+                            href="#"
                         >
                             <BsPinAngle className="mr-2" />
                             Pin Project
@@ -131,5 +131,6 @@ export default DashboardHeaderSection;
 
 DashboardHeaderSection.propTypes = {
     projectData: PropTypes.object,
+    isLoading: PropTypes.bool,
     setDummyTypeChange: PropTypes.func,
 };

@@ -708,5 +708,4 @@ PMTaskGuidelineModal.propTypes = {
     isModalOpen: PropTypes.bool,
     closeModal: PropTypes.func,
     modalData: PropTypes.object,
-    isLoading: PropTypes.bool,
 };

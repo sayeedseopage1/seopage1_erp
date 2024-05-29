@@ -82,4 +82,5 @@ CustomAntModal.propTypes = {
     children: PropTypes.node,
     width: PropTypes.string,
     height: PropTypes.string,
+    data_testid: PropTypes.string,
 };

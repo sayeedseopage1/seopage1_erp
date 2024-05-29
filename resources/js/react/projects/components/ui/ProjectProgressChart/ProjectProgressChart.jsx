@@ -27,7 +27,7 @@ Chart.register(
     PointElement
 );
 
-const ProjectProgressChart = () => {
+const ProjectProgressChart = ({chartData}) => {
     const options = {
         responsive: false,
         plugins: {
@@ -56,7 +56,7 @@ const ProjectProgressChart = () => {
         ],
         datasets: [
             {
-                data: [0, 15, 70, 15, 0, 0, 0, 0],
+                data: chartData,
                 backgroundColor: [
                     "#D21010",
                     "#F5C308",
@@ -80,4 +80,6 @@ const ProjectProgressChart = () => {
 
 export default ProjectProgressChart;
 
-ProjectProgressChart.propTypes = {};
+ProjectProgressChart.propTypes = {
+    chartData: PropTypes.array,
+};

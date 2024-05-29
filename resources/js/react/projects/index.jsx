@@ -1,4 +1,5 @@
 import React from "react";
+import PropTypes from "prop-types";
 import { DndProvider, useDragLayer } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import ReactDOM from "react-dom/client";
@@ -117,4 +118,10 @@ if (projectDashboardContainer) {
             </ThemeProvider>
         </React.StrictMode>
     );
+}
+
+
+
+Container.propTypes = {
+    children: PropTypes.node,
 }

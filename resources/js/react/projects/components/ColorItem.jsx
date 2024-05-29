@@ -14,6 +14,16 @@ const ColorItem = ({ color, desc, isDescUse = false, isColorUse = true }) => {
         }, 1000);
     };
 
+    function renderColorOrCopied() {
+        if (!isShow) {
+          return color;
+        } else if (state.value) {
+          return <span> Copied</span>;
+        } else {
+          return null;
+        }
+      }
+
     return (
         <div className="position-relative px-2">
             {isColorUse && (
@@ -22,7 +32,7 @@ const ColorItem = ({ color, desc, isDescUse = false, isColorUse = true }) => {
                     className="py-2 px-3 d-inline-block text-white rounded cursor-pointer border-0"
                     style={{ background: color , }}
                 >
-                    {!isShow ? color : state.value ? <span> Copied</span> : null}
+                    {renderColorOrCopied()}
                 </button>
             )}
             {isDescUse && (

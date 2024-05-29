@@ -37,7 +37,7 @@ const ProjectCompletionModal = ({ isModalOpen, closeModal, modalData }) => {
         try {
             // TODO: Implement the API call to submit the admin comment
             setTimeout(() => {
-                setProjectCompletionData(prev => {
+                setProjectCompletionData((prev) => {
                     return {
                         ...prev,
                         project_submission: {
@@ -956,7 +956,6 @@ const ProjectCompletionModal = ({ isModalOpen, closeModal, modalData }) => {
                                         <Switch>
                                             <Switch.Case
                                                 condition={
-                                                    project_portfolio &&
                                                     project_portfolio
                                                         ?.plugin_list?.length
                                                 }
@@ -1238,5 +1237,4 @@ ProjectCompletionModal.propTypes = {
     isModalOpen: PropTypes.bool.isRequired,
     closeModal: PropTypes.func.isRequired,
     modalData: PropTypes.object,
-    isLoading: PropTypes.bool,
 };

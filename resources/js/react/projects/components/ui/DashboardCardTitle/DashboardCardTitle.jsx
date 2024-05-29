@@ -73,4 +73,5 @@ DashboardCardTitle.propTypes = {
     isInfoIconUse: PropTypes.bool,
     infoText: PropTypes.string,
     className: PropTypes.string,
+    borderType: PropTypes.string,
 };

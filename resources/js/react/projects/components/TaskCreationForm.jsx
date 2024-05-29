@@ -1,5 +1,6 @@
 import { Listbox } from "@headlessui/react";
 import _ from "lodash";
+import PropTypes from "prop-types";
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import { useParams } from "react-router-dom";
@@ -361,12 +362,14 @@ const TaskCreationForm = ({ handleRefresh, isOpen, close, onSuccess }) => {
                                         <label
                                             className={`f-14 text-dark-gray mb-1`}
                                             data-label="true"
+                                            htmlFor="project"
                                         >
                                             Project <sup>*</sup>
                                         </label>
                                         <input
                                             className={`form-control height-35 f-14`}
                                             readOnly
+                                            id="project"
                                             defaultValue={project}
                                         />
                                     </div>
@@ -382,10 +385,11 @@ const TaskCreationForm = ({ handleRefresh, isOpen, close, onSuccess }) => {
                                             <label
                                                 className={`f-14 text-dark-gray mb-1`}
                                                 data-label="true"
+                                                htmlFor="milestone"
                                             >
                                                 Milestone <sup>*</sup>
                                             </label>
-                                            <Listbox.Button className=" sp1-selection-display-button form-control height-35 f-14 sp1-selection-display bg-white w-100">
+                                            <Listbox.Button id="milestone" className=" sp1-selection-display-button form-control height-35 f-14 sp1-selection-display bg-white w-100">
                                                 {milestoneDataIsFetching ? (
                                                     <Loader title="Loading..." />
                                                 ) : (
@@ -515,12 +519,14 @@ const TaskCreationForm = ({ handleRefresh, isOpen, close, onSuccess }) => {
                                         <label
                                             className={`f-14 text-dark-gray mb-1`}
                                             data-label="true"
+                                            htmlFor="project_deliverable"
                                         >
                                             Project Deliverable
                                         </label>
                                         <input
                                             className={`form-control height-35 f-14`}
                                             readOnly
+                                            id="project_deliverable"
                                             defaultValue={
                                                 milestone?.deliverable_type ??
                                                 ""
@@ -684,3 +690,11 @@ const TaskCreationForm = ({ handleRefresh, isOpen, close, onSuccess }) => {
 };
 
 export default TaskCreationForm;
+
+
+TaskCreationForm.propTypes = {
+    handleRefresh: PropTypes.func,
+    isOpen: PropTypes.bool,
+    close: PropTypes.func,
+    onSuccess: PropTypes.func,
+}

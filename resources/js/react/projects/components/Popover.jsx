@@ -143,6 +143,7 @@ export default Popover;
 
 Popover.propTypes = {
     children: PropTypes.node.isRequired,
+    className: PropTypes.string,
 };
 
 Panel.propTypes = {

@@ -1,5 +1,5 @@
 import React from "react";
-import { render, screen, fireEvent, act } from "@testing-library/react";
+import { render, screen, } from "@testing-library/react";
 import WorkingEnvironmentModal from "../WorkingEnvironmentModal";
 
 
@@ -15,7 +15,7 @@ const mockData = {
 describe("WorkingEnvironmentModal", () => {
   // Render Test Cases
   it("should render without crashing", () => {
-    const { getByText } = render(
+    render(
       <WorkingEnvironmentModal
         isModalOpen={true}
         closeModal={() => { }}
@@ -33,7 +33,7 @@ describe("WorkingEnvironmentModal", () => {
   });
 
   it("should Render with mock data", () => {
-    const { getByText } = render(
+    render(
       <WorkingEnvironmentModal
         isModalOpen={true}
         closeModal={() => { }}

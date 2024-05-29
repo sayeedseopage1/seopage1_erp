@@ -8,9 +8,9 @@ export default function TaskListTableLoader({ prevItemLength = 7, tableCol }) {
             <td className="sp1_tasks_td pl-2">
                 <Placeholder width="50px" height="13px" className="mb-1" />
             </td>
-            {tableCol.slice(0, tableCol?.length - 1).map((_, index) => {
+            {tableCol.slice(0, tableCol?.length - 1).map((placeholder) => {
                 return (
-                    <td key={index} className="sp1_tasks_td">
+                    <td key={placeholder} className="sp1_tasks_td">
                         <div className="d-flex align-items-center justify-content-center">
                             <Placeholder
                                 width="80px"

@@ -24,20 +24,26 @@ const TextLoaderDynamic = ({
                     />
                 </Switch.Case>
                 <Switch.Case condition={number > 1}>
-                    {[...Array(number)].map((_, index) => {
+                    {[...Array(number)].map((placeholder, index) => {
                         const isFullSize = index < fullSizeCount;
                         const isLast = index === number - 1;
-                        const width = isLast
-                            ? 50
-                            : isFullSize
-                            ? 100
-                            : 100 -
-                              (index - fullSizeCount + 1) * widthDeference;
+                        const getWidth = (() => {
+                            if (isLast) {
+                                return 50;
+                            } else if (isFullSize) {
+                                return 100;
+                            } else {
+                                return (
+                                    100 -
+                                    (index - fullSizeCount + 1) * widthDeference
+                                );
+                            }
+                        })();
                         return (
                             <Placeholder
                                 className={className}
-                                key={index}
-                                width={`${width}%`}
+                                key={placeholder}
+                                width={`${getWidth}%`}
                                 height={height}
                             />
                         );
@@ -55,6 +61,7 @@ TextLoaderDynamic.propTypes = {
     widthDeference: PropTypes.number,
     className: PropTypes.string,
     height: PropTypes.number,
+    width: PropTypes.number,
     parentClassName: PropTypes.string,
     fullSizeCount: PropTypes.number,
 };

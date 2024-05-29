@@ -1,5 +1,5 @@
 import React from "react";
-import { render, screen, fireEvent, waitFor } from "@testing-library/react";
+import { render, screen, fireEvent } from "@testing-library/react";
 import ProjectDeadlineExtensionModal from "../ProjectDeadlineExtensionModal";
 import { toast } from 'react-toastify';
 import userEvent from "@testing-library/user-event";
@@ -17,7 +17,7 @@ jest.mock('react-toastify', () => ({
 describe("Project Deadline Extension Modal", () => {
   // Render Test Cases
   it("should render without crashing", () => {
-    const { getByText, getByLabelText } = render(
+    render(
       <ProjectDeadlineExtensionModal
         isModalOpen={true}
         closeModal={() => { }}
@@ -34,7 +34,7 @@ describe("Project Deadline Extension Modal", () => {
 
   // Test Cases for handleDeadlineExtension function when all fields are empty
   it("should show validation errors when all fields are empty", () => {
-    const { getByText } = render(
+    render(
       <ProjectDeadlineExtensionModal
         isModalOpen={true}
         closeModal={() => { }}

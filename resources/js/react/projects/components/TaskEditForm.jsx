@@ -1,5 +1,6 @@
 import { Listbox } from "@headlessui/react";
 import _ from "lodash";
+import PropTypes from "prop-types";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
@@ -347,11 +348,13 @@ const TaskEditForm = ({ isOpen, close, row, table }) => {
                                     <label
                                         className={`f-14 text-dark-gray mb-1`}
                                         data-label="true"
+                                        htmlFor="project"
                                     >
                                         Project
                                     </label>
                                     <input
                                         className={`form-control height-35 f-14`}
+                                        id="project"
                                         readOnly
                                         defaultValue={project}
                                     />
@@ -617,3 +620,11 @@ const TaskEditForm = ({ isOpen, close, row, table }) => {
 };
 
 export default TaskEditForm;
+
+
+TaskEditForm.propTypes = {
+    isOpen: PropTypes.bool,
+    close: PropTypes.func,
+    row: PropTypes.object,
+    table: PropTypes.string,
+}

@@ -94,4 +94,5 @@ export default DashboardFreelancerInfoSection;
 
 DashboardFreelancerInfoSection.propTypes = {
     projectData: PropTypes.object,
+    isLoading: PropTypes.bool,
 };

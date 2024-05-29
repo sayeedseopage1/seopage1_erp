@@ -342,6 +342,5 @@ export default ProjectQCSubmissionFormModal;
 
 ProjectQCSubmissionFormModal.propTypes = {
     isModalOpen: PropTypes.bool,
-    closeModal: PropTypes.func,
-    modalData: PropTypes.object,
+    closeModal: PropTypes.func
 };

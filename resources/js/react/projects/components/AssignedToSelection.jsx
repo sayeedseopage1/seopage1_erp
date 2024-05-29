@@ -1,5 +1,6 @@
 import { Combobox } from '@headlessui/react'
 import * as React from 'react'
+import PropTypes from "prop-types";
 import _  from 'lodash';
 import { useUsers } from '../../hooks/useUsers';
 import Loader from '../../tasks/components/Loader';
@@ -40,8 +41,8 @@ const AssginedToSelection = ({selected, onSelect, taskCategory}) => {
   return (
     <Combobox  value={selected} onChange={onSelect}>
         <div className="form-group position-relative my-3">
-            <label htmlFor="">Assigned To <sup>*</sup></label>
-            <Combobox.Button className="d-flex align-items-center w-100 sp1-selection-display-button">
+            <label htmlFor="assigned">Assigned To <sup>*</sup></label>
+            <Combobox.Button id="assigned" className="d-flex align-items-center w-100 sp1-selection-display-button">
                 <Combobox.Input
                     onChange={e => setQuery(e.target.value)}
                     placeholder='--'
@@ -124,3 +125,10 @@ const AssginedToSelection = ({selected, onSelect, taskCategory}) => {
 }
 
 export default AssginedToSelection
+
+
+AssginedToSelection.propTypes = {
+    selected: PropTypes.object,
+    onSelect: PropTypes.func,
+    taskCategory: PropTypes.object
+}
