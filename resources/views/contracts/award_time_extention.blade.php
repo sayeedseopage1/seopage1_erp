@@ -93,12 +93,13 @@
                                                     <div class="form-group">
 
                                                         <label for="goal_creation_type">
-                                                            Select Hours  Hrs </strong>
+                                                            Select Goal Start Time
                                                         </label>
 
                                                         <select name="goal_creation_type" id="goal_creation_type" class="form-control height-35" required>
-                                                            @foreach ($goalCreationTimeType as $key => $item)
-                                                                <option value="{{ $key }}">{{ $item }}</option>
+                                                            <option value="" >Select One</option>
+                                                            @foreach ($value->goalTimeType as $key => $item)
+                                                                <option value="{{ $key }}" >{{ $item }}</option>
                                                             @endforeach
                                                         </select>
 
@@ -252,6 +253,6 @@
                     }
                 })
             })
-        })
+        });
     </script>
 @endpush

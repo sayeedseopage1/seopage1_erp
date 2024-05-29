@@ -54,6 +54,30 @@ class HelperPmProjectStatusController extends AccountBaseController
         }
     }
 
+    function getGoalStartDate($project, $deal, $pm_project)
+    {
+        switch ($project->goal_creation_time_type) {
+            case '1':
+            default:
+                return $pm_project->project_award_time_platform;
+                break;
+            case '2':
+                return $deal->released_at;
+                break;
+            case '3':
+                return $deal->authorized_on;
+                break;
+            case '4':
+                return $project->project_acceptance_time;
+                break;
+            case '5':
+                $increaseRequest = AwardTimeIncress::where('deal_id', $deal->id)->first();
+                if (!$increaseRequest) throw new Exception('Award Time Increase data not found');
+                return $increaseRequest->updated_at;
+                break;
+        }
+    }
+
     public function ProjectPmGoalCreation(PmGoalSetting $pmGoalSetting, Deal $findDeal, Project $findProject)
     {
         if (!in_array($pmGoalSetting->category, array_keys(Project::$categories))) return new Exception('Project priority type is invalid');
@@ -289,30 +313,6 @@ class HelperPmProjectStatusController extends AccountBaseController
         $goal->duration = 60 / 24;
         $goal->added_by = Auth::user()->id;
         $goal->save();
-    }
-
-    function getGoalStartDate($project, $deal, $pm_project)
-    {
-        switch ($project->goal_creation_time_type) {
-            case '1':
-            default:
-                return $pm_project->project_award_time_platform;
-                break;
-            case '2':
-                return $deal->released_at;
-                break;
-            case '3':
-                return $deal->authorized_on;
-                break;
-            case '4':
-                return $project->project_acceptance_time;
-                break;
-            case '5':
-                $increaseRequest = AwardTimeIncress::where('deal_id', $deal->id)->first();
-                if (!$increaseRequest) throw new Exception('Award Time Increase data not found');
-                return $increaseRequest->updated_at;
-                break;
-        }
     }
 
     function calculateProjectRequiredDays($priorityType, $milestoneCount)

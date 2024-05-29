@@ -2611,13 +2611,44 @@ class ContractController extends AccountBaseController
 
     public function award_time_increase_index()
     {
-        if ($this->user->role_id == 1) {
-            $this->award_time_request = AwardTimeIncress::where('status', '0')->orderBy('id', 'desc')->get();
-            $this->goalCreationTimeType = Project::$goalCreationTimeType;
-            return view('contracts.award_time_extention', $this->data);
-        } else {
+        if ($this->user->role_id != 1) {
             abort(403);
         }
+
+        $this->award_time_request = AwardTimeIncress::where('status', '0')->orderBy('id', 'desc')->get()->map(function($item){
+            $deal = Deal::find($item->deal_id);
+            $project = Project::where('deal_id', $deal->id)->first();
+            $pmProject = $deal->pm_project;
+
+            $temp = [];
+            foreach (Project::$goalCreationTimeType as $key => $value) {
+                switch ($key) {
+                    case '1':
+                    default:
+                        if ($pmProject->project_award_time_platform) $temp[$key] = $value;
+                        break;
+                    case '2':
+                        if($deal->released_at) $temp[$key] = $value;
+                        break;
+                    case '3':
+                        if($deal->authorized_on) $temp[$key] = $value;
+                        break;
+                    case '4':
+                        if($project->project_acceptance_time) $temp[$key] = $value;
+                        break;
+                    case '5':
+                        $increaseRequest = AwardTimeIncress::where('deal_id', $deal->id)->first();
+                        if ($increaseRequest && $increaseRequest->updated_at) $temp[$key] = $value;
+                        break;
+                }
+            }
+
+            $item->goalTimeType = $temp;
+
+            return $item;
+        });
+
+        return view('contracts.award_time_extention', $this->data);
     }
 
     public function award_time_incress_store(Request $request)

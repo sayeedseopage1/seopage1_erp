@@ -21,7 +21,7 @@ class ProjectPmGoal extends Model
                 [
                     'code' => 'TSM',
                     'name' => '1st submission has to be made.',
-                    'type' => '1st_task_submissino',
+                    'type' => '1st_task_submission',
                 ],
                 [
                     'code' => 'FPMR',
@@ -55,7 +55,7 @@ class ProjectPmGoal extends Model
                 [
                     'code' => 'TSM',
                     'name' => '1st submission has to be made.',
-                    'type' => '1st_task_submissino',
+                    'type' => '1st_task_submission',
                 ],
                 [
                     'code' => 'FMR',
