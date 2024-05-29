@@ -121,6 +121,17 @@ class Incentive
                 ->where('projects.project_status','Accepted')
                 ->sum('project_milestones.cost');
                 self::findIncentive($incentiveCriteria);
+            }elseif($incentiveCriteria->id == 11){
+                // $incentiveCriteria->acquired_percent = DB::table('users')
+                // ->join('projects', 'users.id', '=', 'projects.pm_id')
+                // ->join('project_milestones', 'projects.id', '=', 'project_milestones.project_id')
+                // ->join('payments', 'project_milestones.invoice_id', '=', 'payments.invoice_id')
+                // ->whereBetween('payments.paid_on', [$startDate, $endDate])
+                // ->where('payments.added_by', $user_id)
+                // ->whereNot('project_milestones.status', 'canceled')
+                // ->where('projects.project_status','Accepted')
+                // ->sum('project_milestones.cost');
+                // self::findIncentive($incentiveCriteria);
             }
 
         } catch (\Throwable $th) {
