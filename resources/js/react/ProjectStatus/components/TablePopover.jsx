@@ -17,7 +17,7 @@ const TablePopover = ({ text, isDangerHtml = false, isPercentUse = false }) => {
                     <div
                         className={`${style.projectStatus_percent_popover_button} multine-ellipsis`}
                     >
-                        {text`${isPercentUse ? "%" : null}` ?? "--"}
+                        {text ?`${text} ${isPercentUse ? "%" : ''}` : "--"}
                     </div>
                 )}
             </Popover.Button>
