@@ -1,6 +1,6 @@
 import React from "react";
 import { useGetTaskListQuery } from "../../../services/api/EvaluationApiSlice";
-import TaskModalComponent from "./TaskModalComponent";
+
 import { convertTime } from "../../../utils/converTime";
 
 const TotalMinRequiredRound = ({ data, round }) => {
