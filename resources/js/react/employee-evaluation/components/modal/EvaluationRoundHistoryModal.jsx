@@ -48,6 +48,7 @@ const EvaluationRoundHistoryModal = ({ data }) => {
                         margin: "auto auto",
                         padding: "0px",
                         overflowY: "auto",
+                        maxWidth: "75vw",
                     },
                 }}
                 isOpen={isOpen}
