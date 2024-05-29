@@ -878,17 +878,17 @@ class TimelogController extends AccountBaseController
         }
 
         if (!is_null($timeLog->project_id)) {
-            $task = Task::where('id',$timeLog->task_id)->first();
-            $text = 'Developer ' . Auth::user()->name . ' stopped the subtask ' . $task->heading . ' timer';
-            $link = '<a href="' . route('tasks.show', $timeLog->task_id) . '">' . $text . '</a>';
-            $this->logProjectActivity($timeLog->project_id, $link);
+            // $task = Task::where('id',$timeLog->task_id)->first();
+            // $text = 'Developer ' . Auth::user()->name . ' stopped the subtask ' . $task->heading . ' timer';
+            // $link = '<a href="' . route('tasks.show', $timeLog->task_id) . '">' . $text . '</a>';
+            // $this->logProjectActivity($timeLog->project_id, $link);
         }
 
         if (!is_null($timeLog->task_id)) {
-            $this->logTaskActivity($timeLog->task_id, user()->id, 'timerStoppedBy');
+            // $this->logTaskActivity($timeLog->task_id, user()->id, 'timerStoppedBy');
         }
 
-        $this->logUserActivity($this->user->id, 'modules.tasks.timerStoppedBy');
+        // $this->logUserActivity($this->user->id, 'modules.tasks.timerStoppedBy');
 
         /** @phpstan-ignore-next-line */
 
