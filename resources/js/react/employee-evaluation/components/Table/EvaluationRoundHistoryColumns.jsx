@@ -1,22 +1,19 @@
 import CommentModal from "./CommentModal";
 
-import { convertTime } from "../../../utils/converTime";
-import ActionEvaluationTable from "./ActionEvaluationTable";
 import AverageRatingSecondaryMetrics from "./AverageRatingSecondaryMetrics";
 import AverageRating from "./AverageRating";
-import EvaluationRevisionModal from "../modal/EvaluationRevisionModal";
-import AssignedTasksData from "./AssignedTasksData";
-import SubmittedTasksData from "./SubmittedTasksData";
+
 import { User } from "../../../utils/user-details";
 import ActionEvaluationRequiredRoundTable from "./ActionEvaluationRequiredRoundTable";
 import AssignedTasksDataRequiredRound from "./AssignedTasksDataRequiredRound";
 import SubmittedTasksDataRequiredRound from "./SubmittedTasksDataRequiredRound";
 import TotalMinRequiredRound from "./TotalMinRequiredRound";
+import EvaluationRevisionModalRequiredRound from "../modal/EvaluationRevisionModalRequiredRound";
 const auth = new User(window.Laravel.user);
 export const EvaluationRoundHistoryTableColumns = [
     {
         id: "id",
-        header: "Extended Round",
+        header: "Round",
         accessorKey: "id",
         cell: ({ row }) => {
             return <div>Round-{row.index + 1}</div>;
@@ -76,7 +73,7 @@ export const EvaluationRoundHistoryTableColumns = [
             const data = row.original;
             return (
                 <div style={{ marginLeft: "50px" }}>
-                    <EvaluationRevisionModal
+                    <EvaluationRevisionModalRequiredRound
                         data={data}
                         round={row.index + 1}
                     />

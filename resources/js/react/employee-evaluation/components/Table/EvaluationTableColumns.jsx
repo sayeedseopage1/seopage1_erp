@@ -12,6 +12,8 @@ import EvaluationRevisionModal from "../modal/EvaluationRevisionModal";
 import EvaluationRoundHistoryModal from "../modal/EvaluationRoundHistoryModal";
 import AssignedTasksData from "./AssignedTasksData";
 import SubmittedTasksData from "./SubmittedTasksData";
+import TotalMin from "./TotalMin";
+
 const auth = new User(window.Laravel.user);
 
 export const EvaluationTableColumns = [
@@ -76,7 +78,7 @@ export const EvaluationTableColumns = [
     },
     {
         id: "round_requied",
-        header: "Round required",
+        header: "Previous Rounds",
         accessorKey: "round_requied",
         cell: ({ row }) => {
             const data = row.original;
@@ -117,7 +119,7 @@ export const EvaluationTableColumns = [
             const data = row?.original;
             return (
                 <div style={{ marginLeft: "50px" }}>
-                    {convertTime(data?.total_minutes)}
+                    <TotalMin data={data} />
                 </div>
             );
         },

@@ -8,7 +8,7 @@ const EvaluationRevisionModal = ({ data }) => {
     const [isEvaluationRevisionModal, setIsEvaluationRevisionModal] =
         React.useState(false);
     const { data: revisionData, isLoading } = useGetAllRevisionListQuery(
-        data?.parent_task_id
+        data?.task_id
     );
 
     const Revisions = revisionData?.data;

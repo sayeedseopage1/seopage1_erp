@@ -20,13 +20,19 @@ const EvaluationRoundHistoryModal = ({ data }) => {
     const [isOpen, setIsOpen] = useState(false);
     return (
         <div>
-            <div
-                style={{ marginLeft: "50px" }}
+            <button
+                style={{
+                    marginLeft: "30px",
+                    width: "100px",
+                    height: "40px",
+                    backgroundColor: "transparent",
+                }}
                 className="link_color"
                 onClick={() => setIsOpen(true)}
+                disabled={data?.round_requied === 0}
             >
                 {data?.round_requied}
-            </div>
+            </button>
             <ReactModal
                 style={{
                     overlay: {
