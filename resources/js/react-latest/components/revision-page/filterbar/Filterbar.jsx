@@ -5,7 +5,7 @@ import { useWindowSize } from "react-use";
 import Avatar from "../../../../react/global/Avatar";
 import { useFilter } from "../../../hooks/useFilter";
 import styles from "../../../styles/filterbar.module.css";
-import Button from '../../../ui/Button';
+import Button from "../../../ui/Button";
 import JqueryDateRangePicker from "../../../ui/JqueryDateRangePicker";
 import Loader from "../../../ui/Loader";
 import Select from "../../../ui/Select";
@@ -27,21 +27,36 @@ const Filterbar = ({ onFilter, isOwnRevision }) => {
     const [endDate, setEndDate] = useState(null);
     const [project, setProject] = useState(null);
     const [raisedBy, setRaisedBy] = useState(null);
+    const [raisedByName, setRaisedByName] = useState(null);
     const [againstTo, setAgainstTo] = useState(null);
+    const [againstToName, setAgainstToName] = useState(null);
     const [projectManager, setProjectManager] = useState(null);
+    const [projectManagerName, setProjectManagerName] = useState(null);
     const [sale, setSale] = useState(null);
+    const [saleName, setSaleName] = useState(null);
     const [leadDeveloper, setLeadDeveloper] = useState(null);
+    const [leadDeveloperName, setLeadDeveloperName] = useState(null);
     const [client, setClient] = useState(null);
+    const [clientName, setClientName] = useState(null);
 
     const _startDate = useMemo(() => startDate, [startDate]);
     const _endDate = useMemo(() => endDate, [endDate]);
     const _project = useMemo(() => project, [project]);
     const _raisedBy = useMemo(() => raisedBy, [raisedBy]);
+    const _raisedByName = useMemo(() => raisedByName, [raisedByName]);
     const _againstTo = useMemo(() => againstTo, [againstTo]);
+    const _againstToName = useMemo(() => againstToName, [againstToName]);
     const _projectManager = useMemo(() => projectManager, [projectManager]);
+    const _projectManagerName = useMemo(
+        () => projectManagerName,
+        [projectManagerName]
+    );
     const _sale = useMemo(() => sale, [sale]);
+    const _saleName = useMemo(() => saleName, [saleName]);
     const _lead = useMemo(() => leadDeveloper, [leadDeveloper]);
+    const _leadName = useMemo(() => leadDeveloperName, [leadDeveloperName]);
     const _client = useMemo(() => client, [client]);
+    const _clientName = useMemo(() => clientName, [clientName]);
 
     const filterRef = useRef(null);
 
@@ -51,11 +66,19 @@ const Filterbar = ({ onFilter, isOwnRevision }) => {
             endDate: _endDate,
             project: _project?.id,
             raised_by: _raisedBy?.id,
-            against_to: isOwnRevision ? window?.Laravel?.user?.id : _againstTo?.id,
+            against_to: isOwnRevision
+                ? window?.Laravel?.user?.id
+                : _againstTo?.id,
             project_manager: _projectManager?.id,
             sale: _sale?.id,
             lead: _lead?.id,
             client: _client?.id,
+            raised_by_name: _raisedByName,
+            against_to_name: _againstToName,
+            project_manager_name: _projectManagerName,
+            sale_name: _saleName,
+            lead_name: _leadName,
+            client_name: _clientName,
         };
 
         const queryObject = _.pickBy(filter, Boolean);
@@ -72,9 +95,8 @@ const Filterbar = ({ onFilter, isOwnRevision }) => {
         _sale,
         _lead,
         _client,
-        isOwnRevision
+        isOwnRevision,
     ]);
-
 
     // handle methods
     const handleProjectFetching = async () => {
@@ -103,13 +125,21 @@ const Filterbar = ({ onFilter, isOwnRevision }) => {
                 className={styles.filterExpandButton}
                 onClick={() => setExpandMenu(true)}
             >
-            <i className="fa-solid fa-filter"></i>
+                <i className="fa-solid fa-filter"></i>
                 Filter
             </button>
-            <div className={styles.filterItems} ref={filterRef} data-active-collapse={expandMenu ? 'true': 'false'}>
+            <div
+                className={styles.filterItems}
+                ref={filterRef}
+                data-active-collapse={expandMenu ? "true" : "false"}
+            >
                 {/* Date picker */}
                 <div className={styles.filterHead}>
-                    <Button variant="tertiary" className="ml-auto" onClick={() => setExpandMenu(false)}>
+                    <Button
+                        variant="tertiary"
+                        className="ml-auto"
+                        onClick={() => setExpandMenu(false)}
+                    >
                         <i className="fa-solid fa-xmark" />
                     </Button>
                 </div>
@@ -119,7 +149,10 @@ const Filterbar = ({ onFilter, isOwnRevision }) => {
                         <div className={styles.label}>Client:</div>
                         <Select
                             value={client}
-                            onChange={(value) => setClient(value)}
+                            onChange={(value) => {
+                                setClient(value);
+                                setClientName(value?.name);
+                            }}
                             display={(client) => client?.name || "Select All"}
                             className={styles.selection_menu}
                         >
@@ -198,7 +231,10 @@ const Filterbar = ({ onFilter, isOwnRevision }) => {
                         <div className={styles.label}>Revision Raised By:</div>
                         <Select
                             value={raisedBy}
-                            onChange={(value) => setRaisedBy(value)}
+                            onChange={(value) => {
+                                setRaisedBy(value);
+                                setRaisedByName(value?.name);
+                            }}
                             display={(raised) => raised?.name || "Select All"}
                             className={styles.selection_menu}
                         >
@@ -269,82 +305,88 @@ const Filterbar = ({ onFilter, isOwnRevision }) => {
 
                 {/* against to */}
 
-                {!isOwnRevision ?
-                <FilterItem id="against_to">
-                    <div>
-                        <div className={styles.label}>Revision Against To:</div>
-                        <Select
-                            value={againstTo}
-                            onChange={(value) => setAgainstTo(value)}
-                            display={(againstTo) =>
-                                againstTo?.name || "Select All"
-                            }
-                            className={styles.selection_menu}
-                        >
-                            <Select.Options>
-                                {isLoading.user ? (
-                                    <div
-                                        className={`${styles.filterLoader} py-2`}
-                                    >
-                                        <Loader title="Loading..." />
-                                    </div>
-                                ) : (
-                                    <Select.SearchControllerWrapper>
-                                        {(query) => {
-                                            const data = _.filter(
-                                                getEmployees([
-                                                    4, 5, 6, 7, 9, 10,
-                                                ]),
-                                                (d) =>
-                                                    _.includes(
-                                                        _.lowerCase(d.name),
-                                                        _.lowerCase(query)
-                                                    )
-                                            );
-                                            return _.size(data) > 0 ? (
-                                                _.map(data, (employee) => (
-                                                    <Select.Option
-                                                        key={employee.id}
-                                                        value={employee}
-                                                    >
-                                                        <div
-                                                            className="d-flex align-items-center"
-                                                            style={{
-                                                                gap: "10px",
-                                                            }}
+                {!isOwnRevision ? (
+                    <FilterItem id="against_to">
+                        <div>
+                            <div className={styles.label}>
+                                Revision Against To:
+                            </div>
+                            <Select
+                                value={againstTo}
+                                onChange={(value) => {
+                                    setAgainstTo(value);
+                                    setAgainstToName(value?.name);
+                                }}
+                                display={(againstTo) =>
+                                    againstTo?.name || "Select All"
+                                }
+                                className={styles.selection_menu}
+                            >
+                                <Select.Options>
+                                    {isLoading.user ? (
+                                        <div
+                                            className={`${styles.filterLoader} py-2`}
+                                        >
+                                            <Loader title="Loading..." />
+                                        </div>
+                                    ) : (
+                                        <Select.SearchControllerWrapper>
+                                            {(query) => {
+                                                const data = _.filter(
+                                                    getEmployees([
+                                                        4, 5, 6, 7, 9, 10,
+                                                    ]),
+                                                    (d) =>
+                                                        _.includes(
+                                                            _.lowerCase(d.name),
+                                                            _.lowerCase(query)
+                                                        )
+                                                );
+                                                return _.size(data) > 0 ? (
+                                                    _.map(data, (employee) => (
+                                                        <Select.Option
+                                                            key={employee.id}
+                                                            value={employee}
                                                         >
-                                                            <Avatar
-                                                                src={
-                                                                    employee?.image_url ||
-                                                                    null
-                                                                }
-                                                                width={24}
-                                                                height={24}
-                                                                type="circle"
-                                                            />
-                                                            <span className="d-block">
-                                                                {" "}
-                                                                {
-                                                                    employee.name
-                                                                }{" "}
-                                                            </span>
-                                                        </div>
-                                                    </Select.Option>
-                                                ))
-                                            ) : (
-                                                <div
-                                                    className={`${styles.filterLoader} py-2`}
-                                                >
-                                                    Data Not Found
-                                                </div>
-                                            );
-                                        }}
-                                    </Select.SearchControllerWrapper>
-                                )}
-                            </Select.Options>
-                        </Select>
-                    </div>
-                </FilterItem> : null}
+                                                            <div
+                                                                className="d-flex align-items-center"
+                                                                style={{
+                                                                    gap: "10px",
+                                                                }}
+                                                            >
+                                                                <Avatar
+                                                                    src={
+                                                                        employee?.image_url ||
+                                                                        null
+                                                                    }
+                                                                    width={24}
+                                                                    height={24}
+                                                                    type="circle"
+                                                                />
+                                                                <span className="d-block">
+                                                                    {" "}
+                                                                    {
+                                                                        employee.name
+                                                                    }{" "}
+                                                                </span>
+                                                            </div>
+                                                        </Select.Option>
+                                                    ))
+                                                ) : (
+                                                    <div
+                                                        className={`${styles.filterLoader} py-2`}
+                                                    >
+                                                        Data Not Found
+                                                    </div>
+                                                );
+                                            }}
+                                        </Select.SearchControllerWrapper>
+                                    )}
+                                </Select.Options>
+                            </Select>
+                        </div>
+                    </FilterItem>
+                ) : null}
 
                 {/* Sales*/}
                 <FilterItem id="sales">
@@ -352,7 +394,10 @@ const Filterbar = ({ onFilter, isOwnRevision }) => {
                         <div className={styles.label}>Sales :</div>
                         <Select
                             value={sale}
-                            onChange={(value) => setSale(value)}
+                            onChange={(value) => {
+                                setSale(value);
+                                setSaleName(value?.name);
+                            }}
                             display={(employee) =>
                                 employee?.name || "Select All"
                             }
@@ -402,7 +447,10 @@ const Filterbar = ({ onFilter, isOwnRevision }) => {
                         <div className={styles.label}>Project Manager:</div>
                         <Select
                             value={projectManager}
-                            onChange={(value) => setProjectManager(value)}
+                            onChange={(value) => {
+                                setProjectManager(value);
+                                setProjectManagerName(value?.name);
+                            }}
                             display={(employee) =>
                                 employee?.name || "Select All"
                             }
@@ -453,7 +501,10 @@ const Filterbar = ({ onFilter, isOwnRevision }) => {
                         <div className={styles.label}>Lead Developer:</div>
                         <Select
                             value={leadDeveloper}
-                            onChange={(value) => setLeadDeveloper(value)}
+                            onChange={(value) => {
+                                setLeadDeveloper(value);
+                                setLeadDeveloperName(value?.name);
+                            }}
                             display={(employee) =>
                                 employee?.name || "Select All"
                             }

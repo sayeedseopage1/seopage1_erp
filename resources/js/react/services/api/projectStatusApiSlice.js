@@ -83,6 +83,12 @@ const projectStatusApiSlice = apiSlice.injectEndpoints({
             query: (pm_id) =>
                 `/account/goal-expire/${pm_id}`,
         }),
+        exportProjectStatus: build.mutation({
+            query: (query) => ({
+                url: `/account/export-project-status-data?${query}`,
+                method: "GET",
+            }),
+        }),
     }),
 });
 
@@ -100,4 +106,5 @@ export const {
     useGetGoalExpiredHistoryQuery,
     useLazyGetGoalExpiredHistoryQuery,
     useGetProjectManagerDeadlineExpiredGoalsQuery,
+    useExportProjectStatusMutation,
 } = projectStatusApiSlice;

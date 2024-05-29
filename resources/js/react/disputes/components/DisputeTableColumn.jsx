@@ -67,7 +67,9 @@ export const disputeTableColumn = [
                         width={24}
                         height={24}
                     />
-                    <a hrev={`account/clients/${client?.id}`}>{client?.name}</a>
+                    <a hrev={`account/clients/${client?.id}`}>
+                        <span style={{ color: "#3366CC" }}>{client?.name}</span>{" "}
+                    </a>
                 </div>
             );
         },
@@ -109,8 +111,9 @@ export const disputeTableColumn = [
                         href={`/account/projects/${data?.project_id}`}
                         className="multine-ellipsis"
                     >
-                        {" "}
-                        {data.project_name}{" "}
+                        <span style={{ color: "#3366CC" }}>
+                            {data.project_name}
+                        </span>
                     </a>
                 </abbr>
             );
@@ -129,7 +132,7 @@ export const disputeTableColumn = [
                     href={`/account/tasks/${task?.id}`}
                     className="multine-ellipsis"
                 >
-                    {task?.title}
+                    <span style={{ color: "#3366CC" }}>{task?.title}</span>
                 </a>
             );
         },
@@ -147,7 +150,7 @@ export const disputeTableColumn = [
                     href={`/account/tasks/${task?.id}`}
                     className="multine-ellipsis"
                 >
-                    {task.title}
+                    <span style={{ color: "#3366CC" }}> {task.title}</span>
                 </a>
             );
         },
@@ -177,7 +180,9 @@ export const disputeTableColumn = [
                         height={24}
                     />
                     <a href={`/account/employees/${salesPerson?.id}`}>
-                        {salesPerson?.name}
+                        <span style={{ color: "#3366CC" }}>
+                            {salesPerson?.name}
+                        </span>
                     </a>
                 </div>
             );
@@ -210,7 +215,9 @@ export const disputeTableColumn = [
                         height={24}
                     />
                     <a href={`/account/employees/${project_manager?.id}`}>
-                        {project_manager?.name}
+                        <span style={{ color: "#3366CC" }}>
+                            {project_manager?.name}
+                        </span>
                     </a>
                 </div>
             );
@@ -243,7 +250,10 @@ export const disputeTableColumn = [
                         height={24}
                     />
                     <a href={`/account/employees/${lead_developer?.id}`}>
-                        {lead_developer?.name}
+                        <span style={{ color: "#3366CC" }}>
+                            {" "}
+                            {lead_developer?.name}
+                        </span>
                     </a>
                 </div>
             );
@@ -276,7 +286,10 @@ export const disputeTableColumn = [
                         height={24}
                     />
                     <a href={`/account/employees/${developer?.id}`}>
-                        {developer?.name}
+                        <span style={{ color: "#3366CC" }}>
+                            {" "}
+                            {developer?.name}
+                        </span>
                     </a>
                 </div>
             );
@@ -306,7 +319,9 @@ export const disputeTableColumn = [
                         height={24}
                     />
                     <a href={`/account/employees/${raised_by?.id}`}>
-                        {raised_by?.name}
+                        <span style={{ color: "#3366CC" }}>
+                            {raised_by?.name}
+                        </span>
                     </a>
                 </div>
             );
@@ -344,7 +359,10 @@ export const disputeTableColumn = [
                                 : "employees"
                         }/${raised_against.id}`}
                     >
-                        {raised_against?.name}
+                        <span style={{ color: "#3366CC" }}>
+                            {" "}
+                            {raised_against?.name}
+                        </span>
                     </a>
                 </div>
             );
@@ -446,7 +464,7 @@ export const disputeTableColumn = [
                                 : "employees"
                         }/${winner.id}`}
                     >
-                        {winner?.name}
+                        <span style={{ color: "#3366CC" }}>{winner?.name}</span>
                     </a>
                 </div>
             );
@@ -563,7 +581,9 @@ export const disputeTableColumn = [
                         height={24}
                     />
                     <a href={`/account/employees/${resolved_by.id}`}>
-                        {resolved_by?.name}
+                        <span style={{ color: "#3366CC" }}>
+                            {resolved_by?.name}
+                        </span>
                     </a>
                 </div>
             );
@@ -691,7 +711,9 @@ export const disputeTableColumn = [
                         height={24}
                     />
                     <a href={`/account/employees/${authorized_by.id}`}>
-                        {authorized_by?.name}
+                        <span style={{ color: "#3366CC" }}>
+                            {authorized_by?.name}
+                        </span>
                     </a>
                 </div>
             );
