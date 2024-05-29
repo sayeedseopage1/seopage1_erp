@@ -12,13 +12,14 @@ const EvaluationRevisionModalRequiredRound = ({ data }) => {
     );
 
     const Revisions = revisionData?.data;
+    // console.log("revisions", Revisions);
     return (
         <>
             <div
                 onClick={() => setIsEvaluationRevisionModal(true)}
                 className="link_color"
             >
-                {data?.total_revision ?? "0"}
+                {Revisions?.length ?? "0"}
             </div>
 
             <RevisionModalBody

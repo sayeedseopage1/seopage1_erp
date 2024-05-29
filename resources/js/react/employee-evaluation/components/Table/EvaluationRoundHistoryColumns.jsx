@@ -9,6 +9,7 @@ import AssignedTasksDataRequiredRound from "./AssignedTasksDataRequiredRound";
 import SubmittedTasksDataRequiredRound from "./SubmittedTasksDataRequiredRound";
 import TotalMinRequiredRound from "./TotalMinRequiredRound";
 import EvaluationRevisionModalRequiredRound from "../modal/EvaluationRevisionModalRequiredRound";
+import AverageRatingRequiredRound from "./AverageRatingRequiredRound";
 const auth = new User(window.Laravel.user);
 export const EvaluationRoundHistoryTableColumns = [
     {
@@ -89,7 +90,10 @@ export const EvaluationRoundHistoryTableColumns = [
             const data = row.original;
             return (
                 <div style={{ marginLeft: "50px" }}>
-                    <AverageRating data={data} />
+                    <AverageRatingRequiredRound
+                        data={data}
+                        round={row.index + 1}
+                    />
                 </div>
             );
         },
