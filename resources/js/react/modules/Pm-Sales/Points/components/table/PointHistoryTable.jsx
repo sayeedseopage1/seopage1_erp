@@ -114,50 +114,8 @@ const baseColumns = [
     },
 ];
 
-const PointHistoryTable = ({ data, isLoading, onPageChange }) => {
+const PointHistoryTable = ({ data, isLoading }) => {
     const [dragIndex, setDragIndex] = useState({ active: -1, over: -1 });
-    // const [skipPageReset, setSkipPageReset] = useState(false);
-    // const [{ pageIndex, pageSize }, setPagination] = useState({
-    //     pageIndex: 0,
-    //     pageSize: 10,
-    // });
-
-
-    // on pagination
-    // const handlePageChange = ({ selected }) => {
-    //     const paginate = {
-    //         pageIndex: selected,
-    //         pageSize,
-    //     };
-
-    //     setPagination({ ...paginate, pageIndex: 0 });
-    //     onPageChange(paginate);
-    // };
-
-    // // handle page size change
-    // const handlePageSizeChange = (e) => {
-    //     e.preventDefault();
-
-    //     const paginate = {
-    //         pageIndex,
-    //         pageSize: e.target.value,
-    //     };
-    //     setPagination({ ...paginate, pageIndex: 0 });
-    //     onPageChange(paginate);
-    // };
-
-    // pagination
-    // const pagination = useMemo(
-    //     () => ({ pageIndex, pageSize }),
-    //     [pageIndex, pageSize]
-    // );
-
-    // clear skipPageReset
-    // useEffect(() => {
-    //     if (skipPageReset) {
-    //         setSkipPageReset(false);
-    //     }
-    // }, [data]);
 
     const [columns, setColumns] = useState(() =>
         baseColumns.map((column, i) => ({
@@ -205,53 +163,45 @@ const PointHistoryTable = ({ data, isLoading, onPageChange }) => {
     const rowClassName = (_record, index) => (index % 2 === 0 ? 'table-row-odd' : '');
 
     return (
-        <div className="cnx__table_wrapper" style={{ padding: '16px' }}>
-            <ConfigProvider
-                theme={{
-                    components: {
-                        Table: {
-                            headerBg: '#fff'
-                        },
+        <ConfigProvider
+            theme={{
+                components: {
+                    Table: {
+                        headerBg: '#fff'
                     },
-                }}
+                },
+            }}
+        >
+            <DndContext
+                sensors={sensors}
+                modifiers={[restrictToHorizontalAxis]}
+                onDragEnd={onDragEnd}
+                onDragOver={onDragOver}
+                collisionDetection={closestCenter}
             >
-                <DndContext
-                    sensors={sensors}
-                    modifiers={[restrictToHorizontalAxis]}
-                    onDragEnd={onDragEnd}
-                    onDragOver={onDragOver}
-                    collisionDetection={closestCenter}
-                >
-                    <SortableContext items={columns.map((i) => i.key)} strategy={horizontalListSortingStrategy}>
-                        <DragIndexContext.Provider value={dragIndex}>
-                            <Table
-                                rowKey="id"
-                                columns={columns}
-                                dataSource={data?.data}
-                                components={{
-                                    header: { cell: TableHeaderCell },
-                                    body: { cell: TableBodyCell },
-                                }}
-                                pagination={false}
-                                scroll={{ x: 1024, y: 1000 }}
-                                rowClassName={rowClassName}
-                            />
-                        </DragIndexContext.Provider>
-                    </SortableContext>
-                    <DragOverlay>
-                        <th style={{ backgroundColor: 'gray', padding: 16 }}>
-                            {columns[columns.findIndex((i) => i.key === dragIndex.active)]?.title}
-                        </th>
-                    </DragOverlay>
-                </DndContext>
-            </ConfigProvider>
-            {/* <PointHistoryTablePagination
-                tableData={data}
-                handlePageSizeChange={handlePageSizeChange}
-                handlePageChange={handlePageChange}
-                pageSize={pageSize}
-            /> */}
-        </div>
+                <SortableContext items={columns.map((i) => i.key)} strategy={horizontalListSortingStrategy}>
+                    <DragIndexContext.Provider value={dragIndex}>
+                        <Table
+                            rowKey="id"
+                            columns={columns}
+                            dataSource={data?.data}
+                            components={{
+                                header: { cell: TableHeaderCell },
+                                body: { cell: TableBodyCell },
+                            }}
+                            pagination={false}
+                            scroll={{ x: 1024, y: 1000 }}
+                            rowClassName={rowClassName}
+                        />
+                    </DragIndexContext.Provider>
+                </SortableContext>
+                <DragOverlay>
+                    <th style={{ backgroundColor: 'gray', padding: 16 }}>
+                        {columns[columns.findIndex((i) => i.key === dragIndex.active)]?.title}
+                    </th>
+                </DragOverlay>
+            </DndContext>
+        </ConfigProvider>
     );
 };
 

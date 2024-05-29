@@ -17,11 +17,6 @@ const PmCashPoints = () => {
     const { data: pmCashPoints, isLoading: dataFetchingStateIsLoading } = useGetPmCashPointsQuery(query)
     const tableData = pmCashPoints?.data
 
-    // const onPageChange = (paginate) => {
-    //     setPagination(paginate);
-    //     setQuery(prev => ({ ...prev, per_page: pageSize, page: pageIndex + 1 }));
-    //     // setQuery({ ...query, limit: pageSize, page: pageIndex + 1 });
-    // };
 
     const onPageChange = ({ selected }) => {
         setPagination(prev => {
@@ -63,17 +58,18 @@ const PmCashPoints = () => {
                             isLoading={isDataFetching}
                             defaultColumns={TableColumns}
                         /> */}
-
-                    <PointHistoryTable data={tableData} isLoading={dataFetchingStateIsLoading} onPageChange={onPageChange} />
-                    <PointHistoryTablePagination
-                        tableData={tableData}
-                        handlePageSizeChange={handlePageSizeChange}
-                        handlePageChange={onPageChange}
-                        pageSize={pageSize}
-                    />
+                    <div className="cnx__table_wrapper" style={{ padding: '16px' }}>
+                        <PointHistoryTable data={tableData} isLoading={dataFetchingStateIsLoading} onPageChange={onPageChange} />
+                        <PointHistoryTablePagination
+                            tableData={tableData}
+                            handlePageSizeChange={handlePageSizeChange}
+                            handlePageChange={onPageChange}
+                            pageSize={pageSize}
+                        />
+                    </div>
                 </main>
-            </div>
-        </div>
+            </div >
+        </div >
 
     )
 }
