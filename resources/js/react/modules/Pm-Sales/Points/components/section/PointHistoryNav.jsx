@@ -4,7 +4,8 @@ import { Placeholder } from '../../../../../global/Placeholder';
 import { ButtonComponent } from '../../../PointFactors/components/Styles/ui/ui';
 
 const PointHistoryNav = ({ navActive, setNavActive, data, isLoading }) => {
-    const balancePoints = data?.reduce((prev, curr) => prev + Number(curr?.cumulative_balance), 0);
+    // const balancePoints = data?.reduce((prev, curr) => prev + Number(curr?.cumulative_balance), 0);
+    const balancePoints = data?.length ? data[0]?.cumulative_balance : 0;
     const posPoints = data?.reduce((prev, curr) => prev + Number(curr?.total_points_earn), 0);
     const negPoints = data?.reduce((prev, curr) => prev + Number(curr?.total_points_lost), 0);
     return (

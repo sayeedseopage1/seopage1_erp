@@ -4,18 +4,26 @@ namespace App\Http\Controllers\PointIncentive;
 
 use Carbon\Carbon;
 use App\Models\Task;
+use App\Models\Project;
 use App\Helper\Incentive;
 use App\Models\TaskRevision;
 use Illuminate\Http\Request;
 use App\Models\IncentiveType;
 use App\Models\IncentiveFactor;
 use App\Http\Controllers\Controller;
+use App\View\Components\Forms\Number;
 
 class IncentiveFactorController extends Controller
 {
     public function index()
     {
         $total_points = 500;
+        $total_previous_assigned_amount = number_format(Project::join('project_milestones', 'projects.id', '=', 'project_milestones.project_id')
+        ->where('projects.pm_id', 209)
+        ->whereBetween('project_milestones.created_at', [Carbon::now()->subMonth()->startOfMonth(), Carbon::now()->subMonth()->endOfMonth()])
+        ->where('projects.project_status','Accepted')
+        ->sum('cost'), 2);
+
         $incentiveData = IncentiveType::with('incentiveCriterias.incentiveFactors')->get()->map(function($incentiveType){
             $incentiveType->incentiveCriterias->map(function($incentiveCriteria){
                 Incentive::progressiveCalculation($incentiveCriteria, $incentiveCriteria->acquired_percent);
@@ -24,6 +32,7 @@ class IncentiveFactorController extends Controller
         });
 
         $data['total_points'] = $total_points;
+        $data['total_previous_assigned_amount'] = $total_previous_assigned_amount;
         $data['incentive_data'] = $incentiveData;
 
         return response()->json([
