@@ -103,7 +103,7 @@ const EvaluationRequiredRoundsTaskListModal = ({
 
     useEffect(() => {
         setTaskList(Tasks);
-    }, [singleEvaluation, Tasks]);
+    }, [singleEvaluation]);
 
     let tasksToRate = [];
     //to enable or disable button
