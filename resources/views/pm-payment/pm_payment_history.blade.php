@@ -169,11 +169,13 @@
                     </div>
                 </div>
             </div>
-
-
         </div>
 
         <div class="row">
+            <div class="col-md-12">
+                <div id="table-actions" class="flex-grow-1 align-items-center mt-4">
+                </div>
+            </div>
             <div class="col-md-12">
                 <div class="d-flex flex-column w-tables rounded mt-3 bg-white">
                     {!! $dataTable->table(['class' => 'table table-hover border-0 w-100']) !!}

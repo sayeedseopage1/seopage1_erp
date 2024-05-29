@@ -24,11 +24,15 @@ const QualifiedSalesFilterbar = ({ onFilter }) => {
     // employee
     const [selectedEmployeeId, setSelectedEmployeeId] = React.useState(null);
     const [selectedPMId, setSelectedPMId] = React.useState(null);
+    const [selectedPMName, setSelectedPMname] = React.useState(null);
     const [selectedClientId, setSelectedClientId] = React.useState(null);
+    const [selectedClientName, setSelectedClientName] = React.useState(null);
     const [selectedProject, setSelectedProject] = React.useState(null);
+    const [selectedProjectName, setSelectedProjectName] = React.useState(null);
     const [dept, setDept] = React.useState({});
     const [shift, setShift] = React.useState(null);
     const [closedBy, setClosedBy] = React.useState(null);
+    const [closedByName, setClosedByName] = React.useState(null);
 
     const logged_user = window?.Laravel?.user;
 
@@ -78,22 +82,33 @@ const QualifiedSalesFilterbar = ({ onFilter }) => {
     };
 
     const _closedBy = useMemo(() => closedBy, [closedBy]);
+    const _closedByName = useMemo(() => closedByName, [closedByName]);
     const pmID = useMemo(() => selectedPMId, [selectedPMId]);
+    const pmName = useMemo(() => selectedPMName, [selectedPMName]);
     const _clientID = useMemo(() => selectedClientId, [selectedClientId]);
+    const _clientName = useMemo(() => selectedClientName, [selectedClientName]);
     const _startDate = useMemo(() => startDate, [startDate]);
     const _endDate = useMemo(() => endDate, [endDate]);
     const _project = useMemo(() => selectedProject, [selectedProject]);
+    const _projectName = useMemo(
+        () => selectedProjectName,
+        [selectedProjectName]
+    );
 
     React.useEffect(() => {
         if (_startDate && _endDate) {
             let data = {
                 closed_by: _closedBy,
+                closed_by_name: _closedByName,
                 pm_id: pmID,
+                pm_Name: pmName,
                 client_id: _clientID,
+                client_Name: _clientName,
                 start_date: _startDate,
                 end_date: _endDate,
                 search: search || null,
                 project_id: _project?.id || null,
+                project_Name: _projectName?.name || null,
             };
 
             onFilter(data);
@@ -103,12 +118,16 @@ const QualifiedSalesFilterbar = ({ onFilter }) => {
     const handleSearch = () => {
         let data = {
             closed_by: _closedBy,
+            closed_by_name: _closedByName,
             pm_id: pmID,
+            pm_Name: pmName,
             client_id: _clientID,
+            client_nAME: _clientName,
             start_date: _startDate,
             end_date: _endDate,
             search: search || null,
             project_id: _project?.id || null,
+            project_Name: _projectName?.name || null,
         };
 
         onFilter(data);
@@ -158,7 +177,10 @@ const QualifiedSalesFilterbar = ({ onFilter }) => {
                                     : null
                             }
                             isLoading={usersIsFetching}
-                            onSelect={(e, d) => setSelectedPMId(d.id)}
+                            onSelect={(e, d) => {
+                                setSelectedPMId(d.id);
+                                setSelectedPMname(d.name);
+                            }}
                         />
 
                         {/* client */}
@@ -182,7 +204,10 @@ const QualifiedSalesFilterbar = ({ onFilter }) => {
                                     : null
                             }
                             isLoading={usersIsFetching}
-                            onSelect={(e, d) => setSelectedClientId(d.id)}
+                            onSelect={(e, d) => {
+                                setSelectedClientId(d.id);
+                                setSelectedClientName(d.name);
+                            }}
                         />
 
                         <DepartmentFilter
@@ -220,7 +245,10 @@ const QualifiedSalesFilterbar = ({ onFilter }) => {
                                     : null
                             }
                             isLoading={usersIsFetching}
-                            onSelect={(e, d) => setClosedBy(d.id)}
+                            onSelect={(e, d) => {
+                                setClosedBy(d.id);
+                                setClosedByName(d.name);
+                            }}
                         />
 
                         <ProjectFilterItem
@@ -232,7 +260,10 @@ const QualifiedSalesFilterbar = ({ onFilter }) => {
                             }
                             isLoading={isFetching}
                             selected={selectedProject}
-                            onSelect={(e, d) => setSelectedProject(d)}
+                            onSelect={(e, d) => {
+                                setSelectedProject(d);
+                                setSelectedProjectName(d);
+                            }}
                         />
                     </>
                 )}
