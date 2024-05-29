@@ -4,6 +4,8 @@ import arrow1 from '../../assets/arrow-1.svg'
 import arrow2 from '../../assets/arrow-2.svg'
 import { Popover } from "antd";
 import { IoInformationCircle } from "react-icons/io5";
+import line18 from '../../assets/Line18.svg'
+import line19 from '../../assets/Line19.svg'
 
 const IncentiveThickChart = ({ chartData }) => {
     const chartRef = useRef(null);
@@ -230,9 +232,9 @@ const IncentiveThickChart = ({ chartData }) => {
     return (
         <>
             <div className="y_axis_arrow ">
-                <img src={arrow1} className="chart_axis_icon" alt="arrow1" />
+                <img src={line18} className="chart_yAxis_icon" alt="arrow1" />
                 <h2 className="chart_axis_title">{chartData?.yTitle}</h2>
-                <img src={arrow2} className="chart_axis_icon" alt="arrow2" />
+                <img src={line19} className="chart_yAxis_icon" alt="arrow2" />
             </div>
             <div className="chart_header">
                 <div className="chart_title">

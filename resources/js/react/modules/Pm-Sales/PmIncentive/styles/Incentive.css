@@ -245,8 +245,20 @@
     gap: 13px;
 }
 
-
 .y_axis_arrow {
+    transform: rotate(-90deg) translateX(-50%);
+    transform-origin: top left;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 15px;
+    position: absolute;
+    top: 45%;
+    left: 0;
+}
+
+
+/* .y_axis_arrow {
     transform: rotate(-90deg);
     display: flex;
     align-items: center;
@@ -254,13 +266,13 @@
     gap: 8px;
     position: absolute;
     top: 41%;
-    left: -28%;
-}
+    left: -23%;
+} */
 
-#bonus_points .chart_parent:nth-child(1) .y_axis_arrow,
+/* #bonus_points .chart_parent:nth-child(1) .y_axis_arrow,
 #bonus_points .chart_parent:nth-child(3) .y_axis_arrow {
-    left: -25%
-}
+    left: -20%
+} */
 
 .chart_axis_title {
     font-size: 12px;
@@ -273,6 +285,10 @@
 
 .chart_axis_icon {
     width: 20%;
+}
+
+.chart_yAxis_icon {
+    transform: rotate(90deg);
 }
 
 .x_axis_arrow {
@@ -917,75 +933,25 @@
             modals ends
 *********************************/
 
-@media only screen and (min-width: 1601px) and (max-width: 1700px) {
-    .y_axis_arrow {
-        left: -33%;
-    }
-
-    #bonus_points .chart_parent:nth-child(1) .y_axis_arrow,
-    #bonus_points .chart_parent:nth-child(3) .y_axis_arrow {
-        left: -25%
-    }
-}
-
 @media only screen and (min-width: 1501px) and (max-width: 1600px) {
-    .y_axis_arrow {
-        left: -36%;
-    }
-
-    #bonus_points .chart_parent:nth-child(1) .y_axis_arrow,
-    #bonus_points .chart_parent:nth-child(3) .y_axis_arrow {
-        left: -25%
-    }
-
     .chart_axis_icon {
         width: 18%;
     }
 }
 
 @media only screen and (min-width: 1401px) and (max-width: 1500px) {
-    .y_axis_arrow {
-        top: 38%;
-        left: -40%;
-    }
-
-    #bonus_points .chart_parent:nth-child(1) .y_axis_arrow,
-    #bonus_points .chart_parent:nth-child(3) .y_axis_arrow {
-        left: -25%
-    }
-
     .chart_axis_icon {
         width: 18%;
     }
 }
 
 @media only screen and (min-width: 1301px) and (max-width: 1400px) {
-    .y_axis_arrow {
-        top: 38%;
-        left: -44%;
-    }
-
-    #bonus_points .chart_parent:nth-child(1) .y_axis_arrow,
-    #bonus_points .chart_parent:nth-child(3) .y_axis_arrow {
-        left: -25%
-    }
-
     .chart_axis_icon {
         width: 18%;
     }
 }
 
 @media only screen and (min-width: 1201px) and (max-width: 1300px) {
-    .y_axis_arrow {
-        top: 38%;
-        left: -49%;
-    }
-
-    #bonus_points .chart_parent:nth-child(1) .y_axis_arrow,
-    #bonus_points .chart_parent:nth-child(3) .y_axis_arrow {
-        left: -25%
-    }
-
     .chart_axis_icon {
         width: 15%;
     }
@@ -1001,9 +967,9 @@
         width: 100%;
     }
 
-    .y_axis_arrow {
+    /* .y_axis_arrow {
         display: none;
-    }
+    } */
 
     .chart_axis_icon {
         width: 18%;
@@ -1020,9 +986,9 @@
         width: 100%;
     }
 
-    .y_axis_arrow {
+    /* .y_axis_arrow {
         display: none;
-    }
+    } */
 
     .chart_axis_icon {
         width: 18%;
@@ -1039,9 +1005,9 @@
         width: 100%;
     }
 
-    .y_axis_arrow {
+    /* .y_axis_arrow {
         display: none;
-    }
+    } */
 
     .chart_axis_icon {
         width: 18%;
