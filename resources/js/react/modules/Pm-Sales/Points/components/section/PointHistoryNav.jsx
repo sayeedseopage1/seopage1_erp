@@ -11,9 +11,9 @@ const PointHistoryNav = ({ navActive, setNavActive, data, isLoading }) => {
     return (
         <div className='point_history_nav_container'>
             <div className='point_history_banner'>
-                <h4 className='point_history_banner_item'>Balance points: {isLoading ? <Placeholder width="50px" height={18} /> : <span className={`${balancePoints > 0 ? '' : 'point_table_data_neg'}`} style={{ fontSize: '20px' }}>{balancePoints?.toFixed(2)}</span>}</h4>
+                <h4 className='point_history_banner_item'>Balance points: {isLoading ? <Placeholder width="50px" height={18} /> : <span className={`${balancePoints > 0 ? '' : 'point_table_data_neg'}`}>{balancePoints?.toFixed(2)}</span>}</h4>
                 <h4 className='point_history_banner_item'>Positive points: {isLoading ? <Placeholder width="50px" height={18} /> : <span className={`${posPoints > 0 ? 'point_table_data_pos' : 'point_table_data_neg'}`}>{posPoints?.toFixed(2)}</span>}</h4>
-                <Divider type="vertical" />
+                <Divider className='antd_divider_vertical' type="vertical" />
                 <h4 className='point_history_banner_item'>Negative points: {isLoading ? <Placeholder width="50px" height={18} /> : <span className={`${negPoints > 0 ? 'point_table_data_neg' : 'point_table_data_pos'}`}>{negPoints?.toFixed(2)}</span>}</h4>
                 <a href="/account/pm-point-factors">
                     <ButtonComponent

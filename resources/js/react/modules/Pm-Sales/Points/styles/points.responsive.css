@@ -1,0 +1,31 @@
+@media only screen and (max-width: 768px) {
+    .point_history_banner_item {
+        font-size: 13px;
+        gap: 3px;
+    }
+
+    .point_history_banner {
+        flex-wrap: wrap;
+    }
+
+    .antd_divider_vertical {
+        display: none;
+    }
+
+    .point_history_nav {
+        flex-wrap: wrap;
+        justify-content: flex-start;
+    }
+}
+
+@media only screen and (max-width: 1509px) {
+    .point_history_nav_container {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .point_history_banner {
+        width: 100%;
+        max-width: 100%;
+    }
+}

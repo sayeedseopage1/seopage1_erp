@@ -11,6 +11,7 @@ import { store } from '../../../services/store';
 import { useUsers } from '../../../hooks/useUsers';
 import PmCashPoints from './pages/PmCashPoints';
 import '../Points/styles/points.css'
+import '../Points/styles/points.responsive.css'
 
 
 const Content = () => {
