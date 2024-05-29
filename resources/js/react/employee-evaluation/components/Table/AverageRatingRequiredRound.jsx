@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import styles from "../../../../react/tasks/components/PrimaryPageAuthorization.module.css";
 import ReactModal from "react-modal";
 import { ratingHoverText } from "../../../utils/ratingHoverText";
@@ -6,31 +6,13 @@ import RatingSectionStatic from "../modal/RatingSectionStatic";
 import Card from "../../../global/Card";
 import { useGetTaskListQuery } from "../../../services/api/EvaluationApiSlice";
 
-const AverageRating = ({ data }) => {
+const AverageRatingRequiredRound = ({ data, round }) => {
     const {
         data: TaskList,
         isLoading,
         isFetching,
     } = useGetTaskListQuery(data?.user_id);
-    const [latestRoundTasks, setLatestRoundTasks] = useState([]);
-
-    useEffect(() => {
-        if (TaskList?.data) {
-            // Find the latest round number
-            const latestRound = Math.max(
-                ...TaskList.data.map((task) => task.round)
-            );
-
-            // Filter tasks that have the latest round
-            const tasks = TaskList.data.filter(
-                (task) =>
-                    task.round === latestRound && task.submission_date !== null
-            );
-
-            setLatestRoundTasks(tasks);
-        }
-    }, [TaskList]);
-
+    const Tasks = TaskList?.data.filter((task) => task.round === round);
     const [isRatingModalOpen, setIsRatingModalOpen] = useState(false);
 
     const calculateAverage = (tasks, property) => {
@@ -42,24 +24,15 @@ const AverageRating = ({ data }) => {
         return (total / tasks.length).toFixed(2);
     };
 
-    const qw_first_chance_avg = calculateAverage(
-        latestRoundTasks,
-        "qw_first_chance"
-    );
-    const qw_first_revision_avg = calculateAverage(
-        latestRoundTasks,
-        "qw_first_revision"
-    );
+    const qw_first_chance_avg = calculateAverage(Tasks, "qw_first_chance");
+    const qw_first_revision_avg = calculateAverage(Tasks, "qw_first_revision");
     const qw_second_revision_avg = calculateAverage(
-        latestRoundTasks,
+        Tasks,
         "qw_second_revision"
     );
-    const speed_of_work_avg = calculateAverage(
-        latestRoundTasks,
-        "speed_of_work"
-    );
+    const speed_of_work_avg = calculateAverage(Tasks, "speed_of_work");
     const understand_instruction_avg = calculateAverage(
-        latestRoundTasks,
+        Tasks,
         "understand_instruction"
     );
 
@@ -104,7 +77,7 @@ const AverageRating = ({ data }) => {
                 onClick={() => setIsRatingModalOpen(true)}
                 className="link_color"
             >
-                {totalAverage ?? "N/A"}
+                {totalAverage}
             </div>
             <ReactModal
                 style={{
@@ -125,7 +98,6 @@ const AverageRating = ({ data }) => {
                         overflowY: "auto",
                     },
                 }}
-                ariaHideApp={false}
                 isOpen={isRatingModalOpen}
                 onRequestClose={() => setIsRatingModalOpen(false)}
             >
@@ -151,4 +123,4 @@ const AverageRating = ({ data }) => {
     );
 };
 
-export default AverageRating;
+export default AverageRatingRequiredRound;
