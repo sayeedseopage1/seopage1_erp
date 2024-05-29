@@ -11,60 +11,65 @@ import Tabbar from "../components/Tabbar";
 import TableFilter from "../components/table/TableFilter";
 import { defaultColumnVisibility } from "../constant";
 import { useIndependentTask } from "../context/IndependentTaskProvider";
+import IndependentTaskExportButton from "../components/IndependentTasksExportButton";
+import IndependentSubTaskExportButton from "../components/IndependentSubTaskExportButton";
 
 const Subtasks = () => {
     const { subTaskTableData, setSubtaskTableData } = useIndependentTask();
     const [filter, setFilter] = React.useState(null);
-    const [search,setSearch] = React.useState('');
+    const [search, setSearch] = React.useState("");
     const auth = new User(window.Laravel.user);
-    const [columnVisibility, setColumnVisibility] = React.useState(defaultColumnVisibility)
+    const [columnVisibility, setColumnVisibility] = React.useState(
+        defaultColumnVisibility
+    );
 
     // const [getAllSubtask, {isFetching}] = useLazyGetAllSubtaskQuery();
-    const [ getIndependentSubtasks, { isLoading, isFetching }] = useGetIndependentSubtasksMutation();
+    const [getIndependentSubtasks, { isLoading, isFetching }] =
+        useGetIndependentSubtasksMutation();
 
     const onFilter = async (filter) => {
         const queryObject = _.pickBy(filter, Boolean);
         const queryString = new URLSearchParams(queryObject).toString();
         setFilter(queryObject);
 
-        if(!filter?.start_date && !filter?.end_date) return;
+        if (!filter?.start_date && !filter?.end_date) return;
 
         try {
-           // fetch independent subtasks
-           const res = await getIndependentSubtasks(queryString).unwrap();
-           setSubtaskTableData(res.data);
-
+            // fetch independent subtasks
+            const res = await getIndependentSubtasks(queryString).unwrap();
+            setSubtaskTableData(res.data);
         } catch (error) {
-           console.error(error);
+            console.error(error);
         }
-    }
+    };
 
     const handleRefresh = () => {
         onFilter(filter);
-    }
-
+    };
 
     let tableColumns = SubTasksTableColumns;
 
-    if(auth?.getRoleId() !== 5){
-        tableColumns = _.filter(SubTasksTableColumns, d => d.id !== "action");
+    if (auth?.getRoleId() !== 5) {
+        tableColumns = _.filter(SubTasksTableColumns, (d) => d.id !== "action");
     }
-
-
 
     return (
         <React.Fragment>
             <FilterContainer>
-                <Filterbar onFilter={onFilter} page="subtasks"/>
+                <Filterbar onFilter={onFilter} page="subtasks" />
             </FilterContainer>
             <div className="sp1_tlr_container">
-            <section className="pt-3 pr-3 d-flex justify-content-end">
+                <section className="pt-3 pr-3 d-flex justify-content-between">
+                    <IndependentSubTaskExportButton
+                        filter={filter}
+                        subTaskTableData={subTaskTableData}
+                    />
                     <button
                         onClick={handleRefresh}
                         className="btn btn-primary"
                         type="button"
                         disabled={isLoading}
-                        style={{paddingTop:"5px",paddingBottom:"5px"}}
+                        style={{ paddingTop: "5px", paddingBottom: "5px" }}
                     >
                         {isLoading && (
                             <span
@@ -78,14 +83,17 @@ const Subtasks = () => {
                 </section>
                 <div className="sp1_tlr_tbl_container">
                     <div className="mb-3 d-flex align-items-center flex-wrap justify-content-between">
-                        <Tabbar/>
-                        <div className="ml-auto" style={{maxWidth: '300px'}}>
+                        <Tabbar />
+                        <div className="ml-auto" style={{ maxWidth: "300px" }}>
                             <SearchBox value={search} onChange={setSearch} />
                         </div>
-                        <div className="ml-2" style={{marginTop: '2px'}}>
+                        <div className="ml-2" style={{ marginTop: "2px" }}>
                             <TableFilter
                                 tableName="independent_subtask_table"
-                                columns = {_.filter(tableColumns, col => col.id !== 'expend')}
+                                columns={_.filter(
+                                    tableColumns,
+                                    (col) => col.id !== "expend"
+                                )}
                                 columnVisibility={columnVisibility}
                                 setColumnVisibility={setColumnVisibility}
                             />
@@ -98,8 +106,8 @@ const Subtasks = () => {
                         tableName="independent_subtask_table"
                         search={search}
                         tableData={subTaskTableData}
-                        reportPermission = {[1,8,5]}
-                        columnVisibility = {columnVisibility}
+                        reportPermission={[1, 8, 5]}
+                        columnVisibility={columnVisibility}
                         setColumnVisibility={setColumnVisibility}
                         tableColumns={tableColumns}
                     />

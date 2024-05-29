@@ -505,16 +505,25 @@ const singleTaskPageApiSlice = apiSlice.injectEndpoints({
             }),
         }),
 
+        // dispute export
+        exportDisputes: build.mutation({
+            query: (query) => ({
+                url: `/account/export-task-dispute?${query}`,
+                method: "GET",
+            }),
+        }),
+
+        // Get types of graphic works
         getTypesOfGraphicWorks: build.query({
             query: () => `/type-of-graphic-works`,
         }),
 
+        // Delete graphics task file
         deleteGraphicsTaskFile: build.mutation({
             query: (fileId) => ({
                 url: `/account/graphic-task-file/delete/${fileId}`,
                 method: "GET",
             }),
-            // invalidatesTags: ["TASKS"],
         }),
     }),
 });
@@ -571,6 +580,7 @@ export const {
     useGetWorkingEnvironmentQuery,
     useLazyGetWorkingEnvironmentQuery,
     useCheckWorkingReportMutation,
+    useExportDisputesMutation,
     useGetTypesOfGraphicWorksQuery,
     useDeleteGraphicsTaskFileMutation,
 } = singleTaskPageApiSlice;

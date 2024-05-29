@@ -58,7 +58,7 @@ class PmPaymentHistoryDataTable extends BaseDataTable
             })
             ->editColumn('project_id', function ($row) {
                 if (!is_null($row->project)) {
-                    return '<a class="text-darkest-grey" href="' . route('projects.show', $row->project_id) . '">' . ucfirst($row->project->project_name) . '</a>';
+                    return '<a href="' . route('projects.show', $row->project_id) . '">' . ucfirst($row->project->project_name) . '</a>';
                 }
                 else {
                     return '--';
@@ -69,7 +69,7 @@ class PmPaymentHistoryDataTable extends BaseDataTable
                     $pm = User::where('id',$row->pm_id)->first();
                     return '<div class="media align-items-center">
                               <div class="media-body">
-                          <h5 class="mb-0 f-13 text-darkest-grey"><a href="' . route('employees.show',$pm->id) . '">' . $pm->name . '</a></h5>
+                          <h5 class="mb-0 f-13 "><a class="text-primary" href="' . route('employees.show',$pm->id) . '">' . $pm->name . '</a></h5>
 
                           </div>
                         </div>';
@@ -82,7 +82,7 @@ class PmPaymentHistoryDataTable extends BaseDataTable
                     $client = User::where('id',$row->client_id)->first();
                     return '<div class="media align-items-center">
                               <div class="media-body">
-                          <h5 class="mb-0 f-13 text-darkest-grey"><a href="' . route('employees.show',$client->id) . '">' . $client->name . '</a></h5>
+                          <h5 class="mb-0 f-13 "><a class="text-primary" href="' . route('employees.show',$client->id) . '">' . $client->name . '</a></h5>
 
                           </div>
                         </div>';

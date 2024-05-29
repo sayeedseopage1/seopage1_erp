@@ -2,13 +2,13 @@ import { apiSlice } from "./apiSlice";
 
 const revisionApi = apiSlice.injectEndpoints({
     endpoints: (build) => ({
-      // revisions
-      getRevisions: build.query({
-        query: (query) => `/account/tasks/revisions?${query}`,
-        providesTags: ["REVISIONS"]
-      }),
+        // revisions
+        getRevisions: build.query({
+            query: (query) => `/account/tasks/revisions?${query}`,
+            providesTags: ["REVISIONS"],
+        }),
 
-       // sales revision response
+        // sales revision response
         saleRevisionAction: build.mutation({
             query: (data) => ({
                 url: `/account/tasks/sales-response-on-revision`,
@@ -20,15 +20,22 @@ const revisionApi = apiSlice.injectEndpoints({
                         .getAttribute("content"),
                 },
             }),
-            invalidatesTags: ["REVISIONS"]
-        })
+            invalidatesTags: ["REVISIONS"],
+        }),
+
+        exportTableRevision: build.mutation({
+            query: (query) => ({
+                // url: `/account/qualified-sales?mode=json&${query}`,
+
+                url: `/account/export-task-revisions-data?${query}`,
+                method: "GET",
+            }),
+        }),
     }),
-}) ;
-
-
+});
 
 export const {
-   useGetRevisionsQuery,
-   useSaleRevisionActionMutation
- } = revisionApi;
-
+    useGetRevisionsQuery,
+    useSaleRevisionActionMutation,
+    useExportTableRevisionMutation,
+} = revisionApi;
