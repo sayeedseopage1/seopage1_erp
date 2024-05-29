@@ -9188,10 +9188,11 @@ var LeadConfirmationModal = function LeadConfirmationModal(_ref) {
     _React$useState2 = _slicedToArray(_React$useState, 2),
     buttonVisible = _React$useState2[0],
     setButtonVisible = _React$useState2[1];
-  var _React$useState3 = react__WEBPACK_IMPORTED_MODULE_0___default().useState(20),
+  var _React$useState3 = react__WEBPACK_IMPORTED_MODULE_0___default().useState(5),
     _React$useState4 = _slicedToArray(_React$useState3, 2),
     countDown = _React$useState4[0],
     setCountDown = _React$useState4[1];
+  // const [countDown, setCountDown] = React.useState(20);
   var auth = new _utils_user_details__WEBPACK_IMPORTED_MODULE_3__.User(window.Laravel.user);
   react__WEBPACK_IMPORTED_MODULE_0___default().useEffect(function () {
     if (auth.getRoleId() && auth.getRoleId() === 6) {
@@ -9202,7 +9203,9 @@ var LeadConfirmationModal = function LeadConfirmationModal(_ref) {
       var timeOutId = setTimeout(function () {
         setButtonVisible(true);
         clearInterval(timeIntervelId);
-      }, 22000);
+      }, 5000);
+      // }, 22000);
+
       return function () {
         clearTimeout(timeOutId);
         clearInterval(timeIntervelId);
@@ -9219,42 +9222,42 @@ var LeadConfirmationModal = function LeadConfirmationModal(_ref) {
       className: "subtask-timer-confirmation--panel",
       children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
         className: "subtask-timer-confirmation--content",
-        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("h4", {
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("h4", {
           className: "mb-3",
-          children: " Do You Understand The Following Things? "
+          children: [" ", "Do You Understand The Following Things?", " "]
         }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("ol", {
           type: "A",
           style: {
-            marginLeft: '30px'
+            marginLeft: "30px"
           },
-          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("li", {
-            children: " Your teams job is not to decide what the look and feel of a website will be based on a few reference websites "
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("li", {
-            children: "Your teams job is not to research a theme based on an instruction shared by the PM. "
+          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("li", {
+            children: [" ", "Your teams job is not to decide what the look and feel of a website will be based on a few reference websites", " "]
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("li", {
+            children: ["Your teams job is not to research a theme based on an instruction shared by the PM.", " "]
           }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("li", {
             children: "Your teams job is not to research a plugin based on a problem shared by PM."
           }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("li", {
             children: "Your teams job is not to choose the color scheme of a website."
           }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("li", {
             children: "Your teams job is not to talk to the support for example the shopify support team, theme support, plugin support and any other support for any solution."
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("li", {
-            children: "Your teams job is not to create the training videos for the client after the completion of a project. "
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("li", {
+            children: ["Your teams job is not to create the training videos for the client after the completion of a project.", " "]
           }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("li", {
             children: "You understand that all your teams hours have to be logged/tracked and you team mates will questioned if each of them doesn\u2019t log at least 7 hours for any reason."
           })]
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("p", {
-          children: "In general, anything that has to do with requirements define (of any sort) has to be done by the project manager. Your teams job is to execute the work based on the defined requirements.  "
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("p", {
+          children: ["In general, anything that has to do with requirements define (of any sort) has to be done by the project manager. Your teams job is to execute the work based on the defined requirements.", " "]
         }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("p", {
           children: "If for any reason, project manager needs your help for any of those things, he will have to create a separate task for each of them and those tasks have to be authorized by the top management mandatorily."
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("p", {
-          children: " Report immediately if you are asked to do any of these and if it was\u2019t authorized by top management. You should see a text like \u201CAuthorized by top management\u201D at the right side of the task title if it was authorized.In case, you don\u2019t report, the extra time taken for these will be considered as your lackings (as they will remain unaccountable) and you will receive negative performance score.\u201D"
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("p", {
+          children: [" ", "Report immediately if you are asked to do any of these and if it was\u2019t authorized by top management. You should see a text like \u201CAuthorized by top management\u201D at the right side of the task title if it was authorized.In case, you don\u2019t report, the extra time taken for these will be considered as your lackings (as they will remain unaccountable) and you will receive negative performance score.\u201D"]
         }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("div", {
           className: "d-flex align-items-center",
           children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)(_components_Button__WEBPACK_IMPORTED_MODULE_2__["default"], {
             onClick: onConfirm,
             className: "ml-auto",
             disabled: !buttonVisible,
-            children: ["Yes, I Fully Understand This ", !buttonVisible && "(".concat(countDown, ")")]
+            children: ["Yes, I Fully Understand This", " ", !buttonVisible && "(".concat(countDown, ")")]
           })
         })]
       })
