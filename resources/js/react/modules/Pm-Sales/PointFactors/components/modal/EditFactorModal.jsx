@@ -146,7 +146,7 @@ const EditFactorModal = ({
                                         value={lower_limit}
                                         onChange={handleChange}
                                         placeholder="Write Here"
-                                        disabled={(!infiniteValueUp && infiniteValueDown)}
+                                    // disabled={(!infiniteValueUp && infiniteValueDown)}
                                     />
                                     {editFactorDataValidation?.lower_limit && (
                                         <p className="text-danger">
@@ -188,7 +188,7 @@ const EditFactorModal = ({
                                         value={upper_limit}
                                         onChange={handleChange}
                                         placeholder="Write Here"
-                                        disabled={(infiniteValueUp && !infiniteValueDown)}
+                                    // disabled={(infiniteValueUp && !infiniteValueDown)}
                                     />
                                     {editFactorDataValidation?.upper_limit && (
                                         <p className="text-danger">

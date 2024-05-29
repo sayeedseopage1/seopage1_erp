@@ -37,9 +37,39 @@
     overflow: hidden;
     color: #000;
     text-overflow: ellipsis;
-    font-family: Poppins;
+    font-family: Poppins, sans-serif;
     font-size: 12px;
     font-style: normal;
     font-weight: 500;
     line-height: normal;
+}
+
+.point_table_data {
+    color: #000;
+    font-family: Poppins, sans-serif;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+    padding: 18px 0px;
+}
+
+.point_table_data strong {
+    color: #1492E6;
+    font-weight: 400;
+}
+
+.point_table_data_neg {
+    color: #F66;
+}
+
+.point_table_data_arrow {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+}
+
+.table-row-odd {
+    background-color: #F2F9FE;
 }

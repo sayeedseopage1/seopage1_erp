@@ -12,6 +12,7 @@ import warningIcon from '../../../assets/warningIcon.svg'
 import { useAddIncentiveFactorsMutation, useEditIncentiveFactorsMutation, useGetSingleIncentiveCriteriaQuery } from '../../../../../../services/api/Pm-Sales/PmIncentiveApiSlice';
 import Spinner from '../../../../PointFactors/components/loader/Spinner';
 
+// TODO: need to execute incentive_amount_type and limit_type
 const ChartIdealVsAchievedEditModal = ({ antdModalOpen, showIdealVsAchievedEditModal, chartDataId }) => {
     const { data: singleCriteria, isLoading: isLoadingSingleCriteria } = useGetSingleIncentiveCriteriaQuery(chartDataId, { skip: !chartDataId })
 
@@ -27,6 +28,8 @@ const ChartIdealVsAchievedEditModal = ({ antdModalOpen, showIdealVsAchievedEditM
             incentive_amount_type: item?.incentive_amount_type
         }
     )) || [];
+
+    // console.log(defaultChartAxisData, 'defaultChartAxisData')
 
     // Modal states for each modal
     const [addNewAxisDataModalOpen, setAddNewAxisDataModalOpen] = useState(false);
@@ -220,7 +223,7 @@ const ChartIdealVsAchievedEditModal = ({ antdModalOpen, showIdealVsAchievedEditM
                                                 <button onClick={() => xAxisEditHandler(item)} className='ratio_edit_button'>Edit</button>
                                             </div>
                                             <div className='ratio_wrapper'>
-                                                <p className='ratio_text'>{item?.incentive_amount}%</p>
+                                                <p className='ratio_text'>{item?.incentive_amount}{item?.incentive_amount_type == 1 ? "" : "%"}</p>
                                                 <button onClick={() => yAxisEditHandler(item)} className='ratio_edit_button'>Edit</button>
                                             </div>
                                         </div>

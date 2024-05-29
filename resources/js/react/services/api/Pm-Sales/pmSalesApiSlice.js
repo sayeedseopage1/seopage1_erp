@@ -42,8 +42,32 @@ const pmSalesApiSlice = apiSlice.injectEndpoints({
             invalidatesTags: ["GET_PM_POINT_FACTORS"],
         }),
         getPmCashPoints: build.query({
-            query: () => `/account/get-pm-cashpoint`,
+            query: (data) => {
+                let searchParams = {};
+
+                if (Object.keys(data)?.length) {
+                    searchParams = new URLSearchParams({
+                        ...(data?.user_id && { user_id: data.user_id }),
+                        ...(data?.start_date && {
+                            start_date: data.start_date,
+                        }),
+                        ...(data?.end_date && { end_date: data.end_date }),
+                        ...(data?.point_type && {
+                            point_type: data.point_type,
+                        }),
+                        ...(data?.per_page && { per_page: data.per_page }),
+                        ...(data?.page && { page: data.page }),
+                    });
+                }
+
+                return {
+                    url: `/account/get-pm-cashpoint?${searchParams.toString()}`,
+                    method: "GET",
+                };
+            },
+            // providesTags: [""],
         }),
+
         getPmByDept: build.query({
             query: (id) => `/account/get-pm-by-department/${id}`,
         }),

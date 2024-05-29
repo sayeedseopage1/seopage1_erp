@@ -215,10 +215,10 @@ const IncentiveThickChart = ({ chartData }) => {
         fill: {
             type: "gradient",
             gradient: {
-                shade: "dark",
+                shade: "light",
                 type: "vertical",
-                shadeIntensity: 0.9,
-                gradientToColors: ["#AAE3FF"],
+                shadeIntensity: 0.7,
+                // gradientToColors: ["#AAE3FF"],
                 inverseColors: !1,
                 opacityFrom: 1,
                 opacityTo: 0.9,
