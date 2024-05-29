@@ -18,7 +18,7 @@ const EvaluationRevisionModal = ({ data }) => {
                 onClick={() => setIsEvaluationRevisionModal(true)}
                 className="link_color"
             >
-                {data?.total_revision ?? "0"}
+                {Revisions?.length ?? "0"}
             </div>
 
             <RevisionModalBody
