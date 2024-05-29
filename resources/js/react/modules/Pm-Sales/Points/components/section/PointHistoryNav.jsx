@@ -3,19 +3,17 @@ import React from 'react';
 import { Placeholder } from '../../../../../global/Placeholder';
 import { ButtonComponent } from '../../../PointFactors/components/Styles/ui/ui';
 
-// TODO: points will come from api
 const PointHistoryNav = ({ navActive, setNavActive, data, isLoading }) => {
-    // const balancePoints = data?.reduce((prev, curr) => prev + Number(curr?.cumulative_balance), 0);
-    const balancePoints = data?.length ? data[0]?.cumulative_balance : 0;
-    const posPoints = data?.reduce((prev, curr) => prev + Number(curr?.total_points_earn), 0);
-    const negPoints = data?.reduce((prev, curr) => prev + Number(curr?.total_points_lost), 0);
+    const { total_points_earn, total_points_lost } = data || {};
+    const balancePoints = parseFloat(total_points_earn) - parseFloat(total_points_lost);
+
     return (
         <div className='point_history_nav_container'>
             <div className='point_history_banner'>
                 <h4 className='point_history_banner_item'>Balance points: {isLoading ? <Placeholder width="50px" height={18} /> : <span className={`${balancePoints > 0 ? '' : 'point_table_data_neg'}`}>{balancePoints?.toFixed(2)}</span>}</h4>
-                <h4 className='point_history_banner_item'>Positive points: {isLoading ? <Placeholder width="50px" height={18} /> : <span className={`${posPoints > 0 ? 'point_table_data_pos' : 'point_table_data_neg'}`}>{posPoints?.toFixed(2)}</span>}</h4>
+                <h4 className='point_history_banner_item'>Positive points: {isLoading ? <Placeholder width="50px" height={18} /> : <span className={`${parseFloat(total_points_earn) > 0 ? 'point_table_data_pos' : 'point_table_data_neg'}`}>{parseFloat(total_points_earn)?.toFixed(2)}</span>}</h4>
                 <Divider className='antd_divider_vertical' type="vertical" />
-                <h4 className='point_history_banner_item'>Negative points: {isLoading ? <Placeholder width="50px" height={18} /> : <span className={`${negPoints > 0 ? 'point_table_data_neg' : 'point_table_data_pos'}`}>{negPoints?.toFixed(2)}</span>}</h4>
+                <h4 className='point_history_banner_item'>Negative points: {isLoading ? <Placeholder width="50px" height={18} /> : <span className={`${parseFloat(total_points_lost) > 0 ? 'point_table_data_neg' : 'point_table_data_pos'}`}>{parseFloat(total_points_lost)?.toFixed(2)}</span>}</h4>
                 <a href="/account/pm-point-factors">
                     <ButtonComponent
                         title={"Point Criteria"}

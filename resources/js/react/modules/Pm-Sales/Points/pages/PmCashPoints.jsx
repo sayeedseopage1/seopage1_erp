@@ -53,7 +53,7 @@ const PmCashPoints = () => {
 
             <div className='sp1_point_page_container'>
                 {/* <PointPageNavbar /> */}
-                <PointHistoryNav navActive={navActive} setNavActive={setNavActive} data={tableData?.data} isLoading={dataFetchingStateIsLoading} />
+                <PointHistoryNav navActive={navActive} setNavActive={setNavActive} data={tableData} isLoading={dataFetchingStateIsLoading} />
                 <main className='sp1_point_page_main'>
 
                     {/* <DataTable
@@ -62,9 +62,9 @@ const PmCashPoints = () => {
                             defaultColumns={TableColumns}
                         /> */}
                     <div className="cnx__table_wrapper" style={{ padding: '16px' }}>
-                        <PointHistoryTable data={tableData} isLoading={dataFetchingStateIsLoading} onPageChange={onPageChange} />
+                        <PointHistoryTable data={tableData?.cash_points} isLoading={dataFetchingStateIsLoading} onPageChange={onPageChange} />
                         <PointHistoryTablePagination
-                            tableData={tableData}
+                            tableData={tableData?.cash_points}
                             handlePageSizeChange={handlePageSizeChange}
                             handlePageChange={onPageChange}
                             pageSize={pageSize}
