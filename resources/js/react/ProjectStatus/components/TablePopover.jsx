@@ -2,7 +2,7 @@ import React from "react";
 import Popover from "./ui/Popover";
 import style from "./ui/popover.module.css";
 
-const TablePopover = ({ text, isDangerHtml = false }) => {
+const TablePopover = ({ text, isDangerHtml = false, isPercentUse = false }) => {
     return (
         <Popover>
             <Popover.Button>
@@ -17,7 +17,7 @@ const TablePopover = ({ text, isDangerHtml = false }) => {
                     <div
                         className={`${style.projectStatus_percent_popover_button} multine-ellipsis`}
                     >
-                        {text ?? "--"}%
+                        {text`${isPercentUse ? "%" : null}` ?? "--"}
                     </div>
                 )}
             </Popover.Button>
