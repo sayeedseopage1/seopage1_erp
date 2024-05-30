@@ -1,4 +1,4 @@
-import { Empty, Modal } from 'antd';
+import { Empty, Modal, Skeleton } from 'antd';
 import React, { useEffect, useState } from 'react';
 import { RxCross1 } from "react-icons/rx";
 import AddNewAxisItemModal from './AddNewAxisItemModal';
@@ -29,6 +29,7 @@ const ChartIdealVsAchievedEditModal = ({ antdModalOpen, showIdealVsAchievedEditM
             limit_type: parseFloat(item?.limit_type),
         }
     )) || [];
+    const singleCriteriaLimitType = parseFloat(singleCriteria?.data?.incentive_factors?.[0]?.limit_type)
 
 
     // Modal states for each modal
@@ -165,7 +166,7 @@ const ChartIdealVsAchievedEditModal = ({ antdModalOpen, showIdealVsAchievedEditM
     };
 
     // console.log("chartAxisData", chartAxisData)
-    // console.log("singleCriteria", singleCriteria)
+    console.log("singleCriteria", singleCriteriaLimitType);
 
 
     return (
@@ -199,8 +200,13 @@ const ChartIdealVsAchievedEditModal = ({ antdModalOpen, showIdealVsAchievedEditM
                         <button onClick={() => setSelectRatioRange(true)} className='ideal_vs_achieved_chart_data_actions_range'>Select Range</button>
                     </div>
                     <div className='ideal_vs_achieved_axis_data'>
-                        <p>Starting Point (X Axis): <span>{parseFloat(singleCriteria?.data?.min_limit)}</span>%</p>
-                        <p>Ending Point (X Axis): <span>{parseFloat(singleCriteria?.data?.max_limit)}</span>%</p>
+                        {
+                            isLoadingSingleCriteria ? <Skeleton paragraph={{ rows: 2, width: '100%' }} active title={false} /> : <>
+                                <p>Starting Point (X Axis): <span>{parseFloat(singleCriteria?.data?.min_limit)}</span>{singleCriteriaLimitType == 1 ? "$" : "%"}</p>
+                                <p>Ending Point (X Axis): <span>{parseFloat(singleCriteria?.data?.max_limit)}</span>{singleCriteriaLimitType == 1 ? "$" : "%"}</p>
+                            </>
+                        }
+
                     </div>
                 </div>
 
@@ -213,7 +219,8 @@ const ChartIdealVsAchievedEditModal = ({ antdModalOpen, showIdealVsAchievedEditM
                 <div className='edit_chart_data_modal_content_wrapper'>
                     {
                         isLoadingSingleCriteria ? (
-                            <Spinner />
+                            // <Spinner />
+                            <Skeleton paragraph={{ rows: 8, width: '100%' }} active title={false} />
                         ) : (
                             chartAxisData?.length > 0 ? (
                                 // If data is available, map through it and render items
