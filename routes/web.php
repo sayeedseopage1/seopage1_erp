@@ -1875,7 +1875,7 @@ Route::get('test-calculation/{taskId}', function ($taskId){
     $endDate = Carbon::now()->endOfMonth();
     $user_id = 209;
     
-    $released_amount_this_month = DB::table('users')
+    return $released_amount_this_month = DB::table('users')
     ->join('projects', 'users.id', '=', 'projects.pm_id')
     ->join('project_milestones', 'projects.id', '=', 'project_milestones.project_id')
     ->join('payments', 'project_milestones.invoice_id', '=', 'payments.invoice_id')
