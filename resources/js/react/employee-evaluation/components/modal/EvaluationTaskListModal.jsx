@@ -265,6 +265,20 @@ const EvaluationTaskListModal = ({
     };
 
     const handleTeamLeadComment = async (e) => {
+        if (teamLeadReview === "") {
+            const errorMessage = (
+                <div>
+                    <div style={{ fontWeight: "bold" }}>
+                        {" "}
+                        Please fill in the following fields:
+                    </div>
+                    <div>Team Leader's Review</div>
+                </div>
+            );
+            toast.error(errorMessage);
+            return;
+        }
+
         await teamLeadSubmission({
             team_lead_cmnt: teamLeadReview,
             user_id: singleEvaluation.user_id,
@@ -285,6 +299,19 @@ const EvaluationTaskListModal = ({
     };
 
     const handleAdminAuthorization = async () => {
+        if (adminComment === "") {
+            const errorMessage = (
+                <div>
+                    <div style={{ fontWeight: "bold" }}>
+                        {" "}
+                        Please fill in the following fields:
+                    </div>
+                    <div>Top Management's Authorization</div>
+                </div>
+            );
+            toast.error(errorMessage);
+            return;
+        }
         await adminAuthorization({
             status: "authorize",
             user_id: singleEvaluation.user_id,
@@ -306,6 +333,19 @@ const EvaluationTaskListModal = ({
     };
 
     const handleAdminRejection = async (e) => {
+        if (adminComment === "") {
+            const errorMessage = (
+                <div>
+                    <div style={{ fontWeight: "bold" }}>
+                        {" "}
+                        Please fill in the following fields:
+                    </div>
+                    <div>Top Management's Authorization</div>
+                </div>
+            );
+            toast.error(errorMessage);
+            return;
+        }
         await adminRejection({
             status: "reject",
             user_id: singleEvaluation.user_id,
@@ -326,6 +366,19 @@ const EvaluationTaskListModal = ({
             });
     };
     const handleAdminExtention = async (e) => {
+        if (adminComment === "") {
+            const errorMessage = (
+                <div>
+                    <div style={{ fontWeight: "bold" }}>
+                        {" "}
+                        Please fill in the following fields:
+                    </div>
+                    <div>Top Management's Authorization</div>
+                </div>
+            );
+            toast.error(errorMessage);
+            return;
+        }
         await adminExtended({
             user_id: singleEvaluation.user_id,
             managements_cmnt: adminComment,
