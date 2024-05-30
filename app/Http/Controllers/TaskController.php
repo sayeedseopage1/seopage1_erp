@@ -3283,10 +3283,15 @@ class TaskController extends AccountBaseController
         $task_status->board_column_id = 9;
         $task_status->save();
         
-        $thisSubmissionTime = Carbon::parse(TaskSubmission::where('task_id', $request->task_id)->orderBy('id', 'desc')->first()->created_at)->format('Y-m-d H:i');
+        $thisSubmissionTime = Carbon::parse(TaskSubmission::whereHas('task', function($task){
+            return $task->where('subtask_id', null);
+        })->where('task_id', $request->task_id)->orderBy('id', 'desc')->first()->created_at)->format('Y-m-d H:i');
         $projectId = Task::find($request->task_id)->project_id;
-        $taskIds = Task::where('project_id', $projectId)->pluck('id');
-        if(!TaskSubmission::whereIn('task_id', $taskIds)->where('created_at', '<', $thisSubmissionTime)->count()){
+        $taskIds = Task::where('project_id', $projectId)->where('subtask_id', null)->pluck('id');
+        $previous_count = TaskSubmission::whereHas('task', function($task){
+            return $task->where('subtask_id', null);
+        })->whereIn('task_id', $taskIds)->where('created_at', '<', $thisSubmissionTime)->count();
+        if(!$previous_count){
             $project = Project::with('deal')->find($projectId);
             $duration_from_submit = Carbon::now()->diffInHours(Carbon::createFromFormat('Y-m-d H:i:s', $project->deal->released_at));
             if($project->deal->project_type == 'hourly'){
