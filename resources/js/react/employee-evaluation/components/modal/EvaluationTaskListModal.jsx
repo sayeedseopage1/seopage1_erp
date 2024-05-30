@@ -158,15 +158,15 @@ const EvaluationTaskListModal = ({
         }
     }, [historyData, latestRound, data]);
 
-    console.log(
-        "outside",
-        historyData?.data,
-        "latest round",
-        latestRound,
-        "prevroundtask",
-        isPreviousTasks
-    );
-    console.log("confirm outside", confirmButtonDisabled);
+    // console.log(
+    //     "outside",
+    //     historyData?.data,
+    //     "latest round",
+    //     latestRound,
+    //     "prevroundtask",
+    //     isPreviousTasks
+    // );
+    // console.log("confirm outside", confirmButtonDisabled);
 
     const formFields = [
         {

@@ -78,7 +78,7 @@ export const EvaluationTableColumns = [
     },
     {
         id: "round_requied",
-        header: "Previous Rounds",
+        header: "Rounds Required",
         accessorKey: "round_requied",
         cell: ({ row }) => {
             const data = row.original;

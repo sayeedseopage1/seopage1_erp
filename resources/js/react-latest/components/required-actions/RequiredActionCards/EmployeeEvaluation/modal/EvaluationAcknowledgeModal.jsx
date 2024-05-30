@@ -63,7 +63,7 @@ const EvaluationAcknowledgeModal = ({
             try {
                 if (developerId) {
                     const response = await axios.get(
-                        `/account/evaluation-history/${developerId}`
+                        `/account/get-single-evaluation/${developerId}`
                     );
                     console.log(response);
                     setSingleEvaluation(response?.data.data[0]);
@@ -77,7 +77,7 @@ const EvaluationAcknowledgeModal = ({
         fetchData();
     }, []);
 
-    console.log("singleEvaluation", singleEvaluation);
+    // console.log("singleEvaluation", singleEvaluation);
     useEffect(() => {
         const fetchTasks = async () => {
             setIsLoading(true);

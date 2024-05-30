@@ -47,7 +47,7 @@ const TimerControl = ({ task, timerStart, setTimerStart, auth }) => {
     const [expireDateForTrainer, setExpireDateForTrainer] =
         useState(expireDate);
 
-    console.log("expired date", expireDateForTrainer);
+    // console.log("expired date", expireDateForTrainer);
     const [timerId, setTimerId] = useState(null);
     const [seconds, setSeconds] = useState(0);
     const [isOpenConfirmationModal, setIsOpenConfirmationModal] =

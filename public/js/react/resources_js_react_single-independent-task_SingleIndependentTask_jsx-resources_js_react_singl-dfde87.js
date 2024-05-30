@@ -18379,7 +18379,8 @@ var TimerControl = function TimerControl(_ref) {
     _useState12 = _slicedToArray(_useState11, 2),
     expireDateForTrainer = _useState12[0],
     setExpireDateForTrainer = _useState12[1];
-  console.log("expired date", expireDateForTrainer);
+
+  // console.log("expired date", expireDateForTrainer);
   var _useState13 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(null),
     _useState14 = _slicedToArray(_useState13, 2),
     timerId = _useState14[0],

@@ -18,6 +18,7 @@ import { useCommentStore } from "../../../../../../../react/UI/comments/zustand/
 import { setPendingActionId } from "../../../../../../services/features/pendingActionSlice";
 import CommentsBodyWithoutSendBox from "../../../../../../../react/UI/comments/CommentBodyWithoutSendBox";
 import EvaluationAcknowledgeModal from "../../../EmployeeEvaluation/modal/EvaluationAcknowledgeModal";
+import EvaluationAcknowledgeTaskModal from "../../../EmployeeEvaluation/modal/EvaluationAcknowledgeTaskModal";
 
 const ActionsButton = ({ data }) => {
     const dispatch = useDispatch();
@@ -28,6 +29,7 @@ const ActionsButton = ({ data }) => {
     const [viewModal, setViewModal] = React.useState(false);
     const [isRelevantModal, setIsRelevantModal] = React.useState(false);
     const [acknowledgement, setAcknowledgement] = React.useState(false);
+    const [acknowledgementTask, setAcknowledgementTask] = React.useState(false);
     const { width } = useWindowSize();
     const taskId = data?.task_id;
     const developerId = data?.developer_id;
@@ -81,7 +83,7 @@ const ActionsButton = ({ data }) => {
                                 <button
                                     key={i}
                                     onClick={() => {
-                                        setAcknowledgement((prev) => !prev);
+                                        setAcknowledgementTask((prev) => !prev);
                                         dispatch(setPendingActionId(data?.id));
                                     }}
                                     className={`${style.action_btn}`}
@@ -91,7 +93,6 @@ const ActionsButton = ({ data }) => {
                             )}
                         </div>
                     );
-                
                 } else if (btn.button_type === "modal") {
                     return (
                         <div>
@@ -188,6 +189,11 @@ const ActionsButton = ({ data }) => {
                 isRelevantModal={isRelevantModal}
             />
 
+            <EvaluationAcknowledgeTaskModal
+                developerId={developerId}
+                setAcknowledgementTask={setAcknowledgementTask}
+                acknowledgementTask={acknowledgementTask}
+            />
             <EvaluationAcknowledgeModal
                 developerId={developerId}
                 setAcknowledgement={setAcknowledgement}
