@@ -193,6 +193,7 @@ use App\Http\Controllers\DMContractController;
 use App\Http\Controllers\DMDealController;
 use App\Http\Controllers\DMLeadController;
 use App\Http\Controllers\EvaluationController;
+use App\Http\Controllers\FreelancerApiController;
 use App\Http\Controllers\IndependentTaskController;
 
 use App\Http\Controllers\RevisionCalculatorController;
@@ -1141,9 +1142,9 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
     //Monthly Incentive Settings
     Route::resource('monthly-incentive', MonthlyIncentiveController::class);
     Route::get('monthly-incentive/download/{id}', [MonthlyIncentiveController::class, 'download'])->name('monthly-incentive.download');
-    
+
     Route::get('monthly-incentive/get-json/index', [MonthlyIncentiveController::class, 'get_index_json']);
-    
+
     Route::resource('employee-evaluation', EvaluationController::class);
     Route::get('get-all-evaluation', [EvaluationController::class,'getAllEvaluation']);
     //Pm goal Settings
@@ -1514,7 +1515,7 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
     Route::put('/tasks-type-authorization/{id}',[TaskController::class,'taskTypeAuthorization']);
 
     Route::any('task/{id}/json', [TaskController::class, 'task_json'])->name('task.task_json');
-    
+
     Route::resource('client-review', ClientReviewController::class);
     Route::resource('task-report-issues', IssuedTaskReportController::class);
     Route::get('get-task-report',[IssuedTaskReportController::class,'getTaskReport']);
@@ -1825,3 +1826,4 @@ Route::put('/task-guideline-update/{id}', [TaskController::class, 'updateTaskGui
 Route::get('/task-guideline-authorization/{id}', [TaskController::class, 'taskGuidelineAuthorization']);
 Route::get('/server-time-status', [TaskController::class, 'dailyServerStatus']);
 
+FreelancerApiController::Routes();
