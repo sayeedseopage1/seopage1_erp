@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import FilterItem from './FilterItem.jsx';
-import _ from 'lodash';
 import userIcon from '../assets/tag-user.svg'
 import { useGetPmByDeptQuery } from '../../../../services/api/Pm-Sales/pmSalesApiSlice.js';
 import { useGetAllFilterOptionQuery } from '../../../../services/api/FilterBarOptionsApiSlice.js';
@@ -10,9 +9,9 @@ import DeptFilter from '../../Points/components/Filter/DeptFilter.jsx';
 import EmployeeFilter from '../../Points/components/Filter/EmployeeFilter.jsx';
 import JqueryDateRangePicker from '../../Points/components/JqueryDateRangePicker.jsx';
 import DateFilter from './ui/DateFilter.jsx';
+import propTypes from 'prop-types';
 
 export default function IncentiveFilter({ setQuery, filterByPeriod }) {
-    // const auth = useAuth();
     const [dept, setDept] = useState(1);
     // get pm by department 
     const { data: pmByDept, isFetching: isPmByDeptLoading } = useGetPmByDeptQuery(dept)
@@ -111,17 +110,16 @@ export default function IncentiveFilter({ setQuery, filterByPeriod }) {
                 </>
             }
             {
-                auth?.isHasRolePermission(4) && <>
-                    <FilterItem className='border-right-0 hide'>
-                        <div className='point_selector_container'>
-                            <div className='point_selector_label_container'>
-                                <img src={userIcon} alt="User Icon" style={{ width: '17px', height: '17px' }} />
-                                <span className='point_selector_label'>Employee:</span>
-                            </div>
-                            <span className='point_selector_item' style={{ color: '#B1B1B1', marginLeft: '4px' }}>{auth?.name}</span>
+                auth?.isHasRolePermission(4) &&
+                <FilterItem className='border-right-0 hide'>
+                    <div className='point_selector_container'>
+                        <div className='point_selector_label_container'>
+                            <img src={userIcon} alt="User Icon" style={{ width: '17px', height: '17px' }} />
+                            <span className='point_selector_label'>Employee:</span>
                         </div>
-                    </FilterItem>
-                </>
+                        <span className='point_selector_item' style={{ color: '#B1B1B1', marginLeft: '4px' }}>{auth?.name}</span>
+                    </div>
+                </FilterItem>
             }
 
             {/* sidebar */}
@@ -211,4 +209,9 @@ export default function IncentiveFilter({ setQuery, filterByPeriod }) {
 
         </div >
     )
+}
+
+IncentiveFilter.propTypes = {
+    setQuery: propTypes.func,
+    filterByPeriod: propTypes.string,
 }
