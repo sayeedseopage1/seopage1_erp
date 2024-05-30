@@ -8,7 +8,7 @@ import { useSelector } from "react-redux";
 import { usePendingActionsIdMutation } from "../../../../../../services/api/pendingActionsApiSlice";
 import { useEffect, useState } from "react";
 import React from "react";
-import useCounterStore from "../../../../../Zustand/store";
+import useCounterStore from "../../../../../../Zustand/store.js";
 
 const RelevantModal = ({ isRelevantModal, setIsRelevantModal }) => {
     const { increaseCount } = useCounterStore();
@@ -16,27 +16,24 @@ const RelevantModal = ({ isRelevantModal, setIsRelevantModal }) => {
         (state) => state.pendingActions.pendingActionId
     );
 
-    const [updatePendingAction] = usePendingActionsIdMutation();
+    const [updatePendingAction, { isLoading }] = usePendingActionsIdMutation();
 
     const submitHandler = (e) => {
         e.preventDefault();
 
         updatePendingAction({
             id: pendingActionId,
-        });
-        // .unwrap()
-        // .then((res) => {
-        //     setIsRelevantModal(false);
-        //     increaseCount();
-        // })
-        // .catch((err) => {
-        //     console.log(err);
-        // });
-
-        setIsRelevantModal(false);
-
-        //increase count is rerendering pending actions page
-        increaseCount();
+        })
+            .unwrap()
+            .then((res) => {
+                setIsRelevantModal(false);
+                increaseCount();
+            })
+            .catch((err) => {
+                console.log("pending action failed");
+                setIsRelevantModal(false);
+                increaseCount();
+            });
     };
     return (
         <ReactModal
@@ -126,8 +123,9 @@ const RelevantModal = ({ isRelevantModal, setIsRelevantModal }) => {
                         type="button"
                         class="btn btn-primary"
                         onClick={submitHandler}
+                        disabled={isLoading}
                     >
-                        Yes
+                        {isLoading ? "processing.." : "Yes"}
                     </button>
                 </Flex>
             </div>

@@ -1,0 +1,14 @@
+
+.authorize_task {
+  font-family: Inter;
+  font-weight: 500 !important;
+  background: #199CDE !important;
+  color: #f9f9f9 !important;
+  border-color: #199CDE !important;
+}
+
+.authorize_task:hover {
+  font-family: Inter;
+  background-color: #1492d2 !important;
+  border-color: #1492d2 !important;
+}

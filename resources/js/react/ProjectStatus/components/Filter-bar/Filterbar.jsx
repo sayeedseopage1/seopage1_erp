@@ -45,7 +45,9 @@ const Filterbar = ({ onFilter, page = "tasks" }) => {
             end_date,
             search: _search,
             client_id: _client?.id,
+            client_name: _client?.name,
             pm_id: _pm?.id,
+            pm_name: _pm?.name,
         };
 
         onFilter(filter);
@@ -57,15 +59,19 @@ const Filterbar = ({ onFilter, page = "tasks" }) => {
         _client,
         _leadDeveloper,
         _pm,
-        _status
+        _status,
     ]);
 
     // console.log(developer)
     useLayoutEffect(() => {
-        if(page === "subtasks" && auth.getRoleId() === 5 && window !== undefined) {
+        if (
+            page === "subtasks" &&
+            auth.getRoleId() === 5 &&
+            window !== undefined
+        ) {
             setDeveloper(window.Laravel.user);
         }
-    }, [])
+    }, []);
 
     return (
         <div className="sp1_task_filter_bar">
@@ -104,7 +110,6 @@ const Filterbar = ({ onFilter, page = "tasks" }) => {
                         className="tasks_search_bar"
                     />
                     <HDivider />
-
                 </React.Fragment>
             )}
 

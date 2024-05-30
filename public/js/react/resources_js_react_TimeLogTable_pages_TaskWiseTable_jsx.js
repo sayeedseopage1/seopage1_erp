@@ -915,33 +915,33 @@ var ExportTaskWiseTableDataToExcel = function ExportTaskWiseTableDataToExcel(_re
   var fieldStyle = {
     alignment: {
       wrapText: true,
-      vertical: 'center',
-      horizontal: 'top'
+      vertical: "center",
+      horizontal: "top"
     }
   };
-
+  console.log("data", data);
   // get data
   var getData = function getData(data) {
     var rows = [];
     lodash__WEBPACK_IMPORTED_MODULE_3___default().forEach(data, function (d) {
       var _d$task_name, _d$project_name, _d$pm_name, _d$client_name, _d$employee_name, _d$start_time, _d$end_time, _d$hours;
       var row = [{
-        value: (_d$task_name = d['task_name']) !== null && _d$task_name !== void 0 ? _d$task_name : '--',
+        value: (_d$task_name = d["task_name"]) !== null && _d$task_name !== void 0 ? _d$task_name : "--",
         style: fieldStyle
       }, {
-        value: (_d$project_name = d['project_name']) !== null && _d$project_name !== void 0 ? _d$project_name : '--',
+        value: (_d$project_name = d["project_name"]) !== null && _d$project_name !== void 0 ? _d$project_name : "--",
         style: fieldStyle
       }, {
-        value: (_d$pm_name = d['pm_name']) !== null && _d$pm_name !== void 0 ? _d$pm_name : '--',
+        value: (_d$pm_name = d["pm_name"]) !== null && _d$pm_name !== void 0 ? _d$pm_name : "--",
         style: fieldStyle
       }, {
-        value: (_d$client_name = d['client_name']) !== null && _d$client_name !== void 0 ? _d$client_name : '--',
+        value: (_d$client_name = d["client_name"]) !== null && _d$client_name !== void 0 ? _d$client_name : "--",
         style: fieldStyle
       }, {
-        value: (_d$employee_name = d['employee_name']) !== null && _d$employee_name !== void 0 ? _d$employee_name : '--',
+        value: (_d$employee_name = d["employee_name"]) !== null && _d$employee_name !== void 0 ? _d$employee_name : "--",
         style: fieldStyle
       }, {
-        value: (_d$start_time = d["start_time"]) !== null && _d$start_time !== void 0 ? _d$start_time : '--',
+        value: (_d$start_time = d["start_time"]) !== null && _d$start_time !== void 0 ? _d$start_time : "--",
         style: fieldStyle
       }, {
         value: (_d$end_time = d["end_time"]) !== null && _d$end_time !== void 0 ? _d$end_time : "active",
@@ -955,7 +955,7 @@ var ExportTaskWiseTableDataToExcel = function ExportTaskWiseTableDataToExcel(_re
           }
         })
       }, {
-        value: (_d$hours = d["hours"]) !== null && _d$hours !== void 0 ? _d$hours : '--',
+        value: (_d$hours = d["hours"]) !== null && _d$hours !== void 0 ? _d$hours : "--",
         style: fieldStyle
       }];
       rows.push(row);
@@ -963,44 +963,44 @@ var ExportTaskWiseTableDataToExcel = function ExportTaskWiseTableDataToExcel(_re
     return rows;
   };
 
-  // columns 
+  // columns
   var columns = [{
-    title: 'Task Name',
+    title: "Task Name",
     width: {
       wpx: 300
     }
   }, {
-    title: 'Project Name',
+    title: "Project Name",
     width: {
       wpx: 300
     }
   }, {
-    title: 'Project Manager',
+    title: "Project Manager",
     width: {
       wpx: 200
     }
   }, {
-    title: 'Client Name',
+    title: "Client Name",
     width: {
       wpx: 200
     }
   }, {
-    title: 'Employee Name',
+    title: "Employee Name",
     width: {
       wpx: 200
     }
   }, {
-    title: 'Start Time',
+    title: "Start Time",
     width: {
       wpx: 200
     }
   }, {
-    title: 'End Time',
+    title: "End Time",
     width: {
       wpx: 200
     }
   }, {
-    title: 'Total Track Time',
+    title: "Total Track Time",
     width: {
       wpx: 200
     }
@@ -1011,14 +1011,14 @@ var ExportTaskWiseTableDataToExcel = function ExportTaskWiseTableDataToExcel(_re
     columns: [{
       title: "Filter"
     }, {
-      title: 'Date'
+      title: "Date"
     }, {
-      title: 'Status'
+      title: "Status"
     }],
     data: [[{
       value: "--"
     }, {
-      value: "".concat(dayjs__WEBPACK_IMPORTED_MODULE_1___default()(filter === null || filter === void 0 ? void 0 : filter.start_date).format('MMM-DD-YYYY'), " to ").concat(dayjs__WEBPACK_IMPORTED_MODULE_1___default()(filter === null || filter === void 0 ? void 0 : filter.end_date).format('MMM-DD-YYYY')),
+      value: "".concat(dayjs__WEBPACK_IMPORTED_MODULE_1___default()(filter === null || filter === void 0 ? void 0 : filter.start_date).format("MMM-DD-YYYY"), " to ").concat(dayjs__WEBPACK_IMPORTED_MODULE_1___default()(filter === null || filter === void 0 ? void 0 : filter.end_date).format("MMM-DD-YYYY")),
       style: {
         font: {
           bold: true
@@ -1029,7 +1029,7 @@ var ExportTaskWiseTableDataToExcel = function ExportTaskWiseTableDataToExcel(_re
       style: {
         font: {
           bold: true,
-          color: '#ffffff'
+          color: "#ffffff"
         }
       }
     }]]
@@ -1042,10 +1042,10 @@ var ExportTaskWiseTableDataToExcel = function ExportTaskWiseTableDataToExcel(_re
   return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(ExcelFile, {
     filename: filename,
     element: button,
-    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(ExcelSheet, _defineProperty({
+    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(ExcelSheet, {
       dataSet: multiDataSet,
       name: filename
-    }, "name", "Organization"))
+    })
   });
 };
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (ExportTaskWiseTableDataToExcel);

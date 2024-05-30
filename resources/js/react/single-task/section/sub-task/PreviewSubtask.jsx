@@ -18,6 +18,7 @@ import { useSingleTask } from "../../../hooks/useSingleTask";
 import Loader from "../../components/Loader";
 import CommentsBody from "../../../UI/comments/CommentsBody";
 import { useGetCommentsQuery } from "../../../services/api/commentsApiSlice";
+import { useSelector } from "react-redux";
 
 const PreviewSubtask = ({ parentTask, subTask }) => {
     const [task, setTask] = React.useState(null);
@@ -28,6 +29,7 @@ const PreviewSubtask = ({ parentTask, subTask }) => {
     const [histories, setHistories] = React.useState([]);
     const [comments, setComments] = React.useState([]);
     const [isCommentShow, setIsCommentShow] = React.useState(false);
+    const { task: singleTask } = useSelector((s) => s.subTask);
 
     const {
         getTaskById,
@@ -55,7 +57,6 @@ const PreviewSubtask = ({ parentTask, subTask }) => {
         })();
     }, []);
 
-    console.log("task", task);
     //   fetch submitted rtk api
     const fetchData = (url, cb) => {
         getTaskDetails(`/${task?.id}/json?mode=${url}`)
@@ -72,7 +73,6 @@ const PreviewSubtask = ({ parentTask, subTask }) => {
         e.preventDefault();
         if (submittedWork.length === 0) {
             const data = await getSubmittionInfo(taskID);
-            // console.log({ data });
             setSubmittedWork([...data]);
         }
     };
@@ -209,9 +209,8 @@ const PreviewSubtask = ({ parentTask, subTask }) => {
             </div>
 
             <div
-                className={`tab-content ${
-                    isCommentShow ? "p-0" : "p-3"
-                } sp1-subtask-modal-tab-content`}
+                className={`tab-content ${isCommentShow ? "p-0" : "p-3"
+                    } sp1-subtask-modal-tab-content`}
                 id="v-pills-tabContent"
             >
                 <div
@@ -225,6 +224,7 @@ const PreviewSubtask = ({ parentTask, subTask }) => {
                             isFetching={taskDetailsIsFetching}
                             taskID={taskID}
                             task={task}
+                            singleTask={singleTask}
                         />
                     </div>
                 </div>
@@ -258,13 +258,13 @@ const PreviewSubtask = ({ parentTask, subTask }) => {
                         />
                     </React.Suspense> */}
                     <CommentsBody
-                        close={() => {}}
+                        close={() => { }}
                         comments={subTaskComments}
                         loading={commentsLoading}
-                        onSubmit={() => {}}
+                        onSubmit={() => { }}
                         isOpen={true}
                         fullScreenView={false}
-                        setFullScreenView={() => {}}
+                        setFullScreenView={() => { }}
                         height={"741px"}
                         fetching={commentsFetching}
                         refetch={commentsRefetch}

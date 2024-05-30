@@ -1,4 +1,5 @@
 import * as React from "react";
+
 import styled from "styled-components";
 import RefreshButton from "../components/RefreshButton";
 import DataTable from "../components/table/DataTable";
@@ -10,8 +11,13 @@ import { useDealContext } from "../components/context/DealContext";
 import DealTableExportButton from "../components/DealTableExportToExcel";
 import Button from "../../../../global/Button";
 import { useAuth } from "../../../../hooks/useAuth";
-
+import styles from "../components/ui/AuthorizationButton.module.css";
+import ReactModal from "react-modal";
+import AuthNeedTable from "../components/table/AuthNeedTable";
+import Card from "../../../../global/Card";
+import { AuthNeedTableColumns } from "../components/table/AuthNeedTableCloumn";
 const WonDeals = () => {
+    const [isAuthNeedModalOpen, setIsAuthNeedModalOpen] = React.useState(false);
     const auth = useAuth();
     const { isEditFormEnable } = useDealContext();
 
@@ -45,8 +51,12 @@ const WonDeals = () => {
     );
 
     const wonDeals = data?.data;
+    const authNeedWonDeals = wonDeals?.data.filter(
+        (deal) => deal.authorization_status === 2 && deal.is_drafted === 0
+    );
     const extensionRequest = data?.total_request;
 
+    console.log("wondeals", wonDeals);
     const onPageChange = (paginate) => {
         setPagination(paginate);
     };
@@ -77,6 +87,20 @@ const WonDeals = () => {
                         )}
 
                         <DealTableExportButton filter={filter} />
+
+                        {auth.roleId === 8 && (
+                            <Button
+                                onClick={() => setIsAuthNeedModalOpen(true)}
+                                variant="tertiary"
+                                className={styles.authorize_task}
+                            >
+                                <i className="fa-solid fa-hourglass-end" />
+                                Authorization Needed
+                                <span className="badge badge-light">
+                                    {authNeedWonDeals?.length ?? 0}
+                                </span>
+                            </Button>
+                        )}
                     </Flex>
 
                     <Flex>
@@ -100,6 +124,45 @@ const WonDeals = () => {
                     />
                 </Container>
             </div>
+
+            <ReactModal
+                style={{
+                    overlay: {
+                        backgroundColor: "rgba(0, 0, 0, 0.6)",
+                        margin: "auto auto",
+                        zIndex: 100,
+                    },
+                    content: {
+                        borderRadius: "10px",
+                        height: "fit-content",
+
+                        maxWidth: "1300px",
+                        margin: "auto auto",
+                        border: "none",
+                        padding: "0px",
+                        overflowY: "auto",
+                    },
+                }}
+                isOpen={isAuthNeedModalOpen}
+                onRequestClose={() => setIsAuthNeedModalOpen(false)}
+            >
+                <Card>
+                    <Card.Head onClose={() => setIsAuthNeedModalOpen(false)}>
+                        <span>Authorization Needed </span>
+                    </Card.Head>
+                </Card>
+                <Card.Body>
+                    <AuthNeedTable
+                        data={authNeedWonDeals}
+                        columns={[...AuthNeedTableColumns]}
+                        isLoading={isFetching}
+                        onPageChange={onPageChange}
+                        sorting={sorting}
+                        tableName="AuthNeedTable"
+                        setSorting={setSorting}
+                    />
+                </Card.Body>
+            </ReactModal>
         </React.Fragment>
     );
 };
