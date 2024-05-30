@@ -12,7 +12,9 @@ const AverageRatingRequiredRound = ({ data, round }) => {
         isLoading,
         isFetching,
     } = useGetTaskListQuery(data?.user_id);
-    const Tasks = TaskList?.data.filter((task) => task.round === round);
+    const Tasks = TaskList?.data.filter(
+        (task) => task.round === round && task.submission_date !== null
+    );
     const [isRatingModalOpen, setIsRatingModalOpen] = useState(false);
 
     const calculateAverage = (tasks, property) => {
