@@ -41,6 +41,7 @@ import {
     useStoreAdminRejectedMutation,
     useStoreAdminAuthorizedMutation,
     useStoreAdminExtendedMutation,
+    useGetEvaluationHistoryQuery,
 } from "../../../services/api/EvaluationApiSlice";
 import { useEffect } from "react";
 import FormatDate from "../../../UI/comments/utils/FormatDate";
@@ -58,16 +59,18 @@ const EvaluationTaskListModal = ({
     singleEvaluation,
 }) => {
     const [dateExpired, setDateExpired] = React.useState(false);
-    React.useEffect(() => {
-        setDateExpired(new Date(singleEvaluation?.exp_date) < Date.now());
-    }, [singleEvaluation]);
-    // console.log(singleEvaluation?.user_name, dateExpired);
+    const [latestRound, setLatestRound] = React.useState(null);
+    const [confirmButtonDisabled, setConfirmButtonDisabled] =
+        React.useState(false);
+
+    const [isPreviousTasks, setIsPreviousTasks] = React.useState(false);
 
     const auth = useAuth();
     const [cumulativeAverage, setCumulativeAverage] = React.useState(
         singleEvaluation?.lead_dev_avg_rating
     );
     const { evaluationObject } = useEmployeeEvaluation();
+    const [latestRoundTasks, setLatestRoundTasks] = useState([]);
     const [teamLeadReview, setTeamLeadReview] = useState("");
     const [adminComment, setAdminComment] = useState("");
     const [isAllTaskRated, setIsAllTaskRated] = useState(false);
@@ -96,59 +99,74 @@ const EvaluationTaskListModal = ({
     const { data, isLoading, isFetching } = useGetTaskListQuery(
         singleEvaluation?.user_id
     );
-    const [latestRoundTasks, setLatestRoundTasks] = useState([]);
+    const { data: historyData } = useGetEvaluationHistoryQuery(
+        singleEvaluation?.user_id
+    );
 
-    useEffect(() => {
+    React.useEffect(() => {
+        setDateExpired(new Date(singleEvaluation?.exp_date) < Date.now());
+    }, [singleEvaluation]);
+
+    React.useEffect(() => {
         if (data?.data) {
-            // Find the latest round number
             const latestRound = Math.max(
                 ...data.data.map((task) => task.round)
             );
-
-            // Filter tasks that have the latest round
+            setLatestRound(latestRound);
             const tasks = data.data.filter(
                 (task) => task.round === latestRound
             );
-
             setLatestRoundTasks(tasks);
         }
     }, [data]);
 
-    let tasksToRate = [];
-    useEffect(() => {
-        if (latestRoundTasks) {
-            tasksToRate = latestRoundTasks?.filter((task) => {
-                return (
+    React.useEffect(() => {
+        if (latestRoundTasks.length > 0) {
+            const tasksToRate = latestRoundTasks.filter(
+                (task) =>
                     Number(task.total_min) < 60 && task.submission_date !== null
-                );
-            });
-            //calculate average rating
-            const cumulativeSum = tasksToRate?.reduce(
+            );
+            const cumulativeSum = tasksToRate.reduce(
                 (acc, cur) => acc + Number(cur.avg_rating),
                 0
             );
-
-            //set average rating
-            const average = cumulativeSum / tasksToRate?.length;
+            const average = cumulativeSum / tasksToRate.length;
             setCumulativeAverage(average);
 
-            //checking if all tasks are rated using the length of tasksToRate array and the length of tasksToRate array filtered by lead_dev_cmnt not null
             const isAllTaskRated =
-                tasksToRate?.length ===
-                tasksToRate?.filter((task) => task.lead_dev_cmnt !== null)
+                tasksToRate.length ===
+                tasksToRate.filter((task) => task.lead_dev_cmnt !== null)
                     .length;
             setIsAllTaskRated(isAllTaskRated);
-
-            // console.log(tasksToRate, cumulativeSum, average, isAllTaskRated);
         }
     }, [latestRoundTasks]);
 
-    const [{ pageIndex, pageSize }, setPagination] = useState({
-        pageIndex: 0,
-        pageSize: 10,
-    });
+    React.useEffect(() => {
+        setConfirmButtonDisabled(
+            !isAllTaskRated || !dateExpired || isPreviousTasks
+        );
+    }, [isAllTaskRated, dateExpired, isPreviousTasks]);
 
-    const confirmButtonDisabled = !isAllTaskRated || !dateExpired;
+    React.useEffect(() => {
+        if (historyData?.data && latestRound) {
+            if (
+                historyData.data.length > 0 &&
+                latestRound === historyData.data.length
+            ) {
+                setIsPreviousTasks(true);
+            }
+        }
+    }, [historyData, latestRound, data]);
+
+    console.log(
+        "outside",
+        historyData?.data,
+        "latest round",
+        latestRound,
+        "prevroundtask",
+        isPreviousTasks
+    );
+    console.log("confirm outside", confirmButtonDisabled);
 
     const formFields = [
         {
@@ -450,7 +468,8 @@ const EvaluationTaskListModal = ({
                 style={{ marginLeft: "5%", marginRight: "5%" }}
             >
                 {auth.roleId === 6 &&
-                    (evaluationObject?.ld_submission_status === 0
+                    (evaluationObject?.ld_submission_status === 0 &&
+                    !isPreviousTasks
                         ? formFields.map((field, index) => (
                               <RatingSection key={index} {...field} />
                           ))
@@ -459,7 +478,10 @@ const EvaluationTaskListModal = ({
                               <RatingSectionStatic key={index} {...field} />
                           )))}
 
-                {(auth.roleId === 8 || auth.roleId === 1) &&
+                {((auth.roleId === 8 &&
+                    singleEvaluation?.ld_submission_status === 1) ||
+                    (auth.roleId === 1 &&
+                        singleEvaluation?.ld_submission_status === 1)) &&
                     formFields.map((field, index) => (
                         <RatingSectionStatic key={index} {...field} />
                     ))}
@@ -468,7 +490,8 @@ const EvaluationTaskListModal = ({
             <CommentTeamLeadSection>
                 {/* //team lead comment start */}
                 {auth.roleId === 8 &&
-                    singleEvaluation.team_lead_status === 0 && (
+                    singleEvaluation.team_lead_status === 0 &&
+                    singleEvaluation.ld_submission_status === 1 && (
                         <div>
                             <TeamLeadReviewTitle>
                                 Team Leader's Review
@@ -529,7 +552,9 @@ const EvaluationTaskListModal = ({
             <CommentAdminSection>
                 {/* admin view section start */}
                 {auth.roleId === 1 &&
-                    singleEvaluation.managements_decision === null && (
+                    singleEvaluation.managements_decision === null &&
+                    singleEvaluation.team_lead_status === 1 &&
+                    singleEvaluation.ld_submission_status === 1 && (
                         <div>
                             <section>
                                 <SectionFlex>
@@ -627,7 +652,8 @@ const EvaluationTaskListModal = ({
                     {/* Team Lead submit button start */}
 
                     {auth.roleId === 8 &&
-                        singleEvaluation.team_lead_status === 0 && (
+                        singleEvaluation.team_lead_status === 0 &&
+                        singleEvaluation.ld_submission_status === 1 && (
                             <Button
                                 onClick={handleTeamLeadComment}
                                 size="md"
@@ -644,7 +670,9 @@ const EvaluationTaskListModal = ({
 
                     {/* Admin submit button start */}
                     {auth.roleId === 1 &&
-                        singleEvaluation.managements_decision === null && (
+                        singleEvaluation.managements_decision === null &&
+                        singleEvaluation.team_lead_status === 1 &&
+                        singleEvaluation.ld_submission_status === 1 && (
                             <Flex>
                                 <Button
                                     onClick={handleAdminAuthorization}

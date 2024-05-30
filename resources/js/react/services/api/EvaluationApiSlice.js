@@ -16,7 +16,11 @@ const evaluationApiSlice = apiSlice.injectEndpoints({
                 body: data,
                 formData: true,
             }),
-            invalidatesTags: ["ALL_TASKS", "ALL_EVALUATION"],
+            invalidatesTags: [
+                "ALL_TASKS",
+                "ALL_EVALUATION",
+                "EVALUATION_HISTORY",
+            ],
         }),
 
         storeTaskRatingFinalSubmission: build.mutation({
