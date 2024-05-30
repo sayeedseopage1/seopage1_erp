@@ -83,21 +83,21 @@ return new class extends Migration
             [
                 'id' => 9,
                 'incentive_type_id' => 3,
-                'title' => 'Bonus points based on released amount > 6000',
+                'title' => 'Bonus points based on released amount',
                 'min_limit' => 6000,
                 'max_limit' => 15000,
             ],
             [
                 'id' => 10,
                 'incentive_type_id' => 3,
-                'title' => 'Unreleased payment amount > 6000',
+                'title' => 'Unreleased payment amount',
                 'min_limit' => 0,
                 'max_limit' => 35000,
             ],
             [
                 'id' => 11,
                 'incentive_type_id' => 3,
-                'title' => 'Bonus points based on released amount < 6000',
+                'title' => 'Bonus points based on released amount',
                 'min_limit' => 0,
                 'max_limit' => 100,
             ]
