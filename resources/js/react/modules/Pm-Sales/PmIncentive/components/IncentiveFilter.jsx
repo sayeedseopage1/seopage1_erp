@@ -1,74 +1,79 @@
-import React, { useState } from 'react';
-import FilterItem from './FilterItem';
-import JqueryDateRangePicker from './JqueryDateRangePicker';
-import { useDispatch, useSelector } from 'react-redux';
-import { useUsers } from '../../../../hooks/useUsers';
-import { useGetAllFilterOptionQuery } from '../../../../services/api/FilterBarOptionsApiSlice';
-import DepartmentFilter from './DepartmentFilter';
-import { setFilterState } from '../../../../services/features/pointPageFilterSlice';
-import EmployeeFilterOptions from './EmployeeFilterOptions';
+import React, { useEffect, useState } from 'react';
+import FilterItem from './FilterItem.jsx';
+import _ from 'lodash';
+import userIcon from '../assets/tag-user.svg'
+import { useGetPmByDeptQuery } from '../../../../services/api/Pm-Sales/pmSalesApiSlice.js';
+import { useGetAllFilterOptionQuery } from '../../../../services/api/FilterBarOptionsApiSlice.js';
+import { auth } from '../../Points/constants/index.js';
+import Button from '../../../../Insights/ui/Button.jsx';
+import DeptFilter from '../../Points/components/Filter/DeptFilter.jsx';
+import EmployeeFilter from '../../Points/components/Filter/EmployeeFilter.jsx';
+import JqueryDateRangePicker from '../../Points/components/JqueryDateRangePicker.jsx';
 
-const IncentiveFilter = ({ setData,
-    setIsDataFetching }) => {
-    const { departments, employees } = useSelector(s => s.pointPageFilterOption);
-    const { getUserById, usersObject, usersIsFetching, users } = useUsers();
-    const dispatch = useDispatch();
+
+export default function IncentiveFilter({
+    setQuery
+}) {
+
+    // const auth = useAuth();
+    const [dept, setDept] = useState(1);
+    // get pm by department 
+    const { data: pmByDept, isFetching: isPmByDeptLoading } = useGetPmByDeptQuery(dept)
+    const pmByDeptData = pmByDept?.data
     const [startDate, setStartDate] = useState(null);
     const [endDate, setEndDate] = useState(null);
-    const [dept, setDept] = useState(null);
-    const [selectedEmployee, setSelectedEmployee] = useState(null);
-    // const [employeeLoading, setEmployeeLoading] = useState([]);
+    const [selectedEmployee, setSelectedEmployee] = useState("");
 
-    // console.log(users?.filter(u => u?.role_id == 4));
-    // console.log(selectedEmployee)
-
-    const getEmployees = (shift) => {
-        let users = [];
-
-        if (shift.members) {
-            let members = shift?.members?.split(',')?.filter(d => d !== '');
-            members?.map(m => {
-                let user = getUserById(m);
-                users.push({
-                    id: user?.id,
-                    name: user?.name,
-                    image_url: user?.image_url,
-                });
-            });
-
-            users.length && setSelectedEmployee(users[0])
+    useEffect(() => {
+        if (auth?.isHasRolePermission(1) && pmByDeptData && !isPmByDeptLoading) {
+            setSelectedEmployee(pmByDeptData[0]?.id);
+            setQuery(prevQuery => ({ ...prevQuery, user_id: pmByDeptData[0]?.id }));
         }
-        return users;
-    }
+    }, [pmByDeptData, isPmByDeptLoading]);
+
+
+    // sidebar
+    const [sidebarIsOpen, setSidebarIsOpen] = useState(false);
+
 
     // fetch data
     const {
-        data,
-        isFetching
+        data: depAndEmployees,
+        isFetching: isDepAndEmployeesFetching
     } = useGetAllFilterOptionQuery('', {
         refetchOnMountOrArgChange: true,
-        skip: departments.length && employees.length
     });
 
-    React.useEffect(() => {
-        if (data && !isFetching) {
-            setDept(data?.department[0]);
-            dispatch(
-                setFilterState(data)
-            )
+    useEffect(() => {
+        setQuery(prevQuery => ({
+            ...prevQuery,
+            start_date: startDate,
+            end_date: endDate,
+            dept_id: dept,
+            user_id: selectedEmployee
+        }));
+    }, [startDate, endDate, dept, selectedEmployee]);
+
+    useEffect(() => {
+        if (auth?.isHasRolePermission(4)) {
+            setQuery(prevQuery => ({ ...prevQuery, user_id: auth?.userId }));
         }
-    }, [data, isFetching])
+    }, [auth?.userId, startDate]);
 
+    const handleDeptChange = (value) => {
+        setDept(value);
+        setSelectedEmployee("");
+        setQuery(prevQuery => ({ ...prevQuery, dept_id: value, user_id: "" }));
+    };
 
-    // handle dept select
-    const handleDepartmentSelect = (dept) => {
-        setDept(dept);
-    }
+    const handlePmChange = (value) => {
+        setSelectedEmployee(value);
+        setQuery(prevQuery => ({ ...prevQuery, user_id: value }));
+    };
 
-    // TODO: need to make functionality 
     return (
-        <div className='sp1__pp_filter_bar d-flex align-items-center justify-content-between pr-3'>
-            <FilterItem>
+        <div className='sp1__pp_filter_bar justify-content-between'>
+            <FilterItem className='border-right-0'>
                 <JqueryDateRangePicker
                     startDate={startDate}
                     endDate={endDate}
@@ -78,27 +83,116 @@ const IncentiveFilter = ({ setData,
                 />
             </FilterItem>
 
-            <FilterItem className='hide'>
-                <EmployeeFilterOptions
-                    selected={selectedEmployee}
-                    setSelectedEmployee={setSelectedEmployee}
-                    data={users?.filter(u => u?.role_id == 4)}
-                    loading={usersIsFetching}
-                    onSelect={() => { }}
-                />
-            </FilterItem>
+            {
+                auth?.isHasRolePermission(1) && <>
+                    <FilterItem className='border-right-0 hide'>
+                        <DeptFilter department={depAndEmployees?.department} handleChange={handleDeptChange} isFetching={isDepAndEmployeesFetching} />
+                    </FilterItem>
+                    <FilterItem className='border-right-0 hide'>
+                        <EmployeeFilter pmByDeptData={pmByDeptData} handleChange={handlePmChange} isFetching={isPmByDeptLoading} />
+                    </FilterItem>
 
-            <FilterItem className='hide'>
-                <DepartmentFilter
-                    data={departments}
-                    selected={dept}
-                    setSelectedDept={setDept}
-                    loading={isFetching}
-                    onSelect={handleDepartmentSelect}
-                />
-            </FilterItem>
-        </div>
-    );
-};
+                </>
+            }
+            {
+                auth?.isHasRolePermission(4) && <>
+                    <FilterItem className='border-right-0 hide'>
+                        <div className='point_selector_container'>
+                            <div className='point_selector_label_container'>
+                                <img src={userIcon} alt="User Icon" style={{ width: '17px', height: '17px' }} />
+                                <span className='point_selector_label'>Employee:</span>
+                            </div>
+                            <span className='point_selector_item' style={{ color: '#B1B1B1', marginLeft: '4px' }}>{auth?.name}</span>
+                        </div>
+                    </FilterItem>
+                </>
+            }
 
-export default IncentiveFilter;
+            {/* sidebar */}
+            {
+                auth?.isHasRolePermission(1) &&
+                <div className='sp1__pp_filter_sidebar_container'>
+                    <div
+                        className='sp1__pp_filter_sidebar_toggle'
+                        onClick={() => setSidebarIsOpen(!sidebarIsOpen)}
+                    >
+                        <i className="fa-solid fa-filter"></i>
+                        <span>Filters</span>
+                    </div>
+
+                    {
+                        auth?.isHasRolePermission(1) && sidebarIsOpen && (
+                            <aside className='sp1__pp_filter_sidebar'>
+                                <div className='sp1__pp_filter_sidebar_header'>
+                                    <span>Filters</span>
+
+                                    <Button
+                                        aria-label="Close"
+                                        variant='tertiary'
+                                        onClick={() => setSidebarIsOpen(false)}
+                                    >
+                                        <i className="fa-solid fa-xmark"></i>
+                                    </Button>
+                                </div>
+
+                                <div className="sp1__pp_filter_sidebar_items">
+                                    <FilterItem className='w-100 border-right-0'>
+                                        <DeptFilter department={depAndEmployees?.department} handleChange={handleDeptChange} isFetching={isDepAndEmployeesFetching} />
+                                    </FilterItem>
+                                    <FilterItem className='w-100 border-right-0'>
+                                        <EmployeeFilter pmByDeptData={pmByDeptData} handleChange={handlePmChange} isFetching={isPmByDeptLoading} />
+                                    </FilterItem>
+                                </div>
+                            </aside>
+                        )
+                    }
+                </div>
+            }
+
+            {/* sidebar */}
+            {
+                auth?.isHasRolePermission(4) &&
+                <div className='sp1__pp_filter_sidebar_container'>
+                    <div
+                        className='sp1__pp_filter_sidebar_toggle'
+                        onClick={() => setSidebarIsOpen(!sidebarIsOpen)}
+                    >
+                        <i className="fa-solid fa-filter"></i>
+                        <span>Filters</span>
+                    </div>
+
+                    {
+                        auth?.isHasRolePermission(4) && sidebarIsOpen && (
+                            <aside className='sp1__pp_filter_sidebar'>
+                                <div className='sp1__pp_filter_sidebar_header'>
+                                    <span>Filters</span>
+
+                                    <Button
+                                        aria-label="Close"
+                                        variant='tertiary'
+                                        onClick={() => setSidebarIsOpen(false)}
+                                    >
+                                        <i className="fa-solid fa-xmark"></i>
+                                    </Button>
+                                </div>
+                                <div className="sp1__pp_filter_sidebar_items">
+                                    <FilterItem className='w-100 border-right-0'>
+                                        <div className='point_selector_container'>
+                                            <div className='point_selector_label_container'>
+                                                <img src={userIcon} alt="User Icon" style={{ width: '17px', height: '17px' }} />
+                                                <span className='point_selector_label'>Employee:</span>
+                                            </div>
+                                            <span className='point_selector_item' style={{ color: '#B1B1B1', marginLeft: '4px' }}>{auth?.name}</span>
+                                        </div>
+                                    </FilterItem>
+                                </div>
+                            </aside>
+                        )
+                    }
+                </div>
+            }
+
+
+        </div >
+    )
+}

@@ -18,6 +18,7 @@ const Incentive = () => {
     const [tab, setTab] = useState("current");
     const [filterByPeriod, setFilterByPeriod] = useState("monthly");
     const { incentiveTypesLoading } = useIncentiveTypes();
+    const [query, setQuery] = useState({});
 
     if (incentiveTypesLoading) {
         return <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
@@ -27,7 +28,7 @@ const Incentive = () => {
 
     return (
         <div>
-            <IncentiveFilter />
+            <IncentiveFilter setQuery={setQuery} />
             <div className='incentive_wrapper'>
 
                 <FilterBar tab={tab} setTab={setTab} filterByPeriod={filterByPeriod} setFilterByPeriod={setFilterByPeriod} />

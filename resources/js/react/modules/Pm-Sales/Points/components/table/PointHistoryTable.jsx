@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useEffect, useMemo, useState } from 'react';
+import React, { createContext, useContext, useState } from 'react';
 import {
     closestCenter,
     DndContext,
@@ -19,7 +19,6 @@ import moment from 'moment/moment';
 import PointHistoryTableLoader from '../loader/PointHistoryTableLoader';
 import upArrowIcon from '../../assets/upArrow.svg';
 import downArrowIcon from '../../assets/downArrow.svg';
-import PointHistoryTablePagination from '../PointHistoryTablePagination';
 
 
 const DragIndexContext = createContext({ active: -1, over: -1 });
