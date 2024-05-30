@@ -20,8 +20,10 @@ import CommentContainerDecider from "../../../../../../../react/UI/comments/Comm
 import { useCommentStore } from "../../../../../../../react/UI/comments/zustand/store";
 import { setPendingActionId } from "../../../../../../services/features/pendingActionSlice";
 import CommentsBodyWithoutSendBox from "../../../../../../../react/UI/comments/CommentBodyWithoutSendBox";
-import EvaluationAcknowledgeModal from "../../../EmployeeEvaluation/modal/EvaluationAcknowledgeModal";
+
 import { usePendingActionStore } from "../../../../../../Zustand/store";
+import EvaluationAcknowledgeSubtaskModal from "../../../EmployeeEvaluation/modal/EvaluationAcknowledgeSubtaskModal";
+import EvaluationAcknowledgeModal from "../../../EmployeeEvaluation/modal/EvaluationAcknowledgeModal";
 
 const ActionsButton = ({ data }) => {
     const dispatch = useDispatch();
@@ -32,6 +34,8 @@ const ActionsButton = ({ data }) => {
     const [viewModal, setViewModal] = React.useState(false);
     const [isRelevantModal, setIsRelevantModal] = React.useState(false);
     const [acknowledgement, setAcknowledgement] = React.useState(false);
+    const [acknowledgementSubtask, setAcknowledgementSubtask] =
+        React.useState(false);
     const { width } = useWindowSize();
     const taskId = data?.task_id;
     const developerId = data?.developer_id;
@@ -136,7 +140,9 @@ const ActionsButton = ({ data }) => {
                                     key={i}
                                     onClick={() => {
                                         setPendingAction(data);
-                                        setAcknowledgement((prev) => !prev);
+                                        setAcknowledgementSubtask(
+                                            (prev) => !prev
+                                        );
                                         dispatch(setPendingActionId(data?.id));
                                     }}
                                     className={`${style.action_btn}`}
@@ -146,7 +152,7 @@ const ActionsButton = ({ data }) => {
                             )}
                         </div>
                     );
-                }  else if (btn.button_type === "modal") {
+                } else if (btn.button_type === "modal") {
                     return (
                         <ModalWithBtnTemplate
                             key={i}
@@ -224,6 +230,12 @@ const ActionsButton = ({ data }) => {
             <RelevantModal
                 setIsRelevantModal={setIsRelevantModal}
                 isRelevantModal={isRelevantModal}
+            />
+
+            <EvaluationAcknowledgeSubtaskModal
+                developerId={developerId}
+                setAcknowledgementSubtask={setAcknowledgementSubtask}
+                acknowledgementSubtask={acknowledgementSubtask}
             />
 
             <EvaluationAcknowledgeModal

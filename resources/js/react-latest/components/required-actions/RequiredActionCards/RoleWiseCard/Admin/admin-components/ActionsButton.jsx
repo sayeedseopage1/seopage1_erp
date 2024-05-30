@@ -12,7 +12,7 @@ import { useDispatch } from "react-redux";
 
 import { useGetCommentsQuery } from "../../../../../../services/api/commentsApiSlice";
 import { useWindowSize } from "react-use";
-import EvaluationModal from "../../../EmployeeEvaluation/modal/EvaluationAcknowledgeModal";
+import EvaluationModal from "../../../EmployeeEvaluation/modal/EvaluationAcknowledgeSubtaskModal";
 import RelevantModal from "../../Developer/dev-components/RelevantModal";
 import CommentsBody from "../../../../../../../react/UI/comments/CommentsBody";
 import CommentBodyForPendingActions from "../../../../../../../react/UI/comments/CommentBodyForPendingActions";

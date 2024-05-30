@@ -34,9 +34,9 @@ import useCounterStore from "../../../../../Zustand/store";
 import { toast } from "react-toastify";
 import { useAcknowledgePendingActionsPastMutation } from "../../../../../services/api/pendingActionsApiSlice";
 import { EvaluationTaskTableColumns } from "../../../../../../react/employee-evaluation/components/Table/EvaluationTaskTableColumns";
-const EvaluationAcknowledgeModal = ({
-    acknowledgement,
-    setAcknowledgement,
+const EvaluationAcknowledgeTaskModal = ({
+    acknowledgementTask,
+    setAcknowledgementTask,
     developerId,
 }) => {
     const { increaseCount } = useCounterStore();
@@ -63,7 +63,7 @@ const EvaluationAcknowledgeModal = ({
             try {
                 if (developerId) {
                     const response = await axios.get(
-                        `/account/get-single-evaluation/${developerId}`
+                        `/account/evaluation-history/${developerId}`
                     );
                     console.log(response);
                     setSingleEvaluation(response?.data.data[0]);
@@ -77,7 +77,7 @@ const EvaluationAcknowledgeModal = ({
         fetchData();
     }, []);
 
-    // console.log("singleEvaluation", singleEvaluation);
+    console.log("singleEvaluation", singleEvaluation);
     useEffect(() => {
         const fetchTasks = async () => {
             setIsLoading(true);
@@ -116,12 +116,12 @@ const EvaluationAcknowledgeModal = ({
 
             if (response?.status == 200) {
                 if (singleEvaluation?.managements_decision == "One more week") {
-                    setAcknowledgement(false);
+                    setAcknowledgementTask(false);
                     increaseCount();
                     window.open(response?.url, "_blank");
                 } else {
                     toast.success("Acknowledge successful!");
-                    setAcknowledgement(false);
+                    setAcknowledgementTask(false);
                     increaseCount();
                 }
             }
@@ -139,12 +139,12 @@ const EvaluationAcknowledgeModal = ({
 
             if (response?.status == 200) {
                 if (singleEvaluation?.managements_decision == "One more week") {
-                    setAcknowledgement(false);
+                    setAcknowledgementTask(false);
                     increaseCount();
                     window.open(response?.url, "_blank");
                 } else {
                     toast.success("Acknowledge successful!");
-                    setAcknowledgement(false);
+                    setAcknowledgementTask(false);
                     increaseCount();
                 }
             }
@@ -172,8 +172,8 @@ const EvaluationAcknowledgeModal = ({
                 },
             }}
             ariaHideApp={false}
-            isOpen={acknowledgement}
-            onRequestClose={() => setAcknowledgement(false)}
+            isOpen={acknowledgementTask}
+            onRequestClose={() => setAcknowledgementTask(false)}
         >
             <section>
                 <EvalTableTitle>
@@ -278,7 +278,7 @@ const EvaluationAcknowledgeModal = ({
 
             <FooterButtons>
                 <Button
-                    onClick={() => setAcknowledgement(false)}
+                    onClick={() => setAcknowledgementTask(false)}
                     variant="secondary"
                     size="md"
                 >
@@ -322,6 +322,6 @@ const EvaluationAcknowledgeModal = ({
     );
 };
 
-export default EvaluationAcknowledgeModal;
+export default EvaluationAcknowledgeTaskModal;
 
 //mitul work end
