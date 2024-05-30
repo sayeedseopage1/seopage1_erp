@@ -177,7 +177,7 @@ class EvaluationController extends AccountBaseController
         ->leftJoin('sub_tasks', 'employee_evaluations.user_id', '=', 'sub_tasks.assigned_to')
         ->leftJoin('tasks', 'sub_tasks.task_id', '=', 'tasks.id')
         ->leftJoin('users as added_by', 'sub_tasks.added_by', '=', 'added_by.id')
-        ->leftJoin('roles', 'employee_evaluations.role', '=', 'roles.id')
+        ->leftJoin('roles', 'employee_evaluations.user_id', '=', 'roles.id')
         ->leftJoin('project_time_logs', 'employee_evaluations.user_id', '=', 'project_time_logs.user_id')
         ->leftJoin('task_users', 'employee_evaluations.user_id', '=', 'task_users.user_id')
         ->where('employee_evaluations.user_id', $user_id)
