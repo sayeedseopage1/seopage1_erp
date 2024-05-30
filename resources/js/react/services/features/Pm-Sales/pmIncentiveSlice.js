@@ -12,7 +12,7 @@ const pmIncentiveSlice = createSlice({
     initialState,
     reducers: {
         regularPointAverage: (state, action) => {
-            state.regularPointAverage = action.payload.toFixed;
+            state.regularPointAverage = action.payload;
         },
         regularIncentivePoints: (state, action) => {
             state.regularIncentivePoints = action.payload;
