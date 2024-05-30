@@ -136,7 +136,7 @@ const AverageRating = ({ data }) => {
                     >
                         <div>
                             <span>Lead Developer Average Rating</span>
-                            <span> {`(${totalAverage ?? "N/A"})`}</span>
+                            <span> {totalAverage.toFixed(2) ?? "N/A"}</span>
                         </div>
                     </Card.Head>
 
