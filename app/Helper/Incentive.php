@@ -216,7 +216,7 @@ class Incentive
                 ->where('projects.project_status','Accepted')
                 ->sum('project_milestones.cost');
 
-                $incentiveCriteria->acquired_percent = number_format((($released_amount_this_month + 10000)/($remain_unreleased_amount_last_months + $assigned_amount_this_month)) * 100, 2);
+                $incentiveCriteria->acquired_percent = number_format(($released_amount_this_month/($remain_unreleased_amount_last_months + $assigned_amount_this_month)) * 100, 2);
                 self::findIncentive($incentiveCriteria);
             }
 
