@@ -1,7 +1,7 @@
 import React from 'react';
 import CustomAntdModal from '../ui/CustomAntdModal';
 
-const FinalPointsModal = ({ antdModalOpen, setAntdModalOpen, unreleasedIncentive, bonusPointsAcquired, bonusPointsData }) => {
+const FinalPointsModal = ({ antdModalOpen, setAntdModalOpen, unreleasedIncentive, bonusPointsIncentive, bonusPointsData }) => {
 
     return (
         <div>
@@ -13,7 +13,7 @@ const FinalPointsModal = ({ antdModalOpen, setAntdModalOpen, unreleasedIncentive
                 <>
                     <div className="modal_point_row">
                         <p>Your bonus points: </p>{" "}
-                        <span className="text-sm">{parseFloat(bonusPointsAcquired)}</span>
+                        <span className="text-sm">{parseFloat(bonusPointsIncentive)}</span>
                     </div>
                     <div className="modal_point_row">
                         <p>Incentive Percentage: </p>{" "}
@@ -21,7 +21,7 @@ const FinalPointsModal = ({ antdModalOpen, setAntdModalOpen, unreleasedIncentive
                     </div>
                     <hr />
                     <div className="modal_point_row">
-                        <p>Your final points: <span>({parseFloat(bonusPointsAcquired)}*{parseFloat(unreleasedIncentive)}%)</span></p>{" "}
+                        <p>Your final points: <span>({parseFloat(bonusPointsIncentive)}*{parseFloat(unreleasedIncentive)}%)</span></p>{" "}
                         <span className={`${bonusPointsData > 0 ? 'progress_card_desc_pos' : 'progress_card_desc_neg'}`}>{parseFloat(bonusPointsData)}pt</span>
                     </div>
                 </>

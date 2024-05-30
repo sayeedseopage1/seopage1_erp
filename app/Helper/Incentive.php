@@ -168,14 +168,16 @@ class Incentive
                 ->sum('project_milestones.cost');
 
                 $this_month_released_percent = round(($released_amount_this_month_assigned / $assigned_amount_this_month) * 100, 2);
-                $previous_months_released_percent = round((($released_amount_this_month - $released_amount_this_month_assigned) / $remain_unreleased_amount_last_months) * 100, 2) + 40; // test add 40
+                $previous_months_released_percent = round((($released_amount_this_month - $released_amount_this_month_assigned) / $remain_unreleased_amount_last_months) * 100, 2);
                 $match_trigger = 0;
                 $incentiveCriteria->acquired_percent = round($assigned_amount_this_month + $remain_unreleased_amount_last_months - $released_amount_this_month, 2);
-
+                $incentiveCriteria->obtained_incentive = 0;
+                $incentiveCriteria->previous_month_released_percent = $previous_months_released_percent;
+                $incentiveCriteria->current_month_released_percent = $this_month_released_percent;
                 foreach($incentiveCriteria->incentiveFactors as $factor){
+                    $incentiveCriteria->incentive_amount_type = $factor->incentive_amount_type;
                     if(!$match_trigger && $factor->lower_limit <= $previous_months_released_percent && $factor->uppder_limit <= $this_month_released_percent){
                         $match_trigger++;
-                        $incentiveCriteria->incentive_amount_type = $factor->incentive_amount_type;
                         $incentiveCriteria->obtained_incentive = $factor->incentive_amount;
                     }
                     $factor->upper_limit = round(($assigned_amount_this_month - (($assigned_amount_this_month/100) * $factor->upper_limit)) + ($remain_unreleased_amount_last_months - (($remain_unreleased_amount_last_months/100) * $factor->lower_limit)), 2);
