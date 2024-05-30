@@ -18,7 +18,7 @@ const IncentiveThickChart = ({ chartData }) => {
     //     });
     // };
 
-    console.log(chartData)
+    // console.log(chartData)
 
     const isAllZero = chartData?.incentive == 0;
 

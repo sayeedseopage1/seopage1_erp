@@ -25,11 +25,11 @@ const ChartIdealVsAchievedEditModal = ({ antdModalOpen, showIdealVsAchievedEditM
             lower_limit: parseFloat(item?.lower_limit),
             upper_limit: parseFloat(item?.upper_limit),
             incentive_amount: parseFloat(item?.incentive_amount),
-            incentive_amount_type: item?.incentive_amount_type
+            incentive_amount_type: parseFloat(item?.incentive_amount_type),
+            limit_type: parseFloat(item?.limit_type),
         }
     )) || [];
 
-    // console.log(defaultChartAxisData, 'defaultChartAxisData')
 
     // Modal states for each modal
     const [addNewAxisDataModalOpen, setAddNewAxisDataModalOpen] = useState(false);
@@ -164,6 +164,9 @@ const ChartIdealVsAchievedEditModal = ({ antdModalOpen, showIdealVsAchievedEditM
         }
     };
 
+    // console.log("chartAxisData", chartAxisData)
+    // console.log("singleCriteria", singleCriteria)
+
 
     return (
         <Modal className='pay_now_modal'
@@ -219,7 +222,7 @@ const ChartIdealVsAchievedEditModal = ({ antdModalOpen, showIdealVsAchievedEditM
                                     .map((item) => (
                                         <div key={item?.id} className='edit_chart_data_modal_content ratio_card'>
                                             <div className='ratio_wrapper'>
-                                                <p className='ratio_text'>{item?.lower_limit}-{item?.upper_limit}%</p>
+                                                <p className='ratio_text'>{item?.lower_limit}-{item?.limit_type == 1 ? "$" : ""}{item?.upper_limit}{item?.limit_type == 2 ? "%" : ""}</p>
                                                 <button onClick={() => xAxisEditHandler(item)} className='ratio_edit_button'>Edit</button>
                                             </div>
                                             <div className='ratio_wrapper'>

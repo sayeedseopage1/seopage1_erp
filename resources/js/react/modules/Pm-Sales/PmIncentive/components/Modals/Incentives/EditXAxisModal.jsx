@@ -7,7 +7,7 @@ import { toast } from 'react-toastify';
 
 const EditXAxisModal = ({ singleCriteria, axisEditItem, setChartAxisData, antdModalOpen, setAntdModalOpen }) => {
 
-    const { lower_limit, upper_limit } = axisEditItem || {}
+    const { lower_limit, upper_limit, limit_type } = axisEditItem || {}
     const { min_limit, max_limit } = singleCriteria?.data || {};
 
     const {
@@ -85,8 +85,8 @@ const EditXAxisModal = ({ singleCriteria, axisEditItem, setChartAxisData, antdMo
                 <div className='add_new_axis_item_modal_body'>
                     <form onSubmit={handleSubmit(onSubmit)}>
                         <div style={{ marginBottom: '32px' }}>
-                            <p className="axis_item_modal_inputs_title" style={{ fontSize: '16px' }}>Current Value: <span style={{ fontWeight: '500', color: '#000', fontSize: '20px' }}>{lower_limit}-{upper_limit}%</span></p>
-                            <p className='axis_item_modal_inputs_title' style={{ fontSize: '16px' }}>New X Axis ratio (Percentage)</p>
+                            <p className="axis_item_modal_inputs_title" style={{ fontSize: '16px' }}>Current Value: <span style={{ fontWeight: '500', color: '#000', fontSize: '20px' }}>{lower_limit}-{limit_type == 1 ? "$" : ""}{upper_limit}{limit_type == 2 ? '%' : ''}</span></p>
+                            <p className='axis_item_modal_inputs_title' style={{ fontSize: '16px' }}>New X Axis ratio ({limit_type == 1 ? "Amount" : "Percentage"})</p>
                             <div className='axis_item_modal_inputs_inner'>
                                 <div className='w-50'>
                                     <input defaultValue={lower_limit} className='point_edit_modal_input' type='number' {...register("lower_limit", { required: true })} placeholder='Write here ' />
