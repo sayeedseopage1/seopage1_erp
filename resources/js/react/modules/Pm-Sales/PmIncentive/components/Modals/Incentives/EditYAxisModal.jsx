@@ -7,7 +7,7 @@ import { toast } from 'react-toastify';
 
 const EditYAxisModal = ({ axisEditItem, chartAxisData, setChartAxisData, antdModalOpen, setAntdModalOpen }) => {
 
-    const { incentive_amount } = axisEditItem || {}
+    const { incentive_amount, incentive_amount_type } = axisEditItem || {}
 
     const {
         register,
@@ -63,9 +63,8 @@ const EditYAxisModal = ({ axisEditItem, chartAxisData, setChartAxisData, antdMod
                 <div className='add_new_axis_item_modal_body'>
                     <form onSubmit={handleSubmit(onSubmit)}>
                         <div style={{ marginBottom: '32px' }}>
-                            {/* <p className='axis_item_modal_inputs_title'>X Axis ratio (Percentage)</p> */}
-                            <p className="axis_item_modal_inputs_title" style={{ fontSize: '16px' }}>Current Percentage: <span style={{ fontWeight: '500', color: '#000', fontSize: '20px' }}>{incentive_amount}%</span></p>
-                            <p className='axis_item_modal_inputs_title' style={{ fontSize: '16px' }}>New Percentage</p>
+                            <p className="axis_item_modal_inputs_title" style={{ fontSize: '16px' }}>Current {incentive_amount_type == 1 ? 'Value' : 'Percentage'}: <span style={{ fontWeight: '500', color: '#000', fontSize: '20px' }}>{incentive_amount}{incentive_amount_type == 2 ? '%' : ''}</span></p>
+                            <p className='axis_item_modal_inputs_title' style={{ fontSize: '16px' }}>New {incentive_amount_type == 1 ? 'Value' : 'Percentage'}</p>
                             <div className='axis_item_modal_inputs_inner'>
                                 <div className='w-100'>
                                     <input defaultValue={incentive_amount} className='point_edit_modal_input' type='number' {...register("incentive_amount", { required: true })} placeholder='Write here' />
