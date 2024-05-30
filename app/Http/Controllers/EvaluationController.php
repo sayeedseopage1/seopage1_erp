@@ -559,7 +559,7 @@ class EvaluationController extends AccountBaseController
                 $evaluation->managements_cmnt = $request->managements_cmnt;
                 $evaluation->managements_decision = 'One more week';
                 $evaluation->accept_rejected = Carbon::now();
-                $evaluation->exp_date = Carbon::parse($evaluation->exp_date)->addMinutes(20); 
+                $evaluation->exp_date = Carbon::now()->addMinutes(20); 
                 $evaluation->managements_id = Auth::user()->id;
                 $evaluation->managements_name = Auth::user()->name;
                 $evaluation->managements_auth_at = Carbon::now();
