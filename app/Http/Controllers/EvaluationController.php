@@ -154,7 +154,7 @@ class EvaluationController extends AccountBaseController
                         $data->total_hours = $total_hours;
                         $data->total_minutes = $total_min;
                         $data->total_revision = $revision;
-                        $data->round_requied = $history;
+                        $data->round_requied = $history + 1;
                         }
                     }
             
