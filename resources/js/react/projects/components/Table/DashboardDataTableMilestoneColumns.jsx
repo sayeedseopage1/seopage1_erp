@@ -1,5 +1,10 @@
 
 
+/**
+ * This file contains the columns for the milestone table in the dashboard.
+ * 
+ */
+
 export const DashboardDataTableMilestoneColumns = [
     {
         id: "milestone_name",

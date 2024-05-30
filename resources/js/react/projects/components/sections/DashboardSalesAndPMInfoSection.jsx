@@ -22,6 +22,16 @@ import { DetailsSalesExecutiveConstant } from "../../constants";
 // Helper -
 import { formatHttp, handleLoadingComponent } from "../../helper";
 
+/**
+ * Dashboard Sales And PM Info Section
+ * @component
+ * @param {object} props - Component properties
+ * @param {object} props.projectData - Data related to the project
+ * @param {boolean} props.isLoading - Loading state
+ * @returns {JSX.Element} - Rendered component
+ * @description Dashboard Sales And PM Info Section Component for showing sales and project manager info on the dashboard page.
+ */
+
 const DashboardSalesAndPMInfoSection = ({ projectData, isLoading }) => {
     const projectInfo = projectData?.projectData?.project;
     const dealInfo = projectData?.projectData?.project?.deal;
@@ -31,18 +41,22 @@ const DashboardSalesAndPMInfoSection = ({ projectData, isLoading }) => {
                 title="Details shared by the sales executive:"
                 isBorderUse={false}
             />
+            {/* Details shared by the sales executive */}
             <div className={`${style.dashboardSalesAndPMInfoSection} mb-4`}>
                 <div>
+                    {/* Project Brief in 2-8 Words */}
                     <SectionContainer className="mb-4">
                         <DashboardCardTitle
                             title={
-                                DetailsSalesExecutiveConstant?.wordsHere2_8?.title
+                                DetailsSalesExecutiveConstant?.wordsHere2_8
+                                    ?.title
                             }
                             isBorderUse={true}
                             borderType="dotted"
                             isInfoIconUse={true}
                             infoText={
-                                DetailsSalesExecutiveConstant?.wordsHere2_8?.infoText
+                                DetailsSalesExecutiveConstant?.wordsHere2_8
+                                    ?.infoText
                             }
                         />
                         {handleLoadingComponent(
@@ -66,16 +80,20 @@ const DashboardSalesAndPMInfoSection = ({ projectData, isLoading }) => {
                             />
                         )}
                     </SectionContainer>
+                    {/* End Project Brief in 2-8 Words */}
+                    {/* Project Brief in 3-4 Words */}
                     <SectionContainer className="mb-4">
                         <DashboardCardTitle
                             title={
-                                DetailsSalesExecutiveConstant?.linesHere3_4?.title
+                                DetailsSalesExecutiveConstant?.linesHere3_4
+                                    ?.title
                             }
                             isBorderUse={true}
                             borderType="dotted"
                             isInfoIconUse={true}
                             infoText={
-                                DetailsSalesExecutiveConstant?.linesHere3_4?.infoText
+                                DetailsSalesExecutiveConstant?.linesHere3_4
+                                    ?.infoText
                             }
                         />
                         {handleLoadingComponent(
@@ -100,16 +118,20 @@ const DashboardSalesAndPMInfoSection = ({ projectData, isLoading }) => {
                             />
                         )}
                     </SectionContainer>
+                    {/* End Project Brief in 3-4 Words */}
+                    {/* Project Involved Other Department */}
                     <SectionContainer>
                         <DashboardCardTitle
                             title={
-                                DetailsSalesExecutiveConstant?.involvedProject?.title
+                                DetailsSalesExecutiveConstant?.involvedProject
+                                    ?.title
                             }
                             isBorderUse={true}
                             borderType="dotted"
                             isInfoIconUse={true}
                             infoText={
-                                DetailsSalesExecutiveConstant?.involvedProject?.infoText
+                                DetailsSalesExecutiveConstant?.involvedProject
+                                    ?.infoText
                             }
                         />
                         {handleLoadingComponent(
@@ -134,18 +156,22 @@ const DashboardSalesAndPMInfoSection = ({ projectData, isLoading }) => {
                             />
                         )}
                     </SectionContainer>
+                    {/* End Project Involved Other Department */}
                 </div>
                 <div>
+                    {/* Project Reference Website */}
                     <SectionContainer className="mb-4">
                         <DashboardCardTitle
                             title={
-                                DetailsSalesExecutiveConstant?.referenceWebsite?.title
+                                DetailsSalesExecutiveConstant?.referenceWebsite
+                                    ?.title
                             }
                             isBorderUse={true}
                             borderType="dotted"
                             isInfoIconUse={true}
                             infoText={
-                                DetailsSalesExecutiveConstant?.referenceWebsite?.infoText
+                                DetailsSalesExecutiveConstant?.referenceWebsite
+                                    ?.infoText
                             }
                         />
                         {handleLoadingComponent(
@@ -169,16 +195,20 @@ const DashboardSalesAndPMInfoSection = ({ projectData, isLoading }) => {
                             />
                         )}
                     </SectionContainer>
+                    {/* End Project Reference Website */}
+                    {/* Client Concern */}
                     <SectionContainer className="mb-4">
                         <DashboardCardTitle
                             title={
-                                DetailsSalesExecutiveConstant?.clientConcern?.title
+                                DetailsSalesExecutiveConstant?.clientConcern
+                                    ?.title
                             }
                             isBorderUse={true}
                             borderType="dotted"
                             isInfoIconUse={true}
                             infoText={
-                                DetailsSalesExecutiveConstant?.clientConcern?.infoText
+                                DetailsSalesExecutiveConstant?.clientConcern
+                                    ?.infoText
                             }
                         />
 
@@ -188,7 +218,6 @@ const DashboardSalesAndPMInfoSection = ({ projectData, isLoading }) => {
                                 number={2}
                                 widthDeference={20}
                                 hight={16}
-                               
                                 className="mb-2"
                                 parentClassName="pl-4 pt-3"
                             />,
@@ -204,16 +233,20 @@ const DashboardSalesAndPMInfoSection = ({ projectData, isLoading }) => {
                             />
                         )}
                     </SectionContainer>
+                    {/* End Client Concern */}
+                    {/* Logo Reference */}
                     <SectionContainer className="mb-4">
                         <DashboardCardTitle
                             title={
-                                DetailsSalesExecutiveConstant?.logoReference?.title
+                                DetailsSalesExecutiveConstant?.logoReference
+                                    ?.title
                             }
                             isBorderUse={true}
                             borderType="dotted"
                             isInfoIconUse={true}
                             infoText={
-                                DetailsSalesExecutiveConstant?.logoReference?.infoText
+                                DetailsSalesExecutiveConstant?.logoReference
+                                    ?.infoText
                             }
                         />
                         {handleLoadingComponent(
@@ -249,16 +282,20 @@ const DashboardSalesAndPMInfoSection = ({ projectData, isLoading }) => {
                             />
                         )}
                     </SectionContainer>
+                    {/* End Logo Reference */}
+                    {/* login Information */}
                     <SectionContainer>
                         <DashboardCardTitle
                             title={
-                                DetailsSalesExecutiveConstant?.requiredLogins?.title
+                                DetailsSalesExecutiveConstant?.requiredLogins
+                                    ?.title
                             }
                             isBorderUse={true}
                             borderType="dotted"
                             isInfoIconUse={true}
                             infoText={
-                                DetailsSalesExecutiveConstant?.requiredLogins?.infoText
+                                DetailsSalesExecutiveConstant?.requiredLogins
+                                    ?.infoText
                             }
                         />
                         {handleLoadingComponent(
@@ -283,14 +320,18 @@ const DashboardSalesAndPMInfoSection = ({ projectData, isLoading }) => {
                             />
                         )}
                     </SectionContainer>
+                    {/* End login Information */}
                 </div>
             </div>
+            {/* End Details shared by the sales executive */}
             <DashboardCardTitle
                 title="Comments by Project Manager:"
                 isBorderUse={false}
             />
+            {/* Comments by Project Manager */}
             <div className={`${style.dashboardSalesAndPMInfoSection}`}>
                 <SectionContainer>
+                    {/* Requirements Defined*/}
                     <SectionContentContainer
                         color="#D8EDFC"
                         maxHeight="35vh"
@@ -317,6 +358,8 @@ const DashboardSalesAndPMInfoSection = ({ projectData, isLoading }) => {
                             </p>
                         )}
                     </SectionContentContainer>
+                    {/* End Requirements Defined*/}
+                    {/* Deadline Provided */}
                     <SectionContentContainer
                         color="#D8EDFC"
                         maxHeight="35vh"
@@ -342,9 +385,11 @@ const DashboardSalesAndPMInfoSection = ({ projectData, isLoading }) => {
                             </p>
                         )}
                     </SectionContentContainer>
+                    {/* End Deadline Provided */}
                 </SectionContainer>
 
                 <div>
+                    {/* Any other notes for the project manager/technical team */}
                     <SectionContainer>
                         <DashboardCardTitle
                             title="Any other notes for the project manager/technical team"
@@ -373,8 +418,10 @@ const DashboardSalesAndPMInfoSection = ({ projectData, isLoading }) => {
                             />
                         )}
                     </SectionContainer>
+                    {/* End Any other notes for the project manager/technical team */}
                 </div>
             </div>
+            {/* End Comments by Project Manager */}
         </React.Fragment>
     );
 };

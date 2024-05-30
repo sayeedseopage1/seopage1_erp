@@ -17,6 +17,18 @@ import TaskGuidelineNeedsAuthorizedAdmin from "../modal/TaskGuidelineNeedsAuthor
 // WN - WorkingEnvironment;
 // TGABA - TaskGuidelineNeedsAuthorizedByAdmin;
 
+/**
+ * Dashboard Header Section
+ * @component
+ * @param {object} props - Component properties
+ * @param {object} props.projectData - Data related to the project
+ * @param {boolean} props.isLoading - Loading state
+ * @param {function} props.setDummyTypeChange - Set Dummy Type Change
+ * @returns {JSX.Element} - Rendered component
+ * @description Dashboard Header Section Component for showing header section on the dashboard page.
+ *  
+ */
+
 const DashboardHeaderSection = ({ projectData, isLoading, setDummyTypeChange }) => {
     const [isWNModalOpen, setIsWNModalOpen] = React.useState(false);
     const [isTGABAModalOpen, setIsTGABAModalOpen] = React.useState(false);
@@ -98,7 +110,7 @@ const DashboardHeaderSection = ({ projectData, isLoading, setDummyTypeChange }) 
                 </div>
             </div>
 
-            {/* Modal */}
+            {/* ----- Modal ------ */}
 
             {/* Working Environment Modal */}
             {isWNModalOpen && (

@@ -14,6 +14,19 @@ import { DashBoardDeadlineHistoryModalColumns } from "../Table/DashBoardDeadline
 // style
 import "./styles/deadlineChangeHistoryModal.css";
 
+
+
+/**
+ * Deadline Change History Modal
+ * @param {boolean} isModalOpen - Is Modal Open
+ * @param {function} closeModal - Close Modal
+ * @returns {JSX.Element}
+ * @description - Deadline Change History Modal Component For Show Deadline Change History
+ * 
+ * This modal will be used by Admin
+ * 
+ */
+
 const DeadlineChangeHistoryModal = ({ isModalOpen, closeModal }) => {
     const [projectDeadlineHistory, setProjectDeadlineHistory] = React.useState(
         []

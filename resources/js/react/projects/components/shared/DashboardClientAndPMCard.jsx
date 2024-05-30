@@ -10,16 +10,18 @@ import DashboardCardTitle from "../ui/DashboardCardTitle/DashboardCardTitle";
 
 /**
  * DashboardClientAndPMCard component
- * @param {object} projectData - Project data
- * @param {string} className - Additional class name
- * @returns {JSX.Element}
- * @description DashboardClientAndPMCard component to render client and project manager card
- *
+ * @component
+ * @param {object} props - Component properties
+ * @param {object} props.projectData - Data related to the project
+ * @param {string} props.className - Additional classes
+ * @returns {JSX.Element} - Rendered component
+ * @description DashboardClientAndPMCard component for showing client and project manager info on the dashboard page.
  */
 const DashboardClientAndPMCard = ({ projectData, className = "" }) => {
     const projectInfo = projectData?.projectData;
     return (
         <>
+            {/* Client Card */}
             <CardWrapper color="#ffffff" className={`${className}`}>
                 <DashboardCardTitle title="Client" isBorderUse={true} />
                 <div className="d-flex align-items-center py-4">
@@ -55,6 +57,8 @@ const DashboardClientAndPMCard = ({ projectData, className = "" }) => {
                     </div>
                 </div>
             </CardWrapper>
+            {/* End Client card */}
+            {/* Project Manager Card */}
             <CardWrapper color="#ffffff" className={`${className}`}>
                 <DashboardCardTitle
                     title="Project Manager"
@@ -93,6 +97,7 @@ const DashboardClientAndPMCard = ({ projectData, className = "" }) => {
                     </div>
                 </div>
             </CardWrapper>
+            {/* End Project Manager card */}
         </>
     );
 };

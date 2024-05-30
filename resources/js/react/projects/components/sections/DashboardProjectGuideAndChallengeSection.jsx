@@ -19,6 +19,17 @@ import style from "./styles/dashboardProjectGuideAndChallengeSection.module.css"
 // Helper
 import { formatHttp, handleLoadingComponent } from "../../helper";
 
+/**
+ * Dashboard Project Guide And Challenge Section
+ * @component
+ * @param {object} props - Component properties
+ * @param {object} props.projectData - Data related to the project
+ * @param {boolean} props.isLoading - Loading state
+ * @returns {JSX.Element} - Rendered component
+ * @description Dashboard Project Guide And Challenge Section Component for showing project guide and challenge on the dashboard page.
+ *
+ */
+
 const DashboardProjectGuideAndChallengeSection = ({
     isLoading,
     projectData,
@@ -29,14 +40,23 @@ const DashboardProjectGuideAndChallengeSection = ({
         <div
             className={`${style.dashboardProjectGuideAndChallengeSection} mb-4`}
         >
+            {/* Project General Guidelines */}
             <SectionContainer>
                 <DashboardCardTitle
                     title="Project General Guidelines"
                     isBorderUse={false}
                 />
+                {/* 
+                    This Function will handle the loading state of the component,
+                    and show the loader component when the data is loading
+                */}
                 {handleLoadingComponent(
                     isLoading,
-                    <SectionContentContainer color="linear-gradient(0deg, #F2F9FE 0%, #F2F9FE 100%), #D9D9D9" maxHeight="35vh">
+                    // This will be shown when the data is loading
+                    <SectionContentContainer
+                        color="linear-gradient(0deg, #F2F9FE 0%, #F2F9FE 100%), #D9D9D9"
+                        maxHeight="35vh"
+                    >
                         <TextLoaderDynamic
                             number={4}
                             widthDeference={20}
@@ -54,6 +74,7 @@ const DashboardProjectGuideAndChallengeSection = ({
                             parentClassName="pt-2"
                         />
                     </SectionContentContainer>,
+                    // This will be shown when the data is loaded
                     <SectionContentContainer
                         color="#FFF"
                         maxHeight="35vh"
@@ -66,6 +87,9 @@ const DashboardProjectGuideAndChallengeSection = ({
                     />
                 )}
             </SectionContainer>
+            {/*End Project General Guidelines  */}
+
+            {/* Project Challenge */}
             <SectionContainer>
                 <DashboardCardTitle
                     title="Project Challenge"
@@ -74,6 +98,7 @@ const DashboardProjectGuideAndChallengeSection = ({
                 <SectionContentContainer color="#FFF" maxHeight="35vh">
                     {handleLoadingComponent(
                         isLoading,
+                        // This will be shown when the data is loading
                         <>
                             <TextLoaderDynamic
                                 number={4}
@@ -92,6 +117,7 @@ const DashboardProjectGuideAndChallengeSection = ({
                                 parentClassName="pt-2"
                             />
                         </>,
+                        // This will be shown when the data is loaded
                         <p>
                             {projectInfo?.project_challenges ??
                                 projectInfo?.comment}
@@ -99,6 +125,7 @@ const DashboardProjectGuideAndChallengeSection = ({
                     )}
                 </SectionContentContainer>
             </SectionContainer>
+            {/* End Project Challenge */}
         </div>
     );
 };

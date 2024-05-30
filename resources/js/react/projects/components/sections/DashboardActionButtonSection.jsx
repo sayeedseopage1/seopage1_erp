@@ -22,7 +22,15 @@ import DisputeProjectAuthorizeModal from "../modal/DisputeProjectAuthorizeModal"
 // ProjectDE = Project Deadline Extension
 // ProjectQCSF = Project QC Submission Form
 
-
+/**
+ * Dashboard Action Button Section
+ * @component
+ * @param {object} props - Component properties
+ * @param {object} props.projectData - Data related to the project
+ * @param {boolean} props.isLoading - Loading state
+ * @returns {JSX.Element} - Rendered component
+ * @description Dashboard Action Button Section Component for showing action buttons on the dashboard page.
+ */
 
 
 

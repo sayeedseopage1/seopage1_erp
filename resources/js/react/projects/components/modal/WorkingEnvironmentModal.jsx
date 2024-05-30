@@ -16,7 +16,9 @@ import { handleLoadingComponent } from "../../helper";
  *  @param {function} closeModal - Close Modal Event Handler
  *  @param {object} modalData - Modal Data
  *  @returns {JSX.Element}
- *   @description Working Environment Modal component to render working environment modal
+ *  @description Working Environment Modal component to render working environment modal
+ * 
+ *  This modal will be used by Admin to view working environment details
  */
 
 const WorkingEnvironmentModal = ({ isModalOpen, closeModal, modalData }) => {

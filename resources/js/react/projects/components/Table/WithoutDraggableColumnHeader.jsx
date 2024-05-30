@@ -2,7 +2,19 @@ import React from "react";
 import { flexRender } from "@tanstack/react-table";
 import PropTypes from "prop-types";
 
-// without draggable column header
+
+
+/**
+ * Without Draggable Column Header
+ * @param {object} props - Component properties
+ * @param {object} props.header - Header object
+ * @param {object} props.table - Table object
+ * @param {string} props.className - Additional classes
+ * @param {boolean} props.isNewRuleModal - Is new rule modal
+ * @returns {JSX.Element} - Rendered component
+ * @description - Without Draggable Column Header Component
+ */
+
 const WithoutDraggableColumnHeader = ({
     header,
     table,

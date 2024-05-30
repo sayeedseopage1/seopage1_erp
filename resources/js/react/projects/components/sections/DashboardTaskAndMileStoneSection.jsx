@@ -18,6 +18,16 @@ import { DashboardDataTableMilestoneColumns } from "../Table/DashboardDataTableM
 // constants
 import { DashboardMileStoneTableData, DashboardTaskTableData } from "../../constants";
 
+/**
+ * Dashboard Task And Milestone Section
+ * @component
+ * @param {object} props - Component properties
+ * @param {boolean} props.isLoading - Loading state
+ * @returns {JSX.Element} - Rendered component
+ * @description Dashboard Task And Milestone Section Component for showing task and milestone on the dashboard page.
+ */
+
+
 const DashboardTaskAndMileStoneSection = ({
     isLoading
 }) => {
@@ -41,7 +51,7 @@ const DashboardTaskAndMileStoneSection = ({
                 <DashboardCardTitle title="Project Milestones" isBorderUse={false} />
                 <div className="sp1_tlr_container">
                     <div className="sp1_tlr_tbl_container mx-0 py-3">
-                        {/* Dashboard Task Table */}
+                        {/* Dashboard Project Milestones Table */}
                         <DashboardDataTable
                             tableColumns={DashboardDataTableMilestoneColumns}
                             tableName="Project Milestones"

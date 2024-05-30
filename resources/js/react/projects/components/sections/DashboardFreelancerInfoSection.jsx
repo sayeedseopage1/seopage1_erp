@@ -16,6 +16,16 @@ import { handleLoadingComponent } from "../../helper";
 // Components - Loader
 import TextLoaderDynamic from "../loader/TextLoaderDynamic";
 
+/**
+ * Dashboard Freelancer Info Section
+ * @component
+ * @param {object} props - Component properties
+ * @param {object} props.projectData - Data related to the project
+ * @param {boolean} props.isLoading - Loading state
+ * @returns {JSX.Element} - Rendered component
+ * @description Dashboard Freelancer Info Section Component for showing freelancer info on the dashboard page.
+ */
+
 const DashboardFreelancerInfoSection = ({ projectData, isLoading }) => {
     const dealInfo = projectData?.projectData?.project?.deal;
     return (

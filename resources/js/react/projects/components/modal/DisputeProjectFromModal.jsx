@@ -78,7 +78,8 @@ const fontDataValidation = {
  *  @param {function} setDummyDisputeData - Set Dummy Dispute Data Event Handler
  *  @returns {JSX.Element}
  *  @description DisputeProjectFromModal component to render dispute project form modal
- *
+ * 
+ *  This modal will be used by Admin
  */
 
 const DisputeProjectFromModal = ({
@@ -91,6 +92,7 @@ const DisputeProjectFromModal = ({
         React.useState(fontDataValidation);
     const [isSubmitting, setIsSubmitting] = React.useState(false);
 
+    // Handle Input Change
     const handleInputChange = (e) => {
         const { name, value } = e.target;
         setFormData({
@@ -99,6 +101,7 @@ const DisputeProjectFromModal = ({
         });
     };
 
+    // Handle Dispute Submit
     const handleDisputeSubmit = () => {
         const { description9, ...rest } = formData;
         const isEmpty = isStateAllHaveValue(rest);
@@ -145,16 +148,19 @@ const DisputeProjectFromModal = ({
         }
     };
 
+    // Reset Data
     const resetData = () => {
         setFormData(data);
         setFormValidation(fontDataValidation);
     };
 
+    // Helper Function to check if email is invalid
     function isEmailInvalid(email) {
         console.log("isEmailInvalid", email, isEmail(email));
         return !isEmail(email);
     }
 
+    // UseEffect to check if form is submitting
     useEffect(() => {
         if (formValidation.isSubmitting) {
             const validation = markEmptyFieldsValidation(formData);
@@ -251,7 +257,6 @@ const DisputeProjectFromModal = ({
                     </div>
 
                     {/* Percentage of the amount */}
-
                     <div className=" mb-4">
                         <CustomInput
                             label="4. What percentage of the amount is in dispute? Also, write the amount in dispute separately."
@@ -266,6 +271,7 @@ const DisputeProjectFromModal = ({
                             type="text"
                         />
                     </div>
+                    {/* Release Amount */}
                     <div className=" mb-4">
                         <CustomInput
                             label="5. Did they release the amount that is not in dispute? Or did they release any amount at all?"
@@ -279,6 +285,7 @@ const DisputeProjectFromModal = ({
                             type="text"
                         />
                     </div>
+                    {/* Phase Issue */}
                     <div className=" mb-4">
                         <CustomInput
                             label="6. Which phase we were at when this issue occurred?"
@@ -293,6 +300,7 @@ const DisputeProjectFromModal = ({
                             type="text"
                         />
                     </div>
+                    {/* Issue */}
                     <div className=" mb-4">
                         <CustomInput
                             label="7. What is the issue here?"
@@ -307,6 +315,7 @@ const DisputeProjectFromModal = ({
                             type="text"
                         />
                     </div>
+                    {/* Responsible Person */}
                     <div className=" mb-4">
                         <CustomInput
                             label="8. According to you, which of our team/individuals is responsible for this exactly?"
@@ -321,6 +330,7 @@ const DisputeProjectFromModal = ({
                             type="text"
                         />
                     </div>
+                    {/* Client Satisfaction */}
                     <div className=" mb-4">
                         <CustomInput
                             label="9. Was the work delivered fully to the clients satisfaction and as per the agreed job scope?"
@@ -334,6 +344,7 @@ const DisputeProjectFromModal = ({
                             type="text"
                         />
                     </div>
+                    {/* Deadline */}
                     <div className=" mb-4">
                         <CustomInput
                             label="10. What was the deadline and was the deadline met?"
@@ -347,6 +358,7 @@ const DisputeProjectFromModal = ({
                             type="text"
                         />
                     </div>
+                    {/* Work About */}
                     <div className=" mb-4">
                         <CustomInput
                             label="11. What was the work about (You can share the instruction file) (optional)"
@@ -357,6 +369,7 @@ const DisputeProjectFromModal = ({
                             type="text"
                         />
                     </div>
+                    {/* Reason */}
                     <div className="mb-4">
                         <CustomInput
                             label="12. Describe the reason why we are here. In other words"
@@ -371,6 +384,7 @@ const DisputeProjectFromModal = ({
                             type="text"
                         />
                     </div>
+                    {/* Dissatisfied Time */}
                     <div className="mb-4">
                         <CustomInput
                             label="13. When did the client get dissatisfied the 1st time"
@@ -385,6 +399,7 @@ const DisputeProjectFromModal = ({
                             type="text"
                         />
                     </div>
+                    {/* Dissatisfied Time */}
                     <div className="mb-4">
                         <CustomInput
                             label="14. When did the client get dissatisfied the 2nd time?"
@@ -399,6 +414,7 @@ const DisputeProjectFromModal = ({
                             type="text"
                         />
                     </div>
+                    {/* Dissatisfied Time */}
                     <div className="mb-4">
                         <CustomInput
                             label="15. When did the client get dissatisfied the 3rd time? "
@@ -413,6 +429,7 @@ const DisputeProjectFromModal = ({
                             type="text"
                         />
                     </div>
+                    {/* Weaknesses */}
                     <div className="mb-4">
                         <CustomInput
                             label="16. List down your weaknesses/shortcomings/lackings during this project"
@@ -427,6 +444,7 @@ const DisputeProjectFromModal = ({
                             type="text"
                         />
                     </div>
+                    {/* Percentage and Value */}
                     <div className="mb-4">
                         <CustomInput
                             label="17. If we have to win here, what is the percentage and value of the amount"
@@ -441,6 +459,7 @@ const DisputeProjectFromModal = ({
                             type="text"
                         />
                     </div>
+                    {/* Anything not mentioned */}
                     <div className="mb-4">
                         <CustomInput
                             label="18. Write down anything that you did not specifically mention above."
@@ -455,6 +474,7 @@ const DisputeProjectFromModal = ({
                             type="text"
                         />
                     </div>
+                    {/* Confirmation */}
                     <div className="mb-4">
                         <CustomInput
                             label="19. Please confirm all the above details are correct & complete"
@@ -513,7 +533,6 @@ const DisputeProjectFromModal = ({
                             onClick={handleDisputeSubmit}
                             type="primary"
                         />
-
                         <SingleButton
                             label="Close"
                             className=""

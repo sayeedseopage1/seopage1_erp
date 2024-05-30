@@ -27,42 +27,65 @@ const ProjectDashboard = () => {
 
     return (
         <section>
+            {/* Project Dashboard Header Section */}
             <DashboardHeaderSection
                 setDummyTypeChange={setDummyTypeChange}
                 isLoading={isLoading}
                 projectData={projectData}
             />
+            {/* End Project Dashboard Header Section */}
+
             <Switch>
+                {/* Fixed Project Info Section */}
                 <Switch.Case condition={projectData?.projectType === "Fixed"}>
                     <DashboardProjectInfoFixedSection
                         isLoading={isLoading}
                         projectData={projectData}
                     />
                 </Switch.Case>
+                {/* End Fixed Project Info Section */}
+
+                {/* Hourly Project Info Section */}
                 <Switch.Case condition={projectData?.projectType === "Hourly"}>
                     <DashboardProjectInfoHourlySection
                         isLoading={isLoading}
                         projectData={projectData}
                     />
                 </Switch.Case>
+                {/* End Hourly Project Info Section */}
             </Switch>
+
+            {/* Project Dashboard Actions Button Section */}
             <DashboardActionButtonSection
                 projectData={projectData}
                 isLoading={isLoading}
             />
+            {/* End Project Dashboard Actions Button Section */}
+
+            {/* Project Dashboard Task and Milestone Section */}
             <DashboardTaskAndMileStoneSection isLoading={isLoading} />
+            {/* End Project Dashboard Task and Milestone Section */}
+
+            {/* Project Freelancer Info Section */}
             <DashboardFreelancerInfoSection
                 isLoading={isLoading}
                 projectData={projectData}
             />
+            {/* End Project Freelancer Info Section */}
+
+            {/* Project Guide and Challenge Section */}
             <DashboardProjectGuideAndChallengeSection
                 isLoading={isLoading}
                 projectData={projectData}
             />
+            {/* End Project Guide and Challenge Section */}
+
+            {/* Project Sales and PM Info Section */}
             <DashboardSalesAndPMInfoSection
                 isLoading={isLoading}
                 projectData={projectData}
             />
+            {/* End Project Sales and PM Info Section */}
         </section>
     );
 };

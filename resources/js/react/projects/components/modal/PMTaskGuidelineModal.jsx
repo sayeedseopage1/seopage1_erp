@@ -18,6 +18,19 @@ import { handleLoadingComponent } from "../../helper";
 // Components - Styled Components
 import { ModalContentContainer } from "../ui/styledComponents";
 
+
+/** 
+ * PM Task Guideline Modal
+ * @param {boolean} isModalOpen - Is Modal Open
+ * @param {function} closeModal - Close Modal
+ * @param {object} modalData - Modal Data
+ * @returns {JSX.Element}
+ * @description - PM Task Guideline Modal Component for Parent Task Guideline Details.
+ * 
+ * This modal will be used by PM and Admin
+ * 
+ */
+
 const PMTaskGuidelineModal = ({ isModalOpen, closeModal, modalData }) => {
     const [isLoading, setIsLoading] = React.useState(false);
     const [pmTaskGuidelineData, setPmTaskGuidelineData] = React.useState();
@@ -47,8 +60,6 @@ const PMTaskGuidelineModal = ({ isModalOpen, closeModal, modalData }) => {
             fetchData();
         }
     }, [isModalOpen]);
-
-    console.log(pmTaskGuidelineData);
 
     return (
         <CustomAntModal

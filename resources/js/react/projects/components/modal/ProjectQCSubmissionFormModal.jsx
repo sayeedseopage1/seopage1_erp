@@ -55,7 +55,9 @@ const payloadData = {
  *  @param {boolean} isModalOpen - Modal Open State
  *  @param {function} closeModal - Close Modal Event Handler
  *  @returns {JSX.Element}
- *  @description Project QC Submission Form Modal component to render project QC submission form modal
+ *  @description Project QC Submission Form Modal Component For Submit Project QC Form Data and Admin Comment 
+ * 
+ *  This modal will be used by Admin to submit the project QC form data and admin comment
  */
 
 const ProjectQCSubmissionFormModal = ({ isModalOpen, closeModal }) => {

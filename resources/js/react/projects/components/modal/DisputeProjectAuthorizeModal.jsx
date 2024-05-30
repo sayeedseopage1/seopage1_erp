@@ -30,6 +30,7 @@ import { ProjectDisputeAuthorizationsData } from "../../constants";
  *  @returns {JSX.Element}
  *  @description Dispute Project Authorize Modal component to render dispute project authorize modal
  * 
+ *  This modal will be used by Admin to authorize the dispute
  */
 
 const DisputeProjectAuthorizeModal = ({

@@ -24,11 +24,22 @@ import { handleLoadingComponent } from "../../helper";
 // Components - Loader
 import TextLoaderDynamic from "../loader/TextLoaderDynamic";
 
+/**
+ * Dashboard Project Info Hourly Section
+ * @component
+ * @param {object} props - Component properties
+ * @param {object} props.projectData - Data related to the project
+ * @param {boolean} props.isLoading - Loading state
+ * @returns {JSX.Element} - Rendered component
+ * @description Dashboard Project Info Hourly Section Component for showing hourly project info on the dashboard page.
+ */
+
 const DashboardProjectInfoHourlySection = ({ projectData, isLoading }) => {
     return (
         <SectionWrapper className="my-4 m-0 projectHourlyContainer">
             <div className={`px-0 ${style.projectHourlyLeft}`}>
                 <div className="d-flex row px-0 h-100 m-0">
+                    {/* Client And PM Card */}
                     <div
                         className="d-flex flex-column col-12 col-md-3 px-0"
                         style={{
@@ -41,6 +52,8 @@ const DashboardProjectInfoHourlySection = ({ projectData, isLoading }) => {
                             isLoading={isLoading}
                         />
                     </div>
+                    {/* End  Client And PM Card*/}
+                    {/* Project Progress */}
                     <div className="px-0 px-md-3 my-4 my-md-0 col-12 col-md-6">
                         <DashboardProgress
                             projectData={projectData}
@@ -49,6 +62,8 @@ const DashboardProjectInfoHourlySection = ({ projectData, isLoading }) => {
                             isLoading={isLoading}
                         />
                     </div>
+                    {/* End Project Progress */}
+                    {/* Hours Log and Earnings & Expenses*/}
                     <div
                         className="d-flex flex-column  col-12 col-md-3  px-0"
                         style={{
@@ -129,7 +144,9 @@ const DashboardProjectInfoHourlySection = ({ projectData, isLoading }) => {
                             </div>
                         </CardWrapper>
                     </div>
+                    {/* End Hours Log and Earnings & Expenses*/}
                 </div>
+                {/* Project Hourly Questions time related */}
                 <div className="d-flex row px-0 h-100 m-0 mt-3">
                     <div
                         className="d-flex flex-column  col-12 col-md-9 px-0 pr-md-3 pl-md-0"
@@ -201,7 +218,9 @@ const DashboardProjectInfoHourlySection = ({ projectData, isLoading }) => {
                         </CardWrapper>
                     </div>
                 </div>
+                {/* End Project Hourly Questions time related */}
             </div>
+            {/* Project Hourly Right */}
             <div className={`px-0 ${style.projectHourlyRight}`}>
                 <div
                     className="col-12 d-flex flex-column px-0 pl-md-3 pr-md-0 mt-3 mt-md-0 projectHourlyRightContainer"
@@ -214,6 +233,7 @@ const DashboardProjectInfoHourlySection = ({ projectData, isLoading }) => {
                         gap="16px"
                         className="d-flex flex-row estimateHourlyRateContainer"
                     >
+                        {/* Estimated Hours */}
                         <div className="w-100 w-md-50">
                             <DashboardCardTitle
                                 title="Estimated Hours (Set 1)"
@@ -237,6 +257,8 @@ const DashboardProjectInfoHourlySection = ({ projectData, isLoading }) => {
                                 </div>
                             </div>
                         </div>
+                        {/* End Estimated Hours */}
+                        {/* Hourly Rate */}
                         <div className="w-100 w-md-50">
                             <DashboardCardTitle
                                 title="Hourly Rate"
@@ -270,7 +292,9 @@ const DashboardProjectInfoHourlySection = ({ projectData, isLoading }) => {
                                 />
                             </div>
                         </div>
+                        {/* End Hourly Rate */}
                     </CardWrapper>
+                    {/* Hourly Rate Related Question */}
                     <CardWrapper color="#ffffff" className="h-100">
                         {HourlyProjectSalesData?.map((item) => (
                             <div className="mb-3" key={item?.id}>
@@ -291,8 +315,10 @@ const DashboardProjectInfoHourlySection = ({ projectData, isLoading }) => {
                             </div>
                         ))}
                     </CardWrapper>
+                    {/* End Hourly Rate Related Question */}
                 </div>
             </div>
+            {/* End Project Hourly Right */}
         </SectionWrapper>
     );
 };

@@ -49,18 +49,21 @@ export const DashBoardDeadlineHistoryModalColumns = [
                 <div className="d-flex justify-content-start align-items-center pl-4">
                     <div
                         style={{
-                            width: "10px",
-                            height: "10px",
-                            borderRadius: "50%",
+                            width: "fit-content",
+
+                            borderRadius: "17px",
                             marginRight: "4px",
+                            padding: "2px 10px",
+                            color: "white",
                             backgroundColor: data.request_status.includes(
                                 "Approved"
                             )
                                 ? "rgb(103, 156, 13)"
                                 : "rgb(245, 195, 8)",
                         }}
-                    />
-                    <p>{data.request_status}</p>
+                    >
+                        <p>{data.request_status}</p>
+                    </div>
                 </div>
             );
         },

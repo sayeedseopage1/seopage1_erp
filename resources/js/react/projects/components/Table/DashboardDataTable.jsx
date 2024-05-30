@@ -13,7 +13,20 @@ import EmptyTable from "../../../global/EmptyTable";
 
 // Style
 import "./style/dashboardDataTable.css";
+
+// Loader
 import TaskListTableLoader from "../loader/TaskListTableLoader";
+
+/**
+ * Dashboard Data Table
+ * @param {string} tableName - Table Name
+ * @param {array} tableData - Table Data
+ * @param {array} tableColumns - Table Columns
+ * @param {boolean} isLoading - Loading State
+ * @param {string} tableHight - Table Height
+ * @returns {JSX.Element}
+ * @description - Dashboard Data Table Component For Show Data In Table Format on Dashboard Page
+ */
 
 const DashboardDataTable = ({
     tableName,

@@ -21,6 +21,17 @@ import { Placeholder } from "../../../global/Placeholder";
 import Switch from "../../../global/Switch";
 import Loader from "../../../global/Loader";
 
+/**
+ * Project Completion Modal
+ * @param {boolean} isModalOpen - Is Modal Open
+ * @param {function} closeModal - Close Modal
+ * @param {object} modalData - Modal Data
+ * @returns {JSX.Element}
+ * @description - Project Completion Modal Component for Project Completion Request Form to be filled by the Project Manager to authorize the project completion.
+ *
+ * This modal will be used by Admin to authorize the project completion.
+ */
+
 const ProjectCompletionModal = ({ isModalOpen, closeModal, modalData }) => {
     const [isLoading, setIsLoading] = useState(true);
     const [adminComment, setAdminComment] = useState("");

@@ -4,6 +4,20 @@ import PropTypes from "prop-types";
 import { Placeholder } from "../../../global/Placeholder";
 import Switch from "../../../global/Switch";
 
+/**
+ *  TextLoaderDynamic Component
+ * @param {number} number - Number
+ *  @param {number} fullSizeCount - Full Size Count
+ * @param {number} widthDeference - Width Deference
+ * @param {string} className - ClassName
+ * @param {number} width - Width
+ * @param {number} height - Height
+ * @param {string} parentClassName - Parent ClassName
+ * @returns {JSX.Element}
+ * @description - Text Loader Dynamic
+ *
+ */
+
 const TextLoaderDynamic = ({
     number,
     fullSizeCount = 1,

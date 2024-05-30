@@ -25,6 +25,20 @@ import {
 // Toast
 import { toast } from "react-toastify";
 
+/**
+ *  Project Deadline Extension Modal
+ * @param {boolean} isModalOpen - Is Modal Open
+ * @param {function} closeModal - Close Modal
+ * @param {object} modalData - Modal Data
+ * @returns {JSX.Element}
+ * @description - Project Deadline Extension Modal Component For Extend Deadline on Project , this modal will be used by Admin
+ * 
+ *  This modal will be used by Admin to extend the deadline of the project
+ 
+ */
+
+
+
 const ProjectDeadlineExtensionModal = ({
     isModalOpen,
     closeModal,
@@ -121,6 +135,7 @@ const ProjectDeadlineExtensionModal = ({
                 }}
             >
                 <div className="deadlineInfo mb-1">
+                    {/* Current Deadline */}
                     <div className="deadlineInfo__deadline mb-2">
                         <label htmlFor="oldDeadline">Current Deadline</label>
                         <input
@@ -137,6 +152,7 @@ const ProjectDeadlineExtensionModal = ({
                             }}
                         ></span>
                     </div>
+                    {/* New Deadline  - Input - Required*/}
                     <div className="deadlineInfo__deadline mb-2">
                         <label htmlFor="newDeadline">
                             New Deadline <sup>*</sup>{" "}
@@ -166,6 +182,7 @@ const ProjectDeadlineExtensionModal = ({
                         </span>
                     </div>
                 </div>
+                {/* Reason */}
                 <div className="deadlineExtensionOptions">
                     <h6 className="mb-2">
                         Explain why you need more time to complete this project?{" "}

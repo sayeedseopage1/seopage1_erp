@@ -31,6 +31,7 @@ const DashboardProgress = ({ projectData, style, className = "" }) => {
         React.useState(false);
     const projectInfo = projectData?.projectData;
 
+    // Handle Modal Open and Close
     const handleModal = (setModalOpenFunc, isOpen, action) => {
         setModalOpenFunc(isOpen);
         if (action) {
@@ -46,6 +47,7 @@ const DashboardProgress = ({ projectData, style, className = "" }) => {
                 rightText={`Completed: ${projectInfo?.project?.progress}%`}
                 rightTextColor={"#70CA62"}
             />
+
             <div className="flexBetween my-3 dashboardProgressData">
                 <div className="flexColumn justify-content-between dashboardProgressDataDates">
                     <div className="flexColumn">
@@ -66,16 +68,16 @@ const DashboardProgress = ({ projectData, style, className = "" }) => {
                                         ? "#FF0000"
                                         : "#000000",
                             }}
-                            onClick={()  => handleModal(
-                                setIsDeadlineHistoryModalOpen,
-                                true
-                            )}
+                            onClick={() =>
+                                handleModal(setIsDeadlineHistoryModalOpen, true)
+                            }
                         >
                             <LuCalendarDays className="mr-1" />{" "}
                             {projectInfo?.project?.deadline}
                         </button>
                     </div>
                 </div>
+                {/* Dashboard Chart */}
                 <ProjectProgressChart chartData={[0, 15, 70, 15, 0, 0, 0, 0]} />
             </div>
             <div
@@ -90,18 +92,21 @@ const DashboardProgress = ({ projectData, style, className = "" }) => {
                 ))}
             </div>
 
+            {/*---- Modal ----*/}
+
             {/* Deadline Change History Modal */}
             {isDeadlineHistoryModalOpen && (
                 <DeadlineChangeHistoryModal
                     isModalOpen={isDeadlineHistoryModalOpen}
-                    closeModal={()  => handleModal(
-                        setIsDeadlineHistoryModalOpen,
-                        false
-                    )}
+                    closeModal={() =>
+                        handleModal(setIsDeadlineHistoryModalOpen, false)
+                    }
                     modalData={projectInfo?.project}
                     isLoading={false}
                 />
             )}
+
+            {/* ---- End Modal ---- */}
         </CardWrapper>
     );
 };

@@ -1,6 +1,15 @@
 import PropTypes from "prop-types";
 import { Placeholder } from "../../../global/Placeholder";
 
+/**
+ *  TaskListTableLoader Component
+ *  @param {number} prevItemLength - Previous Item Length
+ * @param {array} tableCol - Table Column
+ *  @returns {JSX.Element}
+ *  @description - Task List Table Loader
+ *
+ */
+
 export default function TaskListTableLoader({ prevItemLength = 7, tableCol }) {
     const updateItemLength = prevItemLength === 0 ? 7 : prevItemLength;
     return _.times(updateItemLength, (item) => (

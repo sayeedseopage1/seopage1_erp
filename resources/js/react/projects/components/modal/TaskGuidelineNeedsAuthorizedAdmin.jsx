@@ -16,6 +16,8 @@ import CustomButton from "../ui/CustomButton/CustomButton";
  *  @param {array} modalData - Modal Data
  *  @returns {JSX.Element}
  *  @description TaskGuidelineNeedsAuthorizedAdmin component to render task guideline needs authorized by admin modal
+ * 
+ *  This modal will be used by Admin to authorize the task guideline
  */
 
 const TaskGuidelineNeedsAuthorizedAdmin = ({
