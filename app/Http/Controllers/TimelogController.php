@@ -760,42 +760,12 @@ class TimelogController extends AccountBaseController
 
                 $this->logTaskActivity($timeLog->task_id, user()->id, 'timerStartedBy');
 
-                if(Auth::user()->role_id == 14){
-                    $user = Auth::user();
-                    $evaluation = EmployeeEvaluation::where('user_id', $user->id)->first();
-                    if ($evaluation->start_date == null) {
-                        $evaluation->start_date = $timeLog->start_time;
-                        $emp_start_task = $evaluation->start_date;
-
-                        $exp_date = Carbon::parse($emp_start_task)->addMinutes(20);
-                        $countSundays = 0;
-                        $currentDate = $emp_start_task->copy(); 
-                        while ($currentDate->lte($exp_date)) {
-                            if ($currentDate->dayOfWeek === Carbon::SUNDAY) {
-                                $countSundays++;
-                            }
-                            $currentDate->addDay(); 
-                        }
-                        
-                        $evaluation->exp_date = Carbon::parse($emp_start_task)->addMinutes(20 + $countSundays);
-                        
-                        $evaluation->save();
-                    }
-                    return response()->json([
-                        'status' => 'success',
-                        'message' => 'task timer started',
-                        'id' => $timeLog->id,
-                        'evaluation' => $evaluation->exp_date,
-                        'task_status'=> $task_board_column,
-                    ]);
-                }else{
-                    return response()->json([
-                        'status' => 'success',
-                        'message' => 'task timer started',
-                        'id' => $timeLog->id,
-                        'task_status'=> $task_board_column,
-                    ]);
-                }
+                return response()->json([
+                    'status' => 'success',
+                    'message' => 'task timer started',
+                    'id' => $timeLog->id,
+                    'task_status'=> $task_board_column,
+                ]);
             }
 
             return response()->json([

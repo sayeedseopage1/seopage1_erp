@@ -162,6 +162,7 @@ class IndependentTaskController extends AccountBaseController
      */
     public function update(Request $request, $id)
     {
+        // dd($request->all());
         // DB::beginTransaction();
         if($request->approval_status == 1){
             $pendingParentTasks = PendingParentTasks::find($id);
@@ -251,7 +252,7 @@ class IndependentTaskController extends AccountBaseController
             $evaluation_history = EvaluationHistory::where('user_id',$pendingParentTasks->evaluation_user_id)->first();
             if($evaluation->managements_decision == 'One more week' || $evaluation_history->managements_decision == 'One more week'){
                 $helper = new HelperPendingActionController();
-                $helper->evaluationAuthTeamLead($evaluation->id, $independent_task->id);
+                $helper->evaluationAuthTeamLead($evaluation->user_id ? $evaluation->user_id : $evaluation_history->user_id, $independent_task->id);
             }
         }
 

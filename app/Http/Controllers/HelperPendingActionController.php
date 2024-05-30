@@ -2108,18 +2108,13 @@ class HelperPendingActionController extends AccountBaseController
                 $action->save();
             }
         }
-        public function evaluationAuthTeamLead($evaluation_task, $taskId)
+        public function evaluationAuthTeamLead($userId, $taskId)
         {
-            $evaluation_task = EmployeeEvaluationTask::where('id',$evaluation_task)->first(); 
-            $new_dev = User::where('id',$evaluation_task->user_id)->first(); 
-            $lead_dev = User::where('id',$evaluation_task->lead_dev_id)->first(); 
-            $evaluation = EmployeeEvaluation::where('user_id',$evaluation_task->user_id)->first(); 
+            $evaluation_task = EmployeeEvaluationTask::where('user_id',$userId)->first();
+            $new_dev = User::where('id',$evaluation_task->user_id)->first();
             $top_management = User::where('id',Auth::user()->id)->first(); 
-            $team_lead = User::where('id',$evaluation->team_lead_id)->first();
             $task = Task::where('id',$taskId)->first();
             $authorizers = User::where('role_id', 6)->get();
-            $updated_at = Carbon::parse($evaluation_task->updated_at);
-            $formatted_date_time = $updated_at->format('d F Y \a\t g:i A');
             foreach ($authorizers as $key => $authorizer) {
                 $action = new PendingAction();
                 $action->code = 'EEFA';
