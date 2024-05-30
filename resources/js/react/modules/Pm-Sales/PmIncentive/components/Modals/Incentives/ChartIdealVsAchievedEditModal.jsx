@@ -18,6 +18,8 @@ const ChartIdealVsAchievedEditModal = ({ antdModalOpen, showIdealVsAchievedEditM
 
     const [editIncentiveFactors, { isLoading: isEditIncentiveFactorsLoading }] = useEditIncentiveFactorsMutation()
     const [addIncentiveFactors, { isLoading: isAddIncentiveFactorsLoading }] = useAddIncentiveFactorsMutation()
+    const singleCriteriaLimitType = parseFloat(singleCriteria?.data?.incentive_factors?.[0]?.limit_type)
+    const singleCriteriaAmountType = parseFloat(singleCriteria?.data?.incentive_factors?.[0]?.incentive_amount_type)
 
     const defaultChartAxisData = singleCriteria?.data?.incentive_factors?.map((item) => (
         {
@@ -29,7 +31,7 @@ const ChartIdealVsAchievedEditModal = ({ antdModalOpen, showIdealVsAchievedEditM
             limit_type: parseFloat(item?.limit_type),
         }
     )) || [];
-    const singleCriteriaLimitType = parseFloat(singleCriteria?.data?.incentive_factors?.[0]?.limit_type)
+
 
 
     // Modal states for each modal
@@ -166,7 +168,7 @@ const ChartIdealVsAchievedEditModal = ({ antdModalOpen, showIdealVsAchievedEditM
     };
 
     // console.log("chartAxisData", chartAxisData)
-    console.log("singleCriteria", singleCriteriaLimitType);
+    // console.log("singleCriteria", singleCriteriaLimitType);
 
 
     return (
@@ -262,6 +264,8 @@ const ChartIdealVsAchievedEditModal = ({ antdModalOpen, showIdealVsAchievedEditM
                 setChartAxisData={setChartAxisData}
                 antdModalOpen={addNewAxisDataModalOpen}
                 setAntdModalOpen={setAddNewAxisDataModalOpen}
+                singleCriteriaLimitType={singleCriteriaLimitType}
+                singleCriteriaAmountType={singleCriteriaAmountType}
             />}
 
             {editXAxisDataModalOpen && <EditXAxisModal
@@ -287,6 +291,7 @@ const ChartIdealVsAchievedEditModal = ({ antdModalOpen, showIdealVsAchievedEditM
                 // setXAxisStartAndEndValue={setXAxisStartAndEndValue}
                 antdModalOpen={selectRatioRange}
                 setAntdModalOpen={setSelectRatioRange}
+                singleCriteriaLimitType={singleCriteriaLimitType}
             />}
 
             {removeRatioItemsModalOpen && <RemoveRatioItemsModal
