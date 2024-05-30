@@ -9,12 +9,9 @@ import Button from '../../../../Insights/ui/Button.jsx';
 import DeptFilter from '../../Points/components/Filter/DeptFilter.jsx';
 import EmployeeFilter from '../../Points/components/Filter/EmployeeFilter.jsx';
 import JqueryDateRangePicker from '../../Points/components/JqueryDateRangePicker.jsx';
+import DateFilter from './ui/DateFilter.jsx';
 
-
-export default function IncentiveFilter({
-    setQuery
-}) {
-
+export default function IncentiveFilter({ setQuery, filterByPeriod }) {
     // const auth = useAuth();
     const [dept, setDept] = useState(1);
     // get pm by department 
@@ -30,7 +27,6 @@ export default function IncentiveFilter({
             setQuery(prevQuery => ({ ...prevQuery, user_id: pmByDeptData[0]?.id }));
         }
     }, [pmByDeptData, isPmByDeptLoading]);
-
 
     // sidebar
     const [sidebarIsOpen, setSidebarIsOpen] = useState(false);
@@ -73,7 +69,7 @@ export default function IncentiveFilter({
 
     return (
         <div className='sp1__pp_filter_bar justify-content-between'>
-            <FilterItem className='border-right-0'>
+            {/* <FilterItem className='border-right-0'>
                 <JqueryDateRangePicker
                     startDate={startDate}
                     endDate={endDate}
@@ -81,6 +77,26 @@ export default function IncentiveFilter({
                     setEndDate={setEndDate}
                     onApply={() => { }}
                 />
+            </FilterItem> */}
+            <FilterItem className='border-right-0'>
+                {
+                    (filterByPeriod != "quarterly" && filterByPeriod != "yearly") && <JqueryDateRangePicker
+                        startDate={startDate}
+                        endDate={endDate}
+                        setStartDate={setStartDate}
+                        setEndDate={setEndDate}
+                        onApply={() => { }}
+                    />
+                }
+                {
+                    (filterByPeriod == "quarterly" || filterByPeriod == "yearly") && <DateFilter
+                        startDate={startDate}
+                        endDate={endDate}
+                        setStartDate={setStartDate}
+                        setEndDate={setEndDate}
+                        type={filterByPeriod}
+                    />
+                }
             </FilterItem>
 
             {

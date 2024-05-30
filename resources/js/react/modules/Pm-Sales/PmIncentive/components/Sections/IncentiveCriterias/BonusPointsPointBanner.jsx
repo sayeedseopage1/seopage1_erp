@@ -24,8 +24,8 @@ const BonusPointsPointBanner = () => {
     // console.log(incentive_criterias)
 
     //TODO: This will replace with the actual data from the backend
-    // const bonusPointsAcquired = incentive_criterias?.find((item) => item?.id == 9 || item?.id == 11)?.acquired_percent;
-    const bonusPointsAcquired = incentive_criterias?.filter(item => item?.id === 9 || item?.id === 11)?.[0]?.acquired_percent;
+    // const bonusPointsIncentive = incentive_criterias?.find((item) => item?.id == 9 || item?.id == 11)?.acquired_percent;
+    const bonusPointsIncentive = incentive_criterias?.filter(item => item?.id === 9 || item?.id === 11)?.[0]?.obtained_incentive;
 
     const pmIncentive = useSelector((state) => state.pmIncentive)
     const dispatch = useDispatch();
@@ -34,7 +34,7 @@ const BonusPointsPointBanner = () => {
 
     useEffect(() => {
         if (bonusIncentiveTypes) {
-            dispatch(bonusPointsPoints((parseFloat(bonusPointsAcquired) * parseFloat(unreleasedIncentive)) / 100));
+            dispatch(bonusPointsPoints((parseFloat(bonusPointsIncentive) * parseFloat(unreleasedIncentive)) / 100));
         }
     }, [bonusIncentiveTypes, incentive_criterias]);
 
@@ -47,7 +47,7 @@ const BonusPointsPointBanner = () => {
                     </span>
                     <div className="">
                         <p className='point_title point_details_wrapper' style={{ color: "#000000" }}>Your bonus points: <span className='point_score' style={{ color: "#1492E6" }}>
-                            {bonusPointsAcquired}pt
+                            {bonusPointsIncentive}pt
                         </span>
                             <Popover
                                 content='This value is Bonus Points Based 
@@ -108,7 +108,7 @@ const BonusPointsPointBanner = () => {
                             antdModalOpen={finalPointsModalOpen}
                             setAntdModalOpen={setFinalPointsModalOpen}
                             unreleasedIncentive={unreleasedIncentive}
-                            bonusPointsAcquired={bonusPointsAcquired}
+                            bonusPointsIncentive={bonusPointsIncentive}
                             bonusPointsData={bonusPointsData}
                         />
                     </div>

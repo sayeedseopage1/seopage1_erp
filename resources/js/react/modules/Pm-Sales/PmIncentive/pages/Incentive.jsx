@@ -26,9 +26,11 @@ const Incentive = () => {
         </div>
     }
 
+    console.log(query)
+
     return (
         <div>
-            <IncentiveFilter setQuery={setQuery} />
+            <IncentiveFilter setQuery={setQuery} filterByPeriod={filterByPeriod} />
             <div className='incentive_wrapper'>
 
                 <FilterBar tab={tab} setTab={setTab} filterByPeriod={filterByPeriod} setFilterByPeriod={setFilterByPeriod} />

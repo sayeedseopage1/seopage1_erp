@@ -121,17 +121,103 @@ class Incentive
                 ->where('projects.project_status','Accepted')
                 ->sum('project_milestones.cost');
                 self::findIncentive($incentiveCriteria);
+            }elseif($incentiveCriteria->id == 10){
+                $bonus_points = 70;
+                $lower_limit = 0;
+
+                $remain_unreleased_amount_last_months = DB::table('projects')
+                ->join('project_milestones', 'projects.id', '=', 'project_milestones.project_id')
+                ->leftJoin('payments', 'project_milestones.invoice_id', '=', 'payments.invoice_id')
+                ->where('project_milestones.created_at', '<', $startDate)
+                ->where(function ($q1) use ($startDate) {
+                    $q1->whereNull('payments.paid_on')
+                        ->orWhere('payments.paid_on', '>', $startDate);
+                })
+                ->whereNot('project_milestones.status', 'canceled')
+                ->where('projects.pm_id', $user_id)
+                ->where('projects.project_status','Accepted')
+                ->sum('project_milestones.cost'); 
+
+                $assigned_amount_this_month = Project::join('project_milestones', 'projects.id', '=', 'project_milestones.project_id')
+                ->where('projects.pm_id', $user_id)
+                ->whereBetween('project_milestones.created_at', [$startDate, $endDate])
+                ->where('projects.project_status','Accepted')
+                ->sum('cost');
+
+                $released_amount_this_month_assigned = DB::table('users')
+                ->join('projects', 'users.id', '=', 'projects.pm_id')
+                ->join('project_milestones', 'projects.id', '=', 'project_milestones.project_id')
+                ->join('payments', 'project_milestones.invoice_id', '=', 'payments.invoice_id')
+                //->whereNotNull('project_milestones.invoice_id')
+                ->whereBetween('project_milestones.created_at', [$startDate, $endDate])
+                ->whereBetween('payments.paid_on', [$startDate, $endDate])
+                ->where('payments.added_by', $user_id)
+                ->whereNot('project_milestones.status', 'canceled')
+                ->where('projects.project_status','Accepted')
+                ->sum('project_milestones.cost');
+
+                $released_amount_this_month = DB::table('users')
+                ->join('projects', 'users.id', '=', 'projects.pm_id')
+                ->join('project_milestones', 'projects.id', '=', 'project_milestones.project_id')
+                ->join('payments', 'project_milestones.invoice_id', '=', 'payments.invoice_id')
+                //->whereNotNull('project_milestones.invoice_id')
+                ->whereBetween('payments.paid_on', [$startDate, $endDate])
+                ->where('payments.added_by', $user_id)
+                ->whereNot('project_milestones.status', 'canceled')
+                ->where('projects.project_status','Accepted')
+                ->sum('project_milestones.cost');
+
+                $this_month_released_percent = round(($released_amount_this_month_assigned / $assigned_amount_this_month) * 100, 2);
+                $previous_months_released_percent = round((($released_amount_this_month - $released_amount_this_month_assigned) / $remain_unreleased_amount_last_months) * 100, 2);
+                $match_trigger = 0;
+                $incentiveCriteria->acquired_percent = round($assigned_amount_this_month + $remain_unreleased_amount_last_months - $released_amount_this_month, 2);
+                $incentiveCriteria->obtained_incentive = 0;
+                $incentiveCriteria->previous_month_released_percent = $previous_months_released_percent;
+                $incentiveCriteria->current_month_released_percent = $this_month_released_percent;
+                foreach($incentiveCriteria->incentiveFactors as $factor){
+                    $incentiveCriteria->incentive_amount_type = $factor->incentive_amount_type;
+                    if(!$match_trigger && $factor->lower_limit <= $previous_months_released_percent && $factor->uppder_limit <= $this_month_released_percent){
+                        $match_trigger++;
+                        $incentiveCriteria->obtained_incentive = $factor->incentive_amount;
+                    }
+                    $factor->upper_limit = round(($assigned_amount_this_month - (($assigned_amount_this_month/100) * $factor->upper_limit)) + ($remain_unreleased_amount_last_months - (($remain_unreleased_amount_last_months/100) * $factor->lower_limit)), 2);
+                    $factor->lower_limit = $lower_limit;
+                    $lower_limit = $factor->upper_limit;
+                }
+
             }elseif($incentiveCriteria->id == 11){
-                // $incentiveCriteria->acquired_percent = DB::table('users')
-                // ->join('projects', 'users.id', '=', 'projects.pm_id')
-                // ->join('project_milestones', 'projects.id', '=', 'project_milestones.project_id')
-                // ->join('payments', 'project_milestones.invoice_id', '=', 'payments.invoice_id')
-                // ->whereBetween('payments.paid_on', [$startDate, $endDate])
-                // ->where('payments.added_by', $user_id)
-                // ->whereNot('project_milestones.status', 'canceled')
-                // ->where('projects.project_status','Accepted')
-                // ->sum('project_milestones.cost');
-                // self::findIncentive($incentiveCriteria);
+                $remain_unreleased_amount_last_months = DB::table('projects')
+                ->join('project_milestones', 'projects.id', '=', 'project_milestones.project_id')
+                ->leftJoin('payments', 'project_milestones.invoice_id', '=', 'payments.invoice_id')
+                ->where('project_milestones.created_at', '<', $startDate)
+                ->where(function ($q1) use ($startDate) {
+                    $q1->whereNull('payments.paid_on')
+                        ->orWhere('payments.paid_on', '>', $startDate);
+                })
+                ->whereNot('project_milestones.status', 'canceled')
+                ->where('projects.pm_id', $user_id)
+                ->where('projects.project_status','Accepted')
+                ->sum('project_milestones.cost');   
+
+                $assigned_amount_this_month = Project::join('project_milestones', 'projects.id', '=', 'project_milestones.project_id')
+                ->where('projects.pm_id', $user_id)
+                ->whereBetween('project_milestones.created_at', [$startDate, $endDate])
+                ->where('projects.project_status','Accepted')
+                ->sum('cost');
+
+                $released_amount_this_month = DB::table('users')
+                ->join('projects', 'users.id', '=', 'projects.pm_id')
+                ->join('project_milestones', 'projects.id', '=', 'project_milestones.project_id')
+                ->join('payments', 'project_milestones.invoice_id', '=', 'payments.invoice_id')
+                //->whereNotNull('project_milestones.invoice_id')
+                ->whereBetween('payments.paid_on', [$startDate, $endDate])
+                ->where('payments.added_by', $user_id)
+                ->whereNot('project_milestones.status', 'canceled')
+                ->where('projects.project_status','Accepted')
+                ->sum('project_milestones.cost');
+
+                $incentiveCriteria->acquired_percent = number_format((($released_amount_this_month + 10000)/($remain_unreleased_amount_last_months + $assigned_amount_this_month)) * 100, 2);
+                self::findIncentive($incentiveCriteria);
             }
 
         } catch (\Throwable $th) {
