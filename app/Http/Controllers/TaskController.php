@@ -3293,7 +3293,7 @@ class TaskController extends AccountBaseController
         })->whereIn('task_id', $taskIds)->where('created_at', '<', $thisSubmissionTime)->count();
         if(!$previous_count){
             $project = Project::with('deal')->find($projectId);
-            $duration_from_submit = Carbon::now()->diffInHours(Carbon::createFromFormat('Y-m-d H:i:s', $project->deal->released_at));
+            $duration_from_submit = Carbon::now()->diffInMinutes(Carbon::createFromFormat('Y-m-d H:i:s', $project->deal->released_at)) / 60;
             if($project->deal->project_type == 'hourly'){
                 // Project Manager Point Distribution ( First submission is made within 100 hours for hourly project )
                 ProjectManagerPointLogic::distribute(19, $projectId, $duration_from_submit);
