@@ -20,7 +20,7 @@ const RemoveRatioItemsModal = ({ chartAxisData, setChartAxisData, antdModalOpen,
             ),
             dataIndex: "lower_limit", // Changed the dataIndex
             key: "lower_limit", // Changed the key
-            render: (_text, record) => <p className='remove_axis_item_table_data' style={{ fontSize: '14px' }}>{record.lower_limit}-{record.upper_limit}%</p>,
+            render: (_text, record) => <p className='remove_axis_item_table_data' style={{ fontSize: '14px' }}>{record?.lower_limit}-{record?.limit_type == 1 ? '$' : ''}{record?.upper_limit}{record?.limit_type == 2 ? '%' : ''}</p>,
         },
         {
             title: (
@@ -30,7 +30,7 @@ const RemoveRatioItemsModal = ({ chartAxisData, setChartAxisData, antdModalOpen,
             ),
             dataIndex: "incentive_amount",
             key: "incentive_amount",
-            render: (text) => <p className='remove_axis_item_table_data' style={{ textAlign: 'center', fontSize: '14px' }}>{text}%</p>,
+            render: (text, record) => <p className='remove_axis_item_table_data' style={{ textAlign: 'center', fontSize: '14px' }}>{text}{record?.incentive_amount_type == 1 ? '' : '%'}</p>,
         },
     ];
 

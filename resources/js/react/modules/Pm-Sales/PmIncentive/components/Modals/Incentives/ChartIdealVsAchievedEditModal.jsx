@@ -1,4 +1,4 @@
-import { Empty, Modal } from 'antd';
+import { Empty, Modal, Skeleton } from 'antd';
 import React, { useEffect, useState } from 'react';
 import { RxCross1 } from "react-icons/rx";
 import AddNewAxisItemModal from './AddNewAxisItemModal';
@@ -18,6 +18,8 @@ const ChartIdealVsAchievedEditModal = ({ antdModalOpen, showIdealVsAchievedEditM
 
     const [editIncentiveFactors, { isLoading: isEditIncentiveFactorsLoading }] = useEditIncentiveFactorsMutation()
     const [addIncentiveFactors, { isLoading: isAddIncentiveFactorsLoading }] = useAddIncentiveFactorsMutation()
+    const singleCriteriaLimitType = parseFloat(singleCriteria?.data?.incentive_factors?.[0]?.limit_type)
+    const singleCriteriaAmountType = parseFloat(singleCriteria?.data?.incentive_factors?.[0]?.incentive_amount_type)
 
     const defaultChartAxisData = singleCriteria?.data?.incentive_factors?.map((item) => (
         {
@@ -25,11 +27,12 @@ const ChartIdealVsAchievedEditModal = ({ antdModalOpen, showIdealVsAchievedEditM
             lower_limit: parseFloat(item?.lower_limit),
             upper_limit: parseFloat(item?.upper_limit),
             incentive_amount: parseFloat(item?.incentive_amount),
-            incentive_amount_type: item?.incentive_amount_type
+            incentive_amount_type: parseFloat(item?.incentive_amount_type),
+            limit_type: parseFloat(item?.limit_type),
         }
     )) || [];
 
-    // console.log(defaultChartAxisData, 'defaultChartAxisData')
+
 
     // Modal states for each modal
     const [addNewAxisDataModalOpen, setAddNewAxisDataModalOpen] = useState(false);
@@ -164,6 +167,9 @@ const ChartIdealVsAchievedEditModal = ({ antdModalOpen, showIdealVsAchievedEditM
         }
     };
 
+    // console.log("chartAxisData", chartAxisData)
+    // console.log("singleCriteria", singleCriteriaLimitType);
+
 
     return (
         <Modal className='pay_now_modal'
@@ -196,8 +202,13 @@ const ChartIdealVsAchievedEditModal = ({ antdModalOpen, showIdealVsAchievedEditM
                         <button onClick={() => setSelectRatioRange(true)} className='ideal_vs_achieved_chart_data_actions_range'>Select Range</button>
                     </div>
                     <div className='ideal_vs_achieved_axis_data'>
-                        <p>Starting Point (X Axis): <span>{parseFloat(singleCriteria?.data?.min_limit)}</span>%</p>
-                        <p>Ending Point (X Axis): <span>{parseFloat(singleCriteria?.data?.max_limit)}</span>%</p>
+                        {
+                            isLoadingSingleCriteria ? <Skeleton paragraph={{ rows: 2, width: '100%' }} active title={false} /> : <>
+                                <p>Starting Point (X Axis): <span>{parseFloat(singleCriteria?.data?.min_limit)}</span>{singleCriteriaLimitType == 1 ? "$" : "%"}</p>
+                                <p>Ending Point (X Axis): <span>{parseFloat(singleCriteria?.data?.max_limit)}</span>{singleCriteriaLimitType == 1 ? "$" : "%"}</p>
+                            </>
+                        }
+
                     </div>
                 </div>
 
@@ -210,7 +221,8 @@ const ChartIdealVsAchievedEditModal = ({ antdModalOpen, showIdealVsAchievedEditM
                 <div className='edit_chart_data_modal_content_wrapper'>
                     {
                         isLoadingSingleCriteria ? (
-                            <Spinner />
+                            // <Spinner />
+                            <Skeleton paragraph={{ rows: 8, width: '100%' }} active title={false} />
                         ) : (
                             chartAxisData?.length > 0 ? (
                                 // If data is available, map through it and render items
@@ -219,7 +231,7 @@ const ChartIdealVsAchievedEditModal = ({ antdModalOpen, showIdealVsAchievedEditM
                                     .map((item) => (
                                         <div key={item?.id} className='edit_chart_data_modal_content ratio_card'>
                                             <div className='ratio_wrapper'>
-                                                <p className='ratio_text'>{item?.lower_limit}-{item?.upper_limit}%</p>
+                                                <p className='ratio_text'>{item?.lower_limit}-{item?.limit_type == 1 ? "$" : ""}{item?.upper_limit}{item?.limit_type == 2 ? "%" : ""}</p>
                                                 <button onClick={() => xAxisEditHandler(item)} className='ratio_edit_button'>Edit</button>
                                             </div>
                                             <div className='ratio_wrapper'>
@@ -252,6 +264,8 @@ const ChartIdealVsAchievedEditModal = ({ antdModalOpen, showIdealVsAchievedEditM
                 setChartAxisData={setChartAxisData}
                 antdModalOpen={addNewAxisDataModalOpen}
                 setAntdModalOpen={setAddNewAxisDataModalOpen}
+                singleCriteriaLimitType={singleCriteriaLimitType}
+                singleCriteriaAmountType={singleCriteriaAmountType}
             />}
 
             {editXAxisDataModalOpen && <EditXAxisModal
@@ -277,6 +291,7 @@ const ChartIdealVsAchievedEditModal = ({ antdModalOpen, showIdealVsAchievedEditM
                 // setXAxisStartAndEndValue={setXAxisStartAndEndValue}
                 antdModalOpen={selectRatioRange}
                 setAntdModalOpen={setSelectRatioRange}
+                singleCriteriaLimitType={singleCriteriaLimitType}
             />}
 
             {removeRatioItemsModalOpen && <RemoveRatioItemsModal

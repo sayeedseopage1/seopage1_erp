@@ -7,7 +7,7 @@ import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useAddIncentiveFactorsMutation } from '../../../../../../services/api/Pm-Sales/PmIncentiveApiSlice';
 
-const AddNewAxisItemModal = ({ singleCriteria, chartAxisData, setChartAxisData, antdModalOpen, setAntdModalOpen, chartData }) => {
+const AddNewAxisItemModal = ({ singleCriteria, chartAxisData, setChartAxisData, antdModalOpen, setAntdModalOpen, singleCriteriaLimitType, singleCriteriaAmountType }) => {
     const {
         register,
         handleSubmit,
@@ -59,6 +59,7 @@ const AddNewAxisItemModal = ({ singleCriteria, chartAxisData, setChartAxisData, 
         }
     }, [antdModalOpen, reset]); // Dependency array includes antdModalOpen and reset
 
+
     return (
         <div>
             <Modal
@@ -78,7 +79,7 @@ const AddNewAxisItemModal = ({ singleCriteria, chartAxisData, setChartAxisData, 
                 <div className='add_new_axis_item_modal_body'>
                     <form onSubmit={handleSubmit(onSubmit)}>
                         <div style={{ marginBottom: '32px' }}>
-                            <p className='axis_item_modal_inputs_title'>X Axis ratio (Percentage)</p>
+                            <p className='axis_item_modal_inputs_title'>X Axis ratio ({singleCriteriaLimitType == 1 ? 'Amount' : 'Percentage'})</p>
                             <div className='axis_item_modal_inputs_inner'>
                                 <div className='w-50'>
                                     <input className='point_edit_modal_input' type='number' {...register("lower_limit", { required: true })} placeholder='Write here' />
@@ -92,7 +93,7 @@ const AddNewAxisItemModal = ({ singleCriteria, chartAxisData, setChartAxisData, 
                             </div>
                         </div>
                         <div style={{ marginBottom: '32px' }}>
-                            <p className='axis_item_modal_inputs_title'>Y Axis ratio (Percentage)</p>
+                            <p className='axis_item_modal_inputs_title'>Y Axis ratio ({singleCriteriaAmountType == 1 ? 'Value' : 'Percentage'})</p>
                             <div className='axis_item_modal_inputs_inner'>
                                 <div className='w-100'>
                                     <input className='point_edit_modal_input' type='number' {...register("incentive_amount", { required: true })} placeholder='Write here ' />

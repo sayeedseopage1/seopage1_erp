@@ -129,9 +129,7 @@ export default function CashPointsFilter({
                     <FilterItem className='border-right-0 hide'>
                         <EmployeeFilter pmByDeptData={pmByDeptData} handleChange={handlePmChange} isFetching={isPmByDeptLoading} />
                     </FilterItem>
-                    <FilterItem className='border-right-0 hide'>
-                        <CreditDebitFilter handleChange={handleCreditDebitChange} />
-                    </FilterItem>
+
                 </>
             }
             {
@@ -147,6 +145,10 @@ export default function CashPointsFilter({
                     </FilterItem>
                 </>
             }
+
+            <FilterItem className='border-right-0 hide'>
+                <CreditDebitFilter handleChange={handleCreditDebitChange} />
+            </FilterItem>
 
             <FilterItem className='border-right-0 hide'>
                 <div className='point_selector_container'>
@@ -250,6 +252,9 @@ export default function CashPointsFilter({
                                             </div>
                                             <span className='point_selector_item' style={{ color: '#B1B1B1', marginLeft: '4px' }}>{auth?.name}</span>
                                         </div>
+                                    </FilterItem>
+                                    <FilterItem className='w-100 border-right-0'>
+                                        <CreditDebitFilter handleChange={handleCreditDebitChange} />
                                     </FilterItem>
                                     <FilterItem className='w-100 border-right-0'>
                                         <div className='point_selector_container'>

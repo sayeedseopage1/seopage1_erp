@@ -6,7 +6,7 @@ import { Modal } from 'antd';
 import { toast } from 'react-toastify';
 import { useEditIncentiveCriteriaMutation } from '../../../../../../services/api/Pm-Sales/PmIncentiveApiSlice';
 
-const SelectRatioRangeModal = ({ singleCriteria, chartDataId, antdModalOpen, setAntdModalOpen }) => {
+const SelectRatioRangeModal = ({ singleCriteria, chartDataId, antdModalOpen, setAntdModalOpen, singleCriteriaLimitType }) => {
     const [editIncentiveCriteria, { isLoading: isEditIncentiveCriteriaLoading }] = useEditIncentiveCriteriaMutation()
 
     const {
@@ -82,7 +82,7 @@ const SelectRatioRangeModal = ({ singleCriteria, chartDataId, antdModalOpen, set
                                 <p className="axis_item_modal_inputs_title" style={{ marginBottom: '0' }}>Starting Point (X Axis)</p>
                                 <div className='d-flex align-items-center'>
                                     <input defaultValue={parseFloat(singleCriteria?.data?.min_limit)} className='point_edit_modal_input' style={{ width: '96px' }} type='number' {...register("min_limit", { required: true })} />
-                                    <span className='axis_item_modal_inputs_title' style={{ margin: '0 0 0 7px' }}>%</span>
+                                    <span className='axis_item_modal_inputs_title' style={{ margin: '0 0 0 7px' }}>{singleCriteriaLimitType == 1 ? "$" : "%"}</span>
                                 </div>
                             </div>
                             {errors.min_limit && <p style={{ color: 'red', fontSize: '12px', textAlign: 'center' }}>This field is required</p>}
@@ -90,7 +90,7 @@ const SelectRatioRangeModal = ({ singleCriteria, chartDataId, antdModalOpen, set
                                 <p className="axis_item_modal_inputs_title" style={{ marginBottom: '0' }}>Ending Point (X Axis)</p>
                                 <div className='d-flex align-items-center'>
                                     <input defaultValue={parseFloat(singleCriteria?.data?.max_limit)} className='point_edit_modal_input' style={{ width: '96px' }} type='number' {...register("max_limit", { required: true })} />
-                                    <span className='axis_item_modal_inputs_title' style={{ margin: '0 0 0 7px' }}>%</span>
+                                    <span className='axis_item_modal_inputs_title' style={{ margin: '0 0 0 7px' }}>{singleCriteriaLimitType == 1 ? "$" : "%"}</span>
                                 </div>
                             </div>
                             {errors.max_limit && <p style={{ color: 'red', fontSize: '12px', textAlign: 'center' }}>This field is required</p>}

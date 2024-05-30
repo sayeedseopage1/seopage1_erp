@@ -34,6 +34,11 @@ font-size: ${(props) => props.font || "14px"};
 font-weight: 500;
 color: ${(props) => props.textColor ? "#fff" : "#1492E6"};
 
+&:hover {
+    background-color: #1492E6;
+    color: #fff;
+}
+
 @media  (max-width: 1400px) {
     min-width: 100px;
   }

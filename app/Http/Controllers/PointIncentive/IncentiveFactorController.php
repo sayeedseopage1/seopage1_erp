@@ -18,11 +18,11 @@ class IncentiveFactorController extends Controller
     public function index()
     {
         $total_points = 500;
-        $total_previous_assigned_amount = number_format(Project::join('project_milestones', 'projects.id', '=', 'project_milestones.project_id')
+        $total_previous_assigned_amount = Project::join('project_milestones', 'projects.id', '=', 'project_milestones.project_id')
         ->where('projects.pm_id', 209)
         ->whereBetween('project_milestones.created_at', [Carbon::now()->subMonth()->startOfMonth(), Carbon::now()->subMonth()->endOfMonth()])
         ->where('projects.project_status','Accepted')
-        ->sum('cost'), 2);
+        ->sum('cost');
 
         $incentiveData = IncentiveType::with('incentiveCriterias.incentiveFactors')->get()->map(function($incentiveType){
             $incentiveType->incentiveCriterias->map(function($incentiveCriteria){

@@ -24,7 +24,8 @@ const UpsaleCrossSalePointBanner = () => {
 
     useEffect(() => {
         if (upSaleCrossSaleTypes) {
-            dispatch(upSaleCrossSalePoints((parseFloat(incentive_criterias[0]?.acquired_percent) * parseFloat(incentive_criterias[0]?.obtained_incentive)) / 100));
+            let res = (parseFloat(incentive_criterias[0]?.acquired_percent) * parseFloat(incentive_criterias[0]?.obtained_incentive)) / 100
+            dispatch(upSaleCrossSalePoints(res));
         }
     }, [upSaleCrossSaleTypes, incentive_criterias]);
 

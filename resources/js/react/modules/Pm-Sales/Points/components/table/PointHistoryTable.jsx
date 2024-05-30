@@ -65,6 +65,7 @@ const baseColumns = [
         key: 'id',
         render: (text) => <span className='point_table_data'>{text}</span>,
         sorter: (a, b) => a.id - b.id,
+        // sortIcon: ({ sortOrder }) => <SortArrows order={sortOrder} />,  //TODO: if needed in future
     },
     {
         title: 'Date',

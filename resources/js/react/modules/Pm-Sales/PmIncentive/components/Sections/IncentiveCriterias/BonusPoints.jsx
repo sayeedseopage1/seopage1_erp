@@ -10,6 +10,23 @@ const BonusPoints = () => {
 
     const bonusPointsChartData = IncentiveFormattedData(bonusIncentiveTypes)
 
+    // console.log(allIncentiveTypes?.data?.total_previous_assigned_amount)
+    // console.log(Number(allIncentiveTypes?.data?.total_previous_assigned_amount))
+    // console.log(bonusPointsChartData)
+
+
+    // const totalPrevAssignedAmount = parseFloat(allIncentiveTypes?.data?.total_previous_assigned_amount.replace(/,/g, ''));
+    // const totalPrevAssignedAmount = 5000;
+    // let bonusChartData;
+
+    // if (totalPrevAssignedAmount >= 6000) {
+    //     bonusChartData = bonusPointsChartData?.filter(item => item?.achieved?.id !== 11);
+    // } else {
+    //     bonusChartData = bonusPointsChartData?.filter(item => item?.achieved?.id !== 9)?.reverse();
+    // }
+
+    // console.log(totalPrevAssignedAmount)
+
     return (
         <>
             <div className="title_wrapper">

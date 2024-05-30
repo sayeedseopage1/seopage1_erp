@@ -8,7 +8,8 @@ import IncentiveEditButton from "../ui/IncentiveEditButton";
 import ChartIdealVsAchievedEditModal from "../Modals/Incentives/ChartIdealVsAchievedEditModal";
 import PropTypes from "prop-types";
 import { auth } from "../../constants";
-import { gradientColors, rangesForLongValue, rangesForShortValue } from "../../constants/rangesColor";
+import line18 from '../../assets/Line18.svg'
+import line19 from '../../assets/Line19.svg'
 
 const IncentiveBarChart = ({ chartData }) => {
     const chartRef = useRef(null);
@@ -20,9 +21,6 @@ const IncentiveBarChart = ({ chartData }) => {
         setModalStateId(chartDataId)
         setIsIdealVsAchievedEditModalOpen(!isIdealVsAchievedEditModalOpen);
     };
-
-
-
 
     // Define colors and gradient stops based on the value
     const getColorStops = (value) => {
@@ -196,6 +194,11 @@ const IncentiveBarChart = ({ chartData }) => {
 
     return (
         <>
+            <div className="y_axis_arrow ">
+                <img src={line18} className="chart_yAxis_icon" alt="arrow1" />
+                <h2 className="chart_axis_title">{chartData?.yTitle}</h2>
+                <img src={line19} className="chart_yAxis_icon" alt="arrow2" />
+            </div>
             <div className="chart_header">
                 <div className="chart_title">
                     <span>{chartData?.title}</span> {chartData?.id == 6 && <Popover
@@ -221,11 +224,6 @@ const IncentiveBarChart = ({ chartData }) => {
                 </div>
             </div>
             <div className="chart_wrapper_inner">
-                <div className="y_axis_arrow ">
-                    <img src={arrow1} className="chart_axis_icon" alt="arrow1" />
-                    <h2 className="chart_axis_title">{chartData?.yTitle}</h2>
-                    <img src={arrow2} className="chart_axis_icon" alt="arrow2" />
-                </div>
                 <Chart
                     ref={chartRef}
                     type="bar"

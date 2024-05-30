@@ -6,13 +6,26 @@ const useIncentiveTypes = () => {
 
     const regularIncentiveTypes = incentiveTypesData?.find((item) => item?.id == 1);
     const upSaleCrossSaleTypes = incentiveTypesData?.find((item) => item?.id == 2);
-    const bonusIncentiveTypes = incentiveTypesData?.find((item) => item?.id == 3);
+    const bonusData = incentiveTypesData?.find((item) => item?.id == 3);
+
+
+    const totalPrevAssignedAmount = parseFloat(allIncentiveTypes?.data?.total_previous_assigned_amount).toFixed(2);
+    // const totalPrevAssignedAmount = 5000;
+
+    let bonusFormattedData;
+    if (totalPrevAssignedAmount && totalPrevAssignedAmount >= 6000) {
+        bonusFormattedData = bonusData?.incentive_criterias?.filter(item => item?.id !== 11);
+    }
+    if (totalPrevAssignedAmount && totalPrevAssignedAmount < 6000) {
+        bonusFormattedData = bonusData?.incentive_criterias?.filter(item => item?.id !== 9)?.reverse();
+    }
+
+    const bonusIncentiveTypes = { ...bonusData, incentive_criterias: bonusFormattedData };
 
     return { allIncentiveTypes, regularIncentiveTypes, upSaleCrossSaleTypes, bonusIncentiveTypes, incentiveTypesLoading }
 };
 
 export default useIncentiveTypes;
-
 
 //! This is garbage data for testing
 /* const apiDataSample = {
