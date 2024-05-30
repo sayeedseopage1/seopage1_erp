@@ -11,32 +11,24 @@ import IncentiveFactors from '../components/Sections/IncentiveFactors/IncentiveF
 import HeldAmounts from '../components/Sections/HeldAmounts/HeldAmounts';
 import QuarterlyAndYearlyTable from '../components/Sections/QuarterlyAndYearly/QuarterlyAndYearlyTable';
 import FilterBar from '../components/Sections/IncentiveCriterias/FilterBar';
+import useIncentiveTypes from '../hooks/useIncentiveTypes';
+import Spinner from '../../PointFactors/components/loader/Spinner';
 
 const Incentive = () => {
-    const [data, setData] = useState([]);
-    const [loading, setLoading] = useState(true);
-    const [isDataFetching, setIsDataFetching] = useState(true);
     const [tab, setTab] = useState("current");
     const [filterByPeriod, setFilterByPeriod] = useState("monthly");
+    const { incentiveTypesLoading } = useIncentiveTypes();
 
-
-    React.useEffect(() => {
-        const timer = setTimeout(() => {
-            setLoading(false)
-        }, 1000)
-
-        return () => clearTimeout(timer)
-    }, [])
+    if (incentiveTypesLoading) {
+        return <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
+            <Spinner />
+        </div>
+    }
 
     return (
         <div>
-            <IncentiveFilter
-                setData={setData}
-                setIsDataFetching={setIsDataFetching}
-            />
+            <IncentiveFilter />
             <div className='incentive_wrapper'>
-
-                {/*  <FilterBar tab={tab} setTab={setTab} filterByPeriod={filterByPeriod} setFilterByPeriod={setFilterByPeriod} isPayNowModalOpen={isPayNowModalOpen} setIsPayNowModalOpen={setIsPayNowModalOpen} showPayNowModal={showPayNowModal} handlePayNowOk={handlePayNowOk} handlePayNowCancel={handlePayNowCancel} /> */}
 
                 <FilterBar tab={tab} setTab={setTab} filterByPeriod={filterByPeriod} setFilterByPeriod={setFilterByPeriod} />
 
