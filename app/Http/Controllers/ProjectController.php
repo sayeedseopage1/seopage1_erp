@@ -693,7 +693,6 @@ class ProjectController extends AccountBaseController
     }
     public function storeDispute(Request $request)
     {
-
         $validator =  $request->validate([
             'client_username' => 'required',
             'project_value' => 'required|numeric|min:0',
@@ -817,9 +816,11 @@ class ProjectController extends AccountBaseController
             Notification::send($user, new ProjectDisputeNotification($project));
         }
 
-        //        Toastr::success('Submitted Successfully', 'Success', ["positionClass" => "toast-top-right"]);
-        //  return Redirect::route('projects.index');
-        //          return redirect('/account/projects/' .$dispute->project_id);
+        $text = Auth::user()->name . ' submitted project cancelation/dispute form ';
+        $link = '<a style="color:blue" href="' . route('projects.show', $dispute->project_id) . '">' . $text . '</a>';
+        $this->logProjectActivity($dispute->project_id, $link);
+
+
         return response()->json([
             'status' => 200,
             'redirectUrl' => url('/account/projects/' . $dispute->project_id)
@@ -934,6 +935,9 @@ class ProjectController extends AccountBaseController
 
         }
     }
+    $text = Auth::user()->name . ' authorized project cancelation/dispute form ';
+    $link = '<a style="color:blue" href="' . route('projects.show', $project->id) . '">' . $text . '</a>';
+    $this->logProjectActivity($project->id, $link);
 
         return response()->json(['status'=>400]);
     }
@@ -3637,7 +3641,7 @@ class ProjectController extends AccountBaseController
     }
     public function InComplete(Request $request)
     {
-        //        dd($request->all());
+            //    dd($request->all());
         $project = Project::find($request->id);
         $project->dispute_status = 1;
         $project->save();
@@ -3646,6 +3650,12 @@ class ProjectController extends AccountBaseController
 
 
         $helper->DisputeSubmitAction($project);
+
+        $text = Auth::user()->name . ' makred this project as incomplete ';
+        $link = '<a style="color:blue" href="' . route('projects.show', $project->id) . '">' . $text . '</a>';
+        $this->logProjectActivity($project->id, $link);
+
+
         return response()->json([
             'status' => 400,
         ]);
@@ -3741,7 +3751,7 @@ class ProjectController extends AccountBaseController
     }
     public function ProjectCompletionSubmit(Request $request)
     {
-        //      dd($request);
+            //  dd($request->all());
         $validated = $request->validate([
             'qc_protocol' => 'required',
             'login_information' => 'required',
@@ -3951,9 +3961,10 @@ class ProjectController extends AccountBaseController
             Notification::send($user, new ProjectSubmissionNotification($milestone));
         }
 
-        //      Toastr::success('Submitted Successfully', 'Success', ["positionClass" => "toast-top-right"]);
+        $text = Auth::user()->name . ' submitted project completion form ';
+        $link = '<a style="color:blue" href="' . route('projects.show', $project_id->id) . '">' . $text . '</a>';
+        $this->logProjectActivity($project_id->id, $link);
 
-        //      return redirect('/account/projects/'.$milestone->project_id.'?tab=milestones');
         return response()->json([
             'status' => 'success',
             'redirectUrl' => url('/account/projects/' . $milestone->project_id . '?tab=milestones')
@@ -5578,6 +5589,10 @@ public function updatePmBasicSEO(Request $request){
 
         Notification::send($user, new ProjectSubmissionAcceptNotification($project_id));
 
+        $text = Auth::user()->name . ' authorized project completion form ';
+        $link = '<a style="color:blue" href="' . route('projects.show', $project_id->id) . '">' . $text . '</a>';
+        $this->logProjectActivity($project_id->id, $link);
+
         Toastr::success('Project Submission Request Accepted Successfully', 'Success', ["positionClass" => "toast-top-right"]);
         return back();
     }
@@ -5678,6 +5693,10 @@ public function updatePmBasicSEO(Request $request){
                     Notification::send($user, new QCSubmissionNotification($milestone));
                 }
 
+                $text = Auth::user()->name . ' submitted project QC form ';
+                $link = '<a style="color:blue" href="' . route('projects.show', $request->project_id) . '">' . $text . '</a>';
+                $this->logProjectActivity($request->project_id, $link);
+
                 Toastr::success('Submitted Successfully', 'Success', ["positionClass" => "toast-top-right"]);
                 return redirect('/account/projects/' . $milestone->project_id . '?tab=milestones');
             }
@@ -5768,7 +5787,9 @@ public function updatePmBasicSEO(Request $request){
 
         $project_id = Project::where('id', $project->project_id)->first();
 
-
+        $text = Auth::user()->name . ' authorized project QC form ';
+        $link = '<a style="color:blue" href="' . route('projects.show', $project_id->id) . '">' . $text . '</a>';
+        $this->logProjectActivity($project_id->id, $link);
 
         Toastr::success('Project Q&C Request Accepted Successfully', 'Success', ["positionClass" => "toast-top-right"]);
         return back();

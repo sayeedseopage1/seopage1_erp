@@ -750,6 +750,8 @@ class ProjectMilestoneController extends AccountBaseController
 
     public function CancelMilestone(Request $request)
     {
+        // dd($request->all());
+        // DB::beginTransaction();
         $validator = Validator::make($request->all(), [
             'comments' => 'required',
         ]);
@@ -812,6 +814,24 @@ class ProjectMilestoneController extends AccountBaseController
         foreach ($users as $user) {
             Notification::send($user, new MilestoneCancelNotification($milestone));
         }
+
+        function ordinal($number) {
+            $suffix = ['th', 'st', 'nd', 'rd', 'th', 'th', 'th', 'th', 'th', 'th'];
+            if (((int)($number % 100 / 10)) == 1) {
+                $abbreviation = $number . 'th';
+            } else {
+                $abbreviation = $number . $suffix[$number % 10];
+            }
+            return $abbreviation;
+        }
+
+        $completedMilestone = ProjectMilestone::where('id','<=', $request->milestoneId)->where('project_id', $milestone->project_id)->count();
+        $milestoneCompletion = $completedMilestone . substr(ordinal($completedMilestone), -2);
+
+        $text = Auth::user()->name . ' sent cancelation request for milestone ' . $milestoneCompletion .' milestone (' . $milestone->milestone_title . ') '  ;
+        $link = '<a style="color:blue" href="' . route('projects.show', $milestone->project_id) . '?tab=milestones">' . $text . '</a>';
+        $this->logProjectActivity($milestone->project_id, $link);
+
         return response()->json([
             'status' => 'success'
         ]);
@@ -820,8 +840,7 @@ class ProjectMilestoneController extends AccountBaseController
     }
     public function CancelMilestoneApprove(Request $request)
     {
-//         dd($request->milestoneId);
-
+        // dd($request->milestoneId);
         $milestone_id= ProjectMilestone::where('id',$request->milestoneId)->first();
         $milestone= ProjectMilestone::find($milestone_id->id);
         $milestone->cancelation_status= 'approved';
@@ -871,14 +890,23 @@ class ProjectMilestoneController extends AccountBaseController
         }
 
         $user= User::where('id',$project->pm_id)->first();
-        $log_user = Auth::user();
-        $activity = new ProjectActivity();
-        $activity->activity= $milestone->milestone_title. '- Milestone canceled by '. $user->name;
+        
+        function ordinal($number) {
+            $suffix = ['th', 'st', 'nd', 'rd', 'th', 'th', 'th', 'th', 'th', 'th'];
+            if (((int)($number % 100 / 10)) == 1) {
+                $abbreviation = $number . 'th';
+            } else {
+                $abbreviation = $number . $suffix[$number % 10];
+            }
+            return $abbreviation;
+        }
 
+        $completedMilestone = ProjectMilestone::where('id','<=', $request->milestoneId)->where('project_id', $milestone->project_id)->count();
+        $milestoneCompletion = $completedMilestone . substr(ordinal($completedMilestone), -2);
 
-        $activity->project_id = $update_project->id;
-
-        $activity->save();
+        $text = Auth::user()->name . ' authorized cancelation request for milestone ' . $milestoneCompletion .' milestone (' . $milestone->milestone_title . ') '  ;
+        $link = '<a style="color:blue" href="' . route('projects.show', $milestone->project_id) . '?tab=milestones">' . $text . '</a>';
+        $this->logProjectActivity($milestone->project_id, $link);
 
         //update authoziation action
 
