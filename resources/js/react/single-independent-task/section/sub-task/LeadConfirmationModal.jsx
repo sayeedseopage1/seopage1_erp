@@ -5,8 +5,8 @@ import { User } from "../../../utils/user-details";
 
 const LeadConfirmationModal = ({ isOpen, onConfirm }) => {
     const [buttonVisible, setButtonVisible] = React.useState(false);
-    const [countDown, setCountDown] = React.useState(5);
-    // const [countDown, setCountDown] = React.useState(20);
+    // const [countDown, setCountDown] = React.useState(5);
+    const [countDown, setCountDown] = React.useState(20);
     const auth = new User(window.Laravel.user);
 
     React.useEffect(() => {
@@ -20,8 +20,8 @@ const LeadConfirmationModal = ({ isOpen, onConfirm }) => {
             let timeOutId = setTimeout(() => {
                 setButtonVisible(true);
                 clearInterval(timeIntervelId);
-            }, 5000);
-            // }, 22000);
+                // }, 5000);
+            }, 22000);
 
             return () => {
                 clearTimeout(timeOutId);

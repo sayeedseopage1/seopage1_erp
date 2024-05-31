@@ -9188,11 +9188,11 @@ var LeadConfirmationModal = function LeadConfirmationModal(_ref) {
     _React$useState2 = _slicedToArray(_React$useState, 2),
     buttonVisible = _React$useState2[0],
     setButtonVisible = _React$useState2[1];
-  var _React$useState3 = react__WEBPACK_IMPORTED_MODULE_0___default().useState(5),
+  // const [countDown, setCountDown] = React.useState(5);
+  var _React$useState3 = react__WEBPACK_IMPORTED_MODULE_0___default().useState(20),
     _React$useState4 = _slicedToArray(_React$useState3, 2),
     countDown = _React$useState4[0],
     setCountDown = _React$useState4[1];
-  // const [countDown, setCountDown] = React.useState(20);
   var auth = new _utils_user_details__WEBPACK_IMPORTED_MODULE_3__.User(window.Laravel.user);
   react__WEBPACK_IMPORTED_MODULE_0___default().useEffect(function () {
     if (auth.getRoleId() && auth.getRoleId() === 6) {
@@ -9203,9 +9203,8 @@ var LeadConfirmationModal = function LeadConfirmationModal(_ref) {
       var timeOutId = setTimeout(function () {
         setButtonVisible(true);
         clearInterval(timeIntervelId);
-      }, 5000);
-      // }, 22000);
-
+        // }, 5000);
+      }, 22000);
       return function () {
         clearTimeout(timeOutId);
         clearInterval(timeIntervelId);
@@ -14774,8 +14773,8 @@ var ExpiredTimeModalForNewEmployee = function ExpiredTimeModalForNewEmployee(_re
   // console.log("timer status for warning", timerStatusForWarningModal);
 
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(function () {
-    if (toggleModal && timeLeft <= 4200 &&
-    // 70 minutes
+    if (toggleModal && timeLeft <= 3600 &&
+    // 60 minutes
     timeLeft > 0 && timerStatusForWarningModal) {
       setShowExpirationWarningModal(true);
     }
