@@ -3367,6 +3367,11 @@ class TaskController extends AccountBaseController
             $task->board_column_id = 9;
             $task->save();
         }
+
+        $text = Auth::user()->name . ' submitted the task ' . $task_status->heading . ' for client\'s approval';
+        $link = '<a href="' . route('tasks.show', $task_status->id) . '">' . $text . '</a>';
+        $this->logProjectActivity($task_status->project_id, $link);
+
         return response()->json([
             'status' => 200,
         ]);
