@@ -1,4 +1,5 @@
 import Avatar from "../../../global/Avatar";
+import { getColor } from "../../../utils/getColor";
 import TablePopover from "../TablePopover";
 import { CreatedBy } from "../table/ui";
 import Popover from "../ui/Popover";
@@ -117,7 +118,48 @@ export const DeadlineEHColumn = [
         accessorKey: "client_communication_rating",
         cell: ({ row }) => {
             const data = row?.original;
-            return <TablePopover text={data?.client_communication_rating} />;
+
+            function convertToPercentage(number) {
+                if (number < 1 || number > 10) {
+                    return "Number must be between 1 and 10";
+                }
+                let percentage = (number / 10) * 100;
+                return percentage;
+            }
+            return (
+                <div
+                    style={{
+                        backgroundColor: "lightgray",
+                        borderRadius: "8px",
+                    }}
+                >
+                    <div
+                        className="progress-bar f-12"
+                        role="progressbar"
+                        style={{
+                            width: `${
+                                convertToPercentage(
+                                    data?.client_communication_rating
+                                ) ?? 0
+                            }%`,
+                            backgroundColor: getColor(
+                                convertToPercentage(
+                                    data?.client_communication_rating
+                                ) ?? 0
+                            ),
+                            height: "15px",
+                            borderRadius: "8px",
+                        }}
+                        aria-valuenow={data?.client_communication_rating ?? 0}
+                        aria-valuemin="0"
+                        aria-valuemax="10"
+                    >
+                        {data?.client_communication_rating
+                            ? `${data?.client_communication_rating}/10`
+                            : 0}
+                    </div>
+                </div>
+            );
         },
     },
     {
@@ -137,7 +179,47 @@ export const DeadlineEHColumn = [
         accessorKey: "negligence_pm_rating",
         cell: ({ row }) => {
             const data = row?.original;
-            return <TablePopover text={data?.negligence_pm_rating} />;
+            function convertToPercentage(number) {
+                if (number < 1 || number > 10) {
+                    return "Number must be between 1 and 10";
+                }
+                let percentage = (number / 10) * 100;
+                return percentage;
+            }
+            return (
+                <div
+                    style={{
+                        backgroundColor: "lightgray",
+                        borderRadius: "8px",
+                    }}
+                >
+                    <div
+                        className="progress-bar f-12"
+                        role="progressbar"
+                        style={{
+                            width: `${
+                                convertToPercentage(
+                                    data?.negligence_pm_rating
+                                ) ?? 0
+                            }%`,
+                            backgroundColor: getColor(
+                                convertToPercentage(
+                                    data?.negligence_pm_rating
+                                ) ?? 0
+                            ),
+                            height: "15px",
+                            borderRadius: "8px",
+                        }}
+                        aria-valuenow={data?.negligence_pm_rating ?? 0}
+                        aria-valuemin="0"
+                        aria-valuemax="10"
+                    >
+                        {data?.negligence_pm_rating
+                            ? `${data?.negligence_pm_rating}/10`
+                            : 0}
+                    </div>
+                </div>
+            );
         },
     },
     {
