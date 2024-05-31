@@ -464,7 +464,6 @@ class ContractController extends AccountBaseController
     //storing lead to deal
     public function storeLeadDeal(Request $request)
     {
-        // dd($request->all());
         DB::beginTransaction();
         $current_time = Carbon::now()->format('d-m-Y H:i:s');
         $award_date = strtotime($request->award_time);
@@ -510,25 +509,22 @@ class ContractController extends AccountBaseController
         if ($deal_stage->deal_stage == 0) {
             $deal->deal_stage = $deal_stage->deal_stage + 1;
             $deal->comments = $deal_stage->comments;
-            $deal->won_lost = 'Yes';
+            // $deal->won_lost = 'Yes';
             $deal->save();
         } elseif ($deal_stage->deal_stage == 1) {
             $deal->deal_stage = $deal_stage->deal_stage + 1;
             $deal->comments = $deal_stage->comments;
-            $deal->won_lost = 'Yes';
+            // $deal->won_lost = 'Yes';
             $deal->save();
         } elseif ($deal_stage->deal_stage == 2) {
             $deal->deal_stage = $deal_stage->deal_stage + 1;
             $deal->comments = $deal_stage->comments;
-            $deal->won_lost = 'Yes';
-            $deal->save();
-        } elseif ($deal_stage->deal_stage == 6) {
-            $deal->deal_stage = 6;
+            // $deal->won_lost = 'Yes';
             $deal->save();
         } else {
             $deal->deal_stage = $deal_stage->deal_stage;
             $deal->comments = $deal_stage->comments;
-            $deal->won_lost = 'Yes';
+            // $deal->won_lost = 'Yes';
             $deal->status = 'pending';
             $deal->save();
             //$lead_id = Lead::where('id', $request->lead_id)->first();
