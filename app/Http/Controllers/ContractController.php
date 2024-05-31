@@ -521,6 +521,10 @@ class ContractController extends AccountBaseController
             $deal->comments = $deal_stage->comments;
             // $deal->won_lost = 'Yes';
             $deal->save();
+        }elseif ($deal_stage->deal_stage == 5) {
+            $deal->deal_stage = 6;
+            // $deal->won_lost = 'Yes';
+            $deal->save();
         } else {
             $deal->deal_stage = $deal_stage->deal_stage;
             $deal->comments = $deal_stage->comments;

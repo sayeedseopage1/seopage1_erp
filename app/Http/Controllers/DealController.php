@@ -982,9 +982,13 @@ class DealController extends AccountBaseController
                     }elseif ($item->deal_stage == 4) {
                         $won_lost = 'Negotiation Started';
                         $won_lost_bg = '#A020F0';
-                    }else{
+                    }elseif ($item->deal_stage == 5){
                         $won_lost = 'Milestone Breakdown';
                         $won_lost_bg = '#C525F2';
+                    }
+                    else{
+                        $won_lost = 'Pending Sales Analysis';
+                        $won_lost_bg = '#FCBD01';
                     }
                 }
                 $item->won_lost = $won_lost;
@@ -1006,7 +1010,9 @@ class DealController extends AccountBaseController
 
 
             $counts = Deal::select(DB::raw("COUNT(IF(sale_analysis_status = 'pending', 1, null)) as pending"))
-            ->whereBetween('created_at', [$startDate, $endDate])->first();
+            ->whereBetween(DB::raw('DATE(created_at)'), [$startDate, $endDate])
+            ->orWhereBetween(DB::raw('DATE(updated_at)'), [$startDate, $endDate])
+            ->first();
 
             $extra = collect($counts);
             $deals_data = $extra->merge($deals_data);
