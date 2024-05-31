@@ -123,7 +123,7 @@ class EvaluationController extends AccountBaseController
                     ->leftJoin('sub_tasks', 'employee_evaluations.user_id', '=', 'sub_tasks.assigned_to')
                     ->leftJoin('tasks', 'sub_tasks.task_id', '=', 'tasks.id')
                     ->leftJoin('users as added_by', 'sub_tasks.added_by', '=', 'added_by.id')
-                    ->leftJoin('roles', 'employee_evaluations.role', '=', 'roles.id')
+                    ->leftJoin('roles', 'employee_evaluations.user_id', '=', 'roles.id')
                     ->leftJoin('project_time_logs', 'employee_evaluations.user_id', '=', 'project_time_logs.user_id')
                     ->leftJoin('task_users', 'employee_evaluations.user_id', '=', 'task_users.user_id')
                     ->groupBy('employee_evaluations.id');
@@ -559,7 +559,7 @@ class EvaluationController extends AccountBaseController
                 $evaluation->managements_cmnt = $request->managements_cmnt;
                 $evaluation->managements_decision = 'One more week';
                 $evaluation->accept_rejected = Carbon::now();
-                $evaluation->exp_date = Carbon::parse($evaluation->exp_date)->addMinutes(20); 
+                $evaluation->exp_date = Carbon::now()->addMinutes(20); 
                 $evaluation->managements_id = Auth::user()->id;
                 $evaluation->managements_name = Auth::user()->name;
                 $evaluation->managements_auth_at = Carbon::now();

@@ -524,6 +524,25 @@ class SubTaskController extends AccountBaseController
             /**EMPLOYEE EVALUATION START */
             $taskFind = Task::where('subtask_id',$subTask->id)->where('u_id',null)->where('independent_task_status',1)->first(); //Find SubTask
             if($taskFind != null){
+                $evaluation = EmployeeEvaluation::where('user_id', $subTask->assigned_to)->first();
+                if ($evaluation->start_date == null) {
+                    $evaluation->start_date = Carbon::now();
+                    $emp_start_task = $evaluation->start_date;
+
+                    $exp_date = Carbon::parse($emp_start_task)->addMinutes(20);
+                    $countSundays = 0;
+                    $currentDate = $emp_start_task->copy(); 
+                    while ($currentDate->lte($exp_date)) {
+                        if ($currentDate->dayOfWeek === Carbon::SUNDAY) {
+                            $countSundays++;
+                        }
+                        $currentDate->addDay(); 
+                    }
+                    
+                    $evaluation->exp_date = Carbon::parse($emp_start_task)->addMinutes(20 + $countSundays);
+                    
+                    $evaluation->save();
+                }
                 $evaluation_history = EvaluationHistory::where('user_id', $subTask->assigned_to)->count();
                 $evaluation_task = new EmployeeEvaluationTask();
                 $evaluation_task->user_id = $subTask->assigned_to;
