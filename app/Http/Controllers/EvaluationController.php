@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use App\Models\EmployeeDetails;
 use App\Models\EmployeeEvaluation;
 use App\Models\EmployeeEvaluationTask;
 use App\Models\EvaluationHistory;
@@ -438,6 +439,10 @@ class EvaluationController extends AccountBaseController
             $user= User::find($request->user_id);
             $user->role_id= 5;
             $user->save();
+
+            $employee_details = EmployeeDetails::where('user_id',$request->user_id)->first();
+            $employee_details->designation_id = 26;
+            $employee_details->save();
 
             $evaluation_task = EmployeeEvaluationTask::where('user_id',$request->user_id)->first();
             $actions = PendingAction::where('code','TLSDE')->where('task_id',$evaluation_task->task_id)->where('past_status',0)->get();
