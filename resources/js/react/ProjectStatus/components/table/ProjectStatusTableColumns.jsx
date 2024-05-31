@@ -31,7 +31,7 @@ export const ProjectStatusTableColumns = [
                                 : null
                         }
                     />
-                    <span>{data?.clientName}</span>
+                    <span style={{ color: "#3366CC" }}>{data?.clientName}</span>
                 </CreatedBy>
             );
         },
@@ -60,18 +60,9 @@ export const ProjectStatusTableColumns = [
         accessorKey: "project_budget",
         cell: ({ row }) => {
             const data = row.original;
-            const getBudgetDisplay = (data) => {
-                if (data?.project_budget !== 0) {
-                    return `${data?.project_budget} ${data?.currency_symbol}`;
-                } else if (data?.project_upsell_budget !== 0) {
-                    return `${data?.project_upsell_budget} ${data?.currency_symbol}`;
-                } else {
-                    return `${data?.currency_symbol} ${data.hourly_rate}/Hour`;
-                }
-            };
             return (
                 <span>
-                    {getBudgetDisplay(data)}{" "}
+                    {data?.project_budget} {data?.currency_symbol}
                 </span>
             );
         },
@@ -94,7 +85,7 @@ export const ProjectStatusTableColumns = [
                         }
                     />
 
-                    <span>{data?.pmName}</span>
+                    <span style={{ color: "#3366CC" }}>{data?.pmName}</span>
                 </CreatedBy>
             );
         },
@@ -115,6 +106,7 @@ export const ProjectStatusTableColumns = [
         cell: ({ row, table }) => {
             const data = row.original;
             const handler = table.options.meta;
+            const percentage = 50;
             return (
                 <div
                     className="progress"
@@ -126,40 +118,36 @@ export const ProjectStatusTableColumns = [
                         <Popover.Button>
                             <div
                                 onClick={() => handler.onPercentOfGoalMet(data)}
-                                className={`${style.projectStatus_percent_popover_button}`}
+                                className={`${style.projectStatus_popover_button}`}
                             >
                                 <div
                                     className="progress-bar f-12"
                                     role="progressbar"
                                     style={{
-                                        width: `${data?.goal_percentage ?? 0}%`,
-                                        backgroundColor: getColor(
-                                            data?.goal_percentage ?? 0
-                                        ),
-                                        height: "15px",
+                                        width: `${percentage}%`,
+                                        backgroundColor: getColor(percentage),
                                     }}
-                                    aria-valuenow={data?.goal_percentage ?? 0}
+                                    aria-valuenow={percentage}
                                     aria-valuemin="0"
                                     aria-valuemax="100"
                                 >
-                                    {data?.goal_percentage ?? 0}%
+                                    {percentage}%
                                 </div>
                             </div>
                         </Popover.Button>
                         <Popover.Panel>
                             <div
+                                onTouchStartCapture={() => {
+                                    debugger;
+                                }}
                                 className={`${style.projectStatus_popover_panel}`}
                             >
                                 <div className="d-flex flex-column justify-content-start align-items-start">
-                                    <p>Total goals: {data?.total_goal}</p>
+                                    <p>Total goals: 10</p>
+                                    <p>Goals deadline expired so far: 8</p>
+                                    <p>Goals met: 4</p>
                                     <p>
-                                        Goals deadline expired so far:{" "}
-                                        {data?.goal_expire}
-                                    </p>
-                                    <p>Goals met: {data?.goal_meet}</p>
-                                    <p>
-                                        Percentage of goals met:{" "}
-                                        {data?.goal_percentage ?? 0}%
+                                        Percentage of goals met: {percentage}%
                                     </p>
                                 </div>
                             </div>
@@ -180,25 +168,13 @@ export const ProjectStatusTableColumns = [
                         <div
                             className={`${style.projectStatus_popover_button}`}
                         >
-                            {data.upcoming_goal_day === 0 ? (
-                                <p>Today</p>
-                            ) : data.upcoming_goal_day ? (
-                                <p>In {data.upcoming_goal_day} Days</p>
-                            ) : (
-                                <p>No upcoming goals!</p>
-                            )}
+                            <p>In 02 Days</p>
                         </div>
                     </Popover.Button>
                     <Popover.Panel>
                         <div className={`${style.projectStatus_popover_panel}`}>
                             <div className="d-flex flex-column justify-content-start align-items-start">
-                                {data.next_goal_date ? (
-                                    <p>
-                                        Next Goal Date : {data.next_goal_date}
-                                    </p>
-                                ) : (
-                                    <p>All goals are completed!</p>
-                                )}
+                                <p>Next Goal Date : 2024-02-16 09:10:26</p>
                             </div>
                         </div>
                     </Popover.Panel>
@@ -209,17 +185,8 @@ export const ProjectStatusTableColumns = [
     {
         id: "next_goal_details",
         header: "Next Goal Details",
-        cell: ({ row, table }) => {
-            const data = row.original;
-            const handler = table.options.meta;
-            return (
-                <button
-                    onClick={() => handler.onNextGoalDetails(data)}
-                    className="btn btn-success"
-                >
-                    View Details
-                </button>
-            );
+        cell: ({ row }) => {
+            return <button className="btn btn-success">View Details</button>;
         },
     },
 ];

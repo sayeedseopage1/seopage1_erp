@@ -7,7 +7,7 @@ const FileUploaderContext = React.createContext();
 // render icon
 const RenderIcon = ({ filename, size }) => {
     // get ext
-    if(!filename) return null;
+    if (!filename) return null;
     let arr = filename.split(".");
     let ext = arr[arr.length - 1];
     let _filename =
@@ -18,8 +18,8 @@ const RenderIcon = ({ filename, size }) => {
     return (
         <div
             className="uploaded-file-preview"
-            data-toggle="tooltip"
-            data-placement="top"
+            // data-toggle="tooltip"
+            // data-placement="top"
             title={filename}
         >
             <div className="__icon">
@@ -111,7 +111,7 @@ const FilePreview = ({
         <a href={downloadUrl} target="_blank" onClick={e => !downloadAble && e.preventDefault()} download={downloadAble}>
             <div className={`sp1_file_upload--input-preview ${classname}`} {...props}>
                 {/* delete button */}
-                {deleteAble  && (
+                {deleteAble && (
                     <Button
                         type="button"
                         onClick={(e) => {
@@ -147,7 +147,7 @@ const FilePreview = ({
 };
 
 // uploaded file previews
-const SelectedFilePreveiw = ({children}) => {
+const SelectedFilePreveiw = ({ children }) => {
     const { previews, files, setFiles, setPreviews } = React.useContext(FileUploaderContext);
 
     const onDelete = (e, index) => {
@@ -160,7 +160,7 @@ const SelectedFilePreveiw = ({children}) => {
         setPreviews(updatePreview)
     }
 
-    return children({previews, onDelete})
+    return children({ previews, onDelete })
 }
 
 // file uploader
@@ -176,7 +176,7 @@ const FileUploader = ({ files, setFiles, children, className = "" }) => {
             }}
         >
             <div
-                className={`d-flex flex-wrap align-items-center ${className}`}
+                className={`d-flex flex-nowrap overflow-auto align-items-center ${className}`}
                 style={{ gap: "10px" }}
             >
                 {children}

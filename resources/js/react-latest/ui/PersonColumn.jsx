@@ -99,7 +99,7 @@ const PersonColumn = ({ name, avatar, slug, profileLink }) => {
                     onMouseLeave={() => setIsVisible(false)}
                     className={`multiline-ellipsis ${css.person_info} ${css.person}`}
                 >
-                    {name}
+                    <span style={{ color: "#3366CC" }}>{name}</span>
                 </a>
             </div>
 

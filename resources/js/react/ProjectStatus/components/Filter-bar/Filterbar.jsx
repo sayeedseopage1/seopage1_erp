@@ -49,7 +49,9 @@ const Filterbar = ({ onFilter, page = "tasks" }) => {
             end_date,
             search: _search,
             client_id: _client?.id,
+            client_name: _client?.name,
             pm_id: _pm?.id,
+            pm_name: _pm?.name,
         };
 
         onFilter(filter);

@@ -45,10 +45,15 @@ const Filterbar = ({ onFilter, page = "tasks" }) => {
             start_date,
             end_date,
             assignee_to: _developer?.id,
+            assignee_to_name: _developer?.name,
             client_id: _client?.id,
+            client_name: _client?.name,
             assignee_by: _leadDeveloper?.id,
+            assignee_by_name: _leadDeveloper?.name,
             pm_id: _pm?.id,
+            pm_name: _pm?.name,
             status: _status?.id,
+            status_name: _status?.column_name,
             date_filter_by,
         };
 

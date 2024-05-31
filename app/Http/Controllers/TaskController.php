@@ -79,6 +79,8 @@ use App\Models\TaskDisputeQuestion;
 use App\Models\TaskRevisionDispute;
 use App\Models\TaskType;
 use App\Models\DailySubmission;
+use App\Models\GraphicTaskFile;
+use App\Models\GraphicWorkDetails;
 use App\Models\PendingParentTaskConversation;
 use App\Models\PendingParentTasks;
 use App\Notifications\PendingParentTasksNotification;
@@ -140,6 +142,242 @@ class TaskController extends AccountBaseController
 
     
     public function get_tasks(Request $request)
+    {
+        $startDate = $request->input('start_date', null);
+        $endDate = $request->input('end_date', null);
+        $assignee_to = $request->input('assignee_to', null);
+        $assignee_by = $request->input('assignee_by', null);
+
+        $pmId = $request->input('pm_id', null);
+        $clientId = $request->input('client_id', null);
+        $projectId = $request->input('project_id', null);
+        $status = $request->input('status', null);
+        $date_filter_by = $request->input('date_filter_by', null);
+
+
+
+        $tasks = Task::with('graphicWorkDetail.graphicTaskFiles')->select(
+            'tasks.*',
+            'tasks.heading as task_name',
+            'projects.project_name',
+            'projects.id as project_id',
+            'client.id as client_id',
+            'client.name as client_name',
+            'client.image as client_avatar',
+            'tasks.estimate_minutes',
+            'tasks.estimate_hours',
+            'assigned_to.id as assigned_to_id',
+            'assigned_to.name as assigned_to_name',
+            'assigned_to.image as assigned_to_avatar',
+            'added_by.name as added_by_name',
+            'added_by.image as added_by_avatar',
+            'project_milestones.milestone_title',
+            'pm_id.id as project_manager_id',
+            'pm_id.name as pm_id_name',
+            'pm_id.image as pm_id_avatar',
+            'project_deliverables.title as deliverable_title',
+            'task_approves.created_at as task_approval_date',
+            'taskboard_columns.column_name',
+            'taskboard_columns.label_color',
+            'project_time_logs.created_at as task_start_date',
+            'tasks.created_at as creation_date',
+            'tasks.updated_at as completion_date',
+            'project_time_logs.start_time',
+            'project_time_logs.end_time',
+            'task_category.category_name',
+            'tasks.client_name as ind_client_name',
+            'ind_client.id as ind_client_id',
+            'ind_client.name as ind_existing_client_name',
+            'task_submissions.created_at as task_submission_date',
+
+            DB::raw('(SELECT COUNT(sub_tasks.id) FROM sub_tasks WHERE sub_tasks.task_id = tasks.id AND DATE(sub_tasks.created_at) >= "' . $startDate . '" AND DATE(sub_tasks.created_at) <= "' . $endDate . '") as subtasks_count')
+
+        )
+            ->where('tasks.subtask_id', null)
+            ->leftJoin('projects', 'projects.id', 'tasks.project_id')
+            ->leftJoin('users as client', 'client.id', 'projects.client_id')
+            ->join('task_users', 'task_users.task_id', 'tasks.id')
+            ->join('users as assigned_to', 'assigned_to.id', 'task_users.user_id')
+            ->join('users as added_by', 'added_by.id', 'tasks.added_by')
+            ->leftJoin('users as ind_client', 'ind_client.id', 'tasks.client_id')
+            ->leftJoin('users as pm_id', 'pm_id.id', 'projects.pm_id')
+            ->leftJoin('project_milestones', 'project_milestones.id', 'tasks.milestone_id')
+            ->join('taskboard_columns', 'taskboard_columns.id', 'tasks.board_column_id')
+            ->leftJoin('task_category', 'task_category.id', 'tasks.task_category_id')
+            ->leftJoin('project_time_logs', 'project_time_logs.task_id', 'tasks.id')
+            // ->leftJoin('project_time_logs', function ($join) {
+            //     $join->on('project_time_logs.task_id', '=', 'tasks.id')
+            //         ->orderBy('project_time_logs.created_at', 'desc');
+            // })
+            ->leftJoin('project_deliverables', 'project_deliverables.milestone_id', 'project_milestones.id')
+            ->leftJoin('task_approves', 'task_approves.task_id', 'tasks.id')
+            ->leftJoin('task_submissions', function ($join) {
+                $join->on('task_submissions.task_id', '=', 'tasks.id')
+                    ->whereRaw('task_submissions.created_at = (SELECT MAX(created_at) FROM task_submissions WHERE task_id = tasks.id)')
+                    ->orderBy('task_submissions.created_at', 'desc');
+            })
+            ->groupBy('tasks.id')
+            // ->leftJoin('task_approves','task_approves.task_id','tasks.id')
+        ;
+        //->orderBy('id', 'desc');
+        // ->get();
+        if (!is_null($startDate) && !is_null($endDate) &&  $startDate == $endDate) {
+
+
+            $tasks = $tasks->whereDate('tasks.created_at', '=', Carbon::parse($startDate)->format('Y-m-d'));
+        } else {
+            if (!is_null($startDate)) {
+                $tasks = $tasks->whereDate('tasks.created_at', '>=', Carbon::parse($startDate)->format('Y-m-d'));
+            }
+            if (!is_null($endDate)) {
+                $tasks = $tasks->whereDate('tasks.created_at', '<=', Carbon::parse($endDate)->format('Y-m-d'));
+            }
+        }
+        if (!is_null($projectId)) {
+            $tasks = $tasks->where('tasks.project_id', $projectId);
+        }
+        if (!is_null($assignee_to)) {
+            $tasks = $tasks->where('task_users.user_id', $assignee_to);
+        }
+        if (!is_null($assignee_by)) {
+            $tasks = $tasks->where('tasks.added_by', $assignee_by);
+        }
+        if (!is_null($pmId)) {
+            $tasks = $tasks->where('projects.pm_id', $pmId);
+        }
+        if (!is_null($clientId)) {
+            $tasks = $tasks->where('projects.client_id', $clientId);
+        }
+        if (!is_null($date_filter_by)) {
+            if ($date_filter_by == 'Created Date') {
+                if (!is_null($startDate) && !is_null($endDate) &&  $startDate == $endDate) {
+
+
+                    $tasks = $tasks->whereDate('tasks.created_at', '=', Carbon::parse($startDate)->format('Y-m-d'));
+                } else {
+                    if (!is_null($startDate)) {
+                        $tasks = $tasks->whereDate('tasks.created_at', '>=', Carbon::parse($startDate)->format('Y-m-d'));
+                    }
+                    if (!is_null($endDate)) {
+                        $tasks = $tasks->whereDate('tasks.created_at', '<=', Carbon::parse($endDate)->format('Y-m-d'));
+                    }
+                }
+            } elseif ($date_filter_by == 'Due Date') {
+                if (!is_null($startDate) && !is_null($endDate) &&  $startDate == $endDate) {
+
+
+                    $tasks = $tasks->whereDate('tasks.due_date', '=', Carbon::parse($startDate)->format('Y-m-d'));
+                } else {
+                    if (!is_null($startDate)) {
+                        $tasks = $tasks->whereDate('tasks.due_date', '>=', Carbon::parse($startDate)->format('Y-m-d'));
+                    }
+                    if (!is_null($endDate)) {
+                        $tasks = $tasks->whereDate('tasks.due_date', '<=', Carbon::parse($endDate)->format('Y-m-d'));
+                    }
+                }
+            } else {
+                if (!is_null($startDate) && !is_null($endDate) &&  $startDate == $endDate) {
+
+
+                    $tasks = $tasks->whereDate('tasks.updated_at', '=', Carbon::parse($startDate)->format('Y-m-d'));
+                } else {
+                    if (!is_null($startDate)) {
+                        $tasks = $tasks->whereDate('tasks.updated_at', '>=', Carbon::parse($startDate)->format('Y-m-d'));
+                    }
+                    if (!is_null($endDate)) {
+                        $tasks = $tasks->whereDate('tasks.updated_at', '<=', Carbon::parse($endDate)->format('Y-m-d'));
+                    }
+                }
+            }
+        }
+        if (!is_null($status)) {
+            if ($status == 11) {
+                $tasks = $tasks;
+            } elseif ($status == 10) {
+                $tasks = $tasks->where('tasks.board_column_id', '!=', 4);
+            } elseif ($status == 1) {
+                $tasks = $tasks->where('tasks.board_column_id', 1);
+            } elseif ($status == 2) {
+                $tasks = $tasks->where('tasks.board_column_id', 2);
+            } elseif ($status == 3) {
+                $tasks = $tasks->where('tasks.board_column_id', 3);
+            } elseif ($status == 4) {
+                $tasks = $tasks->where('tasks.board_column_id', 4);
+            } elseif ($status == 6) {
+                $tasks = $tasks->where('tasks.board_column_id', 6);
+            } elseif ($status == 7) {
+                $tasks = $tasks->where('tasks.board_column_id', 7);
+            } elseif ($status == 8) {
+                $tasks = $tasks->where('tasks.board_column_id', 8);
+            } elseif ($status == 9) {
+                $tasks = $tasks->where('tasks.board_column_id', 9);
+            }
+        }
+        if (Auth::user()->role_id == 9 || Auth::user()->role_id == 10) {
+            $tasks = $tasks->where('task_users.user_id', Auth::id())->orderBy('tasks.created_at', 'desc')->get();
+        } else {
+            $tasks = $tasks->orderBy('tasks.created_at', 'desc')->get();
+        }
+
+        foreach ($tasks as $task) {
+            $task->files = TaskFile::where('task_id', $task->id)->get();
+            $subtasks_hours_logged = Subtask::select('tasks.*')
+
+                ->where('sub_tasks.task_id', $task->id)
+                ->join('tasks', 'tasks.subtask_id', 'sub_tasks.id')
+                ->leftJoin('project_time_logs', 'project_time_logs.task_id', 'tasks.id')
+                ->sum('project_time_logs.total_minutes');
+            $subtasks_completed_count = Subtask::select('tasks.*')
+
+                ->where('sub_tasks.task_id', $task->id)
+                ->join('tasks', 'tasks.subtask_id', 'sub_tasks.id')
+
+                ->whereIn('tasks.board_column_id', ['4', '8', '7'])
+                ->count();
+            $subtasks_timer_active = Subtask::select('tasks.*')
+
+                ->where('sub_tasks.task_id', $task->id)
+                ->join('tasks', 'tasks.subtask_id', 'sub_tasks.id')
+                ->leftJoin('project_time_logs', 'project_time_logs.task_id', 'tasks.id')
+                ->where('project_time_logs.start_time', '!=', null)
+
+                ->where('project_time_logs.end_time', null)
+                ->count();
+            $task_hours_logged = Task::select('tasks.*')->leftJoin('project_time_logs', 'project_time_logs.task_id', 'tasks.id')
+                ->where('task_id', $task->id)
+                ->sum('project_time_logs.total_minutes');
+            $subtasks_reports_count = Subtask::select('sub_tasks.*', 'developer_report_issues.id as report_issues')
+
+                ->where('sub_tasks.task_id', $task->id)
+                ->join('tasks', 'tasks.subtask_id', 'sub_tasks.id')
+
+                ->leftJoin('developer_report_issues as report_issues', 'report_issues.task_id', 'tasks.id')
+
+                ->count('report_issues.id');
+            $tasks_reports_count = Task::select('tasks.*', 'developer_report_issues.id as report_issues')
+
+                ->where('tasks.id', $task->id)
+
+                ->leftJoin('developer_report_issues as report_issues', 'report_issues.task_id', 'tasks.id')
+
+                ->count('report_issues.id');
+
+
+            $task->subtasks_hours_logged = $subtasks_hours_logged + $task_hours_logged;
+            $task->subtasks_completed_count = $subtasks_completed_count;
+            $task->subtasks_timer_active = $subtasks_timer_active;
+
+            $task->subtasks_reports_count = $subtasks_reports_count + $tasks_reports_count;
+        }
+
+
+        return response()->json([
+            'status' => 200,
+            'tasks' => $tasks,
+
+        ]);
+    }
+    public function exportTaskData(Request $request)
     {
         $startDate = $request->input('start_date', null);
         $endDate = $request->input('end_date', null);
@@ -451,10 +689,12 @@ class TaskController extends AccountBaseController
             ->orderBy('id', 'desc')
             ->get();
 
+            $sub_task_details = GraphicWorkDetails::with('graphicTaskFiles')->where('task_id', $id)->first();
+
         return response()->json([
             'status' => 200,
             'tasks' => $tasks,
-
+            'sub_task_details_graphic_work' => $sub_task_details??null
         ]);
     }
     public function get_subtasks(Request $request)
@@ -655,6 +895,202 @@ class TaskController extends AccountBaseController
 
 
 
+        return response()->json([
+            'status' => 200,
+            'tasks' => $tasks,
+
+        ]);
+    }
+    public function exportSubTaskData(Request $request)
+    {
+        $startDate = $request->input('start_date', null);
+        $endDate = $request->input('end_date', null);
+        $assignee_to = $request->input('assignee_to', null);
+        $assignee_by = $request->input('assignee_by', null);
+
+        $pmId = $request->input('pm_id', null);
+        $clientId = $request->input('client_id', null);
+        $status = $request->input('status', null);
+        $date_filter_by = $request->input('date_filter_by', null);
+        $projectId = $request->input('project_id', null);
+
+
+
+        $tasks = SubTask::select(
+            'tasks.*',
+            'tasks.heading as task_name',
+            'projects.project_name',
+            'projects.id as project_id',
+            'client.id as client_id',
+            'client.name as client_name',
+            'client.image as client_avatar',
+            'tasks.estimate_minutes',
+            'tasks.estimate_hours',
+            'assigned_to.id as assigned_to_id',
+            'assigned_to.name as assigned_to_name',
+            'assigned_to.image as assigned_to_avatar',
+            'added_by.name as added_by_name',
+            'added_by.image as added_by_avatar',
+            'project_milestones.milestone_title',
+            'pm_id.id as project_manager_id',
+            'pm_id.name as pm_id_name',
+            'pm_id.image as pm_id_avatar',
+            'project_deliverables.title as deliverable_title',
+            'task_approves.created_at as task_approval_date',
+            'taskboard_columns.column_name',
+            'taskboard_columns.label_color',
+            'project_time_logs.created_at as task_start_date',
+            'tasks.created_at as creation_date',
+            'tasks.updated_at as completion_date',
+            'task_category.category_name',
+            'task_files.filename',
+
+            'tasks.client_name as ind_client_name',
+            'ind_client.id as ind_client_id',
+            'ind_client.name as ind_existing_client_name',
+
+            'project_time_logs.start_time',
+            'project_time_logs.end_time',
+            'task_submissions.created_at as task_submission_date',
+            'tasks.updated_at as task_updated_at',
+            'perentTask.heading as perent_task_heading',
+
+
+
+            DB::raw('(SELECT SUM(project_time_logs.total_minutes) FROM project_time_logs WHERE task_id = tasks.id) as subtasks_hours_logged'),
+            DB::raw('(SELECT COUNT(developer_report_issues.id) FROM developer_report_issues WHERE developer_report_issues.task_id = tasks.id) as subtasks_reports_count')
+
+        )
+            ->where('tasks.subtask_id', '!=', null)
+            ->join('tasks', 'tasks.subtask_id', 'sub_tasks.id')
+            ->join('tasks as perentTask', 'perentTask.id', 'sub_tasks.task_id')
+            ->leftJoin('projects', 'projects.id', 'tasks.project_id')
+            ->leftJoin('users as client', 'client.id', 'projects.client_id')
+            ->leftJoin('users as ind_client', 'ind_client.id', 'tasks.client_id')
+            ->join('task_users', 'task_users.task_id', 'tasks.id')
+            ->join('users as assigned_to', 'assigned_to.id', 'task_users.user_id')
+            ->join('users as added_by', 'added_by.id', 'tasks.added_by')
+            ->leftJoin('users as pm_id', 'pm_id.id', 'projects.pm_id')
+
+
+            ->leftJoin('project_milestones', 'project_milestones.id', 'tasks.milestone_id')
+            ->join('taskboard_columns', 'taskboard_columns.id', 'tasks.board_column_id')
+            ->leftJoin('task_category', 'task_category.id', 'tasks.task_category_id')
+            ->leftJoin('project_time_logs', function ($join) {
+                $join->on('project_time_logs.task_id', '=', 'tasks.id')
+                    ->orderBy('project_time_logs.created_at', 'desc');
+            })
+            ->leftJoin('project_deliverables', 'project_deliverables.milestone_id', 'project_milestones.id')
+            ->leftJoin('task_approves', 'task_approves.task_id', 'tasks.id')
+            ->leftJoin('task_files', 'task_files.task_id', 'tasks.id')
+            ->leftJoin('task_submissions', function ($join) {
+                $join->on('task_submissions.task_id', '=', 'tasks.id')
+                    ->whereRaw('task_submissions.created_at = (SELECT MAX(created_at) FROM task_submissions WHERE task_id = tasks.id)')
+                    ->orderBy('task_submissions.created_at', 'desc');
+            })
+
+
+            ->groupBy('tasks.id')
+        ;
+
+        if (!is_null($startDate) && !is_null($endDate) &&  $startDate == $endDate) {
+
+
+            $tasks = $tasks->whereDate('tasks.created_at', '=', Carbon::parse($startDate)->format('Y-m-d'));
+        } else {
+            if (!is_null($startDate)) {
+                $tasks = $tasks->whereDate('tasks.created_at', '>=', Carbon::parse($startDate)->format('Y-m-d'));
+            }
+            if (!is_null($endDate)) {
+                $tasks = $tasks->whereDate('tasks.created_at', '<=', Carbon::parse($endDate)->format('Y-m-d'));
+            }
+        }
+        if (!is_null($projectId)) {
+            $tasks = $tasks->where('tasks.project_id', $projectId);
+        }
+        if (!is_null($assignee_to)) {
+            $tasks = $tasks->where('task_users.user_id', $assignee_to);
+        }
+        if (!is_null($assignee_by)) {
+            $tasks = $tasks->where('tasks.added_by', $assignee_by);
+        }
+        if (!is_null($pmId)) {
+            $tasks = $tasks->where('projects.pm_id', $pmId);
+        }
+        if (!is_null($clientId)) {
+            $tasks = $tasks->where('projects.client_id', $clientId);
+        }
+        if (!is_null($date_filter_by)) {
+            if ($date_filter_by == 'Created Date') {
+                if (!is_null($startDate) && !is_null($endDate) &&  $startDate == $endDate) {
+
+
+                    $tasks = $tasks->whereDate('tasks.created_at', '=', Carbon::parse($startDate)->format('Y-m-d'));
+                } else {
+                    if (!is_null($startDate)) {
+                        $tasks = $tasks->whereDate('tasks.created_at', '>=', Carbon::parse($startDate)->format('Y-m-d'));
+                    }
+                    if (!is_null($endDate)) {
+                        $tasks = $tasks->whereDate('tasks.created_at', '<=', Carbon::parse($endDate)->format('Y-m-d'));
+                    }
+                }
+            } elseif ($date_filter_by == 'Due Date') {
+                if (!is_null($startDate) && !is_null($endDate) &&  $startDate == $endDate) {
+
+
+                    $tasks = $tasks->whereDate('tasks.due_date', '=', Carbon::parse($startDate)->format('Y-m-d'));
+                } else {
+                    if (!is_null($startDate)) {
+                        $tasks = $tasks->whereDate('tasks.due_date', '>=', Carbon::parse($startDate)->format('Y-m-d'));
+                    }
+                    if (!is_null($endDate)) {
+                        $tasks = $tasks->whereDate('tasks.due_date', '<=', Carbon::parse($endDate)->format('Y-m-d'));
+                    }
+                }
+            } else {
+                if (!is_null($startDate) && !is_null($endDate) &&  $startDate == $endDate) {
+
+
+                    $tasks = $tasks->whereDate('tasks.updated_at', '=', Carbon::parse($startDate)->format('Y-m-d'));
+                } else {
+                    if (!is_null($startDate)) {
+                        $tasks = $tasks->whereDate('tasks.updated_at', '>=', Carbon::parse($startDate)->format('Y-m-d'));
+                    }
+                    if (!is_null($endDate)) {
+                        $tasks = $tasks->whereDate('tasks.updated_at', '<=', Carbon::parse($endDate)->format('Y-m-d'));
+                    }
+                }
+            }
+        }
+        if (!is_null($status)) {
+            if ($status == 11) {
+                $tasks = $tasks;
+            } elseif ($status == 10) {
+                $tasks = $tasks->where('tasks.board_column_id', '!=', 4);
+            } elseif ($status == 1) {
+                $tasks = $tasks->where('tasks.board_column_id', 1);
+            } elseif ($status == 2) {
+                $tasks = $tasks->where('tasks.board_column_id', 2);
+            } elseif ($status == 3) {
+                $tasks = $tasks->where('tasks.board_column_id', 3);
+            } elseif ($status == 4) {
+                $tasks = $tasks->where('tasks.board_column_id', 4);
+            } elseif ($status == 6) {
+                $tasks = $tasks->where('tasks.board_column_id', 6);
+            } elseif ($status == 7) {
+                $tasks = $tasks->where('tasks.board_column_id', 7);
+            } elseif ($status == 8) {
+                $tasks = $tasks->where('tasks.board_column_id', 8);
+            } elseif ($status == 9) {
+                $tasks = $tasks->where('tasks.board_column_id', 9);
+            }
+        }
+        if (Auth::user()->role_id == 5) {
+            $tasks = $tasks->where('task_users.user_id', Auth::id())->orderBy('tasks.created_at', 'desc')->get();
+        } else {
+            $tasks = $tasks->orderBy('tasks.created_at', 'desc')
+            ->get();
+        }
         return response()->json([
             'status' => 200,
             'tasks' => $tasks,
@@ -1932,349 +2368,474 @@ class TaskController extends AccountBaseController
     public function StoreNewTask(Request $request)
     {
         //  dd($request->all());
-        //    DB::beginTransaction();
-        $setting = global_setting();
-        $rules = [
-            'heading' => 'required',
-            'estimate_hours' => 'required',
-            'estimate_minutes' => 'required',
-            'description' => 'required',
-            'user_id' => 'required',
-            'milestone_id' => 'required',
+        try {
+            //    DB::beginTransaction();
+            $setting = global_setting();
+            $rules = [
+                'heading' => 'required',
+                'estimate_hours' => 'required',
+                'estimate_minutes' => 'required',
+                'description' => 'required',
+                'user_id' => 'required',
+                'milestone_id' => 'required',
 
 
-        ];
-        $validator = Validator::make($request->all(), $rules);
+            ];
+            $validator = Validator::make($request->all(), $rules);
+
+            if ($validator->fails()) {
+                return response($validator->errors(), 422);
+            }
+            $project_id = Project::where('id', $request->project_id)->first();
+            $task_estimation_hours = Task::where('project_id', $project_id->id)->whereNull('subtask_id')->sum('estimate_hours');
+            $task_estimation_minutes = Task::where('project_id', $project_id->id)->whereNull('subtask_id')->sum('estimate_minutes');
+            $total_task_estimation_minutes = $task_estimation_hours * 60 + $task_estimation_minutes;
+            $left_minutes = ($project_id->hours_allocated - $request->estimate_hours) * 60 - ($total_task_estimation_minutes + $request->estimate_minutes);
+
+            $left_in_hours = round($left_minutes / 60, 0);
+            $left_in_minutes = $left_minutes % 60;
+            //dd($left_minutes);
+            if ($left_minutes < 0) {
+                return response()->json([
+                    "message" => "The given data was invalid.",
+                    "errors" => [
+                        "hours" => [
+                            "Estimate hours cannot exceed from project allocation hours !"
+                        ]
+                    ]
+                ], 422);
+            }
+
+            if ($request->estimate_hours == 0 && $request->estimate_minutes == 0) {
+                return response()->json([
+                    "message" => "Wrong Input",
+                    "errors" => [
+                        "hours" => [
+                            "Estimate hours and minutes cannot be 0 !"
+                        ]
+                    ]
+                ], 422);
+            }
+
+            //dd($request);
+            $project = request('project_id') ? Project::findOrFail(request('project_id')) : null;
+
+            if (is_null($project) || ($project->project_admin != user()->id)) {
+                $this->addPermission = user()->permission('add_tasks');
+                abort_403(!in_array($this->addPermission, ['all', 'added']));
+            }
+
+            DB::beginTransaction();
+            $ganttTaskArray = [];
+            $gantTaskLinkArray = [];
+            $taskBoardColumn = TaskboardColumn::where('slug', 'incomplete')->first();
+            if ($request->need_authorization == "true" && $request->sub_acknowledgement != null) {
+                $pending_parent_tasks = new PendingParentTasks();
+                $pending_parent_tasks->heading = $request->heading;
+                $pending_parent_tasks->description = $request->description;
+                $dueDate = ($request->has('without_duedate')) ? null : Carbon::createFromFormat($this->global->date_format, $request->due_date)->format('Y-m-d');
+                $pending_parent_tasks->start_date = Carbon::createFromFormat($this->global->date_format, $request->start_date)->format('Y-m-d');
+                $pending_parent_tasks->due_date = $dueDate;
+                $pending_parent_tasks->project_id = $request->project_id;
+                $pending_parent_tasks->category_id = $request->category_id;
+                $pending_parent_tasks->priority = $request->priority;
+                $pending_parent_tasks->board_column_id = $request->board_column_id;
+                $pending_parent_tasks->estimate_hours = $request->estimate_hours;
+                $pending_parent_tasks->estimate_minutes = $request->estimate_minutes;
+                $pending_parent_tasks->deliverable_id = $request->deliverable_id;
+                $pending_parent_tasks->milestone_id = $request->milestone_id;
+                $pending_parent_tasks->user_id = $request->user_id;
+                $pending_parent_tasks->added_by = Auth::user()->id;
+                $pending_parent_tasks->acknowledgement = $request->acknowledgement;
+                $pending_parent_tasks->sub_acknowledgement = $request->sub_acknowledgement;
+                $pending_parent_tasks->need_authorization = $request->need_authorization ? 1 : 0;
+                $pending_parent_tasks->save();
+
+                $helper = new HelperPendingActionController();
+
+
+                $helper->ParentTaskAuthorization($pending_parent_tasks);
+                if ($request->hasFile('file')) {
+                    $files = $request->file('file');
+                    $destinationPath = storage_path('app/public/');
+                    $file_name = [];
+
+                    foreach ($files as $file) {
+                        $taskFile = new TaskFile();
+                        $taskFile->task_id = $pending_parent_tasks->id;
+                        $filename = uniqid() . '.' . $file->getClientOriginalExtension();
+                        array_push($file_name, $filename);
+                        $taskFile->user_id = $this->user->id;
+                        $taskFile->filename = $filename;
+                        $taskFile->hashname = $filename;
+                        $taskFile->size = $file->getSize();
+                        $taskFile->save();
+
+                        Storage::disk('s3')->put('/' . $filename, file_get_contents($file));
+
+                        $this->logTaskActivity($pending_parent_tasks->id, $this->user->id, 'fileActivity', $pending_parent_tasks->board_column_id);
+                    }
+                }
+
+                if (is_array($request->user_id)) {
+                    // $assigned_to = User::find($request->user_id[0]);
+
+
+                    // $text = Auth::user()->name . ' assigned new task on ' . $assigned_to->name;
+                    // $link = '<a href="' . route('tasks.show', $pending_parent_tasks->id) . '">' . $text . '</a>';
+                    // $this->logProjectActivity($project->id, $link);
+
+                    // $this->triggerPusher('notification-channel', 'notification', [
+                    //     'user_id' => $assigned_to->id,
+                    //     'role_id' => $assigned_to->role_id,
+                    //     'title' => 'You have new task',
+                    //     'body' => 'Project managet assigned new task on you',
+                    //     'redirectUrl' => route('tasks.show', $pending_parent_tasks->id)
+                    // ]);
+
+                } else {
+                    // $assigned_to = User::find($request->user_id);
+
+                    // $text = Auth::user()->name . ' assigned new task on ' . $assigned_to->name;
+                    // $link = '<a href="' . route('tasks.show', $pending_parent_tasks->id) . '">' . $text . '</a>';
+                    // $this->logProjectActivity($project->id, $link);
+
+                    // $this->triggerPusher('notification-channel', 'notification', [
+                    //     'user_id' => $assigned_to->id,
+                    //     'role_id' => $assigned_to->role_id,
+                    //     'title' => 'You have new task',
+                    //     'body' => 'Project managet assigned new task on you',
+                    //     'redirectUrl' => route('tasks.show', $pending_parent_tasks->id)
+                    // ]);
+                }
+                $users = User::where('role_id', 1)->orWhere('role_id', 8)->get();
+                foreach ($users as $user) {
+                    Notification::send($user, new PendingParentTasksNotification($pending_parent_tasks));
+                }
+            } else {
+                $task = new Task();
+                $task->heading = $request->heading;
+
+                $task->description = str_replace('<p><br></p>', '', trim($request->description));
+
+                $dueDate = ($request->has('without_duedate')) ? null : Carbon::createFromFormat($this->global->date_format, $request->due_date)->format('Y-m-d');
+                $task->start_date = Carbon::createFromFormat($this->global->date_format, $request->start_date)->format('Y-m-d');
+                $task->due_date = $dueDate;
+                $task->project_id = $request->project_id;
+                $task->task_category_id = $request->category_id;
+                $task->priority = $request->priority;
+                $task->board_column_id = $taskBoardColumn->id;
+
+                // if ($request->has('dependent') && $request->has('dependent_task_id') && $request->dependent_task_id != '') {
+                //     $dependentTask = Task::findOrFail($request->dependent_task_id);
+
+                //     // if (!is_null($dependentTask->due_date) && !is_null($dueDate) && $dependentTask->due_date->greaterThan($dueDate)) {
+                //     //     /* @phpstan-ignore-line */
+                //     //     return Reply::error(__('messages.taskDependentDate'));
+                //     // }
+
+                //     $task->dependent_task_id = $request->dependent_task_id;
+                // }
+
+                $task->is_private = $request->has('is_private') ? 1 : 0;
+                $task->billable = $request->has('billable') && $request->billable ? 1 : 0;
+                $task->estimate_hours = $request->estimate_hours;
+                $task->estimate_minutes = $request->estimate_minutes;
+                $task->deliverable_id = $request->deliverable_id;
+
+                if ($request->board_column_id) {
+                    $task->board_column_id = $request->board_column_id;
+                }
+
+                if ($request->milestone_id != '') {
+                    $task->milestone_id = $request->milestone_id;
+                }
+
+                // Add repeated task
+                $task->repeat = $request->repeat ? 1 : 0;
+
+                if ($request->has('repeat')) {
+                    $task->repeat_count = $request->repeat_count;
+                    $task->repeat_type = $request->repeat_type;
+                    $task->repeat_cycles = $request->repeat_cycles;
+                }
+
+                $task->task_status = "pending";
+                $total_hours = $request->estimate_hours * 60;
+                $total_minutes = $request->estimate_minutes;
+                $total_in_minutes = $total_hours + $total_minutes;
+                $task->estimate_time_left_minutes = $total_in_minutes;
+
+                // Create UI Work Details
+                if($request->category_id == 5){
+                    $task->cms = $request->cms??null;
+                    $task->theme_name = $request->theme_name??null;
+                    $task->theme_template_library_link = $request->theme_template_library_link??null;
+                }
+
+                $task->added_by = Auth::id();
+                $task->created_by = Auth::id();
+                $task->save();
+
+                $task->task_short_code = ($project) ? $project->project_short_code . '-' . $task->id : null;
+                $task->saveQuietly();
+
+                // Create Graphic Work Details
+                if($request->category_id == 7){
+                    $graphicWorkDetails = GraphicWorkDetails::create([
+                        'task_id' => $task->id,
+                        'type_of_graphic_work_id' => $request->type_of_graphic_work_id,
+                        'type_of_logo' => $request->type_of_logo ?? null,
+                        'brand_name' => $request->brand_name ?? null,
+                        'number_of_versions' => $request->number_of_versions ?? null,
+                        'file_types_needed' => $request->file_types_needed ?? null,
+                        'design_instruction' => $request->design_instruction ?? null,
+                        'reference' => $request->reference ?? null,
+                        'font_name' => $request->font_name ?? null,
+                        'font_url' => $request->font_url ?? null,
+                        'primary_color' => $request->primary_color ?? null,
+                        'primary_color_description' => $request->primary_color_description ?? null,
+                        'secondary_colors' => $request->secondary_colors ?? null,
+                        'workable_url' => $request->workable_url ?? null,
+                        'file_extensions' => $request->file_extensions ?? null
+                    ]);
+
+                    // attach_text_files
+                    if ($request->hasFile('attach_text_files')) {
+                        $files = $request->file('attach_text_files');
+                        foreach ($files as $file) {
+                            $graphicTaskFile = new GraphicTaskFile();
+                            $graphicTaskFile->task_id = $task->id;
+                            $graphicTaskFile->graphic_work_detail_id = $graphicWorkDetails->id;
+                            $graphicTaskFile->file_type = 1;
+                            $filename = uniqid() . '.' . $file->getClientOriginalExtension();
+                            $graphicTaskFile->user_id = $this->user->id;
+                            $graphicTaskFile->filename = $filename;
+                            $graphicTaskFile->hashname = $filename;
+                            $graphicTaskFile->size = $file->getSize();
+                            $graphicTaskFile->save();
+                            Storage::disk('s3')->put('/' . $filename, file_get_contents($file));
+                        }
+                    }
+
+                    // workable_image_files
+                    if ($request->hasFile('workable_image_files')) {
+                        $files = $request->file('workable_image_files');
+                        foreach ($files as $file) {
+                            $graphicTaskFile = new GraphicTaskFile();
+                            $graphicTaskFile->task_id = $task->id;
+                            $graphicTaskFile->graphic_work_detail_id = $graphicWorkDetails->id;
+                            $graphicTaskFile->file_type = 2;
+                            $filename = uniqid() . '.' . $file->getClientOriginalExtension();
+                            $graphicTaskFile->user_id = $this->user->id;
+                            $graphicTaskFile->filename = $filename;
+                            $graphicTaskFile->hashname = $filename;
+                            $graphicTaskFile->size = $file->getSize();
+                            $graphicTaskFile->save();
+                            Storage::disk('s3')->put('/' . $filename, file_get_contents($file));
+                        }
+                    }
+
+                    // workable_image_or_video_files
+                    if ($request->hasFile('workable_image_or_video_files')) {
+                        $files = $request->file('workable_image_or_video_files');
+                        foreach ($files as $file) {
+                            $graphicTaskFile = new GraphicTaskFile();
+                            $graphicTaskFile->task_id = $task->id;
+                            $graphicTaskFile->graphic_work_detail_id = $graphicWorkDetails->id;
+                            $graphicTaskFile->file_type = 3;
+                            $filename = uniqid() . '.' . $file->getClientOriginalExtension();
+                            $graphicTaskFile->user_id = $this->user->id;
+                            $graphicTaskFile->filename = $filename;
+                            $graphicTaskFile->hashname = $filename;
+                            $graphicTaskFile->size = $file->getSize();
+                            $graphicTaskFile->save();
+                            Storage::disk('s3')->put('/' . $filename, file_get_contents($file));
+                        }
+                    }
+
+                    // brand_guideline_files
+                    if ($request->hasFile('brand_guideline_files')) {
+                        $files = $request->file('brand_guideline_files');
+                        foreach ($files as $file) {
+                            $graphicTaskFile = new GraphicTaskFile();
+                            $graphicTaskFile->task_id = $task->id;
+                            $graphicTaskFile->graphic_work_detail_id = $graphicWorkDetails->id;
+                            $graphicTaskFile->file_type = 4;
+                            $filename = uniqid() . '.' . $file->getClientOriginalExtension();
+                            $graphicTaskFile->user_id = $this->user->id;
+                            $graphicTaskFile->filename = $filename;
+                            $graphicTaskFile->hashname = $filename;
+                            $graphicTaskFile->size = $file->getSize();
+                            $graphicTaskFile->save();
+                            Storage::disk('s3')->put('/' . $filename, file_get_contents($file));
+                        }
+                    }
+
+                    // reference_files
+                    if ($request->hasFile('reference_files')) {
+                        $files = $request->file('reference_files');
+                        foreach ($files as $file) {
+                            $graphicTaskFile = new GraphicTaskFile();
+                            $graphicTaskFile->task_id = $task->id;
+                            $graphicTaskFile->graphic_work_detail_id = $graphicWorkDetails->id;
+                            $graphicTaskFile->file_type = 5;
+                            $filename = uniqid() . '.' . $file->getClientOriginalExtension();
+                            $graphicTaskFile->user_id = $this->user->id;
+                            $graphicTaskFile->filename = $filename;
+                            $graphicTaskFile->hashname = $filename;
+                            $graphicTaskFile->size = $file->getSize();
+                            $graphicTaskFile->save();
+                            Storage::disk('s3')->put('/' . $filename, file_get_contents($file));
+                        }
+                    }
+                }
+                
+
+                if ($request->hasFile('file')) {
+                    $files = $request->file('file');
+                    $destinationPath = storage_path('app/public/');
+                    $file_name = [];
+
+                    foreach ($files as $file) {
+                        $taskFile = new TaskFile();
+                        $taskFile->task_id = $task->id;
+                        $filename = uniqid() . '.' . $file->getClientOriginalExtension();
+                        array_push($file_name, $filename);
+                        $taskFile->user_id = $this->user->id;
+                        $taskFile->filename = $filename;
+                        $taskFile->hashname = $filename;
+                        $taskFile->size = $file->getSize();
+                        $taskFile->save();
+
+                        Storage::disk('s3')->put('/' . $filename, file_get_contents($file));
+
+                        $this->logTaskActivity($task->id, $this->user->id, 'fileActivity', $task->board_column_id);
+                    }
+                }
 
 
 
-        if ($validator->fails()) {
-            return response($validator->errors(), 422);
-        }
-        $project_id = Project::where('id', $request->project_id)->first();
-        $task_estimation_hours = Task::where('project_id', $project_id->id)->sum('estimate_hours');
-        $task_estimation_minutes = Task::where('project_id', $project_id->id)->sum('estimate_minutes');
-        $total_task_estimation_minutes = $task_estimation_hours * 60 + $task_estimation_minutes;
-        $left_minutes = ($project_id->hours_allocated - $request->estimate_hours) * 60 - ($total_task_estimation_minutes + $request->estimate_minutes);
+                // For gantt chart
+                if ($request->page_name && !is_null($task->due_date) && $request->page_name == 'ganttChart') {
+                    $parentGanttId = $request->parent_gantt_id;
 
-        $left_in_hours = round($left_minutes / 60, 0);
-        $left_in_minutes = $left_minutes % 60;
-        //dd($left_minutes);
-        if ($left_minutes < 0) {
-            // return response()->json([
-            //     "message" => "The given data was invalid.",
-            //     "errors" => [
-            //         "hours" => [
-            //             "Estimate hours cannot exceed from project allocation hours !"
-            //         ]
-            //     ]
-            // ], 422);
-        }
+                    /* @phpstan-ignore-next-line */
+                    $taskDuration = $task->due_date->diffInDays($task->start_date);
+                    /* @phpstan-ignore-line */
+                    $taskDuration = $taskDuration + 1;
 
+                    $ganttTaskArray[] = [
+                        'id' => $task->id,
+                        'text' => $task->heading,
+                        'start_date' => $task->start_date->format('Y-m-d'), /* @phpstan-ignore-line */
+                        'duration' => $taskDuration,
+                        'parent' => $parentGanttId,
+                        'taskid' => $task->id
+                    ];
 
-        if ($request->estimate_hours == 0 && $request->estimate_minutes == 0) {
-            // return response()->json([
-            //     "message" => "Wrong Input",
-            //     "errors" => [
-            //         "hours" => [
-            //             "Estimate hours and minutes cannot be 0 !"
-            //         ]
-            //     ]
-            // ], 422);
-        }
+                    $gantTaskLinkArray[] = [
+                        'id' => 'link_' . $task->id,
+                        'source' => $task->dependent_task_id != '' ? $task->dependent_task_id : $parentGanttId,
+                        'target' => $task->id,
+                        'type' => $task->dependent_task_id != '' ? 0 : 1
+                    ];
+                }
 
 
-        //dd($request);
-        $project = request('project_id') ? Project::findOrFail(request('project_id')) : null;
+                // DB::commit();
 
-        if (is_null($project) || ($project->project_admin != user()->id)) {
-            $this->addPermission = user()->permission('add_tasks');
-            abort_403(!in_array($this->addPermission, ['all', 'added']));
-        }
+                if (request()->add_more == 'true') {
+                    unset($request->project_id);
+                    $html = $this->create();
+                    return Reply::successWithData(__('messages.taskCreatedSuccessfully'), ['html' => $html, 'add_more' => true, 'taskID' => $task->id]);
+                }
 
-        // DB::beginTransaction();
-        $ganttTaskArray = [];
-        $gantTaskLinkArray = [];
-        $taskBoardColumn = TaskboardColumn::where('slug', 'incomplete')->first();
-        if ($request->need_authorization == "true" && $request->sub_acknowledgement != null) {
-            $pending_parent_tasks = new PendingParentTasks();
-            $pending_parent_tasks->heading = $request->heading;
-            $pending_parent_tasks->description = $request->description;
-            $dueDate = ($request->has('without_duedate')) ? null : Carbon::createFromFormat($this->global->date_format, $request->due_date)->format('Y-m-d');
-            $pending_parent_tasks->start_date = Carbon::createFromFormat($this->global->date_format, $request->start_date)->format('Y-m-d');
-            $pending_parent_tasks->due_date = $dueDate;
-            $pending_parent_tasks->project_id = $request->project_id;
-            $pending_parent_tasks->category_id = $request->category_id;
-            $pending_parent_tasks->priority = $request->priority;
-            $pending_parent_tasks->board_column_id = $request->board_column_id;
-            $pending_parent_tasks->estimate_hours = $request->estimate_hours;
-            $pending_parent_tasks->estimate_minutes = $request->estimate_minutes;
-            $pending_parent_tasks->deliverable_id = $request->deliverable_id;
-            $pending_parent_tasks->milestone_id = $request->milestone_id;
-            $pending_parent_tasks->user_id = $request->user_id;
-            $pending_parent_tasks->added_by = Auth::user()->id;
-            $pending_parent_tasks->acknowledgement = $request->acknowledgement;
-            $pending_parent_tasks->sub_acknowledgement = $request->sub_acknowledgement;
-            $pending_parent_tasks->need_authorization = $request->need_authorization ? 1 : 0;
-            $pending_parent_tasks->save();
+                if ($request->page_name && $request->page_name == 'ganttChart') {
 
-            $helper = new HelperPendingActionController();
+                    return Reply::successWithData(
+                        'messages.taskCreatedSuccessfully',
+                        [
+                            'tasks' => $ganttTaskArray,
+                            'links' => $gantTaskLinkArray
+                        ]
+                    );
+                }
+
+                if (is_array($request->user_id)) {
+                    $assigned_to = User::find($request->user_id[0]);
+
+                    if ($assigned_to->role_id == 6) {
+                        //need pending action
+                        $helper = new HelperPendingActionController();
 
 
-            $helper->ParentTaskAuthorization($pending_parent_tasks);
-            if ($request->hasFile('file')) {
-                $files = $request->file('file');
-                $destinationPath = storage_path('app/public/');
-                $file_name = [];
+                        $helper->NewTaskAssign($task);
 
-                foreach ($files as $file) {
-                    $taskFile = new TaskFile();
-                    $taskFile->task_id = $pending_parent_tasks->id;
-                    $filename = uniqid() . '.' . $file->getClientOriginalExtension();
-                    array_push($file_name, $filename);
-                    $taskFile->user_id = $this->user->id;
-                    $taskFile->filename = $filename;
-                    $taskFile->hashname = $filename;
-                    $taskFile->size = $file->getSize();
-                    $taskFile->save();
 
-                    Storage::disk('s3')->put('/' . $filename, file_get_contents($file));
+                        //need pending action
+                    }
+                    $text = Auth::user()->name . ' assigned new task on ' . $assigned_to->name;
+                    $link = '<a href="' . route('tasks.show', $task->id) . '">' . $text . '</a>';
+                    $this->logProjectActivity($project->id, $link);
 
-                    $this->logTaskActivity($pending_parent_tasks->id, $this->user->id, 'fileActivity', $pending_parent_tasks->board_column_id);
+                    $this->triggerPusher('notification-channel', 'notification', [
+                        'user_id' => $assigned_to->id,
+                        'role_id' => $assigned_to->role_id,
+                        'title' => 'You have new task',
+                        'body' => 'Project managet assigned new task on you',
+                        'redirectUrl' => route('tasks.show', $task->id)
+                    ]);
+                } else {
+                    $assigned_to = User::find($request->user_id);
+                    if ($assigned_to->role_id == 6) {
+                        //need pending action
+                        $helper = new HelperPendingActionController();
+
+
+                        $helper->NewTaskAssign($task);
+
+
+                        //need pending action
+                    }
+                    $text = Auth::user()->name . ' assigned new task on ' . $assigned_to->name;
+                    $link = '<a href="' . route('tasks.show', $task->id) . '">' . $text . '</a>';
+                    $this->logProjectActivity($project->id, $link);
+
+                    $this->triggerPusher('notification-channel', 'notification', [
+                        'user_id' => $assigned_to->id,
+                        'role_id' => $assigned_to->role_id,
+                        'title' => 'You have new task',
+                        'body' => 'Project managet assigned new task on you',
+                        'redirectUrl' => route('tasks.show', $task->id)
+                    ]);
                 }
             }
+            DB::commit();
+            return response()->json([
+                'status' => 200,
+                'message' => 'Task added successfully',
 
-            if (is_array($request->user_id)) {
-                // $assigned_to = User::find($request->user_id[0]);
+            ]);
 
+            // $redirectUrl = urldecode($request->redirect_url);
 
-                // $text = Auth::user()->name . ' assigned new task on ' . $assigned_to->name;
-                // $link = '<a href="' . route('tasks.show', $pending_parent_tasks->id) . '">' . $text . '</a>';
-                // $this->logProjectActivity($project->id, $link);
-
-                // $this->triggerPusher('notification-channel', 'notification', [
-                //     'user_id' => $assigned_to->id,
-                //     'role_id' => $assigned_to->role_id,
-                //     'title' => 'You have new task',
-                //     'body' => 'Project managet assigned new task on you',
-                //     'redirectUrl' => route('tasks.show', $pending_parent_tasks->id)
-                // ]);
-
-            } else {
-                // $assigned_to = User::find($request->user_id);
-
-                // $text = Auth::user()->name . ' assigned new task on ' . $assigned_to->name;
-                // $link = '<a href="' . route('tasks.show', $pending_parent_tasks->id) . '">' . $text . '</a>';
-                // $this->logProjectActivity($project->id, $link);
-
-                // $this->triggerPusher('notification-channel', 'notification', [
-                //     'user_id' => $assigned_to->id,
-                //     'role_id' => $assigned_to->role_id,
-                //     'title' => 'You have new task',
-                //     'body' => 'Project managet assigned new task on you',
-                //     'redirectUrl' => route('tasks.show', $pending_parent_tasks->id)
-                // ]);
-            }
-            $users = User::where('role_id', 1)->orWhere('role_id', 8)->get();
-            foreach ($users as $user) {
-                Notification::send($user, new PendingParentTasksNotification($pending_parent_tasks));
-            }
-        } else {
-            $task = new Task();
-            $task->heading = $request->heading;
-
-            $task->description = str_replace('<p><br></p>', '', trim($request->description));
-
-            $dueDate = ($request->has('without_duedate')) ? null : Carbon::createFromFormat($this->global->date_format, $request->due_date)->format('Y-m-d');
-            $task->start_date = Carbon::createFromFormat($this->global->date_format, $request->start_date)->format('Y-m-d');
-            $task->due_date = $dueDate;
-            $task->project_id = $request->project_id;
-            $task->task_category_id = $request->category_id;
-            $task->priority = $request->priority;
-            $task->board_column_id = $taskBoardColumn->id;
-
-            // if ($request->has('dependent') && $request->has('dependent_task_id') && $request->dependent_task_id != '') {
-            //     $dependentTask = Task::findOrFail($request->dependent_task_id);
-
-            //     // if (!is_null($dependentTask->due_date) && !is_null($dueDate) && $dependentTask->due_date->greaterThan($dueDate)) {
-            //     //     /* @phpstan-ignore-line */
-            //     //     return Reply::error(__('messages.taskDependentDate'));
-            //     // }
-
-            //     $task->dependent_task_id = $request->dependent_task_id;
+            // if ($redirectUrl == '') {
+            //     //$redirectUrl = url('/account/projects/418?tab=tasks');
+            //     $redirectUrl = route('projects.show', $request->project_id) . '?tab=tasks';
             // }
 
-            $task->is_private = $request->has('is_private') ? 1 : 0;
-            $task->billable = $request->has('billable') && $request->billable ? 1 : 0;
-            $task->estimate_hours = $request->estimate_hours;
-            $task->estimate_minutes = $request->estimate_minutes;
-            $task->deliverable_id = $request->deliverable_id;
-
-            if ($request->board_column_id) {
-                $task->board_column_id = $request->board_column_id;
-            }
-
-            if ($request->milestone_id != '') {
-                $task->milestone_id = $request->milestone_id;
-            }
-
-            // Add repeated task
-            $task->repeat = $request->repeat ? 1 : 0;
-
-            if ($request->has('repeat')) {
-                $task->repeat_count = $request->repeat_count;
-                $task->repeat_type = $request->repeat_type;
-                $task->repeat_cycles = $request->repeat_cycles;
-            }
-            $task->task_status = "pending";
-            $total_hours = $request->estimate_hours * 60;
-            $total_minutes = $request->estimate_minutes;
-            $total_in_minutes = $total_hours + $total_minutes;
-            $task->estimate_time_left_minutes = $total_in_minutes;
-            $task->added_by = Auth::id();
-            $task->created_by = Auth::id();
-
-
-            $task->save();
-
-
-
-            $task->task_short_code = ($project) ? $project->project_short_code . '-' . $task->id : null;
-            $task->saveQuietly();
-            if ($request->hasFile('file')) {
-                $files = $request->file('file');
-                $destinationPath = storage_path('app/public/');
-                $file_name = [];
-
-                foreach ($files as $file) {
-                    $taskFile = new TaskFile();
-                    $taskFile->task_id = $task->id;
-                    $filename = uniqid() . '.' . $file->getClientOriginalExtension();
-                    array_push($file_name, $filename);
-                    $taskFile->user_id = $this->user->id;
-                    $taskFile->filename = $filename;
-                    $taskFile->hashname = $filename;
-                    $taskFile->size = $file->getSize();
-                    $taskFile->save();
-
-                    Storage::disk('s3')->put('/' . $filename, file_get_contents($file));
-
-
-                    $this->logTaskActivity($task->id, $this->user->id, 'fileActivity', $task->board_column_id);
-                }
-            }
-
-
-
-            // For gantt chart
-            if ($request->page_name && !is_null($task->due_date) && $request->page_name == 'ganttChart') {
-                $parentGanttId = $request->parent_gantt_id;
-
-                /* @phpstan-ignore-next-line */
-                $taskDuration = $task->due_date->diffInDays($task->start_date);
-                /* @phpstan-ignore-line */
-                $taskDuration = $taskDuration + 1;
-
-                $ganttTaskArray[] = [
-                    'id' => $task->id,
-                    'text' => $task->heading,
-                    'start_date' => $task->start_date->format('Y-m-d'), /* @phpstan-ignore-line */
-                    'duration' => $taskDuration,
-                    'parent' => $parentGanttId,
-                    'taskid' => $task->id
-                ];
-
-                $gantTaskLinkArray[] = [
-                    'id' => 'link_' . $task->id,
-                    'source' => $task->dependent_task_id != '' ? $task->dependent_task_id : $parentGanttId,
-                    'target' => $task->id,
-                    'type' => $task->dependent_task_id != '' ? 0 : 1
-                ];
-            }
-
-
-            // DB::commit();
-
-            if (request()->add_more == 'true') {
-                unset($request->project_id);
-                $html = $this->create();
-                return Reply::successWithData(__('messages.taskCreatedSuccessfully'), ['html' => $html, 'add_more' => true, 'taskID' => $task->id]);
-            }
-
-            if ($request->page_name && $request->page_name == 'ganttChart') {
-
-                return Reply::successWithData(
-                    'messages.taskCreatedSuccessfully',
-                    [
-                        'tasks' => $ganttTaskArray,
-                        'links' => $gantTaskLinkArray
-                    ]
-                );
-            }
-
-            if (is_array($request->user_id)) {
-                $assigned_to = User::find($request->user_id[0]);
-
-                if ($assigned_to->role_id == 6) {
-                    //need pending action
-                    $helper = new HelperPendingActionController();
-
-
-                    $helper->NewTaskAssign($task);
-
-
-                    //need pending action
-                }
-                $text = Auth::user()->name . ' assigned new task on ' . $assigned_to->name;
-                $link = '<a href="' . route('tasks.show', $task->id) . '">' . $text . '</a>';
-                $this->logProjectActivity($project->id, $link);
-
-                $this->triggerPusher('notification-channel', 'notification', [
-                    'user_id' => $assigned_to->id,
-                    'role_id' => $assigned_to->role_id,
-                    'title' => 'You have new task',
-                    'body' => 'Project managet assigned new task on you',
-                    'redirectUrl' => route('tasks.show', $task->id)
-                ]);
-            } else {
-                $assigned_to = User::find($request->user_id);
-                if ($assigned_to->role_id == 6) {
-                    //need pending action
-                    $helper = new HelperPendingActionController();
-
-
-                    $helper->NewTaskAssign($task);
-
-
-                    //need pending action
-                }
-                $text = Auth::user()->name . ' assigned new task on ' . $assigned_to->name;
-                $link = '<a href="' . route('tasks.show', $task->id) . '">' . $text . '</a>';
-                $this->logProjectActivity($project->id, $link);
-
-                $this->triggerPusher('notification-channel', 'notification', [
-                    'user_id' => $assigned_to->id,
-                    'role_id' => $assigned_to->role_id,
-                    'title' => 'You have new task',
-                    'body' => 'Project managet assigned new task on you',
-                    'redirectUrl' => route('tasks.show', $task->id)
-                ]);
-            }
+            // return Reply::successWithData(__('messages.taskCreatedSuccessfully'), ['redirectUrl' => $redirectUrl, 'taskID' => $task->id]);
+        } catch (\Throwable $th) {
+            // throw $th;
+            DB::rollBack();
+            return response()->json([
+                'status' => 400,
+                'message' => 'Something went wrong!',
+    
+            ]);
         }
-        return response()->json([
-            'status' => 200,
-            'message' => 'Task added successfully',
-
-        ]);
-
-        // $redirectUrl = urldecode($request->redirect_url);
-
-        // if ($redirectUrl == '') {
-        //     //$redirectUrl = url('/account/projects/418?tab=tasks');
-        //     $redirectUrl = route('projects.show', $request->project_id) . '?tab=tasks';
-        // }
-
-        // return Reply::successWithData(__('messages.taskCreatedSuccessfully'), ['redirectUrl' => $redirectUrl, 'taskID' => $task->id]);
+        
     }
     public function EditTask(Request $request)
     {
@@ -2299,34 +2860,36 @@ class TaskController extends AccountBaseController
         }
         $project_id = Project::where('id', $request->project_id)->first();
         $task_id = Task::where('id', $request->task_id)->first();
-        $task_estimation_hours = Task::where('project_id', $project_id->id)->sum('estimate_hours');
-        $task_estimation_minutes = Task::where('project_id', $project_id->id)->sum('estimate_minutes');
+        $task_estimation_hours = Task::where('project_id', $project_id->id)->whereNull('subtask_id')->where('id', '!=', $request->task_id)->sum('estimate_hours');
+        $task_estimation_minutes = Task::where('project_id', $project_id->id)->whereNull('subtask_id')->where('id', '!=', $request->task_id)->sum('estimate_minutes');
         $total_task_estimation_minutes = $task_estimation_hours * 60 + $task_estimation_minutes;
         //  $left_minutes = ($project_id->hours_allocated+ $task_id->estimate_hours - $request->estimate_hours) * 60 - (($total_task_estimation_minutes  + $request->estimate_minutes);
-        $left_minutes = ($project_id->hours_allocated - $task_id->estimate_hours + $request->estimate_hours) * 60 - (($total_task_estimation_minutes - $task_id->estimate_minutes  + $request->estimate_minutes));
+        // $left_minutes = ($project_id->hours_allocated - $task_id->estimate_hours + $request->estimate_hours) * 60 - (($total_task_estimation_minutes - $task_id->estimate_minutes  + $request->estimate_minutes));
+        $left_minutes = ($project_id->hours_allocated - $request->estimate_hours) * 60 - (($total_task_estimation_minutes + $request->estimate_minutes));
+        // dd($left_minutes);
         $left_in_hours = round($left_minutes / 60, 0);
         $left_in_minutes = $left_minutes % 60;
         //   / dd($left_minutes);
-        // if ($left_minutes < 0) {
-        //     return response()->json([
-        //         "message" => "Something went wrong",
-        //         "errors" => [
-        //             "hours" => [
-        //                 "Estimate hours cannot exceed from project allocation hours !"
-        //             ]
-        //         ]
-        //     ], 422);
-        // }
-        // if ($request->estimate_hours == 0 && $request->estimate_minutes == 0) {
-        //     return response()->json([
-        //         "message" => "Wrong Input",
-        //         "errors" => [
-        //             "hours" => [
-        //                 "Estimate hours and minutes cannot be 0 !"
-        //             ]
-        //         ]
-        //     ], 422);
-        // }
+        if ($left_minutes < 0) {
+            return response()->json([
+                "message" => "Something went wrong",
+                "errors" => [
+                    "hours" => [
+                        "Estimate hours cannot exceed from project allocation hours !"
+                    ]
+                ]
+            ], 422);
+        }
+        if ($request->estimate_hours == 0 && $request->estimate_minutes == 0) {
+            return response()->json([
+                "message" => "Wrong Input",
+                "errors" => [
+                    "hours" => [
+                        "Estimate hours and minutes cannot be 0 !"
+                    ]
+                ]
+            ], 422);
+        }
 
 
         // dd($request);
@@ -2381,8 +2944,126 @@ class TaskController extends AccountBaseController
         $total_in_minutes = $total_hours + $total_minutes;
         $task->estimate_time_left_minutes = $total_in_minutes;
 
-
+        // Update UI Work Details
+        if($request->category_id == 5){
+            $task->cms = $request->cms??null;
+            $task->theme_name = $request->theme_name??null;
+            $task->theme_template_library_link = $request->theme_template_library_link??null;
+        }
+        
         $task->save();
+
+        // Update Graphic Work Details
+        if($request->category_id == 7){
+            $graphicWorkDetails = GraphicWorkDetails::updateOrCreate([
+                'task_id' => $task->id
+            ],[
+                'type_of_graphic_work_id' => $request->type_of_graphic_work_id,
+                'type_of_logo' => $request->type_of_logo ?? null,
+                'brand_name' => $request->brand_name ?? null,
+                'number_of_versions' => $request->number_of_versions ?? null,
+                'file_types_needed' => $request->file_types_needed ?? null,
+                'design_instruction' => $request->design_instruction ?? null,
+                'reference' => $request->reference ?? null,
+                'font_name' => $request->font_name ?? null,
+                'font_url' => $request->font_url ?? null,
+                'primary_color' => $request->primary_color ?? null,
+                'primary_color_description' => $request->primary_color_description ?? null,
+                'secondary_colors' => $request->secondary_colors ?? null,
+                'workable_url' => $request->workable_url ?? null,
+                'file_extensions' => $request->file_extensions ?? null
+            ]);
+            
+            // attach_text_files
+            if ($request->hasFile('attach_text_files')) {
+                $files = $request->file('attach_text_files');
+                foreach ($files as $file) {
+                    $graphicTaskFile = new GraphicTaskFile();
+                    $graphicTaskFile->task_id = $task->id;
+                    $graphicTaskFile->graphic_work_detail_id = $graphicWorkDetails->id;
+                    $graphicTaskFile->file_type = 1;
+                    $filename = uniqid() . '.' . $file->getClientOriginalExtension();
+                    $graphicTaskFile->user_id = $this->user->id;
+                    $graphicTaskFile->filename = $filename;
+                    $graphicTaskFile->hashname = $filename;
+                    $graphicTaskFile->size = $file->getSize();
+                    $graphicTaskFile->save();
+                    Storage::disk('s3')->put('/' . $filename, file_get_contents($file));
+                }
+            }
+
+            // workable_image_files
+            if ($request->hasFile('workable_image_files')) {
+                $files = $request->file('workable_image_files');
+                foreach ($files as $file) {
+                    $graphicTaskFile = new GraphicTaskFile();
+                    $graphicTaskFile->task_id = $task->id;
+                    $graphicTaskFile->graphic_work_detail_id = $graphicWorkDetails->id;
+                    $graphicTaskFile->file_type = 2;
+                    $filename = uniqid() . '.' . $file->getClientOriginalExtension();
+                    $graphicTaskFile->user_id = $this->user->id;
+                    $graphicTaskFile->filename = $filename;
+                    $graphicTaskFile->hashname = $filename;
+                    $graphicTaskFile->size = $file->getSize();
+                    $graphicTaskFile->save();
+                    Storage::disk('s3')->put('/' . $filename, file_get_contents($file));
+                }
+            }
+
+            // workable_image_or_video_files
+            if ($request->hasFile('workable_image_or_video_files')) {
+                $files = $request->file('workable_image_or_video_files');
+                foreach ($files as $file) {
+                    $graphicTaskFile = new GraphicTaskFile();
+                    $graphicTaskFile->task_id = $task->id;
+                    $graphicTaskFile->graphic_work_detail_id = $graphicWorkDetails->id;
+                    $graphicTaskFile->file_type = 3;
+                    $filename = uniqid() . '.' . $file->getClientOriginalExtension();
+                    $graphicTaskFile->user_id = $this->user->id;
+                    $graphicTaskFile->filename = $filename;
+                    $graphicTaskFile->hashname = $filename;
+                    $graphicTaskFile->size = $file->getSize();
+                    $graphicTaskFile->save();
+                    Storage::disk('s3')->put('/' . $filename, file_get_contents($file));
+                }
+            }
+
+            // brand_guideline_files
+            if ($request->hasFile('brand_guideline_files')) {
+                $files = $request->file('brand_guideline_files');
+                foreach ($files as $file) {
+                    $graphicTaskFile = new GraphicTaskFile();
+                    $graphicTaskFile->task_id = $task->id;
+                    $graphicTaskFile->graphic_work_detail_id = $graphicWorkDetails->id;
+                    $graphicTaskFile->file_type = 4;
+                    $filename = uniqid() . '.' . $file->getClientOriginalExtension();
+                    $graphicTaskFile->user_id = $this->user->id;
+                    $graphicTaskFile->filename = $filename;
+                    $graphicTaskFile->hashname = $filename;
+                    $graphicTaskFile->size = $file->getSize();
+                    $graphicTaskFile->save();
+                    Storage::disk('s3')->put('/' . $filename, file_get_contents($file));
+                }
+            }
+
+            // reference_files
+            if ($request->hasFile('reference_files')) {
+                $files = $request->file('reference_files');
+                foreach ($files as $file) {
+                    $graphicTaskFile = new GraphicTaskFile();
+                    $graphicTaskFile->task_id = $task->id;
+                    $graphicTaskFile->graphic_work_detail_id = $graphicWorkDetails->id;
+                    $graphicTaskFile->file_type = 5;
+                    $filename = uniqid() . '.' . $file->getClientOriginalExtension();
+                    $graphicTaskFile->user_id = $this->user->id;
+                    $graphicTaskFile->filename = $filename;
+                    $graphicTaskFile->hashname = $filename;
+                    $graphicTaskFile->size = $file->getSize();
+                    $graphicTaskFile->save();
+                    Storage::disk('s3')->put('/' . $filename, file_get_contents($file));
+                }
+            }
+        }
 
         $assignee = TaskUser::where('task_id', $task->id)->first();
         $assignee->user_id = $request->user_id;
@@ -4192,7 +4873,7 @@ class TaskController extends AccountBaseController
                      abort(403);
                 }
             }
-            $task = Task::with('users', 'createBy', 'boardColumn')->select([
+            $task = Task::with('graphicWorkDetail.graphicTaskFiles','users', 'createBy', 'boardColumn')->select([
                 'tasks.*',
                 'task_types.page_type',
                 'task_types.task_type',
@@ -4517,7 +5198,7 @@ class TaskController extends AccountBaseController
 
             //  dd($left_minutes);
 
-            $left_in_hours = round($left_minutes / 60, 0);
+            $left_in_hours = (int) ($left_minutes / 60);
             $left_in_minutes = $left_minutes % 60;
 
             return response()->json([
@@ -5308,75 +5989,107 @@ class TaskController extends AccountBaseController
         $raised_against =  $filter["raised_against"] ?? NULL;
         $client_id =   $filter["client_id"] ?? NULL;
 
+        $disputes = DB::table('task_revision_disputes as disputes')
+            ->leftJoin('task_revisions as revision', 'disputes.revision_id', 'revision.id')
+            ->leftJoin('projects', 'disputes.project_id', 'projects.id')
+            ->leftJoin('deals', 'projects.deal_id', 'deals.id')
+            ->select(
+                'disputes.*',
+                'revision.*',
+                'disputes.id as id',
+                'disputes.created_at as dispute_created_at',
+                'disputes.updated_at as dispute_updated_at',
+                'revision.id as revision_id',
+                'revision.created_at as revision_created_at',
+                'revision.updated_at as revision_updated_at',
+                'revision.raised_by_percent as revision_raised_by_percent',
+                'revision.raised_against_percent as revision_raised_against_percent',
+                'disputes.raised_by_percent as raised_by_percent',
+                'disputes.raised_against_percent as raised_against_percent',
+                'projects.id as project_id',
+                'projects.project_name as project_name',
+                'projects.client_id as client_id',
+                'projects.pm_id as pm_id',
+                'projects.deal_id as project_deal_id',
+                'deals.added_by as deal_added_by'
+            )
+            ->groupBy('revision.id')
+            ->where(function ($query) use ($task_id, $project_id, $dispute_id, $raised_by, $raised_against, $client_id, $start_date, $end_date, $logged_user) {
+                if ($task_id) {
+                    $query->where('disputes.task_id', $task_id);
+                }
 
+                if (collect([1, 8])->contains($logged_user->role_id)) {
+                    if ($raised_by) {
+                        $query->where('disputes.raised_by', $raised_by);
+                    }
 
-        //get user
-        function get_user($user_id, $is_client)
-        {
-            $user = User::where('id', $user_id)->get()->first();
-            $user_response = [
-                "id" => $user->id,
-                "name" => $user->name,
-                "image" => $user->image,
-                "role_id" => $user->role_id,
-            ];
+                    if ($raised_against) {
+                        $query->where('disputes.raised_against', $raised_against);
+                    }
+                } else {
+                    $query->where('disputes.raised_against', $logged_user->id)
+                        ->orWhere('disputes.raised_by', $logged_user->id);
+                }
 
-            if (!$is_client) {
-                $employee_details = [
-                    "designation" => $user->employeeDetail ? $user->employeeDetail->designation->name : null,
-                    "emplyee_id" => $user->employeeDetail ? $user->employeeDetail->employee_id : null,
-                ];
-                $user_response = array_merge($user_response, $employee_details);
-            }
+                if ($client_id) {
+                    $query->where('projects.client_id', $client_id);
+                }
 
-            return $user_response;
-        }
+                if ($project_id) {
+                    $query->where('disputes.project_id', $project_id);
+                }
 
-        // get task details
-        function get_task($task_id)
-        {
-            // TODO: get task details here...
-             
+                if ($dispute_id) {
+                    $query->where('disputes.id', $dispute_id);
+                }
 
-            $task = DB::table('tasks')
-                ->where('tasks.id', $task_id)
-                ->leftJoin('project_members', 'tasks.project_id', 'project_members.project_id')
-                ->leftJoin('task_users', 'tasks.id', 'task_users.task_id')
-                ->select(
-                    'tasks.id as id',
-                    'tasks.heading as title',
-                    'tasks.subtask_id',
-                    'tasks.created_by as task_added_by',
-                    'task_users.user_id as task_user_id',
-                    'tasks.task_category_id as task_category'
-                )
-                ->first();
+                if ($start_date) {
+                    $query->whereDate('disputes.created_at', '>=', Carbon::create($start_date)->format('Y-m-d'));
+                }
+
+                if ($end_date) {
+                    $query->whereDate('disputes.created_at', '<=', Carbon::create($end_date)->format('Y-m-d'));
+                }
+            })
             
-           
-            // if subtask 
-            if($task->subtask_id){
-                // get subtask details
-                $subtask = DB::table('sub_tasks') 
-                    ->where('id', $task->subtask_id)
-                    ->first(); 
-                    
-                // lead developer 
-                $lead_dev = 2252;
-                $lead_developer = get_user($lead_dev, false);
-                $developer = get_user($subtask->assigned_to, false);
+            ->get();
 
-                $task->lead_developer = $lead_developer ?? null;
-                $task->developer = $developer ?? null;
-                $task->parent_task = get_task($subtask->task_id); 
 
-                return $task;
-            }else {
-                $lead_developer = get_user($task->task_user_id, false);
-                $task->lead_developer = $lead_developer ?? null; 
-                return $task;
+        $disputes->each(function ($dispute) {
+            $dispute->raised_against = $this->get_user($dispute->raised_against, false);
+            $dispute->raised_by = $this->get_user($dispute->raised_by, false);
+            $conversation = DB::table('task_dispute_questions')->where('dispute_id', $dispute->id)->get();
+            $dispute->conversations = $conversation ?? [];
+            $dispute->task = $this->get_task($dispute->task_id);
+            $dispute->client = $this->get_user($dispute->client_id, true);
+            $dispute->project_manager = $this->get_user($dispute->pm_id, false);
+            $dispute->sales_person = $this->get_user($dispute->deal_added_by, false);
+            if ($dispute->resolved_by) {
+                $dispute->resolved_by = $this->get_user($dispute->resolved_by, false);
             }
- 
-        }
+            if ($dispute->winner) {
+                $dispute->winner = $this->get_user($dispute->winner, false);
+            }
+            if ($dispute->authorized_by) {
+                $dispute->authorized_by = $this->get_user($dispute->authorized_by, false);
+            }
+        });
+
+        return response()->json($disputes, 200);
+    }
+    public function exportTaskDisput(Request $request)
+    {
+        $logged_user = Auth::user();
+
+        $start_date = $request->start_date ?? null;
+        $end_date = $request->end_date ?? null;
+        $task_id = $request->task_id ?? null;
+        $project_id = $request->project_id ?? null;
+        $dispute_id = $request->dispute_id ?? null;
+        $raised_by = $request->dispute_raised_by ?? null;
+        $raised_against = $request->dispute_raised_against ?? null;
+        $client_id =   $request->client_id ?? null;
 
         $disputes = DB::table('task_revision_disputes as disputes')
             ->leftJoin('task_revisions as revision', 'disputes.revision_id', 'revision.id')
@@ -5446,26 +6159,29 @@ class TaskController extends AccountBaseController
 
 
         $disputes->each(function ($dispute) {
-            $dispute->raised_against = get_user($dispute->raised_against, false);
-            $dispute->raised_by = get_user($dispute->raised_by, false);
+            $dispute->raised_against = $this->get_user($dispute->raised_against, false);
+            $dispute->raised_by = $this->get_user($dispute->raised_by, false);
             $conversation = DB::table('task_dispute_questions')->where('dispute_id', $dispute->id)->get();
             $dispute->conversations = $conversation ?? [];
-            $dispute->task = get_task($dispute->task_id);
-            $dispute->client = get_user($dispute->client_id, true);
-            $dispute->project_manager = get_user($dispute->pm_id, false);
-            $dispute->sales_person = get_user($dispute->deal_added_by, false);
+            $dispute->task = $this->get_task($dispute->task_id);
+            $dispute->client = $this->get_user($dispute->client_id, true);
+            $dispute->project_manager = $this->get_user($dispute->pm_id, false);
+            $dispute->sales_person = $this->get_user($dispute->deal_added_by, false);
             if ($dispute->resolved_by) {
-                $dispute->resolved_by = get_user($dispute->resolved_by, false);
+                $dispute->resolved_by = $this->get_user($dispute->resolved_by, false);
             }
             if ($dispute->winner) {
-                $dispute->winner = get_user($dispute->winner, false);
+                $dispute->winner = $this->get_user($dispute->winner, false);
             }
             if ($dispute->authorized_by) {
-                $dispute->authorized_by = get_user($dispute->authorized_by, false);
+                $dispute->authorized_by = $this->get_user($dispute->authorized_by, false);
             }
         });
 
-        return response()->json($disputes, 200);
+        return response()->json([
+            'data' => $disputes,
+            'status' => 200
+        ]);
     }
 
     public function get_disputes(Request $request)
@@ -5804,77 +6520,6 @@ class TaskController extends AccountBaseController
 
         $author = Auth::user();
 
-
-         //get user
-         function get_user($user_id, $is_client){
-            if(!$user_id) return;
-            $user = User::where( 'id', $user_id)->get()->first();
-            $user_response = [
-                "id" => $user->id,
-                "name" => $user->name,
-                "image" => $user->image,
-                "role_id" => $user->role_id,
-           ];
-
-
-            if(!$is_client){
-                $employee_details = [
-                    "designation" => $user->employeeDetail ? $user->employeeDetail->designation->name : null,
-                    "emplyee_id" => $user->employeeDetail ? $user->employeeDetail->employee_id : null,
-                ];
-                $user_response = array_merge($user_response, $employee_details);
-            }
-
-           return $user_response;
-        }
-
-        // get task details
-        function get_task($task_id)
-        {
-            // TODO: get task details here...
-             
-
-            $task = DB::table('tasks')
-                ->where('tasks.id', $task_id)
-                ->leftJoin('project_members', 'tasks.project_id', 'project_members.project_id')
-                ->leftJoin('task_users', 'tasks.id', 'task_users.task_id')
-                ->select(
-                    'tasks.id as id',
-                    'tasks.heading as title',
-                    'tasks.subtask_id',
-                    'tasks.created_by as task_added_by',
-                    'task_users.user_id as task_user_id',
-                    'tasks.task_category_id as task_category'
-                )
-                ->first();
-            
-           
-            // if subtask 
-            if($task->subtask_id){
-                // get subtask details
-                $subtask = DB::table('sub_tasks') 
-                    ->where('id', $task->subtask_id)
-                    ->first(); 
-                    
-                // lead developer 
-                $lead_dev = $subtask->added_by;
-                $lead_developer = get_user($lead_dev, false);
-                $developer = get_user($subtask->assigned_to, false);
-
-                $task->lead_developer = $lead_developer ?? null;
-                $task->developer = $developer ?? null;
-                $task->parent_task = get_task($subtask->task_id); 
-
-                return $task;
-            }else {
-                $lead_developer = get_user($task->task_user_id, false);
-                $task->lead_developer = $lead_developer ?? null; 
-                return $task;
-            }
- 
-        }
-
-
         $revisions = DB::table('task_revisions as revisions')
                     ->leftJoin('projects', 'revisions.project_id', 'projects.id')
                     ->leftJoin('deals', 'projects.deal_id', 'deals.id')
@@ -5953,16 +6598,16 @@ class TaskController extends AccountBaseController
 
 
                     foreach ($revisions as $revision) {
-                        $revision->task_assign_to = get_user($revision->task_assign_to, false);
-                        $revision->client = get_user($revision->clientId, true);
-                        $revision->deal_added_by = get_user($revision->deal_added_by, false);
-                        $revision->project_manager = get_user($revision->pm_id, false);
+                        $revision->task_assign_to = $this->get_user($revision->task_assign_to, false);
+                        $revision->client = $this->get_user($revision->clientId, true);
+                        $revision->deal_added_by = $this->get_user($revision->deal_added_by, false);
+                        $revision->project_manager = $this->get_user($revision->pm_id, false);
 
                         if ($revision->sale_person) {
-                            $revision->sale_person = get_user($revision->sale_person, false);
+                            $revision->sale_person = $this->get_user($revision->sale_person, false);
                         }
 
-                        $revision->added_by = get_user($revision->added_by, false);
+                        $revision->added_by = $this->get_user($revision->added_by, false);
 
                         if ($revision->subtask_id) {
                             $revision->lead_developer = $revision->added_by;
@@ -5996,6 +6641,73 @@ class TaskController extends AccountBaseController
         return response()->json($data, 200);
     }
 
+    public function get_user($user_id, $is_client){
+        if(!$user_id) return;
+        $user = User::where( 'id', $user_id)->get()->first();
+        $user_response = [
+            "id" => $user->id,
+            "name" => $user->name,
+            "image" => $user->image,
+            "role_id" => $user->role_id,
+       ];
+
+
+        if(!$is_client){
+            $employee_details = [
+                "designation" => $user->employeeDetail ? $user->employeeDetail->designation->name : null,
+                "emplyee_id" => $user->employeeDetail ? $user->employeeDetail->employee_id : null,
+            ];
+            $user_response = array_merge($user_response, $employee_details);
+        }
+
+       return $user_response;
+    }
+
+    public function get_task($task_id)
+    {
+        // TODO: get task details here...
+            
+
+        $task = DB::table('tasks')
+            ->where('tasks.id', $task_id)
+            ->leftJoin('project_members', 'tasks.project_id', 'project_members.project_id')
+            ->leftJoin('task_users', 'tasks.id', 'task_users.task_id')
+            ->select(
+                'tasks.id as id',
+                'tasks.heading as title',
+                'tasks.subtask_id',
+                'tasks.created_by as task_added_by',
+                'task_users.user_id as task_user_id',
+                'tasks.task_category_id as task_category'
+            )
+            ->first();
+        
+        
+        // if subtask 
+        if($task->subtask_id){
+            // get subtask details
+            $subtask = DB::table('sub_tasks') 
+                ->where('id', $task->subtask_id)
+                ->first(); 
+                
+            // lead developer 
+            $lead_dev = $subtask->added_by;
+            $lead_developer = $this->get_user($lead_dev, false);
+            $developer = $this->get_user($subtask->assigned_to, false);
+
+            $task->lead_developer = $lead_developer ?? null;
+            $task->developer = $developer ?? null;
+            $task->parent_task = $this->get_task($subtask->task_id); 
+
+            return $task;
+        }else {
+            $lead_developer = $this->get_user($task->task_user_id, false);
+            $task->lead_developer = $lead_developer ?? null; 
+            return $task;
+        }
+
+    }
+
     /************** GET TASKS REVISIONs ************* */
     public function task_revisions(Request $request){
         $filter = [
@@ -6012,6 +6724,143 @@ class TaskController extends AccountBaseController
 
 
         return $this-> get_task_revision($filter);
+    }
+
+
+    public function exportTaskRevision(Request $request) 
+    {
+        $client = $request->client ?? null;
+        $sale = $request->sale ?? null;
+        $revision_id = $request->revision_id ?? null;
+        $raised_by = $request->raised_by ?? null;
+        $project_manager = $request->project_manager ?? null;
+        $lead = $request->lead ?? null;
+        $project = $request->project ?? null;
+        $start_date = $request->startDate ?? null;
+        $end_date = $request->endDate ?? null;
+        $against_to = $request->against_to ?? null;
+
+        $author = Auth::user();
+
+        $revisions = DB::table('task_revisions as revisions')
+                    ->leftJoin('projects', 'revisions.project_id', 'projects.id')
+                    ->leftJoin('deals', 'projects.deal_id', 'deals.id')
+                    ->leftJoin('tasks', 'revisions.task_id', 'tasks.id')
+                    ->leftJoin('task_users', 'tasks.id', 'task_users.task_id')
+                    ->select(
+                      'revisions.*',
+                      'revisions.created_at as revision_created_at',
+                      'revisions.updated_at as revision_updated_at',
+                      'projects.id as project_id',
+                      'projects.project_name as project_name',
+                      'projects.client_id as clientId',
+                      'projects.pm_id as pm_id',
+                      'projects.deal_id as project_deal_id',
+                      'projects.status as project_status',
+                      'deals.added_by as deal_added_by',
+                      'tasks.*',
+                      'tasks.id as task_id',
+                      'revisions.id as id',
+                      'tasks.status as task_status',
+                      'task_users.user_id as task_assign_to',
+                    )
+                    ->where(function($query) use ($author, $revision_id, $client, $sale, $raised_by, $project_manager, $lead, $project, $start_date,$end_date){
+                        if($author->role_id != 1 && $author->role_id != 8){
+                           $query->where('task_users.user_id', $author->id)
+                                ->orWhere('tasks.added_by', $author->id)
+                                ->orWhere('revisions.added_by', $author->id)
+                                ->orWhere('revisions.sale_person', $author->id);
+                        }
+
+                        if($revision_id){
+                            $query->where('revisions.id', $revision_id);
+                        }
+
+                        if($sale){
+                            $query->where('deals.added_by', $sale);
+                        }
+
+                        if($client){
+                            $query->where('projects.client_id', $client);
+                        }
+
+                        if($raised_by){
+                            $query->where('tasks.added_by', $raised_by);
+                        }
+
+                        if($project_manager){
+                            $query->where('projects.pm_id', $project_manager);
+                        }
+
+                        if($lead){
+                            $query->where('task_users.user_id', $lead);
+                        }
+
+                        if($project){
+                            $query->where('projects.id', $project);
+                        }
+
+                        if (!is_null($start_date) && !is_null($end_date) && $start_date == $end_date) {
+                            $query->whereDate('revisions.created_at', '=', Carbon::parse($start_date)->format('Y-m-d'));
+                        } else {
+                            if (!is_null($start_date)) {
+                                $query->whereDate('revisions.created_at', '>=', Carbon::parse($start_date)->format('Y-m-d'));
+                            }
+                            if (!is_null($end_date)) {
+                                $query->whereDate('revisions.created_at', '<=', Carbon::parse($end_date)->format('Y-m-d'));
+                            }
+                        }
+
+
+                    })
+                    ->get();
+
+                    $data = [];
+
+
+                    foreach ($revisions as $revision) {
+                        $revision->task_assign_to = $this->get_user($revision->task_assign_to, false);
+                        $revision->client = $this->get_user($revision->clientId, true);
+                        $revision->deal_added_by = $this->get_user($revision->deal_added_by, false);
+                        $revision->project_manager = $this->get_user($revision->pm_id, false);
+
+                        if ($revision->sale_person) {
+                            $revision->sale_person = $this->get_user($revision->sale_person, false);
+                        }
+
+                        $revision->added_by = $this->get_user($revision->added_by, false);
+                        if ($revision->subtask_id) {
+                            $revision->lead_developer = $revision->added_by;
+                            $revision->developer = $revision->task_assign_to;
+                        } else {
+                            $revision->lead_developer = $revision->task_assign_to;
+                            $revision->developer = null;
+                        }
+
+                        if($against_to){
+
+                            if($revision->dispute_between == 'SPR' && $revision->sale_person['id'] == $against_to) {
+                                $data[] = $revision;
+                            }
+
+                            if($revision->dispute_between == 'LDR' && $revision->task_assign_to['id'] == $against_to){
+                                $data[] = $revision;
+                            }
+
+                            if($revision->dispute_between == 'PLR' && $revision->task_assign_to['id'] == $against_to){
+                                $data[] = $revision;
+                            }
+
+                            if($revision->dispute_between == 'CPR' && $revision->project_manager['id'] == $against_to){
+                                $data[] = $revision;
+                            }
+                        } else $data[] = $revision;
+                    }
+
+        return response()->json([
+            'data' => $data,
+            'status' => 200
+        ]);
     }
 
 
@@ -6505,7 +7354,7 @@ class TaskController extends AccountBaseController
             // DB::raw('COALESCE((SELECT SUM(project_time_logs.total_minutes) FROM project_time_logs WHERE project_time_logs.task_id = tasks.id  AND DATE(project_time_logs.start_time) >= daily_submissions.created_at AND DATE(project_time_logs.end_time) <= daily_submissions.created_at), 0) as total_time_spent'),
         )
             ->join('tasks', 'tasks.id', '=', 'daily_submissions.task_id')
-            ->join('task_types', 'tasks.id', '=', 'task_types.task_id')
+            ->leftJoin('task_types', 'tasks.id', '=', 'task_types.task_id')
             ->join('users as employee', 'employee.id', '=', 'daily_submissions.user_id')
             ->join('users as client', 'client.id', '=', 'daily_submissions.client_id')
             ->join('projects', 'projects.id', '=', 'daily_submissions.project_id')
@@ -7321,5 +8170,29 @@ class TaskController extends AccountBaseController
         ]);
     }
     
+    public function deleteGraphicTaskFile($id)
+    {
+        try {
+            $graphicTaskFile = GraphicTaskFile::find($id);
+            if($graphicTaskFile){
+                $graphicTaskFile->delete();
+                return response()->json([
+                    'data' => 'The graphic task file deleted successfully',
+                    'status'=>200
+                ]);
+            }else{
+                return response()->json([
+                    'data' => 'Data not found!',
+                    'status'=>400
+                ]);
+            }
+        } catch (\Throwable $th) {
+            //throw $th;
+            return response()->json([
+                'data' => 'Something went wrong!',
+                'status'=>400
+            ]);
+        }
+    }
 
 }

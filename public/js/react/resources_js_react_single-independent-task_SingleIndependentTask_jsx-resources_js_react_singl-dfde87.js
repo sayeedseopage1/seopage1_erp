@@ -1060,7 +1060,9 @@ var SingleIndependentTask = function SingleIndependentTask() {
   var params = (0,react_router_dom__WEBPACK_IMPORTED_MODULE_29__.useParams)();
 
   // lazily get task details
-  var _useLazyGetTaskDetail = (0,_services_api_SingleTaskPageApi__WEBPACK_IMPORTED_MODULE_7__.useLazyGetTaskDetailsQuery)(),
+  var _useLazyGetTaskDetail = (0,_services_api_SingleTaskPageApi__WEBPACK_IMPORTED_MODULE_7__.useLazyGetTaskDetailsQuery)({
+      skip: !(params !== null && params !== void 0 && params.taskId)
+    }),
     _useLazyGetTaskDetail2 = _slicedToArray(_useLazyGetTaskDetail, 2),
     getTaskDetails = _useLazyGetTaskDetail2[0],
     _useLazyGetTaskDetail3 = _useLazyGetTaskDetail2[1],
@@ -1080,8 +1082,6 @@ var SingleIndependentTask = function SingleIndependentTask() {
     isWorkingEnvLoading = _useLazyGetWorkingEnv3.isLoading;
   var task = new _utils_single_task__WEBPACK_IMPORTED_MODULE_9__.SingleTask(Task); // task instance
   var loggedUser = new _utils_user_details__WEBPACK_IMPORTED_MODULE_10__.User((_window = window) === null || _window === void 0 || (_window = _window.Laravel) === null || _window === void 0 ? void 0 : _window.user); // logged users data
-
-  // console.log(task);
 
   (0,react__WEBPACK_IMPORTED_MODULE_2__.useEffect)(function () {
     _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
@@ -12619,7 +12619,9 @@ var TaskEditForm = function TaskEditForm(_ref2) {
     _useState28 = _slicedToArray(_useState27, 2),
     error = _useState28[0],
     setError = _useState28[1];
-  var _useGetTaskDetailsQue = (0,_services_api_SingleTaskPageApi__WEBPACK_IMPORTED_MODULE_14__.useGetTaskDetailsQuery)("/".concat(task.id, "/json?mode=estimation_time")),
+  var _useGetTaskDetailsQue = (0,_services_api_SingleTaskPageApi__WEBPACK_IMPORTED_MODULE_14__.useGetTaskDetailsQuery)("/".concat(task === null || task === void 0 ? void 0 : task.id, "/json?mode=estimation_time"), {
+      skip: !(task !== null && task !== void 0 && task.id)
+    }),
     estimation = _useGetTaskDetailsQue.data,
     isFetching = _useGetTaskDetailsQue.isFetching;
   var required_error = (error === null || error === void 0 ? void 0 : error.status) === 422 ? error === null || error === void 0 ? void 0 : error.data : null;

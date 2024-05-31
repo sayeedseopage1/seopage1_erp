@@ -259,11 +259,11 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
 
 var columns = [{
-  id: 'serial_number',
-  header: 'SL. No.',
-  className: '',
+  id: "serial_number",
+  header: "SL. No.",
+  className: "",
   sorted: false,
-  sortAccessor: '',
+  sortAccessor: "",
   cell: function cell(row) {
     var rendom = Math.random(8).toString(36).substring(7);
     return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsxs)("span", {
@@ -271,27 +271,27 @@ var columns = [{
     });
   }
 }, {
-  id: 'date',
-  header: 'Date',
-  className: '',
+  id: "date",
+  header: "Date",
+  className: "",
   sorted: false,
-  sortAccessor: '',
+  sortAccessor: "",
   cell: function cell(row) {
     return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)("span", {
-      children: dayjs__WEBPACK_IMPORTED_MODULE_7___default()(row === null || row === void 0 ? void 0 : row.created_at).format('MMM DD, YYYY')
+      children: dayjs__WEBPACK_IMPORTED_MODULE_7___default()(row === null || row === void 0 ? void 0 : row.created_at).format("MMM DD, YYYY")
     });
   }
 }, {
-  id: 'duration',
-  header: 'Duration',
-  className: '',
+  id: "duration",
+  header: "Duration",
+  className: "",
   sorted: false,
-  sortAccessor: '',
+  sortAccessor: "",
   cell: function cell(row) {
     var duration = row !== null && row !== void 0 && row.durations ? JSON.parse(row === null || row === void 0 ? void 0 : row.durations) : null;
     return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsxs)("div", {
       style: {
-        minWidth: '150px'
+        minWidth: "150px"
       },
       children: [duration && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsxs)("table", {
         children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)("thead", {
@@ -318,16 +318,16 @@ var columns = [{
           })
         })]
       }), ((row === null || row === void 0 ? void 0 : row.transition_hours) || (row === null || row === void 0 ? void 0 : row.transition_minutes)) && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsxs)("div", {
-        children: [row === null || row === void 0 ? void 0 : row.transition_hours, " Hours ", row === null || row === void 0 ? void 0 : row.transition_minutes, " Minutes"]
+        children: [row === null || row === void 0 ? void 0 : row.transition_hours, " Hours", " ", row === null || row === void 0 ? void 0 : row.transition_minutes, " Minutes"]
       })]
     });
   }
 }, {
-  id: 'task',
-  header: 'Task',
-  className: '',
+  id: "task",
+  header: "Task",
+  className: "",
   sorted: false,
-  sortAccessor: '',
+  sortAccessor: "",
   cell: function cell(row) {
     return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)("span", {
       children: row !== null && row !== void 0 && row.forgot_to_track_task_id ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)("a", {
@@ -340,11 +340,11 @@ var columns = [{
     });
   }
 }, {
-  id: 'client',
-  header: 'Client',
-  className: '',
+  id: "client",
+  header: "Client",
+  className: "",
   sorted: false,
-  sortAccessor: '',
+  sortAccessor: "",
   cell: function cell(row) {
     var client = row === null || row === void 0 ? void 0 : row.client;
     return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)("span", {
@@ -358,11 +358,11 @@ var columns = [{
     });
   }
 }, {
-  id: 'project',
-  header: 'Project',
-  className: '',
+  id: "project",
+  header: "Project",
+  className: "",
   sorted: false,
-  sortAccessor: '',
+  sortAccessor: "",
   cell: function cell(row) {
     return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)("span", {
       children: row !== null && row !== void 0 && row.related_to_any_project ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)("a", {
@@ -375,22 +375,22 @@ var columns = [{
     });
   }
 }, {
-  id: 'reason',
-  header: 'Reason',
-  className: '',
+  id: "reason",
+  header: "Reason",
+  className: "",
   sorted: false,
-  sortAccessor: '',
+  sortAccessor: "",
   cell: function cell(row) {
     return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)("div", {
       children: row === null || row === void 0 ? void 0 : row.reason_for_less_tracked_hours_a_day_task
     });
   }
 }, {
-  id: 'explanation_from_employee',
-  header: 'Explanation From Employee',
-  className: '',
+  id: "explanation_from_employee",
+  header: "Explanation From Employee",
+  className: "",
   sorted: false,
-  sortAccessor: '',
+  sortAccessor: "",
   cell: function cell(row) {
     return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsxs)("div", {
       children: [(row === null || row === void 0 ? void 0 : row.child_reason) && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsxs)("div", {
@@ -405,18 +405,18 @@ var columns = [{
     });
   }
 }, {
-  id: 'action',
-  header: 'Action',
-  className: '',
+  id: "action",
+  header: "Action",
+  className: "",
   sorted: false,
-  sortAccessor: '',
+  sortAccessor: "",
   cell: function cell(row) {
     return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)(_ReportResolvePreviewModal__WEBPACK_IMPORTED_MODULE_4__["default"], {
       row: row
     });
   }
 }, {
-  id: 'managements_comment',
+  id: "managements_comment",
   header: "Top Management Comment",
   sorted: false,
   cell: function cell() {
@@ -473,7 +473,7 @@ var TimeLogHIstoryModalTable = function TimeLogHIstoryModalTable(_ref) {
     setRenderData(_toConsumableArray(paginated));
   }, [data, currentPage, perPageData]);
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(function () {
-    getTimeLogHistoryDetails("".concat(row === null || row === void 0 ? void 0 : row.employee_id, "?start_date=").concat(filter === null || filter === void 0 ? void 0 : filter.start_date, "&end_data=").concat(filter === null || filter === void 0 ? void 0 : filter.end_date)).unwrap().then(function (res) {
+    getTimeLogHistoryDetails("".concat(row === null || row === void 0 ? void 0 : row.employee_id, "?start_date=").concat(filter === null || filter === void 0 ? void 0 : filter.start_date, "&end_date=").concat(filter === null || filter === void 0 ? void 0 : filter.end_date)).unwrap().then(function (res) {
       var sortedData = lodash__WEBPACK_IMPORTED_MODULE_3___default().orderBy(res, ["id"], ["desc"]);
       handleData(sortedData, currentPage, perPageData);
       setData(sortedData);
@@ -484,7 +484,7 @@ var TimeLogHIstoryModalTable = function TimeLogHIstoryModalTable(_ref) {
     });
   }, []);
 
-  // data sort handle 
+  // data sort handle
   var handleSorting = function handleSorting(sort) {
     var sortData = orderBy.apply(void 0, [data].concat(_toConsumableArray(sort)));
     handleData(sortData, currentPage, perPageData);
@@ -520,7 +520,7 @@ var TimeLogHIstoryModalTable = function TimeLogHIstoryModalTable(_ref) {
       children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)("div", {
         className: "position-relative sp1_tlr_tbl_wrapper",
         style: {
-          maxHeight: '80vh'
+          maxHeight: "80vh"
         },
         children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsxs)("table", {
           className: "sp1_tlr_table",
