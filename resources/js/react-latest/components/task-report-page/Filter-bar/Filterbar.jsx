@@ -20,12 +20,17 @@ const Filterbar = ({ onFilter, page = "tasks" }) => {
     const [developer, setDeveloper] = React.useState(null);
     const [client, setClient] = React.useState(null);
     const [reportIssuer, setReportIssuer] = React.useState(null);
-    const [accountableIndividual, setAccountableIndividual] = React.useState(null);
-    const [status, setStatus] = React.useState({ id: "1_ts_r_1", column_name: 'All', title: 'all' });
+    const [accountableIndividual, setAccountableIndividual] =
+        React.useState(null);
+    const [status, setStatus] = React.useState({
+        id: "1_ts_r_1",
+        column_name: "All",
+        title: "all",
+    });
     const [dateType, setDateType] = React.useState("Created Date");
     const [selectedProject, setSelectedProject] = React.useState(null);
-    const { data: getProjectsOptions, isFetching } = useGetProjectsOptionsQuery('');
-
+    const { data: getProjectsOptions, isFetching } =
+        useGetProjectsOptionsQuery("");
 
     const { width } = useWindowSize();
 
@@ -38,10 +43,16 @@ const Filterbar = ({ onFilter, page = "tasks" }) => {
     const _developer = React.useMemo(() => developer, [developer]);
     const _client = React.useMemo(() => client, [client]);
     const _reportIssuer = React.useMemo(() => reportIssuer, [reportIssuer]);
-    const _accountableIndividual = React.useMemo(() => accountableIndividual, [accountableIndividual]);
+    const _accountableIndividual = React.useMemo(
+        () => accountableIndividual,
+        [accountableIndividual]
+    );
     const _status = React.useMemo(() => status, [status]);
     const date_filter_by = React.useMemo(() => dateType, [dateType]);
-    const _selectedProject = React.useMemo(() => selectedProject, [selectedProject]);
+    const _selectedProject = React.useMemo(
+        () => selectedProject,
+        [selectedProject]
+    );
 
     React.useEffect(() => {
         const filter = {
@@ -49,11 +60,15 @@ const Filterbar = ({ onFilter, page = "tasks" }) => {
             start_date,
             end_date,
             client_id: _client?.id,
+            client_name: _client?.name,
             project_id: _selectedProject ? _selectedProject.id : null,
+            project_name: _selectedProject ? _selectedProject.name : null,
             report_issuer_id: _reportIssuer?.id,
+            report_issuer_name: _reportIssuer?.name,
             accountable_individual_id: _accountableIndividual?.id,
-            // status: _status?.id,
-            // date_filter_by,
+            accountable_individual_name: _accountableIndividual?.name,
+            status_id: _status?.id,
+            status_name: _status?.column_name,
         };
 
         onFilter(filter, _status);
@@ -66,16 +81,16 @@ const Filterbar = ({ onFilter, page = "tasks" }) => {
         _accountableIndividual,
         _status,
         date_filter_by,
-        _selectedProject
+        _selectedProject,
     ]);
 
     const handleProjectFilter = (e, data) => {
         if (data) {
             setSelectedProject(data);
         } else {
-            setSelectedProject(null)
+            setSelectedProject(null);
         }
-    }
+    };
 
     const loggedUser = new User(window.Laravel.user);
 
@@ -92,7 +107,6 @@ const Filterbar = ({ onFilter, page = "tasks" }) => {
 
             {width > 1400 && (
                 <React.Fragment>
-
                     {/* client filter */}
                     <UserFilter
                         title="Client"
@@ -103,36 +117,35 @@ const Filterbar = ({ onFilter, page = "tasks" }) => {
 
                     <HDivider />
 
-
                     {/* projects filter */}
                     <ProjectFilterItem
                         title="Projects"
-                        items={getProjectsOptions ? [...getProjectsOptions] : []}
+                        items={
+                            getProjectsOptions ? [...getProjectsOptions] : []
+                        }
                         isLoading={isFetching}
                         selected={selectedProject}
                         onSelect={handleProjectFilter}
                     />
 
-
                     <HDivider />
 
                     {/* Report Issuer */}
-                    {
-                        _.includes([5, 6, 9, 10], loggedUser.getRoleId()) ?
-                            <ReadOnlyUserFilter
-                                title={"Report Issuer"}
-                                text={window.Laravel.user.name}
-                            /> :
-                            <UserFilter
-                                title="Report Issuer"
-                                state={reportIssuer}
-                                setState={setReportIssuer}
-                                roleIds={[5, 6, 9, 10]}
-                            />
-                    }
+                    {_.includes([5, 6, 9, 10], loggedUser.getRoleId()) ? (
+                        <ReadOnlyUserFilter
+                            title={"Report Issuer"}
+                            text={window.Laravel.user.name}
+                        />
+                    ) : (
+                        <UserFilter
+                            title="Report Issuer"
+                            state={reportIssuer}
+                            setState={setReportIssuer}
+                            roleIds={[5, 6, 9, 10]}
+                        />
+                    )}
 
                     <HDivider />
-
 
                     {/* Accountable Individual */}
                     <UserFilter
@@ -142,19 +155,12 @@ const Filterbar = ({ onFilter, page = "tasks" }) => {
                         roleIds={[4, 6, 8]}
                     />
 
-
                     <HDivider />
-
 
                     {/* status */}
-                    <StatusFilter
-                        state={status}
-                        setState={setStatus}
-                    />
-
+                    <StatusFilter state={status} setState={setStatus} />
 
                     <HDivider />
-
                 </React.Fragment>
             )}
 
@@ -180,7 +186,9 @@ const Filterbar = ({ onFilter, page = "tasks" }) => {
                                 reportIssuer={reportIssuer}
                                 setReportIssuer={setReportIssuer}
                                 accountableIndividual={accountableIndividual}
-                                setAccountableIndividual={setAccountableIndividual}
+                                setAccountableIndividual={
+                                    setAccountableIndividual
+                                }
                                 status={status}
                                 setStatus={setStatus}
                                 selectedProject={selectedProject}

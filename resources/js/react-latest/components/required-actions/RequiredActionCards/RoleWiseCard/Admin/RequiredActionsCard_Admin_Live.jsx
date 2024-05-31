@@ -7,19 +7,25 @@ import useTimer from "../../../../../hooks/useTimer";
 import { useCallback } from "react";
 
 export default function RequiredActionsCard_Admin_Live({ data }) {
-    const {time} = useTimer(dayjs(data.created_at).add(Number(data?.timeframe), "hours"),{
-        stopOnExpire: true,
-    })
+    const { time } = useTimer(
+        dayjs(data.created_at).add(Number(data?.timeframe), "hours"),
+        {
+            stopOnExpire: true,
+        }
+    );
 
-
-    const handleMessageShow = useCallback((type)=>{
-      if (type === "PDA" || type === "DTDA") {
-        return `${data.message} ${time.h || 0} hour ${time.m || 0} minutes`;
-      } else {
-        return data.message;
-      }
-    },[time,data])
-
+    const handleMessageShow = useCallback(
+        (type) => {
+            if (type === "PDA" || type === "DTDA") {
+                return `${data.message} ${time.h || 0} hour ${
+                    time.m || 0
+                } minutes`;
+            } else {
+                return data.message;
+            }
+        },
+        [time, data]
+    );
 
     return (
         <div className={style.card_container}>
@@ -33,7 +39,9 @@ export default function RequiredActionsCard_Admin_Live({ data }) {
                     {/* card subtitle */}
                     <p className={style.subtitle}>
                         <span
-                            dangerouslySetInnerHTML={{ __html: handleMessageShow(data?.code) }}
+                            dangerouslySetInnerHTML={{
+                                __html: handleMessageShow(data?.code),
+                            }}
                         />{" "}
                         {/* from */}
                     </p>
@@ -58,20 +66,20 @@ export default function RequiredActionsCard_Admin_Live({ data }) {
                             className={style.action_expire_time_icon}
                         /> */}
                         {/* <article> */}
-                            <span className={style.highlight}>
-                                Generated on
-                            </span>
-                            <span>
-                                {dayjs(data.created_at).format("DD-MM-YYYY")}
-                                {" "}
-                                {dayjs(data.created_at).format("h a")}
-                            </span>
+                        <span className={style.highlight}>Generated on</span>
+                        <span>
+                            {dayjs(data.created_at).format("DD-MM-YYYY")}{" "}
+                            {dayjs(data.created_at).format("h a")}
+                        </span>
                         {/* </article> */}
                     </div>
 
                     {/* action count down */}
                     <ShowTimer
-                        targetTime={dayjs(data.created_at).add(Number(data.timeframe), "hours")}
+                        targetTime={dayjs(data.created_at).add(
+                            Number(data.timeframe),
+                            "hours"
+                        )}
                     />
                 </aside>
             </div>

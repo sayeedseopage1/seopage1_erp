@@ -2,6 +2,8 @@
 
 use Route as GlobalRoute;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\CrossDeptWork;
+use App\Http\Controllers\DealController;
 use App\Http\Controllers\GdprController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\LeadController;
@@ -10,10 +12,16 @@ use App\Http\Controllers\LeaveController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ClientController;
+use App\Http\Controllers\DMDealController;
+use App\Http\Controllers\DMLeadController;
+use App\Http\Controllers\FilterController;
 use App\Http\Controllers\ImportController;
 use App\Http\Controllers\NoticeController;
+use App\Http\Controllers\PointsController;
+use App\Http\Controllers\PolicyController;
 use App\Http\Controllers\SearchController;
 use App\Http\Controllers\TicketController;
+use App\Http\Controllers\DisputeController;
 use App\Http\Controllers\ExpenseController;
 use App\Http\Controllers\HolidayController;
 use App\Http\Controllers\InvoiceController;
@@ -22,24 +30,30 @@ use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ProjectController;
+use App\Http\Controllers\ProjectCredential;
 use App\Http\Controllers\SubTaskController;
 use App\Http\Controllers\TimelogController;
 use App\Http\Controllers\ContractController;
 use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\EstimateController;
+use App\Http\Controllers\InsightsController;
 use App\Http\Controllers\LeadFileController;
 use App\Http\Controllers\LeadNoteController;
 use App\Http\Controllers\ProposalController;
 use App\Http\Controllers\RegisterController;
+use App\Http\Controllers\RevisionController;
 use App\Http\Controllers\SettingsController;
 use App\Http\Controllers\TaskFileController;
 use App\Http\Controllers\TaskNoteController;
 use App\Http\Controllers\ClientDocController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\DealBoardController;
 use App\Http\Controllers\EventFileController;
+use App\Http\Controllers\IncentiveController;
 use App\Http\Controllers\LeadBoardController;
 use App\Http\Controllers\LeaveTypeController;
 use App\Http\Controllers\PaypalIPNController;
+use App\Http\Controllers\PortfolioController;
 use App\Http\Controllers\PublicUrlController;
 use App\Http\Controllers\TaskBoardController;
 use App\Http\Controllers\TaskLabelController;
@@ -50,8 +64,11 @@ use App\Http\Controllers\ClientNoteController;
 use App\Http\Controllers\CreditNoteController;
 use App\Http\Controllers\DepartmentController;
 use App\Http\Controllers\DiscussionController;
+use App\Http\Controllers\DMContractController;
 use App\Http\Controllers\GoogleAuthController;
+use App\Http\Controllers\KpiSettingController;
 use App\Http\Controllers\StickyNoteController;
+use App\Http\Controllers\SuggestionController;
 use App\Http\Controllers\TaskReportController;
 use App\Http\Controllers\TaxSettingController;
 use App\Http\Controllers\TicketFileController;
@@ -59,7 +76,6 @@ use App\Http\Controllers\TicketTypeController;
 use App\Http\Controllers\CustomFieldController;
 use App\Http\Controllers\DesignationController;
 use App\Http\Controllers\EmployeeDocController;
-use App\Http\Controllers\KnowledgeBaseCategoryController;
 use App\Http\Controllers\LeadCategoyController;
 use App\Http\Controllers\LeadSettingController;
 use App\Http\Controllers\LeaveReportController;
@@ -68,6 +84,7 @@ use App\Http\Controllers\MessageFileController;
 use App\Http\Controllers\ProductFileController;
 use App\Http\Controllers\ProjectFileController;
 use App\Http\Controllers\ProjectNoteController;
+use App\Http\Controllers\ReportIssueController;
 use App\Http\Controllers\SmtpSettingController;
 use App\Http\Controllers\SubTaskFileController;
 use App\Http\Controllers\TaskCommentController;
@@ -75,12 +92,16 @@ use App\Http\Controllers\TaskSettingController;
 use App\Http\Controllers\TicketAgentController;
 use App\Http\Controllers\TicketGroupController;
 use App\Http\Controllers\TicketReplyController;
+use App\Http\Controllers\ClientReviewController;
 use App\Http\Controllers\ContractFileController;
 use App\Http\Controllers\ContractTypeController;
 use App\Http\Controllers\CustomModuleController;
 use App\Http\Controllers\GdprSettingsController;
 use App\Http\Controllers\LeaveSettingController;
 use App\Http\Controllers\NotificationController;
+use App\Http\Controllers\PmGoalSetingController;
+use App\Http\Controllers\ProjectBoardController;
+use App\Http\Controllers\Seopage1TeamController;
 use App\Http\Controllers\SlackSettingController;
 use App\Http\Controllers\TaskCalendarController;
 use App\Http\Controllers\TaskCategoryController;
@@ -90,11 +111,16 @@ use App\Http\Controllers\ClientContactController;
 use App\Http\Controllers\ContractRenewController;
 use App\Http\Controllers\EmployeeShiftController;
 use App\Http\Controllers\EventCalendarController;
+use App\Http\Controllers\ExpenseReportController;
 use App\Http\Controllers\FinanceReportController;
 use App\Http\Controllers\KnowledgeBaseController;
 use App\Http\Controllers\ModuleSettingController;
+use App\Http\Controllers\PendingActionController;
+use App\Http\Controllers\PmPaymentReleaseHistory;
 use App\Http\Controllers\ProjectMemberController;
 use App\Http\Controllers\ProjectRatingController;
+use App\Http\Controllers\ProjectStatusController;
+use App\Http\Controllers\ReportCentralController;
 use App\Http\Controllers\TicketChannelController;
 use App\Http\Controllers\TicketSettingController;
 use App\Http\Controllers\TimelogReportController;
@@ -110,6 +136,7 @@ use App\Http\Controllers\ProfileSettingController;
 use App\Http\Controllers\ProjectSettingController;
 use App\Http\Controllers\PublicLeadGdprController;
 use App\Http\Controllers\PusherSettingsController;
+use App\Http\Controllers\QualifiedSalesController;
 use App\Http\Controllers\RolePermissionController;
 use App\Http\Controllers\StorageSettingController;
 use App\Http\Controllers\TimeLogSettingController;
@@ -119,19 +146,26 @@ use App\Http\Controllers\CurrencySettingController;
 use App\Http\Controllers\DiscussionFilesController;
 use App\Http\Controllers\DiscussionReplyController;
 use App\Http\Controllers\ExpenseCategoryController;
+use App\Http\Controllers\IndependentTaskController;
 use App\Http\Controllers\LanguageSettingController;
 use App\Http\Controllers\Payment\PayfastController;
 use App\Http\Controllers\ProductCategoryController;
 use App\Http\Controllers\ProjectCategoryController;
 use App\Http\Controllers\ProjectTemplateController;
 use App\Http\Controllers\SecuritySettingController;
+use App\Http\Controllers\SoftwareProjectController;
 use App\Http\Controllers\TimelogCalendarController;
 use App\Http\Controllers\AttendanceReportController;
+use App\Http\Controllers\ContractTemplateController;
 use App\Http\Controllers\EmergencyContactController;
+use App\Http\Controllers\IncentiveSettingController;
+use App\Http\Controllers\IssuedTaskReportController;
 use App\Http\Controllers\LeadAgentSettingController;
+use App\Http\Controllers\MonthlyIncentiveController;
 use App\Http\Controllers\Payment\PaystackController;
 use App\Http\Controllers\Payment\RazorPayController;
 use App\Http\Controllers\ProjectMilestoneController;
+use App\Http\Controllers\ProposalTemplateController;
 use App\Http\Controllers\PushNotificationController;
 use App\Http\Controllers\RecurringExpenseController;
 use App\Http\Controllers\RecurringInvoiceController;
@@ -143,64 +177,30 @@ use App\Http\Controllers\LeadSourceSettingController;
 use App\Http\Controllers\LeadStatusSettingController;
 use App\Http\Controllers\Payment\AuthorizeController;
 use App\Http\Controllers\SocialAuthSettingController;
+use App\Http\Controllers\TypeOfGraphicWorkController;
 use App\Http\Controllers\ContractDiscussionController;
-use App\Http\Controllers\ContractTemplateController;
 use App\Http\Controllers\DiscussionCategoryController;
 use App\Http\Controllers\ProductSubCategoryController;
+use App\Http\Controllers\RevisionCalculatorController;
 use App\Http\Controllers\TicketEmailSettingController;
 use App\Http\Controllers\NotificationSettingController;
 use App\Http\Controllers\Payment\FlutterwaveController;
 use App\Http\Controllers\ProjectTemplateTaskController;
 use App\Http\Controllers\ProjectTimelogBreakController;
+use App\Http\Controllers\NonCashPointSettingsController;
 use App\Http\Controllers\TicketReplyTemplatesController;
 use App\Http\Controllers\DatabaseBackupSettingController;
 use App\Http\Controllers\EmployeeShiftScheduleController;
-use App\Http\Controllers\ExpenseReportController;
 use App\Http\Controllers\GoogleCalendarSettingController;
 use App\Http\Controllers\IncomeVsExpenseReportController;
+use App\Http\Controllers\KnowledgeBaseCategoryController;
 use App\Http\Controllers\OfflinePaymentSettingController;
 use App\Http\Controllers\Payment\StripeWebhookController;
 use App\Http\Controllers\ProjectTemplateMemberController;
 use App\Http\Controllers\ProjectTemplateSubTaskController;
 use App\Http\Controllers\PaymentGatewayCredentialController;
-use App\Http\Controllers\ProposalTemplateController;
 use App\Http\Controllers\EmployeeShiftChangeRequestController;
-use App\Http\Controllers\DealController;
-use App\Http\Controllers\DealBoardController;
-use App\Http\Controllers\ProjectBoardController;
-use App\Http\Controllers\ReportIssueController;
-use App\Http\Controllers\SuggestionController;
-use App\Http\Controllers\SoftwareProjectController;
-use App\Http\Controllers\InsightsController;
-use App\Http\Controllers\Seopage1TeamController;
-use App\Http\Controllers\KpiSettingController;
-use App\Http\Controllers\IncentiveSettingController;
-use App\Http\Controllers\PointsController;
-use App\Http\Controllers\PortfolioController;
-use App\Http\Controllers\ProjectCredential;
-use App\Http\Controllers\IncentiveController;
-use App\Http\Controllers\PolicyController;
-use App\Http\Controllers\ReportCentralController;
-use App\Http\Controllers\MonthlyIncentiveController;
-use App\Http\Controllers\QualifiedSalesController;
-use App\Http\Controllers\PendingActionController;
-use App\Http\Controllers\NonCashPointSettingsController;
-use App\Http\Controllers\ClientReviewController;
-use App\Http\Controllers\CrossDeptWork;
-use App\Http\Controllers\DisputeController;
-use App\Http\Controllers\FilterController;
-use App\Http\Controllers\DMContractController;
-use App\Http\Controllers\DMDealController;
-use App\Http\Controllers\DMLeadController;
 use App\Http\Controllers\EvaluationController;
-use App\Http\Controllers\IndependentTaskController;
-
-use App\Http\Controllers\RevisionCalculatorController;
-use App\Http\Controllers\PmPaymentReleaseHistory;
-use App\Http\Controllers\RevisionController;
-use App\Http\Controllers\IssuedTaskReportController;
-use App\Http\Controllers\PmGoalSetingController;
-use App\Http\Controllers\ProjectStatusController;
 use App\Http\Controllers\SalesRiskPolicyController;
 
 /*
@@ -374,6 +374,7 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
     Route::get('/menu/filter/get-employee', [PointsController::class, 'get_employe_by_filter_options']);
     //sales point routes
     Route::post('/point-table-data', [PointsController::class, 'get_point_table_data']);
+    Route::get('export-point-data', [PointsController::class, 'exportPointData']);
     //search bar routes
     Route::get('search-bar-filter', [PointsController::class, 'get_all_search_bar_data']);
     //sales points all routes
@@ -405,6 +406,7 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
     Route::get('check-in-status', [DashboardController::class, 'clockInStatus']);
     Route::post('/developer/daily-minimum-track-hours-log/acknowledgement', [DashboardController::class, 'developerDailytrackHoursLog']);
     Route::put('check-out-status', [DashboardController::class, 'clockOutStatus']);
+
     /** DEVELOPER CHECK IN CHECK OUT START*/
 
     /* Setting menu routes starts from here */
@@ -793,6 +795,7 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
     Route::get('tasks/get-task-status/{id}', [TaskController::class, 'GetTaskStatus']);
     //task revision
     Route::get('tasks/revisions', [TaskController::class, 'task_revisions']);
+    Route::get('export-task-revisions-data', [TaskController::class, 'exportTaskRevision']);
     //task revision json routes
     Route::get('tasks/get-task-revision/{id}', [TaskController::class, 'GetRevision']);
     //developer daily routes
@@ -909,8 +912,10 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
     Route::get('tasks/get-sub-tasks/report-issues/{id}', [TaskController::class, 'get_sub_tasks_report_issues']);
     //subtasks table data
     Route::get('tasks/get-subtasks', [TaskController::class, 'get_subtasks'])->name('get-subtasks');
+    Route::get('export-subtask-data', [TaskController::class, 'exportSubTaskData']);
     //get tasks data
     Route::get('tasks/get-tasks', [TaskController::class, 'get_tasks'])->name('get-tasks');
+    Route::get('export-task-data', [TaskController::class, 'exportTaskData']);
     //developers today task data
     Route::get('tasks/get-today-tasks/{id}', [TaskController::class, 'get_today_tasks']);
     //developer daily submissions
@@ -939,15 +944,16 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
 
     /******* Independent TASK Start ******** */
     Route::get('independent/{any?}', [IndependentTaskController::class, 'index'])
-        ->where('any', '^(?!api\/)[\/\w\.-]*')
-        ->where('any', '^(?:(?!\d+).)*');
-    Route::resource('independent-task', IndependentTaskController::class);
-    Route::get('get-independent-task', [IndependentTaskController::class, 'independentTaskGet'])->name('independent-task-get');
-    Route::get('independent-task-show', [IndependentTaskController::class, 'independentTaskShow'])->name('independent-task-show');
-    Route::get('get-all-independent-task', [IndependentTaskController::class, 'independentTaskAll'])->name('get-all-independent-task');
-    Route::get('independent-task/{task_id}/subtask', [IndependentTaskController::class, 'independentSubTask'])->name('get-independent-subtask');
-    Route::get('independent-subtasks', [IndependentTaskController::class, 'independentAllSubTask'])->name('get-independent-all-sub-task');
-    /******* Independent TASK End ******** */
+    ->where('any', '^(?!api\/)[\/\w\.-]*')
+    ->where('any', '^(?:(?!\d+).)*');
+    Route::resource('independent-task',IndependentTaskController::class);
+    Route::get('get-independent-task',[IndependentTaskController::class,'independentTaskGet'])->name('independent-task-get');
+    Route::get('independent-task-show',[IndependentTaskController::class,'independentTaskShow'])->name('independent-task-show');
+    Route::get('get-all-independent-task',[IndependentTaskController::class,'independentTaskAll'])->name('get-all-independent-task');
+    Route::get('independent-task/{task_id}/subtask',[IndependentTaskController::class,'independentSubTask'])->name('get-independent-subtask');
+    Route::get('independent-subtasks',[IndependentTaskController::class,'independentAllSubTask'])->name('get-independent-all-sub-task');
+    Route::get('export-independent-task', [IndependentTaskController::class, 'exportIndependentTask']);
+     /******* Independent TASK End ******** */
 
     /******* PENDING PARENT TASK CONVERSATION ******** */
     Route::get('pending-task-conversations/{task_id}', [TaskController::class, 'get_pending_parent_task_conversation_question'])->name('pending-task-conversations');
@@ -963,6 +969,7 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
     Route::get('independent-task-clients', [IndependentTaskController::class, 'clients']);
     /******* TASK DISPUTE ******** */
     Route::get('task-disputes', [TaskController::class, 'get_disputes'])->name('task-disputes');
+    Route::get('export-task-dispute', [TaskController::class, 'exportTaskDisput']);
     Route::post('task-dispute-question', [TaskController::class, 'store_dispute_question'])->name('task-dispute-question');
     Route::put('task-dispute-question-answer', [TaskController::class, 'update_dispute_question_with_answer'])->name('task-dispute-question-answer');
     Route::put('task-dispute-submit-to-auth', [TaskController::class, 'dispute_send_for_authorization'])->name('task-dispute-submit-to-auth');
@@ -1139,9 +1146,9 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
     //Monthly Incentive Settings
     Route::resource('monthly-incentive', MonthlyIncentiveController::class);
     Route::get('monthly-incentive/download/{id}', [MonthlyIncentiveController::class, 'download'])->name('monthly-incentive.download');
-    
+
     Route::get('monthly-incentive/get-json/index', [MonthlyIncentiveController::class, 'get_index_json']);
-    
+
     Route::resource('employee-evaluation', EvaluationController::class);
     Route::get('get-all-evaluation', [EvaluationController::class,'getAllEvaluation']);
     //Pm goal Settings
@@ -1151,6 +1158,7 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
     /* PM PROJECT STATUS */
     Route::resource('project-status', ProjectStatusController::class);
     Route::get('get-project-status-date', [ProjectStatusController::class, 'allProjectStatus']);
+    Route::get('export-project-status-data', [ProjectStatusController::class, 'exportProjectStatus']);
     Route::get('get-pm-goal-date/{id}', [ProjectStatusController::class, 'allProjectPmGoal']);
     Route::get('project-status-calendar', [ProjectStatusController::class, 'projectStatusCalendar'])->name('project-status-calendar');
     Route::get('calendar-show/{id}', [ProjectStatusController::class, 'calendarShow'])->name('calendar.show');
@@ -1167,8 +1175,9 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
 
 
 
-    Route::resource('qualified-sales', QualifiedSalesController::class);
-    Route::get('qualified-sales/get-points/{id}', [QualifiedSalesController::class, 'get_point_details']);
+    Route::resource('qualified-sales',QualifiedSalesController::class);
+    Route::get('qualified-sales/get-points/{id}',[QualifiedSalesController::class,'get_point_details']);
+    Route::get('export-qualified-sales-data', [QualifiedSalesController::class,'exportQualifiedSales']);
 
 
 
@@ -1270,6 +1279,7 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
     Route::get('revision-calculator-data/total-dispute/{id}', [RevisionCalculatorController::class, 'TotalDispute']);
     Route::get('revision-calculator-data/dispute-not-resolve/{id}', [RevisionCalculatorController::class, 'DisputeNotResolve']);
     Route::get('revision-calculator-data/pending-issues/{id}', [RevisionCalculatorController::class, 'PendingIssues']);
+    Route::get('export-revision-calculator-data', [RevisionCalculatorController::class, 'exportRevisionCalculatorData']);
 
 
     // Contracts
@@ -1539,7 +1549,10 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
     Route::get('/filter-cms-categories', [PortfolioController::class, 'filterCmsCategories'])->name('filter-cms-categories');
     Route::get('/filter-data/{dataId}', [PortfolioController::class, 'filterDataShow']);
 
-    //  Route::any('tasks/{any?}', [TaskController::class, 'home'])->where('any', '.*');
+  //  Route::any('tasks/{any?}', [TaskController::class, 'home'])->where('any', '.*');
+
+    // Graphic task files delete
+    Route::get('graphic-task-file/delete/{id}', [TaskController::class, 'deleteGraphicTaskFile'])->name('graphic.task.file.delete');
 });
 
 //custom route for seopage1
@@ -1825,3 +1838,7 @@ Route::get('/server-time-status', [TaskController::class, 'dailyServerStatus']);
 
 // sale risk policies
 SalesRiskPolicyController::Routes();
+Route::group(['middleware' => 'auth'], function () {
+    Route::get('type-of-graphic-works', TypeOfGraphicWorkController::class)->name('typeof.graphic.works');
+});
+

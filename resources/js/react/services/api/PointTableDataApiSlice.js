@@ -1,38 +1,43 @@
-import { apiSlice } from "./apiSlice";            
+import { apiSlice } from "./apiSlice";
 
 const pointTableDataApiSlice = apiSlice.injectEndpoints({
     endpoints: (build) => ({
-       pointTableData: build.mutation({
+        pointTableData: build.mutation({
             query: (data) => ({
                 url: `/account/point-table-data`,
-                method: 'POST',
+                method: "POST",
                 body: {
                     ...data,
-                    _token: document.querySelector("meta[name='csrf-token']").getAttribute("content")
+                    _token: document
+                        .querySelector("meta[name='csrf-token']")
+                        .getAttribute("content"),
                 },
-            })
-       }),
-       
-       
-       nonCashPoint: build.mutation({
-        query: (data) => ({
-            url: `/account/store-non-cash-points`,
-            method: 'POST',
-            body: {
-                ...data,
-                _token: document.querySelector("meta[name='csrf-token']").getAttribute("content")
-            },
-        })
-       })
+            }),
+        }),
 
-    })
+        nonCashPoint: build.mutation({
+            query: (data) => ({
+                url: `/account/store-non-cash-points`,
+                method: "POST",
+                body: {
+                    ...data,
+                    _token: document
+                        .querySelector("meta[name='csrf-token']")
+                        .getAttribute("content"),
+                },
+            }),
+        }),
+        exportCashPoints: build.mutation({
+            query: (query) => ({
+                url: `/account/export-point-data?${query}`,
+                method: "GET",
+            }),
+        }),
+    }),
+});
 
-}) ;
-
-
-
-export const { 
+export const {
     usePointTableDataMutation,
-    useNonCashPointMutation
- } = pointTableDataApiSlice;
-
+    useNonCashPointMutation,
+    useExportCashPointsMutation,
+} = pointTableDataApiSlice;

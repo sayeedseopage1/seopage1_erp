@@ -12,9 +12,11 @@ import Button from "../components/Button";
 import Loader from "../components/Loader";
 import FilterContainer from "../components/Filter-bar/FilterContainer";
 import PercentageofGoalsMetModal from "../components/modal/PercentageofGoalsMetModal";
+import ProjectStatusExportButton from "../components/ProjectStatusExportbutton";
+import { Flex } from "../components/table/ui";
 
 const ProjectStatus = () => {
-    const [search,setSearch] = React.useState('');
+    const [search, setSearch] = React.useState("");
     const [projectDetails, setProjectDetails] = React.useState({});
     const [filter, setFilter] = React.useState(null);
     const [projectId, setProjectId] = React.useState("900");
@@ -23,7 +25,10 @@ const ProjectStatus = () => {
         pageSize: 10,
     });
     const [isModalOneOpen, setIsModalOneOpen] = React.useState(false);
-    const [isOpenPercentageofGoalsMetModal, setIsOpenPercentageofGoalsMetModal] = React.useState(false);
+    const [
+        isOpenPercentageofGoalsMetModal,
+        setIsOpenPercentageofGoalsMetModal,
+    ] = React.useState(false);
     const [selectedProjectName, setSelectedProjectName] = React.useState("");
 
     // make query string
@@ -33,7 +38,11 @@ const ProjectStatus = () => {
     };
 
     // get project status fetch
-    const { data:projectStatusData, isFetching, refetch } = useGetProjectStatusQuery(
+    const {
+        data: projectStatusData,
+        isFetching,
+        refetch,
+    } = useGetProjectStatusQuery(
         queryString({
             page: pageIndex + 1,
             limit: pageSize,
@@ -53,11 +62,10 @@ const ProjectStatus = () => {
     // Data from the API
     const projectStatus = projectStatusData?.data?.data;
     const pmGoal = pmGoalData?.data;
-    const percentageOfGoalsMet = pmGoalData?.data
+    const percentageOfGoalsMet = pmGoalData?.data;
 
     // Table columns
     let tableColumns = ProjectStatusTableColumns;
-
 
     const closeModalOne = () => {
         setIsModalOneOpen(false);
@@ -68,15 +76,14 @@ const ProjectStatus = () => {
     const onFilter = async (filter) => {
         const queryObject = _.pickBy(filter, Boolean);
         setFilter(queryObject);
-    }
-    
+    };
 
     // handle refresh button
     const onRefreshButtonClick = (e) => {
         e.preventDefault();
         onFilter(filter);
         refetch();
-    }
+    };
 
     // handle pm goal modal
     const handlePmGoalModal = (data) => {
@@ -84,27 +91,23 @@ const ProjectStatus = () => {
         setProjectId(data.project_id);
         setIsModalOneOpen(true);
         setSelectedProjectName(data.project_name);
-        refetchPmGoal()
-    }
+        refetchPmGoal();
+    };
 
     // handle percent of goal met  modal
     const handlePercentOfGoalMet = (data) => {
         setProjectId(data.project_id);
         setSelectedProjectName(data.project_name);
         setProjectDetails(data);
-        setIsOpenPercentageofGoalsMetModal(true)
-    }
+        setIsOpenPercentageofGoalsMetModal(true);
+    };
 
     // handle close percentage of goal met modal
     const handleClosePercentageofGoalsMetModal = () => {
         setIsOpenPercentageofGoalsMetModal(false);
-    }
-
-
-    
+    };
 
     return (
-
         <React.Fragment>
             {/* Filter */}
             <FilterContainer>
@@ -113,16 +116,29 @@ const ProjectStatus = () => {
 
             <div className="sp1_tlr_container">
                 <div className="sp1_tlr_tbl_container">
-                    <div className="mb-3 d-flex align-items-center flex-wrap justify-content-end">
-                        {/* Refresh Data */}
-                        <div className="mr-2 mb-2">
-                            <Button onClick={onRefreshButtonClick}>
-                                {isFetching ? <Loader title="Loading..." borderRightColor="white" /> : 'Refresh'}
-                            </Button>
+                    <div
+                        className="mr-2 mb-2"
+                        style={{
+                            display: "flex",
+                            justifyContent: "space-between",
+                        }}
+                    >
+                        <div>
+                            <ProjectStatusExportButton filter={filter} />
                         </div>
+                        <Button onClick={onRefreshButtonClick}>
+                            {isFetching ? (
+                                <Loader
+                                    title="Loading..."
+                                    borderRightColor="white"
+                                />
+                            ) : (
+                                "Refresh"
+                            )}
+                        </Button>
                     </div>
 
-                   {/* Project Status Main Table */}
+                    {/* Project Status Main Table */}
                     <ProjectStatusTable
                         isLoading={isFetching}
                         filter={filter}
@@ -160,4 +176,3 @@ const ProjectStatus = () => {
 };
 
 export default ProjectStatus;
-

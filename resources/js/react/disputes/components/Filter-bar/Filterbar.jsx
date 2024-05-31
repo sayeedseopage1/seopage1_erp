@@ -15,7 +15,8 @@ const Filterbar = ({ onFilter, page = "tasks" }) => {
     const [searchQuery, setSearchQuery] = React.useState("");
     const [disputeRasiedBy, setDisputeRasiedBy] = React.useState(null);
     const [client, setClient] = React.useState(null);
-    const [disputeRaisedAgainst, setDisputeRaisedAgainst] = React.useState(null);
+    const [disputeRaisedAgainst, setDisputeRaisedAgainst] =
+        React.useState(null);
     const [pm, setPm] = React.useState(null);
     const [status, setStatus] = React.useState({
         id: 12,
@@ -31,23 +32,32 @@ const Filterbar = ({ onFilter, page = "tasks" }) => {
     const start_date = React.useMemo(() => startDate, [startDate]);
     const end_date = React.useMemo(() => endDate, [endDate]);
     const _search = React.useMemo(() => search, [search]);
-    const _dispute_rasied_by = React.useMemo(() => disputeRasiedBy, [disputeRasiedBy]);
+    const _dispute_rasied_by = React.useMemo(
+        () => disputeRasiedBy,
+        [disputeRasiedBy]
+    );
     const _client = React.useMemo(() => client, [client]);
-    const _disputeRaisedAgainst = React.useMemo(() => disputeRaisedAgainst, [disputeRaisedAgainst]);
+    const _disputeRaisedAgainst = React.useMemo(
+        () => disputeRaisedAgainst,
+        [disputeRaisedAgainst]
+    );
     const _pm = React.useMemo(() => pm, [pm]);
     const _status = React.useMemo(() => status, [status]);
     const date_filter_by = React.useMemo(() => dateType, [dateType]);
 
     React.useEffect(() => {
-        
         const filter = {
             start_date,
             end_date,
             dispute_rasied_by: _dispute_rasied_by?.id,
+            dispute_rasied_by_name: _dispute_rasied_by?.name,
             client_id: _client?.id,
+            client_name: _client?.name,
             dispute_raised_against: _disputeRaisedAgainst?.id,
+            dispute_raised_against_name: _disputeRaisedAgainst?.name,
             pm_id: _pm?.id,
-            status: _status?.column_name, 
+            pm_name: _pm?.name,
+            status: _status?.column_name,
         };
 
         onFilter(filter);
@@ -73,21 +83,21 @@ const Filterbar = ({ onFilter, page = "tasks" }) => {
             <HDivider />
 
             {width > 1400 && (
-                <React.Fragment> 
+                <React.Fragment>
                     <UserFilter
                         title="Dispute Raised By"
                         state={disputeRasiedBy}
                         setState={setDisputeRasiedBy}
-                        roleIds={[4,5,6, 7, 9, 10]}
-                    />  
+                        roleIds={[4, 5, 6, 7, 9, 10]}
+                    />
                     <HDivider />
                     <UserFilter
                         title="Dispute Raised Against"
                         state={disputeRaisedAgainst}
                         setState={setDisputeRaisedAgainst}
-                        roleIds={[3,4,5,6, 7, 9, 10]}
+                        roleIds={[3, 4, 5, 6, 7, 9, 10]}
                     />
-                     
+
                     <HDivider />
 
                     <UserFilter
@@ -105,7 +115,7 @@ const Filterbar = ({ onFilter, page = "tasks" }) => {
                         setState={setPm}
                         roleIds={[4]}
                     />
-                    <HDivider /> 
+                    <HDivider />
 
                     <StatusFilter state={status} setState={setStatus} />
                     {/* <HDivider />  */}
@@ -132,7 +142,9 @@ const Filterbar = ({ onFilter, page = "tasks" }) => {
                                 client={client}
                                 setClient={setClient}
                                 disputeRaisedAgainst={disputeRaisedAgainst}
-                                setDisputeRaisedAgainst={setDisputeRaisedAgainst}
+                                setDisputeRaisedAgainst={
+                                    setDisputeRaisedAgainst
+                                }
                                 pm={pm}
                                 setPm={setPm}
                                 status={status}

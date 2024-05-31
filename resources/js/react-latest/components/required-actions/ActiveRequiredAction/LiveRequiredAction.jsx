@@ -9,7 +9,7 @@ import { useLazyGetLiveRequiredActionQuery } from "../../../services/api/require
 import RequiredActionCard_Loader from "../RequiredActionCards/RequiredActionCard_Loader";
 import { useRefresh } from "../Index";
 import { User } from "../../../utils/user-details";
-import useCounterStore from "../../Zustand/store";
+import useCounterStore from "../../../Zustand/store";
 
 const currentUser = new User(window.Laravel.user);
 

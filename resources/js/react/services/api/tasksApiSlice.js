@@ -27,12 +27,17 @@ const taskApiSlice = apiSlice.injectEndpoints({
                 formData: true,
             }),
 
-            invalidatesTags: ["TASKS", "SUB_TASKS"],
+            invalidatesTags: ["TASKS"],
         }),
 
         getSubTasks: build.query({
-            query: ({ taskId, query }) =>
-                `/account/tasks/get-tasks-subtasks/${taskId}?${query}`,
+            query: ({ taskId, query }) => {
+                const queryParam = query ? `${taskId}?${query}` : `${taskId}`;
+                return {
+                    url: `/account/tasks/get-tasks-subtasks/${queryParam}`,
+                };
+            },
+            providesTags: ["SUB_TASKS"],
         }),
         getTaskForTotalTime: build.query({
             query: (taskId) => `/account/task/${taskId}/json?mode=basic`,
@@ -86,6 +91,18 @@ const taskApiSlice = apiSlice.injectEndpoints({
         checkUnAuthorizedTaskType: build.query({
             query: () => `/account/developer/primary-page-authorization-count`,
         }),
+        exportTasks: build.mutation({
+            query: (query) => ({
+                url: `/account/export-task-data?${query}`,
+                method: "GET",
+            }),
+        }),
+        exportSubTasks: build.mutation({
+            query: (query) => ({
+                url: `/account/export-subtask-data?${query}`,
+                method: "GET",
+            }),
+        }),
     }),
 });
 
@@ -106,4 +123,6 @@ export const {
     useGetTaskTypeDataQuery,
     useUpdateTasktypeAuthStatusMutation,
     useCheckUnAuthorizedTaskTypeQuery,
+    useExportTasksMutation,
+    useExportSubTasksMutation,
 } = taskApiSlice;

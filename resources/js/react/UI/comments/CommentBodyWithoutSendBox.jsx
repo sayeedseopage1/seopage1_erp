@@ -45,20 +45,20 @@ import axios from "axios";
 import { useCommentStore } from "./zustand/store";
 
 const CommentContext = createContext({
-    setScroll: () => {},
+    setScroll: () => { },
     selectedComments: [],
-    setSecletedComments: () => {},
+    setSecletedComments: () => { },
     mentionedComment: {},
-    setMentionedComment: () => {},
+    setMentionedComment: () => { },
     contextHolder: {},
-    setContextHolder: () => {},
+    setContextHolder: () => { },
     allComments: [],
     isImageModalOpen: false,
-    setIsImageModalOpen: () => {},
+    setIsImageModalOpen: () => { },
     imageModalCurrentFileUrl: "",
-    setImageModalCurrentFileUrl: () => {},
+    setImageModalCurrentFileUrl: () => { },
     refetchType: "",
-    setRefetchType: () => {},
+    setRefetchType: () => { },
 });
 export function useCommentContext() {
     return useContext(CommentContext);
@@ -110,6 +110,7 @@ const CommentsBodyWithoutSendBox = ({
     const [refetchType, setRefetchType] = useState("refetch");
     // =================================================================
     // fetch this task from api
+
     useEffect(() => {
         axios
             .get(`/account/task/${taskId}/json?mode=basic`)
@@ -270,11 +271,10 @@ const CommentsBodyWithoutSendBox = ({
         // console.log({ allSelectedComments });
         const allSelectedCommentsString = allSelectedComments.reduce(
             (total, comment, i, arr) => {
-                total += `${htmlToPreservedText(comment?.comment)}\n${
-                    comment?.user?.name
-                }, ${dayjs(comment?.created_date).format(
-                    "MMM DD, YYYY, hh:mm A"
-                )}`;
+                total += `${htmlToPreservedText(comment?.comment)}\n${comment?.user?.name
+                    }, ${dayjs(comment?.created_date).format(
+                        "MMM DD, YYYY, hh:mm A"
+                    )}`;
 
                 if (i < arr.length - 1) {
                     total += "\n\n\n";
@@ -397,9 +397,7 @@ const CommentsBodyWithoutSendBox = ({
                     timerProgressBar: true,
                 });
             })
-            .finally(() => {
-                //   setIsLoading(false);
-            });
+            .finally(() => { });
     };
 
     const handleDeleteSingleComment = (comment) => {
@@ -615,9 +613,8 @@ const CommentsBodyWithoutSendBox = ({
 
                     {showSearchBar ? (
                         <div
-                            className={`${
-                                style.commentsBody_header_searchBar_container
-                            } ${animation ? style.open : style.close}`}
+                            className={`${style.commentsBody_header_searchBar_container
+                                } ${animation ? style.open : style.close}`}
                         >
                             <input
                                 value={searchText}
@@ -803,8 +800,8 @@ const CommentsBodyWithoutSendBox = ({
                                         idMatch={
                                             comment?.id ===
                                             searchIndexes[
-                                                searchIndexes.length -
-                                                    commentIndex
+                                            searchIndexes.length -
+                                            commentIndex
                                             ]
                                         }
                                         id={comment?.id}

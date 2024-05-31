@@ -1,8 +1,9 @@
 import React, { useState } from "react";
 import ReactModal from "react-modal";
-import useCounterStore from "../../../react-latest/components/Zustand/store";
+
 import { usePendingActionsIdMutation } from "../../../react-latest/services/api/pendingActionsApiSlice";
 import { useSelector } from "react-redux";
+import useCounterStore from "../../../react-latest/Zustand/store";
 
 const CloseModal = ({ onClose, isOpen, setIsOpen }) => {
     const { increaseCount } = useCounterStore();

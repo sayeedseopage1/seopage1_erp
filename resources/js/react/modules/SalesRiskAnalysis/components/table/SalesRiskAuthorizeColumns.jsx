@@ -96,7 +96,12 @@ export const SalesRiskAuthorizeColumns = [
                 <div className="d-flex justify-content-end align-items-center pr-3">
                     <Switch>
                         <Switch.Case condition={data.key === "hourlyRate"}>
-                            <Switch.Case condition={data?.points?.length}>
+                            <Switch.Case
+                                condition={
+                                    data?.points?.length &&
+                                    !data?.message?.length
+                                }
+                            >
                                 <span style={customStyles.points}>
                                     {data?.points[0]}($
                                     {Number(data?.points[1]).toFixed(2)}
@@ -105,17 +110,16 @@ export const SalesRiskAuthorizeColumns = [
                             </Switch.Case>
                             <Switch.Case
                                 condition={
-                                    !data?.points?.length &&
-                                    data?.message?.length
+                                    ("points" in data) && data?.message?.length
                                 }
                             >
                                 <span style={customStyles.points}>
-                                    {data?.message[0]}
+                                    {data?.message?.[0]}
                                 </span>
                             </Switch.Case>
                             <Switch.Case
                                 condition={
-                                    !data?.points?.length &&
+                                    !("points" in data) &&
                                     !data?.message?.length
                                 }
                             >
@@ -123,23 +127,28 @@ export const SalesRiskAuthorizeColumns = [
                             </Switch.Case>
                         </Switch.Case>
                         <Switch.Case condition={data?.key !== "hourlyRate"}>
-                            <Switch.Case condition={data?.points}>
+                            <Switch.Case
+                                condition={
+                                    "points" in data && !data?.message?.length
+                                }
+                            >
                                 <span style={customStyles.points}>
                                     {data.points}
                                 </span>
                             </Switch.Case>
                             <Switch.Case
                                 condition={
-                                    !data?.points && data?.message?.length
+                                    !("points" in data) && data?.message?.length
                                 }
                             >
                                 <span style={customStyles.points}>
-                                    {data?.message[0]}
+                                    {data?.message?.[0]}
                                 </span>
                             </Switch.Case>
                             <Switch.Case
                                 condition={
-                                    !data?.points && !data?.message?.length
+                                    !("points" in data) &&
+                                    !data?.message?.length
                                 }
                             >
                                 <span style={customStyles.points}>--</span>

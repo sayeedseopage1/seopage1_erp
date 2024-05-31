@@ -37,8 +37,10 @@ import SendboxForPendingActions from "./components/sendbox/SendboxForPendingActi
 import SingleChatForPendingActions from "./components/SIngleChatForPendingActions";
 import { useSelector } from "react-redux";
 import { usePendingActionsIdMutation } from "../../../react-latest/services/api/pendingActionsApiSlice";
-import useCounterStore from "../../../react-latest/components/Zustand/store";
+
 import "./styles/customSwalButtons.css";
+import ImageSliderModalForPendingActions from "./components/ImageSliderModalForPendingActions";
+import useCounterStore from "../../../react-latest/Zustand/store";
 const CommentContext = createContext({
     setScroll: () => {},
     selectedComments: [],
@@ -743,16 +745,24 @@ const CommentBodyForPendingActions = ({
                                     //     denyButton: "btn btn-danger",
                                     // },
                                 }).then((result) => {
-                                    console.log("swal fire result", result);
                                     if (result.isConfirmed) {
                                         Swal.close();
                                     } else if (result.isDenied) {
                                         updatePendingAction({
                                             id: pendingActionId,
-                                        });
-
-                                        increaseCount();
-                                        close();
+                                        })
+                                            .unwrap()
+                                            .then(() => {
+                                                close();
+                                                increaseCount();
+                                            })
+                                            .catch(() => {
+                                                console.log(
+                                                    "past action failed"
+                                                );
+                                                close();
+                                                increaseCount();
+                                            });
                                     } else if (result.isDismissed) {
                                         close();
                                     }
@@ -884,7 +894,7 @@ const CommentBodyForPendingActions = ({
                         }}
                         ref={chatbottom_ref}
                     />
-                    <ImageSliderModal
+                    <ImageSliderModalForPendingActions
                         isOpen={isImageModalOpen}
                         close={() => setIsImageModalOpen(false)}
                         selectedImgUrl={imageModalCurrentFileUrl}

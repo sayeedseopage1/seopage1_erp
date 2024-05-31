@@ -41,10 +41,7 @@ export const TaskTableColumns = [
             const data = row?.original;
             return (
                 <>
-                    <abbr
-                        title={data?.heading}
-                        style={{ textDecoration: "none" }}
-                    >
+                    <a title={data?.heading} style={{ textDecoration: "none" }}>
                         <div
                             className="d-flex align-items-center"
                             style={{ gap: "10px", position: "relative" }}
@@ -53,8 +50,9 @@ export const TaskTableColumns = [
                                 href={`/account/tasks/${data?.id}`}
                                 className="hover-underline multine-ellipsis"
                             >
-                                {" "}
-                                {data?.heading}{" "}
+                                <span style={{ color: "#3366CC" }}>
+                                    {data?.heading}
+                                </span>
                             </a>
                             {auth && (
                                 <span
@@ -77,7 +75,7 @@ export const TaskTableColumns = [
                                 </span>
                             )}
                         </div>
-                    </abbr>
+                    </a>
                 </>
             );
         },
@@ -190,7 +188,9 @@ export const TaskTableColumns = [
                             href={`/account/projects/${data?.project_id}`}
                             className="multine-ellipsis"
                         >
-                            {data?.project_name}
+                            <span style={{ color: "#3366CC" }}>
+                                {data?.project_name}
+                            </span>
                         </a>
                     ) : (
                         <span style={{ fontWeight: "bold", color: "gray" }}>

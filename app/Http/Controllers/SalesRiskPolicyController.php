@@ -456,7 +456,8 @@ class SalesRiskPolicyController extends AccountBaseController
         // get yes no rules
         $yesNoRules = [];
         if ($policy = SalesRiskPolicy::where('key', 'yesNoRules')->first()) {
-            $yesNoRules = SalesRiskPolicy::where('parent_id', $policy->id)->get(['id', 'title']);
+            $freeRuleIds = SalesPolicyQuestion::where('key', 'yesNoRules')->pluck('value');
+            $yesNoRules = SalesRiskPolicy::where('parent_id', $policy->id)->whereNotIn('id', $freeRuleIds)->get(['id', 'title']);
         }
 
         return response()->json(['data' => compact('types', 'questionKeys', 'policies', 'questionList', 'yesNoRules')]);
@@ -637,15 +638,6 @@ class SalesRiskPolicyController extends AccountBaseController
 
     function renderQuestionList(Request $req)
     {
-        /* TODO: this code will be removed. Added: 20-05-2024 */
-        if (!Schema::hasColumn('policy_question_values', 'submitted_by')) {
-            Schema::table('policy_question_values', function (Blueprint $table) {
-                $table->integer('submitted_by')->unsigned()->after('question_list');
-                $table->foreign('submitted_by')->on('users')->references('id')->onUpdate('no action')->onDelete('no action');
-            });
-        }
-        /* end */
-
         $deal = Deal::find($req->session()->get('deal_id'));
         $dealStage = DealStage::where('lead_id', $deal->lead->id)->first();
 
@@ -753,9 +745,6 @@ class SalesRiskPolicyController extends AccountBaseController
 
     function calculatePolicyPoint($deal_id, $questionValues = null)
     {
-        // $dealStage = DealStage::find($deal_id);
-        // dd($dealStage);
-
         if (!$deal = Deal::find($deal_id)) {
             return ['points' => null, 'error' => 'Deal not found'];
         }
@@ -870,7 +859,7 @@ class SalesRiskPolicyController extends AccountBaseController
                         break;
                 }
             }
-            $message[] = 'Hourly rate (' . $hourlyRate . ') not matched with any conditions';
+            $pointData['hourlyRate']['message'][] = 'Hourly rate (' . $hourlyRate . ') not matched with any conditions';
             endHourlyRate:
 
             // --------------------- end hourly rate calculation ------------------ //
@@ -878,14 +867,14 @@ class SalesRiskPolicyController extends AccountBaseController
             // ---------------------- milestone calculation ------------------------------- //
             $questions = SalesPolicyQuestion::where('key', 'milestone')->orderBy('sequence')->get();
             if (count($questions) < 3) {
-                $message[] = '3 milestone questions are expected, ' . count($questions) . ' found.';
+                $pointData['milestone']['message'][] = '3 milestone questions are expected, ' . count($questions) . ' found.';
                 goto endMilestone;
             }
 
             $policy = SalesRiskPolicy::where('parent_id', $questions[0]->policy_id)->orderBy('sequence')->get();
 
             if (count($policy) < 1) {
-                $message[] = '2 milestone policies are expected, ' . count($policy) . ' found.';
+                $pointData['milestone']['message'][] = '2 milestone policies are expected, ' . count($policy) . ' found.';
                 goto endMilestone;
             }
 
@@ -895,7 +884,7 @@ class SalesRiskPolicyController extends AccountBaseController
             if (isset($questionAns[$questions[0]->id]))
                 $value = $questionAns[$questions[0]->id];
             else {
-                $message[] = 'All milestone questions values are not defined.';
+                $pointData['milestone']['message'][] = 'All milestone questions values are not defined.';
                 goto endMilestone;
             }
 
@@ -915,7 +904,7 @@ class SalesRiskPolicyController extends AccountBaseController
                 if (isset($questionAns[$questions[1]->id]))
                     $value = $questionAns[$questions[1]->id];
                 else {
-                    $message[] = 'Milestone total amount not found.';
+                    $pointData['milestone']['message'][] = 'Milestone total amount not found.';
                     goto endMilestone;
                 }
 
@@ -928,7 +917,7 @@ class SalesRiskPolicyController extends AccountBaseController
                 if (isset($questionAns[$questions[2]->id]))
                     $value = $questionAns[$questions[2]->id];
                 else {
-                    $message[] = 'Milestone selected list data not found.';
+                    $pointData['milestone']['message'][] = 'Milestone selected list data not found.';
                     goto endMilestone;
                 }
 
@@ -991,7 +980,7 @@ class SalesRiskPolicyController extends AccountBaseController
                 if (isset($questionAns[$questions[0]->id]))
                     $value = $questionAns[$questions[0]->id];
                 else {
-                    $message[] = 'Threat question value is not added.';
+                    $pointData['threat']['message'][] = 'Threat question value is not added.';
                     goto endThreat;
                 }
 
@@ -1015,7 +1004,7 @@ class SalesRiskPolicyController extends AccountBaseController
                     $pointData['threat']['questionAnswer'][] = ['id' => $questions[1]->id, 'title' => $questions[1]->title, 'value' => $questionAns[$questions[1]->id], 'parent_id' => $questions[1]->parent_id];
                 }
             } else {
-                $message[] = 'Threat question value is not added.';
+                $pointData['threat']['message'][] = 'Threat question value is not added.';
             }
 
             endThreat:
@@ -1033,7 +1022,7 @@ class SalesRiskPolicyController extends AccountBaseController
                 if (isset($questionAns[$questions[0]->id]) && isset($policy[0]))
                     $value = $questionAns[$questions[0]->id];
                 else {
-                    $message[] = 'Done By Else section policy or question value is not added.';
+                    $pointData['doneByElse']['message'][] = 'Done By Else section policy or question value is not added.';
                     goto endDoneByElse;
                 }
 
@@ -1046,7 +1035,7 @@ class SalesRiskPolicyController extends AccountBaseController
 
                     if (isset($questionAns[$questions[1]->id]) && isset($policy[1])) $value = $questionAns[$questions[1]->id];
                     else {
-                        $message[] = 'Done By Else section: 2nd Policy or 2nd Question value is not added.';
+                        $pointData['doneByElse']['message'][] = 'Done By Else section: 2nd Policy or 2nd Question value is not added.';
                         goto endDoneByElse;
                     }
 
@@ -1064,7 +1053,7 @@ class SalesRiskPolicyController extends AccountBaseController
 
                 $pointData['doneByElse']['points'] = $pointValue;
                 $pointData['doneByElse']['questionAnswer'] = $data;
-            } else $message[] = 'Done By Else section questions are not added.';
+            } else $pointData['doneByElse']['message'][] = 'Done By Else section questions are not added.';
 
             endDoneByElse:
 
@@ -1081,7 +1070,7 @@ class SalesRiskPolicyController extends AccountBaseController
                     if (isset($questionAns[$questions[0]->id]))
                         $value = $questionAns[$questions[0]->id];
                     else {
-                        $message[] = "$item value is not added.";
+                        $pointData[$item]['message'][] = "$item value is not added.";
                         continue;
                     }
 
@@ -1099,31 +1088,31 @@ class SalesRiskPolicyController extends AccountBaseController
                     if (isset($questions[1]) && isset($questionAns[$questions[1]->id]))
                         $pointData[$item]['questionAnswer'][] = ['id' => $questions[1]->id, 'title' => $questions[1]->title, 'value' => $questionAns[$questions[1]->id], 'parent_id' => $questions[1]->parent_id];
                     else {
-                        $message[] = "$item value is not added.";
+                        $pointData[$item]['message'][] = "$item value is not added.";
                         continue;
                     }
                 } else {
-                    $message[] = "$item questions are not added.";
+                    $pointData[$item]['message'][] = "$item questions are not added.";
                 }
             }
             // ---------------------------- end routeWork, availableWeekend, firstSubmission, acceptPriceProposal ------------------------------ //
 
             // -------------------------------- yesNoRules ------------------------------ //
             $questions = SalesPolicyQuestion::where('key', 'yesNoRules')->get();
-            foreach ((object) $questions as $item) {
+            foreach ((object) $questions as $key => $item) {
                 // $rule_id = json_decode($item->value)->rule_id;
                 $rule = SalesRiskPolicy::where('id', $item->value)->first();
                 $value = $questionAns[$item->id];
 
                 if ($value == 'yes') {
                     $points += (float) json_decode($rule->value)->yes->point;
-                    $pointData['yesNoRules']['points'] = json_decode($rule->value)->yes->point;
+                    $pointData['yesNoRules' . $key]['points'] = json_decode($rule->value)->yes->point;
                 } else {
                     $points += (float) json_decode($rule->value)->no->point;
-                    $pointData['yesNoRules']['points'] = json_decode($rule->value)->no->point;
+                    $pointData['yesNoRules' . $key]['points'] = json_decode($rule->value)->no->point;
                 }
                 $policyIdList[$rule->id] = $value;
-                $pointData['yesNoRules']['questionAnswer'][] = ['id' => $item->id, 'title' => $item->title, 'value' => $value, 'parent_id' => null];
+                $pointData['yesNoRules' . $key]['questionAnswer'][] = ['id' => $item->id, 'title' => $item->title, 'value' => $value, 'parent_id' => null];
             }
             // -------------------------------- end yesNoRules ------------------------------ //
 
@@ -1133,7 +1122,7 @@ class SalesRiskPolicyController extends AccountBaseController
             $policy = SalesRiskPolicy::where('key', 'clientCountry')->first();
 
             if (!$policy) {
-                $message[] = 'Client\'s Country policy not found.';
+                $pointData['clientCountry']['message'][] = 'Client\'s Country policy not found.';
                 goto endClientCountry;
             }
 
@@ -1217,7 +1206,7 @@ class SalesRiskPolicyController extends AccountBaseController
                 $pointData['projectDeadline']['questionAnswer'][] = ['title' => 'What is the deadline for this project?', 'value' => $deadline . ' Days', 'parent_id' => null];
                 $data ? $pointData['projectDeadline']['questionAnswer'][] = $data : '';
             } else
-                $message[] = 'Project Deadline policy not found.';
+                $pointData['projectDeadline']['message'][] = 'Project Deadline policy not found.';
 
             // --------------------------------- end projectDeadline -------------------------- //
 
@@ -1272,7 +1261,7 @@ class SalesRiskPolicyController extends AccountBaseController
                 $pointData['projectBudget']['questionAnswer'][] = ['title' => 'What is the budget for this project?', 'value' => '$' . number_format($deal->amount, 2), 'parent_id' => null];
                 $data ? $pointData['projectBudget']['questionAnswer'][] = $data : '';
             } else
-                $message[] = "Project Budget policy is not added.";
+                $pointData['projectBudget']['message'][] = "Project Budget policy is not added.";
             // -------------------------------- end projectBudget -------------------------------------- //
 
             $calculationData = ['points' => $points, 'pointData' => $pointData, 'policyIdList' => $policyIdList, 'message' => $message];
@@ -1478,6 +1467,12 @@ class SalesRiskPolicyController extends AccountBaseController
                 $dealStage->won_lost = 'Yes';
                 $dealStage->status = 'pending';
                 $dealStage->save();
+            }
+
+            if ($deal->is_final) {
+                $deal->is_drafted = 0;
+                $deal->authorization_status = 2;
+                $deal->released_at = Carbon::now();
             }
         } elseif ($status == '0') {
             $deal->sale_analysis_status = 'denied';
