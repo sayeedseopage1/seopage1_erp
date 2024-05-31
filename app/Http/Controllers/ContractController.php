@@ -2029,7 +2029,7 @@ class ContractController extends AccountBaseController
                         Notification::send($usr, new HourlyDealNotification($deal));
                     }
                 }
-                
+
                 $users = User::where('role_id', 8)->get();
 
                 foreach ($users as $key => $user) {
@@ -2365,7 +2365,7 @@ class ContractController extends AccountBaseController
         }
 
         $itemDeal = $this->data['contract']->deal;
-        
+
         if((Auth::user()->role_id == 7 || Auth::user()->role_id == 8) && !($itemDeal->is_drafted == 0 && ($itemDeal->authorization_status == 1 || (((Carbon::now()->diffInSeconds($itemDeal->released_at) > 10800) && (Carbon::parse($itemDeal->released_at)->format('H:i:s') >= '07:00' && Carbon::parse($itemDeal->released_at)->format('H:i:s') < '23:30')) || ((Carbon::parse($itemDeal->released_at)->format('H:i:s') < '07:00' || Carbon::parse($itemDeal->released_at)->format('H:i:s') >= '23:30') && (Carbon::parse(now())->format('H:i:s') >= '10:00') || Carbon::parse($itemDeal->released_at)->format('Y-m-d') < now()->format('Y-m-d')))))){
             $this->data['contract']->deal->pm_id = null;
         }
@@ -2602,7 +2602,7 @@ class ContractController extends AccountBaseController
             $qualified_sale->save();
         }
 
-        
+
         if(!$request->denyDeal){
             $user = User::where('id', $deal->pm_id)->first();
             if ($deal->project_type == 'fixed') {
@@ -2785,22 +2785,22 @@ public function storeClientDeal(Request $request){
     if ($deal_stage->deal_stage == 0) {
         $deal->deal_stage = $deal_stage->deal_stage + 1;
         $deal->comments = $deal_stage->comments;
-        $deal->won_lost = 'Yes';
+        // $deal->won_lost = 'Yes';
         $deal->save();
     } elseif ($deal_stage->deal_stage == 1) {
         $deal->deal_stage = $deal_stage->deal_stage + 1;
         $deal->comments = $deal_stage->comments;
-        $deal->won_lost = 'Yes';
+        // $deal->won_lost = 'Yes';
         $deal->save();
     } elseif ($deal_stage->deal_stage == 2) {
         $deal->deal_stage = $deal_stage->deal_stage + 1;
         $deal->comments = $deal_stage->comments;
-        $deal->won_lost = 'Yes';
+        // $deal->won_lost = 'Yes';
         $deal->save();
     } else {
         $deal->deal_stage = $deal_stage->deal_stage;
         $deal->comments = $deal_stage->comments;
-        $deal->won_lost = 'Yes';
+        // $deal->won_lost = 'Yes';
         $deal->save();
 
         //$lead_id = Lead::where('id', $request->lead_id)->first();
@@ -3210,7 +3210,7 @@ public function getAllContracts(Request $request){
             $itemDeal->closing_date = null;
             $itemDeal->pm_id = null;
         }
-        
+
     }
     /**AMOUNT CHECK ITS UPSELL OR NOT END */
     /**COUNT OF AWARD TIME REQUEST DATA START */

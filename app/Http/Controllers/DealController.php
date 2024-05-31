@@ -946,7 +946,7 @@ class DealController extends AccountBaseController
             }
 
             $deals_data = $dealQuery
-                ->orderBy('id', 'desc')
+                ->orderBy('updated_at', 'desc')
                 ->paginate($limit);
 
             foreach($deals_data as $item){
