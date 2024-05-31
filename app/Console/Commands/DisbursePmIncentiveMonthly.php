@@ -118,6 +118,14 @@ class DisbursePmIncentiveMonthly extends Command
             $obtainedIncentive[] = Incentive::progressiveStore(7, $user->id, $client_retention_rate, $now);
             // End
 
+            if (in_array(0, $obtainedIncentive)) {
+                $achieved_regular_incentive = 0;
+            } else {
+                $achieved_regular_incentive = (($totalEarnedPoints + $totalLostPoints) / 100) * (array_sum($obtainedIncentive) / count($obtainedIncentive));
+            }
+
+            dd($achieved_regular_incentive);
+
             // Upsale/Cross sale amount
             $upsale_amount = ProjectMilestone::select('project_milestones.*')
             ->join('projects','projects.id','project_milestones.project_id')
@@ -129,6 +137,7 @@ class DisbursePmIncentiveMonthly extends Command
             ->whereBetween('project_milestones.created_at', [$startDate, $endDate])
             ->sum('project_milestones.cost');
             $achieved_upsale_incentive = Incentive::progressiveStore(8, $user->id, $upsale_amount, $now);
+            dd($achieved_upsale_incentive);
             // End
             
             // Bonus points based on released amount
@@ -198,14 +207,7 @@ class DisbursePmIncentiveMonthly extends Command
                 }
             }
             dd($achieved_bonus_incentive);
-            
             // End
-            
-            // if (in_array(0, $obtainedIncentive)) {
-            //     dd(0);
-            // } else {
-            //     dd(array_sum($obtainedIncentive) / count($obtainedIncentive));
-            // }
         }
     }
 }
