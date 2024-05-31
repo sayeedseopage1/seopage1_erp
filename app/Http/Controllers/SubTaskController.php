@@ -529,7 +529,7 @@ class SubTaskController extends AccountBaseController
                     $evaluation->start_date = Carbon::now();
                     $emp_start_task = $evaluation->start_date;
 
-                    $exp_date = Carbon::parse($emp_start_task)->addMinutes(20);
+                    $exp_date = Carbon::parse($emp_start_task)->addDays(7);
                     $countSundays = 0;
                     $currentDate = $emp_start_task->copy(); 
                     while ($currentDate->lte($exp_date)) {
@@ -539,7 +539,7 @@ class SubTaskController extends AccountBaseController
                         $currentDate->addDay(); 
                     }
                     
-                    $evaluation->exp_date = Carbon::parse($emp_start_task)->addMinutes(20 + $countSundays);
+                    $evaluation->exp_date = Carbon::parse($emp_start_task)->addDays(7 + $countSundays);
                     
                     $evaluation->save();
                 }
