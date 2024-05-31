@@ -128,7 +128,7 @@ class DisbursePmIncentiveMonthly extends Command
             ->where('project_milestones.status','!=','canceled')
             ->whereBetween('project_milestones.created_at', [$startDate, $endDate])
             ->sum('project_milestones.cost');
-            $upsale_amount_incentive = Incentive::progressiveStore(8, $user->id, $upsale_amount, $now);
+            $achieved_upsale_incentive = Incentive::progressiveStore(8, $user->id, $upsale_amount, $now);
             // End
             
             // Bonus points based on released amount
@@ -190,14 +190,14 @@ class DisbursePmIncentiveMonthly extends Command
             // Bonus points based on unreleased amount
             $this_month_released_percent = round(($released_amount_this_month_assigned / $assigned_amount_this_month) * 100, 2);
             $previous_months_released_percent = round((($released_amount_this_month - $released_amount_this_month_assigned) / $remain_unreleased_amount_last_months) * 100, 2);
-            $achieved_bonus_points = 0;
+            $achieved_bonus_incentive = 0;
             foreach(IncentiveCriteria::with('incentiveFactors')->find(10)->incentiveFactors as $factor){
                 if($factor->lower_limit <= $previous_months_released_percent && $factor->uppder_limit <= $this_month_released_percent){
-                    $achieved_bonus_points = ($acquired_bonus_points / 100) * $factor->incentive_amount;
+                    $achieved_bonus_incentive = ($acquired_bonus_points / 100) * $factor->incentive_amount;
                     break;
                 }
             }
-            dd($achieved_bonus_points);
+            dd($achieved_bonus_incentive);
             
             // End
             
