@@ -27,9 +27,9 @@ const EvaluationRoundHistoryModal = ({ data }) => {
                     height: "40px",
                     backgroundColor: "transparent",
                 }}
-                className={`${data?.round_requied === 1 ? "" : "link_color"}`}
+                className={`${data?.round_requied === 0 ? "" : "link_color"}`}
                 onClick={() => setIsOpen(true)}
-                disabled={data?.round_requied === 1}
+                disabled={data?.round_requied === 0}
             >
                 {data?.round_requied}
             </button>
