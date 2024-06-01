@@ -147,8 +147,7 @@ class DisbursePmIncentiveMonthly extends Command
             ->where('project_milestones.status','!=','canceled')
             ->whereBetween('project_milestones.created_at', [$startDate, $endDate])
             ->sum('project_milestones.cost');
-            dump($upsale_amount);
-            $achieved_upsale_incentive = Incentive::progressiveStore(8, $user->id, $upsale_amount, $now);
+            $achieved_upsale_incentive = ($upsale_amount / 100) * Incentive::progressiveStore(8, $user->id, $upsale_amount, $now);
             // End
 
             // Achieved upsale/cross bonus
