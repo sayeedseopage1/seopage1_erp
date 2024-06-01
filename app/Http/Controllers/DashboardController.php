@@ -644,36 +644,58 @@ class DashboardController extends AccountBaseController
             $userDailyTaskSubmission = true;
         }
 
-        if(Auth::user()->role_id = 14){
-            $logStatus = true;
-            $userDailyTaskSubmission = true;
-        }
-
         $incomplete_hours = $minimum_log_hours - $userTotalMin;
         // $userDailyTaskSubmission = true;
-        return response()->json([
-            'data' => [
-                'check_in_check_out' => [
-                    'check_in_status' => (Auth::user()->role_id == 14) ? true : ($user ? true : false),
-                    'data' => $user,
-                ],
-                'daily_task_report' => [
-                    'daily_submission_status' => $userDailyTaskSubmission,
-                    'data' => [
-                        'checking_date'=> $userClockIn->created_at??'',
+        if(Auth::user()->role_id == 14)
+        {
+            return response()->json([
+                'data' => [
+                    'check_in_check_out' => [
+                        'check_in_status' =>  true,
+                        'data' => $user,
                     ],
-                ],
-                'hours_log_report' => [
-                    'hours_log_report_status' => $logStatus,
-                    'data' => [
-                        'checking_date'=> $userClockIn->created_at??'',
-                        'complete_hours'=> $userTotalMin,
-                        'target_minimum_log_hours'=> $minimum_log_hours,
-                        'incomplete_hours'=> $incomplete_hours < 0 ? 0 : $incomplete_hours,
+                    'daily_task_report' => [
+                        'daily_submission_status' => true,
+                        'data' => [
+                            'checking_date'=> $userClockIn->created_at??'',
+                        ],
+                    ],
+                    'hours_log_report' => [
+                        'hours_log_report_status' => true,
+                        'data' => [
+                            'checking_date'=> $userClockIn->created_at??'',
+                            'complete_hours'=> $userTotalMin,
+                            'target_minimum_log_hours'=> $minimum_log_hours,
+                            'incomplete_hours'=> $incomplete_hours < 0 ? 0 : $incomplete_hours,
+                        ]
                     ]
-                ]
-            ],
-        ]);
+                ],
+            ]); 
+        }else{
+            return response()->json([
+                'data' => [
+                    'check_in_check_out' => [
+                        'check_in_status' => $user ? true : false,
+                        'data' => $user,
+                    ],
+                    'daily_task_report' => [
+                        'daily_submission_status' => $userDailyTaskSubmission,
+                        'data' => [
+                            'checking_date'=> $userClockIn->created_at??'',
+                        ],
+                    ],
+                    'hours_log_report' => [
+                        'hours_log_report_status' => $logStatus,
+                        'data' => [
+                            'checking_date'=> $userClockIn->created_at??'',
+                            'complete_hours'=> $userTotalMin,
+                            'target_minimum_log_hours'=> $minimum_log_hours,
+                            'incomplete_hours'=> $incomplete_hours < 0 ? 0 : $incomplete_hours,
+                        ]
+                    ]
+                ],
+            ]); 
+        }
     }
 
     public function clockOutStatus()
