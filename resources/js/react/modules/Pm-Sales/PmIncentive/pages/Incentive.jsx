@@ -26,8 +26,6 @@ const Incentive = () => {
         </div>
     }
 
-    console.log(query)
-
     return (
         <div>
             <IncentiveFilter setQuery={setQuery} filterByPeriod={filterByPeriod} />

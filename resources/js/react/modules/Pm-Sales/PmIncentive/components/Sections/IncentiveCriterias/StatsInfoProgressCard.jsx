@@ -1,5 +1,6 @@
 import React from 'react';
 import GradientProgressBar from './GradientProgressBar';
+import PropTypes from 'prop-types';
 
 const StatsInfoProgressCard = ({ item }) => {
     const { title, obtained_incentive, acquired_percent, incentive_factors } = item || {}
@@ -28,3 +29,7 @@ const StatsInfoProgressCard = ({ item }) => {
 };
 
 export default StatsInfoProgressCard;
+
+StatsInfoProgressCard.propTypes = {
+    item: PropTypes.object
+}

@@ -14,6 +14,7 @@ const DeptFilter = ({ department, handleChange, isFetching }) => {
                     className='points_selector'
                     defaultValue={{ value: 1, label: 'Web Development' }}
                     style={{ width: 150 }}
+                    popupMatchSelectWidth={false}
                     onChange={handleChange}
                     options={department?.map(item => ({
                         value: item?.id,

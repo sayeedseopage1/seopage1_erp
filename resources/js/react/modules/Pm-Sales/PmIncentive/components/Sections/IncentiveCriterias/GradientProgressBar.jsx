@@ -1,5 +1,6 @@
+import PropTypes from 'prop-types';
+
 const GradientProgressBar = ({ progress, incentive, isAverage }) => {
-    // const progressBarWidth = `${progress}%`;
 
     const progressBarOuterStyle = {
         width: "100%",
@@ -24,3 +25,9 @@ const GradientProgressBar = ({ progress, incentive, isAverage }) => {
 };
 
 export default GradientProgressBar;
+
+GradientProgressBar.propTypes = {
+    progress: PropTypes.number,
+    incentive: PropTypes.number,
+    isAverage: PropTypes.bool
+}

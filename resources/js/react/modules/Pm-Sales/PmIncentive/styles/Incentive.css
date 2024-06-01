@@ -5,7 +5,6 @@
 .incentive_wrapper {
     background: #F7FAFF;
     padding: 0px 30px;
-    /* padding-bottom: 69.78px; */
     font-family: 'Poppins', sans-serif;
 }
 
@@ -256,23 +255,6 @@
     top: 45%;
     left: 0;
 }
-
-
-/* .y_axis_arrow {
-    transform: rotate(-90deg);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-    position: absolute;
-    top: 41%;
-    left: -23%;
-} */
-
-/* #bonus_points .chart_parent:nth-child(1) .y_axis_arrow,
-#bonus_points .chart_parent:nth-child(3) .y_axis_arrow {
-    left: -20%
-} */
 
 .chart_axis_title {
     font-size: 12px;
@@ -564,7 +546,6 @@
     align-items: center;
     justify-content: space-between;
     gap: 10px;
-    /* max-width: 1127px; */
     font-size: 14px;
     flex: 1;
 }
@@ -643,7 +624,6 @@
     align-items: center;
     justify-content: space-between;
     gap: 10px;
-    /* margin-top: 40px; */
     color: #000;
     font-family: Poppins, sans-serif;
     font-size: 14px;
@@ -889,7 +869,6 @@
     font-style: normal;
     font-weight: 500;
     line-height: 21px;
-    /* 131.25% */
 }
 
 .remove_axis_item_table_wrapper {
@@ -897,10 +876,6 @@
     margin: 0px auto;
 }
 
-/* div:where(.swal2-icon) {
-    border: none !important;
-    border-color: transparent !important;
-} */
 
 .swal2-icon-custom {
     margin-bottom: -25px !important;
@@ -967,10 +942,6 @@
         width: 100%;
     }
 
-    /* .y_axis_arrow {
-        display: none;
-    } */
-
     .chart_axis_icon {
         width: 18%;
     }
@@ -986,10 +957,6 @@
         width: 100%;
     }
 
-    /* .y_axis_arrow {
-        display: none;
-    } */
-
     .chart_axis_icon {
         width: 18%;
     }
@@ -1004,10 +971,6 @@
     .chart_wrapper {
         width: 100%;
     }
-
-    /* .y_axis_arrow {
-        display: none;
-    } */
 
     .chart_axis_icon {
         width: 18%;

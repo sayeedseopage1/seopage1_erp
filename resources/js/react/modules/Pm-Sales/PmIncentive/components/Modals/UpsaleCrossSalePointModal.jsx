@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import CustomAntdModal from '../ui/CustomAntdModal';
+import PropTypes from 'prop-types';
 
 const UpsaleCrossSalePointModal = ({ antdModalOpen, setAntdModalOpen, upsaleCrossSalePointsData, upSaleCrossSaleTypes }) => {
     const { incentive_criterias } = upSaleCrossSaleTypes || {};
@@ -42,3 +43,10 @@ const UpsaleCrossSalePointModal = ({ antdModalOpen, setAntdModalOpen, upsaleCros
 };
 
 export default UpsaleCrossSalePointModal;
+
+UpsaleCrossSalePointModal.propTypes = {
+    antdModalOpen: PropTypes.bool,
+    setAntdModalOpen: PropTypes.func,
+    upsaleCrossSalePointsData: PropTypes.number,
+    upSaleCrossSaleTypes: PropTypes.object
+}

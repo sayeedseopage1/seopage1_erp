@@ -7,11 +7,11 @@ import { Popover } from 'antd';
 import useIncentiveTypes from '../../../hooks/useIncentiveTypes';
 import AverageProgressCard from './AverageProgressCard';
 import { useDispatch, useSelector } from 'react-redux';
-import { regularIncentivePoints } from '../../../../../../services/features/Pm-Sales/PmIncentiveSlice';
+import { regularIncentivePoints } from '../../../../../../services/features/Pm-Sales/pmIncentiveSlice';
 
 const StatsInfo = () => {
     const [incentivePointsModalOpen, setIncentivePointsModalOpen] = useState(false);
-    const { allIncentiveTypes, regularIncentiveTypes, incentiveTypesLoading } = useIncentiveTypes();
+    const { allIncentiveTypes, regularIncentiveTypes } = useIncentiveTypes();
 
     const pmIncentive = useSelector((state) => state.pmIncentive)
     const dispatch = useDispatch();
@@ -28,7 +28,6 @@ const StatsInfo = () => {
         <div className='stats_info_wrapper'>
             {/* point stats */}
             <div className='stats_info_outer'>
-                {/* TODO: implement loading here as well  */}
                 {
                     regularIncentiveTypes?.incentive_criterias?.map((item) => <StatsInfoProgressCard key={item?.id} item={item} />)
                 }
@@ -56,9 +55,9 @@ const StatsInfo = () => {
                         </span>
                         <div className="">
                             <p className="stats_info_desc point_details_wrapper">
-                                Your actual incentive points: <span className={`${regularIncentivePointsData > 0 ? 'progress_card_desc_pos' : 'progress_card_desc_neg'} stats_info_link`} onClick={() => setIncentivePointsModalOpen(true)}>
+                                Your actual incentive points: <button className={`${regularIncentivePointsData > 0 ? 'progress_card_desc_pos' : 'progress_card_desc_neg'} stats_info_link bg-transparent`} onClick={() => setIncentivePointsModalOpen(true)}>
                                     {regularIncentivePointsData}pt
-                                </span>
+                                </button>
                                 <Popover
                                     content='This is after multiplying your regular points with the average percentage calculated earlier'
                                     overlayStyle={{

@@ -1,5 +1,6 @@
 import React from 'react';
 import CustomAntdModal from '../ui/CustomAntdModal';
+import PropTypes from 'prop-types';
 
 
 const RegularPointsModal = ({ antdModalOpen, setAntdModalOpen }) => {
@@ -39,3 +40,8 @@ const RegularPointsModal = ({ antdModalOpen, setAntdModalOpen }) => {
 };
 
 export default RegularPointsModal;
+
+RegularPointsModal.propTypes = {
+    antdModalOpen: PropTypes.bool,
+    setAntdModalOpen: PropTypes.func
+}

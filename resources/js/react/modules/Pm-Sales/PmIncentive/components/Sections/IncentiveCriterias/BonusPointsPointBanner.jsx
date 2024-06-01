@@ -10,7 +10,7 @@ import useIncentiveTypes from '../../../hooks/useIncentiveTypes';
 import { Placeholder } from '../../../../../../global/Placeholder';
 import { auth } from '../../../constants';
 import { useDispatch, useSelector } from 'react-redux';
-import { bonusPointsPoints } from '../../../../../../services/features/Pm-Sales/PmIncentiveSlice';
+import { bonusPointsPoints } from '../../../../../../services/features/Pm-Sales/pmIncentiveSlice';
 
 const BonusPointsPointBanner = () => {
     const [finalPointsModalOpen, setFinalPointsModalOpen] = useState(false);
@@ -21,10 +21,6 @@ const BonusPointsPointBanner = () => {
 
     const unreleasedIncentive = incentive_criterias?.find((item) => item?.id == 10)?.obtained_incentive;
 
-    // console.log(incentive_criterias)
-
-    //TODO: This will replace with the actual data from the backend
-    // const bonusPointsIncentive = incentive_criterias?.find((item) => item?.id == 9 || item?.id == 11)?.acquired_percent;
     const bonusPointsIncentive = incentive_criterias?.filter(item => item?.id === 9 || item?.id === 11)?.[0]?.obtained_incentive;
 
     const pmIncentive = useSelector((state) => state.pmIncentive)
@@ -99,9 +95,9 @@ const BonusPointsPointBanner = () => {
                     </span>
                     <div className="">
                         <p className='point_title point_details_wrapper' style={{ color: "#000000" }}>
-                            Final points: <span onClick={() => setFinalPointsModalOpen(true)} className='point_score clickable_link' style={{ color: "#1492E6" }} role='button'>
+                            Final points: <button onClick={() => setFinalPointsModalOpen(true)} className='point_score clickable_link bg-transparent' style={{ color: "#1492E6" }}>
                                 {bonusPointsData}pt
-                            </span>
+                            </button>
                         </p>
 
                         <FinalPointsModal

@@ -6,26 +6,9 @@ import useIncentiveTypes from '../../../hooks/useIncentiveTypes';
 import { IncentiveFormattedData } from '../../../utils/formattedChartData';
 
 const BonusPoints = () => {
-    const { bonusIncentiveTypes, incentiveTypesLoading } = useIncentiveTypes();
+    const { bonusIncentiveTypes } = useIncentiveTypes();
 
     const bonusPointsChartData = IncentiveFormattedData(bonusIncentiveTypes)
-
-    // console.log(allIncentiveTypes?.data?.total_previous_assigned_amount)
-    // console.log(Number(allIncentiveTypes?.data?.total_previous_assigned_amount))
-    // console.log(bonusPointsChartData)
-
-
-    // const totalPrevAssignedAmount = parseFloat(allIncentiveTypes?.data?.total_previous_assigned_amount.replace(/,/g, ''));
-    // const totalPrevAssignedAmount = 5000;
-    // let bonusChartData;
-
-    // if (totalPrevAssignedAmount >= 6000) {
-    //     bonusChartData = bonusPointsChartData?.filter(item => item?.achieved?.id !== 11);
-    // } else {
-    //     bonusChartData = bonusPointsChartData?.filter(item => item?.achieved?.id !== 9)?.reverse();
-    // }
-
-    // console.log(totalPrevAssignedAmount)
 
     return (
         <>
@@ -36,8 +19,8 @@ const BonusPoints = () => {
             </div>
             <div id='bonus_points' className='chart_section_container'>
                 {
-                    bonusPointsChartData?.map((item, ind) => (
-                        <div key={ind} className="chart_parent">
+                    bonusPointsChartData?.map((item) => (
+                        <div key={item?.id} className="chart_parent">
 
                             <div className="secondary_chart_wrapper">
                                 <IncentiveBarChart chartData={item?.ideal} />

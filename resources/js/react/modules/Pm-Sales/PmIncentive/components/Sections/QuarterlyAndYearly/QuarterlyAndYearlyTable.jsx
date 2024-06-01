@@ -1,6 +1,6 @@
 import React from 'react';
 import { quarterlyAndYearlyTableData, quarterlyAndYearlyTableHeaders } from '../../../constants/index';
-// import {} from '../../../constants/index'
+import PropTypes from 'prop-types';
 
 const QuarterlyAndYearlyTable = ({ period }) => {
     return (
@@ -17,7 +17,7 @@ const QuarterlyAndYearlyTable = ({ period }) => {
                 </thead>
                 <tbody>
                     {
-                        quarterlyAndYearlyTableData?.slice(0, period).map((item, ind) => <tr key={ind}>
+                        quarterlyAndYearlyTableData?.slice(0, period).map((item) => <tr key={item?.id}>
                             <td>{item?.month}</td>
                             <td>
                                 {item?.regularPoints}
@@ -36,3 +36,7 @@ const QuarterlyAndYearlyTable = ({ period }) => {
 };
 
 export default QuarterlyAndYearlyTable;
+
+QuarterlyAndYearlyTable.propTypes = {
+    period: PropTypes.number
+}

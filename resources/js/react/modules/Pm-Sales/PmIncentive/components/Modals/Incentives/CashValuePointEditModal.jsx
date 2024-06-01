@@ -13,7 +13,6 @@ const CashValuePointEditModal = ({ regularIncentiveTypes, antdModalOpen, setAntd
     const {
         register,
         handleSubmit,
-        watch,
         reset,
         formState: { errors },
     } = useForm()
@@ -69,6 +68,7 @@ const CashValuePointEditModal = ({ regularIncentiveTypes, antdModalOpen, setAntd
 export default CashValuePointEditModal;
 
 CashValuePointEditModal.propTypes = {
+    regularIncentiveTypes: PropTypes.object,
     antdModalOpen: PropTypes.bool,
     setAntdModalOpen: PropTypes.func
 };

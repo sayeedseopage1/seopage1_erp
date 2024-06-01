@@ -8,8 +8,7 @@ import { Placeholder } from '../../../../../../global/Placeholder';
 import useIncentiveTypes from '../../../hooks/useIncentiveTypes';
 import { auth } from '../../../constants';
 import { useDispatch, useSelector } from 'react-redux';
-import { upSaleCrossSalePoints } from '../../../../../../services/features/Pm-Sales/PmIncentiveSlice';
-// import { upSaleCrossSalePoints } from '../../../../../../services/features/Pm-Sales/PmIncentiveSlice';
+import { upSaleCrossSalePoints } from '../../../../../../services/features/Pm-Sales/pmIncentiveSlice';
 
 const UpsaleCrossSalePointBanner = () => {
     const [upsaleCrossSalePointsModalOpen, setUpsaleCrossSalePointsModalOpen] = useState(false);
@@ -37,9 +36,9 @@ const UpsaleCrossSalePointBanner = () => {
                         <img src={pointIconDark} alt="pointIcon" />
                     </span>
                     <div className="">
-                        <p className='point_title point_details_wrapper' style={{ color: "#000000" }}>Your upsale/cross sales points: <span onClick={() => setUpsaleCrossSalePointsModalOpen(true)} className='point_score clickable_link' style={{ color: "#1492E6" }}>
+                        <p className='point_title point_details_wrapper' style={{ color: "#000000" }}>Your upsale/cross sales points: <button onClick={() => setUpsaleCrossSalePointsModalOpen(true)} className='point_score clickable_link bg-transparent' style={{ color: "#1492E6" }}>
                             {upsaleCrossSalePointsData}pt
-                        </span></p>
+                        </button></p>
 
                         <UpsaleCrossSalePointModal
                             antdModalOpen={upsaleCrossSalePointsModalOpen}

@@ -1,23 +1,9 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import CustomAntdModal from '../ui/CustomAntdModal';
-import useIncentiveTypes from '../../hooks/useIncentiveTypes';
-import { useDispatch } from 'react-redux';
-import { regularIncentivePoints } from '../../../../../services/features/Pm-Sales/PmIncentiveSlice';
+import PropTypes from 'prop-types';
 
 
 const IncentivePointModal = ({ antdModalOpen, setAntdModalOpen, regularPointAverage, regularIncentivePointsData, totalPoints }) => {
-    const { allIncentiveTypes, incentiveTypesLoading } = useIncentiveTypes();
-    // const dispatch = useDispatch();
-
-    // useEffect(() => {
-    //     console.log(allIncentiveTypes?.data?.total_points)
-    //     console.log(regularPointAverage)
-    //     if (allIncentiveTypes?.data?.total_points) {
-    //         dispatch(regularIncentivePoints((parseFloat(allIncentiveTypes?.data?.total_points) * regularPointAverage) / 100));
-    //     }
-
-    // }, [allIncentiveTypes?.data?.total_points]);
-
 
     return (
         <div>
@@ -47,3 +33,11 @@ const IncentivePointModal = ({ antdModalOpen, setAntdModalOpen, regularPointAver
 };
 
 export default IncentivePointModal;
+
+IncentivePointModal.propTypes = {
+    antdModalOpen: PropTypes.bool,
+    setAntdModalOpen: PropTypes.func,
+    regularPointAverage: PropTypes.number,
+    regularIncentivePointsData: PropTypes.number,
+    totalPoints: PropTypes.number
+}

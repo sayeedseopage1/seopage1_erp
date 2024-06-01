@@ -1,5 +1,4 @@
 import { User } from "../../../../../react/utils/user-details";
-// import { User } from "../../../utils/user-details";
 const reVsTask = [10, 20, 22, 30, 40, 50, 60, 70, 80, 90, 100];
 const incentive = [0, 0, 50, 0, 0, 0, 0, 0, 0, 0];
 
@@ -1030,6 +1029,7 @@ export const quarterlyAndYearlyTableHeaders = [
 
 export const quarterlyAndYearlyTableData = [
     {
+        id: 1,
         month: "January, 2023",
         regularPoints: 100,
         actualPoints: 120,
@@ -1039,6 +1039,7 @@ export const quarterlyAndYearlyTableData = [
         cumulativeIncentiveAmount: "300 TK",
     },
     {
+        id: 2,
         month: "February, 2023",
         regularPoints: 120,
         actualPoints: 130,
@@ -1048,6 +1049,7 @@ export const quarterlyAndYearlyTableData = [
         cumulativeIncentiveAmount: "620 TK",
     },
     {
+        id: 3,
         month: "March, 2023",
         regularPoints: 140,
         actualPoints: 150,
@@ -1057,6 +1059,7 @@ export const quarterlyAndYearlyTableData = [
         cumulativeIncentiveAmount: "960 TK",
     },
     {
+        id: 4,
         month: "April, 2023",
         regularPoints: 160,
         actualPoints: 170,
@@ -1066,6 +1069,7 @@ export const quarterlyAndYearlyTableData = [
         cumulativeIncentiveAmount: "1320 TK",
     },
     {
+        id: 5,
         month: "May, 2023",
         regularPoints: 180,
         actualPoints: 190,
@@ -1075,6 +1079,7 @@ export const quarterlyAndYearlyTableData = [
         cumulativeIncentiveAmount: "1700 TK",
     },
     {
+        id: 6,
         month: "June, 2023",
         regularPoints: 200,
         actualPoints: 210,
@@ -1084,6 +1089,7 @@ export const quarterlyAndYearlyTableData = [
         cumulativeIncentiveAmount: "2100 TK",
     },
     {
+        id: 7,
         month: "July, 2023",
         regularPoints: 220,
         actualPoints: 230,
@@ -1093,6 +1099,7 @@ export const quarterlyAndYearlyTableData = [
         cumulativeIncentiveAmount: "2520 TK",
     },
     {
+        id: 8,
         month: "August, 2023",
         regularPoints: 240,
         actualPoints: 250,
@@ -1102,6 +1109,7 @@ export const quarterlyAndYearlyTableData = [
         cumulativeIncentiveAmount: "2960 TK",
     },
     {
+        id: 9,
         month: "September, 2023",
         regularPoints: 260,
         actualPoints: 270,
@@ -1111,6 +1119,7 @@ export const quarterlyAndYearlyTableData = [
         cumulativeIncentiveAmount: "3420 TK",
     },
     {
+        id: 10,
         month: "October, 2023",
         regularPoints: 280,
         actualPoints: 290,
@@ -1120,6 +1129,7 @@ export const quarterlyAndYearlyTableData = [
         cumulativeIncentiveAmount: "3900 TK",
     },
     {
+        id: 11,
         month: "November, 2023",
         regularPoints: 300,
         actualPoints: 310,
@@ -1129,6 +1139,7 @@ export const quarterlyAndYearlyTableData = [
         cumulativeIncentiveAmount: "4400 TK",
     },
     {
+        id: 12,
         month: "December, 2023",
         regularPoints: 320,
         actualPoints: 330,
@@ -1186,304 +1197,5 @@ export const statsInfoData = {
     ],
 };
 
-// TODO: it will be removed
-export const dummyUserRole = 1;
-
 //*** User role for permissions
 export const auth = new User(window?.Laravel?.user);
-
-// export const achivedBarChartData = [
-//     {
-//         id: 1,
-//         title: "Revision Vs Task ratio",
-//         yTitle: "Incentive percentage",
-//         chartTag: "Ideal",
-//         series: [
-//             {
-//                 name: "Revision vs task ratio",
-//                 data: [100, 80, 50, 10, 10, 10, 10],
-//             },
-//         ],
-//         categories: [
-//             "0-10%",
-//             "11-20%",
-//             "21-35%",
-//             "36-50%",
-//             "51-65%",
-//             "66-80%",
-//             "81-100%",
-//         ],
-//         range: [
-//             {
-//                 from: 0,
-//                 to: 40,
-//                 color: "#FFA3A3",
-//             },
-//             {
-//                 from: 41,
-//                 to: 50,
-//                 color: "#FEBC05",
-//             },
-//             {
-//                 from: 51,
-//                 to: 80,
-//                 color: "#09F",
-//             },
-//             {
-//                 from: 81,
-//                 to: 100,
-//                 color: "#14B96A",
-//             },
-//         ],
-//     },
-//     {
-//         id: 2,
-//         title: "Goal Achieve Rate",
-//         yTitle: "Incentive percentage",
-//         chartTag: "Ideal",
-//         series: [
-//             {
-//                 name: "Goal Achieve Rate",
-//                 data: [10, 50, 80, 100, 100, 100, 100],
-//             },
-//         ],
-//         categories: [
-//             "0-40%",
-//             "41-50%",
-//             "51-74%",
-//             "75",
-//             "76-80%",
-//             "81-90%",
-//             "91-100%",
-//         ],
-//         range: [
-//             {
-//                 from: 0,
-//                 to: 20,
-//                 color: "#FFA3A3",
-//             },
-//             {
-//                 from: 21,
-//                 to: 50,
-//                 color: "#FEBC05",
-//             },
-//             {
-//                 from: 51,
-//                 to: 80,
-//                 color: "#09F",
-//             },
-//             {
-//                 from: 81,
-//                 to: 100,
-//                 color: "#14B96A",
-//             },
-//         ],
-//     },
-//     {
-//         id: 3,
-//         title: "Negative points vs Positive points ",
-//         yTitle: "Incentive percentage",
-//         chartTag: "Ideal",
-//         series: [
-//             {
-//                 name: "Negative points vs Positive points ",
-//                 data: [100, 80, 50, 10, 10, 10, 10],
-//             },
-//         ],
-//         categories: [
-//             "0-25%",
-//             "26-35%",
-//             "36-50%",
-//             "51-65%",
-//             "66-80%",
-//             "81-95%",
-//             "100%",
-//         ],
-//         range: [
-//             {
-//                 from: 0,
-//                 to: 40,
-//                 color: "#FFA3A3",
-//             },
-//             {
-//                 from: 41,
-//                 to: 50,
-//                 color: "#FEBC05",
-//             },
-//             {
-//                 from: 51,
-//                 to: 80,
-//                 color: "#09F",
-//             },
-//             {
-//                 from: 81,
-//                 to: 100,
-//                 color: "#14B96A",
-//             },
-//         ],
-//     },
-//     {
-//         id: 4,
-//         title: "Percentage of Delayed Projects",
-//         yTitle: "Incentive percentage",
-//         chartTag: "Ideal",
-//         series: [
-//             {
-//                 name: "Percentage of Delayed Projects",
-//                 data: [120, 100, 80, 50, 10, 10, 10],
-//             },
-//         ],
-//         categories: [
-//             "0-30%",
-//             "31-40%",
-//             "41-50%",
-//             "51-60%",
-//             "61-70%",
-//             "71-80%",
-//             "100%",
-//         ],
-//         range: [
-//             {
-//                 from: 0,
-//                 to: 40,
-//                 color: "#FFA3A3",
-//             },
-//             {
-//                 from: 41,
-//                 to: 50,
-//                 color: "#FEBC05",
-//             },
-//             {
-//                 from: 51,
-//                 to: 80,
-//                 color: "#09F",
-//             },
-//             {
-//                 from: 81,
-//                 to: 120,
-//                 color: "#14B96A",
-//             },
-//         ],
-//     },
-//     {
-//         id: 5,
-//         title: "Milestone Cancelation Rate",
-//         yTitle: "Incentive percentage",
-//         chartTag: "Ideal",
-//         series: [
-//             {
-//                 name: "Milestone Cancelation Rate",
-//                 data: [120, 100, 50, 20, 10, 10, 10],
-//             },
-//         ],
-//         categories: [
-//             "00-03%",
-//             "05-05%",
-//             "06-10%",
-//             "11-15%",
-//             "16-20%",
-//             "21-30%",
-//             "31-100%",
-//         ],
-//         range: [
-//             {
-//                 from: 0,
-//                 to: 19,
-//                 color: "#FFA3A3",
-//             },
-//             {
-//                 from: 20,
-//                 to: 49,
-//                 color: "#FEBC05",
-//             },
-//             {
-//                 from: 50,
-//                 to: 80,
-//                 color: "#09F",
-//             },
-//             {
-//                 from: 81,
-//                 to: 120,
-//                 color: "#14B96A",
-//             },
-//         ],
-//     },
-//     {
-//         id: 6,
-//         title: "Deadline Miss Rate",
-//         yTitle: "Incentive percentage",
-//         chartTag: "Ideal",
-//         series: [
-//             {
-//                 name: "Deadline Miss Rate",
-//                 data: [100, 80, 50, 20, 10, 10, 10],
-//             },
-//         ],
-//         categories: [
-//             "0-30%",
-//             "31-40%",
-//             "41-45%",
-//             "46-50%",
-//             "51-65%",
-//             "66-80%",
-//             "81-100%",
-//         ],
-//         range: [
-//             {
-//                 from: 0,
-//                 to: 19,
-//                 color: "#FFA3A3",
-//             },
-//             {
-//                 from: 20,
-//                 to: 49,
-//                 color: "#FEBC05",
-//             },
-//             {
-//                 from: 50,
-//                 to: 80,
-//                 color: "#09F",
-//             },
-//             {
-//                 from: 81,
-//                 to: 120,
-//                 color: "#14B96A",
-//             },
-//         ],
-//     },
-//     {
-//         id: 7,
-//         title: "Client Retention Rate",
-//         yTitle: "Incentive percentage",
-//         chartTag: "Ideal",
-//         series: [
-//             {
-//                 name: "Client Retention Rate",
-//                 data: [0, 50, 80, 100, 120],
-//             },
-//         ],
-//         categories: ["0-5%", "6-10%", "11-15%", "16-20%", "21-100%"],
-//         range: [
-//             {
-//                 from: 0,
-//                 to: 40,
-//                 color: "#FFA3A3",
-//             },
-//             {
-//                 from: 41,
-//                 to: 50,
-//                 color: "#FEBC05",
-//             },
-//             {
-//                 from: 51,
-//                 to: 80,
-//                 color: "#09F",
-//             },
-//             {
-//                 from: 81,
-//                 to: 120,
-//                 color: "#14B96A",
-//             },
-//         ],
-//     },
-// ];

@@ -1,10 +1,10 @@
 import React from 'react';
 import CustomAntdModal from '../../ui/CustomAntdModal';
-import PropTypes from "prop-types";
 import { ButtonComponent } from '../../../../PointFactors/components/Styles/ui/ui';
 import { useForm } from 'react-hook-form';
 import { useEditIncentiveTypesMutation } from '../../../../../../services/api/Pm-Sales/PmIncentiveApiSlice';
 import { toast } from 'react-toastify';
+import propTypes from "prop-types";
 
 const CashValueBonusEditModal = ({ bonusIncentiveTypes, antdModalOpen, setAntdModalOpen }) => {
 
@@ -13,7 +13,6 @@ const CashValueBonusEditModal = ({ bonusIncentiveTypes, antdModalOpen, setAntdMo
     const {
         register,
         handleSubmit,
-        watch,
         reset,
         formState: { errors },
     } = useForm()
@@ -68,6 +67,7 @@ const CashValueBonusEditModal = ({ bonusIncentiveTypes, antdModalOpen, setAntdMo
 export default CashValueBonusEditModal;
 
 CashValueBonusEditModal.propTypes = {
-    antdModalOpen: PropTypes.bool,
-    setAntdModalOpen: PropTypes.func
+    bonusIncentiveTypes: propTypes.object,
+    antdModalOpen: propTypes.bool,
+    setAntdModalOpen: propTypes.func
 };

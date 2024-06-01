@@ -31,6 +31,7 @@ const CreditDebitFilter = ({ handleChange }) => {
                     className='points_selector'
                     defaultValue={{ value: creditOrDebit[0]?.value, label: creditOrDebit[0]?.label }}
                     style={{ width: 100 }}
+                    popupMatchSelectWidth={false}
                     onChange={handleChange}
                     options={creditOrDebit?.map(item => ({
                         value: item?.value,

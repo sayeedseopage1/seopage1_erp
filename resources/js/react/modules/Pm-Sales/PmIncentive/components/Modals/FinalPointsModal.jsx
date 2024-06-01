@@ -1,5 +1,6 @@
 import React from 'react';
 import CustomAntdModal from '../ui/CustomAntdModal';
+import PropTypes from 'prop-types';
 
 const FinalPointsModal = ({ antdModalOpen, setAntdModalOpen, unreleasedIncentive, bonusPointsIncentive, bonusPointsData }) => {
 
@@ -31,3 +32,11 @@ const FinalPointsModal = ({ antdModalOpen, setAntdModalOpen, unreleasedIncentive
 };
 
 export default FinalPointsModal;
+
+FinalPointsModal.propTypes = {
+    antdModalOpen: PropTypes.bool,
+    setAntdModalOpen: PropTypes.func,
+    unreleasedIncentive: PropTypes.number,
+    bonusPointsIncentive: PropTypes.string,
+    bonusPointsData: PropTypes.number,
+}

@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import CustomAntdModal from '../ui/CustomAntdModal';
 import { useDispatch, useSelector } from 'react-redux';
 import { regularPointAverage } from '../../../../../services/features/Pm-Sales/PmIncentiveSlice';
+import PropTypes from 'prop-types';
 
 const AveragePointModal = ({ antdModalOpen, setAntdModalOpen, item: statsInfoData }) => {
     const dispatch = useDispatch();
@@ -48,11 +49,10 @@ const AveragePointModal = ({ antdModalOpen, setAntdModalOpen, item: statsInfoDat
                     <hr />
                     {/* Render the total incentive average calculation */}
                     <div className="modal_point_row">
-                        <p>Total incentive average:
-                            <span>
-                                ({incentive_criterias?.map(item => `${parseFloat(item?.obtained_incentive)}%`).join(' + ')})
-                                / {incentive_criterias?.length}
-                            </span>
+                        <p>Total incentive average:<span>
+                            ({incentive_criterias?.map(item => `${parseFloat(item?.obtained_incentive)}%`).join(' + ')})
+                            / {incentive_criterias?.length}
+                        </span>
                         </p>
                         {/* Apply a class based on whether the averagePoints is positive or not */}
                         <span className={`${pmIncentive?.regularPointAverage > 0 ? 'progress_card_desc_pos' : 'progress_card_desc_neg'}`}>{pmIncentive?.regularPointAverage}%</span>
@@ -68,3 +68,9 @@ const AveragePointModal = ({ antdModalOpen, setAntdModalOpen, item: statsInfoDat
 };
 
 export default AveragePointModal;
+
+AveragePointModal.propTypes = {
+    antdModalOpen: PropTypes.bool.isRequired,
+    setAntdModalOpen: PropTypes.func.isRequired,
+    item: PropTypes.object,
+};

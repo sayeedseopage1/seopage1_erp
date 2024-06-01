@@ -3,7 +3,6 @@ import PropTypes from "prop-types";
 import { ButtonComponent } from '../../../../PointFactors/components/Styles/ui/ui';
 import { useForm } from 'react-hook-form';
 import { Modal } from 'antd';
-import { toast } from 'react-toastify';
 
 const EditYAxisModal = ({ axisEditItem, chartAxisData, setChartAxisData, antdModalOpen, setAntdModalOpen }) => {
 
@@ -12,7 +11,6 @@ const EditYAxisModal = ({ axisEditItem, chartAxisData, setChartAxisData, antdMod
     const {
         register,
         handleSubmit,
-        watch,
         reset,
         formState: { errors },
     } = useForm()
@@ -29,7 +27,6 @@ const EditYAxisModal = ({ axisEditItem, chartAxisData, setChartAxisData, antdMod
         // Concatenate newData with filteredData
         setChartAxisData([...filteredData, newData]);
         setAntdModalOpen(false);
-        // toast.success('Y Axis Ratio updated successfully');
         reset();
     }
 

@@ -26,23 +26,22 @@ const HeldAmountsTablePagination = ({ handlePageSizeChange, handlePageChange, ta
             </div>
 
             {/* pagination */}
-            <React.Fragment>
-                <ReactPaginate
-                    breakLabel="..."
-                    onPageChange={handlePageChange}
-                    previousLabel="Previous"
-                    nextLabel="Next"
-                    pageRangeDisplayed={3}
-                    marginPagesDisplayed={1}
-                    pageCount={tableData?.last_page ?? 1}
-                    renderOnZeroPageCount={null}
-                    containerClassName={styles.containerClassName}
-                    pageLinkClassName={styles.pageLinkClassName}
-                    activeLinkClassName={styles.activeLinkClassName}
-                    previousLinkClassName={styles.pageLinkClassName}
-                    nextLinkClassName={styles.pageLinkClassName}
-                />
-            </React.Fragment>
+            <ReactPaginate
+                breakLabel="..."
+                onPageChange={handlePageChange}
+                previousLabel="Previous"
+                nextLabel="Next"
+                pageRangeDisplayed={3}
+                marginPagesDisplayed={1}
+                pageCount={tableData?.last_page ?? 1}
+                renderOnZeroPageCount={null}
+                containerClassName={styles.containerClassName}
+                pageLinkClassName={styles.pageLinkClassName}
+                activeLinkClassName={styles.activeLinkClassName}
+                previousLinkClassName={styles.pageLinkClassName}
+                nextLinkClassName={styles.pageLinkClassName}
+            />
+
             {/* end pagination */}
         </div>
     );
@@ -54,4 +53,5 @@ HeldAmountsTablePagination.propTypes = {
     handlePageSizeChange: PropTypes.func,
     handlePageChange: PropTypes.func,
     tableData: PropTypes.object,
+    pageSize: PropTypes.number
 };

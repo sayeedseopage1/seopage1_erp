@@ -552,8 +552,8 @@ return new class extends Migration
                 'id' => 59,
                 'incentive_criteria_id' => 10,
                 'limit_type' => 1,
-                'lower_limit' => 0,
-                'upper_limit' => 5000,
+                'lower_limit' => 80,
+                'upper_limit' => 35,
                 'incentive_amount_type' => 2,
                 'incentive_amount' => 100
             ],
@@ -561,8 +561,8 @@ return new class extends Migration
                 'id' => 60,
                 'incentive_criteria_id' => 10,
                 'limit_type' => 1,
-                'lower_limit' => 5000,
-                'upper_limit' => 10000,
+                'lower_limit' => 70,
+                'upper_limit' => 30,
                 'incentive_amount_type' => 2,
                 'incentive_amount' => 80
             ],
@@ -570,8 +570,8 @@ return new class extends Migration
                 'id' => 61,
                 'incentive_criteria_id' => 10,
                 'limit_type' => 1,
-                'lower_limit' => 10000,
-                'upper_limit' => 15000,
+                'lower_limit' => 60,
+                'upper_limit' => 20,
                 'incentive_amount_type' => 2,
                 'incentive_amount' => 50
             ],
@@ -579,8 +579,8 @@ return new class extends Migration
                 'id' => 62,
                 'incentive_criteria_id' => 10,
                 'limit_type' => 1,
-                'lower_limit' => 15000,
-                'upper_limit' => 20000,
+                'lower_limit' => 50,
+                'upper_limit' => 15,
                 'incentive_amount_type' => 2,
                 'incentive_amount' => 10
             ],
@@ -588,31 +588,13 @@ return new class extends Migration
                 'id' => 63,
                 'incentive_criteria_id' => 10,
                 'limit_type' => 1,
-                'lower_limit' => 20000,
-                'upper_limit' => 25000,
+                'lower_limit' => 0,
+                'upper_limit' => 0,
                 'incentive_amount_type' => 2,
                 'incentive_amount' => 0
             ],
             [
                 'id' => 64,
-                'incentive_criteria_id' => 10,
-                'limit_type' => 1,
-                'lower_limit' => 25000,
-                'upper_limit' => 30000,
-                'incentive_amount_type' => 2,
-                'incentive_amount' => 0
-            ],
-            [
-                'id' => 65,
-                'incentive_criteria_id' => 10,
-                'limit_type' => 1,
-                'lower_limit' => 30000,
-                'upper_limit' => 35000,
-                'incentive_amount_type' => 2,
-                'incentive_amount' => 0
-            ],
-            [
-                'id' => 66,
                 'incentive_criteria_id' => 11,
                 'limit_type' => 2,
                 'lower_limit' => 0,
@@ -621,7 +603,7 @@ return new class extends Migration
                 'incentive_amount' => 0
             ],
             [
-                'id' => 67,
+                'id' => 65,
                 'incentive_criteria_id' => 11,
                 'limit_type' => 2,
                 'lower_limit' => 60,
@@ -630,7 +612,7 @@ return new class extends Migration
                 'incentive_amount' => 30
             ],
             [
-                'id' => 68,
+                'id' => 66,
                 'incentive_criteria_id' => 11,
                 'limit_type' => 2,
                 'lower_limit' => 65,
@@ -639,7 +621,7 @@ return new class extends Migration
                 'incentive_amount' => 40
             ],
             [
-                'id' => 69,
+                'id' => 67,
                 'incentive_criteria_id' => 11,
                 'limit_type' => 2,
                 'lower_limit' => 70,
@@ -648,7 +630,7 @@ return new class extends Migration
                 'incentive_amount' => 50
             ],
             [
-                'id' => 70,
+                'id' => 68,
                 'incentive_criteria_id' => 11,
                 'limit_type' => 2,
                 'lower_limit' => 75,

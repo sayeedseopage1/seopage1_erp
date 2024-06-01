@@ -9,7 +9,7 @@ import DeptFilter from '../../Points/components/Filter/DeptFilter.jsx';
 import EmployeeFilter from '../../Points/components/Filter/EmployeeFilter.jsx';
 import JqueryDateRangePicker from '../../Points/components/JqueryDateRangePicker.jsx';
 import DateFilter from './ui/DateFilter.jsx';
-import propTypes from 'prop-types';
+import PropTypes from 'prop-types';
 
 export default function IncentiveFilter({ setQuery, filterByPeriod }) {
     const [dept, setDept] = useState(1);
@@ -126,13 +126,13 @@ export default function IncentiveFilter({ setQuery, filterByPeriod }) {
             {
                 auth?.isHasRolePermission(1) &&
                 <div className='sp1__pp_filter_sidebar_container'>
-                    <div
-                        className='sp1__pp_filter_sidebar_toggle'
+                    <button
+                        className='sp1__pp_filter_sidebar_toggle bg-transparent'
                         onClick={() => setSidebarIsOpen(!sidebarIsOpen)}
                     >
                         <i className="fa-solid fa-filter"></i>
                         <span>Filters</span>
-                    </div>
+                    </button>
 
                     {
                         auth?.isHasRolePermission(1) && sidebarIsOpen && (
@@ -167,13 +167,13 @@ export default function IncentiveFilter({ setQuery, filterByPeriod }) {
             {
                 auth?.isHasRolePermission(4) &&
                 <div className='sp1__pp_filter_sidebar_container'>
-                    <div
-                        className='sp1__pp_filter_sidebar_toggle'
+                    <button
+                        className='sp1__pp_filter_sidebar_toggle bg-transparent'
                         onClick={() => setSidebarIsOpen(!sidebarIsOpen)}
                     >
                         <i className="fa-solid fa-filter"></i>
                         <span>Filters</span>
-                    </div>
+                    </button>
 
                     {
                         auth?.isHasRolePermission(4) && sidebarIsOpen && (
@@ -212,6 +212,6 @@ export default function IncentiveFilter({ setQuery, filterByPeriod }) {
 }
 
 IncentiveFilter.propTypes = {
-    setQuery: propTypes.func,
-    filterByPeriod: propTypes.string,
+    setQuery: PropTypes.func,
+    filterByPeriod: PropTypes.string,
 }

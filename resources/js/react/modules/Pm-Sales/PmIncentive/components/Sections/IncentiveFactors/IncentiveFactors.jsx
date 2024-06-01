@@ -6,67 +6,123 @@ const incentivesFactorsConditions = [
         id: 1,
         title: "You will get 120% of the incentive if the following conditions are met:",
         conditions: [
-            "Milestone cancellation rate (0-3%)",
-            "Percentage of delayed projects (0-30%)",
-            "Client retention rate (21-100%)"
+            {
+                id: 1,
+                title: "Milestone cancellation rate (0-3%)"
+            },
+            {
+                id: 2,
+                title: "Percentage of delayed projects (0-30%)"
+            },
+            {
+                id: 3,
+                title: "Client retention rate (21-100%)"
+            }
         ]
     },
     {
         id: 2,
         title: "You will get 120% of the incentive if the following conditions are met:",
         conditions: [
-            "Milestone cancellation rate (0-3%)",
-            "Percentage of delayed projects (0-30%)",
-            "Client retention rate (21-100%)",
-            "Milestone cancellation rate (0-3%)",
-            "Percentage of delayed projects (0-30%)",
-            "Client retention rate (21-100%)",
+            {
+                id: 1,
+                title: "Milestone cancellation rate (0-3%)"
+            },
+            {
+                id: 2,
+                title: "Percentage of delayed projects (0-30%)"
+            },
+            {
+                id: 3,
+                title: "Client retention rate (21-100%)"
+            },
+            {
+                id: 4,
+                title: "Milestone cancellation rate (0-3%)"
+            },
+            {
+                id: 5,
+                title: "Percentage of delayed projects (0-30%)"
+            },
+            {
+                id: 6,
+                title: "Client retention rate (21-100%)"
+            }
         ]
     },
     {
         id: 3,
         title: "You will get 120% of the incentive if the following conditions are met:",
         conditions: [
-            "Milestone cancellation rate (0-3%)",
-            "Percentage of delayed projects (0-30%)",
-            "Client retention rate (21-100%)",
-            "Milestone cancellation rate (0-3%)",
-            "Percentage of delayed projects (0-30%)",
-            "Client retention rate (21-100%)",
+            {
+                id: 1,
+                title: "Milestone cancellation rate (0-3%)"
+            },
+            {
+                id: 2,
+                title: "Percentage of delayed projects (0-30%)"
+            },
+            {
+                id: 3,
+                title: "Client retention rate (21-100%)"
+            }
         ]
     },
     {
         id: 4,
         title: "You will get 120% of the incentive if the following conditions are met:",
         conditions: [
-            "Milestone cancellation rate (0-3%)",
-            "Percentage of delayed projects (0-30%)",
-            "Client retention rate (21-100%)"
+            {
+                id: 1,
+                title: "Milestone cancellation rate (0-3%)"
+            },
+            {
+                id: 2,
+                title: "Percentage of delayed projects (0-30%)"
+            },
+            {
+                id: 3,
+                title: "Client retention rate (21-100%)"
+            }
         ]
     },
     {
         id: 5,
         title: "You will get 120% of the incentive if the following conditions are met:",
         conditions: [
-            "Milestone cancellation rate (0-3%)",
-            "Percentage of delayed projects (0-30%)",
-            "Client retention rate (21-100%)",
-            "Milestone cancellation rate (0-3%)",
-            "Percentage of delayed projects (0-30%)",
-            "Client retention rate (21-100%)",
+            {
+                id: 1,
+                title: "Milestone cancellation rate (0-3%)"
+            },
+            {
+                id: 2,
+                title: "Percentage of delayed projects (0-30%)"
+            },
+            {
+                id: 3,
+                title: "Client retention rate (21-100%)"
+            }
         ]
     },
     {
         id: 6,
         title: "You will get 120% of the incentive if the following conditions are met:",
         conditions: [
-            "Milestone cancellation rate (0-3%)",
-            "Percentage of delayed projects (0-30%)",
-            "Client retention rate (21-100%)"
+            {
+                id: 1,
+                title: "Milestone cancellation rate (0-3%)"
+            },
+            {
+                id: 2,
+                title: "Percentage of delayed projects (0-30%)"
+            },
+            {
+                id: 3,
+                title: "Client retention rate (21-100%)"
+            }
         ]
     }
 ];
-
 
 const IncentiveFactors = () => {
     return (

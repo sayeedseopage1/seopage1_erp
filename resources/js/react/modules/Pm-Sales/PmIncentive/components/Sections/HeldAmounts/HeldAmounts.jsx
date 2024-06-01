@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
-import { dummyUserRole, heldAmountsData, heldAmountsDataTableHeaders } from '../../../constants';
+import { auth, heldAmountsData, heldAmountsDataTableHeaders } from '../../../constants';
 import Pagination from '../../ui/Pagination';
+
 
 const HeldAmounts = () => {
     const [currentPage, setCurrentPage] = useState(1)
@@ -28,6 +29,7 @@ const HeldAmounts = () => {
                 </thead>
                 <tbody>
                     {
+                        // TODO: index will be replaced with actual data
                         currentPageData?.map((item, ind) => <tr key={ind}>
                             <td>{item?.month}</td>
                             <td>
@@ -40,7 +42,7 @@ const HeldAmounts = () => {
                             <td>{item?.held_amount_balance}</td>
                             <td>
                                 {
-                                    dummyUserRole == 1 && item?.status == 1 ? <button className='incentive_success_btn'>Paid</button> : <button className='incentive_danger_btn'>Pending</button>
+                                    auth?.isHasRolePermission(1) && item?.status == 1 ? <button className='incentive_success_btn'>Paid</button> : <button className='incentive_danger_btn'>Pending</button>
                                 }
                             </td>
                         </tr>)

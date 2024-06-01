@@ -32,6 +32,7 @@ function createIncentiveArray(arr, incentive) {
 export const IncentiveFormattedData = (incentiveData) => {
     const data = incentiveData?.incentive_criterias?.map((criteria) => {
         return {
+            id: criteria?.id,
             title: criteria?.title,
             ideal: {
                 id: criteria?.id,
@@ -122,17 +123,3 @@ export const IncentiveFormattedData = (incentiveData) => {
     });
     return data;
 };
-
-// export const statsInfoData = (incentiveData) => {
-//     const data = incentiveData?.incentive_criterias?.map((criteria) => {
-//         return {
-//             average:null,
-//             stats_info:[
-//                 criteria?.incentive_factors?.map((factor) =>
-//                     parseFloat(factor?.incentive_amount)
-//                 ),
-//             ]
-//         };
-//     });
-//     return data;
-// };

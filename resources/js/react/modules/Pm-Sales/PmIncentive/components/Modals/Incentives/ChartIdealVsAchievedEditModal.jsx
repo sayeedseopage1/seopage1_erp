@@ -10,9 +10,8 @@ import { toast } from 'react-toastify';
 import Swal from 'sweetalert2';
 import warningIcon from '../../../assets/warningIcon.svg'
 import { useAddIncentiveFactorsMutation, useEditIncentiveFactorsMutation, useGetSingleIncentiveCriteriaQuery } from '../../../../../../services/api/Pm-Sales/PmIncentiveApiSlice';
-import Spinner from '../../../../PointFactors/components/loader/Spinner';
+import PropTypes from 'prop-types';
 
-// TODO: need to execute incentive_amount_type and limit_type
 const ChartIdealVsAchievedEditModal = ({ antdModalOpen, showIdealVsAchievedEditModal, chartDataId }) => {
     const { data: singleCriteria, isLoading: isLoadingSingleCriteria } = useGetSingleIncentiveCriteriaQuery(chartDataId, { skip: !chartDataId })
 
@@ -31,8 +30,6 @@ const ChartIdealVsAchievedEditModal = ({ antdModalOpen, showIdealVsAchievedEditM
             limit_type: parseFloat(item?.limit_type),
         }
     )) || [];
-
-
 
     // Modal states for each modal
     const [addNewAxisDataModalOpen, setAddNewAxisDataModalOpen] = useState(false);
@@ -167,10 +164,6 @@ const ChartIdealVsAchievedEditModal = ({ antdModalOpen, showIdealVsAchievedEditM
         }
     };
 
-    // console.log("chartAxisData", chartAxisData)
-    // console.log("singleCriteria", singleCriteriaLimitType);
-
-
     return (
         <Modal className='pay_now_modal'
             closable={false}
@@ -227,8 +220,8 @@ const ChartIdealVsAchievedEditModal = ({ antdModalOpen, showIdealVsAchievedEditM
                             chartAxisData?.length > 0 ? (
                                 // If data is available, map through it and render items
                                 chartAxisData
-                                    .sort((a, b) => a?.lower_limit - b?.lower_limit)
-                                    .map((item) => (
+                                    ?.sort((a, b) => a?.lower_limit - b?.lower_limit)
+                                    ?.map((item) => (
                                         <div key={item?.id} className='edit_chart_data_modal_content ratio_card'>
                                             <div className='ratio_wrapper'>
                                                 <p className='ratio_text'>{item?.lower_limit}-{item?.limit_type == 1 ? "$" : ""}{item?.upper_limit}{item?.limit_type == 2 ? "%" : ""}</p>
@@ -307,3 +300,9 @@ const ChartIdealVsAchievedEditModal = ({ antdModalOpen, showIdealVsAchievedEditM
 };
 
 export default ChartIdealVsAchievedEditModal;
+
+ChartIdealVsAchievedEditModal.propTypes = {
+    chartDataId: PropTypes.number,
+    antdModalOpen: PropTypes.bool,
+    showIdealVsAchievedEditModal: PropTypes.func
+};

@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import Dropdown from '../../../../../Insights/ui/Dropdown';
 import { CompareDate } from '../../../../../utils/dateController';
+import PropTypes from 'prop-types';
 
 const DateFilter = ({ startDate, endDate, setStartDate, setEndDate, subtract, type = 'monthly' }) => {
     const dayjs = new CompareDate();
@@ -73,12 +74,6 @@ const DateFilter = ({ startDate, endDate, setStartDate, setEndDate, subtract, ty
 
     return (
         <div>
-            {/* <div className='sp1__jquery_date_picker' style={{ position: 'relative' }}>
-                <div className='sp1__jquery_date_btn'>
-                    <i className="fa-solid fa-calendar-days"></i>
-                </div>
-                <div className='sp1__jquery_date_text'>{start} to {end}</div>
-            </div> */}
             <Dropdown>
                 <Dropdown.Toggle>
                     <div className='sp1__jquery_date_picker' style={{ position: 'relative' }}>
@@ -169,4 +164,13 @@ const DateFilter = ({ startDate, endDate, setStartDate, setEndDate, subtract, ty
     );
 };
 
-export default DateFilter
+export default DateFilter;
+
+DateFilter.propTypes = {
+    startDate: PropTypes.string,
+    endDate: PropTypes.string,
+    type: PropTypes.string,
+    setStartDate: PropTypes.func,
+    setEndDate: PropTypes.func,
+    subtract: PropTypes.func
+}

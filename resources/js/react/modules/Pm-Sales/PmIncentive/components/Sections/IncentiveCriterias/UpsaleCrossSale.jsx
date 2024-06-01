@@ -7,12 +7,10 @@ import { IncentiveFormattedData } from '../../../utils/formattedChartData';
 
 
 const UpsaleCrossSale = () => {
-    const { upSaleCrossSaleTypes, incentiveTypesLoading } = useIncentiveTypes();
+    const { upSaleCrossSaleTypes } = useIncentiveTypes();
 
     const upSaleCrossSaleChartData = IncentiveFormattedData(upSaleCrossSaleTypes)
 
-
-    // TODO: handle loading state here as well
     return (
         <>
             <div className="title_wrapper">
@@ -22,8 +20,8 @@ const UpsaleCrossSale = () => {
             </div>
             <div className='chart_section_container'>
                 {
-                    upSaleCrossSaleChartData?.map((item, ind) => (
-                        <div key={ind} className="chart_parent">
+                    upSaleCrossSaleChartData?.map((item) => (
+                        <div key={item?.id} className="chart_parent">
 
                             <div className="secondary_chart_wrapper">
                                 <IncentiveBarChart chartData={item?.ideal} />
