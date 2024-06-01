@@ -58,6 +58,11 @@ const EvaluationTaskListModal = ({
     setIsEvaluationModal,
     singleEvaluation,
 }) => {
+    const { data: RoundHistory } = useGetEvaluationHistoryQuery(
+        singleEvaluation?.user_id
+    );
+    const roundNumber = RoundHistory?.data.length;
+    console.log("roundnumber", roundNumber);
     const [dateExpired, setDateExpired] = React.useState(false);
     const [latestRound, setLatestRound] = React.useState(null);
     const [confirmButtonDisabled, setConfirmButtonDisabled] =
@@ -684,17 +689,19 @@ const EvaluationTaskListModal = ({
                                         ? "Authorizing..."
                                         : "Authorize"}
                                 </Button>
-                                <Button
-                                    variant="info"
-                                    onClick={handleAdminExtention}
-                                    size="md"
-                                    className="ml-2"
-                                    disabled={isLoadingAdminExtended}
-                                >
-                                    {isLoadingAdminExtended
-                                        ? "extending..."
-                                        : "Continue this trial for 1 more week!"}
-                                </Button>
+                                {roundNumber === 0 && (
+                                    <Button
+                                        variant="info"
+                                        onClick={handleAdminExtention}
+                                        size="md"
+                                        className="ml-2"
+                                        disabled={isLoadingAdminExtended}
+                                    >
+                                        {isLoadingAdminExtended
+                                            ? "extending..."
+                                            : "Continue this trial for 1 more week!"}
+                                    </Button>
+                                )}
                                 <Button
                                     variant="danger"
                                     onClick={handleAdminRejection}

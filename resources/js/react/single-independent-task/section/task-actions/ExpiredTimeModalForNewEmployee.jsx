@@ -42,7 +42,7 @@ const ExpiredTimeModalForNewEmployee = ({
     useEffect(() => {
         if (
             toggleModal &&
-            timeLeft <= 4200 && // 70 minutes
+            timeLeft <= 3600 && // 60 minutes
             timeLeft > 0 &&
             timerStatusForWarningModal
         ) {
