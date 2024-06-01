@@ -2,17 +2,20 @@ import Avatar from "../../../global/Avatar";
 import { getColor } from "../../../utils/getColor";
 import Popover from "../ui/Popover";
 import { CreatedBy } from "./ui";
-import style from "../ui/popover.module.css";
+import style from '../ui/popover.module.css'
+
 
 export const ProjectStatusTableColumns = [
     {
         id: "id",
         header: "#",
         accessorKey: "id",
-        cell: ({ row, cell }) => {
+        cell: ({ row,cell }) => {
             const data = row.original;
-            return <span>{cell?.row?.index + 1}</span>;
-        },
+            return (
+                <span>{cell?.row?.index + 1}</span>
+            );
+        }
     },
     {
         id: "clientName",
@@ -21,31 +24,29 @@ export const ProjectStatusTableColumns = [
         cell: ({ row }) => {
             const data = row.original;
             return (
-                <CreatedBy href={`/account/clients/${data.clientId}`}>
+                <CreatedBy
+                    href={`/account/clients/${data.clientId}`}
+                >
                     <Avatar
                         type="circle"
                         name={data?.clientName}
-                        src={
-                            data?.clientImage
-                                ? `/user-uploads/avatar/${data?.clientImage}`
-                                : null
-                        }
+                        src={data?.clientImage ? `/user-uploads/avatar/${data?.clientImage}` : null}
                     />
-                    <span style={{ color: "#3366CC" }}>{data?.clientName}</span>
+                    <span>{data?.clientName}</span>
                 </CreatedBy>
             );
-        },
+        }
     },
     {
         id: "project_name",
         header: "Project Name",
         accessorKey: "project_name",
-        cell: ({ row, table }) => {
+        cell: ({ row, table  }) => {
             const data = row.original;
-            const handler = table.options.meta;
+            const handler = table.options.meta
             return (
                 <p
-                    onClick={() => handler.onClickHandler(data)}
+                onClick={() => handler.onClickHandler(data)}
                     role="button"
                     className="multiline-ellipsis text-hover-underline-color pr-2 text-primary"
                 >
@@ -65,7 +66,7 @@ export const ProjectStatusTableColumns = [
                     {data?.project_budget} {data?.currency_symbol}
                 </span>
             );
-        },
+        }
     },
     {
         id: "pmName",
@@ -74,21 +75,19 @@ export const ProjectStatusTableColumns = [
         cell: ({ row }) => {
             const data = row.original;
             return (
-                <CreatedBy href={`/account/employees/${data.pmId}`}>
+                <CreatedBy
+                    href={`/account/employees/${data.pmId}`}
+                >
                     <Avatar
                         type="circle"
                         name={data?.pmName}
-                        src={
-                            data?.pmImage
-                                ? `/user-uploads/avatar/${data?.pmImage}`
-                                : null
-                        }
+                        src={data?.pmImage ? `/user-uploads/avatar/${data?.pmImage}` : null}
                     />
 
-                    <span style={{ color: "#3366CC" }}>{data?.pmName}</span>
+                    <span>{data?.pmName}</span>
                 </CreatedBy>
             );
-        },
+        }
     },
     {
         id: "project_category",
@@ -105,29 +104,25 @@ export const ProjectStatusTableColumns = [
         header: "Percentage of Goals Met",
         cell: ({ row, table }) => {
             const data = row.original;
-            const handler = table.options.meta;
-            const percentage = 50;
+            const handler = table.options.meta
             return (
-                <div
-                    className="progress"
-                    style={{
-                        height: "15px",
-                    }}
-                >
+                <div className="progress" style={{
+                    height: "15px",
+                }}>
                     <Popover>
                         <Popover.Button>
                             <div
                                 onClick={() => handler.onPercentOfGoalMet(data)}
-                                className={`${style.projectStatus_popover_button}`}
+                                className={`${style.projectStatus_percent_popover_button}`}
                             >
                                 <div
                                     className="progress-bar f-12"
                                     role="progressbar"
                                     style={{
-                                        width: `${percentage}%`,
-                                        backgroundColor: getColor(percentage),
-                                    }}
-                                    aria-valuenow={percentage}
+                                        width: `${data?.goal_percentage ?? 0}%`,
+                                        backgroundColor: getColor(data?.goal_percentage ?? 0),
+                                        height: "15px"}}
+                                    aria-valuenow={data?.goal_percentage ?? 0}
                                     aria-valuemin="0"
                                     aria-valuemax="100"
                                 >
@@ -136,26 +131,22 @@ export const ProjectStatusTableColumns = [
                             </div>
                         </Popover.Button>
                         <Popover.Panel>
-                            <div
-                                onTouchStartCapture={() => {
-                                    debugger;
-                                }}
-                                className={`${style.projectStatus_popover_panel}`}
-                            >
-                                <div className="d-flex flex-column justify-content-start align-items-start">
-                                    <p>Total goals: 10</p>
-                                    <p>Goals deadline expired so far: 8</p>
-                                    <p>Goals met: 4</p>
-                                    <p>
-                                        Percentage of goals met: {percentage}%
-                                    </p>
+                            <div className={`${style.projectStatus_popover_panel}`}>
+                                <div
+                                    className="d-flex flex-column justify-content-start align-items-start"
+                                >
+                                    <p>Total goals: {data?.total_goal}</p>
+                                    <p>Goals deadline expired so far: {data?.goal_expire}</p>
+                                    <p>Goals met: {data?.goal_meet}</p>
+                                    <p>Percentage of goals met: {data?.goal_percentage ?? 0}%</p>
                                 </div>
                             </div>
                         </Popover.Panel>
                     </Popover>
                 </div>
             );
-        },
+
+        }
     },
     {
         id: "next_goal_date",
@@ -165,28 +156,44 @@ export const ProjectStatusTableColumns = [
             return (
                 <Popover>
                     <Popover.Button>
-                        <div
-                            className={`${style.projectStatus_popover_button}`}
-                        >
-                            <p>In 02 Days</p>
-                        </div>
+                            <div className={`${style.projectStatus_popover_button}`}>
+                                {
+                                    data.upcoming_goal_day === 0 ?
+                                    <p>Today</p> :
+                                    data.upcoming_goal_day ?
+                                     <p>In {data.upcoming_goal_day} Days</p> :
+                                         <p>No upcoming goals!</p>}
+                            </div>
                     </Popover.Button>
                     <Popover.Panel>
                         <div className={`${style.projectStatus_popover_panel}`}>
-                            <div className="d-flex flex-column justify-content-start align-items-start">
-                                <p>Next Goal Date : 2024-02-16 09:10:26</p>
+                             <div
+                                className="d-flex flex-column justify-content-start align-items-start"
+                            >
+                                {
+                                    data.next_goal_date ?
+                                        <p>Next Goal Date : {data.next_goal_date}</p> :
+                                            <p>All goals are completed!</p>
+                                }
                             </div>
                         </div>
                     </Popover.Panel>
                 </Popover>
+
             );
-        },
+
+        }
     },
     {
         id: "next_goal_details",
         header: "Next Goal Details",
-        cell: ({ row }) => {
-            return <button className="btn btn-success">View Details</button>;
-        },
-    },
+        cell: ({ row, table }) => {
+                 const data = row.original;
+                const handler = table.options.meta;
+                return (
+                    <button onClick={() => handler.onNextGoalDetails(data)} className="btn btn-success">View Details</button>
+                );
+
+        }
+    }
 ];

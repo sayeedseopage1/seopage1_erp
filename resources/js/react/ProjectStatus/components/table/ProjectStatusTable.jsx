@@ -15,7 +15,6 @@ import _ from "lodash";
 import { useSearchParams } from "react-router-dom";
 import { useLocalStorage } from "react-use";
 import EmptyTable from "../../../global/EmptyTable";
-import { Placeholder } from "../../../global/Placeholder";
 import { DragableColumnHeader } from "./DragableColumnHeader";
 import ProjectStatusTablePagination from "../ProjectStatusTablePagination";
 import { User } from "../../../utils/user-details";
@@ -142,8 +141,6 @@ const ProjectStatusTable = ({
             },
         }
     })
-
-  
 
     
     return (

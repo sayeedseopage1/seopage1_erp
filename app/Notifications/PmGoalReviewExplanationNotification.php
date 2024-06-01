@@ -87,7 +87,7 @@ class PmGoalReviewExplanationNotification extends Notification
         </p>'
         .
         '<p>
-            <b style="color: black">' . __('Goal description') . ': '.'</b>' . '<span>'.$goal->description.'</span>'. '
+            <b style="color: black">' . __('Goal description') . ': '.'</b>' . '<span>'.$goal->expired_meet_description.'</span>'. '
         </p>';
         $goal->mail_status = 3;
         $goal->save();

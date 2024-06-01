@@ -1,5 +1,9 @@
 import Avatar from "../../../global/Avatar";
+import { getColor } from "../../../utils/getColor";
+import TablePopover from "../TablePopover";
 import { CreatedBy } from "../table/ui";
+import Popover from "../ui/Popover";
+import style from "../ui/popover.module.css";
 
 export const DeadlineEHColumn = [
     {
@@ -21,12 +25,12 @@ export const DeadlineEHColumn = [
     {
         id: "start_date",
         header: "Goal Start Date",
-        accessorKey: "start_date",
+        accessorKey: "goal_start_date",
     },
     {
         id: "deadline",
         header: "Goal Dead Line",
-        accessorKey: "deadline",
+        accessorKey: "goal_end_date",
     },
     {
         id: "duration",
@@ -43,26 +47,20 @@ export const DeadlineEHColumn = [
         accessorKey: "goal_name",
         cell: ({ row }) => {
             const data = row?.original;
-            return (
-                <span title={data?.goal_name} className="multine-ellipsis">
-                    {data?.goal_name ?? "--"}
-                </span>
-            );
+            return <TablePopover text={data?.goal_name} />;
         },
     },
     {
         id: "description",
-        header: "Description",
-        accessorKey: "description",
+        header: "Expired Meet Des..",
+        accessorKey: "expired_meet_description",
         cell: ({ row }) => {
             const data = row?.original;
-            return data?.description ? (
-                <span
-                    className="multine-ellipsis"
-                    dangerouslySetInnerHTML={{ __html: data?.description }}
+            return (
+                <TablePopover
+                    text={data?.expired_meet_description}
+                    isDangerHtml={true}
                 />
-            ) : (
-                <span>--</span>
             );
         },
     },
@@ -75,7 +73,7 @@ export const DeadlineEHColumn = [
             return (
                 <div className="d-flex align-items-center">
                     <i
-                        class="fa fa-circle mr-1 f-10"
+                        className="fa fa-circle mr-1 f-10"
                         style={{
                             color:
                                 data?.goal_status === 0 ? "#FF0000" : "#00b5ff",
@@ -88,14 +86,14 @@ export const DeadlineEHColumn = [
     },
     {
         id: "reason",
-        header: "Reason",
+        header: "PM Reason",
         accessorKey: "reason",
         cell: ({ row }) => {
             const data = row?.original;
             return (
-                <span
-                    className="multine-ellipsis"
-                    dangerouslySetInnerHTML={{ __html: data?.reason ?? "--" }}
+                <TablePopover
+                    text={data?.expired_pm_reason}
+                    isDangerHtml={true}
                 />
             );
         },
@@ -107,11 +105,9 @@ export const DeadlineEHColumn = [
         cell: ({ row }) => {
             const data = row?.original;
             return (
-                <span
-                    className="multine-ellipsis"
-                    dangerouslySetInnerHTML={{
-                        __html: data?.client_communication ?? "--",
-                    }}
+                <TablePopover
+                    text={data?.client_communication}
+                    isDangerHtml={true}
                 />
             );
         },
@@ -122,10 +118,47 @@ export const DeadlineEHColumn = [
         accessorKey: "client_communication_rating",
         cell: ({ row }) => {
             const data = row?.original;
+
+            function convertToPercentage(number) {
+                if (number < 1 || number > 10) {
+                    return "Number must be between 1 and 10";
+                }
+                let percentage = (number / 10) * 100;
+                return percentage;
+            }
             return (
-                <span className="multine-ellipsis">
-                    {data.client_communication_rating}
-                </span>
+                <div
+                    style={{
+                        backgroundColor: "lightgray",
+                        borderRadius: "8px",
+                    }}
+                >
+                    <div
+                        className="progress-bar f-12"
+                        role="progressbar"
+                        style={{
+                            width: `${
+                                convertToPercentage(
+                                    data?.client_communication_rating
+                                ) ?? 0
+                            }%`,
+                            backgroundColor: getColor(
+                                convertToPercentage(
+                                    data?.client_communication_rating
+                                ) ?? 0
+                            ),
+                            height: "15px",
+                            borderRadius: "8px",
+                        }}
+                        aria-valuenow={data?.client_communication_rating ?? 0}
+                        aria-valuemin="0"
+                        aria-valuemax="10"
+                    >
+                        {data?.client_communication_rating
+                            ? `${data?.client_communication_rating}/10`
+                            : 0}
+                    </div>
+                </div>
             );
         },
     },
@@ -136,12 +169,7 @@ export const DeadlineEHColumn = [
         cell: ({ row }) => {
             const data = row?.original;
             return (
-                <span
-                    className="multine-ellipsis"
-                    dangerouslySetInnerHTML={{
-                        __html: data?.negligence_pm ?? "--",
-                    }}
-                />
+                <TablePopover text={data?.negligence_pm} isDangerHtml={true} />
             );
         },
     },
@@ -151,10 +179,60 @@ export const DeadlineEHColumn = [
         accessorKey: "negligence_pm_rating",
         cell: ({ row }) => {
             const data = row?.original;
+            function convertToPercentage(number) {
+                if (number < 1 || number > 10) {
+                    return "Number must be between 1 and 10";
+                }
+                let percentage = (number / 10) * 100;
+                return percentage;
+            }
             return (
-                <span className="multine-ellipsis">
-                    {data.negligence_pm_rating}
-                </span>
+                <div
+                    style={{
+                        backgroundColor: "lightgray",
+                        borderRadius: "8px",
+                    }}
+                >
+                    <div
+                        className="progress-bar f-12"
+                        role="progressbar"
+                        style={{
+                            width: `${
+                                convertToPercentage(
+                                    data?.negligence_pm_rating
+                                ) ?? 0
+                            }%`,
+                            backgroundColor: getColor(
+                                convertToPercentage(
+                                    data?.negligence_pm_rating
+                                ) ?? 0
+                            ),
+                            height: "15px",
+                            borderRadius: "8px",
+                        }}
+                        aria-valuenow={data?.negligence_pm_rating ?? 0}
+                        aria-valuemin="0"
+                        aria-valuemax="10"
+                    >
+                        {data?.negligence_pm_rating
+                            ? `${data?.negligence_pm_rating}/10`
+                            : 0}
+                    </div>
+                </div>
+            );
+        },
+    },
+    {
+        id: "any_other_suggestion_admin",
+        header: "Any other suggestions from authorizer",
+        accessorKey: "any_other_suggestion_admin",
+        cell: ({ row }) => {
+            const data = row?.original;
+            return (
+                <TablePopover
+                    text={data?.any_other_suggestion_admin}
+                    isDangerHtml={true}
+                />
             );
         },
     },

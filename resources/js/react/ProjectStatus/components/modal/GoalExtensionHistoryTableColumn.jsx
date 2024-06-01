@@ -1,5 +1,8 @@
 import Avatar from "../../../global/Avatar";
+import TablePopover from "../TablePopover";
 import { CreatedBy } from "../table/ui";
+import Popover from "../ui/Popover";
+import style from "../ui/popover.module.css";
 
 export const GoalExtensionHistoryTableColumn = [
     {
@@ -8,28 +11,15 @@ export const GoalExtensionHistoryTableColumn = [
         accessorKey: "id",
         cell: ({ cell }) => {
             return (
-                <div style={{
-                    width: "20px",
-                }}>
+                <div
+                    style={{
+                        width: "20px",
+                    }}
+                >
                     {cell?.row?.index + 1}
                 </div>
-            )
-        }
-    },
-    {
-        id: "goal_start_date",
-        header: "Goal Start Date",
-        accessorKey: "start_date",
-    },
-    {
-        id: "goal_end_date",
-        header: "Prev. Goal Deadline",
-        accessorKey: "old_deadline",
-    },
-    {
-        id: "new_goal_deadline",
-        header: "New Goal Deadline",
-        accessorKey: "new_deadline",
+            );
+        },
     },
     {
         id: "goal_name",
@@ -37,38 +27,84 @@ export const GoalExtensionHistoryTableColumn = [
         accessorKey: "goal_name",
         cell: ({ row }) => {
             const data = row?.original;
-            return (
-                <span title={data?.goal_name} className="multine-ellipsis">
-                    {data?.goal_name ?? "--"}
-                </span>
-            )
-        }
+            return <TablePopover text={data?.goal_name} />;
+        },
     },
     {
-        id: "duration",
-        header: "Duration",
-        accessorKey: "duration",
+        id: "goal_start_date",
+        header: "Goal Start Date",
+        accessorKey: "goal_start_date",
+        cell: ({ row }) => {
+            const data = row?.original;
+            return <span>{data?.goal_start_date}</span>;
+        },
+    },
+    {
+        id: "goal_end_date",
+        header: "Prev. Goal Deadline",
+        accessorKey: "old_deadline",
+        cell: ({ row }) => {
+            const data = row?.original;
+            return <span>{data?.old_deadline}</span>;
+        },
+    },
+    {
+        id: "new_goal_deadline",
+        header: "New Goal Deadline",
+        accessorKey: "new_deadline",
+        cell: ({ row }) => {
+            const data = row?.original;
+            return <span>{data?.new_deadline ?? "--"}</span>;
+        },
+    },
+    {
+        id: "old_duration",
+        header: "Prev. Goal Duration",
+        accessorKey: "old_duration",
         cell: ({ row }) => {
             const data = row?.original;
             return (
-                <span >
-                    {`${data?.duration} Days` ?? "--"}
+                <span>
+                    {` ${data?.old_duration} Days` ?? "--"}
                 </span>
-            )
-        }
+            );
+        },
+    },
+
+    {
+        id: "new_duration",
+        header: "New Goal Duration",
+        accessorKey: "new_duration",
+        cell: ({ row }) => {
+            const data = row?.original;
+            return (
+                <span>
+                    {`${data?.new_duration} Days` ?? "--"}
+                </span>
+            );
+        },
+    },
+    {
+        id: "reason",
+        header: "PM Reason",
+        accessorKey: "extended_pm_reason",
+        cell: ({ row }) => {
+            const data = row?.original;
+            return (
+                <TablePopover text={data?.extended_pm_reason} isDangerHtml={true} />
+            );
+        },
     },
     {
         id: "description",
-        header: "Description",
-        accessorKey: "description",
+        header: "Authorizer Comment",
+        accessorKey: "extended_admin_comment",
         cell: ({ row }) => {
             const data = row?.original;
             return (
-                <span title={data?.reason} className="multine-ellipsis"
-                    dangerouslySetInnerHTML={{ __html: data?.description ?? "--", }}
-                />
-            )
-        }
+                <TablePopover text={data?.extended_admin_comment} isDangerHtml={true} />
+            );
+        },
     },
     {
         id: "status",
@@ -77,38 +113,102 @@ export const GoalExtensionHistoryTableColumn = [
         cell: ({ row }) => {
             const data = row?.original;
             return (
-                <div className="d-flex align-items-center" >
-                    <i class="fa fa-circle mr-1 f-10" style={{
-                        color: data?.goal_status === 0 ? "#1492d2 " : "#218838",
-                    }}></i>
-
+                <div className="d-flex align-items-center">
+                    <i
+                        class="fa fa-circle mr-1 f-10"
+                        style={{
+                            color:
+                                data?.goal_status === 0
+                                    ? "#1492d2 "
+                                    : "#218838",
+                        }}
+                    ></i>
                     {data?.goal_status === 0 ? "Incomplete" : "Completed"}
                 </div>
-            )
-        }
-    },
-    {
-        id: "reason",
-        header: "Reason",
-        accessorKey: "reason",
-        cell: ({ row }) => {
-            const data = row?.original;
-            return (
-                <span title={data?.reason} className="multine-ellipsis"
-                    dangerouslySetInnerHTML={{ __html: data?.extended_admin_cmnt ?? "--", }}
-                />
-            )
-        }
+            );
+        },
     },
     {
         id: "extension_req_on",
         header: "Extension Requested On",
         accessorKey: "extension_req_on",
     },
+
+
     {
         id: "extension_req_for",
-        header: "Extension Requested For",
+        header: "Extension Requested For (Date)",
         accessorKey: "extension_req_for",
+        cell: ({ row }) => {
+            const data = row?.original;
+            return (
+                <span>
+                    {data?.extension_req_for ?? "--"}
+                </span>
+            );
+        }
+    },
+    {
+        id: "extension_req_for",
+        header: "Extension Requested For (Days)",
+        accessorKey: "extended_day",
+        cell: ({ row }) => {
+            const data = row?.original;
+            return (
+                <span>
+                    {data?.extended_day ? `${data?.extended_day} Days` : "--"}
+                </span>
+            );
+        }
+    },
+    {
+        id: "extension_req_authorized_for",
+        header: "Extension Req. Authorized For (Date)",
+        accessorKey: "extension_req_auth_for",
+        cell: ({ row }) => {
+            const data = row?.original;
+            return (
+                <span>
+                    {`${data?.extension_req_auth_for}` ?? "--"}
+                </span>
+            );
+        }
+    },
+    {
+        id: "extension_req_authorized_for",
+        header: "Extension Req. Authorized For (Days)",
+        accessorKey: "admin_extended_day",
+        cell: ({ row }) => {
+            const data = row?.original;
+            return (
+                <span>
+                    {data.admin_extended_day ? `${data?.admin_extended_day} Days` : "--"}
+                </span>
+            );
+        }
+    },
+    {
+        id: "authorization_status",
+        header: "Authorization Status",
+        accessorKey: "auth_status",
+        cell: ({ row }) => {
+            const data = row?.original;
+            return (
+                <div className="d-flex align-items-center justify-content-center">
+                    <p
+                        style={{
+                            backgroundColor:
+                                data?.auth_status === 2 ? "#ff3838" : "#018839",
+                            color: "#fff",
+                            padding: "5px 10px",
+                            borderRadius: "20px",
+                        }}
+                    >
+                        {data?.auth_status === 2 ? "Rejected" : "Accepted"}
+                    </p>
+                </div>
+            );
+        },
     },
     {
         id: "extension_req_auth_on",
@@ -128,18 +228,15 @@ export const GoalExtensionHistoryTableColumn = [
                     <Avatar
                         type="circle"
                         name={data?.authorization_by_name}
-                        src={data?.clientImage ? `/user-uploads/avatar/${data?.authorization_by_img}` : null}
+                        src={
+                            data?.clientImage
+                                ? `/user-uploads/avatar/${data?.authorization_by_img}`
+                                : null
+                        }
                     />
                     <span>{data?.authorization_by_name}</span>
                 </CreatedBy>
-            )
-        }
-    },
-    {
-        id: "extension_req_authorized_for",
-        header: "Extension Req. Authorized For",
-        accessorKey: "extension_req_auth_for",
-    },
-
-
+            );
+        },
+    }
 ];

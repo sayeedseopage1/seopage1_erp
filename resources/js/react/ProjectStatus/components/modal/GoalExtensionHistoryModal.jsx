@@ -59,8 +59,8 @@ const GoalExtensionHistoryModal = ({
         {/* Goal Extention History Table */}
         <GoalExtensionHistoryTable
           projectDetails={projectDetails}
-          closeModal={closeModal}     
-          tableName="goalExtensionHistoryTable"   
+          closeModal={closeModal}
+          tableName="goalExtensionHistoryTable"
           tableColumns={GoalExtensionHistoryTableColumn}
           goalExtensionHistory={goalExtensionHistory}
           goalExtensionHistoryData={goalExtensionHistoryData}
@@ -75,16 +75,16 @@ export default GoalExtensionHistoryModal
 
 const customStyles = {
   overlay: {
-      zIndex: 9999998,
+      zIndex: 9,
       backgroundColor: "rgba(0, 0, 0, 0.5)",
       margin: "auto auto",
       padding: "20px",
   },
   content: {
       zIndex: 9999999,
-      maxWidth: "76vw",
-      maxHeight: "85vh",
+      maxWidth: "75vw",
       height: "fit-content",
+      maxHeight: "85vh",
       margin: "auto auto",
       padding: "20px",
   },

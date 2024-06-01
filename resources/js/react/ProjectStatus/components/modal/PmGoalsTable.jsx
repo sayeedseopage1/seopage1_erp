@@ -26,7 +26,6 @@ import {
     useLazyGetGoalExtensionHistoryQuery,
     useLazyGetProjectExtendImagesQuery,
 } from "../../../services/api/projectStatusApiSlice";
-import ProjectStatusTablePagination from "../ProjectStatusTablePagination";
 
 const PmGoalsTable = ({
     projectDetails,
@@ -263,41 +262,41 @@ const PmGoalsTable = ({
         setIsOpenGoalExtensionHistoryModal(false);
     };
 
+
     return (
-        <React.Fragment>
-            <div className="sp1_tasks_table_wrapper">
-                <table className="sp1_tasks_table">
-                    {/* Table Head */}
-                    <thead className="sp1_tasks_thead">
-                        {table.getHeaderGroups().map((headerGroup) => (
-                            <tr key={headerGroup.id} className="sp1_tasks_tr">
-                                {headerGroup.headers.map((header) => {
-                                    return (
-                                        <DragableColumnHeader
-                                            key={header.id}
-                                            header={header}
-                                            table={table}
-                                        />
-                                    );
-                                })}
-                            </tr>
-                        ))}
-                    </thead>
-                    {/* Table body */}
-                    <tbody className="sp1_tasks_tbody">
-                        {!isLoading &&
-                            table.getRowModel().rows.map((row) => {
+        <div className="sp1_tasks_table_wrapper">
+            <table className="sp1_tasks_table">
+                {/* Table Head */}
+                <thead className="sp1_tasks_thead">
+                    {table.getHeaderGroups().map((headerGroup) => (
+                        <tr key={headerGroup.id} className="sp1_tasks_tr">
+                            {headerGroup.headers.map((header) => {
                                 return (
-                                    <tr
-                                        className={`sp1_tasks_tr ${
-                                            row.parentId !== undefined
-                                                ? "expended_row"
-                                                : ""
-                                        } ${
-                                            row.getIsExpanded()
-                                                ? "expended_parent_row"
-                                                : ""
-                                        } 
+                                    <DragableColumnHeader
+                                        key={header.id}
+                                        header={header}
+                                        table={table}
+                                    />
+                                );
+                            })}
+                        </tr>
+                    ))}
+                </thead>
+                {/* Table body */}
+                <tbody className="sp1_tasks_tbody">
+                    {!isLoading &&
+                        table.getRowModel().rows.map((row) => {
+                            return (
+                                <tr
+                                    className={`sp1_tasks_tr ${
+                                        row.parentId !== undefined
+                                            ? "expended_row"
+                                            : ""
+                                    } ${
+                                        row.getIsExpanded()
+                                            ? "expended_parent_row"
+                                            : ""
+                                    }
                                 ${
                                     row.original?.goal_status === 1
                                         ? style.goalMeat
@@ -308,39 +307,39 @@ const PmGoalsTable = ({
                                         ? style.goalNotMeat
                                         : ""
                                 }`}
-                                        key={row.id}
-                                    >
-                                        {/* <tr
+                                    key={row.id}
+                                >
+                                    {/* <tr
                                 className={`sp1_tasks_tr ${row.parentId !== undefined ? 'expended_row' :''} ${row.getIsExpanded() ? 'expended_parent_row': ''} `}
                                     key={row.id}
                                 > */}
-                                        {row.getVisibleCells().map((cell) => {
-                                            return (
-                                                <td
-                                                    key={cell.id}
-                                                    className="px-2 sp1_tasks_td"
-                                                >
-                                                    {flexRender(
-                                                        cell.column.columnDef
-                                                            .cell,
-                                                        cell.getContext()
-                                                    )}
-                                                </td>
-                                            );
-                                        })}
-                                    </tr>
-                                );
-                            })}
-                        {isLoading && (
-                            <PmGoalsTableLoader prevItemLength={data?.length} />
-                        )}
-                    </tbody>
-                </table>
-                {!isLoading && _.size(table.getRowModel().rows) === 0 && (
-                    <EmptyTable />
-                )}
+                                    {row.getVisibleCells().map((cell) => {
+                                        return (
+                                            <td
+                                                key={cell.id}
+                                                className="px-2 sp1_tasks_td"
+                                            >
+                                                {flexRender(
+                                                    cell.column.columnDef.cell,
+                                                    cell.getContext()
+                                                )}
+                                            </td>
+                                        );
+                                    })}
+                                </tr>
+                            );
+                        })}
+                    {isLoading && (
+                        <PmGoalsTableLoader prevItemLength={data?.length} />
+                    )}
+                </tbody>
+            </table>
+            {!isLoading && _.size(table.getRowModel().rows) === 0 && (
+                <EmptyTable />
+            )}
 
-                {/* */}
+            {/* */}
+            {isOpenExtendRequestModal && (
                 <ExtendRequestModal
                     projectDetails={projectDetails}
                     extendRequestGoalId={extendRequestGoalId}
@@ -348,6 +347,8 @@ const PmGoalsTable = ({
                     refetchPmGoal={refetchPmGoal}
                     onClose={handleClosExtendRequestModal}
                 />
+            )}
+            {isOpenReviewExtendRequestModal && (
                 <ReviewExtendRequestModal
                     projectPmGoalId={projectPmGoalId}
                     projectDetails={projectDetails}
@@ -357,6 +358,8 @@ const PmGoalsTable = ({
                     refetchPmGoal={refetchPmGoal}
                     onClose={handleCloseExtendReviewModal}
                 />
+            )}
+            {isOpenDeadlineExplainModal && (
                 <DeadlineExplainModal
                     projectPmGoalId={projectPmGoalId}
                     projectDetails={projectDetails}
@@ -365,6 +368,8 @@ const PmGoalsTable = ({
                     isModalTwoOpen={isOpenDeadlineExplainModal}
                     closeModalTwo={handleCloseDeadlineExplainModal}
                 />
+            )}
+            {isOpenResolveModal && (
                 <ResolveModal
                     projectDetails={projectDetails}
                     projectPmGoalId={projectPmGoalId}
@@ -375,6 +380,8 @@ const PmGoalsTable = ({
                     }
                     closeModal={handleCloseResolveModal}
                 />
+            )}
+            {isOpenGoalExtensionHistoryModal && (
                 <GoalExtensionHistoryModal
                     projectDetails={projectDetails}
                     goalExtensionHistoryData={goalExtensionHistoryData}
@@ -386,6 +393,8 @@ const PmGoalsTable = ({
                     isLoading={isGoalExtensionHistoryLoading}
                     closeModal={handleCloseExtensionHistoryModal}
                 />
+            )}
+            {isOpenDeadlineExplanationHistoryModal && (
                 <DeadlineExplanationHistoryModal
                     projectDetails={projectDetails}
                     goalExpiredHistory={goalExpiredHistory}
@@ -396,23 +405,9 @@ const PmGoalsTable = ({
                     isLoading={isGoalExpiredHistoryLoading}
                     closeModal={handleCloseDeadlineExHistoryModal}
                 />
-                <Toaster />
-            </div>
-            <ProjectStatusTablePagination
-                currentPage={pageIndex + 1}
-                perpageRow={pageSize}
-                onPageSize={(size) => table?.setPageSize(size)}
-                onPaginate={(page) => table?.setPageIndex(page - 1)}
-                totalEntry={_.size(data)}
-                onNext={() => table.getCanNextPage() && table.nextPage()}
-                disableNext={!table?.getCanNextPage()}
-                onPrevious={() =>
-                    table?.getCanPreviousPage() && table?.previousPage()
-                }
-                disablePrevious={!table?.getCanPreviousPage()}
-                totalPages={table?.getPageCount()}
-            />
-        </React.Fragment>
+            )}
+            <Toaster />
+        </div>
     );
 };
 

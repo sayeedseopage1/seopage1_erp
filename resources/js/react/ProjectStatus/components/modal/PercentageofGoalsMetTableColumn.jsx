@@ -1,3 +1,4 @@
+import TablePopover from "../TablePopover";
 
 export const PercentageofGMTableColumn = [
     {
@@ -5,15 +6,16 @@ export const PercentageofGMTableColumn = [
         header: "#",
         accessorKey: "id",
         cell: ({ row, table, column, cell }) => {
-            const data = row?.original;
             return (
-                <div style={{
-                    width: "20px",
-                }}>
+                <div
+                    style={{
+                        width: "20px",
+                    }}
+                >
                     {cell?.row?.index + 1}
                 </div>
-            )
-        }
+            );
+        },
     },
     {
         id: "goal_start_date",
@@ -31,12 +33,8 @@ export const PercentageofGMTableColumn = [
         accessorKey: "goal_name",
         cell: ({ row }) => {
             const data = row?.original;
-            return (
-                <span title={data?.goal_name} className="multine-ellipsis">
-                    {data?.goal_name ?? "--"}
-                </span>
-            )
-        }
+            return <TablePopover text={data?.goal_name} />;
+        },
     },
     {
         id: "duration",
@@ -44,12 +42,8 @@ export const PercentageofGMTableColumn = [
         accessorKey: "duration",
         cell: ({ row }) => {
             const data = row?.original;
-            return (
-                <span >
-                    {`${data?.duration} Days` ?? "--"}
-                </span>
-            )
-        }
+            return <span>{`${data?.duration} Days` ?? "--"}</span>;
+        },
     },
     {
         id: "description",
@@ -61,8 +55,8 @@ export const PercentageofGMTableColumn = [
                 <span title={data?.description} className="multine-ellipsis">
                     {data?.description ?? "--"}
                 </span>
-            )
-        }
+            );
+        },
     },
     {
         id: "status",
@@ -71,15 +65,20 @@ export const PercentageofGMTableColumn = [
         cell: ({ row }) => {
             const data = row?.original;
             return (
-                <div className="d-flex align-items-center" >
-                    <i class="fa fa-circle mr-1 f-10" style={{
-                        color: data?.goal_status === 0 ? "#1492d2 " : "#218838",
-                    }}></i>
+                <div className="d-flex align-items-center">
+                    <i
+                        class="fa fa-circle mr-1 f-10"
+                        style={{
+                            color:
+                                data?.goal_status === 0
+                                    ? "#1492d2 "
+                                    : "#218838",
+                        }}
+                    ></i>
 
                     {data?.goal_status === 0 ? "Incomplete" : "Completed"}
                 </div>
-            )
-        }
+            );
+        },
     },
-
 ];

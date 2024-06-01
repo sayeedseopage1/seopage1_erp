@@ -2825,6 +2825,185 @@ class TaskController extends AccountBaseController
             //     $redirectUrl = route('projects.show', $request->project_id) . '?tab=tasks';
             // }
 
+            $task->is_private = $request->has('is_private') ? 1 : 0;
+            $task->billable = $request->has('billable') && $request->billable ? 1 : 0;
+            $task->estimate_hours = $request->estimate_hours;
+            $task->estimate_minutes = $request->estimate_minutes;
+            $task->deliverable_id = $request->deliverable_id;
+
+            if ($request->board_column_id) {
+                $task->board_column_id = $request->board_column_id;
+            }
+
+            if ($request->milestone_id != '') {
+                $task->milestone_id = $request->milestone_id;
+            }
+
+            // Add repeated task
+            $task->repeat = $request->repeat ? 1 : 0;
+
+            if ($request->has('repeat')) {
+                $task->repeat_count = $request->repeat_count;
+                $task->repeat_type = $request->repeat_type;
+                $task->repeat_cycles = $request->repeat_cycles;
+            }
+            $task->task_status = "pending";
+            $total_hours = $request->estimate_hours * 60;
+            $total_minutes = $request->estimate_minutes;
+            $total_in_minutes = $total_hours + $total_minutes;
+            $task->estimate_time_left_minutes = $total_in_minutes;
+            $task->added_by = Auth::id();
+            $task->created_by = Auth::id();
+
+
+            $task->save();
+
+            $current_date = Carbon::now();
+            $pm_goal = ProjectPmGoal::where('project_id',$task->project_id)->where('goal_code','DCS')->first();
+            if($pm_goal != null && $current_date < $pm_goal->goal_end_date)
+            {
+                $goal_count= ProjectPmGoal::where('project_id',$task->project_id)->count();
+                $goal_percentage = 100/$goal_count;
+                $pm_goal->goal_progress = $goal_percentage;
+                $pm_goal->goal_status = 1;
+                
+            
+                $task_count= Task::where('project_id',$task->project_id)->count();
+                    if($task_count > 0)
+                        {
+                            $pm_goal->expired_meet_description = 'Having the deliverables signed and creating all the tasks';
+
+                        }elseif($task_count < 1)
+                        {
+                            $pm_goal->expired_meet_description = 'Deliverables is signed and tasks has not been created properly';
+
+                        }
+                        $pm_goal->save();
+            }
+
+
+
+            $task->task_short_code = ($project) ? $project->project_short_code . '-' . $task->id : null;
+            $task->saveQuietly();
+            if ($request->hasFile('file')) {
+                $files = $request->file('file');
+                $destinationPath = storage_path('app/public/');
+                $file_name = [];
+
+                foreach ($files as $file) {
+                    $taskFile = new TaskFile();
+                    $taskFile->task_id = $task->id;
+                    $filename = uniqid() . '.' . $file->getClientOriginalExtension();
+                    array_push($file_name, $filename);
+                    $taskFile->user_id = $this->user->id;
+                    $taskFile->filename = $filename;
+                    $taskFile->hashname = $filename;
+                    $taskFile->size = $file->getSize();
+                    $taskFile->save();
+
+                    Storage::disk('s3')->put('/' . $filename, file_get_contents($file));
+
+
+                    $this->logTaskActivity($task->id, $this->user->id, 'fileActivity', $task->board_column_id);
+                }
+            }
+
+
+
+            // For gantt chart
+            if ($request->page_name && !is_null($task->due_date) && $request->page_name == 'ganttChart') {
+                $parentGanttId = $request->parent_gantt_id;
+
+                /* @phpstan-ignore-next-line */
+                $taskDuration = $task->due_date->diffInDays($task->start_date);
+                /* @phpstan-ignore-line */
+                $taskDuration = $taskDuration + 1;
+
+                $ganttTaskArray[] = [
+                    'id' => $task->id,
+                    'text' => $task->heading,
+                    'start_date' => $task->start_date->format('Y-m-d'), /* @phpstan-ignore-line */
+                    'duration' => $taskDuration,
+                    'parent' => $parentGanttId,
+                    'taskid' => $task->id
+                ];
+
+                $gantTaskLinkArray[] = [
+                    'id' => 'link_' . $task->id,
+                    'source' => $task->dependent_task_id != '' ? $task->dependent_task_id : $parentGanttId,
+                    'target' => $task->id,
+                    'type' => $task->dependent_task_id != '' ? 0 : 1
+                ];
+            }
+
+
+            // DB::commit();
+
+            if (request()->add_more == 'true') {
+                unset($request->project_id);
+                $html = $this->create();
+                return Reply::successWithData(__('messages.taskCreatedSuccessfully'), ['html' => $html, 'add_more' => true, 'taskID' => $task->id]);
+            }
+
+            if ($request->page_name && $request->page_name == 'ganttChart') {
+
+                return Reply::successWithData(
+                    'messages.taskCreatedSuccessfully',
+                    [
+                        'tasks' => $ganttTaskArray,
+                        'links' => $gantTaskLinkArray
+                    ]
+                );
+            }
+
+            if (is_array($request->user_id)) {
+                $assigned_to = User::find($request->user_id[0]);
+
+                if ($assigned_to->role_id == 6) {
+                    //need pending action
+                    $helper = new HelperPendingActionController();
+
+
+                    $helper->NewTaskAssign($task);
+
+
+                    //need pending action
+                }
+                $text = Auth::user()->name . ' assigned new task on ' . $assigned_to->name;
+                $link = '<a href="' . route('tasks.show', $task->id) . '">' . $text . '</a>';
+                $this->logProjectActivity($project->id, $link);
+
+                $this->triggerPusher('notification-channel', 'notification', [
+                    'user_id' => $assigned_to->id,
+                    'role_id' => $assigned_to->role_id,
+                    'title' => 'You have new task',
+                    'body' => 'Project managet assigned new task on you',
+                    'redirectUrl' => route('tasks.show', $task->id)
+                ]);
+            } else {
+                $assigned_to = User::find($request->user_id);
+                if ($assigned_to->role_id == 6) {
+                    //need pending action
+                    $helper = new HelperPendingActionController();
+
+
+                    $helper->NewTaskAssign($task);
+
+
+                    //need pending action
+                }
+                $text = Auth::user()->name . ' assigned new task on ' . $assigned_to->name;
+                $link = '<a href="' . route('tasks.show', $task->id) . '">' . $text . '</a>';
+                $this->logProjectActivity($project->id, $link);
+
+                $this->triggerPusher('notification-channel', 'notification', [
+                    'user_id' => $assigned_to->id,
+                    'role_id' => $assigned_to->role_id,
+                    'title' => 'You have new task',
+                    'body' => 'Project managet assigned new task on you',
+                    'redirectUrl' => route('tasks.show', $task->id)
+                ]);
+            }
             // return Reply::successWithData(__('messages.taskCreatedSuccessfully'), ['redirectUrl' => $redirectUrl, 'taskID' => $task->id]);
         } catch (\Throwable $th) {
             // throw $th;
@@ -3724,12 +3903,11 @@ class TaskController extends AccountBaseController
         $pm_goal->goal_status = 1;
         
 
-        $pm_goal->description = '1st task submission';
+        $pm_goal->expired_meet_description = '1st task submission';
 
                 
         $pm_goal->updated_at= Carbon::now();
         $pm_goal->save();
-        
 
     }
         $actions = PendingAction::where('code','SFT')->where('past_status',0)->where('project_id',$task_status->project_id)->get();

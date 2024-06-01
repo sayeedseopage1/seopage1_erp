@@ -1,4 +1,3 @@
-import { method } from "lodash";
 import { apiSlice } from "./apiSlice";
 
 const _token = document
@@ -16,7 +15,6 @@ const projectStatusApiSlice = apiSlice.injectEndpoints({
             query: (project_id) => `/account/get-pm-goal-date/${project_id}`,
             providesTags: "GET_PM_GOAL",
         }),
-
         createDeadlineExplanationReason: build.mutation({
             query: (data) => ({
                 url: `/account/project-status-reason-submit`,
@@ -61,7 +59,8 @@ const projectStatusApiSlice = apiSlice.injectEndpoints({
             ],
         }),
         getProjectExtendImages: build.query({
-            query: (goal_id) => `/account/project-extend-image/${goal_id}`,
+            query: (query) =>
+                `/account/project-extend-image${query}`,
             providesTags: "GET_PROJECT_EXTEND_IMAGE",
         }),
         createReviewExtendRequest: build.mutation({
@@ -71,6 +70,18 @@ const projectStatusApiSlice = apiSlice.injectEndpoints({
                 body: data,
                 formData: true,
             }),
+        }),
+        getGoalExtensionHistory: build.query({
+            query: (goal_id) =>
+                `/account/goal-extension-history/${goal_id}`,
+        }),
+        getGoalExpiredHistory: build.query({
+            query: (goal_id) =>
+                `/account/goal-resolved-history/${goal_id}`,
+        }),
+        getProjectManagerDeadlineExpiredGoals: build.query({
+            query: (pm_id) =>
+                `/account/goal-expire/${pm_id}`,
         }),
         exportProjectStatus: build.mutation({
             query: (query) => ({
@@ -88,6 +99,12 @@ export const {
     useCreateResolveSuggestionCommentMutation,
     useCreateExtendRequestMutation,
     useGetProjectExtendImagesQuery,
+    useLazyGetProjectExtendImagesQuery,
     useCreateReviewExtendRequestMutation,
+    useGetGoalExtensionHistoryQuery,
+    useLazyGetGoalExtensionHistoryQuery,
+    useGetGoalExpiredHistoryQuery,
+    useLazyGetGoalExpiredHistoryQuery,
+    useGetProjectManagerDeadlineExpiredGoalsQuery,
     useExportProjectStatusMutation,
 } = projectStatusApiSlice;

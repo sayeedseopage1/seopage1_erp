@@ -16,19 +16,16 @@ return new class extends Migration
         Schema::create('pm_goal_exp_histories', function (Blueprint $table) {
             $table->id();
             $table->integer('goal_id');
-            $table->dateTime('start_date');
-            $table->dateTime('deadline');
-            $table->string('duration');
-            $table->string('goal_name');
-            $table->longText('description');
-            $table->longText('reason');
+            // $table->dateTime('start_date');
+            // $table->dateTime('deadline');
+            $table->longText('expired_pm_reason');
             $table->longText('client_communication')->nullable();
-            $table->longText('negligence_pm')->nullable();
             $table->double('client_communication_rating')->nullable();
+            $table->longText('negligence_pm')->nullable();
             $table->double('negligence_pm_rating')->nullable();
-            $table->integer('goal_status')->default(0);
+            $table->longText('any_other_suggestion_admin')->nullable();
             $table->integer('authorization_status')->default(0);
-            $table->dateTime('authorization_on');
+            $table->dateTime('authorization_on')->nullable();
             $table->integer('authorization_by')->nullable();
             $table->timestamps();
         });

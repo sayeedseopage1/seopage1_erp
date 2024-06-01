@@ -7,46 +7,54 @@ import CKEditorComponent from "../../../ckeditor";
 import { Flex } from "../table/ui";
 import { useCreateResolveSuggestionCommentMutation } from "../../../services/api/projectStatusApiSlice";
 import FractionalRating from "../FractionalRating";
-import { isStateAllHaveValue, markEmptyFieldsValidation } from "../../../utils/stateValidation";
+import {
+    isStateAllHaveValue,
+    markEmptyFieldsValidation,
+} from "../../../utils/stateValidation";
 import { formatAPIErrors } from "../../../utils/formatAPIErrors";
+import { useAuth } from "../../../hooks/useAuth";
 const ResolveModal = ({
     projectPmGoalId,
     projectDetails,
     isModalOpen,
     closeModal,
     refetchPmGoal,
-    resolveDeadlineExplanationData
+    resolveDeadlineExplanationData,
 }) => {
+    const auth = useAuth()
     const [resolveModalData, setResolveModalData] = useState({
         client_communication: "",
         client_communication_rating: null,
         negligence_pm: "",
         negligence_pm_rating: null,
+        any_other_suggestion_admin: "",
     });
-    const [resolveModalDataValidation, setResolveModalDataValidation] = useState({
-        client_communication: false,
-        client_communication_rating: false,
-        negligence_pm: false,
-        negligence_pm_rating: false,
-        isSubmitting: false,
-      });
-    
-      // toolkit query
+    const [resolveModalDataValidation, setResolveModalDataValidation] =
+        useState({
+            client_communication: false,
+            client_communication_rating: false,
+            negligence_pm: false,
+            negligence_pm_rating: false,
+            isSubmitting: false,
+        });
+
+    // toolkit query
     const [submitData, { isLoading }] =
         useCreateResolveSuggestionCommentMutation();
 
-    // Api Call    
+    // Api Call
     const handleSubmit = async () => {
+        const {any_other_suggestion_admin, ...rest} = resolveModalData
         const isEmpty = isStateAllHaveValue({
             project_pm_goal_id: projectPmGoalId,
-            ...resolveModalData
+            ...rest,
         });
 
         if (isEmpty) {
             const validation = markEmptyFieldsValidation({
-                    project_pm_goal_id: projectPmGoalId,
-                    ...resolveModalData
-                });
+                project_pm_goal_id: projectPmGoalId,
+                ...rest,
+            });
             setResolveModalDataValidation({
                 ...resolveModalDataValidation,
                 ...validation,
@@ -60,20 +68,19 @@ const ResolveModal = ({
             const result = await submitData({
                 project_pm_goal_id: projectPmGoalId,
                 ...resolveModalData,
-                rating: 5,
             }).unwrap();
             if (result?.status) {
                 closeModal();
                 toast.success("Submission was successful");
                 refetchPmGoal();
-                handleResetForm()
+                handleResetForm();
             } else {
                 toast.error("Submission was not successful");
             }
         } catch (error) {
-            if(error?.status === 422){
+            if (error?.status === 422) {
                 const errors = formatAPIErrors(error?.data?.errors);
-                errors.forEach(error => {
+                errors.forEach((error) => {
                     toast.error(error);
                 });
             } else {
@@ -85,12 +92,12 @@ const ResolveModal = ({
         }
     };
 
-    // 
+    //
     useEffect(() => {
-        if(resolveModalDataValidation.isSubmitting){
+        if (resolveModalDataValidation.isSubmitting) {
             const validation = markEmptyFieldsValidation({
                 project_pm_goal_id: projectPmGoalId,
-                ...resolveModalData
+                ...resolveModalData,
             });
             setResolveModalDataValidation({
                 ...resolveModalDataValidation,
@@ -99,7 +106,6 @@ const ResolveModal = ({
         }
     }, [resolveModalData, resolveModalDataValidation.isSubmitting]);
 
-
     // Reset form when modal is closed
     const handleResetForm = () => {
         setResolveModalData({
@@ -107,6 +113,7 @@ const ResolveModal = ({
             client_communication_rating: null,
             negligence_pm: "",
             negligence_pm_rating: null,
+            any_other_suggestion_admin: "",
         });
         setResolveModalDataValidation({
             client_communication: false,
@@ -115,9 +122,7 @@ const ResolveModal = ({
             negligence_pm_rating: false,
             isSubmitting: false,
         });
-    }
-
-  
+    };
 
     return (
         <ReactModal
@@ -127,9 +132,7 @@ const ResolveModal = ({
             onRequestClose={closeModal}
             contentLabel="Resolve"
         >
-            <div
-                className="d-flex justify-content-between align-items-center mb-3"
-            >
+            <div className="d-flex justify-content-between align-items-center mb-3">
                 <h6
                     style={{
                         fontSize: "25px",
@@ -157,66 +160,88 @@ const ResolveModal = ({
 
             <section style={styles.container}>
                 <div className="w-100">
-                    <div className="my-2 row">
-                        <p className="col-4"><strong>Project Name</strong>{" "}</p>
-                        <p className="col-8">{projectDetails?.project_name}</p>
+                    <div className="my-3 row">
+                        <p className="col-12 col-md-4">
+                            <strong>Project Name</strong>{" "}
+                        </p>
+                        <p className="col-12 col-md-8">
+                            {projectDetails?.project_name}
+                        </p>
                     </div>
-                    <div className="my-2 row">
-                        <p className="col-4"><strong>Client:</strong>{" "}</p>
-                        <p className="col-8">{projectDetails?.clientName}</p>
+                    <div className="my-3 row">
+                        <p className="col-12 col-md-4">
+                            <strong>Client:</strong>{" "}
+                        </p>
+                        <p className="col-12 col-md-8">
+                            {projectDetails?.clientName}
+                        </p>
                     </div>
-                    <div className="my-2 row">
-                        <p className="col-4"><strong>Project Budget:</strong>{" "}</p>
-                        <p className="col-8">{projectDetails?.currency_symbol} {projectDetails?.project_budget}</p>
+                    <div className="my-3 row">
+                        <p className="col-12 col-md-4">
+                            <strong>Project Budget:</strong>{" "}
+                        </p>
+                        <p className="col-12 col-md-8">
+                            {projectDetails?.currency_symbol}{" "}
+                            {projectDetails?.project_budget}
+                        </p>
                     </div>
-                    <div className="my-2 row">
-                        <p className="col-4"><strong>Project Category:</strong>{" "}</p>
-                        <p className="col-8">{projectDetails?.project_category}</p>
+                    <div className="my-3 row">
+                        <p className="col-12 col-md-4">
+                            <strong>Project Category:</strong>{" "}
+                        </p>
+                        <p className="col-12 col-md-8">
+                            {projectDetails?.project_category}
+                        </p>
                     </div>
-                    <div className="my-2 row">
-                        <p className="col-4"><strong>Start Date:</strong>{" "}</p>
-                        <p className="col-8">{new Date(
-                            projectDetails?.goal_start_date
-                        ).toLocaleDateString()}</p>
+                    <div className="my-3 row">
+                        <p className="col-12 col-md-4">
+                            <strong>Start Date:</strong>{" "}
+                        </p>
+                        <p className="col-12 col-md-8">
+                            {new Date(
+                                projectDetails?.goal_start_date
+                            ).toLocaleDateString()}
+                        </p>
                     </div>
-                    <div className="my-2 row">
-                        <p className="col-4"><strong>Deadline:</strong>{" "}</p>
-                        <p className="col-8">{new Date(
-                            projectDetails?.goal_end_date
-                        ).toLocaleDateString()}</p>
+                    <div className="my-3 row">
+                        <p className="col-12 col-md-4">
+                            <strong>Deadline:</strong>{" "}
+                        </p>
+                        <p className="col-12 col-md-8">
+                            {new Date(
+                                projectDetails?.goal_end_date
+                            ).toLocaleDateString()}
+                        </p>
                     </div>
-                    <div className="my-2 row">
-                        <p className="col-4"><strong>Description:</strong>{" "}</p>
-                        <p className="col-8">{resolveDeadlineExplanationData?.description}</p>
+                    <div className="my-3 row">
+                        <p className="col-12 col-md-4">
+                            <strong>Description:</strong>{" "}
+                        </p>
+                        <p className="col-12 col-md-8">
+                            {
+                                resolveDeadlineExplanationData?.expired_meet_description
+                            }
+                        </p>
                     </div>
-                    <div className="my-2 row">
-                        <p className="col-4"><strong>Reason:</strong>{" "}</p>
-                        <p className="col-8"><span
-                            dangerouslySetInnerHTML={{
-                                __html: resolveDeadlineExplanationData?.reason
-                                    ? resolveDeadlineExplanationData?.reason
-                                    : "--",
-                            }}
-                        /></p>
+                    <div className="my-3 row">
+                        <p className="col-12 col-md-4">
+                            <strong>Reason:</strong>{" "}
+                        </p>
+                        <p className="col-12 col-md-8">
+                            <span
+                                dangerouslySetInnerHTML={{
+                                    __html: resolveDeadlineExplanationData?.expired_reason
+                                        ? resolveDeadlineExplanationData?.expired_reason
+                                        : "--",
+                                }}
+                            />
+                        </p>
                     </div>
-                    {/* <div className="my-2 row">
-                        <p className="col-4"><strong>Rating:</strong>{" "}</p>
-                        <div className="col-8 flex-col">
-                            <div className="d-flex justify-content-between align-items-center"><FractionalRating
-                        className=""
-                            value={resolveModalData?.rating}
-                            onChange={(value) => setResolveModalData({
-                                ...resolveModalData,
-                                rating: value
-                            })}
-                        />
-                        {resolveModalData?.rating  && <small>{resolveModalData?.rating} /10</small>}</div>
-                            {resolveModalDataValidation.rating && <small className="text-danger my-1">Rating is required</small>}
-                        </div>
-                    </div> */}
                     <div style={styles.reasonContainer}>
                         <p>
-                            <strong>Is client communication perfect here? </strong>
+                            <strong>
+                                Is client communication perfect here?{" "}
+                            </strong>
                         </p>
                         <div
                             style={{
@@ -229,30 +254,53 @@ const ResolveModal = ({
                                     setResolveModalData({
                                         ...resolveModalData,
                                         client_communication: editor.getData(),
-                                    })
+                                    });
                                 }}
                             />
-                           
                         </div>
-                        {resolveModalDataValidation.client_communication && <small className="text-danger my-1">Client communication is required</small>}
+                        {resolveModalDataValidation.client_communication && (
+                            <small className="text-danger my-1">
+                                Client communication is required
+                            </small>
+                        )}
                         <div className="my-2">
-                            <p><strong>Client communication rating</strong></p>
+                            <p>
+                                <strong>Client communication rating</strong>
+                            </p>
                             <div className="d-flex justify-content-between align-items-center">
-                             <FractionalRating 
-                                 value={resolveModalData?.client_communication_rating}
-                                onChange={(value) => setResolveModalData({
-                                    ...resolveModalData,
-                                    client_communication_rating: value
-                                })}
-                             />
-                                {resolveModalData?.client_communication_rating  && <small>{resolveModalData?.client_communication_rating} /10</small>}
+                                <FractionalRating
+                                    value={
+                                        resolveModalData?.client_communication_rating
+                                    }
+                                    onChange={(value) =>
+                                        setResolveModalData({
+                                            ...resolveModalData,
+                                            client_communication_rating: value,
+                                        })
+                                    }
+                                />
+                                {resolveModalData?.client_communication_rating && (
+                                    <small>
+                                        {
+                                            resolveModalData?.client_communication_rating
+                                        }{" "}
+                                        /10
+                                    </small>
+                                )}
                             </div>
-                            {resolveModalDataValidation?.client_communication_rating && <small className="text-danger my-1">Client Communication Rating is required</small>}
+                            {resolveModalDataValidation?.client_communication_rating && (
+                                <small className="text-danger my-1">
+                                    Client Communication Rating is required
+                                </small>
+                            )}
                         </div>
                     </div>
                     <div style={styles.reasonContainer}>
                         <p className="my-2">
-                            <strong>Is there any negligence from project managers side? </strong>
+                            <strong>
+                                Is there any negligence from project managers
+                                side?{" "}
+                            </strong>
                         </p>
                         <div
                             style={{
@@ -260,30 +308,71 @@ const ResolveModal = ({
                                 borderRadius: "5px",
                             }}
                         >
-                            <CKEditorComponent onChange={(e, editor) => {
-                                setResolveModalData({
-                                    ...resolveModalData,
-                                    negligence_pm: editor.getData(),
-                                })
-                            }} />
-                          
+                            <CKEditorComponent
+                                onChange={(e, editor) => {
+                                    setResolveModalData({
+                                        ...resolveModalData,
+                                        negligence_pm: editor.getData(),
+                                    });
+                                }}
+                            />
                         </div>
-                        {resolveModalDataValidation.negligence_pm && <small className="text-danger my-1">Negligence from project managers is required</small>}
+                        {resolveModalDataValidation.negligence_pm && (
+                            <small className="text-danger my-1">
+                                Negligence from project managers is required
+                            </small>
+                        )}
                         <div className="my-2">
-                            <p className="my-2"><strong>Project managers rating</strong></p>
+                            <p className="my-2">
+                                <strong>Project managers rating</strong>
+                            </p>
                             <div className="d-flex justify-content-between align-items-center">
-                             <FractionalRating 
-                                value={resolveModalData.negligence_pm_rating}  
-                                onChange={(value) => setResolveModalData({
-                                    ...resolveModalData,
-                                    negligence_pm_rating: value
-                                })}
-                             />
-                             {resolveModalData?.negligence_pm_rating  && <small>{resolveModalData?.negligence_pm_rating} /10</small>}
+                                <FractionalRating
+                                    value={
+                                        resolveModalData.negligence_pm_rating
+                                    }
+                                    onChange={(value) =>
+                                        setResolveModalData({
+                                            ...resolveModalData,
+                                            negligence_pm_rating: value,
+                                        })
+                                    }
+                                />
+                                {resolveModalData?.negligence_pm_rating && (
+                                    <small>
+                                        {resolveModalData?.negligence_pm_rating}{" "}
+                                        /10
+                                    </small>
+                                )}
                             </div>
 
                             {/* Error  */}
-                            {resolveModalDataValidation.negligence_pm_rating && <small className="text-danger my-1">Client Communication Rating is required</small>}
+                            {resolveModalDataValidation.negligence_pm_rating && (
+                                <small className="text-danger my-1">
+                                    Client Communication Rating is required
+                                </small>
+                            )}
+                        </div>
+                    </div>
+                    <div style={styles.reasonContainer}>
+                        <p className="my-2">
+                            <strong>Any other suggestion from {auth?.name ?? "Admin"} </strong>
+                        </p>
+                        <div
+                            style={{
+                                border: "1px solid #ccc",
+                                borderRadius: "5px",
+                            }}
+                        >
+                            <CKEditorComponent
+                                onChange={(e, editor) => {
+                                    setResolveModalData({
+                                        ...resolveModalData,
+                                        any_other_suggestion_admin:
+                                            editor.getData(),
+                                    });
+                                }}
+                            />
                         </div>
                     </div>
                     <Button
@@ -292,7 +381,7 @@ const ResolveModal = ({
                         onClick={handleSubmit}
                         disabled={isLoading}
                     >
-                        {isLoading ? "Submitting..." : "Submit"}
+                        {isLoading ? "Authorizing..." : "Authorize"}
                     </Button>
                 </div>
             </section>

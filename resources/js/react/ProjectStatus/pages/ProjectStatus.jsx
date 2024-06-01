@@ -12,14 +12,16 @@ import Button from "../components/Button";
 import Loader from "../components/Loader";
 import FilterContainer from "../components/Filter-bar/FilterContainer";
 import PercentageofGoalsMetModal from "../components/modal/PercentageofGoalsMetModal";
-import ProjectStatusExportButton from "../components/ProjectStatusExportbutton";
-import { Flex } from "../components/table/ui";
+import NextGoalDetailsModal from "../components/modal/NextGoalDetailsModal";
+import ProjectManagerExplanationModal from "../components/modal/ProjectManagerExplanationModal";
+import { useSearchParams } from "react-router-dom";
 
 const ProjectStatus = () => {
     const [search, setSearch] = React.useState("");
     const [projectDetails, setProjectDetails] = React.useState({});
     const [filter, setFilter] = React.useState(null);
-    const [projectId, setProjectId] = React.useState("900");
+    const [searchParams, setSearchParams] = useSearchParams();
+    const [projectId, setProjectId] = React.useState(null);
     const [{ pageIndex, pageSize }, setPagination] = React.useState({
         pageIndex: 0,
         pageSize: 10,
@@ -30,6 +32,8 @@ const ProjectStatus = () => {
         setIsOpenPercentageofGoalsMetModal,
     ] = React.useState(false);
     const [selectedProjectName, setSelectedProjectName] = React.useState("");
+    const [isOpenNextGoalDetailsModal, setIsOpenNextGoalDetailsModal] =
+        React.useState(false);
 
     // make query string
     const queryString = (object) => {
@@ -57,6 +61,8 @@ const ProjectStatus = () => {
         refetch: refetchPmGoal,
     } = useGetPmGoalQuery(projectId, {
         refetchOnMountOrArgChange: true /*, skip: !filter?.start_date*/,
+        skip: !projectId,
+        staleTime: 0
     });
 
     // Data from the API
@@ -70,6 +76,11 @@ const ProjectStatus = () => {
     const closeModalOne = () => {
         setIsModalOneOpen(false);
         setSelectedProjectName("");
+        setProjectId(null);
+        searchParams.delete("modal_type");
+        searchParams.delete("goal_id");
+        searchParams.delete("project_id");
+        setSearchParams(searchParams);
     };
 
     // On filter
@@ -91,7 +102,7 @@ const ProjectStatus = () => {
         setProjectId(data.project_id);
         setIsModalOneOpen(true);
         setSelectedProjectName(data.project_name);
-        refetchPmGoal();
+        // refetchPmGoal();
     };
 
     // handle percent of goal met  modal
@@ -100,12 +111,35 @@ const ProjectStatus = () => {
         setSelectedProjectName(data.project_name);
         setProjectDetails(data);
         setIsOpenPercentageofGoalsMetModal(true);
+        refetchPmGoal();
+    };
+
+    const handleNextGoalDetails = (data) => {
+        setProjectDetails(data);
+        setIsOpenNextGoalDetailsModal(true);
     };
 
     // handle close percentage of goal met modal
     const handleClosePercentageofGoalsMetModal = () => {
         setIsOpenPercentageofGoalsMetModal(false);
     };
+
+    // handle close next goal details modal
+    const handleCloseNextGoalDetailsModal = () => {
+        setIsOpenNextGoalDetailsModal(false);
+    };
+
+    // use this to update the pmGoal state for next 24 hours this goal will be expired
+    React.useEffect(() => {
+        const modalType = searchParams.get("modal_type");
+        const goal_id = searchParams.get("goal_id");
+        const project_id = searchParams.get("project_id");
+        if (modalType === "filtered_goal_details" && goal_id && project_id) {
+            setProjectId(project_id);
+            setIsModalOneOpen(true);
+            // refetchPmGoal();
+        }
+    }, []);
 
     return (
         <React.Fragment>
@@ -116,26 +150,20 @@ const ProjectStatus = () => {
 
             <div className="sp1_tlr_container">
                 <div className="sp1_tlr_tbl_container">
-                    <div
-                        className="mr-2 mb-2"
-                        style={{
-                            display: "flex",
-                            justifyContent: "space-between",
-                        }}
-                    >
-                        <div>
-                            <ProjectStatusExportButton filter={filter} />
+                    <div className="mb-3 d-flex align-items-center flex-wrap justify-content-end">
+                        {/* Refresh Data */}
+                        <div className="mr-2 mb-2">
+                            <Button onClick={onRefreshButtonClick}>
+                                {isFetching ? (
+                                    <Loader
+                                        title="Loading..."
+                                        borderRightColor="white"
+                                    />
+                                ) : (
+                                    "Refresh"
+                                )}
+                            </Button>
                         </div>
-                        <Button onClick={onRefreshButtonClick}>
-                            {isFetching ? (
-                                <Loader
-                                    title="Loading..."
-                                    borderRightColor="white"
-                                />
-                            ) : (
-                                "Refresh"
-                            )}
-                        </Button>
                     </div>
 
                     {/* Project Status Main Table */}
@@ -149,28 +177,45 @@ const ProjectStatus = () => {
                         refetch={refetch}
                         handlePmGoalModal={handlePmGoalModal}
                         handlePercentOfGoalMet={handlePercentOfGoalMet}
+                        handleNextGoalDetails={handleNextGoalDetails}
                     />
                 </div>
             </div>
             {/* Project Status Modal */}
-            <ProjectModal
-                refetchPmGoal={refetchPmGoal}
-                isFetchingPmGoal={isFetchingPmGoal}
-                pmGoal={pmGoal}
-                isOpen={isModalOneOpen}
-                closeModal={closeModalOne}
-                selectedProjectName={selectedProjectName}
-                projectDetails={projectDetails}
-            />
+            {isModalOneOpen && (
+                <ProjectModal
+                    refetchPmGoal={refetchPmGoal}
+                    isFetchingPmGoal={isFetchingPmGoal}
+                    pmGoal={pmGoal}
+                    projectStatus={projectStatus}
+                    setProjectDetails={setProjectDetails}
+                    isOpen={isModalOneOpen}
+                    closeModal={closeModalOne}
+                    selectedProjectName={selectedProjectName}
+                    projectDetails={projectDetails}
+                />
+            )}
             {/* Percent of Goals Met Modal */}
-            <PercentageofGoalsMetModal
-                projectDetails={projectDetails}
-                refetchPmGoal={refetchPmGoal}
-                isOpen={isOpenPercentageofGoalsMetModal}
-                isLoading={isFetchingPmGoal}
-                percentageOfGoalsMet={percentageOfGoalsMet}
-                closeModal={handleClosePercentageofGoalsMetModal}
-            />
+            {isOpenPercentageofGoalsMetModal && (
+                <PercentageofGoalsMetModal
+                    projectDetails={projectDetails}
+                    refetchPmGoal={refetchPmGoal}
+                    isOpen={isOpenPercentageofGoalsMetModal}
+                    isLoading={isFetchingPmGoal}
+                    percentageOfGoalsMet={percentageOfGoalsMet}
+                    closeModal={handleClosePercentageofGoalsMetModal}
+                />
+            )}
+            {isOpenNextGoalDetailsModal && (
+                <NextGoalDetailsModal
+                    isOpen={isOpenNextGoalDetailsModal}
+                    closeModal={handleCloseNextGoalDetailsModal}
+                    projectDetails={projectDetails}
+                />
+            )}
+            {searchParams.get("modal_type") === "individual_goal_details" && (
+                <ProjectManagerExplanationModal />
+            )}
         </React.Fragment>
     );
 };
