@@ -255,6 +255,7 @@ return array (
     'advanced' => 'Advanced',
     'point' => 'Points',
     'factor' => 'Factors',
+    'incentive' => 'PM Incentive'
 ),
   'parentId' => 'Parent',
   'childId' => 'Child',
