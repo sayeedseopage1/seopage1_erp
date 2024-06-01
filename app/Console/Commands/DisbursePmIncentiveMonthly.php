@@ -7,11 +7,13 @@ use App\Models\Task;
 use App\Models\User;
 use App\Models\Project;
 use App\Helper\Incentive;
+use App\Models\AchievedIncentive;
 use App\Models\CashPoint;
 use App\Models\TaskRevision;
 use Illuminate\Console\Command;
 use App\Models\ProjectMilestone;
 use App\Models\IncentiveCriteria;
+use App\Models\IncentiveType;
 use Illuminate\Support\Facades\DB;
 use App\Models\ProgressiveIncentive;
 
@@ -44,7 +46,7 @@ class DisbursePmIncentiveMonthly extends Command
         $now = now();
 
         foreach($users as $user){
-            $cashPoints = CashPoint::whereNotNull('factor_id')->get();
+            $cashPoints = CashPoint::where('user_id', $user->id)->whereNotNull('factor_id')->get();
             $totalEarnedPoints = $cashPoints->sum('total_points_earn');
             $totalLostPoints = $cashPoints->sum('total_points_lost');
             $availablePoints = $totalEarnedPoints - $totalLostPoints + 500;
@@ -124,25 +126,45 @@ class DisbursePmIncentiveMonthly extends Command
                 $achieved_regular_incentive = (($totalEarnedPoints + $totalLostPoints) / 100) * (array_sum($obtainedIncentive) / count($obtainedIncentive));
             }
 
-            dd($achieved_regular_incentive);
+            // Achieved regular bonus
+            $incentiveType = IncentiveType::find(1); // Regular incentive type
+            AchievedIncentive::create([
+                'date' => $now,
+                'user_id' => $user->id,
+                'incentive_type_id' => 1,
+                'incentive_point' => $achieved_regular_incentive,
+                'cash_value' => $incentiveType->cash_value,
+                'total_cash_amount' => $incentiveType->cash_value * $achieved_regular_incentive
+            ]);
 
             // Upsale/Cross sale amount
             $upsale_amount = ProjectMilestone::select('project_milestones.*')
             ->join('projects','projects.id','project_milestones.project_id')
             ->join('deals','deals.id','projects.deal_id')
             ->where('deals.project_type','fixed')
-            ->where('projects.pm_id', 209)
-            ->where('project_milestones.added_by', 209)
+            ->where('projects.pm_id', $user->id)
+            ->where('project_milestones.added_by', $user->id)
             ->where('project_milestones.status','!=','canceled')
             ->whereBetween('project_milestones.created_at', [$startDate, $endDate])
             ->sum('project_milestones.cost');
+            dump($upsale_amount);
             $achieved_upsale_incentive = Incentive::progressiveStore(8, $user->id, $upsale_amount, $now);
-            dd($achieved_upsale_incentive);
             // End
+
+            // Achieved upsale/cross bonus
+            $incentiveType = IncentiveType::find(2); // Upsale/Cross sale incentive type
+            AchievedIncentive::create([
+                'date' => $now,
+                'user_id' => $user->id,
+                'incentive_type_id' => 2,
+                'incentive_point' => $achieved_upsale_incentive,
+                'cash_value' => $incentiveType->cash_value,
+                'total_cash_amount' => $incentiveType->cash_value * $achieved_upsale_incentive
+            ]);
             
             // Bonus points based on released amount
             $total_previous_assigned_amount = Project::join('project_milestones', 'projects.id', '=', 'project_milestones.project_id')
-            ->where('projects.pm_id', 209)
+            ->where('projects.pm_id', $user->id)
             ->whereBetween('project_milestones.created_at', [Carbon::now()->subMonth()->startOfMonth(), Carbon::now()->subMonth()->endOfMonth()])
             ->where('projects.project_status','Accepted')
             ->sum('cost');
@@ -197,7 +219,7 @@ class DisbursePmIncentiveMonthly extends Command
             }
 
             // Bonus points based on unreleased amount
-            $this_month_released_percent = round(($released_amount_this_month_assigned / $assigned_amount_this_month) * 100, 2);
+            $this_month_released_percent = $assigned_amount_this_month ? round(($released_amount_this_month_assigned / $assigned_amount_this_month) * 100, 2) : 0;
             $previous_months_released_percent = round((($released_amount_this_month - $released_amount_this_month_assigned) / $remain_unreleased_amount_last_months) * 100, 2);
             $achieved_bonus_incentive = 0;
             foreach(IncentiveCriteria::with('incentiveFactors')->find(10)->incentiveFactors as $factor){
@@ -206,8 +228,18 @@ class DisbursePmIncentiveMonthly extends Command
                     break;
                 }
             }
-            dd($achieved_bonus_incentive);
             // End
+
+            // Achieved upsale/cross bonus
+            $incentiveType = IncentiveType::find(3); // Bonus point incentive type
+            AchievedIncentive::create([
+                'date' => $now,
+                'user_id' => $user->id,
+                'incentive_type_id' => 3,
+                'incentive_point' => $achieved_bonus_incentive,
+                'cash_value' => $incentiveType->cash_value,
+                'total_cash_amount' => $incentiveType->cash_value * $achieved_bonus_incentive
+            ]);
         }
     }
 }
