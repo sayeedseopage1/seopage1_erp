@@ -3,6 +3,7 @@ import { SalesPointsContainer } from "../Styles/ui/ui";
 import Tooltip from "../Tooltip";
 import EditIcon from "../Styles/ui/EditIcon";
 import Switch from "../../../../../global/Switch";
+import { auth } from "../../../PmIncentive/constants";
 
 export const PointFactorsColumns = [
     {
@@ -113,21 +114,25 @@ export const PointFactorsColumns = [
                                             </Switch>
                                         </div>
 
-                                        <div
-                                            onClick={() => {
-                                                action.handleEditFactor(
-                                                    factor
-                                                );
-                                            }}
-                                            role="button"
-                                        >
-                                            <Tooltip
-                                                text={`Edit Factors
-                                                    `}
+                                        {
+                                            auth?.isHasRolePermission(1) && <div
+                                                onClick={() => {
+                                                    action.handleEditFactor(
+                                                        factor
+                                                    );
+                                                }}
+                                                role="button"
                                             >
-                                                <EditIcon className="cursor-pointer" />
-                                            </Tooltip>
-                                        </div>
+                                                <Tooltip
+                                                    text={`Edit Factors
+                                                    `}
+                                                >
+                                                    <EditIcon className="cursor-pointer" />
+                                                </Tooltip>
+                                            </div>
+                                        }
+
+
                                     </div>
                                 </SalesPointsContainer>
                             );
