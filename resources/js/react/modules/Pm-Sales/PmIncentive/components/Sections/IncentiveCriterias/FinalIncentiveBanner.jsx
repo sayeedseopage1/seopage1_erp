@@ -4,7 +4,7 @@ import useIncentiveTypes from '../../../hooks/useIncentiveTypes';
 import { useSelector } from 'react-redux';
 
 const FinalIncentiveBanner = () => {
-    const { allIncentiveTypes, regularIncentiveTypes, upSaleCrossSaleTypes, bonusIncentiveTypes, incentiveTypesLoading } = useIncentiveTypes();
+    const { allIncentiveTypes, regularIncentiveTypes, upSaleCrossSaleTypes, bonusIncentiveTypes } = useIncentiveTypes();
     const pmIncentive = useSelector((state) => state.pmIncentive)
     const { regularIncentivePoints, upSaleCrossSalePoints, bonusPointsPoints } = pmIncentive || {}
 

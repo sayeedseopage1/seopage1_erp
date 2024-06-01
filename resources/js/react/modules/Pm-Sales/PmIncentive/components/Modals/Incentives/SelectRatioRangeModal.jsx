@@ -13,7 +13,6 @@ const SelectRatioRangeModal = ({ singleCriteria, chartDataId, antdModalOpen, set
         register,
         handleSubmit,
         reset,
-        watch,
         formState: { errors },
     } = useForm()
 
@@ -30,7 +29,6 @@ const SelectRatioRangeModal = ({ singleCriteria, chartDataId, antdModalOpen, set
             }
             const response = await editIncentiveCriteria({ id: chartDataId, payload }).unwrap();
             if (response?.status == 200) {
-                // toast.success(response.message);
                 toast.success('X Axis range updated successfully');
                 reset();
                 setAntdModalOpen(false)
@@ -40,9 +38,6 @@ const SelectRatioRangeModal = ({ singleCriteria, chartDataId, antdModalOpen, set
         } catch (error) {
             toast.error("Failed to update");
         }
-
-
-        // setXAxisStartAndEndValue(data)
 
         reset()
         setAntdModalOpen(false)
@@ -109,6 +104,9 @@ const SelectRatioRangeModal = ({ singleCriteria, chartDataId, antdModalOpen, set
 export default SelectRatioRangeModal;
 
 SelectRatioRangeModal.propTypes = {
+    singleCriteria: PropTypes.object,
+    chartDataId: PropTypes.number,
     antdModalOpen: PropTypes.bool,
-    setAntdModalOpen: PropTypes.func
+    setAntdModalOpen: PropTypes.func,
+    singleCriteriaLimitType: PropTypes.number
 };

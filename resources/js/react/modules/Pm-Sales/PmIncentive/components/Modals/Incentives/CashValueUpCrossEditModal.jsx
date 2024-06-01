@@ -13,7 +13,6 @@ const CashValueUpCrossEditModal = ({ upSaleCrossSaleTypes, antdModalOpen, setAnt
     const {
         register,
         handleSubmit,
-        watch,
         reset,
         formState: { errors },
     } = useForm()
@@ -70,6 +69,7 @@ const CashValueUpCrossEditModal = ({ upSaleCrossSaleTypes, antdModalOpen, setAnt
 export default CashValueUpCrossEditModal;
 
 CashValueUpCrossEditModal.propTypes = {
+    upSaleCrossSaleTypes: PropTypes.object,
     antdModalOpen: PropTypes.bool,
     setAntdModalOpen: PropTypes.func
 };

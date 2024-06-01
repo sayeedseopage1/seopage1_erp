@@ -3,6 +3,7 @@ import '../../../styles/Incentive.css'
 import { ButtonComponent } from '../../../../PointFactors/components/Styles/ui/ui';
 import PayNowModal from '../../Modals/HeldAmounts/PayNowModal';
 import { auth } from '../../../constants';
+import PropTypes from "prop-types";
 
 const pointFilters = [
     {
@@ -86,3 +87,10 @@ const FilterBar = ({ tab, setTab, filterByPeriod, setFilterByPeriod }) => {
 };
 
 export default FilterBar;
+
+FilterBar.propTypes = {
+    tab: PropTypes.string,
+    setTab: PropTypes.func,
+    filterByPeriod: PropTypes.string,
+    setFilterByPeriod: PropTypes.func
+}

@@ -7,6 +7,7 @@ import { IoInformationCircle } from "react-icons/io5";
 import line18 from '../../assets/Line18.svg'
 import line19 from '../../assets/Line19.svg'
 import { rangesForLongValue, rangesForShortValue } from "../../constants/rangesColor";
+import PropTypes from 'prop-types';
 
 const IncentiveThickChart = ({ chartData }) => {
     const chartRef = useRef(null);
@@ -102,13 +103,9 @@ const IncentiveThickChart = ({ chartData }) => {
         },
         grid: { show: !0, strokeDashArray: 3, position: "back" },
         xaxis: {
-            // categories: chartData?.id > 7 ? chartData?.categories : [],
-            // categories: chartData?.categories,
             tickPlacement: "on",
             labels: {
                 formatter: (g) => {
-                    // return `${chartData?.id > 7 ? g : Math.round(g) + "%"}`;
-                    // return `${g}`;
                     return `${chartData?.limitType == 1 ? "$" : ""} ${Math.round(g)} ${chartData?.limitType == 2 ? "%" : ""}`;
                 },
                 style: {
@@ -214,7 +211,7 @@ const IncentiveThickChart = ({ chartData }) => {
 
     return (
         <>
-            <div className="y_axis_arrow ">
+            <div className="y_axis_arrow">
                 <img src={line18} className="chart_yAxis_icon" alt="arrow1" />
                 <h2 className="chart_axis_title">{chartData?.yTitle}</h2>
                 <img src={line19} className="chart_yAxis_icon" alt="arrow2" />
@@ -261,3 +258,7 @@ const IncentiveThickChart = ({ chartData }) => {
 };
 
 export default IncentiveThickChart;
+
+IncentiveThickChart.propTypes = {
+    chartData: PropTypes.object,
+}

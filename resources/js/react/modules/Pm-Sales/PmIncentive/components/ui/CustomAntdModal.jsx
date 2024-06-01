@@ -28,7 +28,7 @@ const CustomAntdModal = ({ title, antdModalOpen, setAntdModalOpen, children, mod
 
 export default CustomAntdModal;
 
-CustomAntdModal.prototypes = {
+CustomAntdModal.propTypes = {
     title: PropTypes.node,
     antdModalOpen: PropTypes.bool,
     setAntdModalOpen: PropTypes.func,

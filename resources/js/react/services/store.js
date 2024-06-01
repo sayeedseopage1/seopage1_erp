@@ -9,7 +9,7 @@ import subtaskReducer from "./features/subTaskSlice";
 import timeLogHistoryReducer from "./features/timeLogHistorySlice";
 import tasksReducer from "./features/tasksSlice";
 import errorSlice from "./features/errorSlice";
-import PmIncentiveSliceReducer from "./features/Pm-Sales/PmIncentiveSlice";
+import PmIncentiveSliceReducer from "./features/Pm-Sales/pmIncentiveSlice";
 
 export const store = configureStore({
     reducer: {

@@ -13,7 +13,6 @@ const EditXAxisModal = ({ singleCriteria, axisEditItem, setChartAxisData, antdMo
     const {
         register,
         handleSubmit,
-        watch,
         reset,
         formState: { errors },
     } = useForm()
@@ -115,7 +114,7 @@ const EditXAxisModal = ({ singleCriteria, axisEditItem, setChartAxisData, antdMo
 export default EditXAxisModal;
 
 EditXAxisModal.propTypes = {
-    xAxisStartAndEndValue: PropTypes.object,
+    singleCriteria: PropTypes.object,
     axisEditItem: PropTypes.object,
     chartAxisData: PropTypes.array,
     setChartAxisData: PropTypes.func,

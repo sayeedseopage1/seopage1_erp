@@ -14,7 +14,8 @@ const EmployeeFilter = ({ pmByDeptData, handleChange, isFetching }) => {
                 isFetching ? <div className='ml-1'><Placeholder width="100px" height={18} /></div> : pmByDeptData?.length > 0 ? <Select
                     className='points_selector'
                     defaultValue={{ value: pmByDeptData[0]?.id, label: pmByDeptData[0]?.name }}
-                    style={{ width: 120 }}
+                    style={{ width: 150 }}
+                    popupMatchSelectWidth={false}
                     onChange={handleChange}
                     options={pmByDeptData?.map(item => ({
                         value: item?.id,

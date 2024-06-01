@@ -108,7 +108,7 @@ const IncentiveBarChart = ({ chartData }) => {
                 },
             },
             // stepSize: Math.max(...chartData?.series[0]?.data) > 20 ? 20 : Math.max(...chartData?.series[0]?.data),
-            stepSize: Math.max(...chartData?.series[0]?.data) > 10 ? 20 : 2,
+            stepSize: chartData && Math.max(...chartData?.series?.[0]?.data) > 10 ? 20 : 2,
         },
 
         dataLabels: {

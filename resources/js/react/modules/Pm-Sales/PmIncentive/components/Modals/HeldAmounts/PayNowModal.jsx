@@ -3,6 +3,7 @@ import { Modal, Select, Table } from 'antd';
 import { ButtonComponent } from '../../../../PointFactors/components/Styles/ui/ui';
 import amountIcon from '../../../assets/amount.svg';
 import Swal from 'sweetalert2';
+import PropTypes from 'prop-types'
 
 const { Option } = Select;  // Ensure to import Option from antd
 
@@ -234,3 +235,8 @@ const PayNowModal = ({ antdModalOpen, showPayNowModal }) => {
 };
 
 export default PayNowModal;
+
+PayNowModal.propTypes = {
+    antdModalOpen: PropTypes.bool,
+    showPayNowModal: PropTypes.func
+};

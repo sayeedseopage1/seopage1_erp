@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
 const IncentiveFactorCard = ({ item }) => {
     return (
@@ -8,7 +9,7 @@ const IncentiveFactorCard = ({ item }) => {
             </div>
             <ul className='incentive_factors_card_list'>
                 {
-                    item?.conditions.map((condition, ind) => <li key={ind}>{condition}</li>)
+                    item?.conditions.map((condition) => <li key={condition?.id}>{condition?.title}</li>)
                 }
             </ul>
 
@@ -17,3 +18,7 @@ const IncentiveFactorCard = ({ item }) => {
 };
 
 export default IncentiveFactorCard;
+
+IncentiveFactorCard.propTypes = {
+    item: PropTypes.object
+}

@@ -5,7 +5,6 @@ import { useForm } from 'react-hook-form';
 import { Modal } from 'antd';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { useAddIncentiveFactorsMutation } from '../../../../../../services/api/Pm-Sales/PmIncentiveApiSlice';
 
 const AddNewAxisItemModal = ({ singleCriteria, chartAxisData, setChartAxisData, antdModalOpen, setAntdModalOpen, singleCriteriaLimitType, singleCriteriaAmountType }) => {
     const {
@@ -116,10 +115,11 @@ const AddNewAxisItemModal = ({ singleCriteria, chartAxisData, setChartAxisData, 
 export default AddNewAxisItemModal;
 
 AddNewAxisItemModal.propTypes = {
-    antdModalOpen: PropTypes.bool,
-    setAntdModalOpen: PropTypes.func,
-    xAxisStartAndEndValue: PropTypes.object,
+    singleCriteria: PropTypes.object,
     chartAxisData: PropTypes.array,
     setChartAxisData: PropTypes.func,
-    chartData: PropTypes.array,
+    antdModalOpen: PropTypes.bool,
+    setAntdModalOpen: PropTypes.func,
+    singleCriteriaLimitType: PropTypes.number,
+    singleCriteriaAmountType: PropTypes.number,
 };

@@ -5,7 +5,7 @@ import { Modal, Table } from 'antd';
 import { useDeleteIncentiveFactorMutation } from '../../../../../../services/api/Pm-Sales/PmIncentiveApiSlice';
 
 const RemoveRatioItemsModal = ({ chartAxisData, setChartAxisData, antdModalOpen, setAntdModalOpen, setIsAllItemsRemoved }) => {
-    const [selectedRowKeysState, setSelectedRowKeys] = useState([]);
+    const [selectedRowKeysState, setSelectedRowKeysState] = useState([]);
 
     const [deleteIncentiveFactor, { isLoading: isDeleteIncentiveFactorLoading }] = useDeleteIncentiveFactorMutation()
 
@@ -36,7 +36,7 @@ const RemoveRatioItemsModal = ({ chartAxisData, setChartAxisData, antdModalOpen,
 
     const rowSelection = {
         onChange: (selectedRowKeys, selectedRows) => {
-            setSelectedRowKeys(selectedRowKeys);
+            setSelectedRowKeysState(selectedRowKeys);
             setIsAllItemsRemoved(selectedRowKeys?.length == chartAxisData?.length);
         },
         selectedRowKeys: selectedRowKeysState,
@@ -51,14 +51,14 @@ const RemoveRatioItemsModal = ({ chartAxisData, setChartAxisData, antdModalOpen,
         // Updating chartAxisData and clearing selectedRowKeysState after deletion
         const updatedChartAxisData = chartAxisData?.filter(item => !selectedRowKeysState?.includes(item?.id));
         setChartAxisData(updatedChartAxisData);
-        setSelectedRowKeys([]); // Clearing selectedRowKeysState
+        setSelectedRowKeysState([]); // Clearing selectedRowKeysState
         setAntdModalOpen(false);
     };
 
 
     const handleCancel = () => {
         setAntdModalOpen(false);
-        setSelectedRowKeys([]); // Clearing selectedRowKeysState on cancel
+        setSelectedRowKeysState([]); // Clearing selectedRowKeysState on cancel
     };
 
     return (
@@ -104,8 +104,9 @@ const RemoveRatioItemsModal = ({ chartAxisData, setChartAxisData, antdModalOpen,
 export default RemoveRatioItemsModal;
 
 RemoveRatioItemsModal.propTypes = {
-    chartAxisData: PropTypes.array.isRequired, // Added required prop type validation
-    setChartAxisData: PropTypes.func.isRequired, // Added required prop type validation
-    antdModalOpen: PropTypes.bool.isRequired, // Added required prop type validation
-    setAntdModalOpen: PropTypes.func.isRequired, // Added required prop type validation
+    chartAxisData: PropTypes.array.isRequired,
+    setChartAxisData: PropTypes.func.isRequired,
+    antdModalOpen: PropTypes.bool.isRequired,
+    setAntdModalOpen: PropTypes.func.isRequired,
+    setIsAllItemsRemoved: PropTypes.func
 };
