@@ -171,9 +171,12 @@ const TimerControl = ({ task, timerStart, setTimerStart, auth }) => {
             if (
                 workReport &&
                 workReport.data &&
-                workReport.data.check_in_check_out.check_in_status &&
-                workReport.data.daily_task_report.daily_submission_status &&
-                workReport.data.hours_log_report.hours_log_report_status
+                (workReport.data.check_in_check_out.check_in_status ||
+                    auth.roleId === 14) &&
+                (workReport.data.daily_task_report.daily_submission_status ||
+                    auth.roleId === 14) &&
+                (workReport.data.hours_log_report.hours_log_report_status ||
+                    auth.roleId === 14)
             ) {
                 await startTimerApi({
                     task_id: task?.id,
