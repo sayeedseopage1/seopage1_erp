@@ -109,7 +109,11 @@ class Incentive
                 ->where('project_milestones.status','!=','canceled')
                 ->whereBetween('project_milestones.created_at', [$startDate, $endDate])
                 ->sum('project_milestones.cost');
-                self::findIncentive($incentiveCriteria);
+                if($incentiveCriteria->acquired_percent) self::findIncentive($incentiveCriteria);
+                else{
+                    $incentiveCriteria->incentive_amount_type = $incentiveCriteria->incentiveFactors->first()->incentive_amount_type;
+                    $incentiveCriteria->obtained_incentive = 0;
+                }
             }elseif($incentiveCriteria->id == 9){
                 $incentiveCriteria->acquired_percent = DB::table('users')
                 ->join('projects', 'users.id', '=', 'projects.pm_id')
