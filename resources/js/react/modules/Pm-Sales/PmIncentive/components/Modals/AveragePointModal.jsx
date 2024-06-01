@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import CustomAntdModal from '../ui/CustomAntdModal';
 import { useDispatch, useSelector } from 'react-redux';
-import { regularPointAverage } from '../../../../../services/features/Pm-Sales/PmIncentiveSlice';
+import { regularPointAverage } from '../../../../../services/features/Pm-Sales/pmIncentiveSlice';
 import PropTypes from 'prop-types';
 
 const AveragePointModal = ({ antdModalOpen, setAntdModalOpen, item: statsInfoData }) => {

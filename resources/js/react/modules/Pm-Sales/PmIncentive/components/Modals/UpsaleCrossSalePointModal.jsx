@@ -34,7 +34,7 @@ const UpsaleCrossSalePointModal = ({ antdModalOpen, setAntdModalOpen, upsaleCros
                     <hr />
                     <div className="modal_point_row">
                         <p>Upsale/cross sale point: <span>({upsaleCrossSale}*{upsaleCrossSaleIncentive}%)</span></p>{" "}
-                        <span className={`${upsaleCrossSaleIncentive > 0 ? 'progress_card_desc_pos' : 'progress_card_desc_neg'}`}>{upsaleCrossSalePointsData}</span>
+                        <span className={`${upsaleCrossSalePointsData > 0 ? 'progress_card_desc_pos' : 'progress_card_desc_neg'}`}>{upsaleCrossSalePointsData}</span>
                     </div>
                 </div>
             </CustomAntdModal>
