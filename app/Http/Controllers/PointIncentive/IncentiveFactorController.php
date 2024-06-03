@@ -6,6 +6,7 @@ use Carbon\Carbon;
 use App\Models\Task;
 use App\Models\Project;
 use App\Helper\Incentive;
+use App\Models\CashPoint;
 use App\Models\TaskRevision;
 use Illuminate\Http\Request;
 use App\Models\IncentiveType;
@@ -17,9 +18,15 @@ class IncentiveFactorController extends Controller
 {
     public function index(Request $request)
     {
-        $total_points = 500;
+        $startDate = $request->start_date ? Carbon::parse($request->start_date)->startOfDay() : Carbon::now()->startOfMonth();
+        $endDate = Carbon::parse($request->end_date ?? now())->endOfDay();
+        $user_id = $request->user_id ?? null;
+        $prevMonthStartDate = $startDate->subMonth()->startOfMonth();
+        $prevMonthEndDate = $endDate->subMonth()->endOfMonth();
+
+        $total_points = CashPoint::where('user_id', $request->user_id)->whereBetween('created_at', [$startDate, $endDate])->whereNotNull('factor_id')->get();
         $total_previous_assigned_amount = Project::join('project_milestones', 'projects.id', '=', 'project_milestones.project_id')
-        ->where('projects.pm_id', 209)
+        ->where('projects.pm_id', $user_id)
         ->whereBetween('project_milestones.created_at', [Carbon::now()->subMonth()->startOfMonth(), Carbon::now()->subMonth()->endOfMonth()])
         ->where('projects.project_status','Accepted')
         ->sum('cost');
