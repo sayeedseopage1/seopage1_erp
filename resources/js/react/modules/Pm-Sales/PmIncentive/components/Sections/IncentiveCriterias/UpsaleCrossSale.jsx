@@ -4,10 +4,11 @@ import IncentiveThickChart from '../../Charts/IncentiveThickChart';
 import useIncentiveTypes from '../../../hooks/useIncentiveTypes'
 import UpsaleCrossSalePointBanner from './UpsaleCrossSalePointBanner';
 import { IncentiveFormattedData } from '../../../utils/formattedChartData';
+import ChartDataLoader from '../../loader/ChartDataLoader';
 
 
 const UpsaleCrossSale = () => {
-    const { upSaleCrossSaleTypes } = useIncentiveTypes();
+    const { upSaleCrossSaleTypes, incentiveTypesLoading } = useIncentiveTypes();
 
     const upSaleCrossSaleChartData = IncentiveFormattedData(upSaleCrossSaleTypes)
 
@@ -20,7 +21,7 @@ const UpsaleCrossSale = () => {
             </div>
             <div className='chart_section_container'>
                 {
-                    upSaleCrossSaleChartData?.map((item) => (
+                    incentiveTypesLoading ? <ChartDataLoader count={1} /> : upSaleCrossSaleChartData?.length > 0 && upSaleCrossSaleChartData?.map((item) => (
                         <div key={item?.id} className="chart_parent">
 
                             <div className="secondary_chart_wrapper">
@@ -34,7 +35,6 @@ const UpsaleCrossSale = () => {
 
                     ))
                 }
-
                 <UpsaleCrossSalePointBanner />
             </div>
         </>

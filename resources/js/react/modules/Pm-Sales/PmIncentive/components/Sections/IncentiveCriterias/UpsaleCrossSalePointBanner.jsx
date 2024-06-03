@@ -31,42 +31,47 @@ const UpsaleCrossSalePointBanner = () => {
     return (
         <div className="secondary_point_banner">
             <div className="secondary_point_card_wrapper">
-                <div className="secondary_point_card">
-                    <span className="">
-                        <img src={pointIconDark} alt="pointIcon" />
-                    </span>
-                    <div className="">
-                        <p className='point_title point_details_wrapper' style={{ color: "#000000" }}>Your upsale/cross sales points: <button onClick={() => setUpsaleCrossSalePointsModalOpen(true)} className='point_score clickable_link bg-transparent' style={{ color: "#1492E6" }}>
-                            {upsaleCrossSalePointsData}pt
-                        </button></p>
+                {
+                    incentiveTypesLoading ? <Placeholder width="60%" height={28} /> : <div className="secondary_point_card">
+                        <span className="">
+                            <img src={pointIconDark} alt="pointIcon" />
+                        </span>
+                        <div className="">
+                            <p className='point_title point_details_wrapper' style={{ color: "#000000" }}>Your upsale/cross sales points: <button onClick={() => setUpsaleCrossSalePointsModalOpen(true)} className='point_score clickable_link bg-transparent' style={{ color: "#1492E6" }}>
+                                {upsaleCrossSalePointsData}pt
+                            </button></p>
 
-                        <UpsaleCrossSalePointModal
-                            antdModalOpen={upsaleCrossSalePointsModalOpen}
-                            setAntdModalOpen={setUpsaleCrossSalePointsModalOpen}
-                            upSaleCrossSaleTypes={upSaleCrossSaleTypes}
-                            upsaleCrossSalePointsData={upsaleCrossSalePointsData}
-                        />
+                            <UpsaleCrossSalePointModal
+                                antdModalOpen={upsaleCrossSalePointsModalOpen}
+                                setAntdModalOpen={setUpsaleCrossSalePointsModalOpen}
+                                upSaleCrossSaleTypes={upSaleCrossSaleTypes}
+                                upsaleCrossSalePointsData={upsaleCrossSalePointsData}
+                            />
+                        </div>
                     </div>
-                </div>
+                }
             </div>
 
             <div className="custom_divider"></div>
 
             <div className="secondary_point_card_wrapper">
-                <div className="secondary_point_card">
-                    <span className="secondary_point_card_image_wrapper">
-                        <img src={cashBag} style={{ width: "24px", height: "24px" }} alt="taka" />
-                    </span>
-                    {
-                        incentiveTypesLoading ? <Placeholder width="60%" height={28} /> : <p className='point_title point_details_wrapper' style={{ color: "#000000" }}>
+                {
+                    incentiveTypesLoading ? <Placeholder width="60%" height={28} /> : <div className="secondary_point_card">
+                        <span className="secondary_point_card_image_wrapper">
+                            <img src={cashBag} style={{ width: "24px", height: "24px" }} alt="taka" />
+                        </span>
+
+                        <p className='point_title point_details_wrapper' style={{ color: "#000000" }}>
                             Cash value: <span className='point_score' style={{ color: "#1492E6" }}>
                                 {parseFloat(upSaleCrossSaleTypes?.cash_value)} Taka
                             </span> {
                                 auth?.isHasRolePermission(1) && <IncentiveEditButton onClick={() => setEditUpsaleCrossSalePointsModalOpen(true)} className={`chart_button`}></IncentiveEditButton>
                             }
                         </p>
-                    }
-                </div>
+
+                    </div>
+                }
+
             </div>
             <CashValueUpCrossEditModal upSaleCrossSaleTypes={upSaleCrossSaleTypes} antdModalOpen={editUpsaleCrossSalePointsModalOpen} setAntdModalOpen={setEditUpsaleCrossSalePointsModalOpen} />
         </div>

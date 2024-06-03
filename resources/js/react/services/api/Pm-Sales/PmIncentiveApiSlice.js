@@ -10,14 +10,16 @@ const pmSalesApiSlice = apiSlice.injectEndpoints({
             query: (data) => {
                 let searchParams = {};
 
-                if (Object.keys(data)?.length) {
-                    searchParams = new URLSearchParams({
-                        ...(data?.user_id && { user_id: data.user_id }),
-                        ...(data?.start_date && {
-                            start_date: data.start_date,
-                        }),
-                        ...(data?.end_date && { end_date: data.end_date }),
-                    });
+                if (data) {
+                    if (Object.keys(data)?.length) {
+                        searchParams = new URLSearchParams({
+                            ...(data?.user_id && { user_id: data.user_id }),
+                            ...(data?.start_date && {
+                                start_date: data.start_date,
+                            }),
+                            ...(data?.end_date && { end_date: data.end_date }),
+                        });
+                    }
                 }
 
                 return {

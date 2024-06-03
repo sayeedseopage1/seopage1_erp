@@ -19,6 +19,7 @@ const Incentive = () => {
     const [query, setQuery] = useState({});
     const [tab, setTab] = useState("current");
     const [filterByPeriod, setFilterByPeriod] = useState("monthly");
+    // TODO: it will be modified 
     const { incentiveTypesLoading } = useIncentiveTypes(query);
 
 
