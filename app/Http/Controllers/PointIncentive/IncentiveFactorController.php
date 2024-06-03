@@ -52,7 +52,7 @@ class IncentiveFactorController extends Controller
         $data['total_points'] = $total_points;
         $data['total_previous_assigned_amount'] = $total_previous_assigned_amount;
         $data['incentive_data'] = $incentiveData;
-        
+
         return response()->json([
             'status' => 200,
             'data' => $data
@@ -126,7 +126,6 @@ class IncentiveFactorController extends Controller
     public function destroy($id)
     {
         try {
-            $id = "4";
             IncentiveFactor::where('id', $id)->delete();
             return response()->json([
                 'status' => 200,
