@@ -2712,18 +2712,20 @@ class TaskController extends AccountBaseController
             ];
         }
 
-
         DB::commit();
 
+        $text = Auth::user()->name . ' updated his task ' . $task->heading;
+        $link = '<a href="' . route('tasks.show', $task->id) . '">' . $text . '</a>';
+        $this->logProjectActivity($project->id, $link);
 
 
         if (is_array($request->user_id)) {
             $assigned_to = User::find($request->user_id[0]);
 
 
-            $text = Auth::user()->name . ' assigned task updated by ' . $assigned_to->name;
-            $link = '<a href="' . route('tasks.show', $task->id) . '">' . $text . '</a>';
-            $this->logProjectActivity($project->id, $link);
+            // $text = Auth::user()->name . ' updated his task ' . $task->heading;
+            // $link = '<a href="' . route('tasks.show', $task->id) . '">' . $text . '</a>';
+            // $this->logProjectActivity($project->id, $link);
 
             $this->triggerPusher('notification-channel', 'notification', [
                 'user_id' => $assigned_to->id,
@@ -2735,9 +2737,9 @@ class TaskController extends AccountBaseController
         } else {
             $assigned_to = User::find($request->user_id);
 
-            $text = Auth::user()->name . ' assigned task updated by' . $assigned_to->name;
-            $link = '<a href="' . route('tasks.show', $task->id) . '">' . $text . '</a>';
-            $this->logProjectActivity($project->id, $link);
+            // $text = Auth::user()->name . ' assigned task updated by' . $assigned_to->name;
+            // $link = '<a href="' . route('tasks.show', $task->id) . '">' . $text . '</a>';
+            // $this->logProjectActivity($project->id, $link);
 
             $this->triggerPusher('notification-channel', 'notification', [
                 'user_id' => $assigned_to->id,

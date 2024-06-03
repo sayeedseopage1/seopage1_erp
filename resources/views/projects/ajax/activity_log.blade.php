@@ -7,16 +7,25 @@
 						<th>On</th>
 						<th>By</th>
 						<th>Activity</th>
+						<th>Time difference</th>
 					</x-slot>
 					@foreach($activityLog as $value)
+						@php
+							$previousTime = App\Models\ProjectActivity::where('project_id', $value->project_id)->where('id', '<', $value->id)->orderBy('id', 'desc')->first();
+							$thisTime = $previousTime->created_at ?? null;
+							$timeDifference = $thisTime ? $thisTime->diff($value->created_at) : 0;
+						@endphp
 					<tr>
-						<td>{{$value->created_at->format('Y-m-d g:i A')}}<br>(GMT {{$value->created_at->format('P')}})</td>
+						<td>{{$value->created_at->format('j M Y h:i A')}}</td>
 						<td>
 							@if(is_null($value->addedBy))
 								---
 							@else
-							<img src="{{URL::asset('user-uploads/avatar/'.$value->addedBy->image ?? 'avatar_blank.png')}}" class="mr-3 taskEmployeeImg rounded-circle" alt="{{$value->addedBy->name}}" title="{{$value->addedBy->name}}">
-							{{$value->addedBy->name}}
+								@if ($value->addedBy->image != null)
+								<img src="{{URL::asset('user-uploads/avatar/'.$value->addedBy->image ?? 'avatar_blank.png')}}" class="mr-3 taskEmployeeImg rounded-circle" alt="{{$value->addedBy->name}}" title="{{$value->addedBy->name}}">{{$value->addedBy->name}}
+								@else
+								<img src="{{URL::asset('user-uploads/avatar/avatar_blank.png')}}" class="mr-3 taskEmployeeImg rounded-circle" alt="{{$value->addedBy->name}}" title="{{$value->addedBy->name}}">{{$value->addedBy->name}}
+								@endif
 							@endif
 						</td>
 						<td>
@@ -57,23 +66,33 @@
 								{!! html_entity_decode($value->activity, ENT_QUOTES, 'UTF-8') !!}
 							@endif
 						</td>
+						<td>{{$timeDifference ? $timeDifference->format('%h hour %i minutes') : ''}}</td>
 					</tr>
 					@endforeach
 					
 					@foreach($lead_deal_activity_log as $value)
+					@php
+						$previousTime = App\Models\ProjectActivity::where('project_id', $value->project_id)->where('id', '<', $value->id)->orderBy('id', 'desc')->first();
+						$thisTime = $previousTime->created_at ?? null;
+						$timeDifference = $thisTime ? $thisTime->diff($value->created_at) : 0;
+					@endphp
 					<tr>
-						<td>{{$value->created_at->format('Y-m-d g:i A')}}<br>(GMT {{$value->created_at->format('P')}})</td>
+						<td>{{$value->created_at->format('j M Y h:i A')}}</td>
 						<td>
 							@if(is_null($value->addedBy))
 								---
 							@else
-							<img src="{{URL::asset('user-uploads/avatar/'.$value->addedBy->image ?? 'avatar_blank.png')}}" class="mr-3 taskEmployeeImg rounded-circle" alt="{{$value->addedBy->name ?? '--'}}" title="{{$value->addedBy->name ?? '--'}}">
-							{{$value->addedBy->name ?? '--'}}
+								@if ($value->addedBy->image != null)
+								<img src="{{URL::asset('user-uploads/avatar/'.$value->addedBy->image ?? 'avatar_blank.png')}}" class="mr-3 taskEmployeeImg rounded-circle" alt="{{$value->addedBy->name ?? '--'}}" title="{{$value->addedBy->name ?? '--'}}">{{$value->addedBy->name ?? '--'}}
+								@else
+								<img src="{{URL::asset('user-uploads/avatar/avatar_blank.png')}}" class="mr-3 taskEmployeeImg rounded-circle" alt="{{$value->addedBy->name ?? '--'}}" title="{{$value->addedBy->name ?? '--'}}">{{$value->addedBy->name ?? '--'}}
+								@endif
 							@endif
 						</td>
 						<td>
 							{!! html_entity_decode($value->message, ENT_QUOTES, 'UTF-8') !!}
 						</td>
+						<td>{{$timeDifference ? $timeDifference->format('%h hour %i minutes') : ''}}</td>
 					</tr>
 					@endforeach
 				</x-table>
@@ -107,7 +126,7 @@
 		                    <input type="text" class="position-relative text-dark form-control border-0 p-2 text-left f-14 f-w-500" name="date_range" id="datatableRange_al" placeholder="Start Date And End Date">
 		               </div>
 		            </div>
-		            <div class="col-12 col-sm-4">
+		            <div class="col-12 col-sm-4 d-flex">
 		                <div class="select-box py-2 px-0 mr-3">
 		                    <x-forms.label :fieldLabel="__('Employee')" fieldId="employee" />
 		                    <select class="form-control select-picker" name="employee" id="employee" data-live-search="false" data-size="8">
@@ -119,6 +138,10 @@
 		                        @endforeach
 		                    </select>
 		                </div>
+						<div class="form-group mt-2">
+							<label for="">Client</label>
+							<input type="text" name="" id="" class="form-control height-35 f-14" value="{{$client->name}}" readonly>
+						</div>
 		            </div>
 		        </div>
 	        </div>
@@ -142,8 +165,12 @@
 								@if(is_null($value->addedBy))
 									---
 								@else
-								<img src="{{URL::asset('user-uploads/avatar/'.$value->addedBy->image ?? 'avatar_blank.png')}}" class="mr-3 taskEmployeeImg rounded-circle" alt="{{$value->addedBy->name}}" title="{{$value->addedBy->name}}">
-								{{$value->addedBy->name}}
+									@if ($value->addedBy->image != null)
+									<img src="{{URL::asset('user-uploads/avatar/'.$value->addedBy->image ?? 'avatar_blank.png')}}" class="mr-3 taskEmployeeImg rounded-circle" alt="{{$value->addedBy->name}}" title="{{$value->addedBy->name}}">{{$value->addedBy->name}}
+									@else
+									<img src="{{URL::asset('user-uploads/avatar/avatar_blank.png')}}" class="mr-3 taskEmployeeImg rounded-circle" alt="{{$value->addedBy->name}}" title="{{$value->addedBy->name}}">{{$value->addedBy->name}}
+									@endif
+								
 								@endif
 							</td>
 							<td>

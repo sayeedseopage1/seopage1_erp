@@ -2498,6 +2498,8 @@ class ProjectController extends AccountBaseController
             case 'activity_log':
                 $this->activityLog = ProjectActivity::where('project_id', $this->project->id)->orderBy('id', 'desc')->get();
                 $this->lead_deal_activity_log = LeadsDealsActivityLog::where('project_id', $this->project->id)->orderBy('id', 'desc')->get();
+                $this->project = Project::where('id', $this->project->id)->first();
+                $this->client = User::where('id', $this->project->client_id)->first();
                 $this->view = 'projects.ajax.activity_log';
                 break;
             case 'expenses':
@@ -3962,6 +3964,10 @@ class ProjectController extends AccountBaseController
         }
 
         $text = Auth::user()->name . ' submitted project completion form ';
+        $link = '<a style="color:blue" href="' . route('projects.show', $project_id->id) . '">' . $text . '</a>';
+        $this->logProjectActivity($project_id->id, $link);
+
+        $text = 'Project has been completed successfully';
         $link = '<a style="color:blue" href="' . route('projects.show', $project_id->id) . '">' . $text . '</a>';
         $this->logProjectActivity($project_id->id, $link);
 
