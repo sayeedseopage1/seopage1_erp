@@ -51,6 +51,7 @@ var HistoryItem = function HistoryItem(_ref) {
 
     // }
   }
+
   return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("div", {
     className: "d-flex align-items-center justify-content-between sp1_tark_right_item py-2",
     children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("div", {

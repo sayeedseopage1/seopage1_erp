@@ -126,7 +126,7 @@ export const ProjectStatusTableColumns = [
                                     aria-valuemin="0"
                                     aria-valuemax="100"
                                 >
-                                    {percentage}%
+                                    {data?.goal_percentage}%
                                 </div>
                             </div>
                         </Popover.Button>
