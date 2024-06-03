@@ -6,27 +6,45 @@ use Carbon\Carbon;
 use App\Models\Task;
 use App\Models\Project;
 use App\Helper\Incentive;
+use App\Models\CashPoint;
 use App\Models\TaskRevision;
 use Illuminate\Http\Request;
 use App\Models\IncentiveType;
 use App\Models\IncentiveFactor;
 use App\Http\Controllers\Controller;
+use App\Models\IncentiveCriteria;
+use App\Models\ProgressiveIncentive;
 use App\View\Components\Forms\Number;
 
 class IncentiveFactorController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $total_points = 500;
+        $startDate = $request->start_date ? Carbon::parse($request->start_date)->startOfDay() : Carbon::now()->startOfMonth();
+        $endDate = Carbon::parse($request->end_date ?? now())->endOfDay();
+        $user_id = $request->user_id ?? null;
+        $prevMonthStartDate = $startDate->subMonth()->startOfMonth();
+        $prevMonthEndDate = $endDate->subMonth()->endOfMonth();
+
+        $cashPoints = CashPoint::where('user_id', $request->user_id)->whereBetween('created_at', [$startDate, $endDate])->whereNotNull('factor_id')->get();
+        $total_points = $cashPoints->sum('total_points_earn') - $cashPoints->sum('total_points_lost');
         $total_previous_assigned_amount = Project::join('project_milestones', 'projects.id', '=', 'project_milestones.project_id')
-        ->where('projects.pm_id', 209)
+        ->where('projects.pm_id', $user_id)
         ->whereBetween('project_milestones.created_at', [Carbon::now()->subMonth()->startOfMonth(), Carbon::now()->subMonth()->endOfMonth()])
         ->where('projects.project_status','Accepted')
         ->sum('cost');
 
-        $incentiveData = IncentiveType::with('incentiveCriterias.incentiveFactors')->get()->map(function($incentiveType){
-            $incentiveType->incentiveCriterias->map(function($incentiveCriteria){
-                Incentive::progressiveCalculation($incentiveCriteria, $incentiveCriteria->acquired_percent);
+        $incentiveData = IncentiveType::with('incentiveCriterias.incentiveFactors')->get()->map(function($incentiveType) use($request){
+            $incentiveType->incentiveCriterias->map(function($incentiveCriteria) use($request){
+                if(Carbon::now()->startOfMonth() > Carbon::parse($request->start_date)){
+                    $progressiveIncentive = ProgressiveIncentive::where('pm_id', $request->user_id)->whereMonth('date', Carbon::parse($request->start_date)->month)->whereIn('incentive_factor_id', IncentiveFactor::where('incentive_criteria_id', $incentiveCriteria->id)->pluck('id'))->first();
+                    $incentiveCriteria->acquired_percent = $progressiveIncentive->acquired_value ?? null;
+                    $incentiveCriteria->incentive_amount_type = $progressiveIncentive->incentive_amount_type ?? IncentiveFactor::where('incentive_criteria_id', $incentiveCriteria->id)->first()->incentive_amount_type;
+                    $incentiveCriteria->obtained_incentive = $progressiveIncentive->incentive_amount ?? 0;
+                    return $incentiveCriteria;
+                }else{
+                    Incentive::progressiveCalculation($incentiveCriteria, $request);
+                }
             });
             return $incentiveType;
         });
@@ -108,7 +126,6 @@ class IncentiveFactorController extends Controller
     public function destroy($id)
     {
         try {
-            $id = "4";
             IncentiveFactor::where('id', $id)->delete();
             return response()->json([
                 'status' => 200,

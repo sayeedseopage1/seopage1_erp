@@ -16,10 +16,11 @@ import QuarterAndYearlyTable from '../components/Sections/QuarterlyAndYearly/Qua
 import { quarterlyAndYearlyTableData } from '../constants';
 
 const Incentive = () => {
+    const [query, setQuery] = useState({});
     const [tab, setTab] = useState("current");
     const [filterByPeriod, setFilterByPeriod] = useState("monthly");
-    const { incentiveTypesLoading } = useIncentiveTypes();
-    const [query, setQuery] = useState({});
+    const { incentiveTypesLoading } = useIncentiveTypes(query);
+
 
     // console.log(query)
 

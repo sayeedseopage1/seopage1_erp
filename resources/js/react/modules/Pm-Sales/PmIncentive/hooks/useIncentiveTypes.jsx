@@ -1,12 +1,14 @@
 import { useGetIncentiveFactorsQuery } from "../../../../services/api/Pm-Sales/PmIncentiveApiSlice";
 
-const useIncentiveTypes = () => {
-    const { data: allIncentiveTypes, isLoading: incentiveTypesLoading } = useGetIncentiveFactorsQuery();
+const useIncentiveTypes = (query) => {
+    const { data: allIncentiveTypes, isLoading: incentiveTypesLoading } = useGetIncentiveFactorsQuery(query);
     const incentiveTypesData = allIncentiveTypes?.data?.incentive_data;
 
     const regularIncentiveTypes = incentiveTypesData?.find((item) => item?.id == 1);
     const upSaleCrossSaleTypes = incentiveTypesData?.find((item) => item?.id == 2);
     const bonusData = incentiveTypesData?.find((item) => item?.id == 3);
+
+    // console.log(query)
 
 
     const totalPrevAssignedAmount = parseFloat(allIncentiveTypes?.data?.total_previous_assigned_amount).toFixed(2);

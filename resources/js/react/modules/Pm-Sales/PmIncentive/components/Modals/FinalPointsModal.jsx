@@ -37,6 +37,6 @@ FinalPointsModal.propTypes = {
     antdModalOpen: PropTypes.bool,
     setAntdModalOpen: PropTypes.func,
     unreleasedIncentive: PropTypes.number,
-    bonusPointsIncentive: PropTypes.string,
+    bonusPointsIncentive: PropTypes.number,
     bonusPointsData: PropTypes.number,
 }
