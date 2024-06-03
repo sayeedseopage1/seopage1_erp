@@ -20,6 +20,8 @@ const Incentive = () => {
     const { incentiveTypesLoading } = useIncentiveTypes();
     const [query, setQuery] = useState({});
 
+    // console.log(query)
+
     if (incentiveTypesLoading) {
         return <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
             <Spinner />

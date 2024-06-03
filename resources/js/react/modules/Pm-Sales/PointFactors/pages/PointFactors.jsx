@@ -9,8 +9,9 @@ import _ from 'lodash';
 import { toast } from 'react-toastify';
 import useActiveFactorFields from '../hooks/useActiveFactorFields';
 import { validationFormator } from '../utils/validationFormator';
-import { filterNullValues } from '../utils/removeNull';
+// import { filterNullValues } from '../utils/removeNull';
 import { useCreatePmPointFactorMutation, useGetFactorsFieldsByCriteriaQuery, useGetPmPointFactorsQuery } from '../../../../services/api/Pm-Sales/pmSalesApiSlice';
+import { auth } from '../../PmIncentive/constants';
 // import { HourlyPointFactorsColumns } from '../components/table/HourlyPointFactorsColumns';
 
 const PointFactors = () => {
@@ -287,10 +288,14 @@ const PointFactors = () => {
                         onPageChange={onPageChange}
                     />
 
-                    <AddNewSectionCointainer>
-                        <p>Add more item ?</p>
-                        <AddButton onClick={handleAddNewItemModal}>Add new items</AddButton>
-                    </AddNewSectionCointainer>
+                    {
+                        auth?.isHasRolePermission(1) && <AddNewSectionCointainer>
+                            <p>Add more item ?</p>
+                            <AddButton onClick={handleAddNewItemModal}>Add new items</AddButton>
+                        </AddNewSectionCointainer>
+                    }
+
+
 
 
                     {/* Add new factor item Modal */}

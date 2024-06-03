@@ -2,8 +2,10 @@ import { Divider } from 'antd';
 import React from 'react';
 import { Placeholder } from '../../../../../global/Placeholder';
 import { ButtonComponent } from '../../../PointFactors/components/Styles/ui/ui';
+import { FiRefreshCw } from "react-icons/fi";
+import { AiOutlineLoading3Quarters } from "react-icons/ai";
 
-const PointHistoryNav = ({ navActive, setNavActive, data, isLoading }) => {
+const PointHistoryNav = ({ navActive, setNavActive, data, isLoading, isFetching, refetch }) => {
     const { total_points_earn, total_points_lost } = data || {};
     const balancePoints = parseFloat(total_points_earn) - parseFloat(total_points_lost);
 
@@ -43,6 +45,16 @@ const PointHistoryNav = ({ navActive, setNavActive, data, isLoading }) => {
                 >
                     Redeem Points
                 </ButtonComponent>
+                <button
+                    onClick={() => refetch()}
+                    title={"Refresh"}
+                    className='point_history_refresh_btn'
+                    disabled={isFetching}
+                >
+                    {
+                        isFetching ? <AiOutlineLoading3Quarters className='loading-icon' /> : <FiRefreshCw />
+                    }
+                </button>
             </div>
         </div>
     );
