@@ -9,10 +9,11 @@ import FinalIncentiveBanner from '../components/Sections/IncentiveCriterias/Fina
 import Switch from '../../../../global/Switch';
 import IncentiveFactors from '../components/Sections/IncentiveFactors/IncentiveFactors';
 import HeldAmounts from '../components/Sections/HeldAmounts/HeldAmounts';
-import QuarterlyAndYearlyTable from '../components/Sections/QuarterlyAndYearly/QuarterlyAndYearlyTable';
 import FilterBar from '../components/Sections/IncentiveCriterias/FilterBar';
 import useIncentiveTypes from '../hooks/useIncentiveTypes';
 import Spinner from '../../PointFactors/components/loader/Spinner';
+import QuarterAndYearlyTable from '../components/Sections/QuarterlyAndYearly/QuarterAndYearlyTable';
+import { quarterlyAndYearlyTableData } from '../constants';
 
 const Incentive = () => {
     const [tab, setTab] = useState("current");
@@ -52,14 +53,10 @@ const Incentive = () => {
                                     <FinalIncentiveBanner />
                                 </div>
                             </Switch.Case>
-                            <Switch.Case condition={filterByPeriod == "quarterly"}>
+                            <Switch.Case condition={filterByPeriod == "quarterly" || filterByPeriod == "yearly"}>
                                 <div className='incentive_inner_wrapper'>
-                                    <QuarterlyAndYearlyTable period={3} />
-                                </div>
-                            </Switch.Case>
-                            <Switch.Case condition={filterByPeriod == "yearly"}>
-                                <div className='incentive_inner_wrapper'>
-                                    <QuarterlyAndYearlyTable />
+                                    {/* TODO: this slice will be removed when the api filter is ready */}
+                                    <QuarterAndYearlyTable data={filterByPeriod == "quarterly" ? quarterlyAndYearlyTableData.slice(0, 3) : quarterlyAndYearlyTableData} />
                                 </div>
                             </Switch.Case>
                         </Switch>

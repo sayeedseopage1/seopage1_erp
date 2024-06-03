@@ -10,7 +10,7 @@ class PmIncentiveViewController extends AccountBaseController
     public function __construct()
     {
         parent::__construct();
-        $this->pageTitle = 'app.menu.factor';
+        $this->pageTitle = 'app.menu.incentive';
     }
 
     public function __invoke(Request $request)
