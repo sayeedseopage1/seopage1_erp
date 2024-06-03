@@ -35,6 +35,7 @@ const AddNewPolicyModal = ({
     closeModal,
     newPolicyData,
     newPolicyDataValidation,
+    isPolicyUpdating,
     newPolicyInputData,
     isRuleUpdating,
     isLoadingAddSalesRiskAnalysisRule,
@@ -51,6 +52,7 @@ const AddNewPolicyModal = ({
         handleAddRuleOnPolicy,
         setNewPolicyInputData,
         handleCancelRuleOnPolicy,
+        setNewPolicyDeleteData
     } = handlerAction;
     const { departments } = useSelector((state) => state.filterOptions);
     let allSelectedCountries = [];
@@ -167,7 +169,9 @@ const AddNewPolicyModal = ({
                                 setNewPolicyData={setNewPolicyData}
                                 setIsRuleUpdating={setIsRuleUpdating}
                                 setNewPolicyInputData={setNewPolicyInputData}
+                                setEditPolicyDeleteData={setNewPolicyDeleteData}
                             />
+
                         </div>
                     ) : (
                         ""
@@ -258,7 +262,7 @@ const AddNewPolicyModal = ({
                     <ModalButton onClick={handlePolicyAdded} width="177px">
                         {isLoadingAddSalesRiskAnalysisRule
                             ? "Loading..."
-                            : "Add Policy"}
+                            : isPolicyUpdating ? "Update Policy" : "Add Policy"}
                     </ModalButton>
                     <ModalButton
                         onClick={closeModal}
@@ -286,4 +290,5 @@ AddNewPolicyModal.propTypes = {
     isRuleUpdating: PropTypes.bool,
     isLoadingAddSalesRiskAnalysisRule: PropTypes.bool,
     handlerAction: PropTypes.object,
+    isPolicyUpdating: PropTypes.bool,
 };

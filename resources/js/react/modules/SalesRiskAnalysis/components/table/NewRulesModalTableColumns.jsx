@@ -23,7 +23,7 @@ export const NewRulesModalTableColumnsData = [
                         <Switch.Case
                             condition={_.includes(
                                 validPolicyTypes,
-                                data?.policyType.name
+                                data?.policyType?.name
                             )}
                         >
                             <p
@@ -48,7 +48,7 @@ export const NewRulesModalTableColumnsData = [
                             </p>
                         </Switch.Case>
                         <Switch.Case
-                            condition={data?.policyType.name === "yesNo"}
+                            condition={data?.policyType?.name === "yesNo"}
                         >
                             <p
                                 style={{
@@ -114,7 +114,7 @@ export const NewRulesModalTableColumnsData = [
                             </ul>
                         </Switch.Case>
                         <Switch.Case
-                            condition={data?.policyType.name === "list"}
+                            condition={data?.policyType?.name === "list"}
                         >
                             <div className="d-flex">
                                 <p
@@ -155,7 +155,7 @@ export const NewRulesModalTableColumnsData = [
             const data = row?.original;
             return (
                 <div className="d-flex justify-content-start align-items-start flex-column">
-                    <Switch.Case condition={data?.policyType.name !== "yesNo"}>
+                    <Switch.Case condition={data?.policyType?.name !== "yesNo"}>
                         <p
                             style={{
                                 color: "#8F8F8F",
@@ -167,7 +167,7 @@ export const NewRulesModalTableColumnsData = [
                             {data?.valueType?.label}
                         </p>
                     </Switch.Case>
-                    <Switch.Case condition={data?.policyType.name === "yesNo"}>
+                    <Switch.Case condition={data?.policyType?.name === "yesNo"}>
                         <div
                             style={{
                                 height: "56px",
@@ -215,7 +215,7 @@ export const NewRulesModalTableColumnsData = [
                         <Switch.Case
                             condition={_.includes(
                                 ["lessThan", "greaterThan", "fixed"],
-                                data?.policyType.name
+                                data?.policyType?.name
                             )}
                         >
                             <p
@@ -232,7 +232,7 @@ export const NewRulesModalTableColumnsData = [
                         <Switch.Case
                             condition={_.includes(
                                 ["range"],
-                                data?.policyType.name
+                                data?.policyType?.name
                             )}
                         >
                             <p
@@ -247,7 +247,7 @@ export const NewRulesModalTableColumnsData = [
                             </p>
                         </Switch.Case>
                         <Switch.Case
-                            condition={data?.policyType.name === "yesNo"}
+                            condition={data?.policyType?.name === "yesNo"}
                         >
                             <div
                                 style={{
@@ -280,7 +280,7 @@ export const NewRulesModalTableColumnsData = [
                             </ul>
                         </Switch.Case>
                         <Switch.Case
-                            condition={data?.policyType.name === "list"}
+                            condition={data?.policyType?.name === "list"}
                         >
                             <div className="d-flex">
                                 <p

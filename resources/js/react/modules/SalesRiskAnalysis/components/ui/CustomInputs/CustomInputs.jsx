@@ -155,6 +155,7 @@ const CustomInputs = ({
                             fontWeight: "500",
                             fontFamily: "Poppins",
                             display: "flex",
+                            padding: "5px 8px",
                             backgroundColor: "#C4DE95",
                         }}
                     >
