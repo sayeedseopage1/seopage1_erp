@@ -40,7 +40,7 @@ const EvaluationRatingModal = ({
     isSingleEvaluationModalOpen,
     data,
 }) => {
-    console.log("data in evaluation rating modal", data);
+    // console.log("data in evaluation rating modal", data);
     const { evaluationObject, setEvaluationObject } = useEmployeeEvaluation();
     const userIdFromParam = new URLSearchParams(location.search).get("user_id");
 

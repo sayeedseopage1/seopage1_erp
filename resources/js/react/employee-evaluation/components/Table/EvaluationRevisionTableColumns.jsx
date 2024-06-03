@@ -89,7 +89,7 @@ export const EvaluationRevisionTableColumns = [
                             href={`/account/employees/${data?.added_by}`}
                             className="text-primary"
                         >
-                            {console.log("data in task revision table", data)}
+                            {/* {console.log("data in task revision table", data)} */}
                             {data?.added_by_name}
                         </a>
                     </Popover.Button>

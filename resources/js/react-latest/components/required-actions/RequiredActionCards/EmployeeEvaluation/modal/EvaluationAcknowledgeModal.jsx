@@ -65,7 +65,7 @@ const EvaluationAcknowledgeModal = ({
                     const response = await axios.get(
                         `/account/get-single-evaluation/${developerId}`
                     );
-                    console.log(response);
+                    // console.log(response);
                     setSingleEvaluation(response?.data.data[0]);
                     setEvaluationObject(response?.data.data[0]);
                 }
