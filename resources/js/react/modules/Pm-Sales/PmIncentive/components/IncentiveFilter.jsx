@@ -68,34 +68,14 @@ export default function IncentiveFilter({ setQuery, filterByPeriod }) {
 
     return (
         <div className='sp1__pp_filter_bar justify-content-between'>
-            {/* <FilterItem className='border-right-0'>
-                <JqueryDateRangePicker
+            <FilterItem className='border-right-0'>
+                <DateFilter
                     startDate={startDate}
                     endDate={endDate}
                     setStartDate={setStartDate}
                     setEndDate={setEndDate}
-                    onApply={() => { }}
+                    type={filterByPeriod}
                 />
-            </FilterItem> */}
-            <FilterItem className='border-right-0'>
-                {
-                    (filterByPeriod != "quarterly" && filterByPeriod != "yearly") && <JqueryDateRangePicker
-                        startDate={startDate}
-                        endDate={endDate}
-                        setStartDate={setStartDate}
-                        setEndDate={setEndDate}
-                        onApply={() => { }}
-                    />
-                }
-                {
-                    (filterByPeriod == "quarterly" || filterByPeriod == "yearly") && <DateFilter
-                        startDate={startDate}
-                        endDate={endDate}
-                        setStartDate={setStartDate}
-                        setEndDate={setEndDate}
-                        type={filterByPeriod}
-                    />
-                }
             </FilterItem>
 
             {
