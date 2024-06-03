@@ -394,6 +394,7 @@ class ProjectStatusController extends AccountBaseController
 
             \DB::commit();
         } catch (\Throwable $th) {
+            throw $th;
             \DB::rollback();
         }
         return response()->json(['status'=>200]);

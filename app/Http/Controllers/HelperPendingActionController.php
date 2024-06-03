@@ -18,6 +18,7 @@ use App\Models\TaskRevisionDispute;
 use App\Models\Task;
 use App\Models\Taskuser;
 use App\Models\ProjectMember;
+use App\Models\ProjectPmGoal;
 use App\Models\TaskComment;
 use DB;
 
