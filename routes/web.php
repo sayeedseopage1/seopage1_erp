@@ -200,6 +200,7 @@ use App\Http\Controllers\PmPaymentReleaseHistory;
 use App\Http\Controllers\RevisionController;
 use App\Http\Controllers\IssuedTaskReportController;
 use App\Http\Controllers\PmGoalSetingController;
+use App\Http\Controllers\PriceQuotationController;
 use App\Http\Controllers\ProjectStatusController;
 
 /*
@@ -1825,3 +1826,7 @@ Route::put('/task-guideline-update/{id}', [TaskController::class, 'updateTaskGui
 Route::get('/task-guideline-authorization/{id}', [TaskController::class, 'taskGuidelineAuthorization']);
 Route::get('/server-time-status', [TaskController::class, 'dailyServerStatus']);
 
+
+
+//  Price Qutation Routes
+Route::resource('price-quotation', PriceQuotationController::class);

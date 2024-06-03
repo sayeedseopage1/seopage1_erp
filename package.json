@@ -3,7 +3,7 @@
     "scripts": {
         "dev": "npm run development",
         "development": "mix",
-        "watch": "mix watch",
+        "watch": "set NODE_OPTIONS=--max-old-space-size=8000 && mix watch",
         "watch-poll": "mix watch -- --watch-options-poll=1000",
         "hot": "mix watch --hot",
         "prod": "npm run production",
@@ -42,6 +42,7 @@
         "@reduxjs/toolkit": "^1.9.3",
         "@smastrom/react-rating": "^1.3.1",
         "@tanstack/react-table": "^8.8.5",
+        "antd": "^5.17.4",
         "autolinker": "^4.0.0",
         "bootstrap": "^4.3.1",
         "bootstrap-icons": "^1.10.4",

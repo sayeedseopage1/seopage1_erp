@@ -1,0 +1,100 @@
+:root {
+  --primaryBlue: #1492E6;
+  --primaryDarkBlue: #D5ECFC;
+  --primaryExtraDarkBlue: #0471c5;
+  --primaryLightBlue: #EAF6FF;
+  --primaryDarkText: #000000;
+  --primaryLightText: #FFFFFF;
+  --borderColor: #C6C6C6;
+  --primarySuccess: #70CA62;
+  --primaryDanger: #FF6666;
+}
+
+/* Table Style */
+.sp1_price_quotation_table_wrapper {
+  max-height: calc(100vh - 330px);
+  overflow: auto;
+  overflow-y: hidden;
+  border-radius: 16px 16px 0 0;
+}
+
+.sp1_price_quotation_table {
+  min-width: 100%;
+}
+
+.sp1_price_quotation_thead {
+  position: sticky;
+  top: 0;
+  left: 0;
+  width: 100%;
+}
+
+.sp1_price_quotation_thead_tr {
+  background-color: var(--primaryBlue);
+  color: var(--primaryLightText);
+}
+
+.sp1_price_quotation_thead_th {
+  min-width: 150px;
+  max-width: 150px;
+  width: 150px;
+  background-color: var(--primaryBlue);
+  position: relative;
+  color: var(--primaryLightText);
+  min-width: 100px;
+  cursor: default;
+  font-family: Poppins, sans-serif;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+  padding: 20px;
+  text-wrap: nowrap;
+}
+
+.sp1_price_quotation_column_sort_btn {
+  background-color: transparent;
+}
+
+
+.sp1_price_quotation_td {
+  border-top: 1px solid transparent;
+  border-bottom: 1px solid transparent;
+  border-bottom-color: rgb(0 0 0 / 5%);
+  padding: 6px 0;
+  transition: background 0.2s ease-in-out;
+  color: var(--primaryDarkText);
+  font-family: Poppins , sans-serif;
+  font-size: 15px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+}
+
+
+
+
+
+/* Table Content style */
+
+.table_asc_dec.priceDec::before {
+  color: var(--primaryDanger);
+}
+
+.table_asc_dec.priceAse::after {
+  color: var(--primarySuccess);
+}
+
+
+/* Button Color */
+.price_quotation_refresh_button{
+  background-color: var(--primaryBlue) !important;
+  color: var(--primaryLightText) !important;
+  font-family: Poppins, sans-serif;
+  font-weight: 400;
+}
+
+.price_quotation_refresh_button:hover{
+  background-color: var(--primaryExtraDarkBlue) !important;
+}
+

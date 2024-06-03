@@ -375,6 +375,7 @@
 
 
                            <x-sub-menu-item :link="route('incentives.index')" :text="'Incentives'" />
+                           <x-sub-menu-item :link="route('price-quotation.index')" :text="'Price Quotations'" />
                            @endif
 
 
