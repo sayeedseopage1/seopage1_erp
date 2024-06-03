@@ -41,15 +41,15 @@ class Incentive
         
     }
 
-    public static function progressiveCalculation($incentiveCriteria)
+    public static function progressiveCalculation($incentiveCriteria, $request)
     {
         try {
-            $startDate = Carbon::now()->startOfMonth();
-            $endDate = Carbon::now()->endOfMonth();
+            $startDate = $request->start_date ?? Carbon::now()->startOfMonth();
+            $endDate = $request->end_date ?? Carbon::now()->endOfMonth();
             $incentiveCriteria->acquired_percent = 0; 
             $incentiveCriteria->incentive_amount_type = null;
             $incentiveCriteria->obtained_incentive = 0;
-            $user_id = 209;
+            $user_id = $request->user_id ?? null;
 
             if($incentiveCriteria->id == 1){
                 $total_tasks = Task::select('tasks.id')->where('tasks.added_by', $user_id)->whereBetween('tasks.created_at', [$startDate, $endDate])->count();

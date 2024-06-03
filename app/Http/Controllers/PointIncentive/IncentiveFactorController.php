@@ -15,7 +15,7 @@ use App\View\Components\Forms\Number;
 
 class IncentiveFactorController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
         $total_points = 500;
         $total_previous_assigned_amount = Project::join('project_milestones', 'projects.id', '=', 'project_milestones.project_id')
@@ -24,9 +24,9 @@ class IncentiveFactorController extends Controller
         ->where('projects.project_status','Accepted')
         ->sum('cost');
 
-        $incentiveData = IncentiveType::with('incentiveCriterias.incentiveFactors')->get()->map(function($incentiveType){
-            $incentiveType->incentiveCriterias->map(function($incentiveCriteria){
-                Incentive::progressiveCalculation($incentiveCriteria, $incentiveCriteria->acquired_percent);
+        $incentiveData = IncentiveType::with('incentiveCriterias.incentiveFactors')->get()->map(function($incentiveType) use($request){
+            $incentiveType->incentiveCriterias->map(function($incentiveCriteria) use($request){
+                Incentive::progressiveCalculation($incentiveCriteria, $request);
             });
             return $incentiveType;
         });
