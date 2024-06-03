@@ -12,6 +12,8 @@ use Illuminate\Http\Request;
 use App\Models\IncentiveType;
 use App\Models\IncentiveFactor;
 use App\Http\Controllers\Controller;
+use App\Models\IncentiveCriteria;
+use App\Models\ProgressiveIncentive;
 use App\View\Components\Forms\Number;
 
 class IncentiveFactorController extends Controller
@@ -24,7 +26,8 @@ class IncentiveFactorController extends Controller
         $prevMonthStartDate = $startDate->subMonth()->startOfMonth();
         $prevMonthEndDate = $endDate->subMonth()->endOfMonth();
 
-        $total_points = CashPoint::where('user_id', $request->user_id)->whereBetween('created_at', [$startDate, $endDate])->whereNotNull('factor_id')->get();
+        $cashPoints = CashPoint::where('user_id', $request->user_id)->whereBetween('created_at', [$startDate, $endDate])->whereNotNull('factor_id')->get();
+        $total_points = $cashPoints->sum('total_points_earn') - $cashPoints->sum('total_points_lost');
         $total_previous_assigned_amount = Project::join('project_milestones', 'projects.id', '=', 'project_milestones.project_id')
         ->where('projects.pm_id', $user_id)
         ->whereBetween('project_milestones.created_at', [Carbon::now()->subMonth()->startOfMonth(), Carbon::now()->subMonth()->endOfMonth()])
@@ -33,7 +36,15 @@ class IncentiveFactorController extends Controller
 
         $incentiveData = IncentiveType::with('incentiveCriterias.incentiveFactors')->get()->map(function($incentiveType) use($request){
             $incentiveType->incentiveCriterias->map(function($incentiveCriteria) use($request){
-                Incentive::progressiveCalculation($incentiveCriteria, $request);
+                if(Carbon::now()->startOfMonth() > Carbon::parse($request->start_date)){
+                    $progressiveIncentive = ProgressiveIncentive::where('pm_id', $request->user_id)->whereMonth('date', Carbon::parse($request->start_date)->month)->whereIn('incentive_factor_id', IncentiveFactor::where('incentive_criteria_id', $incentiveCriteria->id)->pluck('id'))->first();
+                    $incentiveCriteria->acquired_percent = $progressiveIncentive->acquired_value ?? null;
+                    $incentiveCriteria->incentive_amount_type = $progressiveIncentive->incentive_amount_type ?? IncentiveFactor::where('incentive_criteria_id', $incentiveCriteria->id)->first()->incentive_amount_type;
+                    $incentiveCriteria->obtained_incentive = $progressiveIncentive->incentive_amount ?? 0;
+                    return $incentiveCriteria;
+                }else{
+                    Incentive::progressiveCalculation($incentiveCriteria, $request);
+                }
             });
             return $incentiveType;
         });
@@ -41,7 +52,7 @@ class IncentiveFactorController extends Controller
         $data['total_points'] = $total_points;
         $data['total_previous_assigned_amount'] = $total_previous_assigned_amount;
         $data['incentive_data'] = $incentiveData;
-
+        
         return response()->json([
             'status' => 200,
             'data' => $data
