@@ -96,6 +96,7 @@ const EvaluationAcknowledgeTaskModal = ({
         fetchTasks();
     }, [developerId]);
 
+    console.log("single evaluation", singleEvaluation);
     const [sorting, setSorting] = useState([]);
 
     const [{ pageIndex, pageSize }, setPagination] = useState({
@@ -218,11 +219,13 @@ const EvaluationAcknowledgeTaskModal = ({
                                 __html: singleEvaluation?.team_lead_cmnt,
                             }}
                         />
-
                         <ReviewFooter>
                             By{" "}
-                            <a href="www.teamLead.com" target="_blank">
-                                Mohammad Sayeed Ullah
+                            <a
+                                href={`/account/employees/${singleEvaluation?.team_lead_id}`}
+                                target="_blank"
+                            >
+                                {singleEvaluation?.team_lead_name}
                             </a>{" "}
                             on{" "}
                             <span>
