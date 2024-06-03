@@ -16,7 +16,7 @@ const PmCashPoints = () => {
     });
 
     // table data
-    const { data: pmCashPoints, isLoading: dataFetchingStateIsLoading } = useGetPmCashPointsQuery(query)
+    const { data: pmCashPoints, isLoading: dataFetchingStateIsLoading, refetch: pmCashPointHistoryRefetch } = useGetPmCashPointsQuery(query)
     const tableData = pmCashPoints?.data
 
 
@@ -53,7 +53,7 @@ const PmCashPoints = () => {
 
             <div className='sp1_point_page_container'>
                 {/* <PointPageNavbar /> */}
-                <PointHistoryNav navActive={navActive} setNavActive={setNavActive} data={tableData} isLoading={dataFetchingStateIsLoading} />
+                <PointHistoryNav navActive={navActive} setNavActive={setNavActive} data={tableData} isLoading={dataFetchingStateIsLoading} refetch={pmCashPointHistoryRefetch} />
                 <main className='sp1_point_page_main'>
 
                     {/* <DataTable
