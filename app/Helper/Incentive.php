@@ -44,8 +44,8 @@ class Incentive
     public static function progressiveCalculation($incentiveCriteria, $request)
     {
         try {
-            $startDate = $request->start_date ?? Carbon::now()->startOfMonth();
-            $endDate = $request->end_date ?? Carbon::now()->endOfMonth();
+            $startDate = $request->start_date ? Carbon::parse($request->start_date)->startOfDay() : Carbon::now()->startOfMonth();
+            $endDate = Carbon::parse($request->end_date ?? now())->endOfDay();
             $incentiveCriteria->acquired_percent = 0; 
             $incentiveCriteria->incentive_amount_type = null;
             $incentiveCriteria->obtained_incentive = 0;
@@ -70,7 +70,7 @@ class Incentive
                 $incentiveCriteria->acquired_percent = $projects->sum('total_goals') ? number_format(($projects->sum('total_goals_met') / $projects->sum('total_goals')) * 100, 2) : 0;
                 self::findIncentive($incentiveCriteria);
             }elseif($incentiveCriteria->id == 3){
-                $cashPoints = CashPoint::whereNotNull('factor_id')->get();
+                $cashPoints = CashPoint::where('user_id', $user_id)->whereBetween('created_at', [$startDate, $endDate])->whereNotNull('factor_id')->get();
                 $totalEarnedPoints = $cashPoints->sum('total_points_earn');
                 $totalLostPoints = $cashPoints->sum('total_points_lost');
                 $total_points = $totalEarnedPoints + $totalLostPoints;
