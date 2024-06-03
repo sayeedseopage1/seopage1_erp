@@ -62,7 +62,7 @@ const PmCashPoints = () => {
                             defaultColumns={TableColumns}
                         /> */}
                     <div className="cnx__table_wrapper" style={{ padding: '16px' }}>
-                        <PointHistoryTable data={tableData?.cash_points} isLoading={dataFetchingStateIsLoading} onPageChange={onPageChange} />
+                        <PointHistoryTable data={tableData?.cash_points} isLoading={dataFetchingStateIsLoading} isFetching={pmCashPointHistoryIsFetching} onPageChange={onPageChange} />
                         <PointHistoryTablePagination
                             tableData={tableData?.cash_points}
                             handlePageSizeChange={handlePageSizeChange}

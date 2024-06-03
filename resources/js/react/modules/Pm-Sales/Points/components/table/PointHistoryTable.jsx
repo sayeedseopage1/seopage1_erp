@@ -114,7 +114,7 @@ const baseColumns = [
     },
 ];
 
-const PointHistoryTable = ({ data, isLoading }) => {
+const PointHistoryTable = ({ data, isLoading, isFetching }) => {
     const [dragIndex, setDragIndex] = useState({ active: -1, over: -1 });
 
     const [columns, setColumns] = useState(() =>
@@ -156,7 +156,7 @@ const PointHistoryTable = ({ data, isLoading }) => {
         });
     };
 
-    if (isLoading) {
+    if (isLoading || isFetching) {
         return <table className='cnx__table_body'><tbody><PointHistoryTableLoader /></tbody></table>
     }
 
