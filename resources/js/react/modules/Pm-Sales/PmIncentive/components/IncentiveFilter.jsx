@@ -23,7 +23,6 @@ export default function IncentiveFilter({ filterByPeriod }) {
     useEffect(() => {
         if (auth?.isHasRolePermission(1) && pmByDeptData && !isPmByDeptLoading) {
             setSelectedEmployee(pmByDeptData[0]?.id);
-            // setQuery(prevQuery => ({ ...prevQuery, user_id: pmByDeptData?.[0]?.id }));
         }
     }, [pmByDeptData, isPmByDeptLoading]);
 
@@ -191,6 +190,5 @@ export default function IncentiveFilter({ filterByPeriod }) {
 }
 
 IncentiveFilter.propTypes = {
-    setQuery: PropTypes.func,
     filterByPeriod: PropTypes.string,
 }
