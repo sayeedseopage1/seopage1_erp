@@ -894,13 +894,13 @@ class SalesRiskPolicyController extends AccountBaseController
             if ($value == 'yes') {
                 $pointValue = json_decode($policy[0]->value) ? json_decode($policy[0]->value)->yes->point : 0;
                 $points += (float) $pointValue;
-                $policyIdList[$policy[0]->id] = $policy[0]->id;
+                $policyIdList[$policy[0]->id] = 'yes';
 
                 $data[] = ['id' => $questions[0]->id, 'title' =>  $questions[0]->title, 'value' => 'yes', 'parent_id' => null];
             } else {
                 $data[] = ['id' => $questions[0]->id, 'title' =>  $questions[0]->title, 'value' => 'No', 'parent_id' => null];
                 // unsetting first yes/no policy
-                $policyIdList[$policy[0]->id] = $policy[0]->id;
+                $policyIdList[$policy[0]->id] = 'no';
 
                 // ------------------- percentage calculation
                 if (isset($questionAns[$questions[1]->id]))
