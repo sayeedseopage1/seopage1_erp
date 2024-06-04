@@ -38,7 +38,7 @@ class IncentiveFactorController extends Controller
             $incentiveType->incentiveCriterias->map(function($incentiveCriteria) use($request){
                 if($request->user_id && Carbon::now()->startOfMonth() > Carbon::parse($request->start_date)){
                     $progressiveIncentive = ProgressiveIncentive::where('pm_id', $request->user_id)->whereMonth('date', Carbon::parse($request->start_date)->month)->whereIn('incentive_factor_id', IncentiveFactor::where('incentive_criteria_id', $incentiveCriteria->id)->pluck('id'))->first();
-                    $incentiveCriteria->acquired_percent = $progressiveIncentive->acquired_value ?? null;
+                    $incentiveCriteria->acquired_percent = $progressiveIncentive->acquired_value ?? 0;
                     $incentiveCriteria->incentive_amount_type = $progressiveIncentive->incentive_amount_type ?? IncentiveFactor::where('incentive_criteria_id', $incentiveCriteria->id)->first()->incentive_amount_type;
                     $incentiveCriteria->obtained_incentive = $progressiveIncentive->incentive_amount ?? 0;
                     return $incentiveCriteria;
