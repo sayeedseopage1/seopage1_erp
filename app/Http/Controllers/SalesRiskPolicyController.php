@@ -693,6 +693,7 @@ class SalesRiskPolicyController extends AccountBaseController
             return response()->json(['status' => 'error', 'message' => 'Deal question values are already added.'], 500);
         }
 
+        DB::beginTransaction();
         try {
 
             PolicyQuestionValue::create([
@@ -726,6 +727,7 @@ class SalesRiskPolicyController extends AccountBaseController
             }
 
             $deal->save();
+            DB::commit();
 
             return response()->json([
                 'status' => 'success',
@@ -734,7 +736,7 @@ class SalesRiskPolicyController extends AccountBaseController
                 'data' => ['points' => $calculation['points']]
             ]);
         } catch (\Throwable $th) {
-
+            DB::rollBack();
             // if error then delete previous records
             PolicyQuestionValue::where('deal_id', $dealId)->delete();
 
@@ -1088,7 +1090,7 @@ class SalesRiskPolicyController extends AccountBaseController
                     if (isset($questions[1]) && isset($questionAns[$questions[1]->id]))
                         $pointData[$item]['questionAnswer'][] = ['id' => $questions[1]->id, 'title' => $questions[1]->title, 'value' => $questionAns[$questions[1]->id], 'parent_id' => $questions[1]->parent_id];
                     else {
-                        $pointData[$item]['message'][] = "$item 2nd value is not added. Question Id:". $questions[1]->id;
+                        $pointData[$item]['message'][] = "$item 2nd value is not added. Question Id:";
                         continue;
                     }
                 } else {
