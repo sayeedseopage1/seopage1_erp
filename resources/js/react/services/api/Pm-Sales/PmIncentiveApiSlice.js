@@ -6,8 +6,31 @@ const _token = document
 
 const pmSalesApiSlice = apiSlice.injectEndpoints({
     endpoints: (build) => ({
+        // getIncentiveFactors: build.query({
+        //     query: (data) => {
+        //         let searchParams = {};
+
+        //         if (data) {
+        //             if (Object.keys(data)?.length) {
+        //                 searchParams = new URLSearchParams({
+        //                     ...(data?.user_id && { user_id: data.user_id }),
+        //                     ...(data?.start_date && {
+        //                         start_date: data.start_date,
+        //                     }),
+        //                     ...(data?.end_date && { end_date: data.end_date }),
+        //                 });
+        //             }
+        //         }
+
+        //         return {
+        //             url: `/account/incentive-factor?${searchParams.toString()}`,
+        //             method: "GET",
+        //         };
+        //     },
+        //     providesTags: ["GET_INCENTIVE_FACTORS"],
+        // }),
         getIncentiveFactors: build.query({
-            query: () => `/account/incentive-factor`,
+            query: (query) => `/account/incentive-factor?${query}`,
             providesTags: ["GET_INCENTIVE_FACTORS"],
         }),
         getSingleIncentiveCriteria: build.query({

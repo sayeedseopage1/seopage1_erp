@@ -9,18 +9,17 @@ import FinalIncentiveBanner from '../components/Sections/IncentiveCriterias/Fina
 import Switch from '../../../../global/Switch';
 import IncentiveFactors from '../components/Sections/IncentiveFactors/IncentiveFactors';
 import HeldAmounts from '../components/Sections/HeldAmounts/HeldAmounts';
-import QuarterlyAndYearlyTable from '../components/Sections/QuarterlyAndYearly/QuarterlyAndYearlyTable';
 import FilterBar from '../components/Sections/IncentiveCriterias/FilterBar';
-import useIncentiveTypes from '../hooks/useIncentiveTypes';
 import Spinner from '../../PointFactors/components/loader/Spinner';
+import QuarterAndYearlyTable from '../components/Sections/QuarterlyAndYearly/QuarterAndYearlyTable';
+import { quarterlyAndYearlyTableData } from '../constants';
+import useIncentive from '../hooks/useIncentive';
+import IncentiveDataProvider from '../Provider/IncentiveDataProvider';
 
 const Incentive = () => {
     const [tab, setTab] = useState("current");
     const [filterByPeriod, setFilterByPeriod] = useState("monthly");
-    const { incentiveTypesLoading } = useIncentiveTypes();
-    const [query, setQuery] = useState({});
-
-    // console.log(query)
+    const { incentiveTypesLoading } = useIncentive();
 
     if (incentiveTypesLoading) {
         return <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
@@ -30,9 +29,8 @@ const Incentive = () => {
 
     return (
         <div>
-            <IncentiveFilter setQuery={setQuery} filterByPeriod={filterByPeriod} />
+            <IncentiveFilter filterByPeriod={filterByPeriod} />
             <div className='incentive_wrapper'>
-
                 <FilterBar tab={tab} setTab={setTab} filterByPeriod={filterByPeriod} setFilterByPeriod={setFilterByPeriod} />
 
                 <Switch>
@@ -52,14 +50,10 @@ const Incentive = () => {
                                     <FinalIncentiveBanner />
                                 </div>
                             </Switch.Case>
-                            <Switch.Case condition={filterByPeriod == "quarterly"}>
+                            <Switch.Case condition={filterByPeriod == "quarterly" || filterByPeriod == "yearly"}>
                                 <div className='incentive_inner_wrapper'>
-                                    <QuarterlyAndYearlyTable period={3} />
-                                </div>
-                            </Switch.Case>
-                            <Switch.Case condition={filterByPeriod == "yearly"}>
-                                <div className='incentive_inner_wrapper'>
-                                    <QuarterlyAndYearlyTable />
+                                    {/* TODO: this slice will be removed when the api filter is ready */}
+                                    <QuarterAndYearlyTable data={filterByPeriod == "quarterly" ? quarterlyAndYearlyTableData.slice(0, 3) : quarterlyAndYearlyTableData} />
                                 </div>
                             </Switch.Case>
                         </Switch>

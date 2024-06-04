@@ -3,15 +3,15 @@ import StatsInfoProgressCard from './StatsInfoProgressCard';
 import pointIconDark from '../../../assets/pointIconDark.svg'
 import { IoInformationCircle } from "react-icons/io5";
 import IncentivePointModal from '../../Modals/IncentivePointModal';
-import { Popover } from 'antd';
-import useIncentiveTypes from '../../../hooks/useIncentiveTypes';
+import { Popover, Skeleton } from 'antd';
 import AverageProgressCard from './AverageProgressCard';
 import { useDispatch, useSelector } from 'react-redux';
 import { regularIncentivePoints } from '../../../../../../services/features/Pm-Sales/pmIncentiveSlice';
+import useIncentive from '../../../hooks/useIncentive';
 
 const StatsInfo = () => {
     const [incentivePointsModalOpen, setIncentivePointsModalOpen] = useState(false);
-    const { allIncentiveTypes, regularIncentiveTypes } = useIncentiveTypes();
+    const { allIncentiveTypes, regularIncentiveTypes, incentiveTypesLoading } = useIncentive();
 
     const pmIncentive = useSelector((state) => state.pmIncentive)
     const dispatch = useDispatch();
@@ -29,9 +29,14 @@ const StatsInfo = () => {
             {/* point stats */}
             <div className='stats_info_outer'>
                 {
-                    regularIncentiveTypes?.incentive_criterias?.map((item) => <StatsInfoProgressCard key={item?.id} item={item} />)
+                    incentiveTypesLoading ? <Skeleton size="large" paragraph={{ rows: 7 }} active title={false} /> : <>
+                        {
+                            regularIncentiveTypes?.incentive_criterias?.map((item) => <StatsInfoProgressCard key={item?.id} item={item} />)
+                        }
+                        <AverageProgressCard item={regularIncentiveTypes} regularPointAverage={regularPointAverage} />
+                    </>
                 }
-                <AverageProgressCard item={regularIncentiveTypes} regularPointAverage={regularPointAverage} />
+
             </div>
             {/* point score */}
             <div className='stats_score_outer'>

@@ -10,6 +10,7 @@ import './styles/heldAmount.css'
 import './styles/incentiveFactors.css'
 import './styles/Incentive.responsive.css'
 import { ConfigProvider } from "antd";
+import IncentiveDataProvider from "./Provider/IncentiveDataProvider";
 
 
 const Content = () => {
@@ -26,27 +27,31 @@ const container = document.getElementById("projectMangerIncentive");
 if (container) {
     ReactDOM.createRoot(container).render(
         <React.StrictMode>
-            <Provider store={store}>
-                <ConfigProvider
-                    theme={{
-                        components: {
-                            Modal: {
-                                titleFontSize: 20,
-                                borderRadiusLG: 22,
-                            },
-                        },
 
-                    }}
-                >
-                    <BrowserRouter basename="/account/pm-incentives">
-                        <Routes>
-                            <Route path="/" element={<Content />}>
-                                <Route index element={<Incentive />} />
-                            </Route>
-                        </Routes>
-                    </BrowserRouter>
-                </ConfigProvider>
+            <Provider store={store}>
+                <IncentiveDataProvider>
+                    <ConfigProvider
+                        theme={{
+                            components: {
+                                Modal: {
+                                    titleFontSize: 20,
+                                    borderRadiusLG: 22,
+                                },
+                            },
+
+                        }}
+                    >
+                        <BrowserRouter basename="/account/pm-incentives">
+                            <Routes>
+                                <Route path="/" element={<Content />}>
+                                    <Route index element={<Incentive />} />
+                                </Route>
+                            </Routes>
+                        </BrowserRouter>
+                    </ConfigProvider>
+                </IncentiveDataProvider>
             </Provider>
+
         </React.StrictMode>
     );
 }

@@ -476,6 +476,8 @@
     width: 49.5%;
     display: flex;
     justify-content: center;
+    align-items: center;
+    gap: 12px;
 }
 
 .secondary_point_card {

@@ -5,12 +5,12 @@ import IncentiveEditButton from "../../ui/IncentiveEditButton";
 import CashValuePointEditModal from "../../Modals/Incentives/CashValuePointEditModal";
 import { useState } from "react";
 import { Placeholder } from "../../../../../../global/Placeholder";
-import useIncentiveTypes from "../../../hooks/useIncentiveTypes";
 import { auth } from "../../../constants";
+import useIncentive from "../../../hooks/useIncentive";
 
 const PointBanner = () => {
     const [editPointDataModalOpen, setEditPointDataModalOpen] = useState(false);
-    const { allIncentiveTypes, regularIncentiveTypes, incentiveTypesLoading } = useIncentiveTypes();
+    const { allIncentiveTypes, regularIncentiveTypes, incentiveTypesLoading } = useIncentive();
 
     return (
         <div className="point_banner">
@@ -18,9 +18,11 @@ const PointBanner = () => {
                 <span className="point_card_image_wrapper">
                     <img src={pointIcon} style={{ width: "24px", height: "24px" }} alt="pointIcon" />
                 </span>
-                <p className='point_title point_details_wrapper'>
-                    Your obtained points: <span className='point_score'>{parseFloat(allIncentiveTypes?.data?.total_points)} pt</span> &nbsp;
-                </p>
+                {
+                    incentiveTypesLoading ? <Placeholder width="60%" height={28} /> : <p className='point_title point_details_wrapper'>
+                        Your obtained points: <span className='point_score'>{allIncentiveTypes?.data?.total_points} pt</span> &nbsp;
+                    </p>
+                }
             </div>
 
             <div className="point_card">

@@ -2,11 +2,12 @@ import React from 'react';
 import BonusPointsPointBanner from './BonusPointsPointBanner';
 import IncentiveBarChart from '../../Charts/IncentiveBarChart';
 import IncentiveThickChart from '../../Charts/IncentiveThickChart';
-import useIncentiveTypes from '../../../hooks/useIncentiveTypes';
 import { IncentiveFormattedData } from '../../../utils/formattedChartData';
+import ChartDataLoader from '../../loader/ChartDataLoader';
+import useIncentive from '../../../hooks/useIncentive';
 
 const BonusPoints = () => {
-    const { bonusIncentiveTypes } = useIncentiveTypes();
+    const { bonusIncentiveTypes, incentiveTypesLoading } = useIncentive();
 
     const bonusPointsChartData = IncentiveFormattedData(bonusIncentiveTypes)
 
@@ -19,7 +20,7 @@ const BonusPoints = () => {
             </div>
             <div id='bonus_points' className='chart_section_container'>
                 {
-                    bonusPointsChartData?.map((item) => (
+                    incentiveTypesLoading ? <ChartDataLoader count={2} /> : bonusPointsChartData?.length > 0 && bonusPointsChartData?.map((item) => (
                         <div key={item?.id} className="chart_parent">
 
                             <div className="secondary_chart_wrapper">

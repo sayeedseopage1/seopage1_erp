@@ -150,7 +150,9 @@ const IncentiveThickChart = ({ chartData }) => {
             formatter: function (val, opts) {
                 // Apply special case for the first bar when all values are zero
                 if (isAllZero && opts.dataPointIndex === 0) {
-                    return `⬤ ${chartData?.shortTitle}: ${chartData?.limitType == 1 ? "$" : ""}${chartData?.ratio}${chartData?.limitType == 2 ? "%" : ""}`;
+                    return chartData?.ratio != null
+                        ? `⬤ ${chartData?.shortTitle}: ${chartData?.limitType === 1 ? "$" : ""}${chartData?.ratio}${chartData?.limitType === 2 ? "%" : ""}`
+                        : `⬤ ${chartData?.shortTitle}: N/A`;
                 }
                 return val ? `${chartData?.limitType == 1 ? "$" : ""}${chartData?.ratio}${chartData?.limitType == 2 ? "%" : ""}, ${val}${chartData?.amountType == 1 ? "" : "%"}` : "";
             },
@@ -250,7 +252,9 @@ const IncentiveThickChart = ({ chartData }) => {
                     <img src={arrow2} className="chart_axis_icon" alt="arrow2" />
                 </div>
 
-                <p className="chart_ratio">{chartData.title}: <span className={`${chartData?.incentive > 0 ? "chart_ratio_value_pos" : "chart_ratio_value_neg"}`}>{chartData?.limitType == 1 ? "$" : ""}{chartData?.ratio}{chartData?.limitType == 2 ? "%" : ""}</span></p>
+
+
+                <p className="chart_ratio">{chartData.title}: {chartData?.ratio != null ? <span className={`${chartData?.incentive > 0 ? "chart_ratio_value_pos" : "chart_ratio_value_neg"}`}>{chartData?.limitType == 1 ? "$" : ""}{chartData?.ratio}{chartData?.limitType == 2 ? "%" : ""}</span> : "N/A"}</p>
 
             </div>
         </>
