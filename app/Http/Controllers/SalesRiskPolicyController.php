@@ -820,7 +820,7 @@ class SalesRiskPolicyController extends AccountBaseController
                 $pointData['hourlyRate']['questionAnswer'][] = $data;
             }
 
-            $hourlyRate = $deal->amount / $hours;
+            $hourlyRate = round($deal->amount / $hours);
 
             foreach ($rules as $item) {
                 switch ($item->type) {
@@ -1088,7 +1088,7 @@ class SalesRiskPolicyController extends AccountBaseController
                     if (isset($questions[1]) && isset($questionAns[$questions[1]->id]))
                         $pointData[$item]['questionAnswer'][] = ['id' => $questions[1]->id, 'title' => $questions[1]->title, 'value' => $questionAns[$questions[1]->id], 'parent_id' => $questions[1]->parent_id];
                     else {
-                        $pointData[$item]['message'][] = "$item value is not added.";
+                        $pointData[$item]['message'][] = "$item 2nd value is not added. Question Id:". $questions[1]->id;
                         continue;
                     }
                 } else {
@@ -1142,7 +1142,7 @@ class SalesRiskPolicyController extends AccountBaseController
                     }
                 }
             }
-            $pointData['clientCountry']['questionAnswer'][] = ['title' => 'From which country does the client originate?', 'value' => $lead->country, 'parent_id' => 'question_id'];
+            $pointData['clientCountry']['questionAnswer'][] = ['title' => 'From which country does the client originate?', 'value' => $lead->country, 'parent_id' => null];
             $pointData['clientCountry']['points'] = 0;
             endClientCountry:
             // ------------------------------ end clientCountry country --------------------------- //
