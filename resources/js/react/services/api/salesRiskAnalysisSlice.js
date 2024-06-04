@@ -16,6 +16,7 @@ const salesRiskAnalysisApiSlice = apiSlice.injectEndpoints({
         }),
         getSalesRiskAnalysisInputs: build.query({
             query: (query) => `/account/sales-risk-policies/input-fields`,
+            invalidatesTags: ["GET_SALES_RISK_ANALYSIS_INPUT_FIELDS"],
         }),
         addSalesRiskAnalysisRule: build.mutation({
             query: (body) => ({
@@ -27,10 +28,12 @@ const salesRiskAnalysisApiSlice = apiSlice.injectEndpoints({
                 },
             }),
             invalidatesTags: (result, error, arg) => {
+                const tags = ["GET_SALES_RISK_ANALYSIS_RULES", "GET_SALES_RISK_ANALYSIS_QUESTION_FIELDS_TYPE", "GET_SALES_RISK_ANALYSIS_INPUT_FIELDS"];
                 if (result && !error) {
-                    return [{ type: "GET_SALES_RISK_ANALYSIS_RULES" }];
+
+                    return tags.map((tag) => ({ type: tag }));;
                 }
-            }
+            },
         }),
         questionInputFields: build.query({
             query: (query) => `/account/sales-risk-policies/question-fields`,
@@ -61,11 +64,11 @@ const salesRiskAnalysisApiSlice = apiSlice.injectEndpoints({
                 },
             }),
             invalidatesTags: (result, error, arg) => {
+                const tags = ["GET_SALES_RISK_ANALYSIS_RULES", "GET_SALES_RISK_ANALYSIS_QUESTION_FIELDS_TYPE", "GET_SALES_RISK_ANALYSIS_INPUT_FIELDS"];
                 if (result && !error) {
-                    return [{ type: "GET_SALES_RISK_ANALYSIS_RULES" }];
+
+                    return tags.map((tag) => ({ type: tag }));;
                 }
-
-
             },
         }),
         editSingleRuleSalesRiskAnalysis: build.mutation({
@@ -93,9 +96,11 @@ const salesRiskAnalysisApiSlice = apiSlice.injectEndpoints({
                     "origin": "http://localhost:8000"
                 },
             }),
+
             invalidatesTags: (result, error, arg) => {
+                const tags = ["GET_SALES_RISK_ANALYSIS_RULES", "GET_SALES_RISK_ANALYSIS_QUESTION_FIELDS_TYPE", "GET_SALES_RISK_ANALYSIS_INPUT_FIELDS"];
                 if (result && !error) {
-                    return [{ type: "GET_SALES_RISK_ANALYSIS_RULES" }];
+                    return tags.map((tag) => ({ type: tag }));;
                 }
             },
         }),
@@ -118,9 +123,11 @@ const salesRiskAnalysisApiSlice = apiSlice.injectEndpoints({
                 },
             }),
             invalidatesTags: (result, error, arg) => {
+                const tags = ["GET_SALES_RISK_ANALYSIS_RULES", "GET_SALES_RISK_ANALYSIS_QUESTION_FIELDS_TYPE", "GET_SALES_RISK_ANALYSIS_INPUT_FIELDS"];
                 if (result && !error) {
-                    return [{ type: "GET_SALES_RISK_ANALYSIS_RULES" }];
+                    return tags.map((tag) => ({ type: tag }));;
                 }
+
             },
         }),
         editQuestionSalesRiskAnalysis: build.mutation({
@@ -162,7 +169,7 @@ const salesRiskAnalysisApiSlice = apiSlice.injectEndpoints({
                 },
             }),
             invalidatesTags: (result, error, arg) => {
-                const tags = ["GET_SALES_RISK_ANALYSIS_QUESTION_LIST", "GET_SALES_RISK_ANALYSIS_QUESTION_FIELDS_TYPE"];
+                const tags = ["GET_SALES_RISK_ANALYSIS_QUESTION_LIST", "GET_SALES_RISK_ANALYSIS_QUESTION_FIELDS_TYPE", "GET_SALES_RISK_ANALYSIS_INPUT_FIELDS"];
                 if (result && !error) {
                     return tags.map((tag) => ({ type: tag }));
                 }
