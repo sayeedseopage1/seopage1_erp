@@ -85,6 +85,7 @@ export const RevisionTableColumns = [
                             href={`/account/tasks/${data.task_id}`}
                             className="multiline-ellipsis"
                         >
+                            {data.heading}
                             <span style={{ color: "#3366CC" }}>
                                 {data.heading}
                             </span>

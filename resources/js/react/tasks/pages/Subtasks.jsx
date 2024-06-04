@@ -74,6 +74,11 @@ const Subtasks = () => {
                             res.tasks,
                             (d) => Number(d.assigned_to_id) === auth.getId()
                         );
+                    } else if (auth.getRoleId() === 14) {
+                        _data = _.filter(
+                            res.tasks,
+                            (d) => Number(d.assigned_to_id) === auth.getId()
+                        );
                     }
 
                     const data = _.orderBy(_data, "due_date", "desc");

@@ -69,8 +69,6 @@ const DeveloperRevisionView = ({ task, close }) => {
         } else return "Revision By Lead Developer";
     };
 
-    console.log("revision", revision);
-
     return (
         <React.Fragment>
             <div

@@ -12,7 +12,7 @@
                         <label class="f-14 text-dark-grey mb-12" data-label="true" for="website_type">Chose Website Type
                             <sup class="f-14 mr-1">*</sup>
                         </label>
-                        <input type="text" class="form-control height-35 f-14 error" placeholder="Type cms name" name="website_type" id="website_type" autocomplete="off" aria-invalid="true">
+                        <input type="text" class="form-control height-35 f-14 error search-website-type" placeholder="Type website type" name="website_type" id="website_type" autocomplete="off" aria-invalid="true">
                         <label id="website_typeError" class="text-danger" for="website_type"></label>
                     </div>
                 </div>
@@ -24,7 +24,16 @@
         </div>
     </div>
 </div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-3-typeahead/4.0.2/bootstrap3-typeahead.min.js"></script>
 <script>
+    var path = "{{ route('check-website-type') }}";
+    $('input.search-website-type').typeahead({
+        source: function(website_type, process){
+            return $.get(path, {website_type: website_type}, function(data){
+                return process(data)
+            })
+        }
+    });
     $('#add_website_type').click(function(e){
         // alert('ok');
         e.preventDefault();
