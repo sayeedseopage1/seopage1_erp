@@ -1021,6 +1021,8 @@ var SingleTaskPage = function SingleTaskPage() {
     }),
     taskStatus = _useGetTaskStatusQuer.data;
   var task = new _utils_single_task__WEBPACK_IMPORTED_MODULE_9__.SingleTask(Task); // task instance
+
+  console.log("single task revision log", task);
   var loggedUser = new _utils_user_details__WEBPACK_IMPORTED_MODULE_10__.User((_window = window) === null || _window === void 0 || (_window = _window.Laravel) === null || _window === void 0 ? void 0 : _window.user); // logged users data
   var _React$useState = react__WEBPACK_IMPORTED_MODULE_1__.useState({}),
     _React$useState2 = _slicedToArray(_React$useState, 2),
@@ -1643,7 +1645,7 @@ var SingleTaskPage = function SingleTaskPage() {
                 children: "Revision Logged Time: "
               }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_32__.jsx)("div", {
                 className: "d-flex align-items-center font-weight-bold pl-2 ".concat(loadingClass),
-                children: (0,_utils_converTime__WEBPACK_IMPORTED_MODULE_28__.convertTime)(task === null || task === void 0 ? void 0 : task.revisionLogMin)
+                children: "".concat(task === null || task === void 0 ? void 0 : task.revisionLogHour, " hrs ").concat(task === null || task === void 0 ? void 0 : task.revisionLogMin, " mins")
               })]
             }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_32__.jsxs)("div", {
               className: "d-flex align-items-center mb-2",
@@ -1690,7 +1692,7 @@ var ShowEditModals = function ShowEditModals(_ref) {
   } else hasAccess = false;
   if (hasAccess) {
     if (task.isSubtask) {
-      // TODO: need to work here 
+      // TODO: need to work here
       return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_32__.jsx)(_section_sub_task_SubTaskEditModal__WEBPACK_IMPORTED_MODULE_22__["default"], {
         task: task,
         singleTask: singleTask
