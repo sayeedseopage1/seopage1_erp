@@ -150,6 +150,32 @@ const ActionsButton = ({ data }) => {
                                     Acknowledge & create sub-tasks
                                 </button>
                             )}
+                            {btn.button_name === "Delete" && (
+                                <div>
+                                    <ModalWithBtnTemplate
+                                        key={i}
+                                        btn_color={btn.button_color}
+                                        btn_name={btn.button_name}
+                                        modal_heading={data.heading}
+                                        showBottomCloseBtn={false}
+                                        // maxWidth={handleModalWidth(btn)}
+                                        btn_Disable={handleBtnDisable(6)}
+                                    >
+                                        {(setIsOpen) => {
+                                            // modal form
+                                            if (btn?.modal_form) {
+                                                return (
+                                                    <ModalForm
+                                                        setIsOpen={setIsOpen}
+                                                        form_data={btn}
+                                                    />
+                                                );
+                                            }
+                                        }}
+                                    </ModalWithBtnTemplate>
+                                    {/* <button>click</button> */}
+                                </div>
+                            )}
                         </div>
                     );
                 } else if (btn.button_type === "modal") {
