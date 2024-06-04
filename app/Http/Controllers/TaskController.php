@@ -79,6 +79,8 @@ use App\Models\TaskDisputeQuestion;
 use App\Models\TaskRevisionDispute;
 use App\Models\TaskType;
 use App\Models\DailySubmission;
+use App\Models\EmployeeEvaluation;
+use App\Models\EmployeeEvaluationTask;
 use App\Models\GraphicTaskFile;
 use App\Models\GraphicWorkDetails;
 use App\Models\PendingParentTaskConversation;
@@ -821,7 +823,7 @@ class TaskController extends AccountBaseController
             $task_submit->user_id = $request->user_id;
 
             //$task_submit->table=$request->table;
-            //$task_submit->list=$request->list;
+            $task_submit->screen_record_link = $request->screen_record_link;
             $task_submit->text = $request->text;
             if ($order == null) {
                 $task_submit->submission_no = 1;
@@ -929,18 +931,30 @@ class TaskController extends AccountBaseController
 
 
         $task_id = Task::where('id', $task->id)->first();
-
         $user = User::where('id', $task->added_by)->first();
         $sender = User::where('id', $request->user_id)->first();
         // need pending action
+        if($task_id->project_id != null){
         $helper = new HelperPendingActionController();
 
 
         $helper->TaskApproveAction($task_id,$sender);
+        }
 
         //need pending action
 
         /**EMPLOYEE EVALUATION START */
+        $taskFind = Task::where('id',$request->task_id)->where('u_id',null)->where('independent_task_status',1)->first(); //Find SubTask
+        if($taskFind != null){
+            $evaluation = EmployeeEvaluationTask::where('task_id',$taskFind->id)->first();
+            if($evaluation !=null)
+            {
+                $evaluation->submission_date = $task_submit->created_at;
+                $evaluation->completed_work = json_encode($request->link);
+                $evaluation->status = 1; // IF STATUS 1 THAT MEANS EVALUTE DISPLAY
+                $evaluation->save();
+            }
+        }
 
         /**EMPLOYEE EVALUATION END */
 
@@ -1308,6 +1322,19 @@ class TaskController extends AccountBaseController
         //     $task_revision->final_responsible_person = '';
         // }  
         $task_revision->save();
+
+        /**EMPLOYEE EVALUATION START */
+        $taskFind = Task::where('id',$request->task_id)->where('u_id',null)->where('independent_task_status',1)->first(); 
+        if($taskFind != null){
+            $evaluation = EmployeeEvaluationTask::where('task_id',$taskFind->id)->first();
+            if($evaluation !=null)
+            {
+                $evaluation->revision_number = $task_revision->revision_no;
+                $evaluation->save();
+            }
+        }
+
+        /**EMPLOYEE EVALUATION END */
  
         //need pending action
 
@@ -4744,6 +4771,7 @@ class TaskController extends AccountBaseController
             $data = User::where('role_id', 5)
             ->orWhere('role_id',9)
             ->orWhere('role_id',10) 
+            ->orWhere('role_id',14) 
             ->get()
             ->map(function ($row) {
                 $task_assign = Task::select('tasks.*')

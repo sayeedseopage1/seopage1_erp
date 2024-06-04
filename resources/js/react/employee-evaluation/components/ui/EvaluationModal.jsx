@@ -19,13 +19,13 @@ export const SectionFlex = styled.div`
 
 export const HorizontalLineLeftTL = styled.div`
     height: 3px;
-    background-color: #1d81f4;
+    background-color: #1492e6;
     width: 45%;
 `;
 
 export const HorizontalLineRightTL = styled.div`
     height: 3px;
-    background-color: #1d81f4;
+    background-color: #1492e6;
     width: 45%;
 `;
 
@@ -55,13 +55,13 @@ export const ReviewFooter = styled.div`
 
 export const HorizontalLineLeftA = styled.div`
     height: 3px;
-    background-color: #1d81f4;
+    background-color: #1492e6;
     width: 43%;
 `;
 
 export const HorizontalLineRightA = styled.div`
     height: 3px;
-    background-color: #1d81f4;
+    background-color: #1492e6;
     width: 43%;
 `;
 

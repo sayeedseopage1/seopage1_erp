@@ -1,9 +1,7 @@
 import React, { useState, useEffect } from "react";
 
 import { useGetEvaluationListQuery } from "../../services/api/EvaluationApiSlice";
-import { DataTableColumns } from "../components/Table/DataTableColumns";
-import DataTable from "../components/Table/DataTable";
-import Button from "../../global/Button";
+
 import styles from "./EmployeeEvaluation.module.css";
 import EvaluationTableFilterBar from "../components/EvaluationTableFilterBar";
 
@@ -12,6 +10,8 @@ import RefreshButton from "../components/RefreshButton";
 import { Link, useSearchParams } from "react-router-dom";
 import _ from "lodash";
 import Card from "../../global/Card";
+import EvaluationTable from "../components/Table/EvaluationTable";
+import { EvaluationTableColumns } from "../components/Table/EvaluationTableColumns";
 
 const EmployeeEvaluation = () => {
     const [searchParams, setSearchParams] = useSearchParams();
@@ -28,7 +28,7 @@ const EmployeeEvaluation = () => {
         return new URLSearchParams(queryObject).toString();
     };
 
-    const { data, isFetching, refetch } = useGetEvaluationListQuery(
+    const { data, isLoading, isFetching, refetch } = useGetEvaluationListQuery(
         queryString({
             page: pageIndex + 1,
             limit: pageSize,
@@ -39,28 +39,25 @@ const EmployeeEvaluation = () => {
         { refetchOnMountOrArgChange: true, skip: !filter?.start_date }
     );
 
-    const Evaluations = data?.data;
+    const mainData = data?.data;
+    const Evaluations = data?.data.data;
 
-    // filter data
     const getData = (type) => {
-        let _data = _.orderBy(Evaluations, "authorization_status", "asc");
+        let _data = _.orderBy(Evaluations, "managements_decision", "asc");
         switch (type) {
             case "all":
                 return _data;
             case "pending":
-                return _.filter(
-                    _data,
-                    (d) => d.authorization_status === "pending"
-                );
+                return _.filter(_data, (d) => d.managements_decision === null);
             case "denied":
                 return _.filter(
                     _data,
-                    (d) => d.authorization_status === "denied"
+                    (d) => d.managements_decision === "Rejected"
                 );
             case "authorized":
                 return _.filter(
                     _data,
-                    (d) => d.authorization_status === "authorized"
+                    (d) => d.managements_decision === "Accepted"
                 );
             default:
                 return _data;
@@ -68,7 +65,7 @@ const EmployeeEvaluation = () => {
     };
 
     const _data = {
-        all: getData("all"),
+        all: getData(null),
         pending: getData("pending"),
         denied: getData("denied"),
         authorized: getData("authorized"),
@@ -88,6 +85,7 @@ const EmployeeEvaluation = () => {
         setPagination(paginate);
     };
 
+    // console.log("filter data", filter);
     return (
         <>
             <EvaluationTableFilterBar setFilter={setFilter} />
@@ -97,16 +95,20 @@ const EmployeeEvaluation = () => {
                     <Tabs data={_data} />
 
                     <RefreshButton
-                        onClick={refetch}
+                        onClick={() => {
+                            refetch();
+                        }}
                         isLoading={isFetching}
                         className="font-weight-normal"
                     />
                 </Flex>
 
-                <DataTable
+                <EvaluationTable
                     data={tableData(searchParams.get("show"))}
-                    columns={[...DataTableColumns]}
-                    isLoading={false}
+                    mainData={mainData}
+                    columns={[...EvaluationTableColumns]}
+                    isLoading={isLoading}
+                    isFetching={isFetching}
                     onPageChange={onPageChange}
                     sorting={sorting}
                     tableName="Evaluation Table"
@@ -122,17 +124,23 @@ export default EmployeeEvaluation;
 const Tabs = (props) => {
     const [searchParams, setSearchParams] = useSearchParams();
     const data = props.data;
-
-    useEffect(() => {
-        setSearchParams({ show: "pending" });
-    }, []);
+    // useEffect(() => {
+    //     setSearchParams({ show: "pending" });
+    // }, []);
 
     const handleRouteChange = (e, params) => {
         e.preventDefault();
+
+        // Create a new URLSearchParams object with the new parameters
+        const newSearchParams = new URLSearchParams();
+
+        // Set new parameters
         for (const [key, value] of Object.entries(params)) {
-            searchParams.set(key, value);
+            newSearchParams.set(key, value);
         }
-        setSearchParams(searchParams);
+
+        // Update the searchParams state with the new URLSearchParams object
+        setSearchParams(newSearchParams);
     };
 
     const badge = (type) => {

@@ -16,11 +16,38 @@ export const EvalTableTitle = styled.div`
     background-color: #1d82f5;
     color: #ffffff;
 `;
+export const NameLink = styled.a`
+    color: blue;
+    text-decoration: none;
+    cursor: pointer;
+`;
+
+export const EvalTableSubTitle = styled.div`
+    font-size: 20px;
+    margin-left: auto;
+    text-align: center;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    color: #555;
+`;
+export const ReviewTableSubTitle = styled.div`
+    font-size: 16px;
+    margin-left: auto;
+    text-align: center;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    color: #555;
+`;
+
+export const ReviewTableSubTitleDate = styled.span`
+    color: green;
+`;
+
 export const FooterButtons = styled.div`
     display: flex;
-    justify-content: right;
+    justify-content: center;
     margin-top: 20px;
-    margin-right: 50px;
+
     gap: 20px;
     align-items: center;
 `;
