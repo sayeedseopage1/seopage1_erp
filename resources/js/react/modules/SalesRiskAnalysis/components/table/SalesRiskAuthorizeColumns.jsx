@@ -103,8 +103,8 @@ export const SalesRiskAuthorizeColumns = [
                                 }
                             >
                                 <span style={customStyles.points}>
-                                    {data?.points[0]}($
-                                    {Number(data?.points[1]).toFixed(2)}
+                                    {data?.points?.[0]}($
+                                    {Number(data?.points?.[1]).toFixed(2)}
                                     /hours)
                                 </span>
                             </Switch.Case>
