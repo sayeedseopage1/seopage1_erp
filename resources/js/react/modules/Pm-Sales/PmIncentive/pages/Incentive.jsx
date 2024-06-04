@@ -14,7 +14,6 @@ import Spinner from '../../PointFactors/components/loader/Spinner';
 import QuarterAndYearlyTable from '../components/Sections/QuarterlyAndYearly/QuarterAndYearlyTable';
 import { quarterlyAndYearlyTableData } from '../constants';
 import useIncentive from '../hooks/useIncentive';
-import IncentiveDataProvider from '../Provider/IncentiveDataProvider';
 
 const Incentive = () => {
     const [tab, setTab] = useState("current");

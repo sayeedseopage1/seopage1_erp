@@ -1,5 +1,6 @@
 import React from 'react';
 import { ConfigProvider, Table } from 'antd';
+import PropTypes from 'prop-types';
 
 const columns = [
     {
@@ -76,3 +77,7 @@ const QuarterAndYearlyTable = ({ data }) => {
 };
 
 export default QuarterAndYearlyTable;
+
+QuarterAndYearlyTable.propTypes = {
+    data: PropTypes.array
+}
