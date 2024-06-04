@@ -78,15 +78,15 @@ const SalesRiskAuthorize = () => {
             } else {
                 const { pointData, questionData, ...rest } = data?.data ?? {};
                 if (auth.getRoleId() === 1) {
-                    const formatData = Object.entries(
-                        data?.data?.pointData
-                    ).map(([key, value]) => {
-                        return {
+                    const formatData = Object.entries(data?.data?.pointData)
+                        .filter(([key, value]) => "questionAnswer" in value)
+                        .map(([key, value]) => ({
                             ...value,
                             key: key,
                             id: key,
-                        };
-                    });
+                        }));
+
+                    console.log(formatData);
 
                     setAnswersPoint(formatData);
                 } else {
@@ -175,7 +175,7 @@ const SalesRiskAuthorize = () => {
     const FilterSaleRiskTableColumnByRole = () => {
         if (auth.getRoleId() === 1) {
             return SalesRiskAuthorizeColumns;
-        } else if ([7, 8].includes(auth.getRoleId())){
+        } else if ([7, 8].includes(auth.getRoleId())) {
             return SalesRiskAuthorizeTableColumnsForUser;
         }
     };
@@ -482,7 +482,8 @@ const SalesRiskAuthorize = () => {
                                                         maxWidth: "170px",
                                                         marginRight: "10px",
                                                         display: "flex",
-                                                        justifyContent: "center",
+                                                        justifyContent:
+                                                            "center",
                                                         alignItems: "center",
                                                     }}
                                                     className="mb-3 mb-md-0"
