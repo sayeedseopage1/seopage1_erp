@@ -33,6 +33,7 @@ import {
 } from "../helper/formatEditPolicyData";
 import { SalesRiskAnalysisContext } from "../context/SalesRiskAnalysisProvider";
 import { generateUniqueString } from "../../../utils/customUidGenerate";
+import { useSelector } from "react-redux";
 
 const inputSateData = {
     mainDetails: {
@@ -88,6 +89,7 @@ const inputSateData = {
 
 const SalesRiskPolices = () => {
     const { policyKeys } = useContext(SalesRiskAnalysisContext);
+    const { departments } = useSelector((state) => state.filterOptions);
     const [{ pageIndex, pageSize }, setPagination] = React.useState({
         pageIndex: 0,
         pageSize: 10,
@@ -210,7 +212,6 @@ const SalesRiskPolices = () => {
         ) {
             if (name === "key") {
                 if (value.name === "yesNoRules") {
-
                     const singlePolicyDataAll =
                         await getSinglePolicyDataByIDorKey(value.name);
                     if (singlePolicyDataAll?.data?.data?.length) {
@@ -222,16 +223,34 @@ const SalesRiskPolices = () => {
                         setNewPolicyMainDetails({
                             ...newPolicyMainDetails,
                             id: singlePolicyDataAll?.data?.data[0]?.id,
+                            policyName:
+                                singlePolicyDataAll?.data?.data[0]?.title,
+                            department: departments?.find((item) => item?.team_name === formattedRules[0]?.department?.name),
+                            comment:
+                                singlePolicyDataAll?.data?.data[0]?.comment,
                             key: value,
                         });
+                        setNewPolicyData({
+                            ...newPolicyData,
+                            policyName:
+                                singlePolicyDataAll?.data?.data[0]?.title,
+                                department: departments?.find((item) => item?.team_name === formattedRules[0]?.department?.name),
+                            comment:
+                                singlePolicyDataAll?.data?.data[0]?.comment,
+                            policyType: PolicyTypeItems?.data?.find((item) =>
+                                item?.name?.includes("yesNo")
+                            ),
+                            [name]: value,
+                        });
+                    } else {
+                        setNewPolicyData({
+                            ...newPolicyData,
+                            policyType: PolicyTypeItems?.data?.find((item) =>
+                                item?.name?.includes("yesNo")
+                            ),
+                            [name]: value,
+                        });
                     }
-                    setNewPolicyData({
-                        ...newPolicyData,
-                        policyType: PolicyTypeItems?.data?.find((item) =>
-                            item?.name?.includes("yesNo")
-                        ),
-                        [name]: value,
-                    });
                     setIsPolicyUpdating(true);
                 } else {
                     setNewPolicyData({
@@ -275,7 +294,6 @@ const SalesRiskPolices = () => {
             });
         }
     };
-
 
     const autoGenerateTitle = (data) => {
         return `${data?.policyType?.label} ${
@@ -579,7 +597,9 @@ const SalesRiskPolices = () => {
                     isPolicyUpdating={isPolicyUpdating}
                     newPolicyDataValidation={newPolicyDataValidation}
                     isLoadingAddSalesRiskAnalysisRule={
-                        isLoadingAddSalesRiskAnalysisRule || isLoadingEditSalesRiskAnalysisPolicy || isLoadingSinglePolicyDataByIDorKey
+                        isLoadingAddSalesRiskAnalysisRule ||
+                        isLoadingEditSalesRiskAnalysisPolicy ||
+                        isLoadingSinglePolicyDataByIDorKey
                     }
                     handlerAction={{
                         handleChange,
