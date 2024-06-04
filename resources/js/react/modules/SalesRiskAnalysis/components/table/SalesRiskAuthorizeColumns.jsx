@@ -96,12 +96,7 @@ export const SalesRiskAuthorizeColumns = [
                 <div className="d-flex justify-content-end align-items-center pr-3">
                     <Switch>
                         <Switch.Case condition={data.key === "hourlyRate"}>
-                            <Switch.Case
-                                condition={
-                                    data?.points?.length &&
-                                    !data?.message?.length
-                                }
-                            >
+                            <Switch.Case condition={data?.points?.length}>
                                 <span style={customStyles.points}>
                                     {data?.points?.[0]}($
                                     {Number(data?.points?.[1]).toFixed(2)}
@@ -110,7 +105,7 @@ export const SalesRiskAuthorizeColumns = [
                             </Switch.Case>
                             <Switch.Case
                                 condition={
-                                    ("points" in data) && data?.message?.length
+                                    !("points" in data) && data?.message?.length
                                 }
                             >
                                 <span style={customStyles.points}>
@@ -129,7 +124,7 @@ export const SalesRiskAuthorizeColumns = [
                         <Switch.Case condition={data?.key !== "hourlyRate"}>
                             <Switch.Case
                                 condition={
-                                    "points" in data && !data?.message?.length
+                                    "points" in data
                                 }
                             >
                                 <span style={customStyles.points}>
