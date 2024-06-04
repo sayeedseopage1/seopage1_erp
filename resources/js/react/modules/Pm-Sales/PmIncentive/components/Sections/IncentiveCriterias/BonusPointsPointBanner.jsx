@@ -6,17 +6,17 @@ import FinalPointsModal from '../../Modals/FinalPointsModal';
 import { Popover } from 'antd';
 import IncentiveEditButton from '../../ui/IncentiveEditButton';
 import CashValueBonusEditModal from '../../Modals/Incentives/CashValueBonusEditModal';
-import useIncentiveTypes from '../../../hooks/useIncentiveTypes';
 import { Placeholder } from '../../../../../../global/Placeholder';
 import { auth } from '../../../constants';
 import { useDispatch, useSelector } from 'react-redux';
 import { bonusPointsPoints } from '../../../../../../services/features/Pm-Sales/pmIncentiveSlice';
+import useIncentive from '../../../hooks/useIncentive';
 
 const BonusPointsPointBanner = () => {
     const [finalPointsModalOpen, setFinalPointsModalOpen] = useState(false);
     const [editBonusPointsModalOpen, setEditBonusPointsModalOpen] = useState(false);
 
-    const { bonusIncentiveTypes, incentiveTypesLoading } = useIncentiveTypes();
+    const { bonusIncentiveTypes, incentiveTypesLoading } = useIncentive();
     const { incentive_criterias } = bonusIncentiveTypes || {};
 
     const unreleasedIncentive = incentive_criterias?.find((item) => item?.id == 10)?.obtained_incentive;

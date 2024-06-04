@@ -5,15 +5,15 @@ import UpsaleCrossSalePointModal from '../../Modals/UpsaleCrossSalePointModal';
 import IncentiveEditButton from '../../ui/IncentiveEditButton';
 import CashValueUpCrossEditModal from '../../Modals/Incentives/CashValueUpCrossEditModal';
 import { Placeholder } from '../../../../../../global/Placeholder';
-import useIncentiveTypes from '../../../hooks/useIncentiveTypes';
 import { auth } from '../../../constants';
 import { useDispatch, useSelector } from 'react-redux';
 import { upSaleCrossSalePoints } from '../../../../../../services/features/Pm-Sales/pmIncentiveSlice';
+import useIncentive from '../../../hooks/useIncentive';
 
 const UpsaleCrossSalePointBanner = () => {
     const [upsaleCrossSalePointsModalOpen, setUpsaleCrossSalePointsModalOpen] = useState(false);
     const [editUpsaleCrossSalePointsModalOpen, setEditUpsaleCrossSalePointsModalOpen] = useState(false);
-    const { upSaleCrossSaleTypes, incentiveTypesLoading } = useIncentiveTypes();
+    const { upSaleCrossSaleTypes, incentiveTypesLoading } = useIncentive();
     const { incentive_criterias } = upSaleCrossSaleTypes || {};
 
     const pmIncentive = useSelector((state) => state.pmIncentive)

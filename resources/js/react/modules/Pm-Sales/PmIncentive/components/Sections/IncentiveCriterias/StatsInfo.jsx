@@ -4,14 +4,14 @@ import pointIconDark from '../../../assets/pointIconDark.svg'
 import { IoInformationCircle } from "react-icons/io5";
 import IncentivePointModal from '../../Modals/IncentivePointModal';
 import { Popover, Skeleton } from 'antd';
-import useIncentiveTypes from '../../../hooks/useIncentiveTypes';
 import AverageProgressCard from './AverageProgressCard';
 import { useDispatch, useSelector } from 'react-redux';
 import { regularIncentivePoints } from '../../../../../../services/features/Pm-Sales/pmIncentiveSlice';
+import useIncentive from '../../../hooks/useIncentive';
 
 const StatsInfo = () => {
     const [incentivePointsModalOpen, setIncentivePointsModalOpen] = useState(false);
-    const { allIncentiveTypes, regularIncentiveTypes, incentiveTypesLoading } = useIncentiveTypes();
+    const { allIncentiveTypes, regularIncentiveTypes, incentiveTypesLoading } = useIncentive();
 
     const pmIncentive = useSelector((state) => state.pmIncentive)
     const dispatch = useDispatch();

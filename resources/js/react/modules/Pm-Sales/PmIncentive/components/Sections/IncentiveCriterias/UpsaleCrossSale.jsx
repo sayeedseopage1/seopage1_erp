@@ -1,14 +1,14 @@
 import React from 'react';
 import IncentiveBarChart from '../../Charts/IncentiveBarChart';
 import IncentiveThickChart from '../../Charts/IncentiveThickChart';
-import useIncentiveTypes from '../../../hooks/useIncentiveTypes'
 import UpsaleCrossSalePointBanner from './UpsaleCrossSalePointBanner';
 import { IncentiveFormattedData } from '../../../utils/formattedChartData';
 import ChartDataLoader from '../../loader/ChartDataLoader';
+import useIncentive from '../../../hooks/useIncentive';
 
 
 const UpsaleCrossSale = () => {
-    const { upSaleCrossSaleTypes, incentiveTypesLoading } = useIncentiveTypes();
+    const { upSaleCrossSaleTypes, incentiveTypesLoading } = useIncentive();
 
     const upSaleCrossSaleChartData = IncentiveFormattedData(upSaleCrossSaleTypes)
 

@@ -2,12 +2,12 @@ import React from 'react';
 import BonusPointsPointBanner from './BonusPointsPointBanner';
 import IncentiveBarChart from '../../Charts/IncentiveBarChart';
 import IncentiveThickChart from '../../Charts/IncentiveThickChart';
-import useIncentiveTypes from '../../../hooks/useIncentiveTypes';
 import { IncentiveFormattedData } from '../../../utils/formattedChartData';
 import ChartDataLoader from '../../loader/ChartDataLoader';
+import useIncentive from '../../../hooks/useIncentive';
 
 const BonusPoints = () => {
-    const { bonusIncentiveTypes, incentiveTypesLoading } = useIncentiveTypes();
+    const { bonusIncentiveTypes, incentiveTypesLoading } = useIncentive();
 
     const bonusPointsChartData = IncentiveFormattedData(bonusIncentiveTypes)
 

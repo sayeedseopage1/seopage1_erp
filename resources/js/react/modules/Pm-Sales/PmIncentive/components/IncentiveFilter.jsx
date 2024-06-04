@@ -5,15 +5,15 @@ import { useGetPmByDeptQuery } from '../../../../services/api/Pm-Sales/pmSalesAp
 import { useGetAllFilterOptionQuery } from '../../../../services/api/FilterBarOptionsApiSlice.js';
 import { auth } from '../../Points/constants/index.js';
 import Button from '../../../../Insights/ui/Button.jsx';
-import DeptFilter from '../../Points/components/Filter/DeptFilter.jsx';
-import EmployeeFilter from '../../Points/components/Filter/EmployeeFilter.jsx';
-import JqueryDateRangePicker from '../../Points/components/JqueryDateRangePicker.jsx';
 import DateFilter from './ui/DateFilter.jsx';
 import PropTypes from 'prop-types';
+import DeptFilter from './Filter/DeptFilter.jsx';
+import EmployeeFilter from './Filter/EmployeeFilter.jsx';
+import useIncentive from '../hooks/useIncentive.jsx';
 
-export default function IncentiveFilter({ setQuery, filterByPeriod }) {
+export default function IncentiveFilter({ filterByPeriod, setQuery }) {
+    // const { setQuery } = useIncentive();
     const [dept, setDept] = useState(1);
-    // get pm by department 
     const { data: pmByDept, isFetching: isPmByDeptLoading } = useGetPmByDeptQuery(dept)
     const pmByDeptData = pmByDept?.data
     const [startDate, setStartDate] = useState(null);
@@ -23,13 +23,12 @@ export default function IncentiveFilter({ setQuery, filterByPeriod }) {
     useEffect(() => {
         if (auth?.isHasRolePermission(1) && pmByDeptData && !isPmByDeptLoading) {
             setSelectedEmployee(pmByDeptData[0]?.id);
-            setQuery(prevQuery => ({ ...prevQuery, user_id: pmByDeptData[0]?.id }));
+            // setQuery(prevQuery => ({ ...prevQuery, user_id: pmByDeptData?.[0]?.id }));
         }
     }, [pmByDeptData, isPmByDeptLoading]);
 
     // sidebar
     const [sidebarIsOpen, setSidebarIsOpen] = useState(false);
-
 
     // fetch data
     const {
@@ -44,10 +43,10 @@ export default function IncentiveFilter({ setQuery, filterByPeriod }) {
             ...prevQuery,
             start_date: startDate,
             end_date: endDate,
-            dept_id: dept,
+            // dept_id: dept,
             user_id: selectedEmployee
         }));
-    }, [startDate, endDate, dept, selectedEmployee]);
+    }, [startDate, endDate, selectedEmployee]);
 
     useEffect(() => {
         if (auth?.isHasRolePermission(4)) {
@@ -58,7 +57,7 @@ export default function IncentiveFilter({ setQuery, filterByPeriod }) {
     const handleDeptChange = (value) => {
         setDept(value);
         setSelectedEmployee("");
-        setQuery(prevQuery => ({ ...prevQuery, dept_id: value, user_id: "" }));
+        setQuery(prevQuery => ({ ...prevQuery, user_id: "" }));
     };
 
     const handlePmChange = (value) => {

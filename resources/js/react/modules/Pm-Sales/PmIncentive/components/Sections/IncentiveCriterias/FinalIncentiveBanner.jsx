@@ -1,10 +1,10 @@
 import React from 'react';
 import cashBag from '../../../assets/cashBag.svg'
-import useIncentiveTypes from '../../../hooks/useIncentiveTypes';
 import { useSelector } from 'react-redux';
+import useIncentive from '../../../hooks/useIncentive';
 
 const FinalIncentiveBanner = () => {
-    const { allIncentiveTypes, regularIncentiveTypes, upSaleCrossSaleTypes, bonusIncentiveTypes } = useIncentiveTypes();
+    const { allIncentiveTypes, regularIncentiveTypes, upSaleCrossSaleTypes, bonusIncentiveTypes } = useIncentive();
     const pmIncentive = useSelector((state) => state.pmIncentive)
     const { regularIncentivePoints, upSaleCrossSalePoints, bonusPointsPoints } = pmIncentive || {}
 

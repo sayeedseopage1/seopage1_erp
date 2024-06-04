@@ -1,13 +1,12 @@
 import React from 'react';
 import IncentiveBarChart from '../../Charts/IncentiveBarChart';
 import IncentiveThickChart from '../../Charts/IncentiveThickChart';
-import useIncentiveTypes from '../../../hooks/useIncentiveTypes';
 import { IncentiveFormattedData } from '../../../utils/formattedChartData';
-// import { Placeholder } from '../../../../../../global/Placeholder';
 import ChartDataLoader from '../../loader/ChartDataLoader';
+import useIncentive from '../../../hooks/useIncentive';
 
 const IdealVsAchieved = () => {
-    const { regularIncentiveTypes, incentiveTypesLoading } = useIncentiveTypes();
+    const { regularIncentiveTypes, incentiveTypesLoading } = useIncentive();
 
     const regularChartData = IncentiveFormattedData(regularIncentiveTypes)
 
