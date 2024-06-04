@@ -3,9 +3,9 @@ import { useGetIncentiveFactorsQuery } from '../../../../services/api/Pm-Sales/P
 import _ from 'lodash';
 
 export const IncentiveContext = createContext(null);
-const IncentiveDataProvider = ({ children, query }) => {
+const IncentiveDataProvider = ({ children }) => {
 
-    // const [query, setQuery] = useState({})
+    const [query, setQuery] = useState({})
 
     const { user_id, start_date, end_date } = query || {};
 
@@ -46,7 +46,7 @@ const IncentiveDataProvider = ({ children, query }) => {
 
 
 
-    const incentiveInfo = { allIncentiveTypes, regularIncentiveTypes, upSaleCrossSaleTypes, bonusIncentiveTypes, incentiveTypesLoading, incentiveTypesIsFetching }
+    const incentiveInfo = { allIncentiveTypes, regularIncentiveTypes, upSaleCrossSaleTypes, bonusIncentiveTypes, incentiveTypesLoading, incentiveTypesIsFetching, setQuery }
 
 
     return (

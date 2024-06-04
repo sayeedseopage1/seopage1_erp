@@ -11,8 +11,8 @@ import DeptFilter from './Filter/DeptFilter.jsx';
 import EmployeeFilter from './Filter/EmployeeFilter.jsx';
 import useIncentive from '../hooks/useIncentive.jsx';
 
-export default function IncentiveFilter({ filterByPeriod, setQuery }) {
-    // const { setQuery } = useIncentive();
+export default function IncentiveFilter({ filterByPeriod }) {
+    const { setQuery } = useIncentive();
     const [dept, setDept] = useState(1);
     const { data: pmByDept, isFetching: isPmByDeptLoading } = useGetPmByDeptQuery(dept)
     const pmByDeptData = pmByDept?.data
