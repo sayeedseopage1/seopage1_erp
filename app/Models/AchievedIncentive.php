@@ -13,6 +13,7 @@ class AchievedIncentive extends Model
         'date',
         'user_id',
         'incentive_type_id',
+        'acquired_points',
         'incentive_point',
         'cash_value',
         'total_cash_amount'

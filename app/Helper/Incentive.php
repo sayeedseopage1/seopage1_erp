@@ -24,6 +24,7 @@ class Incentive
                     ProgressiveIncentive::create([
                         'date' => $now,
                         'pm_id' => $pm_id,
+                        'incentive_criteria_id' => $incentiveFactor->incentive_criteria_id,
                         'incentive_factor_id' => $incentiveFactor->id,
                         'acquired_value' => $comparable_value,
                         'incentive_amount_type' => $incentiveFactor->incentive_amount_type,

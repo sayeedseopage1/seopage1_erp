@@ -11,12 +11,14 @@ import DeptFilter from './Filter/DeptFilter.jsx';
 import EmployeeFilter from './Filter/EmployeeFilter.jsx';
 import useIncentive from '../hooks/useIncentive.jsx';
 
-export default function IncentiveFilter({ filterByPeriod }) {
+export default function IncentiveFilter({ filterByPeriod, setQueryForAchievedIncentive }) {
     const { setQuery } = useIncentive();
     const [dept, setDept] = useState(1);
     const { data: pmByDept, isFetching: isPmByDeptLoading } = useGetPmByDeptQuery(dept)
     const pmByDeptData = pmByDept?.data
     const [startDate, setStartDate] = useState(null);
+    const [startDateQuarterAndYear, setStartDateQuarterAndYear] = useState(null);
+    const [endDateQuarterAndYear, setEndDateQuarterAndYear] = useState(null);
     const [endDate, setEndDate] = useState(null);
     const [selectedEmployee, setSelectedEmployee] = useState("");
 
@@ -37,6 +39,7 @@ export default function IncentiveFilter({ filterByPeriod }) {
         refetchOnMountOrArgChange: true,
     });
 
+    // for monthly incentive
     useEffect(() => {
         setQuery(prevQuery => ({
             ...prevQuery,
@@ -47,9 +50,20 @@ export default function IncentiveFilter({ filterByPeriod }) {
         }));
     }, [startDate, endDate, selectedEmployee]);
 
+    // for achieved quarterly and yearly incentive history table
+    useEffect(() => {
+        setQueryForAchievedIncentive(prevQuery => ({
+            ...prevQuery,
+            start_date: startDateQuarterAndYear,
+            end_date: endDateQuarterAndYear,
+            user_id: selectedEmployee
+        }));
+    }, [startDateQuarterAndYear, endDateQuarterAndYear, selectedEmployee]);
+
     useEffect(() => {
         if (auth?.isHasRolePermission(4)) {
             setQuery(prevQuery => ({ ...prevQuery, user_id: auth?.userId }));
+            setQueryForAchievedIncentive(prevQuery => ({ ...prevQuery, user_id: auth?.userId }));
         }
     }, [auth?.userId, startDate]);
 
@@ -57,23 +71,37 @@ export default function IncentiveFilter({ filterByPeriod }) {
         setDept(value);
         setSelectedEmployee("");
         setQuery(prevQuery => ({ ...prevQuery, user_id: "" }));
+        setQueryForAchievedIncentive(prevQuery => ({ ...prevQuery, user_id: "" }));
     };
 
     const handlePmChange = (value) => {
         setSelectedEmployee(value);
         setQuery(prevQuery => ({ ...prevQuery, user_id: value }));
+        setQueryForAchievedIncentive(prevQuery => ({ ...prevQuery, user_id: value }));
     };
 
     return (
         <div className='sp1__pp_filter_bar justify-content-between'>
             <FilterItem className='border-right-0'>
-                <DateFilter
-                    startDate={startDate}
-                    endDate={endDate}
-                    setStartDate={setStartDate}
-                    setEndDate={setEndDate}
-                    type={filterByPeriod}
-                />
+                {
+                    filterByPeriod == "monthly" && <DateFilter
+                        startDate={startDate}
+                        endDate={endDate}
+                        setStartDate={setStartDate}
+                        setEndDate={setEndDate}
+                        type={'monthly'}
+                    />
+                }
+                {
+                    filterByPeriod != "monthly" && <DateFilter
+                        startDate={startDateQuarterAndYear}
+                        endDate={endDateQuarterAndYear}
+                        setStartDate={setStartDateQuarterAndYear}
+                        setEndDate={setEndDateQuarterAndYear}
+                        type={filterByPeriod}
+                    />
+                }
+
             </FilterItem>
 
             {

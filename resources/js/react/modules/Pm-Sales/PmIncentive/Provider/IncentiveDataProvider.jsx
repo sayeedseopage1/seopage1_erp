@@ -5,9 +5,7 @@ import PropTypes from 'prop-types';
 
 export const IncentiveContext = createContext(null);
 const IncentiveDataProvider = ({ children }) => {
-
     const [query, setQuery] = useState({})
-
     const { user_id, start_date, end_date } = query || {};
 
     // make query string
@@ -47,7 +45,7 @@ const IncentiveDataProvider = ({ children }) => {
 
 
 
-    const incentiveInfo = { allIncentiveTypes, regularIncentiveTypes, upSaleCrossSaleTypes, bonusIncentiveTypes, incentiveTypesLoading, incentiveTypesIsFetching, setQuery }
+    const incentiveInfo = { allIncentiveTypes, regularIncentiveTypes, upSaleCrossSaleTypes, bonusIncentiveTypes, incentiveTypesLoading, incentiveTypesIsFetching, setQuery };
 
 
     return (
