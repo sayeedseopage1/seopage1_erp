@@ -19,8 +19,8 @@ const StatsInfoProgressCard = ({ item }) => {
             </div>
             <div className="progress_card_stats_wrapper">
                 <div className="progress_card_stats_inner">
-                    <label>{title}</label>
-                    <label>{parseFloat(acquired_percent)}/{parseFloat(incentive_factors[incentive_factors.length - 1]?.upper_limit)}%</label>
+                    <span style={{ marginBottom: '6px' }}>{title}</span>
+                    <span style={{ marginBottom: '6px' }}>{parseFloat(acquired_percent)}/{parseFloat(incentive_factors[incentive_factors.length - 1]?.upper_limit)}%</span>
                 </div>
                 <GradientProgressBar progress={parseFloat(acquired_percent)} incentive={parseFloat(obtained_incentive)} />
             </div>

@@ -1,11 +1,8 @@
-/* eslint-disable react/prop-types */
-import _ from 'lodash';
 import * as React from 'react';
+import PropTypes from 'prop-types';
 
 
 const JqueryDateRangePicker = ({
-    startDate,
-    endDate,
     setStartDate,
     setEndDate,
     onApply
@@ -15,20 +12,10 @@ const JqueryDateRangePicker = ({
         if (window.$) {
             let $ = window.$;
             let moment = window.moment;
-            // let today = moment().format('D'); 
 
             $(function () {
                 let start = moment().startOf('month');
                 let end = moment();
-
-
-
-                // if(today > 20){
-                //     end = moment().add(1, 'months').date(20);
-                // }else {
-                //     end = moment().date(20);
-                // }
-
 
                 setStartDate(start.format());
                 setEndDate(end.format());
@@ -99,3 +86,9 @@ const JqueryDateRangePicker = ({
 }
 
 export default JqueryDateRangePicker;
+
+JqueryDateRangePicker.propTypes = {
+    setStartDate: PropTypes.func,
+    setEndDate: PropTypes.func,
+    onApply: PropTypes.func
+}

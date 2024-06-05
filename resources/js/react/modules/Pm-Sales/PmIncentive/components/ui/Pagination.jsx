@@ -1,10 +1,9 @@
 import * as React from 'react';
 import PropTypes from 'prop-types';
 import Button from '../../../../../Insights/ui/Button';
-// import Button from '../../Insights/ui/Button';
 
 
-const Pagination = ({ data, setCurrentPageData, numOfPerPageRow = 10, sortConfig, sortedData, currentPage = 1, setCurrentPage }) => {
+const Pagination = ({ data, setCurrentPageData, numOfPerPageRow = 10, currentPage = 1, setCurrentPage }) => {
 
     const [renderButtons, setRenderButtons] = React.useState([]);
     const [totalPages, setTotalPages] = React.useState(1);
@@ -19,22 +18,8 @@ const Pagination = ({ data, setCurrentPageData, numOfPerPageRow = 10, sortConfig
         return data.slice(startIndex, startIndex + nPaginate);
     };
 
-    const sortData = (data) => {
-        return data.sort((a, b) => {
-            if (a.user_id > b.user_id) {
-                return 1;
-            }
-            if (a.user_id < b.user_id) {
-                return -1;
-            }
-            return 0;
-        });
-    }
-
     /// set current page data
     React.useEffect(() => {
-        // let _data = sortedData(data, sortConfig);
-        // _data = sortData(_data);
         let perPageData = paginate(data, currentPage, numOfPerPageRow);
         setCurrentPageData(perPageData);
         // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -166,11 +151,11 @@ const Pagination = ({ data, setCurrentPageData, numOfPerPageRow = 10, sortConfig
 
 
 Pagination.propTypes = {
-    // sortConfig: PropTypes.object.isRequired,
-    // sortedData: PropTypes.func.isRequired,
     data: PropTypes.array.isRequired,
     setCurrentPageData: PropTypes.func,
     numOfPerPageRow: PropTypes.number,
+    currentPage: PropTypes.number,
+    setCurrentPage: PropTypes.func
 }
 
 
