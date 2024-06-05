@@ -1481,7 +1481,7 @@ class SalesRiskPolicyController extends AccountBaseController
 
             if ($dealStage = DealStage::where('lead_id', $deal->lead_id)->first()) {
                 $dealStage->won_lost = 'No';
-                $deal->deal_status = "Lost";
+                $dealStage->deal_status = "Lost";
                 $dealStage->save();
             }
         }
