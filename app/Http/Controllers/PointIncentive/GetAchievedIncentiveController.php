@@ -17,7 +17,7 @@ class GetAchievedIncentiveController extends Controller
 
         $achievedIncentives = AchievedIncentive::where('user_id', $user_id)->whereBetween('date', [$startDate,$endDate])->get()->groupBy(function($date) {
             return \Carbon\Carbon::parse($date->date)->format('Y-m-d');
-        })->map(function($query){
+        })->map(function($query) use ($user_id){
             $regularIncentive = $query->where('incentive_type_id', 1)->first();
             $upsaleIncentive = $query->where('incentive_type_id', 2)->first();
             $bonusIncentive = $query->where('incentive_type_id', 3)->first();
@@ -27,7 +27,8 @@ class GetAchievedIncentiveController extends Controller
             $keys['actual_points'] = $regularIncentive->incentive_point;
             $keys['upsale_points'] = $upsaleIncentive->incentive_point;
             $keys['bonus_points'] = $bonusIncentive->incentive_point;
-            $keys['comulative_incentive_amount'] = $query->sum('total_cash_amount');
+            $keys['incentive_amount'] = $query->sum('total_cash_amount');
+            $keys['comulative_incentive_amount'] = $query->sum('total_cash_amount') + AchievedIncentive::where('user_id', $user_id)->where('date', '<', $regularIncentive->date)->sum('total_cash_amount');
             return $query->test = $keys;
         });
 
@@ -40,6 +41,7 @@ class GetAchievedIncentiveController extends Controller
                 'actual_points' => $achievedIncentive['actual_points'],
                 'upsale_points' => $achievedIncentive['upsale_points'],
                 'bonus_points' => $achievedIncentive['bonus_points'],
+                'incentive_amount' => $achievedIncentive['incentive_amount'],
                 'comulative_incentive_amount' => $achievedIncentive['comulative_incentive_amount']
             ];
             $data->push($singleItem);
