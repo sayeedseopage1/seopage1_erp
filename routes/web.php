@@ -202,6 +202,8 @@ use App\Http\Controllers\ProjectTemplateSubTaskController;
 use App\Http\Controllers\PaymentGatewayCredentialController;
 use App\Http\Controllers\EmployeeShiftChangeRequestController;
 use App\Http\Controllers\EvaluationController;
+use App\Http\Controllers\PlatformAccountsController;
+use App\Http\Controllers\PriceQuotationController;
 
 /*
 |--------------------------------------------------------------------------
@@ -567,7 +569,7 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
 
     });
 
-
+    PlatformAccountsController::Route('platform-accounts');
 
     /* Setting menu routes ends here */
     Route::resource('company-settings', SettingsController::class)->only(['edit', 'update', 'index', 'change_language']);
@@ -1149,9 +1151,9 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
     //Monthly Incentive Settings
     Route::resource('monthly-incentive', MonthlyIncentiveController::class);
     Route::get('monthly-incentive/download/{id}', [MonthlyIncentiveController::class, 'download'])->name('monthly-incentive.download');
-    
+
     Route::get('monthly-incentive/get-json/index', [MonthlyIncentiveController::class, 'get_index_json']);
-    
+
     Route::resource('employee-evaluation', EvaluationController::class);
     Route::get('get-all-evaluation', [EvaluationController::class,'getAllEvaluation']);
     Route::get('get-single-evaluation/{user_id}', [EvaluationController::class, 'getSingleEvaluation']);
@@ -1539,7 +1541,7 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
     Route::put('/tasks-type-authorization/{id}',[TaskController::class,'taskTypeAuthorization']);
 
     Route::any('task/{id}/json', [TaskController::class, 'task_json'])->name('task.task_json');
-    
+
     Route::resource('client-review', ClientReviewController::class);
     Route::resource('task-report-issues', IssuedTaskReportController::class);
     Route::get('get-task-report',[IssuedTaskReportController::class,'getTaskReport']);
@@ -1571,6 +1573,8 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
     // Graphic task files delete
     Route::get('graphic-task-file/delete/{id}', [TaskController::class, 'deleteGraphicTaskFile'])->name('graphic.task.file.delete');
 });
+
+PriceQuotationController::Route();
 
 //custom route for seopage1
 Route::get('/deals/client-form/{id}', [HomeController::class, 'deal']);

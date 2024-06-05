@@ -357,6 +357,8 @@
                             @if($user->role_id == 4)
                             <x-sub-menu-item :link="route('contracts.index')" :text="'Won Deals'" />
                             @else
+
+
                             <x-sub-menu-item icon="person" :text="__('app.menu.lead')" :link="route('leads.index')">
                                 <x-slot name="iconPath">
                                     <path
@@ -365,6 +367,7 @@
                             </x-sub-menu-item>
                             <x-sub-menu-item :link="route('deals.index')" :text="'Deals'" />
                             <x-sub-menu-item :link="route('contracts.index')" :text="'Won Deals'" />
+                            <x-sub-menu-item :link="route('price-quotations.index')" :text="'Price Quotations'" />
                             @if($user->role_id == 1 || Auth::user()->role_id == 7 || Auth::user()->role_id == 8)
                             <x-sub-menu-item :link="route('qualified-sales.index')" :text="'Qualified Sales'" />
                             @endif
@@ -855,6 +858,7 @@
                         @if(Auth::user()->role_id == 1)
                         <x-sub-menu-item  :link="route('kpi-settings.index')" :text="'KPI Settings'" />
                         <x-sub-menu-item  :link="route('incentive-settings.index')" :text="'Incentives Settings'" />
+                        <x-sub-menu-item  :link="route('platform-accounts.index')" :text="'Platform Accounts'" />
                         <x-sub-menu-item  :link="route('pm-goal-setting.index')" :text="'PM Goal Settings'" />
                         <x-sub-menu-item  :link="route('dashboard.core.metric')" :text="'PM Core Metrics Settings'" />
 
