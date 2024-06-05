@@ -213,6 +213,7 @@ use App\Http\Controllers\ProjectTemplateSubTaskController;
 use App\Http\Controllers\PointIncentive\CriteriaController;
 use App\Http\Controllers\PaymentGatewayCredentialController;
 use App\Http\Controllers\EmployeeShiftChangeRequestController;
+use App\Http\Controllers\PointIncentive\GetAchievedIncentiveController;
 use App\Http\Controllers\PointIncentive\IncentiveTypeController;
 use App\Http\Controllers\PointIncentive\GetPmCashPointController;
 use App\Http\Controllers\PointIncentive\IncentiveFactorController;
@@ -1573,6 +1574,7 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
     Route::resource('incentive-type', IncentiveTypeController::class)->only(['index', 'update']);
     Route::resource('incentive-factor', IncentiveFactorController::class);
     Route::resource('incentive-criteria', IncentiveCriteriaController::class)->only(['show','update']);
+    Route::resource('get-achieved-incentive', GetAchievedIncentiveController::class)->only(['index']);
 
 
   //  Route::any('tasks/{any?}', [TaskController::class, 'home'])->where('any', '.*');
