@@ -102,7 +102,7 @@ class SalesPolicyQuestionSeeder extends Seeder
               ],
               [
                 'id' => 7,
-                'title' => 'Why did he create xxx% of milestone?',
+                'title' => 'Why did he create a partial milestone?',
                 'type' => 'list',
                 'key' => 'milestone',
                 'value' => '[{"id":"7_1","title":"The client\'s bank is rejecting his card after creating 2-3 milestones. He will do the rest tomorrow"},{"id":"7_2","title":"The client is getting error from the system after creating 1-3 milestones. He will try again in a few hours or so"},{"id":"7_3","title":"The client will create the milestones as we complete the previous milestones work"}]',

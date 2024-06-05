@@ -1032,8 +1032,9 @@ class SalesRiskPolicyController extends AccountBaseController
                     $points += (float) json_decode($policy[0]->value)->no->point;
                     $pointValue = json_decode($policy[0]->value)->no->point;
                     $policyIdList[$policy[0]->id] = 'no';
-                    $data[] = ['id' => $questions[0]->id, 'title' => $questions[0]->title, 'value' => 'No', 'parent_id' => $questions[0]->parent_id];
+                    $data[] = ['id' => $questions[0]->id, 'title' => $questions[0]->title, 'value' => 'No', 'parent_id' => null];
                 } else {
+                    $data[] = ['id' => $questions[0]->id, 'title' => $questions[0]->title, 'value' => 'Yes', 'parent_id' => null];
 
                     if (isset($questionAns[$questions[1]->id]) && isset($policy[1])) $value = $questionAns[$questions[1]->id];
                     else {
