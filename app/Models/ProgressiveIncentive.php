@@ -12,6 +12,7 @@ class ProgressiveIncentive extends Model
     protected $fillable = [
         'date',
         'pm_id',
+        'incentive_criteria_id',
         'incentive_factor_id',
         'acquired_value',
         'incentive_amount_type',

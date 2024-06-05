@@ -15,7 +15,6 @@ use App\Models\ProjectMilestone;
 use App\Models\IncentiveCriteria;
 use App\Models\IncentiveType;
 use Illuminate\Support\Facades\DB;
-use App\Models\ProgressiveIncentive;
 
 class DisbursePmIncentiveMonthly extends Command
 {
