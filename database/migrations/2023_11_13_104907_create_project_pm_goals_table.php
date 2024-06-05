@@ -27,7 +27,6 @@ return new class extends Migration
             $table->dateTime('goal_end_date');
             $table->string('duration');
             $table->integer('added_by');
-            // $table->integer('updated_by')->nullable();
             $table->float('goal_progress')->default(0);
             $table->integer('goal_status')->default(0);
             $table->longText('expired_meet_description')->nullable();

@@ -16,8 +16,6 @@ return new class extends Migration
         Schema::create('pm_goal_exp_histories', function (Blueprint $table) {
             $table->id();
             $table->integer('goal_id');
-            // $table->dateTime('start_date');
-            // $table->dateTime('deadline');
             $table->longText('expired_pm_reason');
             $table->longText('client_communication')->nullable();
             $table->double('client_communication_rating')->nullable();
