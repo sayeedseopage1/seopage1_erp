@@ -37,7 +37,7 @@ const PriceQuotations = () => {
     }, [isLoading]);
 
     return (
-        <div className="">
+        <div className="price_quotations_container">
             {/* Price Quotations Filter */}
             <PriceQuotationFilterBar setFilter={setFilter} />
 
@@ -65,7 +65,7 @@ const PriceQuotations = () => {
                         />
                     </Flex>
                     <DataTable
-                        tableName="Price Quotations"
+                        tableName="priceQuotations"
                         tableData={{
                             data: PriceQuotationsDummyData,
                             from: 1,
@@ -78,6 +78,15 @@ const PriceQuotations = () => {
                         tableColumns={PriceQuotationsTableColumns}
                         tableActions={{}}
                         isLoading={isLoading}
+                        justifyStyleColumn={{
+                            requested_on: "center",
+                            primary_page: "center",
+                            secondary_page: "center",
+                            other_works_needed: "center",
+                            system_suggested_price: "center",
+                            project_budget: "center",
+                        }}
+                        sortingColumn={["clients"]}
                     />
                 </div>
             </div>

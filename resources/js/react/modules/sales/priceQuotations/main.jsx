@@ -17,6 +17,7 @@ import Toaster from "../../../global/Toaster";
 
 // Pages
 import PriceQuotations from "./pages/PriceQuotations";
+import AccountLists from "./pages/AccountLists";
 
 // Content component
 const Content = () => {
@@ -70,10 +71,29 @@ if (container) {
         <React.StrictMode>
             <Provider store={store}>
                 <DndProvider backend={HTML5Backend}>
-                    <BrowserRouter basename="/price-quotation">
+                    <BrowserRouter basename="/price-quotations">
                         <Routes>
                             <Route path="/" element={<Content />}>
                                 <Route index element={<PriceQuotations />} />
+                            </Route>
+                        </Routes>
+                    </BrowserRouter>
+                </DndProvider>
+            </Provider>
+        </React.StrictMode>
+    );
+}
+
+const accountListsContainer = document.getElementById("accountListContentContainer");
+if (accountListsContainer) {
+    ReactDOM.createRoot(accountListsContainer).render(
+        <React.StrictMode>
+            <Provider store={store}>
+                <DndProvider backend={HTML5Backend}>
+                    <BrowserRouter basename="/account-lists">
+                        <Routes>
+                            <Route path="/" element={<Content />}>
+                                <Route index element={<AccountLists />} />
                             </Route>
                         </Routes>
                     </BrowserRouter>

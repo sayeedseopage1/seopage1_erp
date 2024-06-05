@@ -18,8 +18,21 @@ import PriceQuotationsTableLoader from "../Loader/PriceQuotationsTableLoader";
 // Components - Empty Table
 import EmptyTable from "../../../../../global/EmptyTable";
 import DataTablePagination from "./DataTablePagination";
+import AccountListTableLoader from "../Loader/AccountListTableLoader";
 
-const DataTable = ({ tableData, tableColumns, tableName, isLoading }) => {
+const loadingComponent = {
+    priceQuotations: <PriceQuotationsTableLoader />,
+    accountLists: <AccountListTableLoader />,
+};
+
+const DataTable = ({
+    tableData,
+    tableColumns,
+    tableName,
+    isLoading,
+    justifyStyleColumn,
+    sortingColumn,
+}) => {
     // Table State
     const [sorting, setSorting] = React.useState([]);
     const [expanded, setExpanded] = React.useState({});
@@ -97,6 +110,10 @@ const DataTable = ({ tableData, tableColumns, tableName, isLoading }) => {
         getSortedRowModel: getSortedRowModel(),
     });
 
+    const getLoadingComponent = (tableName) => {
+        return loadingComponent[tableName];
+    };
+
     return (
         <React.Fragment>
             <div
@@ -115,24 +132,19 @@ const DataTable = ({ tableData, tableColumns, tableName, isLoading }) => {
                         }}
                     >
                         {table.getHeaderGroups().map((headerGroup) => (
-                            <tr key={headerGroup.id} className="sp1_price_quotation_thead_tr">
+                            <tr
+                                key={headerGroup.id}
+                                className="sp1_price_quotation_thead_tr"
+                            >
                                 {headerGroup.headers.map((header) => {
                                     return (
                                         <DraggableColumnHeader
                                             header={header}
                                             table={table}
                                             key={header.id}
-                                            sortingColumn={["clients"]}
-                                            justifyStyleColumn={{
-                                                requested_on: "center",
-                                                primary_page: "center",
-                                                secondary_page: "center",
-                                                other_works_needed: "center",
-                                                system_suggested_price: "center",
-                                                project_budget: "center",
-                                            }}
+                                            sortingColumn={sortingColumn}
+                                            justifyStyleColumn={justifyStyleColumn}
                                         />
-
                                     );
                                 })}
                             </tr>
@@ -140,7 +152,7 @@ const DataTable = ({ tableData, tableColumns, tableName, isLoading }) => {
                     </thead>
                     {/* table Body */}
                     <tbody className="sp1_price_quotation_tbody">
-                        {!isLoading && 
+                        {!isLoading &&
                             table.getRowModel().rows.map((row) => {
                                 return (
                                     <tr
@@ -173,11 +185,7 @@ const DataTable = ({ tableData, tableColumns, tableName, isLoading }) => {
                                 );
                             })}
                         {/* Loading Table */}
-                        {isLoading && (
-                            <PriceQuotationsTableLoader
-                                prevItemLength={data?.length}
-                            />
-                        )}
+                        {isLoading && getLoadingComponent(tableName)}
                     </tbody>
                 </table>
                 {/* Table for empty */}
@@ -196,8 +204,10 @@ const DataTable = ({ tableData, tableColumns, tableName, isLoading }) => {
 export default DataTable;
 
 DataTable.propTypes = {
-    tableData: PropTypes.array,
+    tableData: PropTypes.object,
     tableColumns: PropTypes.array,
     tableName: PropTypes.string,
     isLoading: PropTypes.bool,
+    justifyStyleColumn: PropTypes.object,
+    sortingColumn: PropTypes.array,
 };

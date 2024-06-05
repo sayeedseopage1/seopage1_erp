@@ -1,6 +1,7 @@
 :root {
   --primaryBlue: #1492E6;
   --primaryDarkBlue: #D5ECFC;
+  --primaryLightDarkBlue: #EAF6FF;
   --primaryExtraDarkBlue: #0471c5;
   --primaryLightBlue: #EAF6FF;
   --primaryDarkText: #000000;
@@ -8,6 +9,7 @@
   --borderColor: #C6C6C6;
   --primarySuccess: #70CA62;
   --primaryDanger: #FF6666;
+  --lightgray: #8F8F8F;
 }
 
 /* Table Style */
@@ -64,15 +66,27 @@
   padding: 6px 0;
   transition: background 0.2s ease-in-out;
   color: var(--primaryDarkText);
-  font-family: Poppins , sans-serif;
-  font-size: 15px;
+  font-family: Poppins, sans-serif;
+  font-size: 14px;
   font-style: normal;
   font-weight: 400;
   line-height: normal;
 }
 
 
+.sp1_price_quotation_thead_th:not(:first-child) {
+  padding-left: 8px !important;
+  padding-right: 8px !important;
+}
 
+.sp1_price_quotation_td:first-child {
+  padding-left: 20px !important;
+}
+
+.platform_account_table .sp1_price_quotation_td{
+  padding-top: 15px;
+  padding-bottom: 15px;
+}
 
 
 /* Table Content style */
@@ -86,15 +100,27 @@
 }
 
 
+.sp1_price_quotation_tr:nth-child(odd) {
+  background-color: var(--primaryLightText);
+}
+
+.sp1_price_quotation_tr:nth-child(even) {
+  background-color: var(--primaryLightBlue);
+}
+
+.sp1_price_quotation_tr:hover {
+  background-color: var(--primaryLightBlue);
+}
+
+
 /* Button Color */
-.price_quotation_refresh_button{
+.price_quotation_refresh_button {
   background-color: var(--primaryBlue) !important;
   color: var(--primaryLightText) !important;
   font-family: Poppins, sans-serif;
   font-weight: 400;
 }
 
-.price_quotation_refresh_button:hover{
+.price_quotation_refresh_button:hover {
   background-color: var(--primaryExtraDarkBlue) !important;
 }
-

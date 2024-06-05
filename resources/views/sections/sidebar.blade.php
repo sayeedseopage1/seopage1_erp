@@ -375,7 +375,7 @@
 
 
                            <x-sub-menu-item :link="route('incentives.index')" :text="'Incentives'" />
-                           <x-sub-menu-item :link="route('price-quotation.index')" :text="'Price Quotations'" />
+                           <x-sub-menu-item :link="route('price-quotations.index')" :text="'Price Quotations'" />
                            @endif
 
 
@@ -856,6 +856,7 @@
                         @if(Auth::user()->role_id == 1)
                         <x-sub-menu-item  :link="route('kpi-settings.index')" :text="'KPI Settings'" />
                         <x-sub-menu-item  :link="route('incentive-settings.index')" :text="'Incentives Settings'" />
+                        <x-sub-menu-item  :link="route('price-quotations.accountList')" :text="'Account Lists'" />
                         <x-sub-menu-item  :link="route('pm-goal-setting.index')" :text="'PM Goal Settings'" />
                         <x-sub-menu-item  :link="route('dashboard.core.metric')" :text="'PM Core Metrics Settings'" />
 

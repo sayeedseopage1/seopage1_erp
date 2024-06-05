@@ -170,3 +170,114 @@ export const PriceQuotationsDummyData = [
     "project_budget": 20000
   }
 ]
+
+
+export const AccountListDummyData = [
+    {
+        "id": 1,
+        "platform": "Platform 1",
+        "user_name": "User 1",
+        "user_url": "user1.com",
+        "account_email": "useremail1@gmail.com",
+        "profile_type": "Profile type 1",
+        "generated_on": "2021-09-01",
+        "multiplying_factor": 1,
+
+    },
+    {
+        "id": 2,
+        "platform": "Platform 2",
+        "user_name": "User 2",
+        "user_url": "user2.com",
+        "account_email": "useremail2@gmail.com",
+        "profile_type": "Profile type 2",
+        "generated_on": "2021-09-02",
+        "multiplying_factor": 2,
+
+    },
+    {
+        "id": 3,
+        "platform": "Platform 3",
+        "user_name": "User 3",
+        "user_url": "user3.com",
+        "account_email": "useremail3@gmail.com",
+        "profile_type": "Profile type 3",
+        "generated_on": "2021-09-03",
+        "multiplying_factor": 3,
+
+    },
+    {
+        "id": 4,
+        "platform": "Platform 4",
+        "user_name": "User 4",
+        "user_url": "user4.com",
+        "account_email": "useremail4@gmail.com",
+        "profile_type": "Profile type 4",
+        "generated_on": "2021-09-04",
+        "multiplying_factor": 4,
+
+    },
+    {
+        "id": 5,
+        "platform": "Platform 5",
+        "user_name": "User 5",
+        "user_url": "user5.com",
+        "account_email": "useremail5@gmail.com",
+        "profile_type": "Profile type 5",
+        "generated_on": "2021-09-05",
+        "multiplying_factor": 5,
+
+    },
+    {
+        "id": 6,
+        "platform": "Platform 6",
+        "user_name": "User 6",
+        "user_url": "user6.com",
+        "account_email": "useremail6@gmail.com",
+        "profile_type": "Profile type 6",
+        "generated_on": "2021-09-06",
+        "multiplying_factor": 6,
+
+    },
+    {
+        "id": 7,
+        "platform": "Platform 7",
+        "user_name": "User 7",
+        "user_url": "user7.com",
+        "account_email": "useremail7@gmail.com",
+        "profile_type": "Profile type 7",
+        "generated_on": "2021-09-07",
+        "multiplying_factor": 7,
+
+    },
+    {
+        "id": 8,
+        "platform": "Platform 8",
+        "user_name": "User 8",
+        "user_url": "user8.com",
+        "account_email": "useremail8@gmail.com",
+        "profile_type": "Profile type 8",
+        "generated_on": "2021-09-08",
+        "multiplying_factor": 8,
+    },
+    {
+        "id": 9,
+        "platform": "Platform 9",
+        "user_name": "User 9",
+        "user_url": "user9.com",
+        "account_email": "useremail9@gmail.com",
+        "profile_type": "Profile type 9",
+        "generated_on": "2021-09-09",
+        "multiplying_factor": 9,
+    },
+    {
+        "id": 10,
+        "platform": "Platform 10",
+        "user_name": "User 10",
+        "user_url": "user10.com",
+        "account_email": "useremail10@gmail.com",
+        "profile_type": "Profile type 10",
+        "generated_on": "2021-09-10",
+        "multiplying_factor": 10,
+    }
+]

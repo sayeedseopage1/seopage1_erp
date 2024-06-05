@@ -1742,7 +1742,6 @@ Route::put('/projects/update-sales-basic-seo-cms/{id}', [ProjectController::clas
 Route::get('/project-challenge/{id}', [ProjectController::class, 'ProjectChallenge'])->name('project-challenge');
 
 
-
 //add project niche
 Route::post('/projects/niche-store', [ProjectController::class, 'storeNiche'])->name('add-niche');
 Route::get('/projects/niches', [ProjectController::class, 'Niche'])->name('get-niche');
@@ -1776,6 +1775,7 @@ Route::controller(DealController::class)->group(function () {
 
     Route::get('search-client', 'SearchClient')->name('client-search');
 });
+
 //milestone cancellation
 Route::post('/cancel-milestone', [ProjectMilestoneController::class, 'CancelMilestone'])->name('cancel-milestone');
 Route::post('/cancel-milestone-approve', [ProjectMilestoneController::class, 'CancelMilestoneApprove'])->name('cancel-milestone-approve');
@@ -1825,8 +1825,3 @@ Route::get('/task-guideline-deny-authorization/{id}', [TaskController::class, 't
 Route::put('/task-guideline-update/{id}', [TaskController::class, 'updateTaskGuideline']);
 Route::get('/task-guideline-authorization/{id}', [TaskController::class, 'taskGuidelineAuthorization']);
 Route::get('/server-time-status', [TaskController::class, 'dailyServerStatus']);
-
-
-
-//  Price Qutation Routes
-Route::resource('price-quotation', PriceQuotationController::class);
