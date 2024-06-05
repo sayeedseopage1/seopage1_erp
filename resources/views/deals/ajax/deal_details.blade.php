@@ -1041,12 +1041,7 @@
                             @if ($deal->deal_stage == 0)
                                 @include('contracts.modals.dealqualifymodal2')
                             @endif
-                        @elseif(
-                            $deal->deal_stage == 1 ||
-                                $deal->deal_stage == 2 ||
-                                $deal->deal_stage == 3 ||
-                                $deal->deal_stage == 4 ||
-                                $deal->deal_stage == 5)
+                        @elseif($deal->deal_stage >= 1)
                             <?php
 
                             $lead_converted_to_qualified = App\Models\DealStageChange::where('deal_id', $deal->short_code)
@@ -1200,7 +1195,7 @@
                                 Click me to Change Stage
                             </a>
                             @include('contracts.modals.dealqualifymodal2')
-                        @elseif($deal->deal_stage == 2 || $deal->deal_stage == 3 || $deal->deal_stage == 4 || $deal->deal_stage == 5)
+                        @elseif($deal->deal_stage >= 2)
                             <?php
 
                             $lead_converted_to_req_def = App\Models\DealStageChange::where('deal_id', $deal->short_code)
@@ -1336,7 +1331,7 @@
                                 Click me to Change Stage
                             </a>
                             @include('contracts.modals.dealqualifymodal2')
-                        @elseif($deal->deal_stage == 3 || $deal->deal_stage == 4 || $deal->deal_stage == 5)
+                        @elseif($deal->deal_stage >= 2)
                             <?php
 
                             $lead_converted_to_prop_def = App\Models\DealStageChange::where('deal_id', $deal->short_code)
@@ -1483,7 +1478,7 @@
                                 Click me to Change Stage
                             </a>
                             @include('contracts.modals.dealqualifymodal2')
-                        @elseif($deal->deal_stage == 4 || $deal->deal_stage == 5)
+                        @elseif($deal->deal_stage >= 3)
                             <?php
 
                             $lead_converted_to_neg_def = App\Models\DealStageChange::where('deal_id', $deal->short_code)
@@ -1624,7 +1619,7 @@
                                 Click me to Change Stage
                             </a>
                             @include('contracts.modals.dealqualifymodal2')
-                        @elseif($deal->deal_stage == 5)
+                        @elseif($deal->deal_stage >= 4)
                             <?php
 
                             $lead_converted_to_mile_def = App\Models\DealStageChange::where('deal_id', $deal->short_code)
