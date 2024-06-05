@@ -1,7 +1,7 @@
 import _ from "lodash";
 import React, { useState } from "react";
-import { Link, useLocation, useSearchParams } from 'react-router-dom';
-import styled from 'styled-components';
+import { Link, useLocation, useSearchParams } from "react-router-dom";
+import styled from "styled-components";
 import { RevisionTableColumns } from "../components/revision-page/RevisionTableColumns";
 import Filterbar from "../components/revision-page/filterbar/Filterbar";
 import { useGetRevisionsQuery } from "../services/api/revisionApiSlice";
@@ -11,6 +11,7 @@ import Toaster from "../ui/Toaster";
 import DataTable from "../ui/basic-table/DataTable";
 import TableLoader from "../ui/basic-table/TableLoader";
 import { User } from "../utils/user-details";
+import RevisionTableExportButton from "../components/revision-page/RevisionTableExportButton";
 
 const Revision = () => {
     const auth = new User(window.Laravel.user);
@@ -18,7 +19,7 @@ const Revision = () => {
     const location = useLocation();
     const [searchParam] = useSearchParams();
 
-    const activeTab = searchParam.get('tab');
+    const activeTab = searchParam.get("tab");
 
     /**
      * * Fetch revision data
@@ -35,25 +36,48 @@ const Revision = () => {
         <section className={styles.revision_section_container}>
             {/* filter */}
             <div>
-                <Filterbar onFilter={(filter) => setFilter(filter)} isOwnRevision={activeTab === 'my-revision'}/>
+                <Filterbar
+                    onFilter={(filter) => setFilter(filter)}
+                    isOwnRevision={activeTab === "my-revision"}
+                />
             </div>
 
             {/* Tab bar */}
-            <Flex justifyContent="space-between" className="mb-3">
-                {
-                    auth.getRoleId() === 8 ?
-                    <Tabs>
-                        <Tab to={location.pathname} className={!activeTab ? 'active' : ''}> All </Tab>
-                        <Tab
-                            to={`${location.pathname}?tab=my-revision`}
-                            className={activeTab === 'my-revision' ? 'active' : ''}
-                        > My Revision </Tab>
-                    </Tabs> : null
-                }
+            <Flex justifyContent="space-between" className="mb-2">
+                <div>
+                    <div style={{ display: "flex", marginLeft: "10px " }}>
+                        {auth.getRoleId() === 8 ? (
+                            <Tabs>
+                                <Tab
+                                    to={location.pathname}
+                                    className={!activeTab ? "active" : ""}
+                                >
+                                    {" "}
+                                    All{" "}
+                                </Tab>
+                                <Tab
+                                    to={`${location.pathname}?tab=my-revision`}
+                                    className={
+                                        activeTab === "my-revision"
+                                            ? "active"
+                                            : ""
+                                    }
+                                >
+                                    {" "}
+                                    My Revision{" "}
+                                </Tab>
+                            </Tabs>
+                        ) : null}
 
+                        <div style={{ marginTop: "14px", marginLeft: "10px" }}>
+                            {" "}
+                            <RevisionTableExportButton filter={filter.filter} />
+                        </div>
+                    </div>
+                </div>
 
                 <RefreshButton onClick={refetch}>
-                    {isFetching ? <Loader title="Refreshing..." /> : 'Refresh'}
+                    {isFetching ? <Loader title="Refreshing..." /> : "Refresh"}
                 </RefreshButton>
             </Flex>
 
@@ -67,7 +91,7 @@ const Revision = () => {
                     tableColumns={[...RevisionTableColumns]}
                     state={{ isFetching }}
                     // hideColumns={auth?.getRoleId() === 1 ? ['action']: []}
-                    loader={<TableLoader columns ={RevisionTableColumns} />}
+                    loader={<TableLoader columns={RevisionTableColumns} />}
                 />
             </div>
 
@@ -78,12 +102,12 @@ const Revision = () => {
 
 export default Revision;
 
-
 const Flex = styled.div`
     display: flex;
-    align-items: ${props => props.alignItems ?? 'center'} ;
-    justify-content: ${props => props.justifyContent ?? 'center'};
-    gap: ${props => props.gap ?? '10px'};
+    align-items: ${(props) => props.alignItems ?? "center"};
+    justify-content: ${(props) => props.justifyContent ?? "center"};
+    gap: ${(props) => props.gap ?? "10px"};
+    height: 60px;
 `;
 
 const Tabs = styled(Flex)``;
@@ -96,7 +120,7 @@ const Tab = styled(Link)`
     color: #777;
 
     &:hover,
-    &.active{
+    &.active {
         color: #fff !important;
         background: var(--header_color);
         border-color: var(--header_color);

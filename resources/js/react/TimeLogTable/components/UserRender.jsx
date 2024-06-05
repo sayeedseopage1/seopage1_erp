@@ -6,7 +6,7 @@ const UserRender = ({ image, name, role, id, profileUrl, roleLink }) => {
             {image ? (
                 <img
                     src={`/user-uploads/avatar/${image}`}
-                    alt={''}
+                    alt={""}
                     className="rounded-circle "
                     style={{ width: 32, height: 32 }}
                 />
@@ -31,10 +31,21 @@ const UserRender = ({ image, name, role, id, profileUrl, roleLink }) => {
 
             <div className="">
                 <h6 className="mb-0 f-14">
-                    <a href={profileUrl} className="text-hover-underline">{name}</a>
+                    <a href={profileUrl} className="text-hover-underline">
+                        <span style={{ color: "#3366CC" }}> {name}</span>
+                    </a>
                 </h6>
                 <span className="f-12">
-                    {roleLink ? <a href={roleLink} className="text-dark text-hover-underline">{role}</a> : role}
+                    {roleLink ? (
+                        <a
+                            href={roleLink}
+                            className="text-dark text-hover-underline"
+                        >
+                            {role}
+                        </a>
+                    ) : (
+                        role
+                    )}
                 </span>
             </div>
         </div>

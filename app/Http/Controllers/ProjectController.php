@@ -57,6 +57,11 @@ use App\DataTables\ProjectNotesDataTable;
 use App\Http\Requests\Project\StoreProject;
 use App\DataTables\ArchiveProjectsDataTable;
 use App\DataTables\ArchiveTasksDataTable;
+use App\DataTables\NicheCategoryDataTable;
+use App\DataTables\ProjectCmsDataTable;
+use App\DataTables\WebsitePluginDataTable;
+use App\DataTables\WebsiteThemeDataTable;
+use App\DataTables\WebsiteTypeDataTable;
 use App\Http\Requests\Project\UpdateProject;
 use Maatwebsite\Excel\Imports\HeadingRowFormatter;
 use App\Http\Requests\Admin\Employee\ImportRequest;
@@ -3959,74 +3964,99 @@ class ProjectController extends AccountBaseController
         //        route('dealDetails', $deal->id)
 
     }
-    public function viewCms()
+    public function viewCms(ProjectCmsDataTable $dataTable)
     {
         $this->pageTitle = 'CMS';
-        $this->all_cms = DB::table('project_cms')->orderBy('id', 'desc')->paginate(10);
-        return view('projects.cms.index', $this->data);
+        return $dataTable->render('projects.cms.index',$this->data);
     }
     public function storeCms(Request $request)
     {
         $validated = $request->validate([
-            'cms_name' => 'required',
+            'cms_name' => 'required|unique:project_cms',
         ], [
             'cms_name.required' => 'This field is required!!',
+            'cms_name.unique' => 'The CMS name must be unique!',
         ]);
         $cms = new ProjectCms();
         $cms->cms_name = $request->cms_name;
         $cms->save();
-        return response()->json(['status' => 200]);
+        return response()->json(['status' => 200, 'cms' => $cms]);
     }
-    public function updateCms(Request $request, $id)
+    public function editCms(Request $request)
     {
-        $cms = ProjectCms::find($id);
+        $this->id = $request->id;
+        return view('projects.modals.editcmsmodal', $this->data);
+    }
+    public function checkCMS(Request $request)
+    {
+        $data = ProjectCMS::where('cms_name', 'LIKE', "%{$request->cms_name}%")->pluck('cms_name');
+        return response()->json($data);
+    }
+    public function updateCms(Request $request)
+    {
+        $cms = ProjectCms::find($request->cms_id);
         $cms->cms_name = $request->cms_name;
         $cms->save();
 
         return response()->json(['status' => 200]);
     }
     // VIEW PROJECT WEBSITE SECTION
-    public function viewWebsiteType()
+    public function viewWebsiteType(WebsiteTypeDataTable $dataTable)
     {
         $this->pageTitle = 'Website Type';
-        $this->website_types = DB::table('project_website_types')->orderBy('id', 'desc')->paginate(10);
-        return view('projects.website-type.index', $this->data);
+        return $dataTable->render('projects.website-type.index', $this->data);
+    }
+    public function checkWebsiteType(Request $request)
+    {
+        $data = ProjectWebsiteType::where('website_type', 'LIKE', "%{$request->website_type}%")->pluck('website_type');
+        return response()->json($data);
     }
     public function storeWebsiteType(Request $request)
     {
         $validated = $request->validate([
-            'website_type' => 'required',
+            'website_type' => 'required|unique:project_website_types',
         ], [
             'website_type.required' => 'This field is required!!',
+            'website_type.unique' => 'The website type must be unique!',
         ]);
         $project_website_type = new ProjectWebsiteType();
         $project_website_type->website_type = $request->website_type;
         $project_website_type->save();
         return response()->json(['status' => 200]);
     }
-    public function updateWebsiteType(Request $request, $id)
+    public function editWebsiteType(Request $request)
     {
-        $project_website_type = ProjectWebsiteType::find($id);
+        $this->id = $request->id;
+        return view('projects.modals.editwebsitetypemodal', $this->data);
+    }
+    public function updateWebsiteType(Request $request)
+    {
+        $project_website_type = ProjectWebsiteType::find($request->id);
         $project_website_type->website_type = $request->website_type;
         $project_website_type->save();
 
         return response()->json(['status' => 200]);
     }
     // VIEW PROJECT WEBSITE THEME SECTION
-    public function viewWebsiteTheme()
+    public function viewWebsiteTheme(WebsiteThemeDataTable $dataTable)
     {
         $this->pageTitle = 'Website Theme';
-        $this->website_themes = DB::table('project_website_themes')->orderBy('id', 'desc')->paginate(10);
-        return view('projects.website-theme.index', $this->data);
+        return $dataTable->render('projects.website-theme.index', $this->data);
+    }
+    public function checkWebsiteTheme(Request $request)
+    {
+        $data = ProjectWebsiteTheme::where('theme_name', 'LIKE', "%{$request->theme_name}%")->pluck('theme_name');
+        return response()->json($data);
     }
     public function storeWebsiteTheme(Request $request)
     {
         $validated = $request->validate([
-            'theme_name' => 'required',
+            'theme_name' => 'required|unique:project_website_themes',
             'theme_url' => 'required|url',
         ], [
             'theme_name.required' => 'This field is required!!',
             'theme_url.required' => 'This field is required!!',
+            'theme_name.unique' => 'The theme name must be unique!',
         ]);
         $project_website_theme = new ProjectWebsiteTheme();
         $project_website_theme->theme_name = $request->theme_name;
@@ -4034,9 +4064,14 @@ class ProjectController extends AccountBaseController
         $project_website_theme->save();
         return response()->json(['status' => 200]);
     }
-    public function updateWebsiteTheme(Request $request, $id)
+    public function editWebsiteTheme(Request $request)
     {
-        $project_website_theme = ProjectWebsiteTheme::find($id);
+        $this->id = $request->id;
+        return view('projects.modals.editwebsitethememodal', $this->data);
+    }
+    public function updateWebsiteTheme(Request $request)
+    {
+        $project_website_theme = ProjectWebsiteTheme::find($request->id);
         $project_website_theme->theme_name = $request->theme_name;
         $project_website_theme->theme_url = $request->theme_url;
         $project_website_theme->save();
@@ -4045,11 +4080,15 @@ class ProjectController extends AccountBaseController
     }
 
     // VIEW PROJECT WEBSITE PLUGIN SECTION
-    public function viewWebsitePlugin()
+    public function viewWebsitePlugin(WebsitePluginDataTable $dataTable)
     {
         $this->pageTitle = 'Website Plugin';
-        $this->website_plugins = DB::table('project_website_plugins')->orderBy('id', 'desc')->paginate(10);
-        return view('projects.website-plugin.index', $this->data);
+        return $dataTable->render('projects.website-plugin.index', $this->data);
+    }
+    public function checkWebsitePlugin(Request $request)
+    {
+        $data = ProjectWebsitePlugin::where('plugin_name', 'LIKE', "%{$request->plugin_name}%")->pluck('plugin_name');
+        return response()->json($data);
     }
     public function storeWebsitePlugin(Request $request)
     {
@@ -4061,9 +4100,14 @@ class ProjectController extends AccountBaseController
         }
         return response()->json(['status' => 200]);
     }
-    public function updateWebsitePlugin(Request $request, $id)
+    public function editWebsitePlugin(Request $request)
     {
-        $project_website_plugin = ProjectWebsitePlugin::find($id);
+        $this->id = $request->id;
+        return view('projects.modals.editwebsitepluginmodal', $this->data);
+    }
+    public function updateWebsitePlugin(Request $request)
+    {
+        $project_website_plugin = ProjectWebsitePlugin::find($request->id);
         $project_website_plugin->plugin_name = $request->plugin_name;
         $project_website_plugin->plugin_url = $request->plugin_url;
         $project_website_plugin->save();
@@ -4072,11 +4116,20 @@ class ProjectController extends AccountBaseController
     }
 
     // VIEW PROJECT CATEGORY SECTION
-    public function viewCategory()
+    public function viewCategory(NicheCategoryDataTable $dataTable)
     {
         $this->pageTitle = 'Categories';
-        $this->categories = ProjectNiche::with('parent', 'child')->paginate(10);
-        return view('projects.category.index', $this->data);
+        return $dataTable->render('projects.category.index', $this->data);
+    }
+    public function checkCategory(Request $request)
+    {
+        $data = ProjectNiche::where('category_name', 'LIKE', "%{$request->category_name}%")->pluck('category_name');
+        return response()->json($data);
+    }    
+    public function editCategory(Request $request)
+    {
+        $this->id = $request->id;
+        return view('projects.modals.editnichemodal', $this->data);
     }
 
     public function parentCategoryId($id)
@@ -5342,9 +5395,10 @@ public function updatePmBasicSEO(Request $request){
     {
         //        dd($request->all());
         $request->validate([
-            'category_name' => 'required',
+            'category_name' => 'required|unique:project_niches',
         ], [
             'category_name.required' => 'Please enter the category name!',
+            'category_name.unique' => 'The category name must be unique!',
         ]);
         $category = new ProjectNiche();
         $category->category_name = $request->category_name;
@@ -5357,9 +5411,9 @@ public function updatePmBasicSEO(Request $request){
             'message' => 'Category Added Successfully',
         ]);
     }
-    public function updateCategory(Request $request, $id)
+    public function updateCategory(Request $request)
     {
-        $update_category = ProjectNiche::find($id);
+        $update_category = ProjectNiche::find($request->id);
         $update_category->category_name = $request->category_name;
         $update_category->parent_category_id = $request->parent_category_id;
         $update_category->save();

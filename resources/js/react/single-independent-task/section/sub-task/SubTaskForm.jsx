@@ -299,7 +299,7 @@ const SubTaskForm = ({ close, isFirstSubtask = false }) => {
                         Swal.fire({
                             position: "center",
                             icon: "error",
-                            title: "Please fill up all required fields",
+                            title: "Task title should be unique on this project",
                             showConfirmButton: true,
                         });
                     }
@@ -537,6 +537,7 @@ const SubTaskForm = ({ close, isFirstSubtask = false }) => {
                                 <AssginedToSelection
                                     selected={assignedTo}
                                     onSelect={setAssignedTo}
+                                    taskCategory={taskCategory}
                                 />
 
                                 {err?.assignedTo && (
@@ -553,7 +554,7 @@ const SubTaskForm = ({ close, isFirstSubtask = false }) => {
                                             assignedTo?.gender === "male"
                                                 ? "He "
                                                 : "She "
-                                        } has more than 10 Submittable tasks.`}
+                                        } has more than 4 Submittable tasks.`}
                                     </div>
                                 )}
                             </div>

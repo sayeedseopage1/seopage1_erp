@@ -15,12 +15,14 @@ use App\Models\ProjectTimeLogBreak;
 use App\Models\Task;
 use App\Models\TaskboardColumn;
 use App\Models\User;
+use App\Models\EmployeeEvaluation;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Facades\Excel;
 use Auth;
 use App\Models\DeveloperStopTimer;
+use App\Models\EmployeeEvaluationTask;
 use App\Models\TaskRevision;
 use App\Models\PendingAction;
 use App\Models\PendingActionPast;
@@ -369,8 +371,7 @@ class TimelogController extends AccountBaseController
      */
     public function startTimer(Request $request)
     {
-
-    //DB::beginTransaction();
+    // DB::beginTransaction();
      $userID = Auth::id(); // Replace with the actual user ID
 
     //  $yesterdayDate = ProjectTimeLog::where('user_id', $userID)
@@ -783,7 +784,7 @@ class TimelogController extends AccountBaseController
 
     public function stopTimer(Request $request)
     {
-    // dd($request);
+    // dd($request->all());
      if(Auth::user()->role_id == 1)
      {
         $timeId = $request->timeId;
@@ -798,6 +799,21 @@ class TimelogController extends AccountBaseController
         $timeLog->total_minutes = ((int)$timeLog->total_hours * 60) + (int)($timeLog->end_time->diff($timeLog->start_time)->format('%i'));
         $timeLog->edited_by_user = $this->user->id;
         $timeLog->save();
+
+        /**EMPLOYEE EVALUATION START */
+        $taskFind = Task::where('id',$request->task_id)->where('u_id',null)->where('independent_task_status',1)->first(); //Find SubTask
+        if($taskFind != null){
+            $evaluation = EmployeeEvaluationTask::where('task_id',$taskFind->id)->first();
+            if($evaluation !=null)
+            {
+                $evaluation->total_hours = $timeLog->total_hours;
+                $evaluation->total_min = $timeLog->total_minutes;
+                $evaluation->save();
+            }
+        }
+
+        /**EMPLOYEE EVALUATION END */
+
         $html = $this->showActiveTimer()->render();
         return Reply::successWithData(__('messages.timerStoppedSuccessfully'), ['html' => $html, 'activeTimerCount' => $this->activeTimerCount]);
 
@@ -828,6 +844,24 @@ class TimelogController extends AccountBaseController
         $timeLog->total_minutes = ((int)$timeLog->total_hours * 60) + (int)($timeLog->end_time->diff($timeLog->start_time)->format('%i'));
         $timeLog->edited_by_user = $this->user->id;
         $timeLog->save();
+
+        /**EMPLOYEE EVALUATION START */
+        $taskFind = Task::where('id',$request->task_id)->where('u_id',null)->where('independent_task_status',1)->first(); //Find SubTask
+        if($taskFind != null){
+            $evaluation = EmployeeEvaluationTask::where('task_id',$taskFind->id)->first();
+            if($evaluation->total_min !=null)
+            {
+                $evaluation->total_hours = $evaluation->total_hours + $timeLog->total_hours;
+                $evaluation->total_min = $evaluation->total_min + $timeLog->total_minutes;
+                $evaluation->save();
+            }else{
+                $evaluation->total_hours = $timeLog->total_hours;
+                $evaluation->total_min = $timeLog->total_minutes;
+                $evaluation->save();
+            }
+        }
+
+        /**EMPLOYEE EVALUATION END */
 
         // Stop breaktime if active
         /** @phpstan-ignore-next-line */
