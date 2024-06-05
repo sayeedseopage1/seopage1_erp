@@ -69,7 +69,6 @@ const Incentive = () => {
                             </Switch.Case>
                             <Switch.Case condition={filterByPeriod == "quarterly" || filterByPeriod == "yearly"}>
                                 <div className='incentive_inner_wrapper'>
-                                    {/* TODO: this slice will be removed when the api filter is ready */}
                                     <QuarterAndYearlyTable data={achievedIncentiveHistoryData} isFetching={achievedIncentiveHistoryIsFetching} isLoading={achievedIncentiveHistoryLoading} />
                                 </div>
                             </Switch.Case>

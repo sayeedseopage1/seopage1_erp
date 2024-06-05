@@ -76,7 +76,7 @@ const QuarterAndYearlyTable = ({ data, isFetching, isLoading }) => {
                     },
                 }}
             >
-                <Table rowKey="id" columns={columns} dataSource={data} pagination={false} scroll={{ x: 1400, y: 1000 }} bordered />
+                <Table rowKey="date" columns={columns} dataSource={data} pagination={false} scroll={{ x: 1400, y: 1000 }} bordered />
             </ConfigProvider>
         </div>
     );
