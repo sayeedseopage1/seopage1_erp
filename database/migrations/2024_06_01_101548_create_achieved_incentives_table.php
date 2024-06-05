@@ -18,6 +18,7 @@ return new class extends Migration
             $table->timestamp('date');
             $table->unsignedBigInteger('user_id')->comment('Here user_id used as pm_id but the field can be used for another user also');
             $table->foreignId('incentive_type_id')->nullable()->constrained();
+            $table->decimal('acquired_points')->default(0);
             $table->decimal('incentive_point')->default(0);
             $table->decimal('cash_value')->default(0);
             $table->decimal('total_cash_amount')->default(0)->comment('total_cash_value = incentive_point * cash_value');

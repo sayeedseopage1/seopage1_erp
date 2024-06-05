@@ -122,7 +122,7 @@ class DisbursePmIncentiveMonthly extends Command
             if (in_array(0, $obtainedIncentive)) {
                 $achieved_regular_incentive = 0;
             } else {
-                $achieved_regular_incentive = (($totalEarnedPoints + $totalLostPoints) / 100) * (array_sum($obtainedIncentive) / count($obtainedIncentive));
+                $achieved_regular_incentive = (($totalEarnedPoints - $totalLostPoints) / 100) * (array_sum($obtainedIncentive) / count($obtainedIncentive));
             }
 
             // Achieved regular bonus
@@ -131,6 +131,7 @@ class DisbursePmIncentiveMonthly extends Command
                 'date' => $now,
                 'user_id' => $user->id,
                 'incentive_type_id' => 1,
+                'acquired_points' => $totalEarnedPoints - $totalLostPoints,
                 'incentive_point' => $achieved_regular_incentive,
                 'cash_value' => $incentiveType->cash_value,
                 'total_cash_amount' => $incentiveType->cash_value * $achieved_regular_incentive
@@ -155,6 +156,7 @@ class DisbursePmIncentiveMonthly extends Command
                 'date' => $now,
                 'user_id' => $user->id,
                 'incentive_type_id' => 2,
+                'acquired_points' => $upsale_amount,
                 'incentive_point' => $achieved_upsale_incentive,
                 'cash_value' => $incentiveType->cash_value,
                 'total_cash_amount' => $incentiveType->cash_value * $achieved_upsale_incentive
@@ -234,6 +236,7 @@ class DisbursePmIncentiveMonthly extends Command
                 'date' => $now,
                 'user_id' => $user->id,
                 'incentive_type_id' => 3,
+                'acquired_points' => $acquired_bonus_points,
                 'incentive_point' => $achieved_bonus_incentive,
                 'cash_value' => $incentiveType->cash_value,
                 'total_cash_amount' => $incentiveType->cash_value * $achieved_bonus_incentive
