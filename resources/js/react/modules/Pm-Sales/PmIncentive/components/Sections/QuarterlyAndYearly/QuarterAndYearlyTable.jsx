@@ -85,5 +85,7 @@ const QuarterAndYearlyTable = ({ data, isFetching, isLoading }) => {
 export default QuarterAndYearlyTable;
 
 QuarterAndYearlyTable.propTypes = {
-    data: PropTypes.array
+    data: PropTypes.array,
+    isFetching: PropTypes.bool,
+    isLoading: PropTypes.bool
 }

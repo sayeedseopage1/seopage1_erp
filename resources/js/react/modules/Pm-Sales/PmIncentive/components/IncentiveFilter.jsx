@@ -219,4 +219,5 @@ export default function IncentiveFilter({ filterByPeriod, setQueryForAchievedInc
 
 IncentiveFilter.propTypes = {
     filterByPeriod: PropTypes.string,
+    setQueryForAchievedIncentive: PropTypes.func,
 }

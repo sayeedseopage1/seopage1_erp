@@ -12,7 +12,6 @@ import HeldAmounts from '../components/Sections/HeldAmounts/HeldAmounts';
 import FilterBar from '../components/Sections/IncentiveCriterias/FilterBar';
 import Spinner from '../../PointFactors/components/loader/Spinner';
 import QuarterAndYearlyTable from '../components/Sections/QuarterlyAndYearly/QuarterAndYearlyTable';
-import { quarterlyAndYearlyTableData } from '../constants';
 import useIncentive from '../hooks/useIncentive';
 import { useGetAchievedIncentiveQuery } from '../../../../services/api/Pm-Sales/PmIncentiveApiSlice';
 
