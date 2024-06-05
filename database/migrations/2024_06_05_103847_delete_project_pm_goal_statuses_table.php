@@ -13,7 +13,7 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::drop('project_pm_goal_statuses');
+        if(Schema::hasTable('project_pm_goal_statuses')) Schema::drop('project_pm_goal_statuses');
     }
 
     /**
