@@ -524,33 +524,36 @@ class SubTaskController extends AccountBaseController
             /**EMPLOYEE EVALUATION START */
             $taskFind = Task::where('subtask_id',$subTask->id)->where('u_id',null)->where('independent_task_status',1)->first(); //Find SubTask
             if($taskFind != null){
-                $evaluation = EmployeeEvaluation::where('user_id', $subTask->assigned_to)->first();
-                if ($evaluation->start_date == null) {
-                    $evaluation->start_date = Carbon::now();
-                    $emp_start_task = $evaluation->start_date;
+                $task_user = User::where('id', $subTask->assigned_to)->first();
+                if($task_user->role_id == 14){
+                    $evaluation = EmployeeEvaluation::where('user_id', $subTask->assigned_to)->first();
+                    if ($evaluation->start_date == null) {
+                        $evaluation->start_date = Carbon::now();
+                        $emp_start_task = $evaluation->start_date;
 
-                    $exp_date = Carbon::parse($emp_start_task)->addDays(7);
-                    $countSundays = 0;
-                    $currentDate = $emp_start_task->copy(); 
-                    while ($currentDate->lte($exp_date)) {
-                        if ($currentDate->dayOfWeek === Carbon::SUNDAY) {
-                            $countSundays++;
+                        $exp_date = Carbon::parse($emp_start_task)->addDays(7);
+                        $countSundays = 0;
+                        $currentDate = $emp_start_task->copy(); 
+                        while ($currentDate->lte($exp_date)) {
+                            if ($currentDate->dayOfWeek === Carbon::SUNDAY) {
+                                $countSundays++;
+                            }
+                            $currentDate->addDay(); 
                         }
-                        $currentDate->addDay(); 
+                        
+                        $evaluation->exp_date = Carbon::parse($emp_start_task)->addDays(7 + $countSundays);
+                        
+                        $evaluation->save();
                     }
-                    
-                    $evaluation->exp_date = Carbon::parse($emp_start_task)->addDays(7 + $countSundays);
-                    
-                    $evaluation->save();
+                    $evaluation_history = EvaluationHistory::where('user_id', $subTask->assigned_to)->count();
+                    $evaluation_task = new EmployeeEvaluationTask();
+                    $evaluation_task->user_id = $subTask->assigned_to;
+                    $evaluation_task->task_id = $taskFind->id;
+                    $evaluation_task->task_name = $taskFind->heading;
+                    $evaluation_task->assign_date = $taskFind->created_at;
+                    $evaluation_task->round = $evaluation_history + 1;
+                    $evaluation_task->save();
                 }
-                $evaluation_history = EvaluationHistory::where('user_id', $subTask->assigned_to)->count();
-                $evaluation_task = new EmployeeEvaluationTask();
-                $evaluation_task->user_id = $subTask->assigned_to;
-                $evaluation_task->task_id = $taskFind->id;
-                $evaluation_task->task_name = $taskFind->heading;
-                $evaluation_task->assign_date = $taskFind->created_at;
-                $evaluation_task->round = $evaluation_history + 1;
-                $evaluation_task->save();
             }
             /**EMPLOYEE EVALUATION END */
 
