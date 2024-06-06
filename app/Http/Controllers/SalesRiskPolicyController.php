@@ -1052,6 +1052,12 @@ class SalesRiskPolicyController extends AccountBaseController
 
                     $data[] = ['id' => $questions[1]->id, 'title' => $questions[1]->title, 'value' => $value, 'parent_id' => $questions[1]->parent_id];
                     $policyIdList[$policy[1]->id] = $value;
+
+                    if (isset($questions[2]) && isset($questionAns[$questions[2]->id]))
+                    {
+                        $value = $questionAns[$questions[2]->id];
+                        $data[] = ['id' => $questions[2]->id, 'title' => $questions[2]->title, 'value' => $value, 'parent_id' => $questions[1]->parent_id];
+                    }
                 }
 
                 $pointData['doneByElse']['points'] = $pointValue;
