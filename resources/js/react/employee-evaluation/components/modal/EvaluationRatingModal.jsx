@@ -40,6 +40,7 @@ const EvaluationRatingModal = ({
     isSingleEvaluationModalOpen,
     data,
 }) => {
+    // console.log("data in evaluation rating modal", data);
     const { evaluationObject, setEvaluationObject } = useEmployeeEvaluation();
     const userIdFromParam = new URLSearchParams(location.search).get("user_id");
 
@@ -77,6 +78,7 @@ const EvaluationRatingModal = ({
         fetchData();
     }, [userIdFromParam]);
 
+    console.log("eval object after fetch", evaluationObject);
     useEffect(() => {
         const calculateAverageRating = (formData) => {
             const ratings = Object.values(formData).filter(
@@ -326,10 +328,10 @@ const EvaluationRatingModal = ({
                                 <LeadDevName>
                                     By{" "}
                                     <a
-                                        href={`/account/employees/${evaluationObject?.added_by_id}`}
+                                        href={`/account/employees/${data?.added_by_id}`}
                                         target="_blank"
                                     >
-                                        {evaluationObject?.added_by_name}
+                                        {data?.added_by_name}
                                     </a>{" "}
                                     on{" "}
                                     <span>{FormatDate(data?.updated_at)}</span>
@@ -348,10 +350,10 @@ const EvaluationRatingModal = ({
                             <LeadDevName>
                                 By{" "}
                                 <a
-                                    href={`/account/employees/${evaluationObject?.added_by_id}`}
+                                    href={`/account/employees/${data?.added_by_id}`}
                                     target="_blank"
                                 >
-                                    {evaluationObject?.added_by_name}
+                                    {data?.added_by_name}
                                 </a>{" "}
                                 on <span>{FormatDate(data?.updated_at)}</span>
                             </LeadDevName>

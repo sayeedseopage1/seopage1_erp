@@ -447,16 +447,15 @@ const EvaluationRequiredRoundsTaskListModal = ({
                                 <ReviewFooter>
                                     By{" "}
                                     <a
-                                        href={`/account/employees/208`}
+                                        href={`/account/employees/${singleEvaluation?.team_lead_id}`}
                                         target="_blank"
-                                        v
                                     >
-                                        Mohammad Sayeed Ullah
+                                        {singleEvaluation?.team_lead_name}
                                     </a>{" "}
                                     on{" "}
                                     <span>
                                         {FormatDate(
-                                            singleEvaluation.updated_at
+                                            singleEvaluation?.updated_at
                                         )}
                                     </span>
                                 </ReviewFooter>

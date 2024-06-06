@@ -65,7 +65,7 @@ const EvaluationAcknowledgeModal = ({
                     const response = await axios.get(
                         `/account/get-single-evaluation/${developerId}`
                     );
-                    console.log(response);
+                    // console.log(response);
                     setSingleEvaluation(response?.data.data[0]);
                     setEvaluationObject(response?.data.data[0]);
                 }
@@ -221,8 +221,11 @@ const EvaluationAcknowledgeModal = ({
 
                         <ReviewFooter>
                             By{" "}
-                            <a href="www.teamLead.com" target="_blank">
-                                Mohammad Sayeed Ullah
+                            <a
+                                href={`/account/employees/${singleEvaluation?.team_lead_id}`}
+                                target="_blank"
+                            >
+                                {singleEvaluation?.team_lead_name}
                             </a>{" "}
                             on{" "}
                             <span>
