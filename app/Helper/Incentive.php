@@ -171,8 +171,8 @@ class Incentive
                 ->whereNot('project_milestones.status', 'canceled')
                 ->where('projects.project_status','Accepted')
                 ->sum('project_milestones.cost');
-
-                $this_month_released_percent = round(($released_amount_this_month_assigned / $assigned_amount_this_month) * 100, 2);
+                
+                $this_month_released_percent = $assigned_amount_this_month ? round(($released_amount_this_month_assigned / $assigned_amount_this_month) * 100, 2) : 0;
                 $previous_months_released_percent = round((($released_amount_this_month - $released_amount_this_month_assigned) / $remain_unreleased_amount_last_months) * 100, 2);
                 $match_trigger = 0;
                 $incentiveCriteria->acquired_percent = round($assigned_amount_this_month + $remain_unreleased_amount_last_months - $released_amount_this_month, 2);
