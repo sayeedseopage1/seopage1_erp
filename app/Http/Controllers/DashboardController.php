@@ -671,7 +671,7 @@ class DashboardController extends AccountBaseController
 
     public function clockOutStatus()
     {
-        DB::beginTransaction();
+        // DB::beginTransaction();
         $user_id = Auth::user()->id;
         $today = Carbon::now();
 
@@ -735,7 +735,7 @@ class DashboardController extends AccountBaseController
 
         $incomplete_hours = $minimum_log_hours - $userTotalMin;
 
-        $time_log = ProjectTimeLog::where('user_id',$user_id)->whereDate('created_at',$today)->orderBy('created_at','desc')->get()->toArray();
+        $time_log = ProjectTimeLog::where('user_id',$user_id)->whereDate('created_at',$today)->orderBy('created_at','desc')->get();
 
         return response()->json([
             'data' => [
