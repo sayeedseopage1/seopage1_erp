@@ -92,7 +92,7 @@ const DateFilter = ({ startDate, endDate, setStartDate, setEndDate, subtract, ty
                                 «
                             </button>
                             <div className='font-weight-bold'>{year}</div>
-                            <button aria-label='next' className='btn btn-sm f-18' onClick={nextYear} disabled={type === 'monthly' && year >= currentYear}>
+                            <button aria-label='next' className='btn btn-sm f-18' onClick={nextYear} disabled={type === 'monthly' && year >= currentYear} style={{ cursor: type === 'monthly' && year >= currentYear ? 'not-allowed' : 'pointer' }}>
                                 »
                             </button>
                         </div>
