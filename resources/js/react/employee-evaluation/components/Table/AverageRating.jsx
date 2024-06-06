@@ -24,7 +24,8 @@ const AverageRating = ({ data }) => {
             // Filter tasks that have the latest round
             const tasks = TaskList.data.filter(
                 (task) =>
-                    task.round === latestRound && task.submission_date !== null
+                    task.round === latestRound &&
+                    ![1, 2, 3].includes(task?.task_board_column_id)
             );
 
             setLatestRoundTasks(tasks);
@@ -136,7 +137,10 @@ const AverageRating = ({ data }) => {
                     >
                         <div>
                             <span>Lead Developer Average Rating</span>
-                            <span> {totalAverage.toFixed(2) ?? "N/A"}</span>
+                            <span>
+                                {" "}
+                                {`(${totalAverage.toFixed(2) ?? "N/A"})`}
+                            </span>
                         </div>
                     </Card.Head>
 
