@@ -78,7 +78,6 @@ const EvaluationRatingModal = ({
         fetchData();
     }, [userIdFromParam]);
 
-    console.log("eval object after fetch", evaluationObject);
     useEffect(() => {
         const calculateAverageRating = (formData) => {
             const ratings = Object.values(formData).filter(
