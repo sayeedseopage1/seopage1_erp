@@ -67,29 +67,7 @@ class IncentiveFactorController extends Controller
                         ->whereBetween('project_milestones.created_at', [$startDate, $endDate])
                         ->where('projects.project_status','Accepted')
                         ->sum('cost');
-
-                        $released_amount_this_month_assigned = DB::table('users')
-                        ->join('projects', 'users.id', '=', 'projects.pm_id')
-                        ->join('project_milestones', 'projects.id', '=', 'project_milestones.project_id')
-                        ->join('payments', 'project_milestones.invoice_id', '=', 'payments.invoice_id')
-                        //->whereNotNull('project_milestones.invoice_id')
-                        ->whereBetween('project_milestones.created_at', [$startDate, $endDate])
-                        ->whereBetween('payments.paid_on', [$startDate, $endDate])
-                        ->where('payments.added_by', $user_id)
-                        ->whereNot('project_milestones.status', 'canceled')
-                        ->where('projects.project_status','Accepted')
-                        ->sum('project_milestones.cost');
-
-                        $released_amount_this_month = DB::table('users')
-                        ->join('projects', 'users.id', '=', 'projects.pm_id')
-                        ->join('project_milestones', 'projects.id', '=', 'project_milestones.project_id')
-                        ->join('payments', 'project_milestones.invoice_id', '=', 'payments.invoice_id')
-                        //->whereNotNull('project_milestones.invoice_id')
-                        ->whereBetween('payments.paid_on', [$startDate, $endDate])
-                        ->where('payments.added_by', $user_id)
-                        ->whereNot('project_milestones.status', 'canceled')
-                        ->where('projects.project_status','Accepted')
-                        ->sum('project_milestones.cost');
+                        
                         foreach($incentiveCriteria->incentiveFactors as $factor){
                             $factor->upper_limit = round(($assigned_amount_this_month - (($assigned_amount_this_month/100) * $factor->upper_limit)) + ($remain_unreleased_amount_last_months - (($remain_unreleased_amount_last_months/100) * $factor->lower_limit)), 2);
                             $factor->lower_limit = $lower_limit;
