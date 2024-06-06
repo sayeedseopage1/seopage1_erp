@@ -30,7 +30,6 @@ const DateFilter = ({ startDate, endDate, setStartDate, setEndDate, subtract, ty
         setEnd(e);
     }, [subtract]);
 
-
     useEffect(() => {
         let s;
         let e;
@@ -53,7 +52,7 @@ const DateFilter = ({ startDate, endDate, setStartDate, setEndDate, subtract, ty
 
         setStart(s);
         setEnd(e);
-    }, [type])
+    }, [type]);
 
     const handleDatePick = (start, end) => {
         const s = dayjs.dayjs(start).format('MMM DD, YYYY');
@@ -71,6 +70,8 @@ const DateFilter = ({ startDate, endDate, setStartDate, setEndDate, subtract, ty
     const nextYear = () => {
         setYear((prev) => Number(prev) + 1);
     };
+
+    const currentYear = dayjs.dayjs().year();
 
     return (
         <div>
@@ -91,13 +92,18 @@ const DateFilter = ({ startDate, endDate, setStartDate, setEndDate, subtract, ty
                                 «
                             </button>
                             <div className='font-weight-bold'>{year}</div>
-                            <button aria-label='next' className='btn btn-sm f-18' onClick={nextYear}>
+                            <button aria-label='next' className='btn btn-sm f-18' onClick={nextYear} disabled={type === 'monthly' && year >= currentYear}>
                                 »
                             </button>
                         </div>
                         <ul className='sp1_inc_month_wrapper'>
                             {type === 'monthly' &&
                                 [...Array(12)].map((_, i) => {
+                                    const currentMonth = dayjs.dayjs().month();
+                                    const currentYear = dayjs.dayjs().year();
+                                    if (year > currentYear || (year == currentYear && i > currentMonth)) {
+                                        return null;
+                                    }
                                     const d = dayjs.dayjs().year(year).month(i);
                                     const m = dayjs.dayjs().year(year).month(i).format('MMM');
                                     return (
@@ -173,4 +179,4 @@ DateFilter.propTypes = {
     setStartDate: PropTypes.func,
     setEndDate: PropTypes.func,
     subtract: PropTypes.func
-}
+};
