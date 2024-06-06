@@ -11,8 +11,9 @@ use App\Models\TaskRevision;
 use Illuminate\Http\Request;
 use App\Models\IncentiveType;
 use App\Models\IncentiveFactor;
-use App\Http\Controllers\Controller;
 use App\Models\IncentiveCriteria;
+use Illuminate\Support\Facades\DB;
+use App\Http\Controllers\Controller;
 use App\Models\ProgressiveIncentive;
 use App\View\Components\Forms\Number;
 
@@ -41,6 +42,61 @@ class IncentiveFactorController extends Controller
                     $incentiveCriteria->acquired_percent = $progressiveIncentive->acquired_value ?? 0;
                     $incentiveCriteria->incentive_amount_type = $progressiveIncentive->incentive_amount_type ?? IncentiveFactor::where('incentive_criteria_id', $incentiveCriteria->id)->first()->incentive_amount_type;
                     $incentiveCriteria->obtained_incentive = $progressiveIncentive->incentive_amount ?? 0;
+
+                    if($incentiveCriteria->id == 10){
+                        $lower_limit = 0;
+                        $startDate = Carbon::parse($request->start_date)->startOfDay();
+                        $endDate = Carbon::parse($request->end_date)->endOfDay();
+                        $user_id = $request->user_id ?? null;
+                        
+                        $remain_unreleased_amount_last_months = DB::table('projects')
+                        ->join('project_milestones', 'projects.id', '=', 'project_milestones.project_id')
+                        ->leftJoin('payments', 'project_milestones.invoice_id', '=', 'payments.invoice_id')
+                        ->where('project_milestones.created_at', '<', $startDate)
+                        ->where(function ($q1) use ($startDate) {
+                            $q1->whereNull('payments.paid_on')
+                                ->orWhere('payments.paid_on', '>', $startDate);
+                        })
+                        ->whereNot('project_milestones.status', 'canceled')
+                        ->where('projects.pm_id', $user_id)
+                        ->where('projects.project_status','Accepted')
+                        ->sum('project_milestones.cost'); 
+
+                        $assigned_amount_this_month = Project::join('project_milestones', 'projects.id', '=', 'project_milestones.project_id')
+                        ->where('projects.pm_id', $user_id)
+                        ->whereBetween('project_milestones.created_at', [$startDate, $endDate])
+                        ->where('projects.project_status','Accepted')
+                        ->sum('cost');
+
+                        $released_amount_this_month_assigned = DB::table('users')
+                        ->join('projects', 'users.id', '=', 'projects.pm_id')
+                        ->join('project_milestones', 'projects.id', '=', 'project_milestones.project_id')
+                        ->join('payments', 'project_milestones.invoice_id', '=', 'payments.invoice_id')
+                        //->whereNotNull('project_milestones.invoice_id')
+                        ->whereBetween('project_milestones.created_at', [$startDate, $endDate])
+                        ->whereBetween('payments.paid_on', [$startDate, $endDate])
+                        ->where('payments.added_by', $user_id)
+                        ->whereNot('project_milestones.status', 'canceled')
+                        ->where('projects.project_status','Accepted')
+                        ->sum('project_milestones.cost');
+
+                        $released_amount_this_month = DB::table('users')
+                        ->join('projects', 'users.id', '=', 'projects.pm_id')
+                        ->join('project_milestones', 'projects.id', '=', 'project_milestones.project_id')
+                        ->join('payments', 'project_milestones.invoice_id', '=', 'payments.invoice_id')
+                        //->whereNotNull('project_milestones.invoice_id')
+                        ->whereBetween('payments.paid_on', [$startDate, $endDate])
+                        ->where('payments.added_by', $user_id)
+                        ->whereNot('project_milestones.status', 'canceled')
+                        ->where('projects.project_status','Accepted')
+                        ->sum('project_milestones.cost');
+                        foreach($incentiveCriteria->incentiveFactors as $factor){
+                            $factor->upper_limit = round(($assigned_amount_this_month - (($assigned_amount_this_month/100) * $factor->upper_limit)) + ($remain_unreleased_amount_last_months - (($remain_unreleased_amount_last_months/100) * $factor->lower_limit)), 2);
+                            $factor->lower_limit = $lower_limit;
+                            $lower_limit = $factor->upper_limit;
+                        }
+                    }
+
                     return $incentiveCriteria;
                 }elseif($request->user_id){
                     Incentive::progressiveCalculation($incentiveCriteria, $request);
