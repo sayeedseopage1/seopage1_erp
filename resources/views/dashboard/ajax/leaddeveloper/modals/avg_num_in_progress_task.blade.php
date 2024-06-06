@@ -4,7 +4,7 @@
       <div class="modal-content">
         <div class="modal-header">
           <div class="modal-title"><h4>Submitted Tasks: {{$submit_number_of_tasks_in_this_month_lead}}</h4>
-         
+
              </div>
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>
@@ -25,23 +25,23 @@
                   </tr>
                 </thead>
                 <tbody>
-                    @foreach($total_in_progress_date_range_table_lead as $row)
+                    @foreach($total_in_progress_date_range_table_lead as $key => $row)
                     <tr>
                         <td>{{$loop->index+1}}</td>
                         <td>
                             {{$row->assign_date}}
-                          
+
                         </td>
                         <td>
                             <a href="{{route('tasks.show',$row->id)}}">{{$row->heading}}<a>
-                         
+
                         </td>
                         <td>
                             @if($row->cl_id != null)
                             {{$row->cl_name}}
                             @elseif($row->client_name != null)
                             {{$row->client_name}}
-                            @else 
+                            @else
                            <a href="{{route('clients.show',$row->clientId)}}"> {{$row->clientName}}</a>
 
                             @endif
@@ -49,8 +49,8 @@
                         </td>
                         <td>
                             @if($row->board_column_id == 1 || $row->board_column_id == 2 || $row->board_column_id == 3)
-                            N\A 
-                            @else 
+                            N\A
+                            @else
                             {{$row->submission_date}}
                         @endif
                     </td>
@@ -65,7 +65,7 @@
                         </td>
                     </tr>
                     @endforeach
-                   
+
                 </tbody>
               </table>
         </div>

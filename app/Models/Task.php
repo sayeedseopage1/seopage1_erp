@@ -483,7 +483,7 @@ class Task extends BaseModel
     }
     public function subtask(): BelongsTo
     {
-        return $this->belongsTo(Subtask::class,'subtask_id');
+        return $this->belongsTo(Subtask::class, 'subtask_id');
     }
     public function milestone()
     {
