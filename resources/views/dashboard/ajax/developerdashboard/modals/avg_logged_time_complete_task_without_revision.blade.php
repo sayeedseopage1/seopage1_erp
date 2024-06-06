@@ -1,19 +1,16 @@
 <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
-<div class="modal fade" id="number_of_task_received{{$number_of_tasks_received}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="avg_logged_time_complete_task_without_revision{{$submit_number_of_tasks_in_this_month}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-xl">
       <div class="modal-content">
         <div class="modal-header">
-          <div class="modal-title"><h4>Received Tasks: {{$number_of_tasks_received}}</h4>
-            <h4>Primary Pages: {{$number_of_tasks_received_primary_page}}</h4>
-           <h4>Secondary Pages: {{$number_of_tasks_received_secondary_page}} </h4>
-           <h4>Others:  {{$number_of_task_others_page_in_this_month}}</h4>
+          <div class="modal-title"><h4>Avg. Logged Time For Complete Tasks Without Revisions (In Hours): {{$avg_logged_time_complete_task_without_revision}}</h4>
              </div>
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>
           </button>
         </div>
         <div class="modal-body">
-            <table id="number_of_task_received" class="display" style="width:100%">
+            <table id="avg_logged_time_complete_task_without_revision_table" class="display" style="width:100%">
                 <thead>
                   <tr>
                     <th scope="col">Sl No</th>
@@ -23,11 +20,17 @@
                     <th scope="col">Submission Date</th>
                     <th scope="col">Deadline</th>
                     <th scope="col">status</th>
+                    <th scope="col">Hours Log</th>
                     <th scope="col">Revision Count</th>
                   </tr>
                 </thead>
                 <tbody>
-                    @foreach($number_of_tasks_received_data as $row)
+                    @foreach($avg_logged_time_complete_task_without_revision_table as $row)
+                    @php
+                      $revision_log_hour = App\Models\ProjectTimeLog::where('task_id',$row->id)->where('revision_status',1)->sum('total_hours');
+                      $revision_log_total_min = App\Models\ProjectTimeLog::where('task_id',$row->id)->where('revision_status',1)->sum('total_minutes');
+                      $revision_log_min = $revision_log_hour * 60 + $revision_log_total_min;
+                    @endphp
 
                     <tr>
                         <td>{{$loop->index+1}}</td>
@@ -62,10 +65,17 @@
                           <span style="color: {{$row->label_color}}"> {{$row->column_name}}</span>
                         </td>
                         <td>
+                          <?php
+                              $hours = floor($revision_log_min / 60);
+                              $minutes = $revision_log_min % 60;
+                              echo $hours . ' hrs ' . $minutes . ' mins';
+                          ?>
+                      </td>
+                        <td>
                           {{-- <a href="#" data-toggle="modal" data-target="#revision_count_modal{{ $key }}">
                               {{$row->revision_count}}
                           </a> --}}
-                          0
+                          {{$row->revision_count}}
                         </td>
                     </tr>
                     @endforeach
@@ -80,7 +90,7 @@
     </div>
   </div>
 
-  {{-- @foreach($number_of_tasks_received_data as $key => $row)
+  {{-- @foreach($submit_number_of_tasks_in_this_month_data as $key => $row)
   @if ($row->revision_count !='0')
   @php
     $task_revisions = App\Models\TaskRevision::where('task_id',$row->id)->get();
@@ -190,10 +200,9 @@
   @endif
   @endforeach --}}
 
-
   <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
   <script>
-      new DataTable('#number_of_task_received',{
+      new DataTable('#avg_logged_time_complete_task_without_revision_table',{
         "dom": 't<"d-flex"l<"ml-auto"ip>><"clear">',
       });
   </script>

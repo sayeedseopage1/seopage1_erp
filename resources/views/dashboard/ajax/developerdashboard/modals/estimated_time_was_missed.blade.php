@@ -2,10 +2,8 @@
 <div class="modal fade" id="estimated_time_was_missed{{count($estimate_missed_task_data)}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-xl">
       <div class="modal-content">
-        <div class="modal-title"><h4>Received Tasks: {{$number_of_tasks_received}}</h4>
-          <h4>Primary Pages: {{$number_of_tasks_received_primary_page}}</h4> 
-         <h4>Secondary Pages: {{$number_of_tasks_received_secondary_page}} </h4>  
-         <h4>Others:  {{$number_of_tasks_received - ($number_of_tasks_received_primary_page + $number_of_tasks_received_secondary_page)}}</h4>  
+        <div class="modal-title"><h4>Percentage of Task Where Given Estimated Time was Missed (for first submission Without Revision): {{$percentage_of_tasks_where_given_estimated_time_was_missed_without_revision}}</h4>
+        <div class="modal-title"><h4>Percentage of Task Where Given Estimated Time was Missed (for first submission With Revision): {{$percentage_of_tasks_where_given_estimated_time_was_missed_with_revision}}</h4>
            </div>
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>
@@ -22,11 +20,11 @@
                     <th scope="col">Submission Date</th>
                     <th scope="col">Deadline</th>
                     <th scope="col">status</th>
-                  
+
                   </tr>
                 </thead>
                 <tbody>
-                    @foreach($estimate_missed_task_data as $row)
+                    @foreach($percentage_of_tasks_where_given_estimated_time_was_missed_with_revision_data as $row)
                     {{-- {{dd($row)}} --}}
                     <tr>
                         <td>{{$loop->index+1}}</td>
@@ -39,14 +37,14 @@
                             {{$row->cl_name}}
                             @elseif($row->client_name != null)
                             {{$row->client_name}}
-                            @else 
+                            @else
                            <a href="{{route('clients.show',$row->clientId)}}"> {{$row->clientName}}</a>
                            @endif
                         </td>
                         <td>
                             @if($row->board_column_id == 1 || $row->board_column_id == 2 || $row->board_column_id == 3)
-                            N\A 
-                            @else 
+                            N\A
+                            @else
                             {{$row->submission_date}}
                         @endif
                     </td>
@@ -54,7 +52,7 @@
                         <td>
                           <span style="color: {{$row->label_color}}"> {{$row->column_name}}</span>
                         </td>
-                      
+
                     </tr>
                     @endforeach
                 </tbody>
@@ -71,6 +69,6 @@
       new DataTable('#table_estimate_task_date',{
         "dom": 't<"d-flex"l<"ml-auto"ip>><"clear">',
       });
-      
-       
+
+
   </script>

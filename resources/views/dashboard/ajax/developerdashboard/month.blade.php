@@ -14,12 +14,10 @@
                             {{-- <span class="f-12 font-weight-normal text-lightest">
                         @lang('Received tasks this cycle')
                         <i class="fa fa-question-circle" aria-hidden="true" data-toggle="modal" data-target="#"></i>
-                     
+
                     </span> --}}
                         </p>
                         @include('dashboard.ajax.developerdashboard.modals.number_of_task_received')
-
-
 
                     </div>
                 </div>
@@ -37,24 +35,19 @@
                             <a href="#" data-toggle="modal"
                                 data-target="#submit_number_of_tasks_in_this_month{{ $submit_number_of_tasks_in_this_month }}">
 
-
                                 {{ $submit_number_of_tasks_in_this_month }}
 
                             </a>
                             {{-- <span class="f-12 font-weight-normal text-lightest">
                         @lang('Primary pages')
                         <i class="fa fa-question-circle" aria-hidden="true" data-toggle="modal" data-target="#"></i>
-                     
+
                     </span> --}}
                         </p>
                         @include('dashboard.ajax.developerdashboard.modals.number_of_task_submitted')
 
-
-
-
                     </div>
                 </div>
-
             </div>
         </div>
         <div class="col-md-4">
@@ -72,9 +65,6 @@
 
                         </p>
                         @include('dashboard.ajax.developerdashboard.modals.first_attempt_approve_task_data')
-
-
-
 
                     </div>
                 </div>
@@ -100,7 +90,6 @@
                         </p>
                         @include('dashboard.ajax.developerdashboard.modals.first_attempt_approve_task_client_data')
 
-
                     </div>
                 </div>
 
@@ -118,15 +107,12 @@
                             <a href="#" data-toggle="modal"
                                 data-target="#avg_task_approval_lead_developer{{ count($avg_no_of_submission_needed_for_app_by_lead_dev) }}">
 
-
                                 {{ round($average_submission_aproval_in_this_month, 2) }}
 
                             </a>
 
                         </p>
                         @include('dashboard.ajax.developerdashboard.modals.avg_task_approval_lead_developer')
-
-
 
                     </div>
                 </div>
@@ -149,14 +135,11 @@
                         </p>
                         @include('dashboard.ajax.developerdashboard.modals.avg_task_approval_client')
 
-
                     </div>
                 </div>
 
             </div>
         </div>
-
-
 
     </div>
     <div class="row mt-3">
@@ -174,7 +157,6 @@
                             </a>
                         </p>
                         @include('dashboard.ajax.developerdashboard.modals.percentage_task_with_revision')
-
 
                     </div>
                 </div>
@@ -197,37 +179,42 @@
                         </p>
                         @include('dashboard.ajax.developerdashboard.modals.total_num_of_revision')
 
-
                     </div>
                 </div>
 
             </div>
         </div>
-        <div class="col-md-3">
+        <div class="col-md-6">
             <div
                 class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0">
                 <div class="d-block text-capitalize">
                     <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">Avg. logged time for complete tasks (In Hours)</h5>
                     <div class="d-flex flex-wrap">
 
-                        <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
+                        <p class="mb-0 f-18 font-weight-bold mr-5">
+                            Avg. Logged Time For Complete Tasks With Revisions (In Hours):
                             <a href="#" data-toggle="modal"
                                 data-target="#avg_logged_time_complete_task{{ $submit_number_of_tasks_in_this_month }}">
-
-
                                 {{ round($average_submission_time_in_this_month, 2) }} Hours
-
                             </a>
-
+                            @include('dashboard.ajax.developerdashboard.modals.avg_logged_time_complete_task')
                         </p>
-                        @include('dashboard.ajax.developerdashboard.modals.avg_logged_time_complete_task')
-
+                        <p class="mb-0 f-18 font-weight-bold mr-5">
+                            Avg. Logged Time For Complete Tasks Without Revisions (In Hours):
+                            <a href="#" data-toggle="modal"
+                                data-target="#avg_logged_time_complete_task_without_revision{{ $submit_number_of_tasks_in_this_month }}">
+                                {{ round($avg_logged_time_complete_task_without_revision, 2) }} Hours
+                            </a>
+                            @include('dashboard.ajax.developerdashboard.modals.avg_logged_time_complete_task_without_revision')
+                        </p>
 
                     </div>
                 </div>
 
             </div>
         </div>
+    </div>
+    <div class="row mt-3">
         <div class="col-md-3">
             <div
                 class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0">
@@ -239,7 +226,6 @@
                             <a href="#" data-toggle="modal"
                                 data-target="#avg_task_submission_time_in_days{{ $submit_number_of_tasks_in_this_month }}">
 
-
                                 {{ round($average_submission_day_in_this_month, 2) }} Days
 
                             </a>
@@ -247,19 +233,12 @@
                         </p>
                         @include('dashboard.ajax.developerdashboard.modals.avg_task_submission_time_in_days')
 
-
                     </div>
                 </div>
 
             </div>
         </div>
-
-
-
-
-    </div>
-    <div class="row mt-3">
-        <div class="col-md-4">
+        <div class="col-md-3">
             <div
                 class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0">
                 <div class="d-block text-capitalize">
@@ -270,7 +249,6 @@
                             <a href="#" data-toggle="modal"
                                 data-target="#avg_num_in_progress{{ count($total_in_progress_date_range_table) }}">
 
-
                                 {{ round($average_in_progress_date_range, 2) }}
 
                             </a>
@@ -278,13 +256,12 @@
                         </p>
                         @include('dashboard.ajax.developerdashboard.modals.avg_num_in_progress')
 
-
                     </div>
                 </div>
 
             </div>
         </div>
-        <div class="col-md-4">
+        <div class="col-md-3">
             <div
                 class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0">
                 <div class="d-block text-capitalize">
@@ -304,7 +281,7 @@
 
             </div>
         </div>
-        <div class="col-md-4">
+        <div class="col-md-3">
             <div
                 class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0">
                 <div class="d-block text-capitalize">
@@ -319,14 +296,11 @@
                         </p>
                         @include('dashboard.ajax.developerdashboard.modals.estimated_time_was_missed')
 
-
                     </div>
                 </div>
 
             </div>
         </div>
-
-
 
     </div>
     <div class="row mt-3">
@@ -338,15 +312,8 @@
                     <div class="d-flex flex-wrap">
 
                         <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
-                            <a href="#" data-toggle="modal" data-target="#">
-
-
-                                0%
-
-                            </a>
-
+                            <a href="#" data-toggle="modal" data-target="#">Under Development</a>
                         </p>
-
 
                     </div>
                 </div>
@@ -363,15 +330,8 @@
                     <div class="d-flex flex-wrap">
 
                         <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
-                            <a href="#" data-toggle="modal" data-target="#">
-
-
-                                0%
-
-                            </a>
-
+                            <a href="#" data-toggle="modal" data-target="#">Under Development</a>
                         </p>
-
 
                     </div>
                 </div>
@@ -386,23 +346,14 @@
                     <div class="d-flex flex-wrap">
 
                         <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
-                            <a href="#" data-toggle="modal" data-target="#">
-
-
-                                0
-
-                            </a>
-
+                            <a href="#" data-toggle="modal" data-target="#">Under Development</a>
                         </p>
-
 
                     </div>
                 </div>
 
             </div>
         </div>
-
-
 
     </div>
     <div class="row mt-3">
@@ -432,8 +383,6 @@
                             @include('dashboard.ajax.developerdashboard.modals.dispute_file_all_data')
                         </p>
 
-
-
                     </div>
                 </div>
 
@@ -453,7 +402,6 @@
                             <a href="#" data-toggle="modal"
                                 data-target="#no_of_dispute_lost{{ count($number_of_dispute_filed_own_data) }}">
 
-
                                 {{ $number_of_dispute_lost_own }}
 
                             </a>
@@ -465,20 +413,17 @@
                             <a href="#" data-toggle="modal"
                                 data-target="#no_of_dispute_lost_overall{{ count($number_of_dispute_filed_all_data) }}">
 
-
                                 {{ $number_of_dispute_lost_all }}
 
                             </a>
                             @include('dashboard.ajax.developerdashboard.modals.no_of_dispute_lost_overall')
                         </p>
 
-
                     </div>
                 </div>
 
             </div>
         </div>
-
 
     </div>
     <div class="row mt-3">
@@ -492,13 +437,12 @@
                         <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
                             <a href="#" data-toggle="modal"
                                 data-target="#hours_spent_in_revision_modal{{ count($spent_revision_developer_data) }}">
-                                {{ round($spent_revision_developer, 2) }} Hours
+                                {{ $spent_revision_developer }}
 
                             </a>
 
                         </p>
                         @include('dashboard.ajax.developerdashboard.modals.hours_spent_in_revision_modal')
-
 
                     </div>
                 </div>
@@ -521,7 +465,6 @@
                         <th>Client Name</th>
                         <th>Submittion date</th>
                         <th>Current Status</th>
-
 
                     </x-slot>
 
@@ -561,13 +504,7 @@
                                     {{ $task->column_name }}
                                 </span>
 
-
-
-
                             </td>
-
-
-
 
                         </tr>
                     @empty
@@ -593,10 +530,7 @@
                         <th>Client Name</th>
                         <th>Current Status</th>
 
-
                     </x-slot>
-
-
 
                     @forelse($past_tasks as $task)
                         <tr>
@@ -620,21 +554,13 @@
 
                             </td>
 
-
                             <td>
                                 <span class="task-status" data-task-id="{{ $task->id }}"
                                     style="color: {{ $task->label_color }}; cursor:pointer">
                                     {{ $task->column_name }}
                                 </span>
 
-
-
-
-
                             </td>
-
-
-
 
                         </tr>
                     @empty
