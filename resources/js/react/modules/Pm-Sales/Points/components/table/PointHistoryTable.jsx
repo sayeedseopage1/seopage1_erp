@@ -72,7 +72,7 @@ const baseColumns = [
         title: 'Date',
         dataIndex: 'created_at',
         key: 'created_at',
-        render: (text) => <span className='point_table_data'>{moment(text).format("DD-MM-YYYY")}</span>,
+        render: (text) => <span className='point_table_data'>{moment(text).format("DD-MM-YYYY h:mm A")}</span>,
         sorter: (a, b) => moment(a.created_at).unix() - moment(b.created_at).unix(),
     },
     {
