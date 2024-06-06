@@ -169,24 +169,21 @@ class PointsController extends AccountBaseController
             
             
         }
-        if ($request->bonus_type != '') {
-           // dd($request->bonus_type);
-           if($request->bonus_type == 'Bonus')
-           {
-            $data = $data->where('cash_points.project_id',null);
-
-           }
-          else
-           {
-            $data = $data->where('cash_points.project_id', '!=',null);
-
-           }
-           if ($request->bonus_type == 'Authorization') {
-            $data = $data->where('cash_points.bonus_type', 'Authorization Bonus')->where('cash_points.bonus_type','!=',null);
-        
-        }
-          
-            
+        if ($request->bonus_type != '') 
+        {
+            if($request->bonus_type == 'Bonus'){
+                $data = $data->where(function($query) {
+                    $query->where('cash_points.bonus_type', 'Bonus')->orWhere('cash_points.type', 'Bonus');
+                });
+            }
+            if($request->bonus_type == 'Regular'){
+                $data = $data->where('cash_points.bonus_type', 'Regular');
+            }
+            if ($request->bonus_type == 'Authorization') {
+                $data = $data->where(function($query) {
+                    $query->where('cash_points.bonus_type', 'Authorization Bonus')->orWhere('cash_points.type','Authorization Bonus');
+                });
+            }
         }
 
         if(Auth::user()->role_id == 1)

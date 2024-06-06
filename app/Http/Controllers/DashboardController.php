@@ -671,6 +671,7 @@ class DashboardController extends AccountBaseController
 
     public function clockOutStatus()
     {
+        // DB::beginTransaction();
         $user_id = Auth::user()->id;
         $today = Carbon::now();
 
@@ -734,6 +735,8 @@ class DashboardController extends AccountBaseController
 
         $incomplete_hours = $minimum_log_hours - $userTotalMin;
 
+        $time_log = ProjectTimeLog::where('user_id',$user_id)->whereDate('created_at',$today)->orderBy('created_at','desc')->get();
+
         return response()->json([
             'data' => [
                 'check_in_check_out' => [
@@ -754,6 +757,9 @@ class DashboardController extends AccountBaseController
                         'target_minimum_log_hours'=> $minimum_log_hours,
                         'incomplete_hours'=> $incomplete_hours < 0 ? 0 : $incomplete_hours,
                     ]
+                ],
+                'project_time_log' => [
+                    'data' => $time_log,
                 ]
             ],
         ]);
@@ -763,7 +769,6 @@ class DashboardController extends AccountBaseController
 
     public function developerDailytrackHoursLog(Request $request)
     {
-     //dd($request->all());
         $stop_time = new DeveloperStopTimer();
         $stop_time->reason_for_less_tracked_hours_a_day_task = $request->reason_for_less_tracked_hours_a_day_task;
         $stop_time->durations = $request->durations;
