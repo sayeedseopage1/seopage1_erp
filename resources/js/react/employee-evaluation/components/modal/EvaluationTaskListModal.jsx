@@ -62,7 +62,6 @@ const EvaluationTaskListModal = ({
         singleEvaluation?.user_id
     );
     const roundNumber = RoundHistory?.data.length;
-    console.log("roundnumber", roundNumber);
     const [dateExpired, setDateExpired] = React.useState(false);
     const [latestRound, setLatestRound] = React.useState(null);
     const [confirmButtonDisabled, setConfirmButtonDisabled] =
@@ -128,13 +127,15 @@ const EvaluationTaskListModal = ({
     React.useEffect(() => {
         if (latestRoundTasks.length > 0) {
             const tasksToRate = latestRoundTasks.filter(
-                (task) =>
-                    Number(task.total_min) < 60 && task.submission_date !== null
+                (task) => ![1, 2, 3].includes(task?.task_board_column_id)
             );
+
             const cumulativeSum = tasksToRate.reduce(
-                (acc, cur) => acc + Number(cur.avg_rating),
+                (acc, cur) => acc + Number(cur.avg_rating ?? 0),
                 0
             );
+
+            console.log("tasks to rate", tasksToRate);
             const average = cumulativeSum / tasksToRate.length;
             setCumulativeAverage(average);
 
@@ -162,16 +163,6 @@ const EvaluationTaskListModal = ({
             }
         }
     }, [historyData, latestRound, data]);
-
-    // console.log(
-    //     "outside",
-    //     historyData?.data,
-    //     "latest round",
-    //     latestRound,
-    //     "prevroundtask",
-    //     isPreviousTasks
-    // );
-    // console.log("confirm outside", confirmButtonDisabled);
 
     const formFields = [
         {
@@ -454,6 +445,7 @@ const EvaluationTaskListModal = ({
                         <span>
                             {" "}
                             {Number(cumulativeAverage)?.toFixed(2) ?? 0}
+                            {console.log("cumulative avg", cumulativeAverage)}
                         </span>
                     </span>
                 </EvalTableTitle>
@@ -535,11 +527,10 @@ const EvaluationTaskListModal = ({
                                 <ReviewFooter>
                                     By{" "}
                                     <a
-                                        href={`/account/employees/208`}
+                                        href={`/account/employees/${singleEvaluation?.team_lead_id}`}
                                         target="_blank"
-                                        v
                                     >
-                                        Mohammad Sayeed Ullah
+                                        {singleEvaluation.team_lead_name}
                                     </a>{" "}
                                     on{" "}
                                     <span>

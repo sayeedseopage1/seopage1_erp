@@ -65,7 +65,7 @@ const EvaluationAcknowledgeSubtaskModal = ({
                     const response = await axios.get(
                         `/account/evaluation-history/${developerId}`
                     );
-                    console.log(response);
+                    // console.log(response);
                     setSingleEvaluation(response?.data.data[0]);
                     setEvaluationObject(response?.data.data[0]);
                 }
@@ -77,7 +77,7 @@ const EvaluationAcknowledgeSubtaskModal = ({
         fetchData();
     }, []);
 
-    console.log("singleEvaluation", singleEvaluation);
+    // console.log("singleEvaluation", singleEvaluation);
     useEffect(() => {
         const fetchTasks = async () => {
             setIsLoading(true);
@@ -221,8 +221,11 @@ const EvaluationAcknowledgeSubtaskModal = ({
 
                         <ReviewFooter>
                             By{" "}
-                            <a href="www.teamLead.com" target="_blank">
-                                Mohammad Sayeed Ullah
+                            <a
+                                href={`/account/employees/${singleEvaluation?.team_lead_id}`}
+                                target="_blank"
+                            >
+                                {singleEvaluation?.team_lead_name}
                             </a>{" "}
                             on{" "}
                             <span>

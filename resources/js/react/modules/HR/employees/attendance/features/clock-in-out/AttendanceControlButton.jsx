@@ -70,7 +70,6 @@ export const AttendanceControlButton = () => {
         }
     }, []);
 
-    console.log(auth.roleId);
     return (
         <>
             {auth.roleId !== 14 && (
