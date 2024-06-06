@@ -2,59 +2,59 @@
 
 namespace App\Http\Controllers;
 
+use Carbon\Carbon;
+use App\Models\Task;
+use App\Models\User;
 use App\Helper\Reply;
-use App\Models\AttendanceSetting;
+use App\Models\Event;
+use App\Models\Leave;
+use App\Models\Ticket;
+use App\Models\Holiday;
+use App\Models\Project;
+use App\Models\PMAssign;
+use Carbon\CarbonPeriod;
+use App\Models\Attendance;
+use App\Models\TaskHistory;
+use App\Traits\HRDashboard;
+use App\Traits\PmDashboard;
+use App\Models\PmCoreMetric;
+use App\Models\TaskRevision;
+use Illuminate\Http\Request;
+use App\Traits\LeadDashboard;
+use App\Traits\UxUiDashboard;
+use App\Models\ProjectTimeLog;
+use App\Traits\SalesDashboard;
+use App\Models\DailySubmission;
 use App\Models\DashboardWidget;
 use App\Models\EmployeeDetails;
-use App\Models\Event;
-use App\Models\Holiday;
-use App\Models\Leave;
-use App\Models\ProjectTimeLog;
-use App\Models\ProjectTimeLogBreak;
-use App\Models\Task;
 use App\Models\TaskboardColumn;
-use App\Models\Ticket;
-use App\Models\PMAssign;
-use App\Models\Project;
 use App\Traits\ClientDashboard;
-use App\Traits\ClientPanelDashboard;
-use App\Traits\CurrencyExchange;
-use App\Traits\EmployeeDashboard;
-use App\Traits\FinanceDashboard;
-use App\Traits\HRDashboard;
-use App\Traits\OverviewDashboard;
-use App\Traits\ProjectDashboard;
 use App\Traits\TicketDashboard;
-use App\Traits\webdevelopmentDashboard;
-use App\Traits\LeadDashboard;
-use App\Traits\DeveloperDashboard;
-use App\Traits\UxUiDashboard;
+use App\Traits\CurrencyExchange;
+use App\Traits\FinanceDashboard;
+use App\Traits\ProjectDashboard;
+use App\Models\AttendanceSetting;
+use App\Traits\EmployeeDashboard;
 use App\Traits\GraphicsDashboard;
-use App\Traits\SalesDashboard;
-use App\Traits\PmDashboard;
-use Carbon\Carbon;
-use Carbon\CarbonPeriod;
-use Froiden\Envato\Traits\AppBoot;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
-use App\Models\User;
-use App\Traits\PmDashboardAdminView;
-use App\Models\PmCoreMetric;
+use App\Traits\OverviewDashboard;
 use App\Models\DeveloperStopTimer;
-use Auth;
-use App\Models\Attendance;
-use App\Models\DailySubmission;
-use App\Models\TaskHistory;
-use App\Models\TaskRevision;
-use App\Traits\LeadDashboardAdminView;
+use App\Traits\DeveloperDashboard;
+use Froiden\Envato\Traits\AppBoot;
+use Illuminate\Support\Facades\DB;
+use App\Models\ProjectTimeLogBreak;
+use App\Traits\ClientPanelDashboard;
+use App\Traits\PmDashboardAdminView;
+use Illuminate\Support\Facades\Auth;
 use App\Traits\DevDashboardAdminView;
+use App\Traits\LeadDashboardAdminView;
+use function PHPUnit\Framework\isNull;
 use App\Traits\SalesDashboardAdminView;
 
-use function PHPUnit\Framework\isNull;
+use App\Traits\webdevelopmentDashboard;
 
 class DashboardController extends AccountBaseController
 {
-    use AppBoot, CurrencyExchange, OverviewDashboard, EmployeeDashboard, ProjectDashboard, ClientDashboard, HRDashboard,webdevelopmentDashboard, TicketDashboard, FinanceDashboard, ClientPanelDashboard, LeadDashboard, DeveloperDashboard, UxUiDashboard, GraphicsDashboard, SalesDashboard, PmDashboard, PmDashboardAdminView,LeadDashboardAdminView,DevDashboardAdminView,SalesDashboardAdminView;
+    use AppBoot, CurrencyExchange, OverviewDashboard, EmployeeDashboard, ProjectDashboard, ClientDashboard, HRDashboard, webdevelopmentDashboard, TicketDashboard, FinanceDashboard, ClientPanelDashboard, LeadDashboard, DeveloperDashboard, UxUiDashboard, GraphicsDashboard, SalesDashboard, PmDashboard, PmDashboardAdminView, LeadDashboardAdminView, DevDashboardAdminView, SalesDashboardAdminView;
 
     public function __construct()
     {
@@ -132,73 +132,72 @@ class DashboardController extends AccountBaseController
      */
     public function memberDashboard()
     {
-        abort_403 (!in_array('employee', user_roles()));
+        abort_403(!in_array('employee', user_roles()));
         return $this->employeeDashboard();
     }
 
     public function advancedDashboard()
     {
 
-        if (in_array('admin', user_roles()) || $this->sidebarUserPermissions['view_overview_dashboard'] == 4
-        || $this->sidebarUserPermissions['view_project_dashboard'] == 4
-        || $this->sidebarUserPermissions['view_client_dashboard'] == 4
-        || $this->sidebarUserPermissions['view_hr_dashboard'] == 4
-        || $this->sidebarUserPermissions['view_ticket_dashboard'] == 4
-        || $this->sidebarUserPermissions['view_finance_dashboard'] == 4)
-
-
-         {
+        if (
+            in_array('admin', user_roles()) || $this->sidebarUserPermissions['view_overview_dashboard'] == 4
+            || $this->sidebarUserPermissions['view_project_dashboard'] == 4
+            || $this->sidebarUserPermissions['view_client_dashboard'] == 4
+            || $this->sidebarUserPermissions['view_hr_dashboard'] == 4
+            || $this->sidebarUserPermissions['view_ticket_dashboard'] == 4
+            || $this->sidebarUserPermissions['view_finance_dashboard'] == 4
+        ) {
 
             $tab = request('tab');
 
             switch ($tab) {
-            case 'web-development':
-                $this->webdevelopmentDashboard();
-                break;
-            case 'project':
-                $this->projectDashboard();
-                break;
-            case 'client':
-                $this->clientDashboard();
-                break;
-            case 'hr':
-                $this->hrDashboard();
-                break;
-            case 'ticket':
-                $this->ticketDashboard();
-                break;
-            case 'finance':
-                $this->financeDashboard();
-                break;
-            default:
-                if ($this->sidebarUserPermissions['view_ticket_dashboard'] == 4) {
-                    $this->activeTab = ($tab == '') ? 'web-development' : $tab;
+                case 'web-development':
                     $this->webdevelopmentDashboard();
-                } elseif (in_array('admin', user_roles()) || $this->sidebarUserPermissions['view_overview_dashboard'] == 4) {
-                    $this->activeTab = ($tab == '') ? 'overview' : $tab;
-                    $this->overviewDashboard();
-
-                } elseif ($this->sidebarUserPermissions['view_project_dashboard'] == 4) {
-                    $this->activeTab = ($tab == '') ? 'project' : $tab;
+                    break;
+                case 'project':
                     $this->projectDashboard();
-
-                } elseif ($this->sidebarUserPermissions['view_client_dashboard'] == 4) {
-                    $this->activeTab = ($tab == '') ? 'client' : $tab;
+                    break;
+                case 'client':
                     $this->clientDashboard();
-
-                } elseif ($this->sidebarUserPermissions['view_hr_dashboard'] == 4) {
-                    $this->activeTab = ($tab == '') ? 'hr' : $tab;
+                    break;
+                case 'hr':
                     $this->hrDashboard();
-
-                } elseif ($this->sidebarUserPermissions['view_finance_dashboard'] == 4) {
-                    $this->activeTab = ($tab == '') ? 'finance' : $tab;
+                    break;
+                case 'ticket':
                     $this->ticketDashboard();
-
-                } else if ($this->sidebarUserPermissions['view_ticket_dashboard'] == 4) {
-                    $this->activeTab = ($tab == '') ? 'finance' : $tab;
+                    break;
+                case 'finance':
                     $this->financeDashboard();
-                }
-                break;
+                    break;
+                default:
+                    if ($this->sidebarUserPermissions['view_ticket_dashboard'] == 4) {
+                        $this->activeTab = ($tab == '') ? 'web-development' : $tab;
+                        $this->webdevelopmentDashboard();
+                    } elseif (in_array('admin', user_roles()) || $this->sidebarUserPermissions['view_overview_dashboard'] == 4) {
+                        $this->activeTab = ($tab == '') ? 'overview' : $tab;
+                        $this->overviewDashboard();
+
+                    } elseif ($this->sidebarUserPermissions['view_project_dashboard'] == 4) {
+                        $this->activeTab = ($tab == '') ? 'project' : $tab;
+                        $this->projectDashboard();
+
+                    } elseif ($this->sidebarUserPermissions['view_client_dashboard'] == 4) {
+                        $this->activeTab = ($tab == '') ? 'client' : $tab;
+                        $this->clientDashboard();
+
+                    } elseif ($this->sidebarUserPermissions['view_hr_dashboard'] == 4) {
+                        $this->activeTab = ($tab == '') ? 'hr' : $tab;
+                        $this->hrDashboard();
+
+                    } elseif ($this->sidebarUserPermissions['view_finance_dashboard'] == 4) {
+                        $this->activeTab = ($tab == '') ? 'finance' : $tab;
+                        $this->ticketDashboard();
+
+                    } else if ($this->sidebarUserPermissions['view_ticket_dashboard'] == 4) {
+                        $this->activeTab = ($tab == '') ? 'finance' : $tab;
+                        $this->financeDashboard();
+                    }
+                    break;
             }
 
             if (request()->ajax()) {
@@ -240,8 +239,7 @@ class DashboardController extends AccountBaseController
 
     public function privateCalendar()
     {
-        if(request()->filter)
-        {
+        if (request()->filter) {
             $employee_details = EmployeeDetails::where('user_id', user()->id)->first();
             $employee_details->calendar_view = (request()->filter != false) ? request()->filter : null;
             $employee_details->save();
@@ -256,8 +254,7 @@ class DashboardController extends AccountBaseController
 
         $eventData = array();
 
-        if(in_array('events', $calendar_filter_array))
-        {
+        if (in_array('events', $calendar_filter_array)) {
             // Events
             $model = Event::with('attendee', 'attendee.user');
 
@@ -273,39 +270,35 @@ class DashboardController extends AccountBaseController
             $events = $model->get();
 
 
-            foreach ($events as $key => $event)
-            {
+            foreach ($events as $key => $event) {
                 $eventData[] = [
                     'id' => $event->id,
                     'title' => ucfirst($event->event_name),
                     'start' => $event->start_date_time,
                     'end' => $event->end_date_time,
                     'event_type' => 'event',
-                    'extendedProps' => ['bg_color' => $event->label_color, 'color' => '#fff','icon' => 'fa-calendar']
+                    'extendedProps' => ['bg_color' => $event->label_color, 'color' => '#fff', 'icon' => 'fa-calendar']
                 ];
             }
         }
 
-        if(in_array('holiday', $calendar_filter_array))
-        {
+        if (in_array('holiday', $calendar_filter_array)) {
             // holiday
             $holidays = Holiday::whereBetween('date', [$startDate->toDateString(), $endDate->toDateString()])->get();
 
-            foreach ($holidays as $key => $holiday)
-            {
+            foreach ($holidays as $key => $holiday) {
                 $eventData[] = [
                     'id' => $holiday->id,
                     'title' => ucfirst($holiday->occassion),
                     'start' => $holiday->date,
                     'end' => $holiday->date,
                     'event_type' => 'holiday',
-                    'extendedProps' => ['bg_color' => '#1d82f5', 'color' => '#fff','icon' => 'fa-star']
+                    'extendedProps' => ['bg_color' => '#1d82f5', 'color' => '#fff', 'icon' => 'fa-star']
                 ];
             }
         }
 
-        if(in_array('task', $calendar_filter_array))
-        {
+        if (in_array('task', $calendar_filter_array)) {
             // tasks
             $completedTaskColumn = TaskboardColumn::completeColumn();
             $tasks = Task::with('boardColumn')
@@ -319,40 +312,36 @@ class DashboardController extends AccountBaseController
                     $q->orWhereBetween(DB::raw('DATE(tasks.`start_date`)'), [$startDate->toDateString(), $endDate->toDateString()]);
                 })->get();
 
-            foreach ($tasks as $key => $task)
-            {
+            foreach ($tasks as $key => $task) {
                 $eventData[] = [
                     'id' => $task->id,
                     'title' => ucfirst($task->heading),
                     'start' => $task->start_date,
                     'end' => $task->due_date ? $task->due_date : $task->start_date,
                     'event_type' => 'task',
-                    'extendedProps' => ['bg_color' => $task->boardColumn->label_color, 'color' => '#fff','icon' => 'fa-list']
+                    'extendedProps' => ['bg_color' => $task->boardColumn->label_color, 'color' => '#fff', 'icon' => 'fa-list']
                 ];
             }
         }
 
-        if(in_array('tickets', $calendar_filter_array))
-        {
+        if (in_array('tickets', $calendar_filter_array)) {
             // tickets
             $tickets = Ticket::where('user_id', user()->id)
-            ->whereBetween(DB::raw('DATE(tickets.`updated_at`)'), [$startDate->toDateString(), $endDate->toDateString()])->get();
+                ->whereBetween(DB::raw('DATE(tickets.`updated_at`)'), [$startDate->toDateString(), $endDate->toDateString()])->get();
 
-            foreach ($tickets as $key => $ticket)
-            {
+            foreach ($tickets as $key => $ticket) {
                 $eventData[] = [
                     'id' => $ticket->id,
                     'title' => ucfirst($ticket->subject),
                     'start' => $ticket->updated_at,
                     'end' => $ticket->updated_at,
                     'event_type' => 'ticket',
-                    'extendedProps' => ['bg_color' => '#1d82f5', 'color' => '#fff','icon' => 'fa-ticket-alt']
+                    'extendedProps' => ['bg_color' => '#1d82f5', 'color' => '#fff', 'icon' => 'fa-ticket-alt']
                 ];
             }
         }
 
-        if(in_array('leaves', $calendar_filter_array))
-        {
+        if (in_array('leaves', $calendar_filter_array)) {
             // approved leaves of all emoloyees with employee name
             $leaves = Leave::join('leave_types', 'leave_types.id', 'leaves.leave_type_id')
                 ->where('leaves.status', 'approved')
@@ -363,18 +352,17 @@ class DashboardController extends AccountBaseController
 
             $duration = '';
 
-            foreach ($leaves as $key => $leave)
-            {
-                $duration = ($leave->duration == 'half day') ? '( '. __('app.halfday') .' )' : '';
+            foreach ($leaves as $key => $leave) {
+                $duration = ($leave->duration == 'half day') ? '( ' . __('app.halfday') . ' )' : '';
 
                 $eventData[] = [
                     'id' => $leave->id,
-                    'title' => $duration.' '.ucfirst($leave->user->name),
+                    'title' => $duration . ' ' . ucfirst($leave->user->name),
                     'start' => $leave->leave_date->toDateString(),
                     'end' => $leave->leave_date->toDateString(),
                     'event_type' => 'leave',
                     /** @phpstan-ignore-next-line */
-                    'extendedProps' => ['name' => 'Leave : '.ucfirst($leave->user->name),'bg_color' => $leave->color, 'color' => '#fff','icon' => 'fa-plane-departure']
+                    'extendedProps' => ['name' => 'Leave : ' . ucfirst($leave->user->name), 'bg_color' => $leave->color, 'color' => '#fff', 'icon' => 'fa-plane-departure']
                 ];
             }
         }
@@ -387,41 +375,41 @@ class DashboardController extends AccountBaseController
         $startDate = Carbon::createFromFormat($this->global->date_format, $request->startDate);
         $endDate = Carbon::createFromFormat($this->global->date_format, $request->endDate);
 
-        $project_counts= PMAssign::where('pm_id',$request->pm_id)->whereBetween('created_at', [$startDate, $endDate])->first();
+        $project_counts = PMAssign::where('pm_id', $request->pm_id)->whereBetween('created_at', [$startDate, $endDate])->first();
         if (!is_null($project_counts) && $project_counts->project_count != 0) {
-            $project_release_count= Project::where('pm_id',$request->pm_id)->where('due',0)->whereBetween('created_at', [$startDate, $endDate])->count();
+            $project_release_count = Project::where('pm_id', $request->pm_id)->where('due', 0)->whereBetween('created_at', [$startDate, $endDate])->count();
             if ($project_release_count != 0) {
-                $total_release_percentage= ($project_release_count / $project_counts->project_count)* 100;
-            }else {
-                $total_release_percentage=0;
+                $total_release_percentage = ($project_release_count / $project_counts->project_count) * 100;
+            } else {
+                $total_release_percentage = 0;
             }
 
-            $project_cancelation=  Project::where('pm_id',$request->pm_id)->where('status','canceled')->whereBetween('created_at', [$startDate, $endDate])->count();
+            $project_cancelation = Project::where('pm_id', $request->pm_id)->where('status', 'canceled')->whereBetween('created_at', [$startDate, $endDate])->count();
             if ($project_cancelation != 0) {
-                $percentage_of_project_cancelation = ($project_cancelation / $project_counts->project_count)*100;
-            }else {
-                $percentage_of_project_cancelation= 0;
+                $percentage_of_project_cancelation = ($project_cancelation / $project_counts->project_count) * 100;
+            } else {
+                $percentage_of_project_cancelation = 0;
             }
 
-            $projects_on_hold= Project::where('pm_id',$request->pm_id)->where('status','on hold')->whereBetween('created_at', [$startDate, $endDate])->count();
+            $projects_on_hold = Project::where('pm_id', $request->pm_id)->where('status', 'on hold')->whereBetween('created_at', [$startDate, $endDate])->count();
             if ($projects_on_hold != 0) {
-                $projects_on_hold_percentage= ($project_counts->project_count / $projects_on_hold)*100;
-            }else {
-                $projects_on_hold_percentage= 0;
+                $projects_on_hold_percentage = ($project_counts->project_count / $projects_on_hold) * 100;
+            } else {
+                $projects_on_hold_percentage = 0;
             }
 
-        }else {
-            $total_release_percentage=0;
-            $percentage_of_project_cancelation= 0;
-            $projects_on_hold_percentage= 0;
+        } else {
+            $total_release_percentage = 0;
+            $percentage_of_project_cancelation = 0;
+            $projects_on_hold_percentage = 0;
         }
         if (!is_null($project_counts) && $project_counts->amount != 0) {
 
-            $project_cancelation_rate=  Project::where('pm_id',$request->pm_id)->where('status','canceled')->whereBetween('created_at', [$startDate, $endDate])->sum('project_budget');
-            $percentage_of_project_cancelation_rate= ($project_cancelation_rate/$project_counts->amount)*100;
-        }else {
+            $project_cancelation_rate = Project::where('pm_id', $request->pm_id)->where('status', 'canceled')->whereBetween('created_at', [$startDate, $endDate])->sum('project_budget');
+            $percentage_of_project_cancelation_rate = ($project_cancelation_rate / $project_counts->amount) * 100;
+        } else {
 
-            $percentage_of_project_cancelation_rate= 0;
+            $percentage_of_project_cancelation_rate = 0;
         }
 
         $html = view('dashboard.ajax.projectManageDetalsOnAdvanceDashboard', [
@@ -438,23 +426,26 @@ class DashboardController extends AccountBaseController
             'html' => $html
         ]);
     }
-    public function pmDashboardExplanation(){
+    public function pmDashboardExplanation()
+    {
         $this->pageTitle = 'PM Cycle Explanation';
-        return view('dashboard.pm_explanation',$this->data);
+        return view('dashboard.pm_explanation', $this->data);
     }
-    public function pmPerformance($id){
+    public function pmPerformance($id)
+    {
         $this->pm = User::where('id', $id)->first();
         $this->pageTitle = 'PM Performance';
         return $this->PmDashboardAdminPmView($this->pm);
     }
-    public function coreMetric(){
+    public function coreMetric()
+    {
         $this->pageTitle = "Update Core Metrics";
-        $this->pm_core_metrics = PmCoreMetric::orderBy('id','desc')->first();
-               return view('core_metric.index',$this->data);
-      }
-      public function updateCoreMetric (Request $request ,$id)
-      {
-        $validator =  $request->validate([
+        $this->pm_core_metrics = PmCoreMetric::orderBy('id', 'desc')->first();
+        return view('core_metric.index', $this->data);
+    }
+    public function updateCoreMetric(Request $request, $id)
+    {
+        $validator = $request->validate([
             'released_amount_for_cycle' => 'required|numeric|min:0',
             'total_released_amount' => 'required|numeric|min:0',
             'avg_project_completion_time_for_cycle' => 'required|numeric|min:0',
@@ -498,9 +489,9 @@ class DashboardController extends AccountBaseController
         $pm_core_metric->avg_payment_per_day = $request->avg_payment_per_day;
         $pm_core_metric->save();
 
-        return response()->json(['status'=>200]);
-      }
-      public function DeveloperCheckOut(Request $request)
+        return response()->json(['status' => 200]);
+    }
+    public function DeveloperCheckOut(Request $request)
     {
 
         $currentDateTime = Carbon::now();
@@ -627,7 +618,8 @@ class DashboardController extends AccountBaseController
                         $minimum_log_hours = 420;
                         if ($userTotalMin < 420) {
                             $logStatus = false;
-                        } else $logStatus = true;
+                        } else
+                            $logStatus = true;
                     }
                 }
             } else {
@@ -674,63 +666,63 @@ class DashboardController extends AccountBaseController
         $user_id = Auth::user()->id;
         $today = Carbon::now();
 
-        if(Auth::user()->role_id = 5 || Auth::user()->role_id = 9 || Auth::user()->role_id = 10){
+        if (Auth::user()->role_id = 5 || Auth::user()->role_id = 9 || Auth::user()->role_id = 10) {
 
-        $user = Attendance::where('user_id',$user_id)->whereDate('created_at',$today)->orderBy('id', 'desc')->first();
-        $user->clock_out_time = Carbon::now();
-        $user->save();
+            $user = Attendance::where('user_id', $user_id)->whereDate('created_at', $today)->orderBy('id', 'desc')->first();
+            $user->clock_out_time = Carbon::now();
+            $user->save();
 
-        $userClockIn = Attendance::where('user_id',$user_id)->whereDate('created_at',$today)->orderBy('created_at','desc')->first();
-        $userGetTasks = ProjectTimeLog::where('user_id', $userClockIn->user_id)
-                            ->whereDate('created_at', $userClockIn->created_at)
-                            ->orderBy('created_at', 'desc')
-                            ->groupBy('task_id')
-                            ->get();
-        $userTaskCount = $userGetTasks->count();
+            $userClockIn = Attendance::where('user_id', $user_id)->whereDate('created_at', $today)->orderBy('created_at', 'desc')->first();
+            $userGetTasks = ProjectTimeLog::where('user_id', $userClockIn->user_id)
+                ->whereDate('created_at', $userClockIn->created_at)
+                ->orderBy('created_at', 'desc')
+                ->groupBy('task_id')
+                ->get();
+            $userTaskCount = $userGetTasks->count();
 
-        $userDailyTaskSubmission = true;
-        if ($userTaskCount > 0) {
-            $report = DailySubmission::where('user_id', $userClockIn->user_id)
-                                    -> whereDate('report_date', $userClockIn->created_at)
-                                    -> get();
-
-
-            if($report->count() === $userTaskCount){
-                $userDailyTaskSubmission = true;
-            }else {
-                $userDailyTaskSubmission = false;
-            }
-        }else{
             $userDailyTaskSubmission = true;
-        }
+            if ($userTaskCount > 0) {
+                $report = DailySubmission::where('user_id', $userClockIn->user_id)
+                    ->whereDate('report_date', $userClockIn->created_at)
+                    ->get();
 
-        $userDeveloperHoursTrack = DeveloperStopTimer::where('user_id',$userClockIn->user_id)
-                                ->whereDate('date','=',$userClockIn->created_at)
-                                ->orderBy('created_at','desc')
-                                ->first();
-        $userTotalMin = ProjectTimeLog::where('user_id',$user_id)->whereDate('created_at','=',$userClockIn->created_at)->orderBy('created_at','desc')->sum('total_minutes');
-        $createdAt = Carbon::parse($userClockIn->created_at);
-        
-        $logStatus = true;
 
-        $minimum_log_hours = 0;
-         
-        if ($createdAt->dayOfWeek === Carbon::SATURDAY) {
-            $minimum_log_hours = 270;
-            if($userTotalMin < $minimum_log_hours){
-                $logStatus = false;
+                if ($report->count() === $userTaskCount) {
+                    $userDailyTaskSubmission = true;
+                } else {
+                    $userDailyTaskSubmission = false;
+                }
+            } else {
+                $userDailyTaskSubmission = true;
             }
-        } else {
-            $minimum_log_hours = 420;
-            if($userTotalMin < $minimum_log_hours){
-                $logStatus = false;
+
+            $userDeveloperHoursTrack = DeveloperStopTimer::where('user_id', $userClockIn->user_id)
+                ->whereDate('date', '=', $userClockIn->created_at)
+                ->orderBy('created_at', 'desc')
+                ->first();
+            $userTotalMin = ProjectTimeLog::where('user_id', $user_id)->whereDate('created_at', '=', $userClockIn->created_at)->orderBy('created_at', 'desc')->sum('total_minutes');
+            $createdAt = Carbon::parse($userClockIn->created_at);
+
+            $logStatus = true;
+
+            $minimum_log_hours = 0;
+
+            if ($createdAt->dayOfWeek === Carbon::SATURDAY) {
+                $minimum_log_hours = 270;
+                if ($userTotalMin < $minimum_log_hours) {
+                    $logStatus = false;
+                }
+            } else {
+                $minimum_log_hours = 420;
+                if ($userTotalMin < $minimum_log_hours) {
+                    $logStatus = false;
+                }
             }
+
+
+            $logStatus = $userDeveloperHoursTrack ? true : $logStatus;
+
         }
-
-
-        $logStatus = $userDeveloperHoursTrack ? true : $logStatus ;
-
-    }
 
         $incomplete_hours = $minimum_log_hours - $userTotalMin;
 
@@ -743,16 +735,16 @@ class DashboardController extends AccountBaseController
                 'daily_task_report' => [
                     'daily_submission_status' => $userDailyTaskSubmission ? true : false,
                     'data' => [
-                        'checking_date'=> $userClockIn->created_at,
+                        'checking_date' => $userClockIn->created_at,
                     ],
                 ],
                 'hours_log_report' => [
                     'hours_log_report_status' => $logStatus,
                     'data' => [
-                        'checking_date'=> $userClockIn->created_at,
-                        'complete_hours'=> $userTotalMin,
-                        'target_minimum_log_hours'=> $minimum_log_hours,
-                        'incomplete_hours'=> $incomplete_hours < 0 ? 0 : $incomplete_hours,
+                        'checking_date' => $userClockIn->created_at,
+                        'complete_hours' => $userTotalMin,
+                        'target_minimum_log_hours' => $minimum_log_hours,
+                        'incomplete_hours' => $incomplete_hours < 0 ? 0 : $incomplete_hours,
                     ]
                 ]
             ],
@@ -763,7 +755,7 @@ class DashboardController extends AccountBaseController
 
     public function developerDailytrackHoursLog(Request $request)
     {
-     //dd($request->all());
+        //dd($request->all());
         $stop_time = new DeveloperStopTimer();
         $stop_time->reason_for_less_tracked_hours_a_day_task = $request->reason_for_less_tracked_hours_a_day_task;
         $stop_time->durations = $request->durations;
@@ -778,66 +770,74 @@ class DashboardController extends AccountBaseController
         $stop_time->transition_hours = $request->transition_hours;
         $stop_time->transition_minutes = $request->transition_minutes;
         $stop_time->date = $request->date;
-       
+
         $stop_time->project_id = $request->project_id;
         $stop_time->task_id = $request->task_id;
-        $project= Project::where('id',$request->project_id)->first();
-        if($project != null)
-        {
+        $project = Project::where('id', $request->project_id)->first();
+        if ($project != null) {
             $stop_time->client_id = $project->client_id;
 
         }
-       
+
 
         $stop_time->save();
 
-        return response()->json(['status'=>200]);
+        return response()->json(['status' => 200]);
     }
     public function task_history($id)
     {
-        $status_history= TaskHistory::select('task_history.id','task_history.created_at as created_on',
-        'taskboard_columns.column_name','taskboard_columns.label_color'
+        $status_history = TaskHistory::select(
+            'task_history.id',
+            'task_history.created_at as created_on',
+            'taskboard_columns.column_name',
+            'taskboard_columns.label_color'
         )
-        ->leftJoin('taskboard_columns','taskboard_columns.id','task_history.board_column_id')
-        ->where('task_history.task_id',$id)
-       
-        ->where('task_history.board_column_id','!=',null)
-        ->groupBy('task_history.id','task_history.created_at')
-      
-        ->orderBy('task_history.created_at','desc')
-        ->get();
-      //  dd($status_history);
-        
-      
+            ->leftJoin('taskboard_columns', 'taskboard_columns.id', 'task_history.board_column_id')
+            ->where('task_history.task_id', $id)
+
+            ->where('task_history.board_column_id', '!=', null)
+            ->groupBy('task_history.id', 'task_history.created_at')
+
+            ->orderBy('task_history.created_at', 'desc')
+            ->get();
+        //  dd($status_history);
 
 
 
 
-      
+
+
+
     }
     public function task_revision($id)
     {
-        $task_revision= TaskRevision::select('task_revisions.created_at','task_revisions.final_responsible_person',
-        'raised_by_percent','raised_against_percent'
-        )->where('task_revisions.task_id',$id)
-        ->where('task_revisions.final_responsible_person','!=',null)
-        ->groupBy('task_revisions.id')
-        ->orderBy('task_revisions.id','desc')->get();
-      //  dd($task_revision);
+        $task_revision = TaskRevision::select(
+            'task_revisions.created_at',
+            'task_revisions.final_responsible_person',
+            'raised_by_percent',
+            'raised_against_percent'
+        )->where('task_revisions.task_id', $id)
+            ->where('task_revisions.final_responsible_person', '!=', null)
+            ->groupBy('task_revisions.id')
+            ->orderBy('task_revisions.id', 'desc')->get();
+        //  dd($task_revision);
     }
-    public function leadDevPerformance($id){
+    public function leadDevPerformance($id)
+    {
         $this->lead_dev = User::where('id', $id)->first();
         $this->pageTitle = 'Lead Developer Performance';
         return $this->LeadDashboardAdminView($this->lead_dev);
     }
-    public function devPerformance($id){
+    public function devPerformance($id)
+    {
         $this->dev = User::where('id', $id)->first();
         $this->pageTitle = 'Developer Performance';
         return $this->DevDashboardAdminView($this->dev);
     }
-    public function salesPerformance($id){
+    public function salesPerformance($id)
+    {
         $this->sales = User::where('id', $id)->first();
         $this->pageTitle = 'Sales Performance';
         return $this->SalesDashboardAdminView($this->sales);
     }
-  }
+}
