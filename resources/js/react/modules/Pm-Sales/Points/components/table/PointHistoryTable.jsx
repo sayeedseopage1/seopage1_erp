@@ -19,6 +19,7 @@ import moment from 'moment/moment';
 import PointHistoryTableLoader from '../loader/PointHistoryTableLoader';
 import upArrowIcon from '../../assets/upArrow.svg';
 import downArrowIcon from '../../assets/downArrow.svg';
+import PropTypes from 'prop-types';
 
 
 const DragIndexContext = createContext({ active: -1, over: -1 });
@@ -57,6 +58,7 @@ const TableHeaderCell = (props) => {
     return <th {...props} ref={setNodeRef} style={style} {...attributes} {...listeners} />;
 };
 
+
 const baseColumns = [
     {
         title: 'ID',
@@ -70,7 +72,7 @@ const baseColumns = [
         title: 'Date',
         dataIndex: 'created_at',
         key: 'created_at',
-        render: (text) => <span className='point_table_data'>{moment(text).format("DD-MM-YYYY")}</span>,
+        render: (text) => <span className='point_table_data'>{moment(text).format("DD-MM-YYYY h:mm A")}</span>,
         sorter: (a, b) => moment(a.created_at).unix() - moment(b.created_at).unix(),
     },
     {
@@ -157,7 +159,7 @@ const PointHistoryTable = ({ data, isLoading, isFetching }) => {
     };
 
     if (isLoading || isFetching) {
-        return <table className='cnx__table_body'><tbody><PointHistoryTableLoader /></tbody></table>
+        return <table className='cnx__table_body'><tbody><PointHistoryTableLoader tableCol={columns?.length} /></tbody></table>
     }
 
     const rowClassName = (_record, index) => (index % 2 === 0 ? 'table-row-odd' : '');
@@ -206,3 +208,19 @@ const PointHistoryTable = ({ data, isLoading, isFetching }) => {
 };
 
 export default PointHistoryTable;
+
+PointHistoryTable.propTypes = {
+    data: PropTypes.object,
+    isLoading: PropTypes.bool,
+    isFetching: PropTypes.bool
+};
+
+TableBodyCell.propTypes = {
+    id: PropTypes.string.isRequired,
+    style: PropTypes.object.isRequired,
+};
+
+TableHeaderCell.propTypes = {
+    id: PropTypes.string.isRequired,
+    style: PropTypes.object.isRequired,
+};

@@ -1,6 +1,6 @@
 import React from 'react';
-import { Placeholder } from '../../../../../global/Placeholder';
 import { Skeleton } from 'antd';
+import PropTypes from 'prop-types';
 
 const ChartDataLoader = ({ count }) => {
     return (
@@ -9,11 +9,11 @@ const ChartDataLoader = ({ count }) => {
                 Array(count).fill(0).map((_, index) => (
                     <div key={index} className="chart_parent">
                         <div className="chart_wrapper">
-                            {/* <Placeholder height={300} /> */}
+
                             <Skeleton size="large" paragraph={{ rows: 5 }} active title={false} />
                         </div>
                         <div className="chart_wrapper">
-                            {/* <Placeholder height={300} /> */}
+
                             <Skeleton size="large" paragraph={{ rows: 5 }} active title={false} />
                         </div>
                     </div>
@@ -24,3 +24,7 @@ const ChartDataLoader = ({ count }) => {
 };
 
 export default ChartDataLoader;
+
+ChartDataLoader.propTypes = {
+    count: PropTypes.number
+}

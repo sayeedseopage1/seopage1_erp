@@ -252,8 +252,6 @@ const IncentiveThickChart = ({ chartData }) => {
                     <img src={arrow2} className="chart_axis_icon" alt="arrow2" />
                 </div>
 
-
-
                 <p className="chart_ratio">{chartData.title}: {chartData?.ratio != null ? <span className={`${chartData?.incentive > 0 ? "chart_ratio_value_pos" : "chart_ratio_value_neg"}`}>{chartData?.limitType == 1 ? "$" : ""}{chartData?.ratio}{chartData?.limitType == 2 ? "%" : ""}</span> : "N/A"}</p>
 
             </div>

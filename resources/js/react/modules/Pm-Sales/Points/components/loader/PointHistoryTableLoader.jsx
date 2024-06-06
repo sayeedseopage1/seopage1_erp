@@ -8,21 +8,13 @@ export default function PointHistoryTableLoader({ prevItemLength = 10, tableCol 
     return (
         _.times(updateItemLength, item => (
             <tr key={item} className="sp1_tasks_tr" >
-                <td className="sp1_tasks_td py-3">
-                    <Placeholder width="80px" height="13px" className="mb-1" />
-                </td>
-                <td className="sp1_tasks_td py-3">
-                    <Placeholder width="80px" height="13px" className="mb-1" />
-                </td>
-                <td className="sp1_tasks_td py-3">
-                    <Placeholder width="80px" height="13px" className="mb-1" />
-                </td>
-                <td className="sp1_tasks_td py-3">
-                    <Placeholder width="80px" height="13px" className="mb-1" />
-                </td>
-                <td className="sp1_tasks_td py-3">
-                    <Placeholder width="80px" height="13px" className="mb-1" />
-                </td>
+                {
+                    Array(tableCol).fill(0).map((item, index) => (
+                        <td key={index} className="sp1_tasks_td py-3">
+                            <Placeholder width="80px" height="13px" className="mb-1" />
+                        </td>
+                    ))
+                }
             </tr>
         ))
     )

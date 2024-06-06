@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 
 const FilterItem = ({ className = '', id, children }) => {
     return (
@@ -8,4 +9,10 @@ const FilterItem = ({ className = '', id, children }) => {
     )
 }
 
-export default FilterItem 
+export default FilterItem
+
+FilterItem.propTypes = {
+    className: PropTypes.string,
+    id: PropTypes.string,
+    children: PropTypes.node
+}

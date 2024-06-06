@@ -1,12 +1,11 @@
 import React, { createContext, useState } from 'react';
 import { useGetIncentiveFactorsQuery } from '../../../../services/api/Pm-Sales/PmIncentiveApiSlice';
 import _ from 'lodash';
+import PropTypes from 'prop-types';
 
 export const IncentiveContext = createContext(null);
 const IncentiveDataProvider = ({ children }) => {
-
     const [query, setQuery] = useState({})
-
     const { user_id, start_date, end_date } = query || {};
 
     // make query string
@@ -16,7 +15,7 @@ const IncentiveDataProvider = ({ children }) => {
     };
 
     // get pm point factors
-    const { data: allIncentiveTypes, isLoading: incentiveTypesLoading, isFetching: incentiveTypesIsFetching, error } =
+    const { data: allIncentiveTypes, isLoading: incentiveTypesLoading, isFetching: incentiveTypesIsFetching } =
         useGetIncentiveFactorsQuery(
             queryString({
                 user_id,
@@ -46,7 +45,7 @@ const IncentiveDataProvider = ({ children }) => {
 
 
 
-    const incentiveInfo = { allIncentiveTypes, regularIncentiveTypes, upSaleCrossSaleTypes, bonusIncentiveTypes, incentiveTypesLoading, incentiveTypesIsFetching, setQuery }
+    const incentiveInfo = { allIncentiveTypes, regularIncentiveTypes, upSaleCrossSaleTypes, bonusIncentiveTypes, incentiveTypesLoading, incentiveTypesIsFetching, setQuery };
 
 
     return (
@@ -57,3 +56,7 @@ const IncentiveDataProvider = ({ children }) => {
 };
 
 export default IncentiveDataProvider;
+
+IncentiveDataProvider.propTypes = {
+    children: PropTypes.node
+}

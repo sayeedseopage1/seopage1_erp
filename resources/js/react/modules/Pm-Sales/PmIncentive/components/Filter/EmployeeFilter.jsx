@@ -1,6 +1,7 @@
 import { Select } from 'antd';
 import userIcon from '../../assets/tag-user.svg'
 import { Placeholder } from '../../../../../global/Placeholder';
+import PropTypes from 'prop-types';
 
 const EmployeeFilter = ({ pmByDeptData, handleChange, isFetching }) => {
 
@@ -30,3 +31,9 @@ const EmployeeFilter = ({ pmByDeptData, handleChange, isFetching }) => {
 };
 
 export default EmployeeFilter;
+
+EmployeeFilter.propTypes = {
+    pmByDeptData: PropTypes.array,
+    handleChange: PropTypes.func,
+    isFetching: PropTypes.bool
+}

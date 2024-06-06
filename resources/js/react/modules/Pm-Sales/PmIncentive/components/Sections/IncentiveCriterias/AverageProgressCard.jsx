@@ -26,8 +26,8 @@ const AverageProgressCard = ({ item, regularPointAverage }) => {
             </div>
             <div className="progress_card_stats_wrapper">
                 <div className="progress_card_stats_inner">
-                    <label>Average</label>
-                    <label>{regularPointAverage}/100%</label>
+                    <span style={{ marginBottom: '6px' }}>Average</span>
+                    <span style={{ marginBottom: '6px' }}>{regularPointAverage}/100%</span>
                 </div>
                 <GradientProgressBar incentive={regularPointAverage} isAverage={true} />
             </div>

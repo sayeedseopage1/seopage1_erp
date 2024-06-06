@@ -12,14 +12,30 @@ import HeldAmounts from '../components/Sections/HeldAmounts/HeldAmounts';
 import FilterBar from '../components/Sections/IncentiveCriterias/FilterBar';
 import Spinner from '../../PointFactors/components/loader/Spinner';
 import QuarterAndYearlyTable from '../components/Sections/QuarterlyAndYearly/QuarterAndYearlyTable';
-import { quarterlyAndYearlyTableData } from '../constants';
 import useIncentive from '../hooks/useIncentive';
-import IncentiveDataProvider from '../Provider/IncentiveDataProvider';
+import { useGetAchievedIncentiveQuery } from '../../../../services/api/Pm-Sales/PmIncentiveApiSlice';
 
 const Incentive = () => {
     const [tab, setTab] = useState("current");
     const [filterByPeriod, setFilterByPeriod] = useState("monthly");
     const { incentiveTypesLoading } = useIncentive();
+    const [queryForAchievedIncentive, setQueryForAchievedIncentive] = useState({})
+
+    // make query string
+    const queryString = (object) => {
+        const queryObject = _.pickBy(object, Boolean);
+        return new URLSearchParams(queryObject).toString();
+    };
+
+    // get pm point factors
+    const { data: achievedIncentiveHistory, isFetching: achievedIncentiveHistoryIsFetching, isLoading: achievedIncentiveHistoryLoading } =
+        useGetAchievedIncentiveQuery(
+            queryString(queryForAchievedIncentive),
+            { skip: filterByPeriod == "monthly" },
+        );
+
+    const achievedIncentiveHistoryData = achievedIncentiveHistory?.data
+
 
     if (incentiveTypesLoading) {
         return <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
@@ -29,7 +45,7 @@ const Incentive = () => {
 
     return (
         <div>
-            <IncentiveFilter filterByPeriod={filterByPeriod} />
+            <IncentiveFilter filterByPeriod={filterByPeriod} setQueryForAchievedIncentive={setQueryForAchievedIncentive} />
             <div className='incentive_wrapper'>
                 <FilterBar tab={tab} setTab={setTab} filterByPeriod={filterByPeriod} setFilterByPeriod={setFilterByPeriod} />
 
@@ -52,8 +68,7 @@ const Incentive = () => {
                             </Switch.Case>
                             <Switch.Case condition={filterByPeriod == "quarterly" || filterByPeriod == "yearly"}>
                                 <div className='incentive_inner_wrapper'>
-                                    {/* TODO: this slice will be removed when the api filter is ready */}
-                                    <QuarterAndYearlyTable data={filterByPeriod == "quarterly" ? quarterlyAndYearlyTableData.slice(0, 3) : quarterlyAndYearlyTableData} />
+                                    <QuarterAndYearlyTable data={achievedIncentiveHistoryData} isFetching={achievedIncentiveHistoryIsFetching} isLoading={achievedIncentiveHistoryLoading} />
                                 </div>
                             </Switch.Case>
                         </Switch>

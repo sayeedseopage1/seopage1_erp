@@ -27,17 +27,6 @@ const IdealVsAchieved = () => {
                     </div>
                 )
             }
-            {/* {regularChartData?.map((item) =>
-                <div key={item?.id} className="chart_parent">
-                    <div className="chart_wrapper">
-                        <IncentiveBarChart chartData={item?.ideal} />
-                    </div>
-                    <div className="chart_wrapper">
-                        <IncentiveThickChart chartData={item?.achieved} />
-                    </div>
-                </div>
-            )} */}
-
         </div>
     );
 };
