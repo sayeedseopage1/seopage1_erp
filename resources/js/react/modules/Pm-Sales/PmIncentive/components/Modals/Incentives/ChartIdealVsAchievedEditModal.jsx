@@ -23,6 +23,7 @@ const ChartIdealVsAchievedEditModal = ({ antdModalOpen, showIdealVsAchievedEditM
     const defaultChartAxisData = singleCriteria?.data?.incentive_factors?.map((item) => (
         {
             id: item.id,
+            chartDataId: chartDataId,
             lower_limit: parseFloat(item?.lower_limit),
             upper_limit: parseFloat(item?.upper_limit),
             incentive_amount: parseFloat(item?.incentive_amount),
@@ -76,51 +77,53 @@ const ChartIdealVsAchievedEditModal = ({ antdModalOpen, showIdealVsAchievedEditM
             // Sort chartAxisData based on lower_limit
             const sortedChartData = chartAxisData.sort((a, b) => a.lower_limit - b.lower_limit);
 
-            // Validation 0: Check if the starting point is valid and the ending point is valid
-            if (
-                Number(sortedChartData[0].lower_limit) < Number(singleCriteria?.data?.min_limit) ||
-                Number(sortedChartData[sortedChartData.length - 1].upper_limit) > Number(singleCriteria?.data?.max_limit)
-            ) {
-                toast.error(`X Axis range must be between ${singleCriteria?.data?.min_limit} and ${singleCriteria?.data?.max_limit}`);
-                return;
-            }
-
-            // Validation 1: Check if the starting point is less than the minimum lower_limit
-            if (sortedChartData.length > 0 && Number(sortedChartData[0].lower_limit) > Number(singleCriteria?.data?.min_limit)) {
-                toast.error('Starting Point (X Axis) is invalid.');
-                return;
-            }
-
-            // Validation 4: Check if the ending point is greater than the maximum upper_limit
-            if (sortedChartData.length > 0 && Number(sortedChartData[sortedChartData.length - 1].upper_limit) < Number(singleCriteria?.data?.max_limit)) {
-                toast.error('Ending Point (X Axis) is invalid.');
-                return;
-            }
-
-            // Validation 2: Check for conflicts between ranges
-            for (let i = 0; i < sortedChartData.length - 1; i++) {
-                if (Number(sortedChartData[i].upper_limit) > Number(sortedChartData[i + 1].lower_limit)) {
-                    toast.error('Conflicting ranges detected.');
+            if (chartDataId != 10) {
+                // Validation 0: Check if the starting point is valid and the ending point is valid
+                if (
+                    Number(sortedChartData[0].lower_limit) < Number(singleCriteria?.data?.min_limit) ||
+                    Number(sortedChartData[sortedChartData.length - 1].upper_limit) > Number(singleCriteria?.data?.max_limit)
+                ) {
+                    toast.error(`X Axis range must be between ${singleCriteria?.data?.min_limit} and ${singleCriteria?.data?.max_limit}`);
                     return;
                 }
-            }
 
-            // Validation 3: Check for missing ranges
-            for (let i = 0; i < sortedChartData.length - 1; i++) {
-                if (Number(sortedChartData[i].upper_limit) <= Number(sortedChartData[i + 1].lower_limit) - 1) {
-                    Swal.fire({
-                        html: `<p class="incentive_swal_desc text-dark">Please review the table entry again, as you're missing a percentage in the row.</p>`,
-                        showCancelButton: true,
-                        confirmButtonText: "Try Again",
-                        cancelButtonText: "Cancel",
-                        customClass: {
-                            confirmButton: 'swal2-confirm-custom',
-                            cancelButton: 'swal2-cancel-custom',
-                            icon: 'swal2-icon-custom'
-                        },
-                        iconHtml: `<img src="${warningIcon}">`
-                    });
+                // Validation 1: Check if the starting point is less than the minimum lower_limit
+                if (sortedChartData.length > 0 && Number(sortedChartData[0].lower_limit) > Number(singleCriteria?.data?.min_limit)) {
+                    toast.error('Starting Point (X Axis) is invalid.');
                     return;
+                }
+
+                // Validation 4: Check if the ending point is greater than the maximum upper_limit
+                if (sortedChartData.length > 0 && Number(sortedChartData[sortedChartData.length - 1].upper_limit) < Number(singleCriteria?.data?.max_limit)) {
+                    toast.error('Ending Point (X Axis) is invalid.');
+                    return;
+                }
+
+                // Validation 2: Check for conflicts between ranges
+                for (let i = 0; i < sortedChartData.length - 1; i++) {
+                    if (Number(sortedChartData[i].upper_limit) > Number(sortedChartData[i + 1].lower_limit)) {
+                        toast.error('Conflicting ranges detected.');
+                        return;
+                    }
+                }
+
+                // Validation 3: Check for missing ranges
+                for (let i = 0; i < sortedChartData.length - 1; i++) {
+                    if (Number(sortedChartData[i].upper_limit) <= Number(sortedChartData[i + 1].lower_limit) - 1) {
+                        Swal.fire({
+                            html: `<p class="incentive_swal_desc text-dark">Please review the table entry again, as you're missing a percentage in the row.</p>`,
+                            showCancelButton: true,
+                            confirmButtonText: "Try Again",
+                            cancelButtonText: "Cancel",
+                            customClass: {
+                                confirmButton: 'swal2-confirm-custom',
+                                cancelButton: 'swal2-cancel-custom',
+                                icon: 'swal2-icon-custom'
+                            },
+                            iconHtml: `<img src="${warningIcon}">`
+                        });
+                        return;
+                    }
                 }
             }
 
@@ -192,22 +195,27 @@ const ChartIdealVsAchievedEditModal = ({ antdModalOpen, showIdealVsAchievedEditM
                             <button onClick={() => setAddNewAxisDataModalOpen(true)} className='chart_data_add'>Add</button>
                             <button onClick={() => setRemoveRatioItemsModalOpen(true)} className='chart_data_remove'>Remove</button>
                         </div>
-                        <button onClick={() => setSelectRatioRange(true)} className='ideal_vs_achieved_chart_data_actions_range'>Select Range</button>
-                    </div>
-                    <div className='ideal_vs_achieved_axis_data'>
                         {
-                            isLoadingSingleCriteria ? <Skeleton paragraph={{ rows: 2, width: '100%' }} active title={false} /> : <>
-                                <p>Starting Point (X Axis): <span>{parseFloat(singleCriteria?.data?.min_limit)}</span>{singleCriteriaLimitType == 1 ? "$" : "%"}</p>
-                                <p>Ending Point (X Axis): <span>{parseFloat(singleCriteria?.data?.max_limit)}</span>{singleCriteriaLimitType == 1 ? "$" : "%"}</p>
-                            </>
+                            chartDataId != 10 && <button onClick={() => setSelectRatioRange(true)} className='ideal_vs_achieved_chart_data_actions_range'>Select Range</button>
                         }
 
                     </div>
+                    {
+                        chartDataId != 10 && <div className='ideal_vs_achieved_axis_data'>
+                            {
+                                isLoadingSingleCriteria ? <Skeleton paragraph={{ rows: 2, width: '100%' }} active title={false} /> : <>
+                                    <p>Starting Point (X Axis): <span>{parseFloat(singleCriteria?.data?.min_limit)}</span>{singleCriteriaLimitType == 1 ? "$" : "%"}</p>
+                                    <p>Ending Point (X Axis): <span>{parseFloat(singleCriteria?.data?.max_limit)}</span>{singleCriteriaLimitType == 1 ? "$" : "%"}</p>
+                                </>
+                            }
+
+                        </div>
+                    }
                 </div>
 
                 {/* Modal Content */}
                 <div className='edit_chart_data_modal_content' style={{ padding: "28px 0 0 0" }}>
-                    <h3 className='edit_chart_data_sub_title'>X Axis Ratio</h3>
+                    <h3 className='edit_chart_data_sub_title'>X Axis {chartDataId == 10 ? "Condition" : "Ratio"}</h3>
                     <h3 className='edit_chart_data_sub_title'>Y Axis Ratio</h3>
                 </div>
 
@@ -220,11 +228,16 @@ const ChartIdealVsAchievedEditModal = ({ antdModalOpen, showIdealVsAchievedEditM
                             chartAxisData?.length > 0 ? (
                                 // If data is available, map through it and render items
                                 chartAxisData
-                                    ?.sort((a, b) => a?.lower_limit - b?.lower_limit)
+                                    ?.sort((a, b) => chartDataId == 10 ? b.lower_limit - a.lower_limit : a?.lower_limit - b?.lower_limit)
                                     ?.map((item) => (
                                         <div key={item?.id} className='edit_chart_data_modal_content ratio_card'>
                                             <div className='ratio_wrapper'>
-                                                <p className='ratio_text'>{item?.lower_limit}-{item?.limit_type == 1 ? "$" : ""}{item?.upper_limit}{item?.limit_type == 2 ? "%" : ""}</p>
+                                                {
+                                                    chartDataId == 10 ?
+                                                        <p className='ratio_text'><span title='Previous month %'>{item?.lower_limit}%</span> & <span title='Current month %'>{item?.upper_limit}%</span></p>
+                                                        :
+                                                        <p className='ratio_text'>{item?.lower_limit}-{item?.limit_type == 1 ? "$" : ""}{item?.upper_limit}{item?.limit_type == 2 ? "%" : ""}</p>
+                                                }
                                                 <button onClick={() => xAxisEditHandler(item)} className='ratio_edit_button'>Edit</button>
                                             </div>
                                             <div className='ratio_wrapper'>

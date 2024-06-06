@@ -7,8 +7,9 @@ import { toast } from 'react-toastify';
 
 const EditXAxisModal = ({ singleCriteria, axisEditItem, setChartAxisData, antdModalOpen, setAntdModalOpen }) => {
 
-    const { lower_limit, upper_limit, limit_type } = axisEditItem || {}
+    const { lower_limit, upper_limit, limit_type, chartDataId } = axisEditItem || {}
     const { min_limit, max_limit } = singleCriteria?.data || {};
+
 
     const {
         register,
@@ -20,14 +21,16 @@ const EditXAxisModal = ({ singleCriteria, axisEditItem, setChartAxisData, antdMo
     const validateFields = (data) => {
         let isValid = true;
 
-        if (Number(data.lower_limit) >= Number(data.upper_limit) || Number(data.upper_limit) < Number(data.lower_limit)) {
-            toast.error('X Axis Lower Limit cannot be greater than or equal to Upper Limit');
-            isValid = false;
-        }
+        if (chartDataId != 10) {
+            if (Number(data.lower_limit) >= Number(data.upper_limit) || Number(data.upper_limit) < Number(data.lower_limit)) {
+                toast.error('X Axis Lower Limit cannot be greater than or equal to Upper Limit');
+                isValid = false;
+            }
 
-        if (Number(data.lower_limit) < Number(min_limit) || Number(data.upper_limit) > Number(max_limit)) {
-            toast.error(`X Axis range must be between ${min_limit} and ${max_limit}`);
-            isValid = false;
+            if (Number(data.lower_limit) < Number(min_limit) || Number(data.upper_limit) > Number(max_limit)) {
+                toast.error(`X Axis range must be between ${min_limit} and ${max_limit}`);
+                isValid = false;
+            }
         }
 
         return isValid;
@@ -84,17 +87,23 @@ const EditXAxisModal = ({ singleCriteria, axisEditItem, setChartAxisData, antdMo
                 <div className='add_new_axis_item_modal_body'>
                     <form onSubmit={handleSubmit(onSubmit)}>
                         <div style={{ marginBottom: '32px' }}>
-                            <p className="axis_item_modal_inputs_title" style={{ fontSize: '16px' }}>Current Value: <span style={{ fontWeight: '500', color: '#000', fontSize: '20px' }}>{lower_limit}-{limit_type == 1 ? "$" : ""}{upper_limit}{limit_type == 2 ? '%' : ''}</span></p>
-                            <p className='axis_item_modal_inputs_title' style={{ fontSize: '16px' }}>New X Axis ratio ({limit_type == 1 ? "Amount" : "Percentage"})</p>
+                            {
+                                chartDataId == 10 ? <p className="axis_item_modal_inputs_title" style={{ fontSize: '16px' }}>Current Condition: <span style={{ fontWeight: '500', color: '#000', fontSize: '20px' }}>{lower_limit}% & {upper_limit}%</span></p> : <p className="axis_item_modal_inputs_title" style={{ fontSize: '16px' }}>Current Value: <span style={{ fontWeight: '500', color: '#000', fontSize: '20px' }}>{lower_limit}-{limit_type == 1 ? "$" : ""}{upper_limit}{limit_type == 2 ? '%' : ''}</span></p>
+                            }
+
+                            {
+                                chartDataId == 10 ? <p className='axis_item_modal_inputs_title' style={{ fontSize: '16px' }}>New X Axis condition (Percentage)</p> : <p className='axis_item_modal_inputs_title' style={{ fontSize: '16px' }}>New X Axis ratio ({limit_type == 1 ? "Amount" : "Percentage"})</p>
+                            }
+
                             <div className='axis_item_modal_inputs_inner'>
                                 <div className='w-50'>
-                                    <input defaultValue={lower_limit} className='point_edit_modal_input' type='number' {...register("lower_limit", { required: true })} placeholder='Write here ' />
+                                    <input defaultValue={lower_limit} className='point_edit_modal_input' type='number' {...register("lower_limit", { required: true })} placeholder={`${chartDataId == 10 ? 'Previous month %' : 'Write here'}`} />
 
                                     {errors.lower_limit && <span style={{ color: 'red', fontSize: '12px' }}>This field is required</span>}
                                 </div>
 
                                 <div className='w-50'>
-                                    <input defaultValue={upper_limit} className='point_edit_modal_input' type='number' {...register("upper_limit", { required: true })} placeholder='Write here ' />
+                                    <input defaultValue={upper_limit} className='point_edit_modal_input' type='number' {...register("upper_limit", { required: true })} placeholder={`${chartDataId == 10 ? 'Previous month %' : 'Write here'}`} />
 
                                     {errors.upper_limit && <span style={{ color: 'red', fontSize: '12px' }}>This field is required</span>}
                                 </div>

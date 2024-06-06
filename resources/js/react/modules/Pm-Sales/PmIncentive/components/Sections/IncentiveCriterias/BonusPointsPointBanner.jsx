@@ -19,9 +19,9 @@ const BonusPointsPointBanner = () => {
     const { bonusIncentiveTypes, incentiveTypesLoading } = useIncentive();
     const { incentive_criterias } = bonusIncentiveTypes || {};
 
-    const unreleasedIncentive = incentive_criterias?.find((item) => item?.id == 10)?.obtained_incentive;
+    const unreleasedIncentive = parseFloat(incentive_criterias?.find((item) => item?.id == 10)?.obtained_incentive);
 
-    const bonusPointsIncentive = incentive_criterias?.filter(item => item?.id === 9 || item?.id === 11)?.[0]?.obtained_incentive;
+    const bonusPointsIncentive = parseFloat(incentive_criterias?.filter(item => item?.id === 9 || item?.id === 11)?.[0]?.obtained_incentive);
 
     const pmIncentive = useSelector((state) => state.pmIncentive)
     const dispatch = useDispatch();

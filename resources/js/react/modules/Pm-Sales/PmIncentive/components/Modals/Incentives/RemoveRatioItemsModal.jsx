@@ -20,7 +20,13 @@ const RemoveRatioItemsModal = ({ chartAxisData, setChartAxisData, antdModalOpen,
             ),
             dataIndex: "lower_limit", // Changed the dataIndex
             key: "lower_limit", // Changed the key
-            render: (_text, record) => <p className='remove_axis_item_table_data' style={{ fontSize: '14px' }}>{record?.lower_limit}-{record?.limit_type == 1 ? '$' : ''}{record?.upper_limit}{record?.limit_type == 2 ? '%' : ''}</p>,
+            render: (_text, record) => record?.chartDataId == 10 ?
+                <p className='remove_axis_item_table_data' style={{ fontSize: '14px' }}><span title='Previous month %'>{record?.lower_limit}%</span> & <span title='Current month %'>{record?.upper_limit}%</span></p>
+                :
+                <p className='remove_axis_item_table_data' style={{ fontSize: '14px' }}>{record?.lower_limit}-{record?.limit_type == 1 ? "$" : ""}{record?.upper_limit}{record?.limit_type == 2 ? "%" : ""}</p>
+
+
+            /* render: (_text, record) => <p className='remove_axis_item_table_data' style={{ fontSize: '14px' }}>{record?.lower_limit}-{record?.limit_type == 1 ? '$' : ''}{record?.upper_limit}{record?.limit_type == 2 ? '%' : ''}</p>, */
         },
         {
             title: (
