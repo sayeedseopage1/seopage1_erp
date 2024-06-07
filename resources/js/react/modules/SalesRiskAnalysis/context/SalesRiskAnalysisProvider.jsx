@@ -23,6 +23,7 @@ const SalesRiskAnalysisProvider = ({ children }) => {
     const [yesNoRules, setYesNoRules] = React.useState([]);
     const [policyKeys, setPolicyKeys] = React.useState({});
     const [allQuestions, setAllQuestions] = React.useState({});
+    const [questionAnswerKeys, setQuestionAnswerKeys] = React.useState({});
 
     // fetch filter options
     const { data: filterOptions, isFetching: isFilterOptionsFetching } =
@@ -42,10 +43,14 @@ const SalesRiskAnalysisProvider = ({ children }) => {
     });
 
     // fetch question fields
-    const { data: questionFieldsData, isLoading: isQuestionType } =
-        useSaleRiskQuestionsListFiledTypeQuery("", {
-            refetchOnMountOrArgChange: true,
-        });
+    const {
+        data: questionFieldsData,
+        isLoading: questionTypeLoading,
+        refetch: questionFiledRefetch,
+        status: questionTypeStatus,
+    } = useSaleRiskQuestionsListFiledTypeQuery("", {
+        refetchOnMountOrArgChange: true,
+    });
 
     // set filter options state
     useEffect(() => {
@@ -77,7 +82,7 @@ const SalesRiskAnalysisProvider = ({ children }) => {
     }, [salesRiskInputs, isSalesRiskInputsFetching]);
 
     React.useEffect(() => {
-        if (questionFieldsData && !isQuestionType) {
+        if (questionFieldsData && !questionTypeLoading) {
             const questionTypeData = Object.entries(
                 questionFieldsData?.data?.questionKeys
             )
@@ -93,8 +98,19 @@ const SalesRiskAnalysisProvider = ({ children }) => {
                         id: index + 1,
                         name: key,
                         label: value,
-                    };f
+                    };
+                    f;
                 });
+            const questionKeys = Object.entries(
+                questionFieldsData?.data?.questionKeys
+            ).map(([key, value], index) => {
+                return {
+                    id: index + 1,
+                    name: key,
+                    label: value,
+                };
+                f;
+            });
 
             const policyList = questionFieldsData?.data?.policies.map(
                 (policy) => {
@@ -126,6 +142,13 @@ const SalesRiskAnalysisProvider = ({ children }) => {
                     };
                 }
             );
+            setQuestionAnswerKeys({
+                label: "Question Answer Keys",
+                emptyOptionsLabel: "Select Question Answer Key",
+                id: "questionAnswerKey",
+                data: questionKeys,
+            });
+
             setAllQuestions({
                 label: "Parent Questions",
                 emptyOptionsLabel: "Select Parent Question",
@@ -152,16 +175,21 @@ const SalesRiskAnalysisProvider = ({ children }) => {
                 data: yesNoRulesData,
             });
         }
-    }, [questionFieldsData, isQuestionType]);
+    }, [questionFieldsData, questionTypeLoading]);
+
+    let isQuestionTypeLoading = questionTypeStatus === "pending" ? true : false;
 
     const SalesRiskAnalysisValue = React.useMemo(() => {
         return {
             questionsAnswerType,
+            questionAnswerKeys,
             policies,
             allQuestions,
             policyKeys,
             isSalesRiskInputsLoading,
             yesNoRules,
+            isQuestionTypeLoading,
+            questionFiledRefetch,
         };
     });
 

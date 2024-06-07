@@ -29,7 +29,13 @@ import { PolicyTypeItems } from "../../constant";
 
 // Sections Components
 import NewPolicyModalInputsContainer from "../sections/NewPolicyModalInputsContainer";
+
+// Context
 import { SalesRiskAnalysisContext } from "../../context/SalesRiskAnalysisProvider";
+
+// style
+import "./style/modalStyle.css";
+import Switch from "../Switch";
 
 const EditPolicyModal = ({
     open,
@@ -54,6 +60,10 @@ const EditPolicyModal = ({
         handlePolicyEditChange,
     } = editPolicyAction;
     const { policyKeys } = useContext(SalesRiskAnalysisContext);
+    const { settings } = useSelector((state) => state.saleRiskAnalysis);
+    const isPolicyEditEnabled = settings?.find(
+        (setting) => setting.name === "enable_edit_policy"
+    )?.value;
     const { departments } = useSelector((state) => state.filterOptions);
     let allSelectedCountries = [];
 
@@ -87,6 +97,7 @@ const EditPolicyModal = ({
                                 type="text"
                                 className="w-100"
                                 name="policyName"
+                                readOnly={!isPolicyEditEnabled}
                                 value={editPolicyDefaultData?.policyName}
                                 onChange={handlePolicyEditChange}
                                 placeholder="Write Here"
@@ -106,6 +117,7 @@ const EditPolicyModal = ({
                             <ModalSelectContainer>
                                 <DepartmentSelect
                                     data={departments}
+                                    isDisabled={!isPolicyEditEnabled}
                                     selected={editPolicyDefaultData?.department}
                                     setSelectedDept={handlePolicyEditChange}
                                 />
@@ -128,7 +140,7 @@ const EditPolicyModal = ({
                                     data={policyKeys}
                                     selected={editPolicyDefaultData?.key}
                                     setSelected={handlePolicyEditChange}
-                                    isDisableUse={false}
+                                    isDisableUse={!isPolicyEditEnabled}
                                 />
                             </ModalSelectContainer>
                             {editPolicyDataValidation?.key && (
@@ -147,6 +159,7 @@ const EditPolicyModal = ({
                                 type="text"
                                 className="w-100"
                                 name="comment"
+                                readOnly={!isPolicyEditEnabled}
                                 value={editPolicyDefaultData?.comment}
                                 onChange={handlePolicyEditChange}
                                 placeholder="Write Here"
@@ -176,52 +189,66 @@ const EditPolicyModal = ({
                     ) : (
                         ""
                     )}
-                    <div className="row mb-4 align-items-center">
-                        <ModalInputLabel className="col-4">
-                            Rule Type<sup>*</sup>{" "}
-                        </ModalInputLabel>
-                        <div className="col-8 px-0 flex-column">
-                            <ModalSelectContainer>
-                                <CustomDropDown
-                                    filedName="policyType"
-                                    data={{
-                                        ...PolicyTypeItems,
-                                        data: PolicyTypeItems?.data?.map(
-                                            (item) => {
-                                                const isYesNoRule =
-                                                editPolicyData?.key?.name ===
-                                                    "yesNoRules";
-                                                const isItemYesNo =
-                                                    item?.name.includes(
-                                                        "yesNo"
-                                                    );
-                                                const disabled = isYesNoRule
-                                                    ? !isItemYesNo
-                                                    : false;
 
-                                                return {
-                                                    ...item,
-                                                    disabled,
-                                                };
+                    <Switch>
+                        <Switch.Case
+                            condition={
+                                isPolicyEditEnabled ||
+                                editPolicyData?.key?.name === "yesNoRules"
+                            }
+                        >
+                            <div className="row mb-4 align-items-center">
+                                <ModalInputLabel className="col-4">
+                                    Rule Type<sup>*</sup>{" "}
+                                </ModalInputLabel>
+                                <div className="col-8 px-0 flex-column">
+                                    <ModalSelectContainer>
+                                        <CustomDropDown
+                                            filedName="policyType"
+                                            data={{
+                                                ...PolicyTypeItems,
+                                                data: PolicyTypeItems?.data?.map(
+                                                    (item) => {
+                                                        const isYesNoRule =
+                                                            editPolicyData?.key
+                                                                ?.name ===
+                                                            "yesNoRules";
+                                                        const isItemYesNo =
+                                                            item?.name.includes(
+                                                                "yesNo"
+                                                            );
+                                                        const disabled =
+                                                            isYesNoRule
+                                                                ? !isItemYesNo
+                                                                : false;
+
+                                                        return {
+                                                            ...item,
+                                                            disabled,
+                                                        };
+                                                    }
+                                                ),
+                                            }}
+                                            selected={
+                                                editPolicyData?.policyType
                                             }
-                                        ),
-                                    }}
-                                    selected={editPolicyData?.policyType}
-                                    setSelected={handlePolicyEditChange}
-                                    isDisableUse={
-                                        editPolicyData?.key?.name ===
-                                            "yesNoRules" &&
-                                        !editPolicyInputData?.length
-                                    }
-                                />
-                            </ModalSelectContainer>
-                            {editPolicyDataValidation?.policyType && (
-                                <p className="text-danger">
-                                    Rule type is required
-                                </p>
-                            )}
-                        </div>
-                    </div>
+                                            setSelected={handlePolicyEditChange}
+                                            isDisableUse={
+                                                editPolicyData?.key?.name ===
+                                                    "yesNoRules" &&
+                                                !editPolicyInputData?.length
+                                            }
+                                        />
+                                    </ModalSelectContainer>
+                                    {editPolicyDataValidation?.policyType && (
+                                        <p className="text-danger">
+                                            Rule type is required
+                                        </p>
+                                    )}
+                                </div>
+                            </div>
+                        </Switch.Case>
+                    </Switch>
                     {/* All Rules Inputs */}
                     <NewPolicyModalInputsContainer
                         newPolicyData={editPolicyData}
@@ -233,29 +260,44 @@ const EditPolicyModal = ({
                         setIsFocusedOnTitleInput={setIsFocusedOnTitleInput}
                     />
 
-                    <div className="d-flex justify-content-end">
-                        <button
-                            className="d-flex btn btn-success align-items-center"
-                            style={{
-                                fontSize: "13px",
-                            }}
-                            disabled={_.isEmpty(editPolicyData?.policyType)}
-                            onClick={handleAddRuleOnPolicy}
+                    <Switch>
+                        <Switch.Case
+                            condition={
+                                isRuleUpdating || isPolicyEditEnabled ||
+                                editPolicyData?.key?.name === "yesNoRules"
+                            }
                         >
-                            {isRuleUpdating ? "Update rule" : "Create Rule"}
-                        </button>
-                        <button
-                            className="d-flex btn btn-warning align-items-center text-white"
-                            style={{
-                                fontSize: "13px",
-                                marginLeft: "10px",
-                            }}
-                            disabled={_.isEmpty(editPolicyData?.policyType)}
-                            onClick={handleCancelRuleOnPolicy}
-                        >
-                            {isRuleUpdating ? "Cancel Edit" : "Cancel"}
-                        </button>
-                    </div>
+                            <div className="d-flex justify-content-end">
+                                <button
+                                    className="d-flex btn btn-success align-items-center"
+                                    style={{
+                                        fontSize: "13px",
+                                    }}
+                                    disabled={_.isEmpty(
+                                        editPolicyData?.policyType
+                                    )}
+                                    onClick={handleAddRuleOnPolicy}
+                                >
+                                    {isRuleUpdating
+                                        ? "Update rule"
+                                        : "Create Rule"}
+                                </button>
+                                <button
+                                    className="d-flex btn btn-warning align-items-center text-white"
+                                    style={{
+                                        fontSize: "13px",
+                                        marginLeft: "10px",
+                                    }}
+                                    disabled={_.isEmpty(
+                                        editPolicyData?.policyType
+                                    )}
+                                    onClick={handleCancelRuleOnPolicy}
+                                >
+                                    {isRuleUpdating ? "Cancel Edit" : "Cancel"}
+                                </button>
+                            </div>
+                        </Switch.Case>
+                    </Switch>
                 </div>
                 <Flex gap="10px" justifyContent="center">
                     <ModalButton onClick={handleEditPolicyUpdate} width="177px">

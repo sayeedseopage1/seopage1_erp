@@ -15,6 +15,7 @@ const CustomModal = ({
     width,
     isCloseButtonShow = false,
     scroLlBottom = false,
+    className = "",
     ...props
 }) => {
     return (

@@ -1,4 +1,5 @@
-import React, {  useEffect } from "react";
+import React, { useContext, useEffect } from "react";
+import { IoAdd } from "react-icons/io5";
 
 // ui components
 import RefreshButton from "../components/RefreshButton";
@@ -13,9 +14,16 @@ import { QuestionsListTableColumns } from "../components/table/QuestionsListTabl
 //APi services
 import { useSaleAnalysisQuestionsListQuery } from "../../../services/api/salesRiskAnalysisSlice";
 import { set } from "lodash";
-
+import { SalesRiskAnalysisContext } from "../context/SalesRiskAnalysisProvider";
+import Switch from "../components/Switch";
+import Loader from "../../../global/Loader";
 
 const SalesRiskQuestionList = () => {
+    const [isYesNoRulesLoading, setIsYesNoRulesLoading] = React.useState(false);
+
+    const { isQuestionTypeLoading ,questionFiledRefetch, questionsAnswerType, policies } = useContext(SalesRiskAnalysisContext);
+    const [addQuestionsModalOpenClicked, setAddQuestionsModalOpenClicked] =
+    React.useState(false);
     const [{ pageIndex, pageSize }, setPagination] = React.useState({
         pageIndex: 0,
         pageSize: 10,
@@ -60,10 +68,9 @@ const SalesRiskQuestionList = () => {
     // questions list data
     const questionsList = data?.data;
 
-
     const handleOpenAddQuestionsModal = () => {
         setAddQuestionsModalOpen(true);
-    }
+    };
 
     // close modal
     const handleCloseAddQuestionsModal = () => {
@@ -75,8 +82,6 @@ const SalesRiskQuestionList = () => {
     const onPageChange = (paginate) => {
         setPagination(paginate);
     };
-
-
 
     useEffect(() => {
         if (questionsList?.data?.length > 0) {
@@ -91,6 +96,38 @@ const SalesRiskQuestionList = () => {
         }
     }, [questionsList]);
 
+    const openAddQuestionsModal = () => {
+        questionFiledRefetch();
+        setAddQuestionsModalOpenClicked(true);
+    };
+
+    useEffect(() => {
+        if (addQuestionsModalOpenClicked) {
+            if (!isQuestionTypeLoading) {
+                handleOpenAddQuestionsModal();
+                handleOpenAddQuestionsModal();
+                    const isYesNoRulesExist = questionsAnswerType.data.find(
+                        (item) => item.name === "yesNoRules"
+                    );
+                    setSingleQuestion({
+                        ...singleQuestion,
+                        question_key: isYesNoRulesExist,
+                        type: isYesNoRulesExist && {
+                            id: 2,
+                            label: "Yes/No",
+                            name: "yesNo",
+                        },
+                        title: "",
+                        policy_id:
+                            isYesNoRulesExist &&
+                            policies.data.find((item) =>
+                                item.key.includes("yesNo")
+                            ),
+                    });
+                setAddQuestionsModalOpenClicked(false);
+            }
+        }
+    }, [addQuestionsModalOpenClicked, isQuestionTypeLoading]);
 
 
     return (
@@ -98,13 +135,25 @@ const SalesRiskQuestionList = () => {
             {/* refresh button */}
             <div className="d-flex justify-content-between align-items-center">
                 <button
-                    onClick={() => {
-                        setAddQuestionsModalOpen(true);
+                    onClick={
+                        isQuestionTypeLoading
+                            ? null
+                            : () => openAddQuestionsModal()
+                    }
+                    className="btn btn-primary ml-0 mb-3 mb-md-0 d-flex align-items-center"
+                    style={{
+                        padding: "9px 12px",
                     }}
-                    className="btn btn-primary"
                 >
-                    <i className="fa fa-plus mr-2" aria-hidden="true" /> Add New
-                    Questions
+                    <Switch>
+                        <Switch.Case condition={isQuestionTypeLoading}>
+                            <Loader title="Loading Question Key" />
+                        </Switch.Case>
+                        <Switch.Case condition={!isQuestionTypeLoading}>
+                            <IoAdd className="mr-1" size={20} /> Add New
+                            Question
+                        </Switch.Case>
+                    </Switch>
                 </button>
                 <RefreshButton
                     onClick={() => {
@@ -128,13 +177,17 @@ const SalesRiskQuestionList = () => {
                         setAllQuestions={setAllQuestions}
                         allQuestions={allQuestions}
                         onPageChange={onPageChange}
-                        handleOpenAddQuestionsModal={handleOpenAddQuestionsModal}
+                        setIsYesNoRulesLoading={setIsYesNoRulesLoading}
+                        handleOpenAddQuestionsModal={
+                            handleOpenAddQuestionsModal
+                        }
                     />
                 </div>
             </div>
             {addQuestionsModalOpen && (
                 <AddQuestionsListModal
                     open={addQuestionsModalOpen}
+                    isYesNoRulesLoading={isYesNoRulesLoading}
                     closeModal={handleCloseAddQuestionsModal}
                     addQuestionsData={singleQuestion}
                     singleQuestion={singleQuestion}
