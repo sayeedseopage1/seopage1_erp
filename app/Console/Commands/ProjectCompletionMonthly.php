@@ -32,7 +32,6 @@ class ProjectCompletionMonthly extends Command
      */
     public function handle()
     {
-        $minLimit = Factor::where('criteria_id', 9)->where('status', 1)->first()->lower_limit;
         $users = User::where('role_id',4)->get();
         foreach($users as $user){
             $referenceProjectId = Project::whereHas('deal', function($deal){
@@ -63,7 +62,6 @@ class ProjectCompletionMonthly extends Command
 
             // Project Manager Point Distribution ( Project completion )
             ProjectManagerPointLogic::distribute(10, $referenceProjectId, $projectsTwelveDays->count());
-            
         }
     }
 }
