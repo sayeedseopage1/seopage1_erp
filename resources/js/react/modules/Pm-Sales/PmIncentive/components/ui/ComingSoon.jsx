@@ -6,7 +6,7 @@ const ComingSoon = ({ pageName }) => {
         <div className="coming-soon-container">
             <div className="coming-soon-content">
                 <h1 className="coming-soon-title">{pageName} Coming Soon</h1>
-                <p className="coming-soon-text">Our website is under construction. We&apos;ll be back soon!</p>
+                <p className="coming-soon-text">Our system is under construction. We&apos;ll be back soon!</p>
                 <div className="divider-container">
                     <div className="divider"></div>
                 </div>
