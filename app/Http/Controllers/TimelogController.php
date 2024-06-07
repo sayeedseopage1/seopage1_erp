@@ -738,7 +738,7 @@ class TimelogController extends AccountBaseController
                 $timeLog->start_time = now();
                 $timeLog->hourly_rate = 0;
                 $timeLog->memo = $task_status->heading;
-                $task_revision = TaskRevision::where('task_id',$request->task_id)->first();
+                $task_revision = TaskRevision::where('task_id',$request->task_id)->orderBy('id', 'desc')->first();
                 //  /  dd($task_revision);
                     if($task_revision != null)
                     {
