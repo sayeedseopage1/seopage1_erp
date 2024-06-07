@@ -191,6 +191,8 @@ export class TaskRevision {
         this.revisionAcknowledgement = data.revision_acknowledgement;
         this.revisionNo = data.revision_no;
         this.revisionReason = data.revision_reason;
+        this.totalMin = data.total_minutes ?? "";
+        this.totalHour = data.total_hours ?? "";
         this.revisionStatus = data.revision_status;
         this.saleAccept = data.sale_accept;
         this.saleComment = data.sale_comment;
