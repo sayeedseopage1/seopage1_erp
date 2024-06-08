@@ -14,7 +14,7 @@
 
 
 @component('mail::button', ['url' => $url])
-@lang($text)
+    {{ $text }}
 @endcomponent
 
 @lang('email.regards'),<br>
