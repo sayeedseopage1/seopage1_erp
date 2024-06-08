@@ -139,11 +139,18 @@ class Invoice extends BaseModel
                         $is_all_paid = $milestone->invoice && $milestone->invoice->status == 'paid' ? $is_all_paid : 0;
                     }
                     
+
+                    $projectMilestone = ProjectMilestone::with('project.client')->find($item->milestone_id);
+                    $activity = 'You marked milestone '.$projectMilestone->milestone_title??null. ', from project <a style="color:blue" href="'.route('projects.show',$projectMilestone->project->id??null).'">'.$projectMilestone->project->project_name??null. '</a> for client: <a style="color:blue" href="'.route('clients.show', $projectMilestone->project->client->id??null).'">'. $projectMilestone->project->client->name??null. '</a> as complete';
+
                     // Project Manager Point Distribution ( Milestone release )
-                    if($is_all_paid) ProjectManagerPointLogic::distribute(4, $item->project_id, $is_all_paid);
+                    if($is_all_paid) ProjectManagerPointLogic::distribute(4, $item->project_id, $is_all_paid, null, $activity);
                 }
 
                 if(Project::with('deal')->find($item->project_id)->deal->project_type == 'hourly'){
+                    $project = Project::with('client')->find($item->project_id);
+                    $activity = 'You billed amount'.$item->total.' for your hourly project <a style="color:blue" href="'.route('projects.show',$project->id).'">'.$project->project_name. '</a> from client <a style="color:blue" href="'.route('clients.show', $project->client->id).'">'. $project->client->name. '</a> this week!';
+
                     // Project Manager Point Distribution ( Billed amount every week )
                     ProjectManagerPointLogic::distribute(18, $item->project_id, 1, ($item->total/100) * Factor::find(45)->points);
                 }
