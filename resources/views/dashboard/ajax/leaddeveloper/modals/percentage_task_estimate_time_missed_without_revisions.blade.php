@@ -1,11 +1,13 @@
 <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
-<div id="percentage_of_tasks_deadline_missed{{ count($estimate_missed_task_data_lead) }}" class="modal fade" tabindex="-1"
-    aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div id="percentage_task_estimate_time_missed_without_revisions{{ count($estimate_missed_task_data_lead) }}"
+    class="modal fade" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-xl">
         <div class="modal-content">
             <div class="modal-header">
                 <div class="modal-title">
-                    <h4>Submitted Tasks: {{ $submit_number_of_tasks_in_this_month_lead }}</h4>
+                    <h4>Percentage of Tasks Where Given Estimated Time was Missed Without Revisions:
+                        {{ round($percentage_of_tasks_where_given_estimated_time_was_missed_without_revision, 2) }}%
+                    </h4>
 
                 </div>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -13,7 +15,8 @@
                 </button>
             </div>
             <div class="modal-body">
-                <table id="percentage_of_tasks_deadline_missed_table" class="display" style="width:100%">
+                <table id="percentage_task_estimate_time_missed_without_revisions_table" class="display"
+                    style="width:100%">
                     <thead>
                         <tr>
                             <th scope="col">Sl No</th>
@@ -27,7 +30,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach ($estimate_missed_task_data_lead as $row)
+                        @foreach ($percentage_of_tasks_where_given_estimated_time_was_missed_without_revision_data as $row)
                             <tr>
                                 <td>{{ $loop->index + 1 }}</td>
                                 <td>
@@ -190,7 +193,7 @@
 
 <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
 <script>
-    new DataTable('#percentage_of_tasks_deadline_missed_table', {
+    new DataTable('#percentage_task_estimate_time_missed_without_revisions_table', {
         "dom": 't<"d-flex"l<"ml-auto"ip>><"clear">',
     });
 </script>

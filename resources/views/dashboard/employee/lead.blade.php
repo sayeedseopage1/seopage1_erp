@@ -398,7 +398,6 @@
 
                                     </a>
                                     @include('dashboard.ajax.leaddeveloper.modals.avg_task_submission_in_day')
-
                                 </p>
 
                             </div>
@@ -426,7 +425,30 @@
 
                                     </a>
                                     @include('dashboard.ajax.leaddeveloper.modals.avg_num_in_progress_task')
+                                </p>
 
+                            </div>
+                        </div>
+                        <div class="d-block">
+                            <i class="fa fa-list text-lightest f-27"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div
+                        class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0">
+                        <div class="d-block text-capitalize">
+                            <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">Average Task Hold Time</h5>
+                            <div class="d-flex flex-wrap">
+
+                                <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
+                                    <a href="#" data-toggle="modal"
+                                        data-target="#avg_num_in_progress_task{{ count($total_in_progress_date_range_table_lead) }}">
+
+                                        {{ round($average_in_progress_date_range_lead, 2) }}
+
+                                    </a>
+                                    @include('dashboard.ajax.leaddeveloper.modals.avg_num_in_progress_task')
                                 </p>
 
                             </div>
@@ -453,33 +475,6 @@
 
                                     </a>
                                     @include('dashboard.ajax.leaddeveloper.modals.percentage_of_tasks_deadline_missed')
-
-                                </p>
-
-                            </div>
-                        </div>
-                        <div class="d-block">
-                            <i class="fa fa-list text-lightest f-27"></i>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div
-                        class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0">
-                        <div class="d-block text-capitalize">
-                            <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">Percentage of tasks where given estimated time
-                                was missed</h5>
-                            <div class="d-flex flex-wrap">
-
-                                <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
-                                    <a href="#" data-toggle="modal"
-                                        data-target="#percentage_task_estimate_time_missed{{ count($estimate_missed_task_data_lead) }}">
-
-                                        {{ round($percentage_number_task_cross_estimate_time_lead, 2) }}%
-
-                                    </a>
-                                    @include('dashboard.ajax.leaddeveloper.modals.percentage_task_estimate_time_missed')
-
                                 </p>
 
                             </div>
@@ -492,6 +487,42 @@
 
             </div>
             <div class="row mt-3">
+                <div class="col-md-8">
+                    <div
+                        class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0">
+                        <div class="d-block text-capitalize">
+                            <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">Percentage of tasks where given estimated time
+                                was missed</h5>
+                            <div class="d-flex flex-wrap">
+
+                                <h6 class="mb-0 f-18 font-weight-bold mr-5">
+                                    Percentage of Tasks Where Given Estimated Time was Missed With Revisions
+                                    <a href="#" data-toggle="modal"
+                                        data-target="#percentage_task_estimate_time_missed{{ count($estimate_missed_task_data_lead) }}">
+                                        {{ round($percentage_number_task_cross_estimate_time_lead, 2) }}%
+
+                                    </a>
+                                    @include('dashboard.ajax.leaddeveloper.modals.percentage_task_estimate_time_missed')
+                                </h6>
+                                <h6 class="mb-0 f-18 font-weight-bold mr-5">
+                                    Percentage of Tasks Where Given Estimated Time was Missed Without Revisions
+                                    <a href="#" data-toggle="modal"
+                                        data-target="#percentage_task_estimate_time_missed_without_revisions{{ count($estimate_missed_task_data_lead) }}">
+                                        {{ round($percentage_of_tasks_where_given_estimated_time_was_missed_without_revision, 2) }}%
+
+                                    </a>
+                                    @include('dashboard.ajax.leaddeveloper.modals.percentage_task_estimate_time_missed_without_revisions')
+                                </h6>
+
+                            </div>
+                        </div>
+                        <div class="d-block">
+                            <i class="fa fa-list text-lightest f-27"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row mt-3">
                 <div class="col-md-4">
                     <div
                         class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0">
@@ -502,7 +533,7 @@
                                 <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
                                     <a href="#" data-toggle="modal" data-target="#">
 
-                                        0%
+                                        Under Development
 
                                     </a>
 
@@ -527,7 +558,7 @@
                                 <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
                                     <a href="#" data-toggle="modal" data-target="#">
 
-                                        0%
+                                        Under Development
 
                                     </a>
 
@@ -550,12 +581,72 @@
                                 <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
                                     <a href="#" data-toggle="modal" data-target="#">
 
-                                        0
+                                        Under Development
 
                                     </a>
 
                                 </p>
 
+                            </div>
+                        </div>
+                        <div class="d-block">
+                            <i class="fa fa-list text-lightest f-27"></i>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <div class="row mt-3">
+                <div class="col-md-4">
+                    <div
+                        class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0">
+                        <div class="d-block text-capitalize">
+                            <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">Number of Approval</h5>
+                            <div class="d-flex flex-wrap">
+
+                                <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
+                                    <a href="#" data-toggle="modal" data-target="#">
+                                        {{$number_of_approval}}
+                                    </a>
+                                </p>
+                            </div>
+                        </div>
+                        <div class="d-block">
+                            <i class="fa fa-list text-lightest f-27"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div
+                        class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0">
+                        <div class="d-block text-capitalize">
+                            <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">
+                                Auto Approval
+                            </h5>
+                            <div class="d-flex flex-wrap">
+
+                                <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
+                                    <a href="#" data-toggle="modal" data-target="#">
+                                        {{$auto_approved_tasks}}
+                                    </a>
+                                </p>
+                            </div>
+                        </div>
+                        <div class="d-block">
+                            <i class="fa fa-list text-lightest f-27"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div
+                        class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0">
+                        <div class="d-block text-capitalize">
+                            <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">Manual Approval</h5>
+                            <div class="d-flex flex-wrap">
+
+                                <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
+                                    <a href="#" data-toggle="modal" data-target="#">{{$manually_approved_tasks}}</a>
+                                </p>
                             </div>
                         </div>
                         <div class="d-block">
@@ -572,26 +663,19 @@
                         <div class="d-block text-capitalize">
                             <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">Number of disputes filed</h5>
                             <div class="d-flex flex-wrap">
-
                                 <h6 class="mb-0 f-18 font-weight-bold mr-5">
                                     No. of disputes filed:
                                     <a href="#" data-toggle="modal" data-target="#">
-
                                         {{ $number_of_dispute_filed_own_lead }}
-
                                     </a>
-
                                 </h6>
                                 <h6 class="mb-0 f-18 font-weight-bold mr-5">
                                     No. of disputes (Overall):
                                     <a href="#" data-toggle="modal"
                                         data-target="#no_of_dispute_overall{{ count($number_of_dispute_filed_all_data_lead) }}">
-
                                         {{ $number_of_dispute_filed_all_lead }}
-
                                     </a>
                                     @include('dashboard.ajax.leaddeveloper.modals.no_of_dispute_overall')
-
                                 </h6>
 
                             </div>
@@ -648,6 +732,24 @@
                     <div
                         class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0">
                         <div class="d-block text-capitalize">
+                            <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">Number of Disputes Involved In</h5>
+                            <div class="d-flex flex-wrap">
+
+                                <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
+                                        {{ round($disputes_lead_developer_involved, 2) }}
+                                </p>
+
+                            </div>
+                        </div>
+                        <div class="d-block">
+                            <i class="fa fa-list text-lightest f-27"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div
+                        class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0">
+                        <div class="d-block text-capitalize">
                             <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">Hours spent in revisions</h5>
                             <div class="d-flex flex-wrap">
 
@@ -669,7 +771,6 @@
                         </div>
                     </div>
                 </div>
-
             </div>
 
             <div class="row my-5">
@@ -684,7 +785,6 @@
                                 <th>Client Name</th>
                                 <th>Submittion date</th>
                                 <th>Current Status</th>
-
                             </x-slot>
 
                             @forelse($tasks as $task)
@@ -840,7 +940,7 @@
                         // tooltip for leaves
                         if (info.event.extendedProps.event_type == 'leave') {
                             $(info.el).find('td.fc-list-event-title > a').css('cursor',
-                            'default'); // list view cursor for leave
+                                'default'); // list view cursor for leave
                             $(info.el).css('cursor', 'default')
                             $(info.el).tooltip({
                                 title: info.event.extendedProps.name,
