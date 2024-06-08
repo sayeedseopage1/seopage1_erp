@@ -44,7 +44,7 @@ const EditFactorModal = ({
 
     const { id: factorId, title, project_type, lower_limit, upper_limit, lower_limit_condition, upper_limit_condition, limit_type, limit_unit, point_type, points, status, lower_limit_top_range_condition, upper_limit_bottom_range_condition, lower_limit_top_range, upper_limit_bottom_range } = editFactorData || {}
 
-    console.log(editFactorData)
+    // console.log(editFactorData)
     // console.log("u", upper_limit_condition)
     // console.log("l", lower_limit_condition)
 
@@ -206,7 +206,7 @@ const EditFactorModal = ({
                                 <div className="col-9 flex-column px-0">
                                     {/* lower limits */}
                                     <div className="d-flex align-items-center justify-content-start">
-                                        <div className="col-6">
+                                        <div className="col-6 d-flex align-items-center">
                                             <ModalInputLabel className="col-4" style={{ fontSize: '14px', color: '#8F8F8F' }}>
                                                 {interpretCondition(lower_limit_condition)}
                                             </ModalInputLabel>
@@ -220,7 +220,7 @@ const EditFactorModal = ({
                                                 style={{ width: '100px' }}
                                             />
                                         </div>
-                                        <div className="col-6">
+                                        <div className="col-6 d-flex align-items-center">
                                             <ModalInputLabel className="col-3" style={{ fontSize: '14px', color: '#8F8F8F' }}>
                                                 {interpretCondition(lower_limit_top_range_condition)}
                                             </ModalInputLabel>
@@ -238,7 +238,7 @@ const EditFactorModal = ({
                                     <Divider plain>Or</Divider>
                                     {/* upper limits */}
                                     <div className="d-flex align-items-center justify-content-start">
-                                        <div className="col-6">
+                                        <div className="col-6 d-flex align-items-center">
                                             <ModalInputLabel className="col-4" style={{ fontSize: '14px', color: '#8F8F8F' }}>
                                                 {interpretCondition(upper_limit_bottom_range_condition)}
                                             </ModalInputLabel>
@@ -252,7 +252,7 @@ const EditFactorModal = ({
                                                 style={{ width: '100px' }}
                                             />
                                         </div>
-                                        <div className="col-6">
+                                        <div className="col-6 d-flex align-items-center">
                                             <ModalInputLabel className="col-4" style={{ fontSize: '14px', color: '#8F8F8F' }}>
                                                 {interpretCondition(upper_limit_condition)}
                                             </ModalInputLabel>
