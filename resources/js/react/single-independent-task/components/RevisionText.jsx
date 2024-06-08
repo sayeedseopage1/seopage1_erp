@@ -5,6 +5,7 @@ import Button from "./Button";
 import dayjs from "dayjs";
 import { useUsers } from "../../hooks/useUsers";
 import { User } from "../../utils/user-details";
+import { convertTime } from "../../../react-latest/utils/converTime";
 
 // const RevisionText = ({text, index, date, time, revision}) => {
 //     const [expend, setExpend] = React.useState(false);
@@ -123,6 +124,12 @@ const RevisionText = ({ index, revision }) => {
                 <span className="d-block">
                     <strong>Time</strong>: {time}
                 </span>
+                {revision?.totalMin && (
+                    <span className="d-block">
+                        <strong>Rev.Time</strong>:{" "}
+                        {`${convertTime(revision?.totalMin)}`}
+                    </span>
+                )}
             </div>
             <div className="px-3">
                 {revision?.revisionAcknowledgement ? (
