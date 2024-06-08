@@ -45,16 +45,26 @@ class SalesPolicyNotification extends Notification
                 $subject = 'Client ' . $this->data['client'] . ': Sales risk authorization needed';
                 $header = 'Please authorize sales risk for the following project:';
                 $body = strtr('Project name: projectName</a> <br/>
-                Client name: clientName (It should be linked to that particular clients page)<br/>
+                Client name: clientName<br/>
                 Sales person: salesPerson <br/>
-                Sum of points; salePoint<br/>', $this->data);
+                Sum of points; salesPoint<br/>', $this->data);
                 $url = $this->url;
+                $text = 'View Deal';
+                break;
+            case 'sales_lead_authorization':
+                $subject = 'Client ' . $this->data['client'] . ': Sales authorization needed';
+                $header = 'Please authorize the following sale made by your team member:';
+                $body = strtr('Project name: projectName</a> <br/>
+                Client name: clientName<br/>
+                Sales person: salesPerson <br/>', $this->data);
+                $url = $this->url;
+                $text = 'Authorize';
                 break;
         }
 
         return (new MailMessage)
             ->subject(__('[No Reply] ' . $subject))
-            ->markdown('mail.sales-policy-mail', ['header' => $header, 'body' => $body, 'url' => $url]);
+            ->markdown('mail.sales-policy-mail', ['header' => $header, 'body' => $body, 'url' => $url, 'text' => $text]);
     }
 
     /**

@@ -723,9 +723,12 @@ class SalesRiskPolicyController extends AccountBaseController
                     $dealStage->status = 'pending';
                     $dealStage->save();
                 }
+
+                // pending action for sales lead authorization
+                event(new SalesPolicyEvent('sales_lead_authorization', $deal));
             } else {
                 $deal->sale_analysis_status = 'analysis';
-                event(new SalesPolicyEvent('sales_risk_authorization', $deal, ['questionValue' => $policyQuestionValue, 'points' =>$calculation['points']]));
+                event(new SalesPolicyEvent('sales_risk_authorization', $deal, ['questionValue' => $policyQuestionValue, 'points' => $calculation['points']]));
             }
 
             $deal->save();
@@ -1493,7 +1496,7 @@ class SalesRiskPolicyController extends AccountBaseController
             event(new SalesPolicyEvent('sales_risk_authorization', $deal, ['past' => 'accept']));
 
             // pending action for sales lead authorization
-            event(new SalesPolicyEvent('admin_sales_authorized', $deal));
+            event(new SalesPolicyEvent('sales_lead_authorization', $deal));
 
         } elseif ($status == '0') {
             $deal->sale_analysis_status = 'denied';

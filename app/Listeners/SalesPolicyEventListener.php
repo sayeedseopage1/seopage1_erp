@@ -30,12 +30,13 @@ class SalesPolicyEventListener
             ]
         ],
 
-        'admin_sales_authorized' => [
+        'sales_lead_authorization' => [
             'code' => 'ASA',
             'item_name' => 'Sales authorization needed',
             'heading' => 'Sales Authorization!',
             'message' => 'Project projectName from Client clientName requires sales authorization (Sales Rep: salesPerson).',
             'timeframe' => 12,
+            'past' => 'Project projectName from Client clientName from Sales Rep: salesPerson was authorized by sales lead authorizedBy'
         ]
     ];
 
@@ -63,7 +64,7 @@ class SalesPolicyEventListener
                 if (isset($event->data['past'])) self::salesRiskAuthorizationPastAction($event);
                 else self::salesRiskAuthorizationPendingAction($event);
                 break;
-            case 'admin_sales_authorized':
+            case 'sales_lead_authorization':
                 self::saleLeadAuthorizationPendingAction($event);
                 break;
         }
@@ -118,7 +119,6 @@ class SalesPolicyEventListener
             // notify user
             Notification::send($user, new SalesPolicyNotification('sales_risk_authorization',  $messageData, route('account.sales-analysis-report', $deal->id)));
         }
-
     }
 
     public function salesRiskAuthorizationPastAction($event)
@@ -171,8 +171,12 @@ class SalesPolicyEventListener
     public function saleLeadAuthorizationPendingAction($event)
     {
         $data = $this->eventTypes[$event->type];
+
+        if ($event->deal->authorization_status != 2) return;
+
         $deal = $event->deal;
-        $questionValue = $event->data['questionValue'];
+
+        $questionValue = PolicyQuestionValue::where('deal_id', $deal->id)->first();
 
         $users = User::where('role_id', 8)->get();
 
@@ -184,11 +188,9 @@ class SalesPolicyEventListener
             'clientName' => "<a href='" . route('clients.show', $deal->client_id) . "'>$deal->client_name</a>",
             'client' => $deal->client_name,
             'salesPerson' => "<a href='" . route('employees.show', $salesUser->id) . "'>$salesUser->name</a>",
-            'salesPoint' => $event->data['points']
         ];
 
         $data['message'] = strtr($data['message'], $messageData);
-
 
         foreach ($users as $key => $user) {
 
@@ -207,7 +209,7 @@ class SalesPolicyEventListener
                     'button_name' => 'Review',
                     'button_color' => 'primary',
                     'button_type' => 'redirect_url',
-                    'button_url' => route('account.sales-analysis-report', $deal->id),
+                    'button_url' => route('authorization_request', $deal->id),
                 ],
             ];
             $action->button = json_encode($button);
@@ -215,7 +217,7 @@ class SalesPolicyEventListener
 
 
             // notify user
-            Notification::send($user, new SalesPolicyNotification('sales_risk_authorization',  $messageData, route('account.sales-analysis-report', $deal->id)));
+            Notification::send($user, new SalesPolicyNotification('sales_lead_authorization',  $messageData, route('authorization_request', $deal->id)));
         }
     }
 }

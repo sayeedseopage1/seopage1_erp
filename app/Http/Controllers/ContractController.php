@@ -56,6 +56,7 @@ use App\Models\AuthorizationAction;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\File;
 use App\DataTables\WonDealsDataTable;
+use App\Events\SalesPolicyEvent;
 use App\Models\LeadsDealsActivityLog;
 use App\Models\kpiSettingGenerateSale;
 use Illuminate\Support\Facades\Redirect;
@@ -1565,6 +1566,8 @@ class ContractController extends AccountBaseController
                 ]);
             }
 
+            // pending action for sales lead authorization
+            event(new SalesPolicyEvent('sales_lead_authorization', $deal));
         }
 
         $deal = Deal::find($deal->id);
@@ -2128,6 +2131,9 @@ class ContractController extends AccountBaseController
             }
 
             DB::commit();
+
+            // pending action for sales lead authorization
+            event(new SalesPolicyEvent('sales_lead_authorization', $deal));
             // all good
         } catch (\Exception $e) {
             DB::rollback();
