@@ -798,10 +798,12 @@ class TimelogController extends AccountBaseController
             $timeLog->edited_by_user = $this->user->id;
             $timeLog->save();
 
-            /**EMPLOYEE EVALUATION START */
-            $taskFind = Task::where('id',$request->task_id)->where('u_id',null)->where('independent_task_status',1)->first(); //Find SubTask
-            if($taskFind != null){
-                $evaluation = EmployeeEvaluationTask::where('task_id',$taskFind->id)->first();
+        /**EMPLOYEE EVALUATION START */
+        $taskFind = Task::where('id',$request->task_id)->where('u_id',null)->where('independent_task_status',1)->first(); //Find SubTask
+        if($taskFind != null){
+            $evaluation = EmployeeEvaluationTask::where('task_id',$taskFind->id)->first();
+            if($evaluation !=null)
+            {
                 if($evaluation !=null)
                 {
                     $evaluation->total_hours = $timeLog->total_hours;
@@ -850,10 +852,12 @@ class TimelogController extends AccountBaseController
             $timeLog->edited_by_user = $this->user->id;
             $timeLog->save();
 
-            /**EMPLOYEE EVALUATION START */
-            $taskFind = Task::where('id',$request->task_id)->where('u_id',null)->where('independent_task_status',1)->first(); //Find SubTask
-            if($taskFind != null){
-                $evaluation = EmployeeEvaluationTask::where('task_id',$taskFind->id)->first();
+        /**EMPLOYEE EVALUATION START */
+        $taskFind = Task::where('id',$request->task_id)->where('u_id',null)->where('independent_task_status',1)->first(); //Find SubTask
+        if($taskFind != null){
+            $evaluation = EmployeeEvaluationTask::where('task_id',$taskFind->id)->first();
+            if($evaluation !=null)
+            {
                 if($evaluation->total_min !=null)
                 {
                     $evaluation->total_hours = $evaluation->total_hours + $timeLog->total_hours;
