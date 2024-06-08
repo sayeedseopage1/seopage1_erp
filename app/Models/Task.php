@@ -177,8 +177,12 @@ class Task extends BaseModel
                     $hoursDifference = Carbon::now()->diffInHours($start_date) - 48 - ($countSundays * 24);
                     if($hoursDifference > 0){
                         $points = (int) ($hoursDifference/24) * Factor::where('criteria_id', 12)->first()->points;
+
+                        $taskitem = Task::with('project.client')->find($item->id);
+                        $activity = 'You task hold time for task <a style="color:blue" href="'.route('tasks.show',$taskitem->id??null).'">'.$taskitem->heading??null. '</a> (Project <a style="color:blue" href="'.route('projects.show',$taskitem->project->id??null).'">'.$taskitem->project->project_name??null. '</a> from client  <a style="color:blue" href="'.route('clients.show', $taskitem->project->client->id??null).'">'. $taskitem->project->client->name??null. '</a>) is more than 48 hours during assign phase';
+
                         // Project Manager Point Distribution ( Task hold time during assign phase )
-                        ProjectManagerPointLogic::distribute(12, $item->project_id, abs($points) ? 1 : 0, $points);
+                        ProjectManagerPointLogic::distribute(12, $item->project_id, abs($points) ? 1 : 0, $points, $activity);
                     }
                 }
             }
@@ -189,8 +193,11 @@ class Task extends BaseModel
                 if(!$item->subtask_id && Auth::user()->role_id == 4 && $lastSubmission = TaskSubmission::where('task_id', $item->id)->orderBy('id', 'desc')->first()){
                     $hoursDifference = Carbon::parse($lastSubmission->created_at)->diffInHours(Carbon::now());
                     
+                    $taskitem = Task::with('project.client')->find($item->id);
+                    $activity = 'You did not take any action of this submitted task <a style="color:blue" href="'.route('tasks.show',$taskitem->id??null).'">'.$taskitem->heading??null. '</a>, for project <a style="color:blue" href="'.route('projects.show',$taskitem->project->id??null).'">'.$taskitem->project->project_name??null. '</a>  (Client <a style="color:blue" href="'.route('clients.show', $taskitem->project->client->id??null).'">'. $taskitem->project->client->name??null. '</a>) in 36 hours';
+
                     // Project Manager Point Distribution ( Reviewing the work )
-                    ProjectManagerPointLogic::distribute(8, $item->project_id, $hoursDifference);
+                    ProjectManagerPointLogic::distribute(8, $item->project_id, $hoursDifference, null, $activity);
                 }
 
                 if(!$item->subtask_id && Auth::user()->role_id == 4){
@@ -203,10 +210,13 @@ class Task extends BaseModel
                         }, Carbon::now());
                         $hoursDifference = Carbon::now()->diffInHours($start_date) - ($countSundays * 24);
                         if($hoursDifference > 0){
-                            $points = (int) ($hoursDifference/24) * Factor::where('criteria_id', 13)->first()->points;
+                            $points = (int) ($hoursDifference/12) * Factor::where('criteria_id', 13)->first()->points;
                             
+                            $taskitem = Task::with('project.client')->find($item->id);
+                            $activity = 'You task hold time for task <a style="color:blue" href="'.route('tasks.show',$taskitem->id??null).'">'.$taskitem->heading??null. '</a> (Project <a style="color:blue" href="'.route('projects.show',$taskitem->project->id??null).'">'.$taskitem->project->project_name??null. '</a> from client <a style="color:blue" href="'.route('clients.show', $taskitem->project->client->id??null).'">'. $taskitem->project->client->name??null. '</a>) is more than 12 hours during submission phase';
+
                             // Project Manager Point Distribution ( Task hold time during submission phase )
-                            ProjectManagerPointLogic::distribute(13, $item->project_id, abs($points) ? 1 : 0, $points);
+                            ProjectManagerPointLogic::distribute(13, $item->project_id, abs($points) ? 1 : 0, $points, $activity);
                         }
                     }else{
                         $start_date = $lastSubmissionTime;
@@ -217,8 +227,11 @@ class Task extends BaseModel
                         if($hoursDifference > 0){
                             $points = (int) ($hoursDifference/4) * Factor::where('criteria_id', 14)->first()->points;
                             
+                            $taskitem = Task::with('project.client')->find($item->id);
+                            $activity = 'You task hold time for task <a style="color:blue" href="'.route('tasks.show',$taskitem->id??null).'">'.$taskitem->heading??null. '</a> (Project <a style="color:blue" href="'.route('projects.show',$taskitem->project->id??null).'">'.$taskitem->project->project_name??null. '</a> from client <a style="color:blue" href="'.route('clients.show', $taskitem->project->client->id??null).'">'. $taskitem->project->client->name??null. '</a>) is more than 4 hours during revision submission phase';
+
                             // Project Manager Point Distribution ( Task hold time during revision submission )
-                            ProjectManagerPointLogic::distribute(14, $item->project_id, abs($points) ? 1 : 0, $points);
+                            ProjectManagerPointLogic::distribute(14, $item->project_id, abs($points) ? 1 : 0, $points, $activity);
                         }
                     }
                 }

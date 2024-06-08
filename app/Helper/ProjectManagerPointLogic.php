@@ -10,7 +10,7 @@ use Illuminate\Contracts\Validation\Validator;
 
 class ProjectManagerPointLogic
 {
-    public static function distribute($criteriaId, $projectId, $comparable_value, $points = null)
+    public static function distribute($criteriaId, $projectId, $comparable_value, $points = null, $activity = null)
     {
         $project = Project::with('deal:id,project_type', 'client:id,name')->find($projectId);
         if(!$project) return false;
@@ -41,26 +41,34 @@ class ProjectManagerPointLogic
         if($earned_points==0) return false;
 
         try {
-
-            $activity = null;
-            
             if($criteriaId == 1){
-                $activity = 'Deliverables for project: <a style="color:blue" href="'.route('projects.show',$project->id).'">'.$project->project_name. '</a>, Client: <a style="color:blue" href="'.route('clients.show', $project->client->id).'">'. $project->client->name. '</a> have been signed!';
+                $activity = 'Deliverables for project <a style="color:blue" href="'.route('projects.show',$project->id).'">'.$project->project_name. '</a> (Client <a style="color:blue" href="'.route('clients.show', $project->client->id).'">'. $project->client->name. '</a>) have been signed!';
             }elseif($criteriaId == 2){
-                $activity = 'Your estimated hours for project: <a style="color:blue" href="'.route('projects.show',$project->id).'">'.$project->project_name. '</a>, from client: <a style="color:blue" href="'.route('clients.show', $project->client->id).'">'. $project->client->name. '</a> has matched the logged hours by '.$comparable_value.'%';
+                $activity = 'Your estimated hours for project <a style="color:blue" href="'.route('projects.show',$project->id).'">'.$project->project_name. '</a> from client <a style="color:blue" href="'.route('clients.show', $project->client->id).'">'. $project->client->name. '</a> has matched the logged hours by '.$comparable_value.'%';
             }elseif($criteriaId == 3){
-                $activity = 'Revisions for project: <a style="color:blue" href="'.route('projects.show',$project->id).'">'.$project->project_name. '</a>, from client: <a style="color:blue" href="'.route('clients.show', $project->client->id).'">'. $project->client->name. '</a> consumed less than '.$comparable_value.'% time of the estimated time';
+                $activity = 'Revisions for project <a style="color:blue" href="'.route('projects.show',$project->id).'">'.$project->project_name. '</a> from client <a style="color:blue" href="'.route('clients.show', $project->client->id).'">'. $project->client->name. '</a> consumed less than '.$comparable_value.'% time of the estimated time';
+            }elseif($criteriaId == 5){
+                $activity = 'You completed the project <a style="color:blue" href="'.route('projects.show',$project->id).'">'.$project->project_name. '</a> from client <a style="color:blue" href="'.route('clients.show', $project->client->id).'">'. $project->client->name. '</a>';
+            }elseif($criteriaId == 6){
+                $activity = 'You have created first tasks for the project <a style="color:blue" href="'.route('projects.show',$project->id).'">'.$project->project_name. '</a> from client <a style="color:blue" href="'.route('clients.show', $project->client->id).'">'. $project->client->name. '</a> at the first '.$comparable_value.' hours';
+            }elseif($criteriaId == 7){
+                $activity = 'The deadline for the project <a style="color:blue" href="'.route('projects.show',$project->id).'">'.$project->project_name. '</a> from client <a style="color:blue" href="'.route('clients.show', $project->client->id).'">'. $project->client->name. '</a> has been met!';
+            }elseif($criteriaId == 9){
+                $activity = 'You completed '.$comparable_value.' projects in the first 7 days!';
+            }elseif($criteriaId == 10){
+                $activity = 'You completed '.$comparable_value.' projects in the first 12 days!';
+            }elseif($criteriaId == 11){
+                $activity = 'First submission for project <a style="color:blue" href="'.route('projects.show',$project->id).'">'.$project->project_name. '</a> from client <a style="color:blue" href="'.route('clients.show', $project->client->id).'">'. $project->client->name. '</a> is made within 100 hours after the project started!';
+            }elseif($criteriaId == 17){
+                $activity = 'You crossed '.$comparable_value.' billable hours for your hourly projects this week!';
+            }elseif($criteriaId == 19){
+                $activity = 'First submission for project <a style="color:blue" href="'.route('projects.show',$project->id).'">'.$project->project_name. '</a> from client <a style="color:blue" href="'.route('clients.show', $project->client->id).'">'. $project->client->name. '</a> is made within 100 hours after the project started!';
             }
-            
-            // <a style="color:blue" href="https://erp.seopage1.net/account/employees/220">Md. Nozib Ud Dowla</a> created the bid Project : <a style="color:blue" href="https://erp.seopage1.net/account/projects/456">Slider Revolution Module for front page HEADER of WP website</a>, Client: <a style="color:blue" href="https://erp.seopage1.net/account/clients/456">Daniel P.</a>Hours logged more than 12%
-
-            // '<a style="color:blue" href="'.route('employees.show',$user_name->id).'">'.$user_name->name . '</a> created the bid Project : <a style="color:blue" href="'.route('projects.show',$project->id).'">'.$project->project_name. '</a>, Client: <a style="color:blue" href="'.route('clients.show',$project->client_id).'">'. $project->client_name->name. '</a>Hours logged '.$value->logged_hours_sales_amount. '%';
-
             
             CashPoint::create([
                 'user_id' => $project->pm_id,
                 'project_id' => $projectId,
-                'activity' => 'null',
+                'activity' => $activity,
                 'gained_as' => 'Individual',
                 'points' => abs($earned_points),
                 'total_points_earn' => $earned_points > 0 ? $earned_points : 0,
