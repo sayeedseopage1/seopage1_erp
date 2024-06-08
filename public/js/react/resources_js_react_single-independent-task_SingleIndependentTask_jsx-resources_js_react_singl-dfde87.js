@@ -14005,8 +14005,8 @@ var SubmitionView = function SubmitionView(_ref) {
     toggle = _ref.toggle,
     data = _ref.data,
     isLoading = _ref.isLoading;
-  var links = _.compact(_.split(data === null || data === void 0 ? void 0 : data.links, ','));
-  var attaches = _.compact(_.split(data === null || data === void 0 ? void 0 : data.attaches, ','));
+  var links = _.compact(_.split(data === null || data === void 0 ? void 0 : data.links, ","));
+  var attaches = _.compact(_.split(data === null || data === void 0 ? void 0 : data.attaches, ","));
   var _useWindowSize = (0,react_use__WEBPACK_IMPORTED_MODULE_8__["default"])(),
     deviceWidth = _useWindowSize.width;
   var content = function content() {
@@ -14063,13 +14063,13 @@ var SubmitionView = function SubmitionView(_ref) {
                 }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("div", {
                   className: "sp1-item-center rounded-circle border",
                   style: {
-                    width: '32px',
-                    height: '32px'
+                    width: "32px",
+                    height: "32px"
                   },
                   children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("span", {
                     className: "font-weight-bold",
                     style: {
-                      fontSize: '1.2rem'
+                      fontSize: "1.2rem"
                     },
                     children: data === null || data === void 0 || (_data$name = data.name) === null || _data$name === void 0 ? void 0 : _data$name.slice(0, 1)
                   })
@@ -14088,7 +14088,7 @@ var SubmitionView = function SubmitionView(_ref) {
                   style: {
                     color: "#767581"
                   },
-                  children: [dayjs__WEBPACK_IMPORTED_MODULE_4___default()(data === null || data === void 0 ? void 0 : data.submission_date).format("MMM DD, YYYY"), " at ", dayjs__WEBPACK_IMPORTED_MODULE_4___default()(data === null || data === void 0 ? void 0 : data.submission_date).format("hh:mm a")]
+                  children: [dayjs__WEBPACK_IMPORTED_MODULE_4___default()(data === null || data === void 0 ? void 0 : data.submission_date).format("MMM DD, YYYY"), " ", "at", " ", dayjs__WEBPACK_IMPORTED_MODULE_4___default()(data === null || data === void 0 ? void 0 : data.submission_date).format("hh:mm a")]
                 })]
               })]
             })]
@@ -14097,12 +14097,12 @@ var SubmitionView = function SubmitionView(_ref) {
             style: {
               gap: "10px"
             },
-            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("span", {
+            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)("span", {
               className: "d-block fs-14 font-weight-bold",
               style: {
                 color: "#767581"
               },
-              children: " Links "
+              children: [" ", "Links", " "]
             }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("ul", {
               style: {
                 listStyle: "unset",
@@ -14120,6 +14120,34 @@ var SubmitionView = function SubmitionView(_ref) {
                     children: [" ", link, " "]
                   })
                 }, link + i);
+              })
+            })]
+          }), (data === null || data === void 0 ? void 0 : data.screen_record_link) && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)("div", {
+            className: "d-flex flex-column mt-3",
+            style: {
+              gap: "10px"
+            },
+            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)("span", {
+              className: "d-block fs-14 font-weight-bold",
+              style: {
+                color: "#767581"
+              },
+              children: [" ", "Screen Record Link", " "]
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("ul", {
+              style: {
+                listStyle: "unset",
+                marginLeft: "30px"
+              },
+              children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("li", {
+                style: {
+                  listStyle: "unset"
+                },
+                children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)("a", {
+                  className: "hover-underline text-primary",
+                  target: "_blank",
+                  href: data === null || data === void 0 ? void 0 : data.screen_record_link,
+                  children: [" ", data === null || data === void 0 ? void 0 : data.screen_record_link, " "]
+                })
               })
             })]
           }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)("div", {
@@ -14157,7 +14185,7 @@ var SubmitionView = function SubmitionView(_ref) {
                   deleteAble: false,
                   downloadUrl: "".concat(file),
                   previewUrl: "".concat(file),
-                  fileType: _.includes(["png", "jpg", "jpeg", "gif", "svg"], _.last(_.split(file, '.'))) ? 'images' : 'others',
+                  fileType: _.includes(["png", "jpg", "jpeg", "gif", "svg"], _.last(_.split(file, "."))) ? "images" : "others",
                   ext: ""
                 }, "".concat(file, "_").concat(index));
               })

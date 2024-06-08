@@ -8,9 +8,14 @@ use App\Models\TaskFile;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 use App\Helper\Files;
+use App\Models\Designation;
+use App\Models\EmployeeDetails;
 use App\Models\EmployeeEvaluation;
 use App\Models\EvaluationHistory;
+use App\Models\PendingAction;
+use App\Models\PendingActionPast;
 use App\Models\PendingParentTaskConversation;
+use App\Models\Role;
 use App\Models\SubTask;
 use App\Models\Task;
 use App\Models\TaskUser;
@@ -119,12 +124,14 @@ class IndependentTaskController extends AccountBaseController
             }
         }
 
+        $helper = new HelperPendingActionController();
+        $helper->independentTaskCreation($ppTask->id);
 
         $users = User::where('role_id',1)->orWhere('role_id',8)->get();
-            foreach($users as $user)
-                {
-                    Notification::send($user, new IndependentTasksNotification($ppTask));
-                }
+        foreach($users as $user)
+            {
+                Notification::send($user, new IndependentTasksNotification($ppTask));
+            }
 
         return response()->json([
             'status'=>'success'
@@ -247,16 +254,45 @@ class IndependentTaskController extends AccountBaseController
             $pendingParentTasks->save();
         }
 
-        if(Auth::user()->role_id == 1 || Auth::user()->role_id == 8 && $pendingParentTasks->evaluation_user_id !=null){
-            $evaluation = EmployeeEvaluation::where('user_id',$pendingParentTasks->evaluation_user_id)->first();
-            $evaluation_history = EvaluationHistory::where('user_id',$pendingParentTasks->evaluation_user_id)->first();
-            if($evaluation->managements_decision == 'One more week' || $evaluation_history->managements_decision == 'One more week'){
-                $helper = new HelperPendingActionController();
-                $helper->evaluationAuthTeamLead($evaluation->user_id ? $evaluation->user_id : $evaluation_history->user_id, $independent_task->id);
+        $actions = PendingAction::where('code','INDTA')->where('past_status',0)->where('ind_task_id',$id)->get();
+        if($actions != null)
+        {
+            foreach ($actions as $key => $action) 
+            {
+                $action->authorized_by= Auth::id();
+                $action->authorized_at= Carbon::now();
+                $action->past_status = 1;
+                $action->save();
+                $taskAddded = User::where('id',$pendingParentTasks->added_by)->first();
+                $role = Role::where('id',$taskAddded->role_id)->first();
+                $past_action= new PendingActionPast();
+                $past_action->item_name = $action->item_name;
+                $past_action->code = $action->code;
+                $past_action->serial = $action->serial;
+                $past_action->action_id = $action->id;
+                $past_action->heading = $action->heading;
+                $past_action->message = 'Independent task <a href="'.route('tasks.show',$independent_task->id).'">'.$independent_task->heading.'</a> created by '.$role->display_name.' <a href="'.route('employees.show',$taskAddded->id).'">'.$taskAddded->name.'</a> was authorized by <a href="'.route('employees.show',Auth::user()->id).'">'.Auth::user()->name.'</a>!';
+                $past_action->timeframe = $action->timeframe;
+                $past_action->authorization_for = $action->authorization_for;
+                $past_action->authorized_by = $action->authorized_by;
+                $past_action->authorized_at = $action->authorized_at;
+                $past_action->expired_status = $action->expired_status;
+                $past_action->past_status = $action->past_status;
+                $past_action->save();
             }
         }
 
-
+        if($pendingParentTasks->evaluation_user_id !=null){
+            if(Auth::user()->role_id == 1 || Auth::user()->role_id == 8){
+                $evaluation = EmployeeEvaluation::where('user_id',$pendingParentTasks->evaluation_user_id)->first();
+                $evaluation_history = EvaluationHistory::where('user_id',$pendingParentTasks->evaluation_user_id)->first();
+                if($evaluation->managements_decision == 'One more week' || $evaluation_history->managements_decision == 'One more week'){
+                    $helper = new HelperPendingActionController();
+                    $helper->evaluationAuthTeamLead($evaluation->user_id ? $evaluation->user_id : $evaluation_history->user_id, $independent_task->id);
+                }
+            }
+        }
+        
         return response()->json([
             'status'=>'success'
         ],200);
