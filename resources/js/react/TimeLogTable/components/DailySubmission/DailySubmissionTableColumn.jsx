@@ -328,22 +328,44 @@ export const DailySubmissionTableColumn = [
         sorted: false,
         group: false,
         cell: ({ row, className }) => {
+            const Links = row?.original.attachments;
             return (
-                <td className={`${className} sp1_tlr_td_border`}>
-                    {row?.attachments ? (
-                        <a
-                            className="text-primary font-weight-bold"
-                            href={row?.attachments}
-                            target="_blank"
-                        >
-                            View Link
-                        </a>
-                    ) : (
-                        <span className="text-danger font-weight-bold">
-                            No Attachments
+                <Popover>
+                    <Popover.Button>
+                        <span className=" singleline-ellipsis link_color hover-underline">
+                            {JSON.parse(Links).map((data, index) => (
+                                <div key={index}>
+                                    <a
+                                        className="link_color hover-underline"
+                                        target="_blank"
+                                        href={data}
+                                    >
+                                        {data}
+                                    </a>
+                                    <br />
+                                </div>
+                            ))}
                         </span>
-                    )}
-                </td>
+                    </Popover.Button>
+
+                    <Popover.Panel>
+                        <div className="revision_popover_panel">
+                            {JSON.parse(Links).map((data, index) => (
+                                <div key={index}>
+                                    <span>{index + 1}.</span>
+                                    <a
+                                        className="link_color hover-underline mb-2"
+                                        target="_blank"
+                                        href={data}
+                                    >
+                                        {data}
+                                    </a>
+                                    <br />
+                                </div>
+                            ))}
+                        </div>
+                    </Popover.Panel>
+                </Popover>
             );
         },
     },
