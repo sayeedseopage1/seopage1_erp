@@ -5047,12 +5047,13 @@ class TaskController extends AccountBaseController
             $Sub_Tasks = $subtasks;
             $revisions = TaskRevision::where('task_id', $task->id)->get();
             foreach ($revisions as $revision) {
-                $timeLogData = ProjectTimeLog::where('revision_id', $revision->id)->first();
-                if ($timeLogData !== null) {
-                    $revision->total_hours = $timeLogData->total_hours;
-                    $revision->total_minutes = $timeLogData->total_minutes;
+                $timeLogData = ProjectTimeLog::where('revision_id', $revision->id)->get();
+                if (!$timeLogData->isEmpty()) {
+                    $revision->total_hours = $timeLogData->sum('total_hours');
+                    $revision->total_minutes = $timeLogData->sum('total_minutes');
                 }
             }
+
             if ($revisions == null) {
                 $revisions = '';
             }
