@@ -671,7 +671,7 @@ return new class extends Migration
             [
                 'id' => 32,
                 'criteria_id' => 13,
-                'title' => "Task hold time is more than 1 day during the submission phase of new tasks, hold time will count after 24 hurs",
+                'title' => "Task hold time is more than 12 hours during the submission phase of new tasks, hold time will count after 12 hurs",
                 'project_type' => 1,
                 'lower_limit' => 1,
                 'upper_limit' => 1,
