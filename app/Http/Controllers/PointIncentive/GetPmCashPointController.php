@@ -23,7 +23,7 @@ class GetPmCashPointController extends Controller
         $startDate = $request->start_date ? Carbon::parse($request->start_date)->startOfDay() : Carbon::now()->startOfMonth();
         $endDate = Carbon::parse($request->end_date??now())->endOfDay();
 
-        $data['cash_points'] = CashPoint::selectRaw('cash_points.*, (total_points_earn - total_points_lost) as balance, CONCAT("<strong>Factor: </strong>", criterias.title, ", <strong>Project Manager: </strong>", users.name) as activity')
+        $data['cash_points'] = CashPoint::selectRaw('cash_points.*, (total_points_earn - total_points_lost) as balance')
         ->selectRaw('(SELECT SUM(total_points_earn - total_points_lost) FROM cash_points AS cp WHERE cp.id <= cash_points.id AND cp.factor_id IS NOT NULL AND cp.user_id = ? AND cp.created_at BETWEEN ? AND ?) AS cumulative_balance', [$userId, $startDate, $endDate])
         // ->selectRaw('(SELECT SUM(total_points_earn - total_points_lost) FROM cash_points AS cp WHERE cp.id <= cash_points.id AND cp.id < 11) AS cumulative_balance')
         
