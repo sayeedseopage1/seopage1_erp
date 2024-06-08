@@ -105,10 +105,6 @@ const PointFactorsTable = ({
         onPageChange(paginate);
     };
 
-
-
-
-
     // handle page size change
     const handlePageSizeChange = (e) => {
         e.preventDefault();
@@ -151,14 +147,18 @@ const PointFactorsTable = ({
         getSortedRowModel: getSortedRowModel(),
         meta: {
             handleEditFactor: (factorData) => {
+
                 // find default value for dropdown options 
                 const limit_unit = LimitUnits?.data?.find(unit => unit?.name == factorData?.limit_unit)
                 const lower_limit_top_range = factorData?.lower_limit_top_range
                 const upper_limit_bottom_range = factorData?.upper_limit_bottom_range
+                // const lower_limit = singleLimitIds?.includes(factorData?.id)
+                //     ? editFactorData?.upper_limit
+                //     : factorData?.lower_limit;
 
                 // set editor data
                 setEditFactorData({
-                    ...factorData, limit_unit, lower_limit_top_range, upper_limit_bottom_range
+                    ...factorData, limit_unit, lower_limit_top_range, upper_limit_bottom_range,
                 });
                 setEditFactorModalOpen(true);
             },
@@ -199,6 +199,8 @@ const PointFactorsTable = ({
         // resetFormForRule();
     };
 
+
+
     // submit 
     const [updatePmPointfactor, { isLoading: isUpdatePmPointfactorLoading }] = useUpdatePmPointfactorMutation()
 
@@ -219,11 +221,14 @@ const PointFactorsTable = ({
             // const lowerLimitCondition = editFactorData?.infiniteValueDown ? editFactorData?.infiniteValueDown : editFactorData?.limit_type == 2 ? "==" : "<"
             // const upperLimitCondition = editFactorData?.infiniteValueUp ? editFactorData?.infiniteValueUp : editFactorData?.limit_type == 2 ? "==" : ">="
 
+            const singleEqualValLimitIds = [14, 19, 29, 44]
+
             const payload = {
                 criteria_id: parseFloat(editFactorData?.criteria_id),
                 title: editFactorData?.title ?? null,
                 project_type: parseFloat(editFactorData?.project_type) ?? null,
-                lower_limit: parseFloat(editFactorData?.lower_limit) ?? null,
+                // lower_limit: parseFloat(editFactorData?.lower_limit) ?? null,
+                lower_limit: singleEqualValLimitIds?.includes(editFactorData?.id) ? parseFloat(editFactorData?.upper_limit) : parseFloat(editFactorData?.lower_limit),
                 upper_limit: parseFloat(editFactorData?.upper_limit) ?? null,
                 lower_limit_top_range: editFactorData?.lower_limit_top_range ? parseFloat(editFactorData?.lower_limit_top_range) : null,
                 upper_limit_bottom_range: editFactorData?.upper_limit_bottom_range ? parseFloat(editFactorData?.upper_limit_bottom_range) : null,
@@ -236,16 +241,16 @@ const PointFactorsTable = ({
                 status: parseFloat(editFactorData?.status) ?? null,
             }
 
-            // console.log("payload: ", payload)
+            console.log("payload: ", payload)
 
-            const response = await updatePmPointfactor({ id: editFactorData?.id, payload }).unwrap();
+            // const response = await updatePmPointfactor({ id: editFactorData?.id, payload }).unwrap();
 
-            if (response?.status == 200) {
-                toast.success(response.message);
-                handleCloseEditFactorModal();
-            } else {
-                toast.warning(response.message);
-            }
+            // if (response?.status == 200) {
+            //     toast.success(response.message);
+            //     handleCloseEditFactorModal();
+            // } else {
+            //     toast.warning(response.message);
+            // }
         } catch (error) {
             toast.error("Failed to update item");
         }

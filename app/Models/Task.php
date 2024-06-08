@@ -179,7 +179,7 @@ class Task extends BaseModel
                         $points = (int) ($hoursDifference/24) * Factor::where('criteria_id', 12)->first()->points;
 
                         $taskitem = Task::with('project.client')->find($item->id);
-                        $activity = 'You task hold time for task <a style="color:blue" href="'.route('tasks.show',$taskitem->id??null).'">'.$taskitem->heading??null. '</a> (Project <a style="color:blue" href="'.route('projects.show',$taskitem->project->id??null).'">'.$taskitem->project->project_name??null. '</a> from client  <a style="color:blue" href="'.route('clients.show', $taskitem->project->client->id??null).'">'. $taskitem->project->client->name??null. '</a>) is more than 48 hours during assign phase';
+                        $activity = 'Your task hold time for task <a style="color:blue" href="'.route('tasks.show',$taskitem->id??null).'">'.$taskitem->heading??null. '</a> (Project <a style="color:blue" href="'.route('projects.show',$taskitem->project->id??null).'">'.$taskitem->project->project_name??null. '</a> from client  <a style="color:blue" href="'.route('clients.show', $taskitem->project->client->id??null).'">'. $taskitem->project->client->name??null. '</a>) is more than 48 hours during assign phase';
 
                         // Project Manager Point Distribution ( Task hold time during assign phase )
                         ProjectManagerPointLogic::distribute(12, $item->project_id, abs($points) ? 1 : 0, $points, $activity);
@@ -213,7 +213,7 @@ class Task extends BaseModel
                             $points = (int) ($hoursDifference/12) * Factor::where('criteria_id', 13)->first()->points;
                             
                             $taskitem = Task::with('project.client')->find($item->id);
-                            $activity = 'You task hold time for task <a style="color:blue" href="'.route('tasks.show',$taskitem->id??null).'">'.$taskitem->heading??null. '</a> (Project <a style="color:blue" href="'.route('projects.show',$taskitem->project->id??null).'">'.$taskitem->project->project_name??null. '</a> from client <a style="color:blue" href="'.route('clients.show', $taskitem->project->client->id??null).'">'. $taskitem->project->client->name??null. '</a>) is more than 12 hours during submission phase';
+                            $activity = 'Your task hold time for task <a style="color:blue" href="'.route('tasks.show',$taskitem->id??null).'">'.$taskitem->heading??null. '</a> (Project <a style="color:blue" href="'.route('projects.show',$taskitem->project->id??null).'">'.$taskitem->project->project_name??null. '</a> from client <a style="color:blue" href="'.route('clients.show', $taskitem->project->client->id??null).'">'. $taskitem->project->client->name??null. '</a>) is more than 12 hours during submission phase';
 
                             // Project Manager Point Distribution ( Task hold time during submission phase )
                             ProjectManagerPointLogic::distribute(13, $item->project_id, abs($points) ? 1 : 0, $points, $activity);
@@ -228,7 +228,7 @@ class Task extends BaseModel
                             $points = (int) ($hoursDifference/4) * Factor::where('criteria_id', 14)->first()->points;
                             
                             $taskitem = Task::with('project.client')->find($item->id);
-                            $activity = 'You task hold time for task <a style="color:blue" href="'.route('tasks.show',$taskitem->id??null).'">'.$taskitem->heading??null. '</a> (Project <a style="color:blue" href="'.route('projects.show',$taskitem->project->id??null).'">'.$taskitem->project->project_name??null. '</a> from client <a style="color:blue" href="'.route('clients.show', $taskitem->project->client->id??null).'">'. $taskitem->project->client->name??null. '</a>) is more than 4 hours during revision submission phase';
+                            $activity = 'Your task hold time for task <a style="color:blue" href="'.route('tasks.show',$taskitem->id??null).'">'.$taskitem->heading??null. '</a> (Project <a style="color:blue" href="'.route('projects.show',$taskitem->project->id??null).'">'.$taskitem->project->project_name??null. '</a> from client <a style="color:blue" href="'.route('clients.show', $taskitem->project->client->id??null).'">'. $taskitem->project->client->name??null. '</a>) is more than 4 hours during revision submission phase';
 
                             // Project Manager Point Distribution ( Task hold time during revision submission )
                             ProjectManagerPointLogic::distribute(14, $item->project_id, abs($points) ? 1 : 0, $points, $activity);

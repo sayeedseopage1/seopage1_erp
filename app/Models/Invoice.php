@@ -148,8 +148,10 @@ class Invoice extends BaseModel
                 }
 
                 if(Project::with('deal')->find($item->project_id)->deal->project_type == 'hourly'){
-                    $project = Project::with('client')->find($item->project_id);
-                    $activity = 'You billed amount'.$item->total.' for your hourly project <a style="color:blue" href="'.route('projects.show',$project->id).'">'.$project->project_name. '</a> from client <a style="color:blue" href="'.route('clients.show', $project->client->id).'">'. $project->client->name. '</a> this week!';
+                    $project = Project::with('client', 'deal')->find($item->project_id);
+                    $totalHours = $project->deal->hourly_rate ? ($item->total / $project->deal->hourly_rate) : 0;
+
+                    $activity = 'You billed '.$totalHours.' hours for your hourly project <a style="color:blue" href="'.route('projects.show',$project->id).'">'.$project->project_name. '</a> from client <a style="color:blue" href="'.route('clients.show', $project->client->id).'">'. $project->client->name. '</a> this week!';
 
                     // Project Manager Point Distribution ( Billed amount every week )
                     ProjectManagerPointLogic::distribute(18, $item->project_id, 1, ($item->total/100) * Factor::find(45)->points);

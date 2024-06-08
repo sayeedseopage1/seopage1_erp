@@ -48,6 +48,7 @@ const EditFactorModal = ({
     // console.log("u", upper_limit_condition)
     // console.log("l", lower_limit_condition)
 
+    const singleEqualValLimitIds = [14, 19, 29, 44]
     const singleLimitIds = [8, 14, 17, 19, 29, 44]
     const dualValueLimitIds = [3, 4, 5, 6]
 
@@ -155,9 +156,9 @@ const EditFactorModal = ({
                                         </p>
                                     )}
 
-                                    {/* {
+                                    {
                                         lower_limit < 0 && <p className="text-danger">Lower limit can not less than 0</p>
-                                    } */}
+                                    }
                                 </div>
                             </div>
                         }
@@ -190,9 +191,9 @@ const EditFactorModal = ({
                                         </p>
                                     )}
 
-                                    {/* {
-                                        lower_limit && (parseFloat(upper_limit) < parseFloat(lower_limit)) && <p className="text-danger">Upper limit must be greater than lower limit</p>
-                                    } */}
+                                    {
+                                        !singleEqualValLimitIds?.includes(factorId) && lower_limit && (parseFloat(upper_limit) < parseFloat(lower_limit)) && <p className="text-danger">Upper limit must be greater than lower limit</p>
+                                    }
                                 </div>
                             </div>
                         }
