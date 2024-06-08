@@ -291,7 +291,7 @@ const PointFactors = () => {
                     {
                         auth?.isHasRolePermission(1) && <AddNewSectionCointainer>
                             <p>Add more item ?</p>
-                            <AddButton onClick={handleAddNewItemModal}>Add new items</AddButton>
+                            <AddButton disabled onClick={handleAddNewItemModal}>Add new items</AddButton>
                         </AddNewSectionCointainer>
                     }
 

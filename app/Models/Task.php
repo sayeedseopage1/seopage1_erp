@@ -169,6 +169,11 @@ class Task extends BaseModel
                     $countSundays = $start_date->diffInDaysFiltered(function (Carbon $date) {
                         return $date->dayOfWeek === Carbon::SUNDAY;
                     }, Carbon::now());
+
+                    $acceptanceToFirstTaskDuration = Carbon::now()->diffInHours($start_date) - ($countSundays * 24);
+                    // Project Manager Point Distribution ( If all the tasks are created in the first 2 dayse )
+                    ProjectManagerPointLogic::distribute(6, $item->project_id, $acceptanceToFirstTaskDuration);
+
                     $hoursDifference = Carbon::now()->diffInHours($start_date) - 48 - ($countSundays * 24);
                     if($hoursDifference > 0){
                         $points = (int) ($hoursDifference/24) * Factor::where('criteria_id', 12)->first()->points;

@@ -32,7 +32,6 @@ class ProjectCompletionMonthly extends Command
      */
     public function handle()
     {
-        $minLimit = Factor::where('criteria_id', 9)->where('status', 1)->first()->lower_limit;
         $users = User::where('role_id',4)->get();
         foreach($users as $user){
             $referenceProjectId = Project::whereHas('deal', function($deal){
@@ -40,59 +39,29 @@ class ProjectCompletionMonthly extends Command
             })
             ->where('pm_id', $user->id)
             ->whereIn('status', ['finished', 'partially finished'])
-            ->whereBetween('updated_at', [Carbon::now()->startOfMonth(), Carbon::now()->endOfMonth()])->orderBy('id', 'desc')->first()->id ?? null;
+            ->whereBetween('updated_at', [Carbon::now()->subMonth()->startOfMonth(), Carbon::now()->endOfMonth()])->orderBy('id', 'desc')->where('project_completion_days', '<=', 12)->first()->id ?? null;
 
-            $project = Project::whereHas('deal', function($deal){
+            $projectsSevenDays = Project::whereHas('deal', function($deal){
                 return $deal->where('project_type', 'fixed');
             })
             ->where('pm_id', $user->id)
             ->whereIn('status', ['finished', 'partially finished'])
-            ->whereBetween('updated_at', [Carbon::now()->startOfMonth(), Carbon::now()->endOfMonth()]);
+            ->whereBetween('updated_at', [Carbon::now()->startOfMonth(), Carbon::now()->endOfMonth()])
+            ->where('project_completion_days', '<=', 7)->get();
 
-            $today = Carbon::now();
-            $startOfMonth = $today->copy()->startOfMonth();
-            $endOfMonth = $today->copy()->endOfMonth();
-
-            $sevenDaySlotStart = $startOfMonth->copy();
-            $sevenDaySlotEnd = $startOfMonth->copy()->addDays(11);
+            // Project Manager Point Distribution ( Project completion )
+            ProjectManagerPointLogic::distribute(9, $referenceProjectId, $projectsSevenDays->count());
             
-            $maxProjectCount = 0;
+            $projectsTwelveDays = Project::whereHas('deal', function($deal){
+                return $deal->where('project_type', 'fixed');
+            })
+            ->where('pm_id', $user->id)
+            ->whereIn('status', ['finished', 'partially finished'])
+            ->whereBetween('updated_at', [Carbon::now()->startOfMonth(), Carbon::now()->endOfMonth()])
+            ->where('project_completion_days', '>=', 8)->where('project_completion_days', '<=', 12)->get();
 
-            while ($sevenDaySlotEnd->lte($endOfMonth)) { 
-                $count = $project->whereBetween('project_completion_time', [$sevenDaySlotStart->startOfDay(), $sevenDaySlotEnd->endOfDay()])
-                ->count();
-                $maxProjectCount = $maxProjectCount < $count ? $count : $maxProjectCount;
-                $sevenDaySlotStart->addDay();
-                $sevenDaySlotEnd->addDay();
-            }
-            
-            if($maxProjectCount >= $minLimit){
-                // Project Manager Point Distribution ( Project completion )
-                ProjectManagerPointLogic::distribute(9, $referenceProjectId, $maxProjectCount);
-            }else{
-                $project = Project::whereHas('deal', function($deal){
-                    return $deal->where('project_type', 'fixed');
-                })
-                ->where('pm_id', $user->id)
-                ->whereIn('status', ['finished', 'partially finished'])
-                ->whereBetween('updated_at', [Carbon::now()->startOfMonth(), Carbon::now()->endOfMonth()]);
-                
-                $twelveDaySlotStart = $startOfMonth->copy();
-                $twelveDaySlotEnd = $startOfMonth->copy()->addDays(12);
-                
-                $maxProjectCount = 0;
-
-                while ($twelveDaySlotEnd->lte($endOfMonth)) { 
-                    $count = $project->whereBetween('project_completion_time', [$twelveDaySlotStart->startOfDay(), $twelveDaySlotEnd->endOfDay()])
-                    ->count();
-                    $maxProjectCount = $maxProjectCount < $count ? $count : $maxProjectCount;
-                    $twelveDaySlotStart->addDay();
-                    $twelveDaySlotEnd->addDay();
-                }
-
-                // Project Manager Point Distribution ( Project completion )
-                ProjectManagerPointLogic::distribute(10, $referenceProjectId, $maxProjectCount);
-            }
+            // Project Manager Point Distribution ( Project completion )
+            ProjectManagerPointLogic::distribute(10, $referenceProjectId, $projectsTwelveDays->count());
         }
     }
 }

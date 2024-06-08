@@ -68,3 +68,18 @@ export const LimitUnits = {
         },
     ],
 };
+
+export const interpretCondition = (condition) => {
+    switch (condition) {
+        case "<=":
+            return "Greater than or equal";
+        case "<":
+            return "Greater than";
+        case ">=":
+            return "Less than or equal";
+        case ">":
+            return "Less than";
+        default:
+            return "Invalid condition";
+    }
+};
