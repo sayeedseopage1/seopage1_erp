@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\SalesPolicyEvent;
 use App\Models\Country;
 use App\Models\Currency;
 use App\Models\Deal;
@@ -696,7 +697,7 @@ class SalesRiskPolicyController extends AccountBaseController
         DB::beginTransaction();
         try {
 
-            PolicyQuestionValue::create([
+            $policyQuestionValue = PolicyQuestionValue::create([
                 'deal_id' => $dealId,
                 'values' => json_encode($req->all()),
                 'question_list' => json_encode(SalesPolicyQuestion::get()),
@@ -724,9 +725,11 @@ class SalesRiskPolicyController extends AccountBaseController
                 }
             } else {
                 $deal->sale_analysis_status = 'analysis';
+                event(new SalesPolicyEvent('sales_risk_authorization', $deal, ['questionValue' => $policyQuestionValue, 'points' =>$calculation['points']]));
             }
 
             $deal->save();
+
             DB::commit();
 
             return response()->json([
@@ -1468,6 +1471,8 @@ class SalesRiskPolicyController extends AccountBaseController
             return ['points' => null, 'error' => 'Deal not found'];
         }
 
+        DB::beginTransaction();
+
         if ($status == '1') {
             $deal->sale_analysis_status = 'authorized';
             $deal->sale_authorize_on = date('Y-m-d h:i:s');
@@ -1483,6 +1488,13 @@ class SalesRiskPolicyController extends AccountBaseController
                 $deal->authorization_status = 2;
                 $deal->released_at = Carbon::now();
             }
+
+            // pending action post update
+            event(new SalesPolicyEvent('sales_risk_authorization', $deal, ['past' => 'accept']));
+
+            // pending action for sales lead authorization
+            event(new SalesPolicyEvent('admin_sales_authorized', $deal));
+
         } elseif ($status == '0') {
             $deal->sale_analysis_status = 'denied';
 
@@ -1491,12 +1503,17 @@ class SalesRiskPolicyController extends AccountBaseController
                 $dealStage->deal_status = "Lost";
                 $dealStage->save();
             }
+
+            // pending action update
+            event(new SalesPolicyEvent('sales_risk_authorization', $deal, ['past' => 'deny']));
         }
 
         $deal->sale_authorize_by = auth()->user()->id;
         $deal->sale_authorize_on = date('Y-m-d h:i:s');
         $deal->sale_authorize_comment = $req->comment;
         $deal->save();
+
+        DB::commit();
 
         return response()->json(['status' => 'successful', 'message' => 'Deal status updated.']);
     }
