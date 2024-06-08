@@ -12,7 +12,7 @@ class ProjectManagerPointLogic
 {
     public static function distribute($criteriaId, $projectId, $comparable_value, $points = null)
     {
-        $project = Project::with('deal:id,project_type')->find($projectId);
+        $project = Project::with('deal:id,project_type', 'client:id,name')->find($projectId);
         if(!$project) return false;
         $criteria = Criteria::with(['factors' => function($factor) use ($project){
             return $factor->where('project_type', $project->deal->project_type == 'fixed' ? 1 : 2);
@@ -41,6 +41,22 @@ class ProjectManagerPointLogic
         if($earned_points==0) return false;
 
         try {
+
+            $activity = null;
+            
+            if($criteriaId == 1){
+                $activity = 'Deliverables for project: <a style="color:blue" href="'.route('projects.show',$project->id).'">'.$project->project_name. '</a>, Client: <a style="color:blue" href="'.route('clients.show', $project->client->id).'">'. $project->client->name. '</a> have been signed!';
+            }elseif($criteriaId == 2){
+                $activity = 'Your estimated hours for project: <a style="color:blue" href="'.route('projects.show',$project->id).'">'.$project->project_name. '</a>, from client: <a style="color:blue" href="'.route('clients.show', $project->client->id).'">'. $project->client->name. '</a> has matched the logged hours by '.$comparable_value.'%';
+            }elseif($criteriaId == 3){
+                $activity = 'Revisions for project: <a style="color:blue" href="'.route('projects.show',$project->id).'">'.$project->project_name. '</a>, from client: <a style="color:blue" href="'.route('clients.show', $project->client->id).'">'. $project->client->name. '</a> consumed less than '.$comparable_value.'% time of the estimated time';
+            }
+            
+            // <a style="color:blue" href="https://erp.seopage1.net/account/employees/220">Md. Nozib Ud Dowla</a> created the bid Project : <a style="color:blue" href="https://erp.seopage1.net/account/projects/456">Slider Revolution Module for front page HEADER of WP website</a>, Client: <a style="color:blue" href="https://erp.seopage1.net/account/clients/456">Daniel P.</a>Hours logged more than 12%
+
+            // '<a style="color:blue" href="'.route('employees.show',$user_name->id).'">'.$user_name->name . '</a> created the bid Project : <a style="color:blue" href="'.route('projects.show',$project->id).'">'.$project->project_name. '</a>, Client: <a style="color:blue" href="'.route('clients.show',$project->client_id).'">'. $project->client_name->name. '</a>Hours logged '.$value->logged_hours_sales_amount. '%';
+
+            
             CashPoint::create([
                 'user_id' => $project->pm_id,
                 'project_id' => $projectId,

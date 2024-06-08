@@ -129,16 +129,20 @@ class PmPointFactorController extends AccountBaseController
             'project_type' => 'required|in:1,2',
             'lower_limit' => 'required|numeric',
             'upper_limit' => 'required|numeric',
-            'limit_type' => 'required|in:1,2',
-            'limit_unit' => 'required|in:1,2,3,4,5',
+            'lower_limit_top_range' => 'nullable|numeric',
+            'upper_limit_bottom_range' => 'nullable|numeric',
+            // 'limit_type' => 'required|in:1,2',
+            // 'limit_unit' => 'required|in:1,2,3,4,5',
             'lower_limit_condition' => 'required|string',
             'upper_limit_condition' => 'required|string',
-            'limit_depend_on_models_and_fields' => 'nullable',
-            'point_type' => 'required|in:1,2',
+            'lower_limit_top_range_condition' => 'nullable|string',
+            'upper_limit_bottom_range_condition' => 'nullable|string',
+            // 'limit_depend_on_models_and_fields' => 'nullable',
+            // 'point_type' => 'required|in:1,2',
             'points' => 'required|numeric',
-            'point_depend_on_model' => 'nullable',
-            'point_depend_on_field' => 'nullable',
-            'status' => 'nullable'
+            // 'point_depend_on_model' => 'nullable',
+            // 'point_depend_on_field' => 'nullable',
+            'status' => 'required'
         ]);
 
         $lowerLimitRefValue = $this->checkableValue($validated['lower_limit'], $validated['lower_limit_condition']);
@@ -186,7 +190,7 @@ class PmPointFactorController extends AccountBaseController
                 'message' => 'Factor udated successfully'
             ]);
         } catch (\Throwable $th) {
-            //throw $th;
+            throw $th;
             return response()->json([
                 'status'=> 400,
                 'message' => 'Something went wrong!'

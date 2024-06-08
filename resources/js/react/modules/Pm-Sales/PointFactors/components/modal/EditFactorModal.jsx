@@ -155,9 +155,9 @@ const EditFactorModal = ({
                                         </p>
                                     )}
 
-                                    {
+                                    {/* {
                                         lower_limit < 0 && <p className="text-danger">Lower limit can not less than 0</p>
-                                    }
+                                    } */}
                                 </div>
                             </div>
                         }
@@ -190,9 +190,9 @@ const EditFactorModal = ({
                                         </p>
                                     )}
 
-                                    {
+                                    {/* {
                                         lower_limit && (parseFloat(upper_limit) < parseFloat(lower_limit)) && <p className="text-danger">Upper limit must be greater than lower limit</p>
-                                    }
+                                    } */}
                                 </div>
                             </div>
                         }
