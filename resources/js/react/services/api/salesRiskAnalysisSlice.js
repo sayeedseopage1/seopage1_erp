@@ -210,7 +210,6 @@ const salesRiskAnalysisApiSlice = apiSlice.injectEndpoints({
             }),
             invalidatesTags: (result, error, arg) => {
                 if (result && !error) {
-                    console.log("result", result, error, arg)
                     return [{ type: "GET_SALES_RISK_ANALYSIS_QUESTION_LIST_BY_DEAL_ID" }];
                 }
             }

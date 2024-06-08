@@ -63,7 +63,7 @@ const AddNewPolicyModal = ({
         }
     });
 
-    console.log(newPolicyData)
+
 
     return (
         <CustomModal

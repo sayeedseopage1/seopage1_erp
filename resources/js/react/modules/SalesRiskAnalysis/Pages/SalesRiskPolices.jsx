@@ -1,5 +1,7 @@
 import React, { useContext, useEffect, useMemo } from "react";
 import { toast } from "react-toastify";
+import { IoAdd } from "react-icons/io5";
+import { CiSettings } from "react-icons/ci";
 
 // ui components
 import RefreshButton from "../components/RefreshButton";
@@ -34,6 +36,9 @@ import {
 import { SalesRiskAnalysisContext } from "../context/SalesRiskAnalysisProvider";
 import { generateUniqueString } from "../../../utils/customUidGenerate";
 import { useSelector } from "react-redux";
+import Switch from "../components/Switch";
+import Loader from "../../../global/Loader";
+import SettingDropDown from "../components/SettingDropDown";
 
 const inputSateData = {
     mainDetails: {
@@ -88,8 +93,19 @@ const inputSateData = {
 };
 
 const SalesRiskPolices = () => {
-    const { policyKeys } = useContext(SalesRiskAnalysisContext);
+    const {
+        policyKeys,
+        isQuestionTypeLoading,
+        questionFiledRefetch,
+        questionsAnswerType,
+        policies
+    } = useContext(SalesRiskAnalysisContext);
+    const { settings } = useSelector((state) => state.saleRiskAnalysis);
     const { departments } = useSelector((state) => state.filterOptions);
+    const [addModalOpenClicked, setAddModalOpenClicked] = React.useState({
+        type: "",
+        status: false,
+    });
     const [{ pageIndex, pageSize }, setPagination] = React.useState({
         pageIndex: 0,
         pageSize: 10,
@@ -225,7 +241,11 @@ const SalesRiskPolices = () => {
                             id: singlePolicyDataAll?.data?.data[0]?.id,
                             policyName:
                                 singlePolicyDataAll?.data?.data[0]?.title,
-                            department: departments?.find((item) => item?.team_name === formattedRules[0]?.department?.name),
+                            department: departments?.find(
+                                (item) =>
+                                    item?.team_name ===
+                                    formattedRules[0]?.department?.name
+                            ),
                             comment:
                                 singlePolicyDataAll?.data?.data[0]?.comment,
                             key: value,
@@ -234,7 +254,11 @@ const SalesRiskPolices = () => {
                             ...newPolicyData,
                             policyName:
                                 singlePolicyDataAll?.data?.data[0]?.title,
-                                department: departments?.find((item) => item?.team_name === formattedRules[0]?.department?.name),
+                            department: departments?.find(
+                                (item) =>
+                                    item?.team_name ===
+                                    formattedRules[0]?.department?.name
+                            ),
                             comment:
                                 singlePolicyDataAll?.data?.data[0]?.comment,
                             policyType: PolicyTypeItems?.data?.find((item) =>
@@ -522,28 +546,106 @@ const SalesRiskPolices = () => {
         setPagination(paginate);
     };
 
+    const openAddModal = (type) => {
+        questionFiledRefetch();
+        setAddModalOpenClicked({
+            type: type,
+            status: true,
+        });
+    };
+
+    useEffect(() => {
+        if (addModalOpenClicked.status) {
+            if (!isQuestionTypeLoading) {
+                if (addModalOpenClicked.type === "question") {
+                    handleOpenAddQuestionsModal();
+                    const isYesNoRulesExist = questionsAnswerType.data.find(
+                        (item) => item.name === "yesNoRules"
+                    );
+                    setSingleQuestion({
+                        ...singleQuestion,
+                        question_key: isYesNoRulesExist,
+                        type: isYesNoRulesExist && {
+                            id: 2,
+                            label: "Yes/No",
+                            name: "yesNo",
+                        },
+                        title: "",
+                        policy_id:
+                            isYesNoRulesExist &&
+                            policies.data.find((item) =>
+                                item.key.includes("yesNo")
+                            ),
+                    });
+                } else {
+                    handleAddNewPolicyModal();
+                }
+                setAddModalOpenClicked({
+                    type: "",
+                    status: false,
+                });
+            }
+        }
+    }, [addModalOpenClicked, isQuestionTypeLoading]);
+
     return (
         <React.Fragment>
             <SalesRiskAnalysisContainer>
                 {/* refresh button */}
                 <div className="d-flex justify-content-between align-items-center">
                     <div className="d-flex flex-column flex-md-row align-items-start align-items-md-center">
+                        <Switch>
+                            <Switch.Case
+                                condition={
+                                    settings?.find(
+                                        (item) =>
+                                            item?.name ===
+                                            "enable_add_policy_button"
+                                    )?.value === true
+                                }
+                            >
+                                <button
+                                    onClick={
+                                        isQuestionTypeLoading
+                                            ? null
+                                            : () => openAddModal("policy")
+                                    }
+                                    className="btn btn-info mb-3 mb-md-0 mr-3"
+                                >
+                                    <Switch.Case
+                                        condition={isQuestionTypeLoading}
+                                    >
+                                        <Loader title="Loading Policy Key" />
+                                    </Switch.Case>
+                                    <Switch.Case
+                                        condition={!isQuestionTypeLoading}
+                                    >
+                                        <IoAdd className="mr-1" size={20} /> Add
+                                        New Policy
+                                    </Switch.Case>
+                                </button>
+                            </Switch.Case>
+                        </Switch>
                         <button
-                            onClick={handleAddNewPolicyModal}
-                            className="btn btn-primary mb-3 mb-md-0"
-                        >
-                            <i className="fa fa-plus mr-2" aria-hidden="true" />{" "}
-                            Add New Policy
-                        </button>
-                        <button
-                            onClick={handleOpenAddQuestionsModal}
-                            className="btn btn-info ml-0 mb-3 mb-md-0 ml-md-3"
+                            onClick={
+                                isQuestionTypeLoading
+                                    ? null
+                                    : () => openAddModal("question")
+                            }
+                            className="btn btn-primary ml-0 mb-3 mb-md-0 d-flex align-items-center"
                             style={{
                                 padding: "9px 12px",
                             }}
                         >
-                            <i className="fa fa-plus mr-2" aria-hidden="true" />{" "}
-                            Add New Question
+                            <Switch>
+                                <Switch.Case condition={isQuestionTypeLoading}>
+                                    <Loader title="Loading Question Key" />
+                                </Switch.Case>
+                                <Switch.Case condition={!isQuestionTypeLoading}>
+                                    <IoAdd className="mr-1" size={20} /> Add New
+                                    Question
+                                </Switch.Case>
+                            </Switch>
                         </button>
                         <button
                             onClick={() => {
@@ -564,13 +666,16 @@ const SalesRiskPolices = () => {
                             Questions List
                         </button>
                     </div>
-                    <RefreshButton
-                        onClick={() => {
-                            refetch();
-                        }}
-                        className="sales_risk_refresh_button"
-                        isLoading={isFetching}
-                    />
+                    <div className="d-flex">
+                        <RefreshButton
+                            onClick={() => {
+                                refetch();
+                            }}
+                            className="sales_risk_refresh_button"
+                            isLoading={isFetching}
+                        />
+                        <SettingDropDown />
+                    </div>
                 </div>
                 <div className="sp1_tlr_container">
                     <div className="sp1_tlr_tbl_container mx-0 py-3">

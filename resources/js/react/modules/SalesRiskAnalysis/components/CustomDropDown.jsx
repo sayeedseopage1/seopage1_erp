@@ -18,8 +18,6 @@ const CustomDropDown = ({
     const _Options = data?.data;
     const startCase = _.startCase(selected?.label);
 
-
-
     return (
         <div
             className={`${
@@ -30,11 +28,11 @@ const CustomDropDown = ({
         >
             <Dropdown register className="w-100">
                 <Dropdown.Toggle
-                    className={
+                    className={`${
                         sidebarItem
                             ? "sp1__pp_filter_dd_toggle py-2 px-2 border w-100"
                             : "sp1__pp_filter_dd_toggle w-100 mw-100 cnx_dropdown__dd__toggle"
-                    }
+                    }  ${isDisableUse ? "sp1_remove_toggle_icon" : ""}`}
                     disabled={isDisableUse}
                 >
                     <Tooltip text={startCase} key="select-department-sal-risk">

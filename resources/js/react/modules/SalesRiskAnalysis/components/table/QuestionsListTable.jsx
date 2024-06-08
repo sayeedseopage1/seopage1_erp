@@ -24,6 +24,7 @@ import { QuestionsTypes } from "../../constant";
 // context
 import { SalesRiskAnalysisContext } from "../../context/SalesRiskAnalysisProvider";
 import QuestionsListTableLoader from "../loader/QuestionsListTableLoader";
+import { useLazyGetSinglePolicySalesRiskAnalysisQuery } from "../../../../services/api/salesRiskAnalysisSlice";
 
 const QuestionsListTable = ({
     tableData,
@@ -36,8 +37,9 @@ const QuestionsListTable = ({
     setIsQuestionUpdating,
     onPageChange,
     handleOpenAddQuestionsModal,
+    setIsYesNoRulesLoading
 }) => {
-    const { questionsAnswerType, yesNoRules } = useContext(
+    const { questionsAnswerType, yesNoRules, questionAnswerKeys } = useContext(
         SalesRiskAnalysisContext
     );
     const [sorting, setSorting] = React.useState([]);
@@ -95,6 +97,24 @@ const QuestionsListTable = ({
         [pageIndex, pageSize]
     );
 
+    const [
+        getSinglePolicy,
+        {
+            data: singlePolicyDataByIDorKey,
+            isLoading: isLoadingSinglePolicyDataByIDorKey,
+        },
+    ] = useLazyGetSinglePolicySalesRiskAnalysisQuery();
+
+    const getSinglePolicyDataByIDorKey = async (key) => {
+        try {
+            const response = await getSinglePolicy(`key=${key}`);
+            return response;
+        } catch (error) {
+            return error;
+        }
+    };
+
+
     const table = useReactTable({
         data,
         columns,
@@ -117,12 +137,19 @@ const QuestionsListTable = ({
         getSortedRowModel: getSortedRowModel(),
         paginateExpandedRows: false,
         meta: {
-            editSingleQuestion: (row) => {
+            editSingleQuestion: async (row) => {
                 setIsQuestionUpdating(true);
                 handleOpenAddQuestionsModal();
+                let ruleId ;
 
-               
-
+                if(row?.key === "yesNoRules"){
+                    setIsYesNoRulesLoading(true);
+                    const res = await getSinglePolicyDataByIDorKey(row?.key)
+                    const item = res?.data?.data?.[0].ruleList?.find(item => item?.id === row?.value);
+                    const check = item ? { ...item, label: item?.title } : undefined;
+                    setIsYesNoRulesLoading(false);
+                    ruleId = check
+                }
                 const parent_question = allQuestions.find(
                     (item) => item?.id === row?.parent_id
                 );
@@ -134,7 +161,7 @@ const QuestionsListTable = ({
                     type: QuestionsTypes?.data?.find(
                         (item) => item?.name === row?.type
                     ),
-                    question_key: questionsAnswerType?.data?.find(
+                    question_key: questionAnswerKeys?.data?.find(
                         (item) => item?.name === row?.key
                     ),
                     policy_id: {
@@ -142,9 +169,7 @@ const QuestionsListTable = ({
                         title: row?.policy_title,
                         label: row?.policy_title,
                     },
-                    rule_id: yesNoRules?.data?.find(
-                        (item) => item?.name === row?.rule_id
-                    ),
+                    rule_id: ruleId,
                     parent_question_for: row?.value,
                     listItem: row.type === "list" ? row?.value : [],
                 };
@@ -262,4 +287,5 @@ QuestionsListTable.propTypes = {
     setIsQuestionUpdating: PropTypes.func,
     onPageChange: PropTypes.func,
     handleOpenAddQuestionsModal: PropTypes.func,
+    setIsYesNoRulesLoading: PropTypes.func,
 };
