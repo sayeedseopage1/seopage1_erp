@@ -282,14 +282,14 @@ class IndependentTaskController extends AccountBaseController
             }
         }
 
-        // if(Auth::user()->role_id == 1 || Auth::user()->role_id == 8 && $pendingParentTasks->evaluation_user_id !=null){
-        //     $evaluation = EmployeeEvaluation::where('user_id',$pendingParentTasks->evaluation_user_id)->first();
-        //     $evaluation_history = EvaluationHistory::where('user_id',$pendingParentTasks->evaluation_user_id)->first();
-        //     if($evaluation->managements_decision == 'One more week' || $evaluation_history->managements_decision == 'One more week'){
-        //         $helper = new HelperPendingActionController();
-        //         $helper->evaluationAuthTeamLead($evaluation->user_id ? $evaluation->user_id : $evaluation_history->user_id, $independent_task->id);
-        //     }
-        // }
+        if(Auth::user()->role_id == 1 || Auth::user()->role_id == 8 && $pendingParentTasks->evaluation_user_id !=null){
+            $evaluation = EmployeeEvaluation::where('user_id',$pendingParentTasks->evaluation_user_id)->first();
+            $evaluation_history = EvaluationHistory::where('user_id',$pendingParentTasks->evaluation_user_id)->first();
+            if($evaluation->managements_decision == 'One more week' || $evaluation_history->managements_decision == 'One more week'){
+                $helper = new HelperPendingActionController();
+                $helper->evaluationAuthTeamLead($evaluation->user_id ? $evaluation->user_id : $evaluation_history->user_id, $independent_task->id);
+            }
+        }
 
 
         return response()->json([
