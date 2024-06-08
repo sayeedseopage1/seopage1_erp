@@ -176,7 +176,7 @@ return new class extends Migration
                 'limit_type' => 1,
                 'limit_unit' => 1,
                 'lower_limit_condition' => '>',
-                'upper_limit_condition' => '<=',
+                'upper_limit_condition' => '<',
                 'lower_limit_top_range_condition' => null,
                 'upper_limit_bottom_range_condition' => null,
                 'limit_depend_on_models_and_fields' => json_encode([['model' => 'App\Models\Task', 'field' => 'estimate_hours'], ['model' => 'App\Models\ProjectTimeLog', 'field' => 'total_hours']]),
@@ -291,7 +291,7 @@ return new class extends Migration
                 'point_depend_on_field' => 'project_budget'
             ],
             [
-                'id' => 14,
+                'id' => 13,
                 'criteria_id' => 3,
                 'title' => '40-80% time of the estimated time in revision',
                 'project_type' => 1,
@@ -312,7 +312,7 @@ return new class extends Migration
                 'point_depend_on_field' => 'project_budget'
             ],
             [
-                'id' => 15,
+                'id' => 14,
                 'criteria_id' => 3,
                 'title' => '>80% time of the estimated time in revision',
                 'project_type' => 1,
@@ -323,7 +323,7 @@ return new class extends Migration
                 'limit_type' => 1,
                 'limit_unit' => 1,
                 'lower_limit_condition' => '<',
-                'upper_limit_condition' => '<=',
+                'upper_limit_condition' => '<',
                 'lower_limit_top_range_condition' => null,
                 'upper_limit_bottom_range_condition' => null,
                 'limit_depend_on_models_and_fields' => null,
@@ -333,7 +333,7 @@ return new class extends Migration
                 'point_depend_on_field' => 'project_budget'
             ],
             [
-                'id' => 16,
+                'id' => 15,
                 'criteria_id' => 4,
                 'title' => 'For marking every milestone as paid',
                 'project_type' => 1,
@@ -354,7 +354,7 @@ return new class extends Migration
                 'point_depend_on_field' => null
             ],
             [
-                'id' => 17,
+                'id' => 16,
                 'criteria_id' => 5,
                 'title' => 'For completing a project full (With project completion form)',
                 'project_type' => 1,
@@ -375,7 +375,7 @@ return new class extends Migration
                 'point_depend_on_field' => 'project_budget'
             ],
             [
-                'id' => 18,
+                'id' => 17,
                 'criteria_id' => 6,
                 'title' => 'If first tasks are created within (0-48) hours',
                 'project_type' => 1,
@@ -396,7 +396,7 @@ return new class extends Migration
                 'point_depend_on_field' => 'project_budget'
             ],
             [
-                'id' => 19,
+                'id' => 18,
                 'criteria_id' => 7,
                 'title' => 'If the project deadline is met',
                 'project_type' => 1,
@@ -417,7 +417,7 @@ return new class extends Migration
                 'point_depend_on_field' => 'project_budget'
             ],
             [
-                'id' => 20,
+                'id' => 19,
                 'criteria_id' => 8,
                 'title' => "If a PM doesn't submit a task to the client / give revision within 36 hours after it was submitted by the lead developer",
                 'project_type' => 1,
@@ -438,7 +438,7 @@ return new class extends Migration
                 'point_depend_on_field' => null
             ],
             [
-                'id' => 21,
+                'id' => 20,
                 'criteria_id' => 9,
                 'title' => "If a project manager can complete 5 project in 7 days",
                 'project_type' => 1,
@@ -459,7 +459,7 @@ return new class extends Migration
                 'point_depend_on_field' => null
             ],
             [
-                'id' => 22,
+                'id' => 21,
                 'criteria_id' => 9,
                 'title' => "If a project manager can complete 8 project in 7 days",
                 'project_type' => 1,
@@ -480,7 +480,7 @@ return new class extends Migration
                 'point_depend_on_field' => null
             ],
             [
-                'id' => 23,
+                'id' => 22,
                 'criteria_id' => 9,
                 'title' => "If a project manager can complete 10 project in 7 days",
                 'project_type' => 1,
@@ -501,7 +501,7 @@ return new class extends Migration
                 'point_depend_on_field' => null
             ],
             [
-                'id' => 24,
+                'id' => 23,
                 'criteria_id' => 10,
                 'title' => "If a project manager can complete 5 project in 12 days",
                 'project_type' => 1,
@@ -522,7 +522,7 @@ return new class extends Migration
                 'point_depend_on_field' => null
             ],
             [
-                'id' => 25,
+                'id' => 24,
                 'criteria_id' => 10,
                 'title' => "If a project manager can complete 8 project in 12 days",
                 'project_type' => 1,
@@ -543,7 +543,7 @@ return new class extends Migration
                 'point_depend_on_field' => null
             ],
             [
-                'id' => 26,
+                'id' => 25,
                 'criteria_id' => 10,
                 'title' => "If a project manager can complete 10 project in 12 days",
                 'project_type' => 1,
@@ -564,7 +564,7 @@ return new class extends Migration
                 'point_depend_on_field' => null
             ],
             [
-                'id' => 27,
+                'id' => 26,
                 'criteria_id' => 11,
                 'title' => "$1-400",
                 'project_type' => 1,
@@ -585,7 +585,7 @@ return new class extends Migration
                 'point_depend_on_field' => null
             ],
             [
-                'id' => 28,
+                'id' => 27,
                 'criteria_id' => 11,
                 'title' => "$401-700",
                 'project_type' => 1,
@@ -606,7 +606,7 @@ return new class extends Migration
                 'point_depend_on_field' => null
             ],
             [
-                'id' => 29,
+                'id' => 28,
                 'criteria_id' => 11,
                 'title' => "$701-1200",
                 'project_type' => 1,
@@ -627,7 +627,7 @@ return new class extends Migration
                 'point_depend_on_field' => null
             ],
             [
-                'id' => 30,
+                'id' => 29,
                 'criteria_id' => 11,
                 'title' => "$1201+",
                 'project_type' => 1,
@@ -648,7 +648,7 @@ return new class extends Migration
                 'point_depend_on_field' => null
             ],
             [
-                'id' => 31,
+                'id' => 30,
                 'criteria_id' => 12,
                 'title' => "Task hold time is more than 1 day during the assign phase, hold time will count after 48 hours",
                 'project_type' => 1,
@@ -669,9 +669,9 @@ return new class extends Migration
                 'point_depend_on_field' => null
             ],
             [
-                'id' => 32,
+                'id' => 31,
                 'criteria_id' => 13,
-                'title' => "Task hold time is more than 12 hours during the submission phase of new tasks, hold time will count after 12 hurs",
+                'title' => "Task hold time is more than 1 day during the submission phase of new tasks, hold time will count after 24 hurs",
                 'project_type' => 1,
                 'lower_limit' => 1,
                 'upper_limit' => 1,
@@ -690,7 +690,7 @@ return new class extends Migration
                 'point_depend_on_field' => null
             ],
             [
-                'id' => 33,
+                'id' => 32,
                 'criteria_id' => 14,
                 'title' => "Task hold time is more than 4 hours during the submission phase of revisions, hold time will count after 4 hours",
                 'project_type' => 1,
@@ -711,7 +711,7 @@ return new class extends Migration
                 'point_depend_on_field' => null
             ],
             [
-                'id' => 34,
+                'id' => 33,
                 'criteria_id' => 15,
                 'title' => "For missing every goal in a regular project",
                 'project_type' => 1,
@@ -732,7 +732,7 @@ return new class extends Migration
                 'point_depend_on_field' => null
             ],
             [
-                'id' => 35,
+                'id' => 34,
                 'criteria_id' => 15,
                 'title' => "For missing every goal in a priority project",
                 'project_type' => 1,
@@ -753,7 +753,7 @@ return new class extends Migration
                 'point_depend_on_field' => null
             ],
             [
-                'id' => 36,
+                'id' => 35,
                 'criteria_id' => 15,
                 'title' => "For missing every goal in a high-priority project",
                 'project_type' => 1,
@@ -774,7 +774,7 @@ return new class extends Migration
                 'point_depend_on_field' => null
             ],
             [
-                'id' => 37,
+                'id' => 36,
                 'criteria_id' => 15,
                 'title' => "For missing every goal in a top most priority project",
                 'project_type' => 1,
@@ -795,7 +795,7 @@ return new class extends Migration
                 'point_depend_on_field' => null
             ],
             [
-                'id' => 38,
+                'id' => 37,
                 'criteria_id' => 15,
                 'title' => "For missing every goal in a critically sensitive project",
                 'project_type' => 1,
@@ -816,7 +816,7 @@ return new class extends Migration
                 'point_depend_on_field' => null
             ],
             [
-                'id' => 39,
+                'id' => 38,
                 'criteria_id' => 16,
                 'title' => "Regular",
                 'project_type' => 1,
@@ -837,7 +837,7 @@ return new class extends Migration
                 'point_depend_on_field' => null
             ],
             [
-                'id' => 40,
+                'id' => 39,
                 'criteria_id' => 16,
                 'title' => "Priority",
                 'project_type' => 1,
@@ -858,7 +858,7 @@ return new class extends Migration
                 'point_depend_on_field' => null
             ],
             [
-                'id' => 41,
+                'id' => 40,
                 'criteria_id' => 16,
                 'title' => "High priority",
                 'project_type' => 1,
@@ -879,7 +879,7 @@ return new class extends Migration
                 'point_depend_on_field' => null
             ],
             [
-                'id' => 42,
+                'id' => 41,
                 'criteria_id' => 16,
                 'title' => "Most priority",
                 'project_type' => 1,
@@ -900,7 +900,7 @@ return new class extends Migration
                 'point_depend_on_field' => null
             ],
             [
-                'id' => 43,
+                'id' => 42,
                 'criteria_id' => 16,
                 'title' => "Top most priority",
                 'project_type' => 1,
@@ -921,7 +921,7 @@ return new class extends Migration
                 'point_depend_on_field' => null
             ],
             [
-                'id' => 44,
+                'id' => 43,
                 'criteria_id' => 17,
                 'title' => "If they cross (100-180) billable hours per week",
                 'project_type' => 2,
@@ -942,7 +942,7 @@ return new class extends Migration
                 'point_depend_on_field' => null
             ],
             [
-                'id' => 45,
+                'id' => 44,
                 'criteria_id' => 17,
                 'title' => "If they cross 180  billable hours per week",
                 'project_type' => 2,
@@ -963,7 +963,7 @@ return new class extends Migration
                 'point_depend_on_field' => null
             ],
             [
-                'id' => 46,
+                'id' => 45,
                 'criteria_id' => 18,
                 'title' => "For the billed amounts in hourly projects (Every week) will get 3% of the billed amount",
                 'project_type' => 2,
@@ -984,7 +984,7 @@ return new class extends Migration
                 'point_depend_on_field' => null
             ],
             [
-                'id' => 47,
+                'id' => 46,
                 'criteria_id' => 15,
                 'title' => "Missing every goal in a regular project",
                 'project_type' => 2,
@@ -1005,7 +1005,7 @@ return new class extends Migration
                 'point_depend_on_field' => null
             ],
             [
-                'id' => 48,
+                'id' => 47,
                 'criteria_id' => 15,
                 'title' => "Missing every goal in a priority project",
                 'project_type' => 2,
@@ -1026,7 +1026,7 @@ return new class extends Migration
                 'point_depend_on_field' => null
             ],
             [
-                'id' => 49,
+                'id' => 48,
                 'criteria_id' => 15,
                 'title' => "Missing every goal in a high-priority project",
                 'project_type' => 2,
@@ -1047,7 +1047,7 @@ return new class extends Migration
                 'point_depend_on_field' => null
             ],
             [
-                'id' => 50,
+                'id' => 49,
                 'criteria_id' => 15,
                 'title' => "Missing every goal in a top most priority project",
                 'project_type' => 2,
@@ -1068,7 +1068,7 @@ return new class extends Migration
                 'point_depend_on_field' => null
             ],
             [
-                'id' => 51,
+                'id' => 50,
                 'criteria_id' => 15,
                 'title' => "Missing every goal in a critically sensitive project",
                 'project_type' => 2,
@@ -1089,7 +1089,7 @@ return new class extends Migration
                 'point_depend_on_field' => null
             ],
             [
-                'id' => 52,
+                'id' => 51,
                 'criteria_id' => 19,
                 'title' => "If the first submission is made within 100 hours of the award time",
                 'project_type' => 2,
@@ -1110,7 +1110,7 @@ return new class extends Migration
                 'point_depend_on_field' => null
             ],
             [
-                'id' => 53,
+                'id' => 52,
                 'criteria_id' => 16,
                 'title' => "Revision due to PM's fault on regular project",
                 'project_type' => 2,
@@ -1131,7 +1131,7 @@ return new class extends Migration
                 'point_depend_on_field' => null
             ],
             [
-                'id' => 54,
+                'id' => 53,
                 'criteria_id' => 16,
                 'title' => "Revision due to PM's fault on priority project",
                 'project_type' => 2,
@@ -1152,7 +1152,7 @@ return new class extends Migration
                 'point_depend_on_field' => null
             ],
             [
-                'id' => 55,
+                'id' => 54,
                 'criteria_id' => 16,
                 'title' => "Revision due to PM's fault on high-priority project",
                 'project_type' => 2,
@@ -1173,7 +1173,7 @@ return new class extends Migration
                 'point_depend_on_field' => null
             ],
             [
-                'id' => 56,
+                'id' => 55,
                 'criteria_id' => 16,
                 'title' => "Revision due to PM's fault on top most priority project",
                 'project_type' => 2,
@@ -1194,7 +1194,7 @@ return new class extends Migration
                 'point_depend_on_field' => null
             ],
             [
-                'id' => 57,
+                'id' => 56,
                 'criteria_id' => 16,
                 'title' => "Revision due to PM's fault on critically sensitive project",
                 'project_type' => 2,
