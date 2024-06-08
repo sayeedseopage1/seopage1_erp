@@ -241,16 +241,21 @@ const PointFactorsTable = ({
                 status: parseFloat(editFactorData?.status) ?? null,
             }
 
-            console.log("payload: ", payload)
+            if (!singleEqualValLimitIds?.includes(editFactorData?.id) && editFactorData?.lower_limit && (parseFloat(editFactorData?.upper_limit) < parseFloat(editFactorData?.lower_limit))) {
+                toast.warning("Upper limit cannot be less than lower limit");
+                return
+            }
 
-            // const response = await updatePmPointfactor({ id: editFactorData?.id, payload }).unwrap();
+            const response = await updatePmPointfactor({ id: editFactorData?.id, payload }).unwrap();
 
-            // if (response?.status == 200) {
-            //     toast.success(response.message);
-            //     handleCloseEditFactorModal();
-            // } else {
-            //     toast.warning(response.message);
-            // }
+
+
+            if (response?.status == 200) {
+                toast.success(response.message);
+                handleCloseEditFactorModal();
+            } else {
+                toast.warning(response.message);
+            }
         } catch (error) {
             toast.error("Failed to update item");
         }
