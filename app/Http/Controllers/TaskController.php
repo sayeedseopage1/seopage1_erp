@@ -7276,26 +7276,20 @@ class TaskController extends AccountBaseController
 
     public function storeDailySubmission(Request $request)
     {
-
-
         $daily_submission = new DailySubmission();
 
-        if ($request->file('file') != null) {
-            foreach ($request->file('file') as $att) {
-                $task_submit = new TaskSubmission();
-                $filename = null;
-                if ($att) {
-                    $filename = time() . $att->getClientOriginalName();
+        if ($request->hasFile('file')) {
+            $files = $request->file('file');
+            $file_name = [];
 
-                    Storage::disk('public')->putFileAs(
-                        'DailySubmission/',
-                        $att,
-                        $filename
-                    );
-                }
-                $daily_submission->attachments = $filename;
+            foreach ($files as $file) {
+                $filename = uniqid() . '.' . $file->getClientOriginalExtension();
+                array_push($file_name, $filename);
+                Storage::disk('s3')->put('/' . $filename, file_get_contents($file));
             }
         }
+
+        $daily_submission->attachments = json_encode($file_name);
         $daily_submission->user_id = $request->user_id;
         $daily_submission->task_id = $request->task_id;
         $daily_submission->project_id = $request->project_id;
@@ -7428,6 +7422,17 @@ class TaskController extends AccountBaseController
             $dailySubmission = $dailySubmission->where('projects.client_id', $clientId);
         }
         $dailySubmission = $dailySubmission->get();
+        $baseUrl = 'https://seopage1storage.s3.ap-southeast-1.amazonaws.com/';
+        foreach ($dailySubmission as $submission) {
+            if (!empty($submission->attachments)) {
+                $attachments = json_decode($submission->attachments, true);
+                if (is_array($attachments)) {
+                    $submission->attachments = array_map(function($attachment) use ($baseUrl) {
+                        return $baseUrl . $attachment;
+                    }, $attachments);
+                }
+            }
+        }
 
 
         return response()->json([
