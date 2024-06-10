@@ -328,44 +328,54 @@ export const DailySubmissionTableColumn = [
         sorted: false,
         group: false,
         cell: ({ row, className }) => {
-            const Links = row?.original.attachments;
+            const totalAttachments = row?.attachments?.length;
             return (
-                <Popover>
-                    <Popover.Button>
-                        <span className=" singleline-ellipsis link_color hover-underline">
-                            {JSON.parse(Links).map((data, index) => (
-                                <div key={index}>
-                                    <a
-                                        className="link_color hover-underline"
-                                        target="_blank"
-                                        href={data}
-                                    >
-                                        {data}
-                                    </a>
-                                    <br />
-                                </div>
-                            ))}
-                        </span>
-                    </Popover.Button>
+                <td className={`${className} sp1_tlr_td_border`}>
+                    {row?.attachments ? (
+                        <>
+                            <Popover>
+                                <Popover.Button>
+                                    <span className=" singleline-ellipsis link_color hover-underline">
+                                        {row?.attachments.map((data, index) => (
+                                            <div key={index}>
+                                                {totalAttachments} attachments
+                                            </div>
+                                        ))}
+                                    </span>
+                                </Popover.Button>
 
-                    <Popover.Panel>
-                        <div className="revision_popover_panel">
-                            {JSON.parse(Links).map((data, index) => (
-                                <div key={index}>
-                                    <span>{index + 1}.</span>
-                                    <a
-                                        className="link_color hover-underline mb-2"
-                                        target="_blank"
-                                        href={data}
-                                    >
-                                        {data}
-                                    </a>
-                                    <br />
-                                </div>
-                            ))}
-                        </div>
-                    </Popover.Panel>
-                </Popover>
+                                <Popover.Panel>
+                                    <div className="revision_popover_panel">
+                                        {row?.attachments.map((data, index) => (
+                                            <div key={index}>
+                                                <span
+                                                    style={{
+                                                        fontWeight: "bold",
+                                                        fontSize: "16px",
+                                                    }}
+                                                >
+                                                    {index + 1}.
+                                                </span>
+                                                <a
+                                                    className="link_color hover-underline mb-2"
+                                                    target="_blank"
+                                                    href={data}
+                                                >
+                                                    {data}
+                                                </a>
+                                                <br />
+                                            </div>
+                                        ))}
+                                    </div>
+                                </Popover.Panel>
+                            </Popover>
+                        </>
+                    ) : (
+                        <span className="text-danger font-weight-bold">
+                            No Attachments
+                        </span>
+                    )}
+                </td>
             );
         },
     },
