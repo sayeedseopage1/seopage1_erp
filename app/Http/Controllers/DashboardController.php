@@ -643,7 +643,8 @@ class DashboardController extends AccountBaseController
 
 
         $incomplete_hours = $minimum_log_hours - $userTotalMin;
-        // $userDailyTaskSubmission = true;
+        $userLog = ProjectTimeLog::where('user_id', $user_id)->whereDate('created_at', $today)->orderBy('created_at', 'desc')->get();
+
         return response()->json([
             'data' => [
                 'check_in_check_out' => [
@@ -664,7 +665,8 @@ class DashboardController extends AccountBaseController
                         'target_minimum_log_hours' => $minimum_log_hours,
                         'incomplete_hours' => $incomplete_hours < 0 ? 0 : $incomplete_hours,
                     ]
-                ]
+                ],
+                'user_log' => $userLog
             ],
         ]);
     }
@@ -792,6 +794,75 @@ class DashboardController extends AccountBaseController
 
         return response()->json(['status'=>200]);
     }
+
+    // public function developerDailytrackHoursLog(Request $request)
+    // {
+    //     DB::beginTransaction();
+    //     // Decode the JSON durations string into an array
+    //     $durations = json_decode($request->durations, true);
+        
+    //     $restrictedStartTimeEvening = \Carbon\Carbon::createFromTime(23, 0, 0); // 11:00 PM
+    //     $restrictedEndTimeEvening = \Carbon\Carbon::createFromTime(23, 59, 59); // 11:59 PM
+    //     $restrictedStartTimeMorning = \Carbon\Carbon::createFromTime(0, 0, 0); // 12:00 AM
+    //     $restrictedEndTimeMorning = \Carbon\Carbon::createFromTime(7, 45, 0); // 7:45 AM
+
+    //     foreach ($durations as $duration) {
+    //         $startTime = \Carbon\Carbon::createFromFormat('h:i A', $duration['start']);
+    //         $endTime = \Carbon\Carbon::createFromFormat('h:i A', $duration['end']);
+
+    //         if (
+    //             ($startTime->between($restrictedStartTimeEvening, $restrictedEndTimeEvening)) ||
+    //             ($startTime->between($restrictedStartTimeMorning, $restrictedEndTimeMorning)) ||
+    //             ($endTime->between($restrictedStartTimeEvening, $restrictedEndTimeEvening)) ||
+    //             ($endTime->between($restrictedStartTimeMorning, $restrictedEndTimeMorning))
+    //         ) {
+    //             return response()->json(['status' => 400, 'message' => 'Durations should not be between 11 PM and 7:45 AM.'], 400);
+    //         }
+    //         // Check if the user has already logged time between these time
+    //         $user = Auth::user()->id;
+    //         $timeLogs = ProjectTimeLog::where('user_id', $user)->whereDate('created_at', Carbon::today())->get();
+
+    //         foreach ($timeLogs as $timeLog) {
+    //             $start_time = Carbon::parse($timeLog->start_time);
+    //             $end_time = Carbon::parse($timeLog->end_time);
+
+    //             if (
+    //                 ($start_time->between($startTime, $endTime) || $end_time->between($startTime, $endTime)) ||
+    //                 ($startTime->between($start_time, $end_time) || $endTime->between($start_time, $end_time))
+    //             ) {
+    //                 return response()->json(['status' => 400, 'message' => 'You have already logged time between these times.'], 400);
+    //             }
+    //         }
+    //     }
+
+    //     // Store the data in the database
+    //     $stop_time = new DeveloperStopTimer();
+    //     $stop_time->reason_for_less_tracked_hours_a_day_task = $request->reason_for_less_tracked_hours_a_day_task;
+    //     $stop_time->durations = $request->durations;
+    //     $stop_time->comment = $request->comment;
+    //     $stop_time->leave_period = $request->leave_period;
+    //     $stop_time->child_reason = $request->child_reason;
+    //     $stop_time->responsible_person = $request->responsible_person;
+    //     $stop_time->related_to_any_project = $request->related_to_any_project;
+    //     $stop_time->responsible_person_id = $request->responsible_person_id;
+    //     $stop_time->forgot_to_track_task_id = $request->forgot_to_track_task_id;
+    //     $stop_time->user_id = Auth::user()->id;
+    //     $stop_time->transition_hours = $request->transition_hours;
+    //     $stop_time->transition_minutes = $request->transition_minutes;
+    //     $stop_time->date = $request->date;
+    //     $stop_time->project_id = $request->project_id;
+    //     $stop_time->task_id = $request->task_id;
+
+    //     $project = Project::where('id', $request->project_id)->first();
+    //     if ($project != null) {
+    //         $stop_time->client_id = $project->client_id;
+    //     }
+
+    //     $stop_time->save();
+
+    //     return response()->json(['status' => 200]);
+    // }
+
     public function task_history($id)
     {
         $status_history= TaskHistory::select('task_history.id','task_history.created_at as created_on',
