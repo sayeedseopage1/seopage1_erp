@@ -38,7 +38,6 @@ const EditFactorModal = ({
             const infinite_value_down = singleDefaultFactor?.lower_limit_condition == ">" ? ">" : ""
             setEditFactorData({ ...singleDefaultFactor, description: singleDefaultFactor?.criteria?.description, limit_unit: limit_unit_obj, infiniteValueUp: infinite_value_up, infiniteValueDown: infinite_value_down })
         }
-
     }, [singleDefaultFactor]);
 
     const { id: factorId, title, project_type, lower_limit, upper_limit, lower_limit_condition, upper_limit_condition, limit_type, limit_unit, point_type, points, status, lower_limit_top_range_condition, upper_limit_bottom_range_condition, lower_limit_top_range, upper_limit_bottom_range, description } = editFactorData || {}
@@ -53,6 +52,7 @@ const EditFactorModal = ({
     const dualValueLimitIds = [3, 4, 5, 6]
     const limitUnitByCondition = limit_unit?.id == 1 ? "Hours" : limit_unit?.id == 2 ? "%" : limit_unit?.id == 3 ? "$" : limit_unit?.id == 4 ? "Projects" : "others"
 
+    console.log(description)
     return (
         <CustomModal
             open={open}
@@ -144,7 +144,7 @@ const EditFactorModal = ({
                                             type="number"
                                             className="ml-2 mr-1"
                                             name="lower_limit"
-                                            value={lower_limit}
+                                            value={parseFloat(lower_limit)}
                                             onChange={handleChange}
                                             placeholder="Write Here"
                                             style={{ width: '100px' }}
@@ -183,7 +183,7 @@ const EditFactorModal = ({
                                             type="number"
                                             className="ml-2 mr-1"
                                             name="upper_limit"
-                                            value={upper_limit}
+                                            value={parseFloat(upper_limit)}
                                             onChange={handleChange}
                                             placeholder="Write Here"
                                             style={{ width: '100px' }}
@@ -222,7 +222,7 @@ const EditFactorModal = ({
                                                 type="number"
                                                 className="ml-2 mr-1"
                                                 name="lower_limit"
-                                                value={lower_limit}
+                                                value={parseFloat(lower_limit)}
                                                 onChange={handleChange}
                                                 placeholder="Write Here"
                                                 style={{ width: '100px' }}
@@ -239,7 +239,7 @@ const EditFactorModal = ({
                                                 type="number"
                                                 className="ml-2 mr-1"
                                                 name="lower_limit_top_range"
-                                                value={lower_limit_top_range}
+                                                value={parseFloat(lower_limit_top_range)}
                                                 onChange={handleChange}
                                                 placeholder="Write Here"
                                                 style={{ width: '100px' }}
@@ -260,7 +260,7 @@ const EditFactorModal = ({
                                                 type="number"
                                                 className="ml-2 mr-1"
                                                 name="upper_limit_bottom_range"
-                                                value={upper_limit_bottom_range}
+                                                value={parseFloat(upper_limit_bottom_range)}
                                                 onChange={handleChange}
                                                 placeholder="Write Here"
                                                 style={{ width: '100px' }}
@@ -277,7 +277,7 @@ const EditFactorModal = ({
                                                 type="number"
                                                 className="ml-2 mr-1"
                                                 name="upper_limit"
-                                                value={upper_limit}
+                                                value={parseFloat(upper_limit)}
                                                 onChange={handleChange}
                                                 placeholder="Write Here"
                                                 style={{ width: '100px' }}
@@ -303,7 +303,7 @@ const EditFactorModal = ({
                                             type="number"
                                             className="mr-2"
                                             name="points"
-                                            value={points}
+                                            value={parseFloat(points)}
                                             onChange={handleChange}
                                             placeholder="Write Here"
                                             style={{ width: '100px' }}
@@ -343,10 +343,12 @@ const EditFactorModal = ({
                                         type="text"
                                         className="w-100"
                                         name="description"
-                                        value={description}
+                                        value={description || ''}
                                         onChange={handleChange}
                                         placeholder="Write Here"
                                     />
+
+
                                 </div>
                             </div>
                         }
