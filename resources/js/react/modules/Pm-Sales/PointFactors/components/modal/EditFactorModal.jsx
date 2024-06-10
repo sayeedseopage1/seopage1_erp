@@ -47,10 +47,12 @@ const EditFactorModal = ({
     // console.log(editFactorData)
     // console.log("u", upper_limit_condition)
     // console.log("l", lower_limit_condition)
+    // console.log(limit_unit)
 
     const singleEqualValLimitIds = [14, 19, 29, 44]
     const singleLimitIds = [8, 14, 17, 19, 29, 44]
     const dualValueLimitIds = [3, 4, 5, 6]
+    const limitUnitByCondition = limit_unit?.id == 1 ? "Hours" : limit_unit?.id == 2 ? "%" : limit_unit?.id == 3 ? "$" : limit_unit?.id == 4 ? "Projects" : "others"
 
     return (
         <CustomModal
@@ -141,7 +143,7 @@ const EditFactorModal = ({
                                         </ModalInputLabel>
                                         <ModalInput
                                             type="number"
-                                            className="ml-2"
+                                            className="ml-2 mr-1"
                                             name="lower_limit"
                                             value={lower_limit}
                                             onChange={handleChange}
@@ -149,6 +151,9 @@ const EditFactorModal = ({
                                             style={{ width: '100px' }}
                                         // disabled={(!infiniteValueUp && infiniteValueDown)}
                                         />
+                                        {
+                                            limitUnitByCondition
+                                        }
                                     </div>
                                     {editFactorDataValidation?.lower_limit && (
                                         <p className="text-danger">
@@ -177,13 +182,16 @@ const EditFactorModal = ({
                                         </ModalInputLabel>
                                         <ModalInput
                                             type="number"
-                                            className="ml-2"
+                                            className="ml-2 mr-1"
                                             name="upper_limit"
                                             value={upper_limit}
                                             onChange={handleChange}
                                             placeholder="Write Here"
                                             style={{ width: '100px' }}
                                         />
+                                        {
+                                            limitUnitByCondition
+                                        }
                                     </div>
                                     {editFactorDataValidation?.upper_limit && (
                                         <p className="text-danger">
@@ -213,13 +221,16 @@ const EditFactorModal = ({
                                             </ModalInputLabel>
                                             <ModalInput
                                                 type="number"
-                                                className="ml-2"
+                                                className="ml-2 mr-1"
                                                 name="lower_limit"
                                                 value={lower_limit}
                                                 onChange={handleChange}
                                                 placeholder="Write Here"
                                                 style={{ width: '100px' }}
                                             />
+                                            {
+                                                limitUnitByCondition
+                                            }
                                         </div>
                                         <div className="col-6 d-flex align-items-center">
                                             <ModalInputLabel className="col-3" style={{ fontSize: '14px', color: '#8F8F8F' }}>
@@ -227,13 +238,16 @@ const EditFactorModal = ({
                                             </ModalInputLabel>
                                             <ModalInput
                                                 type="number"
-                                                className="ml-2"
+                                                className="ml-2 mr-1"
                                                 name="lower_limit_top_range"
                                                 value={lower_limit_top_range}
                                                 onChange={handleChange}
                                                 placeholder="Write Here"
                                                 style={{ width: '100px' }}
                                             />
+                                            {
+                                                limitUnitByCondition
+                                            }
                                         </div>
                                     </div>
                                     <Divider plain>Or</Divider>
@@ -245,13 +259,16 @@ const EditFactorModal = ({
                                             </ModalInputLabel>
                                             <ModalInput
                                                 type="number"
-                                                className="ml-2"
+                                                className="ml-2 mr-1"
                                                 name="upper_limit_bottom_range"
                                                 value={upper_limit_bottom_range}
                                                 onChange={handleChange}
                                                 placeholder="Write Here"
                                                 style={{ width: '100px' }}
                                             />
+                                            {
+                                                limitUnitByCondition
+                                            }
                                         </div>
                                         <div className="col-6 d-flex align-items-center">
                                             <ModalInputLabel className="col-4" style={{ fontSize: '14px', color: '#8F8F8F' }}>
@@ -259,13 +276,16 @@ const EditFactorModal = ({
                                             </ModalInputLabel>
                                             <ModalInput
                                                 type="number"
-                                                className="ml-2"
+                                                className="ml-2 mr-1"
                                                 name="upper_limit"
                                                 value={upper_limit}
                                                 onChange={handleChange}
                                                 placeholder="Write Here"
                                                 style={{ width: '100px' }}
                                             />
+                                            {
+                                                limitUnitByCondition
+                                            }
                                         </div>
                                     </div>
                                 </div>
