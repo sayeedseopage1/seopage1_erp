@@ -9,17 +9,16 @@ use App\Helper\Reply;
 use App\Models\Leave;
 use App\Models\Holiday;
 use App\Models\Project;
+use App\Models\SubTask;
 use App\Models\TaskUser;
 use Carbon\CarbonPeriod;
+use Nette\Utils\DateTime;
 use App\Models\TaskRevision;
 use App\Models\ProjectTimeLog;
 use App\Models\DashboardWidget;
 use App\Models\AttendanceSetting;
 use Illuminate\Support\Facades\DB;
 use App\Models\ProjectTimeLogBreak;
-
-
-
 use Illuminate\Support\Facades\Auth;
 
 trait LeadDashboard
@@ -980,6 +979,8 @@ trait LeadDashboard
 
 
             $this->number_of_dispute_filed_all_data_lead = $number_of_dispute_filed_all_data_lead;
+            //-------------------Average Task Hold Time-----------------//
+            $this->average_average_task_hold_time_lead = $this->leadAverageTaskHoldTime($startDate, $endDate, $devId);
             //------------ Number of disputes lost own table-----------------//
             $number_of_dispute_lost_own_id = DB::table('task_revision_disputes')
                 ->select('task_id')
@@ -1187,7 +1188,6 @@ trait LeadDashboard
                     ->leftJoin('users as client', 'client.id', 'projects.client_id')
                     ->leftJoin('users as cl', 'cl.id', 'tasks.client_id')
                     ->where('tasks.id', $task)
-                    //->groupBy('tasks.id', $task)
                     ->first();
 
                 $estimate_missed_task_data[] = $task_data;
@@ -1195,9 +1195,6 @@ trait LeadDashboard
 
 
             $this->estimate_missed_task_data_lead = $estimate_missed_task_data;
-
-
-
 
 
             $html = view('dashboard.ajax.leaddeveloper.month', $this->data)->render();
@@ -1222,7 +1219,7 @@ trait LeadDashboard
 
             $this->username_lead = DB::table('users')->where('id', $devId)->value('name');
 
-            [$this->number_of_tasks_received_lead, $this->number_of_tasks_received_lead_data] = $this->leadNumberOfTasksReceived($startDate, $endDate, $devId);
+            [$this->number_of_tasks_received_lead, $this->number_of_tasks_received_lead_data] = $this->leadNumberOfTasksReceived(startDate: $startDate, endDate: $endDate, devId: $devId);
 
             [$this->submit_number_of_tasks_in_this_month_lead, $this->submit_number_of_tasks_in_this_month_lead_data] = $this->leadNumberOfSubmittedTasks($startDate, $endDate, $devId);
 
@@ -1569,8 +1566,8 @@ trait LeadDashboard
 
 
             $this->number_of_dispute_filed_all_data_lead = $number_of_dispute_filed_all_data_lead;
-            //-------------------Number of disputes filed all table-----------------//
-
+            //-------------------Average Task Hold Time-----------------//
+            $this->average_average_task_hold_time_lead = $this->leadAverageTaskHoldTime($startDate, $endDate, $devId);
             //------------ Number of disputes lost own table-----------------//
             $number_of_dispute_lost_own_id = DB::table('task_revision_disputes')
                 ->select('task_id')
@@ -2304,8 +2301,6 @@ trait LeadDashboard
 
     private function leadAverageTaskHoldTime($startDate, $endDate, $devId)
     {
-        $startDate = "2024-03-01 00:00:00";
-        $endDate = "2024-03-31 00:00:00";
         $assign_phase = DB::table('tasks')
             ->join('task_users', 'tasks.id', '=', 'task_users.task_id')
             ->whereDate('tasks.created_at', '>=', $startDate)
@@ -2331,8 +2326,8 @@ trait LeadDashboard
             // dd($assign_date);
 
             if ($assign_date != NULL) {
-                $startDateTime = $i1->created_at;
-                $endDateTime = $assign_date->created_at;
+                $startDateTime = new DateTime($i1->created_at);
+                $endDateTime = new DateTime($assign_date->created_at);
 
                 // Ensure the end date is greater than the start date
                 if ($endDateTime <= $startDateTime) {
@@ -2676,9 +2671,7 @@ trait LeadDashboard
 
         // Combine into a single variable with a formatted string
         $average_hold_time_formatted = sprintf('%d days, %02d hours, %02d minutes, %02d seconds', $days, $hours, $minutes, $seconds);
-
-        // dd($average_hold_time_formatted);
-
+        // dd($totalDuration);
         return $average_hold_time_formatted;
     }
 

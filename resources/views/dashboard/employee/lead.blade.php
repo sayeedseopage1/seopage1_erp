@@ -442,13 +442,10 @@
                             <div class="d-flex flex-wrap">
 
                                 <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
-                                    <a href="#" data-toggle="modal"
-                                        data-target="#avg_num_in_progress_task{{ count($total_in_progress_date_range_table_lead) }}">
-
-                                        {{ round($average_in_progress_date_range_lead, 2) }}
-
+                                    <a href="#">
+                                        {{ $average_average_task_hold_time_lead }}
                                     </a>
-                                    @include('dashboard.ajax.leaddeveloper.modals.avg_num_in_progress_task')
+                                    {{-- @include('dashboard.ajax.leaddeveloper.modals.avg_num_in_progress_task') --}}
                                 </p>
 
                             </div>
