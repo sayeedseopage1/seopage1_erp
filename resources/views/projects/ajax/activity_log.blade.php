@@ -109,7 +109,7 @@
 		$myCollection = collect($activityLog);
 		$uniqueCollection = $myCollection->unique('user_id');
 	@endphp
-	<div class="row mx-0">
+	<div class="row mx-0 sticky-top" style="background-color: rgb(242, 244, 247); z-index:1; top: 110px">
 		<form action="" class="w-100" id="filter-form">
 			@csrf
 			<input type="hidden" name="project_id" value="{{request()->route('project')}}">
