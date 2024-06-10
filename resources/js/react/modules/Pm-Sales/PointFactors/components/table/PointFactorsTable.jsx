@@ -171,8 +171,6 @@ const PointFactorsTable = ({
             project_type: false,
             lower_limit: false,
             upper_limit: false,
-            // lower_limit_top_range: false,
-            // upper_limit_bottom_range: false,
             limit_type: false,
             limit_unit: false,
             point_type: false,
@@ -196,7 +194,6 @@ const PointFactorsTable = ({
     // modal Close Handler
     const handleCloseEditFactorModal = () => {
         setEditFactorModalOpen(false);
-        // resetFormForRule();
     };
 
 
@@ -248,7 +245,6 @@ const PointFactorsTable = ({
             }
 
             const response = await updatePmPointfactor({ id: editFactorData?.id, payload }).unwrap();
-
 
 
             if (response?.status == 200) {
