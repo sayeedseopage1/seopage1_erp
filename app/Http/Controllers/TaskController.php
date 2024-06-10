@@ -1983,7 +1983,7 @@ class TaskController extends AccountBaseController
     public function StoreNewTask(Request $request)
     {
         try {
-            //    DB::beginTransaction();
+               DB::beginTransaction();
             $setting = global_setting();
             $rules = [
                 'heading' => 'required',
@@ -2190,14 +2190,7 @@ class TaskController extends AccountBaseController
                 $task->added_by = Auth::id();
                 $task->created_by = Auth::id();
                 $task->save();
-
-                $first_task_count = Task::first();
-                if($first_task_count != null){
-                    $text = Auth::user()->name . ' 1st task created in this projects : ' . $task->heading;
-                    $link = '<a href="' . route('projects.show', $task->project_id) . '?tab=deliverable">' . $text . '</a>';
-                    $this->logProjectActivity($task->project_id, $link);
-                }
-
+                
                 $task->task_short_code = ($project) ? $project->project_short_code . '-' . $task->id : null;
                 $task->saveQuietly();
 
