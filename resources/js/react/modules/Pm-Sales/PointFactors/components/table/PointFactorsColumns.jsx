@@ -4,6 +4,8 @@ import Tooltip from "../Tooltip";
 import EditIcon from "../Styles/ui/EditIcon";
 import Switch from "../../../../../global/Switch";
 import { auth } from "../../../PmIncentive/constants";
+import { Popover } from "antd";
+import { IoInformationCircle } from "react-icons/io5";
 
 export const PointFactorsColumns = [
     {
@@ -25,14 +27,16 @@ export const PointFactorsColumns = [
                         {data?.title}
                     </span>
                     <span className="ml-2">
-                        {data?.id === 12 ? (
+                        {data?.description !== null ? (
                             <>
-                                <Tooltip text={"lorem ipsum dolor sit amet consectetur adipisicing elit consequuntur officiis temporibus"}>
-                                    {" "}
-                                    <i style={{
-                                        fontSize: "15px",
-                                    }} className="fa-solid fa-circle-info "></i>
-                                </Tooltip>
+                                <Popover
+                                    content={data?.description}
+                                    overlayStyle={{
+                                        width: "220px"
+                                    }}
+                                >
+                                    <IoInformationCircle size={15} className='informationCircle' />
+                                </Popover>
                             </>
                         ) : (
                             ""
@@ -49,7 +53,6 @@ export const PointFactorsColumns = [
         cell: ({ row, table }) => {
             const data = row?.original;
             return (
-                // FIXME: this style can be changed
                 <div className="d-flex flex-column justify-content-start align-items-start" style={{ width: "500px" }}>
                     {
                         _.map(data?.factors, (factor) => {

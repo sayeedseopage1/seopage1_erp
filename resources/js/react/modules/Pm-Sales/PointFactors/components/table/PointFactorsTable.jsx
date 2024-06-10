@@ -65,6 +65,8 @@ const PointFactorsTable = ({
     // modal state data
     const [editFactorData, setEditFactorData] = React.useState({});
 
+    // console.log(editFactorData)
+
     // point factors data
     const _pointFactors = React.useMemo(
         () => tableData,
@@ -147,14 +149,12 @@ const PointFactorsTable = ({
         getSortedRowModel: getSortedRowModel(),
         meta: {
             handleEditFactor: (factorData) => {
-
+                // console.log(factorData)
                 // find default value for dropdown options 
                 const limit_unit = LimitUnits?.data?.find(unit => unit?.name == factorData?.limit_unit)
                 const lower_limit_top_range = factorData?.lower_limit_top_range
                 const upper_limit_bottom_range = factorData?.upper_limit_bottom_range
-                // const lower_limit = singleLimitIds?.includes(factorData?.id)
-                //     ? editFactorData?.upper_limit
-                //     : factorData?.lower_limit;
+
 
                 // set editor data
                 setEditFactorData({
@@ -221,7 +221,7 @@ const PointFactorsTable = ({
             // const lowerLimitCondition = editFactorData?.infiniteValueDown ? editFactorData?.infiniteValueDown : editFactorData?.limit_type == 2 ? "==" : "<"
             // const upperLimitCondition = editFactorData?.infiniteValueUp ? editFactorData?.infiniteValueUp : editFactorData?.limit_type == 2 ? "==" : ">="
 
-            const singleEqualValLimitIds = [14, 19, 29, 44]
+            const singleEqualValLimitIds = [14, 19, 25, 29, 44]
 
             const payload = {
                 criteria_id: parseFloat(editFactorData?.criteria_id),
@@ -237,6 +237,7 @@ const PointFactorsTable = ({
                 lower_limit_condition: editFactorData?.lower_limit_condition ?? null,
                 upper_limit_condition: editFactorData?.upper_limit_condition ?? null,
                 point_type: parseFloat(editFactorData?.point_type) ?? null,
+                description: editFactorData?.description ?? null,
                 points: parseFloat(editFactorData?.points) ?? null,
                 status: parseFloat(editFactorData?.status) ?? null,
             }
