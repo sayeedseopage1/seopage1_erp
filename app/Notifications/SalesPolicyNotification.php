@@ -47,7 +47,7 @@ class SalesPolicyNotification extends Notification
                 $body = strtr('Project name: projectName</a> <br/>
                 Client name: clientName<br/>
                 Sales person: salesPerson <br/>
-                Sum of points; salesPoint<br/>', $this->data);
+                Sum of points: salesPoint<br/>', $this->data);
                 $url = $this->url;
                 $text = 'View Deal';
                 break;
@@ -59,6 +59,15 @@ class SalesPolicyNotification extends Notification
                 Sales person: salesPerson <br/>', $this->data);
                 $url = $this->url;
                 $text = 'Authorize';
+                break;
+            case 'pending_large_from_submission':
+                $subject = 'Client ' . $this->data['client'] . ': Finish the pending works for your own deal!';
+                $header = 'Please finish the pending works for your own deal:';
+                $body = strtr('Please finish the pending works for your own deal: <br/>
+                Won deal name: projectName<br/>
+                Client name: clientName <br/>', $this->data);
+                $url = $this->url;
+                $text = 'Review';
                 break;
         }
 

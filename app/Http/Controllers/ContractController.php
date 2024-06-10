@@ -1566,7 +1566,7 @@ class ContractController extends AccountBaseController
                 ]);
             }
 
-            // pending action for sales lead authorization
+            // pending action for sales lead authorization when removed form draft
             event(new SalesPolicyEvent('sales_lead_authorization', $deal));
         }
 
@@ -1589,11 +1589,10 @@ class ContractController extends AccountBaseController
                 $project_member->project_id = $project->id;
                 $project_member->save();
             }
-        //    / dd("asd asl d");
-
-
             DB::commit();
             // all good
+            // past action for large form submission
+            event(new SalesPolicyEvent('pending_large_from_submission', $deal, ['past'=>'']));
         } catch (\Exception $e) {
             DB::rollback();
             Toastr::error('Action Failed', 'Error', ["positionClass" => "toast-top-right", 'redirectUrl']);
