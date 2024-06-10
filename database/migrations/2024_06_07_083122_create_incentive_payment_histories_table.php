@@ -17,9 +17,10 @@ return new class extends Migration
             $table->id();
             $table->timestamp('date');
             $table->foreignId('user_id')->nullable();
-            $table->foreignId('incentive_payment_id');
+            $table->foreignId('incentive_payment_id')->nullable();
             $table->unsignedTinyInteger('type')->default(0)->comment('1 = Payable, 2 = Held');
             $table->decimal('paid_amount')->default(0);
+            $table->unsignedBigInteger('added_by')->nullable();
             $table->timestamps();
         });
     }

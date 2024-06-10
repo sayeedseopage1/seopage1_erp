@@ -13,6 +13,7 @@ use App\Models\TaskRevision;
 use Illuminate\Console\Command;
 use App\Models\ProjectMilestone;
 use App\Models\IncentiveCriteria;
+use App\Models\IncentivePayment;
 use App\Models\IncentiveType;
 use Illuminate\Support\Facades\DB;
 
@@ -49,8 +50,9 @@ class DisbursePmIncentiveMonthly extends Command
                 $cashPoints = CashPoint::where('user_id', $user->id)->whereNotNull('factor_id')->get();
                 $totalEarnedPoints = $cashPoints->sum('total_points_earn');
                 $totalLostPoints = $cashPoints->sum('total_points_lost');
-                $availablePoints = $totalEarnedPoints - $totalLostPoints + 500;
+                $availablePoints = $totalEarnedPoints - $totalLostPoints;
                 $obtainedIncentive = [];
+                $totalCashValue = 0;
 
                 // Revision vs task ratio
                 $total_tasks = Task::select('tasks.id')
@@ -137,6 +139,7 @@ class DisbursePmIncentiveMonthly extends Command
                     'cash_value' => $incentiveType->cash_value,
                     'total_cash_amount' => $incentiveType->cash_value * $achieved_regular_incentive
                 ]);
+                $totalCashValue = $incentiveType->cash_value * $achieved_regular_incentive;
 
                 // Upsale/Cross sale amount
                 $upsale_amount = ProjectMilestone::select('project_milestones.*')
@@ -162,6 +165,7 @@ class DisbursePmIncentiveMonthly extends Command
                     'cash_value' => $incentiveType->cash_value,
                     'total_cash_amount' => $incentiveType->cash_value * $achieved_upsale_incentive
                 ]);
+                $totalCashValue += $incentiveType->cash_value * $achieved_upsale_incentive;
                 
                 // Bonus points based on released amount
                 $total_previous_assigned_amount = Project::join('project_milestones', 'projects.id', '=', 'project_milestones.project_id')
@@ -247,6 +251,18 @@ class DisbursePmIncentiveMonthly extends Command
                     'incentive_point' => $achieved_bonus_incentive,
                     'cash_value' => $incentiveType->cash_value,
                     'total_cash_amount' => $incentiveType->cash_value * $achieved_bonus_incentive
+                ]);
+                $totalCashValue += $incentiveType->cash_value * $achieved_bonus_incentive;
+
+                // Incentive Payment details
+                IncentivePayment::create([
+                    'date' => $now,
+                    'user_id' => $user->id,
+                    'total_incentive_amount' => $totalCashValue,
+                    'held_amount' => ($totalCashValue/100)*20,
+                    'payable_amount' => ($totalCashValue/100)*80,
+                    'paid_amount' => ($totalCashValue/100)*80,
+                    'status' => 1
                 ]);
             }
             DB::commit();

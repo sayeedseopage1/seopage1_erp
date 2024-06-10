@@ -15,5 +15,11 @@ class IncentivePaymentHistory extends Model
         'incentive_payment_id',
         'type',
         'paid_amount',
+        'added_by'
     ];
+
+    public function addedBy()
+    {
+        return $this->hasOne(User::class, 'id', 'added_by');
+    }
 }
