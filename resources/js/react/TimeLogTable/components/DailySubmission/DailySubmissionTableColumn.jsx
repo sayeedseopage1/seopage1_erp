@@ -3,6 +3,7 @@ import { convertTime } from "../../../utils/converTime";
 import Popover from "../../../../react-latest/ui/Popover";
 import "../data-table.css";
 import UserRender from "../UserRender";
+import FileList from "../../../global/fileLists/FileList";
 
 export const DailySubmissionTableColumn = [
     {
@@ -328,44 +329,31 @@ export const DailySubmissionTableColumn = [
         sorted: false,
         group: false,
         cell: ({ row, className }) => {
-            const totalAttachments = row?.attachments?.length;
+            const links = row?.attachments;
+            const screenshotLink = row?.screenshot_screenrecord_link;
             return (
                 <td className={`${className} sp1_tlr_td_border`}>
-                    {row?.attachments ? (
+                    {Array.isArray(links) || screenshotLink ? (
                         <>
                             <Popover>
                                 <Popover.Button>
-                                    <span className=" singleline-ellipsis link_color hover-underline">
-                                        {row?.attachments.map((data, index) => (
-                                            <div key={index}>
-                                                {totalAttachments} attachments
-                                            </div>
-                                        ))}
+                                    <span className="singleline-ellipsis link_color hover-underline">
+                                        See Attachments
                                     </span>
                                 </Popover.Button>
 
                                 <Popover.Panel>
                                     <div className="revision_popover_panel">
-                                        {row?.attachments.map((data, index) => (
-                                            <div key={index}>
-                                                <span
-                                                    style={{
-                                                        fontWeight: "bold",
-                                                        fontSize: "16px",
-                                                    }}
-                                                >
-                                                    {index + 1}.
-                                                </span>
-                                                <a
-                                                    className="link_color hover-underline mb-2"
-                                                    target="_blank"
-                                                    href={data}
-                                                >
-                                                    {data}
-                                                </a>
-                                                <br />
-                                            </div>
-                                        ))}
+                                        <h6>screenshot/screen record link:</h6>
+                                        <a
+                                            href={screenshotLink}
+                                            target="_blank"
+                                        >
+                                            {screenshotLink}
+                                        </a>
+                                        {Array.isArray(links) && (
+                                            <FileList links={links} />
+                                        )}
                                     </div>
                                 </Popover.Panel>
                             </Popover>
