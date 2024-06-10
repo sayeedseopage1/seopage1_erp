@@ -77,14 +77,25 @@ export default function CashPointsFilter({
     });
 
     useEffect(() => {
-        setQuery(prevQuery => ({
-            ...prevQuery,
-            start_date: startDate,
-            end_date: endDate,
-            dept_id: dept,
-            credit_debit: creditDebit,
-            user_id: selectedEmployee
-        }));
+        if (auth.isHasRolePermission(4)) {
+            setQuery(prevQuery => ({
+                ...prevQuery,
+                start_date: startDate,
+                end_date: endDate,
+                dept_id: dept,
+                credit_debit: creditDebit,
+                user_id: auth?.userId
+            }));
+        } else {
+            setQuery(prevQuery => ({
+                ...prevQuery,
+                start_date: startDate,
+                end_date: endDate,
+                dept_id: dept,
+                credit_debit: creditDebit,
+                user_id: selectedEmployee
+            }));
+        }
     }, [startDate, endDate, dept, creditDebit, selectedEmployee]);
 
     useEffect(() => {
