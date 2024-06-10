@@ -9,7 +9,7 @@ class Criteria extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['title','criteria_id'];
+    protected $fillable = ['title','criteria_id','description'];
 
     public function factors()
     {

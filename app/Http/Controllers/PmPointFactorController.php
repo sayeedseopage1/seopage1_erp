@@ -142,7 +142,8 @@ class PmPointFactorController extends AccountBaseController
             'points' => 'required|numeric',
             // 'point_depend_on_model' => 'nullable',
             // 'point_depend_on_field' => 'nullable',
-            'status' => 'required'
+            'status' => 'required',
+            'description' => 'nullable|string'
         ]);
 
         $lowerLimitRefValue = $this->checkableValue($validated['lower_limit'], $validated['lower_limit_condition']);
@@ -185,6 +186,12 @@ class PmPointFactorController extends AccountBaseController
 
         try {
             Factor::find($id)->update($validated);
+            if($validated['description']){
+                Criteria::find($validated['criteria_id'])->update([
+                    'description' => $validated['description']
+                ]);
+            }
+
             return response()->json([
                 'status'=> 200,
                 'message' => 'Factor udated successfully'
