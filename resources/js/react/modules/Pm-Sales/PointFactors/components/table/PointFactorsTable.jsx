@@ -221,7 +221,7 @@ const PointFactorsTable = ({
             // const lowerLimitCondition = editFactorData?.infiniteValueDown ? editFactorData?.infiniteValueDown : editFactorData?.limit_type == 2 ? "==" : "<"
             // const upperLimitCondition = editFactorData?.infiniteValueUp ? editFactorData?.infiniteValueUp : editFactorData?.limit_type == 2 ? "==" : ">="
 
-            const singleEqualValLimitIds = [14, 19, 29, 44]
+            const singleEqualValLimitIds = [14, 19, 25, 29, 44]
 
             const payload = {
                 criteria_id: parseFloat(editFactorData?.criteria_id),

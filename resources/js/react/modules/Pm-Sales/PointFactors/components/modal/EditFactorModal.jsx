@@ -49,8 +49,8 @@ const EditFactorModal = ({
     // console.log("l", lower_limit_condition)
     // console.log(limit_unit)
 
-    const singleEqualValLimitIds = [14, 19, 29, 44]
-    const singleLimitIds = [8, 14, 17, 19, 29, 44]
+    const singleEqualValLimitIds = [14, 19, 25, 29, 44]
+    const singleLimitIds = [8, 14, 17, 19, 25, 29, 44]
     const dualValueLimitIds = [3, 4, 5, 6]
     const limitUnitByCondition = limit_unit?.id == 1 ? "Hours" : limit_unit?.id == 2 ? "%" : limit_unit?.id == 3 ? "$" : limit_unit?.id == 4 ? "Projects" : "others"
 
