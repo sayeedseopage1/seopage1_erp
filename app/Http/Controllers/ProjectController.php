@@ -822,7 +822,7 @@ class ProjectController extends AccountBaseController
         }
 
         $text = Auth::user()->name . ' submitted project cancelation/dispute form ';
-        $link = '<a style="color:blue" href="' . route('projects.show', $dispute->project_id) . '">' . $text . '</a>';
+        $link = '<a href="' . route('projects.show', $dispute->project_id) . '">' . $text . '</a>';
         $this->logProjectActivity($dispute->project_id, $link);
 
 
@@ -941,7 +941,7 @@ class ProjectController extends AccountBaseController
         }
     }
     $text = Auth::user()->name . ' authorized project cancelation/dispute form ';
-    $link = '<a style="color:blue" href="' . route('projects.show', $project->id) . '">' . $text . '</a>';
+    $link = '<a href="' . route('projects.show', $project->id) . '">' . $text . '</a>';
     $this->logProjectActivity($project->id, $link);
 
         return response()->json(['status'=>400]);
@@ -2370,12 +2370,12 @@ class ProjectController extends AccountBaseController
         // NEW ACTIVITY LOG CODE
         if ($project->project_summary != null) {
             $p_m = User::where('id', $project->pm_id)->first();
-            $link = $p_m->name . ' updated the'.'<a style="color:blue" href="' . route('projects.show', $project->id) . '"> project </a>'.'general guidelines';
+            $link = $p_m->name . ' updated the'.'<a href="' . route('projects.show', $project->id) . '"> project </a>'.'general guidelines';
             $this->logProjectActivity($project->id, $link);
         }
         if ($project->project_status == 'Accepted') {
             $p_m = User::where('id', $project->pm_id)->first();
-            $link = $p_m->name . ' accepted the '.'<a style="color:blue" href="' . route('projects.show', $project->id) . '">project</a>';
+            $link = $p_m->name . ' accepted the '.'<a href="' . route('projects.show', $project->id) . '">project</a>';
             $this->logProjectActivity($project->id, $link);
         }
 
@@ -3353,7 +3353,7 @@ class ProjectController extends AccountBaseController
             $project->save();
 
             $text = Auth::user()->name . ' added project deliverable : ' . $deliverable->title;
-            $link = '<a style="color:blue" href="' . route('projects.show', $project->id) . '?tab=deliverables">' . $text . '</a>';
+            $link = '<a href="' . route('projects.show', $project->id) . '?tab=deliverables">' . $text . '</a>';
             $this->logProjectActivity($project->id, $link);
 
             $users = User::where('role_id', 1)->get();
@@ -3550,7 +3550,7 @@ class ProjectController extends AccountBaseController
         $log_user = Auth::user();
 
         $text = Auth::user()->name . ' updated project deliverable : ' . $deliverable->title;
-        $link = '<a style="color:blue" href="' . route('projects.show', $project_id_update->id) . '?tab=deliverable">' . $text . '</a>';
+        $link = '<a href="' . route('projects.show', $project_id_update->id) . '?tab=deliverable">' . $text . '</a>';
         $this->logProjectActivity($project_id_update->id, $link);
 
         if ($request->deliverable_type == 'Others' || $request->deliverable_type == 'Fixing Issues/Bugs') {
@@ -3579,7 +3579,7 @@ class ProjectController extends AccountBaseController
         $log_user = Auth::user();
 
         $text = Auth::user()->name . ' deleted project deliverable : ' . $deliverable_id->title;
-        $link = '<a style="color:blue" href="' . route('projects.show', $project->id) . '?tab=deliverable">' . $text . '</a>';
+        $link = '<a href="' . route('projects.show', $project->id) . '?tab=deliverable">' . $text . '</a>';
         $this->logProjectActivity($project->id, $link);
         return response()->json(['status' => 400]);
     }
@@ -3659,7 +3659,7 @@ class ProjectController extends AccountBaseController
         $helper->DisputeSubmitAction($project);
 
         $text = Auth::user()->name . ' makred this project as incomplete ';
-        $link = '<a style="color:blue" href="' . route('projects.show', $project->id) . '">' . $text . '</a>';
+        $link = '<a href="' . route('projects.show', $project->id) . '">' . $text . '</a>';
         $this->logProjectActivity($project->id, $link);
 
 
@@ -3969,11 +3969,11 @@ class ProjectController extends AccountBaseController
         }
 
         $text = Auth::user()->name . ' submitted project completion form ';
-        $link = '<a style="color:blue" href="' . route('projects.show', $project_id->id) . '">' . $text . '</a>';
+        $link = '<a href="' . route('projects.show', $project_id->id) . '">' . $text . '</a>';
         $this->logProjectActivity($project_id->id, $link);
 
         $text = 'Project has been completed successfully';
-        $link = '<a style="color:blue" href="' . route('projects.show', $project_id->id) . '">' . $text . '</a>';
+        $link = '<a href="' . route('projects.show', $project_id->id) . '">' . $text . '</a>';
         $this->logProjectActivity($project_id->id, $link);
 
         return response()->json([
@@ -5650,7 +5650,7 @@ public function updatePmBasicSEO(Request $request){
         Notification::send($user, new ProjectSubmissionAcceptNotification($project_id));
 
         $text = Auth::user()->name . ' authorized project completion form ';
-        $link = '<a style="color:blue" href="' . route('projects.show', $project_id->id) . '">' . $text . '</a>';
+        $link = '<a href="' . route('projects.show', $project_id->id) . '">' . $text . '</a>';
         $this->logProjectActivity($project_id->id, $link);
 
         Toastr::success('Project Submission Request Accepted Successfully', 'Success', ["positionClass" => "toast-top-right"]);
@@ -5754,7 +5754,7 @@ public function updatePmBasicSEO(Request $request){
                 }
 
                 $text = Auth::user()->name . ' submitted project QC form ';
-                $link = '<a style="color:blue" href="' . route('projects.show', $request->project_id) . '">' . $text . '</a>';
+                $link = '<a href="' . route('projects.show', $request->project_id) . '">' . $text . '</a>';
                 $this->logProjectActivity($request->project_id, $link);
 
                 Toastr::success('Submitted Successfully', 'Success', ["positionClass" => "toast-top-right"]);
@@ -5848,7 +5848,7 @@ public function updatePmBasicSEO(Request $request){
         $project_id = Project::where('id', $project->project_id)->first();
 
         $text = Auth::user()->name . ' authorized project QC form ';
-        $link = '<a style="color:blue" href="' . route('projects.show', $project_id->id) . '">' . $text . '</a>';
+        $link = '<a href="' . route('projects.show', $project_id->id) . '">' . $text . '</a>';
         $this->logProjectActivity($project_id->id, $link);
 
         Toastr::success('Project Q&C Request Accepted Successfully', 'Success', ["positionClass" => "toast-top-right"]);
@@ -5886,7 +5886,7 @@ public function updatePmBasicSEO(Request $request){
         //need pending action
 
         $text = Auth::user()->name . '  send project deliverable time extention request ';
-        $link = '<a style="color:blue" href="' . route('projects.show', $project->id) . '?tab=deliverable">' . $text . '</a>';
+        $link = '<a href="' . route('projects.show', $project->id) . '?tab=deliverable">' . $text . '</a>';
         $this->logProjectActivity($project->id, $link);
 
         $users = User::where('role_id', 1)->get();
@@ -5974,7 +5974,7 @@ public function updatePmBasicSEO(Request $request){
         //end authorization action
 
         $text = Auth::user()->name . ' accepted project deliverable time extention request';
-        $link = '<a style="color:blue" href="' . route('projects.show', $project->id) . '?tab=deliverable">' . $text . '</a>';
+        $link = '<a href="' . route('projects.show', $project->id) . '?tab=deliverable">' . $text . '</a>';
         $this->logProjectActivity($project->id, $link);
 
         $users = User::where('id', $project_id->pm_id)->get();
@@ -6018,7 +6018,7 @@ public function updatePmBasicSEO(Request $request){
         }
 
         $text = Auth::user()->name . ' send project deliverable authorization request';
-        $link = '<a style="color:blue" href="' . route('projects.show', $project->id) . '?tab=deliverables">' . $text . '</a>';
+        $link = '<a href="' . route('projects.show', $project->id) . '?tab=deliverables">' . $text . '</a>';
         $this->logProjectActivity($project->id, $link);
 
         return response()->json(['status' => 400]);
@@ -6147,7 +6147,7 @@ public function updatePmBasicSEO(Request $request){
 
 
         $text = Auth::user()->name . ' finally authorized project deliverable';
-        $link = '<a style="color:blue" href="' . route('projects.show', $project->id) . '?tab=deliverables">' . $text . '</a>';
+        $link = '<a href="' . route('projects.show', $project->id) . '?tab=deliverables">' . $text . '</a>';
         $this->logProjectActivity($project->id, $link);
 
         $user = User::where('id', $project->pm_id)->first();
@@ -6207,7 +6207,7 @@ public function updatePmBasicSEO(Request $request){
             $url = route('projects.show', $data->project_id) . '?tab=deliverables';
 
             $text = Auth::user()->name . ' send delivarable change request to project manager';
-            $link = '<a style="color:blue" href="' . $url . '">' . $text . '</a>';
+            $link = '<a href="' . $url . '">' . $text . '</a>';
             $this->logProjectActivity($data->project->id, $link);
 
             $this->triggerPusher('notification-channel', 'notification', [

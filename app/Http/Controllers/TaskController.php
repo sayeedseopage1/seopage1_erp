@@ -2194,7 +2194,7 @@ class TaskController extends AccountBaseController
                 $first_task_count = Task::first();
                 if($first_task_count != null){
                     $text = Auth::user()->name . ' 1st task created in this projects : ' . $task->heading;
-                    $link = '<a style="color:blue" href="' . route('projects.show', $task->project_id) . '?tab=deliverable">' . $text . '</a>';
+                    $link = '<a href="' . route('projects.show', $task->project_id) . '?tab=deliverable">' . $text . '</a>';
                     $this->logProjectActivity($task->project_id, $link);
                 }
 

@@ -829,7 +829,7 @@ class ProjectMilestoneController extends AccountBaseController
         $milestoneCompletion = $completedMilestone . substr(ordinal($completedMilestone), -2);
 
         $text = Auth::user()->name . ' sent cancelation request for milestone ' . $milestoneCompletion .' milestone (' . $milestone->milestone_title . ') '  ;
-        $link = '<a style="color:blue" href="' . route('projects.show', $milestone->project_id) . '?tab=milestones">' . $text . '</a>';
+        $link = '<a href="' . route('projects.show', $milestone->project_id) . '?tab=milestones">' . $text . '</a>';
         $this->logProjectActivity($milestone->project_id, $link);
 
         return response()->json([
@@ -905,7 +905,7 @@ class ProjectMilestoneController extends AccountBaseController
         $milestoneCompletion = $completedMilestone . substr(ordinal($completedMilestone), -2);
 
         $text = Auth::user()->name . ' authorized cancelation request for milestone ' . $milestoneCompletion .' milestone (' . $milestone->milestone_title . ') '  ;
-        $link = '<a style="color:blue" href="' . route('projects.show', $milestone->project_id) . '?tab=milestones">' . $text . '</a>';
+        $link = '<a href="' . route('projects.show', $milestone->project_id) . '?tab=milestones">' . $text . '</a>';
         $this->logProjectActivity($milestone->project_id, $link);
 
         //update authoziation action

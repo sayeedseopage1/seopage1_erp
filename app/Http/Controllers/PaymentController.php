@@ -1661,7 +1661,7 @@ class PaymentController extends AccountBaseController
         $milestoneCompletion = $completedMilestone . substr(ordinal($completedMilestone), -2);
 
         $text = Auth::user()->name . ' Completed milestone ' . $milestoneCompletion .' milestone (' . $milestone->milestone_title . ') '  ;
-        $link = '<a style="color:blue" href="' . route('projects.show', $request->project_id) . '?tab=milestones">' . $text . '</a>';
+        $link = '<a href="' . route('projects.show', $request->project_id) . '?tab=milestones">' . $text . '</a>';
         $this->logProjectActivity($request->project_id, $link);
 
         \DB::commit();

@@ -214,7 +214,7 @@ class PendingActionController extends AccountBaseController
                 }
 
                 $text = $this->user->name . ' finally authorized project deliverable';
-                $link = '<a style="color:blue" href="' . route('projects.show', $project->id) . '?tab=deliverable">' . $text . '</a>';
+                $link = '<a href="' . route('projects.show', $project->id) . '?tab=deliverable">' . $text . '</a>';
                 $this->logProjectActivity($project->id, $link);
 
                 $user = User::where('id', $project->pm_id)->first();
