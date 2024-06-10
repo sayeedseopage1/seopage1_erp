@@ -5392,7 +5392,7 @@ class TaskController extends AccountBaseController
     }
     public function GetTaskSubmission($id)
     {
-        $submissions = TaskSubmission::selectRaw('task_id, submission_no, user_id, text,GROUP_CONCAT(link) as links, GROUP_CONCAT(CONCAT("https://seopage1storage.s3.ap-southeast-1.amazonaws.com/", attach)) as attaches, MAX(task_submissions.created_at) as submission_date, users.user_name, users.name, users.image, users.role_id')
+        $submissions = TaskSubmission::selectRaw('task_id, submission_no, user_id, text,GROUP_CONCAT(link) as links, GROUP_CONCAT(CONCAT("https://seopage1storage.s3.ap-southeast-1.amazonaws.com/", attach)) as attaches, MAX(task_submissions.created_at) as submission_date,screen_record_link, users.user_name, users.name, users.image, users.role_id')
             ->where('task_id', $id)
             ->join('users', 'users.id', 'task_submissions.user_id')
             ->groupBy('task_id', 'submission_no')

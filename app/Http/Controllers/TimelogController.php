@@ -845,9 +845,12 @@ class TimelogController extends AccountBaseController
             $evaluation = EmployeeEvaluationTask::where('task_id',$taskFind->id)->first();
             if($evaluation !=null)
             {
-                $evaluation->total_hours = $timeLog->total_hours;
-                $evaluation->total_min = $timeLog->total_minutes;
-                $evaluation->save();
+                if($evaluation !=null)
+                {
+                    $evaluation->total_hours = $timeLog->total_hours;
+                    $evaluation->total_min = $timeLog->total_minutes;
+                    $evaluation->save();
+                }
             }
         }
 
@@ -888,15 +891,18 @@ class TimelogController extends AccountBaseController
         $taskFind = Task::where('id',$request->task_id)->where('u_id',null)->where('independent_task_status',1)->first(); //Find SubTask
         if($taskFind != null){
             $evaluation = EmployeeEvaluationTask::where('task_id',$taskFind->id)->first();
-            if($evaluation->total_min !=null)
+            if($evaluation !=null)
             {
-                $evaluation->total_hours = $evaluation->total_hours + $timeLog->total_hours;
-                $evaluation->total_min = $evaluation->total_min + $timeLog->total_minutes;
-                $evaluation->save();
-            }else{
-                $evaluation->total_hours = $timeLog->total_hours;
-                $evaluation->total_min = $timeLog->total_minutes;
-                $evaluation->save();
+                if($evaluation->total_min !=null)
+                {
+                    $evaluation->total_hours = $evaluation->total_hours + $timeLog->total_hours;
+                    $evaluation->total_min = $evaluation->total_min + $timeLog->total_minutes;
+                    $evaluation->save();
+                }else{
+                    $evaluation->total_hours = $timeLog->total_hours;
+                    $evaluation->total_min = $timeLog->total_minutes;
+                    $evaluation->save();
+                }
             }
         }
 
