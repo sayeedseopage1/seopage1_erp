@@ -16,7 +16,7 @@ class ProjectManagerPointController extends AccountBaseController
     }
 
     public function index(){
-        abort_403(!(Auth::user()->role_id == 1 || Auth::user()->role_id == 4));
+        abort_403(!(Auth::user()->role_id == 1 || Auth::user()->role_id == 8 || Auth::user()->role_id == 4));
         return view('project-manager-point.index', $this->data);
     }
 }

@@ -1,27 +1,17 @@
 import React, { useEffect, useState } from 'react';
-import { setFilterState } from '../../../../services/features/pointPageFilterSlice';
-import { useGetAllFilterOptionQuery, useGetProjectsOptionsQuery } from '../../../../services/api/FilterBarOptionsApiSlice';
-import { useDispatch, useSelector } from 'react-redux';
+import { useGetAllFilterOptionQuery } from '../../../../services/api/FilterBarOptionsApiSlice';
 import FilterItem from './FilterItem';
 import JqueryDateRangePicker from './JqueryDateRangePicker';
-import DepartmentFilter from './DepartmentFilter';
 import _ from 'lodash';
-import ShiftFilterOption from './ShiftFilterOption.jsx';
-import EmployeeFilterOptions from './EmployeeFilterOptions';
 import Button from '../../../../Insights/ui/Button.jsx';
-
-import UserFilter from './UserFilter';
-import TypeFilter from './TypeFilter';
-
-import { useUsers } from '../../../../hooks/useUsers.jsx';
-import { useAuth } from '../../../../hooks/useAuth.jsx';
-import { useGetPmByDeptQuery, useGetPmCashPointsQuery } from '../../../../services/api/Pm-Sales/pmSalesApiSlice.js';
+import { useGetPmByDeptQuery } from '../../../../services/api/Pm-Sales/pmSalesApiSlice.js';
 import DeptFilter from './Filter/DeptFilter.jsx';
 import EmployeeFilter from './Filter/EmployeeFilter.jsx';
 import CreditDebitFilter from './Filter/CreditDebitFilter.jsx';
 import pointIcon from '../assets/point1.svg'
 import { auth } from '../constants/index.js';
 import userIcon from '../assets/tag-user.svg'
+import deptIcon from '../assets/group1.svg'
 
 
 export default function CashPointsFilter({
@@ -33,23 +23,14 @@ export default function CashPointsFilter({
     // get pm by department 
     const { data: pmByDept, isFetching: isPmByDeptLoading } = useGetPmByDeptQuery(dept)
     const pmByDeptData = pmByDept?.data
-    // const { departments, shift, employees } = useSelector(s => s.pointPageFilterOption);
-    const { getUserById, usersObject, usersIsFetching } = useUsers();
-    const dispatch = useDispatch();
     const [startDate, setStartDate] = useState(null);
     const [endDate, setEndDate] = useState(null);
-    const [client, setClient] = useState(null);
-    const [type, setType] = useState(null);
     const [creditDebit, setCreditDebit] = useState("");
-
-    // const [selectedShift, setSelectedShift] = useState(null);
     const [selectedEmployee, setSelectedEmployee] = useState("");
-    // const [employeeLoading, setEmployeeLoading] = useState(true);
-    // const [project, setProject] = useState(null);
 
 
     useEffect(() => {
-        if (auth?.isHasRolePermission(1) && pmByDeptData && !isPmByDeptLoading) {
+        if ((auth?.isHasRolePermission(1) || auth?.isHasRolePermission(8)) && pmByDeptData && !isPmByDeptLoading) {
             setSelectedEmployee(pmByDeptData[0]?.id);
             setQuery(prevQuery => ({ ...prevQuery, user_id: pmByDeptData[0]?.id }));
         }
@@ -133,7 +114,7 @@ export default function CashPointsFilter({
             </FilterItem>
 
             {
-                auth?.isHasRolePermission(1) && <>
+                (auth?.isHasRolePermission(1) || auth?.isHasRolePermission(8)) && <>
                     <FilterItem className='border-right-0 hide'>
                         <DeptFilter department={depAndEmployees?.department} handleChange={handleDeptChange} isFetching={isDepAndEmployeesFetching} />
                     </FilterItem>
@@ -173,7 +154,7 @@ export default function CashPointsFilter({
 
             {/* sidebar */}
             {
-                auth?.isHasRolePermission(1) &&
+                (auth?.isHasRolePermission(1) || auth?.isHasRolePermission(8)) &&
                 <div className='sp1__pp_filter_sidebar_container'>
                     <div
                         className='sp1__pp_filter_sidebar_toggle'
@@ -184,7 +165,7 @@ export default function CashPointsFilter({
                     </div>
 
                     {
-                        auth?.isHasRolePermission(1) && sidebarIsOpen && (
+                        (auth?.isHasRolePermission(1) || auth?.isHasRolePermission(8)) && sidebarIsOpen && (
                             <aside className='sp1__pp_filter_sidebar'>
                                 <div className='sp1__pp_filter_sidebar_header'>
                                     <span>Filters</span>
