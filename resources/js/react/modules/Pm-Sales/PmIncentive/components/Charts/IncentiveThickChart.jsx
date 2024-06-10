@@ -130,10 +130,11 @@ const IncentiveThickChart = ({ chartData }) => {
             },
         },
         yaxis: {
-            // tickAmount: 5,
-            max: Math.max(...chartData?.series?.[0]?.data) > 10 ? 120 : 10,
+            max: Math.max(...chartData?.actualSeriesData),
             labels: {
-                formatter: (val) => `${val}%`,
+                formatter: (val) => {
+                    return `${val}${chartData?.amountType == 1 ? "" : "%"}`;
+                },
                 style: {
                     fontSize: "10",
                     fontFamily: "poppins",
@@ -142,16 +143,15 @@ const IncentiveThickChart = ({ chartData }) => {
 
                 }
             },
-            // stepSize: 20
-            stepSize: Math.max(...chartData?.series?.[0]?.data) > 10 ? 20 : 2,
+            stepSize: chartData?.incentive > 0 && chartData?.incentive <= 10 ? 2 : 20,
         },
         dataLabels: {
             enabled: true,
             formatter: function (val, opts) {
                 // Apply special case for the first bar when all values are zero
-                if (isAllZero && opts.dataPointIndex === 0) {
+                if (isAllZero && opts.dataPointIndex == 0) {
                     return chartData?.ratio != null
-                        ? `⬤ ${chartData?.shortTitle}: ${chartData?.limitType === 1 ? "$" : ""}${chartData?.ratio}${chartData?.limitType === 2 ? "%" : ""}`
+                        ? `⬤ ${chartData?.shortTitle}: ${chartData?.limitType == 1 ? "$" : ""}${chartData?.ratio}${chartData?.limitType == 2 ? "%" : ""}`
                         : `⬤ ${chartData?.shortTitle}: N/A`;
                 }
                 return val ? `${chartData?.limitType == 1 ? "$" : ""}${chartData?.ratio}${chartData?.limitType == 2 ? "%" : ""}, ${val}${chartData?.amountType == 1 ? "" : "%"}` : "";

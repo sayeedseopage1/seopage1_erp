@@ -76,7 +76,7 @@ const SelectRatioRangeModal = ({ singleCriteria, chartDataId, antdModalOpen, set
                             <div className='select_ratio_range_modal_inputs'>
                                 <p className="axis_item_modal_inputs_title" style={{ marginBottom: '0' }}>Starting Point (X Axis)</p>
                                 <div className='d-flex align-items-center'>
-                                    <input defaultValue={parseFloat(singleCriteria?.data?.min_limit)} className='point_edit_modal_input' style={{ width: '96px' }} type='number' {...register("min_limit", { required: true })} />
+                                    <input defaultValue={parseFloat(singleCriteria?.data?.min_limit)} className='point_edit_modal_input' step='any' style={{ width: '96px' }} type='number' {...register("min_limit", { required: true })} />
                                     <span className='axis_item_modal_inputs_title' style={{ margin: '0 0 0 7px' }}>{singleCriteriaLimitType == 1 ? "$" : "%"}</span>
                                 </div>
                             </div>
@@ -84,7 +84,7 @@ const SelectRatioRangeModal = ({ singleCriteria, chartDataId, antdModalOpen, set
                             <div className='select_ratio_range_modal_inputs' style={{ marginTop: '18px' }}>
                                 <p className="axis_item_modal_inputs_title" style={{ marginBottom: '0' }}>Ending Point (X Axis)</p>
                                 <div className='d-flex align-items-center'>
-                                    <input defaultValue={parseFloat(singleCriteria?.data?.max_limit)} className='point_edit_modal_input' style={{ width: '96px' }} type='number' {...register("max_limit", { required: true })} />
+                                    <input defaultValue={parseFloat(singleCriteria?.data?.max_limit)} className='point_edit_modal_input' step='any' style={{ width: '96px' }} type='number' {...register("max_limit", { required: true })} />
                                     <span className='axis_item_modal_inputs_title' style={{ margin: '0 0 0 7px' }}>{singleCriteriaLimitType == 1 ? "$" : "%"}</span>
                                 </div>
                             </div>

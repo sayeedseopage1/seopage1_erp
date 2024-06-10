@@ -88,13 +88,13 @@ const EditXAxisModal = ({ singleCriteria, axisEditItem, setChartAxisData, antdMo
                             <p className='axis_item_modal_inputs_title' style={{ fontSize: '16px' }}>New X Axis ratio ({limit_type == 1 ? "Amount" : "Percentage"})</p>
                             <div className='axis_item_modal_inputs_inner'>
                                 <div className='w-50'>
-                                    <input defaultValue={lower_limit} className='point_edit_modal_input' type='number' {...register("lower_limit", { required: true })} placeholder='Write here ' />
+                                    <input defaultValue={lower_limit} className='point_edit_modal_input' step='any' type='number' {...register("lower_limit", { required: true })} placeholder='Write here ' />
 
                                     {errors.lower_limit && <span style={{ color: 'red', fontSize: '12px' }}>This field is required</span>}
                                 </div>
 
                                 <div className='w-50'>
-                                    <input defaultValue={upper_limit} className='point_edit_modal_input' type='number' {...register("upper_limit", { required: true })} placeholder='Write here ' />
+                                    <input defaultValue={upper_limit} className='point_edit_modal_input' step='any' type='number' {...register("upper_limit", { required: true })} placeholder='Write here ' />
 
                                     {errors.upper_limit && <span style={{ color: 'red', fontSize: '12px' }}>This field is required</span>}
                                 </div>

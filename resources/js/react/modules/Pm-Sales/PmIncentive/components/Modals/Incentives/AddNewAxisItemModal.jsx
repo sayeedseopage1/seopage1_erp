@@ -81,12 +81,12 @@ const AddNewAxisItemModal = ({ singleCriteria, chartAxisData, setChartAxisData, 
                             <p className='axis_item_modal_inputs_title'>X Axis ratio ({singleCriteriaLimitType == 1 ? 'Amount' : 'Percentage'})</p>
                             <div className='axis_item_modal_inputs_inner'>
                                 <div className='w-50'>
-                                    <input className='point_edit_modal_input' type='number' {...register("lower_limit", { required: true })} placeholder='Write here' />
+                                    <input className='point_edit_modal_input' step='any' type='number' {...register("lower_limit", { required: true })} placeholder='Write here' />
                                     {errors.lower_limit && <span style={{ color: 'red', fontSize: '12px' }}>This field is required</span>}
                                 </div>
 
                                 <div className='w-50'>
-                                    <input className='point_edit_modal_input' type='number' {...register("upper_limit", { required: true })} placeholder='Write here' />
+                                    <input className='point_edit_modal_input' step='any' type='number' {...register("upper_limit", { required: true })} placeholder='Write here' />
                                     {errors.upper_limit && <span style={{ color: 'red', fontSize: '12px' }}>This field is required</span>}
                                 </div>
                             </div>
@@ -95,7 +95,7 @@ const AddNewAxisItemModal = ({ singleCriteria, chartAxisData, setChartAxisData, 
                             <p className='axis_item_modal_inputs_title'>Y Axis ratio ({singleCriteriaAmountType == 1 ? 'Value' : 'Percentage'})</p>
                             <div className='axis_item_modal_inputs_inner'>
                                 <div className='w-100'>
-                                    <input className='point_edit_modal_input' type='number' {...register("incentive_amount", { required: true })} placeholder='Write here ' />
+                                    <input className='point_edit_modal_input' step='any' type='number' {...register("incentive_amount", { required: true })} placeholder='Write here ' />
                                     {errors.incentive_amount && <span style={{ color: 'red', fontSize: '12px' }}>This field is required</span>}
                                 </div>
                             </div>
