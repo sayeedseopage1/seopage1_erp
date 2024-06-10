@@ -2536,6 +2536,9 @@ class ContractController extends AccountBaseController
             $deal->price_authorization = $request->price_authorization;
             $deal->requirment_define = $request->requirment_define;
             $deal->project_deadline_authorization = $request->project_deadline_authorization;
+
+            // pending action for sales lead authorization
+            event(new SalesPolicyEvent('sales_lead_authorization', $deal, ['past' => 'accept']));
         }
 
         //kpi settings

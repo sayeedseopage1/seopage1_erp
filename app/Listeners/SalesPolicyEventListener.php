@@ -37,6 +37,14 @@ class SalesPolicyEventListener
             'message' => 'Project projectName from Client clientName requires sales authorization (Sales Rep: salesPerson).',
             'timeframe' => 12,
             'past' => 'Project projectName from Client clientName from Sales Rep: salesPerson was authorized by sales lead authorizedBy'
+        ],
+        'pending_large_from_submission' => [
+            'code' => 'PLFS',
+            'item_name' => 'Larger form fill up by the sales person',
+            'heading' => 'Finish the pending works for your own deal!',
+            'message' => 'Finish pending works for your own deal projectName from client clientName!',
+            'timeframe' => 12,
+            'past' => 'Pending works for deal projectName was completed!'
         ]
     ];
 
@@ -61,11 +69,15 @@ class SalesPolicyEventListener
     {
         switch ($event->type) {
             case 'sales_risk_authorization':
-                if (isset($event->data['past'])) self::salesRiskAuthorizationPastAction($event);
-                else self::salesRiskAuthorizationPendingAction($event);
+                if (! isset($event->data['past'])) self::salesRiskAuthorizationPendingAction($event);
+                else self::salesRiskAuthorizationPastAction($event);
                 break;
             case 'sales_lead_authorization':
-                self::saleLeadAuthorizationPendingAction($event);
+                if (! isset($event->data['past'])) self::saleLeadAuthorizationPendingAction($event);
+                else self::saleLeadAuthorizationPastAction($event);
+                break;
+            case 'pending_large_from_submission':
+                if (! isset($event->data['past']))
                 break;
         }
     }
@@ -215,6 +227,104 @@ class SalesPolicyEventListener
             $action->button = json_encode($button);
             $action->save();
 
+
+            // notify user
+            Notification::send($user, new SalesPolicyNotification('sales_lead_authorization',  $messageData, route('authorization_request', $deal->id)));
+        }
+    }
+
+    public function saleLeadAuthorizationPastAction($event)
+    {
+        $data = $this->eventTypes[$event->type];
+        $deal = $event->deal;
+
+        $questionValue = PolicyQuestionValue::where('deal_id', $deal->id)->first();
+        $salesUser = User::find($questionValue->submitted_by);
+
+        // 'past' => 'Project projectName from Client clientName from Sales Rep: salesPerson was authorized by sales lead authorizedBy'
+        $message = strtr($data['past'], [
+            'projectName' => "<a href='" . route('contracts.show', $deal->id) . "'>$deal->project_name</a>",
+            'clientName' => "<a href='" . route('clients.show', $deal->client_id) . "'>$deal->client_name</a>",
+            'salesPerson' => "<a href='" . route('employees.show', $salesUser->id) . "'>$salesUser->name</a>",
+            'authorizedBy' => "<a href='" . route('employees.show', auth()->user()->id) . "'>" . auth()->user()->name . "</a>"
+        ]);
+
+        PendingAction::where([
+            'code' => $data['code'],
+            'past_status' => 0,
+            'deal_id' => $deal->id,
+            'authorization_for' => auth()->user()->id
+        ])->get()->map(function ($item) use ($message) {
+
+            $item->authorized_by = auth()->user()->id;
+            $item->authorized_at = Carbon::now();
+            $item->past_status = 1;
+            $item->save();
+
+            // past action
+            $pastAction = new PendingActionPast();
+            $pastAction->item_name = $item->item_name;
+            $pastAction->code = $item->code;
+            $pastAction->serial = $item->serial;
+            $pastAction->action_id = $item->id;
+            $pastAction->heading = $item->heading;
+            $pastAction->message = $message;
+            $pastAction->timeframe = $item->timeframe;
+            $pastAction->authorization_for = $item->authorization_for;
+            $pastAction->authorized_by = $item->authorized_by;
+            $pastAction->authorized_at = $item->authorized_at;
+            $pastAction->past_status = $item->past_status;
+            $pastAction->client_id = $item->client_id;
+            $pastAction->save();
+        });
+    }
+
+    public function submitLargeFromPendingAction($event)
+    {
+        $data = $this->eventTypes[$event->type];
+
+        if ($event->deal->authorization_status != 2) return;
+
+        $deal = $event->deal;
+
+        $questionValue = PolicyQuestionValue::where('deal_id', $deal->id)->first();
+
+        $users = User::where('role_id', 8)->get();
+
+        $salesUser = User::find($questionValue->submitted_by);
+        // 'message' => 'Project projectName from Client clientName requires sales authorization (Sales Rep: salesPerson).',
+
+        $messageData = [
+            'projectName' => "<a href='" . route('contracts.show', $deal->id) . "'>$deal->project_name</a>",
+            'clientName' => "<a href='" . route('clients.show', $deal->client_id) . "'>$deal->client_name</a>",
+            'client' => $deal->client_name,
+            'salesPerson' => "<a href='" . route('employees.show', $salesUser->id) . "'>$salesUser->name</a>",
+        ];
+
+        $data['message'] = strtr($data['message'], $messageData);
+
+        foreach ($users as $key => $user) {
+
+            $action = new PendingAction();
+            $action->code = $data['code'];
+            $action->serial = $data['code'] . 'x' . $key;
+            $action->item_name = $data['item_name'];
+            $action->heading = $data['heading'];
+            $action->message = $data['message'];
+            $action->timeframe = $data['timeframe'];
+            $action->deal_id = $deal->id;
+            $action->client_id = $deal->client_id;
+            $action->authorization_for = $user->id;
+            $button = [
+                [
+                    'button_name' => 'Review',
+                    'button_color' => 'primary',
+                    'button_type' => 'redirect_url',
+                    'button_url' => route('authorization_request', $deal->id),
+                ],
+            ];
+            $action->button = json_encode($button);
+            $action->save();
 
             // notify user
             Notification::send($user, new SalesPolicyNotification('sales_lead_authorization',  $messageData, route('authorization_request', $deal->id)));

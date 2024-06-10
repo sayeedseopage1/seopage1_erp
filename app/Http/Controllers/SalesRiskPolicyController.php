@@ -1490,13 +1490,12 @@ class SalesRiskPolicyController extends AccountBaseController
                 $deal->is_drafted = 0;
                 $deal->authorization_status = 2;
                 $deal->released_at = Carbon::now();
+                event(new SalesPolicyEvent('sales_lead_authorization', $deal));
             }
+            else event(new SalesPolicyEvent('pending_large_from_submission', $deal));
 
             // pending action post update
             event(new SalesPolicyEvent('sales_risk_authorization', $deal, ['past' => 'accept']));
-
-            // pending action for sales lead authorization
-            event(new SalesPolicyEvent('sales_lead_authorization', $deal));
 
         } elseif ($status == '0') {
             $deal->sale_analysis_status = 'denied';
