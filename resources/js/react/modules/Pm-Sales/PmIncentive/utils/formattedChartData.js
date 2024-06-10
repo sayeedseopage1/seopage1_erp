@@ -15,6 +15,7 @@ function convertToShortTitle(title) {
 }
 
 function createIncentiveArray(arr, incentive) {
+    // console.log(arr);
     // Create a new array with the same length as the input array, initialized with zeros
     let newArr = new Array(arr.length).fill(0);
 
@@ -25,6 +26,8 @@ function createIncentiveArray(arr, incentive) {
             newArr[i] = parseFloat(incentive);
         }
     }
+
+    // console.log(newArr);
 
     return newArr;
 }
@@ -100,6 +103,9 @@ export const IncentiveFormattedData = (incentiveData) => {
                         ),
                     },
                 ],
+                actualSeriesData: criteria?.incentive_factors?.map((factor) =>
+                    parseFloat(factor?.incentive_amount)
+                ),
                 incentive_factors: criteria?.incentive_factors,
                 categories: criteria?.incentive_factors?.map(
                     (factor, index, array) => {
