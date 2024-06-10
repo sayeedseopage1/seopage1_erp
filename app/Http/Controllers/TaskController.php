@@ -7376,6 +7376,7 @@ class TaskController extends AccountBaseController
             'daily_submissions.attachments as attachments',
             'working_environments.site_url as site_url',
             'working_environments.frontend_password as frontend_password',
+            'daily_submissions.link_name as screenshot_screenrecord_link',
             'daily_submissions.created_at as report_submission_date',
             'taskboard_columns.column_name as status_name',
             'taskboard_columns.label_color as status_color'
