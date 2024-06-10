@@ -37,7 +37,7 @@ class SalesPolicyEventListener
             'item_name' => 'Sales authorization needed',
             'heading' => 'Sales Authorization!',
             'message' => 'Project projectName from Client clientName requires sales authorization (Sales Rep: salesPerson).',
-            'timeframe' => 12,
+            'timeframe' => 3,
             'past' => 'Project projectName from Client clientName from Sales Rep: salesPerson was authorized by sales lead authorizedBy'
         ],
         'pending_large_from_submission' => [
@@ -189,7 +189,7 @@ class SalesPolicyEventListener
     {
         $data = $this->eventTypes[$event->type];
 
-        if ($event->deal->authorization_status != 2) return;
+        if ($event->deal->authorization_status != 2 || $event->deal->released_at == null) return;
 
         $deal = $event->deal;
 
@@ -208,6 +208,20 @@ class SalesPolicyEventListener
         ];
 
         $data['message'] = strtr($data['message'], $messageData);
+
+        $releasedAt = date_create($deal->released_at);
+        $time = (float) $releasedAt->format('H'). $releasedAt->format('.i');
+
+        /**
+         * 3 hours for sales made from 7.01am - 11.30 pm.
+         * For sales made from 11.31pm - 7am, sales lead will get till 10 am in the morning.
+         *  */
+        if($time > 7.00 && $time <= 21.30) $data['timeframe'] = 3;
+        else {
+            $d2 = date_create(date('Y-m-d 10:00:00'));
+            $diff = date_diff($releasedAt, $d2);
+            $data['timeframe'] = (float) $diff->format('%H.%i');
+        };
 
         foreach ($users as $key => $user) {
 

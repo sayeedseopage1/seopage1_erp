@@ -1566,8 +1566,7 @@ class ContractController extends AccountBaseController
                 ]);
             }
 
-            // pending action for sales lead authorization when removed form draft
-            event(new SalesPolicyEvent('sales_lead_authorization', $deal));
+
         }
 
         $deal = Deal::find($deal->id);
@@ -1591,6 +1590,9 @@ class ContractController extends AccountBaseController
             }
             DB::commit();
             // all good
+
+            // pending action for sales lead authorization when removed form draft
+            event(new SalesPolicyEvent('sales_lead_authorization', $deal));
             // past action for large form submission
             event(new SalesPolicyEvent('pending_large_from_submission', $deal, ['past'=>'']));
         } catch (\Exception $e) {
