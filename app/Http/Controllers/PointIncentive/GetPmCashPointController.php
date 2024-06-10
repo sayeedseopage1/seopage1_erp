@@ -22,9 +22,10 @@ class GetPmCashPointController extends Controller
         $userId = $request->user_id??null;
         $startDate = $request->start_date ? Carbon::parse($request->start_date)->startOfDay() : Carbon::now()->startOfMonth();
         $endDate = Carbon::parse($request->end_date??now())->endOfDay();
+        $point_type_field = $request->point_type == 1 ? 'total_points_earn' : 'total_points_lost';
 
         $data['cash_points'] = CashPoint::selectRaw('cash_points.*, (total_points_earn - total_points_lost) as balance')
-        ->selectRaw('(SELECT SUM(total_points_earn - total_points_lost) FROM cash_points AS cp WHERE cp.id <= cash_points.id AND cp.factor_id IS NOT NULL AND cp.user_id = ? AND cp.created_at BETWEEN ? AND ?) AS cumulative_balance', [$userId, $startDate, $endDate])
+        ->selectRaw('(SELECT SUM(total_points_earn - total_points_lost) FROM cash_points AS cp WHERE cp.id <= cash_points.id AND cp.factor_id IS NOT NULL AND cp.user_id = ? AND cp.created_at BETWEEN ? AND ?' . ($request->point_type ? ' AND ' . $point_type_field . ' != 0' : '') . ') AS cumulative_balance', [$userId, $startDate, $endDate])
         // ->selectRaw('(SELECT SUM(total_points_earn - total_points_lost) FROM cash_points AS cp WHERE cp.id <= cash_points.id AND cp.id < 11) AS cumulative_balance')
         
         ->leftJoin('factors', 'factors.id', '=', 'cash_points.factor_id')
