@@ -111,6 +111,10 @@ font-family: Poppins;
 font-size: 20px;
 font-weight: 500;
 
+:disabled {
+    cursor: not-allowed;
+}
+
 @media (max-width: 600px) {
 width:150px;
 height: 48px;

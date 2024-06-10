@@ -105,10 +105,6 @@ const PointFactorsTable = ({
         onPageChange(paginate);
     };
 
-
-
-
-
     // handle page size change
     const handlePageSizeChange = (e) => {
         e.preventDefault();
@@ -151,12 +147,18 @@ const PointFactorsTable = ({
         getSortedRowModel: getSortedRowModel(),
         meta: {
             handleEditFactor: (factorData) => {
+
                 // find default value for dropdown options 
                 const limit_unit = LimitUnits?.data?.find(unit => unit?.name == factorData?.limit_unit)
+                const lower_limit_top_range = factorData?.lower_limit_top_range
+                const upper_limit_bottom_range = factorData?.upper_limit_bottom_range
+                // const lower_limit = singleLimitIds?.includes(factorData?.id)
+                //     ? editFactorData?.upper_limit
+                //     : factorData?.lower_limit;
 
                 // set editor data
                 setEditFactorData({
-                    ...factorData, limit_unit
+                    ...factorData, limit_unit, lower_limit_top_range, upper_limit_bottom_range,
                 });
                 setEditFactorModalOpen(true);
             },
@@ -169,6 +171,8 @@ const PointFactorsTable = ({
             project_type: false,
             lower_limit: false,
             upper_limit: false,
+            // lower_limit_top_range: false,
+            // upper_limit_bottom_range: false,
             limit_type: false,
             limit_unit: false,
             point_type: false,
@@ -195,6 +199,8 @@ const PointFactorsTable = ({
         // resetFormForRule();
     };
 
+
+
     // submit 
     const [updatePmPointfactor, { isLoading: isUpdatePmPointfactorLoading }] = useUpdatePmPointfactorMutation()
 
@@ -212,27 +218,37 @@ const PointFactorsTable = ({
             return;
         }
         try {
-            const lowerLimitCondition = editFactorData?.infiniteValueDown ? editFactorData?.infiniteValueDown : editFactorData?.limit_type == 2 ? "==" : "<"
-            const upperLimitCondition = editFactorData?.infiniteValueUp ? editFactorData?.infiniteValueUp : editFactorData?.limit_type == 2 ? "==" : ">="
+            // const lowerLimitCondition = editFactorData?.infiniteValueDown ? editFactorData?.infiniteValueDown : editFactorData?.limit_type == 2 ? "==" : "<"
+            // const upperLimitCondition = editFactorData?.infiniteValueUp ? editFactorData?.infiniteValueUp : editFactorData?.limit_type == 2 ? "==" : ">="
+
+            const singleEqualValLimitIds = [14, 19, 29, 44]
 
             const payload = {
-                criteria_id: parseInt(editFactorData?.criteria_id),
+                criteria_id: parseFloat(editFactorData?.criteria_id),
                 title: editFactorData?.title ?? null,
-                project_type: parseInt(editFactorData?.project_type) ?? null,
-                lower_limit: parseInt(editFactorData?.lower_limit) ?? null,
-                upper_limit: parseInt(editFactorData?.upper_limit) ?? null,
-                limit_type: parseInt(editFactorData?.limit_type) ?? null,
-                limit_unit: parseInt(editFactorData?.limit_unit?.name) ?? null,
-                lower_limit_condition: lowerLimitCondition ?? null,
-                upper_limit_condition: upperLimitCondition ?? null,
-                point_type: parseInt(editFactorData?.point_type) ?? null,
+                project_type: parseFloat(editFactorData?.project_type) ?? null,
+                // lower_limit: parseFloat(editFactorData?.lower_limit) ?? null,
+                lower_limit: singleEqualValLimitIds?.includes(editFactorData?.id) ? parseFloat(editFactorData?.upper_limit) : parseFloat(editFactorData?.lower_limit),
+                upper_limit: parseFloat(editFactorData?.upper_limit) ?? null,
+                lower_limit_top_range: editFactorData?.lower_limit_top_range ? parseFloat(editFactorData?.lower_limit_top_range) : null,
+                upper_limit_bottom_range: editFactorData?.upper_limit_bottom_range ? parseFloat(editFactorData?.upper_limit_bottom_range) : null,
+                limit_type: parseFloat(editFactorData?.limit_type) ?? null,
+                limit_unit: parseFloat(editFactorData?.limit_unit?.name) ?? null,
+                lower_limit_condition: editFactorData?.lower_limit_condition ?? null,
+                upper_limit_condition: editFactorData?.upper_limit_condition ?? null,
+                point_type: parseFloat(editFactorData?.point_type) ?? null,
                 points: parseFloat(editFactorData?.points) ?? null,
-                status: parseInt(editFactorData?.status) ?? null,
+                status: parseFloat(editFactorData?.status) ?? null,
             }
 
-            // console.log("payload: ", payload)
+            if (!singleEqualValLimitIds?.includes(editFactorData?.id) && editFactorData?.lower_limit && (parseFloat(editFactorData?.upper_limit) < parseFloat(editFactorData?.lower_limit))) {
+                toast.warning("Upper limit cannot be less than lower limit");
+                return
+            }
 
             const response = await updatePmPointfactor({ id: editFactorData?.id, payload }).unwrap();
+
+
 
             if (response?.status == 200) {
                 toast.success(response.message);

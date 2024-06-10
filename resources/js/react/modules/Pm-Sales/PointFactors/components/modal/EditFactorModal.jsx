@@ -5,9 +5,10 @@ import { Flex } from "../../../../../global/styled-component/Flex";
 import CustomModal from "../Styles/ui/CustomModal/CustomModal";
 import { CheckboxContainer, ModalButton, ModalInput, ModalInputLabel, ModalSelectContainer, ModalTitle, StyledInput, StyledLabel } from "../Styles/ui/ui";
 import CustomDropDown from "../CustomDropdown";
-import { LimitUnits } from "../../constant";
+import { LimitUnits, interpretCondition } from "../../constant";
 import Spinner from "../loader/Spinner";
 import { useGetSinglePmPointFactorQuery } from "../../../../../services/api/Pm-Sales/pmSalesApiSlice";
+import { Divider } from "antd";
 
 const EditFactorModal = ({
     open,
@@ -41,20 +42,15 @@ const EditFactorModal = ({
 
     }, [singleDefaultFactor]);
 
-    const { title, project_type, lower_limit, upper_limit, lower_limit_condition, upper_limit_condition, limit_type, limit_unit, point_type, points, status, infiniteValueDown, infiniteValueUp } = editFactorData || {}
+    const { id: factorId, title, project_type, lower_limit, upper_limit, lower_limit_condition, upper_limit_condition, limit_type, limit_unit, point_type, points, status, lower_limit_top_range_condition, upper_limit_bottom_range_condition, lower_limit_top_range, upper_limit_bottom_range } = editFactorData || {}
 
+    // console.log(editFactorData)
+    // console.log("u", upper_limit_condition)
+    // console.log("l", lower_limit_condition)
 
-    // useEffect(() => {
-    //     if ((infiniteValueUp && !infiniteValueDown)) {
-    //         setEditFactorData({ ...editFactorData, upper_limit: lower_limit })
-    //     }
-    // }, [infiniteValueUp])
-
-    // useEffect(() => {
-    //     if ((!infiniteValueUp && infiniteValueDown)) {
-    //         setEditFactorData({ ...editFactorData, lower_limit: upper_limit })
-    //     }
-    // }, [infiniteValueDown])
+    const singleEqualValLimitIds = [14, 19, 29, 44]
+    const singleLimitIds = [8, 14, 17, 19, 29, 44]
+    const dualValueLimitIds = [3, 4, 5, 6]
 
     return (
         <CustomModal
@@ -76,21 +72,21 @@ const EditFactorModal = ({
                     isLoadingSingleFactorData ? <Spinner /> : <div className="d-flex flex-column mb-4 px-3  w-100">
                         {/* criteria  *****required****** */}
                         <div className="row mb-4 align-items-center">
-                            <ModalInputLabel className="col-4">
+                            <ModalInputLabel className="col-3">
                                 Criteria:
                             </ModalInputLabel>
-                            <ModalInputLabel className="col-8" color="#8F8F8F">
+                            <ModalInputLabel className="col-9" color="#8F8F8F">
                                 {editFactorData?.criteria?.title}
                             </ModalInputLabel>
                         </div>
 
                         {/* title  *****required****** */}
                         {
-                            editFactorData?.title && <div className="row mb-4 align-items-center">
-                                <ModalInputLabel className="col-4">
+                            <div className="row mb-4 align-items-center">
+                                <ModalInputLabel className="col-3">
                                     Title <sup>*</sup>:{" "}
                                 </ModalInputLabel>
-                                <div className="col-8 flex-column px-0">
+                                <div className="col-9 flex-column px-0">
                                     <ModalInput
                                         type="text"
                                         className="w-100"
@@ -111,10 +107,10 @@ const EditFactorModal = ({
                         {/* Project Type  *****required****** */}
                         {
                             project_type && <div className="row mb-4 align-items-center">
-                                <ModalInputLabel className="col-4">
+                                <ModalInputLabel className="col-3">
                                     Project Type <sup>*</sup>:{" "}
                                 </ModalInputLabel>
-                                <ModalInputLabel className="col-8" color="#8F8F8F">
+                                <ModalInputLabel className="col-9" color="#8F8F8F">
                                     {project_type == 1 ? "Fixed" : "Hourly"}
                                 </ModalInputLabel>
                             </div>
@@ -123,31 +119,37 @@ const EditFactorModal = ({
                         {/* limit type  *****required****** */}
                         {
                             editFactorData?.limit_type && <div className="row mb-4 align-items-center">
-                                <ModalInputLabel className="col-4">
-                                    Limit Type <sup>*</sup>:{" "}
+                                <ModalInputLabel className="col-3">
+                                    Criteria Type <sup>*</sup>:{" "}
                                 </ModalInputLabel>
-                                <ModalInputLabel className="col-8" color="#8F8F8F">
-                                    {limit_type == 1 ? "Range" : "Boolean"}
+                                <ModalInputLabel className="col-9" color="#8F8F8F">
+                                    {limit_type == 1 ? "Range" : "Yes/No"}
                                 </ModalInputLabel>
                             </div>
                         }
 
                         {/* Lower Limit  *****required****** */}
                         {
-                            limit_type == 1 && <div className="row mb-4 align-items-start">
-                                <ModalInputLabel className="col-4">
+                            !dualValueLimitIds.includes(factorId) && !singleLimitIds.includes(factorId) && limit_type == 1 && <div className="row mb-4 align-items-center">
+                                <ModalInputLabel className="col-3">
                                     Lower Limit <sup>*</sup>:{" "}
                                 </ModalInputLabel>
-                                <div className="col-8 flex-column px-0">
-                                    <ModalInput
-                                        type="number"
-                                        className="w-100"
-                                        name="lower_limit"
-                                        value={lower_limit}
-                                        onChange={handleChange}
-                                        placeholder="Write Here"
-                                    // disabled={(!infiniteValueUp && infiniteValueDown)}
-                                    />
+                                <div className="col-9 flex-column px-0">
+                                    <div className="d-flex align-items-center justify-content-start w-100">
+                                        <ModalInputLabel className="col-4" style={{ fontSize: '14px', color: '#8F8F8F' }}>
+                                            {interpretCondition(lower_limit_condition)}
+                                        </ModalInputLabel>
+                                        <ModalInput
+                                            type="number"
+                                            className="ml-2"
+                                            name="lower_limit"
+                                            value={lower_limit}
+                                            onChange={handleChange}
+                                            placeholder="Write Here"
+                                            style={{ width: '100px' }}
+                                        // disabled={(!infiniteValueUp && infiniteValueDown)}
+                                        />
+                                    </div>
                                     {editFactorDataValidation?.lower_limit && (
                                         <p className="text-danger">
                                             Lower Limit is required
@@ -157,18 +159,6 @@ const EditFactorModal = ({
                                     {
                                         lower_limit < 0 && <p className="text-danger">Lower limit can not less than 0</p>
                                     }
-
-                                    <CheckboxContainer className="mt-2">
-                                        <StyledInput
-                                            type="checkbox"
-                                            id="infiniteValueDown"
-                                            name="infiniteValueDown"
-                                            onChange={handleChange}
-                                            defaultChecked={lower_limit_condition == '>'}
-                                            value={">"}
-                                        />
-                                        <StyledLabel htmlFor="infiniteValueDown"><small style={{ fontSize: '12px', fontWeight: "500" }}>Smaller than lower limit</small></StyledLabel>
-                                    </CheckboxContainer>
                                 </div>
                             </div>
                         }
@@ -176,20 +166,25 @@ const EditFactorModal = ({
 
                         {/* Upper Limit  *****required****** */}
                         {
-                            limit_type == 1 && <div className="row mb-4 align-items-start">
-                                <ModalInputLabel className="col-4">
-                                    Upper Limit <sup>*</sup>:{" "}
+                            !dualValueLimitIds.includes(factorId) && limit_type == 1 && <div className="row mb-4 align-items-center">
+                                <ModalInputLabel className="col-3">
+                                    {singleLimitIds.includes(factorId) ? "Limit" : "Upper Limit"}<sup>*</sup>:{" "}
                                 </ModalInputLabel>
-                                <div className="col-8 flex-column px-0">
-                                    <ModalInput
-                                        type="number"
-                                        className="w-100"
-                                        name="upper_limit"
-                                        value={upper_limit}
-                                        onChange={handleChange}
-                                        placeholder="Write Here"
-                                    // disabled={(infiniteValueUp && !infiniteValueDown)}
-                                    />
+                                <div className="col-9 flex-column px-0">
+                                    <div className="d-flex align-items-center justify-content-start">
+                                        <ModalInputLabel className="col-4" style={{ fontSize: '14px', color: '#8F8F8F' }}>
+                                            {interpretCondition(upper_limit_condition)}
+                                        </ModalInputLabel>
+                                        <ModalInput
+                                            type="number"
+                                            className="ml-2"
+                                            name="upper_limit"
+                                            value={upper_limit}
+                                            onChange={handleChange}
+                                            placeholder="Write Here"
+                                            style={{ width: '100px' }}
+                                        />
+                                    </div>
                                     {editFactorDataValidation?.upper_limit && (
                                         <p className="text-danger">
                                             Upper Limit is required
@@ -197,75 +192,111 @@ const EditFactorModal = ({
                                     )}
 
                                     {
-                                        lower_limit && (parseFloat(upper_limit) < parseFloat(lower_limit)) && <p className="text-danger">Upper limit must be greater than lower limit</p>
+                                        !singleEqualValLimitIds?.includes(factorId) && lower_limit && (parseFloat(upper_limit) < parseFloat(lower_limit)) && <p className="text-danger">Upper limit must be greater than lower limit</p>
                                     }
-
-                                    <CheckboxContainer className="mt-2">
-                                        <StyledInput
-                                            type="checkbox"
-                                            id="infiniteValueUp"
-                                            name="infiniteValueUp"
-                                            onChange={handleChange}
-                                            defaultChecked={upper_limit_condition == '<'}
-                                            value={"<"}
-                                        />
-                                        <StyledLabel htmlFor="infiniteValueUp"><small style={{ fontSize: '12px', fontWeight: "500" }}>Mark as infinity</small></StyledLabel>
-                                    </CheckboxContainer>
                                 </div>
                             </div>
                         }
 
-                        {/* limit unit  *****required****** */}
+                        {/* lower limit and upper limit for dual value limit */}
                         {
-                            editFactorData?.limit_unit && <div className="row mb-4 align-items-center">
-                                <ModalInputLabel className="col-4">
-                                    Limit Unit<sup>*</sup>:{" "}
+                            dualValueLimitIds.includes(factorId) && <div className="row mb-4 align-items-center">
+                                <ModalInputLabel className="col-3">
+                                    Limits <sup>*</sup>:{" "}
                                 </ModalInputLabel>
-                                <div className="col-8 px-0 flex-column">
-                                    <ModalSelectContainer>
-                                        <CustomDropDown
-                                            filedName="limit_unit"
-                                            data={LimitUnits}
-                                            selected={limit_unit}
-                                            setSelected={handleChange}
-                                        />
-                                    </ModalSelectContainer>
-                                    {editFactorDataValidation?.limit_unit && (
-                                        <p className="text-danger">
-                                            Limit unit is required
-                                        </p>
-                                    )}
+                                <div className="col-9 flex-column px-0">
+                                    {/* lower limits */}
+                                    <div className="d-flex align-items-center justify-content-start">
+                                        <div className="col-6 d-flex align-items-center">
+                                            <ModalInputLabel className="col-4" style={{ fontSize: '14px', color: '#8F8F8F' }}>
+                                                {interpretCondition(lower_limit_condition)}
+                                            </ModalInputLabel>
+                                            <ModalInput
+                                                type="number"
+                                                className="ml-2"
+                                                name="lower_limit"
+                                                value={lower_limit}
+                                                onChange={handleChange}
+                                                placeholder="Write Here"
+                                                style={{ width: '100px' }}
+                                            />
+                                        </div>
+                                        <div className="col-6 d-flex align-items-center">
+                                            <ModalInputLabel className="col-3" style={{ fontSize: '14px', color: '#8F8F8F' }}>
+                                                {interpretCondition(lower_limit_top_range_condition)}
+                                            </ModalInputLabel>
+                                            <ModalInput
+                                                type="number"
+                                                className="ml-2"
+                                                name="lower_limit_top_range"
+                                                value={lower_limit_top_range}
+                                                onChange={handleChange}
+                                                placeholder="Write Here"
+                                                style={{ width: '100px' }}
+                                            />
+                                        </div>
+                                    </div>
+                                    <Divider plain>Or</Divider>
+                                    {/* upper limits */}
+                                    <div className="d-flex align-items-center justify-content-start">
+                                        <div className="col-6 d-flex align-items-center">
+                                            <ModalInputLabel className="col-4" style={{ fontSize: '14px', color: '#8F8F8F' }}>
+                                                {interpretCondition(upper_limit_bottom_range_condition)}
+                                            </ModalInputLabel>
+                                            <ModalInput
+                                                type="number"
+                                                className="ml-2"
+                                                name="upper_limit_bottom_range"
+                                                value={upper_limit_bottom_range}
+                                                onChange={handleChange}
+                                                placeholder="Write Here"
+                                                style={{ width: '100px' }}
+                                            />
+                                        </div>
+                                        <div className="col-6 d-flex align-items-center">
+                                            <ModalInputLabel className="col-4" style={{ fontSize: '14px', color: '#8F8F8F' }}>
+                                                {interpretCondition(upper_limit_condition)}
+                                            </ModalInputLabel>
+                                            <ModalInput
+                                                type="number"
+                                                className="ml-2"
+                                                name="upper_limit"
+                                                value={upper_limit}
+                                                onChange={handleChange}
+                                                placeholder="Write Here"
+                                                style={{ width: '100px' }}
+                                            />
+                                        </div>
+                                    </div>
                                 </div>
-                            </div>
-                        }
-
-                        {/* point type  *****required****** */}
-                        {
-                            editFactorData?.point_type && <div className="row mb-4 align-items-center">
-                                <ModalInputLabel className="col-4">
-                                    Point Type <sup>*</sup>:{" "}
-                                </ModalInputLabel>
-                                <ModalInputLabel className="col-8" color="#8F8F8F">
-                                    {point_type == 1 ? "Static" : "Percentage"}
-                                </ModalInputLabel>
                             </div>
                         }
 
                         {/* points *****required****** */}
                         {
-                            editFactorData?.points && <div className="row mb-4 align-items-center">
-                                <ModalInputLabel className="col-4">
+                            <div className="row mb-4 align-items-center">
+                                <ModalInputLabel className="col-3">
                                     Points <sup>*</sup>:{" "}
                                 </ModalInputLabel>
-                                <div className="col-8 flex-column px-0">
-                                    <ModalInput
-                                        type="number"
-                                        className="w-100"
-                                        name="points"
-                                        value={points}
-                                        onChange={handleChange}
-                                        placeholder="Write Here"
-                                    />
+                                <div className="col-9 flex-column px-0">
+                                    <div className="d-flex align-items-center justify-content-start w-100">
+                                        <ModalInput
+                                            type="number"
+                                            className="mr-2"
+                                            name="points"
+                                            value={points}
+                                            onChange={handleChange}
+                                            placeholder="Write Here"
+                                            style={{ width: '100px' }}
+                                        />
+                                        {
+                                            point_type == 1 ? <ModalInputLabel color="#8F8F8F">
+                                                {(points == 1 || points == -1 || points == 0) ? 'Point' : 'Points'}
+                                            </ModalInputLabel> : <ModalInputLabel color="#8F8F8F">
+                                                % of the project budget
+                                            </ModalInputLabel>
+                                        }
+                                    </div>
                                     {editFactorDataValidation?.points && (
                                         <p className="text-danger">
                                             Points is required
@@ -278,10 +309,10 @@ const EditFactorModal = ({
                         {/* status *****Optional****** */}
                         {
                             editFactorData?.status != null && <div className="row mb-4 align-items-center">
-                                <ModalInputLabel className="col-4">
+                                <ModalInputLabel className="col-3">
                                     Status <sup>*</sup>:{" "}
                                 </ModalInputLabel>
-                                <div className="col-8 px-0">
+                                <div className="col-9 px-0">
                                     <CheckboxContainer className="mr-3">
                                         <StyledInput
                                             type="checkbox"
