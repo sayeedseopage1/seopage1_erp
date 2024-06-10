@@ -223,11 +223,17 @@ class DisbursePmIncentiveMonthly extends Command
                 $this_month_released_percent = $assigned_amount_this_month ? round(($released_amount_this_month_assigned / $assigned_amount_this_month) * 100, 2) : 0;
                 $previous_months_released_percent = $remain_unreleased_amount_last_months ? round((($released_amount_this_month - $released_amount_this_month_assigned) / $remain_unreleased_amount_last_months) * 100, 2) : 0;
                 $achieved_bonus_incentive = 0;
+                $total_unreleased_amount_till_now = $remain_unreleased_amount_last_months + $assigned_amount_this_month - $released_amount_this_month;
+                $lower_limit = 0;
+                $upper_limit = 0;
                 foreach(IncentiveCriteria::with('incentiveFactors')->find(10)->incentiveFactors as $factor){
-                    if($factor->lower_limit <= $previous_months_released_percent && $factor->uppder_limit <= $this_month_released_percent){
+                    $total_unreleased_amount_standard = round(($remain_unreleased_amount_last_months - (($remain_unreleased_amount_last_months / 100)*$factor->lower_limit)) + ($assigned_amount_this_month - (($assigned_amount_this_month / 100)*$factor->upper_limit)), 2);
+                    $upper_limit = $total_unreleased_amount_standard;
+                    if($lower_limit < $total_unreleased_amount_till_now && $upper_limit >= $total_unreleased_amount_till_now){
                         $achieved_bonus_incentive = ($acquired_bonus_points / 100) * $factor->incentive_amount;
                         break;
                     }
+                    $lower_limit = $upper_limit;
                 }
                 // End
 

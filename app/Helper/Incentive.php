@@ -116,7 +116,7 @@ class Incentive
                     $incentiveCriteria->obtained_incentive = 0;
                 }
             }elseif($incentiveCriteria->id == 9){
-                $incentiveCriteria->acquired_percent = DB::table('users')
+                $incentiveCriteria->acquired_percent = round(DB::table('users')
                 ->join('projects', 'users.id', '=', 'projects.pm_id')
                 ->join('project_milestones', 'projects.id', '=', 'project_milestones.project_id')
                 ->join('payments', 'project_milestones.invoice_id', '=', 'payments.invoice_id')
@@ -124,12 +124,10 @@ class Incentive
                 ->where('payments.added_by', $user_id)
                 ->whereNot('project_milestones.status', 'canceled')
                 ->where('projects.project_status','Accepted')
-                ->sum('project_milestones.cost');
+                ->sum('project_milestones.cost'), 2);
                 self::findIncentive($incentiveCriteria);
             }elseif($incentiveCriteria->id == 10){
-                $bonus_points = 70;
                 $lower_limit = 0;
-
                 $remain_unreleased_amount_last_months = DB::table('projects')
                 ->join('project_milestones', 'projects.id', '=', 'project_milestones.project_id')
                 ->leftJoin('payments', 'project_milestones.invoice_id', '=', 'payments.invoice_id')
@@ -172,6 +170,9 @@ class Incentive
                 ->where('projects.project_status','Accepted')
                 ->sum('project_milestones.cost');
                 
+                $total_unreleased_amount_till_now = $remain_unreleased_amount_last_months + $assigned_amount_this_month - $released_amount_this_month;
+
+
                 $this_month_released_percent = $assigned_amount_this_month ? round(($released_amount_this_month_assigned / $assigned_amount_this_month) * 100, 2) : 0;
                 $previous_months_released_percent = round((($released_amount_this_month - $released_amount_this_month_assigned) / $remain_unreleased_amount_last_months) * 100, 2);
                 $match_trigger = 0;
@@ -181,13 +182,13 @@ class Incentive
                 $incentiveCriteria->current_month_released_percent = $this_month_released_percent;
                 foreach($incentiveCriteria->incentiveFactors as $factor){
                     $incentiveCriteria->incentive_amount_type = $factor->incentive_amount_type;
-                    if(!$match_trigger && $factor->lower_limit <= $previous_months_released_percent && $factor->uppder_limit <= $this_month_released_percent){
-                        $match_trigger++;
-                        $incentiveCriteria->obtained_incentive = $factor->incentive_amount;
-                    }
                     $factor->upper_limit = round(($assigned_amount_this_month - (($assigned_amount_this_month/100) * $factor->upper_limit)) + ($remain_unreleased_amount_last_months - (($remain_unreleased_amount_last_months/100) * $factor->lower_limit)), 2);
                     $factor->lower_limit = $lower_limit;
                     $lower_limit = $factor->upper_limit;
+                    if(!$match_trigger && $factor->lower_limit < $total_unreleased_amount_till_now && $factor->upper_limit >= $total_unreleased_amount_till_now){
+                        $match_trigger++;
+                        $incentiveCriteria->obtained_incentive = $factor->incentive_amount;
+                    }
                 }
 
             }elseif($incentiveCriteria->id == 11){
