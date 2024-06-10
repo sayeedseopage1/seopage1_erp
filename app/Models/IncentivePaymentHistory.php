@@ -10,7 +10,9 @@ class IncentivePaymentHistory extends Model
     use HasFactory;
 
     protected $fillable = [
-        'date',
+        'payment_date',
+        'to_month',
+        'from_month',
         'user_id',
         'incentive_payment_id',
         'type',
