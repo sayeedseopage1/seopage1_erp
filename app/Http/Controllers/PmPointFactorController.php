@@ -186,11 +186,9 @@ class PmPointFactorController extends AccountBaseController
 
         try {
             Factor::find($id)->update($validated);
-            if($validated['description']){
-                Criteria::find($validated['criteria_id'])->update([
-                    'description' => $validated['description']
-                ]);
-            }
+            Criteria::find($validated['criteria_id'])->update([
+                'description' => $validated['description']
+            ]);
 
             return response()->json([
                 'status'=> 200,
