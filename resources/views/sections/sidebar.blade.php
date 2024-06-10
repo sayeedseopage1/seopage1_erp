@@ -450,9 +450,11 @@
                                     </div>
                                     <div id="collapse1" class="accordion-collapse collapse" aria-labelledby="headingOne" data-parent="#accordionExample">
                                         <div class="accordion-body sidebar_sub_item_body">
+                                            @if(Auth::user()->role_id == 1 || Auth::user()->role_id == 4)
                                             <a href="{{route('project.manager.point.factors')}}" class="text-lightest">
                                                 Point Criteria
                                             </a>
+                                            @endif
                                             <a href="{{route('project.manager.points')}}" class="text-lightest">
                                                 Point History
                                             </a>

@@ -49,7 +49,7 @@ export default function CashPointsFilter({
 
 
     useEffect(() => {
-        if (auth?.isHasRolePermission(1) && pmByDeptData && !isPmByDeptLoading) {
+        if ((auth?.isHasRolePermission(1) || auth?.isHasRolePermission(8)) && pmByDeptData && !isPmByDeptLoading) {
             setSelectedEmployee(pmByDeptData[0]?.id);
             setQuery(prevQuery => ({ ...prevQuery, user_id: pmByDeptData[0]?.id }));
         }
@@ -122,7 +122,7 @@ export default function CashPointsFilter({
             </FilterItem>
 
             {
-                auth?.isHasRolePermission(1) && <>
+                (auth?.isHasRolePermission(1) || auth?.isHasRolePermission(8)) && <>
                     <FilterItem className='border-right-0 hide'>
                         <DeptFilter department={depAndEmployees?.department} handleChange={handleDeptChange} isFetching={isDepAndEmployeesFetching} />
                     </FilterItem>
@@ -162,7 +162,7 @@ export default function CashPointsFilter({
 
             {/* sidebar */}
             {
-                auth?.isHasRolePermission(1) &&
+                (auth?.isHasRolePermission(1) || auth?.isHasRolePermission(8)) &&
                 <div className='sp1__pp_filter_sidebar_container'>
                     <div
                         className='sp1__pp_filter_sidebar_toggle'
@@ -173,7 +173,7 @@ export default function CashPointsFilter({
                     </div>
 
                     {
-                        auth?.isHasRolePermission(1) && sidebarIsOpen && (
+                        (auth?.isHasRolePermission(1) || auth?.isHasRolePermission(8)) && sidebarIsOpen && (
                             <aside className='sp1__pp_filter_sidebar'>
                                 <div className='sp1__pp_filter_sidebar_header'>
                                     <span>Filters</span>
