@@ -507,4 +507,9 @@ class Task extends BaseModel
     {
         return $this->hasOne(GraphicWorkDetails::class, 'task_id', 'id');
     }
+
+    public function taskType()
+    {
+        return $this->hasOne(TaskType::class);
+    }
 }

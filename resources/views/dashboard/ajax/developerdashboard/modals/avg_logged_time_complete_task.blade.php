@@ -25,7 +25,7 @@
                   </tr>
                 </thead>
                 <tbody>
-                    @foreach($submit_number_of_tasks_in_this_month_data as $row)
+                    @foreach($average_submission_time_in_this_month_data as $row)
                     @php
                       $revision_log_hour = App\Models\ProjectTimeLog::where('task_id',$row->id)->where('revision_status',1)->sum('total_hours');
                       $revision_log_total_min = App\Models\ProjectTimeLog::where('task_id',$row->id)->where('revision_status',1)->sum('total_minutes');
@@ -43,14 +43,14 @@
 
                         </td>
                         <td>
-                            @if($row->cl_id != null)
+                            {{-- @if($row->cl_id != null)
                             {{$row->cl_name}}
                             @elseif($row->client_name != null)
                             {{$row->client_name}}
                             @else
                            <a href="{{route('clients.show',$row->clientId)}}"> {{$row->clientName}}</a>
 
-                            @endif
+                            @endif --}}
 
                         </td>
                         <td>

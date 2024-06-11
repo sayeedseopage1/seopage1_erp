@@ -1,22 +1,18 @@
 <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
-<div id="submit_number_of_tasks_in_this_month{{ $submit_number_of_tasks_in_this_month }}" class="modal fade" tabindex="-1"
+<div id="number_of_task_received_secondary_pages{{ $number_of_tasks_received_secondary_page }}" class="modal fade" tabindex="-1"
     aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-xl">
         <div class="modal-content">
             <div class="modal-header">
                 <div class="modal-title">
-                    <h4>Submitted Tasks: {{ $submit_number_of_tasks_in_this_month }}</h4>
-                    <h4>Submitted Tasks Primary Pages: {{ $submit_number_of_tasks_primary_page_in_this_month }}</h4>
-                    <h4>Submitted Tasks Secondary Pages: {{ $submit_number_of_tasks_secondary_page_in_this_month }}
-                    </h4>
-                    <h4>Submitted Tasks Others: {{ $submit_number_of_tasks_others_page_in_this_month }}</h4>
+                    <h4>Secondary Pages: {{ $number_of_tasks_received_secondary_page }} </h4>
                 </div>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
             <div class="modal-body">
-                <table id="number_of_task_submitted" class="display" style="width:100%">
+                <table id="number_of_task_received_secondary" class="display" style="width:100%">
                     <thead>
                         <tr>
                             <th scope="col">Sl No</th>
@@ -30,11 +26,11 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach ($submit_number_of_tasks_in_this_month_data as $row)
+                        @foreach ($number_of_tasks_received_secondary_page_data as $row)
                             <tr>
-                                <td>{{ ++$loop->index }}</td>
+                                <td>{{ $loop->index + 1 }}</td>
                                 <td>
-                                    {{ $row?->created_at }}
+                                    {{ $row->created_at }}
                                 </td>
                                 <td>
                                     <a href="{{ route('tasks.show', $row->id) }}">{{ $row->heading }}<a>
@@ -58,6 +54,7 @@
                                 </td>
                             </tr>
                         @endforeach
+
                     </tbody>
                 </table>
             </div>
@@ -67,9 +64,10 @@
         </div>
     </div>
 </div>
+
 <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
 <script>
-    new DataTable('#number_of_task_submitted', {
+    new DataTable('#number_of_task_received_secondary', {
         "dom": 't<"d-flex"l<"ml-auto"ip>><"clear">',
     });
 </script>

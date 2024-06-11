@@ -117,7 +117,6 @@
                     {{ $user->name }}</h4>
             </div>
             <!-- WELOCOME NAME END -->
-
             <!-- CLOCK IN CLOCK OUT START -->
             @if (Auth::user()->role_id == 4 || Auth::user()->role_id == 7)
                 <div class="align-items-center border-left-grey border-left-grey-sm-0 h-100 pl-4 ml-5">
@@ -128,9 +127,9 @@
                                 <div class="input-group-text"> <i class="fa fa-calendar-alt mr-2 f-14 text-dark-grey"></i>
                                 </div>
                             </div>
-                            <input type="text"
+                            <input id="datatableRange2" type="text"
                                 class="position-relative text-dark form-control border-0 p-2 text-left f-14 f-w-500"
-                                id="datatableRange2" placeholder="Start Date And End Date">
+                                placeholder="Start Date And End Date">
                         </div>
                     </div>
                 </div>
@@ -177,8 +176,9 @@
         <div class="select-box d-flex border-right-grey border-right-grey-sm-0 mb-3 ml-auto">
             <p class="mb-0 pr-3 f-14 text-dark-grey d-flex align-items-center">@lang('app.date')</p>
             <div class="select-status d-flex">
-                <input type="text" class="position-relative text-dark form-control border-0 p-2 text-left f-14 f-w-500"
-                    id="datatableRange2" placeholder="@lang('placeholders.dateRange')">
+                <input id="datatableRange2" type="text"
+                    class="position-relative text-dark form-control border-0 p-2 text-left f-14 f-w-500"
+                    placeholder="@lang('placeholders.dateRange')">
             </div>
         </div>
         <div class="row">
@@ -206,17 +206,64 @@
                                             data-target="#number_of_task_received{{ $number_of_tasks_received }}">
                                             {{ $number_of_tasks_received }}
                                         </a>
-                                        {{-- <span class="f-12 font-weight-normal text-lightest">
-                                    @lang('Received tasks this cycle')
-                                    <i class="fa fa-question-circle" aria-hidden="true" data-toggle="modal" data-target="#"></i>
-
-                                </span> --}}
                                     </p>
                                     @include('dashboard.ajax.developerdashboard.modals.number_of_task_received')
-
                                 </div>
                             </div>
-
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div
+                            class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0">
+                            <div class="d-block text-capitalize">
+                                <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">Number of tasks received Primary Pages</h5>
+                                <div class="d-flex flex-wrap">
+                                    <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
+                                        <a href="#" data-toggle="modal"
+                                            data-target="#number_of_task_received_primary_pages{{ $number_of_tasks_received_primary_page }}">
+                                            {{ $number_of_tasks_received_primary_page }}
+                                        </a>
+                                    </p>
+                                    @include('dashboard.ajax.developerdashboard.modals.number_of_task_received_primary_pages')
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div
+                            class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0">
+                            <div class="d-block text-capitalize">
+                                <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">Number of tasks received Secondary Pages
+                                </h5>
+                                <div class="d-flex flex-wrap">
+                                    <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
+                                        <a href="#" data-toggle="modal"
+                                            data-target="#number_of_task_received_secondary_pages{{ $number_of_tasks_received_secondary_page }}">
+                                            {{ $number_of_tasks_received_secondary_page }}
+                                        </a>
+                                    </p>
+                                    @include('dashboard.ajax.developerdashboard.modals.number_of_task_received_secondary_pages')
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row mt-3">
+                    <div class="col-md-4">
+                        <div
+                            class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0">
+                            <div class="d-block text-capitalize">
+                                <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">Number of tasks received Others</h5>
+                                <div class="d-flex flex-wrap">
+                                    <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
+                                        <a href="#" data-toggle="modal"
+                                            data-target="#number_of_task_received_others_pages{{ $number_of_task_others_page_in_this_month }}">
+                                            {{ $number_of_task_others_page_in_this_month }}
+                                        </a>
+                                    </p>
+                                    @include('dashboard.ajax.developerdashboard.modals.number_of_task_received_others_pages')
+                                </div>
+                            </div>
                         </div>
                     </div>
                     <div class="col-md-4">
@@ -233,14 +280,77 @@
                                             {{ $submit_number_of_tasks_in_this_month }}
 
                                         </a>
-                                        {{-- <span class="f-12 font-weight-normal text-lightest">
-                                    @lang('Primary pages')
-                                    <i class="fa fa-question-circle" aria-hidden="true" data-toggle="modal" data-target="#"></i>
-
-                                </span> --}}
                                     </p>
                                     @include('dashboard.ajax.developerdashboard.modals.number_of_task_submitted')
 
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div
+                            class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0">
+                            <div class="d-block text-capitalize">
+                                <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">Number of Submit Task for Primary Page
+                                </h5>
+                                <div class="d-flex flex-wrap">
+
+                                    <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
+                                        <a href="#" data-toggle="modal"
+                                            data-target="#submit_number_of_tasks_in_this_month_primary_page{{ $submit_number_of_tasks_primary_page_in_this_month }}">
+
+                                            {{ $submit_number_of_tasks_primary_page_in_this_month }}
+
+                                        </a>
+                                    </p>
+                                    @include('dashboard.ajax.developerdashboard.modals.number_of_task_submitted_primary_page')
+
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+                <div class="row mt-3">
+                    <div class="col-md-4">
+                        <div
+                            class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0">
+                            <div class="d-block text-capitalize">
+                                <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">Number of Submit Task for Secondary Page
+                                </h5>
+                                <div class="d-flex flex-wrap">
+
+                                    <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
+                                        <a href="#" data-toggle="modal"
+                                            data-target="#submit_number_of_tasks_in_this_month_secondary_page{{ $submit_number_of_tasks_secondary_page_in_this_month }}">
+
+                                            {{ $submit_number_of_tasks_secondary_page_in_this_month }}
+
+                                        </a>
+                                    </p>
+                                    @include('dashboard.ajax.developerdashboard.modals.number_of_task_submitted_secondary_page')
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div
+                            class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0">
+                            <div class="d-block text-capitalize">
+                                <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">Number of Submit Task for Others</h5>
+                                <div class="d-flex flex-wrap">
+
+                                    <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
+                                        <a href="#" data-toggle="modal"
+                                            data-target="#submit_number_of_tasks_in_this_month_other_page{{ $submit_number_of_tasks_others_page_in_this_month }}">
+
+                                            {{ $submit_number_of_tasks_others_page_in_this_month }}
+
+                                        </a>
+                                    </p>
+                                    @include('dashboard.ajax.developerdashboard.modals.number_of_task_submitted_other_page')
                                 </div>
                             </div>
 
@@ -267,7 +377,6 @@
 
                         </div>
                     </div>
-
                 </div>
                 <div class="row mt-3">
                     <div class="col-md-4">
@@ -401,6 +510,7 @@
                                             {{ round($avg_logged_time_complete_task_without_revision, 2) }} Hours
                                         </a>
                                         @include('dashboard.ajax.developerdashboard.modals.avg_logged_time_complete_task_without_revision')
+
                                     </p>
                                 </div>
                             </div>
@@ -450,7 +560,6 @@
 
                                     </p>
                                     @include('dashboard.ajax.developerdashboard.modals.avg_num_in_progress')
-
                                 </div>
                             </div>
 
@@ -499,6 +608,7 @@
                     </div>
 
                 </div>
+
                 <div class="row mt-3">
                     <div class="col-md-4">
                         <div
@@ -674,7 +784,7 @@
                                         <td>
                                             @if ($task->ProjectId != null)
                                                 <a
-                                                    href="{{ route('clients.show', $task->client_id) }}">{{ $task->clientName }}</a>
+                                                    href="{{ $task->client_id ? route('clients.show', $task->client_id) : '#' }}">{{ $task->clientName }}</a>
                                             @elseif($task->task_client_name != null)
                                                 {{ $task->task_client_name }}
                                             @else
@@ -739,7 +849,7 @@
                                         <td>
                                             @if ($task->ProjectId != null)
                                                 <a
-                                                    href="{{ route('clients.show', $task->client_id) }}">{{ $task->clientName }}</a>
+                                                    href="{{ $task->client_id ? route('clients.show', $task->client_id) : '#' }}">{{ $task->clientName }}</a>
                                             @elseif($task->task_client_name != null)
                                                 {{ $task->task_client_name }}
                                             @else
@@ -798,9 +908,9 @@
                                                         class="dropdown-menu dropdown-menu-right border-grey rounded b-shadow-4 p-2">
                                                         @if (in_array('tasks', user_modules()))
                                                             <div class="custom-control custom-checkbox cal-filter">
-                                                                <input type="checkbox" value="task"
+                                                                <input id="customCheck1" type="checkbox" value="task"
                                                                     class="form-check-input filter-check"
-                                                                    name="calendar[]" id="customCheck1"
+                                                                    name="calendar[]"
                                                                     @if (in_array('task', $event_filter)) checked @endif>
                                                                 <label
                                                                     class="form-check-label form_custom_label text-dark-grey pl-2 mr-3 justify-content-start cursor-pointer checkmark-20 pt-2 text-wrap"
@@ -809,9 +919,9 @@
                                                         @endif
                                                         @if (in_array('events', user_modules()))
                                                             <div class="custom-control custom-checkbox cal-filter">
-                                                                <input type="checkbox" value="events"
+                                                                <input id="customCheck2" type="checkbox" value="events"
                                                                     class="form-check-input filter-check"
-                                                                    name="calendar[]" id="customCheck2"
+                                                                    name="calendar[]"
                                                                     @if (in_array('events', $event_filter)) checked @endif>
                                                                 <label
                                                                     class="form-check-label form_custom_label text-dark-grey pl-2 mr-3 justify-content-start cursor-pointer checkmark-20 pt-2 text-wrap"
@@ -820,9 +930,9 @@
                                                         @endif
                                                         @if (in_array('holidays', user_modules()))
                                                             <div class="custom-control custom-checkbox cal-filter">
-                                                                <input type="checkbox" value="holiday"
+                                                                <input id="customCheck3" type="checkbox" value="holiday"
                                                                     class="form-check-input filter-check"
-                                                                    name="calendar[]" id="customCheck3"
+                                                                    name="calendar[]"
                                                                     @if (in_array('holiday', $event_filter)) checked @endif>
                                                                 <label
                                                                     class="form-check-label form_custom_label text-dark-grey pl-2 mr-3 justify-content-start cursor-pointer checkmark-20 pt-2 text-wrap"
@@ -831,9 +941,9 @@
                                                         @endif
                                                         @if (in_array('tickets', user_modules()))
                                                             <div class="custom-control custom-checkbox cal-filter">
-                                                                <input type="checkbox" value="tickets"
+                                                                <input id="customCheck4" type="checkbox" value="tickets"
                                                                     class="form-check-input filter-check"
-                                                                    name="calendar[]" id="customCheck4"
+                                                                    name="calendar[]"
                                                                     @if (in_array('tickets', $event_filter)) checked @endif>
                                                                 <label
                                                                     class="form-check-label form_custom_label text-dark-grey pl-2 mr-3 justify-content-start cursor-pointer checkmark-20 pt-2 text-wrap"
@@ -842,9 +952,9 @@
                                                         @endif
                                                         @if (in_array('leaves', user_modules()))
                                                             <div class="custom-control custom-checkbox cal-filter">
-                                                                <input type="checkbox" value="leaves"
+                                                                <input id="customCheck5" type="checkbox" value="leaves"
                                                                     class="form-check-input filter-check"
-                                                                    name="calendar[]" id="customCheck5"
+                                                                    name="calendar[]"
                                                                     @if (in_array('leaves', $event_filter)) checked @endif>
                                                                 <label
                                                                     class="form-check-label form_custom_label text-dark-grey pl-2 mr-3 justify-content-start cursor-pointer checkmark-20 pt-2 text-wrap"
@@ -873,9 +983,8 @@
                                         </div>
                                         <!-- NOTICE HEADING END -->
                                         <!-- NOTICE DETAIL START -->
-                                        <div class="b-shadow-4 cal-info scroll ps" data-menu-vertical="1"
-                                            data-menu-scroll="1" data-menu-dropdown-timeout="500" id="empDashNotice"
-                                            style="overflow: hidden;">
+                                        <div id="empDashNotice" class="b-shadow-4 cal-info scroll ps" data-menu-vertical="1"
+                                            data-menu-scroll="1" data-menu-dropdown-timeout="500" style="overflow: hidden;">
 
                                             @foreach ($notices as $notice)
                                                 <div class="card border-0 b-shadow-4 p-20 rounded-0">
@@ -910,7 +1019,7 @@
                             @endisset
                         @endif
                         @if (!is_null($myActiveTimer))
-                            <div class="col-sm-12" id="myActiveTimerSection">
+                            <div id="myActiveTimerSection" class="col-sm-12">
                                 <x-cards.data :title="__('modules.timeLogs.myActiveTimer')">
                                     <div class="row">
                                         <div class="col-sm-12">

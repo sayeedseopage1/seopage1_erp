@@ -48,7 +48,7 @@
                             @elseif($row->client_name != null)
                             {{$row->client_name}}
                             @else
-                           <a href="{{route('clients.show',$row->clientId)}}"> {{$row->clientName}}</a>
+                           <a href="{{ $row->clientId ? route('clients.show',$row->clientId) : '#'}}"> {{$row->clientName}}</a>
 
                             @endif
 
