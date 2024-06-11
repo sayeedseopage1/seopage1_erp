@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { auth, heldAmountsData } from '../../../constants';
 import Pagination from '../../ui/Pagination';
 import { ConfigProvider, Table } from 'antd';
+import PointHistoryTableLoader from '../../../../Points/components/loader/PointHistoryTableLoader';
 
 
 const tableData = [
@@ -79,7 +80,7 @@ const columns = [
         title: 'Total Amount',
         dataIndex: 'total_incentive_amount',
         key: 'total_incentive_amount',
-        render: (text) => <span className='held_amount_table_td'>{text} taka</span>,
+        render: (text) => <span className='held_amount_table_td'>{parseFloat(text)} taka</span>,
         align: 'center',
     },
     {
@@ -91,7 +92,7 @@ const columns = [
         ),
         dataIndex: 'payable_amount',
         key: 'payable_amount',
-        render: (text) => <span className='held_amount_table_td'>{text} taka</span>,
+        render: (text) => <span className='held_amount_table_td'>{parseFloat(text)} taka</span>,
         align: 'center'
     },
     {
@@ -103,14 +104,14 @@ const columns = [
         ),
         dataIndex: 'held_amount',
         key: 'held_amount',
-        render: (text) => <span className='held_amount_table_td'>{text} taka</span>,
+        render: (text) => <span className='held_amount_table_td'>{parseFloat(text)} taka</span>,
         align: 'center'
     },
     {
         title: 'Held Amount Balance',
-        dataIndex: 'cumulative_held_amount',
-        key: 'cumulative_held_amount',
-        render: (text) => <span className='held_amount_table_td'>{text} taka</span>,
+        dataIndex: 'held_amount',
+        key: 'held_amount',
+        render: (text) => <span className='held_amount_table_td'>{parseFloat(text)} taka</span>,
         align: 'center'
     },
     {
@@ -131,14 +132,15 @@ const columns = [
 ];
 
 
-const HeldAmounts = ({ data, isFetching, isLoading }) => {
+const HeldAmounts = ({ data, isFetching, isLoading, expandedRowKeys }) => {
     const [currentPage, setCurrentPage] = useState(1)
     const [currentPageData, setCurrentPageData] = useState([]);
     const [numberOfRowPerPage, setNumberOfRowPerPage] = useState(10);
 
-    const [expandedRowKeys, setExpandedRowKeys] = useState(
-        tableData.filter((item) => item?.held_amount_payment).map((item) => item?.id)
-    );
+
+    if (isLoading || isFetching) {
+        return <table className='cnx__table_body'><tbody><PointHistoryTableLoader tableCol={columns?.length} prevItemLength={5} /></tbody></table>
+    }
 
     return (
         <div className='held_amount_table_wrapper'>
@@ -166,8 +168,8 @@ const HeldAmounts = ({ data, isFetching, isLoading }) => {
                         expandedRowRender: (record) => {
                             return (
                                 <div className="held-amount-expanded-row">
-                                    <p className="held-amount-expanded-title">{record.held_amount_payment}</p>
-                                    <p className="expanded-held-amount">{parseFloat(record?.cumulative_held_amount)} taka</p>
+                                    <p className="held-amount-expanded-title">{record?.held_amount_payment}</p>
+                                    <p className="expanded-held-amount">{parseFloat(record?.held_amount)} taka</p>
                                 </div>
                             );
                         },
@@ -194,12 +196,12 @@ const HeldAmounts = ({ data, isFetching, isLoading }) => {
                     <span>entries</span>
                 </div>
                 <div className='__total_entries'>
-                    Showing {currentPageData.length > 0 ? 1 : 0} to {currentPageData.length} of {heldAmountsData?.length} entries
+                    Showing {currentPageData?.length > 0 ? 1 : 0} to {currentPageData?.length} of {data?.length} entries
                 </div>
 
                 {/* pagination */}
                 <Pagination
-                    data={tableData}
+                    data={data}
                     currentPage={currentPage}
                     setCurrentPage={setCurrentPage}
                     setCurrentPageData={(v) => setCurrentPageData(v)}

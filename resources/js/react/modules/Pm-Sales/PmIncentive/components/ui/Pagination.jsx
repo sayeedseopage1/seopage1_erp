@@ -13,9 +13,9 @@ const Pagination = ({ data, setCurrentPageData, numOfPerPageRow = 10, currentPag
     const isTotalPagesChange = React.useMemo(() => totalPages, [totalPages]);
 
     const paginate = (data, currentPage, nPaginate) => {
-        if (data.length <= nPaginate) return data;
+        if (data?.length <= nPaginate) return data;
         const startIndex = (currentPage - 1) * nPaginate;
-        return data.slice(startIndex, startIndex + nPaginate);
+        return data?.slice(startIndex, startIndex + nPaginate);
     };
 
     /// set current page data
@@ -29,7 +29,7 @@ const Pagination = ({ data, setCurrentPageData, numOfPerPageRow = 10, currentPag
 
     // count total pages
     React.useEffect(() => {
-        const tPages = Math.ceil(data.length / numOfPerPageRow);
+        const tPages = Math.ceil(data?.length / numOfPerPageRow);
         setTotalPages(tPages);
 
         // eslint-disable-next-line react-hooks/exhaustive-deps

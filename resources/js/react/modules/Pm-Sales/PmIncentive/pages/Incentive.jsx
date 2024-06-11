@@ -20,9 +20,16 @@ const Incentive = () => {
     const [filterByPeriod, setFilterByPeriod] = useState("monthly");
     const { incentiveTypesLoading } = useIncentive();
     const [queryForAchievedIncentive, setQueryForAchievedIncentive] = useState({})
+    const [queryForIncentiveHeldAmounts, setQueryForIncentiveHeldAmounts] = useState({})
 
     // make query string
     const queryString = (object) => {
+        const queryObject = _.pickBy(object, Boolean);
+        return new URLSearchParams(queryObject).toString();
+    };
+
+    //make query string for held amounts
+    const queryStringForIncentiveHeldAmounts = (object) => {
         const queryObject = _.pickBy(object, Boolean);
         return new URLSearchParams(queryObject).toString();
     };
@@ -37,10 +44,13 @@ const Incentive = () => {
     const achievedIncentiveHistoryData = achievedIncentiveHistory?.data
 
     // get incentive held amounts 
-    const { data: incentiveHeldAmounts, isLoading: incentiveHeldAmountsLoading, isFetching: incentiveHeldAmountsIsFetching } = useGetIncentiveHeldAmountQuery()
+    const { data: incentiveHeldAmounts, isLoading: incentiveHeldAmountsLoading, isFetching: incentiveHeldAmountsIsFetching } = useGetIncentiveHeldAmountQuery(
+        queryStringForIncentiveHeldAmounts(queryForIncentiveHeldAmounts),
+        { skip: tab != "held_amount" }
+    )
 
     const incentiveHeldAmountsData = incentiveHeldAmounts?.data
-
+    const expandedRowKeys = incentiveHeldAmountsData?.filter((item) => item?.held_amount_payment).map((item) => item?.id)
 
     if (incentiveTypesLoading) {
         return <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
@@ -50,7 +60,7 @@ const Incentive = () => {
 
     return (
         <div>
-            <IncentiveFilter filterByPeriod={filterByPeriod} setQueryForAchievedIncentive={setQueryForAchievedIncentive} />
+            <IncentiveFilter filterByPeriod={filterByPeriod} setQueryForAchievedIncentive={setQueryForAchievedIncentive} setQueryForIncentiveHeldAmounts={setQueryForIncentiveHeldAmounts} tab={tab} />
             <div className='incentive_wrapper'>
                 <FilterBar tab={tab} setTab={setTab} filterByPeriod={filterByPeriod} setFilterByPeriod={setFilterByPeriod} />
 
@@ -80,7 +90,7 @@ const Incentive = () => {
                     </Switch.Case>
                     <Switch.Case condition={tab == "held_amount"}>
                         <div className='incentive_inner_wrapper'>
-                            <HeldAmounts data={incentiveHeldAmountsData} isFetching={incentiveHeldAmountsIsFetching} isLoading={incentiveHeldAmountsLoading} />
+                            <HeldAmounts expandedRowKeys={expandedRowKeys} data={incentiveHeldAmountsData} isFetching={incentiveHeldAmountsIsFetching} isLoading={incentiveHeldAmountsLoading} />
                         </div>
                     </Switch.Case>
                     <Switch.Case condition={tab == "incentive_factors"}>

@@ -11,13 +11,15 @@ import DeptFilter from './Filter/DeptFilter.jsx';
 import EmployeeFilter from './Filter/EmployeeFilter.jsx';
 import useIncentive from '../hooks/useIncentive.jsx';
 
-export default function IncentiveFilter({ filterByPeriod, setQueryForAchievedIncentive }) {
+export default function IncentiveFilter({ filterByPeriod, setQueryForAchievedIncentive, setQueryForIncentiveHeldAmounts, tab }) {
     const { setQuery } = useIncentive();
     const [dept, setDept] = useState(1);
     const { data: pmByDept, isFetching: isPmByDeptLoading } = useGetPmByDeptQuery(dept)
     const pmByDeptData = pmByDept?.data
     const [startDate, setStartDate] = useState(null);
     const [startDateQuarterAndYear, setStartDateQuarterAndYear] = useState(null);
+    const [startDateYear, setStartDateYear] = useState(null);
+    const [endDateYear, setEndDateYear] = useState(null);
     const [endDateQuarterAndYear, setEndDateQuarterAndYear] = useState(null);
     const [endDate, setEndDate] = useState(null);
     const [selectedEmployee, setSelectedEmployee] = useState("");
@@ -60,10 +62,21 @@ export default function IncentiveFilter({ filterByPeriod, setQueryForAchievedInc
         }));
     }, [startDateQuarterAndYear, endDateQuarterAndYear, selectedEmployee]);
 
+    // for held amount table
+    useEffect(() => {
+        setQueryForIncentiveHeldAmounts(prevQuery => ({
+            ...prevQuery,
+            start_date: startDateYear,
+            end_date: endDateYear,
+            user_id: selectedEmployee
+        }));
+    }, [startDateYear, endDateYear, selectedEmployee]);
+
     useEffect(() => {
         if (auth?.isHasRolePermission(4)) {
             setQuery(prevQuery => ({ ...prevQuery, user_id: auth?.userId }));
             setQueryForAchievedIncentive(prevQuery => ({ ...prevQuery, user_id: auth?.userId }));
+            setQueryForIncentiveHeldAmounts(prevQuery => ({ ...prevQuery, user_id: auth?.userId }));
         }
     }, [auth?.userId, startDate]);
 
@@ -72,19 +85,21 @@ export default function IncentiveFilter({ filterByPeriod, setQueryForAchievedInc
         setSelectedEmployee("");
         setQuery(prevQuery => ({ ...prevQuery, user_id: "" }));
         setQueryForAchievedIncentive(prevQuery => ({ ...prevQuery, user_id: "" }));
+        setQueryForIncentiveHeldAmounts(prevQuery => ({ ...prevQuery, user_id: "" }));
     };
 
     const handlePmChange = (value) => {
         setSelectedEmployee(value);
         setQuery(prevQuery => ({ ...prevQuery, user_id: value }));
         setQueryForAchievedIncentive(prevQuery => ({ ...prevQuery, user_id: value }));
+        setQueryForIncentiveHeldAmounts(prevQuery => ({ ...prevQuery, user_id: value }));
     };
 
     return (
         <div className='sp1__pp_filter_bar justify-content-between'>
             <FilterItem className='border-right-0'>
                 {
-                    filterByPeriod == "monthly" && <DateFilter
+                    tab != "held_amount" && filterByPeriod == "monthly" && <DateFilter
                         startDate={startDate}
                         endDate={endDate}
                         setStartDate={setStartDate}
@@ -93,12 +108,21 @@ export default function IncentiveFilter({ filterByPeriod, setQueryForAchievedInc
                     />
                 }
                 {
-                    filterByPeriod != "monthly" && <DateFilter
+                    tab != "held_amount" && filterByPeriod != "monthly" && <DateFilter
                         startDate={startDateQuarterAndYear}
                         endDate={endDateQuarterAndYear}
                         setStartDate={setStartDateQuarterAndYear}
                         setEndDate={setEndDateQuarterAndYear}
                         type={filterByPeriod}
+                    />
+                }
+                {
+                    tab == "held_amount" && <DateFilter
+                        startDate={startDateYear}
+                        endDate={endDateYear}
+                        setStartDate={setStartDateYear}
+                        setEndDate={setEndDateYear}
+                        type={"yearly"}
                     />
                 }
 
@@ -220,4 +244,6 @@ export default function IncentiveFilter({ filterByPeriod, setQueryForAchievedInc
 IncentiveFilter.propTypes = {
     filterByPeriod: PropTypes.string,
     setQueryForAchievedIncentive: PropTypes.func,
+    setQueryForIncentiveHeldAmounts: PropTypes.func,
+    tab: PropTypes.string
 }
