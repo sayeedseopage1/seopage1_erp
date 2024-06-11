@@ -286,7 +286,7 @@ export const WorkStatusConfirmationModal = ({
                         reminderType="Minimum tracked hours not met"
                         reminderDate={data?.hours_log_report.data.checking_date}
                         data={data?.hours_log_report}
-                        projectTimeLog={data?.project_time_log}
+                        projectTimeLog={data?.user_log}
                         onSubmit={() => {
                             setData((prev) => ({
                                 ...prev,

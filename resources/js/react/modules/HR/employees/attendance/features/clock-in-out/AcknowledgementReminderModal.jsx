@@ -40,7 +40,6 @@ const AcknowledgementReminderModal = ({
     const [step, setStep] = React.useState(0);
     const [isSubmitting, setIsSubmitting] = React.useState(false);
 
-    console.log("acknowledge data", data);
     // handle form submission
     const handleSubmitForm = async (data, submissionType, cb) => {
         setIsSubmitting(true);
@@ -114,6 +113,27 @@ const AcknowledgementReminderModal = ({
                                 {convertTime(data?.data?.incomplete_hours)}
                             </strong>{" "}
                             less.
+                        </div>
+
+                        {/* time tracked data */}
+                        <div>
+                            {projectTimeLog?.length > 0 &&
+                                projectTimeLog.map((item, index) => (
+                                    <div
+                                        key={index}
+                                        className="sp1_single_task--modal-body-option-item"
+                                    >
+                                        <div className="sp1_single_task--modal-body-option-item-title">
+                                            start time:
+                                            {new Date(item.start_time)}
+                                        </div>
+                                        <div className="sp1_single_task--modal-body-option-item-time">
+                                            end time :{new Date(item.end_time)}
+                                        </div>
+
+                                        {console.log(new Date(item.start_time))}
+                                    </div>
+                                ))}
                         </div>
 
                         {/* options */}
