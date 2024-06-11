@@ -3972,10 +3972,6 @@ class ProjectController extends AccountBaseController
         $link = '<a href="' . route('projects.show', $project_id->id) . '">' . $text . '</a>';
         $this->logProjectActivity($project_id->id, $link);
 
-        $text = 'Project has been completed successfully';
-        $link = '<a href="' . route('projects.show', $project_id->id) . '">' . $text . '</a>';
-        $this->logProjectActivity($project_id->id, $link);
-
         return response()->json([
             'status' => 'success',
             'redirectUrl' => url('/account/projects/' . $milestone->project_id . '?tab=milestones')
@@ -5650,6 +5646,10 @@ public function updatePmBasicSEO(Request $request){
         Notification::send($user, new ProjectSubmissionAcceptNotification($project_id));
 
         $text = Auth::user()->name . ' authorized project completion form ';
+        $link = '<a href="' . route('projects.show', $project_id->id) . '">' . $text . '</a>';
+        $this->logProjectActivity($project_id->id, $link);
+
+        $text = 'Project has been completed successfully';
         $link = '<a href="' . route('projects.show', $project_id->id) . '">' . $text . '</a>';
         $this->logProjectActivity($project_id->id, $link);
 
