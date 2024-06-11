@@ -42,6 +42,7 @@ use App\Events\NewUserEvent;
 use App\Events\NewUserRegistrationViaInviteEvent;
 use App\Events\OrderUpdatedEvent;
 use App\Events\PaymentReminderEvent;
+use App\Events\PmGoalEvent;
 use App\Events\ProjectReminderEvent;
 use App\Events\RemovalRequestAdminEvent;
 use App\Events\RemovalRequestAdminLeadEvent;
@@ -98,6 +99,7 @@ use App\Listeners\NewUserListener;
 use App\Listeners\NewUserRegistrationViaInviteListener;
 use App\Listeners\OrderUpdatedListener;
 use App\Listeners\PaymentReminderListener;
+use App\Listeners\PmGoalEventListener;
 use App\Listeners\ProjectReminderListener;
 use App\Listeners\RemovalRequestAdminLeadListener;
 use App\Listeners\RemovalRequestAdminListener;
@@ -300,6 +302,7 @@ class EventServiceProvider extends ServiceProvider
         EventInviteEvent::class => [EventInviteListener::class],
         ProjectReminderEvent::class => [ProjectReminderListener::class],
         PaymentReminderEvent::class => [PaymentReminderListener::class],
+        PmGoalEvent::class => [PmGoalEventListener::class],
         AutoTaskReminderEvent::class => [AutoTaskReminderListener::class],
         TaskReminderEvent::class => [TaskReminderListener::class],
         EventReminderEvent::class => [EventReminderListener::class],

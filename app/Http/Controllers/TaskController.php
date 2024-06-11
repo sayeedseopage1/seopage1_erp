@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\DataTables\TasksDataTable;
+use App\Events\PmGoalEvent;
 use App\Events\TaskReminderEvent;
 use App\Helper\Reply;
 use App\Http\Requests\Tasks\StoreTask;
@@ -2812,6 +2813,10 @@ class TaskController extends AccountBaseController
                 }
             }
             DB::commit();
+
+            // event for pm goal
+            event(new PmGoalEvent('new_task_added', ['projectId' => $project->id]));
+
             return response()->json([
                 'status' => 200,
                 'message' => 'Task added successfully',
@@ -3893,23 +3898,7 @@ class TaskController extends AccountBaseController
         $task_status->task_status = "submit task to client approval";
         $task_status->board_column_id = 9;
         $task_status->save();
-        $current_date = Carbon::now();
-    $pm_goal = ProjectPmGoal::where('project_id',$task_status->project_id)->where('goal_code','TSM')->first();
-    if($pm_goal != null && $current_date < $pm_goal->goal_end_date)
-    {
-        $goal_count= ProjectPmGoal::where('project_id',$task_status->project_id)->count();
-        $goal_percentage = 100/$goal_count;
-        $pm_goal->goal_progress = $goal_percentage;
-        $pm_goal->goal_status = 1;
-        
 
-        $pm_goal->expired_meet_description = '1st task submission';
-
-                
-        $pm_goal->updated_at= Carbon::now();
-        $pm_goal->save();
-
-    }
         $actions = PendingAction::where('code','SFT')->where('past_status',0)->where('project_id',$task_status->project_id)->get();
         if($actions != null)
         {
@@ -3955,6 +3944,10 @@ class TaskController extends AccountBaseController
             $task->board_column_id = 9;
             $task->save();
         }
+
+        // goal submission complete
+        (new PmGoalEvent('task_submission_made', ['projectId' => $task_status->project_id]));
+
         return response()->json([
             'status' => 200,
         ]);
