@@ -95,6 +95,10 @@ const pmSalesApiSlice = apiSlice.injectEndpoints({
             query: (query) => `/account/get-achieved-incentive?${query}`,
             providesTags: ["GET_ACHIEVED_INCENTIVE"],
         }),
+        getIncentiveHeldAmount: build.query({
+            query: (query) => `/account/get-incentive-held-amount?${query}`,
+            providesTags: ["GET_INCENTIVE_HELD_AMOUNT"],
+        }),
     }),
 });
 
@@ -107,4 +111,5 @@ export const {
     useAddIncentiveFactorsMutation,
     useDeleteIncentiveFactorMutation,
     useGetAchievedIncentiveQuery,
+    useGetIncentiveHeldAmountQuery,
 } = pmSalesApiSlice;
