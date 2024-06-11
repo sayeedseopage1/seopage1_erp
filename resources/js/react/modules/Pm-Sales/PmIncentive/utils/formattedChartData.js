@@ -103,7 +103,7 @@ export const IncentiveFormattedData = (incentiveData) => {
                         ),
                     },
                 ],
-                actualSeriesData: criteria?.incentive_factors?.map((factor) =>
+                seriesData: criteria?.incentive_factors?.map((factor) =>
                     parseFloat(factor?.incentive_amount)
                 ),
                 incentive_factors: criteria?.incentive_factors,

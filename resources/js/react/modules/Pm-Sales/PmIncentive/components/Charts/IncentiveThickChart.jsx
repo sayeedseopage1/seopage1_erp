@@ -12,58 +12,10 @@ import PropTypes from 'prop-types';
 const IncentiveThickChart = ({ chartData }) => {
     const chartRef = useRef(null);
 
-    // Function to check if all values are zero
-    // const allValuesAreZero = () => {
-    //     return chartData.series.every(series => {
-    //         return series.data.every(value => value === 0);
-    //     });
-    // };
-
-    // console.log(chartData)
-
     const isAllZero = chartData?.incentive == 0;
-
-    const helper = () => {
-        const acquired_percent = parseFloat(chartData?.ratio)
-        const datas = []
-        chartData.incentive_factors.forEach((item, index) => {
-            if (index == 0) {
-                datas.push(parseFloat(item.lower_limit))
-            }
-            datas.push(parseFloat(item.upper_limit))
-        })
-        let indexData = [];
-        let newData = []
-        const format = [...datas]
-        format.map((item, index) => {
-            if (item <= acquired_percent) {
-                indexData.push(index)
-            }
-            newData.push([item, 0])
-        })
-        if (indexData.length > 0) {
-            const index = indexData[indexData.length - 1]
-            newData[index] = [chartData.ratio, chartData.incentive];
-        }
-        if (newData?.length) {
-            if (parseFloat(newData[0][0]) >= 0) {
-                newData.unshift([0, 0])
-            }
-        }
-
-        return newData
-    }
-
-    const newSeries = [
-        {
-            name: chartData.title,
-            data: helper()
-        }
-    ]
 
     const options = {
         title: {
-            // text: chartData.title,
             style: {
                 fontSize: 14,
                 fontWeight: 500,
@@ -73,7 +25,6 @@ const IncentiveThickChart = ({ chartData }) => {
         },
         tooltip: {
             custom: function ({ series, seriesIndex, dataPointIndex }) {
-
                 return (
                     `
                         <div class="chart_tooltip">
@@ -103,10 +54,11 @@ const IncentiveThickChart = ({ chartData }) => {
         },
         grid: { show: !0, strokeDashArray: 3, position: "back" },
         xaxis: {
+            categories: chartData?.categories,
             tickPlacement: "on",
             labels: {
-                formatter: (g) => {
-                    return `${chartData?.limitType == 1 ? "$" : ""} ${Math.round(g)} ${chartData?.limitType == 2 ? "%" : ""}`;
+                formatter: (val) => {
+                    return `${val}`;
                 },
                 style: {
                     fontSize: "10",
@@ -130,7 +82,7 @@ const IncentiveThickChart = ({ chartData }) => {
             },
         },
         yaxis: {
-            max: Math.max(...chartData?.actualSeriesData),
+            max: Math.max(...chartData?.seriesData),
             labels: {
                 formatter: (val) => {
                     return `${val}${chartData?.amountType == 1 ? "" : "%"}`;
@@ -240,9 +192,7 @@ const IncentiveThickChart = ({ chartData }) => {
                 <Chart
                     ref={chartRef}
                     type="bar"
-                    // series={chartData?.id > 7 ? chartData?.series : newSeries}
-                    // series={chartData?.series}
-                    series={newSeries}
+                    series={chartData?.series}
                     options={options}
                     height={300}
                 ></Chart>

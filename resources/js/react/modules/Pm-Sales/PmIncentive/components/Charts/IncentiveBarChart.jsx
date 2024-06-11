@@ -45,7 +45,8 @@ const IncentiveBarChart = ({ chartData }) => {
         }
     };
 
-    const colors = chartData?.seriesData?.map(chartData?.id == 8 ? getColorStopsMini : getColorStops);
+    // Ensure 'colors' is an array even if 'chartData?.seriesData' is undefined
+    const colors = chartData?.seriesData?.map(chartData?.id === 8 ? getColorStopsMini : getColorStops) || [];
 
     const options = {
         title: {
@@ -82,7 +83,7 @@ const IncentiveBarChart = ({ chartData }) => {
         },
         grid: { show: !0, strokeDashArray: 3, position: "back" },
         xaxis: {
-            categories: chartData?.categories,
+            categories: chartData?.categories || [],
             labels: {
                 formatter: (val) => {
                     return `${val}`;
@@ -107,8 +108,7 @@ const IncentiveBarChart = ({ chartData }) => {
                     colors: ["#000000"],
                 },
             },
-            // stepSize: Math.max(...chartData?.series[0]?.data) > 20 ? 20 : Math.max(...chartData?.series[0]?.data),
-            stepSize: chartData && Math.max(...chartData?.series?.[0]?.data) > 10 ? 20 : 2,
+            stepSize: chartData && Math.max(...(chartData?.series?.[0]?.data || [0])) > 10 ? 20 : 2,
         },
 
         dataLabels: {
@@ -158,13 +158,13 @@ const IncentiveBarChart = ({ chartData }) => {
                 shade: 'light',
                 type: "vertical",
                 shadeIntensity: 0.7,
-                gradientToColors: colors.map(c => c[1]),
+                gradientToColors: colors.map(c => c[1] || '#000000'),
                 inverseColors: true,
                 opacityFrom: 1,
                 opacityTo: 1,
                 stops: [50, 100]
             },
-            colors: colors.map(c => c[0])
+            colors: colors.map(c => c[0] || '#000000')
         },
         responsive: [
             {
