@@ -1664,6 +1664,14 @@ class PaymentController extends AccountBaseController
         $link = '<a href="' . route('projects.show', $request->project_id) . '?tab=milestones">' . $text . '</a>';
         $this->logProjectActivity($request->project_id, $link);
 
+        $project = Project::where('id', $request->project_id)->first();
+        if($project->status == 'finished')
+        {
+            $text = 'Project has been completed successfully';
+            $link = '<a href="' . route('projects.show', $project->id) . '">' . $text . '</a>';
+            $this->logProjectActivity($project->id, $link);
+        }
+
         \DB::commit();
         return Reply::successWithData(__('messages.paymentSuccess'), ['redirectUrl' => $redirectUrl]);
     }

@@ -5649,10 +5649,6 @@ public function updatePmBasicSEO(Request $request){
         $link = '<a href="' . route('projects.show', $project_id->id) . '">' . $text . '</a>';
         $this->logProjectActivity($project_id->id, $link);
 
-        $text = 'Project has been completed successfully';
-        $link = '<a href="' . route('projects.show', $project_id->id) . '">' . $text . '</a>';
-        $this->logProjectActivity($project_id->id, $link);
-
         Toastr::success('Project Submission Request Accepted Successfully', 'Success', ["positionClass" => "toast-top-right"]);
         return back();
     }
