@@ -18,7 +18,8 @@ const tableData = [
         "updated_at": "2023-12-31T04:06:16.000000Z",
         "title": "Monthly Incentive (for the month of December, 2023)",
         "viewing_month": "January, 2024",
-        "held_amount_payment": null
+        "held_amount_payment": null,
+        "cumulative_held_amount": "1000"
     },
     {
         "id": 2,
@@ -33,7 +34,8 @@ const tableData = [
         "updated_at": "2024-01-31T04:06:16.000000Z",
         "title": "Monthly Incentive (for the month of January, 2024)",
         "viewing_month": "February, 2024",
-        "held_amount_payment": "Held incentive amount 400.00 taka for December, 2023 - January, 2024 has been paid on June 10, 2024 by Rajat Chakraborty"
+        "held_amount_payment": "Held incentive amount 400.00 taka for December, 2023 - January, 2024 has been paid on June 10, 2024 by Rajat Chakraborty",
+        "cumulative_held_amount": "0"
     },
     {
         "id": 3,
@@ -48,7 +50,8 @@ const tableData = [
         "updated_at": "2024-02-29T04:06:16.000000Z",
         "title": "Monthly Incentive (for the month of February, 2024)",
         "viewing_month": "March, 2024",
-        "held_amount_payment": null
+        "held_amount_payment": null,
+        "cumulative_held_amount": "2200"
     }
 ]
 
@@ -105,8 +108,8 @@ const columns = [
     },
     {
         title: 'Held Amount Balance',
-        dataIndex: 'held_amount_balance',
-        key: 'held_amount_balance',
+        dataIndex: 'cumulative_held_amount',
+        key: 'cumulative_held_amount',
         render: (text) => <span className='held_amount_table_td'>{text} taka</span>,
         align: 'center'
     },
@@ -164,7 +167,7 @@ const HeldAmounts = ({ data, isFetching, isLoading }) => {
                             return (
                                 <div className="held-amount-expanded-row">
                                     <p className="held-amount-expanded-title">{record.held_amount_payment}</p>
-                                    <p className="expanded-held-amount">{parseFloat(record.held_amount)} taka</p>
+                                    <p className="expanded-held-amount">{parseFloat(record?.cumulative_held_amount)} taka</p>
                                 </div>
                             );
                         },
