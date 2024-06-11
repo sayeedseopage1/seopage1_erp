@@ -24,11 +24,11 @@ class SalesPolicyEventListener
             'code' => 'SRA',
             'item_name' => 'Sales risk analysis admin authorization',
             'heading' => 'Sales risk Authorization!',
-            'message' => 'Project projectName from client clientName requires (Sales person: salesPerson) risk analysis and authorization!',
+            'message' => 'Project projectName from Client clientName requires (Sales person: salesPerson) risk analysis and authorization!',
             'timeframe' => 12,
             'past' => [
-                'accept' => 'Sales risk for project projectName from client clientName (Sales person: salesPerson) was authorized by admin authorizedBy!',
-                'deny' => 'Sales risk for project projectName from client clientName requires (Sales person: salesPerson) was rejected by admin authorizedBy!',
+                'accept' => 'Sales risk for project projectName from Client clientName (Sales person: salesPerson) was authorized by admin authorizedBy!',
+                'deny' => 'Sales risk for project projectName from Client clientName requires (Sales person: salesPerson) was rejected by admin authorizedBy!',
             ]
         ],
 
@@ -44,7 +44,7 @@ class SalesPolicyEventListener
             'code' => 'PLFS',
             'item_name' => 'Larger form fill up by the sales person',
             'heading' => 'Finish the pending works for your own deal!',
-            'message' => 'Finish pending works for your own deal projectName from client clientName!',
+            'message' => 'Finish pending works for your own deal projectName from Client clientName!',
             'timeframe' => 12,
             'past' => 'Pending works for deal projectName was completed!'
         ]
