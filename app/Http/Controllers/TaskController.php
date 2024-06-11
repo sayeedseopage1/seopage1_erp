@@ -1983,7 +1983,7 @@ class TaskController extends AccountBaseController
     public function StoreNewTask(Request $request)
     {
         try {
-               DB::beginTransaction();
+            //    DB::beginTransaction();
             $setting = global_setting();
             $rules = [
                 'heading' => 'required',
@@ -3627,6 +3627,13 @@ class TaskController extends AccountBaseController
             $this->create_dispute($task_revision);
         }
 
+
+        if($project->client_id != null){
+            $client = User::where('id', $project->client_id)->first();
+            $text =  $client->name . ' gave revision for task ' . $task_status->heading;
+            $link = '<a href="' . route('tasks.show', $task_status->id) . '">' . $text . '</a>';
+            $this->logProjectActivity($task_status->project_id, $link);
+        }
 
         return response()->json([
             'status' => 200,
