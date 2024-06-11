@@ -15,7 +15,9 @@ return new class extends Migration
     {
         Schema::create('incentive_payment_histories', function (Blueprint $table) {
             $table->id();
-            $table->timestamp('date');
+            $table->timestamp('payment_date');
+            $table->timestamp('from_month')->nullable();
+            $table->timestamp('to_month')->nullable();
             $table->foreignId('user_id')->nullable();
             $table->foreignId('incentive_payment_id')->nullable();
             $table->unsignedTinyInteger('type')->default(0)->comment('1 = Payable, 2 = Held');
