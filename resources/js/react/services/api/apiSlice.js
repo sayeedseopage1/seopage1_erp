@@ -39,6 +39,7 @@ export const apiSlice = createApi({
         "All_EVALUATION",
         "GET_INCENTIVE_FACTORS",
         "GET_ACHIEVED_INCENTIVE",
+        "GET_INCENTIVE_HELD_AMOUNT",
     ],
     endpoints: () => ({}),
 });

@@ -13,7 +13,7 @@ import FilterBar from '../components/Sections/IncentiveCriterias/FilterBar';
 import Spinner from '../../PointFactors/components/loader/Spinner';
 import QuarterAndYearlyTable from '../components/Sections/QuarterlyAndYearly/QuarterAndYearlyTable';
 import useIncentive from '../hooks/useIncentive';
-import { useGetAchievedIncentiveQuery } from '../../../../services/api/Pm-Sales/PmIncentiveApiSlice';
+import { useGetAchievedIncentiveQuery, useGetIncentiveHeldAmountQuery } from '../../../../services/api/Pm-Sales/PmIncentiveApiSlice';
 
 const Incentive = () => {
     const [tab, setTab] = useState("current");
@@ -35,6 +35,11 @@ const Incentive = () => {
         );
 
     const achievedIncentiveHistoryData = achievedIncentiveHistory?.data
+
+    // get incentive held amounts 
+    const { data: incentiveHeldAmounts, isLoading: incentiveHeldAmountsLoading, isFetching: incentiveHeldAmountsIsFetching } = useGetIncentiveHeldAmountQuery()
+
+    const incentiveHeldAmountsData = incentiveHeldAmounts?.data
 
 
     if (incentiveTypesLoading) {
@@ -75,7 +80,7 @@ const Incentive = () => {
                     </Switch.Case>
                     <Switch.Case condition={tab == "held_amount"}>
                         <div className='incentive_inner_wrapper'>
-                            <HeldAmounts />
+                            <HeldAmounts data={incentiveHeldAmountsData} isFetching={incentiveHeldAmountsIsFetching} isLoading={incentiveHeldAmountsLoading} />
                         </div>
                     </Switch.Case>
                     <Switch.Case condition={tab == "incentive_factors"}>

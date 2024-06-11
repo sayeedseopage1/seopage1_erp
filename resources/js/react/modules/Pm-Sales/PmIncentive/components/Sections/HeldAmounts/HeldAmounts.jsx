@@ -3,11 +3,60 @@ import { auth, heldAmountsData } from '../../../constants';
 import Pagination from '../../ui/Pagination';
 import { ConfigProvider, Table } from 'antd';
 
+
+const tableData = [
+    {
+        "id": 1,
+        "date": "2023-12-31 10:21:11",
+        "user_id": 209,
+        "total_incentive_amount": "1000.00",
+        "held_amount": "200.00",
+        "payable_amount": "800.00",
+        "paid_amount": "800.00",
+        "status": 1,
+        "created_at": "2023-12-31T04:06:16.000000Z",
+        "updated_at": "2023-12-31T04:06:16.000000Z",
+        "title": "Monthly Incentive (for the month of December, 2023)",
+        "viewing_month": "January, 2024",
+        "held_amount_payment": null
+    },
+    {
+        "id": 2,
+        "date": "2024-01-31 10:13:20",
+        "user_id": 209,
+        "total_incentive_amount": "1000.00",
+        "held_amount": "200.00",
+        "payable_amount": "800.00",
+        "paid_amount": "800.00",
+        "status": 1,
+        "created_at": "2024-01-31T04:06:16.000000Z",
+        "updated_at": "2024-01-31T04:06:16.000000Z",
+        "title": "Monthly Incentive (for the month of January, 2024)",
+        "viewing_month": "February, 2024",
+        "held_amount_payment": "Held incentive amount 400.00 taka for December, 2023 - January, 2024 has been paid on June 10, 2024 by Rajat Chakraborty"
+    },
+    {
+        "id": 3,
+        "date": "2024-02-29 10:13:20",
+        "user_id": 209,
+        "total_incentive_amount": "10000.00",
+        "held_amount": "2000.00",
+        "payable_amount": "8000.00",
+        "paid_amount": "8000.00",
+        "status": 2,
+        "created_at": "2024-02-29T04:06:16.000000Z",
+        "updated_at": "2024-02-29T04:06:16.000000Z",
+        "title": "Monthly Incentive (for the month of February, 2024)",
+        "viewing_month": "March, 2024",
+        "held_amount_payment": null
+    }
+]
+
 const columns = [
     {
         title: 'Month',
-        dataIndex: 'month',
-        key: 'month',
+        dataIndex: 'viewing_month',
+        key: 'viewing_month',
         render: (text) => <span className='held_amount_table_td'>{text}</span>,
     },
     {
@@ -16,20 +65,19 @@ const columns = [
                 <p>Title</p>
             </div>
         ),
-        dataIndex: 'monthly_incentive',
-        key: 'monthly_incentive',
-        render: (_, record) => <div className='held_amount_table_td'>
-            <p>Monthly Incentive</p>
-            <span>(For the month of {record?.monthly_incentive})</span>
+        dataIndex: 'title',
+        key: 'title',
+        render: (text) => <div className='held_amount_table_td'>
+            <p>{text}</p>
         </div>,
-        width: '300px',
+        // width: '300px',
     },
     {
         title: 'Total Amount',
-        dataIndex: 'total_amount',
-        key: 'total_amount',
+        dataIndex: 'total_incentive_amount',
+        key: 'total_incentive_amount',
         render: (text) => <span className='held_amount_table_td'>{text} taka</span>,
-        align: 'center'
+        align: 'center',
     },
     {
         title: (
@@ -38,10 +86,9 @@ const columns = [
                 <span>(80% of the total amount)</span>
             </div>
         ),
-        dataIndex: 'disbursed_amount',
-        key: 'disbursed_amount',
+        dataIndex: 'payable_amount',
+        key: 'payable_amount',
         render: (text) => <span className='held_amount_table_td'>{text} taka</span>,
-        width: '245px',
         align: 'center'
     },
     {
@@ -54,7 +101,6 @@ const columns = [
         dataIndex: 'held_amount',
         key: 'held_amount',
         render: (text) => <span className='held_amount_table_td'>{text} taka</span>,
-        width: '245px',
         align: 'center'
     },
     {
@@ -75,16 +121,21 @@ const columns = [
                 }
             </div>
         ),
+        width: '230px',
         align: 'center',
         hidden: auth?.isHasRolePermission(1) ? false : true
     }
 ];
 
 
-const HeldAmounts = () => {
+const HeldAmounts = ({ data, isFetching, isLoading }) => {
     const [currentPage, setCurrentPage] = useState(1)
     const [currentPageData, setCurrentPageData] = useState([]);
     const [numberOfRowPerPage, setNumberOfRowPerPage] = useState(10);
+
+    const [expandedRowKeys, setExpandedRowKeys] = useState(
+        tableData.filter((item) => item?.held_amount_payment).map((item) => item?.id)
+    );
 
     return (
         <div className='held_amount_table_wrapper'>
@@ -96,11 +147,32 @@ const HeldAmounts = () => {
                             headerColor: '#fff',
                             fontSize: '15px',
                             fontFamily: 'Poppins, sans-serif',
+                            rowExpandedBg: '#14B96A'
                         },
                     },
                 }}
             >
-                <Table rowKey="id" columns={columns} dataSource={currentPageData} pagination={false} scroll={{ x: 1400, y: 1000 }} bordered />
+                <Table
+                    rowKey="id"
+                    columns={columns}
+                    dataSource={currentPageData}
+                    pagination={false}
+                    scroll={{ x: 1400, y: 1000 }}
+                    bordered
+                    expandable={{
+                        expandedRowRender: (record) => {
+                            return (
+                                <div className="held-amount-expanded-row">
+                                    <p className="held-amount-expanded-title">{record.held_amount_payment}</p>
+                                    <p className="expanded-held-amount">{parseFloat(record.held_amount)} taka</p>
+                                </div>
+                            );
+                        },
+                        expandedRowKeys,
+                        showExpandColumn: false,
+                        expandIcon: () => null,
+                    }}
+                />
             </ConfigProvider>
 
             {/* table footer  */}
@@ -124,7 +196,7 @@ const HeldAmounts = () => {
 
                 {/* pagination */}
                 <Pagination
-                    data={heldAmountsData}
+                    data={tableData}
                     currentPage={currentPage}
                     setCurrentPage={setCurrentPage}
                     setCurrentPageData={(v) => setCurrentPageData(v)}

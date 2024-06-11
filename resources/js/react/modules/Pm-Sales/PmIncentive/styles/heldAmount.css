@@ -148,3 +148,29 @@
 .swal2-cancel-custom :hover {
     background-color: #fff !important;
 }
+
+.held-amount-expanded-row {
+    color: #fff !important;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.held-amount-expanded-title {
+    text-align: center;
+    flex: 1;
+    font-family: Poppins, sans-serif;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+}
+
+.expanded-held-amount {
+    min-width: 214px;
+    text-align: center;
+    font-family: Poppins, sans-serif;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 600;
+}
