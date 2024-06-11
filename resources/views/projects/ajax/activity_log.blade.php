@@ -70,11 +70,12 @@
 					</tr>
 					@endforeach
 					
-					@foreach($lead_deal_activity_log as $value)
+					@foreach($lead_deal_activity_log as $loopIndex => $value)
 					@php
-						$previousTime = App\Models\ProjectActivity::where('project_id', $value->project_id)->where('id', '<', $value->id)->orderBy('id', 'desc')->first();
-						$thisTime = $previousTime->created_at ?? null;
-						$timeDifference = $thisTime ? $thisTime->diff($value->created_at) : 0;
+						$previousLog = $lead_deal_activity_log->get($loopIndex + 1);
+						$previousTime = $previousLog ? $previousLog->created_at->copy()->setSecond(0) : null;
+						$currentTime = $value->created_at->copy()->setSecond(0);
+						$timeDifference = $previousTime ? $currentTime->diff($previousTime) : null;
 					@endphp
 					<tr>
 						<td>{{$value->created_at->format('j M Y h:i A')}}</td>
@@ -92,7 +93,7 @@
 						<td>
 							{!! html_entity_decode($value->message, ENT_QUOTES, 'UTF-8') !!}
 						</td>
-						<td>{{$timeDifference ? $timeDifference->format('%h hour %i minutes') : ''}}</td>
+						<td>{{$timeDifference ? $timeDifference->format('%h hour %i minutes') : 'N/A'}}</td>
 					</tr>
 					@endforeach
 				</x-table>

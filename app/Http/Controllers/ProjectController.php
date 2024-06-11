@@ -6235,11 +6235,9 @@ public function updatePmBasicSEO(Request $request){
             ->orderBy('id', 'desc')
             ->get();
 
-        $lead_deal_activity_log = LeadsDealsActivityLog::where('project_id', $request->project_id)->orderBy('id', 'desc')->get();
-        // $findTask = Task::where('project_id', $request->project_id)->first();
-        // $task_activity_log = TaskHistory::where('sub_task_id', $findTask->subtask_id)->orderBy('id', 'desc')->get();
-
-        // dd(count($task_activity_log));
+        $project = Project::where('id', $request->project_id)->first();
+        $deal = Deal::where('id', $project->deal_id)->first();
+        $lead_deal_activity_log = LeadsDealsActivityLog::where('lead_id', $deal->lead_id)->orderBy('id', 'desc')->get();
 
         $view = view('projects.ajax.activity_log', compact('activityLog', 'lead_deal_activity_log'))->render();
 
