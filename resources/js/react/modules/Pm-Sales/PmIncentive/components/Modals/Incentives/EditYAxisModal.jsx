@@ -64,7 +64,7 @@ const EditYAxisModal = ({ axisEditItem, chartAxisData, setChartAxisData, antdMod
                             <p className='axis_item_modal_inputs_title' style={{ fontSize: '16px' }}>New {incentive_amount_type == 1 ? 'Value' : 'Percentage'}</p>
                             <div className='axis_item_modal_inputs_inner'>
                                 <div className='w-100'>
-                                    <input defaultValue={incentive_amount} className='point_edit_modal_input' step='any' type='number' {...register("incentive_amount", { required: true })} placeholder='Write here' />
+                                    <input defaultValue={incentive_amount} className='point_edit_modal_input' type='number' {...register("incentive_amount", { required: true })} placeholder='Write here' />
                                     {errors.incentive_amount && <span style={{ color: 'red', fontSize: '12px' }}>This field is required</span>}
                                 </div>
                             </div>

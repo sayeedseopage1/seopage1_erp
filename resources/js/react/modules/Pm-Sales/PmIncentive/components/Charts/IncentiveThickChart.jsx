@@ -95,7 +95,8 @@ const IncentiveThickChart = ({ chartData }) => {
 
                 }
             },
-            stepSize: chartData?.incentive > 0 && chartData?.incentive <= 10 ? 2 : 20,
+            // stepSize: chartData?.incentive > 0 && chartData?.incentive <= 10 ? 2 : 20,
+            stepSize: Math.max(...chartData?.seriesData) > 0 && Math.max(...chartData?.seriesData) <= 10 ? 2 : 20,
         },
         dataLabels: {
             enabled: true,
@@ -185,7 +186,7 @@ const IncentiveThickChart = ({ chartData }) => {
                 <button
                     className="chart_button"
                 >
-                    {chartData.chartTag}
+                    {chartData?.chartTag}
                 </button>
             </div>
             <div className="chart_wrapper_inner" id={`chart_wrapper_inner_${chartData?.id}`}>

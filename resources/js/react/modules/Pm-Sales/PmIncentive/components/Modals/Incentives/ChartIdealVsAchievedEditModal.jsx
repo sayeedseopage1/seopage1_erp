@@ -184,24 +184,26 @@ const ChartIdealVsAchievedEditModal = ({ antdModalOpen, showIdealVsAchievedEditM
             footer={null}
             centered={true}
         >
-            <div className='edit_chart_data_modal_alert'>All the lower limits have been marked as "greater than" and upper
-                limits have been marked as "Less than equal" by the system.</div>
+            {
+                chartDataId != 10 && <div className='edit_chart_data_modal_alert'>All the lower limits have been marked as "greater than" and upper
+                    limits have been marked as "Less than equal" by the system.</div>
+            }
             <div className='pay_now_modal_body' style={{ paddingTop: "0px" }}>
 
                 {/* Modal Top */}
-                <div className='edit_chart_data_modal_top'>
-                    <div className='ideal_vs_achieved_chart_data_actions'>
-                        <div className='ideal_vs_achieved_chart_data_actions_buttons'>
-                            <button onClick={() => setAddNewAxisDataModalOpen(true)} className='chart_data_add'>Add</button>
-                            <button onClick={() => setRemoveRatioItemsModalOpen(true)} className='chart_data_remove'>Remove</button>
-                        </div>
-                        {
-                            chartDataId != 10 && <button onClick={() => setSelectRatioRange(true)} className='ideal_vs_achieved_chart_data_actions_range'>Select Range</button>
-                        }
+                {
+                    chartDataId != 10 && <div className='edit_chart_data_modal_top'>
+                        <div className='ideal_vs_achieved_chart_data_actions'>
+                            <div className='ideal_vs_achieved_chart_data_actions_buttons'>
+                                <button onClick={() => setAddNewAxisDataModalOpen(true)} className='chart_data_add'>Add</button>
+                                <button onClick={() => setRemoveRatioItemsModalOpen(true)} className='chart_data_remove'>Remove</button>
+                            </div>
+                            <button onClick={() => setSelectRatioRange(true)} className='ideal_vs_achieved_chart_data_actions_range'>Select Range</button>
 
-                    </div>
-                    {
-                        chartDataId != 10 && <div className='ideal_vs_achieved_axis_data'>
+
+                        </div>
+
+                        <div className='ideal_vs_achieved_axis_data'>
                             {
                                 isLoadingSingleCriteria ? <Skeleton paragraph={{ rows: 2, width: '100%' }} active title={false} /> : <>
                                     <p>Starting Point (X Axis): <span>{parseFloat(singleCriteria?.data?.min_limit)}</span>{singleCriteriaLimitType == 1 ? "$" : "%"}</p>
@@ -210,11 +212,12 @@ const ChartIdealVsAchievedEditModal = ({ antdModalOpen, showIdealVsAchievedEditM
                             }
 
                         </div>
-                    }
-                </div>
+
+                    </div>
+                }
 
                 {/* Modal Content */}
-                <div className='edit_chart_data_modal_content' style={{ padding: "28px 0 0 0" }}>
+                <div className='edit_chart_data_modal_content' style={{ padding: `${chartDataId == 10 ? "0px" : "28px 0 0 0"}` }}>
                     <h3 className='edit_chart_data_sub_title'>X Axis {chartDataId == 10 ? "Condition" : "Ratio"}</h3>
                     <h3 className='edit_chart_data_sub_title'>Y Axis Ratio</h3>
                 </div>

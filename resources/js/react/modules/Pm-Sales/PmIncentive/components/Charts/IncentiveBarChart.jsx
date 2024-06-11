@@ -58,13 +58,6 @@ const IncentiveBarChart = ({ chartData }) => {
                 color: "#1492E6",
             },
         },
-        series: [
-            {
-                name: chartData?.title,
-                data: chartData?.seriesData
-            }
-        ]
-        ,
         states: {
             hover: {
                 filter: {
@@ -108,7 +101,7 @@ const IncentiveBarChart = ({ chartData }) => {
                     colors: ["#000000"],
                 },
             },
-            stepSize: chartData && Math.max(...(chartData?.series?.[0]?.data || [0])) > 10 ? 20 : 2,
+            stepSize: Math.max(...chartData?.seriesData) > 0 && Math.max(...chartData?.seriesData) <= 10 ? 2 : 20,
         },
 
         dataLabels: {
@@ -227,7 +220,7 @@ const IncentiveBarChart = ({ chartData }) => {
                 <Chart
                     ref={chartRef}
                     type="bar"
-                    series={options?.series}
+                    series={chartData?.series}
                     options={options}
                     height={300}
                 ></Chart>
