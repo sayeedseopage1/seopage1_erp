@@ -81,8 +81,6 @@ export default function IncentiveFilter({ filterByPeriod, setQueryForAchievedInc
     //     }
     // }, [auth?.isHasRolePermission(4)]);
 
-    console.log(auth)
-
     const handleDeptChange = (value) => {
         setDept(value);
         setSelectedEmployee("");

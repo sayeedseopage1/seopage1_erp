@@ -26,14 +26,17 @@ export const formattedFactorData = (incentiveData) => {
         };
     });
 
-    const result = {
-        id: data?.id,
-        title: data?.title,
-        factorsData: data?.categories?.map((category, index) => ({
-            factorLimit: category,
-            idealValue: data?.seriesData[index],
-        })),
-    };
+    const result = data?.map((item) => {
+        return {
+            id: item?.id,
+            title: item?.title,
+            factorsData: item?.categories?.map((category, index) => ({
+                id: index,
+                factorLimit: category,
+                idealValue: item?.seriesData[index],
+            })),
+        };
+    });
 
     return result;
 };

@@ -33,6 +33,77 @@
     gap: 15px;
 }
 
+.criteria_card {
+    border-radius: 11px;
+    background: #BCE4FF;
+    padding: 20px;
+    max-width: 469.953px;
+    width: 100%;
+}
+
+.criteria_card_title {
+    color: #000;
+    font-family: Poppins, sans-serif;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: normal;
+    text-decoration-line: underline;
+    text-align: center;
+}
+
+.factor_header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    margin-bottom: 10px;
+}
+
+.factor_header div {
+    color: #000;
+    font-family: Poppins;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+}
+
+.factor_body {
+    border-radius: 10px;
+    background: #A3D1F0;
+    padding: 10px;
+}
+
+.factor_card {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+}
+
+.factor_title,
+.factor_description {
+    color: #000;
+    font-family: Poppins, sans-serif;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+    /* border: 1px solid #B5E1FF; */
+}
+
+.criteria_factor_notes_wrapper {
+    display: flex;
+    gap: 10px;
+}
+
+.incentive_criteria_factors_parent {
+    display: flex;
+    flex-direction: column;
+    max-width: 950px;
+}
+
 
 /************************* old design css **************************************/
 .incentive_factors_title {

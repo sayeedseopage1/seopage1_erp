@@ -18,12 +18,13 @@ import _ from 'lodash';
 import IncentiveCriteriaFactors from '../components/Sections/IncentiveFactors/IncentiveCriteriaFactors';
 
 const Incentive = () => {
-    const [tab, setTab] = useState("current");
+    // const [tab, setTab] = useState("current");
+    const [tab, setTab] = useState("incentive_factors");
     const [filterByPeriod, setFilterByPeriod] = useState("monthly");
     const { incentiveTypesLoading } = useIncentive();
     const [queryForAchievedIncentive, setQueryForAchievedIncentive] = useState({})
     const [queryForIncentiveHeldAmounts, setQueryForIncentiveHeldAmounts] = useState({})
-    const [queryForHeldAmountPayment, setQueryForHeldAmountPayment] = useState({})
+    // const [queryForHeldAmountPayment, setQueryForHeldAmountPayment] = useState({})
 
     // make query string
     const queryString = (object) => {
