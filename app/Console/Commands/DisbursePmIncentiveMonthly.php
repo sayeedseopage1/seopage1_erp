@@ -47,7 +47,7 @@ class DisbursePmIncentiveMonthly extends Command
         try {
             DB::beginTransaction();
             foreach($users as $user){
-                $cashPoints = CashPoint::where('user_id', $user->id)->whereNotNull('factor_id')->get();
+                $cashPoints = CashPoint::where('user_id', $user->id)->whereBetween('created_at', [$startDate, $endDate])->whereNotNull('factor_id')->get();
                 $totalEarnedPoints = $cashPoints->sum('total_points_earn');
                 $totalLostPoints = $cashPoints->sum('total_points_lost');
                 $availablePoints = $totalEarnedPoints - $totalLostPoints;
@@ -264,6 +264,11 @@ class DisbursePmIncentiveMonthly extends Command
                     'paid_amount' => ($totalCashValue/100)*80,
                     'status' => 1
                 ]);
+
+                foreach($cashPoints as $cashPoint){
+                    $cashPoint->total_points_redeem = $cashPoint->points;
+                    $cashPoint->save();
+                }
             }
             DB::commit();
         } catch (\Throwable $th) {
