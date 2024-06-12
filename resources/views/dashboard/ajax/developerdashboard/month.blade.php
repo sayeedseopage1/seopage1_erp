@@ -320,7 +320,7 @@
 
                     <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
                         <a href="#" data-toggle="modal"
-                            data-target="#percentage_task_with_revision{{ count($revision_task_data) }}">
+                            data-target="#percentage_task_with_revision{{ count($percentage_of_tasks_with_revision_data) }}">
                             {{ round($percentage_of_tasks_with_revision, 2) }}%
                         </a>
                     </p>

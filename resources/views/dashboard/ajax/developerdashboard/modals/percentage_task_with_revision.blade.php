@@ -49,7 +49,7 @@
                                 </td>
                                 <td>{{ $row->firstTaskSubmission->created_at }}</td>
                                 <td
-                                    title="@foreach ($row->revisions as $revision)({{ ++$loop->index }}): By @if($revision->dispute_between == "CPR")Client @elseif($revision->dispute_between == "LDR")Lead Developers @elseif($revision->dispute_between == "PLR")Project Manager @endif On {{ $revision->created_at }}&#xA;@endforeach">
+                                    title="@foreach ($row->revisions as $revision)({{ ++$loop->index }}): By @if ($revision->dispute_between == 'CPR')Client @elseif($revision->dispute_between == 'LDR')Lead Developers @elseif($revision->dispute_between == 'PLR')Project Manager @else Unknown @endif On {{ $revision->created_at }}&#xA; @endforeach">
                                     ({{ $row->revisions->count() }})
                                 </td>
                             </tr>
