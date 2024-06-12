@@ -1,11 +1,11 @@
-import React, { useEffect, useState } from 'react';
-import DataTable from '../ui/DataTable'
+import React, { useState } from 'react';
 import CashPointsFilter from '../components/CashPointsFilter';
-import PointPageNavbar from '../components/Navbar';
 import PointHistoryTable from '../components/table/PointHistoryTable';
 import { useGetPmCashPointsQuery } from '../../../../services/api/Pm-Sales/pmSalesApiSlice';
 import PointHistoryTablePagination from '../components/PointHistoryTablePagination';
 import PointHistoryNav from '../components/section/PointHistoryNav';
+import Switch from '../../../../global/Switch';
+import ComingSoon from '../../PmIncentive/components/ui/ComingSoon';
 
 const PmCashPoints = () => {
     const [navActive, setNavActive] = useState("Cash Point");
@@ -55,21 +55,26 @@ const PmCashPoints = () => {
                 {/* <PointPageNavbar /> */}
                 <PointHistoryNav navActive={navActive} setNavActive={setNavActive} data={tableData} isLoading={dataFetchingStateIsLoading} isFetching={pmCashPointHistoryIsFetching} refetch={pmCashPointHistoryRefetch} />
                 <main className='sp1_point_page_main'>
-
-                    {/* <DataTable
-                            data={data}
-                            isLoading={isDataFetching}
-                            defaultColumns={TableColumns}
-                        /> */}
-                    <div className="cnx__table_wrapper" style={{ padding: '16px' }}>
-                        <PointHistoryTable data={tableData?.cash_points} isLoading={dataFetchingStateIsLoading} isFetching={pmCashPointHistoryIsFetching} onPageChange={onPageChange} />
-                        <PointHistoryTablePagination
-                            tableData={tableData?.cash_points}
-                            handlePageSizeChange={handlePageSizeChange}
-                            handlePageChange={onPageChange}
-                            pageSize={pageSize}
-                        />
-                    </div>
+                    <Switch>
+                        <Switch.Case condition={navActive === "Cash Point"}>
+                            <div className="cnx__table_wrapper" style={{ padding: '16px' }}>
+                                <PointHistoryTable data={tableData?.cash_points} isLoading={dataFetchingStateIsLoading} isFetching={pmCashPointHistoryIsFetching} onPageChange={onPageChange} />
+                                <PointHistoryTablePagination
+                                    tableData={tableData?.cash_points}
+                                    handlePageSizeChange={handlePageSizeChange}
+                                    handlePageChange={onPageChange}
+                                    pageSize={pageSize}
+                                />
+                            </div>
+                        </Switch.Case>
+                        {/* TODO: it will be available soon when it's ready */}
+                        <Switch.Case condition={navActive === "Non Cash Point"}>
+                            <ComingSoon pageName="Non Cash Point" />
+                        </Switch.Case>
+                        <Switch.Case condition={navActive === "Redeem Points"}>
+                            <ComingSoon pageName="Redeem Points" />
+                        </Switch.Case>
+                    </Switch>
                 </main>
             </div >
         </div >
