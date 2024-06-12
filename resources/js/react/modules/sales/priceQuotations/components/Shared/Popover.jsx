@@ -75,7 +75,7 @@ const Panel = ({ children, className, placement = "auto", ...props }) => {
 const Toggle = ({ children, className, ...props }) => {
     const { setRefElement, isVisible, setIsVisible } = usePopover();
     return (
-        <div
+        <button
             ref={setRefElement}
             className={`${css.popover_toggle} ${className}`}
             onMouseOver={() => {
@@ -93,12 +93,10 @@ const Toggle = ({ children, className, ...props }) => {
             onKeyDown={() => {
                 setIsVisible(true);
             }}
-            tabIndex={0}
-            role="button"
             {...props}
         >
             {_.isFunction(children) ? children({ isVisible }) : children}
-        </div>
+        </button>
     );
 };
 
@@ -124,14 +122,12 @@ const Popover = ({ children , className }) => {
 
     return (
         <PopoverCtx.Provider value={popoverValue}>
-            <div
+            <button
                 onMouseLeave={() => setIsVisible(false)}
-                tabIndex={0}
-                role="button"
-                className={`singleline-ellipsis ${className}`}
+                className={`singleline-ellipsis bg-transparent ${className}`}
             >
                 {children}
-            </div>
+            </button>
         </PopoverCtx.Provider>
     );
 };

@@ -1,5 +1,7 @@
 import React, { useEffect } from "react";
 import { IoAddSharp } from "react-icons/io5";
+import Swal from "sweetalert2";
+import dayjs from "dayjs";
 
 // Components - Global - Styled Components
 import { Flex } from "../../../../global/styled-component/Flex";
@@ -18,9 +20,32 @@ import { AccountListDummyData } from "../constant";
 // Modal
 import CreatePlatformAccountModal from "../components/Modal/CreatePlatformAccountModal";
 
+const platformAccountState = {
+    inputs: {
+        platform: {},
+        user_name: "",
+        user_url: "",
+        account_email: "",
+        profile_type: {},
+        generated_on: null,
+        multiplying_factor: "",
+        is_information_accurate: false,
+    },
+};
+
 const AccountLists = () => {
+    const [isPlatformAccountUpdate, setIsPlatformAccountUpdate] =
+        React.useState(false);
+    const [modalTitle, setModalTitle] = React.useState(
+        "Create A New Platform Account"
+    );
+    const [platformAccountInputs, setPlatformAccountInputs] = React.useState(
+        platformAccountState.inputs
+    );
     const [isLoading, setIsLoading] = React.useState(true);
     const [, /*filter*/ setFilter] = React.useState();
+
+    
     // Modal State
     const [isPlatformAccountModalOpen, setIsPlatformAccountModalOpen] =
         React.useState(false);
@@ -46,6 +71,56 @@ const AccountLists = () => {
             action();
         }
     };
+
+    // table actions
+    const metaAction = {
+        editPlatformAccount: (data) => {
+            setIsPlatformAccountUpdate(true);
+            setPlatformAccountInputs({
+                ...data,
+                generated_on: dayjs(data.generated_on, "YYYY/MM/DD"),
+                is_information_accurate: true,
+            });
+            setModalTitle("Update Platform Account");
+            handleModal(setIsPlatformAccountModalOpen, true);
+        },
+        disablePlatformAccount: (data) => {
+            showConfirmation({
+                text:  data.is_active ? "Disable" : "Enable",
+            });
+        },
+    };
+
+    const showConfirmation = ({text}) => {
+        let actionText  = `Yes, ${text} it!`
+        Swal.fire({
+            title: "Are you sure?",
+            text: `You want to ${text} this account.`,
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "var(--primaryBlue)",
+            cancelButtonColor: "var(--primaryDanger)",
+            confirmButtonText: actionText,
+            preConfirm: () => {
+                Swal.showLoading();
+                return handleConfirm()
+            }
+        })
+    };
+
+    const handleConfirm = async () => {
+        return new Promise((resolve) => {
+            setTimeout(() => {
+                resolve(true);
+                Swal.fire({
+                    icon: "success",
+                    title: "Account has been disabled",
+                    showConfirmButton: false,
+                    timer: 1500,
+                });
+            }, 1500);
+        });
+    }
 
     return (
         <React.Fragment>
@@ -98,6 +173,7 @@ const AccountLists = () => {
                                 multiplying_factor: "center",
                                 action: "center",
                             }}
+                            tableActions={metaAction}
                         />
                     </div>
                 </div>
@@ -109,8 +185,22 @@ const AccountLists = () => {
                 <CreatePlatformAccountModal
                     isModalOpen={isPlatformAccountModalOpen}
                     closeModal={() =>
-                        handleModal(setIsPlatformAccountModalOpen, false)
+                        handleModal(
+                            setIsPlatformAccountModalOpen,
+                            false,
+                            () => {
+                                setIsPlatformAccountUpdate(false);
+                                setPlatformAccountInputs(
+                                    platformAccountState.inputs
+                                );
+                                setModalTitle("Create A New Platform Account");
+                            }
+                        )
                     }
+                    setPlatformAccountInputs={setPlatformAccountInputs}
+                    platformAccountInputs={platformAccountInputs}
+                    isPlatformAccountUpdate={isPlatformAccountUpdate}
+                    modalTitle={modalTitle}
                 />
             )}
         </React.Fragment>

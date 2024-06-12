@@ -1,7 +1,22 @@
 import React from "react";
 import PropTypes from "prop-types";
 
-const PersonAvatar = ({ avatar, name, url, imageClass = "", imageParentClass = "" }) => {
+const PersonAvatar = ({
+    avatar,
+    name,
+    url,
+    imageClass = "",
+    imageParentClass = "",
+}) => {
+    const handleError = (e) => {
+        e.target.src = "/img/avatar.png";
+        e.target.alt = name?.slice(0, 1).toUpperCase() || "A";
+    }
+    
+    const avatarSrc = avatar ? `/user-uploads/avatar/${avatar}` : "/img/avatar.png";
+    const avatarAlt = name?.slice(0, 1).toUpperCase() || "A";
+
+
     return (
         <div className="d-flex align-items-center">
             <div className="">
@@ -13,15 +28,11 @@ const PersonAvatar = ({ avatar, name, url, imageClass = "", imageParentClass = "
                         }}
                     >
                         <img
-                            src={`/user-uploads/avatar/${avatar}`}
-                            alt={name}
+                            src={avatarSrc}
+                            alt={avatarAlt}
                             width="40px"
                             className={`${imageClass}`}
-                            onError={(e) => {
-                                e.target.src = "/img/avatar.png";
-                                e.target.alt =
-                                    name?.slice(0, 1).toUpperCase() || "A"; 
-                            }}
+                            onError={handleError}
                         />
                     </div>
                 ) : (
@@ -32,7 +43,6 @@ const PersonAvatar = ({ avatar, name, url, imageClass = "", imageParentClass = "
                             width: "40px",
                             height: "40px",
                             backgroundColor: "#f3f4f6",
-
                         }}
                     >
                         <div

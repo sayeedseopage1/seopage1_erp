@@ -1,0 +1,145 @@
+.custom_input_container input {
+  border: none;
+  border-radius: 5px;
+  outline: none;
+  background-color: var(--primaryDarkBlue);
+  color: var(--primaryDarkText);
+  padding: 12px 15px;
+  font-family: Poppins, sans-serif;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+}
+
+
+.custom_input_container input::placeholder {
+  color: var(--lightgray);
+}
+
+.custom_input_container .custom_date_picker {
+  border: none !important;
+  padding: 0 !important;
+  box-shadow: none !important;
+}
+
+.custom_input_container input:focus:not(#generated_on) {
+  border: none !important;
+  border-radius: 5px !important;
+  outline: none !important;
+  background-color: var(--primaryDarkBlue) !important;
+  color: var(--primaryDarkText) !important;
+  padding: 12px 15px !important;
+}
+
+.custom_input_container .custom_date_picker .ant-picker-input {
+  border: none !important;
+  padding: 12px 15px !important;
+  border-radius: 5px !important;
+  background-color: var(--primaryDarkBlue) !important;
+}
+
+.custom_input_container .custom_date_picker .ant-picker-input input {
+  border: none !important;
+  background-color: var(--primaryDarkBlue) !important;
+  color: var(--primaryDarkText) !important;
+  font-family: Poppins, sans-serif;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+}
+
+.custom_input_container .custom_date_picker .ant-picker-input input:focus {
+  border: none !important;
+  outline: none !important;
+  background-color: var(--primaryDarkBlue) !important;
+  color: var(--primaryDarkText) !important;
+  padding: 0px !important;
+}
+
+.custom_input_container .custom_date_picker .ant-picker-clear {
+  right: 3% !important;
+}
+
+.custom_input_container .custom_date_picker .ant-picker-suffix svg {
+  width: 18px !important;
+  height: 18px !important;
+}
+
+
+.custom_input_container .custom_input_button_container {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.custom_input_container .custom_input_button_container .price_quotation_custom_button {
+  font-family: poppins, sans-serif !important;
+  font-size: 20px !important;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+}
+
+.custom_input_container .custom_input_button_container .custom_input_btn_yes {
+  background-color: transparent !important;
+  color: var(--primaryBlue) !important;
+  border: 1px solid var(--primaryBlue) !important;
+  padding: 8px 45px !important;
+}
+
+.custom_input_container .custom_input_button_container .custom_input_btn_yes:hover {
+  background-color: var(--primaryBlue) !important;
+  color: var(--primaryLightText) !important;
+  padding: 8px 45px !important;
+}
+
+.custom_input_container .custom_input_button_container .custom_input_btn_yes.yes_active {
+  background-color: var(--primaryBlue) !important;
+  color: var(--primaryLightText) !important;
+}
+
+.custom_input_container .custom_input_button_container .custom_input_btn_yes.yes_active:hover {
+  background-color: var(--primaryBlue) !important;
+  color: var(--primaryLightText) !important;
+  
+}
+
+.custom_input_container .custom_input_button_container .custom_input_btn_no {
+  background-color: transparent !important;
+  color: var(--primaryDanger) !important;
+  border: 1px solid var(--primaryDanger) !important;
+  padding: 8px 45px !important;
+}
+
+.custom_input_container .custom_input_button_container .custom_input_btn_no:hover {
+  background-color: var(--primaryDanger) !important;
+  color: var(--primaryLightText) !important;
+  padding: 8px 45px !important;
+}
+
+.custom_input_container .custom_input_button_container .custom_input_btn_no.no_active {
+  background-color: var(--primaryDanger) !important;
+  color: var(--primaryLightText) !important;
+}
+
+.custom_input_container .custom_input_button_container .custom_input_btn_no.no_active:hover {
+  background-color: var(--primaryDanger) !important;
+  color: var(--primaryLightText) !important;
+}
+
+
+
+
+
+
+/* Custom label */
+.custom_label_child {
+  font-family: Poppins , sans-serif;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+  color: var(--primaryGrayText);
+}

@@ -6,8 +6,7 @@ import { BrowserRouter, Routes, Route, Outlet } from "react-router-dom";
 import { Provider } from "react-redux";
 
 // style
-import './priceQuotation.css'
-
+import "./priceQuotation.css";
 
 // Redux store
 import { store } from "../../../services/store";
@@ -18,6 +17,12 @@ import Toaster from "../../../global/Toaster";
 // Pages
 import PriceQuotations from "./pages/PriceQuotations";
 import AccountLists from "./pages/AccountLists";
+
+// Components
+import AntdConfigProvider from "./components/lib/AntdConfigProvider";
+
+// Context
+import PriceQuotationsProvider from "./context/PriceQuotationsProvider";
 
 // Content component
 const Content = () => {
@@ -69,36 +74,52 @@ const container = document.getElementById("priceQuotationContentContainer");
 if (container) {
     ReactDOM.createRoot(container).render(
         <React.StrictMode>
-            <Provider store={store}>
-                <DndProvider backend={HTML5Backend}>
-                    <BrowserRouter basename="/price-quotations">
-                        <Routes>
-                            <Route path="/" element={<Content />}>
-                                <Route index element={<PriceQuotations />} />
-                            </Route>
-                        </Routes>
-                    </BrowserRouter>
-                </DndProvider>
-            </Provider>
+            <AntdConfigProvider>
+                <Provider store={store}>
+                    <PriceQuotationsProvider>
+                        <DndProvider backend={HTML5Backend}>
+                            <BrowserRouter basename="/account/price-quotations">
+                                <Routes>
+                                    <Route path="/" element={<Content />}>
+                                        <Route
+                                            index
+                                            element={<PriceQuotations />}
+                                        />
+                                    </Route>
+                                </Routes>
+                            </BrowserRouter>
+                        </DndProvider>
+                    </PriceQuotationsProvider>
+                </Provider>
+            </AntdConfigProvider>
         </React.StrictMode>
     );
 }
 
-const accountListsContainer = document.getElementById("accountListContentContainer");
+const accountListsContainer = document.getElementById(
+    "platformAccountContainer"
+);
 if (accountListsContainer) {
     ReactDOM.createRoot(accountListsContainer).render(
         <React.StrictMode>
-            <Provider store={store}>
-                <DndProvider backend={HTML5Backend}>
-                    <BrowserRouter basename="/account-lists">
-                        <Routes>
-                            <Route path="/" element={<Content />}>
-                                <Route index element={<AccountLists />} />
-                            </Route>
-                        </Routes>
-                    </BrowserRouter>
-                </DndProvider>
-            </Provider>
+            <AntdConfigProvider>
+                <Provider store={store}>
+                    <PriceQuotationsProvider>
+                        <DndProvider backend={HTML5Backend}>
+                            <BrowserRouter basename="/account/platform-accounts">
+                                <Routes>
+                                    <Route path="/" element={<Content />}>
+                                        <Route
+                                            index
+                                            element={<AccountLists />}
+                                        />
+                                    </Route>
+                                </Routes>
+                            </BrowserRouter>
+                        </DndProvider>
+                    </PriceQuotationsProvider>
+                </Provider>
+            </AntdConfigProvider>
         </React.StrictMode>
     );
 }

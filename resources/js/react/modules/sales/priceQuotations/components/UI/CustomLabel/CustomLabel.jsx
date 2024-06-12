@@ -1,4 +1,5 @@
 import React from "react";
+import PropTypes from "prop-types";
 
 // Style
 import style from "./customLabel.module.css";
@@ -22,3 +23,11 @@ const CustomLabel = ({
 };
 
 export default CustomLabel;
+
+CustomLabel.propTypes = {
+    label: PropTypes.string,
+    className: PropTypes.string,
+    fieldName: PropTypes.string,
+    isRequired: PropTypes.bool,
+    rest: PropTypes.any,
+}

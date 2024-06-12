@@ -7,12 +7,11 @@ import PropTypes from "prop-types";
 import JqueryDateRangePicker from "../Shared/JqueryDateRangePicker";
 
 const PriceQuotationFilterBar = ({ setFilter }) => {
-    const { width } = useWindowSize();
-    const [isOpen, setIsOpen] = React.useState(false);
-    const [client, setClient] = React.useState(null);
+    const { /*width*/ } = useWindowSize();
+    const [client, /*setClient*/] = React.useState(null);
     const [startDate, setStartDate] = React.useState(null);
     const [endDate, setEndDate] = React.useState(null);
-    const [search, setSearch] = React.useState("");
+    const [search, /*setSearch*/] = React.useState("");
 
     const searchText = React.useDeferredValue(search);
 

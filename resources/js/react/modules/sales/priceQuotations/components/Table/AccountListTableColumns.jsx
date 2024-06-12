@@ -1,12 +1,10 @@
-import { MdDelete } from "react-icons/md";
 import { FaRegEdit } from "react-icons/fa";
+import { Switch as AntdSwitch } from "antd";
 
 // Components -Styled Components
 import { TableTdWrapper } from "../UI/StyledComponents";
 
 // Components - UI
-import PersonAvatar from "../Shared/PersonAvatar";
-import TablePopover from "../Shared/TablePopover";
 import Switch from "../../../../../global/Switch";
 import { isURL } from "validator";
 
@@ -19,7 +17,7 @@ export const AccountListTableColumns = [
             const data = row.original;
             return (
                 <TableTdWrapper justifyContent="flex-start">
-                    <p>{data?.platform ? data?.platform : "--"}</p>
+                    <p>{data?.platform ? data?.platform?.name : "--"}</p>
                 </TableTdWrapper>
             );
         },
@@ -63,7 +61,9 @@ export const AccountListTableColumns = [
             const data = row.original;
             return (
                 <TableTdWrapper justifyContent="center">
-                    <p>{data?.profile_type ? data?.profile_type : "--"}</p>
+                    <p>
+                        {data?.profile_type ? data?.profile_type?.name : "--"}
+                    </p>
                 </TableTdWrapper>
             );
         },
@@ -102,15 +102,28 @@ export const AccountListTableColumns = [
         id: "action",
         header: "Action",
         accessorKey: "action",
-        cell: ({ row }) => {
+        cell: ({ row, table }) => {
             const data = row.original;
+            const action = table.options.meta;
             return (
                 <TableTdWrapper justifyContent="center">
-                    <button>
+                    <button
+                        onClick={(e) => {
+                            e.preventDefault();
+                            action.editPlatformAccount(data);
+                        }}
+                    >
                         <FaRegEdit fill="var(--primarySuccess)" size={23} />
                     </button>
-                    <button className="ml-2">
-                        <MdDelete fill="var(--primaryDanger)" size={23} />
+                    <button
+                        onClick={() => {
+                            action.disablePlatformAccount(data);
+                        }}
+                        className="ml-2 antd_custom_switch"
+                    >
+                        <AntdSwitch
+                            checked={data?.is_active}
+                        />
                     </button>
                 </TableTdWrapper>
             );

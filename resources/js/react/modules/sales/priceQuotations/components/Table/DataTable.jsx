@@ -29,6 +29,7 @@ const DataTable = ({
     tableData,
     tableColumns,
     tableName,
+    tableActions = {},
     isLoading,
     justifyStyleColumn,
     sortingColumn,
@@ -108,6 +109,7 @@ const DataTable = ({
         getFilteredRowModel: getFilteredRowModel(),
         getExpandedRowModel: getExpandedRowModel(),
         getSortedRowModel: getSortedRowModel(),
+        meta: tableActions,
     });
 
     const getLoadingComponent = (tableName) => {
@@ -115,89 +117,86 @@ const DataTable = ({
     };
 
     return (
-        <React.Fragment>
-            <div
-                className="sp1_price_quotation_table_wrapper"
-                style={{
-                    height: "100%",
-                    maxHeight: "100%",
-                }}
-            >
-                <table className="sp1_price_quotation_table">
-                    {/* table Header */}
-                    <thead
-                        className="sp1_price_quotation_thead"
-                        style={{
-                            zIndex: 0,
-                        }}
-                    >
-                        {table.getHeaderGroups().map((headerGroup) => (
-                            <tr
-                                key={headerGroup.id}
-                                className="sp1_price_quotation_thead_tr"
-                            >
-                                {headerGroup.headers.map((header) => {
-                                    return (
-                                        <DraggableColumnHeader
-                                            header={header}
-                                            table={table}
-                                            key={header.id}
-                                            sortingColumn={sortingColumn}
-                                            justifyStyleColumn={justifyStyleColumn}
-                                        />
-                                    );
-                                })}
-                            </tr>
-                        ))}
-                    </thead>
-                    {/* table Body */}
-                    <tbody className="sp1_price_quotation_tbody">
-                        {!isLoading &&
-                            table.getRowModel().rows.map((row) => {
+        <div
+            className="sp1_price_quotation_table_wrapper"
+            style={{
+                height: "100%",
+                maxHeight: "100%",
+            }}
+        >
+            <table className="sp1_price_quotation_table">
+                {/* table Header */}
+                <thead
+                    className="sp1_price_quotation_thead"
+                    style={{
+                        zIndex: 0,
+                    }}
+                >
+                    {table.getHeaderGroups().map((headerGroup) => (
+                        <tr
+                            key={headerGroup.id}
+                            className="sp1_price_quotation_thead_tr"
+                        >
+                            {headerGroup.headers.map((header) => {
                                 return (
-                                    <tr
-                                        className={`sp1_price_quotation_tr ${
-                                            row.parentId !== undefined
-                                                ? "expended_row"
-                                                : ""
-                                        } ${
-                                            row.getIsExpanded()
-                                                ? "expended_parent_row"
-                                                : ""
-                                        }`}
-                                        key={row.id}
-                                    >
-                                        {row.getVisibleCells().map((cell) => {
-                                            return (
-                                                <td
-                                                    key={cell.id}
-                                                    className="px-2 sp1_price_quotation_td"
-                                                >
-                                                    {flexRender(
-                                                        cell.column.columnDef
-                                                            .cell,
-                                                        cell.getContext()
-                                                    )}
-                                                </td>
-                                            );
-                                        })}
-                                    </tr>
+                                    <DraggableColumnHeader
+                                        header={header}
+                                        table={table}
+                                        key={header.id}
+                                        sortingColumn={sortingColumn}
+                                        justifyStyleColumn={justifyStyleColumn}
+                                    />
                                 );
                             })}
-                        {/* Loading Table */}
-                        {isLoading && getLoadingComponent(tableName)}
-                    </tbody>
-                </table>
-                {/* Table for empty */}
-                {!isLoading && _.size(table.getRowModel().rows) === 0 && (
-                    <EmptyTable />
-                )}
-                <DataTablePagination
-                    tableData={tableData}
-                    handlePageSizeChange={handlePageSizeChange}
-                />
-            </div>
-        </React.Fragment>
+                        </tr>
+                    ))}
+                </thead>
+                {/* table Body */}
+                <tbody className="sp1_price_quotation_tbody">
+                    {!isLoading &&
+                        table.getRowModel().rows.map((row) => {
+                            return (
+                                <tr
+                                    className={`sp1_price_quotation_tr ${
+                                        row.parentId !== undefined
+                                            ? "expended_row"
+                                            : ""
+                                    } ${
+                                        row.getIsExpanded()
+                                            ? "expended_parent_row"
+                                            : ""
+                                    }`}
+                                    key={row.id}
+                                >
+                                    {row.getVisibleCells().map((cell) => {
+                                        return (
+                                            <td
+                                                key={cell.id}
+                                                className="px-2 sp1_price_quotation_td"
+                                            >
+                                                {flexRender(
+                                                    cell.column.columnDef.cell,
+                                                    cell.getContext()
+                                                )}
+                                            </td>
+                                        );
+                                    })}
+                                </tr>
+                            );
+                        })}
+                    {/* Loading Table */}
+                    {isLoading && getLoadingComponent(tableName)}
+                </tbody>
+            </table>
+            {/* Table for empty */}
+            {!isLoading && _.size(table.getRowModel().rows) === 0 && (
+                <EmptyTable />
+            )}
+            <DataTablePagination
+                tableData={tableData}
+                handlePageSizeChange={handlePageSizeChange}
+            />
+        </div>
     );
 };
 
@@ -210,4 +209,5 @@ DataTable.propTypes = {
     isLoading: PropTypes.bool,
     justifyStyleColumn: PropTypes.object,
     sortingColumn: PropTypes.array,
+    tableActions: PropTypes.object,
 };

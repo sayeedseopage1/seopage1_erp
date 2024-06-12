@@ -1,6 +1,7 @@
 
 import PropTypes from "prop-types";
-import Button from "../../../../../global/Button";
+import Button from "./Button";
+
 
 export default function RefreshButton({ onClick, isLoading, ...rest }) {
     return (

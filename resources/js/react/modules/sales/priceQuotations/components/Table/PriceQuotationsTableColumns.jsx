@@ -1,11 +1,11 @@
 // Components -Styled Components
-import { CreatedBy } from "../../../../../ProjectStatus/components/table/ui";
 import { TableTdWrapper } from "../UI/StyledComponents";
 
 // Components - UI
 import PersonAvatar from "../Shared/PersonAvatar";
 import TablePopover from "../Shared/TablePopover";
 import Switch from "../../../../../global/Switch";
+import { getAseDseColor } from "../../helper";
 
 export const PriceQuotationsTableColumns = [
     {
@@ -122,13 +122,6 @@ export const PriceQuotationsTableColumns = [
         accessorKey: "system_suggested_price",
         cell: ({ row }) => {
             const data = row.original;
-            const getColor = (value) => {
-                if (value <= 2000) {
-                    return "priceDec";
-                } else if (value > 2000) {
-                    return "priceAse";
-                }
-            };
             return (
                 <TableTdWrapper>
                     <p className="d-flex">
@@ -139,7 +132,7 @@ export const PriceQuotationsTableColumns = [
                                 $ {data?.system_suggested_price}{" "}
                                 <button className="sp1_price_quotation_column_sort_btn ml-2">
                                     <span
-                                        className={`table_asc_dec ${getColor(
+                                        className={`table_asc_dec ${getAseDseColor(
                                             data?.project_budget
                                         )}`}
                                     ></span>
@@ -162,13 +155,7 @@ export const PriceQuotationsTableColumns = [
         accessorKey: "project_budget",
         cell: ({ row }) => {
             const data = row.original;
-            const getColor = (value) => {
-                if (value <= 2000) {
-                    return "priceDec";
-                } else if (value > 2000) {
-                    return "priceAse";
-                }
-            };
+
             return (
                 <TableTdWrapper>
                     <p className="d-flex">
@@ -177,7 +164,7 @@ export const PriceQuotationsTableColumns = [
                                 $ {data?.project_budget}{" "}
                                 <button className="sp1_price_quotation_column_sort_btn ml-2">
                                     <span
-                                        className={`table_asc_dec ${getColor(
+                                        className={`table_asc_dec ${getAseDseColor(
                                             data?.project_budget
                                         )}`}
                                     ></span>
