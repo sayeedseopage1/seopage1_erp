@@ -176,8 +176,8 @@
 }
 
 .disabled-row {
-    background-color: #f5f5f5;
-    opacity: 0.5;
+    background-color: #CAEDE1;
+    /* opacity: 0.5; */
     cursor: not-allowed !important;
     /* Change this color to your preferred background color */
 }

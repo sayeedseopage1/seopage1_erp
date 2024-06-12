@@ -26,7 +26,7 @@ export default function IncentiveFilter({ filterByPeriod, setQueryForAchievedInc
     const [selectedEmployee, setSelectedEmployee] = useState("");
 
     useEffect(() => {
-        if (auth?.isHasRolePermission(1) && pmByDeptData && !isPmByDeptLoading) {
+        if ((auth?.isHasRolePermission(1) || auth?.isHasRolePermission(8)) && pmByDeptData && !isPmByDeptLoading) {
             setSelectedEmployee(pmByDeptData[0]?.id);
         }
     }, [pmByDeptData, isPmByDeptLoading]);
@@ -141,7 +141,7 @@ export default function IncentiveFilter({ filterByPeriod, setQueryForAchievedInc
             </FilterItem>
 
             {
-                auth?.isHasRolePermission(1) && <>
+                (auth?.isHasRolePermission(1) || auth?.isHasRolePermission(8)) && <>
                     <FilterItem className='border-right-0 hide'>
                         <DeptFilter department={depAndEmployees?.department} handleChange={handleDeptChange} isFetching={isDepAndEmployeesFetching} />
                     </FilterItem>
@@ -166,7 +166,7 @@ export default function IncentiveFilter({ filterByPeriod, setQueryForAchievedInc
 
             {/* sidebar */}
             {
-                auth?.isHasRolePermission(1) &&
+                (auth?.isHasRolePermission(1) || auth?.isHasRolePermission(8)) &&
                 <div className='sp1__pp_filter_sidebar_container'>
                     <button
                         className='sp1__pp_filter_sidebar_toggle bg-transparent'
@@ -177,7 +177,7 @@ export default function IncentiveFilter({ filterByPeriod, setQueryForAchievedInc
                     </button>
 
                     {
-                        auth?.isHasRolePermission(1) && sidebarIsOpen && (
+                        (auth?.isHasRolePermission(1) || auth?.isHasRolePermission(8)) && sidebarIsOpen && (
                             <aside className='sp1__pp_filter_sidebar'>
                                 <div className='sp1__pp_filter_sidebar_header'>
                                     <span>Filters</span>

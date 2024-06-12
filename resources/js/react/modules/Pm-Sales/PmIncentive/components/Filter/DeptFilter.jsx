@@ -20,8 +20,10 @@ const DeptFilter = ({ department, handleChange, isFetching }) => {
                     options={department?.map(item => ({
                         value: item?.id,
                         label: item?.team_name,
-                        key: item?.id
+                        key: item?.id,
+                        disabled: item?.id != 1
                     }))}
+
                 /> : <div className='ml-1 point_selector_item' style={{ color: '#ff0000' }}>No department found</div>
             }
         </div>
