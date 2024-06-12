@@ -2304,8 +2304,6 @@ trait DeveloperDashboard
 
     private function percentageOfTasksWithRevisions($startDate, $endDate, $devId)
     {
-        // $startDate = "2024-03-01 00:00:00";
-        // $endDate = "2024-03-31 00:00:00";
         $number_of_tasks_completed = DB::table('task_history')
             ->join('tasks', 'tasks.id', '=', 'task_history.task_id')
             ->select('task_history.task_id', 'task_history.created_at')
