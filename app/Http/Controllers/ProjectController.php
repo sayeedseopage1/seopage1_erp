@@ -6237,7 +6237,13 @@ public function updatePmBasicSEO(Request $request){
 
         $project = Project::where('id', $request->project_id)->first();
         $deal = Deal::where('id', $project->deal_id)->first();
-        $lead_deal_activity_log = LeadsDealsActivityLog::where('lead_id', $deal->lead_id)->orderBy('id', 'desc')->get();
+        if ($request->employee != 'all') {
+            $lead_deal_activity_log = LeadsDealsActivityLog::where('lead_id', $deal->lead_id)
+                                                           ->where('created_by', $request->employee)
+                                                           ->orderBy('id', 'desc')->get();
+        } else {
+            $lead_deal_activity_log = LeadsDealsActivityLog::where('lead_id', $deal->lead_id)->orderBy('id', 'desc')->get();
+        }
 
         $view = view('projects.ajax.activity_log', compact('activityLog', 'lead_deal_activity_log'))->render();
 
@@ -6246,6 +6252,8 @@ public function updatePmBasicSEO(Request $request){
             'html' => $view
         ]);
     }
+
+
     public function deliverableEstimationTime($deliverableId)
     {
         $deliverable = ProjectDeliverable::find($deliverableId);

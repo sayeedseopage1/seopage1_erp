@@ -10,17 +10,21 @@
 						<th>Time difference</th>
 					</x-slot>
 					@php
-						$lead_activity_log = $lead_deal_activity_log->first(); 
-						$lead_activity_log = optional($lead_activity_log);
-						$project_activity_log = $activityLog->last();
-						$project_activity_log = optional($project_activity_log);
+						$previousFirst = $lead_deal_activity_log->first()->created_at->copy()->setSecond(0);
+						$logActivity = $activityLog->last();
+						$currectLast = $logActivity->created_at->copy()->setSecond(0);
+						$intervalTime = $previousFirst ? $currectLast->diff($previousFirst) : null;
 					@endphp
 					@foreach($activityLog as $loopIndex => $value)
 					@php
 						$previousLog = $activityLog->get($loopIndex + 1);
 						$previousTime = $previousLog ? $previousLog->created_at->copy()->setSecond(0) : null;
 						$currentTime = $value->created_at->copy()->setSecond(0);
-						$timeDifference = $previousTime ? $currentTime->diff($previousTime) : null;
+						if($logActivity->id == $value->id){
+							$timeDifference = $intervalTime;
+						}else {
+							$timeDifference = $previousTime ? $currentTime->diff($previousTime) : null;
+						}
 					@endphp
 					<tr>
 						<td>{{$value->created_at->format('j M Y h:i A')}}</td>
@@ -76,7 +80,6 @@
 						<td>{{$timeDifference ? $timeDifference->format('%h hour %i minutes') : 'N/A'}}</td>
 					</tr>
 					@endforeach
-					
 					@foreach($lead_deal_activity_log as $loopIndex => $value)
 					@php
 						$previousLog = $lead_deal_activity_log->get($loopIndex + 1);
@@ -114,8 +117,15 @@
 		}
 	</style>
 	@php
-		$myCollection = collect($activityLog);
-		$uniqueCollection = $myCollection->unique('user_id');
+	$all_log_users = App\Models\Project::select('project_activity.added_by', 'leads_deals_activity_logs.created_by')
+					->leftJoin('deals', 'deals.id', '=', 'projects.deal_id')
+					->leftJoin('leads', 'leads.id', '=', 'deals.lead_id')
+					->leftJoin('project_activity', 'project_activity.project_id', '=', 'projects.id')
+					->leftJoin('leads_deals_activity_logs', 'leads_deals_activity_logs.lead_id', '=', 'leads.id')
+					->where('projects.id', $project->id)
+					->get();
+	$userIds = $all_log_users->pluck('added_by')->merge($all_log_users->pluck('created_by'))->unique();
+	$users = App\Models\User::whereIn('id', $userIds)->get();
 	@endphp
 	<div class="row mx-0 sticky-top" style="background-color: rgb(242, 244, 247); z-index:1; top: 110px">
 		<form action="" class="w-100" id="filter-form">
@@ -139,14 +149,12 @@
 		                    <x-forms.label :fieldLabel="__('Employee')" fieldId="employee" />
 		                    <select class="form-control select-picker" name="employee" id="employee" data-live-search="false" data-size="8">
 		                        <option value="all">@lang('app.all')</option>
-		                        @foreach($uniqueCollection as $value)
-		                        @if(!is_null($value->addedBy))
-		                        <option value="{{$value->addedBy->id}}">{{$value->addedBy->name}}</option>
-		                        @endif
-		                        @endforeach
+								@foreach($users as $user)
+									<option value="{{ $user->id }}">{{ $user->name }}</option>
+								@endforeach
 		                    </select>
 		                </div>
-						<div class="form-group mt-2">
+						<div class="form-group" style="margin-top: 10px;">
 							<label for="">Client</label>
 							<input type="text" name="" id="" class="form-control height-35 f-14" value="{{$client->name}}" readonly>
 						</div>
