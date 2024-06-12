@@ -1,3 +1,40 @@
+.incentive_criteria_factor_title {
+    background: #1492E6;
+    color: #FFF;
+    font-family: Poppins, sans-serif;
+    font-size: 24px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: normal;
+    text-transform: uppercase;
+    text-align: center;
+    padding: 19px;
+    margin-bottom: 28px;
+}
+
+.incentive_criteria_factor_note {
+    border-radius: 9px;
+    border: 1px dashed rgba(20, 185, 106, 0.50);
+    background: rgba(20, 185, 106, 0.05);
+    padding: 17px;
+    color: #14B96A;
+    font-family: Poppins, sans-serif;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+    text-align: center;
+    margin-bottom: 24px;
+}
+
+.incentive_criteria_factors {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 15px;
+}
+
+
+/************************* old design css **************************************/
 .incentive_factors_title {
     color: #000;
     font-size: 32px;

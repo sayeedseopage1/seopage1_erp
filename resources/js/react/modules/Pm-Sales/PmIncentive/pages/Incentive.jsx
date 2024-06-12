@@ -15,6 +15,7 @@ import QuarterAndYearlyTable from '../components/Sections/QuarterlyAndYearly/Qua
 import useIncentive from '../hooks/useIncentive';
 import { useGetAchievedIncentiveQuery, useGetIncentiveHeldAmountQuery } from '../../../../services/api/Pm-Sales/PmIncentiveApiSlice';
 import _ from 'lodash';
+import IncentiveCriteriaFactors from '../components/Sections/IncentiveFactors/IncentiveCriteriaFactors';
 
 const Incentive = () => {
     const [tab, setTab] = useState("incentive_factors");
@@ -112,7 +113,8 @@ const Incentive = () => {
                     </Switch.Case>
                     <Switch.Case condition={tab == "incentive_factors"}>
                         <div className='incentive_inner_wrapper'>
-                            <IncentiveFactors />
+                            {/* <IncentiveFactors /> */}
+                            <IncentiveCriteriaFactors />
                         </div>
                     </Switch.Case>
                 </Switch>
