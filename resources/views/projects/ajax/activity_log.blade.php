@@ -9,12 +9,19 @@
 						<th>Activity</th>
 						<th>Time difference</th>
 					</x-slot>
-					@foreach($activityLog as $value)
-						@php
-							$previousTime = App\Models\ProjectActivity::where('project_id', $value->project_id)->where('id', '<', $value->id)->orderBy('id', 'desc')->first();
-							$thisTime = $previousTime->created_at ?? null;
-							$timeDifference = $thisTime ? $thisTime->diff($value->created_at) : 0;
-						@endphp
+					@php
+						$lead_activity_log = $lead_deal_activity_log->first(); 
+						$lead_activity_log = optional($lead_activity_log);
+						$project_activity_log = $activityLog->last();
+						$project_activity_log = optional($project_activity_log);
+					@endphp
+					@foreach($activityLog as $loopIndex => $value)
+					@php
+						$previousLog = $activityLog->get($loopIndex + 1);
+						$previousTime = $previousLog ? $previousLog->created_at->copy()->setSecond(0) : null;
+						$currentTime = $value->created_at->copy()->setSecond(0);
+						$timeDifference = $previousTime ? $currentTime->diff($previousTime) : null;
+					@endphp
 					<tr>
 						<td>{{$value->created_at->format('j M Y h:i A')}}</td>
 						<td>
@@ -66,7 +73,7 @@
 								{!! html_entity_decode($value->activity, ENT_QUOTES, 'UTF-8') !!}
 							@endif
 						</td>
-						<td>{{$timeDifference ? $timeDifference->format('%h hour %i minutes') : ''}}</td>
+						<td>{{$timeDifference ? $timeDifference->format('%h hour %i minutes') : 'N/A'}}</td>
 					</tr>
 					@endforeach
 					

@@ -294,7 +294,7 @@ class LeadController extends AccountBaseController
 
         // activity log
         $user = Auth::user();
-        $text = $user->getRole->name.' '.$user->name.' - Lead ('.$lead->client_name.') was converted';
+        $text = $user->getRole->name.' '.$user->name.' - converted lead ('.$lead->client_name.') to deal';
 
         $link = '<a href="'.route('deals.show', $deal->id).'">'.$text.'</a>';
 
