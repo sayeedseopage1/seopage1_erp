@@ -99,6 +99,29 @@ const pmSalesApiSlice = apiSlice.injectEndpoints({
             query: (query) => `/account/get-incentive-held-amount?${query}`,
             providesTags: ["GET_INCENTIVE_HELD_AMOUNT"],
         }),
+        payIncentiveHeldAmount: build.mutation({
+            query: (payload) => {
+                // let queryParams = new URLSearchParams();
+                // if (payload?.incentive_payment_ids?.length) {
+                //     queryParams.append(
+                //         "incentive_payment_ids",
+                //         JSON.stringify(payload.incentive_payment_ids)
+                //     );
+                // }
+                // if (payload?.user_id) {
+                //     queryParams.append("user_id", payload.user_id);
+                // }
+                return {
+                    url: `/account/pay-incentive-held-amount`,
+                    method: "POST",
+                    body: payload,
+                    headers: {
+                        "X-CSRF-TOKEN": _token,
+                    },
+                };
+            },
+            invalidatesTags: ["GET_INCENTIVE_HELD_AMOUNT"],
+        }),
     }),
 });
 
@@ -112,4 +135,5 @@ export const {
     useDeleteIncentiveFactorMutation,
     useGetAchievedIncentiveQuery,
     useGetIncentiveHeldAmountQuery,
+    usePayIncentiveHeldAmountMutation,
 } = pmSalesApiSlice;

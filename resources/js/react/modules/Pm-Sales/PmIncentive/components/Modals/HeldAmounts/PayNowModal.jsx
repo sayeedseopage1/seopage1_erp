@@ -1,108 +1,45 @@
-import React, { useState } from 'react';
-import { Modal, Select, Table } from 'antd';
+import React, { useEffect, useState } from 'react';
+import { DatePicker, Modal, Select, Table } from 'antd';
 import { ButtonComponent } from '../../../../PointFactors/components/Styles/ui/ui';
 import amountIcon from '../../../assets/amount.svg';
 import Swal from 'sweetalert2';
 import PropTypes from 'prop-types'
-
-const { Option } = Select;  // Ensure to import Option from antd
-
-const payNowData = [
-    {
-        _id: '1',
-        month: 'January',
-        year: '2022',
-        held_amount: '4000',
-        status: 'Pending',
-    },
-    {
-        _id: '2',
-        month: 'February',
-        year: '2022',
-        held_amount: '4000',
-        status: 'Pending',
-    },
-    {
-        _id: '3',
-        month: 'March',
-        year: '2022',
-        held_amount: '4000',
-        status: 'Pending',
-    },
-    {
-        _id: '4',
-        month: 'April',
-        year: '2022',
-        held_amount: '4000',
-        status: 'Pending',
-    },
-    {
-        _id: '5',
-        month: 'May',
-        year: '2022',
-        held_amount: '4000',
-        status: 'Pending',
-    },
-    {
-        _id: '6',
-        month: 'June',
-        year: '2022',
-        held_amount: '4000',
-        status: 'Pending',
-    },
-    {
-        _id: '7',
-        month: 'July',
-        year: '2022',
-        held_amount: '4000',
-        status: 'Pending',
-    },
-    {
-        _id: '8',
-        month: 'January',
-        year: '2023',
-        held_amount: '1600',
-        status: 'paid',
-    },
-    {
-        _id: '9',
-        month: 'February',
-        year: '2023',
-        held_amount: '900',
-        status: 'Pending',
-    },
-    {
-        _id: '10',
-        month: 'January',
-        year: '2024',
-        held_amount: '1900',
-        status: 'paid',
-    },
-]
-
-const held_years = [
-    {
-        _id: '1',
-        year: '2022',
-        isCleared: 'Paid',
-    },
-    {
-        _id: '2',
-        year: '2023',
-        status: 'Pending',
-    },
-    {
-        _id: '3',
-        year: '2024',
-        status: 'Paid',
-    },
-]
+import { useGetIncentiveHeldAmountQuery, usePayIncentiveHeldAmountMutation } from '../../../../../../services/api/Pm-Sales/PmIncentiveApiSlice';
+import dayjs from 'dayjs';
+import moment from 'moment/moment';
+import { FaAngleDown } from "react-icons/fa6";
 
 
-const PayNowModal = ({ antdModalOpen, showPayNowModal }) => {
-    const initialYear = held_years.find(item => item.status === 'Pending')?.year || held_years[0]?.year;
-    const [defaultHeldYear, setDefaultHeldYear] = useState(initialYear);
-    const [modifiedData, setModifiedData] = useState([...payNowData].filter(item => item.year === initialYear));
+const PayNowModal = ({ antdModalOpen, showPayNowModal, queryForIncentiveHeldAmounts, queryStringForIncentiveHeldAmounts, tab }) => {
+    const [startDate, setStartDate] = useState(null);
+    const [endDate, setEndDate] = useState(null);
+    const user_id = queryForIncentiveHeldAmounts?.user_id
+
+    useEffect(() => {
+        const thisYear = new Date().getFullYear();
+        setStartDate(`${thisYear}-01-01`);
+        setEndDate(`${thisYear}-12-31`);
+    }, [])
+
+    const onChange = (_date, dateString) => {
+        setStartDate(`${dateString}-01-01`);
+        setEndDate(`${dateString}-12-31`);
+    };
+
+
+    const { data: incentiveHeldAmounts, isLoading: incentiveHeldAmountsLoading, isFetching: incentiveHeldAmountsIsFetching } = useGetIncentiveHeldAmountQuery(
+        queryStringForIncentiveHeldAmounts({
+            ...queryForIncentiveHeldAmounts,
+            start_date: startDate,
+            end_date: endDate,
+        }),
+        { skip: tab != "held_amount" || !startDate || !endDate }
+    )
+
+    const [payIncentiveHeldAmount, { isLoading: isPayIncentiveHeldAmountLoading }] = usePayIncentiveHeldAmountMutation()
+
+    const incentiveHeldAmountData = incentiveHeldAmounts && [...incentiveHeldAmounts?.data].reverse()
+
     const [selectedRowKeys, setSelectedRowKeys] = useState([]);
     const [totalHeldAmount, setTotalHeldAmount] = useState(0);
 
@@ -110,39 +47,29 @@ const PayNowModal = ({ antdModalOpen, showPayNowModal }) => {
         selectedRowKeys,
         onChange: (selectedRowKeys, selectedRows) => {
             setSelectedRowKeys(selectedRowKeys);
-            setTotalHeldAmount(selectedRows.reduce((prev, curr) => prev + Number(curr.held_amount), 0));
+            setTotalHeldAmount(selectedRows.reduce((prev, curr) => prev + Number(curr?.held_amount), 0));
         },
     };
-
-    const handleHeldYearChange = (value) => {
-        setDefaultHeldYear(value);
-        const newModifiedData = [...payNowData].filter(item => item.year === value);
-        setModifiedData(newModifiedData);
-        // Reset selections
-        setSelectedRowKeys([]);
-        setTotalHeldAmount(0);
-    }
 
     const columns = [
         Table.SELECTION_COLUMN,
         {
             title: (
                 <div className='held_years_header'>
-                    <span>Year</span>
-                    <Select
-                        onChange={handleHeldYearChange}
+                    <span style={{ marginRight: '5px' }}>Year</span>
+                    <DatePicker
                         className='held_years_select'
-                        value={defaultHeldYear}
-                        style={{ width: 120 }}>
-                        {held_years?.map(item => (
-                            <Option value={item.year} key={item._id}>{item.year}</Option>
-                        ))}
-                    </Select>
+                        variant="borderless"
+                        defaultValue={dayjs()}
+                        onChange={onChange}
+                        picker="year"
+                        suffixIcon={<FaAngleDown />}
+                    />
                 </div>
             ),
-            dataIndex: "month",
-            key: "month",
-            render: (text) => <p className='held_amount_table_data'>{text}</p>,
+            dataIndex: "date",
+            key: "date",
+            render: (text) => <p className='held_amount_table_data'>{moment(text).format("MMMM")}</p>,
         },
         {
             title: (
@@ -152,42 +79,88 @@ const PayNowModal = ({ antdModalOpen, showPayNowModal }) => {
             ),
             dataIndex: "held_amount",
             key: "held_amount",
-            render: (text) => <p className='held_amount_table_data' style={{ textAlign: 'center' }}>{text}</p>,
+            render: (text) => <p className='held_amount_table_data' style={{ textAlign: 'center' }}>{parseFloat(text)}</p>,
         },
     ];
 
-    const handlePay = () => {
-        Swal.fire({
-            html: `
-            ${selectedRowKeys.length < modifiedData.length ? `                
-                    <p class="incentive_swal_confirm">Confirmation</p>
-                    <p class="incentive_swal_desc">You've selected ${selectedRowKeys.length} ${selectedRowKeys?.length === 1 ? 'month' : 'months'} out of ${modifiedData?.length} ${modifiedData?.length === 1 ? 'month' : 'months'}. <br>
-                    Do you still want to proceed?
-                    </p>` :
+    // const handlePay = () => {
+    //     Swal.fire({
+    //         html: `
+    //         ${selectedRowKeys.length < incentiveHeldAmountData?.length ? `                
+    //                 <p class="incentive_swal_confirm">Confirmation</p>
+    //                 <p class="incentive_swal_desc">You've selected ${selectedRowKeys.length} ${selectedRowKeys?.length === 1 ? 'month' : 'months'} out of ${incentiveHeldAmountData?.length} ${incentiveHeldAmountData?.length === 1 ? 'month' : 'months'}. <br>
+    //                 Do you still want to proceed?
+    //                 </p>` :
 
-                    `<p class="incentive_swal_confirm">Confirmation</p>
-                    <p class="incentive_swal_desc">Do you want to proceed?</p>
-               
-                `
+    //                 `<p class="incentive_swal_confirm">Confirmation</p>
+    //                 <p class="incentive_swal_desc">Do you want to proceed?</p>
+
+    //             `
+    //             }
+    //         `,
+    //         showCancelButton: true,
+    //         confirmButtonText: "Confirm",
+    //         cancelButtonText: "Do it later",
+    //         customClass: {
+    //             confirmButton: 'swal2-confirm-custom',
+    //             cancelButton: 'swal2-cancel-custom'
+    //         }
+    //     }).then((result) => {
+    //         if (result.isConfirmed) {
+    //             payIncentiveHeldAmount({ incentive_payment_ids: selectedRowKeys, user_id })
+    //             // Swal.fire({
+    //             //     title: "Successfully Paid!",
+    //             //     text: "Held incentives have been disbursed.",
+    //             //     icon: "success"
+    //             // });
+    //         }
+    //     });
+    // }
+
+    const handlePay = async () => {
+        try {
+            const result = await Swal.fire({
+                html: `
+                ${selectedRowKeys.length < incentiveHeldAmountData?.length ? `                
+                        <p class="incentive_swal_confirm">Confirmation</p>
+                        <p class="incentive_swal_desc">You've selected ${selectedRowKeys.length} ${selectedRowKeys?.length === 1 ? 'month' : 'months'} out of ${incentiveHeldAmountData?.length} ${incentiveHeldAmountData?.length === 1 ? 'month' : 'months'}. <br>
+                        Do you still want to proceed?
+                        </p>` :
+
+                        `<p class="incentive_swal_confirm">Confirmation</p>
+                        <p class="incentive_swal_desc">Do you want to proceed?</p>
+                   
+                    `
+                    }
+                `,
+                showCancelButton: true,
+                confirmButtonText: "Confirm",
+                cancelButtonText: "Do it later",
+                customClass: {
+                    confirmButton: 'swal2-confirm-custom',
+                    cancelButton: 'swal2-cancel-custom'
                 }
-            `,
-            showCancelButton: true,
-            confirmButtonText: "Confirm",
-            cancelButtonText: "Do it later",
-            customClass: {
-                confirmButton: 'swal2-confirm-custom',
-                cancelButton: 'swal2-cancel-custom'
-            }
-        }).then((result) => {
+            });
+
             if (result.isConfirmed) {
-                Swal.fire({
+                const response = await payIncentiveHeldAmount({ incentive_payment_ids: selectedRowKeys, user_id }).unwrap();
+
+                await Swal.fire({
                     title: "Successfully Paid!",
-                    text: "Held incentives have been disbursed.",
+                    text: response?.message || "Held incentives have been disbursed.",
                     icon: "success"
                 });
             }
-        });
-    }
+        } catch (error) {
+            console.error("Error paying incentives:", error);
+            await Swal.fire({
+                title: "Error",
+                text: error?.message || "There was an error processing your request. Please try again later.",
+                icon: "error"
+            });
+        }
+    };
+
 
 
     const handleCancel = () => {
@@ -196,6 +169,10 @@ const PayNowModal = ({ antdModalOpen, showPayNowModal }) => {
         setTotalHeldAmount(0);
         showPayNowModal();  // Assuming this function toggles the modal's visibility
     }
+
+    // if (incentiveHeldAmountsLoading || incentiveHeldAmountsIsFetching) {
+    //     return <p>Loading...</p>
+    // }
 
     return (
         <Modal className='pay_now_modal'
@@ -221,8 +198,8 @@ const PayNowModal = ({ antdModalOpen, showPayNowModal }) => {
                 <Table
                     columns={columns}
                     rowSelection={rowSelection}
-                    dataSource={modifiedData}
-                    rowKey="_id"
+                    dataSource={incentiveHeldAmountData}
+                    rowKey="id"
                     pagination={false}
                 />
             </div>

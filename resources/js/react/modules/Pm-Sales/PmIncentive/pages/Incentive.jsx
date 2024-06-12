@@ -18,11 +18,12 @@ import _ from 'lodash';
 import IncentiveCriteriaFactors from '../components/Sections/IncentiveFactors/IncentiveCriteriaFactors';
 
 const Incentive = () => {
-    const [tab, setTab] = useState("incentive_factors");
+    const [tab, setTab] = useState("held_amount");
     const [filterByPeriod, setFilterByPeriod] = useState("monthly");
     const { incentiveTypesLoading } = useIncentive();
     const [queryForAchievedIncentive, setQueryForAchievedIncentive] = useState({})
     const [queryForIncentiveHeldAmounts, setQueryForIncentiveHeldAmounts] = useState({})
+    const [queryForHeldAmountPayment, setQueryForHeldAmountPayment] = useState({})
 
     // make query string
     const queryString = (object) => {
@@ -35,6 +36,12 @@ const Incentive = () => {
         const queryObject = _.pickBy(object, Boolean);
         return new URLSearchParams(queryObject).toString();
     };
+
+    // query for held amount pay 
+    // const queryStringForHeldAmountPayment = (object) => {
+    //     const queryObject = _.pickBy(object, Boolean);
+    //     return new URLSearchParams(queryObject).toString();
+    // };
 
     // get pm point factors
     const { data: achievedIncentiveHistory, isFetching: achievedIncentiveHistoryIsFetching, isLoading: achievedIncentiveHistoryLoading } =
@@ -80,7 +87,7 @@ const Incentive = () => {
         <div>
             <IncentiveFilter filterByPeriod={filterByPeriod} setQueryForAchievedIncentive={setQueryForAchievedIncentive} setQueryForIncentiveHeldAmounts={setQueryForIncentiveHeldAmounts} tab={tab} />
             <div className='incentive_wrapper'>
-                <FilterBar tab={tab} setTab={setTab} filterByPeriod={filterByPeriod} setFilterByPeriod={setFilterByPeriod} />
+                <FilterBar tab={tab} queryStringForIncentiveHeldAmounts={queryStringForIncentiveHeldAmounts} queryForIncentiveHeldAmounts={queryForIncentiveHeldAmounts} setTab={setTab} filterByPeriod={filterByPeriod} setFilterByPeriod={setFilterByPeriod} />
 
                 <Switch>
                     <Switch.Case condition={tab == "current"}>

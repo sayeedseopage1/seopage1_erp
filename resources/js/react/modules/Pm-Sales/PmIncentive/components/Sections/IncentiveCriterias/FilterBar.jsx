@@ -29,7 +29,7 @@ const pointFilters = [
     }
 ]
 
-const FilterBar = ({ tab, setTab, filterByPeriod, setFilterByPeriod }) => {
+const FilterBar = ({ tab, setTab, filterByPeriod, setFilterByPeriod, queryStringForIncentiveHeldAmounts, queryForIncentiveHeldAmounts }) => {
     const [isPayNowModalOpen, setIsPayNowModalOpen] = useState(false);
 
     const showPayNowModal = () => {
@@ -81,7 +81,7 @@ const FilterBar = ({ tab, setTab, filterByPeriod, setFilterByPeriod }) => {
                 </div>
             }
 
-            <PayNowModal antdModalOpen={isPayNowModalOpen} showPayNowModal={showPayNowModal} />
+            <PayNowModal tab={tab} queryForIncentiveHeldAmounts={queryForIncentiveHeldAmounts} queryStringForIncentiveHeldAmounts={queryStringForIncentiveHeldAmounts} antdModalOpen={isPayNowModalOpen} showPayNowModal={showPayNowModal} />
         </div>
     );
 };
