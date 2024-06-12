@@ -49,7 +49,7 @@ export default function IncentiveFilter({ filterByPeriod, setQueryForAchievedInc
             start_date: startDate,
             end_date: endDate,
             // dept_id: dept,
-            user_id: selectedEmployee
+            user_id: auth?.isHasRolePermission(4) ? auth?.userId : selectedEmployee
         }));
     }, [startDate, endDate, selectedEmployee]);
 
@@ -59,7 +59,7 @@ export default function IncentiveFilter({ filterByPeriod, setQueryForAchievedInc
             ...prevQuery,
             start_date: startDateQuarterAndYear,
             end_date: endDateQuarterAndYear,
-            user_id: selectedEmployee
+            user_id: auth?.isHasRolePermission(4) ? auth?.userId : selectedEmployee
         }));
     }, [startDateQuarterAndYear, endDateQuarterAndYear, selectedEmployee]);
 
@@ -69,17 +69,19 @@ export default function IncentiveFilter({ filterByPeriod, setQueryForAchievedInc
             ...prevQuery,
             start_date: startDateYear,
             end_date: endDateYear,
-            user_id: selectedEmployee
+            user_id: auth?.isHasRolePermission(4) ? auth?.userId : selectedEmployee
         }));
     }, [startDateYear, endDateYear, selectedEmployee]);
 
-    useEffect(() => {
-        if (auth?.isHasRolePermission(4)) {
-            setQuery(prevQuery => ({ ...prevQuery, user_id: auth?.userId }));
-            setQueryForAchievedIncentive(prevQuery => ({ ...prevQuery, user_id: auth?.userId }));
-            setQueryForIncentiveHeldAmounts(prevQuery => ({ ...prevQuery, user_id: auth?.userId }));
-        }
-    }, [auth?.userId, startDate]);
+    // useEffect(() => {
+    //     if (auth?.isHasRolePermission(4)) {
+    //         setQuery(prevQuery => ({ ...prevQuery, user_id: auth?.userId }));
+    //         setQueryForAchievedIncentive(prevQuery => ({ ...prevQuery, user_id: auth?.userId }));
+    //         setQueryForIncentiveHeldAmounts(prevQuery => ({ ...prevQuery, user_id: auth?.userId }));
+    //     }
+    // }, [auth?.isHasRolePermission(4)]);
+
+    console.log(auth)
 
     const handleDeptChange = (value) => {
         setDept(value);

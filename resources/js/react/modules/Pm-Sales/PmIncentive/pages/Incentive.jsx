@@ -7,7 +7,7 @@ import UpsaleCrossSale from '../components/Sections/IncentiveCriterias/UpsaleCro
 import BonusPoints from '../components/Sections/IncentiveCriterias/BonusPoints';
 import FinalIncentiveBanner from '../components/Sections/IncentiveCriterias/FinalIncentiveBanner';
 import Switch from '../../../../global/Switch';
-import IncentiveFactors from '../components/Sections/IncentiveFactors/IncentiveFactors';
+// import IncentiveFactors from '../components/Sections/IncentiveFactors/IncentiveFactors';
 import HeldAmounts from '../components/Sections/HeldAmounts/HeldAmounts';
 import FilterBar from '../components/Sections/IncentiveCriterias/FilterBar';
 import Spinner from '../../PointFactors/components/loader/Spinner';
@@ -18,7 +18,7 @@ import _ from 'lodash';
 import IncentiveCriteriaFactors from '../components/Sections/IncentiveFactors/IncentiveCriteriaFactors';
 
 const Incentive = () => {
-    const [tab, setTab] = useState("held_amount");
+    const [tab, setTab] = useState("current");
     const [filterByPeriod, setFilterByPeriod] = useState("monthly");
     const { incentiveTypesLoading } = useIncentive();
     const [queryForAchievedIncentive, setQueryForAchievedIncentive] = useState({})
