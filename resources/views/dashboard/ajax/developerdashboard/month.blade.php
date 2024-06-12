@@ -172,8 +172,8 @@
                 <div class="d-flex flex-wrap">
                     <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
                         <a href="#" data-toggle="modal"
-                            data-target="#first_attempt_approve_task{{ count($first_attempt_approve_task_in_this_month) }}">
-                            {{ count($first_attempt_approve_task_in_this_month) }}
+                            data-target="#first_attempt_approve_task{{ $first_attempt_approve_task_in_this_month_count }}">
+                            {{ $first_attempt_approve_task_in_this_month_count }}
                         </a>
 
                     </p>
@@ -182,6 +182,62 @@
                 </div>
             </div>
 
+        </div>
+    </div>
+</div>
+<div class="row mt-3">
+    <div class="col-md-4">
+        <div
+            class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0">
+            <div class="d-block text-capitalize">
+                <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">Approved Task By Lead Developer in First
+                    Attempt for Primary Page</h5>
+                <div class="d-flex flex-wrap">
+                    <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
+                        <a href="#" data-toggle="modal"
+                            data-target="#first_attempt_approve_task_primary_page{{ $first_attempt_approve_task_primary_page_in_this_month }}">
+                            {{ $first_attempt_approve_task_primary_page_in_this_month }}
+                        </a>
+                    </p>
+                    @include('dashboard.ajax.developerdashboard.modals.first_attempt_approve_task_data_primary_page')
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div
+            class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0">
+            <div class="d-block text-capitalize">
+                <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">Approved Task By Lead Developer in First
+                    Attempt for Secondry Page</h5>
+                <div class="d-flex flex-wrap">
+                    <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
+                        <a href="#" data-toggle="modal"
+                            data-target="#first_attempt_approve_task_secondary_page{{ $first_attempt_approve_task_secondary_page_in_this_month }}">
+                            {{ $first_attempt_approve_task_secondary_page_in_this_month }}
+                        </a>
+                    </p>
+                    @include('dashboard.ajax.developerdashboard.modals.first_attempt_approve_task_data_secondary_page')
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div
+            class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0">
+            <div class="d-block text-capitalize">
+                <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">Approved Task By Lead Developer in First
+                    Attempt for Others</h5>
+                <div class="d-flex flex-wrap">
+                    <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
+                        <a href="#" data-toggle="modal"
+                            data-target="#first_attempt_approve_task_others_page{{ $first_attempt_approve_task_secondary_page_in_this_month }}">
+                            {{ $first_attempt_approve_task_secondary_page_in_this_month }}
+                        </a>
+                    </p>
+                    @include('dashboard.ajax.developerdashboard.modals.first_attempt_approve_task_data_others_page')
+                </div>
+            </div>
         </div>
     </div>
 </div>

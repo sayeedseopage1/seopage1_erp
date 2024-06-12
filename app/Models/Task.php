@@ -512,4 +512,27 @@ class Task extends BaseModel
     {
         return $this->hasOne(TaskType::class);
     }
+
+    public function latestTaskApprove()
+    {
+        return $this->hasOne(TaskApprove::class)->latestOfMany();
+    }
+
+    public function latestTaskSubmission()
+    {
+        return $this->hasOne(TaskSubmission::class)->latestOfMany();
+    }
+    public function firstTaskSubmission()
+    {
+        return $this->hasOne(TaskSubmission::class)->oldestOfMany();
+    }
+
+    public function taskUser()
+    {
+        return $this->hasOneThrough(User::class, TaskUser::class, 'task_id', 'id', 'id', 'user_id');
+    }
+    public function revisions()
+    {
+        return $this->hasMany(TaskRevision::class);
+    }
 }

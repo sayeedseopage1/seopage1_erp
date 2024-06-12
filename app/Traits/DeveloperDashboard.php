@@ -184,14 +184,17 @@ trait DeveloperDashboard
 
 
             [
+                $this->first_attempt_approve_task_in_this_month,
                 $this->first_attempt_approve_task_in_this_month_count,
+                $this->first_attempt_approve_task_primary_page_in_this_month_data,
                 $this->first_attempt_approve_task_primary_page_in_this_month,
+                $this->first_attempt_approve_task_secondary_page_in_this_month_data,
                 $this->first_attempt_approve_task_secondary_page_in_this_month,
+                $this->first_attempt_approve_task_others_page_in_this_month_data,
                 $this->first_attempt_approve_task_others_page_in_this_month,
-                $this->first_attempt_approve_task_in_this_month
             ] = $this->numberOfApprovedTaskson1stAttemptByLeadDeveloper($startDate, $endDate, $devId);
 
-
+            [$this->average_submission_aproval_in_this_month, $this->avg_no_of_submission_needed_for_app_by_lead_dev] = $this->AvgNumberOfAttemptsNeededForApprovalByLeadDeveloper($startDate, $endDate, $devId);
             // --------------Average number of attempts needed for approval(in cycle) lead developer-----------------------------//
 
             $number_of_tasks_approved = DB::table('tasks')
@@ -244,43 +247,6 @@ trait DeveloperDashboard
 
             //---------------- Avg number of attempts needed for approval by lead developer table view ------------------------------//
 
-
-
-            $this->avg_no_of_submission_needed_for_app_by_lead_dev = DB::table('tasks')
-                ->select(
-                    'tasks.id',
-                    'tasks.heading',
-                    'tasks.client_name',
-                    'tasks.due_date',
-                    'tasks.created_at as task_creation_date',
-                    'task_history.created_at as task_approval_date',
-                    'client.name as clientName',
-                    'client.id as clientId',
-                    'cl.name as cl_name',
-                    'cl.id as cl_id',
-                    DB::raw('MIN(task_submissions.created_at) as task_submission_date'),
-                    'taskboard_columns.column_name',
-                    'taskboard_columns.label_color as label_color'
-
-                )
-                ->join('task_users', 'tasks.id', '=', 'task_users.task_id')
-                ->leftJoin('projects', 'tasks.project_id', '=', 'projects.id')
-                ->join('taskboard_columns', 'taskboard_columns.id', '=', 'tasks.board_column_id')
-                ->leftJoin('task_submissions', 'tasks.id', '=', 'task_submissions.task_id')
-                ->leftJoin('users as client', 'client.id', '=', 'projects.client_id')
-                ->leftJoin('users as cl', 'cl.id', '=', 'tasks.client_id')
-                ->join('task_history', 'tasks.id', '=', 'task_history.task_id')
-                ->where('task_submissions.submission_no', 1)
-                ->where('task_submissions.created_at', '>=', $startDate)
-                ->where('task_submissions.created_at', '<', $endDate)
-                ->where('task_users.user_id', $devId)
-
-                ->groupBy('tasks.id')
-                ->orderBy('task_submissions.created_at', 'desc')
-                ->get();
-            foreach ($this->avg_no_of_submission_needed_for_app_by_lead_dev as $revision) {
-                $revision->revision_count = TaskHistory::where('task_id', $revision->id)->where('board_column_id', 1)->whereDate('created_at', '<=', $revision->task_approval_date)->count();
-            }
             // DB::raw('(SELECT COUNT(*) FROM task_revisions WHERE task_revisions.task_id = tasks.id AND task_revisions.created_at <= task_history.created_at) AS revision_count')
 
 
@@ -781,14 +747,11 @@ trait DeveloperDashboard
                 //count of assign tasks
                 $assign_task_count_for_revision++;
             }
-
-            $percentage_of_tasks_with_revision = 0;
-            if ($assign_task_count_for_revision > 0) {
-                $percentage_of_tasks_with_revision = ($number_of_total_revision_for_this_month / $assign_task_count_for_revision) * 100;
-            }
-            $this->percentage_of_tasks_with_revision = $percentage_of_tasks_with_revision;
             $this->assign_task_count_for_revision = $assign_task_count_for_revision;
-            $this->number_of_total_revision_for_this_month = $number_of_total_revision_for_this_month;
+
+            [$this->number_of_total_revision_for_this_month, $this->revision_task_data] = $this->totalNumberOfRevisions($startDate, $endDate, $devId);
+
+            [$this->percentage_of_tasks_with_revision, $this->percentage_of_tasks_with_revision_data] = $this->percentageOfTasksWithRevisions($startDate, $endDate, $devId);
 
 
             $revision_task_data = [];
@@ -1278,11 +1241,14 @@ trait DeveloperDashboard
 
 
             [
+                $this->first_attempt_approve_task_in_this_month,
                 $this->first_attempt_approve_task_in_this_month_count,
+                $this->first_attempt_approve_task_primary_page_in_this_month_data,
                 $this->first_attempt_approve_task_primary_page_in_this_month,
+                $this->first_attempt_approve_task_secondary_page_in_this_month_data,
                 $this->first_attempt_approve_task_secondary_page_in_this_month,
+                $this->first_attempt_approve_task_others_page_in_this_month_data,
                 $this->first_attempt_approve_task_others_page_in_this_month,
-                $this->first_attempt_approve_task_in_this_month
             ] = $this->numberOfApprovedTaskson1stAttemptByLeadDeveloper($startDate, $endDate, $devId);
 
             // --------------Average number of attempts needed for approval(in cycle) lead developer-----------------------------//
@@ -1750,10 +1716,10 @@ trait DeveloperDashboard
 
             [$this->number_of_total_revision_for_this_month, $this->revision_task_data] = $this->totalNumberOfRevisions($startDate, $endDate, $devId);
 
-            $this->percentage_of_tasks_with_revision = $this->percentageOfTasksWithRevisions($startDate, $endDate, $devId);
+            [$this->percentage_of_tasks_with_revision, $this->percentage_of_tasks_with_revision_data] = $this->percentageOfTasksWithRevisions($startDate, $endDate, $devId);
 
 
-            //---------------------------Percentage of tasks with revision sayeed code --------------------------//
+            //-------------------------- Percentage of tasks with revision sayeed code --------------------------//
 
 
 
@@ -1972,9 +1938,59 @@ trait DeveloperDashboard
 
     private function numberOfTasksReceived($startDate, $endDate, $devId)
     {
-        $total_tasks = Task::with('taskType', 'stat', 'project.pm', 'project.client', 'submissions')->whereBetween("created_at", [$startDate, $endDate])
-            ->whereNotNull('subtask_id')
-            ->whereRelation('taskUsers', 'user_id', '=', $devId);
+        $total_tasks = DB::table('tasks')
+            ->join('task_users', 'tasks.id', '=', 'task_users.task_id')
+            ->whereDate('tasks.created_at', '>=', $startDate)
+            ->whereDate('tasks.created_at', '<', $endDate)
+            ->whereNotNull('tasks.subtask_id')
+            ->where('task_users.user_id', $devId)
+            ->select('tasks.id', 'tasks.created_at')
+            // ->groupBy('tasks.id')
+            ->get();
+
+        $number_of_tasks_received = count($total_tasks);
+
+        $test = array();
+
+        $number_of_tasks_received_primary = 0;
+        $number_of_tasks_received_secondary = 0;
+        $number_of_tasks_received_others = 0;
+        foreach ($total_tasks as $i1) {
+            $type = DB::table('task_types')
+                ->where('task_id', $i1->id)
+                ->select('page_type_name', 'page_type', 'task_type') // Attempt to select all potential columns at once
+                ->first();
+
+            // Check which column has a non-null value in the priority order
+            if (!is_null($type)) {
+                if (!is_null($type->page_type_name)) {
+                    $taskType = $type->page_type_name;
+                } elseif (!is_null($type->page_type)) {
+                    $taskType = $type->page_type;
+                } elseif (!is_null($type->task_type)) {
+                    $taskType = $type->task_type;
+                } else {
+                    // Handle the case where none of the expected columns have a value
+                    $taskType = null; // or some default value
+                }
+            } else {
+                // Handle the case where no record was found
+                $taskType = null; // or some default value
+            }
+
+
+            array_push($test, $i1->id);
+
+            if ($taskType == "Primary Page Development") {
+                $number_of_tasks_received_primary++;
+            } elseif ($taskType == "Secondary Page Development") {
+                $number_of_tasks_received_secondary++;
+            } else {
+                $number_of_tasks_received_others++;
+            }
+        }
+
+        $total_tasks = Task::with('taskType', 'stat', 'project.pm', 'project.client', 'submissions')->whereIn('id', $test);
 
         $received_primary = clone $total_tasks;
         $received_secondary = clone $total_tasks;
@@ -2006,30 +2022,85 @@ trait DeveloperDashboard
 
     private function numberOfSubmittedTasks($startDate, $endDate, $devId)
     {
-
-        $number_of_tasks = TaskHistory::whereBetween("created_at", [$startDate, $endDate])
+        $number_of_tasks = DB::table('task_history')
+            ->select('task_id', DB::raw('MIN(created_at) as min_created_at'))
             ->where('board_column_id', 6)
             ->where('user_id', $devId)
-            ->groupBy('task_id')->get()->pluck('task_id')->toArray();
+            ->whereDate('created_at', '>=', $startDate)
+            ->whereDate('created_at', '<', $endDate)
+            ->groupBy('task_id')
+            ->get();
 
-        $test = Task::with('taskType', 'stat', 'project.pm', 'project.client', 'submissions')->whereIn('id', $number_of_tasks);
+        $task = [];
 
-        $number_of_tasks = clone $test;
-        $test_primary = clone $number_of_tasks;
-        $test_secondary = clone $number_of_tasks;
-        $test_others = clone $number_of_tasks;
+        foreach ($number_of_tasks as $i1) {
+            $min_sub = DB::table('task_history')
+                ->select('task_id', DB::raw('MIN(created_at) as min_created_at'))
+                ->where('board_column_id', 6)
+                ->where('user_id', $devId)
+                ->where('task_id', $i1->task_id)
+                ->first();
+            if ($min_sub->min_created_at >= $startDate && $min_sub->min_created_at < $endDate) {
+                array_push($task, $i1->task_id);
+            }
+        }
+        $number_of_tasks_submitted = count($task);
+        // dd($number_of_tasks_submitted);
 
-        $submit_number_of_tasks_in_this_month_data = $number_of_tasks->get();
-        $number_of_tasks_submitted = $number_of_tasks->count();
+        $test = array();
+        $number_of_tasks_submitted_primary = 0;
+        $number_of_tasks_submitted_secondary = 0;
+        $number_of_tasks_submitted_others = 0;
+        foreach ($task as $i1) {
+            $type = DB::table('task_types')
+                ->where('task_id', $i1)
+                ->select('page_type_name', 'page_type', 'task_type') // Attempt to select all potential columns at once
+                ->first();
 
-        $number_of_tasks_submitted_primary_data = $test_primary->whereRelation('taskType', 'page_type', '=', 'Primary Page Development')->get();
-        $number_of_tasks_submitted_primary = $test_primary->count();
+            // Check which column has a non-null value in the priority order
+            if (!is_null($type)) {
+                if (!is_null($type->page_type_name)) {
+                    $taskType = $type->page_type_name;
+                } elseif (!is_null($type->page_type)) {
+                    $taskType = $type->page_type;
+                } elseif (!is_null($type->task_type)) {
+                    $taskType = $type->task_type;
+                } else {
+                    // Handle the case where none of the expected columns have a value
+                    $taskType = null; // or some default value
+                }
+            } else {
+                // Handle the case where no record was found
+                $taskType = null; // or some default value
+            }
 
-        $number_of_tasks_submitted_secondary_data = $test_secondary->whereRelation('taskType', 'page_type', '=', 'Secondary Page Development')->get();
-        $number_of_tasks_submitted_secondary = $test_secondary->count();
+            array_push($test, $i1);
+            if ($taskType == "Primary Page Development") {
+                $number_of_tasks_submitted_primary++;
+            } elseif ($taskType == "Secondary Page Development") {
+                $number_of_tasks_submitted_secondary++;
+            } else {
+                $number_of_tasks_submitted_others++;
+            }
+        }
 
-        $number_of_tasks_submitted_others_data = $test_others->whereNotIn('id', array_merge($number_of_tasks_submitted_primary_data->pluck('id')->toArray(), $number_of_tasks_submitted_secondary_data->pluck('id')->toArray()))->get();
-        $number_of_tasks_submitted_others = $test_others->count();
+        $task = Task::with('taskType', 'stat', 'project.pm', 'project.client', 'submissions')->whereIn('id', $test);
+
+        $task_primary = clone $task;
+        $task_secondary = clone $task;
+        $task_others = clone $task;
+
+        $submit_number_of_tasks_in_this_month_data = $task->get();
+        $number_of_tasks_submitted = $task->count();
+
+        $number_of_tasks_submitted_primary_data = $task_primary->whereRelation('taskType', 'page_type', '=', 'Primary Page Development')->get();
+        $number_of_tasks_submitted_primary = $task_primary->count();
+
+        $number_of_tasks_submitted_secondary_data = $task_secondary->whereRelation('taskType', 'page_type', '=', 'Secondary Page Development')->get();
+        $number_of_tasks_submitted_secondary = $task_secondary->count();
+
+        $number_of_tasks_submitted_others_data = $task_others->whereNotIn('id', array_merge($number_of_tasks_submitted_primary_data->pluck('id')->toArray(), $number_of_tasks_submitted_secondary_data->pluck('id')->toArray()))->get();
+        $number_of_tasks_submitted_others = $task_others->count();
 
         return [
             $submit_number_of_tasks_in_this_month_data,
@@ -2055,8 +2126,6 @@ trait DeveloperDashboard
             ->distinct('task_history.task_id') // This line changed
             ->get();
 
-
-
         $completed_tasks_by_developer = [];
 
         foreach ($number_of_tasks_completed as $i1) {
@@ -2069,7 +2138,6 @@ trait DeveloperDashboard
                 array_push($completed_tasks_by_developer, $i1->task_id);
             }
         }
-
         $number_of_approved_tasks_on_1st_attempts = 0;
         $test = [];
         foreach ($completed_tasks_by_developer as $i1) {
@@ -2099,6 +2167,7 @@ trait DeveloperDashboard
                 array_push($test, $i1);
             }
         }
+
 
         $number_of_tasks_approved_1st_time_primary = 0;
         $number_of_tasks_approved_1st_time_secondary = 0;
@@ -2139,41 +2208,32 @@ trait DeveloperDashboard
             }
         }
 
-        $first_attempt_approve_task_in_this_month = DB::table('tasks')
-            ->select(
-                'tasks.id',
-                'tasks.heading',
-                'tasks.client_name',
-                'tasks.due_date',
-                'tasks.created_at as task_creation_date',
-                'task_history.created_at as task_approval_date',
-                'client.name as clientName',
-                'client.id as clientId',
-                'cl.name as cl_name',
-                'cl.id as cl_id',
-                DB::raw('MIN(task_submissions.created_at) as task_submission_date'),
-                'taskboard_columns.column_name',
-                'taskboard_columns.label_color as label_color'
+        $task = Task::with('taskType', 'stat', 'project.pm', 'project.client', 'latestTaskSubmission', 'latestTaskApprove', 'taskUser')->whereIn('id', $test);
 
-            )
-            ->join('task_users', 'tasks.id', '=', 'task_users.task_id')
-            ->leftJoin('projects', 'tasks.project_id', '=', 'projects.id')
-            ->join('taskboard_columns', 'taskboard_columns.id', '=', 'tasks.board_column_id')
-            ->leftJoin('task_submissions', 'tasks.id', '=', 'task_submissions.task_id')
-            ->leftJoin('users as client', 'client.id', '=', 'projects.client_id')
-            ->leftJoin('users as cl', 'cl.id', '=', 'tasks.client_id')
-            ->join('task_history', 'tasks.id', '=', 'task_history.task_id')
-            ->whereIn('tasks.id', $final_test)
-            ->groupBy('tasks.id')
-            ->orderBy('task_history.created_at', 'desc')
-            ->get();
+        $approved_1st_time_in_this_month = clone $task;
+        $approved_1st_time_primary = clone $task;
+        $approved_1st_time_secondary = clone $task;
+        $approved_1st_time_others = clone $task;
+
+        $number_of_tasks_approved_1st_time_in_this_month_data = $approved_1st_time_in_this_month->get();
+        $number_of_tasks_approved_1st_time_in_this_month = $approved_1st_time_in_this_month->count();
+        $number_of_tasks_approved_1st_time_primary_data = $approved_1st_time_primary->whereRelation('taskType', 'page_type', '=', 'Primary Page Development')->get();
+        $number_of_tasks_approved_1st_time_primary = $approved_1st_time_primary->count();
+        $number_of_tasks_approved_1st_time_secondary_data = $approved_1st_time_secondary->whereRelation('taskType', 'page_type', '=', 'Secondary Page Development')->get();
+        $number_of_tasks_approved_1st_time_secondary = $approved_1st_time_secondary->count();
+        $number_of_tasks_approved_1st_time_others_data = $approved_1st_time_others->whereNotIn('id', array_merge($approved_1st_time_secondary->pluck('id')->toArray(), $approved_1st_time_primary->pluck('id')->toArray()))->get();
+        $number_of_tasks_approved_1st_time_others = $approved_1st_time_others->count();
+
 
         return [
-            count($first_attempt_approve_task_in_this_month),
+            $number_of_tasks_approved_1st_time_in_this_month_data,
+            $number_of_tasks_approved_1st_time_in_this_month,
+            $number_of_tasks_approved_1st_time_primary_data,
             $number_of_tasks_approved_1st_time_primary,
+            $number_of_tasks_approved_1st_time_secondary_data,
             $number_of_tasks_approved_1st_time_secondary,
+            $number_of_tasks_approved_1st_time_others_data,
             $number_of_tasks_approved_1st_time_others,
-            $first_attempt_approve_task_in_this_month
         ];
     }
 
@@ -2234,38 +2294,12 @@ trait DeveloperDashboard
             $average_number_of_attempts_needed = ($number_of_attempts_needed / count($completed_tasks_by_developer));
         }
 
-        $avg_no_of_submission_needed_for_app_by_lead_dev = DB::table('tasks')
-            ->select(
-                'tasks.id',
-                'tasks.heading',
-                'tasks.client_name',
-                'tasks.due_date',
-                'tasks.created_at as task_creation_date',
-                'task_history.created_at as task_approval_date',
-                'client.name as clientName',
-                'client.id as clientId',
-                'cl.name as cl_name',
-                'cl.id as cl_id',
-                DB::raw('MIN(task_submissions.created_at) as task_submission_date'),
-                'taskboard_columns.column_name',
-                'taskboard_columns.label_color as label_color'
+        $avg_no_of_submission_needed_for_app_by_lead_dev = Task::with('taskType', 'stat', 'project.pm', 'project.client', 'revisions', 'firstTaskSubmission')->whereIn('id', $completed_tasks_by_developer)->get();
 
-            )
-            ->join('task_users', 'tasks.id', '=', 'task_users.task_id')
-            ->leftJoin('projects', 'tasks.project_id', '=', 'projects.id')
-            ->join('taskboard_columns', 'taskboard_columns.id', '=', 'tasks.board_column_id')
-            ->leftJoin('task_submissions', 'tasks.id', '=', 'task_submissions.task_id')
-            ->leftJoin('users as client', 'client.id', '=', 'projects.client_id')
-            ->leftJoin('users as cl', 'cl.id', '=', 'tasks.client_id')
-            ->join('task_history', 'tasks.id', '=', 'task_history.task_id')
-            ->whereIn('tasks.id', $completed_tasks_by_developer)
-            ->groupBy('tasks.id')
-            ->orderBy('task_submissions.created_at', 'desc')
-            ->get();
-        foreach ($avg_no_of_submission_needed_for_app_by_lead_dev as $revision) {
-            $revision->revision_count = TaskHistory::where('task_id', $revision->id)->where('board_column_id', 1)->whereDate('created_at', '<=', $revision->task_approval_date)->count();
-        }
-        return [$average_number_of_attempts_needed, $avg_no_of_submission_needed_for_app_by_lead_dev];
+        return [
+            $average_number_of_attempts_needed,
+            $avg_no_of_submission_needed_for_app_by_lead_dev,
+        ];
     }
 
     private function percentageOfTasksWithRevisions($startDate, $endDate, $devId)
@@ -2327,7 +2361,9 @@ trait DeveloperDashboard
             $percentage_of_tasks_with_revision = ($task_with_revision / count($completed_tasks_by_developer)) * 100;
         }
 
-        return $percentage_of_tasks_with_revision;
+        $percentage_of_tasks_with_revision_data = Task::with('taskType', 'stat', 'project.pm', 'project.client', 'revisions', 'firstTaskSubmission')->whereIn('id', $completed_tasks_by_developer)->get();
+
+        return [$percentage_of_tasks_with_revision, $percentage_of_tasks_with_revision_data];
     }
 
     private function totalNumberOfRevisions($startDate, $endDate, $devId)
