@@ -2304,6 +2304,8 @@ trait DeveloperDashboard
 
     private function percentageOfTasksWithRevisions($startDate, $endDate, $devId)
     {
+        // $startDate = "2024-03-01 00:00:00";
+        // $endDate = "2024-03-31 00:00:00";
         $number_of_tasks_completed = DB::table('task_history')
             ->join('tasks', 'tasks.id', '=', 'task_history.task_id')
             ->select('task_history.task_id', 'task_history.created_at')
@@ -2329,6 +2331,7 @@ trait DeveloperDashboard
 
         $task_with_revision = 0;
         $test = [];
+        $task_id = [];
         foreach ($completed_tasks_by_developer as $i1) {
             $submitted = DB::table('task_history')
                 ->select('task_id', DB::raw('MIN(created_at) as earliest_created_at'))
@@ -2353,7 +2356,8 @@ trait DeveloperDashboard
 
             if ($revision > 0) {
                 $task_with_revision++;
-            }
+                array_push($task_id, $i1);
+                }
             array_push($test, $revision);
         }
         $percentage_of_tasks_with_revision = 0;
@@ -2361,7 +2365,7 @@ trait DeveloperDashboard
             $percentage_of_tasks_with_revision = ($task_with_revision / count($completed_tasks_by_developer)) * 100;
         }
 
-        $percentage_of_tasks_with_revision_data = Task::with('taskType', 'stat', 'project.pm', 'project.client', 'revisions', 'firstTaskSubmission')->whereIn('id', $completed_tasks_by_developer)->get();
+        $percentage_of_tasks_with_revision_data = Task::with('taskType', 'stat', 'project.pm', 'project.client', 'revisions', 'firstTaskSubmission')->whereIn('id', $task_id)->get();
 
         return [$percentage_of_tasks_with_revision, $percentage_of_tasks_with_revision_data];
     }
