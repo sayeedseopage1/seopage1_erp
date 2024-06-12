@@ -169,7 +169,7 @@
 						<label for="">Number of Milestones</label><br>
 						<div style="background: #e9ecef; padding: 5px; border-radius: 5px">
 							<h6>
-								<a href="{{route('projects.show', $project->id).'?tab=milestones'}}" class="ml-1">{{$totalMilestone}}</a>
+								<a target="_blank" href="{{route('projects.show', $project->id).'?tab=milestones'}}" class="ml-1">{{$totalMilestone}}</a>
 							</h6>
 						</div>
 					</div>
@@ -179,7 +179,7 @@
 						<label for="">Number of Tasks</label><br>
 						<div style="background: #e9ecef; padding: 5px; border-radius: 5px">
 							<h6>
-								<a href="{{route('projects.show', $project->id).'?tab=tasks'}}" class="ml-1">{{$totalTask}}</a>
+								<a target="_blank" href="{{route('projects.show', $project->id).'?tab=tasks'}}" class="ml-1">{{$totalTask}}</a>
 							</h6>
 						</div>
 					</div>
