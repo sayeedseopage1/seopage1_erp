@@ -13,6 +13,7 @@ const IncentiveThickChart = ({ chartData }) => {
     const chartRef = useRef(null);
 
     const isAllZero = chartData?.incentive == 0;
+    const seriesLength = chartData?.seriesData.length;
 
     const options = {
         title: {
@@ -101,11 +102,15 @@ const IncentiveThickChart = ({ chartData }) => {
         dataLabels: {
             enabled: true,
             formatter: function (val, opts) {
+                const { dataPointIndex } = opts;
                 // Apply special case for the first bar when all values are zero
                 if (isAllZero && opts.dataPointIndex == 0) {
                     return chartData?.ratio != null
                         ? `⬤ ${chartData?.shortTitle}: ${chartData?.limitType == 1 ? "$" : ""}${chartData?.ratio}${chartData?.limitType == 2 ? "%" : ""}`
                         : `⬤ ${chartData?.shortTitle}: N/A`;
+                }
+                if (dataPointIndex === 0 || dataPointIndex === seriesLength - 1) {
+                    return ""; // Hide the label for the first and last bars
                 }
                 return val ? `${chartData?.limitType == 1 ? "$" : ""}${chartData?.ratio}${chartData?.limitType == 2 ? "%" : ""}, ${val}${chartData?.amountType == 1 ? "" : "%"}` : "";
             },
