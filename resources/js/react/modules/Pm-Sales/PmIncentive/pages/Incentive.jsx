@@ -16,7 +16,7 @@ import useIncentive from '../hooks/useIncentive';
 import { useGetAchievedIncentiveQuery, useGetIncentiveHeldAmountQuery } from '../../../../services/api/Pm-Sales/PmIncentiveApiSlice';
 
 const Incentive = () => {
-    const [tab, setTab] = useState("current");
+    const [tab, setTab] = useState("incentive_factors");
     const [filterByPeriod, setFilterByPeriod] = useState("monthly");
     const { incentiveTypesLoading } = useIncentive();
     const [queryForAchievedIncentive, setQueryForAchievedIncentive] = useState({})
