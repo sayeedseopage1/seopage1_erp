@@ -101,18 +101,8 @@ const pmSalesApiSlice = apiSlice.injectEndpoints({
         }),
         payIncentiveHeldAmount: build.mutation({
             query: (payload) => {
-                // let queryParams = new URLSearchParams();
-                // if (payload?.incentive_payment_ids?.length) {
-                //     queryParams.append(
-                //         "incentive_payment_ids",
-                //         JSON.stringify(payload.incentive_payment_ids)
-                //     );
-                // }
-                // if (payload?.user_id) {
-                //     queryParams.append("user_id", payload.user_id);
-                // }
                 return {
-                    url: `/account/pay-incentive-held-amount`,
+                    url: `/account/incentive-payments`,
                     method: "POST",
                     body: payload,
                     headers: {

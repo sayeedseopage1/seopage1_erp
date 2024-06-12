@@ -27,7 +27,7 @@ class GetIncentiveHeldAmount extends Controller
             $item->title = "Monthly Incentive (for the month of $monthYear)";
             $item->viewing_month = Carbon::parse($item->date)->addDays(5)->format('F, Y');
             $heldAmountPaymentHistory = IncentivePaymentHistory::with('addedBy')->whereMonth('to_month', Carbon::parse($item->date))->first();
-            $item->held_amount_payment = $heldAmountPaymentHistory ? "Held incentive amount ". $heldAmountPaymentHistory->paid_amount . " taka for ". Carbon::parse($heldAmountPaymentHistory->from_month)->format('F, Y') . " - ". Carbon::parse($heldAmountPaymentHistory->to_month)->format('F, Y') . " has been paid on ". Carbon::parse($heldAmountPaymentHistory->payment_date)->format('F j, Y') . " by " . $heldAmountPaymentHistory->addedBy->name : null;
+            $item->held_amount_payment = $heldAmountPaymentHistory ? "Held incentive amount <b>". $heldAmountPaymentHistory->paid_amount . " taka</b> for ". Carbon::parse($heldAmountPaymentHistory->from_month)->format('F, Y') . " - ". Carbon::parse($heldAmountPaymentHistory->to_month)->format('F, Y') . " has been paid on <b>". Carbon::parse($heldAmountPaymentHistory->payment_date)->format('F j, Y') . "</b> by <b>" . $heldAmountPaymentHistory->addedBy->name."</b>" : null;
             $item->status_text = $item->status == 1 ? 'Pending' : 'Paid';
             return $item;
         });

@@ -115,7 +115,7 @@ const HeldAmounts = ({ data, isFetching, isLoading, expandedRowKeys }) => {
                         expandedRowRender: (record) => {
                             return (
                                 <div className="held-amount-expanded-row">
-                                    <p className="held-amount-expanded-title">{record?.held_amount_payment}</p>
+                                    <p className="held-amount-expanded-title" dangerouslySetInnerHTML={{ __html: record?.held_amount_payment }}></p>
                                     <p className="expanded-held-amount">00 taka</p>
                                 </div>
                             );

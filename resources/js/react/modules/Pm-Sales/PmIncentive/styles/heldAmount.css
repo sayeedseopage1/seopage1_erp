@@ -174,3 +174,14 @@
     font-style: normal;
     font-weight: 600;
 }
+
+.disabled-row {
+    background-color: #f5f5f5;
+    opacity: 0.5;
+    cursor: not-allowed !important;
+    /* Change this color to your preferred background color */
+}
+
+:where(.css-dev-only-do-not-override-1u00c9r).ant-picker .ant-picker-input>input {
+    font-size: 18px !important;
+}

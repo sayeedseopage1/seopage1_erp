@@ -66,7 +66,7 @@ const Incentive = () => {
 
         for (let i = 0; i < dataCopy?.length; i++) {
             if (dataCopy[i]?.held_amount_payment) {
-                dataCopy[i - 1].held_amount_payment = dataCopy[i].held_amount_payment;
+                dataCopy[i - 1].held_amount_payment = dataCopy[i]?.held_amount_payment;
                 dataCopy[i].held_amount_payment = null;
             }
         }
