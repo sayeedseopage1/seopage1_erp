@@ -21,6 +21,7 @@ class GetIncentiveHeldAmount extends Controller
         $userId = $request->user_id??null;
         $startDate = $request->start_date ? Carbon::parse($request->start_date)->startOfDay() : Carbon::now()->startOfYear();
         $endDate = Carbon::parse($request->end_date??now())->endOfYear();
+
         $data = IncentivePayment::where('user_id', $userId)->whereBetween('date', [$startDate, $endDate])->get()->map(function ($item) {
             $monthYear = Carbon::parse($item->date)->format('F, Y');
             $item->title = "Monthly Incentive (for the month of $monthYear)";
@@ -30,6 +31,21 @@ class GetIncentiveHeldAmount extends Controller
             $item->status_text = $item->status == 1 ? 'Pending' : 'Paid';
             return $item;
         });
+
+        $sumOfHeldAmount = 0;
+        foreach($data as $item){
+            if($item->held_amount_payment){
+                $sumOfHeldAmount += $item->held_amount;
+                $item->cumulative_held_amount = $sumOfHeldAmount;
+                $sumOfHeldAmount = 0;
+            }else{
+                $sumOfHeldAmount += $item->held_amount;
+                $item->cumulative_held_amount = $sumOfHeldAmount;
+            }
+            
+        }
+
+        $data = $data->sortByDesc('id')->values();
 
         return response()->json([
             'status'=> 200,
