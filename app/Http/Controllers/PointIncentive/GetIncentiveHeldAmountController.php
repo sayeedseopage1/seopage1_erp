@@ -8,7 +8,7 @@ use App\Models\IncentivePayment;
 use App\Http\Controllers\Controller;
 use App\Models\IncentivePaymentHistory;
 
-class GetIncentiveHeldAmount extends Controller
+class GetIncentiveHeldAmountController extends Controller
 {
     /**
      * Handle the incoming request.
