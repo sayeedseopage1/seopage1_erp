@@ -14,6 +14,7 @@ import Spinner from '../../PointFactors/components/loader/Spinner';
 import QuarterAndYearlyTable from '../components/Sections/QuarterlyAndYearly/QuarterAndYearlyTable';
 import useIncentive from '../hooks/useIncentive';
 import { useGetAchievedIncentiveQuery, useGetIncentiveHeldAmountQuery } from '../../../../services/api/Pm-Sales/PmIncentiveApiSlice';
+import _ from 'lodash';
 
 const Incentive = () => {
     const [tab, setTab] = useState("incentive_factors");
@@ -49,7 +50,23 @@ const Incentive = () => {
         { skip: tab != "held_amount" }
     )
 
+    const moveHeldAmountPayment = (data) => {
+        let dataCopy;
+        if (data) {
+            dataCopy = _.cloneDeep(data);
+        }
+
+        for (let i = 0; i < dataCopy?.length; i++) {
+            if (dataCopy[i]?.held_amount_payment) {
+                dataCopy[i - 1].held_amount_payment = dataCopy[i].held_amount_payment;
+                dataCopy[i].held_amount_payment = null;
+            }
+        }
+        return dataCopy;
+    }
+
     const incentiveHeldAmountsData = incentiveHeldAmounts?.data
+    const newData = moveHeldAmountPayment(incentiveHeldAmountsData)
     const expandedRowKeys = incentiveHeldAmountsData?.filter((item) => item?.held_amount_payment).map((item) => item?.id)
 
     if (incentiveTypesLoading) {

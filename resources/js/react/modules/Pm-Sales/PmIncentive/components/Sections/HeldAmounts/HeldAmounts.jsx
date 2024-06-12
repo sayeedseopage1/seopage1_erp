@@ -4,58 +4,6 @@ import Pagination from '../../ui/Pagination';
 import { ConfigProvider, Table } from 'antd';
 import PointHistoryTableLoader from '../../../../Points/components/loader/PointHistoryTableLoader';
 
-
-const tableData = [
-    {
-        "id": 1,
-        "date": "2023-12-31 10:21:11",
-        "user_id": 209,
-        "total_incentive_amount": "1000.00",
-        "held_amount": "200.00",
-        "payable_amount": "800.00",
-        "paid_amount": "800.00",
-        "status": 1,
-        "created_at": "2023-12-31T04:06:16.000000Z",
-        "updated_at": "2023-12-31T04:06:16.000000Z",
-        "title": "Monthly Incentive (for the month of December, 2023)",
-        "viewing_month": "January, 2024",
-        "held_amount_payment": null,
-        "cumulative_held_amount": "1000"
-    },
-    {
-        "id": 2,
-        "date": "2024-01-31 10:13:20",
-        "user_id": 209,
-        "total_incentive_amount": "1000.00",
-        "held_amount": "200.00",
-        "payable_amount": "800.00",
-        "paid_amount": "800.00",
-        "status": 1,
-        "created_at": "2024-01-31T04:06:16.000000Z",
-        "updated_at": "2024-01-31T04:06:16.000000Z",
-        "title": "Monthly Incentive (for the month of January, 2024)",
-        "viewing_month": "February, 2024",
-        "held_amount_payment": "Held incentive amount 400.00 taka for December, 2023 - January, 2024 has been paid on June 10, 2024 by Rajat Chakraborty",
-        "cumulative_held_amount": "0"
-    },
-    {
-        "id": 3,
-        "date": "2024-02-29 10:13:20",
-        "user_id": 209,
-        "total_incentive_amount": "10000.00",
-        "held_amount": "2000.00",
-        "payable_amount": "8000.00",
-        "paid_amount": "8000.00",
-        "status": 2,
-        "created_at": "2024-02-29T04:06:16.000000Z",
-        "updated_at": "2024-02-29T04:06:16.000000Z",
-        "title": "Monthly Incentive (for the month of February, 2024)",
-        "viewing_month": "March, 2024",
-        "held_amount_payment": null,
-        "cumulative_held_amount": "2200"
-    }
-]
-
 const columns = [
     {
         title: 'Month',
@@ -131,7 +79,6 @@ const columns = [
     }
 ];
 
-
 const HeldAmounts = ({ data, isFetching, isLoading, expandedRowKeys }) => {
     const [currentPage, setCurrentPage] = useState(1)
     const [currentPageData, setCurrentPageData] = useState([]);
@@ -169,7 +116,7 @@ const HeldAmounts = ({ data, isFetching, isLoading, expandedRowKeys }) => {
                             return (
                                 <div className="held-amount-expanded-row">
                                     <p className="held-amount-expanded-title">{record?.held_amount_payment}</p>
-                                    <p className="expanded-held-amount">{parseFloat(record?.held_amount)} taka</p>
+                                    <p className="expanded-held-amount">00 taka</p>
                                 </div>
                             );
                         },
