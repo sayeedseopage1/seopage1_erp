@@ -68,7 +68,7 @@ const Incentive = () => {
 
     const incentiveHeldAmountsData = incentiveHeldAmounts?.data
     const newData = moveHeldAmountPayment(incentiveHeldAmountsData)
-    const expandedRowKeys = incentiveHeldAmountsData?.filter((item) => item?.held_amount_payment).map((item) => item?.id)
+    const expandedRowKeys = newData && newData?.filter((item) => item?.held_amount_payment).map((item) => item?.id)
 
     if (incentiveTypesLoading) {
         return <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
@@ -108,7 +108,7 @@ const Incentive = () => {
                     </Switch.Case>
                     <Switch.Case condition={tab == "held_amount"}>
                         <div className='incentive_inner_wrapper'>
-                            <HeldAmounts expandedRowKeys={expandedRowKeys} data={incentiveHeldAmountsData} isFetching={incentiveHeldAmountsIsFetching} isLoading={incentiveHeldAmountsLoading} />
+                            <HeldAmounts expandedRowKeys={expandedRowKeys} data={newData} isFetching={incentiveHeldAmountsIsFetching} isLoading={incentiveHeldAmountsLoading} />
                         </div>
                     </Switch.Case>
                     <Switch.Case condition={tab == "incentive_factors"}>

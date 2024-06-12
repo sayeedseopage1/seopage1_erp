@@ -14,8 +14,8 @@ const JqueryDateRangePicker = ({
             let moment = window.moment;
 
             $(function () {
-                let start = moment().startOf('month');
-                let end = moment();
+                let start = moment().subtract(23, 'months').startOf('month'); // Set start date to beginning of current year
+                let end = moment(); // Set end date to today
 
                 setStartDate(start.format());
                 setEndDate(end.format());
@@ -51,16 +51,19 @@ const JqueryDateRangePicker = ({
                         ],
                         firstDay: parseInt("1")
                     },
-                    startDate: start,
-                    endDate: end,
+                    startDate: start, // Default start date set to the beginning of the year
+                    endDate: end, // Default end date set to today
                     datePicker: true,
                     ranges: {
-                        'Today': [moment(), moment()],
-                        'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
-                        'Last 7 Days': [moment().subtract(6, 'days'), moment()],
+                        // 'Today': [moment(), moment()],
+                        // 'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+                        // 'Last 7 Days': [moment().subtract(6, 'days'), moment()],
                         'Last 30 Days': [moment().subtract(29, 'days'), moment()],
                         'This Month': [moment().startOf('month'), moment().endOf('month')],
-                        'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
+                        'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')],
+                        'Last 3 Months': [moment().subtract(3, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')],
+                        'This Year': [moment().startOf('year'), moment().endOf('year')],
+                        'Last 12 Months': [moment().subtract(12, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
                     }
                 }, cb);
 

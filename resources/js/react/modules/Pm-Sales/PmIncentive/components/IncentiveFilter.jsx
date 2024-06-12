@@ -10,6 +10,7 @@ import PropTypes from 'prop-types';
 import DeptFilter from './Filter/DeptFilter.jsx';
 import EmployeeFilter from './Filter/EmployeeFilter.jsx';
 import useIncentive from '../hooks/useIncentive.jsx';
+import JqueryDateRangePicker from './JqueryDateRangePicker.jsx';
 
 export default function IncentiveFilter({ filterByPeriod, setQueryForAchievedIncentive, setQueryForIncentiveHeldAmounts, tab }) {
     const { setQuery } = useIncentive();
@@ -116,13 +117,24 @@ export default function IncentiveFilter({ filterByPeriod, setQueryForAchievedInc
                         type={filterByPeriod}
                     />
                 }
-                {
+                {/* {
                     tab == "held_amount" && <DateFilter
                         startDate={startDateYear}
                         endDate={endDateYear}
                         setStartDate={setStartDateYear}
                         setEndDate={setEndDateYear}
                         type={"yearly"}
+                    />
+                } */}
+
+                {
+                    tab == "held_amount" && <JqueryDateRangePicker
+                        startDate={startDateYear}
+                        endDate={endDateYear}
+                        setStartDate={setStartDateYear}
+                        setEndDate={setEndDateYear}
+                        onApply={() => { }}
+
                     />
                 }
 

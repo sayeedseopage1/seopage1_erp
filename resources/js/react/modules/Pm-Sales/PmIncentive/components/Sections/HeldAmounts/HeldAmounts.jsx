@@ -57,8 +57,8 @@ const columns = [
     },
     {
         title: 'Held Amount Balance',
-        dataIndex: 'held_amount',
-        key: 'held_amount',
+        dataIndex: 'cumulative_held_amount',
+        key: 'cumulative_held_amount',
         render: (text) => <span className='held_amount_table_td'>{parseFloat(text)} taka</span>,
         align: 'center'
     },
@@ -69,7 +69,7 @@ const columns = [
         render: (_, record) => (
             <div>
                 {
-                    record?.status === 1 ? <button className='incentive_success_btn'>Paid</button> : <button className='incentive_danger_btn'>Pending</button>
+                    record?.status === 2 ? <button className='incentive_success_btn'>Paid</button> : <button className='incentive_danger_btn'>Pending</button>
                 }
             </div>
         ),
