@@ -10,10 +10,10 @@
 						<th>Time difference</th>
 					</x-slot>
 					@php
-						$previousFirst = $lead_deal_activity_log->first()->created_at->copy()->setSecond(0);
-						$logActivity = $activityLog->last();
-						$currectLast = $logActivity->created_at->copy()->setSecond(0);
-						$intervalTime = $previousFirst ? $currectLast->diff($previousFirst) : null;
+						$previousFirst = ($lead_deal_activity_log->isNotEmpty() && $lead_deal_activity_log->first()->created_at) ? $lead_deal_activity_log->first()->created_at->copy()->setSecond(0) : null;
+						$logActivity = ($activityLog->isNotEmpty() && $activityLog->last()->created_at) ? $activityLog->last() : null;
+						$currectLast = ($logActivity && $logActivity->created_at) ? $logActivity->created_at->copy()->setSecond(0) : null;
+						$intervalTime = ($previousFirst && $currectLast) ? $currectLast->diff($previousFirst) : null;
 					@endphp
 					@foreach($activityLog as $loopIndex => $value)
 					@php
@@ -126,14 +126,16 @@
 					->get();
 	$userIds = $all_log_users->pluck('added_by')->merge($all_log_users->pluck('created_by'))->unique();
 	$users = App\Models\User::whereIn('id', $userIds)->get();
+	$totalMilestone = App\Models\ProjectMilestone::where('project_id', $project->id)->count();
+	$totalTask = App\Models\Task::where('project_id', $project->id)->where('subtask_id', null)->count();
 	@endphp
 	<div class="row mx-0 sticky-top" style="background-color: rgb(242, 244, 247); z-index:1; top: 110px">
 		<form action="" class="w-100" id="filter-form">
 			@csrf
 			<input type="hidden" name="project_id" value="{{request()->route('project')}}">
-	        <div class="d-block d-lg-flex d-md-flex my-3">
-	            <div class="align-items-center d-flex pl-0 py-1 mr-3 w-100">
-		            <div class="col-12 col-sm-3 p-0">
+			<div class="row mt-4 mb-2">
+				<div class="col-md-4">
+					<div class="p-0">
 		                <label class="f-14 text-dark-grey mb-12" data-label="" for="status">Status</label>
 		                <div class="border input-group rounded">
 		                    <div class="input-group-prepend">
@@ -144,23 +146,45 @@
 		                    <input type="text" class="position-relative text-dark form-control border-0 p-2 text-left f-14 f-w-500" name="date_range" id="datatableRange_al" placeholder="Start Date And End Date">
 		               </div>
 		            </div>
-		            <div class="col-12 col-sm-4 d-flex">
-		                <div class="select-box py-2 px-0 mr-3">
-		                    <x-forms.label :fieldLabel="__('Employee')" fieldId="employee" />
-		                    <select class="form-control select-picker" name="employee" id="employee" data-live-search="false" data-size="8">
-		                        <option value="all">@lang('app.all')</option>
-								@foreach($users as $user)
-									<option value="{{ $user->id }}">{{ $user->name }}</option>
-								@endforeach
-		                    </select>
-		                </div>
-						<div class="form-group" style="margin-top: 10px;">
-							<label for="">Client</label>
-							<input type="text" name="" id="" class="form-control height-35 f-14" value="{{$client->name}}" readonly>
+				</div>
+				<div class="col-md-2">
+					<div class="">
+						<label class="f-14 text-dark-grey mb-12" data-label="" for="employee">Employee</label>
+						<select class="form-control select-picker" name="employee" id="employee" data-live-search="false" data-size="8">
+							<option value="all">@lang('app.all')</option>
+							@foreach($users as $user)
+								<option value="{{ $user->id }}">{{ $user->name }}</option>
+							@endforeach
+						</select>
+					</div>
+				</div>
+				<div class="col-md-2">
+					<div class="form-group">
+						<label for="">Client</label>
+						<input type="text" name="" id="" class="form-control height-35 f-14" value="{{$client->name}}" readonly>
+					</div>
+				</div>
+				<div class="col-md-2">
+					<div class="form-group">
+						<label for="">Number of Milestones</label><br>
+						<div style="background: #fff; padding: 5px; border-radius: 5px">
+							<h6>
+								<a href="{{route('projects.show', $project->id).'?tab=milestones'}}" class="ml-1">{{$totalMilestone}}</a>
+							</h6>
 						</div>
-		            </div>
-		        </div>
-	        </div>
+					</div>
+				</div>
+				<div class="col-md-2">
+					<div class="form-group">
+						<label for="">Number of Tasks</label><br>
+						<div style="background: #fff; padding: 5px; border-radius: 5px">
+							<h6>
+								<a href="{{route('projects.show', $project->id).'?tab=tasks'}}" class="ml-1">{{$totalTask}}</a>
+							</h6>
+						</div>
+					</div>
+				</div>
+			</div>
 	    </form>
 	</div>
 	<div id="activityLog">
