@@ -526,6 +526,13 @@ class ContractController extends AccountBaseController
             $deal->deal_stage = 6;
             // $deal->won_lost = 'Yes';
             $deal->save();
+
+            $stageChange = new DealStageChange();
+            $stageChange->lead_id = $deal->lead_id;
+            $stageChange->deal_id = $deal->short_code;
+            $stageChange->deal_stage_id = $deal->deal_stage;
+            $stageChange->updated_by = Auth::id();
+            $stageChange->save();
         } else {
             $deal->deal_stage = $deal_stage->deal_stage;
             $deal->comments = $deal_stage->comments;
