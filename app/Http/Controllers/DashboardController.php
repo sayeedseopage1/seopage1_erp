@@ -824,19 +824,20 @@ class DashboardController extends AccountBaseController
                 'leftMin' => $leftMin
             ]);
         } else {
-            // $durations = json_decode($request->durations, true);
-            // $totalTrackedSeconds = 0;
-            // foreach ($durations as $duration) {
-            //     $start = new DateTime($duration['start']);
-            //     $end = new DateTime($duration['end']);
-            //     $interval = $start->diff($end);
-            //     $totalSeconds = ($interval->h * 3600) + ($interval->i * 60) + $interval->s;
-            //     $totalTrackedSeconds += $totalSeconds;
-            // }
-            // // Convert total seconds to minutes
-            // $totalTrackedMinutes = $totalTrackedSeconds / 60;
+            $durations = json_decode($request->durations, true);
+            $totalTrackedSeconds = 0;
+            foreach ($durations as $duration) {
+                $start = new DateTime($duration['start']);
+                $end = new DateTime($duration['end']);
+                $interval = $start->diff($end);
+                $totalSeconds = ($interval->h * 3600) + ($interval->i * 60) + $interval->s;
+                $totalTrackedSeconds += $totalSeconds;
+            }
+            // Convert total seconds to minutes
+            $totalTrackedMinutes = $totalTrackedSeconds / 60;
 
             // $leftMin = $request->incomplete_hours - $totalTrackedMinutes;
+
             $user_id = Auth::user()->id;
             $devTimes = DeveloperStopTimer::where('user_id', $user_id)
                                             ->whereDate('date', '=', $request->date)
@@ -859,7 +860,7 @@ class DashboardController extends AccountBaseController
             $leftMin = $request->incomplete_hours - $totalDifferenceInMinutes;
 
 
-            if ($totalDifferenceInMinutes >= $request->incomplete_hours) {
+            if ($totalDifferenceInMinutes + $totalTrackedMinutes >= $request->incomplete_hours) {
                 $stop_time = new DeveloperStopTimer();
                 $stop_time->reason_for_less_tracked_hours_a_day_task = $request->reason_for_less_tracked_hours_a_day_task;
                 $stop_time->durations = $request->durations;
