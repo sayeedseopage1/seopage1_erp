@@ -41,6 +41,7 @@ const AcknowledgementReminderModal = ({
     data,
     trackedTimeHistory,
     lastClockData,
+    incomplete_hours,
     onSubmit,
 }) => {
     const [step, setStep] = React.useState(0);
@@ -57,6 +58,7 @@ const AcknowledgementReminderModal = ({
                     {
                         ...data,
                         date: dayjs.dayjs(reminderDate).format("YYYY-MM-DD"),
+                        incomplete_hours: incomplete_hours,
                         _token: document
                             .querySelector("meta[name='csrf-token']")
                             .getAttribute("content"),
