@@ -42,14 +42,14 @@ class SalesPolicyNotification extends Notification
     {
         switch ($this->type) {
             case 'sales_risk_authorization':
-                $subject = 'Client ' . $this->data['client'] . ': Sales risk authorization needed';
+                $subject = 'Client: ' . $this->data['client'] . ': Sales risk authorization needed';
                 $header = 'Please authorize sales risk for the following project:';
                 $body = strtr('Project name: projectName</a> <br/>
                 Client name: clientName<br/>
                 Sales person: salesPerson <br/>
                 Sum of points: salesPoint<br/>', $this->data);
                 $url = $this->url;
-                $text = 'View Deal';
+                $text = 'Authorize';
                 break;
             case 'sales_lead_authorization':
                 $subject = 'Client ' . $this->data['client'] . ': Sales authorization needed';
@@ -63,8 +63,7 @@ class SalesPolicyNotification extends Notification
             case 'pending_large_from_submission':
                 $subject = 'Client ' . $this->data['client'] . ': Finish the pending works for your own deal!';
                 $header = 'Please finish the pending works for your own deal:';
-                $body = strtr('Please finish the pending works for your own deal: <br/>
-                Won deal name: projectName<br/>
+                $body = strtr('Won deal name: projectName<br/>
                 Client name: clientName <br/>', $this->data);
                 $url = $this->url;
                 $text = 'Review';
@@ -72,7 +71,7 @@ class SalesPolicyNotification extends Notification
         }
 
         return (new MailMessage)
-            ->subject(__('[No Reply] ' . $subject))
+            ->subject(__($subject))
             ->markdown('mail.sales-policy-mail', ['header' => $header, 'body' => $body, 'url' => $url, 'text' => $text]);
     }
 
