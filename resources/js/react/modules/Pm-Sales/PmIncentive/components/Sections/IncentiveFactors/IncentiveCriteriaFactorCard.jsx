@@ -1,4 +1,3 @@
-import { Divider } from 'antd';
 import React from 'react';
 
 const IncentiveCriteriaFactorCard = ({ item }) => {
@@ -6,7 +5,7 @@ const IncentiveCriteriaFactorCard = ({ item }) => {
     return (
         <div className='criteria_card'>
             <p className='criteria_card_title'>{title}</p>
-            <Divider style={{ color: "#55BBFF" }} />
+            <hr className='criteria_card_divider' style={{ color: "#55BBFF" }} />
             <div className='factor_header'>
                 <div>Ratio</div>
                 <div>Obtainable Points</div>

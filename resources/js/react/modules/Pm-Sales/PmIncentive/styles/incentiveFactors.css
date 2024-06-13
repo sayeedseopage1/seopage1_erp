@@ -126,6 +126,11 @@
     justify-content: center;
 }
 
+.criteria_card_divider {
+    border: 1px solid #55BBFF;
+    border-bottom: none;
+}
+
 
 @media only screen and (max-width: 1600px) {
     .criteria_card {

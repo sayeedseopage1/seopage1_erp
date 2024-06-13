@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { auth, heldAmountsData } from '../../../constants';
+import React, { useEffect, useState } from 'react';
+import { auth } from '../../../constants';
 import Pagination from '../../ui/Pagination';
 import { ConfigProvider, Table } from 'antd';
 import PointHistoryTableLoader from '../../../../Points/components/loader/PointHistoryTableLoader';
@@ -79,10 +79,47 @@ const columns = [
     }
 ];
 
-const HeldAmounts = ({ data, isFetching, isLoading, expandedRowKeys }) => {
+const HeldAmounts = ({ data, isFetching, isLoading }) => {
     const [currentPage, setCurrentPage] = useState(1)
     const [currentPageData, setCurrentPageData] = useState([]);
     const [numberOfRowPerPage, setNumberOfRowPerPage] = useState(10);
+
+    const modifiedData = [];
+    data?.forEach(item => {
+        if (item?.held_amount_payment) {
+            const newObject = {
+                "id": item?.id + "abcd",
+                "held_amount_payment_details": item?.held_amount_payment,
+            };
+            modifiedData?.push(newObject);
+        }
+        modifiedData?.push(item);
+    });
+
+    const expandedRowKeys = modifiedData?.filter((item) => item?.held_amount_payment_details)?.map((item) => item?.id)
+
+    const expandable = {
+        expandedRowRender: (record) => {
+            return record?.held_amount_payment_details ? (
+                <div className="held-amount-expanded-row">
+                    <p className="held-amount-expanded-title" dangerouslySetInnerHTML={{ __html: record?.held_amount_payment_details }}></p>
+                    <p className="expanded-held-amount">00 taka</p>
+                </div>
+            ) : null;
+        },
+        expandedRowKeys,
+        showExpandColumn: false,
+        expandIcon: () => null,
+    };
+
+    useEffect(() => {
+        expandedRowKeys?.forEach((key) => {
+            const tr = document?.querySelector(`tr[data-row-key="${key}"]`);
+            if (tr) {
+                tr.style.display = 'none';
+            }
+        });
+    }, [expandedRowKeys]);
 
 
     if (isLoading || isFetching) {
@@ -107,23 +144,11 @@ const HeldAmounts = ({ data, isFetching, isLoading, expandedRowKeys }) => {
                 <Table
                     rowKey="id"
                     columns={columns}
-                    dataSource={currentPageData}
+                    dataSource={modifiedData}
                     pagination={false}
                     scroll={{ x: 1400, y: 1000 }}
                     bordered
-                    expandable={{
-                        expandedRowRender: (record) => {
-                            return (
-                                <div className="held-amount-expanded-row">
-                                    <p className="held-amount-expanded-title" dangerouslySetInnerHTML={{ __html: record?.held_amount_payment }}></p>
-                                    <p className="expanded-held-amount">00 taka</p>
-                                </div>
-                            );
-                        },
-                        expandedRowKeys,
-                        showExpandColumn: false,
-                        expandIcon: () => null,
-                    }}
+                    expandable={expandable}
                 />
             </ConfigProvider>
 
