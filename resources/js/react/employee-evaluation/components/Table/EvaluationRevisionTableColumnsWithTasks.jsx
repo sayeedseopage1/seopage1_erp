@@ -110,23 +110,24 @@ export const EvaluationRevisionTableColumnsWithTasks = [
         header: "Revision Provided By",
         draggable: true,
         sortable: true,
-        accessorFn: (row) => row?.project_manager?.name,
+
         cell: ({ row }) => {
+            const data = row.original;
             return (
                 <Popover>
                     <Popover.Button>
                         <a
-                            href={`/account/employees/2252`}
+                            href={`/account/employees/${data?.added_by}`}
                             className="text-primary"
                         >
-                            Hasnain Islam Dolon
+                            {data?.added_by_name}
                         </a>
                     </Popover.Button>
 
                     <Popover.Panel>
                         <div className={styles.revision_popover_panel}>
-                            <a href={`/account/employees/2252`}>
-                                Hasnain Islam Dolon
+                            <a href={`/account/employees/${data?.added_by}`}>
+                                {data?.added_by_name}
                             </a>
                         </div>
                     </Popover.Panel>

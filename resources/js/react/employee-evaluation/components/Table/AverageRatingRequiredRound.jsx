@@ -79,7 +79,7 @@ const AverageRatingRequiredRound = ({ data, round }) => {
                 onClick={() => setIsRatingModalOpen(true)}
                 className="link_color"
             >
-                {totalAverage.toFixed(2) ?? "N/A"}
+                {`${totalAverage.toFixed(2) ?? "N/A"}`}
             </div>
             <ReactModal
                 style={{
@@ -110,7 +110,10 @@ const AverageRatingRequiredRound = ({ data, round }) => {
                     >
                         <div>
                             <span>Lead Developer Average Rating</span>
-                            <span> {totalAverage.toFixed(2) ?? "N/A"}</span>
+                            <span>
+                                {" "}
+                                {`(${totalAverage.toFixed(2) ?? "N/A"})`}
+                            </span>
                         </div>
                     </Card.Head>
 

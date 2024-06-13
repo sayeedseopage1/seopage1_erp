@@ -114,7 +114,7 @@ class EvaluationController extends AccountBaseController
         $endDate = $request->end_date ?? null;
         $limit = $request->limit ??  10;
 
-        $evaluationQuery = EmployeeEvaluation::select('employee_evaluations.*','added_by.id as added_by_id','added_by.name as added_by_name','tasks.id as task_id','roles.name as role_name')
+        $evaluationQuery = EmployeeEvaluation::select('employee_evaluations.*','added_by.id as added_by_id','added_by.name as added_by_name','tasks.id as task_id','roles.name as role_name', 'tmLead.name as team_lead_name')
                     ->selectRaw('MIN(sub_tasks.created_at) as first_task_assign_on')
                     ->selectRaw('MIN(project_time_logs.created_at) as started_working_on')
                     ->selectRaw('COUNT(DISTINCT task_users.id) as total_task_assigned')
@@ -125,6 +125,7 @@ class EvaluationController extends AccountBaseController
                     ->leftJoin('tasks', 'sub_tasks.task_id', '=', 'tasks.id')
                     ->leftJoin('users as added_by', 'sub_tasks.added_by', '=', 'added_by.id')
                     ->leftJoin('users', 'employee_evaluations.user_id', '=', 'users.id')
+                    ->leftJoin('users as tmLead', 'employee_evaluations.team_lead_id', '=', 'tmLead.id')
                     ->leftJoin('roles', 'users.role_id', '=', 'roles.id')
                     ->leftJoin('project_time_logs', 'employee_evaluations.user_id', '=', 'project_time_logs.user_id')
                     ->leftJoin('task_users', 'employee_evaluations.user_id', '=', 'task_users.user_id')
@@ -169,7 +170,7 @@ class EvaluationController extends AccountBaseController
 
     public function getSingleEvaluation($user_id)
     {
-        $evaluationQuery = EmployeeEvaluation::select('employee_evaluations.*', 'added_by.id as added_by_id', 'added_by.name as added_by_name', 'tasks.id as task_id', 'roles.name as role_name')
+        $evaluationQuery = EmployeeEvaluation::select('employee_evaluations.*', 'added_by.id as added_by_id', 'added_by.name as added_by_name', 'tasks.id as task_id', 'roles.name as role_name', 'tmLead.name as team_lead_name')
         ->selectRaw('MIN(sub_tasks.created_at) as first_task_assign_on')
         ->selectRaw('MIN(project_time_logs.created_at) as started_working_on')
         ->selectRaw('COUNT(DISTINCT task_users.id) as total_task_assigned')
@@ -180,6 +181,7 @@ class EvaluationController extends AccountBaseController
         ->leftJoin('tasks', 'sub_tasks.task_id', '=', 'tasks.id')
         ->leftJoin('users as added_by', 'sub_tasks.added_by', '=', 'added_by.id')
         ->leftJoin('users', 'employee_evaluations.user_id', '=', 'users.id')
+        ->leftJoin('users as tmLead', 'employee_evaluations.team_lead_id', '=', 'tmLead.id')
         ->leftJoin('roles', 'users.role_id', '=', 'roles.id')
         ->leftJoin('project_time_logs', 'employee_evaluations.user_id', '=', 'project_time_logs.user_id')
         ->leftJoin('task_users', 'employee_evaluations.user_id', '=', 'task_users.user_id')
@@ -221,11 +223,13 @@ class EvaluationController extends AccountBaseController
             'taskboard_columns.label_color as task_board_column_color',
             'taskboard_columns.priority as task_board_column_priority',
             'task_submissions.screen_record_link',
-            'tasks.id as task_id'
+            'tasks.id as task_id',
+            'users.id as added_by_id','users.name as added_by_name'
         )
         ->leftJoin('tasks', 'employee_evaluation_tasks.task_id', 'tasks.id')
         ->leftJoin('taskboard_columns', 'tasks.board_column_id', 'taskboard_columns.id')
         ->leftJoin('task_submissions', 'tasks.id', 'task_submissions.task_id')
+        ->leftJoin('users', 'employee_evaluation_tasks.lead_dev_id', 'users.id')
         ->where('employee_evaluation_tasks.user_id', $id)
         ->get();
 
@@ -769,7 +773,7 @@ class EvaluationController extends AccountBaseController
     }
     public function getEmployeeUser($id)
     {
-        $evaluationUser = EmployeeEvaluation::select('employee_evaluations.*','employee_evaluation_tasks.lead_dev_id','users.id as assign_by_id','users.name as assign_by_name','users.image as assign_by_img')
+        $evaluationUser = EmployeeEvaluation::select('employee_evaluations.*','employee_evaluation_tasks.lead_dev_id','users.id as added_by','users.name as added_by_name','users.image as added_by_img')
                         ->leftJoin('employee_evaluation_tasks','employee_evaluations.user_id','employee_evaluation_tasks.user_id')
                         ->leftJoin('users','employee_evaluation_tasks.lead_dev_id','users.id')
                         ->where('employee_evaluations.user_id',$id)
@@ -782,7 +786,11 @@ class EvaluationController extends AccountBaseController
     }
     public function employeeTaskRevision($id)
     {
-        $revision = TaskRevision::where('task_id',$id)->get();
+        $revision = TaskRevision::select('task_revisions.*', 'users.name as added_by_name')
+        ->leftJoin('users', 'task_revisions.added_by','users.id')
+        ->where('task_id',$id)
+        ->get();
+        
         return response()->json([
             'status' => 200,
             'data' => $revision
@@ -796,6 +804,7 @@ class EvaluationController extends AccountBaseController
         foreach($revisions as $revision)
         {
             $revision->task_heading = Task::where('id', $revision->task_id)->value('heading');
+            $revision->added_by_name = User::where('id', $revision->added_by)->value('name');
         }
         return response()->json([
             'status' => 200,
@@ -812,8 +821,10 @@ class EvaluationController extends AccountBaseController
     }
     public function EmployeeEvaluationHistory($id)
     {
-        $history = EvaluationHistory::where('user_id', $id)->get();
-
+        $history = EvaluationHistory::select('evaluation_histories.*', 'users.name as team_lead_name')
+                ->leftJoin('users', 'evaluation_histories.team_lead_id', 'users.id')
+                ->where('user_id', $id)
+                ->get();
         return response()->json([
             'status' => 200,
             'data' => $history
