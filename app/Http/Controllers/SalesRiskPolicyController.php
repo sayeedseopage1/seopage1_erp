@@ -625,13 +625,13 @@ class SalesRiskPolicyController extends AccountBaseController
 
         $deal = Deal::find($deal_id);
         if (in_array($deal->sale_analysis_status, ['authorized', 'auto-authorized'])) {
-            return redirect()->route('dealDetails', $deal_id);
+            return redirect()->route('dealDetailsedit', $deal_id);
         }
 
         $data = $this->data;
         $data['dealStatus'] = $deal->sale_analysis_status;
         $data['addedBefore'] = PolicyQuestionValue::where('deal_id', $deal_id)->count() > 0;
-        $data['redirectUrl'] = route('dealDetails', $deal_id);
+        $data['redirectUrl'] = route('dealDetailsedit', $deal_id);
         // Note: big form route : route('dealDetails', $deal->id)
 
         return view('deals.sales-questions-render', $data);
@@ -738,7 +738,7 @@ class SalesRiskPolicyController extends AccountBaseController
             return response()->json([
                 'status' => 'success',
                 'message' => 'Questions values stored successfully.',
-                'redirectUrl' => route('dealDetails', $dealId),
+                'redirectUrl' => route('dealDetailsedit', $dealId),
                 'data' => ['points' => $calculation['points']]
             ]);
         } catch (\Throwable $th) {
