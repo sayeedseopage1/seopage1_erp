@@ -11,7 +11,7 @@ import TaskList from "./TaskList";
 const Option5 = ({ checked, index, onChange, onSubmit, isLoading, onBack }) => {
     const [task, setTask] = React.useState(null);
     const [durations, setDurations] = React.useState([
-        { start: "00:00 AM", end: "00:00 AM", id: "de2sew" },
+        { start: "", end: "", id: "de2sew" },
     ]);
     const [error, setError] = React.useState(null);
     const uniqueId = Math.random().toString(6).slice(2);
@@ -22,7 +22,7 @@ const Option5 = ({ checked, index, onChange, onSubmit, isLoading, onBack }) => {
         let filtered = durations.filter((d) => d.id !== id);
         setDurations([...filtered]);
     };
-    const [sType, setSType] = React.useState(''); // submission type
+    const [sType, setSType] = React.useState(""); // submission type
 
     // add duration
     const addDurationForm = () => {
@@ -30,8 +30,8 @@ const Option5 = ({ checked, index, onChange, onSubmit, isLoading, onBack }) => {
             ...prev,
             {
                 id: uniqueId,
-                start: "00:00 AM",
-                end: "00:00 AM",
+                start: "",
+                end: "",
             },
         ]);
     };
@@ -40,14 +40,14 @@ const Option5 = ({ checked, index, onChange, onSubmit, isLoading, onBack }) => {
         let errCount = 0;
         let err = new Object();
 
-        if(!task){
+        if (!task) {
             err.task = "Select the task you forgot to track hours!";
             errCount++;
         }
 
         setError(err);
         return !errCount;
-    }
+    };
 
     // handle form submit
     const handleSubmission = (e, submissionType) => {
@@ -59,10 +59,10 @@ const Option5 = ({ checked, index, onChange, onSubmit, isLoading, onBack }) => {
             durations: JSON.stringify(durations),
         };
 
-        setSType(submissionType)
-        if (isValid()){
+        setSType(submissionType);
+        if (isValid()) {
             onSubmit(data, submissionType, onBack);
-        }else{
+        } else {
             Swal.fire({
                 position: "center",
                 icon: "error",
@@ -70,7 +70,6 @@ const Option5 = ({ checked, index, onChange, onSubmit, isLoading, onBack }) => {
                 showConfirmButton: true,
             });
         }
-
     };
 
     return (
@@ -101,7 +100,7 @@ const Option5 = ({ checked, index, onChange, onSubmit, isLoading, onBack }) => {
                                 </Label>
                                 <TaskList task={task} onSelect={setTask} />
                                 <Switch.Case condition={error?.task}>
-                                    <div style={{color: 'red'}}>
+                                    <div style={{ color: "red" }}>
                                         {error?.task}
                                     </div>
                                 </Switch.Case>
@@ -163,19 +162,25 @@ const Option5 = ({ checked, index, onChange, onSubmit, isLoading, onBack }) => {
                                 </Button>
 
                                 <Button
-                                    onClick={e => handleSubmission(e, '')}
-                                    isLoading={sType !== 'CONTINUE' && isLoading}
-                                    loaderTitle='Processing...'
+                                    onClick={(e) => handleSubmission(e, "")}
+                                    isLoading={
+                                        sType !== "CONTINUE" && isLoading
+                                    }
+                                    loaderTitle="Processing..."
                                 >
                                     Submit
                                 </Button>
 
                                 <Button
-                                    variant='success'
-                                    className='ml-2'
-                                    onClick={e => handleSubmission(e, 'CONTINUE')}
-                                    isLoading={sType === 'CONTINUE' && isLoading}
-                                    loaderTitle='Processing...'
+                                    variant="success"
+                                    className="ml-2"
+                                    onClick={(e) =>
+                                        handleSubmission(e, "CONTINUE")
+                                    }
+                                    isLoading={
+                                        sType === "CONTINUE" && isLoading
+                                    }
+                                    loaderTitle="Processing..."
                                 >
                                     Submit and add more
                                 </Button>

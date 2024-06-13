@@ -15,7 +15,7 @@ import ProjectList from "./ProjectList";
 import UserList from "./UserList";
 import TaskList from "./TaskList";
 import { message } from "laravel-mix/src/Log";
-
+import { TimePicker, Space } from "antd";
 const Option4 = ({ checked, index, onChange, onSubmit, isLoading, onBack }) => {
     const [data, setData] = React.useState({
         comment: "",
@@ -30,8 +30,8 @@ const Option4 = ({ checked, index, onChange, onSubmit, isLoading, onBack }) => {
     });
 
     // console.log("data in option 4", data);
-    const [durationStart, setDurationStart] = React.useState("08:00 AM");
-    const [durationEnd, setDurationEnd] = React.useState("05:00 PM");
+    const [durationStart, setDurationStart] = React.useState("");
+    const [durationEnd, setDurationEnd] = React.useState("");
     const [person, setPerson] = React.useState({});
     const [task, setTask] = React.useState({});
     const [error, setError] = React.useState(null);
@@ -62,24 +62,24 @@ const Option4 = ({ checked, index, onChange, onSubmit, isLoading, onBack }) => {
     };
 
     // setup time field
-    React.useEffect(() => {
-        // start time
-        window
-            .$("#timepicker1")
-            .timepicker("setTime", durationStart)
-            .on("changeTime.timepicker", function (e) {
-                setDurationStart(e.target.value);
-            });
+    // React.useEffect(() => {
+    //     // start time
+    //     window
+    //         .$("#timepicker1")
+    //         .timepicker("setTime", durationStart)
+    //         .on("changeTime.timepicker", function (e) {
+    //             setDurationStart(e.target.value);
+    //         });
 
-        // end time
-        window
-            .$("#timepicker2")
-            .timepicker("setTime", durationEnd)
-            .on("changeTime.timepicker", function (e) {
-                setDurationEnd(e.target.value);
-                // console.log(e.timeStamp)
-            });
-    }, [checked]);
+    //     // end time
+    //     window
+    //         .$("#timepicker2")
+    //         .timepicker("setTime", durationEnd)
+    //         .on("changeTime.timepicker", function (e) {
+    //             setDurationEnd(e.target.value);
+    //             // console.log(e.timeStamp)
+    //         });
+    // }, [checked]);
 
     // responsible person ID
     const responsiblePersonId = (id) => {
@@ -455,26 +455,34 @@ const Option4 = ({ checked, index, onChange, onSubmit, isLoading, onBack }) => {
                                         <label htmlFor="" className="d-block">
                                             From:
                                         </label>
-                                        <input
-                                            id="timepicker1"
-                                            className="form-control w-100 py-2"
-                                            data-minute-step="1"
-                                            data-modal-backdrop="false"
-                                            type="text"
-                                        />
+                                        <Space wrap>
+                                            <TimePicker
+                                                use12Hours
+                                                format="h:mm a"
+                                                defaultValue={durationStart}
+                                                onChange={(time) =>
+                                                    setDurationStart(time)
+                                                }
+                                                className="w-100 py-2"
+                                            />
+                                        </Space>
                                     </div>
 
                                     <div className="col-6 input-group bootstrap-timepicker timepicker d-flex flex-column">
                                         <label htmlFor="" className="d-block">
                                             To
                                         </label>
-                                        <input
-                                            id="timepicker2"
-                                            className="form-control w-100 py-2"
-                                            data-minute-step="1"
-                                            data-modal-backdrop="false"
-                                            type="text"
-                                        />
+                                        <Space wrap>
+                                            <TimePicker
+                                                use12Hours
+                                                format="h:mm a"
+                                                defaultValue={durationEnd}
+                                                onChange={(time) =>
+                                                    setDurationEnd(time)
+                                                }
+                                                className="w-100 py-2"
+                                            />
+                                        </Space>
                                     </div>
                                 </div>
                             </FormGroup>

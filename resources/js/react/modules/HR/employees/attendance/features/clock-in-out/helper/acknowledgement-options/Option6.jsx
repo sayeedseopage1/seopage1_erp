@@ -2,17 +2,20 @@ import React from "react";
 import CKEditorComponent from "../../../../../../../../ckeditor";
 import Button from "../../../../../../../../global/Button";
 import Switch from "../../../../../../../../global/Switch";
-import { FormGroup, Label } from "../../../../../../../../global/styled-component/Form";
+import {
+    FormGroup,
+    Label,
+} from "../../../../../../../../global/styled-component/Form";
 import DurationTime from "./DurationTimer";
 
 const Option6 = ({ checked, index, onChange, onSubmit, isLoading, onBack }) => {
     const [comment, setComment] = React.useState("");
     const [durations, setDurations] = React.useState([
-        { start: "00:00 AM", end: "00:00 AM", id: "de2sew" },
+        { start: "", end: "", id: "de2sew" },
     ]);
     const [error, setError] = React.useState(null);
     const uniqueId = Math.random().toString(6).slice(2);
-    const [sType, setSType] = React.useState(''); // submission type
+    const [sType, setSType] = React.useState(""); // submission type
     // editor data change
     const handleEditorChange = (e, editor) => {
         const data = editor.getData();
@@ -32,8 +35,8 @@ const Option6 = ({ checked, index, onChange, onSubmit, isLoading, onBack }) => {
             ...prev,
             {
                 id: uniqueId,
-                start: "00:00 AM",
-                end: "00:00 AM",
+                start: "",
+                end: "",
             },
         ]);
     };
@@ -60,7 +63,7 @@ const Option6 = ({ checked, index, onChange, onSubmit, isLoading, onBack }) => {
             comment,
         };
 
-        setSType(submissionType)
+        setSType(submissionType);
         if (isValid()) {
             onSubmit(data, submissionType, onBack);
         } else {
@@ -97,7 +100,8 @@ const Option6 = ({ checked, index, onChange, onSubmit, isLoading, onBack }) => {
                             {/* time duration */}
                             <FormGroup>
                                 <Label className="font-weight-bold">
-                                    Select an approximate time here. <sup>*</sup>
+                                    Select an approximate time here.{" "}
+                                    <sup>*</sup>
                                 </Label>
                                 {/* duration selection row */}
                                 <div className="row">
@@ -140,7 +144,9 @@ const Option6 = ({ checked, index, onChange, onSubmit, isLoading, onBack }) => {
 
                             {/* comment field */}
                             <div className="mt-3">
-                                <Label className="font-weight-bold">Write your comments here: </Label>
+                                <Label className="font-weight-bold">
+                                    Write your comments here:{" "}
+                                </Label>
                                 <div className="ck-editor-holder stop-timer-options">
                                     <CKEditorComponent
                                         data={comment}
@@ -166,19 +172,25 @@ const Option6 = ({ checked, index, onChange, onSubmit, isLoading, onBack }) => {
                                 </Button>
 
                                 <Button
-                                    onClick={e => handleSubmission(e, '')}
-                                    isLoading={sType !== 'CONTINUE' && isLoading}
-                                    loaderTitle='Processing...'
+                                    onClick={(e) => handleSubmission(e, "")}
+                                    isLoading={
+                                        sType !== "CONTINUE" && isLoading
+                                    }
+                                    loaderTitle="Processing..."
                                 >
                                     Submit
                                 </Button>
 
                                 <Button
-                                    variant='success'
-                                    className='ml-2'
-                                    onClick={e => handleSubmission(e, 'CONTINUE')}
-                                    isLoading={sType === 'CONTINUE' && isLoading}
-                                    loaderTitle='Processing...'
+                                    variant="success"
+                                    className="ml-2"
+                                    onClick={(e) =>
+                                        handleSubmission(e, "CONTINUE")
+                                    }
+                                    isLoading={
+                                        sType === "CONTINUE" && isLoading
+                                    }
+                                    loaderTitle="Processing..."
                                 >
                                     Submit and add more
                                 </Button>

@@ -3,7 +3,7 @@ import CKEditorComponent from "../../../../../../../../ckeditor/index";
 import Button from "../../../../../../../../global/Button";
 import Switch from "../../../../../../../../global/Switch";
 import { Label } from "../../../../../../../../global/styled-component/Form";
-
+import { TimePicker, Space } from "antd";
 /**
  * * This component responsible for rendering leave early explanation form
  */
@@ -21,30 +21,29 @@ const LeavingEarlyExplanation = ({
     // form data
     const [comment, setComment] = React.useState("");
     const [error, setError] = React.useState(null);
-    const [durationStart, setDurationStart] = React.useState("08:00 AM");
-    const [durationEnd, setDurationEnd] = React.useState("05:00 PM");
-    const [sType, setSType] = React.useState(''); // submission type
-
+    const [durationStart, setDurationStart] = React.useState("");
+    const [durationEnd, setDurationEnd] = React.useState("");
+    const [sType, setSType] = React.useState(""); // submission type
 
     // setup time field
-    React.useEffect(() => {
-        // start time
-        window
-            .$("#timepicker1")
-            .timepicker("setTime", durationStart)
-            .on("changeTime.timepicker", function (e) {
-                setDurationStart(e.target.value);
-            });
+    // React.useEffect(() => {
+    //     // start time
+    //     window
+    //         .$("#timepicker1")
+    //         .timepicker("setTime", durationStart)
+    //         .on("changeTime.timepicker", function (e) {
+    //             setDurationStart(e.target.value);
+    //         });
 
-        // end time
-        window
-            .$("#timepicker2")
-            .timepicker("setTime", durationEnd)
-            .on("changeTime.timepicker", function (e) {
-                setDurationEnd(e.target.value);
-                // console.log(e.timeStamp)
-            });
-    }, [checked]);
+    //     // end time
+    //     window
+    //         .$("#timepicker2")
+    //         .timepicker("setTime", durationEnd)
+    //         .on("changeTime.timepicker", function (e) {
+    //             setDurationEnd(e.target.value);
+    //             // console.log(e.timeStamp)
+    //         });
+    // }, [checked]);
 
     // form validation checking
     const isValid = () => {
@@ -121,32 +120,43 @@ const LeavingEarlyExplanation = ({
                                     <label htmlFor="" className="d-block">
                                         From:
                                     </label>
-                                    <input
-                                        id="timepicker1"
-                                        className="form-control w-100 py-2"
-                                        data-minute-step="1"
-                                        data-modal-backdrop="false"
-                                        type="text"
-                                    />
+                                    <Space wrap>
+                                        <TimePicker
+                                            use12Hours
+                                            format="h:mm a"
+                                            defaultValue={durationStart}
+                                            onChange={(time) =>
+                                                setDurationStart(time)
+                                            }
+                                            className="w-100 py-2"
+                                        />
+                                    </Space>
                                 </div>
 
                                 <div className="col-6 input-group bootstrap-timepicker timepicker d-flex flex-column">
                                     <label htmlFor="" className="d-block">
                                         To
                                     </label>
-                                    <input
-                                        id="timepicker2"
-                                        className="form-control w-100 py-2"
-                                        data-minute-step="1"
-                                        data-modal-backdrop="false"
-                                        type="text"
-                                    />
+                                    <Space wrap>
+                                        <TimePicker
+                                            use12Hours
+                                            format="h:mm a"
+                                            defaultValue={durationEnd}
+                                            onChange={(time) =>
+                                                setDurationEnd(time)
+                                            }
+                                            className="w-100 py-2"
+                                        />
+                                    </Space>
                                 </div>
                             </div>
 
                             {/* comment field */}
                             <div className="mt-3">
-                                <Label className="font-weight-bold">Explain the reason why you are leaving early on ${lessTrackDate} <sup>*</sup> </Label>
+                                <Label className="font-weight-bold">
+                                    Explain the reason why you are leaving early
+                                    on ${lessTrackDate} <sup>*</sup>{" "}
+                                </Label>
                                 <div className="ck-editor-holder stop-timer-options">
                                     <CKEditorComponent
                                         data={comment}
@@ -172,19 +182,25 @@ const LeavingEarlyExplanation = ({
                                 </Button>
 
                                 <Button
-                                    onClick={e => handleSubmission(e, '')}
-                                    isLoading={sType !== 'CONTINUE' && isLoading}
-                                    loaderTitle='Processing...'
+                                    onClick={(e) => handleSubmission(e, "")}
+                                    isLoading={
+                                        sType !== "CONTINUE" && isLoading
+                                    }
+                                    loaderTitle="Processing..."
                                 >
                                     Submit
                                 </Button>
 
                                 <Button
-                                    variant='success'
-                                    className='ml-2'
-                                    onClick={e => handleSubmission(e, 'CONTINUE')}
-                                    isLoading={sType === 'CONTINUE' && isLoading}
-                                    loaderTitle='Processing...'
+                                    variant="success"
+                                    className="ml-2"
+                                    onClick={(e) =>
+                                        handleSubmission(e, "CONTINUE")
+                                    }
+                                    isLoading={
+                                        sType === "CONTINUE" && isLoading
+                                    }
+                                    loaderTitle="Processing..."
                                 >
                                     Submit and add more
                                 </Button>

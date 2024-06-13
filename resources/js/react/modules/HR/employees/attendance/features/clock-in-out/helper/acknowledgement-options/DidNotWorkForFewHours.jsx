@@ -20,13 +20,13 @@ const DidNotWorkForFewHours = ({
 }) => {
     const [comment, setComment] = React.useState("");
     const [durations, setDurations] = React.useState([
-        { start: "00:00AM", end: "00:00AM", id: "dwedj" },
+        { start: "", end: "", id: "dwedj" },
     ]);
     const [error, setError] = React.useState(null);
 
     // generate random id
     const uniqueId = Math.random().toString(6).slice(2);
-    const [sType, setSType] = React.useState(''); // submission type
+    const [sType, setSType] = React.useState(""); // submission type
     // remove duration
     const onRemove = (e, id) => {
         e.preventDefault();
@@ -40,8 +40,8 @@ const DidNotWorkForFewHours = ({
             ...prev,
             {
                 id: uniqueId,
-                start: "00:00 AM",
-                end: "00:00 AM",
+                start: "",
+                end: "",
             },
         ]);
     };
@@ -174,19 +174,25 @@ const DidNotWorkForFewHours = ({
                                 </Button>
 
                                 <Button
-                                    onClick={e => handleSubmission(e, '')}
-                                    isLoading={sType !== 'CONTINUE' && isLoading}
-                                    loaderTitle='Processing...'
+                                    onClick={(e) => handleSubmission(e, "")}
+                                    isLoading={
+                                        sType !== "CONTINUE" && isLoading
+                                    }
+                                    loaderTitle="Processing..."
                                 >
                                     Submit
                                 </Button>
 
                                 <Button
-                                    variant='success'
-                                    className='ml-2'
-                                    onClick={e => handleSubmission(e, 'CONTINUE')}
-                                    isLoading={sType === 'CONTINUE' && isLoading}
-                                    loaderTitle='Processing...'
+                                    variant="success"
+                                    className="ml-2"
+                                    onClick={(e) =>
+                                        handleSubmission(e, "CONTINUE")
+                                    }
+                                    isLoading={
+                                        sType === "CONTINUE" && isLoading
+                                    }
+                                    loaderTitle="Processing..."
                                 >
                                     Submit and add more
                                 </Button>
