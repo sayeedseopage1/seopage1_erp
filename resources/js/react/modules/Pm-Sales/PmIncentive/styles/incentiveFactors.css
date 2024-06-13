@@ -25,19 +25,23 @@
     line-height: normal;
     text-align: center;
     margin-bottom: 24px;
+    /* max-width: 32%; */
+    width: 100%;
 }
 
 .incentive_criteria_factors {
-    display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
+    display: flex;
     gap: 15px;
+    width: 100%;
+    flex-wrap: wrap;
+    justify-content: center;
 }
 
 .criteria_card {
     border-radius: 11px;
     background: #BCE4FF;
     padding: 20px;
-    max-width: 469.953px;
+    max-width: 32%;
     width: 100%;
 }
 
@@ -95,13 +99,10 @@
 
 .criteria_factor_notes_wrapper {
     display: flex;
-    gap: 10px;
-}
-
-.incentive_criteria_factors_parent {
-    display: flex;
-    flex-direction: column;
-    max-width: 950px;
+    gap: 15px;
+    width: 100%;
+    flex-wrap: wrap;
+    justify-content: center;
 }
 
 
