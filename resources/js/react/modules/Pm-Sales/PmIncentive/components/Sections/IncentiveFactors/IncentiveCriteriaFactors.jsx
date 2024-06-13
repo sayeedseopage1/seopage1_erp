@@ -18,7 +18,7 @@ const IncentiveCriteriaFactors = () => {
             {/* regular points */}
             <div style={{ marginBottom: '50px' }}>
                 <IncentiveCriteriaFactorTitleBar title={'Regular Points'} />
-                <IncentiveCriteriaFactorNote content={'Actual regular points will be dependent on the following criteria:'} isImportant={true} />
+                <IncentiveCriteriaFactorNote content={'Actual regular points will be dependent on the following criteria:'} isImportant={true} isFullWidth={true} />
                 <div className='incentive_criteria_factors'>
                     {
                         regularData?.map(item => <IncentiveCriteriaFactorCard key={item?.id} item={item} />)

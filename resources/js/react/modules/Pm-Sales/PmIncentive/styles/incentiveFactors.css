@@ -25,19 +25,23 @@
     line-height: normal;
     text-align: center;
     margin-bottom: 24px;
+    max-width: 32%;
+    width: 100%;
 }
 
 .incentive_criteria_factors {
-    display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
+    display: flex;
     gap: 15px;
+    width: 100%;
+    flex-wrap: wrap;
+    justify-content: center;
 }
 
 .criteria_card {
     border-radius: 11px;
     background: #BCE4FF;
     padding: 20px;
-    max-width: 469.953px;
+    max-width: 32%;
     width: 100%;
 }
 
@@ -73,13 +77,13 @@
     border-radius: 10px;
     background: #A3D1F0;
     padding: 10px;
+    min-height: 300px;
 }
 
 .factor_card {
-    display: flex;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
     align-items: center;
-    justify-content: space-between;
-    gap: 10px;
 }
 
 .factor_title,
@@ -93,15 +97,107 @@
     /* border: 1px solid #B5E1FF; */
 }
 
-.criteria_factor_notes_wrapper {
-    display: flex;
-    gap: 10px;
+.factor_description {
+    text-align: right;
 }
 
-.incentive_criteria_factors_parent {
+.factor_card> :nth-child(1) {
+    border-right: 1px solid #B5E1FF;
+    border-bottom: 1px solid #B5E1FF;
+    padding: 11px 5px;
+}
+
+.factor_card> :nth-child(2) {
+    border-bottom: 1px solid #B5E1FF;
+    padding: 11px 5px;
+}
+
+.factor_card:last-child> :nth-child(1),
+.factor_card:last-child> :nth-child(2) {
+    border-bottom: none !important;
+}
+
+
+.criteria_factor_notes_wrapper {
     display: flex;
-    flex-direction: column;
-    max-width: 950px;
+    gap: 15px;
+    width: 100%;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+
+@media only screen and (max-width: 1600px) {
+    .criteria_card {
+        max-width: 49%;
+    }
+
+    .incentive_criteria_factor_note {
+        max-width: 49%;
+        font-size: 14px;
+    }
+
+    .factor_title,
+    .factor_description {
+        font-size: 14px;
+    }
+
+    .factor_header div {
+        font-size: 14px;
+    }
+
+}
+
+@media only screen and (max-width: 1060px) {
+    .criteria_card {
+        max-width: 48%;
+    }
+
+    .criteria_card_title {
+        font-size: 14px;
+    }
+
+    .incentive_criteria_factor_note {
+        max-width: 48%;
+        font-size: 14px;
+    }
+
+    .factor_title,
+    .factor_description {
+        font-size: 14px;
+    }
+
+    .factor_header div {
+        font-size: 14px;
+    }
+
+    .incentive_criteria_factor_title {
+        font-size: 20px;
+    }
+}
+
+@media only screen and (max-width: 800px) {
+    .criteria_card {
+        max-width: 100%;
+    }
+
+    .incentive_criteria_factor_note {
+        max-width: 100%;
+        font-size: 12px;
+    }
+
+    .factor_title,
+    .factor_description {
+        font-size: 12px;
+    }
+
+    .factor_header div {
+        font-size: 12px;
+    }
+
+    .incentive_criteria_factor_title {
+        font-size: 18px;
+    }
 }
 
 

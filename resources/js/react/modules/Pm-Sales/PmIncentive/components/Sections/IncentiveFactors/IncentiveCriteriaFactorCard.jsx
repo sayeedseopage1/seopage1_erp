@@ -3,8 +3,6 @@ import React from 'react';
 
 const IncentiveCriteriaFactorCard = ({ item }) => {
     const { title, factorsData } = item || {};
-
-    console.log(factorsData)
     return (
         <div className='criteria_card'>
             <p className='criteria_card_title'>{title}</p>
