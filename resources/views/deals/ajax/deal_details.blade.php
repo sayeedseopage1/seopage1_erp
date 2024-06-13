@@ -776,7 +776,7 @@
                                     </div>
                                     <div class="sp1_deal-stage-wrapper">
                                         <h2 style="color:rgb(62, 146, 214);">
-                                            <a class="btn btn-info" href="{{ route('dealDetailsedit', $salesDeal->id) }}">
+                                            <a class="btn btn-info" href="{{ route('edit-deal-details', $salesDeal->id) }}">
                                                 Update Deal Details
                                             </a>
                                         </h2>
@@ -785,7 +785,7 @@
                             @elseif (in_array($salesDeal->sale_analysis_status, ['authorized', 'auto-authorized']))
                                 <div class="sp1_deal-stage-wrapper">
                                     <h2 style="color:rgb(62, 146, 214);">
-                                        <a class="btn btn-info" href="{{ route('dealDetailsedit', $salesDeal->id) }}">
+                                        <a class="btn btn-info" href="{{ route('edit-deal-details', $salesDeal->id) }}">
                                             Update Deal Details
                                         </a>
                                     </h2>

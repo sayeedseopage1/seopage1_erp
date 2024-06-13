@@ -334,7 +334,7 @@ class SalesPolicyEventListener
                     'button_name' => 'Review',
                     'button_color' => 'primary',
                     'button_type' => 'redirect_url',
-                    'button_url' => route('dealDetailsedit', $deal->id),
+                    'button_url' => route('edit-deal-details', $deal->id),
                 ],
             ];
             $action->button = json_encode($button);
@@ -342,7 +342,7 @@ class SalesPolicyEventListener
 
             $messageData['client'] = $deal->client_name;
             // notify user
-            Notification::send($user, new SalesPolicyNotification('pending_large_from_submission',  $messageData, route('dealDetailsedit', $deal->id)));
+            Notification::send($user, new SalesPolicyNotification('pending_large_from_submission',  $messageData, route('edit-deal-details', $deal->id)));
         }
     }
 
