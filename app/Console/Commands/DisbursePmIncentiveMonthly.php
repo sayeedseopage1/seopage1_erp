@@ -246,7 +246,7 @@ class DisbursePmIncentiveMonthly extends Command
                             'pm_id' => $user->id,
                             'incentive_criteria_id' => $factor->incentive_criteria_id,
                             'incentive_factor_id' => $factor->id,
-                            'acquired_value' => $achieved_bonus_incentive,
+                            'acquired_value' => $total_unreleased_amount_till_now,
                             'incentive_amount_type' => $factor->incentive_amount_type,
                             'incentive_amount' => $factor->incentive_amount,
                             'created_at' => $now,
