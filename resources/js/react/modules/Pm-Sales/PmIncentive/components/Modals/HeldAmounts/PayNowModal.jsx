@@ -51,6 +51,7 @@ const PayNowModal = ({ antdModalOpen, showPayNowModal, queryForIncentiveHeldAmou
         },
         getCheckboxProps: (record) => ({
             style: record?.status === 2 ? { display: 'none' } : {},
+            disabled: record?.status === 2
         }),
     };
 
