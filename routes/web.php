@@ -223,6 +223,7 @@ use App\Http\Controllers\PointIncentive\IncentiveCriteriaController;
 use App\Http\Controllers\PointIncentive\GetPmPointCriteriaController;
 use App\Http\Controllers\PointIncentive\GetCriteriaWiseFactorController;
 use App\Http\Controllers\PointIncentive\GetIncentiveHeldAmount;
+use App\Http\Controllers\PointIncentive\GetIncentiveHeldAmountController;
 use App\Http\Controllers\PointIncentive\IncentivePaymentController;
 
 /*
@@ -1577,7 +1578,7 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
     Route::resource('incentive-factor', IncentiveFactorController::class);
     Route::resource('incentive-criteria', IncentiveCriteriaController::class)->only(['show','update']);
     Route::resource('get-achieved-incentive', GetAchievedIncentiveController::class)->only(['index']);
-    Route::get('get-incentive-held-amount', GetIncentiveHeldAmount::class)->name('get.incentive.held.amount');
+    Route::get('get-incentive-held-amount', GetIncentiveHeldAmountController::class)->name('get.incentive.held.amount');
     Route::resource('incentive-payments', IncentivePaymentController::class)->only(['create','store']);
 
 

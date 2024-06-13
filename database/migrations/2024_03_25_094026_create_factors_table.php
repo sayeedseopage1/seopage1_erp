@@ -49,7 +49,7 @@ return new class extends Migration
                 'upper_limit_bottom_range' => null,
                 'limit_type' => 1,
                 'limit_unit' => 1,
-                'lower_limit_condition' => '<',
+                'lower_limit_condition' => '<=',
                 'upper_limit_condition' => '>=',
                 'lower_limit_top_range_condition' => null,
                 'upper_limit_bottom_range_condition' => null,
