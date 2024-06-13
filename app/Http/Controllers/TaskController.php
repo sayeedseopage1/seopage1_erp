@@ -7277,10 +7277,10 @@ class TaskController extends AccountBaseController
     public function storeDailySubmission(Request $request)
     {
         $daily_submission = new DailySubmission();
-
+        
+        $file_name = [];
         if ($request->hasFile('file')) {
             $files = $request->file('file');
-            $file_name = [];
 
             foreach ($files as $file) {
                 $filename = uniqid() . '.' . $file->getClientOriginalExtension();
@@ -7289,7 +7289,7 @@ class TaskController extends AccountBaseController
             }
         }
 
-        $daily_submission->attachments = json_encode($file_name);
+        $daily_submission->attachments = !empty($file_name) ? json_encode($file_name) : null;
         $daily_submission->user_id = $request->user_id;
         $daily_submission->task_id = $request->task_id;
         $daily_submission->project_id = $request->project_id;

@@ -643,7 +643,7 @@ class DashboardController extends AccountBaseController
 
 
         $incomplete_hours = $minimum_log_hours - $userTotalMin;
-        $userLog = ProjectTimeLog::where('user_id', $user_id)->whereDate('created_at', $userClockIn->created_at)->orderBy('created_at', 'desc')->get();
+        $userLog = ProjectTimeLog::where('user_id', $user_id)->whereDate('created_at', $userClockIn->created_at)->get();
         $lastLogData = Attendance::where('user_id', $user_id)->whereDate('created_at', $userClockIn->created_at)->orderBy('created_at', 'desc')->first();
 
         return response()->json([
@@ -737,7 +737,7 @@ class DashboardController extends AccountBaseController
     }
 
         $incomplete_hours = $minimum_log_hours - $userTotalMin;
-        $userLog = ProjectTimeLog::where('user_id', $user_id)->whereDate('created_at', $userClockIn->created_at)->orderBy('created_at', 'desc')->get();
+        $userLog = ProjectTimeLog::where('user_id', $user_id)->whereDate('created_at', $userClockIn->created_at)->get();
         $lastLogData = Attendance::where('user_id', $user_id)->whereDate('created_at', $userClockIn->created_at)->orderBy('created_at', 'desc')->first();
 
         return response()->json([
