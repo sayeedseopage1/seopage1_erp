@@ -771,28 +771,21 @@ class DashboardController extends AccountBaseController
 
     public function developerDailytrackHoursLog(Request $request)
     {
+        // dd($request->all());
         DB::beginTransaction();
         $durations = json_decode($request->durations, true);
-        dd($durations, $request->durations);
         $totalTrackedSeconds = 0;
         foreach ($durations as $duration) {
             $start = new DateTime($duration['start']);
             $end = new DateTime($duration['end']);
             $interval = $start->diff($end);
-            $totalTrackedSeconds += ($interval->h * 3600) + ($interval->i * 60) + $interval->s;
+            $totalSeconds = ($interval->h * 3600) + ($interval->i * 60) + $interval->s;
+            $totalTrackedSeconds += $totalSeconds;
         }
+        // Convert total seconds to minutes
+        $totalTrackedMinutes = $totalTrackedSeconds / 60;
 
-        // Convert totalTrackedSeconds to hours and minutes
-        $totalTrackedHours = intdiv($totalTrackedSeconds, 3600);
-        $totalTrackedMinutes = intdiv($totalTrackedSeconds % 3600, 60);
-
-        
-        // Calculate total incomplete hours in minutes
-        $incompleteHoursInMinutes = $request->incomplete_hours * 60;
-
-        // Compare the total tracked time with incomplete hours
-        if (($totalTrackedHours * 60 + $totalTrackedMinutes) == $incompleteHoursInMinutes) {
-            dd('ok');
+        if ($totalTrackedMinutes >= $request->incomplete_hours) {
             $stop_time = new DeveloperStopTimer();
             $stop_time->reason_for_less_tracked_hours_a_day_task = $request->reason_for_less_tracked_hours_a_day_task;
             $stop_time->durations = $request->durations;
