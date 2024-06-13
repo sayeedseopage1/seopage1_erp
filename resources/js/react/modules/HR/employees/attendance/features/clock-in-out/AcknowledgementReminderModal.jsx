@@ -60,7 +60,10 @@ const AcknowledgementReminderModal = ({
                         ...data,
                         date: dayjs.dayjs(reminderDate).format("YYYY-MM-DD"),
                         incomplete_hours: incomplete_hours,
-                        submissionType: submissionType,
+                        submission_type:
+                            submissionType === "CONTINUE"
+                                ? "continue"
+                                : "final_submission",
                         _token: document
                             .querySelector("meta[name='csrf-token']")
                             .getAttribute("content"),
@@ -72,7 +75,10 @@ const AcknowledgementReminderModal = ({
                         Swal.fire({
                             position: "center",
                             icon: "error",
-                            title: `${res.data.message}`,
+                            title: `Your missing hours do not match submitted hours !`,
+                            text: `Your current missed hours: ${convertTime(
+                                res.data.leftMin
+                            )}`,
 
                             showConfirmButton: true,
                         });

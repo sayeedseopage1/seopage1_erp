@@ -91,6 +91,19 @@ const Option1 = ({
             return setError({ comment: "Please explain the reason here!" });
         }
 
+        if (checkOverlapRange(lastClockOutTime, durations)) {
+            Swal.fire({
+                position: "center",
+                icon: "error",
+                title: "You have selected wrong time range!",
+                text: `You must select time within this time range: 07:45 AM - (${formatTimeTo12Hour(
+                    lastClockOutTime
+                )}).`,
+                showConfirmButton: true,
+            });
+            return;
+        }
+
         if (checkOverlap(newOverlappingTimes, durations, trackedTimeHistory)) {
             Swal.fire({
                 position: "center",
@@ -104,19 +117,6 @@ const Option1 = ({
                             )} - ${formatTimeTo12Hour(t.trackedEnd)}`
                     )
                     .join(", ")}`,
-                showConfirmButton: true,
-            });
-            return;
-        }
-
-        if (checkOverlapRange(lastClockOutTime, durations)) {
-            Swal.fire({
-                position: "center",
-                icon: "error",
-                title: "You have selected wrong time range!",
-                text: `You must select time within this time range: 07:45 AM - (${formatTimeTo12Hour(
-                    lastClockOutTime
-                )}).`,
                 showConfirmButton: true,
             });
             return;
@@ -227,9 +227,16 @@ const Option1 = ({
                                 <Button
                                     variant="success"
                                     className="ml-2"
-                                    onClick={(e) =>
-                                        handleSubmission(e, "CONTINUE")
-                                    }
+                                    onClick={(e) => {
+                                        handleSubmission(e, "CONTINUE");
+                                        setDurations([
+                                            {
+                                                start: "",
+                                                end: "",
+                                                id: "d32sew",
+                                            },
+                                        ]);
+                                    }}
                                     isLoading={
                                         sType === "CONTINUE" && isLoading
                                     }

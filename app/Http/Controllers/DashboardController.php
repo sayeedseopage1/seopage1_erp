@@ -770,7 +770,9 @@ class DashboardController extends AccountBaseController
 
 
     public function developerDailytrackHoursLog(Request $request)
+
     {
+        DB::beginTransaction();
         $durations = json_decode($request->durations, true);
         $totalTrackedSeconds = 0;
         foreach ($durations as $duration) {

@@ -1,38 +1,34 @@
-import dayjs from "dayjs";
 const checkOverlapRange = (lastClockOutTime, durations) => {
-    const timeFormat = "HH:mm:ss";
-    const endOfDay = "23:00:00"; // 11 PM
     const startOfDay = "07:45:00"; // 7:45 AM
 
     // Adjust lastClockOutTime to not exceed 11 PM
-    // if (!lastClockOutTime || lastClockOutTime > endOfDay) {
-    // if (
-    //     lastClockOutTime === null ||
-    //     lastClockOutTime === "" ||
-    //     lastClockOutTime < startOfDay ||
-    //     lastClockOutTime > endOfDay
-    // ) {
-    //     lastClockOutTime = endOfDay;
-    // }
     console.log("last clock out time", lastClockOutTime);
+
+    // Convert time string to seconds since start of the day
+    const timeToSeconds = (time) => {
+        const [hours, minutes, seconds] = time.split(":").map(Number);
+        return hours * 3600 + minutes * 60 + seconds;
+    };
+
+    // Convert startOfDay and endOfDay to seconds
+    const startOfDaySeconds = timeToSeconds(startOfDay);
+
+    const lastClockOutTimeSeconds = timeToSeconds(lastClockOutTime);
+
     for (const duration of durations) {
         const durationStart = duration.start;
         const durationEnd = duration.end;
 
+        // Convert duration start and end times to seconds
+        const durationStartSeconds = timeToSeconds(durationStart);
+        const durationEndSeconds = timeToSeconds(durationEnd);
+
         // Check if durationStart or durationEnd is outside the valid time range
         if (
-            dayjs(durationStart, timeFormat).isBefore(
-                dayjs(startOfDay, timeFormat)
-            ) ||
-            dayjs(durationEnd, timeFormat).isBefore(
-                dayjs(startOfDay, timeFormat)
-            ) ||
-            dayjs(durationStart, timeFormat).isAfter(
-                dayjs(lastClockOutTime, timeFormat)
-            ) ||
-            dayjs(durationEnd, timeFormat).isAfter(
-                dayjs(lastClockOutTime, timeFormat)
-            )
+            durationStartSeconds < startOfDaySeconds ||
+            durationEndSeconds < startOfDaySeconds ||
+            durationStartSeconds > lastClockOutTimeSeconds ||
+            durationEndSeconds > lastClockOutTimeSeconds
         ) {
             return true;
         }
