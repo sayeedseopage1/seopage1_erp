@@ -223,9 +223,9 @@ class ProjectPmGoal extends Model
             ],
         ],
         'upsell' => [
-            'code' => 'OMMR',
+            'code' => 'UOMMR',
             'name' => 'At least 1 more milestone released',
-            'type' => 'one_more_milestone_released',
+            'type' => 'upsell_one_more_milestone_released',
         ],
     ];
 

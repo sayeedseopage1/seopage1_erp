@@ -474,9 +474,8 @@ class HelperPmProjectStatusController extends AccountBaseController
         // check if total budget has been completed
         // if not then pm goal will not be created
         // dd($milestoneSum, $project->project_budget, $milestoneSum < $project->project_budget);
-        if ($milestoneSum < $project->project_budget) {
-            return;
-        }
+        if ($milestoneSum <= $project->project_budget) return;
+        $milestoneCost = $milestoneSum - $project->project_budget;
 
         $lastGoal = ProjectPmGoal::where('project_id', $milestone->project_id)->orderBy('goal_end_date', 'desc')->first();
 
@@ -484,8 +483,8 @@ class HelperPmProjectStatusController extends AccountBaseController
 
         // dd($milestone);
 
-        if ($milestone->cost < 100) $goalDuration = 3;
-        else $goalDuration = 3 +  (int) ($milestone->cost / 100);
+        if ($milestoneCost < 100) $goalDuration = 3;
+        else $goalDuration = 3 +  (int) ($milestoneCost / 100);
 
         $goal = new ProjectPmGoal();
         $goal->project_id = $lastGoal->project_id;

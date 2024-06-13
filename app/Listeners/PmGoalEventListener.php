@@ -3,11 +3,12 @@
 namespace App\Listeners;
 
 use App\Events\PmGoalEvent;
+use App\Models\Invoice;
+use App\Models\PMProject;
+use App\Models\Project;
+use App\Models\ProjectMilestone;
 use App\Models\ProjectPmGoal;
 use App\Models\Task;
-use App\Models\TaskboardColumn;
-use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Support\Facades\DB;
 
 class PmGoalEventListener
@@ -42,6 +43,9 @@ class PmGoalEventListener
             case 'task_submission_made':
                 self::taskSubmissionEventHandle($event);
                 break;
+            case 'milestone_invoice_added':
+                self::milestoneInvoiceAddedEventHandle($event);
+                break;
         }
         DB::commit();
     }
@@ -64,11 +68,62 @@ class PmGoalEventListener
         $projectId = $event->data['projectId'];
 
         $task = Task::where(['project_id' => $projectId, 'board_column_id' => 9])->count();
-        $goal = ProjectPmGoal::where(['project_id' => $projectId, 'goal_code' => 'TSM'])->first();
-
         if ($task != 1) return;
+
+        $goal = ProjectPmGoal::where(['project_id' => $projectId, 'goal_code' => 'TSM'])->first();
+        if (time() > strtotime($goal->goal_end_date)) return;
 
         $goal->goal_status = 1;
         $goal->save();
+    }
+
+    private function milestoneInvoiceAddedEventHandle($event)
+    {
+        $invoice = $event->data['invoice'];
+        if ($invoice->status != 'paid') return;
+
+        $project = Project::find($invoice->project_id);
+
+        $projectAccept = PMProject::where('project_id', $project->id)->first();
+
+        // initial milestones
+        $milestones = ProjectMilestone::from('project_milestones as mile')->join('invoices as in', 'in.milestone_id', 'mile.id')
+        ->select('mile.*', 'in.status')
+        ->where('mile.project_id', $project->id)->where('mile.created_at', '<=', $projectAccept->created_at);
+
+        $milestoneSum = $milestones->sum('actual_cost');
+        $milestoneCount = $milestones->count();
+        $paidMilestoneCount = $milestones->where(['in.status' => 'paid'])->count();
+
+        $projectBudget = $project->deal->actual_amount;
+        $paidAmount = Invoice::where(['project_id' => $project->id, 'status' => 'paid'])->sum('total');
+
+        if ($milestoneSum >= $paidAmount && $paidMilestoneCount >= ($milestoneCount/2) )
+        {
+            $goal = ProjectPmGoal::whereIn('goal_code', ['FPMR', 'MPMR', 'MMPMR', 'OMMR'])->where(['project_id' => $project->id, 'goal_status' => 0])->first();
+            if (!$goal || time() > strtotime($goal->goal_end_date)) return;
+
+            $goal->goal_status = 1;
+            $goal->save();
+        }
+        else if ($projectBudget > $milestoneSum && $projectBudget == $paidAmount)
+        {
+            $goal = ProjectPmGoal::where(['project_id' => $project->id, 'goal_code' =>'ERAG'])->first();
+            if (!$goal || time() > strtotime($goal->goal_end_date)) return;
+
+            $goal->goal_status = 1;
+            $goal->save();
+        }
+        else if ($projectBudget < $paidAmount)
+        {
+            $milestone = ProjectMilestone::where(['id'=> $invoice->milestone_id, 'parent_id' => null, 'status' => 'complete'])->first();
+            if (! $milestone) return;
+
+            $goal = ProjectPmGoal::where(['project_id' => $project->id, 'goal_code' =>'UOMMR'])->first();
+            if (!$goal || time() > strtotime($goal->goal_end_date)) return;
+
+            $goal->goal_status = 1;
+            $goal->save();
+        }
     }
 }

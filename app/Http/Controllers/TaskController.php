@@ -3946,7 +3946,7 @@ class TaskController extends AccountBaseController
         }
 
         // goal submission complete
-        (new PmGoalEvent('task_submission_made', ['projectId' => $task_status->project_id]));
+        event(new PmGoalEvent('task_submission_made', ['projectId' => $task_status->project_id]));
 
         return response()->json([
             'status' => 200,

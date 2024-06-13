@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\DataTables\PaymentsDataTable;
+use App\Events\PmGoalEvent;
 use App\Helper\Files;
 use App\Helper\Reply;
 use App\Http\Requests\Payments\StorePayment;
@@ -236,59 +237,8 @@ class PaymentController extends AccountBaseController
         }
 
         $payment->status = 'complete';
-        $payment->save(); 
-        $current_date = Carbon::now();
-        $pm_goals = ProjectPmGoal::where('project_id',$payment->project_id)->get();
-        $total_milestones= ProjectMilestone::where('project_id',$payment->project_id)->count();
-        $complete_milestones= ProjectMilestone::join('payments','payments.project_id','project_milestones.project_id')->where('project_milestones.project_id',$payment->project_id)->where('payments.status','complete')->groupBy('project_milestones.id')->count();
-        $total_milestones_value= ProjectMilestone::where('project_id',$payment->project_id)->sum('cost');
-        $total_complete_milestones_value= ProjectMilestone::join('payments','payments.project_id','project_milestones.project_id')->where('project_milestones.project_id',$payment->project_id)->where('payments.status','complete')->groupBy('project_milestones.id')->sum('amount');
-        $completion_percent = $total_complete_milestones_value/$total_milestones_value;
-        $requierd_milestone = round($total_milestones/2,0);
-        foreach ($pm_goals as $pm_goal){
-            if($pm_goal != null && $current_date < $pm_goal->goal_end_date && $completion_percent >= 0.5 && $pm_goal->goal_code == 'FPMR')
-            {
-                $goal_count= ProjectPmGoal::where('project_id',$pm_goal->project_id)->count();
-                $goal_percentage = 100/$goal_count;
-                $pm_goal->goal_progress = $goal_percentage;
-                $pm_goal->goal_status = 1;
-                $pm_goal->expired_meet_description = $complete_milestones . ' milestones of '.$total_milestones. ' milestones are released';
-                $pm_goal->updated_at= Carbon::now();
-                $pm_goal->save();
-            }elseif($pm_goal != null && $current_date < $pm_goal->goal_end_date && 2 <= $complete_milestones && $pm_goal->goal_code == 'MPMR'){
-                $goal_count= ProjectPmGoal::where('project_id',$pm_goal->project_id)->count();
-                $goal_percentage = 100/$goal_count;
-                $pm_goal->goal_progress = $goal_percentage;
-                $pm_goal->goal_status = 1;
-                $pm_goal->expired_meet_description = '2 out of '.$complete_milestones.' milestones released in this week';
-                $pm_goal->updated_at= Carbon::now();
-                $pm_goal->save();
-            }elseif($pm_goal != null && $current_date < $pm_goal->goal_end_date && 3 <= $complete_milestones && $pm_goal->goal_code == 'MMPMR'){
-                $goal_count= ProjectPmGoal::where('project_id',$pm_goal->project_id)->count();
-                $goal_percentage = 100/$goal_count;
-                $pm_goal->goal_progress = $goal_percentage;
-                $pm_goal->goal_status = 1;
-                $pm_goal->expired_meet_description = '3 out of '.$complete_milestones.' milestones released in this week';
-                $pm_goal->updated_at= Carbon::now();
-                $pm_goal->save();
-            }elseif($pm_goal != null && $current_date < $pm_goal->goal_end_date && 4 <= $complete_milestones && $pm_goal->goal_code == 'LM'){
-                $goal_count= ProjectPmGoal::where('project_id',$pm_goal->project_id)->count();
-                $goal_percentage = 100/$goal_count;
-                $pm_goal->goal_progress = $goal_percentage;
-                $pm_goal->goal_status = 1;
-                $pm_goal->expired_meet_description = '4 out of '.$complete_milestones.' milestones released in this week';
-                $pm_goal->updated_at= Carbon::now();
-                $pm_goal->save();
-            }elseif($pm_goal != null && $current_date < $pm_goal->goal_end_date && $complete_milestones >= 1 && $pm_goal->goal_code == 'FMR'){
-                $goal_count= ProjectPmGoal::where('project_id',$pm_goal->project_id)->count();
-                $goal_percentage = 100/$goal_count;
-                $pm_goal->goal_progress = $goal_percentage;
-                $pm_goal->goal_status = 1;
-                $pm_goal->expired_meet_description = '1 out of '.$complete_milestones. ' milestones released in this week';
-                $pm_goal->updated_at= Carbon::now();
-                $pm_goal->save();
-            }
-        }
+        $payment->save();
+
         $InvoiceId= Invoice::where('id',$invoice->id)->first();
         $projectId= Project::where('id',$InvoiceId->project_id)->first();
         $milestoneId= ProjectMilestone::where('id',$InvoiceId->milestone_id)->first();
@@ -1147,6 +1097,9 @@ class PaymentController extends AccountBaseController
 
             $invoice->save();
         }
+
+        event(new PmGoalEvent('milestone_invoice_added', ['invoice' => $invoice]));
+
         $project= Project::find($request->project_id);
         $invoice_id= Invoice::where('id',$request->invoice_id)->first();
         if ($invoice_id->milestone_id != null) {
