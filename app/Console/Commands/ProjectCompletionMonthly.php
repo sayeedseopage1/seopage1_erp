@@ -34,32 +34,32 @@ class ProjectCompletionMonthly extends Command
     {
         $users = User::where('role_id',4)->get();
         foreach($users as $user){
+            
             $referenceProjectId = Project::whereHas('deal', function($deal){
                 return $deal->where('project_type', 'fixed');
             })
             ->where('pm_id', $user->id)
             ->whereIn('status', ['finished', 'partially finished'])
-            ->whereBetween('updated_at', [Carbon::now()->subMonth()->startOfMonth(), Carbon::now()->endOfMonth()])->orderBy('id', 'desc')->where('project_completion_days', '<=', 12)->first()->id ?? null;
+            ->whereBetween('updated_at', [Carbon::now()->subMonth()->startOfMonth(), Carbon::now()->subMonth()->endOfMonth()])->orderBy('id', 'desc')->where('project_completion_days', '<=', 12)->first()->id ?? null;
 
             $projectsSevenDays = Project::whereHas('deal', function($deal){
                 return $deal->where('project_type', 'fixed');
             })
             ->where('pm_id', $user->id)
             ->whereIn('status', ['finished', 'partially finished'])
-            ->whereBetween('updated_at', [Carbon::now()->startOfMonth(), Carbon::now()->endOfMonth()])
+            ->whereBetween('updated_at', [Carbon::now()->subMonth()->startOfMonth(), Carbon::now()->subMonth()->endOfMonth()])
             ->where('project_completion_days', '<=', 7)->get();
-
             // Project Manager Point Distribution ( Project completion )
             ProjectManagerPointLogic::distribute(9, $referenceProjectId, $projectsSevenDays->count());
             
             $projectsTwelveDays = Project::whereHas('deal', function($deal){
                 return $deal->where('project_type', 'fixed');
-            })
-            ->where('pm_id', $user->id)
-            ->whereIn('status', ['finished', 'partially finished'])
-            ->whereBetween('updated_at', [Carbon::now()->startOfMonth(), Carbon::now()->endOfMonth()])
-            ->where('project_completion_days', '>=', 8)->where('project_completion_days', '<=', 12)->get();
-
+                })
+                ->where('pm_id', $user->id)
+                ->whereIn('status', ['finished', 'partially finished'])
+                ->whereBetween('updated_at', [Carbon::now()->subMonth()->startOfMonth(), Carbon::now()->subMonth()->endOfMonth()])
+                ->where('project_completion_days', '>=', 8)->where('project_completion_days', '<=', 12)->get();
+                
             // Project Manager Point Distribution ( Project completion )
             ProjectManagerPointLogic::distribute(10, $referenceProjectId, $projectsTwelveDays->count());
         }

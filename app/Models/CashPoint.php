@@ -21,7 +21,9 @@ class CashPoint extends Model
         'total_points_void',
         'bonus_type',
         'type',
-        'factor_id'
+        'factor_id',
+        'created_at',
+        'updated_at'
     ];
 
     public function user()
