@@ -1593,8 +1593,7 @@ class ContractController extends AccountBaseController
 
             // pending action for sales lead authorization when removed form draft
             event(new SalesPolicyEvent('sales_lead_authorization', $deal));
-            // past action for large form submission
-            event(new SalesPolicyEvent('pending_large_from_submission', $deal, ['past'=>'']));
+
         } catch (\Exception $e) {
             DB::rollback();
             Toastr::error('Action Failed', 'Error', ["positionClass" => "toast-top-right", 'redirectUrl']);
@@ -2109,6 +2108,9 @@ class ContractController extends AccountBaseController
             $deal->is_drafted = $request->is_drafted;
             $deal->released_at = $request->is_drafted ? null : Carbon::now();
             $deal->save();
+
+            // past action for large form submission
+            event(new SalesPolicyEvent('pending_large_from_submission', $deal, ['past'=>'']));
 
             //         $sender= User::where('id',Auth::id())->first();
             //         $users= User::where('role_id',8)->orWhere('role_id',1)->get();

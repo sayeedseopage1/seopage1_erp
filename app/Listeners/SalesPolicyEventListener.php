@@ -351,6 +351,8 @@ class SalesPolicyEventListener
         $data = $this->eventTypes[$event->type];
         $deal = $event->deal;
 
+        if (! $deal->released_at) return;
+
         // 'past' => 'Pending works for deal projectName was completed!'
         $message = strtr($data['past'], [
             'projectName' => "<a href='" . route('contracts.show', $deal->id) . "'>$deal->project_name</a>",
