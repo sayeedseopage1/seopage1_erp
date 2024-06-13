@@ -535,4 +535,8 @@ class Task extends BaseModel
     {
         return $this->hasMany(TaskRevision::class);
     }
+    public function taskRevisionDispute()
+    {
+        return $this->hasMany(TaskRevisionDispute::class, 'task_id');
+    }
 }

@@ -221,7 +221,7 @@ class RevisionCalculatorController extends AccountBaseController
     public function exportRevisionCalculatorData(Request $request)
 
     {
-       
+
         $startDate = $request->input('startDate', null);
         $endDate = $request->input('endDate', null);
 
@@ -865,6 +865,8 @@ public function DevIssue(Request $request, $id)
         ->groupBy('task_revisions.id')
         ->whereBetween('task_revisions.created_at', [$startDate, $endDate])
         ->get();
+
+        dd($data);
 
    // dd($data);
 

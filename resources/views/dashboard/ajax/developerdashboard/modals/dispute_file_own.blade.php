@@ -1,74 +1,67 @@
 <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
-<div class="modal fade" id="dispute_file_own{{count($number_of_dispute_filed_own_data) }}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div id="dispute_file_own{{ count($number_of_dispute_filed_own_data) }}" class="modal fade" tabindex="-1"
+    aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-xl">
-      <div class="modal-content">
-        <div class="modal-header">
-          <div class="modal-title"><h4>Received Tasks: {{$number_of_tasks_received}}</h4>
-             </div>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-title">
+                    {{-- <h4>Received Tasks: {{$number_of_tasks_received}}</h4> --}}
+                </div>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <table id="table_dispute_file_own" class="display" style="width:100%">
+                    <thead>
+                        <tr>
+                            <th scope="col">Sl No</th>
+                            <th scope="col">Task Name</th>
+                            <th scope="col">Client Name</th>
+                            <th scope="col">Project Manager</th>
+                            <th scope="col">Dispute filed on</th>
+                            <th scope="col">Dispute raised against</th>
+                            <th scope="col">Winner</th>
+                            {{-- <th scope="col">status</th> --}}
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach ($number_of_dispute_filed_own_data as $row)
+                            @foreach ($row->taskRevisionDispute as $row2)
+                                <tr>
+                                    <td>{{ $loop->index + 1 }}</td>
+                                    <td>
+                                        <a href="{{ route('tasks.show', $row->id) }}">{{ $row->heading }}<a>
+                                    </td>
+                                    <td>
+                                        @if ($row?->project?->client)
+                                            <a href="{{ route('clients.show', $row->project->client->id) }}">
+                                                {{ $row->project->client->name }}</a>
+                                        @endif
+                                    </td>
+                                    <td>
+                                        {{ $row?->project?->pm?->name }}
+                                    </td>
+                                    <td>
+                                        {{ $row2?->created_at }}
+                                    </td>
+                                    <td>{{ $row2?->raisedAgainst?->name }}</td>
+                                    <td>{{ $row2?->disputeWinner?->name }}</td>
+                                </tr>
+                            @endforeach
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
         </div>
-        <div class="modal-body">
-            <table id="table_dispute_file_own" class="display" style="width:100%">
-                <thead>
-                  <tr>
-                    <th scope="col">Sl No</th>
-                    <th scope="col">Assign Date</th>
-                    <th scope="col">Task Name</th>
-                    <th scope="col">Client Name</th>
-                    <th scope="col">Submission Date</th>
-                    <th scope="col">Deadline</th>
-                    <th scope="col">status</th>
-
-                  </tr>
-                </thead>
-                <tbody>
-                    @foreach($number_of_dispute_filed_own_data as $row)
-                    {{-- {{dd($row)}} --}}
-                    <tr>
-                        <td>{{$loop->index+1}}</td>
-                        <td>{{$row->assign_date}}</td>
-                        <td>
-                          <a href="{{route('tasks.show',$row->id)}}">{{$row->heading}}<a>
-                        </td>
-                        <td>
-                            @if($row->cl_id != null)
-                            {{$row->cl_name}}
-                            @elseif($row->client_name != null)
-                            {{$row->client_name}}
-                            @else
-                           <a href="{{route('clients.show',$row->clientId)}}"> {{$row->clientName}}</a>
-                           @endif
-                        </td>
-                        <td>
-                            @if($row->board_column_id == 1 || $row->board_column_id == 2 || $row->board_column_id == 3)
-                            N\A
-                            @else
-                            {{$row->submission_date}}
-                        @endif
-                    </td>
-                        <td>{{$row->due_date}}</td>
-                        <td>
-                          <span style="color: {{$row->label_color}}"> {{$row->column_name}}</span>
-                        </td>
-
-                    </tr>
-                    @endforeach
-                </tbody>
-              </table>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        </div>
-      </div>
     </div>
-  </div>
-  <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
-  <script>
-      new DataTable('#table_dispute_file_own',{
+</div>
+<script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+<script>
+    new DataTable('#table_dispute_file_own', {
         "dom": 't<"d-flex"l<"ml-auto"ip>><"clear">',
-      });
-
-
-  </script>
+    });
+</script>

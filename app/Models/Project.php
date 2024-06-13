@@ -425,4 +425,9 @@ class Project extends BaseModel
             return false;
         }
     }
+
+    public function deliverables()
+    {
+        return $this->hasMany(ProjectDeliverable::class, 'project_id');
+    }
 }

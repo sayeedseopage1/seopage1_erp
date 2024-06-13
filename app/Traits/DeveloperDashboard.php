@@ -431,31 +431,38 @@ trait DeveloperDashboard
 
             //in this month
 
-            $submit_number_of_tasks_in_this_month_data = DB::table('task_submissions')
-                ->select('tasks.id', 'tasks.created_at', 'task_submissions.created_at')
-                ->selectRaw('DATEDIFF(task_submissions.created_at, tasks.created_at) AS total_duration')
-                ->join('tasks', 'task_submissions.task_id', '=', 'tasks.id')
-                ->where('task_submissions.created_at', '>=', $startDate)
-                ->where('task_submissions.created_at', '<', $endDate)
-                ->where('task_submissions.user_id', $devId)
-                ->where('task_submissions.submission_no', '=', 1)
-                ->distinct('task_submissions.created_at')
-                ->get();
+            // $submit_number_of_tasks_in_this_month_data = DB::table('task_submissions')
+            //     ->select('tasks.id', 'tasks.created_at', 'task_submissions.created_at')
+            //     ->selectRaw('DATEDIFF(task_submissions.created_at, tasks.created_at) AS total_duration')
+            //     ->join('tasks', 'task_submissions.task_id', '=', 'tasks.id')
+            //     ->where('task_submissions.created_at', '>=', $startDate)
+            //     ->where('task_submissions.created_at', '<', $endDate)
+            //     ->where('task_submissions.user_id', $devId)
+            //     ->where('task_submissions.submission_no', '=', 1)
+            //     ->distinct('task_submissions.created_at')
+            //     ->get();
 
-            $sum_of_total_duration = 0;
-            $count_of_submission_task = 0;
-            foreach ($submit_number_of_tasks_in_this_month_data as $task) {
-                $sum_of_total_duration = $sum_of_total_duration + $task->total_duration;
-                $count_of_submission_task++;
-            }
+            // $sum_of_total_duration = 0;
+            // $count_of_submission_task = 0;
+            // foreach ($submit_number_of_tasks_in_this_month_data as $task) {
+            //     $sum_of_total_duration = $sum_of_total_duration + $task->total_duration;
+            //     $count_of_submission_task++;
+            // }
 
-            $average_submission_day_in_this_month = 0;
+            // $average_submission_day_in_this_month = 0;
 
-            if ($count_of_submission_task > 0) {
-                $average_submission_day_in_this_month = $sum_of_total_duration / $count_of_submission_task;
-            }
+            // if ($count_of_submission_task > 0) {
+            //     $average_submission_day_in_this_month = $sum_of_total_duration / $count_of_submission_task;
+            // }
 
-            $this->average_submission_day_in_this_month = $average_submission_day_in_this_month;
+            // $this->average_submission_day_in_this_month = $average_submission_day_in_this_month;
+            [
+                $this->average_submission_day_in_this_month_data,
+                $this->average_submission_day_in_this_month,
+                $this->average_submission_day_in_this_month_max,
+                $this->average_submission_day_in_this_month_min,
+                $this->all_time_task_id,
+            ] = $this->averageTaskSubmissionTime($startDate, $endDate, $devId);
 
 
             //-----------Percentage of tasks where deadline was missed -----------------//
@@ -556,7 +563,10 @@ trait DeveloperDashboard
             [$this->spent_revision_developer] = $this->hoursSpentInRevisions($startDate, $endDate, $devId);
 
 
-            $this->average_in_progress_date_range = $this->averageNumberOfInProgressTasks($devId);
+            [
+                $this->average_in_progress_date_range_date,
+                $this->average_in_progress_date_range,
+            ] = $this->averageNumberOfInProgressTasks($devId);
 
 
             // Average number of in-progress tasks
@@ -819,8 +829,18 @@ trait DeveloperDashboard
                 }
             }
 
-            $this->percentage_of_tasks_where_given_estimated_time_was_missed_without_revision = $this->PercentageOfTasksWhereGivenEstimatedTimeWasMissedwithoutRevision($startDate, $endDate, $devId);
-            [$this->percentage_of_tasks_where_given_estimated_time_was_missed_with_revision, $this->percentage_of_tasks_where_given_estimated_time_was_missed_with_revision_data] = $this->PercentageOfTasksWhereGivenEstimatedTimeWasMissedWithRevision($startDate, $endDate, $devId);
+            [
+                $this->percentage_of_tasks_where_given_estimated_time_was_missed_without_revision,
+                $this->percentage_of_tasks_where_given_estimated_time_was_missed_without_revision_data,
+                $this->percentage_of_tasks_where_given_estimated_time_was_missed_without_revision_total_submitted,
+                $this->percentage_of_tasks_where_given_estimated_time_was_missed_without_revision_total_missed,
+            ] = $this->PercentageOfTasksWhereGivenEstimatedTimeWasMissedwithoutRevision($startDate, $endDate, $devId);
+            [
+                $this->percentage_of_tasks_where_given_estimated_time_was_missed_with_revision,
+                $this->percentage_of_tasks_where_given_estimated_time_was_missed_with_revision_data,
+                $this->percentage_of_tasks_where_given_estimated_time_was_missed_with_revision_total_submitted,
+                $this->percentage_of_tasks_where_given_estimated_time_was_missed_with_revision_total_missed,
+            ] = $this->PercentageOfTasksWhereGivenEstimatedTimeWasMissedWithRevision($startDate, $endDate, $devId);
 
             //Percentage of tasks where given estimated time was missed table
             $estimate_time_missed_id_store = [];
@@ -1393,32 +1413,38 @@ trait DeveloperDashboard
 
             //in this month
 
-            $submit_number_of_tasks_in_this_month_data = DB::table('task_submissions')
-                ->select('tasks.id', 'tasks.created_at', 'task_submissions.created_at')
-                ->selectRaw('DATEDIFF(task_submissions.created_at, tasks.created_at) AS total_duration')
-                ->join('tasks', 'task_submissions.task_id', '=', 'tasks.id')
-                ->where('task_submissions.created_at', '>=', $startDate)
-                ->where('task_submissions.created_at', '<', $endDate)
-                ->where('task_submissions.user_id', $devId)
-                ->where('task_submissions.submission_no', '=', 1)
-                ->distinct('task_submissions.created_at')
-                ->get();
+            // $submit_number_of_tasks_in_this_month_data = DB::table('task_submissions')
+            //     ->select('tasks.id', 'tasks.created_at', 'task_submissions.created_at')
+            //     ->selectRaw('DATEDIFF(task_submissions.created_at, tasks.created_at) AS total_duration')
+            //     ->join('tasks', 'task_submissions.task_id', '=', 'tasks.id')
+            //     ->where('task_submissions.created_at', '>=', $startDate)
+            //     ->where('task_submissions.created_at', '<', $endDate)
+            //     ->where('task_submissions.user_id', $devId)
+            //     ->where('task_submissions.submission_no', '=', 1)
+            //     ->distinct('task_submissions.created_at')
+            //     ->get();
 
-            $sum_of_total_duration = 0;
-            $count_of_submission_task = 0;
-            foreach ($submit_number_of_tasks_in_this_month_data as $task) {
-                $sum_of_total_duration = $sum_of_total_duration + $task->total_duration;
-                $count_of_submission_task++;
-            }
+            // $sum_of_total_duration = 0;
+            // $count_of_submission_task = 0;
+            // foreach ($submit_number_of_tasks_in_this_month_data as $task) {
+            //     $sum_of_total_duration = $sum_of_total_duration + $task->total_duration;
+            //     $count_of_submission_task++;
+            // }
 
-            $average_submission_day_in_this_month = 0;
+            // $average_submission_day_in_this_month = 0;
 
-            if ($count_of_submission_task > 0) {
-                $average_submission_day_in_this_month = $sum_of_total_duration / $count_of_submission_task;
-            }
+            // if ($count_of_submission_task > 0) {
+            //     $average_submission_day_in_this_month = $sum_of_total_duration / $count_of_submission_task;
+            // }
 
-            $this->average_submission_day_in_this_month = $average_submission_day_in_this_month;
-            [$this->average_submission_day_in_this_month] = $this->averageTaskSubmissionTime($startDate, $endDate, $devId);
+            // $this->average_submission_day_in_this_month = $average_submission_day_in_this_month;
+            [
+                $this->average_submission_day_in_this_month_data,
+                $this->average_submission_day_in_this_month,
+                $this->average_submission_day_in_this_month_max,
+                $this->average_submission_day_in_this_month_min,
+                $this->all_time_task_id
+            ] = $this->averageTaskSubmissionTime($startDate, $endDate, $devId);
 
 
             //-----------Percentage of tasks where deadline was missed -----------------//
@@ -1463,7 +1489,11 @@ trait DeveloperDashboard
 
 
 
-            [$this->percentage_of_tasks_deadline, $this->deadline_missed_task_data] = $this->percentageOfTasksWhereDeadlineWasMissed($startDate, $endDate, $devId);
+            [
+                $this->number_of_tasks_where_deadline_missed_submitted_tasks,
+                $this->percentage_of_tasks_deadline,
+                $this->deadline_missed_task_data
+            ] = $this->percentageOfTasksWhereDeadlineWasMissed($startDate, $endDate, $devId);
 
             // Percentage Of Tasks Where Given Estimated Time Was Missed
 
@@ -1521,7 +1551,10 @@ trait DeveloperDashboard
             [$this->spent_revision_developer] = $this->hoursSpentInRevisions($startDate, $endDate, $devId);
 
 
-            $this->average_in_progress_date_range = $this->averageNumberOfInProgressTasks($devId);
+            [
+                $this->average_in_progress_date_range_date,
+                $this->average_in_progress_date_range,
+            ] = $this->averageNumberOfInProgressTasks($devId);
 
             $this->total_in_progress_date_range_table = DB::table('progress_tasks')
                 ->select('count_progress_task', 'created_at')
@@ -1753,8 +1786,18 @@ trait DeveloperDashboard
                 }
             }
 
-            $this->percentage_of_tasks_where_given_estimated_time_was_missed_without_revision = $this->PercentageOfTasksWhereGivenEstimatedTimeWasMissedwithoutRevision($startDate, $endDate, $devId);
-            [$this->percentage_of_tasks_where_given_estimated_time_was_missed_with_revision, $this->percentage_of_tasks_where_given_estimated_time_was_missed_with_revision_data] = $this->PercentageOfTasksWhereGivenEstimatedTimeWasMissedWithRevision($startDate, $endDate, $devId);
+            [
+                $this->percentage_of_tasks_where_given_estimated_time_was_missed_without_revision,
+                $this->percentage_of_tasks_where_given_estimated_time_was_missed_without_revision_data,
+                $this->percentage_of_tasks_where_given_estimated_time_was_missed_without_revision_total_submitted,
+                $this->percentage_of_tasks_where_given_estimated_time_was_missed_without_revision_total_missed,
+            ] = $this->PercentageOfTasksWhereGivenEstimatedTimeWasMissedwithoutRevision($startDate, $endDate, $devId);
+            [
+                $this->percentage_of_tasks_where_given_estimated_time_was_missed_with_revision,
+                $this->percentage_of_tasks_where_given_estimated_time_was_missed_with_revision_data,
+                $this->percentage_of_tasks_where_given_estimated_time_was_missed_with_revision_total_submitted,
+                $this->percentage_of_tasks_where_given_estimated_time_was_missed_with_revision_total_missed,
+            ] = $this->PercentageOfTasksWhereGivenEstimatedTimeWasMissedWithRevision($startDate, $endDate, $devId);
 
             //Percentage of tasks where given estimated time was missed table
             $estimate_time_missed_id_store = [];
@@ -2355,7 +2398,7 @@ trait DeveloperDashboard
             if ($revision > 0) {
                 $task_with_revision++;
                 array_push($task_id, $i1);
-                }
+            }
             array_push($test, $revision);
         }
         $percentage_of_tasks_with_revision = 0;
@@ -2370,6 +2413,7 @@ trait DeveloperDashboard
 
     private function totalNumberOfRevisions($startDate, $endDate, $devId)
     {
+
         $number_of_tasks_completed = DB::table('task_history')
             ->join('tasks', 'tasks.id', '=', 'task_history.task_id')
             ->select('task_history.task_id', 'task_history.created_at')
@@ -2426,32 +2470,7 @@ trait DeveloperDashboard
             }
         }
 
-        $revision_task_data = DB::table('tasks')
-            ->select(
-                'tasks.id',
-                'tasks.heading',
-                'client.id as clientId',
-                'client.name as clientName',
-                'tasks.created_at as assign_date',
-
-                'task_submissions.created_at as submission_date',
-                'tasks.due_date',
-                'tasks.client_name as client_name',
-                'cl.id as cl_id',
-                'cl.name as cl_name',
-                'tasks.board_column_id',
-                'taskboard_columns.column_name as column_name',
-                'taskboard_columns.label_color'
-            )
-            ->join('task_submissions', 'task_submissions.task_id', '=', 'tasks.id')
-            ->join('task_users', 'tasks.id', '=', 'task_users.task_id')
-            ->join('taskboard_columns', 'taskboard_columns.id', '=', 'tasks.board_column_id')
-            ->leftJoin('projects', 'projects.id', 'tasks.project_id')
-            ->leftJoin('users as client', 'client.id', 'projects.client_id')
-            ->leftJoin('users as cl', 'cl.id', 'tasks.client_id')
-            ->whereIn('tasks.id', $test)
-            ->groupBy('tasks.id')
-            ->get();
+        $revision_task_data = Task::with('taskType', 'stat', 'project.pm', 'project.client', 'revisions.user', 'revisions.taskRevisionDispute.taskDisputeQuestions', 'revisions.taskRevisionDispute.disputeWinner', 'revisions.taskRevisionDispute.raisedBy')->whereIn('id', $test)->get();
         return [
             $total_revision,
             $revision_task_data
@@ -2460,6 +2479,7 @@ trait DeveloperDashboard
 
     private function averageTaskSubmissionTime($startDate, $endDate, $devId)
     {
+
         $number_of_tasks = DB::table('task_history')
             ->select('task_id', DB::raw('MIN(created_at) as min_created_at'))
             ->where('board_column_id', 6)
@@ -2484,6 +2504,7 @@ trait DeveloperDashboard
         }
         $test = array();
         $time = 0;
+        $all_time_task_id = [];
         foreach ($tasks as $task) {
 
             $task_id = $task;
@@ -2509,9 +2530,7 @@ trait DeveloperDashboard
                     // Calculate the difference in minutes, then convert to days
                     $diffInMinutes = $submission_date_new->diffInMinutes($assign_date_new);
                     $diffInDays = $diffInMinutes / 1440;
-
-                    // array_push($test, $diffInDays);
-                    // array_push($test, $diffInDays);
+                    $all_time_task_id[$task_id] = $diffInDays;
                     $time += $diffInDays;
                 } else {
                     // array_push($test, null);
@@ -2521,12 +2540,18 @@ trait DeveloperDashboard
             }
             array_push($test, $task_id);
         }
+
         $average_task_submission_time = 0;
         if (count($tasks) > 0) {
             $average_task_submission_time = $time / count($tasks);
         }
+        $average_task_submission_time_data = Task::with('taskType', 'stat', 'project.pm', 'project.client', 'revisions', 'firstTaskSubmission')->whereIn('id', $test)->get();
         return [
-            $average_task_submission_time
+            $average_task_submission_time_data,
+            $average_task_submission_time,
+            $all_time_task_id ? max($all_time_task_id) : 0,
+            $all_time_task_id ? min($all_time_task_id) : 0,
+            $all_time_task_id,
         ];
     }
 
@@ -2546,8 +2571,11 @@ trait DeveloperDashboard
         }
         $number_of_in_progress_tasks = count($in_progress_tasks);
 
-        return $number_of_in_progress_tasks;
-        // $in_progress_tasks
+        $number_of_in_progress_tasks_data = Task::whereIn('id', $in_progress_tasks)->get()->groupBy('created_at');
+        return [
+            $number_of_in_progress_tasks_data,
+            $number_of_in_progress_tasks
+        ];
 
     }
 
@@ -2579,38 +2607,15 @@ trait DeveloperDashboard
             }
         }
 
-        // $percentage_of_tasks_where_deadline_missed;
+        $percentage_of_tasks_where_deadline_missed = 0;
         if (count($due_date) > 0) {
             $percentage_of_tasks_where_deadline_missed = ($number_of_tasks_where_deadline_missed / count($due_date)) * 100;
         }
+        $number_of_tasks_where_deadline_missed_submitted_tasks = count($due_date);
 
-        $task_data = DB::table('tasks')
-            ->select(
-                'tasks.id',
-                'tasks.heading',
-                'client.id as clientId',
-                'client.name as clientName',
-                'tasks.created_at as assign_date',
-                'task_submissions.created_at as submission_date',
-                'tasks.due_date',
-                'tasks.client_name as client_name',
-                'cl.id as cl_id',
-                'cl.name as cl_name',
-                'tasks.board_column_id',
-                'taskboard_columns.column_name as column_name',
-                'taskboard_columns.label_color'
-            )
-            ->leftJoin('task_submissions', 'task_submissions.task_id', '=', 'tasks.id')
-            ->join('task_users', 'tasks.id', '=', 'task_users.task_id')
-            ->join('taskboard_columns', 'taskboard_columns.id', '=', 'tasks.board_column_id')
-            ->leftJoin('projects', 'projects.id', 'tasks.project_id')
-            ->leftJoin('users as client', 'client.id', 'projects.client_id')
-            ->leftJoin('users as cl', 'cl.id', 'tasks.client_id')
-            ->whereIn('tasks.id', $test)
-            ->groupBy('tasks.id')
-            ->get();
+        $number_of_tasks_where_deadline_missed_data = Task::with('taskType', 'stat', 'project.pm', 'project.client', 'revisions', 'firstTaskSubmission')->whereIn('id', $test)->get();
 
-        return [$number_of_tasks_where_deadline_missed, $task_data];
+        return [$number_of_tasks_where_deadline_missed_submitted_tasks, $number_of_tasks_where_deadline_missed, $number_of_tasks_where_deadline_missed_data];
     }
 
     private function PercentageOfTasksWhereGivenEstimatedTimeWasMissedwithoutRevision($startDate, $endDate, $devId)
@@ -2645,12 +2650,19 @@ trait DeveloperDashboard
         if (count($number_of_tasks) > 0) {
             $percentage_of_tasks_where_given_estimated_time_was_missed_without_revision = ($number_task_cross_estimate_time / count($number_of_tasks)) * 100;
         }
-        return round($percentage_of_tasks_where_given_estimated_time_was_missed_without_revision, 2);
+
+        $number_of_tasks_data = Task::with('taskType', 'timeLogged', 'project.pm', 'project.client')->whereIn('id', $test)->get();
+        return [
+            round($percentage_of_tasks_where_given_estimated_time_was_missed_without_revision, 2),
+            $number_of_tasks_data,
+            count($number_of_tasks),
+            $number_task_cross_estimate_time,
+        ];
     }
 
     private function PercentageOfTasksWhereGivenEstimatedTimeWasMissedWithRevision($startDate, $endDate, $devId)
     {
-        $number_of_tasks = DB::table('tasks')
+        $total_number_of_tasks = DB::table('tasks')
             ->join('task_users', 'tasks.id', '=', 'task_users.task_id')
             ->select('tasks.id', 'tasks.estimate_hours', 'tasks.estimate_minutes')
             ->where('tasks.created_at', '>=', $startDate)
@@ -2661,7 +2673,7 @@ trait DeveloperDashboard
         $number_task_cross_estimate_time = 0;
         $test = [];
 
-        foreach ($number_of_tasks as $task) {
+        foreach ($total_number_of_tasks as $task) {
             $taken_time = DB::table('project_time_logs')
                 ->where('task_id', $task->id)
                 ->groupBy('task_id')
@@ -2675,43 +2687,24 @@ trait DeveloperDashboard
 
         }
         $percentage_of_tasks_where_given_estimated_time_was_missed_with_revision = 0;
-        if (count($number_of_tasks) > 0) {
-            $percentage_of_tasks_where_given_estimated_time_was_missed_with_revision = ($number_task_cross_estimate_time / count($number_of_tasks)) * 100;
+        if (count($total_number_of_tasks) > 0) {
+            $percentage_of_tasks_where_given_estimated_time_was_missed_with_revision = ($number_task_cross_estimate_time / count($total_number_of_tasks)) * 100;
         }
 
+        $number_of_tasks_data = Task::with('taskType', 'timeLogged', 'project.pm', 'project.client')->whereIn('id', $test)->get();
 
-        $number_of_tasks_data = DB::table('tasks')
-            ->select(
-                'tasks.id',
-                'tasks.heading',
-                'client.id as clientId',
-                'client.name as clientName',
-                'tasks.created_at as assign_date',
-                'task_submissions.created_at as submission_date',
-                'tasks.due_date',
-                'tasks.client_name as client_name',
-                'cl.id as cl_id',
-                'cl.name as cl_name',
-                'tasks.board_column_id',
-                'taskboard_columns.column_name as column_name',
-                'taskboard_columns.label_color'
-            )
-            ->leftJoin('task_submissions', 'task_submissions.task_id', '=', 'tasks.id')
-            ->join('task_users', 'tasks.id', '=', 'task_users.task_id')
-            ->join('taskboard_columns', 'taskboard_columns.id', '=', 'tasks.board_column_id')
-            ->leftJoin('projects', 'projects.id', 'tasks.project_id')
-            ->leftJoin('users as client', 'client.id', 'projects.client_id')
-            ->leftJoin('users as cl', 'cl.id', 'tasks.client_id')
-            ->whereIn('tasks.id', $test)
-            ->groupBy('tasks.id')
-            ->get();
-
-        return [round($percentage_of_tasks_where_given_estimated_time_was_missed_with_revision, 2), $number_of_tasks_data];
+        return [
+            round($percentage_of_tasks_where_given_estimated_time_was_missed_with_revision, 2),
+            $number_of_tasks_data,
+            count($total_number_of_tasks),
+            $number_task_cross_estimate_time,
+        ];
     }
 
     private function numberOfDisputesFiled($startDate, $endDate, $devId)
     {
         $test = [];
+        $task = [];
 
         $disputes_filed = DB::table('task_revision_disputes')
             ->select('task_id', 'winner', 'raised_by_percent', 'raised_against_percent', 'raised_by', 'raised_against')
@@ -2721,10 +2714,12 @@ trait DeveloperDashboard
             ->get();
 
         $number_of_disputes_filed = count($disputes_filed);
-
+        // dd($number_of_disputes_filed) ;
 
         foreach ($disputes_filed as $i1) {
-            array_push($test, $i1->task_id);
+
+            array_push($task, $i1->task_id);
+
             if ($i1->winner != NULL) {
                 array_push($test, $i1->winner);
             } else {
@@ -2740,32 +2735,11 @@ trait DeveloperDashboard
             }
         }
 
-        $task_data = DB::table('tasks')
-            ->select(
-                'tasks.id',
-                'tasks.heading',
-                'client.id as clientId',
-                'client.name as clientName',
-                'tasks.created_at as assign_date',
-                'task_submissions.created_at as submission_date',
-                'tasks.due_date',
-                'tasks.client_name as client_name',
-                'cl.id as cl_id',
-                'cl.name as cl_name',
-                'tasks.board_column_id',
-                'taskboard_columns.column_name as column_name',
-                'taskboard_columns.label_color'
-            )
-            ->leftjoin('task_submissions', 'task_submissions.task_id', '=', 'tasks.id')
-            ->join('task_users', 'tasks.id', '=', 'task_users.task_id')
-            ->join('taskboard_columns', 'taskboard_columns.id', '=', 'tasks.board_column_id')
-            ->leftJoin('projects', 'projects.id', 'tasks.project_id')
-            ->leftJoin('users as client', 'client.id', 'projects.client_id')
-            ->leftJoin('users as cl', 'cl.id', 'tasks.client_id')
-            ->whereIn('tasks.id', $test)
-            ->groupBy('tasks.id')
-            ->get();
-
+        $task_data = Task::with('project.pm', 'project.client', 'taskRevisionDispute.disputeWinner', 'taskRevisionDispute.raisedBy')->whereIn('id', $task)->get();
+        // dd(
+        //     $number_of_disputes_filed,
+        //     $task_data
+        // );
         return [
             $number_of_disputes_filed,
             $task_data
@@ -2848,6 +2822,8 @@ trait DeveloperDashboard
     private function hoursSpentInRevisions($startDate, $endDate, $devId)
     {
 
+        $startDate = "2023-01-01 00:00:00";
+        $endDate = "2024-06-31 00:00:00";
 
         $taskwise_revision_time = DB::table('project_time_logs')
             ->where('user_id', $devId)
@@ -2875,6 +2851,12 @@ trait DeveloperDashboard
         $totalHours = floor($totalTimeSeconds / 3600);
 
         $total_revision_time = sprintf('%d hours', $totalHours);
+
+        // dd(
+        //     $total_revision_time,
+        //     count($taskwise_revision_time),
+        //     $taskwise_revision_time
+        // );
 
         return [$total_revision_time];
     }
