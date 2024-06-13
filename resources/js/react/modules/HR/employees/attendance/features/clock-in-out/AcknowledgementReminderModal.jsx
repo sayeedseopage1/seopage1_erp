@@ -47,7 +47,7 @@ const AcknowledgementReminderModal = ({
     const [sType, setSType] = React.useState("");
     const [step, setStep] = React.useState(0);
     const [isSubmitting, setIsSubmitting] = React.useState(false);
-
+    console.log("last clock data", lastClockData);
     // handle form submission
     const handleSubmitForm = async (data, submissionType, cb) => {
         setIsSubmitting(true);
@@ -64,6 +64,7 @@ const AcknowledgementReminderModal = ({
                             submissionType === "CONTINUE"
                                 ? "continue"
                                 : "final_submission",
+                        submission_date: lastClockData.clock_in_time,
                         _token: document
                             .querySelector("meta[name='csrf-token']")
                             .getAttribute("content"),
@@ -146,6 +147,7 @@ const AcknowledgementReminderModal = ({
                         </div>
 
                         {/* time tracked data */}
+
                         {trackedTimeHistory &&
                             trackedTimeHistory?.length > 0 && (
                                 <div>
@@ -159,11 +161,18 @@ const AcknowledgementReminderModal = ({
                                             Tracked Hours
                                         </span>
                                         <Card.Body className={styles.card_body}>
-                                            <TrackedTimeTable
-                                                trackedTimeHistory={
-                                                    trackedTimeHistory
-                                                }
-                                            />
+                                            <div
+                                                style={{
+                                                    maxHeight: "300px",
+                                                    overflowY: "auto",
+                                                }}
+                                            >
+                                                <TrackedTimeTable
+                                                    trackedTimeHistory={
+                                                        trackedTimeHistory
+                                                    }
+                                                />
+                                            </div>
                                         </Card.Body>
                                     </Card>
                                 </div>
