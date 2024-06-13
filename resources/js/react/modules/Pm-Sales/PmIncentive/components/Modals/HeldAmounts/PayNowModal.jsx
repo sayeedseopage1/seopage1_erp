@@ -51,6 +51,7 @@ const PayNowModal = ({ antdModalOpen, showPayNowModal, queryForIncentiveHeldAmou
         },
         getCheckboxProps: (record) => ({
             style: record?.status === 2 ? { display: 'none' } : {},
+            disabled: record?.status === 2
         }),
     };
 
@@ -116,6 +117,8 @@ const PayNowModal = ({ antdModalOpen, showPayNowModal, queryForIncentiveHeldAmou
                 const response = await payIncentiveHeldAmount({ incentive_payment_ids: selectedRowKeys, user_id }).unwrap();
                 if (response?.status === 200) {
                     showPayNowModal()
+                    setSelectedRowKeys([]);
+                    setTotalHeldAmount(0);
                     await Swal.fire({
                         title: "Successfully Paid!",
                         text: response?.data || "Held incentives have been disbursed.",

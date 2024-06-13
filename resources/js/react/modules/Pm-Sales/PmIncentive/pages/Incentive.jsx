@@ -23,7 +23,6 @@ const Incentive = () => {
     const { incentiveTypesLoading } = useIncentive();
     const [queryForAchievedIncentive, setQueryForAchievedIncentive] = useState({})
     const [queryForIncentiveHeldAmounts, setQueryForIncentiveHeldAmounts] = useState({})
-    // const [queryForHeldAmountPayment, setQueryForHeldAmountPayment] = useState({})
 
     // make query string
     const queryString = (object) => {
@@ -36,12 +35,6 @@ const Incentive = () => {
         const queryObject = _.pickBy(object, Boolean);
         return new URLSearchParams(queryObject).toString();
     };
-
-    // query for held amount pay 
-    // const queryStringForHeldAmountPayment = (object) => {
-    //     const queryObject = _.pickBy(object, Boolean);
-    //     return new URLSearchParams(queryObject).toString();
-    // };
 
     // get pm point factors
     const { data: achievedIncentiveHistory, isFetching: achievedIncentiveHistoryIsFetching, isLoading: achievedIncentiveHistoryLoading } =
@@ -58,24 +51,7 @@ const Incentive = () => {
         { skip: tab != "held_amount" }
     )
 
-    const moveHeldAmountPayment = (data) => {
-        let dataCopy;
-        if (data) {
-            dataCopy = _.cloneDeep(data);
-        }
-
-        for (let i = 0; i < dataCopy?.length; i++) {
-            if (dataCopy[i]?.held_amount_payment) {
-                dataCopy[i - 1].held_amount_payment = dataCopy[i]?.held_amount_payment;
-                dataCopy[i].held_amount_payment = null;
-            }
-        }
-        return dataCopy;
-    }
-
     const incentiveHeldAmountsData = incentiveHeldAmounts?.data
-    const newData = moveHeldAmountPayment(incentiveHeldAmountsData)
-    const expandedRowKeys = newData && newData?.filter((item) => item?.held_amount_payment).map((item) => item?.id)
 
     if (incentiveTypesLoading) {
         return <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
@@ -115,7 +91,7 @@ const Incentive = () => {
                     </Switch.Case>
                     <Switch.Case condition={tab == "held_amount"}>
                         <div className='incentive_inner_wrapper'>
-                            <HeldAmounts expandedRowKeys={expandedRowKeys} data={newData} isFetching={incentiveHeldAmountsIsFetching} isLoading={incentiveHeldAmountsLoading} />
+                            <HeldAmounts data={incentiveHeldAmountsData} isFetching={incentiveHeldAmountsIsFetching} isLoading={incentiveHeldAmountsLoading} />
                         </div>
                     </Switch.Case>
                     <Switch.Case condition={tab == "incentive_factors"}>
