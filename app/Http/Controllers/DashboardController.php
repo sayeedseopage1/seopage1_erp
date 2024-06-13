@@ -49,6 +49,7 @@ use App\Models\TaskRevision;
 use App\Traits\LeadDashboardAdminView;
 use App\Traits\DevDashboardAdminView;
 use App\Traits\SalesDashboardAdminView;
+use DateTime;
 
 use function PHPUnit\Framework\isNull;
 
@@ -768,40 +769,91 @@ class DashboardController extends AccountBaseController
     }
 
 
-
     public function developerDailytrackHoursLog(Request $request)
     {
-        $duration = json_decode($request->durations);
-        dd($duration);
-        $stop_time = new DeveloperStopTimer();
-        $stop_time->reason_for_less_tracked_hours_a_day_task = $request->reason_for_less_tracked_hours_a_day_task;
-        $stop_time->durations = $request->durations;
-        $stop_time->comment = $request->comment;
-        $stop_time->leave_period = $request->leave_period;
-        $stop_time->child_reason = $request->child_reason;
-        $stop_time->responsible_person = $request->responsible_person;
-        $stop_time->related_to_any_project = $request->related_to_any_project;
-        $stop_time->responsible_person_id = $request->responsible_person_id;
-        $stop_time->forgot_to_track_task_id = $request->forgot_to_track_task_id;
-        $stop_time->user_id = Auth::user()->id;
-        $stop_time->transition_hours = $request->transition_hours;
-        $stop_time->transition_minutes = $request->transition_minutes;
-        $stop_time->date = $request->date;
-       
-        $stop_time->project_id = $request->project_id;
-        $stop_time->task_id = $request->task_id;
-        $project= Project::where('id',$request->project_id)->first();
-        if($project != null)
-        {
-            $stop_time->client_id = $project->client_id;
-
+        DB::beginTransaction();
+        $durations = json_decode($request->durations, true);
+        dd($durations, $request->durations);
+        $totalTrackedSeconds = 0;
+        foreach ($durations as $duration) {
+            $start = new DateTime($duration['start']);
+            $end = new DateTime($duration['end']);
+            $interval = $start->diff($end);
+            $totalTrackedSeconds += ($interval->h * 3600) + ($interval->i * 60) + $interval->s;
         }
+
+        // Convert totalTrackedSeconds to hours and minutes
+        $totalTrackedHours = intdiv($totalTrackedSeconds, 3600);
+        $totalTrackedMinutes = intdiv($totalTrackedSeconds % 3600, 60);
+
+        
+        // Calculate total incomplete hours in minutes
+        $incompleteHoursInMinutes = $request->incomplete_hours * 60;
+
+        // Compare the total tracked time with incomplete hours
+        if (($totalTrackedHours * 60 + $totalTrackedMinutes) == $incompleteHoursInMinutes) {
+            dd('ok');
+            $stop_time = new DeveloperStopTimer();
+            $stop_time->reason_for_less_tracked_hours_a_day_task = $request->reason_for_less_tracked_hours_a_day_task;
+            $stop_time->durations = $request->durations;
+            $stop_time->comment = $request->comment;
+            $stop_time->leave_period = $request->leave_period;
+            $stop_time->child_reason = $request->child_reason;
+            $stop_time->responsible_person = $request->responsible_person;
+            $stop_time->related_to_any_project = $request->related_to_any_project;
+            $stop_time->responsible_person_id = $request->responsible_person_id;
+            $stop_time->forgot_to_track_task_id = $request->forgot_to_track_task_id;
+            $stop_time->user_id = Auth::user()->id;
+            $stop_time->transition_hours = $request->transition_hours;
+            $stop_time->transition_minutes = $request->transition_minutes;
+            $stop_time->date = $request->date;
+
+            $stop_time->project_id = $request->project_id;
+            $stop_time->task_id = $request->task_id;
+            $project = Project::where('id', $request->project_id)->first();
+            if ($project != null) {
+                $stop_time->client_id = $project->client_id;
+            }
+
+            $stop_time->save();
+
+            return response()->json(['status' => 200]);
+        } else {
+            return response()->json(['status' => 400, 'message' => 'Tracked hours do not match the incomplete hours.']);
+        }
+    }
+
+    // public function developerDailytrackHoursLog(Request $request)
+    // {
+    //     $stop_time = new DeveloperStopTimer();
+    //     $stop_time->reason_for_less_tracked_hours_a_day_task = $request->reason_for_less_tracked_hours_a_day_task;
+    //     $stop_time->durations = $request->durations;
+    //     $stop_time->comment = $request->comment;
+    //     $stop_time->leave_period = $request->leave_period;
+    //     $stop_time->child_reason = $request->child_reason;
+    //     $stop_time->responsible_person = $request->responsible_person;
+    //     $stop_time->related_to_any_project = $request->related_to_any_project;
+    //     $stop_time->responsible_person_id = $request->responsible_person_id;
+    //     $stop_time->forgot_to_track_task_id = $request->forgot_to_track_task_id;
+    //     $stop_time->user_id = Auth::user()->id;
+    //     $stop_time->transition_hours = $request->transition_hours;
+    //     $stop_time->transition_minutes = $request->transition_minutes;
+    //     $stop_time->date = $request->date;
+       
+    //     $stop_time->project_id = $request->project_id;
+    //     $stop_time->task_id = $request->task_id;
+    //     $project= Project::where('id',$request->project_id)->first();
+    //     if($project != null)
+    //     {
+    //         $stop_time->client_id = $project->client_id;
+
+    //     }
        
 
-        $stop_time->save();
+    //     $stop_time->save();
 
-        return response()->json(['status'=>200]);
-    }
+    //     return response()->json(['status'=>200]);
+    // }
 
     public function task_history($id)
     {
