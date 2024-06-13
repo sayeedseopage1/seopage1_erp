@@ -126,11 +126,79 @@
     justify-content: center;
 }
 
-/* .incentive_criteria_factors_parent {
-    display: flex;
-    flex-direction: column;
-    max-width: 950px;
-} */
+
+@media only screen and (max-width: 1600px) {
+    .criteria_card {
+        max-width: 49%;
+    }
+
+    .incentive_criteria_factor_note {
+        max-width: 49%;
+        font-size: 14px;
+    }
+
+    .factor_title,
+    .factor_description {
+        font-size: 14px;
+    }
+
+    .factor_header div {
+        font-size: 14px;
+    }
+
+}
+
+@media only screen and (max-width: 1060px) {
+    .criteria_card {
+        max-width: 48%;
+    }
+
+    .criteria_card_title {
+        font-size: 14px;
+    }
+
+    .incentive_criteria_factor_note {
+        max-width: 48%;
+        font-size: 14px;
+    }
+
+    .factor_title,
+    .factor_description {
+        font-size: 14px;
+    }
+
+    .factor_header div {
+        font-size: 14px;
+    }
+
+    .incentive_criteria_factor_title {
+        font-size: 20px;
+    }
+}
+
+@media only screen and (max-width: 800px) {
+    .criteria_card {
+        max-width: 100%;
+    }
+
+    .incentive_criteria_factor_note {
+        max-width: 100%;
+        font-size: 12px;
+    }
+
+    .factor_title,
+    .factor_description {
+        font-size: 12px;
+    }
+
+    .factor_header div {
+        font-size: 12px;
+    }
+
+    .incentive_criteria_factor_title {
+        font-size: 18px;
+    }
+}
 
 
 /************************* old design css **************************************/
