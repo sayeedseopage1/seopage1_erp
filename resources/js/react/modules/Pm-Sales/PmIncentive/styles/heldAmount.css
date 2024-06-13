@@ -175,8 +175,8 @@
     font-weight: 600;
 }
 
-.disabled-row {
-    background-color: #CAEDE1;
+.success-payment-row {
+    color: #119254 !important;
     /* opacity: 0.5; */
     cursor: not-allowed !important;
     /* Change this color to your preferred background color */

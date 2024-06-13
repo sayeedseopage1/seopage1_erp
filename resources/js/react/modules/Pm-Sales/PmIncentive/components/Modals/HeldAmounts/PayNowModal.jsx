@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { DatePicker, Modal, Select, Table } from 'antd';
+import { DatePicker, Modal, Table } from 'antd';
 import { ButtonComponent } from '../../../../PointFactors/components/Styles/ui/ui';
 import amountIcon from '../../../assets/amount.svg';
 import Swal from 'sweetalert2';
@@ -8,7 +8,6 @@ import { useGetIncentiveHeldAmountQuery, usePayIncentiveHeldAmountMutation } fro
 import dayjs from 'dayjs';
 import moment from 'moment/moment';
 import { FaAngleDown } from "react-icons/fa6";
-import { auth } from '../../../constants';
 
 
 const PayNowModal = ({ antdModalOpen, showPayNowModal, queryForIncentiveHeldAmounts, queryStringForIncentiveHeldAmounts, tab }) => {
@@ -51,12 +50,8 @@ const PayNowModal = ({ antdModalOpen, showPayNowModal, queryForIncentiveHeldAmou
             setTotalHeldAmount(selectedRows.reduce((prev, curr) => prev + Number(curr?.held_amount), 0));
         },
         getCheckboxProps: (record) => ({
-            disabled: record?.status == 2, // Disable row selection if status is 2
+            style: record?.status === 2 ? { display: 'none' } : {},
         }),
-    };
-
-    const rowClassName = (record) => {
-        return record.status === 2 ? 'disabled-row' : '';
     };
 
     const columns = [
@@ -78,7 +73,7 @@ const PayNowModal = ({ antdModalOpen, showPayNowModal, queryForIncentiveHeldAmou
             ),
             dataIndex: "date",
             key: "date",
-            render: (text) => <p className='held_amount_table_data'>{moment(text).format("MMMM")}</p>,
+            render: (text, record) => <p style={record?.status == 2 ? { color: '#119254' } : {}} className={`held_amount_table_data`}>{moment(text).format("MMMM")}</p>,
         },
         {
             title: (
@@ -88,62 +83,9 @@ const PayNowModal = ({ antdModalOpen, showPayNowModal, queryForIncentiveHeldAmou
             ),
             dataIndex: "held_amount",
             key: "held_amount",
-            render: (text) => <p className='held_amount_table_data' style={{ textAlign: 'center' }}>{parseFloat(text)}</p>,
+            render: (text, record) => <p style={record?.status == 2 ? { color: '#119254', textAlign: 'center' } : { textAlign: 'center' }} className={`held_amount_table_data`}>{parseFloat(text)}</p>,
         },
-        // {
-        //     title: (
-        //         <div className='held_years_header' style={{ textAlign: 'center' }}>
-        //             <span>Status</span>
-        //         </div>
-        //     ),
-        //     dataIndex: 'status',
-        //     key: 'status',
-        //     render: (_, record) => (
-        //         <div>
-        //             {
-        //                 record?.status === 2 ? <button className='incentive_success_btn'>Paid</button> : <button className='incentive_danger_btn'>Pending</button>
-        //             }
-        //         </div>
-        //     ),
-        //     width: '230px',
-        //     align: 'center',
-        //     hidden: auth?.isHasRolePermission(1) ? false : true
-        // }
     ];
-
-    // const handlePay = () => {
-    //     Swal.fire({
-    //         html: `
-    //         ${selectedRowKeys.length < incentiveHeldAmountData?.length ? `                
-    //                 <p class="incentive_swal_confirm">Confirmation</p>
-    //                 <p class="incentive_swal_desc">You've selected ${selectedRowKeys.length} ${selectedRowKeys?.length === 1 ? 'month' : 'months'} out of ${incentiveHeldAmountData?.length} ${incentiveHeldAmountData?.length === 1 ? 'month' : 'months'}. <br>
-    //                 Do you still want to proceed?
-    //                 </p>` :
-
-    //                 `<p class="incentive_swal_confirm">Confirmation</p>
-    //                 <p class="incentive_swal_desc">Do you want to proceed?</p>
-
-    //             `
-    //             }
-    //         `,
-    //         showCancelButton: true,
-    //         confirmButtonText: "Confirm",
-    //         cancelButtonText: "Do it later",
-    //         customClass: {
-    //             confirmButton: 'swal2-confirm-custom',
-    //             cancelButton: 'swal2-cancel-custom'
-    //         }
-    //     }).then((result) => {
-    //         if (result.isConfirmed) {
-    //             payIncentiveHeldAmount({ incentive_payment_ids: selectedRowKeys, user_id })
-    //             // Swal.fire({
-    //             //     title: "Successfully Paid!",
-    //             //     text: "Held incentives have been disbursed.",
-    //             //     icon: "success"
-    //             // });
-    //         }
-    //     });
-    // }
 
     const handlePay = async () => {
         try {
@@ -238,7 +180,6 @@ const PayNowModal = ({ antdModalOpen, showPayNowModal, queryForIncentiveHeldAmou
                     dataSource={incentiveHeldAmountData}
                     rowKey="id"
                     pagination={false}
-                    rowClassName={rowClassName}
                 />
             </div>
             <div className='pay_now_modal_footer'>
