@@ -11,32 +11,37 @@ import Switch from "../../../../../global/Switch";
 
 //  Constants
 import { PriceQuotationsDataInputOptions } from "../../constant";
-import { useDispatch, useSelector } from "react-redux";
-import { updateOtherWorkError } from "../../../../../services/features/priceQuotationsSlice";
+import _ from "lodash";
 
 const ExtraWorksInputsContainer = ({
-    priceQuotationsInputs,
-    handleInputChange,
-    priceQuotationsInputsValidation,
     extraHandler,
-    isError,
-    errorText,
+    handleInputChange,
+    priceQuotationsInputs,
+    extraInfoInputsValidation,
+    setExtraInfoInputsValidation,
+    priceQuotationsInputsValidation,
 }) => {
+    let errorData = {
+        status: false,
+        title: "",
+    };
     const { subCategory } = PriceQuotationsDataInputOptions;
+    const { other_works_data, other_works } = priceQuotationsInputs;
     const isExtraDataExist = (data, type) => {
         return data?.find((item) => item?.parent?.name?.toLowerCase() === type);
     };
-    const { other_works_data, other_works } = priceQuotationsInputs;
+
     const removeSpeedOptimization = other_works?.filter(
         (item) => item.name !== "Speed Optimization"
     );
 
     const checkIsExtraDataAddedOrNot = React.useCallback(() => {
-       
         if (removeSpeedOptimization?.length === other_works_data?.length) {
             return false;
         } else {
-            return  true;
+            errorData.status = true;
+            errorData.title = generateErrorTitle();
+            return true;
         }
     }, [priceQuotationsInputs]);
 
@@ -62,38 +67,69 @@ const ExtraWorksInputsContainer = ({
         }
     };
 
+    // Extra Data Validation
+    const extraDataValidation = (value, message) => {
+        if (extraInfoInputsValidation.is_submitting) {
+            if (value) {
+                setExtraInfoInputsValidation((prev) => {
+                    return {
+                        ...prev,
+                        isError: false,
+                        errorText: "",
+                    };
+                });
+            } else {
+                setExtraInfoInputsValidation((prev) => {
+                    return {
+                        ...prev,
+                        isError: true,
+                        errorText: message,
+                    };
+                });
+            }
+        }
+    };
+
+    // Extra Handler
+    const handleExtraHandler = (e, type, fieldName, data) => {
+        extraHandler(
+            e,
+            type,
+            fieldName,
+            priceQuotationsInputs?.other_works[
+                priceQuotationsInputs?.other_works?.length - 1
+            ]
+        );
+    };
+
+    // Check Last Work Without Extra Data
+    const isLastWorkWithoutExtraData = (value) => {
+        const lastWork = _.toLower(_.last(priceQuotationsInputs?.other_works)?.name) === value;
+        const hasNoExtraData = !isExtraDataExist(
+            priceQuotationsInputs?.other_works_data,
+            value
+        );
+        return lastWork && hasNoExtraData;
+    };
+
     return (
         <div className="d-flex flex-column">
             <Switch>
                 <CustomDropDown
-                    label="6. How many hours of other works needed ?"
+                    label="8. How many hours of other works needed ?"
                     placeholder="Select Works Needed"
                     data={subCategory}
-                    isRequired
                     isDisableUse={checkIsExtraDataAddedOrNot()}
                     filedName={"other_works"}
                     selected={priceQuotationsInputs?.other_works}
                     setSelected={handleInputChange}
-                    isError={
-                        priceQuotationsInputsValidation?.is_submitting &&
-                        priceQuotationsInputsValidation?.other_works
-                    }
-                    errorText="Other works needed is required"
                     isMultiple
-                    disabledTitle={checkIsExtraDataAddedOrNot() && generateErrorTitle()}
+                    errorText={"Please fill the required fields first"}
+                    isError={priceQuotationsInputsValidation.is_submitting && priceQuotationsInputsValidation?.other_works}
+                    disabledTitle={errorData?.title}
                 />
                 <Switch.Case
-                    condition={
-                        priceQuotationsInputs?.other_works[
-                            priceQuotationsInputs?.other_works?.length - 1
-                        ]?.name
-                            ?.toLowerCase()
-                            .includes("content writing") &&
-                        !isExtraDataExist(
-                            priceQuotationsInputs?.other_works_data,
-                            "content writing"
-                        )
-                    }
+                    condition={isLastWorkWithoutExtraData("content writing")}
                 >
                     <CustomInput
                         label="i. Number of words required"
@@ -101,32 +137,20 @@ const ExtraWorksInputsContainer = ({
                         isChild
                         type="extra"
                         onClick={(e) =>
-                            extraHandler(
-                                e,
-                                "words",
-                                "number_of_words",
-                                priceQuotationsInputs?.other_works[
-                                    priceQuotationsInputs?.other_works?.length -
-                                        1
-                                ]
+                            handleExtraHandler(e, "words", "number_of_words")
+                        }
+                        onChange={(e) =>
+                            extraDataValidation(
+                                e.target.value,
+                                "Number of words is required"
                             )
                         }
-                        isError={isError}
-                        errorText={errorText}
+                        isError={extraInfoInputsValidation?.isError}
+                        errorText={extraInfoInputsValidation?.errorText}
                     />
                 </Switch.Case>
                 <Switch.Case
-                    condition={
-                        priceQuotationsInputs?.other_works[
-                            priceQuotationsInputs?.other_works?.length - 1
-                        ]?.name
-                            ?.toLowerCase()
-                            .includes("logo creation") &&
-                        !isExtraDataExist(
-                            priceQuotationsInputs?.other_works_data,
-                            "logo creation"
-                        )
-                    }
+                    condition={isLastWorkWithoutExtraData("logo creation")}
                 >
                     <CustomInput
                         label="i. Number of  logo required"
@@ -134,30 +158,20 @@ const ExtraWorksInputsContainer = ({
                         isChild
                         type="extra"
                         onClick={(e) =>
-                            extraHandler(
-                                e,
-                                "logo",
-                                "number_of_logo",
-                                priceQuotationsInputs?.other_works[
-                                    priceQuotationsInputs?.other_works?.length -
-                                        1
-                                ]
+                            handleExtraHandler(e, "logo", "number_of_logo")
+                        }
+                        onChange={(e) =>
+                            extraDataValidation(
+                                e.target.value,
+                                "Number of logo is required"
                             )
                         }
-                        isError={isError}
-                        errorText={errorText}
+                        isError={extraInfoInputsValidation?.isError}
+                        errorText={extraInfoInputsValidation?.errorText}
                     />
                 </Switch.Case>
                 <Switch.Case
-                    condition={
-                        priceQuotationsInputs?.other_works[
-                            priceQuotationsInputs?.other_works?.length - 1
-                        ]?.value === "ui_design" &&
-                        !isExtraDataExist(
-                            priceQuotationsInputs?.other_works_data,
-                            "ui design"
-                        )
-                    }
+                    condition={isLastWorkWithoutExtraData("ui design")}
                 >
                     <CustomInput
                         label="i. Number of  pages required"
@@ -165,49 +179,35 @@ const ExtraWorksInputsContainer = ({
                         isChild
                         type="extra"
                         onClick={(e) =>
-                            extraHandler(
-                                e,
-                                "pages",
-                                "number_of_pages",
-                                priceQuotationsInputs?.other_works[
-                                    priceQuotationsInputs?.other_works?.length -
-                                        1
-                                ]
+                            handleExtraHandler(e, "pages", "number_of_pages")
+                        }
+                        onChange={(e) =>
+                            extraDataValidation(
+                                e.target.value,
+                                "Number of pages is required"
                             )
                         }
-                        isError={isError}
-                        errorText={errorText}
+                        isError={extraInfoInputsValidation?.isError}
+                        errorText={extraInfoInputsValidation?.errorText}
                     />
                 </Switch.Case>
-                <Switch.Case
-                    condition={
-                        priceQuotationsInputs?.other_works[
-                            priceQuotationsInputs?.other_works?.length - 1
-                        ]?.value === "other" &&
-                        !isExtraDataExist(
-                            priceQuotationsInputs?.other_works_data,
-                            "other"
-                        )
-                    }
-                >
+                <Switch.Case condition={isLastWorkWithoutExtraData("other")}>
                     <CustomInput
                         label="i. Number of  hours required"
                         fieldName="number_of_hours"
                         isChild
                         type="extra"
                         onClick={(e) =>
-                            extraHandler(
-                                e,
-                                "other",
-                                "number_of_hours",
-                                priceQuotationsInputs?.other_works[
-                                    priceQuotationsInputs?.other_works?.length -
-                                        1
-                                ]
+                            handleExtraHandler(e, "hours", "number_of_hours")
+                        }
+                        onChange={(e) =>
+                            extraDataValidation(
+                                e.target.value,
+                                "Number of hours is required"
                             )
                         }
-                        isError={isError}
-                        errorText={errorText}
+                        isError={extraInfoInputsValidation?.isError}
+                        errorText={extraInfoInputsValidation?.errorText}
                     />
                 </Switch.Case>
                 <Switch.Case
@@ -238,4 +238,6 @@ ExtraWorksInputsContainer.propTypes = {
     extraHandler: PropTypes.func,
     isError: PropTypes.bool,
     errorText: PropTypes.string,
+    setExtraInfoInputsValidation: PropTypes.func,
+    extraInfoInputsValidation: PropTypes.object,
 };

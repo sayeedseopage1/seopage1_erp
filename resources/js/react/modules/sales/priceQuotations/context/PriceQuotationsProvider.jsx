@@ -25,7 +25,7 @@ const PriceQuotationsProvider = ({ children }) => {
                     name: item.cms_name,
                 };
             });
-
+            // Currencies
             const currenciesFormatted = data?.currencies?.map((item) => {
                 return {
                     ...item,
@@ -33,6 +33,24 @@ const PriceQuotationsProvider = ({ children }) => {
                 };
             });
 
+            // Clients
+            const clientsFormatted = _.chain(data?.deals)
+                .uniqBy("client_username")
+                .map((client, index) => ({
+                    id: index,
+                    name: client.client_name || client.client_username,
+                    user_name: client.client_username,
+                }))
+                .value();
+
+            // Deals
+            const dealsFormatted = data?.deals?.map((item) => {
+                return {
+                    ...item,
+                    name: item.project_name,
+                };
+            });
+            // Freelancer Account
             const freelancerACcount = AccountListDummyData.filter((item) =>
                 item?.platform?.name
                     ?.toLocaleLowerCase()
@@ -56,6 +74,8 @@ const PriceQuotationsProvider = ({ children }) => {
                 cms: cmsFormatted,
                 currencies: currenciesFormatted,
                 accounts: freelancerACcount,
+                clients: clientsFormatted,
+                deals: dealsFormatted,
             });
         }
     }, [filterOptionsData, filterOptionsLoading]);

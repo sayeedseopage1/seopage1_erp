@@ -1,5 +1,6 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 import PropTypes from "prop-types";
+import { toast } from "react-toastify";
 import _ from "lodash";
 
 // Components - UI - Custom
@@ -22,8 +23,14 @@ import { PriceQuotationsContext } from "../../context/PriceQuotationsProvider";
 
 // Components - Section
 import ExtraWorksInputsContainer from "../Section/ExtraWorksInputsContainer";
+
+// Helper Function
 import { generateUniqueId } from "../../../../../utils";
-import { useDispatch } from "react-redux";
+
+import {
+    isStateAllHaveValue,
+    markEmptyFieldsValidation,
+} from "../../../../../utils/stateValidation";
 
 const PriceQuotationsGenerateModal = ({
     isModalOpen,
@@ -32,12 +39,12 @@ const PriceQuotationsGenerateModal = ({
     priceQuotationsInputs,
     setPriceQuotationsInputs,
 }) => {
-    const dispatch = useDispatch();
     const [isLoading, setIsLoading] = React.useState(false);
     const [extraInfoInputsValidation, setExtraInfoInputsValidation] =
         React.useState({
             isError: false,
             errorText: "",
+            is_submitting: false,
         });
     const { filterOptions } = useContext(PriceQuotationsContext);
     const { category, deadline } = PriceQuotationsDataInputOptions;
@@ -48,34 +55,50 @@ const PriceQuotationsGenerateModal = ({
 
     const handleInputChange = (e) => {
         const { name, value } = e.target;
-        if (name === "other_works") {
-            const isExist = _.filter(
-                priceQuotationsInputs?.other_works,
-                (item) => item?.id === value?.id
-            );
-            if (isExist?.length) {
-                const updatedOtherWorks =
-                    priceQuotationsInputs?.other_works?.filter(
-                        (item) => item?.id !== value?.id
-                    );
-                const updatedOtherWorksData = priceQuotationsInputs?.other_works_data?.filter( item => item?.parent?.id !== value?.id);
-                setPriceQuotationsInputs({
-                    ...priceQuotationsInputs,
-                    other_works: updatedOtherWorks,
-                    other_works_data: updatedOtherWorksData
+        setPriceQuotationsInputs((prev) => {
+            const updatedInputs = { ...prev };
+            if (name === "other_works") {
+                const isExist = _.filter(
+                    updatedInputs?.other_works,
+                    (item) => item?.id === value?.id
+                );
+                if (isExist) {
+                    updatedInputs.other_works =
+                        updatedInputs.other_works.filter(
+                            (item) => item?.id !== value?.id
+                        );
+                    updatedInputs.other_works_data =
+                        updatedInputs.other_works_data.filter(
+                            (item) => item?.parent?.id !== value?.id
+                        );
+                } else {
+                    updatedInputs.other_works = [
+                        ...updatedInputs.other_works,
+                        value,
+                    ];
+                }
+                setExtraInfoInputsValidation({
+                    isError: false,
+                    errorText: "",
+                    is_submitting: false,
                 });
+            } else if (name === "client") {
+                updatedInputs.deal = {};
+                updatedInputs[name] = value;
+            } else if (name === "major_works" || name === "risk_factors") {
+                updatedInputs[name] = value;
+                if (value === "NO") {
+                    if (name === "major_works") {
+                        updatedInputs.number_of_functionalities = null;
+                    } else {
+                        updatedInputs.risk_percentage = null;
+                    }
+                }
             } else {
-                setPriceQuotationsInputs({
-                    ...priceQuotationsInputs,
-                    other_works: [...priceQuotationsInputs.other_works, value],
-                });
+                updatedInputs[name] = value;
             }
-        } else {
-            setPriceQuotationsInputs({
-                ...priceQuotationsInputs,
-                [name]: value,
-            });
-        }
+            return updatedInputs;
+        });
     };
 
     // Extra Handler for generating title with the number of words or logo or pages etc
@@ -86,13 +109,15 @@ const PriceQuotationsGenerateModal = ({
         if (!inputValue) {
             setExtraInfoInputsValidation({
                 isError: true,
-                errorText: `${_.startCase(type)} is required`,
+                errorText: `Number of ${_.startCase(type)} is required`,
+                is_submitting: true,
             });
             return;
         }
         setExtraInfoInputsValidation({
             isError: false,
             errorText: "",
+            is_submitting: false,
         });
         const title = generateTitle(type, inputValue);
         const payload = {
@@ -100,7 +125,7 @@ const PriceQuotationsGenerateModal = ({
             title: title,
             value: inputValue,
             parent: parent,
-            status: true
+            status: true,
         };
         setPriceQuotationsInputs({
             ...priceQuotationsInputs,
@@ -124,6 +149,93 @@ const PriceQuotationsGenerateModal = ({
         }
     };
 
+    const validateOtherWorks = (priceQuotationsInputs) => {
+        if (priceQuotationsInputs.other_works.length) {
+            const filterSpeedOptimization =
+                priceQuotationsInputs.other_works?.filter(
+                    (item) => item?.name !== "Speed Optimization"
+                );
+            if (filterSpeedOptimization?.length > 0) {
+                const isLengthSame =
+                    filterSpeedOptimization?.length ===
+                    priceQuotationsInputs.other_works_data?.length;
+                if (isLengthSame) {
+                    return false;
+                } else {
+                    return true;
+                }
+            } else {
+                return false;
+            }
+        } else {
+            return false;
+        }
+    };
+
+    const handleSubmitPriceQuotations = async () => {
+        const {
+            major_works,
+            risk_factors,
+            other_works,
+            other_works_data,
+            number_of_functionalities,
+            risk_percentage,
+            ...formData
+        } = priceQuotationsInputs;
+
+        const payload = {
+            ...formData,
+        };
+
+        if (major_works === "Yes" && number_of_functionalities === null) {
+            payload.number_of_functionalities = null;
+        }
+        if (risk_factors === "Yes" && risk_percentage === null) {
+            payload.risk_percentage = null;
+        }
+
+        const isEmpty = isStateAllHaveValue(payload);
+        if (isEmpty) {
+            const validation = markEmptyFieldsValidation(payload);
+            setPriceQuotationsInputsValidation({
+                ...priceQuotationsInputsValidation,
+                ...validation,
+                other_works: validateOtherWorks(priceQuotationsInputs),
+                is_submitting: true,
+            });
+            return;
+        }
+        try {
+            console.log(priceQuotationsInputs);
+        } catch (error) {
+            toast.error("Something went wrong");
+        }
+    };
+
+    useEffect(() => {
+        if (priceQuotationsInputsValidation.is_submitting) {
+            const validation = markEmptyFieldsValidation(priceQuotationsInputs);
+            setPriceQuotationsInputsValidation({
+                ...priceQuotationsInputsValidation,
+                ...validation,
+                other_works: validateOtherWorks(priceQuotationsInputs),
+                other_works_data: false,
+                risk_percentage:
+                    priceQuotationsInputs?.risk_factors === "Yes" &&
+                    !priceQuotationsInputs?.risk_percentage,
+                number_of_functionalities:
+                    priceQuotationsInputs?.major_works === "Yes" &&
+                    !priceQuotationsInputs?.number_of_functionalities,
+                is_submitting: true,
+            });
+        }
+    }, [
+        priceQuotationsInputs,
+        priceQuotationsInputsValidation.is_submitting,
+        priceQuotationsInputsValidation.risk_percentage,
+        priceQuotationsInputsValidation.number_of_functionalities,
+    ]);
+
     return (
         <CustomModal
             isModalOpen={isModalOpen}
@@ -136,85 +248,120 @@ const PriceQuotationsGenerateModal = ({
             <ModalContentContainer
                 color="var(--primaryLightDarkBlue)"
                 style={{
-                    maxHeight: "calc(85vh - 50px)",
+                    maxHeight: "calc(90vh - 50px)",
                     overflowY: "auto",
                 }}
             >
                 <ContentWrapper className="mb-3">
                     <CustomDropDown
-                        label="1. CMS"
                         isSearchBoxUse
                         isRequired={true}
+                        filedName={"client"}
+                        label="1. Client Name"
+                        data={filterOptions?.clients}
+                        setSelected={handleInputChange}
+                        placeholder="Select Client Name"
+                        errorText="Client Name is required"
+                        selected={priceQuotationsInputs?.client}
+                        isError={
+                            priceQuotationsInputsValidation?.is_submitting &&
+                            priceQuotationsInputsValidation?.client
+                        }
+                    />
+                    <CustomDropDown
+                        isSearchBoxUse
+                        isRequired={true}
+                        filedName={"deal"}
+                        label="2. Deal Name"
+                        isDisableUse={!priceQuotationsInputs?.client?.user_name}
+                        data={filterOptions?.deals.filter(
+                            (deal) =>
+                                deal?.client_username ===
+                                priceQuotationsInputs?.client?.user_name
+                        )}
+                        placeholder="Select Deal Name"
+                        setSelected={handleInputChange}
+                        errorText="Deal Name is required"
+                        selected={priceQuotationsInputs?.deal}
+                        disabledTitle={
+                            !priceQuotationsInputs?.client?.user_name &&
+                            "Please select Client Name first"
+                        }
+                        isError={
+                            priceQuotationsInputsValidation?.is_submitting &&
+                            priceQuotationsInputsValidation?.deal
+                        }
+                    />
+                </ContentWrapper>
+                <ContentWrapper className="mb-3">
+                    <CustomDropDown
+                        label="3. CMS"
+                        isSearchBoxUse
                         filedName={"cms"}
+                        isRequired={true}
                         placeholder="Select CMS"
                         data={filterOptions?.cms}
-                        selected={priceQuotationsInputs?.cms}
+                        errorText="CMS is required"
                         setSelected={handleInputChange}
+                        selected={priceQuotationsInputs?.cms}
                         isError={
                             priceQuotationsInputsValidation?.is_submitting &&
                             priceQuotationsInputsValidation?.cms
                         }
-                        errorText="CMS is required"
                     />
                     <CustomDropDown
-                        label="2. Category"
-                        placeholder="Select Category"
                         data={category}
                         isRequired={true}
+                        label="4. Category"
                         filedName={"category"}
-                        selected={priceQuotationsInputs?.category}
+                        placeholder="Select Category"
+                        errorText="Category is required"
                         setSelected={handleInputChange}
+                        selected={priceQuotationsInputs?.category}
                         isError={
                             priceQuotationsInputsValidation?.is_submitting &&
                             priceQuotationsInputsValidation?.category
                         }
-                        errorText="Category is required"
                     />
                 </ContentWrapper>
                 <ContentWrapper className="mb-3">
                     <CustomInput
-                        label="3. Number of primary pages required"
-                        fieldName="primary_page"
                         isRequired
                         type="number"
-                        value={priceQuotationsInputs?.primary_page}
+                        fieldName="primary_page"
                         onChange={handleInputChange}
+                        errorText="Primary pages is required"
+                        label="5. Number of primary pages required"
+                        value={priceQuotationsInputs?.primary_page}
                         placeholder="Enter Number of Primary Pages"
                         isError={
                             priceQuotationsInputsValidation?.is_submitting &&
                             priceQuotationsInputsValidation["primary_page"]
                         }
-                        errorText="Primary pages is required"
                     />
                     <CustomInput
-                        label="4. Number of secondary pages required"
-                        fieldName="secondary_page"
-                        type="number"
                         isRequired
-                        value={priceQuotationsInputs?.secondary_page}
+                        type="number"
+                        fieldName="secondary_page"
                         onChange={handleInputChange}
+                        errorText="Secondary pages is required"
+                        label="6. Number of secondary pages required"
+                        value={priceQuotationsInputs?.secondary_page}
                         placeholder="Enter Number of Secondary Pages"
                         isError={
                             priceQuotationsInputsValidation?.is_submitting &&
                             priceQuotationsInputsValidation["secondary_page"]
                         }
-                        errorText="Secondary pages is required"
                     />
                 </ContentWrapper>
                 <ContentWrapper className="mb-3">
                     <div className="d-flex flex-column">
                         <CustomInput
-                            label="5. Any major functionalities required?"
-                            fieldName="major_works"
-                            isRequired
                             type="button"
-                            value={priceQuotationsInputs?.major_works}
+                            fieldName="major_works"
                             onChange={handleInputChange}
-                            isError={
-                                priceQuotationsInputsValidation?.is_submitting &&
-                                priceQuotationsInputsValidation["major_works"]
-                            }
-                            errorText="Major works is required"
+                            value={priceQuotationsInputs?.major_works}
+                            label="7. Any major functionalities required?"
                         />
                         <Switch>
                             <Switch.Case
@@ -223,43 +370,48 @@ const PriceQuotationsGenerateModal = ({
                                 }
                             >
                                 <CustomInput
-                                    label="i. Number of Functionalities Requirements"
-                                    fieldName="number_of_functionalities"
                                     isChild
                                     type="number"
+                                    isRequired
+                                    onChange={handleInputChange}
+                                    fieldName="number_of_functionalities"
+                                    errorText="Number of Functionalities Required"
+                                    label="i. Number of Functionalities Requirements"
                                     value={
                                         priceQuotationsInputs?.number_of_functionalities
                                     }
-                                    onChange={handleInputChange}
+                                    placeholder="Enter Number of Functionalities"
+                                    isError={
+                                        priceQuotationsInputsValidation?.is_submitting &&
+                                        priceQuotationsInputsValidation?.number_of_functionalities
+                                    }
                                 />
                             </Switch.Case>
                         </Switch>
                     </div>
                     <ExtraWorksInputsContainer
-                        priceQuotationsInputs={priceQuotationsInputs}
-                        handleInputChange={handleInputChange}
                         extraHandler={extraHandler}
+                        handleInputChange={handleInputChange}
+                        isError={extraInfoInputsValidation.isError}
+                        priceQuotationsInputs={priceQuotationsInputs}
+                        errorText={extraInfoInputsValidation.errorText}
+                        extraInfoInputsValidation={extraInfoInputsValidation}
+                        setExtraInfoInputsValidation={
+                            setExtraInfoInputsValidation
+                        }
                         priceQuotationsInputsValidation={
                             priceQuotationsInputsValidation
                         }
-                        isError={extraInfoInputsValidation.isError}
-                        errorText={extraInfoInputsValidation.errorText}
                     />
                 </ContentWrapper>
                 <ContentWrapper className="mb-3">
                     <div className="d-flex flex-column">
                         <CustomInput
-                            label="7. Is there any risk factors involved? "
-                            fieldName="risk_factors"
-                            isRequired
                             type="button"
-                            value={priceQuotationsInputs?.risk_factors}
+                            fieldName="risk_factors"
                             onChange={handleInputChange}
-                            isError={
-                                priceQuotationsInputsValidation?.is_submitting &&
-                                priceQuotationsInputsValidation["risk_factors"]
-                            }
-                            errorText="Risk factors is required"
+                            value={priceQuotationsInputs?.risk_factors}
+                            label="9. Is there any risk factors involved? "
                         />
                         <Switch>
                             <Switch.Case
@@ -269,75 +421,74 @@ const PriceQuotationsGenerateModal = ({
                                 }
                             >
                                 <CustomInput
+                                    isChild
+                                    type="percentage"
                                     label="i. Risk Percentage"
                                     fieldName="risk_percentage"
-                                    type="percentage"
-                                    isChild
+                                    errorText="Risk Percentage is required"
                                     value={
                                         priceQuotationsInputs?.risk_percentage
                                     }
                                     onChange={handleInputChange}
                                     isError={
                                         priceQuotationsInputsValidation?.is_submitting &&
-                                        priceQuotationsInputsValidation[
-                                            "risk_percentage"
-                                        ]
+                                        priceQuotationsInputsValidation?.risk_percentage
                                     }
-                                    errorText="Risk Percentage is required"
                                 />
                             </Switch.Case>
                         </Switch>
                     </div>
 
                     <CustomDropDown
-                        label="8. Clients Currency"
-                        placeholder="Select a Currency"
-                        data={filterOptions?.currencies}
                         isRequired={true}
+                        label="10. Clients Currency"
                         filedName={"client_currency"}
-                        selected={priceQuotationsInputs?.client_currency}
+                        placeholder="Select a Currency"
                         setSelected={handleInputChange}
+                        data={filterOptions?.currencies}
+                        errorText="Client Currency is required"
+                        selected={priceQuotationsInputs?.client_currency}
                         isError={
                             priceQuotationsInputsValidation?.is_submitting &&
                             priceQuotationsInputsValidation?.client_currency
                         }
-                        errorText="Client Currency is required"
                     />
                 </ContentWrapper>
                 <ContentWrapper className="mb-3">
                     <CustomDropDown
-                        label="9. Deadline"
-                        placeholder="Select Deadline"
                         data={deadline}
                         isRequired={true}
                         filedName="deadline"
-                        selected={priceQuotationsInputs?.deadline}
+                        label="11. Deadline"
+                        placeholder="Select Deadline"
                         setSelected={handleInputChange}
+                        errorText="Deadline is required"
+                        selected={priceQuotationsInputs?.deadline}
                         isError={
                             priceQuotationsInputsValidation?.is_submitting &&
                             priceQuotationsInputsValidation?.deadline
                         }
-                        errorText="Deadline is required"
                     />
                     <CustomDropDown
-                        label="10. Freelancer account"
-                        placeholder="Select Freelancer Account"
-                        data={filterOptions?.accounts}
                         isRequired={true}
                         filedName="platform_account"
-                        selected={priceQuotationsInputs?.platform_account}
+                        label="12. Freelancer account"
+                        data={filterOptions?.accounts}
                         setSelected={handleInputChange}
+                        placeholder="Select Freelancer Account"
+                        errorText="Freelancer Account is required"
+                        selected={priceQuotationsInputs?.platform_account}
                         isError={
                             priceQuotationsInputsValidation?.is_submitting &&
                             priceQuotationsInputsValidation?.platform_account
                         }
-                        errorText="Freelancer Account is required"
                     />
                 </ContentWrapper>
                 <ContentWrapper className="justify-content-center pt-3">
                     <Button
                         className="mr-2 price_quotation_custom_button price_quotation_custom_button_primary"
                         isLoading={isLoading}
+                        onClick={handleSubmitPriceQuotations}
                     >
                         Submit & View
                     </Button>
@@ -362,4 +513,5 @@ PriceQuotationsGenerateModal.propTypes = {
     closeModal: PropTypes.func,
     modalTitle: PropTypes.string,
     priceQuotationsInputs: PropTypes.object,
+    setPriceQuotationsInputs: PropTypes.func,
 };

@@ -127,6 +127,7 @@ const CustomInput = ({
                             name={fieldName}
                             value={value}
                             placeholder={placeholder}
+                            onChange={onChange}
                             {...rest}
                             type="number"
                         />

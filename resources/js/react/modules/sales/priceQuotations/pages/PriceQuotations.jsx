@@ -19,8 +19,6 @@ import DataTable from "../components/Table/DataTable";
 // Dummy Data
 import { PriceQuotationsDummyData } from "../constant";
 
-// Context
-import { PriceQuotationsContext } from "../context/PriceQuotationsProvider";
 
 export const priceQuotationsState = {
     inputs: {
@@ -33,9 +31,11 @@ export const priceQuotationsState = {
         other_works: [],
         risk_factors: null,
         risk_percentage: null,
-        other_works_data: [
-        ],
+        other_works_data: [],
+        client: {},
+        deal: {},
         client_currency: {},
+        
         deadline: null,
         platform_account: {},
     },
@@ -43,6 +43,8 @@ export const priceQuotationsState = {
         cms: false,
         category: false,
         primary_page: false,
+        client: false,
+        deal: false,
         secondary_page: false,
         major_works: false,
         other_works: false,
@@ -55,7 +57,6 @@ export const priceQuotationsState = {
 };
 
 const PriceQuotations = () => {
-    const { filterOptionsLoading } = React.useContext(PriceQuotationsContext);
     const [priceQuotationsInputs, setPriceQuotationsInputs] = React.useState(
         priceQuotationsState.inputs
     );

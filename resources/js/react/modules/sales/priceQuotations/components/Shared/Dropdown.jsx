@@ -70,8 +70,6 @@ const DropdownItem = ({
             className={`cnx_dropdown__item w-100  ${
                 disabled ? "cnx_dropdown__item_disabled" : ""
             } ${className}`}
-            role="button"
-            tabIndex={0}
             onKeyDown={handleClick}
             {...props}
         >
@@ -94,8 +92,6 @@ const DropdownToggle = ({
             className={`cnx_dropdown__toggle ${className}`}
             onClick={toggle}
             onKeyDown={toggle}
-            tabIndex={0}
-            role="button"
         >
             {children}
             {icon && (
@@ -206,7 +202,7 @@ const DropdownMenu = ({
                         isOpen ? "cnx_dropdown__menu_open" : ""
                     } ${className}`}
                     ref={setPopperElement}
-                    style={{ ...styles.popper, minWidth: width }}
+                    style={{ ...styles.popper, minWidth: width , maxWidth:width }}
                     {...attributes.popper}
                     {...props}
                 >

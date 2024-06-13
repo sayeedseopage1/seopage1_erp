@@ -59,6 +59,11 @@
   color: var(--primaryDarkText) !important;
 }
 
+
+.price_quotations_custom_dropdown_menu .singleline-ellipsis{
+  white-space: nowrap;
+}
+
 .cnx__ins__ui_search_input {
   padding: 8px 10px 8px 30px !important;
 }
