@@ -1,5 +1,5 @@
 import axios from "axios";
-import React from "react";
+import React, { useState } from "react";
 import Button from "../../../../../../global/Button";
 import Switch from "../../../../../../global/Switch";
 import { convertTime } from "../../../../../../utils/converTime";
@@ -10,6 +10,11 @@ import Option3 from "./helper/acknowledgement-options/Option3";
 import Option4 from "./helper/acknowledgement-options/Option4";
 import Option5 from "./helper/acknowledgement-options/Option5";
 import Option6 from "./helper/acknowledgement-options/Option6";
+
+import TrackedTimeTable from "./tracked-time-table/Table/TrackedTimeTable";
+import Card from "../../../../../../global/Card";
+
+import styles from "./tracked-time-table/Table/card.module.css";
 
 /**
  * * This components responsible for showing daily working report to developer
@@ -34,7 +39,8 @@ const AcknowledgementReminderModal = ({
     reminderDate,
     reminderType,
     data,
-    projectTimeLog,
+    trackedTimeHistory,
+    lastClockData,
     onSubmit,
 }) => {
     const [step, setStep] = React.useState(0);
@@ -69,6 +75,8 @@ const AcknowledgementReminderModal = ({
         } catch (error) {
             console.log(error);
         }
+
+        console.log("selected times", data);
     };
 
     return (
@@ -116,25 +124,29 @@ const AcknowledgementReminderModal = ({
                         </div>
 
                         {/* time tracked data */}
-                        <div>
-                            {projectTimeLog?.length > 0 &&
-                                projectTimeLog.map((item, index) => (
-                                    <div
-                                        key={index}
-                                        className="sp1_single_task--modal-body-option-item"
-                                    >
-                                        <div className="sp1_single_task--modal-body-option-item-title">
-                                            start time:
-                                            {new Date(item.start_time)}
-                                        </div>
-                                        <div className="sp1_single_task--modal-body-option-item-time">
-                                            end time :{new Date(item.end_time)}
-                                        </div>
-
-                                        {console.log(new Date(item.start_time))}
-                                    </div>
-                                ))}
-                        </div>
+                        {trackedTimeHistory &&
+                            trackedTimeHistory?.length > 0 && (
+                                <div>
+                                    <Card className={styles.revision_card}>
+                                        <span
+                                            style={{
+                                                fontWeight: "bold",
+                                                fontSize: "16px",
+                                            }}
+                                        >
+                                            Tracked Hours
+                                        </span>
+                                        <Card.Body className={styles.card_body}>
+                                            <TrackedTimeTable
+                                                trackedTimeHistory={
+                                                    trackedTimeHistory
+                                                }
+                                            />
+                                        </Card.Body>
+                                    </Card>
+                                </div>
+                            )}
+                        {console.log("project timelog", trackedTimeHistory)}
 
                         {/* options */}
                         <div className="sp1_stop-button-confirmation-option">
@@ -146,6 +158,10 @@ const AcknowledgementReminderModal = ({
                                         condition={!step || step === 1}
                                     >
                                         <Option1
+                                            trackedTimeHistory={
+                                                trackedTimeHistory
+                                            }
+                                            lastClockData={lastClockData}
                                             checked={step === 1}
                                             index={1}
                                             onChange={(e) =>
