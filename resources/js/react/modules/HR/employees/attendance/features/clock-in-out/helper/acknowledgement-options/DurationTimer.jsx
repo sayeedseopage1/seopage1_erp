@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useMemo } from "react";
 import { TimePicker, Space } from "antd";
+import dayjs from "dayjs";
 
 const DurationTime = ({
     durations,
@@ -35,7 +36,9 @@ const DurationTime = ({
                         use12Hours
                         format="h:mm a"
                         defaultValue={start}
-                        onChange={(time) => setStart(time)}
+                        onChange={(time) =>
+                            setStart(dayjs(time, "HH:mm:ss").format("HH:mm:ss"))
+                        }
                         className="w-100 py-2"
                     />
                 </Space>
@@ -47,7 +50,9 @@ const DurationTime = ({
                         use12Hours
                         format="h:mm a"
                         defaultValue={end}
-                        onChange={(time) => setEnd(time)}
+                        onChange={(time) =>
+                            setEnd(dayjs(time, "HH:mm:ss").format("HH:mm:ss"))
+                        }
                         className="w-100 py-2"
                     />
                 </Space>

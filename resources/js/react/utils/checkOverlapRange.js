@@ -6,19 +6,18 @@ const checkOverlapRange = (lastClockOutTime, durations) => {
 
     // Adjust lastClockOutTime to not exceed 11 PM
     // if (!lastClockOutTime || lastClockOutTime > endOfDay) {
-    if (
-        !lastClockOutTime ||
-        lastClockOutTime < startOfDay ||
-        lastClockOutTime > endOfDay
-    ) {
-        lastClockOutTime = endOfDay;
-    }
+    // if (
+    //     lastClockOutTime === null ||
+    //     lastClockOutTime === "" ||
+    //     lastClockOutTime < startOfDay ||
+    //     lastClockOutTime > endOfDay
+    // ) {
+    //     lastClockOutTime = endOfDay;
+    // }
     console.log("last clock out time", lastClockOutTime);
     for (const duration of durations) {
-        const durationStart = dayjs(duration.start, timeFormat).format(
-            timeFormat
-        );
-        const durationEnd = dayjs(duration.end, timeFormat).format(timeFormat);
+        const durationStart = duration.start;
+        const durationEnd = duration.end;
 
         // Check if durationStart or durationEnd is outside the valid time range
         if (
