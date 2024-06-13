@@ -68,6 +68,7 @@
         "laravel-echo": "^1.11.2",
         "libphonenumber-js": "^1.10.49",
         "mix": "^0.0.1",
+        "moment": "^2.30.1",
         "pusher-js": "^7.0.3",
         "quill": "^1.3.7",
         "quill-auto-links": "^0.1.3",
