@@ -16,7 +16,9 @@ class AchievedIncentive extends Model
         'acquired_points',
         'incentive_point',
         'cash_value',
-        'total_cash_amount'
+        'total_cash_amount',
+        'created_at',
+        'updated_at'
     ];
 
     public function projectManager()
