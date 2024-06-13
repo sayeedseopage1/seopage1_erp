@@ -65,6 +65,18 @@ const AcknowledgementReminderModal = ({
                     }
                 )
                 .then((res) => {
+                    console.log("response", res);
+                    if (res.data.status === 400) {
+                        Swal.fire({
+                            position: "center",
+                            icon: "error",
+                            title: `${res.data.message}`,
+
+                            showConfirmButton: true,
+                        });
+
+                        return;
+                    }
                     if (submissionType !== "CONTINUE") {
                         onSubmit();
                         close();
