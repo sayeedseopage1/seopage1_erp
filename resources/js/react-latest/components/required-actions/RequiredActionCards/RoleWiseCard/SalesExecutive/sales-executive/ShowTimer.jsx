@@ -1,7 +1,6 @@
-import { useEffect } from "react";
+
 import useTimer from "../../../../../../hooks/useTimer";
 import style from "../../../../../../styles/required-action-card.module.css";
-import dayjs from "dayjs";
 
 // timer showing clipboard
 export default function ShowTimer({ targetTime }) {

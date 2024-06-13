@@ -1,6 +1,5 @@
-import { useWindowSize } from "react-use";
-import { useDispatch } from "react-redux";
-import React, { useEffect } from "react";
+
+import React  from "react";
 
 // styles
 import style from "../../../../../../styles/required-action-card.module.css";
@@ -8,29 +7,8 @@ import style from "../../../../../../styles/required-action-card.module.css";
 // utils
 import handleBtnDisable from "../../../../utils/handleBtnDisable";
 
-// Api 
-import { useGetCommentsQuery } from "../../../../../../services/api/commentsApiSlice";
-
-// store 
-import { useCommentStore } from "../../../../../../../react/UI/comments/zustand/store";
-
 // action buttons
 const ActionsButton = ({ data }) => {
-
-    const { commentState } = useCommentStore();
-    const { width } = useWindowSize();
-    const taskId = data?.task_id;
-
-    const {
-        data: comments,
-        isFetching,
-        isLoading,
-        refetch,
-    } = useGetCommentsQuery(taskId);
-
-    useEffect(() => {
-        refetch();
-    }, [commentState]);
 
     return (
         <>
