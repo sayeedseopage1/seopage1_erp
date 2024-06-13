@@ -77,13 +77,13 @@
     border-radius: 10px;
     background: #A3D1F0;
     padding: 10px;
+    min-height: 300px;
 }
 
 .factor_card {
-    display: flex;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
     align-items: center;
-    justify-content: space-between;
-    gap: 10px;
 }
 
 .factor_title,
@@ -96,6 +96,27 @@
     line-height: normal;
     /* border: 1px solid #B5E1FF; */
 }
+
+.factor_description {
+    text-align: right;
+}
+
+.factor_card> :nth-child(1) {
+    border-right: 1px solid #B5E1FF;
+    border-bottom: 1px solid #B5E1FF;
+    padding: 11px 5px;
+}
+
+.factor_card> :nth-child(2) {
+    border-bottom: 1px solid #B5E1FF;
+    padding: 11px 5px;
+}
+
+.factor_card:last-child> :nth-child(1),
+.factor_card:last-child> :nth-child(2) {
+    border-bottom: none !important;
+}
+
 
 .criteria_factor_notes_wrapper {
     display: flex;

@@ -34,18 +34,6 @@ const IncentiveCriteriaFactors = () => {
                         <IncentiveCriteriaFactorNote content={'However, the final bonus points will be determined by the amount of unreleased payment he had (Previous + current month) as below:'} />
                     </div>
                     <div className='incentive_criteria_factors'>
-                        {/* <div>
-                            <IncentiveCriteriaFactorNote content={'Bonus Points Based on the Released Amounts'} />
-                            {
-                                bonusData?.slice(0, 1)?.map(item => <IncentiveCriteriaFactorCard key={item?.id} item={item} />)
-                            }
-                        </div>
-                        <div>
-                            <IncentiveCriteriaFactorNote content={'However, the final bonus points will be determined by the amount of unreleased payment he had (Previous + current month) as below:'} />
-                            {
-                                bonusData?.slice(1, 2)?.map(item => <IncentiveCriteriaFactorCard key={item?.id} item={item} />)
-                            }
-                        </div> */}
                         {
                             bonusData?.map(item => <IncentiveCriteriaFactorCard key={item?.id} item={item} />)
                         }
