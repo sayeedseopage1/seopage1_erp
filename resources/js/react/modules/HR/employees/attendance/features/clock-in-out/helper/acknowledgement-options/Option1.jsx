@@ -33,6 +33,7 @@ const Option1 = ({
     ]);
     const [sType, setSType] = React.useState(""); // submission type
 
+    console.log("durations", durations);
     // unique id
     const uniqueId = Math.random().toString(6).slice(2);
 
@@ -63,7 +64,9 @@ const Option1 = ({
 
     //overlapping validation
     let newOverlappingTimes = [];
-    let lastClockOutTime = extractTime(lastClockData?.clock_out_time);
+    let lastClockOutTime = lastClockData?.clock_out_time
+        ? extractTime(lastClockData?.clock_out_time)
+        : "23:00:00";
     console.log("last clock out time", lastClockOutTime);
     const handleSubmission = (e, submissionType) => {
         e.preventDefault();
@@ -108,8 +111,8 @@ const Option1 = ({
             Swal.fire({
                 position: "center",
                 icon: "error",
-                title: "Invalid Time Selection!",
-                text: `Selected Time must be after 7:45 AM and before the last clock-out time(${formatTimeTo12Hour(
+                title: "You have selected wrong time range!",
+                text: `You must select time within this time range: 07:45 AM - (${formatTimeTo12Hour(
                     lastClockOutTime
                 )}).`,
                 showConfirmButton: true,
