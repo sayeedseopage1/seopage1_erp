@@ -11,6 +11,8 @@
 # public/js/app.js
 # public/js/vendor.js.map
 # public/js/vendor.js
+public/js/bundle-report.html
+public/js/report.html
 
 .phpunit.result.cache
 Homestead.json

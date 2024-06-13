@@ -27,24 +27,41 @@ const ExtraWorksInputsContainer = ({
     };
     const { subCategory } = PriceQuotationsDataInputOptions;
     const { other_works_data, other_works } = priceQuotationsInputs;
-    const isExtraDataExist = (data, type) => {
-        return data?.find((item) => item?.parent?.name?.toLowerCase() === type);
-    };
 
-    const removeSpeedOptimization = other_works?.filter(
+    /**
+     * Check if extra data exists for a given type.
+     * @param {Array} data - The array of extra works data.
+     * @param {string} type - The type of work to check for.
+     * @returns {boolean} - True if the extra data exists, false otherwise.
+     */
+    const isExtraDataExist = (data, type) =>
+        data.find((item) => item?.parent?.name?.toLowerCase() === type);
+
+    // Remove Speed Optimization because of Speed Optimization is not extra work
+    const removeSpeedOptimization = other_works.filter(
         (item) => item.name !== "Speed Optimization"
     );
 
+    /**
+     * Check if extra data has been added or not.
+     * @returns {boolean} - True if extra data has not been added correctly, false otherwise.
+     */
     const checkIsExtraDataAddedOrNot = React.useCallback(() => {
-        if (removeSpeedOptimization?.length === other_works_data?.length) {
-            return false;
-        } else {
-            errorData.status = true;
-            errorData.title = generateErrorTitle();
-            return true;
+        const isInvalid =
+            removeSpeedOptimization.length !== other_works_data.length;
+        if (isInvalid) {
+            errorData = {
+                status: true,
+                title: generateErrorTitle(),
+            };
         }
+        return isInvalid;
     }, [priceQuotationsInputs]);
 
+    /**
+     * Generate an appropriate error title based on missing data.
+     * @returns {string} - The generated error title.
+     */
     const generateErrorTitle = () => {
         const notExist = removeSpeedOptimization?.filter(
             (item) =>
@@ -53,60 +70,55 @@ const ExtraWorksInputsContainer = ({
                 )
         );
         const type = notExist[0]?.name?.toLowerCase();
-        switch (type) {
-            case "content writing":
-                return "Please add number of words first, then add new other works";
-            case "logo creation":
-                return "Please add number of logo first, then add new other works";
-            case "ui design":
-                return "Please add number of pages first, then add new other works";
-            case "other":
-                return "Please add number of hours first, then add new other works";
-            default:
-                return "";
-        }
+        const errorMessages = {
+            "content writing":
+                "Please add number of words first, then add new other works",
+            "logo creation":
+                "Please add number of logo first, then add new other works",
+            "ui design":
+                "Please add number of pages first, then add new other works",
+            other: "Please add number of hours first, then add new other works",
+        };
+        return errorMessages[type];
     };
 
-    // Extra Data Validation
+    /**
+     * Validate extra data and set appropriate error messages.
+     * @param {boolean} value - The validation status of the extra data.
+     * @param {string} message - The error message to display if validation fails.
+     */
     const extraDataValidation = (value, message) => {
         if (extraInfoInputsValidation.is_submitting) {
-            if (value) {
-                setExtraInfoInputsValidation((prev) => {
-                    return {
-                        ...prev,
-                        isError: false,
-                        errorText: "",
-                    };
-                });
-            } else {
-                setExtraInfoInputsValidation((prev) => {
-                    return {
-                        ...prev,
-                        isError: true,
-                        errorText: message,
-                    };
-                });
-            }
+            setExtraInfoInputsValidation((prev) => ({
+                ...prev,
+                isError: !value,
+                errorText: value ? "" : message,
+            }));
         }
     };
 
-    // Extra Handler
-    const handleExtraHandler = (e, type, fieldName, data) => {
-        extraHandler(
-            e,
-            type,
-            fieldName,
-            priceQuotationsInputs?.other_works[
-                priceQuotationsInputs?.other_works?.length - 1
-            ]
-        );
+    /**
+     * Handle extra data submission.
+     * @param {Event} e - The event object.
+     * @param {string} type - The type of the extra work.
+     * @param {string} fieldName - The field name of the extra work.
+     */
+    const handleExtraHandler = (e, type, fieldName) => {
+        const lastWork = _.last(priceQuotationsInputs.other_works);
+        extraHandler(e, type, fieldName, lastWork);
     };
 
-    // Check Last Work Without Extra Data
+    /**
+     * Check if the last added work is without extra data.
+     * @param {string} value - The type of the last work.
+     * @returns {boolean} - True if the last work is without extra data, false otherwise.
+     */
     const isLastWorkWithoutExtraData = (value) => {
-        const lastWork = _.toLower(_.last(priceQuotationsInputs?.other_works)?.name) === value;
+        const lastWork =
+            _.toLower(_.last(priceQuotationsInputs.other_works)?.name) ===
+            value;
         const hasNoExtraData = !isExtraDataExist(
-            priceQuotationsInputs?.other_works_data,
+            priceQuotationsInputs.other_works_data,
             value
         );
         return lastWork && hasNoExtraData;
@@ -125,7 +137,10 @@ const ExtraWorksInputsContainer = ({
                     setSelected={handleInputChange}
                     isMultiple
                     errorText={"Please fill the required fields first"}
-                    isError={priceQuotationsInputsValidation.is_submitting && priceQuotationsInputsValidation?.other_works}
+                    isError={
+                        priceQuotationsInputsValidation.is_submitting &&
+                        priceQuotationsInputsValidation?.other_works
+                    }
                     disabledTitle={errorData?.title}
                 />
                 <Switch.Case

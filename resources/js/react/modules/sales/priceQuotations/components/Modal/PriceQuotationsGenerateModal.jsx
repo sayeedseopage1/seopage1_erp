@@ -62,7 +62,7 @@ const PriceQuotationsGenerateModal = ({
                     updatedInputs?.other_works,
                     (item) => item?.id === value?.id
                 );
-                if (isExist) {
+                if (isExist?.length) {
                     updatedInputs.other_works =
                         updatedInputs.other_works.filter(
                             (item) => item?.id !== value?.id
@@ -136,40 +136,35 @@ const PriceQuotationsGenerateModal = ({
         });
     };
 
+    /**
+     * Generate a title based on type and value.
+     * @param {string} type - The type of the input.
+     * @param {string} value - The value of the input.
+     * @returns {string} The generated title.
+     */
     const generateTitle = (type, value) => {
-        switch (type) {
-            case "words":
-                return `Content Writing ${value} words`;
-            case "logo":
-                return `Logo Creation ${value} logos`;
-            case "pages":
-                return `UI Design ${value} pages`;
-            case "other":
-                return `Others ${value} hours`;
-        }
+        const titles = {
+            words: `Content Writing ${value} words`,
+            logo: `Logo Creation ${value} logos`,
+            pages: `UI Design ${value} pages`,
+            other: `Others ${value} hours`,
+        };
+        return titles[type];
     };
 
-    const validateOtherWorks = (priceQuotationsInputs) => {
-        if (priceQuotationsInputs.other_works.length) {
-            const filterSpeedOptimization =
-                priceQuotationsInputs.other_works?.filter(
-                    (item) => item?.name !== "Speed Optimization"
-                );
-            if (filterSpeedOptimization?.length > 0) {
-                const isLengthSame =
-                    filterSpeedOptimization?.length ===
-                    priceQuotationsInputs.other_works_data?.length;
-                if (isLengthSame) {
-                    return false;
-                } else {
-                    return true;
-                }
-            } else {
-                return false;
-            }
-        } else {
-            return false;
-        }
+    /**
+     * Validate other works data.
+     * @param {Object} inputs - The price quotations inputs.
+     * @returns {boolean} True if validation fails, otherwise false.
+     */
+    const validateOtherWorks = (inputs) => {
+        const { other_works, other_works_data } = inputs;
+        if (other_works.length === 0) return false;
+        const filterSpeedOptimization = other_works.filter(
+            (item) => item?.name !== "Speed Optimization"
+        );
+        if (filterSpeedOptimization.length === 0) return false;
+        return filterSpeedOptimization.length !== other_works_data.length;
     };
 
     const handleSubmitPriceQuotations = async () => {
