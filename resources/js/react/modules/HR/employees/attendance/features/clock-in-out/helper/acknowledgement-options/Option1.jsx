@@ -14,6 +14,8 @@ import Swal from "sweetalert2";
  */
 
 const Option1 = ({
+    sType,
+    setSType,
     checked,
     index,
     onChange,
@@ -32,7 +34,6 @@ const Option1 = ({
             id: "d32sew",
         },
     ]);
-    const [sType, setSType] = React.useState(""); // submission type
 
     console.log("durations", durations);
     // unique id

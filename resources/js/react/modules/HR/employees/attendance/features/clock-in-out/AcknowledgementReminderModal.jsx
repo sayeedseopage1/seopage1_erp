@@ -44,6 +44,7 @@ const AcknowledgementReminderModal = ({
     incomplete_hours,
     onSubmit,
 }) => {
+    const [sType, setSType] = React.useState("");
     const [step, setStep] = React.useState(0);
     const [isSubmitting, setIsSubmitting] = React.useState(false);
 
@@ -59,6 +60,7 @@ const AcknowledgementReminderModal = ({
                         ...data,
                         date: dayjs.dayjs(reminderDate).format("YYYY-MM-DD"),
                         incomplete_hours: incomplete_hours,
+                        submissionType: submissionType,
                         _token: document
                             .querySelector("meta[name='csrf-token']")
                             .getAttribute("content"),
@@ -172,6 +174,8 @@ const AcknowledgementReminderModal = ({
                                         condition={!step || step === 1}
                                     >
                                         <Option1
+                                            sType={sType}
+                                            setSType={setSType}
                                             trackedTimeHistory={
                                                 trackedTimeHistory
                                             }
