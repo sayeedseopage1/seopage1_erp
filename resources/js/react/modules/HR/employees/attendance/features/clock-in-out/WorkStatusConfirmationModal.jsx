@@ -288,6 +288,9 @@ export const WorkStatusConfirmationModal = ({
                         data={data?.hours_log_report}
                         trackedTimeHistory={data?.user_log}
                         lastClockData={data?.last_log_data}
+                        incomplete_hours={
+                            data?.hours_log_report.data.incomplete_hours
+                        }
                         onSubmit={() => {
                             setData((prev) => ({
                                 ...prev,
