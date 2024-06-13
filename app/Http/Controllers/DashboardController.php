@@ -771,8 +771,6 @@ class DashboardController extends AccountBaseController
 
     public function developerDailytrackHoursLog(Request $request)
     {
-        // dd($request->all());
-        DB::beginTransaction();
         $durations = json_decode($request->durations, true);
         $totalTrackedSeconds = 0;
         foreach ($durations as $duration) {
@@ -784,6 +782,8 @@ class DashboardController extends AccountBaseController
         }
         // Convert total seconds to minutes
         $totalTrackedMinutes = $totalTrackedSeconds / 60;
+
+        $leftMin = $request->incomplete_hours - $totalTrackedMinutes;
 
         if ($totalTrackedMinutes >= $request->incomplete_hours) {
             $stop_time = new DeveloperStopTimer();
@@ -812,7 +812,11 @@ class DashboardController extends AccountBaseController
 
             return response()->json(['status' => 200]);
         } else {
-            return response()->json(['status' => 400, 'message' => 'Tracked hours do not match the incomplete hours.']);
+            return response()->json([
+                'status' => 400,
+                'leftMin' => $leftMin,
+                'message' => 'Tracked hours do not match the incomplete hours.'
+                ]);
         }
     }
 
