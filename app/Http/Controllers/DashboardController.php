@@ -964,19 +964,29 @@ class DashboardController extends AccountBaseController
                 $totalDifferenceInMinutes = 0;
                 foreach ($devTimes as $dev) {
                     $durations = json_decode($dev->durations, true);
-
-                    foreach ($durations as $duration) {
-                        $start = Carbon::parse($duration['start']);
-                        $end = Carbon::parse($duration['end']);
-                        $differenceInMinutes = $end->diffInMinutes($start);
-                        $totalDifferenceInMinutes += $differenceInMinutes;
+                    if($durations != null){
+                        foreach ($durations as $duration) {
+                            $start = Carbon::parse($duration['start']);
+                            $end = Carbon::parse($duration['end']);
+                            $differenceInMinutes = $end->diffInMinutes($start);
+                            $totalDifferenceInMinutes += $differenceInMinutes;
+                        }
                     }
                 }
 
-                $leftMin = $request->incomplete_hours - $totalDifferenceInMinutes;
+                $differenceMinutes = 0;
+                foreach ($devTimes as $dev) {
+                    $hour = $dev->transition_hours;
+                    $minute = $dev->transition_minutes;
+                    $differenceMinutes += ($hour * 60) + $minute;
+                }
+
+                $totalMinDiff = $differenceMinutes + $totalDifferenceInMinutes;
+
+                $leftMin = $request->incomplete_hours - $totalMinDiff - $totalTrackedMinutes;
 
 
-                if ($totalDifferenceInMinutes + $totalTrackedMinutes >= $request->incomplete_hours) {
+                if ($totalMinDiff + $totalTrackedMinutes > $request->incomplete_hours) {
                     $stop_time = new DeveloperStopTimer();
                     $stop_time->reason_for_less_tracked_hours_a_day_task = $request->reason_for_less_tracked_hours_a_day_task;
                     $stop_time->durations = $request->durations;
