@@ -857,7 +857,7 @@ class DashboardController extends AccountBaseController
                 }
             }
 
-            $leftMin = $request->incomplete_hours - $totalDifferenceInMinutes;
+            $leftMin = $request->incomplete_hours - $totalDifferenceInMinutes- $totalTrackedMinutes;
 
 
             if ($totalDifferenceInMinutes + $totalTrackedMinutes >= $request->incomplete_hours) {

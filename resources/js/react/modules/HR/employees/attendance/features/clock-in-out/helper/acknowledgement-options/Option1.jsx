@@ -208,7 +208,16 @@ const Option1 = ({
                                 {/* back button */}
                                 <Button
                                     variant="tertiary"
-                                    onClick={() => onBack(null)}
+                                    onClick={() => {
+                                        onBack(null);
+                                        setDurations([
+                                            {
+                                                start: "",
+                                                end: "",
+                                                id: "d32sew",
+                                            },
+                                        ]);
+                                    }}
                                     className="ml-auto mr-2"
                                 >
                                     Back
