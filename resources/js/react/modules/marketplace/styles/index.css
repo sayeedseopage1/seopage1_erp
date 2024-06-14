@@ -1,0 +1,17 @@
+:root {
+    --primary-blue: #1492E6;
+    --primary-white: #fff;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+}
+
+.sp1_marketplace_page_wrapper {
+    background-color: var(--primary-white);
+    padding: 33px 22px 33px 33px;
+    min-height: calc(100vh - 63px);
+}

@@ -11,4 +11,4 @@ import './digital-marketing/DmLeads/main';
 import './digital-marketing/DmWonDeals/main';
 
 // marketplace 
-import './marketplace/freelancerProjectDetails/main';
+import './marketplace/main';

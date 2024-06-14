@@ -2,9 +2,9 @@
 
 @section('content')
     <!-- CONTENT WRAPPER START -->
-    <div class="content-wrapper">
+    <div class="content-wrapper p-0">
         <!-- Task Box Start -->
-        <div class="d-flex flex-column rounded mt-3">
+        <div class="d-flex flex-column rounded">
             <div id="marketplaceMessage"></div>
         </div>
         <!-- Task Box End -->
