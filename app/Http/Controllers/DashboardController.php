@@ -935,7 +935,7 @@ class DashboardController extends AccountBaseController
                     return response()->json(['status' => 200]);
                 } else {
                     return response()->json([
-                        'status' => 200,
+                        'status' => 400,
                         'leftMin' => $leftMin
                         ]);
                 }
