@@ -47,6 +47,8 @@ const AcknowledgementReminderModal = ({
     const [sType, setSType] = React.useState("");
     const [step, setStep] = React.useState(0);
     const [isSubmitting, setIsSubmitting] = React.useState(false);
+
+    const [timeLeft, setTImeLeft] = useState();
     console.log("last clock data", lastClockData);
     // handle form submission
     const handleSubmitForm = async (data, submissionType, cb) => {
@@ -71,7 +73,6 @@ const AcknowledgementReminderModal = ({
                     }
                 )
                 .then((res) => {
-                    console.log("response", res);
                     if (res.data.status === 400) {
                         Swal.fire({
                             position: "center",
@@ -86,6 +87,7 @@ const AcknowledgementReminderModal = ({
 
                         return;
                     }
+                    setTImeLeft(res.data.leftMin);
                     if (submissionType !== "CONTINUE") {
                         onSubmit();
                         close();
@@ -179,6 +181,16 @@ const AcknowledgementReminderModal = ({
                             )}
                         {console.log("project timelog", trackedTimeHistory)}
 
+                        {timeLeft > 0 && (
+                            <div className="alert alert-warning text-center">
+                                You have to submit explanation for
+                                <span className="ml-2 text-danger font-weight-bold">
+                                    {convertTime(timeLeft)}
+                                </span>{" "}
+                                more.
+                            </div>
+                        )}
+
                         {/* options */}
                         <div className="sp1_stop-button-confirmation-option">
                             <h6>Why is that?</h6>
@@ -227,6 +239,10 @@ const AcknowledgementReminderModal = ({
                                         condition={!step || step === 3}
                                     >
                                         <Option3
+                                            trackedTimeHistory={
+                                                trackedTimeHistory
+                                            }
+                                            lastClockData={lastClockData}
                                             checked={step === 3}
                                             index={3}
                                             onChange={(e) =>
@@ -242,11 +258,15 @@ const AcknowledgementReminderModal = ({
                                         />
                                     </Switch.Case>
 
-                                    {/* option4: I was present less hours at work today or last day  */}
+                                    {/* option4: I couldn't log hours  */}
                                     <Switch.Case
                                         condition={!step || step === 4}
                                     >
                                         <Option4
+                                            trackedTimeHistory={
+                                                trackedTimeHistory
+                                            }
+                                            lastClockData={lastClockData}
                                             checked={step === 4}
                                             index={4}
                                             onChange={(e) =>
@@ -263,6 +283,10 @@ const AcknowledgementReminderModal = ({
                                         condition={!step || step === 5}
                                     >
                                         <Option5
+                                            trackedTimeHistory={
+                                                trackedTimeHistory
+                                            }
+                                            lastClockData={lastClockData}
                                             checked={step === 5}
                                             index={5}
                                             onChange={(e) =>
@@ -279,6 +303,10 @@ const AcknowledgementReminderModal = ({
                                         condition={!step || step === 6}
                                     >
                                         <Option6
+                                            trackedTimeHistory={
+                                                trackedTimeHistory
+                                            }
+                                            lastClockData={lastClockData}
                                             checked={step === 6}
                                             index={6}
                                             onChange={(e) =>

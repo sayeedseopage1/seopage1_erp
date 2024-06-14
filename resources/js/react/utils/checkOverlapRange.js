@@ -1,9 +1,6 @@
 const checkOverlapRange = (lastClockOutTime, durations) => {
     const startOfDay = "07:45:00"; // 7:45 AM
 
-    // Adjust lastClockOutTime to not exceed 11 PM
-    console.log("last clock out time", lastClockOutTime);
-
     // Convert time string to seconds since start of the day
     const timeToSeconds = (time) => {
         const [hours, minutes, seconds] = time.split(":").map(Number);

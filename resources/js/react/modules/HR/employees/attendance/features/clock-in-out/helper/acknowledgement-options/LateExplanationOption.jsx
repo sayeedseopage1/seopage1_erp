@@ -4,11 +4,18 @@ import Button from "../../../../../../../../global/Button";
 import Switch from "../../../../../../../../global/Switch";
 import { Label } from "../../../../../../../../global/styled-component/Form";
 import { TimePicker, Space } from "antd";
+import dayjs from "dayjs";
+import extractTime from "../../../../../../../../utils/extractTime";
+import checkOverlap from "../../../../../../../../utils/checkOverlap";
+import checkOverlapRange from "../../../../../../../../utils/checkOverlapRange";
+import formatTimeTo12Hour from "../../../../../../../../utils/formatTimeTo12Hour";
 /**
  * this component responsible for rendering late explanation form for user
  */
 
 const LateExplanationOption = ({
+    trackedTimeHistory,
+    lastClockData,
     checked,
     index,
     onChange,
@@ -65,6 +72,12 @@ const LateExplanationOption = ({
         setComment(data);
     };
 
+    //overlapping validation
+    let newOverlappingTimes = [];
+    let lastClockOutTime = lastClockData?.clock_out_time
+        ? extractTime(lastClockData?.clock_out_time)
+        : "23:00:00";
+
     // handle submission
     const handleSubmission = (e, submissionType) => {
         e.preventDefault();
@@ -77,17 +90,62 @@ const LateExplanationOption = ({
             comment,
         };
 
-        setSType(submissionType);
-        if (isValid()) {
-            onSubmit(data, submissionType, onBack);
-        } else {
+        if (!isValid()) {
             Swal.fire({
                 position: "center",
                 icon: "error",
-                title: "Please complete all required fields.",
+                title: "Please fill up the all required fields!",
                 showConfirmButton: true,
             });
+            return;
         }
+        if (
+            checkOverlapRange(lastClockOutTime, [
+                { id: "de2sew", start: durationStart, end: durationEnd },
+            ])
+        ) {
+            Swal.fire({
+                position: "center",
+                icon: "error",
+                title: "You have selected wrong time range!",
+                text: `You must select time within this time range: 07:45 AM - (${formatTimeTo12Hour(
+                    lastClockOutTime
+                )}).`,
+                showConfirmButton: true,
+            });
+            return;
+        }
+
+        if (
+            checkOverlap(
+                newOverlappingTimes,
+                [{ id: "de2sew", start: durationStart, end: durationEnd }],
+                trackedTimeHistory
+            )
+        ) {
+            Swal.fire({
+                position: "center",
+                icon: "error",
+                title: "Your selected time is overlapping with your tracked time!",
+                text: `Overlapping time: ${newOverlappingTimes
+                    ?.map(
+                        (t) =>
+                            `${formatTimeTo12Hour(
+                                t.trackedStart
+                            )} - ${formatTimeTo12Hour(t.trackedEnd)}`
+                    )
+                    .join(", ")}`,
+                showConfirmButton: true,
+            });
+            return;
+        }
+
+        if (submissionType === "CONTINUE") {
+            setDurationStart("");
+            setDurationEnd("");
+        }
+        setSType(submissionType);
+        onSubmit(data, submissionType, onBack);
     };
 
     return (
@@ -128,7 +186,12 @@ const LateExplanationOption = ({
                                             format="h:mm a"
                                             defaultValue={durationStart}
                                             onChange={(time) =>
-                                                setDurationStartt(time)
+                                                setDurationStart(
+                                                    dayjs(
+                                                        time,
+                                                        "HH:mm:ss"
+                                                    ).format("HH:mm:ss")
+                                                )
                                             }
                                             className="w-100 py-2"
                                         />
@@ -145,7 +208,12 @@ const LateExplanationOption = ({
                                             format="h:mm a"
                                             defaultValue={durationEnd}
                                             onChange={(time) =>
-                                                setDurationEnd(time)
+                                                setDurationEnd(
+                                                    dayjs(
+                                                        time,
+                                                        "HH:mm:ss"
+                                                    ).format("HH:mm:ss")
+                                                )
                                             }
                                             className="w-100 py-2"
                                         />
@@ -174,7 +242,11 @@ const LateExplanationOption = ({
                                 {/* back button */}
                                 <Button
                                     variant="tertiary"
-                                    onClick={() => onBack(null)}
+                                    onClick={() => {
+                                        onBack(null);
+                                        setDurationStart("");
+                                        setDurationEnd("");
+                                    }}
                                     className="ml-auto mr-2"
                                 >
                                     Back

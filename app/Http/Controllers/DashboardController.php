@@ -907,7 +907,7 @@ class DashboardController extends AccountBaseController
                 $leftMin = $request->incomplete_hours - $totalMinDiff - $totalMinutes;
 
 
-                if ($totalMinDiff + $totalMinutes > $request->incomplete_hours) {
+                if ($totalMinDiff + $totalMinutes >= $request->incomplete_hours) {
                     $stop_time = new DeveloperStopTimer();
                     $stop_time->reason_for_less_tracked_hours_a_day_task = $request->reason_for_less_tracked_hours_a_day_task;
                     $stop_time->durations = $request->durations;
@@ -986,7 +986,7 @@ class DashboardController extends AccountBaseController
                 $leftMin = $request->incomplete_hours - $totalMinDiff - $totalTrackedMinutes;
 
 
-                if ($totalMinDiff + $totalTrackedMinutes > $request->incomplete_hours) {
+                if ($totalMinDiff + $totalTrackedMinutes >= $request->incomplete_hours) {
                     $stop_time = new DeveloperStopTimer();
                     $stop_time->reason_for_less_tracked_hours_a_day_task = $request->reason_for_less_tracked_hours_a_day_task;
                     $stop_time->durations = $request->durations;

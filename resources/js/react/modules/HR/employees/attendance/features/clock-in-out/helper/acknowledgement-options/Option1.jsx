@@ -35,7 +35,6 @@ const Option1 = ({
         },
     ]);
 
-    console.log("durations", durations);
     // unique id
     const uniqueId = Math.random().toString(6).slice(2);
 
@@ -69,7 +68,7 @@ const Option1 = ({
     let lastClockOutTime = lastClockData?.clock_out_time
         ? extractTime(lastClockData?.clock_out_time)
         : "23:00:00";
-    console.log("last clock out time", lastClockOutTime);
+
     const handleSubmission = (e, submissionType) => {
         e.preventDefault();
 
@@ -124,7 +123,6 @@ const Option1 = ({
 
         setSType(submissionType);
         onSubmit(data, submissionType, onBack);
-        console.log("submitted");
     };
 
     return (

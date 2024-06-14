@@ -4,11 +4,17 @@ import Button from "../../../../../../../../global/Button";
 import Switch from "../../../../../../../../global/Switch";
 import { Flex } from "../../../../../../../../global/styled-component/Flex";
 import DurationTime from "./DurationTimer";
-
+import dayjs from "dayjs";
+import extractTime from "../../../../../../../../utils/extractTime";
+import checkOverlap from "../../../../../../../../utils/checkOverlap";
+import checkOverlapRange from "../../../../../../../../utils/checkOverlapRange";
+import formatTimeTo12Hour from "../../../../../../../../utils/formatTimeTo12Hour";
 /**
  * * This component responsible for rendering working report details explanation form
  */
 const DidNotWorkForFewHours = ({
+    trackedTimeHistory,
+    lastClockData,
     checked,
     index,
     onChange,
@@ -66,6 +72,12 @@ const DidNotWorkForFewHours = ({
         return !errCount;
     };
 
+    //overlapping validation
+    let newOverlappingTimes = [];
+    let lastClockOutTime = lastClockData?.clock_out_time
+        ? extractTime(lastClockData?.clock_out_time)
+        : "23:00:00";
+
     // handle form submit
     const handleSubmission = (e, submissionType) => {
         e.preventDefault();
@@ -76,17 +88,48 @@ const DidNotWorkForFewHours = ({
             comment,
         };
 
-        setSType(submissionType);
-        if (isValid()) {
-            onSubmit(data, submissionType, onBack);
-        } else {
+        if (!isValid()) {
             Swal.fire({
                 position: "center",
                 icon: "error",
-                title: "Please complete all required fields.",
+                title: "Please fill up the all required fields!",
                 showConfirmButton: true,
             });
+            return;
         }
+        if (checkOverlapRange(lastClockOutTime, durations)) {
+            Swal.fire({
+                position: "center",
+                icon: "error",
+                title: "You have selected wrong time range!",
+                text: `You must select time within this time range: 07:45 AM - (${formatTimeTo12Hour(
+                    lastClockOutTime
+                )}).`,
+                showConfirmButton: true,
+            });
+            return;
+        }
+
+        if (checkOverlap(newOverlappingTimes, durations, trackedTimeHistory)) {
+            Swal.fire({
+                position: "center",
+                icon: "error",
+                title: "Your selected time is overlapping with your tracked time!",
+                text: `Overlapping time: ${newOverlappingTimes
+                    ?.map(
+                        (t) =>
+                            `${formatTimeTo12Hour(
+                                t.trackedStart
+                            )} - ${formatTimeTo12Hour(t.trackedEnd)}`
+                    )
+                    .join(", ")}`,
+                showConfirmButton: true,
+            });
+            return;
+        }
+
+        setSType(submissionType);
+        onSubmit(data, submissionType, onBack);
     };
 
     return (
@@ -167,7 +210,16 @@ const DidNotWorkForFewHours = ({
                                 {/* back button */}
                                 <Button
                                     variant="tertiary"
-                                    onClick={() => onBack(null)}
+                                    onClick={() => {
+                                        onBack(null);
+                                        setDurations([
+                                            {
+                                                start: "",
+                                                end: "",
+                                                id: "d32sew",
+                                            },
+                                        ]);
+                                    }}
                                     className="ml-auto mr-2"
                                 >
                                     Back
@@ -186,9 +238,16 @@ const DidNotWorkForFewHours = ({
                                 <Button
                                     variant="success"
                                     className="ml-2"
-                                    onClick={(e) =>
-                                        handleSubmission(e, "CONTINUE")
-                                    }
+                                    onClick={(e) => {
+                                        handleSubmission(e, "CONTINUE");
+                                        setDurations([
+                                            {
+                                                start: "",
+                                                end: "",
+                                                id: "d32sew",
+                                            },
+                                        ]);
+                                    }}
                                     isLoading={
                                         sType === "CONTINUE" && isLoading
                                     }

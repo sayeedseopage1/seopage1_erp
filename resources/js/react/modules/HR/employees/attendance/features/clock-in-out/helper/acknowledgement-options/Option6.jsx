@@ -7,8 +7,21 @@ import {
     Label,
 } from "../../../../../../../../global/styled-component/Form";
 import DurationTime from "./DurationTimer";
-
-const Option6 = ({ checked, index, onChange, onSubmit, isLoading, onBack }) => {
+import extractTime from "../../../../../../../../utils/extractTime";
+import formatTimeTo12Hour from "../../../../../../../../utils/formatTimeTo12Hour";
+import checkOverlapRange from "../../../../../../../../utils/checkOverlapRange";
+import checkOverlap from "../../../../../../../../utils/checkOverlap";
+import Swal from "sweetalert2";
+const Option6 = ({
+    checked,
+    index,
+    onChange,
+    onSubmit,
+    isLoading,
+    onBack,
+    trackedTimeHistory,
+    lastClockData,
+}) => {
     const [comment, setComment] = React.useState("");
     const [durations, setDurations] = React.useState([
         { start: "", end: "", id: "de2sew" },
@@ -53,6 +66,12 @@ const Option6 = ({ checked, index, onChange, onSubmit, isLoading, onBack }) => {
         return !errCount;
     };
 
+    //overlapping validation
+    let newOverlappingTimes = [];
+    let lastClockOutTime = lastClockData?.clock_out_time
+        ? extractTime(lastClockData?.clock_out_time)
+        : "23:00:00";
+
     // handle form submit
     const handleSubmission = (e, submissionType) => {
         e.preventDefault();
@@ -63,17 +82,48 @@ const Option6 = ({ checked, index, onChange, onSubmit, isLoading, onBack }) => {
             comment,
         };
 
-        setSType(submissionType);
-        if (isValid()) {
-            onSubmit(data, submissionType, onBack);
-        } else {
+        if (!isValid()) {
             Swal.fire({
                 position: "center",
                 icon: "error",
                 title: "Please fill up the all required fields!",
                 showConfirmButton: true,
             });
+            return;
         }
+        if (checkOverlapRange(lastClockOutTime, durations)) {
+            Swal.fire({
+                position: "center",
+                icon: "error",
+                title: "You have selected wrong time range!",
+                text: `You must select time within this time range: 07:45 AM - (${formatTimeTo12Hour(
+                    lastClockOutTime
+                )}).`,
+                showConfirmButton: true,
+            });
+            return;
+        }
+
+        if (checkOverlap(newOverlappingTimes, durations, trackedTimeHistory)) {
+            Swal.fire({
+                position: "center",
+                icon: "error",
+                title: "Your selected time is overlapping with your tracked time!",
+                text: `Overlapping time: ${newOverlappingTimes
+                    ?.map(
+                        (t) =>
+                            `${formatTimeTo12Hour(
+                                t.trackedStart
+                            )} - ${formatTimeTo12Hour(t.trackedEnd)}`
+                    )
+                    .join(", ")}`,
+                showConfirmButton: true,
+            });
+            return;
+        }
+
+        setSType(submissionType);
+        onSubmit(data, submissionType, onBack);
     };
     return (
         <React.Fragment>
@@ -165,7 +215,16 @@ const Option6 = ({ checked, index, onChange, onSubmit, isLoading, onBack }) => {
                                 {/* back button */}
                                 <Button
                                     variant="tertiary"
-                                    onClick={() => onBack(null)}
+                                    onClick={() => {
+                                        onBack(null);
+                                        setDurations([
+                                            {
+                                                start: "",
+                                                end: "",
+                                                id: "d32sew",
+                                            },
+                                        ]);
+                                    }}
                                     className="ml-auto mr-2"
                                 >
                                     Back
@@ -184,9 +243,16 @@ const Option6 = ({ checked, index, onChange, onSubmit, isLoading, onBack }) => {
                                 <Button
                                     variant="success"
                                     className="ml-2"
-                                    onClick={(e) =>
-                                        handleSubmission(e, "CONTINUE")
-                                    }
+                                    onClick={(e) => {
+                                        handleSubmission(e, "CONTINUE");
+                                        setDurations([
+                                            {
+                                                start: "",
+                                                end: "",
+                                                id: "d32sew",
+                                            },
+                                        ]);
+                                    }}
                                     isLoading={
                                         sType === "CONTINUE" && isLoading
                                     }

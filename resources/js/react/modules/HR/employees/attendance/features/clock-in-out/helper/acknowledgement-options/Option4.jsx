@@ -11,12 +11,27 @@ import {
     RadioGroups,
 } from "../../../../../../../../global/styled-component/Form";
 import { useAuth } from "../../../../../../../../hooks/useAuth";
-import ProjectList from "./ProjectList";
+
 import UserList from "./UserList";
 import TaskList from "./TaskList";
-import { message } from "laravel-mix/src/Log";
 import { TimePicker, Space } from "antd";
-const Option4 = ({ checked, index, onChange, onSubmit, isLoading, onBack }) => {
+import dayjs from "dayjs";
+
+import checkOverlap from "../../../../../../../../utils/checkOverlap";
+import checkOverlapRange from "../../../../../../../../utils/checkOverlapRange";
+import formatTimeTo12Hour from "../../../../../../../../utils/formatTimeTo12Hour";
+import extractTime from "../../../../../../../../utils/extractTime";
+
+const Option4 = ({
+    trackedTimeHistory,
+    lastClockData,
+    checked,
+    index,
+    onChange,
+    onSubmit,
+    isLoading,
+    onBack,
+}) => {
     const [data, setData] = React.useState({
         comment: "",
         responsible_person: "",
@@ -134,7 +149,6 @@ const Option4 = ({ checked, index, onChange, onSubmit, isLoading, onBack }) => {
     };
 
     // handle submission
-    // handle submission
 
     const fd = {
         ...data,
@@ -143,41 +157,73 @@ const Option4 = ({ checked, index, onChange, onSubmit, isLoading, onBack }) => {
         ]),
     };
 
-    // console.log("data in option 4", fd);
+    //overlapping validation
+    let newOverlappingTimes = [];
+    let lastClockOutTime = lastClockData?.clock_out_time
+        ? extractTime(lastClockData?.clock_out_time)
+        : "23:00:00";
 
     const handleSubmission = (e, submissionType) => {
         e.preventDefault();
 
-        try {
-            // const fd = {
-            //     ...data,
-            //     durations: JSON.stringify([
-            //         { id: "de2sew", start: durationStart, end: durationEnd },
-            //     ]),
-            // };
-
-            // console.log("data in option 4", fd);
-
-            setSType(submissionType);
-
-            if (isValid()) {
-                onSubmit(fd, submissionType, onBack);
-            } else {
-                Swal.fire({
-                    position: "center",
-                    icon: "error",
-                    title: "Please complete all required fields.",
-                    showConfirmButton: true,
-                });
-            }
-        } catch (error) {
+        if (!isValid()) {
             Swal.fire({
                 position: "center",
                 icon: "error",
-                title: "Internal Server Error.",
+                title: "Please fill up the all required fields!",
                 showConfirmButton: true,
             });
+            return;
         }
+
+        if (
+            checkOverlapRange(lastClockOutTime, [
+                { id: "de2sew", start: durationStart, end: durationEnd },
+            ])
+        ) {
+            Swal.fire({
+                position: "center",
+                icon: "error",
+                title: "You have selected wrong time range!",
+                text: `You must select time within this time range: 07:45 AM - (${formatTimeTo12Hour(
+                    lastClockOutTime
+                )}).`,
+                showConfirmButton: true,
+            });
+            return;
+        }
+
+        if (
+            checkOverlap(
+                newOverlappingTimes,
+                [{ id: "de2sew", start: durationStart, end: durationEnd }],
+                trackedTimeHistory
+            )
+        ) {
+            Swal.fire({
+                position: "center",
+                icon: "error",
+                title: "Your selected time is overlapping with your tracked time!",
+                text: `Overlapping time: ${newOverlappingTimes
+                    ?.map(
+                        (t) =>
+                            `${formatTimeTo12Hour(
+                                t.trackedStart
+                            )} - ${formatTimeTo12Hour(t.trackedEnd)}`
+                    )
+                    .join(", ")}`,
+                showConfirmButton: true,
+            });
+            return;
+        }
+
+        if (submissionType === "CONTINUE") {
+            setDurationStart("");
+            setDurationEnd("");
+        }
+        setSType(submissionType);
+
+        onSubmit(fd, submissionType, onBack);
     };
 
     return (
@@ -461,7 +507,12 @@ const Option4 = ({ checked, index, onChange, onSubmit, isLoading, onBack }) => {
                                                 format="h:mm a"
                                                 defaultValue={durationStart}
                                                 onChange={(time) =>
-                                                    setDurationStart(time)
+                                                    setDurationStart(
+                                                        dayjs(
+                                                            time,
+                                                            "HH:mm:ss"
+                                                        ).format("HH:mm:ss")
+                                                    )
                                                 }
                                                 className="w-100 py-2"
                                             />
@@ -478,7 +529,12 @@ const Option4 = ({ checked, index, onChange, onSubmit, isLoading, onBack }) => {
                                                 format="h:mm a"
                                                 defaultValue={durationEnd}
                                                 onChange={(time) =>
-                                                    setDurationEnd(time)
+                                                    setDurationEnd(
+                                                        dayjs(
+                                                            time,
+                                                            "HH:mm:ss"
+                                                        ).format("HH:mm:ss")
+                                                    )
                                                 }
                                                 className="w-100 py-2"
                                             />
@@ -492,7 +548,11 @@ const Option4 = ({ checked, index, onChange, onSubmit, isLoading, onBack }) => {
                                 {/* back button */}
                                 <Button
                                     variant="tertiary"
-                                    onClick={() => onBack(null)}
+                                    onClick={() => {
+                                        onBack(null);
+                                        setDurationStart("");
+                                        setDurationEnd("");
+                                    }}
                                     className="ml-auto mr-2"
                                 >
                                     Back
