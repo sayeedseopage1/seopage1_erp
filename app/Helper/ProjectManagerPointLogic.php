@@ -2,10 +2,11 @@
 
 namespace App\Helper;
 
-use App\Models\CashPoint;
-use App\Models\Criteria;
+use Carbon\Carbon;
 use App\Models\Factor;
 use App\Models\Project;
+use App\Models\Criteria;
+use App\Models\CashPoint;
 use Illuminate\Contracts\Validation\Validator;
 
 class ProjectManagerPointLogic
@@ -38,6 +39,7 @@ class ProjectManagerPointLogic
         }
         
         $earned_points = $points ? $points : $earned_points;
+        $created_at = now();
         if($earned_points==0) return false;
 
         try {
@@ -55,8 +57,10 @@ class ProjectManagerPointLogic
                 $activity = 'The deadline for the project <a style="color:blue" href="'.route('projects.show',$project->id).'">'.$project->project_name. '</a> from client <a style="color:blue" href="'.route('clients.show', $project->client->id).'">'. $project->client->name. '</a> has been met!';
             }elseif($criteriaId == 9){
                 $activity = 'You completed '.$comparable_value.' projects in the first 7 days!';
+                $created_at = Carbon::now()->subMonth()->endOfMonth();
             }elseif($criteriaId == 10){
                 $activity = 'You completed '.$comparable_value.' projects in the first 12 days!';
+                $created_at = Carbon::now()->subMonth()->endOfMonth();
             }elseif($criteriaId == 11){
                 $activity = 'First submission for project <a style="color:blue" href="'.route('projects.show',$project->id).'">'.$project->project_name. '</a> from client <a style="color:blue" href="'.route('clients.show', $project->client->id).'">'. $project->client->name. '</a> is made within 100 hours after the project started!';
             }elseif($criteriaId == 17){
@@ -73,7 +77,9 @@ class ProjectManagerPointLogic
                 'points' => abs($earned_points),
                 'total_points_earn' => $earned_points > 0 ? $earned_points : 0,
                 'total_points_lost' => $earned_points < 0 ? abs($earned_points) : 0,
-                'factor_id' => $factor_id
+                'factor_id' => $factor_id,
+                'created_at' => $created_at,
+                'updated_at' => $created_at
             ]);
             return true;
         } catch (\Throwable $th) {

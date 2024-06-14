@@ -17,6 +17,8 @@ class IncentivePayment extends Model
         'payable_amount',
         'paid_amount',
         'status',
+        'created_at',
+        'updated_at'
     ];
 
     public function incentivePaymentHistories()

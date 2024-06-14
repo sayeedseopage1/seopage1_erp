@@ -28,7 +28,9 @@ class Incentive
                         'incentive_factor_id' => $incentiveFactor->id,
                         'acquired_value' => $comparable_value,
                         'incentive_amount_type' => $incentiveFactor->incentive_amount_type,
-                        'incentive_amount' => $incentiveFactor->incentive_amount
+                        'incentive_amount' => $incentiveFactor->incentive_amount,
+                        'created_at' => $now,
+                        'updated_at' => $now
                     ]);
                     $incentiveAmount = $incentiveFactor->incentive_amount;
                     break;

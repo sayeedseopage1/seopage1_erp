@@ -16,6 +16,8 @@ class ProgressiveIncentive extends Model
         'incentive_factor_id',
         'acquired_value',
         'incentive_amount_type',
-        'incentive_amount'
+        'incentive_amount',
+        'created_at',
+        'updated_at'
     ];
 }
