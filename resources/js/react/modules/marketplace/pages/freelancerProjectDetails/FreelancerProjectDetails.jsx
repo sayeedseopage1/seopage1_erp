@@ -47,7 +47,7 @@ const FreelancerProjectDetails = () => {
                             </button>
                         </div>
                     </div>
-                    <div className='p_d_content_wrapper'>
+                    <div className=''>
                         <Switch>
                             <Switch.Case condition={activeTab === 'Details'}>
                                 <ProjectDetails />
