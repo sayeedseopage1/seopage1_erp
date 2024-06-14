@@ -56,6 +56,11 @@ $projectArchived = $project->trashed();
                             <x-tab :href="route('projects.show', $project->id).'?tab=tasks'" :text="__('app.menu.tasks')" class="tasks"
                             ajax="false" />
                         </li>
+                        @if (auth()->user()->role_id == 1)
+                        <li>
+                            <x-tab :href="route('projects.show', $project->id).'?tab=sales-analysis-report'" :text="__('app.menu.sales-analysis-report')" ajax="false" />
+                        </li>
+                        @endif
 
                         @if (!$projectArchived)
                             <li>

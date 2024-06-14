@@ -1,28 +1,29 @@
 <style>
-    .sidebar_sub_item{
+    .sidebar_sub_item {
         width: 239px;
         overflow-x: hidden;
     }
 
-    .sidebar_sub_item_accordion_item{
+    .sidebar_sub_item_accordion_item {
         width: 100%;
     }
-    .sidebar_sub_item_btn{
+
+    .sidebar_sub_item_btn {
         padding: 6px 10px 6px 58px;
         color: #616e80;
     }
 
-    .sidebar_sub_item_btn:hover{
+    .sidebar_sub_item_btn:hover {
         color: var(--header_color) !important;
     }
 
-    .sidebar_sub_item_body{
+    .sidebar_sub_item_body {
         margin-left: 16px;
     }
 
-    .sidebar_sub_item_body a{
+    .sidebar_sub_item_body a {
         width: 100%;
-        overflow-x:  hidden;
+        overflow-x: hidden;
         white-space: normal !important;
     }
 </style>
@@ -77,7 +78,8 @@
                 @endif
             </div>
             <!-- DROPDOWN - INFORMATION -->
-            <div class="dropdown-menu dropdown-menu-right sidebar-brand-dropdown ml-3" aria-labelledby="dropdownMenuLink" tabindex="0">
+            <div class="dropdown-menu dropdown-menu-right sidebar-brand-dropdown ml-3"
+                aria-labelledby="dropdownMenuLink" tabindex="0">
                 <div class="d-flex justify-content-between align-items-center profile-box">
                     <div class="profileInfo d-flex align-items-center mr-1 flex-wrap">
                         <div class="profileImg mr-2">
@@ -248,13 +250,13 @@
                                 <x-sub-menu-item :link="route('departments.index')" :text="__('app.menu.department')" />
                             @endif
 
-                             @if (isset($sidebarUserPermissions['view_department']) && $sidebarUserPermissions['view_department'] == 4)
-                            <x-sub-menu-item :link="route('teams.index')" :text="__('Team')" />
-                             @endif
-                                @if(Auth::user()->role_id == 1 || Auth::user()->role_id == 7 || Auth::user()->role_id == 8)
+                            @if (isset($sidebarUserPermissions['view_department']) && $sidebarUserPermissions['view_department'] == 4)
+                                <x-sub-menu-item :link="route('teams.index')" :text="__('Team')" />
+                            @endif
+                            @if (Auth::user()->role_id == 1 || Auth::user()->role_id == 7 || Auth::user()->role_id == 8)
                                 <x-sub-menu-item :link="route('monthly-incentive.index')" :text="__('Monthly Incentive')" />
-                                @endif
-                        {{-- @if (isset($sidebarUserPermissions['view_department']) && $sidebarUserPermissions['view_department'] == 4)
+                            @endif
+                            {{-- @if (isset($sidebarUserPermissions['view_department']) && $sidebarUserPermissions['view_department'] == 4)
 
                                 <x-sub-menu-item :link="route('kpi-settings.index')" :text="__('Kpi Settings')" />
                             @endif --}}
@@ -308,15 +310,15 @@
                                     <x-sub-menu-item :link="route('tasks.index')" :text="__('app.menu.tasks')" />
                                 @endif
                             @endif
-                               @if(Auth::user()->role_id == 1)
-                            @if (in_array('timelogs', user_modules()) &&
-                                    $sidebarUserPermissions['view_timelogs'] != 5 &&
-                                    $sidebarUserPermissions['view_timelogs'] != 'none')
-                                <x-sub-menu-item :link="route('timelogs.index')" :text="__('app.menu.timeLogs')" />
+                            @if (Auth::user()->role_id == 1)
+                                @if (in_array('timelogs', user_modules()) &&
+                                        $sidebarUserPermissions['view_timelogs'] != 5 &&
+                                        $sidebarUserPermissions['view_timelogs'] != 'none')
+                                    <x-sub-menu-item :link="route('timelogs.index')" :text="__('app.menu.timeLogs')" />
+                                @endif
                             @endif
-                                    @endif
 
-                                <x-sub-menu-item :link="route('disputes.index')" :text="__('Disputes')" />
+                            <x-sub-menu-item :link="route('disputes.index')" :text="__('Disputes')" />
 
                             @if (Auth::user()->role_id == 1 || Auth::user()->role_id == 8 || Auth::user()->role_id == 4)
                                 <x-sub-menu-item :link="route('revision-calculator.index')" :text="__('Revision Calculator')" />
@@ -324,18 +326,20 @@
                             @if (Auth::user()->role_id == 1)
                                 <x-sub-menu-item :link="route('cross-dept-work.index')" :text="__('Cross Dept Work')" />
                             @endif
-                            @if (Auth::user()->role_id == 1 || Auth::user()->role_id == 8 || Auth::user()->role_id == 6 || Auth::user()->role_id == 5
-                            || Auth::user()->role_id == 9 || Auth::user()->role_id == 10
-                            )
+                            @if (Auth::user()->role_id == 1 ||
+                                    Auth::user()->role_id == 8 ||
+                                    Auth::user()->role_id == 6 ||
+                                    Auth::user()->role_id == 5 ||
+                                    Auth::user()->role_id == 9 ||
+                                    Auth::user()->role_id == 10)
                                 <x-sub-menu-item :link="route('task-report-issues.index')" :text="__('Tasks Reports')" />
                             @endif
 
-                            @if (Auth::user()->role_id == 1 || Auth::user()->role_id == 8 || Auth::user()->role_id == 4
-                            )
+                            @if (Auth::user()->role_id == 1 || Auth::user()->role_id == 8 || Auth::user()->role_id == 4)
                                 <x-sub-menu-item :link="url('account/independent/tasks')" :text="__('Independent Task')" />
                             @endif
                             <x-sub-menu-item :link="route('project-status.index')" :text="__('Projects Status')" />
-                                {{-- <x-sub-menu-item :link="route('independent-task-show')" :text="__('Single Independent Task')" /> --}}
+                            {{-- <x-sub-menu-item :link="route('independent-task-show')" :text="__('Single Independent Task')" /> --}}
 
 
                             {{-- @endif --}}
@@ -345,41 +349,46 @@
                 @php
                     $user = Auth::user();
                 @endphp
-                @if($user->role_id == 1 || $user->role_id == 7 || $user->role_id == 8 || $user->role_id == 4)
+                @if ($user->role_id == 1 || $user->role_id == 7 || $user->role_id == 8 || $user->role_id == 4)
                     <x-menu-item icon="cart-dash-fill" :text="'Web Dev Sales'">
                         <x-slot name="iconPath">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-currency-dollar" viewBox="0 0 16 16">
-                                <path d="M4 10.781c.148 1.667 1.513 2.85 3.591 3.003V15h1.043v-1.216c2.27-.179 3.678-1.438 3.678-3.3 0-1.59-.947-2.51-2.956-3.028l-.722-.187V3.467c1.122.11 1.879.714 2.07 1.616h1.47c-.166-1.6-1.54-2.748-3.54-2.875V1H7.591v1.233c-1.939.23-3.27 1.472-3.27 3.156 0 1.454.966 2.483 2.661 2.917l.61.162v4.031c-1.149-.17-1.94-.8-2.131-1.718H4zm3.391-3.836c-1.043-.263-1.6-.825-1.6-1.616 0-.944.704-1.641 1.8-1.828v3.495l-.2-.05zm1.591 1.872c1.287.323 1.852.859 1.852 1.769 0 1.097-.826 1.828-2.2 1.939V8.73l.348.086z"/>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                                class="bi bi-currency-dollar" viewBox="0 0 16 16">
+                                <path
+                                    d="M4 10.781c.148 1.667 1.513 2.85 3.591 3.003V15h1.043v-1.216c2.27-.179 3.678-1.438 3.678-3.3 0-1.59-.947-2.51-2.956-3.028l-.722-.187V3.467c1.122.11 1.879.714 2.07 1.616h1.47c-.166-1.6-1.54-2.748-3.54-2.875V1H7.591v1.233c-1.939.23-3.27 1.472-3.27 3.156 0 1.454.966 2.483 2.661 2.917l.61.162v4.031c-1.149-.17-1.94-.8-2.131-1.718H4zm3.391-3.836c-1.043-.263-1.6-.825-1.6-1.616 0-.944.704-1.641 1.8-1.828v3.495l-.2-.05zm1.591 1.872c1.287.323 1.852.859 1.852 1.769 0 1.097-.826 1.828-2.2 1.939V8.73l.348.086z" />
                             </svg>
                         </x-slot>
                         <div class="accordionItemContent pb-2">
                             <!-- NAV ITEM - CUSTOMERS COLLAPASE MENU -->
-                            @if($user->role_id == 4)
-                            <x-sub-menu-item :link="route('contracts.index')" :text="'Won Deals'" />
+                            @if ($user->role_id == 4)
+                                <x-sub-menu-item :link="route('contracts.index')" :text="'Won Deals'" />
                             @else
-                            <x-sub-menu-item icon="person" :text="__('app.menu.lead')" :link="route('leads.index')">
-                                <x-slot name="iconPath">
-                                    <path
-                                        d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0zm4 8c0 1-1 1-1 1H3s-1 0-1-1 1-4 6-4 6 3 6 4zm-1-.004c-.001-.246-.154-.986-.832-1.664C11.516 10.68 10.289 10 8 10c-2.29 0-3.516.68-4.168 1.332-.678.678-.83 1.418-.832 1.664h10z" />
-                                </x-slot>
-                            </x-sub-menu-item>
-                            <x-sub-menu-item :link="route('deals.index')" :text="'Deals'" />
-                            <x-sub-menu-item :link="route('contracts.index')" :text="'Won Deals'" />
-                            @if($user->role_id == 1 || Auth::user()->role_id == 7 || Auth::user()->role_id == 8)
-                            <x-sub-menu-item :link="route('qualified-sales.index')" :text="'Qualified Sales'" />
-                            @endif
-                            <x-sub-menu-item :link="route('insights.index')" :text="'Goals & Insights'" />
-                            @if(Auth::user()->role_id == 1 || Auth::user()->role_id == 7 || Auth::user()->role_id == 8)
+                                <x-sub-menu-item icon="person" :text="__('app.menu.lead')" :link="route('leads.index')">
+                                    <x-slot name="iconPath">
+                                        <path
+                                            d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0zm4 8c0 1-1 1-1 1H3s-1 0-1-1 1-4 6-4 6 3 6 4zm-1-.004c-.001-.246-.154-.986-.832-1.664C11.516 10.68 10.289 10 8 10c-2.29 0-3.516.68-4.168 1.332-.678.678-.83 1.418-.832 1.664h10z" />
+                                    </x-slot>
+                                </x-sub-menu-item>
+                                <x-sub-menu-item :link="route('deals.index')" :text="'Deals'" />
 
-                             <x-sub-menu-item :link="route('points.index')" :text="'Points'" />
+                                <x-sub-menu-item :link="route('account.sale-risk-policies.report-list')" :text="'Sales Analysis Reports'" />
+
+                                <x-sub-menu-item :link="route('contracts.index')" :text="'Won Deals'" />
+
+                                @if ($user->role_id == 1 || Auth::user()->role_id == 7 || Auth::user()->role_id == 8)
+                                    <x-sub-menu-item :link="route('qualified-sales.index')" :text="'Qualified Sales'" />
+                                @endif
+                                <x-sub-menu-item :link="route('insights.index')" :text="'Goals & Insights'" />
+                                @if (Auth::user()->role_id == 1 || Auth::user()->role_id == 7 || Auth::user()->role_id == 8)
+                                    <x-sub-menu-item :link="route('points.index')" :text="'Points'" />
 
 
-                           <x-sub-menu-item :link="route('incentives.index')" :text="'Incentives'" />
-                           @endif
+                                    <x-sub-menu-item :link="route('incentives.index')" :text="'Incentives'" />
+                                @endif
 
 
-                            {{--<x-sub-menu-item :link="route('points.index')" :text="'Points'" />--}}
-                            {{--<x-sub-menu-item link="" :text="'Incentives'" />--}}
+                                {{-- <x-sub-menu-item :link="route('points.index')" :text="'Points'" /> --}}
+                                {{-- <x-sub-menu-item link="" :text="'Incentives'" /> --}}
 
                             @endif
 
@@ -388,78 +397,106 @@
                 @endif
 
                 {{-- ------------------------------------- DIGITAL MARKETING SALES START -----------------------------------------  --}}
-                @if (Auth::user()->role_id ==1 || Auth::user()->role_id ==11 ||Auth::user()->role_id ==12)
-                <x-menu-item icon="cart-dash-fill" :text="'D. Marketing Sales'">
-                    <x-slot name="iconPath">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-currency-dollar" viewBox="0 0 16 16">
-                            <path d="M4 10.781c.148 1.667 1.513 2.85 3.591 3.003V15h1.043v-1.216c2.27-.179 3.678-1.438 3.678-3.3 0-1.59-.947-2.51-2.956-3.028l-.722-.187V3.467c1.122.11 1.879.714 2.07 1.616h1.47c-.166-1.6-1.54-2.748-3.54-2.875V1H7.591v1.233c-1.939.23-3.27 1.472-3.27 3.156 0 1.454.966 2.483 2.661 2.917l.61.162v4.031c-1.149-.17-1.94-.8-2.131-1.718H4zm3.391-3.836c-1.043-.263-1.6-.825-1.6-1.616 0-.944.704-1.641 1.8-1.828v3.495l-.2-.05zm1.591 1.872c1.287.323 1.852.859 1.852 1.769 0 1.097-.826 1.828-2.2 1.939V8.73l.348.086z"/>
-                        </svg>
-                    </x-slot>
-                    <div class="accordionItemContent pb-2">
-                        <!-- NAV ITEM - CUSTOMERS COLLAPASE MENU -->
-                        <x-sub-menu-item icon="person" :text="__('app.menu.lead')" :link="route('digital-marketing-lead.index')">
-                            <x-slot name="iconPath">
+                @if (Auth::user()->role_id == 1 || Auth::user()->role_id == 11 || Auth::user()->role_id == 12)
+                    <x-menu-item icon="cart-dash-fill" :text="'D. Marketing Sales'">
+                        <x-slot name="iconPath">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                                fill="currentColor" class="bi bi-currency-dollar" viewBox="0 0 16 16">
                                 <path
-                                    d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0zm4 8c0 1-1 1-1 1H3s-1 0-1-1 1-4 6-4 6 3 6 4zm-1-.004c-.001-.246-.154-.986-.832-1.664C11.516 10.68 10.289 10 8 10c-2.29 0-3.516.68-4.168 1.332-.678.678-.83 1.418-.832 1.664h10z" />
-                            </x-slot>
-                        </x-sub-menu-item>
-                        <x-sub-menu-item :link="route('digital-marketing-deals.index')" :text="'Deals'" />
-                        <x-sub-menu-item :link="route('dm-contracts.index')" :text="'Won Deals'" />
+                                    d="M4 10.781c.148 1.667 1.513 2.85 3.591 3.003V15h1.043v-1.216c2.27-.179 3.678-1.438 3.678-3.3 0-1.59-.947-2.51-2.956-3.028l-.722-.187V3.467c1.122.11 1.879.714 2.07 1.616h1.47c-.166-1.6-1.54-2.748-3.54-2.875V1H7.591v1.233c-1.939.23-3.27 1.472-3.27 3.156 0 1.454.966 2.483 2.661 2.917l.61.162v4.031c-1.149-.17-1.94-.8-2.131-1.718H4zm3.391-3.836c-1.043-.263-1.6-.825-1.6-1.616 0-.944.704-1.641 1.8-1.828v3.495l-.2-.05zm1.591 1.872c1.287.323 1.852.859 1.852 1.769 0 1.097-.826 1.828-2.2 1.939V8.73l.348.086z" />
+                            </svg>
+                        </x-slot>
+                        <div class="accordionItemContent pb-2">
+                            <!-- NAV ITEM - CUSTOMERS COLLAPASE MENU -->
+                            <x-sub-menu-item icon="person" :text="__('app.menu.lead')" :link="route('digital-marketing-lead.index')">
+                                <x-slot name="iconPath">
+                                    <path
+                                        d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0zm4 8c0 1-1 1-1 1H3s-1 0-1-1 1-4 6-4 6 3 6 4zm-1-.004c-.001-.246-.154-.986-.832-1.664C11.516 10.68 10.289 10 8 10c-2.29 0-3.516.68-4.168 1.332-.678.678-.83 1.418-.832 1.664h10z" />
+                                </x-slot>
+                            </x-sub-menu-item>
+                            <x-sub-menu-item :link="route('digital-marketing-deals.index')" :text="'Deals'" />
+                            <x-sub-menu-item :link="route('dm-contracts.index')" :text="'Won Deals'" />
 
-                    </div>
-                </x-menu-item>
+                        </div>
+                    </x-menu-item>
                 @endif
                 {{-- ------------------------------------- DIGITAL MARKETING SALES END -----------------------------------------  --}}
 
-                @if($user->role_id == 1 || $user->role_id == 7 || $user->role_id == 8 || $user->role_id == 4)
-                <x-menu-item icon="briefcase" :text="'Resource'">
-                    <x-slot name="iconPath">
-                        <path
-                            d="M6.5 1A1.5 1.5 0 0 0 5 2.5V3H1.5A1.5 1.5 0 0 0 0 4.5v8A1.5 1.5 0 0 0 1.5 14h13a1.5 1.5 0 0 0 1.5-1.5v-8A1.5 1.5 0 0 0 14.5 3H11v-.5A1.5 1.5 0 0 0 9.5 1h-3zm0 1h3a.5.5 0 0 1 .5.5V3H6v-.5a.5.5 0 0 1 .5-.5zm1.886 6.914L15 7.151V12.5a.5.5 0 0 1-.5.5h-13a.5.5 0 0 1-.5-.5V7.15l6.614 1.764a1.5 1.5 0 0 0 .772 0zM1.5 4h13a.5.5 0 0 1 .5.5v1.616L8.129 7.948a.5.5 0 0 1-.258 0L1 6.116V4.5a.5.5 0 0 1 .5-.5z" />
-                    </x-slot>
-                    <div class="accordionItemContent pb-2">
-                       <x-sub-menu-item link="{{route('portfolio.index')}}" :text="'Portfolio'" />
-                    </div>
-                </x-menu-item>
+                @if ($user->role_id == 1 || $user->role_id == 7 || $user->role_id == 8 || $user->role_id == 4)
+                    <x-menu-item icon="briefcase" :text="'Resource'">
+                        <x-slot name="iconPath">
+                            <path
+                                d="M6.5 1A1.5 1.5 0 0 0 5 2.5V3H1.5A1.5 1.5 0 0 0 0 4.5v8A1.5 1.5 0 0 0 1.5 14h13a1.5 1.5 0 0 0 1.5-1.5v-8A1.5 1.5 0 0 0 14.5 3H11v-.5A1.5 1.5 0 0 0 9.5 1h-3zm0 1h3a.5.5 0 0 1 .5.5V3H6v-.5a.5.5 0 0 1 .5-.5zm1.886 6.914L15 7.151V12.5a.5.5 0 0 1-.5.5h-13a.5.5 0 0 1-.5-.5V7.15l6.614 1.764a1.5 1.5 0 0 0 .772 0zM1.5 4h13a.5.5 0 0 1 .5.5v1.616L8.129 7.948a.5.5 0 0 1-.258 0L1 6.116V4.5a.5.5 0 0 1 .5-.5z" />
+                        </x-slot>
+                        <div class="accordionItemContent pb-2">
+                            <x-sub-menu-item link="{{ route('portfolio.index') }}" :text="'Portfolio'" />
+                        </div>
+                    </x-menu-item>
                 @endif
 
-                @if(Auth::user()->role_id == 1 || Auth::user()->role_id == 7 || Auth::user()->role_id == 8 || Auth::user()->role_id == 4)
-                <li class="accordionItem closeIt">
-                        <a class="nav-item text-lightest f-15 sidebar-text-color" href="{{ route('revision.index') }}" title="Revisions">
+                @if (Auth::user()->role_id == 1 ||
+                        Auth::user()->role_id == 7 ||
+                        Auth::user()->role_id == 8 ||
+                        Auth::user()->role_id == 4)
+                    <li class="accordionItem closeIt">
+                        <a class="nav-item text-lightest f-15 sidebar-text-color"
+                            href="{{ route('revision.index') }}" title="Revisions">
                             <i class="fa fa-history" aria-hidden="true"></i>
                             <span class="pl-3">Revision</span>
                         </a>
-                </li>
+                    </li>
                 @endif
-                @if(Auth::user()->role_id == 1 || Auth::user()->role_id == 4 || Auth::user()->role_id == 8)
-                <x-menu-item class="policy-menu" icon="chat-left-text" :text="__('PM Payment History')" :count="$unreadMessagesCount"
-                             :link="route('pm-payment-history.index')">
-                    <x-slot name="iconPath">
-                        <path d="M5.757 1.071a.5.5 0 0 1 .172.686L3.383 6h9.234L10.07 1.757a.5.5 0 1 1 .858-.514L13.783 6H15a1 1 0 0 1 1 1v1a1 1 0 0 1-1 1v4.5a2.5 2.5 0 0 1-2.5 2.5h-9A2.5 2.5 0 0 1 1 13.5V9a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h1.217L5.07 1.243a.5.5 0 0 1 .686-.172zM2 9v4.5A1.5 1.5 0 0 0 3.5 15h9a1.5 1.5 0 0 0 1.5-1.5V9H2zM1 7v1h14V7H1zm3 3a.5.5 0 0 1 .5.5v3a.5.5 0 0 1-1 0v-3A.5.5 0 0 1 4 10zm2 0a.5.5 0 0 1 .5.5v3a.5.5 0 0 1-1 0v-3A.5.5 0 0 1 6 10zm2 0a.5.5 0 0 1 .5.5v3a.5.5 0 0 1-1 0v-3A.5.5 0 0 1 8 10zm2 0a.5.5 0 0 1 .5.5v3a.5.5 0 0 1-1 0v-3a.5.5 0 0 1 .5-.5zm2 0a.5.5 0 0 1 .5.5v3a.5.5 0 0 1-1 0v-3a.5.5 0 0 1 .5-.5z"></path>
-                    </x-slot>
-                </x-menu-item>
+                @if (Auth::user()->role_id == 1 || Auth::user()->role_id == 4 || Auth::user()->role_id == 8)
+                    <x-menu-item class="policy-menu" icon="chat-left-text" :text="__('PM Payment History')" :count="$unreadMessagesCount"
+                        :link="route('pm-payment-history.index')">
+                        <x-slot name="iconPath">
+                            <path
+                                d="M5.757 1.071a.5.5 0 0 1 .172.686L3.383 6h9.234L10.07 1.757a.5.5 0 1 1 .858-.514L13.783 6H15a1 1 0 0 1 1 1v1a1 1 0 0 1-1 1v4.5a2.5 2.5 0 0 1-2.5 2.5h-9A2.5 2.5 0 0 1 1 13.5V9a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h1.217L5.07 1.243a.5.5 0 0 1 .686-.172zM2 9v4.5A1.5 1.5 0 0 0 3.5 15h9a1.5 1.5 0 0 0 1.5-1.5V9H2zM1 7v1h14V7H1zm3 3a.5.5 0 0 1 .5.5v3a.5.5 0 0 1-1 0v-3A.5.5 0 0 1 4 10zm2 0a.5.5 0 0 1 .5.5v3a.5.5 0 0 1-1 0v-3A.5.5 0 0 1 6 10zm2 0a.5.5 0 0 1 .5.5v3a.5.5 0 0 1-1 0v-3A.5.5 0 0 1 8 10zm2 0a.5.5 0 0 1 .5.5v3a.5.5 0 0 1-1 0v-3a.5.5 0 0 1 .5-.5zm2 0a.5.5 0 0 1 .5.5v3a.5.5 0 0 1-1 0v-3a.5.5 0 0 1 .5-.5z">
+                            </path>
+                        </x-slot>
+                    </x-menu-item>
                 @endif
-                @if(Auth::user()->role_id == 1 || Auth::user()->role_id == 7 || Auth::user()->role_id == 8)
-                <x-menu-item class="policy-menu" icon="chat-left-text" :text="__('Policy')" :count="$unreadMessagesCount"
-                             :link="route('policy.index')">
-                    <x-slot name="iconPath">
+                @if (Auth::user()->role_id == 1 || Auth::user()->role_id == 7 || Auth::user()->role_id == 8)
+                    <x-menu-item class="policy-menu" icon="chat-left-text" :text="__('Policy')" :count="$unreadMessagesCount"
+                        :link="route('policy.index')">
+                        <x-slot name="iconPath">
 
-                        <path d="M 11.824219 0.21875 C 11.722656 0.0820312 11.5625 0 11.390625 0 L 2.277344 0 C 1.394531 0 0.675781 0.714844 0.675781 1.601562 L 0.675781 14.398438 C 0.675781 15.285156 1.394531 16 2.277344 16 L 13.71875 16 C 14.601562 16 15.320312 15.285156 15.320312 14.398438 L 15.320312 5.199219 C 15.320312 5.085938 15.285156 4.976562 15.21875 4.886719 Z M 11.121094 1.066406 L 14.253906 5.375 L 14.253906 14.398438 C 14.253906 14.695312 14.015625 14.933594 13.71875 14.933594 L 2.277344 14.933594 C 1.984375 14.933594 1.742188 14.695312 1.742188 14.398438 L 1.742188 1.601562 C 1.742188 1.304688 1.984375 1.066406 2.277344 1.066406 Z M 11.121094 1.066406 "></path>
-                        <path d="M 3.246094 4.460938 L 8 4.460938 C 8.292969 4.460938 8.53125 4.222656 8.53125 3.925781 C 8.53125 3.632812 8.292969 3.394531 8 3.394531 L 3.246094 3.394531 C 2.953125 3.394531 2.714844 3.632812 2.714844 3.925781 C 2.714844 4.222656 2.953125 4.460938 3.246094 4.460938 Z M 3.246094 4.460938 "></path>
-                        <path d="M 14.785156 5.429688 L 11.925781 5.429688 L 11.925781 0.535156 C 11.925781 0.238281 11.6875 0 11.390625 0 C 11.097656 0 10.859375 0.238281 10.859375 0.535156 L 10.859375 5.964844 C 10.859375 6.257812 11.097656 6.496094 11.390625 6.496094 L 14.785156 6.496094 C 15.082031 6.496094 15.320312 6.257812 15.320312 5.964844 C 15.320312 5.667969 15.082031 5.429688 14.785156 5.429688 Z M 14.785156 5.429688 "></path>
-                        <path d="M 3.246094 7.855469 L 8 7.855469 C 8.292969 7.855469 8.53125 7.617188 8.53125 7.320312 C 8.53125 7.027344 8.292969 6.789062 8 6.789062 L 3.246094 6.789062 C 2.953125 6.789062 2.714844 7.027344 2.714844 7.320312 C 2.714844 7.617188 2.953125 7.855469 3.246094 7.855469 Z M 3.246094 7.855469 "></path>
-                        <path d="M 3.246094 10.910156 L 10.035156 10.910156 C 10.328125 10.910156 10.566406 10.671875 10.566406 10.375 C 10.566406 10.082031 10.328125 9.84375 10.035156 9.84375 L 3.246094 9.84375 C 2.953125 9.84375 2.714844 10.082031 2.714844 10.375 C 2.714844 10.671875 2.953125 10.910156 3.246094 10.910156 Z M 3.246094 10.910156 "></path>
-                    </x-slot>
-                </x-menu-item>
+                            <path
+                                d="M 11.824219 0.21875 C 11.722656 0.0820312 11.5625 0 11.390625 0 L 2.277344 0 C 1.394531 0 0.675781 0.714844 0.675781 1.601562 L 0.675781 14.398438 C 0.675781 15.285156 1.394531 16 2.277344 16 L 13.71875 16 C 14.601562 16 15.320312 15.285156 15.320312 14.398438 L 15.320312 5.199219 C 15.320312 5.085938 15.285156 4.976562 15.21875 4.886719 Z M 11.121094 1.066406 L 14.253906 5.375 L 14.253906 14.398438 C 14.253906 14.695312 14.015625 14.933594 13.71875 14.933594 L 2.277344 14.933594 C 1.984375 14.933594 1.742188 14.695312 1.742188 14.398438 L 1.742188 1.601562 C 1.742188 1.304688 1.984375 1.066406 2.277344 1.066406 Z M 11.121094 1.066406 ">
+                            </path>
+                            <path
+                                d="M 3.246094 4.460938 L 8 4.460938 C 8.292969 4.460938 8.53125 4.222656 8.53125 3.925781 C 8.53125 3.632812 8.292969 3.394531 8 3.394531 L 3.246094 3.394531 C 2.953125 3.394531 2.714844 3.632812 2.714844 3.925781 C 2.714844 4.222656 2.953125 4.460938 3.246094 4.460938 Z M 3.246094 4.460938 ">
+                            </path>
+                            <path
+                                d="M 14.785156 5.429688 L 11.925781 5.429688 L 11.925781 0.535156 C 11.925781 0.238281 11.6875 0 11.390625 0 C 11.097656 0 10.859375 0.238281 10.859375 0.535156 L 10.859375 5.964844 C 10.859375 6.257812 11.097656 6.496094 11.390625 6.496094 L 14.785156 6.496094 C 15.082031 6.496094 15.320312 6.257812 15.320312 5.964844 C 15.320312 5.667969 15.082031 5.429688 14.785156 5.429688 Z M 14.785156 5.429688 ">
+                            </path>
+                            <path
+                                d="M 3.246094 7.855469 L 8 7.855469 C 8.292969 7.855469 8.53125 7.617188 8.53125 7.320312 C 8.53125 7.027344 8.292969 6.789062 8 6.789062 L 3.246094 6.789062 C 2.953125 6.789062 2.714844 7.027344 2.714844 7.320312 C 2.714844 7.617188 2.953125 7.855469 3.246094 7.855469 Z M 3.246094 7.855469 ">
+                            </path>
+                            <path
+                                d="M 3.246094 10.910156 L 10.035156 10.910156 C 10.328125 10.910156 10.566406 10.671875 10.566406 10.375 C 10.566406 10.082031 10.328125 9.84375 10.035156 9.84375 L 3.246094 9.84375 C 2.953125 9.84375 2.714844 10.082031 2.714844 10.375 C 2.714844 10.671875 2.953125 10.910156 3.246094 10.910156 Z M 3.246094 10.910156 ">
+                            </path>
+                        </x-slot>
+                    </x-menu-item>
                 @endif
-                 <x-menu-item class="policy-menu" icon="chat-left-text" :text="__('Pending Actions')" :count="$unreadMessagesCount"
-                             :link="route('pending-action.index')">
+                <x-menu-item class="policy-menu" icon="chat-left-text" :text="__('Pending Actions')" :count="$unreadMessagesCount"
+                    :link="route('pending-action.index')">
                     <x-slot name="iconPath">
-                        <path d="M 11.824219 0.21875 C 11.722656 0.0820312 11.5625 0 11.390625 0 L 2.277344 0 C 1.394531 0 0.675781 0.714844 0.675781 1.601562 L 0.675781 14.398438 C 0.675781 15.285156 1.394531 16 2.277344 16 L 13.71875 16 C 14.601562 16 15.320312 15.285156 15.320312 14.398438 L 15.320312 5.199219 C 15.320312 5.085938 15.285156 4.976562 15.21875 4.886719 Z M 11.121094 1.066406 L 14.253906 5.375 L 14.253906 14.398438 C 14.253906 14.695312 14.015625 14.933594 13.71875 14.933594 L 2.277344 14.933594 C 1.984375 14.933594 1.742188 14.695312 1.742188 14.398438 L 1.742188 1.601562 C 1.742188 1.304688 1.984375 1.066406 2.277344 1.066406 Z M 11.121094 1.066406 "></path>
-                        <path d="M 3.246094 4.460938 L 8 4.460938 C 8.292969 4.460938 8.53125 4.222656 8.53125 3.925781 C 8.53125 3.632812 8.292969 3.394531 8 3.394531 L 3.246094 3.394531 C 2.953125 3.394531 2.714844 3.632812 2.714844 3.925781 C 2.714844 4.222656 2.953125 4.460938 3.246094 4.460938 Z M 3.246094 4.460938 "></path>
-                        <path d="M 14.785156 5.429688 L 11.925781 5.429688 L 11.925781 0.535156 C 11.925781 0.238281 11.6875 0 11.390625 0 C 11.097656 0 10.859375 0.238281 10.859375 0.535156 L 10.859375 5.964844 C 10.859375 6.257812 11.097656 6.496094 11.390625 6.496094 L 14.785156 6.496094 C 15.082031 6.496094 15.320312 6.257812 15.320312 5.964844 C 15.320312 5.667969 15.082031 5.429688 14.785156 5.429688 Z M 14.785156 5.429688 "></path>
-                        <path d="M 3.246094 7.855469 L 8 7.855469 C 8.292969 7.855469 8.53125 7.617188 8.53125 7.320312 C 8.53125 7.027344 8.292969 6.789062 8 6.789062 L 3.246094 6.789062 C 2.953125 6.789062 2.714844 7.027344 2.714844 7.320312 C 2.714844 7.617188 2.953125 7.855469 3.246094 7.855469 Z M 3.246094 7.855469 "></path>
-                        <path d="M 3.246094 10.910156 L 10.035156 10.910156 C 10.328125 10.910156 10.566406 10.671875 10.566406 10.375 C 10.566406 10.082031 10.328125 9.84375 10.035156 9.84375 L 3.246094 9.84375 C 2.953125 9.84375 2.714844 10.082031 2.714844 10.375 C 2.714844 10.671875 2.953125 10.910156 3.246094 10.910156 Z M 3.246094 10.910156 "></path>
+                        <path
+                            d="M 11.824219 0.21875 C 11.722656 0.0820312 11.5625 0 11.390625 0 L 2.277344 0 C 1.394531 0 0.675781 0.714844 0.675781 1.601562 L 0.675781 14.398438 C 0.675781 15.285156 1.394531 16 2.277344 16 L 13.71875 16 C 14.601562 16 15.320312 15.285156 15.320312 14.398438 L 15.320312 5.199219 C 15.320312 5.085938 15.285156 4.976562 15.21875 4.886719 Z M 11.121094 1.066406 L 14.253906 5.375 L 14.253906 14.398438 C 14.253906 14.695312 14.015625 14.933594 13.71875 14.933594 L 2.277344 14.933594 C 1.984375 14.933594 1.742188 14.695312 1.742188 14.398438 L 1.742188 1.601562 C 1.742188 1.304688 1.984375 1.066406 2.277344 1.066406 Z M 11.121094 1.066406 ">
+                        </path>
+                        <path
+                            d="M 3.246094 4.460938 L 8 4.460938 C 8.292969 4.460938 8.53125 4.222656 8.53125 3.925781 C 8.53125 3.632812 8.292969 3.394531 8 3.394531 L 3.246094 3.394531 C 2.953125 3.394531 2.714844 3.632812 2.714844 3.925781 C 2.714844 4.222656 2.953125 4.460938 3.246094 4.460938 Z M 3.246094 4.460938 ">
+                        </path>
+                        <path
+                            d="M 14.785156 5.429688 L 11.925781 5.429688 L 11.925781 0.535156 C 11.925781 0.238281 11.6875 0 11.390625 0 C 11.097656 0 10.859375 0.238281 10.859375 0.535156 L 10.859375 5.964844 C 10.859375 6.257812 11.097656 6.496094 11.390625 6.496094 L 14.785156 6.496094 C 15.082031 6.496094 15.320312 6.257812 15.320312 5.964844 C 15.320312 5.667969 15.082031 5.429688 14.785156 5.429688 Z M 14.785156 5.429688 ">
+                        </path>
+                        <path
+                            d="M 3.246094 7.855469 L 8 7.855469 C 8.292969 7.855469 8.53125 7.617188 8.53125 7.320312 C 8.53125 7.027344 8.292969 6.789062 8 6.789062 L 3.246094 6.789062 C 2.953125 6.789062 2.714844 7.027344 2.714844 7.320312 C 2.714844 7.617188 2.953125 7.855469 3.246094 7.855469 Z M 3.246094 7.855469 ">
+                        </path>
+                        <path
+                            d="M 3.246094 10.910156 L 10.035156 10.910156 C 10.328125 10.910156 10.566406 10.671875 10.566406 10.375 C 10.566406 10.082031 10.328125 9.84375 10.035156 9.84375 L 3.246094 9.84375 C 2.953125 9.84375 2.714844 10.082031 2.714844 10.375 C 2.714844 10.671875 2.953125 10.910156 3.246094 10.910156 Z M 3.246094 10.910156 ">
+                        </path>
                     </x-slot>
                 </x-menu-item>
                 <!-- NAV ITEM - FINANCE COLLAPASE MENU -->
@@ -531,7 +568,9 @@
 
 
                 <!-- NAV ITEM - EVENTS -->
-                  @if (in_array('events', user_modules()) && $sidebarUserPermissions['view_events'] != 5 && $sidebarUserPermissions['view_events'] != 'none')
+                @if (in_array('events', user_modules()) &&
+                        $sidebarUserPermissions['view_events'] != 5 &&
+                        $sidebarUserPermissions['view_events'] != 'none')
                     <x-menu-item icon="calendar-event" :text="__('app.menu.Events')" :link="route('events.index')">
                         <x-slot name="iconPath">
                             <path
@@ -739,7 +778,7 @@
                 @endif
 
 
-                {{--@if(Auth::user()->role_id == 1 || Auth::user()->role_id == 8)
+                {{-- @if (Auth::user()->role_id == 1 || Auth::user()->role_id == 8)
                 <li class="accordionItem closeIt">
                     <a class="nav-item text-lightest f-15 sidebar-text-color" href="{{route("insights.index")}}" title="Insights">
 
@@ -748,13 +787,13 @@
                     </a>
                 </li>
 
-                @endif--}}
+                @endif --}}
 
 
                 <!-- NAV ITEM - REPORTS COLLAPASE MENU -->
 
 
-                 {{-- <x-menu-item icon="gear" :text="__('Report Central')">
+                {{-- <x-menu-item icon="gear" :text="__('Report Central')">
                     <x-slot name="iconPath">
                         <path d="M8 1a5 5 0 0 0-5 5v1h1a1 1 0 0 1 1 1v3a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V6a6 6 0 1 1 12 0v6a2.5 2.5 0 0 1-2.5 2.5H9.366a1 1 0 0 1-.866.5h-1a1 1 0 1 1 0-2h1a1 1 0 0 1 .866.5H11.5A1.5 1.5 0 0 0 13 12h-1a1 1 0 0 1-1-1V8a1 1 0 0 1 1-1h1V6a5 5 0 0 0-5-5z"></path>
                     </x-slot>
@@ -851,44 +890,54 @@
                             d="M9.796 1.343c-.527-1.79-3.065-1.79-3.592 0l-.094.319a.873.873 0 0 1-1.255.52l-.292-.16c-1.64-.892-3.433.902-2.54 2.541l.159.292a.873.873 0 0 1-.52 1.255l-.319.094c-1.79.527-1.79 3.065 0 3.592l.319.094a.873.873 0 0 1 .52 1.255l-.16.292c-.892 1.64.901 3.434 2.541 2.54l.292-.159a.873.873 0 0 1 1.255.52l.094.319c.527 1.79 3.065 1.79 3.592 0l.094-.319a.873.873 0 0 1 1.255-.52l.292.16c1.64.893 3.434-.902 2.54-2.541l-.159-.292a.873.873 0 0 1 .52-1.255l.319-.094c1.79-.527 1.79-3.065 0-3.592l-.319-.094a.873.873 0 0 1-.52-1.255l.16-.292c.893-1.64-.902-3.433-2.541-2.54l-.292.159a.873.873 0 0 1-1.255-.52l-.094-.319zm-2.633.283c.246-.835 1.428-.835 1.674 0l.094.319a1.873 1.873 0 0 0 2.693 1.115l.291-.16c.764-.415 1.6.42 1.184 1.185l-.159.292a1.873 1.873 0 0 0 1.116 2.692l.318.094c.835.246.835 1.428 0 1.674l-.319.094a1.873 1.873 0 0 0-1.115 2.693l.16.291c.415.764-.42 1.6-1.185 1.184l-.291-.159a1.873 1.873 0 0 0-2.693 1.116l-.094.318c-.246.835-1.428.835-1.674 0l-.094-.319a1.873 1.873 0 0 0-2.692-1.115l-.292.16c-.764.415-1.6-.42-1.184-1.185l.159-.291A1.873 1.873 0 0 0 1.945 8.93l-.319-.094c-.835-.246-.835-1.428 0-1.674l.319-.094A1.873 1.873 0 0 0 3.06 4.377l-.16-.292c-.415-.764.42-1.6 1.185-1.184l.292.159a1.873 1.873 0 0 0 2.692-1.115l.094-.319z" />
                     </x-slot>
                     <div class="accordionItemContent pb-2">
-                        <x-sub-menu-item  :link="$sidebarUserPermissions['manage_company_setting'] == 4 ? route('company-settings.index') : route('profile-settings.index')" :text="'General Settings'" />
-                        @if(Auth::user()->role_id == 1)
-                        <x-sub-menu-item  :link="route('kpi-settings.index')" :text="'KPI Settings'" />
-                        <x-sub-menu-item  :link="route('incentive-settings.index')" :text="'Incentives Settings'" />
-                        <x-sub-menu-item  :link="route('pm-goal-setting.index')" :text="'PM Goal Settings'" />
-                        <x-sub-menu-item  :link="route('dashboard.core.metric')" :text="'PM Core Metrics Settings'" />
+                        <x-sub-menu-item :link="$sidebarUserPermissions['manage_company_setting'] == 4
+                            ? route('company-settings.index')
+                            : route('profile-settings.index')" :text="'General Settings'" />
+                        @if (Auth::user()->role_id == 1)
+                            <x-sub-menu-item :link="route('kpi-settings.index')" :text="'KPI Settings'" />
+                            <x-sub-menu-item :link="route('account.sale-risk-policies.index')" :text="'Sales Risk Policies'" />
+                            <x-sub-menu-item :link="route('incentive-settings.index')" :text="'Incentives Settings'" />
+                            <x-sub-menu-item :link="route('pm-goal-setting.index')" :text="'PM Goal Settings'" />
+                            <x-sub-menu-item :link="route('dashboard.core.metric')" :text="'PM Core Metrics Settings'" />
 
-                        <div class="accordionItemContent pb-2">
-                            <div class="accordion sidebar_sub_item" id="accordionExample">
-                                <div class="accordion-item sidebar_sub_item_accordion_item">
-                                    <div class="accordion-header" id="headingOne">
-                                        <div class="accordion-button sidebar_sub_item_btn d-flex" type="button" data-toggle="collapse" data-target="#collapse1" aria-expanded="true" aria-controls="collapse1">
-                                            Project Settings
-                                            <i class="fa fa-angle-right" aria-hidden="true" style="margin-left: auto; margin-right: 5px; font-size: 16px;"></i>
+                            <div class="accordionItemContent pb-2">
+                                <div class="accordion sidebar_sub_item" id="accordionExample">
+                                    <div class="accordion-item sidebar_sub_item_accordion_item">
+                                        <div class="accordion-header" id="headingOne">
+                                            <div class="accordion-button sidebar_sub_item_btn d-flex" type="button"
+                                                data-toggle="collapse" data-target="#collapse1" aria-expanded="true"
+                                                aria-controls="collapse1">
+                                                Project Settings
+                                                <i class="fa fa-angle-right" aria-hidden="true"
+                                                    style="margin-left: auto; margin-right: 5px; font-size: 16px;"></i>
+                                            </div>
                                         </div>
-                                    </div>
-                                    <div id="collapse1" class="accordion-collapse collapse" aria-labelledby="headingOne" data-parent="#accordionExample">
-                                        <div class="accordion-body sidebar_sub_item_body">
-                                            <a href="{{route('project-view-category')}}" class="text-lightest">
-                                                Categories
-                                            </a>
-                                            <a href="{{route('project-view-cms')}}" class="text-lightest">
-                                                CMS
-                                            </a>
-                                            <a href="{{route('project-view-website-type')}}" class="text-lightest">
-                                                Website Types
-                                            </a>
-                                            <a href="{{route('project-view-website-theme')}}" class="text-lightest">
-                                                Website Theme
-                                            </a>
-                                            <a href="{{route('project-view-website-plugin')}}" class="text-lightest">
-                                                Website Plugin
-                                            </a>
+                                        <div id="collapse1" class="accordion-collapse collapse"
+                                            aria-labelledby="headingOne" data-parent="#accordionExample">
+                                            <div class="accordion-body sidebar_sub_item_body">
+                                                <a href="{{ route('project-view-category') }}" class="text-lightest">
+                                                    Categories
+                                                </a>
+                                                <a href="{{ route('project-view-cms') }}" class="text-lightest">
+                                                    CMS
+                                                </a>
+                                                <a href="{{ route('project-view-website-type') }}"
+                                                    class="text-lightest">
+                                                    Website Types
+                                                </a>
+                                                <a href="{{ route('project-view-website-theme') }}"
+                                                    class="text-lightest">
+                                                    Website Theme
+                                                </a>
+                                                <a href="{{ route('project-view-website-plugin') }}"
+                                                    class="text-lightest">
+                                                    Website Plugin
+                                                </a>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
                         @endif
                     </div>
                 </x-menu-item>

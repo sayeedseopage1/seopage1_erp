@@ -47,6 +47,7 @@ use App\Events\RemovalRequestAdminLeadEvent;
 use App\Events\RemovalRequestApprovedRejectLeadEvent;
 use App\Events\RemovalRequestApprovedRejectUserEvent;
 use App\Events\RemovalRequestApproveRejectEvent;
+use App\Events\SalesPolicyEvent;
 use App\Events\SubTaskCompletedEvent;
 use App\Events\TaskCommentEvent;
 use App\Events\TaskEvent;
@@ -102,6 +103,7 @@ use App\Listeners\RemovalRequestAdminListener;
 use App\Listeners\RemovalRequestApprovedRejectLeadListener;
 use App\Listeners\RemovalRequestApprovedRejectListener;
 use App\Listeners\RemovalRequestApprovedRejectUserListener;
+use App\Listeners\SalesPolicyEventListener;
 use App\Listeners\SubTaskCompletedListener;
 use App\Listeners\TaskCommentListener;
 use App\Listeners\TaskListener;
@@ -160,7 +162,6 @@ use App\Models\ProductFiles;
 use App\Models\Project;
 use App\Models\ProjectCategory;
 use App\Models\ProjectFile;
-use App\Models\ProjectMember;
 use App\Models\ProjectMilestone;
 use App\Models\ProjectNote;
 use App\Models\ProjectRating;
@@ -308,6 +309,7 @@ class EventServiceProvider extends ServiceProvider
         NewProposalEvent::class => [NewProposalListener::class],
         TicketRequesterEvent::class => [TicketRequesterListener::class],
         RemovalRequestApproveRejectEvent::class => [RemovalRequestApprovedRejectListener::class],
+        SalesPolicyEvent::class => [SalesPolicyEventListener::class],
         NewExpenseRecurringEvent::class => [NewExpenseRecurringListener::class],
         NewInvoiceRecurringEvent::class => [NewInvoiceRecurringListener::class],
         NewCreditNoteEvent::class => [NewCreditNoteListener::class],
@@ -377,7 +379,6 @@ class EventServiceProvider extends ServiceProvider
         Project::class => [ProjectObserver::class],
         ProjectCategory::class => [ProjectCategoryObserver::class],
         ProjectFile::class => [FileUploadObserver::class],
-    //    / ProjectMember::class => [ProjectMemberObserver::class],
         ProjectMilestone::class => [ProjectMilestoneObserver::class],
         ProjectNote::class => [ProjectNoteObserver::class],
         ProjectRating::class => [ProjectRatingObserver::class],
@@ -404,5 +405,4 @@ class EventServiceProvider extends ServiceProvider
         UserPermission::class => [UserPermissionObserver::class],
 
     ];
-    
 }

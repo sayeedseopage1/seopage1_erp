@@ -15,18 +15,13 @@ const JqueryDateRangePicker = ({
         if(window.$){
             let $ = window.$;
             let moment = window.moment;
-            // let today = moment().format('D'); 
             
             $(function() {
                 let start = moment().subtract(1, 'weeks');
                 let end = moment();
  
 
-                // if(today > 20){
-                //     end = moment().add(1, 'months').date(20);
-                // }else {
-                //     end = moment().date(20);
-                // }
+              
 
                 
                setStartDate(start.format());

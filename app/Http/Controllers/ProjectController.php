@@ -812,7 +812,6 @@ class ProjectController extends AccountBaseController
 
         $helper->DisputeFormAuthorization($project);
 
-
         $project->save();
         $users = User::where('role_id', 1)->get();
         foreach ($users as $user) {
@@ -2237,7 +2236,6 @@ class ProjectController extends AccountBaseController
 
         $helper->ProjectDeliverableCreation($project->id);
 
-
     }
 
         if($project->status == 'not started'){
@@ -2489,6 +2487,10 @@ class ProjectController extends AccountBaseController
             case 'tasks':
                 $this->taskBoardStatus = TaskboardColumn::all();
                 return (!$this->project->trashed()) ? $this->tasks($this->project->project_admin == user()->id) : $this->archivedTasks($this->project->project_admin == user()->id);
+
+            case 'sales-analysis-report':
+                $this->view = 'projects.ajax.salesAnalysisReport';
+                break;
             case 'gantt':
                 $this->taskBoardStatus = TaskboardColumn::all();
                 $this->view = 'projects.ajax.gantt';
@@ -3267,9 +3269,6 @@ class ProjectController extends AccountBaseController
 
         $sign->signature = $imageName;
         $sign->save();
-
-
-
 
 
         event(new ProjectSignedEvent($this->project, $sign));
