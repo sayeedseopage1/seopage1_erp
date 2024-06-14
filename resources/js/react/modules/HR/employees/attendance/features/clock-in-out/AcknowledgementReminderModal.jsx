@@ -64,7 +64,7 @@ const AcknowledgementReminderModal = ({
                             submissionType === "CONTINUE"
                                 ? "continue"
                                 : "final_submission",
-                        submission_date: lastClockData.clock_in_time,
+
                         _token: document
                             .querySelector("meta[name='csrf-token']")
                             .getAttribute("content"),
