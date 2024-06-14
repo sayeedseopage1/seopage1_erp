@@ -4,13 +4,18 @@ import ProjectDetailsTab from '../../components/freelancerProjectDetails/ui/Proj
 import bookmarkIcon from '../../assets/freelancerProjectDetails/bookmark.svg';
 import shareIcon from '../../assets/freelancerProjectDetails/shareIcon.svg'
 import { useLocation } from 'react-router-dom';
+import Switch from '../../../../global/Switch';
+import ProjectDetails from '../../components/freelancerProjectDetails/sections/ProjectDetails';
+import Proposals from '../../components/freelancerProjectDetails/sections/Proposals';
+import Payment from '../../components/freelancerProjectDetails/sections/Payment';
+import Files from '../../components/freelancerProjectDetails/sections/Files';
+import Tasklists from '../../components/freelancerProjectDetails/sections/Tasklists';
 
 const FreelancerProjectDetails = () => {
     const location = useLocation();
     const searchParams = new URLSearchParams(location.search);
     const activeTab = searchParams.get('tab') || 'Details';
 
-    console.log(activeTab)
     return (
         <div className='sp1_marketplace_page_wrapper'>
             <div>
@@ -43,7 +48,23 @@ const FreelancerProjectDetails = () => {
                         </div>
                     </div>
                     <div className='p_d_content_wrapper'>
-                        {activeTab}
+                        <Switch>
+                            <Switch.Case condition={activeTab === 'Details'}>
+                                <ProjectDetails />
+                            </Switch.Case>
+                            <Switch.Case condition={activeTab === 'Proposals'}>
+                                <Proposals />
+                            </Switch.Case>
+                            <Switch.Case condition={activeTab === 'Payment'}>
+                                <Payment />
+                            </Switch.Case>
+                            <Switch.Case condition={activeTab === 'Files'}>
+                                <Files />
+                            </Switch.Case>
+                            <Switch.Case condition={activeTab === 'Task-lists'}>
+                                <Tasklists />
+                            </Switch.Case>
+                        </Switch>
                     </div>
                 </div>
             </div>
