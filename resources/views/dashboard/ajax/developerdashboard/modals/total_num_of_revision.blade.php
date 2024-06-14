@@ -5,8 +5,8 @@
         <div class="modal-content">
             <div class="modal-header">
                 <div class="modal-title">
-                    <h4>Number of submitted tasks: __</h4>
-                    <h4>Number of tasks with revisions: __</h4>
+                    <h4>Number of Submitted Tasks: __</h4>
+                    <h4>Number of Tasks with revisions: {{ count($revision_task_data) }}</h4>
                 </div>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>

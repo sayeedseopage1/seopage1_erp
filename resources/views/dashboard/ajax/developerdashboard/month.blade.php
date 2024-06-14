@@ -362,7 +362,7 @@
                     <p class="mb-0 f-18 font-weight-bold mr-5">
                         Avg. Logged Time For Complete Tasks With Revisions (In Hours):
                         <a href="#" data-toggle="modal"
-                            data-target="#avg_logged_time_complete_task{{ $submit_number_of_tasks_in_this_month }}">
+                            data-target="#avg_logged_time_complete_task{{ count($average_submission_time_in_this_month_data) }}">
                             {{ round($average_submission_time_in_this_month, 2) }} Hours
                         </a>
                         @include('dashboard.ajax.developerdashboard.modals.avg_logged_time_complete_task')
@@ -370,7 +370,7 @@
                     <p class="mb-0 f-18 font-weight-bold mr-5">
                         Avg. Logged Time For Complete Tasks Without Revisions (In Hours):
                         <a href="#" data-toggle="modal"
-                            data-target="#avg_logged_time_complete_task_without_revision{{ $submit_number_of_tasks_in_this_month }}">
+                            data-target="#avg_logged_time_complete_task_without_revision{{ count($avg_logged_time_complete_task_without_revision_data) }}">
                             {{ round($avg_logged_time_complete_task_without_revision, 2) }} Hours
                         </a>
                         @include('dashboard.ajax.developerdashboard.modals.avg_logged_time_complete_task_without_revision')
@@ -415,7 +415,7 @@
 
                     <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
                         <a href="#" data-toggle="modal"
-                            data-target="#avg_num_in_progress{{ count($total_in_progress_date_range_table) }}">
+                            data-target="#avg_num_in_progress{{ count($average_in_progress_date_range_date) }}">
 
                             {{ round($average_in_progress_date_range, 2) }}
 
@@ -434,13 +434,13 @@
             class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0">
             <div class="d-block text-capitalize">
                 <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">
-                    Percentage of tasks where deadline was missed
+                    Percentage of Task Where Given Estimated Time was Missed (for first submission)
                 </h5>
                 <div class="d-flex flex-wrap">
                     <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
                         <a href="#" data-toggle="modal"
-                            data-target="#deadline_was_missed{{ count($deadline_missed_task_data) }}">
-                            {{ round($percentage_of_tasks_deadline, 2) }}%
+                            data-target="#deadline_was_missed{{ count($percentage_of_tasks_where_given_estimated_time_was_missed_without_revision_data) }}">
+                            {{ round($percentage_of_tasks_where_given_estimated_time_was_missed_without_revision, 2) }}%
                         </a>
                     </p>
                     @include('dashboard.ajax.developerdashboard.modals.percentage_task_deadline_missed')
@@ -453,13 +453,14 @@
         <div
             class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0">
             <div class="d-block text-capitalize">
-                <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">Percentage of tasks where given estimated time was
-                    missed</h5>
+                <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">
+                    Percentage of Task Where Given Estimated Time was Missed (for first submission plus revisions)
+                </h5>
                 <div class="d-flex flex-wrap">
                     <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
                         <a href="#" data-toggle="modal"
-                            data-target="#estimated_time_was_missed{{ count($estimate_missed_task_data) }}">
-                            {{ round($percentage_number_task_cross_estimate_time, 2) }}%
+                            data-target="#estimated_time_was_missed{{ $percentage_of_tasks_where_given_estimated_time_was_missed_with_revision_total_missed }}">
+                            {{ round($percentage_of_tasks_where_given_estimated_time_was_missed_with_revision, 2) }}%
                         </a>
                     </p>
                     @include('dashboard.ajax.developerdashboard.modals.estimated_time_was_missed')
@@ -568,9 +569,9 @@
                     <p class="mb-0 f-18 font-weight-bold mr-5">
                         No. of disputes lost(Raised By Developer):
                         <a href="#" data-toggle="modal"
-                            data-target="#no_of_dispute_lost{{ count($number_of_dispute_filed_own_data) }}">
+                            data-target="#no_of_dispute_lost{{ count($number_of_dispute_lost_data) }}">
 
-                            {{ $number_of_dispute_lost_own }}
+                            {{ $number_of_dispute_lost_all }}
 
                         </a>
                         @include('dashboard.ajax.developerdashboard.modals.no_of_dispute_lost')
@@ -604,8 +605,8 @@
 
                     <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
                         <a href="#" data-toggle="modal"
-                            data-target="#hours_spent_in_revision_modal{{ count($spent_revision_developer_data) }}">
-                            {{ $spent_revision_developer }}
+                            data-target="#hours_spent_in_revision_modal{{ $hours_spent_revision_developer_count }}">
+                            {{ $hours_spent_revision_developer }}
 
                         </a>
 

@@ -553,7 +553,7 @@
                                     <p class="mb-0 f-18 font-weight-bold mr-5">
                                         Avg. Logged Time For Complete Tasks With Revisions (In Hours):
                                         <a href="#" data-toggle="modal"
-                                            data-target="#avg_logged_time_complete_task{{ $submit_number_of_tasks_in_this_month }}">
+                                            data-target="#avg_logged_time_complete_task{{ count($average_submission_time_in_this_month_data) }}">
                                             {{ round($average_submission_time_in_this_month, 2) }} Hours
                                         </a>
                                         @include('dashboard.ajax.developerdashboard.modals.avg_logged_time_complete_task')
@@ -561,7 +561,7 @@
                                     <p class="mb-0 f-18 font-weight-bold mr-5">
                                         Avg. Logged Time For Complete Tasks Without Revisions (In Hours):
                                         <a href="#" data-toggle="modal"
-                                            data-target="#avg_logged_time_complete_task_without_revision{{ $submit_number_of_tasks_in_this_month }}">
+                                            data-target="#avg_logged_time_complete_task_without_revision{{ count($avg_logged_time_complete_task_without_revision_data) }}">
                                             {{ round($avg_logged_time_complete_task_without_revision, 2) }} Hours
                                         </a>
                                         @include('dashboard.ajax.developerdashboard.modals.avg_logged_time_complete_task_without_revision')
@@ -759,9 +759,9 @@
                                     <p class="mb-0 f-18 font-weight-bold mr-5">
                                         No. of disputes lost(Raised By Developer):
                                         <a href="#" data-toggle="modal"
-                                            data-target="#no_of_dispute_lost{{ count($number_of_dispute_filed_own_data) }}">
+                                            data-target="#no_of_dispute_lost{{ count($number_of_dispute_lost_data) }}">
 
-                                            {{ $number_of_dispute_lost_own }}
+                                            {{ $number_of_dispute_lost_all }}
 
                                         </a>
                                         @include('dashboard.ajax.developerdashboard.modals.no_of_dispute_lost')
@@ -796,13 +796,12 @@
 
                                     <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
                                         <a href="#" data-toggle="modal"
-                                            data-target="#hours_spent_in_revision_modal{{ count($spent_revision_developer_data) }}">
-                                            {{ $spent_revision_developer }}
+                                            data-target="#hours_spent_in_revision_modal{{ $hours_spent_revision_developer_count }}">
+                                            {{ $hours_spent_revision_developer }}
                                         </a>
 
                                     </p>
                                     @include('dashboard.ajax.developerdashboard.modals.hours_spent_in_revision_modal')
-
                                 </div>
                             </div>
 
