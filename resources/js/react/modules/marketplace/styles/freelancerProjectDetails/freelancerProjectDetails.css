@@ -1,3 +1,71 @@
-.project_details_header {
-    background-color: var(--primary-color);
+.p_d_header {
+    background-color: var(--primary-blue);
+    color: var(--primary-white);
+    border-radius: 8px 10px 0px 0px;
+    padding: 11px 29px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
 }
+
+.p_d_header_title_wrapper {
+    color: var(--primary-white);
+    display: flex;
+    align-items: center;
+    gap: 9px;
+}
+
+.p_d_header_title {
+    font-size: 24px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: normal;
+}
+
+.p_d_header_title_badge {
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+    padding: 8px;
+    border-radius: 40px;
+    background: var(--primary-gray);
+}
+
+.p_d_header_bids_amount_wrapper {
+    display: flex;
+    align-items: flex-start;
+    gap: 24px;
+}
+
+.p_d_header_bids_amount_title {
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+    margin-bottom: 8px;
+}
+
+.p_d_header_bids_amount {
+    font-size: 20px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+}
+
+.p_d_tab_wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+}
+
+.p_d_tab_action_wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 18px;
+}
+
+.p_d_content_wrapper {}

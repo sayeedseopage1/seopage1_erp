@@ -5,7 +5,7 @@ import { Provider } from "react-redux";
 import FreelancerProjectDetails from "./pages/freelancerProjectDetails/FreelancerProjectDetails";
 import Toaster from "../../global/Toaster";
 import { store } from "../../services/store";
-import './styles/index.css';
+import './index.css';
 import FreelancerMessage from "./pages/message/FreelancerMessage";
 
 const Content = () => {
@@ -18,8 +18,20 @@ const Content = () => {
 };
 
 const marketPlaceRoutes = [
-    { id: 1, rootId: 'marketplaceProject', path: 'marketeplace-projects', element: <FreelancerProjectDetails />, context: 'AuthProvider' },
-    { id: 2, rootId: 'marketplaceMessage', path: 'marketeplace-message', element: <FreelancerMessage /> },
+    {
+        id: 1,
+        rootId: 'marketplaceProject',
+        path: 'marketeplace-projects',
+        element: <FreelancerProjectDetails />,
+        contextProvider: React.Fragment
+    },
+    {
+        id: 2,
+        rootId: 'marketplaceMessage',
+        path: 'marketeplace-message',
+        element: <FreelancerMessage />,
+        contextProvider: React.Fragment
+    },
 ]
 
 marketPlaceRoutes.map((route) => {
@@ -29,13 +41,15 @@ marketPlaceRoutes.map((route) => {
         ReactDOM.createRoot(container).render(
             <React.StrictMode>
                 <Provider store={store}>
-                    <BrowserRouter basename={`account/${path}`}>
-                        <Routes>
-                            <Route path="/" element={<Content />}>
-                                <Route index element={element} />
-                            </Route>
-                        </Routes>
-                    </BrowserRouter>
+                    <route.contextProvider>
+                        <BrowserRouter basename={`account/${path}`}>
+                            <Routes>
+                                <Route path="/" element={<Content />}>
+                                    <Route index element={element} />
+                                </Route>
+                            </Routes>
+                        </BrowserRouter>
+                    </route.contextProvider>
                 </Provider>
             </React.StrictMode>
         );

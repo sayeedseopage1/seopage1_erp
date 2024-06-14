@@ -1,10 +1,52 @@
 import React from 'react';
 import '../../styles/freelancerProjectDetails/freelancerProjectDetails.css'
+import ProjectDetailsTab from '../../components/freelancerProjectDetails/ui/ProjectDetailsTab';
+import bookmarkIcon from '../../assets/freelancerProjectDetails/bookmark.svg';
+import shareIcon from '../../assets/freelancerProjectDetails/shareIcon.svg'
+import { useLocation } from 'react-router-dom';
 
 const FreelancerProjectDetails = () => {
+    const location = useLocation();
+    const searchParams = new URLSearchParams(location.search);
+    const activeTab = searchParams.get('tab') || 'Details';
+
+    console.log(activeTab)
     return (
         <div className='sp1_marketplace_page_wrapper'>
-            Project details
+            <div>
+                <div className='p_d_header'>
+                    <div className='p_d_header_title_wrapper'>
+                        <h2 className='p_d_header_title'>Modern Roofing Solutions Online</h2>
+                        <span className='p_d_header_title_badge'>Accepted</span>
+                    </div>
+                    <div className='p_d_header_bids_amount_wrapper'>
+                        <div>
+                            <p className='p_d_header_bids_amount_title'>Bids</p>
+                            <span className='p_d_header_bids_amount'>59</span>
+                        </div>
+                        <div>
+                            <p className='p_d_header_bids_amount_title'>Average bid</p>
+                            <span className='p_d_header_bids_amount'>$168 USD</span>
+                        </div>
+                    </div>
+                </div>
+                <div className='sp1_marketplace_section_wrapper'>
+                    <div className='p_d_tab_wrapper'>
+                        <ProjectDetailsTab isAwarded={true} />
+                        <div className='p_d_tab_action_wrapper'>
+                            <button className='bg-transparent'>
+                                <img src={bookmarkIcon} alt="bookmarkIcon" />
+                            </button>
+                            <button className='bg-transparent'>
+                                <img src={shareIcon} alt="shareIcon" />
+                            </button>
+                        </div>
+                    </div>
+                    <div className='p_d_content_wrapper'>
+                        {activeTab}
+                    </div>
+                </div>
+            </div>
         </div>
     );
 };

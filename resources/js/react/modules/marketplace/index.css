@@ -1,0 +1,34 @@
+:root {
+    --primary-blue: #1492E6;
+    --primary-white: #fff;
+    --light-blue: #F2F9FE;
+    --primary-gray: #ffffff33;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif !important;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p {
+    margin: 0;
+}
+
+.sp1_marketplace_page_wrapper {
+    background-color: var(--primary-white);
+    padding: 30px;
+    min-height: calc(100vh - 63px);
+}
+
+.sp1_marketplace_section_wrapper {
+    background-color: var(--light-blue);
+    padding: 20px 29px;
+}
