@@ -21,7 +21,7 @@ return new class extends Migration
         });
 
         $temp = 0;
-        $salesTableCreateDate = DB::table('migrations')->where('migration', '2024_03_04_151733_create_sales_risk_policies_table')->first() ?: (object)['created_at' => '2024-04-24 00:00:00'];
+        $salesTableCreateDate = DB::table('migrations')->where('migration', '2024_03_04_151733_create_sales_risk_policies_table')->first() ?: (object)['created_at' => '2024-06-14 00:00:00'];
         Deal::whereDate('created_at', '<', Carbon::parse($salesTableCreateDate->created_at)->format('Y-m-d'))->get()->each(function ($item) use (&$temp) {
             if (! in_array($item->sale_analysis_status, ['previous-won', 'previous-denied']) ) {
                 if ($item->status == 'Accepted') $item->sale_analysis_status = 'previous-won';
