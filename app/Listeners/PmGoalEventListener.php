@@ -6,8 +6,10 @@ use App\Events\PmGoalEvent;
 use App\Models\Invoice;
 use App\Models\PMProject;
 use App\Models\Project;
+use App\Models\ProjectDeliverable;
 use App\Models\ProjectMilestone;
 use App\Models\ProjectPmGoal;
+use App\Models\ProjectTimeLog;
 use App\Models\Task;
 use Illuminate\Support\Facades\DB;
 
@@ -16,7 +18,8 @@ class PmGoalEventListener
     protected $type = [
         'new_task_added',
         'task_submission_made',
-        'milestone_invoice_added'
+        'milestone_invoice_added',
+        'task_time_stopped'
     ];
     /**
      * Create the event listener.
@@ -46,6 +49,9 @@ class PmGoalEventListener
                 break;
             case 'milestone_invoice_added':
                 self::milestoneInvoiceAddedEventHandle($event);
+                break;
+            case 'task_time_stopped':
+                self::hourlyGoalCompletion($event);
                 break;
         }
         DB::commit();
@@ -98,13 +104,10 @@ class PmGoalEventListener
         $paidMilestoneCount = $milestones->where(['in.status' => 'paid'])->count();
 
         $goal = ProjectPmGoal::where('project_id', $project->id)->first();
-        if ($goal->project_type == 'fixed' && strtolower($goal->project_category) == 'regular')
-        {
+        if ($goal->project_type == 'fixed' && strtolower($goal->project_category) == 'regular') {
             self::fixedRegularPmGoalCompletion($project, $invoice, $milestoneSum, $paidAmount, $milestoneCount, $paidMilestoneCount);
             return;
-        }
-        else if ($goal->project_type == 'fixed')
-        {
+        } else if ($goal->project_type == 'fixed') {
             self::fixedPriorityPmGoalCompletion($project, $invoice, $paidMilestoneCount, $milestoneCount, $paidAmount);
             return;
         }
@@ -148,21 +151,18 @@ class PmGoalEventListener
         $projectBudget = $project->deal->actual_amount;
 
         if ($paidMilestoneCount == 1) {
-            $goal = ProjectPmGoal::where(['project_id' => $project->id, 'goal_code'=> 'FMR', 'goal_status' => 0])->first();
+            $goal = ProjectPmGoal::where(['project_id' => $project->id, 'goal_code' => 'FMR', 'goal_status' => 0])->first();
             if (!$goal || time() > strtotime($goal->goal_end_date)) return;
 
             $goal->goal_status = 1;
             $goal->save();
-        }
-        else if( $paidMilestoneCount > 1 && $milestoneCount < $paidMilestoneCount){
+        } else if ($paidMilestoneCount > 1 && $milestoneCount < $paidMilestoneCount) {
             $goal = ProjectPmGoal::whereIn('goal_code', ['MPMR', 'MMPMR', 'OMMR'])->where(['project_id' => $project->id, 'goal_status' => 0])->first();
             if (!$goal || time() > strtotime($goal->goal_end_date)) return;
 
             $goal->goal_status = 1;
             $goal->save();
-        }
-        else if ($projectBudget < $paidAmount)
-        {
+        } else if ($projectBudget < $paidAmount) {
             $extraGoal = ProjectPmGoal::where(['project_id' => $project->id, 'goal_code' => 'ERAG', 'goal_status' => 0])->first();
             $extraGoal->goal_status = 1;
             $extraGoal->save();
@@ -176,5 +176,67 @@ class PmGoalEventListener
             $goal->goal_status = 1;
             $goal->save();
         }
+    }
+
+    private function hourlyGoalCompletion($event)
+    {
+        $projectId = $event->data['projectId'];
+        $totalMinutes = ProjectTimeLog::where('project_id', $projectId)->sum('total_minutes');
+
+        if ($totalMinutes < 60) return;
+
+        // find first goal
+        $goal = ProjectPmGoal::where(['project_id' => $projectId, 'goal_code' => 'HTA'])->first();
+        if (!$goal) return;
+
+        if ($goal->goal_status == 0 && time() <= strtotime($goal->goal_end_date)) {
+            $goal->goal_status = 1;
+            $goal->save();
+        }
+
+        if ($totalMinutes < 3 * 60) return;
+
+        // 2nd goal completion ----------------------- //
+        $projectPriority = $goal->project_category;
+
+        if ($projectPriority == 'regular' || $projectPriority == 'priority') {
+            $goal = ProjectPmGoal::where(['project_id' => $projectId, 'goal_code' => '3HT', 'goal_status' => 0])->first();
+            if($goal && time() <= strtotime($goal->goal_end_date))
+            {
+                $goal->goal_status = 1;
+                $goal->save();
+            }
+        }
+        else if ($totalMinutes >= 4*60 && $totalMinutes < 5*60 && $projectPriority == 'highPriority')
+        {
+            $goal = ProjectPmGoal::where(['project_id' => $projectId, 'goal_code' => '4HT', 'goal_status' => 0])->first();
+            if($goal && time() <= strtotime($goal->goal_end_date))
+            {
+                $goal->goal_status = 1;
+                $goal->save();
+            }
+        }
+        else if($totalMinutes >= 5*60 && $projectPriority == 'topMostPriority')
+        {
+            $goal = ProjectPmGoal::where(['project_id' => $projectId, 'goal_code' => '5HT', 'goal_status' => 0])->first();
+            if($goal && time() <= strtotime($goal->goal_end_date))
+            {
+                $goal->goal_status = 1;
+                $goal->save();
+            }
+        }
+        else return;
+        // 2nd goal completion end ----------------------- //
+
+        $goalCount =  ProjectPmGoal::where('project_id', $projectId)->whereNotIn('goal_code', ['HTA','3HT','4HT','5HT'])->count();
+        if($goalCount < 1) return;
+
+        $deliverable = ProjectDeliverable::where('project_id', $projectId)->first();
+        if($goalCount == 1)
+        {
+
+        }
+
+
     }
 }

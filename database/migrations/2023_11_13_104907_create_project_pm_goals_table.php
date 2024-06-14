@@ -34,6 +34,7 @@ return new class extends Migration
             $table->integer('expired_status')->default(0);
             $table->integer('extension_status')->default(0)->comment('1 = pending, 2 = accepted, 3 = rejected');
             $table->integer('mail_status')->default(0);
+            $table->text('data')->nullable();
             $table->timestamps();
         });
     }

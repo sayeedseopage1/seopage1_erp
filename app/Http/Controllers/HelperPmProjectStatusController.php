@@ -512,7 +512,12 @@ class HelperPmProjectStatusController extends AccountBaseController
 
         switch ($goalCount) {
             case 2:
-                $days = ceil(($deliverable->estimation_time - 4) / 3);
+                if(in_array($lastGoal->project_category, ['regular', 'priority']))
+                    $days = ceil(($deliverable->estimation_time - 4) / 3);
+                else if ($lastGoal->project_category == 'highPriority')
+                    $days = ceil(($deliverable->estimation_time - 5) / 3);
+                else if ($lastGoal->project_category == 'topMostPriority')
+                    $days = ceil(($deliverable->estimation_time - 6) / 3);
                 break;
             case $goalCount > 2:
                 $days = ceil($deliverable->estimation_time / 3);
@@ -545,6 +550,8 @@ class HelperPmProjectStatusController extends AccountBaseController
         $duration = (strtotime($goal->goal_end_date) - strtotime($goal->goal_start_date))/ 86400;
         $goal->duration = number_format($duration, 2);
         $goal->added_by = Auth::user()->id;
+
+        $goal->data = json_encode(['deliverable_id' => $deliverable->id]);
         $goal->save();
     }
 }

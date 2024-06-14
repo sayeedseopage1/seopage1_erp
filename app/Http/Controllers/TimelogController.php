@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\DataTables\TimeLogsDataTable;
+use App\Events\PmGoalEvent;
 use App\Exports\EmployeeTimelogs;
 use App\Helper\Reply;
 use App\Http\Requests\TimeLogs\StartTimer;
@@ -859,6 +860,9 @@ class TimelogController extends AccountBaseController
         if ($this->viewTimelogPermission != 'all' && manage_active_timelogs() != 'all') {
                 $this->activeTimerCount->where('project_time_logs.user_id', $this->user->id);
         }
+
+        // this event should calculate total hour and complete goal
+        event(new PmGoalEvent('task_time_stopped', ['projectId' => $timeLog->project_id]));
 
         $this->activeTimerCount = $this->activeTimerCount->count();
         // /dd("sjdnkasdnas");
