@@ -9,3 +9,6 @@ import "./sales/won-deals/main";
 import './digital-marketing/DmDeals/main';
 import './digital-marketing/DmLeads/main';
 import './digital-marketing/DmWonDeals/main';
+
+// marketplace 
+import './marketplace/freelancerProjectDetails/main';
