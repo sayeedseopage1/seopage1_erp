@@ -253,7 +253,9 @@ return array (
     'department' => 'Department',
     'expenseReport' => 'Expense Report',
     'advanced' => 'Advanced',
-    'point' => 'Points'
+    'point' => 'Points',
+    'marketplaceMessage' => 'Marketplace Message',
+    'marketplaceProject' => 'Marketplace Project',
 ),
   'parentId' => 'Parent',
   'childId' => 'Child',

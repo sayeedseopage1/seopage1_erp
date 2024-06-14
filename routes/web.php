@@ -202,6 +202,7 @@ use App\Http\Controllers\ProjectTemplateSubTaskController;
 use App\Http\Controllers\PaymentGatewayCredentialController;
 use App\Http\Controllers\EmployeeShiftChangeRequestController;
 use App\Http\Controllers\EvaluationController;
+use App\Http\Controllers\Marketplace\MarketplaceViewController;
 
 /*
 |--------------------------------------------------------------------------
@@ -1570,6 +1571,10 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
 
     // Graphic task files delete
     Route::get('graphic-task-file/delete/{id}', [TaskController::class, 'deleteGraphicTaskFile'])->name('graphic.task.file.delete');
+
+    // Marketeplace api integration routes
+    Route::get('marketeplace-message', [MarketplaceViewController::class, 'messagePage'])->name('marketplace.message');
+    Route::get('marketeplace-projects', [MarketplaceViewController::class, 'projectPage'])->name('marketplace.project');
 });
 
 //custom route for seopage1
