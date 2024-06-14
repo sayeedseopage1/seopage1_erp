@@ -817,6 +817,32 @@ const SingleTaskPage = () => {
                                         />
                                     </Accordion>
 
+                                    {/* {_.size(task?.revisions) > 0 && (
+                                        <Accordion
+                                            title={
+                                                _.last(task?.revisions)
+                                                    ?.revisionStatus
+                                            }
+                                            headingClass="d-flex align-items-center justify-content-between"
+                                            headingStyle={{
+                                                background: "rgba(227,62,79,1)",
+                                                color: "#fff",
+                                            }}
+                                        >
+                                           
+                                            {_.map(
+                                                task?.revisions,
+                                                (revision, index) => (
+                                                    <RevisionText
+                                                        key={revision?.id}
+                                                        index={index + 1}
+                                                        revision={revision}
+                                                    />
+                                                )
+                                            )}
+                                        </Accordion>
+                                    )} */}
+
                                     {_.size(task?.revisions) > 0 && (
                                         <Accordion
                                             title={
@@ -829,19 +855,8 @@ const SingleTaskPage = () => {
                                                 color: "#fff",
                                             }}
                                         >
-                                            {/* { _.map(task?.revisions, (revision, index) => (
-                                             <RevisionText
-                                                    key={revision?.id}
-                                                    index={index + 1}
-                                                    date={dayjs(revision.createdAt).format('MMM DD, YYYY')}
-                                                    time={dayjs(revision.createdAt).format('hh:mm a')}
-                                                    text={revision?.comment || revision?.devComment || revision?.pmComment}
-                                                    revision={revision}
-                                                />
-                                            ))
-                                        } */}
                                             {_.map(
-                                                task?.revisions,
+                                                _.reverse([...task?.revisions]), // Clone and reverse the array
                                                 (revision, index) => (
                                                     <RevisionText
                                                         key={revision?.id}

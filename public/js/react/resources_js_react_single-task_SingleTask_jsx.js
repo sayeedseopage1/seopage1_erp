@@ -974,6 +974,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _tasks_components_SingleTaskPerson__WEBPACK_IMPORTED_MODULE_31__ = __webpack_require__(/*! ../tasks/components/SingleTaskPerson */ "./resources/js/react/tasks/components/SingleTaskPerson.jsx");
 /* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_32__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
 function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) { return typeof o; } : function (o) { return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o; }, _typeof(o); }
+function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread(); }
+function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+function _iterableToArray(iter) { if (typeof Symbol !== "undefined" && iter[Symbol.iterator] != null || iter["@@iterator"] != null) return Array.from(iter); }
+function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) return _arrayLikeToArray(arr); }
 function ownKeys(e, r) { var t = Object.keys(e); if (Object.getOwnPropertySymbols) { var o = Object.getOwnPropertySymbols(e); r && (o = o.filter(function (r) { return Object.getOwnPropertyDescriptor(e, r).enumerable; })), t.push.apply(t, o); } return t; }
 function _objectSpread(e) { for (var r = 1; r < arguments.length; r++) { var t = null != arguments[r] ? arguments[r] : {}; r % 2 ? ownKeys(Object(t), !0).forEach(function (r) { _defineProperty(e, r, t[r]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys(Object(t)).forEach(function (r) { Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r)); }); } return e; }
 function _defineProperty(obj, key, value) { key = _toPropertyKey(key); if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
@@ -1572,7 +1576,9 @@ var SingleTaskPage = function SingleTaskPage() {
                   background: "rgba(227,62,79,1)",
                   color: "#fff"
                 },
-                children: lodash__WEBPACK_IMPORTED_MODULE_0___default().map(task === null || task === void 0 ? void 0 : task.revisions, function (revision, index) {
+                children: lodash__WEBPACK_IMPORTED_MODULE_0___default().map(lodash__WEBPACK_IMPORTED_MODULE_0___default().reverse(_toConsumableArray(task === null || task === void 0 ? void 0 : task.revisions)),
+                // Clone and reverse the array
+                function (revision, index) {
                   return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_32__.jsx)(_components_RevisionText__WEBPACK_IMPORTED_MODULE_15__["default"], {
                     index: index + 1,
                     revision: revision
