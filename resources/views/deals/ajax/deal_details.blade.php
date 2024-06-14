@@ -790,6 +790,14 @@
                                         </a>
                                     </h2>
                                 </div>
+                            @elseif($salesDeal->sale_analysis_status == 'previous-won')
+                                <div class="text-center">
+                                    <h2 style="color:green;">Previous Won</h2>
+                                </div>
+                            @elseif($salesDeal->sale_analysis_status == 'previous-denied')
+                                <div class="text-center">
+                                    <h2 style="color:red;">Previous Lost</h2>
+                                </div>
                             @elseif ($salesDeal->sale_analysis_status == 'denied')
                                 <div class="text-center">
                                     <h2 style="color:red;">Denied</h2>
@@ -802,7 +810,7 @@
                                     <h2 style="color:rgb(62, 146, 214);">
                                         <a class="btn btn-info"
                                             href="{{ route('account.sale-risk-policies.risk-analysis', $salesDeal->id) }}">
-                                            Add Quesiton Answer
+                                            Complete Sales Risk Form
                                         </a>
                                     </h2>
                                 </div>
