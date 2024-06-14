@@ -1,0 +1,166 @@
+.platform_account_card_wrapper {
+  border-radius: 5px;
+  box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.20);
+  border: none;
+  position: relative;
+  overflow: hidden;
+  background-color: var(--primaryLightDarkBlue);
+}
+
+.platform_account_card_wrapper:hover {
+  box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.30);
+  transition: all 0.8s ease-in-out;
+}
+
+.platform_account_card_header {
+  background-color: var(--primaryBlue);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
+  position: relative;
+}
+
+.platform_account_card_header p {
+  color: var(--primaryLightText);
+  font-family: Poppins, sans-serif;
+  font-size: 22px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: normal;
+  padding: 15px 0;
+  margin-bottom: 0;
+}
+
+.platform_account_card_header button {
+  position: absolute;
+  right: 10px;
+  top: 10px;
+  background-color: var(--primaryLightText);
+  border: none;
+  color: var(--primaryBlue);
+  font-family: Poppins, sans-serif;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: normal;
+  padding: 6px 10px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.platform_account_card_table table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.platform_account_card_table table tbody td {
+  padding: 15px;
+  text-align: center;
+  color: var(--primaryDarkText);
+  border-bottom: 1px solid var(--borderColor);
+  border-right: 1px solid var(--borderColor);
+  font-family: Poppins, sans-serif;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+}
+
+.platform_account_card_table table tbody td:nth-child(1) {
+  width: 10%;
+  padding: 15px 20px;
+}
+
+.platform_account_card_table table tbody td:nth-child(2) {
+  width: 65%;
+  text-align: left;
+  text-wrap: nowrap;
+}
+
+.platform_account_card_table table tbody td:nth-child(3) {
+  width: 25%;
+  text-align: left;
+  text-wrap: nowrap;
+}
+
+.platform_account_card_table table tbody td:last-child {
+  border-right: none;
+}
+
+.platform_account_card_footer {
+  display: flex;
+  padding: 15px;
+  background-color: var(--primaryBlue);
+  border-bottom-left-radius: 5px;
+  border-bottom-right-radius: 5px;
+}
+
+.platform_account_card_budget_info {
+  display: flex;
+  align-items: flex-start;
+  color: var(--primaryLightText);
+  font-family: Poppins, sans-serif;
+  font-style: normal;
+  line-height: normal;
+  flex-direction: column;
+  border-right: 1px solid;
+  width: 64%;
+}
+
+.platform_account_card_budget_info p {
+  font-size: 14px;
+  font-weight: 400;
+  font-family: Poppins, sans-serif;
+  margin-bottom: 4px;
+}
+
+.platform_account_card_budget_info p span {
+  font-family: Poppins, sans-serif;
+  font-weight: 600;
+
+}
+
+.platform_account_card_budget_info h6 {
+  font-family: Poppins, sans-serif;
+  font-size: 18px;
+  font-weight: 400;
+  margin-bottom: 0;
+}
+
+.platform_account_card_budget_info h6 span {
+  font-family: Poppins, sans-serif;
+  font-weight: 600;
+}
+
+.platform_account_card_deadline {
+  color: var(--primaryLightText);
+  font-style: normal;
+  line-height: normal;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  width: 36%;
+}
+
+.platform_account_card_deadline p {
+  font-weight: 500;
+  font-size: 15px;
+  margin-bottom: 4px;
+  font-family: Poppins, sans-serif;
+}
+
+.platform_account_card_deadline h6 {
+  font-size: 14px;
+  font-weight: 400;
+  font-family: Poppins, sans-serif;
+  margin-bottom: 0;
+}
+
+.platform_account_card_deadline h6 span {
+  font-weight: 600;
+  font-size: 14px;
+  font-family: Poppins, sans-serif;
+}
+

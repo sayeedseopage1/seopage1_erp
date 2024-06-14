@@ -66,6 +66,18 @@ export const ModalContentContainer = styled.div`
             line-height: normal;
         }
     }
+
+
+    .view_price_Quotation_wrapper{
+        display: flex;
+        margin: 20px 0;
+        flex-wrap: wrap;
+        justify-content: center;
+        align-items: center;
+        gap: 20px;
+    }
+
+
 `;
 
 export const ContentWrapper = styled.div`

@@ -19,7 +19,6 @@ import DataTable from "../components/Table/DataTable";
 // Dummy Data
 import { PriceQuotationsDummyData } from "../constant";
 
-
 export const priceQuotationsState = {
     inputs: {
         cms: {},
@@ -35,9 +34,9 @@ export const priceQuotationsState = {
         client: {},
         deal: {},
         client_currency: {},
-        
         deadline: null,
         platform_account: {},
+        step: "view-price-quotation",
     },
     validation: {
         cms: false,
@@ -79,12 +78,26 @@ const PriceQuotations = () => {
         }
     }, [isLoading]);
 
-    // Handle Modal Open and Close Function with Action Function as Parameter (if needed)
+    /**
+     * Toggles the state of a modal and optionally executes an additional action.
+     *
+     * @param {Function} setModalOpenFunc - Function to set the modal open state.
+     * @param {boolean} isOpen - Boolean indicating whether the modal should be open (true) or closed (false).
+     * @param {Function} [action] - Optional function to execute after setting the modal state.
+     */
     const handleModal = (setModalOpenFunc, isOpen, action) => {
         setModalOpenFunc(isOpen);
         if (action) {
             action();
         }
+    };
+
+    const handleModalTitle = () => {
+        const titleList = {
+            "submit-price-quotation": "Get A Price Quotations",
+            "view-price-quotation": "View Price Quotations",
+        };
+        return titleList[priceQuotationsInputs.step];
     };
 
     return (
@@ -153,13 +166,17 @@ const PriceQuotations = () => {
             {/* Gat Price Quotations Modal */}
             {isPriceQuotationModalOpen && (
                 <PriceQuotationsGenerateModal
+                    modalTitle={handleModalTitle()}
                     isModalOpen={isPriceQuotationModalOpen}
-                    closeModal={() =>
-                        handleModal(setIsPriceQuotationModalOpen, false)
-                    }
-                    modalTitle="Get A Price Quotations"
-                    setPriceQuotationsInputs={setPriceQuotationsInputs}
                     priceQuotationsInputs={priceQuotationsInputs}
+                    setPriceQuotationsInputs={setPriceQuotationsInputs}
+                    closeModal={() =>
+                        handleModal(setIsPriceQuotationModalOpen, false, () => {
+                            setPriceQuotationsInputs(
+                                priceQuotationsState.inputs
+                            );
+                        })
+                    }
                 />
             )}
         </div>

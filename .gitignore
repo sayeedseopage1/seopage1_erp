@@ -11,8 +11,9 @@
 # public/js/app.js
 # public/js/vendor.js.map
 # public/js/vendor.js
-public/js/bundle-report.html
-public/js/report.html
+public/bundle-report.html
+public/report.html
+
 
 .phpunit.result.cache
 Homestead.json
@@ -37,6 +38,7 @@ storage/reviewed
 
 .scannerwork
 coverage
+wdyr.js
 
 __TODO__
 package-lock.json

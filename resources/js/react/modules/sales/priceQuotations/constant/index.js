@@ -361,3 +361,51 @@ export const AccountListDummyData = [
     is_active: false
   }
 ]
+
+
+export const QuotationDummyData = [
+  {
+    id: 1,
+    cms: "Wordpress",
+    category: "Setup Domain and Hosting",
+    primary_page: 2,
+    secondary_page: 3,
+    major_functionalities: "Yes(2 Hours)",
+    others_works: "7 Hours",
+    risk_factors: "Yes (10%)",
+    currency: "USD",
+    platform_account: "rajat07me",
+    estimated_budget: 219.29,
+    client_currency_amount: 300,
+    deadline: "fixed",
+    deadline_hours: 2
+  },
+  {
+    id:2,
+    cms: "Wordpress",
+    category: "Setup Domain and Hosting",
+    primary_page: 3,
+    secondary_page: 4,
+    major_functionalities: "Yes(5 Hours)",
+    others_works: "10 Hours",
+    risk_factors: "Yes (20%)",
+    currency: "USD",
+    platform_account: "ranjika08",
+    estimated_budget: 219.29,
+    client_currency_amount: 300,
+    deadline: "fixed",
+    deadline_hours: 5
+  }
+]
+
+
+export const QuotationTableLabel={
+  cms: "CMS",
+  category: "Category",
+  primary_page: "Primary Page",
+  secondary_page: "Secondary Page",
+  major_functionalities: "Any Major Functionalities needed?",
+  others_works: "How many hours of other works needed",
+  risk_factors: "Risk Factors involved",
+  currency: "Currency",
+}
