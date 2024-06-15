@@ -50,6 +50,7 @@ use App\Traits\LeadDashboardAdminView;
 use App\Traits\DevDashboardAdminView;
 use App\Traits\SalesDashboardAdminView;
 use DateTime;
+use Illuminate\Support\Facades\Validator;
 
 use function PHPUnit\Framework\isNull;
 
@@ -771,6 +772,36 @@ class DashboardController extends AccountBaseController
 
     public function developerDailytrackHoursLog(Request $request)
     {
+        $id = Auth::user()->id;
+        $devStopTimer = DeveloperStopTimer::where('user_id', $id)->whereDate('date', $request->date)->first();
+        if($devStopTimer != null)
+        {
+            $devDurations = json_decode($devStopTimer->durations, true);
+            $start = [];
+            $end = [];
+
+            foreach ($devDurations as $value) {
+                $start = $value['start'];
+                $end = $value['end'];
+            }
+
+            $inputDurations = json_decode($request->durations, true);
+            $request_start = [];
+            $request_end = [];
+
+            foreach ($inputDurations as $value) {
+                $request_start = $value['start'];
+                $request_end = $value['end'];
+            }
+
+            if (Carbon::parse($request_start)->between($start, $end) || Carbon::parse($request_end)->between($start, $end)) {
+                return response()->json([
+                    'status' => 422,
+                    'message' => 'Already in time frame.'
+                ]);
+            }
+        }
+
         if($request->submission_type == 'continue')
         {
             if($request->reason_for_less_tracked_hours_a_day_task == "During transition from one task to another, I had to wait for a while.")
