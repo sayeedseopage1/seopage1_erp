@@ -77,8 +77,8 @@ const AcknowledgementReminderModal = ({
                         Swal.fire({
                             position: "center",
                             icon: "error",
-                            title: "Schedule Conflict Detected !",
-                            text: `${res.data.message}`,
+                            title: `${res.data.title}`,
+                            text: `${res.data.start} ${res.data.end}/n${res.data.message}`,
                             showConfirmButton: true,
                         });
 
