@@ -1,0 +1,315 @@
+.view_price_quotations_invoice_wrapper {
+  border-radius: 35px;
+  box-shadow: 0px 0px 33px 0px rgba(0, 0, 0, 0.05);
+  padding: 25px;
+  background-color: var(--primaryLightText);
+}
+
+.view_price_quotations_invoice_header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 40px;
+}
+
+.view_price_quotations_invoice_header h1 {
+  font-family: Poppins, sans-serif;
+  font-size: 28px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+  color: var(--primaryDarkText);
+  padding: 10px;
+  border-left: 4px solid var(--primaryBlue);
+  min-width: 308px;
+  margin-bottom: 0;
+}
+
+
+
+.view_price_quotations_invoice_provider {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 40px;
+}
+
+.view_price_quotations_invoice_provider_left {
+  display: flex;
+  flex-direction: column;
+}
+
+.view_price_quotations_invoice_provider_left h6 {
+  padding: 10px;
+  background-color: var(--primaryDarkBlue);
+  color: var(--primaryBlue);
+  font-family: Poppins, sans-serif;
+  font-size: 20px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: normal;
+  text-transform: uppercase;
+}
+
+.view_price_quotations_invoice_provider_left div {
+  display: flex;
+  flex-direction: column;
+  padding-left: 10px;
+}
+
+.view_price_quotations_invoice_provider_left div p {
+  color: var(--primaryDarkText);
+  font-family: Poppins, sans-serif;
+  font-size: 24px;
+  font-style: normal;
+  font-weight: 600;
+  text-wrap: nowrap;
+  line-height: normal;
+}
+
+.view_price_quotations_invoice_provider_left div p span {
+  font-family: Poppins, sans-serif;
+  font-size: 18px;
+  font-weight: 500;
+}
+
+.view_price_quotations_invoice_provider_left div p span a {
+  color: var(--primaryBlue);
+  text-decoration: none;
+  font-weight: 400px;
+}
+
+.view_price_quotations_invoice_provider_left div p span a:hover {
+  color: var(--primaryDarkBlue);
+  text-decoration: underline;
+}
+
+.view_price_quotations_invoice_provider_right {
+  display: flex;
+  flex-direction: column;
+  min-width: 308px;
+}
+
+.view_price_quotations_invoice_provider_right table {
+  background-color: var(--primaryDarkBlue);
+}
+
+.view_price_quotations_invoice_provider_right table tr td {
+  padding: 10px;
+  font-family: Poppins, sans-serif;
+  font-size: 18px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+  border-right: 1px solid var(--borderColor);
+  border-bottom: 1px solid var(--borderColor);
+  text-wrap: nowrap;
+  width: 34%;
+}
+
+.view_price_quotations_invoice_provider_right table tr td:last-child {
+  padding: 10px;
+  font-family: Poppins, sans-serif;
+  font-size: 16px;
+  border-bottom: 1px solid var(--borderColor);
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+  text-wrap: nowrap;
+  width: 66%;
+}
+
+.view_price_quotations_invoice_provider_right table tr:last-child td {
+  border-bottom: none;
+}
+
+.view_price_quotations_invoice_provider_right table tr td:last-child {
+  border-right: 0;
+}
+
+.view_price_quotations_invoice_provider_right_deadline {
+  display: flex;
+  flex-direction: column;
+  min-width: 308px;
+}
+
+.view_price_quotations_invoice_provider_right_deadline h6 {
+  padding: 10px;
+  background-color: var(--primaryExtraLightDanger);
+  color: var(--primaryDanger);
+  font-family: Poppins, sans-serif;
+  font-size: 18px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: normal;
+  text-transform: uppercase;
+}
+
+.view_price_quotations_invoice_provider_right_deadline p {
+  padding-left: 10px;
+  font-family: Poppins, sans-serif;
+  font-size: 18px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+}
+
+.view_price_quotations_invoice_table_wrapper {
+  display: flex;
+  flex-direction: column;
+}
+
+.view_price_quotations_invoice_table {
+  min-width: 100%;
+  border-collapse: collapse;
+}
+
+.view_price_quotations_invoice_table thead tr {
+  background-color: var(--primaryBlue);
+  color: var(--primaryLightText);
+}
+
+.view_price_quotations_invoice_table thead th {
+  min-width: 150px;
+  max-width: 150px;
+  width: 150px;
+  background-color: var(--primaryBlue);
+  border-right: 1px solid var(--primaryLightDarkBlue);
+  color: var(--primaryLightText);
+  font-family: Poppins, sans-serif;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+  padding: 20px;
+  text-wrap: nowrap;
+  text-align: center;
+  padding: 15px;
+  position: relative;
+}
+
+
+
+.view_price_quotations_invoice_table thead th:first-child {
+  max-width: 80px;
+  width: 80px;
+  min-width: 80px;
+}
+
+.view_price_quotations_invoice_table thead th:last-child {
+  max-width: 120px;
+  width: 120px;
+  min-width: 120px;
+}
+
+.view_price_quotations_invoice_table thead th:nth-child(3) {
+  max-width: 115px;
+  width: 115px;
+  min-width: 115px;
+  text-wrap: wrap;
+}
+
+
+
+
+.view_price_quotations_invoice_table thead th:last-child {
+  border-right: none;
+}
+
+
+.view_price_quotations_invoice_table tbody tr td {
+  border-bottom: 1px solid var(--borderColor);
+  border-right: 1px solid var(--borderColor);
+  color: var(--primaryDarkText);
+  padding: 15px;
+  font-family: Poppins, sans-serif;
+  font-size: 18px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+  text-wrap: nowrap;
+  text-align: center;
+}
+
+.view_price_quotations_invoice_table tbody td:nth-child(3) {
+  max-width: 100px;
+  width: 100px;
+  min-width: 100px;
+  text-wrap: wrap;
+}
+
+.view_price_quotations_invoice_table tbody td:nth-child(2) {
+  text-align: left;
+}
+
+.view_price_quotations_invoice_table tbody td:last-child {
+  border-right: none;
+}
+
+.view_price_quotations_invoice_table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.view_price_quotations_invoice_footer {
+  display: flex;
+  flex-direction: column;
+}
+
+.view_price_quotations_invoice_footer_top {
+  display: flex;
+  align-items: center;
+  background-color: var(--primaryLightDarkBlue);
+  padding: 15px 0;
+  margin-bottom: 40px;
+}
+
+.view_price_quotations_invoice_footer_top>p {
+  width: 50%;
+  color: var(--primaryDarkText);
+  font-family: Poppins, sans-serif;
+  font-size: 18px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+  margin-bottom: 0;
+  text-align: center;
+  border-right: 3px solid var(--primaryDarkBlue);
+}
+
+.view_price_quotations_invoice_footer_top p:last-child {
+  border-right: none;
+}
+
+
+.view_price_quotations_invoice_footer_top p span {
+  color: var(--primaryDarkText);
+  font-family: Poppins, sans-serif;
+  font-size: 18px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: normal;
+}
+
+
+.view_price_quotations_invoice_footer_bottom {
+  display: flex;
+  flex-direction: column;
+}
+
+.view_price_quotations_invoice_footer_bottom p {
+  color: var(--primaryDarkText);
+  font-size: 18px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+  text-align: center;
+}
+
+.view_price_quotations_invoice_footer_bottom span {
+  color: var(--primaryDarkText);
+  font-family: Poppins, sans-serif;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+  text-align: center;
+}

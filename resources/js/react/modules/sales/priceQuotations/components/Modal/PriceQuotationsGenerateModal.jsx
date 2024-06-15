@@ -1,14 +1,17 @@
-import React, { useContext, useEffect } from "react";
+import React, { useEffect } from "react";
 import PropTypes from "prop-types";
+import { pdf } from "@react-pdf/renderer";
+
 import { toast } from "react-toastify";
 
 import _ from "lodash";
 
 // Components - UI - Custom
+import Button from "../Shared/Button";
+import DownloadPdf from "../UI/Icons/DownloadPdf";
+import Switch from "../../../../../global/Switch";
 import CustomModal from "../UI/CustomModal/CustomModal";
 import CustomModalHeader from "../UI/CustomModalHeader/CustomModalHeader";
-import Button from "../Shared/Button";
-import Switch from "../../../../../global/Switch";
 
 // Components - Shared - Styled Components
 import { ContentWrapper, ModalContentContainer } from "../UI/StyledComponents";
@@ -25,7 +28,16 @@ import {
 // Modal Content
 import SubmitPriceQuotation from "./ModalContent/SubmitPriceQuotation";
 import ViewPriceQuotation from "./ModalContent/ViewPriceQuotation";
-import { QuotationDummyData } from "../../constant";
+import ViewPriceQuotationsInvoice from "./ModalContent/ViewPriceQuotationsInvoice";
+
+// Dummy Data
+import {
+    PriceQuotationsInvoiceDummyData,
+    QuotationDummyData,
+} from "../../constant";
+import ExportInvoicePDF from "../export/InvoicePdf";
+import ViewPriceQuotationsInvoicePDF from "./ModalContent/ViewPriceQuotationsInvoicePDF";
+import { usePDF } from "react-to-pdf";
 
 const PriceQuotationsGenerateModal = ({
     isModalOpen,
@@ -34,6 +46,7 @@ const PriceQuotationsGenerateModal = ({
     priceQuotationsInputs,
     setPriceQuotationsInputs,
 }) => {
+    const { toPDF, targetRef } = usePDF({filename: 'page.pdf'});
     const [isLoading, setIsLoading] = React.useState(false);
     const [selectedPriceQuotation, setSelectedPriceQuotation] =
         React.useState(null);
@@ -183,7 +196,16 @@ const PriceQuotationsGenerateModal = ({
     };
 
     const handleViewPriceQuotation = async () => {
-        console.log(selectedPriceQuotation)
+        setPriceQuotationsInputs((prev) => {
+            return {
+                ...prev,
+                step: "view-price-quotation-invoice",
+            };
+        });
+    };
+
+    const handleDownloadPDF = async () => {
+        toPDF()
     };
 
     useEffect(() => {
@@ -230,6 +252,11 @@ const PriceQuotationsGenerateModal = ({
                 buttonLabel: "Check Quotation",
                 buttonAction: handleViewPriceQuotation,
             },
+            "view-price-quotation-invoice": {
+                loadingTitle: "Downloading...",
+                buttonLabel: <DownloadPdf />,
+                buttonAction: handleDownloadPDF,
+            },
         };
         return submitQuotation[priceQuotationsInputs.step][type];
     };
@@ -241,11 +268,12 @@ const PriceQuotationsGenerateModal = ({
                 return "1100px";
             case "view-price-quotation":
                 return "1300px";
+            case "view-price-quotation-invoice":
+                return "1300px";
         }
     };
 
-
-    console.log(selectedPriceQuotation)
+    console.log(selectedPriceQuotation);
     return (
         <CustomModal
             isModalOpen={isModalOpen}
@@ -292,8 +320,21 @@ const PriceQuotationsGenerateModal = ({
                     >
                         <ViewPriceQuotation
                             quotationData={QuotationDummyData}
-                            setSelectedPriceQuotation={setSelectedPriceQuotation}
+                            setSelectedPriceQuotation={
+                                setSelectedPriceQuotation
+                            }
                             selectedPriceQuotation={selectedPriceQuotation}
+                        />
+                    </Switch.Case>
+                    <Switch.Case
+                        condition={
+                            priceQuotationsInputs.step ===
+                            "view-price-quotation-invoice"
+                        }
+                    >
+                        <ViewPriceQuotationsInvoice
+                            invoiceData={PriceQuotationsInvoiceDummyData}
+                            targetRef={targetRef}
                         />
                     </Switch.Case>
                 </Switch>

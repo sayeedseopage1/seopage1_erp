@@ -10,8 +10,10 @@
   --primarySuccess: #70CA62;
   --primaryDanger: #FF6666;
   --primaryLightDanger: #fd6b6b;
+  --primaryExtraLightDanger: #FBEEF0;
   --lightgray: #8F8F8F;
-  --primaryGrayText: #837D7D
+  --primaryGrayText: #837D7D,
+  --primaryFont: 'Poppins', sans-serif;
 }
 
 /* Table Style */

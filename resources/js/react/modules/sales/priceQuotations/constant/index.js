@@ -398,6 +398,50 @@ export const QuotationDummyData = [
   }
 ]
 
+export const PriceQuotationsInvoiceDummyData = {
+  client: {
+    name: "Joseph Swami",
+    user_id: "Joseph S.",
+    message_thread: "http:frelancer.com/messages/josep..."
+  },
+  deadline: "20 July 2021",
+  total_hours: 90,
+  items: [
+    {
+      sl: 1,
+      items: "Number of primary pages",
+      quantity: 3,
+      descriptions: "Approximate working hours needed",
+      total_hours: "30"
+    },
+    {
+      sl: 2,
+      items: "Number of secondary pages",
+      quantity: 5,
+      descriptions: "Approximate working hours needed",
+      total_hours: "20"
+    },
+    {
+      sl: 3,
+      items: "Number of functional work",
+      quantity: 1,
+      descriptions: "Approximate working hours needed",
+      total_hours: "20"
+    },
+    {
+      sl: 4,
+      items: "Developers",
+      quantity: "This will be Other works",
+      descriptions: "Approximate working hours needed",
+      total_hours: "20"
+    }
+  ]
+
+}
+
+
+
+
 
 export const QuotationTableLabel={
   cms: "CMS",
@@ -409,3 +453,5 @@ export const QuotationTableLabel={
   risk_factors: "Risk Factors involved",
   currency: "Currency",
 }
+
+

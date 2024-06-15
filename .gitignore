@@ -11,8 +11,8 @@
 # public/js/app.js
 # public/js/vendor.js.map
 # public/js/vendor.js
-public/bundle-report.html
-public/report.html
+/public/bundle-report.html
+/public/report.html
 
 
 .phpunit.result.cache
@@ -38,7 +38,6 @@ storage/reviewed
 
 .scannerwork
 coverage
-wdyr.js
 
 __TODO__
 package-lock.json

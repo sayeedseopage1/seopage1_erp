@@ -18,6 +18,7 @@ import DataTable from "../components/Table/DataTable";
 
 // Dummy Data
 import { PriceQuotationsDummyData } from "../constant";
+import useWhyDidYouRender from "../../../../hooks/useWhyDidYouRender";
 
 export const priceQuotationsState = {
     inputs: {
@@ -36,7 +37,7 @@ export const priceQuotationsState = {
         client_currency: {},
         deadline: null,
         platform_account: {},
-        step: "view-price-quotation",
+        step: "view-price-quotation-invoice",
     },
     validation: {
         cms: false,
@@ -56,6 +57,8 @@ export const priceQuotationsState = {
 };
 
 const PriceQuotations = () => {
+    useWhyDidYouRender("PriceQuotations");
+
     const [priceQuotationsInputs, setPriceQuotationsInputs] = React.useState(
         priceQuotationsState.inputs
     );
@@ -96,6 +99,8 @@ const PriceQuotations = () => {
         const titleList = {
             "submit-price-quotation": "Get A Price Quotations",
             "view-price-quotation": "View Price Quotations",
+            "view-price-quotation-invoice":
+                "View & Download Price Quotations Invoice",
         };
         return titleList[priceQuotationsInputs.step];
     };

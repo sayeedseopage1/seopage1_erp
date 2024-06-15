@@ -57,7 +57,9 @@ const PlatformAccountCard = ({
     return (
         <button
             key={quotationData?.id}
-            className="platform_account_card_wrapper"
+            className={`platform_account_card_wrapper ${
+                selectedPriceQuotation?.id === quotationData?.id ? "active" : ""
+            }`}
             onClick={(e) =>
                 handlePlatformAccountCard("selectedPriceQuotation", e)
             }
@@ -116,12 +118,12 @@ const PlatformAccountCard = ({
             </div>
             <div className="platform_account_card_footer">
                 <div className="platform_account_card_budget_info">
-                    <p>
+                    <h6>
                         Estimated Budget:{" "}
                         <span>
                             $ {quotationData?.estimated_budget} USD (Default)
                         </span>
-                    </p>
+                    </h6>
                     <h6>
                         Amount:{" "}
                         <span>

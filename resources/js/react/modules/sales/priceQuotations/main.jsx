@@ -1,11 +1,11 @@
-import * as React from "react";
+import React from "react";
 import ReactDOM from "react-dom/client";
 import { DndProvider, useDragLayer } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import { BrowserRouter, Routes, Route, Outlet } from "react-router-dom";
 import { Provider } from "react-redux";
 
-// style
+// Style
 import "./priceQuotation.css";
 
 // Redux store
@@ -17,9 +17,6 @@ import Toaster from "../../../global/Toaster";
 // Pages
 import PriceQuotations from "./pages/PriceQuotations";
 import AccountLists from "./pages/AccountLists";
-
-// Components
-import AntdConfigProvider from "./components/lib/AntdConfigProvider";
 
 // Context
 import PriceQuotationsProvider from "./context/PriceQuotationsProvider";
@@ -35,7 +32,7 @@ const Content = () => {
     );
 };
 
-// custom drag layer
+// Custom drag layer
 const DragLayer = () => {
     const { item, itemType, currentOffset } = useDragLayer((monitor) => ({
         item: monitor.getItem(),
@@ -69,57 +66,59 @@ const DragLayer = () => {
     );
 };
 
-// Render the content
-const container = document.getElementById("priceQuotationContentContainer");
-if (container) {
-    ReactDOM.createRoot(container).render(
-        <React.StrictMode>
-            <AntdConfigProvider>
-                <Provider store={store}>
-                    <PriceQuotationsProvider>
-                        <DndProvider backend={HTML5Backend}>
-                            <BrowserRouter basename="/account/price-quotations">
-                                <Routes>
-                                    <Route path="/" element={<Content />}>
-                                        <Route
-                                            index
-                                            element={<PriceQuotations />}
-                                        />
-                                    </Route>
-                                </Routes>
-                            </BrowserRouter>
-                        </DndProvider>
-                    </PriceQuotationsProvider>
-                </Provider>
-            </AntdConfigProvider>
-        </React.StrictMode>
-    );
-}
+// Define your routes data
+const routes = [
+    {
+        id: 1,
+        containerId: "priceQuotationContentContainer",
+        baseUrl: "/account/price-quotations",
+        contextProvider: PriceQuotationsProvider,
+        pageComponent: <PriceQuotations />,
+    },
+    {
+        id: 2,
+        containerId: "platformAccountContainer",
+        baseUrl: "/account/platform-accounts",
+        contextProvider: PriceQuotationsProvider,
+        pageComponent: <AccountLists />,
+    },
+];
 
-const accountListsContainer = document.getElementById(
-    "platformAccountContainer"
-);
-if (accountListsContainer) {
-    ReactDOM.createRoot(accountListsContainer).render(
-        <React.StrictMode>
-            <AntdConfigProvider>
-                <Provider store={store}>
-                    <PriceQuotationsProvider>
-                        <DndProvider backend={HTML5Backend}>
-                            <BrowserRouter basename="/account/platform-accounts">
-                                <Routes>
-                                    <Route path="/" element={<Content />}>
+
+// Render your routes
+const renderRoutes = () => {
+    return routes.map((route) => {
+        const container = document.getElementById(route.containerId);
+        if (container) {
+            ReactDOM.createRoot(container).render(
+                <React.StrictMode key={route.id}>
+                    <Provider store={store}>
+                        <route.contextProvider>
+                            <DndProvider backend={HTML5Backend}>
+                                <BrowserRouter basename={route.baseUrl}>
+                                    <Routes>
                                         <Route
-                                            index
-                                            element={<AccountLists />}
-                                        />
-                                    </Route>
-                                </Routes>
-                            </BrowserRouter>
-                        </DndProvider>
-                    </PriceQuotationsProvider>
-                </Provider>
-            </AntdConfigProvider>
-        </React.StrictMode>
-    );
-}
+                                            path="/"
+                                            element={<Content />}
+                                            key={route.id}
+                                        >
+                                            <Route
+                                                path="/"
+                                                element={route.pageComponent}
+                                                key={route.id}
+                                            />
+                                        </Route>
+                                    </Routes>
+                                </BrowserRouter>
+                            </DndProvider>
+                        </route.contextProvider>
+                    </Provider>
+                </React.StrictMode>
+            );
+        }
+        return null;
+    });
+};
+
+// Call the renderRoutes function
+renderRoutes();
