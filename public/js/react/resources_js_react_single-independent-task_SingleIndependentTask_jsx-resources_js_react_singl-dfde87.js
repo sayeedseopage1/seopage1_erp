@@ -1838,7 +1838,7 @@ var SingleIndependentTask = function SingleIndependentTask() {
                     background: "rgba(227,62,79,1)",
                     color: "#fff"
                   },
-                  children: lodash__WEBPACK_IMPORTED_MODULE_1___default().map(task === null || task === void 0 ? void 0 : task.revisions, function (revision, index) {
+                  children: lodash__WEBPACK_IMPORTED_MODULE_1___default().map(lodash__WEBPACK_IMPORTED_MODULE_1___default().reverse(_toConsumableArray(task === null || task === void 0 ? void 0 : task.revisions)), function (revision, index) {
                     return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_28__.jsx)(_components_RevisionText__WEBPACK_IMPORTED_MODULE_14__["default"], {
                       index: index + 1,
                       date: dayjs__WEBPACK_IMPORTED_MODULE_0___default()(revision.createdAt).format("MMM DD, YYYY"),
