@@ -187,13 +187,8 @@
                                         data-target="#number_of_task_received{{ $number_of_tasks_received_lead }}">
                                         {{ $number_of_tasks_received_lead }}
                                     </a>
-                                    {{-- <span class="f-12 font-weight-normal text-lightest">
-										   @lang('Received tasks this cycle')
-										   <i class="fa fa-question-circle" aria-hidden="true" data-toggle="modal" data-target="#"></i>
-
-									   </span> --}}
                                 </p>
-                                {{-- @include('dashboard.ajax.leaddeveloper.modals.number_of_task_received') --}}
+                                @include('dashboard.ajax.leaddeveloper.modals.number_of_task_received')
 
                             </div>
                         </div>
@@ -216,13 +211,8 @@
                                         {{ $submit_number_of_tasks_in_this_month_lead }}
 
                                     </a>
-                                    {{-- <span class="f-12 font-weight-normal text-lightest">
-										   @lang('Primary pages')
-										   <i class="fa fa-question-circle" aria-hidden="true" data-toggle="modal" data-target="#"></i>
-
-									   </span> --}}
                                 </p>
-                                {{-- @include('dashboard.ajax.leaddeveloper.modals.number_of_task_submitted') --}}
+                                @include('dashboard.ajax.leaddeveloper.modals.number_of_task_submitted')
 
                             </div>
                         </div>
@@ -239,12 +229,12 @@
                                 Project Manager</h5>
                             <div class="d-flex flex-wrap">
                                 <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
-                                    <a href="#" data-toggle="modal" data-target="#">
+                                    <a href="#" data-toggle="modal"
+                                        data-target="#first_attempt_approve_task_in_this_month_lead{{ count($first_attempt_approve_task_in_this_month_lead_data) }}">
                                         {{ $first_attempt_approve_task_in_this_month_lead }}
                                     </a>
-
                                 </p>
-
+                                @include('dashboard.ajax.leaddeveloper.modals.first_attempt_approve_task_in_this_month_lead')
                             </div>
                         </div>
                         <div class="d-block">
@@ -286,14 +276,12 @@
                             <div class="d-flex flex-wrap">
 
                                 <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
-                                    <a href="#" data-toggle="modal" data-target="#">
-
+                                    <a href="#" data-toggle="modal"
+                                    data-target="#average_submission_aproval_in_this_month_lead{{ count($average_submission_aproval_in_this_month_lead_data) }}">
                                         {{ round($average_submission_aproval_in_this_month_lead, 2) }}
-
                                     </a>
-
                                 </p>
-
+                                @include('dashboard.ajax.leaddeveloper.modals.average_submission_aproval_in_this_month_lead')
                             </div>
                         </div>
                         <div class="d-block">
@@ -339,7 +327,7 @@
 
                                 <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
                                     <a href="#" data-toggle="modal"
-                                        data-target="#percentage_of_task_with_revision{{ count($revision_data_lead) }}">
+                                        data-target="#percentage_of_task_with_revision{{ $lead_task_with_revision }}">
 
                                         {{ round($percentage_of_tasks_with_revision_lead, 2) }}%
 
@@ -603,7 +591,7 @@
 
                                 <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
                                     <a href="#" data-toggle="modal" data-target="#">
-                                        {{$number_of_approval}}
+                                        {{ $number_of_approval }}
                                     </a>
                                 </p>
                             </div>
@@ -624,7 +612,7 @@
 
                                 <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
                                     <a href="#" data-toggle="modal" data-target="#">
-                                        {{$auto_approved_tasks}}
+                                        {{ $auto_approved_tasks }}
                                     </a>
                                 </p>
                             </div>
@@ -642,7 +630,8 @@
                             <div class="d-flex flex-wrap">
 
                                 <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
-                                    <a href="#" data-toggle="modal" data-target="#">{{$manually_approved_tasks}}</a>
+                                    <a href="#" data-toggle="modal"
+                                        data-target="#">{{ $manually_approved_tasks }}</a>
                                 </p>
                             </div>
                         </div>
@@ -733,7 +722,7 @@
                             <div class="d-flex flex-wrap">
 
                                 <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
-                                        {{ round($disputes_lead_developer_involved, 2) }}
+                                    {{ round($disputes_lead_developer_involved, 2) }}
                                 </p>
 
                             </div>

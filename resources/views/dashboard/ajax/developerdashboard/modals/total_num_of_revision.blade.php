@@ -1,5 +1,5 @@
 <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
-<div id="total_no_of_revision{{ count($revision_task_data) }}" class="modal fade" tabindex="-1"
+<div id="total_no_of_revision" class="modal fade" tabindex="-1"
     aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-xl">
         <div class="modal-content">

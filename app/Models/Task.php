@@ -2,19 +2,20 @@
 
 namespace App\Models;
 
+use App\Models\Subtask;
+use App\Models\ProjectTimeLog;
+use App\Models\TaskSubmission;
+use App\Models\TaskBoardColumn;
 use App\Observers\TaskObserver;
+use App\Models\ProjectMilestone;
 use App\Traits\CustomFieldsTrait;
+use App\Models\Scopes\OrderByDesc;
+use Illuminate\Notifications\Notifiable;
+use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
-use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\Relations\HasOne;
-use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Notifications\Notifiable;
-use App\Models\Subtask;
-use App\Models\ProjectMilestone;
-use App\Models\TaskBoardColumn;
-use App\Models\Scopes\OrderByDesc;
-use App\Models\TaskSubmission;
 
 /**
  * App\Models\Task
@@ -525,6 +526,14 @@ class Task extends BaseModel
     public function firstTaskSubmission()
     {
         return $this->hasOne(TaskSubmission::class)->oldestOfMany();
+    }
+    public function firstSubTask()
+    {
+        return $this->hasOne(SubTask::class, 'task_id')->oldestOfMany();
+    }
+    public function firstTimeLog()
+    {
+        return $this->hasOne(ProjectTimeLog::class, 'task_id')->oldestOfMany();
     }
 
     public function taskUser()

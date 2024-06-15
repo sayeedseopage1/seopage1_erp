@@ -1,32 +1,33 @@
 <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
-<div id="percentage_of_task_with_revision{{ $lead_task_with_revision }}" class="modal fade" tabindex="-1"
-    aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div id="average_submission_aproval_in_this_month_lead{{ count($average_submission_aproval_in_this_month_lead_data) }}" class="modal fade"
+    tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-xl">
         <div class="modal-content">
             <div class="modal-header">
                 <div class="modal-title">
-                    <h4>Total number of received tasks: {{ $lead_task }}</h4>
-                    <h4>Number Of Tasks With Revisions: {{ $lead_task_with_revision }}</h4>
-                    <h4>Percentage of tasks with revisions: {{ round($percentage_of_tasks_with_revision_lead, 2) }}%
-                    </h4>
+                    {{-- <h4>Submitted Tasks: {{ $first_attempt_approve_task_in_this_month_lead }}</h4> --}}
+
                 </div>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
             <div class="modal-body">
-                <table id="percentage_of_task_with_revision_table" class="display" style="width:100%">
+                <table id="first_attempt_approve_of_task_submitted_lead" class="display" style="width:100%">
                     <thead>
                         <tr>
                             <th scope="col">Sl No</th>
                             <th scope="col">Task Name</th>
                             <th scope="col">Client Name</th>
                             <th scope="col">Assign date</th>
-                            <th scope="col">Number of revisions</th>
+                            <th scope="col">Deadline</th>
+                            <th scope="col">Submission On</th>
+                            <th scope="col">Status</th>
+                            <th scope="col">Revision Count</th>
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach ($lead_task_with_revision_data as $row)
+                        @foreach ($average_submission_aproval_in_this_month_lead_data as $row)
                             <tr>
                                 <td>{{ $loop->index + 1 }}</td>
                                 <td>
@@ -42,7 +43,16 @@
                                     {{ $row->created_at }}
                                 </td>
                                 <td>
-                                    {{ $row->revisions->count() ?? 0 }}
+                                    {{ $row->due_date }}
+                                </td>
+                                <td>
+                                    {{ $row?->latestTaskSubmission?->created_at }}
+                                </td>
+                                <td>
+                                    {{ $row?->status }}
+                                </td>
+                                <td>
+                                    {{ $row?->revisions?->count() ?? 0 }}
                                 </td>
                             </tr>
                         @endforeach
@@ -58,7 +68,7 @@
 
 <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
 <script>
-    new DataTable('#percentage_of_task_with_revision_table', {
+    new DataTable('#first_attempt_approve_of_task_submitted_lead', {
         "dom": 't<"d-flex"l<"ml-auto"ip>><"clear">',
     });
 </script>

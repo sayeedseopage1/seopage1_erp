@@ -82,89 +82,15 @@ trait LeadDashboard
 
             $this->username_lead = DB::table('users')->where('id', $devId)->value('name');
 
-            $this->number_of_tasks_received_lead = DB::table('tasks')
-                ->join('task_users', 'tasks.id', '=', 'task_users.task_id')
-                ->where('tasks.created_at', '>=', $startDate)
-                ->where('tasks.created_at', '<', $endDate)
-                ->where('task_users.user_id', $devId)
-                ->count();
-            $this->number_of_tasks_received_lead_data = DB::table('tasks')
-                ->select(
-                    'tasks.id',
-                    'tasks.heading',
-                    'client.id as clientId',
-                    'client.name as clientName',
-                    'tasks.created_at as assign_date',
-                    'task_submissions.created_at as submission_date',
-                    'tasks.due_date',
-                    'tasks.client_name as client_name',
-                    'cl.id as cl_id',
-                    'cl.name as cl_name',
-                    'tasks.board_column_id',
-                    'taskboard_columns.column_name as column_name',
-                    'taskboard_columns.label_color'
-                    //DB::raw('(SELECT COUNT(task_revisions.id) FROM task_revisions WHERE projects.id = project_time_logs.project_id AND employee.id = project_time_logs.user_id AND DATE(project_time_logs.start_time) >= "'.$startDate.'" AND DATE(project_time_logs.end_time) <= "'.$endDate.'") as number_of_session'),
-                )
-                ->join('task_users', 'tasks.id', '=', 'task_users.task_id')
-                ->join('taskboard_columns', 'taskboard_columns.id', '=', 'tasks.board_column_id')
-                ->leftJoin('projects', 'projects.id', 'tasks.project_id')
-                ->leftJoin('users as client', 'client.id', 'projects.client_id')
-                ->leftJoin('users as cl', 'cl.id', 'tasks.client_id')
-                ->leftJoin('task_submissions', 'task_submissions.task_id', 'tasks.id')
-                ->where('tasks.created_at', '>=', $startDate)
-                ->where('tasks.created_at', '<', $endDate)
-                ->where('task_users.user_id', $devId)
-                ->groupBy('tasks.id')
-                ->get();
-            foreach ($this->number_of_tasks_received_lead_data as $row) {
-                $row->revision_count = TaskRevision::where('task_id', $row->id)->where('final_responsible_person', '!=', null)->count();
-            }
+            [
+                $this->number_of_tasks_received_lead,
+                $this->number_of_tasks_received_lead_data
+            ] = $this->leadNumberOfTasksReceived(startDate: $startDate, endDate: $endDate, devId: $devId);
 
-            $this->submit_number_of_tasks_in_this_month_lead = DB::table('task_submissions')
-                ->join('tasks', 'task_submissions.task_id', '=', 'tasks.id')
-                ->where('task_submissions.created_at', '>=', $startDate)
-                ->where('task_submissions.created_at', '<', $endDate)
-                ->where('task_submissions.user_id', $devId)
-                //  ->where('task_submissions.submission_no', '=', 1)
-                ->whereNotIn('tasks.board_column_id', [1, 2, 3])
-                ->distinct('task_submissions.created_at')
-                ->distinct('tasks.id')
-                ->count();
-            $this->submit_number_of_tasks_in_this_month_lead_data = DB::table('task_submissions')
-                ->select(
-                    'tasks.id',
-                    'tasks.heading',
-                    'client.id as clientId',
-                    'client.name as clientName',
-                    'tasks.created_at as assign_date',
-                    'task_submissions.created_at as submission_date',
-                    'tasks.due_date',
-                    'tasks.client_name as client_name',
-                    'cl.id as cl_id',
-                    'cl.name as cl_name',
-                    'tasks.board_column_id',
-                    'taskboard_columns.column_name as column_name',
-                    'taskboard_columns.label_color'
-                    //DB::raw('(SELECT COUNT(task_revisions.id) FROM task_revisions WHERE projects.id = project_time_logs.project_id AND employee.id = project_time_logs.user_id AND DATE(project_time_logs.start_time) >= "'.$startDate.'" AND DATE(project_time_logs.end_time) <= "'.$endDate.'") as number_of_session'),
-                )
-                ->join('tasks', 'task_submissions.task_id', '=', 'tasks.id')
-                ->join('task_users', 'tasks.id', '=', 'task_users.task_id')
-                ->join('taskboard_columns', 'taskboard_columns.id', '=', 'tasks.board_column_id')
-                ->leftJoin('projects', 'projects.id', 'tasks.project_id')
-                ->leftJoin('users as client', 'client.id', 'projects.client_id')
-                ->leftJoin('users as cl', 'cl.id', 'tasks.client_id')
-                ->where('task_submissions.created_at', '>=', $startDate)
-                ->where('task_submissions.created_at', '<', $endDate)
-                ->where('task_submissions.user_id', $devId)
-                ->where('task_submissions.submission_no', '=', 1)
-                ->distinct('task_submissions.created_at')
-                ->distinct('tasks.id')
-                ->groupBy('tasks.id')
-                ->get();
-            foreach ($this->submit_number_of_tasks_in_this_month_lead_data as $row) {
-                $row->revision_count = TaskRevision::where('task_id', $row->id)->where('final_responsible_person', '!=', null)->count();
-            }
-
+            [
+                $this->submit_number_of_tasks_in_this_month_lead,
+                $this->submit_number_of_tasks_in_this_month_lead_data
+            ] = $this->leadNumberOfSubmittedTasks($startDate, $endDate, $devId);
 
             //-----------------------------number of tasks approved in first attempt(in cycle) Client-----------------------//
 
@@ -200,81 +126,19 @@ trait LeadDashboard
 
             //-----------------------------number of tasks approved in first attempt(in cycle) PM-----------------------//
 
-            $number_of_tasks_approved = DB::table('tasks')
-                ->join('task_users', 'tasks.id', '=', 'task_users.task_id')
-                ->join('task_approves', 'tasks.id', '=', 'task_approves.task_id')
-                ->select('tasks.id')
-                ->where('task_approves.created_at', '>=', $startDate)
-                ->where('task_approves.created_at', '<', $endDate)
-                ->where('task_users.user_id', $devId)
-                ->get();
-            $first_attempt_approve_task = 0;
-            foreach ($number_of_tasks_approved as $task) {
-
-                $min_approve_date = DB::table('task_approves')
-                    ->select('task_approves.created_at')
-                    ->where('task_approves.task_id', $task->id)
-                    ->orderBy('task_approves.created_at', 'asc')
-                    ->first();
-
-                $number_of_tasks = DB::table('task_submissions')
-                    ->join('tasks', 'task_submissions.task_id', '=', 'tasks.id')
-                    ->where('task_submissions.task_id', $task->id)
-                    ->where('task_submissions.created_at', '<', $min_approve_date->created_at)
-                    ->distinct('task_submissions.created_at')
-                    ->count();
-                if ($number_of_tasks == 1) {
-                    $first_attempt_approve_task++;
-                }
-            }
-
-            $this->first_attempt_approve_task_in_this_month_lead = $first_attempt_approve_task;
-
-
-
-
+            [
+                $this->first_attempt_approve_task_in_this_month_lead,
+                $this->first_attempt_approve_task_in_this_month_lead_data
+            ] = $this->leadNumberOfApprovedTasksOn1stAttemptByProjectManager($startDate, $endDate, $devId);
 
 
 
             // --------------Average number of attempts needed for approval(in cycle) Project Manager-----------------------------//
 
-            $number_of_tasks_approved = DB::table('tasks')
-                ->join('task_users', 'tasks.id', '=', 'task_users.task_id')
-                ->join('task_approves', 'tasks.id', '=', 'task_approves.task_id')
-                ->select('tasks.id')
-                ->where('task_approves.created_at', '>=', $startDate)
-                ->where('task_approves.created_at', '<', $endDate)
-                ->where('task_users.user_id', $devId)
-                ->get();
-            $first_attempt_approve_task = 0;
-            $count_submission_per_approval = 0;
-            $total_approval = 0;
-            foreach ($number_of_tasks_approved as $task) {
-
-                $min_approve_date = DB::table('task_approves')
-                    ->select('task_approves.created_at')
-                    ->where('task_approves.task_id', $task->id)
-                    ->orderBy('task_approves.created_at', 'asc')
-                    ->first();
-
-                $number_of_tasks = DB::table('task_submissions')
-                    ->select('task_submissions.submission_no')
-                    ->where('task_submissions.task_id', $task->id)
-                    ->where('task_submissions.created_at', '<', $min_approve_date->created_at)
-                    ->distinct('task_submissions.created_at')
-                    ->orderBy('task_submissions.id', 'DESC')
-                    ->first();
-                $max_submission = $number_of_tasks->submission_no;
-                $count_submission_per_approval = $count_submission_per_approval + $max_submission;
-                $total_approval++;
-            }
-            if ($total_approval > 0) {
-                $this->average_submission_aproval_in_this_month_lead = $count_submission_per_approval / $total_approval;
-            } else {
-                $this->average_submission_aproval_in_this_month_lead = 0;
-            }
-
-
+            [
+                $this->average_submission_aproval_in_this_month_lead,
+                $this->average_submission_aproval_in_this_month_lead_data,
+            ] = $this->leadAvgNumberOfAttemptsNeededForApprovalByProjectManager($startDate, $endDate, $devId);
 
 
             // --------------Average number of attempts needed for approval(in cycle) Client-----------------------------//
@@ -831,7 +695,12 @@ trait LeadDashboard
             $this->average_attempts_approve_client_data_lead = $average_attempts_approve_client_data_lead;
             //---------------------------------Percentage of Revision table----------------------------------------------------//
 
-            [$this->percentage_of_tasks_with_revision_lead, $this->revision_data_lead] = $this->leadPercentageOftaskswithrevisions($startDate, $endDate, $devId);
+            [
+                $this->lead_task_with_revision,
+                $this->lead_task_with_revision_data,
+                $this->lead_task,
+                $this->percentage_of_tasks_with_revision_lead,
+            ] = $this->leadPercentageOftaskswithrevisions($startDate, $endDate, $devId);
 
             //------------------------------average Submission Time(Day) table----------------------------------------------//
 
@@ -1219,9 +1088,15 @@ trait LeadDashboard
 
             $this->username_lead = DB::table('users')->where('id', $devId)->value('name');
 
-            [$this->number_of_tasks_received_lead, $this->number_of_tasks_received_lead_data] = $this->leadNumberOfTasksReceived(startDate: $startDate, endDate: $endDate, devId: $devId);
+            [
+                $this->number_of_tasks_received_lead,
+                $this->number_of_tasks_received_lead_data
+            ] = $this->leadNumberOfTasksReceived(startDate: $startDate, endDate: $endDate, devId: $devId);
 
-            [$this->submit_number_of_tasks_in_this_month_lead, $this->submit_number_of_tasks_in_this_month_lead_data] = $this->leadNumberOfSubmittedTasks($startDate, $endDate, $devId);
+            [
+                $this->submit_number_of_tasks_in_this_month_lead,
+                $this->submit_number_of_tasks_in_this_month_lead_data
+            ] = $this->leadNumberOfSubmittedTasks($startDate, $endDate, $devId);
 
 
             //-----------------------------number of tasks approved in first attempt(in cycle) Client-----------------------//
@@ -1253,14 +1128,18 @@ trait LeadDashboard
 
             //-----------------------------number of tasks approved in first attempt(in cycle) PM-----------------------//
 
-            $this->first_attempt_approve_task_in_this_month_lead = $this->leadNumberOfApprovedTasksOn1stAttemptByProjectManager($startDate, $endDate, $devId);
+            [
+                $this->first_attempt_approve_task_in_this_month_lead,
+                $this->first_attempt_approve_task_in_this_month_lead_data
+            ] = $this->leadNumberOfApprovedTasksOn1stAttemptByProjectManager($startDate, $endDate, $devId);
 
 
             // --------------Average number of attempts needed for approval(in cycle) Project Manager-----------------------------//
 
-            $this->average_submission_aproval_in_this_month_lead = $this->leadAvgNumberOfAttemptsNeededForApprovalByProjectManager($startDate, $endDate, $devId);
-
-
+            [
+                $this->average_submission_aproval_in_this_month_lead,
+                $this->average_submission_aproval_in_this_month_lead_data,
+            ] = $this->leadAvgNumberOfAttemptsNeededForApprovalByProjectManager($startDate, $endDate, $devId);
 
             // --------------Average number of attempts needed for approval(in cycle) Client-----------------------------//
 
@@ -1508,7 +1387,12 @@ trait LeadDashboard
 
 
 
-            [$this->percentage_of_tasks_with_revision_lead, $this->revision_data_lead] = $this->leadPercentageOftaskswithrevisions($startDate, $endDate, $devId);
+            [
+                $this->lead_task_with_revision,
+                $this->lead_task_with_revision_data,
+                $this->lead_task,
+                $this->percentage_of_tasks_with_revision_lead,
+            ] = $this->leadPercentageOftaskswithrevisions($startDate, $endDate, $devId);
 
 
             //------------------------------average Submission Time(Day) table----------------------------------------------//
@@ -1727,51 +1611,14 @@ trait LeadDashboard
             ->select('tasks.id', 'tasks.created_at')
             ->get();
 
-        // $tasks = Task::with('taskUsers')->whereBetween('created_at', [$startDate, $endDate])
-        //     ->whereNull('subtask_id')
-        //     ->whereRelation('taskUsers', 'user_id', $devId)
-        //     ->get();
-
-
         $number_of_tasks_received = $tasks->count();
 
-        $test = $tasks->pluck('id')->toArray();
-
-        // $test = [];
-        // foreach ($tasks as $i1) {
-        //     array_push($test, $i1->id);
-        // }
-
-        $number_of_tasks_received_lead_data = DB::table('tasks')
-            ->select(
-                'tasks.id',
-                'tasks.heading',
-                'client.id as clientId',
-                'client.name as clientName',
-                'tasks.created_at as assign_date',
-                'task_submissions.created_at as submission_date',
-                'tasks.due_date',
-                'tasks.client_name as client_name',
-                'cl.id as cl_id',
-                'cl.name as cl_name',
-                'tasks.board_column_id',
-                'taskboard_columns.column_name as column_name',
-                'taskboard_columns.label_color'
-            )
-            ->join('task_users', 'tasks.id', '=', 'task_users.task_id')
-            ->join('taskboard_columns', 'taskboard_columns.id', '=', 'tasks.board_column_id')
-            ->leftJoin('projects', 'projects.id', 'tasks.project_id')
-            ->leftJoin('users as client', 'client.id', 'projects.client_id')
-            ->leftJoin('users as cl', 'cl.id', 'tasks.client_id')
-            ->leftJoin('task_submissions', 'task_submissions.task_id', 'tasks.id')
-            ->whereIn('tasks.id', $test)
-            ->groupBy('tasks.id')
-            ->get();
-
-
-        foreach ($number_of_tasks_received_lead_data as $row) {
-            $row->revision_count = TaskRevision::where('task_id', $row->id)->where('final_responsible_person', '!=', null)->count();
+        $test = [];
+        foreach ($tasks as $i1) {
+            array_push($test, $i1->id);
         }
+
+        $number_of_tasks_received_lead_data = Task::with('firstTimeLog', 'project.pm', 'project.client', 'firstSubTask')->find($test);
 
         return [
             $number_of_tasks_received,
@@ -1804,36 +1651,8 @@ trait LeadDashboard
             }
         }
 
-        $submit_number_of_tasks_in_this_month_lead_data = DB::table('task_submissions')
-            ->select(
-                'tasks.id',
-                'tasks.heading',
-                'client.id as clientId',
-                'client.name as clientName',
-                'tasks.created_at as assign_date',
-                'task_submissions.created_at as submission_date',
-                'tasks.due_date',
-                'tasks.client_name as client_name',
-                'cl.id as cl_id',
-                'cl.name as cl_name',
-                'tasks.board_column_id',
-                'taskboard_columns.column_name as column_name',
-                'taskboard_columns.label_color'
-                //DB::raw('(SELECT COUNT(task_revisions.id) FROM task_revisions WHERE projects.id = project_time_logs.project_id AND employee.id = project_time_logs.user_id AND DATE(project_time_logs.start_time) >= "'.$startDate.'" AND DATE(project_time_logs.end_time) <= "'.$endDate.'") as number_of_session'),
-            )
-            ->join('tasks', 'task_submissions.task_id', '=', 'tasks.id')
-            ->join('task_users', 'tasks.id', '=', 'task_users.task_id')
-            ->join('taskboard_columns', 'taskboard_columns.id', '=', 'tasks.board_column_id')
-            ->leftJoin('projects', 'projects.id', 'tasks.project_id')
-            ->leftJoin('users as client', 'client.id', 'projects.client_id')
-            ->leftJoin('users as cl', 'cl.id', 'tasks.client_id')
-            ->whereIn('tasks.id', $tasks_submitted)
-            ->groupBy('tasks.id')
-            ->get();
-        foreach ($submit_number_of_tasks_in_this_month_lead_data as $row) {
-            $row->revision_count = TaskRevision::where('task_id', $row->id)->where('final_responsible_person', '!=', null)->count();
-        }
-        // dd($tasks_submitted);
+
+        $submit_number_of_tasks_in_this_month_lead_data = Task::with('firstTimeLog', 'project.pm', 'project.client', 'firstSubTask')->find($tasks_submitted);
         $number_of_tasks_submitted = count($tasks_submitted);
 
         return [
@@ -1902,12 +1721,13 @@ trait LeadDashboard
                 array_push($test, $i1);
             }
         }
-        // dd(
-        //     $number_of_approved_tasks_on_1st_attempt_by_project_manager,
-        //     $test
-        // );
 
-        return $number_of_approved_tasks_on_1st_attempt_by_project_manager;
+        $number_of_approved_tasks_on_1st_attempt_by_project_manager_date = Task::with('firstTimeLog', 'latestTaskApprove', 'project.pm', 'project.client', 'firstSubTask', 'latestTaskSubmission')->find($test);
+
+        return [
+            $number_of_approved_tasks_on_1st_attempt_by_project_manager,
+            $number_of_approved_tasks_on_1st_attempt_by_project_manager_date
+        ];
     }
 
     private function leadAvgNumberOfAttemptsNeededForApprovalByProjectManager($startDate, $endDate, $devId)
@@ -1919,7 +1739,6 @@ trait LeadDashboard
             ->where('task_history.created_at', '<', $endDate)
             ->where('task_history.board_column_id', '=', 4)
             ->whereNull('tasks.subtask_id') // This line changed
-            // ->where('user_id', $devId)
             ->distinct('task_history.task_id') // This line changed
             ->get();
 
@@ -1968,18 +1787,22 @@ trait LeadDashboard
 
             $number_of_attempts_needed += $submit_number;
             // dd($submit_number);
-            array_push($test, array($i1 => $submit_number));
+            array_push($test, $i1);
         }
         $average_number_of_attempts_needed = 0;
         if (count($completed_tasks_by_lead_developer) > 0) {
             $average_number_of_attempts_needed = ($number_of_attempts_needed / count($completed_tasks_by_lead_developer));
         }
+        $average_number_of_attempts_needed_data = Task::with('firstTimeLog', 'latestTaskApprove', 'revisions', 'project.client', 'firstSubTask', 'latestTaskSubmission')->find($test);
         // dd(
         //     $average_number_of_attempts_needed,
-        //     $test
+        //     $average_number_of_attempts_needed_data
         // );
 
-        return $average_number_of_attempts_needed;
+        return [
+            $average_number_of_attempts_needed,
+            $average_number_of_attempts_needed_data
+        ];
     }
 
     private function leadPercentageOftaskswithrevisions($startDate, $endDate, $devId)
@@ -2014,6 +1837,7 @@ trait LeadDashboard
         // dd($completed_tasks_by_lead_developer);
         $task_with_revision = 0;
         $test = [];
+        $test_revision = [];
         foreach ($completed_tasks_by_lead_developer as $i1) {
             $submitted = DB::table('task_history')
                 ->select('task_id', DB::raw('MIN(created_at) as earliest_created_at'))
@@ -2042,6 +1866,7 @@ trait LeadDashboard
             // dd($revision);
             if ($revision > 0) {
                 $task_with_revision++;
+                array_push($test_revision, $i1);
             }
             array_push($test, $i1);
         }
@@ -2050,41 +1875,16 @@ trait LeadDashboard
             $percentage_of_parent_tasks_with_revision = ($task_with_revision / count($completed_tasks_by_lead_developer)) * 100;
         }
 
-        $approve_task_data = DB::table('tasks')
-            ->select(
-                'tasks.id',
-                'tasks.heading',
-                'client.id as clientId',
-                'client.name as clientName',
-                'tasks.created_at as assign_date',
-                'task_submissions.created_at as submission_date',
-                'tasks.due_date',
-                'tasks.client_name as client_name',
-                'cl.id as cl_id',
-                'cl.name as cl_name',
-                'tasks.board_column_id',
-                'taskboard_columns.column_name as column_name',
-                'taskboard_columns.label_color'
-            )
-            ->join('task_submissions', 'task_submissions.task_id', '=', 'tasks.id')
-            ->join('task_users', 'tasks.id', '=', 'task_users.task_id')
-            ->join('taskboard_columns', 'taskboard_columns.id', '=', 'tasks.board_column_id')
-            ->leftJoin('projects', 'projects.id', 'tasks.project_id')
-            ->leftJoin('users as client', 'client.id', 'projects.client_id')
-            ->leftJoin('users as cl', 'cl.id', 'tasks.client_id')
-            ->whereIn('tasks.id', $test)
-            ->groupBy('tasks.id')
-            ->get();
-        // dd($test);
-// dd($percentage_of_tasks_with_revision);
+        $lead_task_with_revisions_count = count($test_revision);
+        $lead_task_count = count($test);
+        $lead_task_with_revisions_data = Task::with('firstTimeLog', 'latestTaskApprove', 'revisions', 'project.client', 'firstSubTask', 'latestTaskSubmission')->find($test_revision);
 
-        // dd(
-        //     $percentage_of_parent_tasks_with_revision,
-        //     $approve_task_data,
-        //     $test
-        // );
-
-        return [$percentage_of_parent_tasks_with_revision, $approve_task_data];
+        return [
+            $lead_task_with_revisions_count,
+            $lead_task_with_revisions_data,
+            $lead_task_count,
+            $percentage_of_parent_tasks_with_revision,
+        ];
     }
     private function leadTotalNumberOfRevisions($startDate, $endDate, $devId)
     {
