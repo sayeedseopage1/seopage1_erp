@@ -794,10 +794,16 @@ class DashboardController extends AccountBaseController
                 $request_end = $value['end'];
             }
 
+            $oldhr = Carbon::parse($start)->format('H:i');
+            $oldmin = Carbon::parse($end)->format('H:i');
+
             if (Carbon::parse($request_start)->between($start, $end) || Carbon::parse($request_end)->between($start, $end)) {
                 return response()->json([
                     'status' => 422,
-                    'message' => 'Already in time frame.'
+                    'title' => 'Duplicate Time Range Detected!',
+                    'start' => $oldhr,
+                    'end' => $oldmin,
+                    'message' => 'You have already submitted explanation for this time range!'
                 ]);
             }
         }
