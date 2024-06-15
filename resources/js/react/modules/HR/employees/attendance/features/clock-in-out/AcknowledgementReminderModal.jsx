@@ -73,6 +73,18 @@ const AcknowledgementReminderModal = ({
                     }
                 )
                 .then((res) => {
+                    if (res.data.status === 422) {
+                        Swal.fire({
+                            position: "center",
+                            icon: "error",
+                            title: "Schedule Conflict Detected !",
+                            text: `${res.data.message}`,
+                            showConfirmButton: true,
+                        });
+
+                        return;
+                    }
+
                     if (res.data.status === 400) {
                         Swal.fire({
                             position: "center",
@@ -87,6 +99,7 @@ const AcknowledgementReminderModal = ({
 
                         return;
                     }
+
                     setTImeLeft(res.data.leftMin);
                     if (submissionType !== "CONTINUE") {
                         onSubmit();
