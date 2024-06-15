@@ -79,6 +79,9 @@ class SalesRiskPolicyController extends AccountBaseController
 
     function index()
     {
+        if (auth()->user()->role_id != 1) /* admin */ {
+            abort_403(user()->permission('manage_company_setting') !== 'all');
+        }
         return view('sales-risk-policies.index', $this->data);
     }
 
@@ -106,6 +109,10 @@ class SalesRiskPolicyController extends AccountBaseController
 
     function save(Request $req)
     {
+        if (auth()->user()->role_id != 1) /* admin*/ {
+            abort_403(user()->permission('manage_company_setting') !== 'all');
+        }
+
         $validator = Validator::make($req->all(), [
             'title' => 'required',
             'department' => 'required',
@@ -165,6 +172,10 @@ class SalesRiskPolicyController extends AccountBaseController
 
     function edit(Request $req, $id): JsonResponse
     {
+        if (auth()->user()->role_id != 1) /* admin*/ {
+            abort_403(user()->permission('manage_company_setting') !== 'all');
+        }
+
         $validator = Validator::make($req->all(), [
             'title' => 'required',
             'department' => 'required',
@@ -239,6 +250,10 @@ class SalesRiskPolicyController extends AccountBaseController
 
     function editSingle(Request $req, $id): JsonResponse
     {
+        if (auth()->user()->role_id != 1) /* admin*/ {
+            abort_403(user()->permission('manage_company_setting') !== 'all');
+        }
+
         try {
             $policy = SalesRiskPolicy::findOrFail($id);
 
@@ -265,6 +280,10 @@ class SalesRiskPolicyController extends AccountBaseController
 
     function ruleList(Request $req)
     {
+        if (auth()->user()->role_id != 1) /* admin*/ {
+            abort_403(user()->permission('manage_company_setting') !== 'all');
+        }
+
         try {
             if ($req->policy_id) {
                 // check if policy is parent or not
@@ -443,6 +462,9 @@ class SalesRiskPolicyController extends AccountBaseController
 
     function questionIndex()
     {
+        if (auth()->user()->role_id != 1) /* admin*/ {
+            abort_403(user()->permission('manage_company_setting') !== 'all');
+        }
         $this->pageTitle = 'Sales Risk Question List';
         return view('sales-risk-policies.questionIndex', $this->data);
     }
@@ -466,6 +488,10 @@ class SalesRiskPolicyController extends AccountBaseController
 
     function policyQuestionSave(Request $req)
     {
+        if (auth()->user()->role_id != 1) /* admin*/ {
+            abort_403(user()->permission('manage_company_setting') !== 'all');
+        }
+        
         $validator = Validator::make($req->all(), [
             'title' => 'required',
             'key' => 'required|in:' . implode(',', array_keys(SalesRiskPolicy::$keys)),
