@@ -783,13 +783,21 @@
                                     </div>
                                 @endif
                             @elseif (in_array($salesDeal->sale_analysis_status, ['authorized', 'auto-authorized']))
-                                <div class="sp1_deal-stage-wrapper">
-                                    <h2 style="color:rgb(62, 146, 214);">
-                                        <a class="btn btn-info" href="{{ route('edit-deal-details', $salesDeal->id) }}">
-                                            Update Deal Details
-                                        </a>
-                                    </h2>
-                                </div>
+
+                                @if($salesDeal->released_at)
+                                    <div class="text-center">
+                                        <h2 style="color:green;">Won</h2>
+                                    </div>
+                                @else
+                                    <div class="sp1_deal-stage-wrapper">
+                                        <h2 style="color:rgb(62, 146, 214);">
+                                            <a class="btn btn-info" href="{{ route('edit-deal-details', $salesDeal->id) }}">
+                                                Update Deal Details
+                                            </a>
+                                        </h2>
+                                    </div>
+                                @endif
+                                
                             @elseif($salesDeal->sale_analysis_status == 'previous-won')
                                 <div class="text-center">
                                     <h2 style="color:green;">Previous Won</h2>
