@@ -36,6 +36,7 @@ import { convertTime } from "../utils/converTime";
 import axios from "axios";
 import { useGetTaskForTotalTimeQuery } from "../services/api/tasksApiSlice";
 import SingleTaskPerson from "../tasks/components/SingleTaskPerson";
+import PersonAvatar from "../global/PersonAvatar";
 const SingleTaskPage = () => {
     const { task: Task } = useSelector((s) => s.subTask);
     const { throwError } = useErrorHandler();
@@ -244,7 +245,7 @@ const SingleTaskPage = () => {
                                                 Project Manager:{" "}
                                             </div>
                                             <div className="sp1_st-list-item-value">
-                                                <SingleTaskPerson
+                                                <PersonAvatar
                                                     avatar={
                                                         task?.projectManagerAvatar
                                                     }
@@ -270,18 +271,18 @@ const SingleTaskPage = () => {
                                                             Number(
                                                                 loggedUser?.getId()
                                                             ) && (
-                                                                <sup
-                                                                    className="rounded-pill bg-dark text-white px-1 ml-1"
-                                                                    style={{
-                                                                        fontSize:
-                                                                            "10px",
-                                                                        whiteSpace:
-                                                                            "nowrap",
-                                                                    }}
-                                                                >
-                                                                    It's You
-                                                                </sup>
-                                                            )}
+                                                            <sup
+                                                                className="rounded-pill bg-dark text-white px-1 ml-1"
+                                                                style={{
+                                                                    fontSize:
+                                                                        "10px",
+                                                                    whiteSpace:
+                                                                        "nowrap",
+                                                                }}
+                                                            >
+                                                                It's You
+                                                            </sup>
+                                                        )}
                                                     </span>
 
                                                     <span
@@ -313,7 +314,7 @@ const SingleTaskPage = () => {
                                                 Assigned To :{" "}
                                             </div>
                                             <div className="sp1_st-list-item-value">
-                                                <SingleTaskPerson
+                                                <PersonAvatar
                                                     avatar={
                                                         task?.assigneeTo?.image
                                                     }
@@ -337,18 +338,18 @@ const SingleTaskPage = () => {
                                                             Number(
                                                                 loggedUser?.getId()
                                                             ) && (
-                                                                <sup
-                                                                    className="rounded-pill bg-dark text-white px-1 ml-1"
-                                                                    style={{
-                                                                        fontSize:
-                                                                            "10px",
-                                                                        whiteSpace:
-                                                                            "nowrap",
-                                                                    }}
-                                                                >
-                                                                    It's You
-                                                                </sup>
-                                                            )}
+                                                            <sup
+                                                                className="rounded-pill bg-dark text-white px-1 ml-1"
+                                                                style={{
+                                                                    fontSize:
+                                                                        "10px",
+                                                                    whiteSpace:
+                                                                        "nowrap",
+                                                                }}
+                                                            >
+                                                                It's You
+                                                            </sup>
+                                                        )}
                                                     </span>
 
                                                     <span
@@ -368,7 +369,7 @@ const SingleTaskPage = () => {
                                                 Assigned by:{" "}
                                             </div>
                                             <div className="sp1_st-list-item-value">
-                                                <SingleTaskPerson
+                                                <PersonAvatar
                                                     avatar={
                                                         task?.assigneeBy?.image
                                                     }
@@ -392,16 +393,16 @@ const SingleTaskPage = () => {
                                                             Number(
                                                                 loggedUser?.getId()
                                                             ) && (
-                                                                <sup
-                                                                    className="rounded-pill bg-dark text-white px-1"
-                                                                    style={{
-                                                                        fontSize:
-                                                                            "10px",
-                                                                    }}
-                                                                >
-                                                                    It's You
-                                                                </sup>
-                                                            )}
+                                                            <sup
+                                                                className="rounded-pill bg-dark text-white px-1"
+                                                                style={{
+                                                                    fontSize:
+                                                                        "10px",
+                                                                }}
+                                                            >
+                                                                It's You
+                                                            </sup>
+                                                        )}
                                                     </span>
 
                                                     <span

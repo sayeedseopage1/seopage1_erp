@@ -8,11 +8,7 @@
 }
 
 .sp1_task_btn_group {
-<<<<<<< HEAD
   border-color: #e7effc;
-=======
-  border-color: #E7EFFC;
->>>>>>> bc11952673d7e5cd5b9a46630134f6cadbf06397
 }
 
 .sp1_task_btn_group button {
@@ -56,11 +52,7 @@
   border-bottom-left-radius: 10px;
   border-bottom-right-radius: 10px;
   overflow: hidden;
-<<<<<<< HEAD
   max-height: 500px;
-=======
-  max-height: 300px;
->>>>>>> bc11952673d7e5cd5b9a46630134f6cadbf06397
   overflow-y: auto;
   font-size: 14px;
 }
@@ -278,11 +270,7 @@
   font-weight: 500;
   margin-right: 10px;
   font-size: 14px;
-<<<<<<< HEAD
   color: #171f28;
-=======
-  color: #171F28;
->>>>>>> bc11952673d7e5cd5b9a46630134f6cadbf06397
   display: block;
 }
 @media (max-width: 557px) {
@@ -320,13 +308,9 @@
   .sp1_message--body h6 {
     font-size: 12px !important;
   }
-<<<<<<< HEAD
   .sp1_message--body p,
   .sp1_message--body i,
   .sp1_message--body a {
-=======
-  .sp1_message--body p, .sp1_message--body i, .sp1_message--body a {
->>>>>>> bc11952673d7e5cd5b9a46630134f6cadbf06397
     font-size: 13px !important;
     line-height: 14px;
   }
@@ -432,11 +416,7 @@
   background-color: #ececec;
   padding: 6px 10px;
   margin-bottom: 10px;
-<<<<<<< HEAD
   border: 1px solid #e7effc;
-=======
-  border: 1px solid #E7EFFC;
->>>>>>> bc11952673d7e5cd5b9a46630134f6cadbf06397
 }
 .sp1_task_card--sub-card-modal-content .__header button {
   margin-left: auto;
@@ -573,11 +553,7 @@
   min-height: 300px;
   max-height: 80vh;
   overflow-y: hidden;
-<<<<<<< HEAD
   background: #fafafc;
-=======
-  background: #FAFAFC;
->>>>>>> bc11952673d7e5cd5b9a46630134f6cadbf06397
   border-radius: 16px;
   padding: 16px;
   border: 1px solid var(--header_color);
@@ -1397,21 +1373,12 @@
 .delete-confirm-button {
   margin-right: 8px;
   color: #fff;
-<<<<<<< HEAD
   background-color: #e73819;
   border: 1px solid #e73819;
 }
 .delete-confirm-button:hover {
   background-color: #de3112;
   border: 1px solid #de3112;
-=======
-  background-color: #E73819;
-  border: 1px solid #E73819;
-}
-.delete-confirm-button:hover {
-  background-color: #DE3112;
-  border: 1px solid #DE3112;
->>>>>>> bc11952673d7e5cd5b9a46630134f6cadbf06397
 }
 
 .delete-deny-button {
@@ -1504,7 +1471,6 @@
   overflow-y: auto;
 }
 
-<<<<<<< HEAD
 .average_rating {
   font-size: 16px;
   position: absolute;
@@ -1533,8 +1499,6 @@
     right: 10px;
   }
 }
-=======
->>>>>>> bc11952673d7e5cd5b9a46630134f6cadbf06397
 .text-hover-underline:hover {
   text-decoration: underline;
 }
@@ -1563,14 +1527,11 @@
     opacity: 0.6;
   }
 }
-<<<<<<< HEAD
 .link_color {
   color: #2323ee !important;
   cursor: pointer;
 }
 
-=======
->>>>>>> bc11952673d7e5cd5b9a46630134f6cadbf06397
 .skeleton-loading {
   width: -moz-fit-content;
   width: fit-content;
