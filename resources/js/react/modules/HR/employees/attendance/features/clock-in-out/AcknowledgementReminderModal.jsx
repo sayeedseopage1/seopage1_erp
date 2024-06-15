@@ -15,6 +15,7 @@ import TrackedTimeTable from "./tracked-time-table/Table/TrackedTimeTable";
 import Card from "../../../../../../global/Card";
 
 import styles from "./tracked-time-table/Table/card.module.css";
+import formatTimeTo12Hour from "../../../../../../utils/formatTimeTo12Hour";
 
 /**
  * * This components responsible for showing daily working report to developer
@@ -78,10 +79,14 @@ const AcknowledgementReminderModal = ({
                             position: "center",
                             icon: "error",
                             title: `${res.data.title}`,
-                            text: `${res.data.start} ${res.data.end}/n${res.data.message}`,
+                            text: `${formatTimeTo12Hour(
+                                res.data.start
+                            )} - ${formatTimeTo12Hour(res.data.end)}\n${
+                                res.data.message
+                            }`,
                             showConfirmButton: true,
                         });
-
+                        setIsSubmitting(false);
                         return;
                     }
 
@@ -96,7 +101,7 @@ const AcknowledgementReminderModal = ({
 
                             showConfirmButton: true,
                         });
-
+                        setIsSubmitting(false);
                         return;
                     }
 
