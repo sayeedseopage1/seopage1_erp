@@ -19,92 +19,19 @@ import { storeSubTasks } from "../../services/features/tasksSlice";
 import { useDispatch, useSelector } from "react-redux";
 import Switch from "../../global/Switch";
 import { User } from "../../utils/user-details";
+import PersonAvatar from "../../global/PersonAvatar";
 
 const compareDate = new CompareDate();
 
 export const SubTasksTableColumns = [
     {
         id: "expend",
-        header: (
-            <span className="mx-2">
-                <strong>#</strong>
-            </span>
-        ),
+        header: "#",
         cell: ({ row }) => (
             <span className="mx-2">
                 <strong>{row.index + 1}</strong>
             </span>
         ),
-    },
-    {
-        id: "task",
-        header: "Task",
-        accessorFn: (row) => `${row.id}${row.heading}`,
-        cell: ({ row }) => {
-            const data = row?.original;
-            return (
-                <abbr title={data?.heading} style={{ textDecoration: "none" }}>
-                    <div
-                        className="d-flex align-items-center"
-                        style={{ gap: "10px" }}
-                    >
-                        <a
-                            href={`/account/tasks/${data?.id}`}
-                            className="hover-underline multine-ellipsis"
-                        >
-                            {" "}
-                            <span style={{ color: "#3366CC" }}>
-                                {data?.heading}{" "}
-                            </span>{" "}
-                        </a>
-                    </div>
-                </abbr>
-            );
-        },
-    },
-    {
-        id: "timer_status",
-        header: "Timer Status",
-        accessorKey: "subtasks_timer_active",
-        cell: ({ row }) => {
-            const data = row?.original;
-            const count = data?.subtasks_timer_active;
-            const subtaskCount = _.size(data?.subtasks_count);
-            const isActive = count > 0;
-            let serverTime = 0;
-            let localTime = 0;
-            let timer = 0;
-
-            if (data?.start_time && _.isNull(data?.end_time)) {
-                serverTime = compareDate.dayjs(data?.start_time).unix();
-                localTime = compareDate.dayjs().unix();
-                timer = localTime - serverTime;
-            }
-
-            const clockIsRunning = data?.start_time && _.isNull(data?.end_time);
-
-            const color = isActive || clockIsRunning ? "#54B688" : "#DCDEE1";
-            return (
-                <div style={{ color }} className="d-flex align-items-center">
-                    <i className="fa-solid fa-stopwatch f-18" />
-                    {row.parentId === undefined &&
-                        subtaskCount === 0 &&
-                        !clockIsRunning && (
-                            <span className="ml-2">
-                                <strong>{count}</strong>
-                            </span>
-                        )}
-                    {clockIsRunning && (
-                        <span
-                            className="ml-1 badge badge-primary text-white"
-                            style={{ fontSize: "11px" }}
-                        >
-                            {<StopWatch time={timer} run={clockIsRunning} />}
-                        </span>
-                    )}
-                </div>
-            );
-        },
     },
     {
         id: "milestone",
@@ -170,9 +97,7 @@ export const SubTasksTableColumns = [
                             href={`/account/projects/${data?.project_id}`}
                             className="multine-ellipsis"
                         >
-                            <span style={{ color: "#3366CC" }}>
-                                {data?.project_name}
-                            </span>
+                            {data?.project_name}
                         </a>
                     ) : (
                         <span style={{ fontWeight: "bold", color: "gray" }}>
@@ -229,7 +154,7 @@ export const SubTasksTableColumns = [
         cell: ({ row }) => {
             const data = row?.original;
             return data?.project_manager_id ? (
-                <Person
+                <PersonAvatar
                     url={`/account/employees/${data?.project_manager_id}`}
                     name={data?.pm_id_name}
                     avatar={data?.pm_id_avatar}
@@ -448,7 +373,7 @@ export const SubTasksTableColumns = [
         cell: ({ row }) => {
             const data = row?.original;
             return (
-                <Person
+                <PersonAvatar
                     url={`/account/employees/${data?.added_by}`}
                     avatar={data?.added_by_avatar}
                     name={data?.added_by_name}
@@ -463,7 +388,7 @@ export const SubTasksTableColumns = [
         cell: ({ row }) => {
             const data = row?.original;
             return (
-                <Person
+                <PersonAvatar
                     url={`/account/employees/${data?.assigned_to_id}`}
                     avatar={data?.assigned_to_avatar}
                     name={data?.assigned_to_name}

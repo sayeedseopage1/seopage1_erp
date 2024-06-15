@@ -15,7 +15,7 @@
 							@if(is_null($value->addedBy))
 								---
 							@else
-							<img src="{{URL::asset('user-uploads/avatar/'.$value->addedBy->image ?? 'avatar_blank.png')}}" class="mr-3 taskEmployeeImg rounded-circle" alt="{{$value->addedBy->name}}" title="{{$value->addedBy->name}}">
+							<img src="{{URL::asset('user-uploads/avatar/'.$value->addedBy->image ?? 'avatar_blank.png')}}" class="mr-3 taskEmployeeImg rounded-circle" alt="{{$value->addedBy->name}}" title="{{$value->addedBy->name}}" onerror="this.onerror=null;this.src='{{URL::asset('user-uploads/avatar/avatar_blank.png')}}';">
 							{{$value->addedBy->name}}
 							@endif
 						</td>
@@ -67,7 +67,7 @@
 							@if(is_null($value->addedBy))
 								---
 							@else
-							<img src="{{URL::asset('user-uploads/avatar/'.$value->addedBy->image ?? 'avatar_blank.png')}}" class="mr-3 taskEmployeeImg rounded-circle" alt="{{$value->addedBy->name ?? '--'}}" title="{{$value->addedBy->name ?? '--'}}">
+							<img src="{{URL::asset('user-uploads/avatar/'.$value->addedBy->image ?? 'avatar_blank.png')}}" class="mr-3 taskEmployeeImg rounded-circle" alt="{{$value->addedBy->name ?? '--'}}" title="{{$value->addedBy->name ?? '--'}}" onerror="this.onerror=null;this.src='{{URL::asset('user-uploads/avatar/avatar_blank.png')}}';">
 							{{$value->addedBy->name ?? '--'}}
 							@endif
 						</td>
@@ -142,7 +142,8 @@
 								@if(is_null($value->addedBy))
 									---
 								@else
-								<img src="{{URL::asset('user-uploads/avatar/'.$value->addedBy->image ?? 'avatar_blank.png')}}" class="mr-3 taskEmployeeImg rounded-circle" alt="{{$value->addedBy->name}}" title="{{$value->addedBy->name}}">
+								<img src="{{URL::asset('user-uploads/avatar/'.$value->addedBy->image ?? 'avatar_blank.png')}}" class="mr-3 taskEmployeeImg rounded-circle" alt="{{$value->addedBy->image}}" title="{{$value->addedBy->name}}" 
+								onerror="this.onerror=null;this.src='{{URL::asset('user-uploads/avatar/avatar_blank.png')}}';">
 								{{$value->addedBy->name}}
 								@endif
 							</td>
@@ -266,4 +267,12 @@
 			});
 		});
 	</script>
+	<script type="text/javascript">
+function handleImageError(image) {
+    image.onerror = null; // Prevent infinite loop in case fallback image also fails
+    image.src = 'avatar.png'; // Fallback image path
+    image.alt = '{{ substr(($value->addedBy->B ?? 'A'), 0, 1) }}'; // Fallback alt text, using first letter of name or 'A'
+}
+</script>
+
 @endif
