@@ -10,7 +10,7 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    font-family: 'Poppins', sans-serif !important;
+    /* font-family: 'Poppins', sans-serif; */
 }
 
 h1,
@@ -21,12 +21,14 @@ h5,
 h6,
 p {
     margin: 0;
+    font-family: 'Poppins', sans-serif;
 }
 
 .sp1_marketplace_page_wrapper {
     background-color: var(--primary-white);
     padding: 30px;
     min-height: calc(100vh - 63px);
+    font-family: 'Poppins', sans-serif !important;
 }
 
 .sp1_marketplace_section_wrapper {
