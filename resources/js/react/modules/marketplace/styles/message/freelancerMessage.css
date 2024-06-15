@@ -69,6 +69,15 @@ input::placeholder {
     line-height: normal;
 }
 
+.chat_list_user_avatar {
+    width: 45px;
+    height: 45px;
+    border-radius: 6px;
+    border: 1px solid #DCDCDC;
+    object-fit: cover;
+    object-position: center;
+}
+
 /* chat box  */
 .chat_box_header {
     height: 78px;
