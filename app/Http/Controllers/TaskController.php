@@ -379,242 +379,6 @@ class TaskController extends AccountBaseController
 
         ]);
     }
-    public function exportTaskData(Request $request)
-    {
-        $startDate = $request->input('start_date', null);
-        $endDate = $request->input('end_date', null);
-        $assignee_to = $request->input('assignee_to', null);
-        $assignee_by = $request->input('assignee_by', null);
-
-        $pmId = $request->input('pm_id', null);
-        $clientId = $request->input('client_id', null);
-        $projectId = $request->input('project_id', null);
-        $status = $request->input('status', null);
-        $date_filter_by = $request->input('date_filter_by', null);
-
-
-
-        $tasks = Task::select(
-            'tasks.*',
-            'tasks.heading as task_name',
-            'projects.project_name',
-            'projects.id as project_id',
-            'client.id as client_id',
-            'client.name as client_name',
-            'client.image as client_avatar',
-            'tasks.estimate_minutes',
-            'tasks.estimate_hours',
-            'assigned_to.id as assigned_to_id',
-            'assigned_to.name as assigned_to_name',
-            'assigned_to.image as assigned_to_avatar',
-            'added_by.name as added_by_name',
-            'added_by.image as added_by_avatar',
-            'project_milestones.milestone_title',
-            'pm_id.id as project_manager_id',
-            'pm_id.name as pm_id_name',
-            'pm_id.image as pm_id_avatar',
-            'project_deliverables.title as deliverable_title',
-            'task_approves.created_at as task_approval_date',
-            'taskboard_columns.column_name',
-            'taskboard_columns.label_color',
-            'project_time_logs.created_at as task_start_date',
-            'tasks.created_at as creation_date',
-            'tasks.updated_at as completion_date',
-            'project_time_logs.start_time',
-            'project_time_logs.end_time',
-            'task_category.category_name',
-            'tasks.client_name as ind_client_name',
-            'ind_client.id as ind_client_id',
-            'ind_client.name as ind_existing_client_name',
-            'task_submissions.created_at as task_submission_date',
-
-            DB::raw('(SELECT COUNT(sub_tasks.id) FROM sub_tasks WHERE sub_tasks.task_id = tasks.id AND DATE(sub_tasks.created_at) >= "' . $startDate . '" AND DATE(sub_tasks.created_at) <= "' . $endDate . '") as subtasks_count')
-
-        )
-            ->where('tasks.subtask_id', null)
-            ->leftJoin('projects', 'projects.id', 'tasks.project_id')
-            ->leftJoin('users as client', 'client.id', 'projects.client_id')
-            ->join('task_users', 'task_users.task_id', 'tasks.id')
-            ->join('users as assigned_to', 'assigned_to.id', 'task_users.user_id')
-            ->join('users as added_by', 'added_by.id', 'tasks.added_by')
-            ->leftJoin('users as ind_client', 'ind_client.id', 'tasks.client_id')
-            ->leftJoin('users as pm_id', 'pm_id.id', 'projects.pm_id')
-            ->leftJoin('project_milestones', 'project_milestones.id', 'tasks.milestone_id')
-            ->join('taskboard_columns', 'taskboard_columns.id', 'tasks.board_column_id')
-            ->leftJoin('task_category', 'task_category.id', 'tasks.task_category_id')
-            ->leftJoin('project_time_logs', 'project_time_logs.task_id', 'tasks.id')
-            // ->leftJoin('project_time_logs', function ($join) {
-            //     $join->on('project_time_logs.task_id', '=', 'tasks.id')
-            //         ->orderBy('project_time_logs.created_at', 'desc');
-            // })
-            ->leftJoin('project_deliverables', 'project_deliverables.milestone_id', 'project_milestones.id')
-            ->leftJoin('task_approves', 'task_approves.task_id', 'tasks.id')
-            ->leftJoin('task_submissions', function ($join) {
-                $join->on('task_submissions.task_id', '=', 'tasks.id')
-                    ->whereRaw('task_submissions.created_at = (SELECT MAX(created_at) FROM task_submissions WHERE task_id = tasks.id)')
-                    ->orderBy('task_submissions.created_at', 'desc');
-            })
-            ->groupBy('tasks.id')
-            // ->leftJoin('task_approves','task_approves.task_id','tasks.id')
-        ;
-        //->orderBy('id', 'desc');
-        // ->get();
-        if (!is_null($startDate) && !is_null($endDate) &&  $startDate == $endDate) {
-
-
-            $tasks = $tasks->whereDate('tasks.created_at', '=', Carbon::parse($startDate)->format('Y-m-d'));
-        } else {
-            if (!is_null($startDate)) {
-                $tasks = $tasks->whereDate('tasks.created_at', '>=', Carbon::parse($startDate)->format('Y-m-d'));
-            }
-            if (!is_null($endDate)) {
-                $tasks = $tasks->whereDate('tasks.created_at', '<=', Carbon::parse($endDate)->format('Y-m-d'));
-            }
-        }
-        if (!is_null($projectId)) {
-            $tasks = $tasks->where('tasks.project_id', $projectId);
-        }
-        if (!is_null($assignee_to)) {
-            $tasks = $tasks->where('task_users.user_id', $assignee_to);
-        }
-        if (!is_null($assignee_by)) {
-            $tasks = $tasks->where('tasks.added_by', $assignee_by);
-        }
-        if (!is_null($pmId)) {
-            $tasks = $tasks->where('projects.pm_id', $pmId);
-        }
-        if (!is_null($clientId)) {
-            $tasks = $tasks->where('projects.client_id', $clientId);
-        }
-        if (!is_null($date_filter_by)) {
-            if ($date_filter_by == 'Created Date') {
-                if (!is_null($startDate) && !is_null($endDate) &&  $startDate == $endDate) {
-
-
-                    $tasks = $tasks->whereDate('tasks.created_at', '=', Carbon::parse($startDate)->format('Y-m-d'));
-                } else {
-                    if (!is_null($startDate)) {
-                        $tasks = $tasks->whereDate('tasks.created_at', '>=', Carbon::parse($startDate)->format('Y-m-d'));
-                    }
-                    if (!is_null($endDate)) {
-                        $tasks = $tasks->whereDate('tasks.created_at', '<=', Carbon::parse($endDate)->format('Y-m-d'));
-                    }
-                }
-            } elseif ($date_filter_by == 'Due Date') {
-                if (!is_null($startDate) && !is_null($endDate) &&  $startDate == $endDate) {
-
-
-                    $tasks = $tasks->whereDate('tasks.due_date', '=', Carbon::parse($startDate)->format('Y-m-d'));
-                } else {
-                    if (!is_null($startDate)) {
-                        $tasks = $tasks->whereDate('tasks.due_date', '>=', Carbon::parse($startDate)->format('Y-m-d'));
-                    }
-                    if (!is_null($endDate)) {
-                        $tasks = $tasks->whereDate('tasks.due_date', '<=', Carbon::parse($endDate)->format('Y-m-d'));
-                    }
-                }
-            } else {
-                if (!is_null($startDate) && !is_null($endDate) &&  $startDate == $endDate) {
-
-
-                    $tasks = $tasks->whereDate('tasks.updated_at', '=', Carbon::parse($startDate)->format('Y-m-d'));
-                } else {
-                    if (!is_null($startDate)) {
-                        $tasks = $tasks->whereDate('tasks.updated_at', '>=', Carbon::parse($startDate)->format('Y-m-d'));
-                    }
-                    if (!is_null($endDate)) {
-                        $tasks = $tasks->whereDate('tasks.updated_at', '<=', Carbon::parse($endDate)->format('Y-m-d'));
-                    }
-                }
-            }
-        }
-        if (!is_null($status)) {
-            if ($status == 11) {
-                $tasks = $tasks;
-            } elseif ($status == 10) {
-                $tasks = $tasks->where('tasks.board_column_id', '!=', 4);
-            } elseif ($status == 1) {
-                $tasks = $tasks->where('tasks.board_column_id', 1);
-            } elseif ($status == 2) {
-                $tasks = $tasks->where('tasks.board_column_id', 2);
-            } elseif ($status == 3) {
-                $tasks = $tasks->where('tasks.board_column_id', 3);
-            } elseif ($status == 4) {
-                $tasks = $tasks->where('tasks.board_column_id', 4);
-            } elseif ($status == 6) {
-                $tasks = $tasks->where('tasks.board_column_id', 6);
-            } elseif ($status == 7) {
-                $tasks = $tasks->where('tasks.board_column_id', 7);
-            } elseif ($status == 8) {
-                $tasks = $tasks->where('tasks.board_column_id', 8);
-            } elseif ($status == 9) {
-                $tasks = $tasks->where('tasks.board_column_id', 9);
-            }
-        }
-        if (Auth::user()->role_id == 9 || Auth::user()->role_id == 10) {
-            $tasks = $tasks->where('task_users.user_id', Auth::id())->orderBy('tasks.created_at', 'desc')->get();
-        } else {
-            $tasks = $tasks->orderBy('tasks.created_at', 'desc')->get();
-        }
-
-        foreach ($tasks as $task) {
-            $task->files = TaskFile::where('task_id', $task->id)->get();
-            $subtasks_hours_logged = Subtask::select('tasks.*')
-
-                ->where('sub_tasks.task_id', $task->id)
-                ->join('tasks', 'tasks.subtask_id', 'sub_tasks.id')
-                ->leftJoin('project_time_logs', 'project_time_logs.task_id', 'tasks.id')
-                ->sum('project_time_logs.total_minutes');
-            $subtasks_completed_count = Subtask::select('tasks.*')
-
-                ->where('sub_tasks.task_id', $task->id)
-                ->join('tasks', 'tasks.subtask_id', 'sub_tasks.id')
-
-                ->whereIn('tasks.board_column_id', ['4', '8', '7'])
-                ->count();
-            $subtasks_timer_active = Subtask::select('tasks.*')
-
-                ->where('sub_tasks.task_id', $task->id)
-                ->join('tasks', 'tasks.subtask_id', 'sub_tasks.id')
-                ->leftJoin('project_time_logs', 'project_time_logs.task_id', 'tasks.id')
-                ->where('project_time_logs.start_time', '!=', null)
-
-                ->where('project_time_logs.end_time', null)
-                ->count();
-            $task_hours_logged = Task::select('tasks.*')->leftJoin('project_time_logs', 'project_time_logs.task_id', 'tasks.id')
-                ->where('task_id', $task->id)
-                ->sum('project_time_logs.total_minutes');
-            $subtasks_reports_count = Subtask::select('sub_tasks.*', 'developer_report_issues.id as report_issues')
-
-                ->where('sub_tasks.task_id', $task->id)
-                ->join('tasks', 'tasks.subtask_id', 'sub_tasks.id')
-
-                ->leftJoin('developer_report_issues as report_issues', 'report_issues.task_id', 'tasks.id')
-
-                ->count('report_issues.id');
-            $tasks_reports_count = Task::select('tasks.*', 'developer_report_issues.id as report_issues')
-
-                ->where('tasks.id', $task->id)
-
-                ->leftJoin('developer_report_issues as report_issues', 'report_issues.task_id', 'tasks.id')
-
-                ->count('report_issues.id');
-
-
-            $task->subtasks_hours_logged = $subtasks_hours_logged + $task_hours_logged;
-            $task->subtasks_completed_count = $subtasks_completed_count;
-            $task->subtasks_timer_active = $subtasks_timer_active;
-
-            $task->subtasks_reports_count = $subtasks_reports_count + $tasks_reports_count;
-        }
-
-
-        return response()->json([
-            'status' => 200,
-            'tasks' => $tasks,
-
-        ]);
-    }
     public function get_task_subtask($id)
     {
         $tasks = Subtask::select(
@@ -897,202 +661,6 @@ class TaskController extends AccountBaseController
 
 
 
-        return response()->json([
-            'status' => 200,
-            'tasks' => $tasks,
-
-        ]);
-    }
-    public function exportSubTaskData(Request $request)
-    {
-        $startDate = $request->input('start_date', null);
-        $endDate = $request->input('end_date', null);
-        $assignee_to = $request->input('assignee_to', null);
-        $assignee_by = $request->input('assignee_by', null);
-
-        $pmId = $request->input('pm_id', null);
-        $clientId = $request->input('client_id', null);
-        $status = $request->input('status', null);
-        $date_filter_by = $request->input('date_filter_by', null);
-        $projectId = $request->input('project_id', null);
-
-
-
-        $tasks = SubTask::select(
-            'tasks.*',
-            'tasks.heading as task_name',
-            'projects.project_name',
-            'projects.id as project_id',
-            'client.id as client_id',
-            'client.name as client_name',
-            'client.image as client_avatar',
-            'tasks.estimate_minutes',
-            'tasks.estimate_hours',
-            'assigned_to.id as assigned_to_id',
-            'assigned_to.name as assigned_to_name',
-            'assigned_to.image as assigned_to_avatar',
-            'added_by.name as added_by_name',
-            'added_by.image as added_by_avatar',
-            'project_milestones.milestone_title',
-            'pm_id.id as project_manager_id',
-            'pm_id.name as pm_id_name',
-            'pm_id.image as pm_id_avatar',
-            'project_deliverables.title as deliverable_title',
-            'task_approves.created_at as task_approval_date',
-            'taskboard_columns.column_name',
-            'taskboard_columns.label_color',
-            'project_time_logs.created_at as task_start_date',
-            'tasks.created_at as creation_date',
-            'tasks.updated_at as completion_date',
-            'task_category.category_name',
-            'task_files.filename',
-
-            'tasks.client_name as ind_client_name',
-            'ind_client.id as ind_client_id',
-            'ind_client.name as ind_existing_client_name',
-
-            'project_time_logs.start_time',
-            'project_time_logs.end_time',
-            'task_submissions.created_at as task_submission_date',
-            'tasks.updated_at as task_updated_at',
-            'perentTask.heading as perent_task_heading',
-
-
-
-            DB::raw('(SELECT SUM(project_time_logs.total_minutes) FROM project_time_logs WHERE task_id = tasks.id) as subtasks_hours_logged'),
-            DB::raw('(SELECT COUNT(developer_report_issues.id) FROM developer_report_issues WHERE developer_report_issues.task_id = tasks.id) as subtasks_reports_count')
-
-        )
-            ->where('tasks.subtask_id', '!=', null)
-            ->join('tasks', 'tasks.subtask_id', 'sub_tasks.id')
-            ->join('tasks as perentTask', 'perentTask.id', 'sub_tasks.task_id')
-            ->leftJoin('projects', 'projects.id', 'tasks.project_id')
-            ->leftJoin('users as client', 'client.id', 'projects.client_id')
-            ->leftJoin('users as ind_client', 'ind_client.id', 'tasks.client_id')
-            ->join('task_users', 'task_users.task_id', 'tasks.id')
-            ->join('users as assigned_to', 'assigned_to.id', 'task_users.user_id')
-            ->join('users as added_by', 'added_by.id', 'tasks.added_by')
-            ->leftJoin('users as pm_id', 'pm_id.id', 'projects.pm_id')
-
-
-            ->leftJoin('project_milestones', 'project_milestones.id', 'tasks.milestone_id')
-            ->join('taskboard_columns', 'taskboard_columns.id', 'tasks.board_column_id')
-            ->leftJoin('task_category', 'task_category.id', 'tasks.task_category_id')
-            ->leftJoin('project_time_logs', function ($join) {
-                $join->on('project_time_logs.task_id', '=', 'tasks.id')
-                    ->orderBy('project_time_logs.created_at', 'desc');
-            })
-            ->leftJoin('project_deliverables', 'project_deliverables.milestone_id', 'project_milestones.id')
-            ->leftJoin('task_approves', 'task_approves.task_id', 'tasks.id')
-            ->leftJoin('task_files', 'task_files.task_id', 'tasks.id')
-            ->leftJoin('task_submissions', function ($join) {
-                $join->on('task_submissions.task_id', '=', 'tasks.id')
-                    ->whereRaw('task_submissions.created_at = (SELECT MAX(created_at) FROM task_submissions WHERE task_id = tasks.id)')
-                    ->orderBy('task_submissions.created_at', 'desc');
-            })
-
-
-            ->groupBy('tasks.id')
-        ;
-
-        if (!is_null($startDate) && !is_null($endDate) &&  $startDate == $endDate) {
-
-
-            $tasks = $tasks->whereDate('tasks.created_at', '=', Carbon::parse($startDate)->format('Y-m-d'));
-        } else {
-            if (!is_null($startDate)) {
-                $tasks = $tasks->whereDate('tasks.created_at', '>=', Carbon::parse($startDate)->format('Y-m-d'));
-            }
-            if (!is_null($endDate)) {
-                $tasks = $tasks->whereDate('tasks.created_at', '<=', Carbon::parse($endDate)->format('Y-m-d'));
-            }
-        }
-        if (!is_null($projectId)) {
-            $tasks = $tasks->where('tasks.project_id', $projectId);
-        }
-        if (!is_null($assignee_to)) {
-            $tasks = $tasks->where('task_users.user_id', $assignee_to);
-        }
-        if (!is_null($assignee_by)) {
-            $tasks = $tasks->where('tasks.added_by', $assignee_by);
-        }
-        if (!is_null($pmId)) {
-            $tasks = $tasks->where('projects.pm_id', $pmId);
-        }
-        if (!is_null($clientId)) {
-            $tasks = $tasks->where('projects.client_id', $clientId);
-        }
-        if (!is_null($date_filter_by)) {
-            if ($date_filter_by == 'Created Date') {
-                if (!is_null($startDate) && !is_null($endDate) &&  $startDate == $endDate) {
-
-
-                    $tasks = $tasks->whereDate('tasks.created_at', '=', Carbon::parse($startDate)->format('Y-m-d'));
-                } else {
-                    if (!is_null($startDate)) {
-                        $tasks = $tasks->whereDate('tasks.created_at', '>=', Carbon::parse($startDate)->format('Y-m-d'));
-                    }
-                    if (!is_null($endDate)) {
-                        $tasks = $tasks->whereDate('tasks.created_at', '<=', Carbon::parse($endDate)->format('Y-m-d'));
-                    }
-                }
-            } elseif ($date_filter_by == 'Due Date') {
-                if (!is_null($startDate) && !is_null($endDate) &&  $startDate == $endDate) {
-
-
-                    $tasks = $tasks->whereDate('tasks.due_date', '=', Carbon::parse($startDate)->format('Y-m-d'));
-                } else {
-                    if (!is_null($startDate)) {
-                        $tasks = $tasks->whereDate('tasks.due_date', '>=', Carbon::parse($startDate)->format('Y-m-d'));
-                    }
-                    if (!is_null($endDate)) {
-                        $tasks = $tasks->whereDate('tasks.due_date', '<=', Carbon::parse($endDate)->format('Y-m-d'));
-                    }
-                }
-            } else {
-                if (!is_null($startDate) && !is_null($endDate) &&  $startDate == $endDate) {
-
-
-                    $tasks = $tasks->whereDate('tasks.updated_at', '=', Carbon::parse($startDate)->format('Y-m-d'));
-                } else {
-                    if (!is_null($startDate)) {
-                        $tasks = $tasks->whereDate('tasks.updated_at', '>=', Carbon::parse($startDate)->format('Y-m-d'));
-                    }
-                    if (!is_null($endDate)) {
-                        $tasks = $tasks->whereDate('tasks.updated_at', '<=', Carbon::parse($endDate)->format('Y-m-d'));
-                    }
-                }
-            }
-        }
-        if (!is_null($status)) {
-            if ($status == 11) {
-                $tasks = $tasks;
-            } elseif ($status == 10) {
-                $tasks = $tasks->where('tasks.board_column_id', '!=', 4);
-            } elseif ($status == 1) {
-                $tasks = $tasks->where('tasks.board_column_id', 1);
-            } elseif ($status == 2) {
-                $tasks = $tasks->where('tasks.board_column_id', 2);
-            } elseif ($status == 3) {
-                $tasks = $tasks->where('tasks.board_column_id', 3);
-            } elseif ($status == 4) {
-                $tasks = $tasks->where('tasks.board_column_id', 4);
-            } elseif ($status == 6) {
-                $tasks = $tasks->where('tasks.board_column_id', 6);
-            } elseif ($status == 7) {
-                $tasks = $tasks->where('tasks.board_column_id', 7);
-            } elseif ($status == 8) {
-                $tasks = $tasks->where('tasks.board_column_id', 8);
-            } elseif ($status == 9) {
-                $tasks = $tasks->where('tasks.board_column_id', 9);
-            }
-        }
-        if (Auth::user()->role_id == 5) {
-            $tasks = $tasks->where('task_users.user_id', Auth::id())->orderBy('tasks.created_at', 'desc')->get();
-        } else {
-            $tasks = $tasks->orderBy('tasks.created_at', 'desc')
-            ->get();
-        }
         return response()->json([
             'status' => 200,
             'tasks' => $tasks,
@@ -1390,7 +958,7 @@ class TaskController extends AccountBaseController
 
         /**EMPLOYEE EVALUATION END */
 
-        $text = Auth::user()->name . ' mark task complete';
+        $text = Auth::user()->name . ' submitted task ' . $task->heading;
         $link = '<a href="' . route('tasks.show', $task->id) . '">' . $text . '</a>';
         if($task->independent_task_status == 0)
         {
@@ -1596,9 +1164,18 @@ class TaskController extends AccountBaseController
     }
 
 
+        if(Auth::user()->role_id == 4)
+        {
+            $text = Auth::user()->name . ' Approved the task ' . $task_status->heading ;
+            $link = '<a href="' . route('tasks.show', $task_status->id) . '">' . $text . '</a>';
+        }else{
+            $under_task = Task::where('id', $task_status->dependent_task_id)->first();
+            $subTaskUser = SubTask::where('id', $task_status->subtask_id)->first();
+            $findDev = User::where('id', $subTaskUser->assigned_to)->first();
+            $text = Auth::user()->name . ' Approved subtask ' . $task_status->heading .' under task '.$under_task->heading .' (Developer: '. $findDev->name . ')';
+            $link = '<a href="' . route('tasks.show', $task_status->id) . '">' . $text . '</a>';
+        }
 
-        $text = Auth::user()->name . ' mark task completed';
-        $link = '<a href="' . route('tasks.show', $task->id) . '">' . $text . '</a>';
         if ($task_status->independent_task_status != 1) {
             $this->logProjectActivity($task->task->project->id, $link);
         }
@@ -1821,8 +1398,18 @@ class TaskController extends AccountBaseController
 
         $task_submission = TaskSubmission::where('task_id', $task_status->id)->first();
 
-        $text = Auth::user()->name . ' send revision request';
-        $link = '<a href="' . route('tasks.show', $task_status->id) . '">' . $text . '</a>';
+        if($request->subtask_id == null)
+        {
+            $revision_task = Task::where('id',$request->task_id)->first();
+            $text = Auth::user()->name . ' Gave revision for task ' . $revision_task->heading;
+            $link = '<a href="' . route('tasks.show', $task_status->id) . '">' . $text . '</a>';
+        }else{
+            $revision_given_by = User::where('id',$request->against_to)->first();
+            $revision_sub_task = Task::where('id',$request->task_id)->first();
+            $revision_task = Task::where('id',$revision_sub_task->dependent_task_id)->first();
+            $text = 'Revision given to '. $revision_given_by->name . ' by ' . Auth::user()->name . ' for subtask ' . $revision_sub_task->heading . ' under task ' . $revision_task->heading;
+            $link = '<a href="' . route('tasks.show', $task_status->id) . '">' . $text . '</a>';
+        }
         if ($task_status->project_id != null) {
             $this->logProjectActivity($task_status->project->id, $link);
         }
@@ -2395,7 +1982,6 @@ class TaskController extends AccountBaseController
     }
     public function StoreNewTask(Request $request)
     {
-        //  dd($request->all());
         try {
             //    DB::beginTransaction();
             $setting = global_setting();
@@ -2604,7 +2190,7 @@ class TaskController extends AccountBaseController
                 $task->added_by = Auth::id();
                 $task->created_by = Auth::id();
                 $task->save();
-
+                
                 $task->task_short_code = ($project) ? $project->project_short_code . '-' . $task->id : null;
                 $task->saveQuietly();
 
@@ -2803,7 +2389,7 @@ class TaskController extends AccountBaseController
 
                         //need pending action
                     }
-                    $text = Auth::user()->name . ' assigned new task on ' . $assigned_to->name;
+                    $text = Auth::user()->name . ' assigned new task ('.$task->heading.') to ' . $assigned_to->name;
                     $link = '<a href="' . route('tasks.show', $task->id) . '">' . $text . '</a>';
                     $this->logProjectActivity($project->id, $link);
 
@@ -2826,7 +2412,7 @@ class TaskController extends AccountBaseController
 
                         //need pending action
                     }
-                    $text = Auth::user()->name . ' assigned new task on ' . $assigned_to->name;
+                    $text = Auth::user()->name . ' assigned new task ('.$task->heading.') to ' . $assigned_to->name;
                     $link = '<a href="' . route('tasks.show', $task->id) . '">' . $text . '</a>';
                     $this->logProjectActivity($project->id, $link);
 
@@ -2852,7 +2438,6 @@ class TaskController extends AccountBaseController
             //     //$redirectUrl = url('/account/projects/418?tab=tasks');
             //     $redirectUrl = route('projects.show', $request->project_id) . '?tab=tasks';
             // }
-
             // return Reply::successWithData(__('messages.taskCreatedSuccessfully'), ['redirectUrl' => $redirectUrl, 'taskID' => $task->id]);
         } catch (\Throwable $th) {
             // throw $th;
@@ -3147,18 +2732,20 @@ class TaskController extends AccountBaseController
             ];
         }
 
-
         DB::commit();
 
+        $text = Auth::user()->name . ' updated his task ' . $task->heading;
+        $link = '<a href="' . route('tasks.show', $task->id) . '">' . $text . '</a>';
+        $this->logProjectActivity($project->id, $link);
 
 
         if (is_array($request->user_id)) {
             $assigned_to = User::find($request->user_id[0]);
 
 
-            $text = Auth::user()->name . ' assigned task updated by ' . $assigned_to->name;
-            $link = '<a href="' . route('tasks.show', $task->id) . '">' . $text . '</a>';
-            $this->logProjectActivity($project->id, $link);
+            // $text = Auth::user()->name . ' updated his task ' . $task->heading;
+            // $link = '<a href="' . route('tasks.show', $task->id) . '">' . $text . '</a>';
+            // $this->logProjectActivity($project->id, $link);
 
             $this->triggerPusher('notification-channel', 'notification', [
                 'user_id' => $assigned_to->id,
@@ -3170,9 +2757,9 @@ class TaskController extends AccountBaseController
         } else {
             $assigned_to = User::find($request->user_id);
 
-            $text = Auth::user()->name . ' assigned task updated by' . $assigned_to->name;
-            $link = '<a href="' . route('tasks.show', $task->id) . '">' . $text . '</a>';
-            $this->logProjectActivity($project->id, $link);
+            // $text = Auth::user()->name . ' assigned task updated by' . $assigned_to->name;
+            // $link = '<a href="' . route('tasks.show', $task->id) . '">' . $text . '</a>';
+            // $this->logProjectActivity($project->id, $link);
 
             $this->triggerPusher('notification-channel', 'notification', [
                 'user_id' => $assigned_to->id,
@@ -3802,6 +3389,11 @@ class TaskController extends AccountBaseController
             $task->board_column_id = 9;
             $task->save();
         }
+
+        $text = Auth::user()->name . ' submitted the task ' . $task_status->heading . ' for client\'s approval';
+        $link = '<a href="' . route('tasks.show', $task_status->id) . '">' . $text . '</a>';
+        $this->logProjectActivity($task_status->project_id, $link);
+
         return response()->json([
             'status' => 200,
         ]);
@@ -4035,6 +3627,13 @@ class TaskController extends AccountBaseController
             $this->create_dispute($task_revision);
         }
 
+
+        if($project->client_id != null){
+            $client = User::where('id', $project->client_id)->first();
+            $text =  $client->name . ' gave revision for task ' . $task_status->heading;
+            $link = '<a href="' . route('tasks.show', $task_status->id) . '">' . $text . '</a>';
+            $this->logProjectActivity($task_status->project_id, $link);
+        }
 
         return response()->json([
             'status' => 200,
@@ -6015,6 +5614,76 @@ class TaskController extends AccountBaseController
         $raised_against =  $filter["raised_against"] ?? NULL;
         $client_id =   $filter["client_id"] ?? NULL;
 
+
+
+        //get user
+        function get_user($user_id, $is_client)
+        {
+            $user = User::where('id', $user_id)->get()->first();
+            $user_response = [
+                "id" => $user->id,
+                "name" => $user->name,
+                "image" => $user->image,
+                "role_id" => $user->role_id,
+            ];
+
+            if (!$is_client) {
+                $employee_details = [
+                    "designation" => $user->employeeDetail ? $user->employeeDetail->designation->name : null,
+                    "emplyee_id" => $user->employeeDetail ? $user->employeeDetail->employee_id : null,
+                ];
+                $user_response = array_merge($user_response, $employee_details);
+            }
+
+            return $user_response;
+        }
+
+        // get task details
+        function get_task($task_id)
+        {
+            // TODO: get task details here...
+             
+
+            $task = DB::table('tasks')
+                ->where('tasks.id', $task_id)
+                ->leftJoin('project_members', 'tasks.project_id', 'project_members.project_id')
+                ->leftJoin('task_users', 'tasks.id', 'task_users.task_id')
+                ->select(
+                    'tasks.id as id',
+                    'tasks.heading as title',
+                    'tasks.subtask_id',
+                    'tasks.created_by as task_added_by',
+                    'task_users.user_id as task_user_id',
+                    'tasks.task_category_id as task_category'
+                )
+                ->first();
+            
+           
+            // if subtask 
+            if($task->subtask_id){
+                // get subtask details
+                $subtask = DB::table('sub_tasks') 
+                    ->where('id', $task->subtask_id)
+                    ->first(); 
+                    
+                // lead developer 
+                $lead_dev = 2252;
+                $lead_developer = get_user($lead_dev, false);
+                $developer = get_user($subtask->assigned_to, false);
+
+                $task->lead_developer = $lead_developer ?? null;
+                $task->developer = $developer ?? null;
+                $task->parent_task = get_task($subtask->task_id); 
+
+                return $task;
+            }else {
+                $lead_developer = get_user($task->task_user_id, false);
+                $task->lead_developer = $lead_developer ?? null; 
+                return $task;
+            }
+ 
+        }
+
         $disputes = DB::table('task_revision_disputes as disputes')
             ->leftJoin('task_revisions as revision', 'disputes.revision_id', 'revision.id')
             ->leftJoin('projects', 'disputes.project_id', 'projects.id')
@@ -6083,131 +5752,26 @@ class TaskController extends AccountBaseController
 
 
         $disputes->each(function ($dispute) {
-            $dispute->raised_against = $this->get_user($dispute->raised_against, false);
-            $dispute->raised_by = $this->get_user($dispute->raised_by, false);
+            $dispute->raised_against = get_user($dispute->raised_against, false);
+            $dispute->raised_by = get_user($dispute->raised_by, false);
             $conversation = DB::table('task_dispute_questions')->where('dispute_id', $dispute->id)->get();
             $dispute->conversations = $conversation ?? [];
-            $dispute->task = $this->get_task($dispute->task_id);
-            $dispute->client = $this->get_user($dispute->client_id, true);
-            $dispute->project_manager = $this->get_user($dispute->pm_id, false);
-            $dispute->sales_person = $this->get_user($dispute->deal_added_by, false);
+            $dispute->task = get_task($dispute->task_id);
+            $dispute->client = get_user($dispute->client_id, true);
+            $dispute->project_manager = get_user($dispute->pm_id, false);
+            $dispute->sales_person = get_user($dispute->deal_added_by, false);
             if ($dispute->resolved_by) {
-                $dispute->resolved_by = $this->get_user($dispute->resolved_by, false);
+                $dispute->resolved_by = get_user($dispute->resolved_by, false);
             }
             if ($dispute->winner) {
-                $dispute->winner = $this->get_user($dispute->winner, false);
+                $dispute->winner = get_user($dispute->winner, false);
             }
             if ($dispute->authorized_by) {
-                $dispute->authorized_by = $this->get_user($dispute->authorized_by, false);
+                $dispute->authorized_by = get_user($dispute->authorized_by, false);
             }
         });
 
         return response()->json($disputes, 200);
-    }
-    public function exportTaskDisput(Request $request)
-    {
-        $logged_user = Auth::user();
-
-        $start_date = $request->start_date ?? null;
-        $end_date = $request->end_date ?? null;
-        $task_id = $request->task_id ?? null;
-        $project_id = $request->project_id ?? null;
-        $dispute_id = $request->dispute_id ?? null;
-        $raised_by = $request->dispute_raised_by ?? null;
-        $raised_against = $request->dispute_raised_against ?? null;
-        $client_id =   $request->client_id ?? null;
-
-        $disputes = DB::table('task_revision_disputes as disputes')
-            ->leftJoin('task_revisions as revision', 'disputes.revision_id', 'revision.id')
-            ->leftJoin('projects', 'disputes.project_id', 'projects.id')
-            ->leftJoin('deals', 'projects.deal_id', 'deals.id')
-            ->select(
-                'disputes.*',
-                'revision.*',
-                'disputes.id as id',
-                'disputes.created_at as dispute_created_at',
-                'disputes.updated_at as dispute_updated_at',
-                'revision.id as revision_id',
-                'revision.created_at as revision_created_at',
-                'revision.updated_at as revision_updated_at',
-                'revision.raised_by_percent as revision_raised_by_percent',
-                'revision.raised_against_percent as revision_raised_against_percent',
-                'disputes.raised_by_percent as raised_by_percent',
-                'disputes.raised_against_percent as raised_against_percent',
-                'projects.id as project_id',
-                'projects.project_name as project_name',
-                'projects.client_id as client_id',
-                'projects.pm_id as pm_id',
-                'projects.deal_id as project_deal_id',
-                'deals.added_by as deal_added_by'
-            )
-            ->groupBy('revision.id')
-            ->where(function ($query) use ($task_id, $project_id, $dispute_id, $raised_by, $raised_against, $client_id, $start_date, $end_date, $logged_user) {
-                if ($task_id) {
-                    $query->where('disputes.task_id', $task_id);
-                }
-
-                if (collect([1, 8])->contains($logged_user->role_id)) {
-                    if ($raised_by) {
-                        $query->where('disputes.raised_by', $raised_by);
-                    }
-
-                    if ($raised_against) {
-                        $query->where('disputes.raised_against', $raised_against);
-                    }
-                } else {
-                    $query->where('disputes.raised_against', $logged_user->id)
-                        ->orWhere('disputes.raised_by', $logged_user->id);
-                }
-
-                if ($client_id) {
-                    $query->where('projects.client_id', $client_id);
-                }
-
-                if ($project_id) {
-                    $query->where('disputes.project_id', $project_id);
-                }
-
-                if ($dispute_id) {
-                    $query->where('disputes.id', $dispute_id);
-                }
-
-                if ($start_date) {
-                    $query->whereDate('disputes.created_at', '>=', Carbon::create($start_date)->format('Y-m-d'));
-                }
-
-                if ($end_date) {
-                    $query->whereDate('disputes.created_at', '<=', Carbon::create($end_date)->format('Y-m-d'));
-                }
-            })
-            
-            ->get();
-
-
-        $disputes->each(function ($dispute) {
-            $dispute->raised_against = $this->get_user($dispute->raised_against, false);
-            $dispute->raised_by = $this->get_user($dispute->raised_by, false);
-            $conversation = DB::table('task_dispute_questions')->where('dispute_id', $dispute->id)->get();
-            $dispute->conversations = $conversation ?? [];
-            $dispute->task = $this->get_task($dispute->task_id);
-            $dispute->client = $this->get_user($dispute->client_id, true);
-            $dispute->project_manager = $this->get_user($dispute->pm_id, false);
-            $dispute->sales_person = $this->get_user($dispute->deal_added_by, false);
-            if ($dispute->resolved_by) {
-                $dispute->resolved_by = $this->get_user($dispute->resolved_by, false);
-            }
-            if ($dispute->winner) {
-                $dispute->winner = $this->get_user($dispute->winner, false);
-            }
-            if ($dispute->authorized_by) {
-                $dispute->authorized_by = $this->get_user($dispute->authorized_by, false);
-            }
-        });
-
-        return response()->json([
-            'data' => $disputes,
-            'status' => 200
-        ]);
     }
 
     public function get_disputes(Request $request)
@@ -6546,6 +6110,77 @@ class TaskController extends AccountBaseController
 
         $author = Auth::user();
 
+
+         //get user
+         function get_user($user_id, $is_client){
+            if(!$user_id) return;
+            $user = User::where( 'id', $user_id)->get()->first();
+            $user_response = [
+                "id" => $user->id,
+                "name" => $user->name,
+                "image" => $user->image,
+                "role_id" => $user->role_id,
+           ];
+
+
+            if(!$is_client){
+                $employee_details = [
+                    "designation" => $user->employeeDetail ? $user->employeeDetail->designation->name : null,
+                    "emplyee_id" => $user->employeeDetail ? $user->employeeDetail->employee_id : null,
+                ];
+                $user_response = array_merge($user_response, $employee_details);
+            }
+
+           return $user_response;
+        }
+
+        // get task details
+        function get_task($task_id)
+        {
+            // TODO: get task details here...
+             
+
+            $task = DB::table('tasks')
+                ->where('tasks.id', $task_id)
+                ->leftJoin('project_members', 'tasks.project_id', 'project_members.project_id')
+                ->leftJoin('task_users', 'tasks.id', 'task_users.task_id')
+                ->select(
+                    'tasks.id as id',
+                    'tasks.heading as title',
+                    'tasks.subtask_id',
+                    'tasks.created_by as task_added_by',
+                    'task_users.user_id as task_user_id',
+                    'tasks.task_category_id as task_category'
+                )
+                ->first();
+            
+           
+            // if subtask 
+            if($task->subtask_id){
+                // get subtask details
+                $subtask = DB::table('sub_tasks') 
+                    ->where('id', $task->subtask_id)
+                    ->first(); 
+                    
+                // lead developer 
+                $lead_dev = $subtask->added_by;
+                $lead_developer = get_user($lead_dev, false);
+                $developer = get_user($subtask->assigned_to, false);
+
+                $task->lead_developer = $lead_developer ?? null;
+                $task->developer = $developer ?? null;
+                $task->parent_task = get_task($subtask->task_id); 
+
+                return $task;
+            }else {
+                $lead_developer = get_user($task->task_user_id, false);
+                $task->lead_developer = $lead_developer ?? null; 
+                return $task;
+            }
+ 
+        }
+
+
         $revisions = DB::table('task_revisions as revisions')
                     ->leftJoin('projects', 'revisions.project_id', 'projects.id')
                     ->leftJoin('deals', 'projects.deal_id', 'deals.id')
@@ -6624,16 +6259,16 @@ class TaskController extends AccountBaseController
 
 
                     foreach ($revisions as $revision) {
-                        $revision->task_assign_to = $this->get_user($revision->task_assign_to, false);
-                        $revision->client = $this->get_user($revision->clientId, true);
-                        $revision->deal_added_by = $this->get_user($revision->deal_added_by, false);
-                        $revision->project_manager = $this->get_user($revision->pm_id, false);
+                        $revision->task_assign_to = get_user($revision->task_assign_to, false);
+                        $revision->client = get_user($revision->clientId, true);
+                        $revision->deal_added_by = get_user($revision->deal_added_by, false);
+                        $revision->project_manager = get_user($revision->pm_id, false);
 
                         if ($revision->sale_person) {
-                            $revision->sale_person = $this->get_user($revision->sale_person, false);
+                            $revision->sale_person = get_user($revision->sale_person, false);
                         }
 
-                        $revision->added_by = $this->get_user($revision->added_by, false);
+                        $revision->added_by = get_user($revision->added_by, false);
 
                         if ($revision->subtask_id) {
                             $revision->lead_developer = $revision->added_by;
@@ -6667,73 +6302,6 @@ class TaskController extends AccountBaseController
         return response()->json($data, 200);
     }
 
-    public function get_user($user_id, $is_client){
-        if(!$user_id) return;
-        $user = User::where( 'id', $user_id)->get()->first();
-        $user_response = [
-            "id" => $user->id,
-            "name" => $user->name,
-            "image" => $user->image,
-            "role_id" => $user->role_id,
-       ];
-
-
-        if(!$is_client){
-            $employee_details = [
-                "designation" => $user->employeeDetail ? $user->employeeDetail->designation->name : null,
-                "emplyee_id" => $user->employeeDetail ? $user->employeeDetail->employee_id : null,
-            ];
-            $user_response = array_merge($user_response, $employee_details);
-        }
-
-       return $user_response;
-    }
-
-    public function get_task($task_id)
-    {
-        // TODO: get task details here...
-            
-
-        $task = DB::table('tasks')
-            ->where('tasks.id', $task_id)
-            ->leftJoin('project_members', 'tasks.project_id', 'project_members.project_id')
-            ->leftJoin('task_users', 'tasks.id', 'task_users.task_id')
-            ->select(
-                'tasks.id as id',
-                'tasks.heading as title',
-                'tasks.subtask_id',
-                'tasks.created_by as task_added_by',
-                'task_users.user_id as task_user_id',
-                'tasks.task_category_id as task_category'
-            )
-            ->first();
-        
-        
-        // if subtask 
-        if($task->subtask_id){
-            // get subtask details
-            $subtask = DB::table('sub_tasks') 
-                ->where('id', $task->subtask_id)
-                ->first(); 
-                
-            // lead developer 
-            $lead_dev = $subtask->added_by;
-            $lead_developer = $this->get_user($lead_dev, false);
-            $developer = $this->get_user($subtask->assigned_to, false);
-
-            $task->lead_developer = $lead_developer ?? null;
-            $task->developer = $developer ?? null;
-            $task->parent_task = $this->get_task($subtask->task_id); 
-
-            return $task;
-        }else {
-            $lead_developer = $this->get_user($task->task_user_id, false);
-            $task->lead_developer = $lead_developer ?? null; 
-            return $task;
-        }
-
-    }
-
     /************** GET TASKS REVISIONs ************* */
     public function task_revisions(Request $request){
         $filter = [
@@ -6750,143 +6318,6 @@ class TaskController extends AccountBaseController
 
 
         return $this-> get_task_revision($filter);
-    }
-
-
-    public function exportTaskRevision(Request $request) 
-    {
-        $client = $request->client ?? null;
-        $sale = $request->sale ?? null;
-        $revision_id = $request->revision_id ?? null;
-        $raised_by = $request->raised_by ?? null;
-        $project_manager = $request->project_manager ?? null;
-        $lead = $request->lead ?? null;
-        $project = $request->project ?? null;
-        $start_date = $request->startDate ?? null;
-        $end_date = $request->endDate ?? null;
-        $against_to = $request->against_to ?? null;
-
-        $author = Auth::user();
-
-        $revisions = DB::table('task_revisions as revisions')
-                    ->leftJoin('projects', 'revisions.project_id', 'projects.id')
-                    ->leftJoin('deals', 'projects.deal_id', 'deals.id')
-                    ->leftJoin('tasks', 'revisions.task_id', 'tasks.id')
-                    ->leftJoin('task_users', 'tasks.id', 'task_users.task_id')
-                    ->select(
-                      'revisions.*',
-                      'revisions.created_at as revision_created_at',
-                      'revisions.updated_at as revision_updated_at',
-                      'projects.id as project_id',
-                      'projects.project_name as project_name',
-                      'projects.client_id as clientId',
-                      'projects.pm_id as pm_id',
-                      'projects.deal_id as project_deal_id',
-                      'projects.status as project_status',
-                      'deals.added_by as deal_added_by',
-                      'tasks.*',
-                      'tasks.id as task_id',
-                      'revisions.id as id',
-                      'tasks.status as task_status',
-                      'task_users.user_id as task_assign_to',
-                    )
-                    ->where(function($query) use ($author, $revision_id, $client, $sale, $raised_by, $project_manager, $lead, $project, $start_date,$end_date){
-                        if($author->role_id != 1 && $author->role_id != 8){
-                           $query->where('task_users.user_id', $author->id)
-                                ->orWhere('tasks.added_by', $author->id)
-                                ->orWhere('revisions.added_by', $author->id)
-                                ->orWhere('revisions.sale_person', $author->id);
-                        }
-
-                        if($revision_id){
-                            $query->where('revisions.id', $revision_id);
-                        }
-
-                        if($sale){
-                            $query->where('deals.added_by', $sale);
-                        }
-
-                        if($client){
-                            $query->where('projects.client_id', $client);
-                        }
-
-                        if($raised_by){
-                            $query->where('tasks.added_by', $raised_by);
-                        }
-
-                        if($project_manager){
-                            $query->where('projects.pm_id', $project_manager);
-                        }
-
-                        if($lead){
-                            $query->where('task_users.user_id', $lead);
-                        }
-
-                        if($project){
-                            $query->where('projects.id', $project);
-                        }
-
-                        if (!is_null($start_date) && !is_null($end_date) && $start_date == $end_date) {
-                            $query->whereDate('revisions.created_at', '=', Carbon::parse($start_date)->format('Y-m-d'));
-                        } else {
-                            if (!is_null($start_date)) {
-                                $query->whereDate('revisions.created_at', '>=', Carbon::parse($start_date)->format('Y-m-d'));
-                            }
-                            if (!is_null($end_date)) {
-                                $query->whereDate('revisions.created_at', '<=', Carbon::parse($end_date)->format('Y-m-d'));
-                            }
-                        }
-
-
-                    })
-                    ->get();
-
-                    $data = [];
-
-
-                    foreach ($revisions as $revision) {
-                        $revision->task_assign_to = $this->get_user($revision->task_assign_to, false);
-                        $revision->client = $this->get_user($revision->clientId, true);
-                        $revision->deal_added_by = $this->get_user($revision->deal_added_by, false);
-                        $revision->project_manager = $this->get_user($revision->pm_id, false);
-
-                        if ($revision->sale_person) {
-                            $revision->sale_person = $this->get_user($revision->sale_person, false);
-                        }
-
-                        $revision->added_by = $this->get_user($revision->added_by, false);
-                        if ($revision->subtask_id) {
-                            $revision->lead_developer = $revision->added_by;
-                            $revision->developer = $revision->task_assign_to;
-                        } else {
-                            $revision->lead_developer = $revision->task_assign_to;
-                            $revision->developer = null;
-                        }
-
-                        if($against_to){
-
-                            if($revision->dispute_between == 'SPR' && $revision->sale_person['id'] == $against_to) {
-                                $data[] = $revision;
-                            }
-
-                            if($revision->dispute_between == 'LDR' && $revision->task_assign_to['id'] == $against_to){
-                                $data[] = $revision;
-                            }
-
-                            if($revision->dispute_between == 'PLR' && $revision->task_assign_to['id'] == $against_to){
-                                $data[] = $revision;
-                            }
-
-                            if($revision->dispute_between == 'CPR' && $revision->project_manager['id'] == $against_to){
-                                $data[] = $revision;
-                            }
-                        } else $data[] = $revision;
-                    }
-
-        return response()->json([
-            'data' => $data,
-            'status' => 200
-        ]);
     }
 
 

@@ -163,7 +163,7 @@ $projectArchived = $project->trashed();
 
 @section('content')
 
-    <div class="content-wrapper pt-0 border-top-0 client-detail-wrapper">
+    <div class="content-wrapper pt-0 border-top-0 client-detail-wrapper position-relative">
         @include($view)
     </div>
 

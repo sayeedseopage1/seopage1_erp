@@ -716,7 +716,7 @@ class ContractController extends AccountBaseController
 
         // activity log
         $user = Auth::user();
-        $text = $user->getRole->name . ' ' . $user->name . ' - Closed Deal (' . $deal->project_name . ') for ' . $deal->actual_amount . '$ (Client: ' . $deal->client_name . ')';
+        $text = $user->name . ' closed the deal for ' . $deal->actual_amount . '$';
         $link = '<a href="' . route('deals.show', $deal->id) . '">' . $text . '</a>';
         $activityLog = new LeadsDealsActivityLog();
         if ($lead != null) {

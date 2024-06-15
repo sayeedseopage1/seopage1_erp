@@ -57,7 +57,8 @@
                           <span style="color: {{$row->label_color}}"> {{$row->column_name}}</span>
                         </td>
                         <td>
-                          <span> {{$row->revision_count}}</span>
+                          {{-- <span> {{$row->revision_count}}</span> --}}
+                          <span>--</span>
                         </td>
                       
                     </tr>
