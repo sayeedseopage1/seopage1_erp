@@ -3,7 +3,6 @@ import '../../styles/message/freelancerMessage.css'
 import ChatList from '../../components/freelancerMessage/sections/ChatList';
 import ChatBox from '../../components/freelancerMessage/sections/ChatBox';
 import ChatActionList from '../../components/freelancerMessage/sections/ChatActionList';
-import { Divider } from 'antd';
 
 const FreelancerMessage = () => {
     return (

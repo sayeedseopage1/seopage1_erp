@@ -1,5 +1,5 @@
 import React from 'react';
-import userProfile from '../../../assets/freelancerMessage/user_profile.svg'
+import userProfile from '../../../assets/freelancerMessage/user_avatar_2.png'
 import chatActiveIcon from '../../../assets/freelancerMessage/chat-active.svg'
 
 const ChatBox = () => {

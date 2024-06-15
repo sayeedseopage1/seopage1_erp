@@ -1,5 +1,6 @@
 import React from 'react';
 import { CiSearch } from "react-icons/ci";
+import ChatListItem from '../ui/ChatListItem';
 
 const ChatList = () => {
     return (
@@ -13,7 +14,13 @@ const ChatList = () => {
                 </div>
             </div>
             <div className='sp1_marketplace_section_wrapper'>
-                hi
+                <div className='chat_list_title_wrapper'>
+                    <p className='chat_list_title'>Chats</p>
+                    <p className='chat_request'>Request</p>
+                </div>
+                <div>
+                    <ChatListItem />
+                </div>
             </div>
         </div>
     );

@@ -18,7 +18,7 @@ const ChatActionList = () => {
                 </div>
             </div>
             <div className='sp1_marketplace_section_wrapper'>
-                hi
+
             </div>
         </div>
     );

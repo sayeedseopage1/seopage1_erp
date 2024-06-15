@@ -46,6 +46,29 @@ input::placeholder {
     line-height: normal;
 }
 
+.chat_list_title_wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px
+}
+
+.chat_list_title {
+    color: var(--primary-black);
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+}
+
+.chat_request {
+    color: var(--primary-blue);
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+}
+
 /* chat box  */
 .chat_box_header {
     height: 78px;
@@ -70,6 +93,7 @@ input::placeholder {
 .chat_user_avatar {
     width: 50px;
     height: 50px;
+    border: 1px solid var(--primary-white);
     border-radius: 50%;
     object-fit: cover;
     object-position: center;
