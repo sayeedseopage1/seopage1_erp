@@ -43,7 +43,7 @@ class SalesRiskPolicyController extends AccountBaseController
 
     public static function Routes()
     {
-        Route::controller(self::class)->prefix('account/sales-risk-policies')->name('account.sale-risk-policies.')->group(function () {
+        Route::controller(self::class)->middleware('auth')->prefix('account/sales-risk-policies')->name('account.sale-risk-policies.')->group(function () {
 
             // policy rules
             Route::get('/', 'index')->name('index');
@@ -1384,7 +1384,7 @@ class SalesRiskPolicyController extends AccountBaseController
                 ->whereIn('sale_analysis_status', ['analysis', 'authorized', 'auto-authorized', 'denied'])
                 ->leftJoin('policy_question_values as pqv', 'pqv.deal_id', 'deals.id')
                 ->where(function ($query) use ($req) {
-                    if (auth()->user()->role_id != 1) $query->where('submitted_by', auth()->user()->id);
+                    if (!in_array(auth()->user()->role_id, [1, 8])) $query->where('submitted_by', auth()->user()->id);
 
                     if ($req->start_date && $req->end_date) $query->whereBetween('deals.created_at', [$req->start_date, $req->end_date]);
                     if ($req->client_id) $query->where('client_id', $req->client_id);
@@ -1449,9 +1449,13 @@ class SalesRiskPolicyController extends AccountBaseController
                 "COUNT(IF( sale_analysis_status IN ('analysis', 'authorized', 'auto-authorized','denied'), 1, null)) as 'all',
                 COUNT(IF( sale_analysis_status = 'analysis', 1, null)) as pending,
                 COUNT(IF( sale_analysis_status IN ('authorized', 'auto-authorized'), 1, null)) as authorized,
-                COUNT(IF( sale_analysis_status = 'denied', 1, null)) as denied
-                "
-            ))->whereBetween('created_at', [$req->start_date, $req->end_date])->first();
+                COUNT(IF( sale_analysis_status = 'denied', 1, null)) as denied"
+            ))->leftJoin('policy_question_values as pqv', 'pqv.deal_id', 'deals.id')
+            ->whereIn('sale_analysis_status', ['analysis', 'authorized', 'auto-authorized', 'denied'])
+            ->where(function ($query) use ($req){
+                if (!in_array(auth()->user()->role_id, [1, 8])) $query->where('submitted_by', auth()->user()->id);
+                if ($req->client_id) $query->where('client_id', $req->client_id);
+            })->whereBetween('deals.created_at', [$req->start_date, $req->end_date])->first();
 
             $extra = collect(['counts' => $counts]);
             $data = $extra->merge($data);
