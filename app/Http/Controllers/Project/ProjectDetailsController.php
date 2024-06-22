@@ -6,6 +6,7 @@ use App\Models\Task;
 use App\Models\Project;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 
 class ProjectDetailsController extends Controller
 {
@@ -28,6 +29,13 @@ class ProjectDetailsController extends Controller
         $projectArray = $project->toArray();
         
         $projectArray['progress'] = $tasks->count() ? round(($tasks->where('status','completed')->count()/$tasks->count())*100) : 0;
+        $projectArray['buttons']['deadline_extension_form'] = Auth::user()->role_id == 4 ? true : false;
+        $projectArray['buttons']['deadline_extension_authorization'] = Auth::user()->role_id == 1 ? true : false;
+        $projectArray['buttons']['mark_as_incomplete'] = Auth::user()->role_id == 1 ? true : false;
+        $projectArray['buttons']['pm_task_guidline'] = true;
+        $projectArray['buttons']['qc_authorization'] = Auth::user()->role_id == 1 ? true : false;
+        $projectArray['buttons']['completion_form_authorization'] = Auth::user()->role_id == 1 ? true : false;
+        $projectArray['buttons']['dispute_authorization'] = Auth::user()->role_id == 1 ? true : false;
 
         unset($projectArray['isProjectAdmin']);
 
