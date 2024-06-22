@@ -95,9 +95,9 @@ const Option1 = ({
                 position: "center",
                 icon: "error",
                 title: "You have selected wrong time range!",
-                text: `You must select time within this time range: 07:45 AM - (${formatTimeTo12Hour(
+                text: `You must select time within this time range: 07:45 AM - ${formatTimeTo12Hour(
                     lastClockOutTime
-                )}).`,
+                )}.`,
                 showConfirmButton: true,
             });
             return;

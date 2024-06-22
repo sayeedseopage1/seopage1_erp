@@ -1,10 +1,10 @@
-import React from 'react'
+import React from "react";
 
 const PersonAvatar = ({ avatar, name, url }) => {
     return (
-        <div className='d-flex align-items-center'>
-            <div className='' style={{ width: '32px' }}>
-                {avatar ?
+        <div className="d-flex align-items-center">
+            <div className="" style={{ width: "32px" }}>
+                {avatar ? (
                     <div
                         style={{
                             width: "32px",
@@ -19,11 +19,13 @@ const PersonAvatar = ({ avatar, name, url }) => {
                             className="rounded-circle"
                             onError={(e) => {
                                 e.target.src = "/img/avatar.png";
-                                e.target.alt = name?.slice(0, 1).toUpperCase() || 'A'; // 'A' is the default if name is undefined
+                                e.target.alt =
+                                    name?.slice(0, 1).toUpperCase() || "A"; // 'A' is the default if name is undefined
                             }}
                         />
                     </div>
-                    : <div
+                ) : (
+                    <div
                         className="sp1-item-center border rounded-circle"
                         style={{
                             width: "32px",
@@ -39,13 +41,15 @@ const PersonAvatar = ({ avatar, name, url }) => {
                             {name?.slice(0, 1).toUpperCase()}
                         </div>
                     </div>
-                }
+                )}
             </div>
-            {
-                url && <a href={url} className='pl-2 '>{name}</a>
-            }
+            {url && (
+                <a href={url} className="pl-2 ">
+                    {name}
+                </a>
+            )}
         </div>
-    )
-}
+    );
+};
 
-export default PersonAvatar
+export default PersonAvatar;
