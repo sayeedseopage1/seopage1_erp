@@ -2245,18 +2245,6 @@ class ProjectController extends AccountBaseController
 
         // abort_403(user()->permission('view_projects') == 'added' && $this->project->added_by != user()->id);
 
-        if (Auth::user()->role_id == 4) {
-            $pm_goal = ProjectPmGoal::all();
-            if (!is_null($pm_goal) && $pm_goal->isNotEmpty()) {
-                foreach ($pm_goal as $item) {
-                    $current_date = now();
-                    $goal_end_date = Carbon::parse($item->goal_end_date)->addHours(24);
-                    if (Auth::user()->id == $item->pm_id && $current_date->gte($goal_end_date) && $item->goal_status == 0 && $item->reason == null) {
-                        return view('projects.ajax.goale_alert', $this->data);
-                    }
-                }
-            }
-        }
 
         return view('projects.show', $this->data);
     }
@@ -3000,8 +2988,7 @@ class ProjectController extends AccountBaseController
 
             $project = Project::where('id', $deliverable->project_id)->first();
 
-            // create pm goal for hourly project
-            if($project->deal->project_type == 'hourly') (new HelperPmProjectStatusController)->deliverablePmGoalCreation($deliverable);
+
 
             $actions = PendingAction::where('code', 'DCA')->where('past_status', 0)->where('project_id', $request->project_id)->get();
             if ($actions != null) {
@@ -5773,7 +5760,7 @@ class ProjectController extends AccountBaseController
         $log_user = Auth::user();
 
         // 2ND TIME TOM MANAGEMENT AUTHORIZATION START
-        if ($request->project_id) {
+        if ($request->project_id && $project->deal->project_type == 'fixed') {
             $oldDeliverable = ProjectDeliverable::where('project_id', $request->project_id)->first();
 
             $deliverableReAuth = new DeliverableReAuthorization();
