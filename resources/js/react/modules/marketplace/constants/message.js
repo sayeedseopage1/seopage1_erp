@@ -34,7 +34,7 @@ export const dummy_messages = {
                 parent_id: 1,
                 time_created: "2024-06-22 17:22:42",
                 message:
-                    "Thanks, John! I'll review it and get back to you soon.",
+                    "Thanks, Dinar! I'll review it and get back to you soon.",
                 message_source: "chat_box",
                 attachments: [],
                 remove_reason: "nonfeatured",
