@@ -2,8 +2,12 @@
     --primary-blue: #1492E6;
     --primary-white: #fff;
     --light-blue: #F2F9FE;
+    --light-blue-2: #E0E9EF;
     --primary-gray: #ffffff33;
+    --secondary-gray: #7C7A7A;
+    --light-gray: #DCDCDC;
     --primary-black: #000;
+    --primary-red: #F66;
 }
 
 * {

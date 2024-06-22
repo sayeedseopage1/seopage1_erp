@@ -46,6 +46,25 @@ input::placeholder {
     line-height: normal;
 }
 
+.chat_list_section_wrapper,
+.chat_action_section_wrapper,
+.chat_box_section_wrapper {
+    height: calc(100vh - 241px);
+}
+
+.chat_list_section_wrapper {
+    border-left: 1px solid var(--light-blue-2);
+    border-bottom: 1px solid var(--light-blue-2);
+    border-bottom-left-radius: 9px;
+}
+
+.chat_list_item_wrapper {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+}
+
 .chat_list_title_wrapper {
     display: flex;
     align-items: center;
@@ -69,13 +88,101 @@ input::placeholder {
     line-height: normal;
 }
 
+.chat_list_wrapper {
+    margin-top: 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    height: calc(100vh - 316px);
+    overflow-y: auto;
+}
+
+.chat_list_item_content {
+    flex: auto;
+}
+
+.chat_list_item_header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+}
+
 .chat_list_user_avatar {
     width: 45px;
     height: 45px;
     border-radius: 6px;
-    border: 1px solid #DCDCDC;
+    border: 1px solid var(--light-gray);
     object-fit: cover;
     object-position: center;
+}
+
+.chat_list_item_names_wrapper {
+    max-width: 164px;
+    display: flex;
+    gap: 4px;
+}
+
+.chat_list_item_name {
+    color: var(--primary-black);
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+}
+
+.chat_list_item_user_name {
+    color: var(--secondary-gray);
+    font-size: 12px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.chat_list_item_date {
+    color: var(--secondary-gray);
+    font-size: 12px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+}
+
+.chat_list_item_message {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    margin-top: 6px;
+}
+
+.chat_list_item_text {
+    max-width: 226px;
+    color: var(--primary-blue);
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.chat_list_item_unread_count {
+    color: var(--primary-white);
+    background-color: var(--primary-red);
+    font-size: 12px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+    width: 22px;
+    height: 22px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
 }
 
 /* chat box  */

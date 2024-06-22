@@ -13,13 +13,17 @@ const ChatList = () => {
                     </div>
                 </div>
             </div>
-            <div className='sp1_marketplace_section_wrapper'>
+            <div className='chat_list_section_wrapper sp1_marketplace_section_wrapper'>
                 <div className='chat_list_title_wrapper'>
                     <p className='chat_list_title'>Chats</p>
                     <p className='chat_request'>Request</p>
                 </div>
-                <div>
-                    <ChatListItem />
+                <div className='chat_list_wrapper'>
+                    {
+                        Array(5).fill(0).map((item, index) => (
+                            <ChatListItem key={index} />
+                        ))
+                    }
                 </div>
             </div>
         </div>
