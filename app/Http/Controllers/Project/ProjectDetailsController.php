@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Project;
 
+use App\Models\Task;
 use App\Models\Project;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -18,11 +19,15 @@ class ProjectDetailsController extends Controller
     {
         $project = Project::select(['id','project_name','project_short_code','client_id','pm_id','start_date','deadline','project_budget','currency_id','deal_id','project_challenge','comments','requirement_defined','deadline_meet','project_summary','status'])->with('client:id,name,country_id', 'client.country:id,iso,nicename', 'pm:id,name,country_id', 'pm.country:id,iso,nicename', 'currency:id,currency_code,currency_symbol', 'deal:id,project_type,amount,upsell_actual_amount,profile_link,message_link,original_currency_id,description,description2,description3,description4,description5,description6,description7,description8,description9', 'deal.original_currency:id,currency_code,currency_symbol', 'workingEnvironment:id,project_id,site_url,frontend_password,login_url,email,password', 'pmTaskGuidline', 'pmTaskGuidelineAuthorizations','projectSubmission', 'projectPortfolio.theme')->find($id);
 
+        $tasks = Task::where('project_id',$project->id);
+
         if (!$project) {
             return response()->json(['status' => 404, 'message' => 'Project not found'], 404);
         }
 
         $projectArray = $project->toArray();
+        
+        $projectArray['progress'] = $tasks->count() ? round(($tasks->where('status','completed')->count()/$tasks->count())*100) : 0;
 
         unset($projectArray['isProjectAdmin']);
 
