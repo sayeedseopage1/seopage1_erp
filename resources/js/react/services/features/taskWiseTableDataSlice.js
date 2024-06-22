@@ -16,9 +16,7 @@ const taskWiseTableDataSlice = createSlice({
         setTaskWiseTableData: (state, action) => {
             state.data = action.payload
         },
-
         setStatus: (state, action) => {state.status = action.payload}
-
     }
 })
 

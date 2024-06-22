@@ -184,6 +184,7 @@ class PaymentController extends AccountBaseController
 
     public function store(StorePayment $request)
     {
+        // dd($request->all());
         \DB::beginTransaction();
         $payment = new Payment();
 
@@ -1644,6 +1645,33 @@ class PaymentController extends AccountBaseController
         if ($redirectUrl == '') {
             $redirectUrl = route('projects.show', $request->project_id).'?tab=milestones';
         }
+
+        function ordinal($number) {
+            $suffix = ['th', 'st', 'nd', 'rd', 'th', 'th', 'th', 'th', 'th', 'th'];
+            if (((int)($number % 100 / 10)) == 1) {
+                $abbreviation = $number . 'th';
+            } else {
+                $abbreviation = $number . $suffix[$number % 10];
+            }
+            return $abbreviation;
+        }
+        $milestoneId = Invoice::where('id', $request->invoice_id)->first()->milestone_id;
+        $milestone = ProjectMilestone::where('id', $milestoneId)->where('project_id', $request->project_id)->first();
+        $completedMilestone = ProjectMilestone::where('id','<=', $milestoneId)->where('project_id', $request->project_id)->count();
+        $milestoneCompletion = $completedMilestone . substr(ordinal($completedMilestone), -2);
+
+        $text = Auth::user()->name . ' Completed milestone ' . $milestoneCompletion .' milestone (' . $milestone->milestone_title . ') '  ;
+        $link = '<a href="' . route('projects.show', $request->project_id) . '?tab=milestones">' . $text . '</a>';
+        $this->logProjectActivity($request->project_id, $link);
+
+        $project = Project::where('id', $request->project_id)->first();
+        if($project->status == 'finished')
+        {
+            $text = 'Project has been completed successfully';
+            $link = '<a href="' . route('projects.show', $project->id) . '">' . $text . '</a>';
+            $this->logProjectActivity($project->id, $link);
+        }
+
         \DB::commit();
         return Reply::successWithData(__('messages.paymentSuccess'), ['redirectUrl' => $redirectUrl]);
     }

@@ -1013,6 +1013,7 @@
     border-radius: 4px;
     font-size: 14px;
     gap: 10px;
+    background-color: #fff;
 }
 
 .cnx_select_box_option > i {

@@ -1,0 +1,1 @@
+export const camelToFlat = c => (c = c.replace(/[A-Z]/g, " $&"), c[0].toUpperCase() + c.slice(1))

@@ -55,8 +55,7 @@ use App\Notifications\DealAuthorizationSendNotification;
 use Notification;
 use App\Models\GoalSetting;;
 use App\Models\RoleUser;
-
-
+use Illuminate\Support\Facades\Route;
 
 class DealController extends AccountBaseController
 {
@@ -70,7 +69,6 @@ class DealController extends AccountBaseController
             return $next($request);
         });
     }
-
 
     public function index()
     {
@@ -87,7 +85,7 @@ class DealController extends AccountBaseController
         }
         if(Auth::user()->role_id == 6 || Auth::user()->role_id == 13){
             abort(403);
-        } 
+        }
 
         return view('deals.index', $this->data);
     }
@@ -230,7 +228,7 @@ class DealController extends AccountBaseController
             }
             // Always use an array of user IDs, even if $goal->user_id is set
             if (isset($goal->user_id) || isset($user_data)) {
-        
+
                 $goal2 = $goal->user_id ? [$goal->user_id] : $user_data;
 
 
@@ -263,7 +261,7 @@ class DealController extends AccountBaseController
                         $dealStage_amount2 = $dealStage->get();
                         $dealStage_amount = $dealStage->sum('deal_stages.amount');
                         $dealStage_count = $dealStage->count();
-                        
+
                         if ($goal->trackingType == 'value') {
                             $deal_amount = $dealStage_amount;
                         } else {
@@ -425,7 +423,7 @@ class DealController extends AccountBaseController
 
     public function update(Request $request)
     {
-    //    dd($request->all()); 
+    //    dd($request->all());
         // $request->validate([
         //     'client_name' => 'required',
         //     'client_username' => 'required',
@@ -558,7 +556,7 @@ class DealController extends AccountBaseController
       //  dd($this->deal );
       if(Auth::user()->role_id == 6 || Auth::user()->role_id == 13){
         abort(403);
-    } 
+    }
 
         // abort_403(
         //     !(
@@ -892,7 +890,8 @@ class DealController extends AccountBaseController
             'lead_added_by.image as lead_added_by_image',
             'amount.currency_symbol as ammount_currency_symbol',
             'actual_amount.currency_symbol as actual_amount_currency_symbol',
-            'leads.project_link as lead_project_link'
+            'leads.project_link as lead_project_link',
+            'deals.sale_analysis_status as sale_analysis_status'
             )
             ->leftJoin('leads', 'leads.id', '=', 'deal_stages.lead_id')
             ->leftJoin('users as added_by', 'deal_stages.added_by', '=', 'added_by.id')
@@ -932,6 +931,9 @@ class DealController extends AccountBaseController
                 if ($request->status == 5) {
                     $dealQuery->where('deal_stages.deal_stage', $request->status)->where('won_lost', '=',null);
                 }
+                elseif ($request->status == 'pending') {
+                    $dealQuery->where('deals.sale_analysis_status', '=', 'pending');
+                }
                 elseif ($request->status == 'won') {
                     $dealQuery->where('deal_stages.won_lost', '=','Yes');
                 }
@@ -942,18 +944,25 @@ class DealController extends AccountBaseController
                     $dealQuery->where('deal_stages.deal_stage', $request->status);
                 }
             }
+
             $deals_data = $dealQuery
-                ->orderBy('id', 'desc')
+                ->orderBy('updated_at', 'desc')
                 ->paginate($limit);
 
             foreach($deals_data as $item){
                 $won_lost = '';
                 $won_lost_bg = '';
-                if($item->won_lost != null){
+
+                if($request->status == 'pending' && $item->sale_analysis_status == 'pending')
+                {
+                    $won_lost = 'Pending Sales Analysis';
+                    $won_lost_bg = '#FCBD01';
+                }
+                elseif($item->won_lost != null){
                     if($item->won_lost== 'Yes'){
                         $won_lost = 'Won';
                         $won_lost_bg = '#00aa00';
-                    }else{
+                    }else {
                         $won_lost = 'Lost';
                         $won_lost_bg = '#FF0000';
                     }
@@ -973,9 +982,13 @@ class DealController extends AccountBaseController
                     }elseif ($item->deal_stage == 4) {
                         $won_lost = 'Negotiation Started';
                         $won_lost_bg = '#A020F0';
-                    }else{
+                    }elseif ($item->deal_stage == 5){
                         $won_lost = 'Milestone Breakdown';
                         $won_lost_bg = '#C525F2';
+                    }
+                    else{
+                        $won_lost = 'Pending Sales Analysis';
+                        $won_lost_bg = '#FCBD01';
                     }
                 }
                 $item->won_lost = $won_lost;
@@ -994,6 +1007,15 @@ class DealController extends AccountBaseController
                     $item->deal_stages_converted_by_image = null;
                 }
             }
+
+
+            $counts = Deal::select(DB::raw("COUNT(IF(sale_analysis_status = 'pending', 1, null)) as pending"))
+            ->whereBetween(DB::raw('DATE(created_at)'), [$startDate, $endDate])
+            ->orWhereBetween(DB::raw('DATE(updated_at)'), [$startDate, $endDate])
+            ->first();
+
+            $extra = collect($counts);
+            $deals_data = $extra->merge($deals_data);
 
         return response()->json([
             'status'=> 200,
@@ -1137,4 +1159,5 @@ class DealController extends AccountBaseController
             'data'=>$countries
         ]);
     }
+
 }
