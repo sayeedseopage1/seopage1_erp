@@ -9,7 +9,7 @@ export const dummy_messages = {
                 from_user: 34567,
                 thread_id: 78910,
                 parent_id: 0,
-                time_created: 1655923200,
+                time_created: "2024-06-22 17:22:42",
                 message:
                     "Hello Jane, I have completed the initial draft of the project. Please review and provide your feedback.",
                 message_source: "chat_box",
@@ -32,7 +32,7 @@ export const dummy_messages = {
                 from_user: 891011,
                 thread_id: 78910,
                 parent_id: 1,
-                time_created: 1655926800,
+                time_created: "2024-06-22 17:22:42",
                 message:
                     "Thanks, John! I'll review it and get back to you soon.",
                 message_source: "chat_box",
@@ -49,7 +49,7 @@ export const dummy_messages = {
                 from_user: 891011,
                 thread_id: 78910,
                 parent_id: 1,
-                time_created: 1655930400,
+                time_created: "2024-06-22 17:22:42",
                 message:
                     "The draft looks good overall. However, could you please make some changes to the introduction section?",
                 message_source: "chat_box",
@@ -66,7 +66,7 @@ export const dummy_messages = {
                 from_user: 34567,
                 thread_id: 78910,
                 parent_id: 3,
-                time_created: 1655934000,
+                time_created: "2024-06-22 17:29:42",
                 message:
                     "Sure, I can do that. I'll send the revised draft by tomorrow.",
                 message_source: "chat_box",
