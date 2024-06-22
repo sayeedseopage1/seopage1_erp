@@ -21,7 +21,7 @@ class ProjectInsightController extends Controller
 
     public function getProjectTasks($project_id)
     {
-        $data = Task::where('project_id', $project_id)->whereNull('subtask_id')->get();
+        $data = Task::select(['id','project_id','heading','start_date','due_date','original_due_date','status','board_column_id','estimate_hours','estimate_minutes'])->where('project_id', $project_id)->whereNull('subtask_id')->get();
 
         return response()->json([
             'code' => 200,
