@@ -3,6 +3,12 @@
     grid-template-columns: 1fr 2fr 1fr;
 }
 
+.chat_list_section_wrapper,
+.chat_action_section_wrapper,
+.chat_box_section_wrapper {
+    height: calc(100vh - 241px);
+}
+
 .chat_header_wrapper {
     padding: 10px 0px;
     background: var(--primary-blue);
@@ -44,12 +50,6 @@ input::placeholder {
     font-style: normal;
     font-weight: 400;
     line-height: normal;
-}
-
-.chat_list_section_wrapper,
-.chat_action_section_wrapper,
-.chat_box_section_wrapper {
-    height: calc(100vh - 241px);
 }
 
 .chat_list_section_wrapper {
@@ -204,6 +204,7 @@ input::placeholder {
 
 .chat_user_avatar_wrapper {
     position: relative;
+    display: inline-block;
 }
 
 .chat_user_avatar {
@@ -269,4 +270,102 @@ input::placeholder {
     border: 1px solid var(--primary-white);
     border-radius: 50%;
 
+}
+
+.chat_action_section_wrapper {
+    border-right: 1px solid var(--light-blue-2);
+    border-bottom: 1px solid var(--light-blue-2);
+    border-bottom-right-radius: 9px;
+    overflow-y: auto;
+}
+
+.chat_action_avatar_wrapper {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 5px;
+}
+
+.chat_action_avatar {
+    width: 97px;
+    height: 97px;
+    border-radius: 50%;
+    border: 1px solid var(--primary-blue);
+}
+
+.chat_action_section_wrapper .active_status {
+    position: absolute;
+    bottom: 5px;
+    right: 5px;
+}
+
+.chat_actions_wrapper {
+    margin-top: 32px;
+}
+
+.chat_action_calling {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 10px;
+    cursor: pointer;
+}
+
+.chat_action_divider {
+    border: 1px solid var(--light-blue-2);
+    margin: 20px 0px;
+}
+
+.chat_action_project_details {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 5px;
+    cursor: pointer;
+}
+
+.chat_action_project_name {
+    color: var(--primary-blue);
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+}
+
+.chat_action_project_date {
+    color: var(--secondary-gray-2);
+    font-size: 12px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+}
+
+.chat_action_items {
+    display: flex;
+    flex-direction: column;
+    gap: 17px;
+}
+
+.chat_action_toggle_item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 5px;
+}
+
+.chat_action_item_title {
+    color: var(--primary-black);
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: normal;
+}
+
+.chat_action_item_description {
+    color: var(--primary-black);
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
 }
