@@ -22,10 +22,141 @@
     padding: 28px 30px;
     background-color: var(--primary-blue);
     border-radius: 9px 9px 0 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 30px;
+}
+
+.projects_content_header_title {
+    color: var(--primary-white);
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.header_title {
+    color: #FFF;
+    font-family: Poppins;
+    font-size: 24px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+}
+
+.projects_content_alert_title,
+.header_results {
+    color: var(--primary-white);
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+}
+
+.projects_content_header_sort_label {
+    color: var(--primary-white);
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+    margin-right: 9px;
+}
+
+.projects_content_header_sort .ant-select-selector {
+    border: 1px solid var(--primary-white) !important;
+    color: var(--primary-white) !important;
+}
+
+.projects_content_header_sort .ant-select-arrow {
+    color: var(--primary-white) !important;
 }
 
 .projects_content_body {
     padding: 30px;
     background-color: var(--primary-white);
     border-radius: 0 0 9px 9px;
+}
+
+/* project card style */
+.project_card_wrapper {
+    padding: 25px 0px;
+    border-bottom: 1px solid var(--light-gray);
+}
+
+.project_card_wrapper:first-child {
+    padding-top: 0px;
+}
+
+.project_card_wrapper:last-child {
+    border-bottom: none;
+    padding-bottom: 0px;
+}
+
+.project_normal_text {
+    color: var(--primary-black);
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+}
+
+.project_card_header {
+    display: grid;
+    grid-template-columns: 3fr 1fr;
+    align-items: flex-start;
+    margin-bottom: 15px;
+}
+
+.project_card_bids_wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px
+}
+
+.project_card_title {
+    color: var(--primary-black);
+    font-size: 20px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+}
+
+.project_card_price {
+    color: var(--primary-black);
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+}
+
+.project_card_body {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.project_card_skills {
+    display: flex;
+    align-items: center;
+    gap: 25px;
+    flex-wrap: wrap;
+}
+
+.project_card_skill {
+    color: var(--primary-blue);
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+    cursor: pointer;
+}
+
+.project_card_footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px
 }
