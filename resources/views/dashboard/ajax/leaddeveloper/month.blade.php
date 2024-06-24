@@ -106,10 +106,12 @@
                 <div class="d-flex flex-wrap">
 
                     <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
-                        <a href="#" data-toggle="modal" data-target="#">
+                        <a href="#" data-toggle="modal"
+                            data-target="#average_submission_aproval_in_this_month_lead{{ count($average_submission_aproval_in_this_month_lead_data) }}">
                             {{ round($average_submission_aproval_in_this_month_lead, 2) }}
                         </a>
                     </p>
+                    @include('dashboard.ajax.leaddeveloper.modals.average_submission_aproval_in_this_month_lead')
                 </div>
             </div>
             <div class="d-block">
@@ -155,7 +157,7 @@
 
                     <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
                         <a href="#" data-toggle="modal"
-                            data-target="#percentage_of_task_with_revision{{ count($revision_data_lead) }}">
+                            data-target="#percentage_of_task_with_revision{{ $lead_task_with_revision }}">
 
                             {{ round($percentage_of_tasks_with_revision_lead, 2) }}%
 
@@ -181,7 +183,7 @@
 
                     <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
                         <a href="#" data-toggle="modal"
-                            data-target="#total_num_of_revision{{ count($revision_data_lead) }}">
+                            data-target="#total_num_of_revision{{ count($number_of_total_revision_for_this_month_lead_data) }}">
 
                             {{ round($number_of_total_revision_for_this_month_lead, 2) }}
 
@@ -206,7 +208,7 @@
 
                     <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
                         <a href="#" data-toggle="modal"
-                            data-target="#avg_task_submission_in_day{{ count($average_submit_data_lead) }}">
+                            data-target="#avg_task_submission_in_day{{ count($average_task_submit_data) }}">
 
                             {{ round($average_submission_day_in_this_month_lead, 2) }} Days
 
@@ -258,10 +260,11 @@
                 <div class="d-flex flex-wrap">
 
                     <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
-                        <a href="#">
+                        <a href="#" data-toggle="modal"
+                            data-target="#average_average_task_hold_time{{ count($average_average_task_hold_time_lead_data) }}">
                             {{ $average_average_task_hold_time_lead }}
                         </a>
-                        {{-- @include('dashboard.ajax.leaddeveloper.modals.avg_num_in_progress_task') --}}
+                        @include('dashboard.ajax.leaddeveloper.modals.average_average_task_hold_time_lead')
                     </p>
 
                 </div>
@@ -311,7 +314,7 @@
                     <h6 class="mb-0 f-18 font-weight-bold mr-5">
                         Percentage of Tasks Where Given Estimated Time was Missed With Revisions
                         <a href="#" data-toggle="modal"
-                            data-target="#percentage_task_estimate_time_missed{{ count($estimate_missed_task_data_lead) }}">
+                            data-target="#percentage_task_estimate_time_missed{{ count($percentage_of_tasks_where_given_estimated_time_was_missed_with_revision_data) }}">
                             {{ round($percentage_number_task_cross_estimate_time_lead, 2) }}%
 
                         </a>
@@ -320,7 +323,7 @@
                     <h6 class="mb-0 f-18 font-weight-bold mr-5">
                         Percentage of Tasks Where Given Estimated Time was Missed Without Revisions
                         <a href="#" data-toggle="modal"
-                            data-target="#percentage_task_estimate_time_missed_without_revisions{{ count($estimate_missed_task_data_lead) }}">
+                            data-target="#percentage_task_estimate_time_missed_without_revisions{{ count($percentage_of_tasks_where_given_estimated_time_was_missed_without_revision_data) }}">
                             {{ round($percentage_of_tasks_where_given_estimated_time_was_missed_without_revision, 2) }}%
 
                         </a>
@@ -418,9 +421,11 @@
                 <div class="d-flex flex-wrap">
 
                     <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
-                        <a href="#" data-toggle="modal" data-target="#">
-                            {{$number_of_approval}}
+                        <a href="#" data-target="#number_of_approval{{ count($number_of_approval_data) }}"
+                            data-toggle="modal">
+                            {{ $number_of_approval }}
                         </a>
+                        @include('dashboard.ajax.leaddeveloper.modals.number_of_approval')
                     </p>
                 </div>
             </div>
@@ -439,9 +444,11 @@
                 <div class="d-flex flex-wrap">
 
                     <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
-                        <a href="#" data-toggle="modal" data-target="#">
-                            {{$auto_approved_tasks}}
+                        <a href="#" data-target="#auto_approved_tasks{{ count($auto_approved_tasks_data) }}"
+                            data-toggle="modal">
+                            {{ $auto_approved_tasks }}
                         </a>
+                        @include('dashboard.ajax.leaddeveloper.modals.auto_approved_tasks')
                     </p>
                 </div>
             </div>
@@ -458,7 +465,10 @@
                 <div class="d-flex flex-wrap">
 
                     <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
-                        <a href="#" data-toggle="modal" data-target="#">{{$manually_approved_tasks}}</a>
+                        <a href="#"
+                            data-target="#manually_approved_tasks{{ count($manually_approved_tasks_data) }}"
+                            data-toggle="modal">{{ $manually_approved_tasks }}</a>
+                        @include('dashboard.ajax.leaddeveloper.modals.manually_approved_tasks')
                     </p>
                 </div>
             </div>
@@ -476,27 +486,23 @@
             <div class="d-block text-capitalize">
                 <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">Number of disputes filed</h5>
                 <div class="d-flex flex-wrap">
-
                     <h6 class="mb-0 f-18 font-weight-bold mr-5">
                         No. of disputes filed:
-                        <a href="#" data-toggle="modal" data-target="#">
-
+                        <a href="#"
+                            data-target="#number_of_disputes_filed{{ count($number_of_dispute_filed_own_lead_data) }}"
+                            data-toggle="modal">
                             {{ $number_of_dispute_filed_own_lead }}
-
                         </a>
-
+                        @include('dashboard.ajax.leaddeveloper.modals.number_of_disputes_filed')
                     </h6>
                     <h6 class="mb-0 f-18 font-weight-bold mr-5">
                         No. of disputes (Overall):
                         <a href="#" data-toggle="modal"
                             data-target="#no_of_dispute_overall{{ count($number_of_dispute_filed_all_data_lead) }}">
-
                             {{ $number_of_dispute_filed_all_lead }}
-
                         </a>
                         @include('dashboard.ajax.leaddeveloper.modals.no_of_dispute_overall')
                     </h6>
-
                 </div>
             </div>
             <div class="d-block">
@@ -554,7 +560,12 @@
                 <div class="d-flex flex-wrap">
 
                     <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
+                        <a href="#" data-toggle="modal"
+                            data-target="#number_of_disputes_involved_in{{ count($disputes_lead_developer_involved_data) }}">
                             {{ round($disputes_lead_developer_involved, 2) }}
+
+                        </a>
+                        @include('dashboard.ajax.leaddeveloper.modals.number_of_disputes_involved_in')
                     </p>
 
                 </div>
@@ -570,18 +581,13 @@
             <div class="d-block text-capitalize">
                 <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">Hours spent in revisions</h5>
                 <div class="d-flex flex-wrap">
-
                     <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
                         <a href="#" data-toggle="modal"
                             data-target="#hours_spent_in_revision{{ count($spent_revision_developer_data_lead) }}">
                             {{ round($spent_revision_developer_lead, 2) }} Hours
-
                         </a>
-
                     </p>
-
                     @include('dashboard.ajax.leaddeveloper.modals.hours_spent_in_revision')
-
                 </div>
             </div>
             <div class="d-block">

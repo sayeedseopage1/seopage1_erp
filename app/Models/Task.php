@@ -12,6 +12,7 @@ use App\Traits\CustomFieldsTrait;
 use App\Models\Scopes\OrderByDesc;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -139,13 +140,26 @@ class Task extends BaseModel
     use CustomFieldsTrait;
 
     protected $dates = ['due_date', 'completed_on', 'start_date'];
-    protected $appends = ['due_on', 'create_on'];
+    protected $appends = ['due_on', 'create_on', 'total_log_time_in_min', 'total_submissions_log_time_in_min'];
     protected $guarded = ['id'];
     public $customFieldModel = 'App\Models\Task';
 
     protected static function booted()
     {
         static::addGlobalScope(new OrderByDesc); // assign the Scope here
+    }
+
+    protected function totalLogTimeInMin(): Attribute
+    {
+        return new Attribute(
+            get: fn() => $this->timeLogged->sum('total_minutes'),
+        );
+    }
+    protected function totalSubmissionsLogTimeInMin(): Attribute
+    {
+        return new Attribute(
+            get: fn() => $this->submissions->sum('total_log_time'),
+        );
     }
 
     public function project(): BelongsTo
@@ -207,6 +221,11 @@ class Task extends BaseModel
     {
         return $this->hasMany(SubTask::class, 'task_id');
     }
+    public function subtaskAll()
+    {
+        return $this->hasManyThrough(Task::class, SubTask::class, 'task_id', 'subtask_id');
+    }
+
 
     public function history(): HasMany
     {
@@ -547,5 +566,10 @@ class Task extends BaseModel
     public function taskRevisionDispute()
     {
         return $this->hasMany(TaskRevisionDispute::class, 'task_id');
+    }
+
+    public function latestAuthUserApproved()
+    {
+        return $this->hasOne(TaskApprove::class)->where('user_id', auth()->id())->latestOfMany();
     }
 }

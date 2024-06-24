@@ -6,7 +6,7 @@ use App\Observers\SubTaskObserver;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-
+use Illuminate\Database\Eloquent\Casts\Attribute;
 
 /**
  * App\Models\SubTask
@@ -70,6 +70,9 @@ class SubTask extends BaseModel
     {
         return $this->hasMany(SubTaskFile::class, 'sub_task_id');
     }
-  
 
+    public function timeLogs(): HasMany
+    {
+        return $this->hasMany(ProjectTimeLog::class, 'task_id', 'task_id');
+    }
 }

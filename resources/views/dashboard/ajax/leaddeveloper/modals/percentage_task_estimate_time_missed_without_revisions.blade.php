@@ -1,5 +1,5 @@
 <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
-<div id="percentage_task_estimate_time_missed_without_revisions{{ count($estimate_missed_task_data_lead) }}"
+<div id="percentage_task_estimate_time_missed_without_revisions{{ count($percentage_of_tasks_where_given_estimated_time_was_missed_without_revision_data) }}"
     class="modal fade" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-xl">
         <div class="modal-content">
@@ -20,13 +20,12 @@
                     <thead>
                         <tr>
                             <th scope="col">Sl No</th>
-                            <th scope="col">Assign Date</th>
                             <th scope="col">Task Name</th>
                             <th scope="col">Client Name</th>
-                            <th scope="col">Submission Date</th>
-                            <th scope="col">Deadline</th>
-                            <th scope="col">status</th>
-                            <th scope="col">Revision Count</th>
+                            <th scope="col">Project Manager</th>
+                            <th scope="col">Estimated hours</th>
+                            <th scope="col">Logged hours </th>
+                            <th scope="col">Difference</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -34,39 +33,25 @@
                             <tr>
                                 <td>{{ $loop->index + 1 }}</td>
                                 <td>
-                                    {{ $row->assign_date }}
-
-                                </td>
-                                <td>
                                     <a href="{{ route('tasks.show', $row->id) }}">{{ $row->heading }}<a>
-
                                 </td>
                                 <td>
-                                    @if ($row->cl_id != null)
-                                        {{ $row->cl_name }}
-                                    @elseif($row->client_name != null)
-                                        {{ $row->client_name }}
-                                    @else
-                                        <a href="{{ route('clients.show', $row->clientId) }}"> {{ $row->clientName }}</a>
-                                    @endif
-
-                                </td>
-                                <td>
-                                    @if ($row->board_column_id == 1 || $row->board_column_id == 2 || $row->board_column_id == 3)
-                                        N\A
-                                    @else
-                                        {{ $row->submission_date }}
+                                    @if ($row?->project?->client)
+                                        <a href="{{ route('clients.show', $row->project->client->id) }}">
+                                            {{ $row->project->client->name }}</a>
                                     @endif
                                 </td>
-                                <td>{{ $row->due_date }}</td>
                                 <td>
-                                    <span style="color: {{ $row->label_color }}"> {{ $row->column_name }}</span>
+                                    {{ $row?->project?->pm?->name ?? 'Unknown' }}
                                 </td>
                                 <td>
-                                    {{-- <a href="#" data-toggle="modal" data-target="#revision_count_modal{{ $key }}">
-                              {{$row->revision_count}}
-                          </a> --}}
-                                    --
+                                    {{ $row?->estimate_hours }}
+                                </td>
+                                <td>
+                                    {{ intval((($row?->timeLogged?->sum('total_minutes') ?? 0) + ($row?->subtaskAll->sum('total_log_time_in_min') ?? 0)) / 60) }}
+                                </td>
+                                <td>
+                                    {{ intval((($row?->timeLogged?->sum('total_minutes') ?? 0) + ($row?->subtaskAll->sum('total_log_time_in_min') ?? 0)) / 60) - ($row?->estimate_hours ?? 0) }}
                                 </td>
                             </tr>
                         @endforeach

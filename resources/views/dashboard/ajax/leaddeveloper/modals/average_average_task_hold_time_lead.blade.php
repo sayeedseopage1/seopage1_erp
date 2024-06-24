@@ -1,13 +1,13 @@
 <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
-<div id="percentage_task_estimate_time_missed{{ count($percentage_of_tasks_where_given_estimated_time_was_missed_with_revision_data) }}" class="modal fade"
+<div id="average_average_task_hold_time{{ count($average_average_task_hold_time_lead_data) }}" class="modal fade"
     tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-xl">
         <div class="modal-content">
             <div class="modal-header">
                 <div class="modal-title">
-                    <h4>Number of submitted tasks: __</h4>
-                    <h4>Number of tasks where Estimed time was missed:{{ $submit_number_of_tasks_in_this_month_lead }}
-                    </h4>
+                    {{-- <h4>Percentage of Tasks Where Given Estimated Time was Missed Without Revisions:
+                        {{ round($percentage_of_tasks_where_given_estimated_time_was_missed_without_revision, 2) }}%
+                    </h4> --}}
 
                 </div>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -15,22 +15,22 @@
                 </button>
             </div>
             <div class="modal-body">
-                <table id="percentage_task_estimate_time_missed_table" class="display" style="width:100%">
+                <table id="average_average_task_hold_time_table" class="display" style="width:100%">
                     <thead>
                         <tr>
                             <th scope="col">Sl No</th>
                             <th scope="col">Task Name</th>
                             <th scope="col">Client Name</th>
                             <th scope="col">Project Manager</th>
-                            <th scope="col">Estimated hours</th>
-                            <th scope="col">Logged hours </th>
+                            <th scope="col">Task receive date</th>
+                            <th scope="col">Assign date</th>
                             <th scope="col">Difference</th>
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach ($percentage_of_tasks_where_given_estimated_time_was_missed_with_revision_data as $row)
+                        @foreach ($average_average_task_hold_time_lead_data as $row)
                             <tr>
-                                <td>{{ $loop->index + 1 }}</td>
+                                <td>{{ $loop->iteration }}</td>
                                 <td>
                                     <a href="{{ route('tasks.show', $row->id) }}">{{ $row->heading }}<a>
                                 </td>
@@ -41,17 +41,13 @@
                                     @endif
                                 </td>
                                 <td>
-                                    {{ $row?->project?->pm?->name ?? 'Unknown' }}
+                                    {{ $row?->project?->pm?->name }}
                                 </td>
                                 <td>
-                                    {{ $row?->estimate_hours }}
+                                    {{ $row?->created_at }}
                                 </td>
-                                <td>
-                                    {{ intval((($row?->timeLogged?->sum('total_minutes') ?? 0) + ($row?->subtaskAll->sum('total_log_time_in_min') ?? 0))/ 60 ) }}
-                                </td>
-                                <td>
-                                    {{intval((($row?->timeLogged?->sum('total_minutes') ?? 0) + ($row?->subtaskAll->sum('total_log_time_in_min') ?? 0))/ 60 ) - ($row?->estimate_hours ?? 0)}}
-                                </td>
+                                <td>{{ $row?->firstSubTask?->created_at }}</td>
+                                <td>{{ Carbon\Carbon::parse($row?->firstSubTask?->created_at)->diffForHumans($row?->created_at) }}</td>
                             </tr>
                         @endforeach
                     </tbody>
@@ -63,10 +59,9 @@
         </div>
     </div>
 </div>
-
 <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
 <script>
-    new DataTable('#percentage_task_estimate_time_missed_table', {
+    new DataTable('#average_average_task_hold_time_table', {
         "dom": 't<"d-flex"l<"ml-auto"ip>><"clear">',
     });
 </script>

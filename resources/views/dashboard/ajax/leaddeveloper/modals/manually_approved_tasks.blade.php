@@ -1,12 +1,21 @@
 <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
-<div id="percentage_task_estimate_time_missed{{ count($percentage_of_tasks_where_given_estimated_time_was_missed_with_revision_data) }}" class="modal fade"
-    tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div id="manually_approved_tasks{{ count($manually_approved_tasks_data) }}" class="modal fade" tabindex="-1"
+    aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-xl">
         <div class="modal-content">
             <div class="modal-header">
                 <div class="modal-title">
-                    <h4>Number of submitted tasks: __</h4>
-                    <h4>Number of tasks where Estimed time was missed:{{ $submit_number_of_tasks_in_this_month_lead }}
+                    <h4>
+                        Total number of received tasks : __
+                    </h4>
+                    <h4>
+                        Total number of approved tasks :{{ round($number_of_approval, 2) }}
+                    </h4>
+                    <h4>
+                        Auto approval count :{{ round($auto_approved_tasks, 2) }}
+                    </h4>
+                    <h4>
+                        Manual approval count :{{ round($manually_approved_tasks, 2) }}
                     </h4>
 
                 </div>
@@ -15,22 +24,23 @@
                 </button>
             </div>
             <div class="modal-body">
-                <table id="percentage_task_estimate_time_missed_table" class="display" style="width:100%">
+                <table id="manually_approved_tasks_table" class="display" style="width:100%">
                     <thead>
                         <tr>
                             <th scope="col">Sl No</th>
                             <th scope="col">Task Name</th>
                             <th scope="col">Client Name</th>
                             <th scope="col">Project Manager</th>
-                            <th scope="col">Estimated hours</th>
-                            <th scope="col">Logged hours </th>
-                            <th scope="col">Difference</th>
+                            <th scope="col">Task receive date</th>
+                            <th scope="col">Assign date</th>
+                            <th scope="col">Approved on</th>
+                            <th scope="col">Approval type</th>
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach ($percentage_of_tasks_where_given_estimated_time_was_missed_with_revision_data as $row)
+                        @foreach ($manually_approved_tasks_data as $row)
                             <tr>
-                                <td>{{ $loop->index + 1 }}</td>
+                                <td>{{ $loop->iteration }}</td>
                                 <td>
                                     <a href="{{ route('tasks.show', $row->id) }}">{{ $row->heading }}<a>
                                 </td>
@@ -41,16 +51,19 @@
                                     @endif
                                 </td>
                                 <td>
-                                    {{ $row?->project?->pm?->name ?? 'Unknown' }}
+                                    {{ $row?->project?->pm?->name }}
                                 </td>
                                 <td>
-                                    {{ $row?->estimate_hours }}
+                                    {{ $row?->created_at }}
                                 </td>
+                                <td>{{ $row?->firstSubTask?->created_at ?? 'none' }}</td>
+                                <td>{{ $row?->latestAuthUserApproved?->created_at ?? 'none' }}</td>
                                 <td>
-                                    {{ intval((($row?->timeLogged?->sum('total_minutes') ?? 0) + ($row?->subtaskAll->sum('total_log_time_in_min') ?? 0))/ 60 ) }}
-                                </td>
-                                <td>
-                                    {{intval((($row?->timeLogged?->sum('total_minutes') ?? 0) + ($row?->subtaskAll->sum('total_log_time_in_min') ?? 0))/ 60 ) - ($row?->estimate_hours ?? 0)}}
+                                    @if (in_array($row->id, $manually_approved_task_ids))
+                                        Manually Approved
+                                    @else
+                                        Auto Approved
+                                    @endif
                                 </td>
                             </tr>
                         @endforeach
@@ -63,10 +76,9 @@
         </div>
     </div>
 </div>
-
 <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
 <script>
-    new DataTable('#percentage_task_estimate_time_missed_table', {
+    new DataTable('#manually_approved_tasks_table', {
         "dom": 't<"d-flex"l<"ml-auto"ip>><"clear">',
     });
 </script>
