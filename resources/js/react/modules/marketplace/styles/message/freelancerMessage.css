@@ -268,6 +268,15 @@
     border-radius: 8px;
     background: var(--light-blue-3);
     padding: 18px;
+    position: relative;
+}
+
+.message_emoji_picker {
+    position: absolute;
+    bottom: 80%;
+    left: 17px;
+    z-index: 10;
+    /* display: none; */
 }
 
 .message_send_actions {
@@ -313,6 +322,25 @@
     background-color: var(--primary-white);
 }
 
+.message_file_preview_wrapper {
+    position: relative;
+}
+
+.cancel_file_button {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 20px;
+    height: 20px;
+    color: var(--primary-red);
+    background-color: transparent;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+}
+
 .input_file_name {
     color: var(--primary-blue);
     font-size: 12px;
@@ -323,6 +351,10 @@
     align-items: center;
     justify-content: space-between;
     gap: 10px
+}
+
+.epr-preview {
+    display: none !important;
 }
 
 .file_upload {
