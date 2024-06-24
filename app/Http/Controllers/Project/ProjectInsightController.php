@@ -8,6 +8,7 @@ use App\Models\Subtask;
 use Illuminate\Http\Request;
 use App\Models\ProjectMilestone;
 use App\Http\Controllers\Controller;
+use App\Models\ProjectDeadlineExtension;
 
 class ProjectInsightController extends Controller
 {
@@ -70,6 +71,14 @@ class ProjectInsightController extends Controller
         return response()->json([
             'code' => 200,
             'data' => $data
+        ]);
+    }
+
+    public function getPendingExtensionRequest($project_id)
+    {
+        return response()->json([
+            'code' => 200,
+            'data' => ProjectDeadlineExtension::where('project_id',$project_id)->where('status', 1)->first()
         ]);
     }
 }
