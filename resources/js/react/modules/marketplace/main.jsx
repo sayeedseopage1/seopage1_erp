@@ -20,16 +20,44 @@ const Content = () => {
 const marketPlaceRoutes = [
     {
         id: 1,
-        rootId: 'marketplaceProject',
-        path: 'marketeplace-projects',
-        element: <FreelancerProjectDetails />,
+        rootId: 'marketplaceMessage',
+        path: 'marketeplace-message',
+        element: <FreelancerMessage />,
         contextProvider: React.Fragment
     },
     {
         id: 2,
-        rootId: 'marketplaceMessage',
-        path: 'marketeplace-message',
-        element: <FreelancerMessage />,
+        rootId: 'marketplaceProjects',
+        path: 'marketeplace-projects',
+        element: <h2>Marketplace Projects</h2>,
+        contextProvider: React.Fragment
+    },
+    {
+        id: 3,
+        rootId: 'marketplaceProjectDetails',
+        path: 'marketeplace-project-details',
+        element: <FreelancerProjectDetails />,
+        contextProvider: React.Fragment
+    },
+    {
+        id: 4,
+        rootId: 'marketplaceBidInsights',
+        path: 'marketeplace-bid-insights',
+        element: <h2>Marketplace Bid Insights</h2>,
+        contextProvider: React.Fragment
+    },
+    {
+        id: 5,
+        rootId: 'marketplaceMilestones',
+        path: 'marketeplace-milestones',
+        element: <h2>Marketplace Milestones</h2>,
+        contextProvider: React.Fragment
+    },
+    {
+        id: 6,
+        rootId: 'marketplaceProfile',
+        path: 'marketeplace-profile',
+        element: <h2>Marketplace Profile</h2>,
         contextProvider: React.Fragment
     },
 ]

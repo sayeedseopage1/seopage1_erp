@@ -471,7 +471,11 @@
                     <div class="accordionItemContent pb-2">
                         <!-- NAV ITEM - CUSTOMERS COLLAPASE MENU -->
                         <x-sub-menu-item :link="route('marketplace.message')" :text="'Messages'"/>
-                        <x-sub-menu-item :link="route('marketplace.project')" :text="'Projects'"/>
+                        <x-sub-menu-item :link="route('marketplace.projects')" :text="'Projects'"/>
+                        <x-sub-menu-item :link="route('marketplace.project.details')" :text="'Projects Details'"/>
+                        <x-sub-menu-item :link="route('marketplace.bid.insights')" :text="'Bid Insights'"/>
+                        <x-sub-menu-item :link="route('marketplace.milestones')" :text="'List Of Milestones'"/>
+                        <x-sub-menu-item :link="route('marketplace.profile')" :text="'Profile'"/>
                     </div>
                 </x-menu-item>
                 @endif
