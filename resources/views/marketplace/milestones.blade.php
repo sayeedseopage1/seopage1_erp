@@ -5,7 +5,7 @@
     <div class="content-wrapper">
         <!-- Task Box Start -->
         <div class="d-flex flex-column rounded mt-3">
-            <div id="marketplaceProject"></div>
+            <div id="marketplaceMilestones"></div>
         </div>
         <!-- Task Box End -->
     </div>

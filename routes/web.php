@@ -1574,7 +1574,11 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
 
     // Marketeplace api integration routes
     Route::get('marketeplace-message', [MarketplaceViewController::class, 'messagePage'])->name('marketplace.message');
-    Route::get('marketeplace-projects', [MarketplaceViewController::class, 'projectPage'])->name('marketplace.project');
+    Route::get('marketeplace-projects', [MarketplaceViewController::class, 'projectsPage'])->name('marketplace.projects');
+    Route::get('marketeplace-project-details', [MarketplaceViewController::class, 'projectDetailsPage'])->name('marketplace.project.details');
+    Route::get('marketeplace-profile', [MarketplaceViewController::class, 'profilePage'])->name('marketplace.profile');
+    Route::get('marketeplace-bid-insights', [MarketplaceViewController::class, 'bidInsightsPage'])->name('marketplace.bid.insights');
+    Route::get('marketeplace-milestones', [MarketplaceViewController::class, 'milestonesPage'])->name('marketplace.milestones');
 });
 
 //custom route for seopage1

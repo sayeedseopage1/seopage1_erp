@@ -21,10 +21,38 @@ class MarketplaceViewController extends AccountBaseController
         return view('marketplace.message', $this->data);
     }
 
-    public function projectPage(Request $request)
+    public function projectDetailsPage(Request $request)
     {
         // abort_403(!(Auth::user()->role_id == 1 || Auth::user()->role_id == 4));
-        $this->pageTitle = 'app.menu.marketplaceProject';
-        return view('marketplace.project', $this->data);
+        $this->pageTitle = 'app.menu.marketplaceProjectDetails';
+        return view('marketplace.project-details', $this->data);
+    }
+
+    public function projectsPage(Request $request)
+    {
+        // abort_403(!(Auth::user()->role_id == 1 || Auth::user()->role_id == 4));
+        $this->pageTitle = 'app.menu.marketplaceProjects';
+        return view('marketplace.projects', $this->data);
+    }
+
+    public function profilePage(Request $request)
+    {
+        // abort_403(!(Auth::user()->role_id == 1 || Auth::user()->role_id == 4));
+        $this->pageTitle = 'app.menu.marketplaceProfile';
+        return view('marketplace.profile', $this->data);
+    }
+
+    public function bidInsightsPage(Request $request)
+    {
+        // abort_403(!(Auth::user()->role_id == 1 || Auth::user()->role_id == 4));
+        $this->pageTitle = 'app.menu.marketplaceBidInsights';
+        return view('marketplace.bid-insights', $this->data);
+    }
+
+    public function milestonesPage(Request $request)
+    {
+        // abort_403(!(Auth::user()->role_id == 1 || Auth::user()->role_id == 4));
+        $this->pageTitle = 'app.menu.marketplaceMilestones';
+        return view('marketplace.milestones', $this->data);
     }
 }
