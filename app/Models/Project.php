@@ -450,4 +450,9 @@ class Project extends BaseModel
     {
         return $this->hasOne(ProjectPortfolio::class, 'project_id');
     }
+
+    public function projectDeadlineExtension()
+    {
+        return $this->hasMany(ProjectDeadlineExtension::class, 'project_id');
+    }
 }
