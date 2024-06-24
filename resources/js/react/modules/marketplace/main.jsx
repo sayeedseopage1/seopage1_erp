@@ -7,6 +7,7 @@ import Toaster from "../../global/Toaster";
 import { store } from "../../services/store";
 import './index.css';
 import FreelancerMessage from "./pages/message/FreelancerMessage";
+import FreelancerProjects from "./pages/freelancerProjects/FreelancerProjects";
 
 const Content = () => {
     return (
@@ -29,7 +30,7 @@ const marketPlaceRoutes = [
         id: 2,
         rootId: 'marketplaceProjects',
         path: 'marketeplace-projects',
-        element: <h2>Marketplace Projects</h2>,
+        element: <FreelancerProjects />,
         contextProvider: React.Fragment
     },
     {

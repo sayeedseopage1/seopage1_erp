@@ -1,0 +1,31 @@
+.projects_page_wrapper {
+    border-radius: 9px;
+    border: 1px solid var(--light-blue-2);
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    gap: 27px;
+}
+
+.projects_page_filter_bar {
+    padding: 30px;
+    background-color: var(--primary-white);
+    border-radius: 9px;
+    border: 1px solid var(--light-blue-2);
+}
+
+.projects_page_contents {
+    border-radius: 9px;
+    border: 1px solid var(--light-blue-2);
+}
+
+.projects_content_header {
+    padding: 28px 30px;
+    background-color: var(--primary-blue);
+    border-radius: 9px 9px 0 0;
+}
+
+.projects_content_body {
+    padding: 30px;
+    background-color: var(--primary-white);
+    border-radius: 0 0 9px 9px;
+}
