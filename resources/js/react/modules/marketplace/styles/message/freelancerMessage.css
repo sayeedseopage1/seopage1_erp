@@ -295,6 +295,29 @@
     overflow-y: auto !important;
 }
 
+.message_all_file_previews {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-bottom: 10px;
+}
+
+.message_file_preview {
+    width: 69px;
+    height: 69px;
+    border-radius: 9px;
+    object-fit: cover;
+    object-position: center;
+    background-color: var(--primary-white);
+}
+
+.input_file_name {
+    color: var(--primary-blue);
+    font-size: 12px;
+}
+
 .file_upload_and_send {
     display: flex;
     align-items: center;
