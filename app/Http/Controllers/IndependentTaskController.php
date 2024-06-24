@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use Carbon\Carbon;
 use App\Helper\Files;
 use App\Models\EmployeeEvaluation;
+use App\Models\EmployeeEvaluationTask;
 use App\Models\EvaluationHistory;
 use App\Models\PendingParentTaskConversation;
 use App\Models\SubTask;
@@ -225,6 +226,42 @@ class IndependentTaskController extends AccountBaseController
             $task_user->task_id = $independent_task->id;
             $task_user->user_id = $pendingParentTasks->user_id;
             $task_user->save();
+
+            /**EMPLOYEE EVALUATION START */
+            $taskFind = Task::where('u_id',$pendingParentTasks->u_id)->first(); //Find SubTask
+            if($taskFind != null){
+                $task_user = User::where('id', $pendingParentTasks->user_id)->first();
+                if($task_user->role_id == 15){
+                    $evaluation = EmployeeEvaluation::where('user_id', $pendingParentTasks->user_id)->first();
+                    if ($evaluation->start_date == null) {
+                        $evaluation->start_date = Carbon::now();
+                        $emp_start_task = $evaluation->start_date;
+
+                        $exp_date = Carbon::parse($emp_start_task)->addDays(3);
+                        $countSundays = 0;
+                        $currentDate = $emp_start_task->copy(); 
+                        while ($currentDate->lte($exp_date)) {
+                            if ($currentDate->dayOfWeek === Carbon::SUNDAY) {
+                                $countSundays++;
+                            }
+                            $currentDate->addDay(); 
+                        }
+                        
+                        $evaluation->exp_date = Carbon::parse($emp_start_task)->addDays(3 + $countSundays);
+                        
+                        $evaluation->save();
+                    }
+                    $evaluation_history = EvaluationHistory::where('user_id', $pendingParentTasks->user_id)->count();
+                    $evaluation_task = new EmployeeEvaluationTask();
+                    $evaluation_task->user_id = $pendingParentTasks->user_id;
+                    $evaluation_task->task_id = $taskFind->id;
+                    $evaluation_task->task_name = $taskFind->heading;
+                    $evaluation_task->assign_date = $taskFind->created_at;
+                    $evaluation_task->round = $evaluation_history + 1;
+                    $evaluation_task->save();
+                }
+            }
+            /**EMPLOYEE EVALUATION END */
 
 
             $user = User::where('id',$pendingParentTasks->user_id)->first();

@@ -14,7 +14,7 @@ const AssginedToSelection = ({selected, onSelect}) => {
     const employees = _.filter(users, (user)=>{
 
          if (_.includes([1, 8, 4], Number(currentUser.roleId))) {
-            return _.includes([ 6, 9, 10], Number(user?.role_id));
+            return _.includes([ 6, 9, 10,15], Number(user?.role_id));
         } else {
             return false;
         } 
