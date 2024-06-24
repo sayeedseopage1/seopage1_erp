@@ -279,6 +279,10 @@
     /* display: none; */
 }
 
+.epr-main>div:last-child {
+    display: none !important;
+}
+
 .message_send_actions {
     display: flex;
     align-items: center;
@@ -351,10 +355,6 @@
     align-items: center;
     justify-content: space-between;
     gap: 10px
-}
-
-.epr-preview {
-    display: none !important;
 }
 
 .file_upload {
