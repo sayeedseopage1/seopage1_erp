@@ -5,7 +5,7 @@ import fileUploadIcon from '../../../assets/freelancerMessage/folder-add.svg';
 import sendIcon from '../../../assets/freelancerMessage/send-2.svg';
 import emojiIcon from '../../../assets/freelancerMessage/grammerly.svg';
 import ChatContents from '../ui/ChatContents';
-import { Controller, useForm } from 'react-hook-form';
+import { useForm } from 'react-hook-form';
 import { Input } from 'antd';
 import { getFileIcon, shortenFileName } from '../../../utils';
 import Picker from 'emoji-picker-react';
