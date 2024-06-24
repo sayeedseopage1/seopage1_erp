@@ -732,6 +732,7 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
     Route::get('project-details/{project_id}', ProjectDetailsController::class)->name('project.details');
     Route::get('project-milestones/{project_id}', [ProjectInsightController::class, 'getProjectMilestones'])->name('project.milestones');
     Route::get('project-tasks/{project_id}', [ProjectInsightController::class, 'getProjectTasks'])->name('project.tasks');
+    Route::get('project-pending-extension/{project_id}', [ProjectInsightController::class, 'getPendingExtensionRequest'])->name('project.pending.extension');
 
     /* PRODUCTS */
     Route::post('products/apply-quick-action', [ProductController::class, 'applyQuickAction'])->name('products.apply_quick_action');
