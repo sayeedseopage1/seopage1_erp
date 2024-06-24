@@ -39,9 +39,8 @@ class ProjectDetailsController extends Controller
         }
         
         $projectArray['buttons']['deadline_extension_authorization'] = Auth::user()->role_id == 1 && $pendingDeadlineExtensionRequests ? true : false;
-        
+        $projectArray['buttons']['mark_as_incomplete'] = Auth::user()->role_id == 1 && $project->status == 'in progress' ? true : false;
 
-        $projectArray['buttons']['mark_as_incomplete'] = Auth::user()->role_id == 1 ? true : false;
         $projectArray['buttons']['pm_task_guidline'] = true;
         $projectArray['buttons']['qc_authorization'] = Auth::user()->role_id == 1 ? true : false;
         $projectArray['buttons']['completion_form_authorization'] = Auth::user()->role_id == 1 ? true : false;
