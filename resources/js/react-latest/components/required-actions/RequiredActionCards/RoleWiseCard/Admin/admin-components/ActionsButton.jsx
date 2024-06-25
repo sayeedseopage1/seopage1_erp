@@ -12,14 +12,14 @@ import { useDispatch } from "react-redux";
 
 import { useGetCommentsQuery } from "../../../../../../services/api/commentsApiSlice";
 import { useWindowSize } from "react-use";
-import EvaluationModal from "../../../EmployeeEvaluation/modal/EvaluationModal";
+import EvaluationModal from "../../../EmployeeEvaluation/modal/EvaluationAcknowledgeSubtaskModal";
 import RelevantModal from "../../Developer/dev-components/RelevantModal";
 import CommentsBody from "../../../../../../../react/UI/comments/CommentsBody";
 import CommentBodyForPendingActions from "../../../../../../../react/UI/comments/CommentBodyForPendingActions";
 import CommentContainerDecider from "../../../../../../../react/UI/comments/CommentContainerDecider";
-import { useCommentStore } from "../../../../../../../react/UI/comments/zustand/store";
 import { setPendingActionId } from "../../../../../../services/features/pendingActionSlice";
 import CommentsBodyWithoutSendBox from "../../../../../../../react/UI/comments/CommentBodyWithoutSendBox";
+import { useCommentStore } from "../../../../../../../react/UI/comments/zustand/store";
 
 const ActionsButton = ({ data }) => {
     const dispatch = useDispatch();
@@ -68,6 +68,7 @@ const ActionsButton = ({ data }) => {
                         <div>
                             {btn.button_name === "View and Reply" && (
                                 <button
+                                    key={i}
                                     disabled={handleBtnDisable(1)}
                                     onClick={() => {
                                         setViewCommentModal((prev) => !prev);
@@ -81,6 +82,7 @@ const ActionsButton = ({ data }) => {
 
                             {btn.button_name === "Not relevant to me" && (
                                 <button
+                                    key={i}
                                     disabled={handleBtnDisable(1)}
                                     onClick={() => {
                                         setIsRelevantModal((prev) => !prev);
@@ -94,6 +96,7 @@ const ActionsButton = ({ data }) => {
                             )}
                             {btn.button_name === "View" && (
                                 <button
+                                    key={i}
                                     disabled={handleBtnDisable(1)}
                                     onClick={() =>
                                         setViewModal((prev) => !prev)

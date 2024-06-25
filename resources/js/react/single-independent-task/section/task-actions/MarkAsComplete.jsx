@@ -16,9 +16,11 @@ import SubmitButton from "../../components/SubmitButton";
 
 import { checkIsURL } from "../../../utils/check-is-url";
 import Swal from "sweetalert2";
-// import Swal from "sweetalert2";
 
 const MarkAsComplete = ({ task, auth }) => {
+    // screen record url for trainee
+    const [screenRecordUrl, setScreenRecordUrl] = useState("");
+    const [screenRecordUrlErr, setScreenRecordUrlErr] = useState("");
     // form data
     const dispatch = useDispatch();
     const [links, setLinks] = useState([""]);
@@ -68,47 +70,11 @@ const MarkAsComplete = ({ task, auth }) => {
                     .unwrap()
                     .then((res) => {
                         if (res.status === "true" || res.status === true) {
-                            // const htmlContent = (
-                            //     <div className="__tostar_modal">
-                            //         <strong>
-                            //             You can't complete this task because you
-                            //             have some pending subtask?
-                            //         </strong>
-                            //         <ul className="py-1">
-                            //             {res.subtasks.map((el, idx) => (
-                            //                 <li
-                            //                     key={el.id}
-                            //                     style={{
-                            //                         listStyle: "unset",
-                            //                         fontSize: "13px",
-                            //                     }}
-                            //                 >
-                            //                     <a
-                            //                         href={`/account/tasks/${el.id}`}
-                            //                     >
-                            //                         {idx + 1}. {el.heading}
-                            //                     </a>{" "}
-                            //                     (
-                            //                     <a
-                            //                         href={`/account/clients/${el.clientId}`}
-                            //                     >
-                            //                         {el.client_name}
-                            //                     </a>
-                            //                     )
-                            //                 </li>
-                            //             ))}
-                            //         </ul>
-                            //     </div>
-                            // );
-                            // toast.warn(htmlContent, {
-                            //     position: "top-center",
-                            //     icon: false,
-                            // });
                             Swal.fire({
-                                icon:'warning',
-                                title:`You can't complete this task because you
-                                have some pending subtask?`
-                            })
+                                icon: "warning",
+                                title: `You can't complete this task because you
+                                have some pending subtask?`,
+                            });
                             close();
                         } else {
                             setMarkAsCompleteModalIsOpen(true);
@@ -120,10 +86,6 @@ const MarkAsComplete = ({ task, auth }) => {
         } else {
             setMarkAsCompleteModalIsOpen(false);
         }
-        // }
-        // else{
-        //     setMarkAsCompleteModalIsOpen(false);
-        // }
     }, [isModalUrl]);
 
     // handle editor change
@@ -143,6 +105,10 @@ const MarkAsComplete = ({ task, auth }) => {
     const handleOnLinkInputChange = (e, index) => {
         const _links = [...links];
         (_links[index] = e.target.value), setLinks(_links);
+    };
+    // handle screenRecord link change
+    const handleOnScreenRecordLinkInputChange = (e) => {
+        setScreenRecordUrl(e.target.value);
     };
 
     // check validation
@@ -169,6 +135,11 @@ const MarkAsComplete = ({ task, auth }) => {
             toast.warn("Please describe what you've done!");
             valid = false;
         }
+        if (auth.roleId === 14 && !checkIsURL(screenRecordUrl)) {
+            toast.warn("Please provide a valid url");
+            setScreenRecordUrlErr("Please provide a valid url");
+            valid = false;
+        }
 
         return valid;
     };
@@ -179,6 +150,7 @@ const MarkAsComplete = ({ task, auth }) => {
         formData.append("text", comment);
         formData.append("user_id", auth?.getId());
         formData.append("task_id", task?.id);
+        formData.append("screen_record_link", screenRecordUrl);
         links.map((link) => formData.append("link[]", link));
         files?.map((file) => formData.append("file[]", file));
         formData.append(
@@ -192,18 +164,6 @@ const MarkAsComplete = ({ task, auth }) => {
             markAsComplete(formData)
                 .unwrap()
                 .then((res) => {
-                    // const Toast = Swal.mixin({
-                    //     toast: true,
-                    //     position: 'top-end',
-                    //     showConfirmButton: false,
-                    //     timer: 3000,
-                    //     timerProgressBar: true,
-                    // })
-
-                    // Toast.fire({
-                    //     icon: 'success',
-                    //     title: 'Task submitted successfully'
-                    // })
                     const Toast = Swal.mixin({
                         toast: true,
                         position: "top-end",
@@ -218,12 +178,12 @@ const MarkAsComplete = ({ task, auth }) => {
                     });
                     close();
                 })
-                .catch((err)=>{
+                .catch((err) => {
                     close();
                     console.log(err);
                 })
-                .finally(()=>{
-                  close();
+                .finally(() => {
+                    close();
                 });
         }
     };
@@ -267,6 +227,7 @@ const MarkAsComplete = ({ task, auth }) => {
                             style={{ overflow: "unset" }}
                         >
                             <form>
+                                {/* //multiple link */}
                                 <div className="form-group">
                                     <label htmlFor="exampleFormControlInput1">
                                         Submit Links What You've Done
@@ -334,6 +295,49 @@ const MarkAsComplete = ({ task, auth }) => {
                                         Add Another Link
                                     </button>
                                 </div>
+
+                                {/* single link for screen recording in case of trainee , role id===14 */}
+                                {auth.roleId === 14 && (
+                                    <div className="form-group">
+                                        <label htmlFor="exampleFormControlInput1">
+                                            Screen recording of the last work
+                                            done
+                                            <sup>*</sup>
+                                            <span
+                                                className="ml-2"
+                                                data-toggle="tooltip"
+                                                data-placement="top"
+                                                title="Submit Screen recording of the last work done"
+                                                data-boundary="window"
+                                                style={{ cursor: "pointer" }}
+                                            >
+                                                <i className="fa-regular fa-circle-question" />
+                                            </span>
+                                        </label>
+
+                                        <input
+                                            type="text"
+                                            className="form-control py-2"
+                                            id="exampleFormControlInput1"
+                                            placeholder="--"
+                                            value={screenRecordUrl}
+                                            onChange={(e) =>
+                                                handleOnScreenRecordLinkInputChange(
+                                                    e
+                                                )
+                                            }
+                                        />
+
+                                        {screenRecordUrlErr && (
+                                            <small
+                                                id="emailHelp"
+                                                class="form-text text-danger"
+                                            >
+                                                {screenRecordUrlErr}
+                                            </small>
+                                        )}
+                                    </div>
+                                )}
 
                                 {/* upload files */}
                                 <div className="form-group">

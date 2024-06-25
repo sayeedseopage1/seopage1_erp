@@ -13,7 +13,7 @@ import Button from "../../../../global/Button";
 
 import { useWindowSize, useDebounce } from "react-use";
 
-const FilterBar = ({ setFilter }) => {
+const FilterBar = ({ setFilter, setConvertStatus, convertStatus }) => {
     const [isExpended, setIsExpended] = React.useState(false);
 
     const { users } = useUsers();
@@ -24,7 +24,6 @@ const FilterBar = ({ setFilter }) => {
     const [client, setClient] = React.useState(null);
     const [addedBy, setAddedBy] = React.useState(null);
     const [closedBy, setClosedBy] = React.useState(null);
-    const [convertStatus, setConvertStatus] = React.useState(null);
 
     const SIZE = useWindowSize();
 
@@ -160,6 +159,10 @@ const FilterBar = ({ setFilter }) => {
                                 { id: "3", title: "Proposal Made" },
                                 { id: "4", title: "Negotiation Started" },
                                 { id: "5", title: "Milestone Breakdown" },
+                                {
+                                    id: "pending",
+                                    title: "Pending Sales Analysis",
+                                },
                                 { id: "won", title: "Won" },
                                 { id: "lost", title: "Lost" },
                             ]}

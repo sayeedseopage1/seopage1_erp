@@ -425,4 +425,39 @@ class Project extends BaseModel
             return false;
         }
     }
+
+    public function workingEnvironment()
+    {
+        return $this->hasOne(WorkingEnvironment::class, 'project_id');
+    }
+
+    public function pmTaskGuidline()
+    {
+        return $this->hasOne(PmTaskGuideline::class, 'project_id');
+    }
+
+    public function pmTaskGuidelineAuthorizations()
+    {
+        return $this->hasMany(PmTaskGuidelineAuthorization::class, 'project_id');
+    }
+
+    public function projectSubmission()
+    {
+        return $this->hasOne(ProjectSubmission::class, 'project_id');
+    }
+
+    public function projectPortfolio()
+    {
+        return $this->hasOne(ProjectPortfolio::class, 'project_id');
+    }
+
+    public function projectDeadlineExtension()
+    {
+        return $this->hasMany(ProjectDeadlineExtension::class, 'project_id');
+    }
+
+    public function projectQcSubmission()
+    {
+        return $this->hasOne(QCSubmission::class, 'project_id');
+    }
 }

@@ -1,0 +1,80 @@
+.dropdown{
+  position: relative;
+}
+
+.toggleWrapper{
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.dropdownToggle {
+  width: 110px;
+  border: 1px solid #ddd;
+  height: 36px;
+  border-radius: 6px;
+  background-color: transparent;
+  text-align: left;
+  padding-inline: 10px;
+}
+.dropdownToggleConvertStatus{
+  width: 210px;
+  border: 1px solid #ddd;
+  height: 36px;
+  border-radius: 6px;
+  background-color: transparent;
+  text-align: left;
+  padding-inline: 10px;
+}
+
+.dropdownMenu{
+  position: absolute;
+  top: 100%;
+  left: 0;
+  width: 250px;
+  background-color: #fff;
+  z-index: 10;
+  border-radius: 6px;
+  box-shadow: 0 0 10px rgb(0 0 0 / 10%);
+} 
+
+
+.dropdownItem{
+  padding: 8px 16px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.dropdownItemActive{
+  cursor: pointer;
+  background-color: rgb(0 0 0 / 3%);
+}
+
+.dropdownItemSelected{
+  background-color: rgba(98, 98, 209, 0.089);
+}
+
+
+.searchBox{
+  display: flex;
+  align-items: center;
+  border: 1px solid #ddd;
+  margin: 6px 10px;
+  padding-inline: 10px;
+  border-radius: 4px;
+}
+
+.searchBox > i {
+  color: #777;
+}
+
+.searchBox > input{
+  padding: 8px 10px;
+  border: none; 
+}
+.options{
+  overflow-x: hidden;
+  overflow-y: auto;
+  max-height: 350px;
+} 

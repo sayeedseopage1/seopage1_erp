@@ -1,0 +1,24 @@
+.cnx_select_box_toggle_multi{
+  border: 1px solid #B1B1B1;
+  border-radius: 9px;
+  padding: 13px 18px;
+  font-family: 'Poppins', sans-serif;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 500;
+}
+#cnx_select_box_tag_item{
+  display: flex !important;
+  flex-wrap: wrap !important;
+  gap: 5px !important;
+}
+
+.multiSelectOptions{
+  height: 250px !important;
+  overflow-y: auto !important;
+}
+
+.cnx_dropdown__menu_open__parentQuestion{
+  max-width: 400px !important;
+  width: 100% !important;
+}

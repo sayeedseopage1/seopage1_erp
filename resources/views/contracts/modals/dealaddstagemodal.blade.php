@@ -25,7 +25,7 @@
         display: -moz-grid;
         place-items: center;
         overflow-x: hidden;
-        overflow-y: auto; 
+        overflow-y: auto;
     }
 
     .sp1_modal_panel {
@@ -35,7 +35,7 @@
         background: #fff;
         border-radius: 1rem;
         box-shadow: rgb(0 0 0 / 10%);
-        margin: 2rem 0;  
+        margin: 2rem 0;
     }
 </style>
 
@@ -59,19 +59,19 @@
                     @endif
                     <input type="hidden" name="date" value="{{$date}}">
                     <input type="hidden" name="id" value="{{$deal->id}}">
-    
+
                     <div class="modal-body">
-    
+
                         <div class="row">
                             @if(Session::has('error'))
                                 <div class="alert alert-danger" role="alert">
-    
+
                                     <div class="alert-body">
                                         {{Session::get('error')}}
                                     </div>
                                 </div>
                             @endif
-    
+
                                 {{-- <div class="col-md-12">
                                     <div class="mt-3">
                                         <label for="client_name" class="form-label"><strong>Client Name <span style="color:red;">*<span></strong>
@@ -83,7 +83,7 @@
                                         <label id="clientNameError" class="error text-danger" for="client_name"></label>
                                     </div>
                                 </div> --}}
-    
+
                             <div class="col-md-6">
                                 <div class="mt-3">
                                     <label for="deal_id" class="form-label"><strong>Deal ID <span style="color:red;">*<span></strong>
@@ -113,8 +113,8 @@
                                     </div>
                                 @endif
                             </div>
-    
-    
+
+
                         </div>
                         <div class="row">
                             <div class="col-md-12">
@@ -123,7 +123,7 @@
                                         <i class="fa fa-question-circle" data-toggle="popover" data-placement="top" data-content="Client Username" data-html="true" data-trigger="hover"></i>
                                     </label>
                                     <input name="user_name" id="user_name" readonly value="{{$deal->client_username}}" type="text" class="form-control height-35 f-14 @error('user_name') is-invalid @enderror" placeholder="Enter Client Username" >
-    
+
                                 </div>
                                 @error('user_name')
                                 <div class="mt-3">
@@ -131,14 +131,14 @@
                                 </div>
                                 @enderror
                             </div>
-    
+
                             <div class="col-md-12">
                                 <div class="mt-3">
                                     <label for="project_name" class="form-label"><strong>Project Name <span style="color:red;">*<span></strong>
                                         <i class="fa fa-question-circle" data-toggle="popover" data-placement="top" data-content="Project Name" data-html="true" data-trigger="hover"></i>
                                     </label>
                                     <input name="project_name" value="{{$deal->project_name}}" readonly id="project_name" type="text" class="form-control height-35 f-14" placeholder="Enter Project Name" required>
-    
+
                                 </div>
                             </div>
                         </div>
@@ -150,7 +150,7 @@
                                             <i class="fa fa-question-circle" data-toggle="popover" data-placement="top" data-content="Profile Link" data-html="true" data-trigger="hover"></i>
                                         </label>
                                         <input name="profile_link" value="{{$deal->profile_link}}" readonly id="profile_link_1" type="text" class="form-control height-35 f-14" placeholder="Enter Client Profile Link" required>
-    
+
                                     </div>
                                 @else
                                     <div class="mt-3">
@@ -158,22 +158,22 @@
                                             <i class="fa fa-question-circle" data-toggle="popover" data-placement="top" data-content="Profile Link" data-html="true" data-trigger="hover"></i>
                                         </label>
                                         <input name="profile_link"  id="profile_link_2" type="text" class="form-control height-35 f-14" placeholder="Enter Client Profile Link" >
-    
+
                                     </div>
-    
+
                                 @endif
                             </div>
                             <div class="col-md-12">
                                 @if($deal->message_link != null)
                                     <?php
                                     $mystring = $deal->message_link;
-    
+
                                     $output = str_replace('<br>',' ', $mystring);
-    
+
                                     $output_final= (trim($output));
                                     $data= explode("  ", $output_final);
                                     //  dd(($data));
-    
+
                                     ?>
                                     @foreach($data as $message)
                                         <div class="mt-3">
@@ -181,26 +181,26 @@
                                                 <i class="fa fa-question-circle" data-toggle="popover" data-placement="top" data-content="Message Link" data-html="true" data-trigger="hover"></i>
                                             </label>
                                             <input name="message_link[]" value="{{$message}}" readonly id="message_link" type="text" class="form-control height-35 f-14" placeholder="Enter Project Name" required>
-    
+
                                         </div>
-    
+
                                     @endforeach
-    
-    
-    
+
+
+
                                 @else
                                     <div class="mt-3">
                                         <label for="message_link" class="form-label"><strong>Message Link</strong>
                                             <i class="fa fa-question-circle" data-toggle="popover" data-placement="top" data-content="Message Link" data-html="true" data-trigger="hover"></i>
                                         </label>
                                         <input name="message_link"  id="message_link" type="text" class="form-control height-35 f-14" placeholder="Enter Message Thread Link" required>
-    
+
                                     </div>
-    
+
                                     {{--
                                                                     <label class="mt-3" for="Client Username"><strong>Client Message Thread Link</strong></label>
                                                                     <div class="col-md-12 dynamic-field" id="dynamic-field-1">
-    
+
                                                                                <div class="row">
                                                                                    <div class="col-md-12 my-2">
                                                                                        <div class="form-group">
@@ -209,14 +209,14 @@
                                                                                    </div>
                                                                                </div>
                                                                            </div> --}}
-    
+
                                     {{-- <div class="col-md-3 my-2 form-group append-buttons">
                                         <div class="clearfix">
                                             <button type="button" id="add-button" class="btn btn-secondary2 float-left text-uppercase shadow-sm"><i class="fa fa-plus fa-fw"></i></button>
                                             <button type="button" id="remove-button" class="btn btn-secondary2 float-left text-uppercase ml-1" disabled="disabled"><i class="fa fa-minus fa-fw"></i></button>
                                         </div>
                                     </div> --}}
-    
+
                                 @endif
                             </div>
                         </div>
@@ -239,7 +239,7 @@
                                 </div>
                             </div>
                         </div>
-    
+
                         <div class="mt-3">
                             <label for="amount" class="form-label"><strong>Project Budget <span style="color:red;">*<span></strong>
                                 <i class="fa fa-question-circle" data-toggle="popover" data-placement="top" data-content="Project Budget" data-html="true" data-trigger="hover"></i>
@@ -260,38 +260,50 @@
                                 @foreach ($currencies as $currency)
                                     <option value="{{$currency->id}}">({{$currency->currency_code}})</option>
                                 @endforeach
-    
-    
+
+
                             </select>
-                        </div> 
+                        </div>
                         <div class="mt-3" id="timerss">
-    
+
                             <h2><strong>Project Award Time <span style="color:red;">*<span></strong>
                                 <i class="fa fa-question-circle" data-toggle="popover" data-placement="top" data-content="Project Award Time" data-html="true" data-trigger="hover"></i>
                             </h2>
-                             
+
                             <input type="text" id="date-format" name="award_time" value="{{old('award_time')}}" class="form-control height-35 f-14 floating-label" placeholder="Select Exact Award Time" >
                             <label id="awardTimeError" class="text-danger" for=""></label>
                         </div>
+
+                        @if($deal->project_type != 'hourly')
+                        <div class="mt-3 deadline-div" id="timerss" >
+
+                            <h2><strong>Deadline <span style="color:red;">*<span></strong>
+                                <i class="fa fa-question-circle" data-toggle="popover" data-placement="top" data-content="Project Deadline" data-html="true" data-trigger="hover"></i>
+                            </h2>
+
+                            <input type="datetime-local" name="deadline" value=""  class="form-control height-35 f-14" id="deadline" placeholder="Enter deadline" style="background: #ffffff;">
+                            <label id="deadlineError" class="text-danger" for=""></label>
+                        </div>
+                        @endif
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary dismiss-modal" data-dismiss-modal="#dealaddstagemodal">Close</button>
                         <button type="submit" class="btn btn-primary" id="createWonDealBtn">Create Won Deal</button>
                     </div>
-                </form> 
-            </div> 
+                </form>
+            </div>
         </div>
     </div>
 </div>
 
 {{-- modal control --}}
-{{-- 
+{{--
 <script>
     var modalToggle = document.querySelectorAll(".deal-modal-toggle");
     var dismissModal = document.querySelectorAll(".dismiss-modal");
 
     modalToggle.forEach(element => {
-         
+
         element.addEventListener('click', function() {
             const targetModal = document.querySelector(this.dataset.target);
             targetModal.classList.toggle('show')
@@ -299,26 +311,30 @@
     });
 
     dismissModal.forEach(element => {
-        // add event listener 
+        // add event listener
         element.addEventListener('click', function() {
             const targetModal = document.querySelector(this.dataset.dismissModal);
             targetModal.classList.remove('show');
         })
     })
 </script> --}}
-
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 
 <script>
     $(document).ready(function(){
         $('#date-format').daterangepicker({
             singleDatePicker: true,
             timePicker: true,
-            drops: "auto", 
+            drops: "auto",
             locale: {
                 format: 'DD-MM-YYYY hh:mm A'
             }
         });
         $('#date-format').val(moment().format('DD-MM-YYYY hh:mm A'));
+
+        flatpickr("input[type=datetime-local]", {minDate: "today"});
+
     });
 </script>
 
@@ -354,7 +370,9 @@
             'lead_id': {{$deal->lead_id}},
             @endif
             'date': '{{$date}}',
+            'deadline': document.getElementById('deadline').value,
             'id': {{$deal->id}},
+            'deal_stage': 6,
         }
 
         // console.log({data});
@@ -398,6 +416,11 @@
                     $('#awardTimeError').text('');
                     $('#createWonDealBtn').attr("disabled", false);
                     $('#createWonDealBtn').html("Create Won Deal");
+                }
+                if(error.responseJSON.errors.deadline){
+                    $('#deadlineError').text(error.responseJSON.errors.deadline);
+                }else{
+                    $('#deadlineError').text('');
                 }
                 $('#createWonDealBtn').attr("disabled", false);
                 $('#createWonDealBtn').html("Create Won Deal");
@@ -473,5 +496,12 @@
             disableButtonRemove();
             enableButtonAdd();
         });
+    });
+
+    // deadline hide for hourly
+    $('input[name="deal_type"]').change(function()
+    {
+        if ($(this).val() == 'hourly') $('.deadline-div').hide();
+        else $('.deadline-div').show();
     });
 </script>

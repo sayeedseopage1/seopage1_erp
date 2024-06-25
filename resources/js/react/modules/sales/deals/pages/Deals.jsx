@@ -14,7 +14,7 @@ import DealTableExportButton from "../components/DealTableExportToExcel";
 
 const Deals = () => {
     const { isEditFormEnable } = useDealContext();
-
+    const [convertStatus, setConvertStatus] = React.useState(null);
     const [isCreationFormVisible, setIsCreationFormVisible] =
         React.useState(false);
 
@@ -53,7 +53,11 @@ const Deals = () => {
     return (
         <React.Fragment>
             <div>
-                <FilterBar setFilter={setFilter} />
+                <FilterBar
+                    setFilter={setFilter}
+                    setConvertStatus={setConvertStatus}
+                    convertStatus={convertStatus}
+                />
                 <Flex justifyContent="space-between" className="mb-3">
                     <Flex>
                         <Button
@@ -63,7 +67,56 @@ const Deals = () => {
                             <i className="fa-solid fa-plus" />
                             Create Deal
                         </Button>
-
+                        <button
+                            className="btn btn-warning"
+                            style={{
+                                fontSize: "14px",
+                                padding: "6px 12px",
+                                backgroundColor:
+                                    convertStatus === null
+                                        ? "#24b8cf"
+                                        : "rgb(193 244 251)",
+                                border: "none",
+                                color:
+                                    convertStatus === null ? "white" : "black",
+                            }}
+                            onClick={() => setConvertStatus(null)}
+                        >
+                            All{" "}
+                            <span className="badge badge-light ml-1">
+                                {" "}
+                                {deals?.total ?? 0}
+                            </span>
+                        </button>
+                        <button
+                            className="btn btn-warning d-flex align-items-center"
+                            style={{
+                                fontSize: "14px",
+                                padding: "6px 12px",
+                                backgroundColor:
+                                    convertStatus?.id === "pending"
+                                        ? "rgb(255, 145, 20)"
+                                        : "rgb(247 220 190)",
+                                border: "none",
+                                color:
+                                    convertStatus?.id === "pending"
+                                        ? "white"
+                                        : "rgb(255, 145, 20)",
+                            }}
+                            onClick={() =>
+                                setConvertStatus({
+                                    id: "pending",
+                                    title: "Pending Sales Analysis",
+                                })
+                            }
+                        >
+                            <i class="fa-solid fa-hourglass-end mr-1"></i>
+                            Pending Sales Analysis{" "}
+                            <span className="badge badge-light ml-1">
+                                {" "}
+                                {deals?.pending ?? 0}
+                            </span>
+                        </button>
                         <DealTableExportButton filter={filter} />
                     </Flex>
 
