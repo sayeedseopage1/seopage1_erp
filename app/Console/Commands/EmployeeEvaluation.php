@@ -47,6 +47,18 @@ class EmployeeEvaluation extends Command
                     $helper->NewPmEvaluation($data->user_id);
                     $data->pending_action_sending_time = Carbon::now();
                     $data->save();
+                }elseif($data->pending_action_sending_time == null && $data->user_status == 'LD')
+                {
+                    $helper = new HelperPendingActionController();
+                    $helper->NewPmEvaluation($data->user_id);
+                    $data->pending_action_sending_time = Carbon::now();
+                    $data->save();
+                }elseif($data->pending_action_sending_time == null && $data->user_status == 'SE')
+                {
+                    $helper = new HelperPendingActionController();
+                    $helper->NewPmEvaluation($data->user_id);
+                    $data->pending_action_sending_time = Carbon::now();
+                    $data->save();
                 }else{
                     dd('Developer'); 
                     $helper = new HelperPendingActionController();
