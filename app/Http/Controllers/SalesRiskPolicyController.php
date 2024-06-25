@@ -667,47 +667,54 @@ class SalesRiskPolicyController extends AccountBaseController
 
     function renderQuestionList(Request $req)
     {
-        $deal = Deal::find($req->session()->get('deal_id'));
-        $dealStage = DealStage::where('lead_id', $deal->lead->id)->first();
+        try {
+            $deal = Deal::find($req->session()->get('deal_id'));
+            $dealStage = DealStage::where('lead_id', $deal->lead->id)->first();
 
-        $data = SalesPolicyQuestion::parent()
-            ->where(function ($query) use ($dealStage) {
-                // excluding weekend question except Saturday and Sunday deal's
-                if (!in_array(Carbon::parse($dealStage->updated_at)->format('D'), ['Sat', 'Sun']))
-                    $query->whereNot('key', 'availableWeekend');
-                else if (Carbon::parse($dealStage->updated_at)->format('D') == 'Fri' && Carbon::parse($dealStage->updated_at)->format('H') < 17)
-                    $query->whereNot('key', 'availableWeekend');
-            })
-            ->get()
-            ->filter(fn ($item) => SalesRiskPolicy::find($item->policy_id)->status)
-            ->filter(function ($item) {
-                if ($item->key == 'yesNoRules') return SalesRiskPolicy::find($item->value)->status;
-                else return true;
-            })
-            ->map(function ($item) {
+            $data = SalesPolicyQuestion::parent()
+                ->where(function ($query) use ($dealStage) {
+                    // excluding weekend question except Saturday and Sunday deal's
+                    if (!in_array(Carbon::parse($dealStage->updated_at)->format('D'), ['Sat', 'Sun']))
+                        $query->whereNot('key', 'availableWeekend');
+                    else if (Carbon::parse($dealStage->updated_at)->format('D') == 'Fri' && Carbon::parse($dealStage->updated_at)->format('H') < 17)
+                        $query->whereNot('key', 'availableWeekend');
+                })
+                ->get()
+                ->filter(fn ($item) => SalesRiskPolicy::find($item->policy_id)->status)
+                ->filter(function ($item) {
+                    if ($item->key == 'yesNoRules')
+                        return SalesRiskPolicy::find($item->value)->status;
+                    else
+                        return true;
+                })
+                ->map(function ($item) {
 
-                // check if rule is enable
-                if ($item->key == 'yesNoRules' && SalesRiskPolicy::find($item->value)->status == 0) return;
+                    // check if rule is enable
+                    if ($item->key == 'yesNoRules' && SalesRiskPolicy::find($item->value)->status == 0) return;
 
-                $data = [
-                    'id' => $item->id,
-                    'title' => $item->title,
-                    'key' => $item->key,
-                    'type' => $item->type,
-                    'value' => json_decode($item->value) ? json_decode($item->value) : $item->value,
-                    'placeholder' => $item->placeholder,
-                    'parent_id' => $item->parent_id,
-                    'policy_id' => $item->policy_id,
-                    'policy_title' => SalesRiskPolicy::find($item->policy_id)->title,
-                    'comment' => $item->comment,
-                    'questions' => self::questionListChild($item->id)
-                ];
-                return $data;
-            })->toArray();
+                    $data = [
+                        'id' => $item->id,
+                        'title' => $item->title,
+                        'key' => $item->key,
+                        'type' => $item->type,
+                        'value' => json_decode($item->value) ? json_decode($item->value) : $item->value,
+                        'placeholder' => $item->placeholder,
+                        'parent_id' => $item->parent_id,
+                        'policy_id' => $item->policy_id,
+                        'policy_title' => SalesRiskPolicy::find($item->policy_id)->title,
+                        'comment' => $item->comment,
+                        'questions' => self::questionListChild($item->id)
+                    ];
+                    return $data;
+                })->toArray();
 
-        $currency = Currency::find($deal->original_currency_id);
+            $currency = Currency::find($deal->original_currency_id);
 
-        return response()->json(['status' => 'success', 'data' => ['questionList' => array_values($data), 'currency' => [$currency->currency_code, $currency->currency_name, $currency->currency_symbol]]]);
+            return response()->json(['status' => 'success', 'data' => ['questionList' => array_values($data), 'currency' => [$currency->currency_code, $currency->currency_name, $currency->currency_symbol]]]);
+        } catch (\Throwable $th) {
+            // throw $th;
+            return response()->json(['status' => 'error', 'message' => $th->getMessage(), 'code' => $th->getLine()]);
+        }
     }
 
     function questionValueSave(Request $req)
