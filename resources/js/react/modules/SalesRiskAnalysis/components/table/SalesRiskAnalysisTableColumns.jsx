@@ -55,7 +55,6 @@ export const SalesRiskAnalysisTableColumns = [
                                 style={{
                                     cursor: "pointer",
                                 }}
-                            
                             >
                                 {/* Empty string as label */}
                             </label>{" "}
@@ -64,7 +63,6 @@ export const SalesRiskAnalysisTableColumns = [
                             onClick={() => {
                                 action.handleEditPolicy(data);
                             }}
-                            
                             className="d-flex align-items-center bg-transparent"
                         >
                             <Tooltip text={`Edit Policy`}>
@@ -451,7 +449,6 @@ export const SalesRiskAnalysisTableColumns = [
                                                     "no"
                                                 );
                                             }}
-                                           
                                             className="d-flex align-items-center bg-transparent"
                                         >
                                             <Tooltip text={`Edit Policy Rule`}>
@@ -470,11 +467,10 @@ export const SalesRiskAnalysisTableColumns = [
                                                 marginLeft: "10px",
                                             }}
                                             onClick={() => {
-                                                data.status === "1" &&
-                                                    action.handleRuleStatus(
-                                                        rule,
-                                                        data
-                                                    );
+                                                action.handleRuleStatus(
+                                                    rule,
+                                                    data
+                                                );
                                             }}
                                         >
                                             <Tooltip

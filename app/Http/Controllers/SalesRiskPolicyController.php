@@ -784,7 +784,7 @@ class SalesRiskPolicyController extends AccountBaseController
             // if error then delete previous records
             PolicyQuestionValue::where('deal_id', $dealId)->delete();
 
-            // throw $th;
+            throw $th;
             return response()->json(['status' => 'error', 'message' => 'Data did not stored successfully.'], 500);
         }
     }
@@ -1323,7 +1323,7 @@ class SalesRiskPolicyController extends AccountBaseController
 
             return $calculationData;
         } catch (\Throwable $th) {
-            // throw $th;
+            throw $th;
             return ['points' => null, 'error' => $th->getMessage()];
         }
     }
