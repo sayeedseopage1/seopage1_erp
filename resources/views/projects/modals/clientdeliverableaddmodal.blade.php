@@ -1,5 +1,11 @@
 @php
+    $projectType = $project->deal->project_type;
     $milestones= App\Models\ProjectMilestone::where('project_id',$project->id)->get();
+
+    if ($projectType == 'hourly') {
+        $addedMilestones = App\Models\ProjectDeliverable::where('project_id',$project->id)->pluck('milestone_id');
+        $milestone = App\Models\ProjectMilestone::where('project_id',$project->id)->whereNotIn('id',$addedMilestones)->first();
+    }
 @endphp
 <div class="modal fade" id="deliverablesaddModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-lg">
@@ -37,8 +43,8 @@
             <option value="Speed optimization" title="Any speed optimization works should be added under this item.">Speed optimization</option>
             <option value="Fixing Issues/Bugs" title="Any Fixing Issues/Bugs works should be added under this item.">Fixing Issues/Bugs</option>
             <option value="Fixing Responsiveness/Making something responsive" title="Any Fixing Responsiveness/Making something responsive works should be added under this item.">Fixing Responsiveness/Making something responsive</option>
-          
-           
+
+
             <option value="Others" title="Anything that is not specifically mentioned above should go to others. For example, any complex functionality, speed optimization, bug fixing or anything else not mentioned specifically above. If you select others, the top management will have to check and authorize those deliverables before you can proceed further.">Others</option>
           </select>
                   <label id="deliverableError" class="text-danger" for=""></label>
@@ -54,9 +60,14 @@
         </label>
       <select class="form-control height-35 f-14" name="milestone_id" id="milestone_id">
 
+        @if ($projectType == 'fixed')
         @foreach($milestones as $milestone)
         <option value="{{$milestone->id}}">{{$milestone->milestone_title}}</option>
        @endforeach
+       @elseif($milestone)
+       <option value="{{$milestone->id}}">{{$milestone->milestone_title}}</option>
+
+        @endif
 
       </select>
               <label id="milestoneError" class="text-danger" for=""></label>

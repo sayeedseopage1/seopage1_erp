@@ -192,8 +192,9 @@ class ProjectMilestoneController extends AccountBaseController
             $update_task->milestone_id = $milestone->id;
             $update_task->save();
         }
-      //  dd("true");
-        $project_id= Project::where('id',$milestone_update->project_id)->first();
+
+        $project->authorization_status = 'pending';
+        $project->save();
         $milestone_updated_count= ProjectMilestone::where('project_id',$milestone_update->project_id)->count();
 
         $milestone_complete= ProjectMilestone::where('project_id',$milestone_update->project_id)->where('status','complete')->count();
