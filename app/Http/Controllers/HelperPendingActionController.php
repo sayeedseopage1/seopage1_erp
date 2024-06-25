@@ -2168,7 +2168,7 @@ class HelperPendingActionController extends AccountBaseController
                         'button_color' => 'primary',
                         'button_type' => 'redirect_url',
                         'button_url' => route('employee-evaluation.index'),
-                        'button_url' => route('employee-evaluation.index', ['user_id' => $new_pm->id, 'show' => 'all']),
+                        'button_url' => route('employee-evaluation.index', ['user_id' => $new_pm->id, 'show' => 'all' ,'type' => 'pm']),
                     ],
                 ];
                 $action->button = json_encode($button);
