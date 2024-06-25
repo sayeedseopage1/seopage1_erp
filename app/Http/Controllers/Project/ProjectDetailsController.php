@@ -42,11 +42,12 @@ class ProjectDetailsController extends Controller
         $projectArray['buttons']['mark_as_incomplete'] = Auth::user()->role_id == 1 && $project->status == 'in progress' ? true : false;
         $projectArray['buttons']['pm_task_guidline_authorization'] = Auth::user()->role_id == 1 && $project->pmTaskGuidelineAuthorizations->where('status', 0)->count() ? true : false;
         $projectArray['buttons']['pm_task_guidline'] = $project->pmTaskGuidline ? true : false;
-        $projectArray['buttons']['project_qc_authorization'] = (Auth::user()->role_id == 1 || Auth::user()->role_id == 8) && $project->projectQcSubmission->status == 'pending' ? true : false;
+        $projectArray['buttons']['project_qc_authorization'] = (Auth::user()->role_id == 1 || Auth::user()->role_id == 8) && ($project->projectQcSubmission && $project->projectQcSubmission->status == 'pending') ? true : false;
         $projectArray['buttons']['project_qc_data'] = $project->projectQcSubmission ? true : false;
+        $projectArray['buttons']['completion_form_authorization'] = (Auth::user()->role_id == 1 || Auth::user()->role_id == 8) && ($project->projectSubmission && $project->projectSubmission->status == 'pending') ? true : false;
+        $projectArray['buttons']['completion_form_data'] = $project->projectSubmission ? true : false;
 
 
-        $projectArray['buttons']['completion_form_authorization'] = Auth::user()->role_id == 1 ? true : false;
         $projectArray['buttons']['dispute_authorization'] = Auth::user()->role_id == 1 ? true : false;
 
         unset($projectArray['isProjectAdmin']);
