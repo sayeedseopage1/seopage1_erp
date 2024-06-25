@@ -7,6 +7,7 @@ export const CommentAdminSection = styled.section``;
 export const ButtonSection = styled.section``;
 export const RatingTitleAndTableSection = styled.section``;
 export const RatingSectionLeadDev = styled.section``;
+export const RatingSectionTeamLead = styled.section``;
 export const CommentLeadDevSection = styled.section``;
 export const RatingButtonSection = styled.section``;
 export const LeadDevName = styled.div`

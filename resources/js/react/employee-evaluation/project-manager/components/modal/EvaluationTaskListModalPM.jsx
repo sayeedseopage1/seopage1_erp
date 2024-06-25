@@ -585,25 +585,6 @@ const EvaluationTaskListModalPM = ({
 
                     {/* lead dev submit button end */}
 
-                    {/* Team Lead submit button start */}
-
-                    {auth.roleId === 8 &&
-                        singleEvaluation.team_lead_status === 0 &&
-                        singleEvaluation.team_lead_submission_status === 1 && (
-                            <Button
-                                onClick={handleTeamLeadComment}
-                                size="md"
-                                className="ml-2"
-                                disabled={isLoadingTeamLeadReview}
-                            >
-                                {isLoadingTeamLeadReview
-                                    ? "Submitting..."
-                                    : "Submit Review"}
-                            </Button>
-                        )}
-
-                    {/* Team Lead Submit button end */}
-
                     {/* Admin submit button start */}
                     {auth.roleId === 1 &&
                         singleEvaluation.managements_decision === null &&
