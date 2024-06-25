@@ -231,7 +231,7 @@ class IndependentTaskController extends AccountBaseController
             $taskFind = Task::where('u_id',$pendingParentTasks->u_id)->first(); //Find SubTask
             if($taskFind != null){
                 $task_user = User::where('id', $pendingParentTasks->user_id)->first();
-                if($task_user->role_id == 15){
+                if($task_user->role_id == 15 || $task_user->role_id == 16 || $task_user->role_id == 17){
                     $evaluation = EmployeeEvaluation::where('user_id', $pendingParentTasks->user_id)->first();
                     if ($evaluation->start_date == null) {
                         $evaluation->start_date = Carbon::now();
