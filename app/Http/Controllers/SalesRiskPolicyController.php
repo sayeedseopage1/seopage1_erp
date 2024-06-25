@@ -391,11 +391,10 @@ class SalesRiskPolicyController extends AccountBaseController
             // if policy parent
             if ($policy->parent_id == null)
                 SalesRiskPolicy::where('parent_id', $id)->update(['status' => $status]);
-            else if($status == 1) {
-                $count = SalesRiskPolicy::where(['parent_id'=> $policy->parent_id, 'status' => '1'])->count();
+            else if ($status == 1) {
+                $count = SalesRiskPolicy::where(['parent_id' => $policy->parent_id, 'status' => '1'])->count();
                 if ($count > 0) SalesRiskPolicy::whereId($policy->parent_id)->update(['status' => '1']);
-            }
-            else {
+            } else {
                 $count = SalesRiskPolicy::where('parent_id', $policy->parent_id)->where('status', '1')->count();
                 if ($count == 0) SalesRiskPolicy::whereId($policy->parent_id)->update(['status' => '0']);
             }
@@ -673,8 +672,11 @@ class SalesRiskPolicyController extends AccountBaseController
 
         $data = SalesPolicyQuestion::parent()
             ->where(function ($query) use ($dealStage) {
-                // excluding weekend question on Saturday and Sunday deal's
-                if (!in_array(Carbon::parse($dealStage->updated_at)->format('D'), ['Sat', 'Sun'])) $query->whereNot('key', 'availableWeekend');
+                // excluding weekend question except Saturday and Sunday deal's
+                if (!in_array(Carbon::parse($dealStage->updated_at)->format('D'), ['Sat', 'Sun']))
+                    $query->whereNot('key', 'availableWeekend');
+                else if (Carbon::parse($dealStage->updated_at)->format('D') == 'Fri' && Carbon::parse($dealStage->updated_at)->format('H') < 17)
+                    $query->whereNot('key', 'availableWeekend');
             })
             ->get()
             ->filter(fn ($item) => SalesRiskPolicy::find($item->policy_id)->status)
@@ -1153,7 +1155,7 @@ class SalesRiskPolicyController extends AccountBaseController
             $questions = SalesPolicyQuestion::where('key', 'yesNoRules')->get();
             foreach ((object) $questions as $key => $item) {
                 // $rule_id = json_decode($item->value)->rule_id;
-                if(!isset($questionAns[$item->id])) continue;
+                if (!isset($questionAns[$item->id])) continue;
 
                 $rule = SalesRiskPolicy::where('id', $item->value)->first();
                 $value = $questionAns[$item->id];
