@@ -30,3 +30,94 @@ export const dummy_projects = [
         updated_at: "2021-01-12 12:00:00",
     },
 ];
+
+export const project_types = [
+    {
+        id: 1,
+        value: "hourly",
+        title: "Hourly Rate",
+    },
+    {
+        id: 2,
+        value: "fixed",
+        title: "Fixed Price",
+    },
+];
+
+export const project_skills = [
+    {
+        id: 1,
+        value: "Content Writing",
+        title: "Content Writing",
+    },
+    {
+        id: 2,
+        value: "SEO",
+        title: "SEO",
+    },
+    {
+        id: 3,
+        value: "Copywriting",
+        title: "Copywriting",
+    },
+    {
+        id: 4,
+        value: "Social Media",
+        title: "Social Media",
+    },
+    {
+        id: 5,
+        value: "Email Marketing",
+        title: "Email Marketing",
+    },
+    {
+        id: 6,
+        value: "Video Marketing",
+        title: "Video Marketing",
+    },
+    {
+        id: 7,
+        value: "Graphic Design",
+        title: "Graphic Design",
+    },
+    {
+        id: 8,
+        value: "Translation",
+        title: "Translation",
+    },
+    {
+        id: 9,
+        value: "Article Writing",
+        title: "Article Writing",
+    },
+    {
+        id: 10,
+        value: "Internet Marketing",
+        title: "Internet Marketing",
+    },
+    {
+        id: 11,
+        value: "Mobile App Development",
+        title: "Mobile App Development",
+    },
+    {
+        id: 12,
+        value: "Website Development",
+        title: "Website Development",
+    },
+    {
+        id: 13,
+        value: "Logo Design",
+        title: "Logo Design",
+    },
+    {
+        id: 14,
+        value: "Video Editing",
+        title: "Video Editing",
+    },
+    {
+        id: 15,
+        value: "Data Entry",
+        title: "Data Entry",
+    },
+];

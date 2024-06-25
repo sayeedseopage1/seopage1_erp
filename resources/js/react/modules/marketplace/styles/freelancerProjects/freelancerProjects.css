@@ -6,6 +6,7 @@
     gap: 27px;
 }
 
+/* filter bar */
 .projects_page_filter_bar {
     padding: 30px;
     background-color: var(--primary-white);
@@ -13,6 +14,59 @@
     border: 1px solid var(--light-blue-2);
 }
 
+.projects_page_filter_bar_header {
+    color: var(--primary-black);
+    font-size: 24px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+    margin-bottom: 10px;
+}
+
+.filter_bar_title_wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    margin-bottom: 15px;
+}
+
+.filter_bar_title {
+    color: var(--primary-black);
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+}
+
+.filter_bar_clear {
+    color: var(--primary-blue);
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+    background-color: transparent;
+}
+
+.filter_check_wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 3px;
+    margin-bottom: 8px;
+}
+
+.filter_check_label {
+    color: var(--primary-black);
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+    margin: 0px;
+}
+
+
+/* projects page contents */
 .projects_page_contents {
     border-radius: 9px;
     border: 1px solid var(--light-blue-2);
