@@ -1153,6 +1153,8 @@ class SalesRiskPolicyController extends AccountBaseController
             $questions = SalesPolicyQuestion::where('key', 'yesNoRules')->get();
             foreach ((object) $questions as $key => $item) {
                 // $rule_id = json_decode($item->value)->rule_id;
+                if(!isset($questionAns[$item->id])) continue;
+
                 $rule = SalesRiskPolicy::where('id', $item->value)->first();
                 $value = $questionAns[$item->id];
 
