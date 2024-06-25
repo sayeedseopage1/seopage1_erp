@@ -1,20 +1,15 @@
-// import { convertTime } from "../../../utils/converTime";
-
-// import AssignedTasksData from "./AssignedTasksData";
-// import SubmittedTasksData from "./SubmittedTasksData";
-
 import CommentModal from "../../../components/Table/CommentModal";
 import TotalMin from "../../../components/Table/TotalMin";
 import EvaluationRoundHistoryModal from "../../../components/modal/EvaluationRoundHistoryModal";
 import EvaluationRevisionModal from "../../../components/modal/EvaluationRevisionModal";
 import AverageRating from "../../../components/Table/AverageRating";
 import AverageRatingSecondaryMetrics from "../../../components/Table/AverageRatingSecondaryMetrics";
-import { User } from "../../../../utils/user-details";
+
 import FormatDate from "../../../../utils/FormateDate";
 import Person from "../../../components/Table/Person";
 import ActionEvaluationTablePM from "./ActionEvaluationTablePM";
-
-const auth = new User(window.Laravel.user);
+import AssignedTasksData from "../../../components/Table/AssignedTasksData";
+import SubmittedTasksData from "../../../components/Table/SubmittedTasksData";
 
 export const EvaluationTableColumnsPM = [
     {
@@ -93,7 +88,7 @@ export const EvaluationTableColumnsPM = [
             const data = row.original;
             return (
                 <div style={{ marginLeft: "50px" }}>
-                    {/* <AssignedTasksData data={data} /> */}
+                    <AssignedTasksData data={data} />
                 </div>
             );
         },
@@ -106,7 +101,7 @@ export const EvaluationTableColumnsPM = [
             const data = row.original;
             return (
                 <div style={{ marginLeft: "50px" }}>
-                    {/* <SubmittedTasksData data={data} /> */}
+                    <SubmittedTasksData data={data} />
                 </div>
             );
         },
@@ -139,7 +134,7 @@ export const EvaluationTableColumnsPM = [
     },
     {
         id: "team_lead_avg_rating",
-        header: "Lead Developer Average Rating",
+        header: "Team Lead Average Rating",
         accessorKey: "team_lead_avg_rating",
         cell: ({ row }) => {
             const data = row.original;

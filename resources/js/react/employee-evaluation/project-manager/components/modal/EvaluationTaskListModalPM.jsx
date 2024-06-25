@@ -54,7 +54,8 @@ import useEmployeeEvaluation from "../../../../zustand/store.js";
 import RatingSection from "../../../components/modal/RatingSection.jsx";
 import RatingSectionStatic from "../../../components/modal/RatingSectionStatic.jsx";
 import { ratingHoverText } from "../../../../utils/ratingHoverText.js";
-import { EvaluationTaskTableColumns } from "../../../components/Table/EvaluationTaskTableColumns.jsx";
+
+import { EvaluationTaskTableColumnsPM } from "../table/EvaluationTaskTableColumnsPM.jsx";
 
 const EvaluationTaskListModalPM = ({
     isEvaluationModal,
@@ -92,7 +93,7 @@ const EvaluationTaskListModalPM = ({
 
     const [
         taskRatingFinalSubmission,
-        { isLoading: isLoadingLeadDevFinalSubmission },
+        { isLoading: isLoadingTeamLeadFinalSubmission },
     ] = useStoreTaskRatingFinalSubmissionMutation();
     const [teamLeadSubmission, { isLoading: isLoadingTeamLeadReview }] =
         useStoreTeamLeadReviewMutation();
@@ -228,7 +229,7 @@ const EvaluationTaskListModalPM = ({
         setPagination(paginate);
     };
 
-    const handleLeadDevFinalSubmission = async () => {
+    const handleTeamLeadFinalSubmission = async () => {
         const requiredFields = [
             { key: "communication", label: "Communication" },
             { key: "professionalism", label: "Professionalism" },
@@ -278,40 +279,6 @@ const EvaluationTaskListModalPM = ({
             })
             .catch((error) => {
                 toast.error("Final submission failed. Please try again later.");
-            });
-    };
-
-    const handleTeamLeadComment = async (e) => {
-        if (teamLeadReview === "") {
-            const errorMessage = (
-                <div>
-                    <div style={{ fontWeight: "bold" }}>
-                        {" "}
-                        Please fill in the following fields:
-                    </div>
-                    <div>Team Leader's Review</div>
-                </div>
-            );
-            toast.error(errorMessage);
-            return;
-        }
-
-        await teamLeadSubmission({
-            team_lead_cmnt: teamLeadReview,
-            user_id: singleEvaluation.user_id,
-            _token: document
-                .querySelector("meta[name='csrf-token']")
-                .getAttribute("content"),
-        })
-            .unwrap()
-            .then(() => {
-                toast.success("Review submission Successful!");
-                setIsEvaluationModal(false);
-            })
-            .catch((error) => {
-                toast.error(
-                    "Review submission failed. Please try again later."
-                );
             });
     };
 
@@ -454,7 +421,7 @@ const EvaluationTaskListModalPM = ({
                 </EvalTableTitle>
                 <EvaluationTaskTable
                     data={latestRoundTasks}
-                    columns={[...EvaluationTaskTableColumns]}
+                    columns={[...EvaluationTaskTableColumnsPM]}
                     isLoading={isLoading}
                     onPageChange={onPageChange}
                     sorting={sorting}
@@ -569,15 +536,15 @@ const EvaluationTaskListModalPM = ({
                     </Button>
 
                     {/* lead dev submit button start */}
-                    {auth.roleId === 6 &&
+                    {auth.roleId === 8 &&
                         singleEvaluation.team_lead_submission_status !== 1 && (
                             <Button
-                                onClick={handleLeadDevFinalSubmission}
+                                onClick={handleTeamLeadFinalSubmission}
                                 size="md"
                                 className="ml-2"
                                 disabled={confirmButtonDisabled}
                             >
-                                {isLoadingLeadDevFinalSubmission
+                                {isLoadingTeamLeadFinalSubmission
                                     ? "Submitting..."
                                     : "Confirm Submission"}
                             </Button>
@@ -588,7 +555,6 @@ const EvaluationTaskListModalPM = ({
                     {/* Admin submit button start */}
                     {auth.roleId === 1 &&
                         singleEvaluation.managements_decision === null &&
-                        singleEvaluation.team_lead_status === 1 &&
                         singleEvaluation.team_lead_submission_status === 1 && (
                             <Flex>
                                 <Button

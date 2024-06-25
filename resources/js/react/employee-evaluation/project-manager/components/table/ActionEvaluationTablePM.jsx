@@ -4,7 +4,7 @@ import { useLocation } from "react-router-dom";
 import { Tooltip } from "react-tooltip";
 
 import useEmployeeEvaluation from "../../../../zustand/store";
-import EvaluationTaskListModal from "../../../components/modal/EvaluationTaskListModal";
+
 import Switch from "../../../../global/Switch";
 import Button from "../../../components/Button";
 import { useAuth } from "../../../../hooks/useAuth";
