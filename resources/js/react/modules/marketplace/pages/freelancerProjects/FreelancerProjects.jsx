@@ -12,6 +12,9 @@ const FreelancerProjects = () => {
                     Select: {
                         selectorBg: 'transparent',
                     },
+                    Input: {
+                        paddingBlockLG: 10
+                    },
                 },
             }}
         >

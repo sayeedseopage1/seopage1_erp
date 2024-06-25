@@ -16,8 +16,8 @@ const ProjectCard = ({ item }) => {
                 </div>
             </div>
             <div className='project_card_body'>
-                <p className='project_normal_text'>Budget {budget_range}</p>
-                <p className='project_normal_text'>{description}</p>
+                <p className='project_normal_text'>Budget {budget_range} {currency}</p>
+                <p className='project_normal_text project_card_description'>{description}</p>
                 <div className='project_card_skills'>
                     {
                         skills.map((skill, index) => (

@@ -109,11 +109,35 @@
     z-index: 2;
 }
 
+.filter_input_wrapper {
+    margin-bottom: 16px;
+}
+
+.filter_input_label {
+    color: var(--primary-black);
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+}
+
+.filter_view_all_button {
+    color: var(--primary-blue);
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+    text-decoration-line: underline;
+    background-color: transparent;
+    margin-top: 15px;
+}
+
 
 /* projects page contents */
 .projects_page_contents {
     border-radius: 9px;
     border: 1px solid var(--light-blue-2);
+    background-color: var(--primary-white);
 }
 
 .projects_content_header {
@@ -220,6 +244,12 @@
     line-height: normal;
 }
 
+.project_card_title:hover {
+    color: var(--primary-blue);
+    text-decoration: underline;
+    cursor: pointer;
+}
+
 .project_card_price {
     color: var(--primary-black);
     font-size: 16px;
@@ -234,6 +264,17 @@
     align-items: flex-start;
     gap: 15px;
     margin-bottom: 20px;
+}
+
+.project_card_description {
+    display: block;
+    display: -webkit-box;
+    max-width: 100%;
+    -webkit-line-clamp: 4;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    cursor: pointer;
 }
 
 .project_card_skills {

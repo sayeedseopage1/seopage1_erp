@@ -3,16 +3,20 @@ import ProjectCheckBox from '../ui/ProjectCheckBox';
 import { languages, listing_types, project_skills, project_types } from '../../../constants/projects';
 import { Divider } from 'antd';
 import FilterBarTitle from '../ui/FilterBarTitle';
+import FilterInput from '../ui/FilterInput';
+import { FiSearch } from "react-icons/fi";
 
 const ProjectsFilterBar = () => {
     const [filterQuery, setFilterQuery] = useState({
         project_types: [],
-        fixed_price: [
-            {
-                id: 1,
-            }
-        ],
-        hourly_rate: [],
+        fixed_price: {
+            fixed_min: null,
+            fixed_max: null
+        },
+        hourly_rate: {
+            hourly_min: null,
+            hourly_max: null
+        },
         project_skills: [],
         listing_types: [],
         project: "",
@@ -20,7 +24,7 @@ const ProjectsFilterBar = () => {
         languages: [],
     });
 
-    console.log(filterQuery)
+    // console.log(filterQuery)
 
     return (
         <div id='projects_page_filter' className='projects_page_filter_bar'>
@@ -54,15 +58,63 @@ const ProjectsFilterBar = () => {
             <Divider />
             {/* fixed price */}
             <div className='filter_sub_wrapper'>
-                <FilterBarTitle title={'Fixed price'} onClick={() => setFilterQuery({ ...filterQuery, fixed_price: [] })} />
+                <FilterBarTitle title={'Fixed price'} onClick={() => setFilterQuery({
+                    ...filterQuery, fixed_price: {
+                        fixed_min: null,
+                        fixed_max: null
+                    }
+                })} />
+                <FilterInput
+                    onChange={(e) => setFilterQuery({ ...filterQuery, fixed_price: { ...filterQuery?.fixed_price, fixed_min: e.target.value } })}
+                    placeholder={'0'}
+                    label='min'
+                    prefix='$'
+                    suffix='USD'
+                    value={filterQuery?.fixed_price?.fixed_min}
+                />
+                <FilterInput
+                    onChange={(e) => setFilterQuery({ ...filterQuery, fixed_price: { ...filterQuery?.fixed_price, fixed_max: e.target.value } })}
+                    placeholder='0'
+                    label='max'
+                    prefix='$'
+                    suffix='USD'
+                    value={filterQuery?.fixed_price?.fixed_max}
+                />
             </div>
             {/* Hourly rate */}
             <div className='filter_sub_wrapper'>
-                <FilterBarTitle title={'Hourly rate'} onClick={() => setFilterQuery({ ...filterQuery, hourly_rate: [] })} />
+                <FilterBarTitle title={'Hourly rate'} onClick={() => setFilterQuery({
+                    ...filterQuery, hourly_rate: {
+                        hourly_min: null,
+                        hourly_max: null
+                    }
+                })} />
+                <FilterInput
+                    onChange={(e) => setFilterQuery({ ...filterQuery, hourly_rate: { ...filterQuery?.hourly_rate, hourly_min: e.target.value } })}
+                    placeholder='0'
+                    label='min'
+                    prefix='$'
+                    suffix='USD'
+                    value={filterQuery?.hourly_rate?.hourly_min}
+                />
+                <FilterInput
+                    onChange={(e) => setFilterQuery({ ...filterQuery, hourly_rate: { ...filterQuery?.hourly_rate, hourly_max: e.target.value } })}
+                    placeholder='0'
+                    label='max'
+                    prefix='$'
+                    suffix='USD'
+                    value={filterQuery?.hourly_rate?.hourly_max}
+                />
             </div>
             {/* Skills */}
             <div className='filter_sub_wrapper'>
                 <FilterBarTitle title={'Skills'} onClick={() => setFilterQuery({ ...filterQuery, project_skills: [] })} />
+                <FilterInput
+                    placeholder={'Search skills'}
+                    suffix={
+                        <FiSearch />
+                    }
+                />
                 <div>
                     {
                         project_skills.map((item) => (
@@ -84,6 +136,9 @@ const ProjectsFilterBar = () => {
                             }} />
                         ))
                     }
+                </div>
+                <div className='text-center'>
+                    <button className='filter_view_all_button'>View all ({project_skills?.length})</button>
                 </div>
             </div>
             {/* Listing type */}
@@ -115,14 +170,36 @@ const ProjectsFilterBar = () => {
             {/* Project  */}
             <div className='filter_sub_wrapper'>
                 <FilterBarTitle title={'Project'} onClick={() => setFilterQuery({ ...filterQuery, project: "" })} />
+                <FilterInput
+                    placeholder='Enter a location'
+                    suffix={
+                        <FiSearch />
+                    }
+                    value={filterQuery?.project}
+                    onChange={(e) => setFilterQuery({ ...filterQuery, project: e.target.value })}
+                />
             </div>
             {/* Client's country */}
             <div className='filter_sub_wrapper'>
                 <FilterBarTitle title={"Client's country"} onClick={() => setFilterQuery({ ...filterQuery, clients_country: "" })} />
+                <FilterInput
+                    placeholder='Search countries'
+                    suffix={
+                        <FiSearch />
+                    }
+                    value={filterQuery?.clients_country}
+                    onChange={(e) => setFilterQuery({ ...filterQuery, clients_country: e.target.value })}
+                />
             </div>
             {/* Languages */}
             <div className='filter_sub_wrapper'>
                 <FilterBarTitle title={'Languages'} onClick={() => setFilterQuery({ ...filterQuery, languages: [] })} />
+                <FilterInput
+                    placeholder={'Search languages'}
+                    suffix={
+                        <FiSearch />
+                    }
+                />
                 <div>
                     {
                         languages.map((item) => (
