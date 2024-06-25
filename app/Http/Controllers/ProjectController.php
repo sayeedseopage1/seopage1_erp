@@ -142,6 +142,7 @@ use App\Notifications\UpdateClientFormNotification;
 use App\Notifications\UpdateClientProductCategoryNotification;
 use App\Notifications\UpdateClientProductDescriptionNotification;
 use App\Models\ProjectPmGoal;
+use App\Models\TaskHistory;
 
 class ProjectController extends AccountBaseController
 {
@@ -697,7 +698,6 @@ class ProjectController extends AccountBaseController
     }
     public function storeDispute(Request $request)
     {
-
         $validator =  $request->validate([
             'client_username' => 'required',
             'project_value' => 'required|numeric|min:0',
@@ -812,7 +812,6 @@ class ProjectController extends AccountBaseController
 
         $helper->DisputeFormAuthorization($project);
 
-
         $project->save();
         $users = User::where('role_id', 1)->get();
         foreach ($users as $user) {
@@ -821,9 +820,11 @@ class ProjectController extends AccountBaseController
             Notification::send($user, new ProjectDisputeNotification($project));
         }
 
-        //        Toastr::success('Submitted Successfully', 'Success', ["positionClass" => "toast-top-right"]);
-        //  return Redirect::route('projects.index');
-        //          return redirect('/account/projects/' .$dispute->project_id);
+        $text = Auth::user()->name . ' submitted project cancelation/dispute form ';
+        $link = '<a href="' . route('projects.show', $dispute->project_id) . '">' . $text . '</a>';
+        $this->logProjectActivity($dispute->project_id, $link);
+
+
         return response()->json([
             'status' => 200,
             'redirectUrl' => url('/account/projects/' . $dispute->project_id)
@@ -938,6 +939,9 @@ class ProjectController extends AccountBaseController
 
         }
     }
+    $text = Auth::user()->name . ' authorized project cancelation/dispute form ';
+    $link = '<a href="' . route('projects.show', $project->id) . '">' . $text . '</a>';
+    $this->logProjectActivity($project->id, $link);
 
         return response()->json(['status'=>400]);
     }
@@ -951,10 +955,8 @@ class ProjectController extends AccountBaseController
      */
     public function update(UpdateProject $request, $id)
     {
-
-
         //kpi distribution start from here
-      //  DB::beginTransaction();
+    //    DB::beginTransaction();
         $find_project_id = Project::where('id', $id)->first();
         $find_deal_id = Deal::where('id', $find_project_id->deal_id)->first();
         $dealStage = DealStage::where('short_code', $find_deal_id->deal_id)->first();
@@ -2161,7 +2163,6 @@ class ProjectController extends AccountBaseController
         $project->project_summary = ($request->project_summary !== '<p><br></p>') ? $request->project_summary : null;
 
         $project->save();
-       // dd($project);
 
         // PROJECT PM GOAL SETTINGS START
         if($project->status = 'not started'){
@@ -2234,7 +2235,6 @@ class ProjectController extends AccountBaseController
 
 
         $helper->ProjectDeliverableCreation($project->id);
-
 
     }
 
@@ -2325,46 +2325,57 @@ class ProjectController extends AccountBaseController
             $project->updateCustomFieldData($request->get('custom_fields_data'));
         }
 
-        if ($project->project_status != 'Accepted') {
-            $pm_name = User::where('id', $project->pm_id)->first();
+        // OLD ACTIVITY LOG CODE
+        // if ($project->project_status != 'Accepted') {
+        //     $pm_name = User::where('id', $project->pm_id)->first();
 
-            $text = 'Project accepted by ' . $pm_name->name;
-            $link = '<a style="color:blue" href="' . route('projects.show', $project->id) . '?tab=deliverable">' . $text . '</a>';
+        //     $text = 'Project accepted by ' . $pm_name->name;
+        //     $link = '<a style="color:blue" href="' . route('projects.show', $project->id) . '?tab=deliverable">' . $text . '</a>';
+        //     $this->logProjectActivity($project->id, $link);
+        // } else {
+        //     $log_user = Auth::user();
+        //     foreach ($originalValues as $attribute => $originalValue) {
+        //         if ($attribute === 'updated_at' || $attribute === 'last_updated_by') {
+        //             continue;
+        //         }
+
+        //         $updatedValue = $project->$attribute;
+
+        //         if ($attribute == 'project_summary' && $originalValue != $updatedValue) {
+        //             if ($attribute == 'project_name') {
+        //                 $print = 'project name';
+        //             } else {
+        //                 $print = $attribute;
+        //             }
+        //             $activity = new ProjectActivity();
+        //             if ($attribute == 'project_summary') {
+        //                 $activity->activity = $log_user->name . ' updated project summary';
+        //                 $activity->old_data = $originalValue;
+        //             } else {
+        //                 $activity->activity = $log_user->name . ' updated ' . $print . ' from ' . $originalValue . ' to ' . $updatedValue;
+        //             }
+
+        //             $activity->project_id = $project->id;
+        //             // $activity->attribute = $attribute;
+        //             // $activity->old_value = $originalValue;
+        //             // $activity->new_value = $updatedValue;
+        //             // $activity->user_id = Auth::id();
+        //             $activity->save();
+        //         }
+        //     }
+        // }
+
+        // NEW ACTIVITY LOG CODE
+        if ($project->project_summary != null) {
+            $p_m = User::where('id', $project->pm_id)->first();
+            $link = $p_m->name . ' updated the'.'<a href="' . route('projects.show', $project->id) . '"> project </a>'.'general guidelines';
             $this->logProjectActivity($project->id, $link);
-        } else {
-            $log_user = Auth::user();
-            foreach ($originalValues as $attribute => $originalValue) {
-                if ($attribute === 'updated_at' || $attribute === 'last_updated_by') {
-                    continue;
-                }
-
-                $updatedValue = $project->$attribute;
-
-                if ($attribute == 'project_summary' && $originalValue != $updatedValue) {
-                    if ($attribute == 'project_name') {
-                        $print = 'project name';
-                    } else {
-                        $print = $attribute;
-                    }
-                    $activity = new ProjectActivity();
-                    if ($attribute == 'project_summary') {
-                        $activity->activity = $log_user->name . ' updated project summary';
-                        $activity->old_data = $originalValue;
-                    } else {
-                        $activity->activity = $log_user->name . ' updated ' . $print . ' from ' . $originalValue . ' to ' . $updatedValue;
-                    }
-
-                    $activity->project_id = $project->id;
-                    // $activity->attribute = $attribute;
-                    // $activity->old_value = $originalValue;
-                    // $activity->new_value = $updatedValue;
-                    // $activity->user_id = Auth::id();
-                    $activity->save();
-                }
-            }
         }
-
-
+        if ($project->project_status == 'Accepted') {
+            $p_m = User::where('id', $project->pm_id)->first();
+            $link = $p_m->name . ' accepted the '.'<a href="' . route('projects.show', $project->id) . '">project</a>';
+            $this->logProjectActivity($project->id, $link);
+        }
 
         $redirectUrl = urldecode($request->redirect_url);
 
@@ -2476,6 +2487,10 @@ class ProjectController extends AccountBaseController
             case 'tasks':
                 $this->taskBoardStatus = TaskboardColumn::all();
                 return (!$this->project->trashed()) ? $this->tasks($this->project->project_admin == user()->id) : $this->archivedTasks($this->project->project_admin == user()->id);
+
+            case 'sales-analysis-report':
+                $this->view = 'projects.ajax.salesAnalysisReport';
+                break;
             case 'gantt':
                 $this->taskBoardStatus = TaskboardColumn::all();
                 $this->view = 'projects.ajax.gantt';
@@ -2490,6 +2505,8 @@ class ProjectController extends AccountBaseController
             case 'activity_log':
                 $this->activityLog = ProjectActivity::where('project_id', $this->project->id)->orderBy('id', 'desc')->get();
                 $this->lead_deal_activity_log = LeadsDealsActivityLog::where('project_id', $this->project->id)->orderBy('id', 'desc')->get();
+                $this->project = Project::where('id', $this->project->id)->first();
+                $this->client = User::where('id', $this->project->client_id)->first();
                 $this->view = 'projects.ajax.activity_log';
                 break;
             case 'expenses':
@@ -3254,9 +3271,6 @@ class ProjectController extends AccountBaseController
         $sign->save();
 
 
-
-
-
         event(new ProjectSignedEvent($this->project, $sign));
 
         return Reply::redirect(route('projects.show', $this->project->id));
@@ -3337,15 +3351,8 @@ class ProjectController extends AccountBaseController
             }
             $project->save();
 
-            $log_user = Auth::user();
-
-            $activity = new ProjectActivity();
-            $activity->activity = $log_user->name . ' added project deliverable : ' . $deliverable->title;
-            $activity->project_id = $project->id;
-            $activity->save();
-
             $text = Auth::user()->name . ' added project deliverable : ' . $deliverable->title;
-            $link = '<a style="color:blue" href="' . route('projects.show', $project->id) . '?tab=deliverable">' . $text . '</a>';
+            $link = '<a href="' . route('projects.show', $project->id) . '?tab=deliverables">' . $text . '</a>';
             $this->logProjectActivity($project->id, $link);
 
             $users = User::where('role_id', 1)->get();
@@ -3542,7 +3549,7 @@ class ProjectController extends AccountBaseController
         $log_user = Auth::user();
 
         $text = Auth::user()->name . ' updated project deliverable : ' . $deliverable->title;
-        $link = '<a style="color:blue" href="' . route('projects.show', $project_id_update->id) . '?tab=deliverable">' . $text . '</a>';
+        $link = '<a href="' . route('projects.show', $project_id_update->id) . '?tab=deliverable">' . $text . '</a>';
         $this->logProjectActivity($project_id_update->id, $link);
 
         if ($request->deliverable_type == 'Others' || $request->deliverable_type == 'Fixing Issues/Bugs') {
@@ -3571,7 +3578,7 @@ class ProjectController extends AccountBaseController
         $log_user = Auth::user();
 
         $text = Auth::user()->name . ' deleted project deliverable : ' . $deliverable_id->title;
-        $link = '<a style="color:blue" href="' . route('projects.show', $project->id) . '?tab=deliverable">' . $text . '</a>';
+        $link = '<a href="' . route('projects.show', $project->id) . '?tab=deliverable">' . $text . '</a>';
         $this->logProjectActivity($project->id, $link);
         return response()->json(['status' => 400]);
     }
@@ -3640,7 +3647,7 @@ class ProjectController extends AccountBaseController
     }
     public function InComplete(Request $request)
     {
-        //        dd($request->all());
+            //    dd($request->all());
         $project = Project::find($request->id);
         $project->dispute_status = 1;
         $project->save();
@@ -3649,6 +3656,12 @@ class ProjectController extends AccountBaseController
 
 
         $helper->DisputeSubmitAction($project);
+
+        $text = Auth::user()->name . ' makred this project as incomplete ';
+        $link = '<a href="' . route('projects.show', $project->id) . '">' . $text . '</a>';
+        $this->logProjectActivity($project->id, $link);
+
+
         return response()->json([
             'status' => 400,
         ]);
@@ -3744,7 +3757,7 @@ class ProjectController extends AccountBaseController
     }
     public function ProjectCompletionSubmit(Request $request)
     {
-        //      dd($request);
+            //  dd($request->all());
         $validated = $request->validate([
             'qc_protocol' => 'required',
             'login_information' => 'required',
@@ -3954,9 +3967,10 @@ class ProjectController extends AccountBaseController
             Notification::send($user, new ProjectSubmissionNotification($milestone));
         }
 
-        //      Toastr::success('Submitted Successfully', 'Success', ["positionClass" => "toast-top-right"]);
+        $text = Auth::user()->name . ' submitted project completion form ';
+        $link = '<a href="' . route('projects.show', $project_id->id) . '">' . $text . '</a>';
+        $this->logProjectActivity($project_id->id, $link);
 
-        //      return redirect('/account/projects/'.$milestone->project_id.'?tab=milestones');
         return response()->json([
             'status' => 'success',
             'redirectUrl' => url('/account/projects/' . $milestone->project_id . '?tab=milestones')
@@ -5630,6 +5644,10 @@ public function updatePmBasicSEO(Request $request){
 
         Notification::send($user, new ProjectSubmissionAcceptNotification($project_id));
 
+        $text = Auth::user()->name . ' authorized project completion form ';
+        $link = '<a href="' . route('projects.show', $project_id->id) . '">' . $text . '</a>';
+        $this->logProjectActivity($project_id->id, $link);
+
         Toastr::success('Project Submission Request Accepted Successfully', 'Success', ["positionClass" => "toast-top-right"]);
         return back();
     }
@@ -5730,6 +5748,10 @@ public function updatePmBasicSEO(Request $request){
                     Notification::send($user, new QCSubmissionNotification($milestone));
                 }
 
+                $text = Auth::user()->name . ' submitted project QC form ';
+                $link = '<a href="' . route('projects.show', $request->project_id) . '">' . $text . '</a>';
+                $this->logProjectActivity($request->project_id, $link);
+
                 Toastr::success('Submitted Successfully', 'Success', ["positionClass" => "toast-top-right"]);
                 return redirect('/account/projects/' . $milestone->project_id . '?tab=milestones');
             }
@@ -5820,7 +5842,9 @@ public function updatePmBasicSEO(Request $request){
 
         $project_id = Project::where('id', $project->project_id)->first();
 
-
+        $text = Auth::user()->name . ' authorized project QC form ';
+        $link = '<a href="' . route('projects.show', $project_id->id) . '">' . $text . '</a>';
+        $this->logProjectActivity($project_id->id, $link);
 
         Toastr::success('Project Q&C Request Accepted Successfully', 'Success', ["positionClass" => "toast-top-right"]);
         return back();
@@ -5857,7 +5881,7 @@ public function updatePmBasicSEO(Request $request){
         //need pending action
 
         $text = Auth::user()->name . '  send project deliverable time extention request ';
-        $link = '<a style="color:blue" href="' . route('projects.show', $project->id) . '?tab=deliverable">' . $text . '</a>';
+        $link = '<a href="' . route('projects.show', $project->id) . '?tab=deliverable">' . $text . '</a>';
         $this->logProjectActivity($project->id, $link);
 
         $users = User::where('role_id', 1)->get();
@@ -5945,7 +5969,7 @@ public function updatePmBasicSEO(Request $request){
         //end authorization action
 
         $text = Auth::user()->name . ' accepted project deliverable time extention request';
-        $link = '<a style="color:blue" href="' . route('projects.show', $project->id) . '?tab=deliverable">' . $text . '</a>';
+        $link = '<a href="' . route('projects.show', $project->id) . '?tab=deliverable">' . $text . '</a>';
         $this->logProjectActivity($project->id, $link);
 
         $users = User::where('id', $project_id->pm_id)->get();
@@ -5989,7 +6013,7 @@ public function updatePmBasicSEO(Request $request){
         }
 
         $text = Auth::user()->name . ' send project deliverable authorization request';
-        $link = '<a style="color:blue" href="' . route('projects.show', $project->id) . '?tab=deliverable">' . $text . '</a>';
+        $link = '<a href="' . route('projects.show', $project->id) . '?tab=deliverables">' . $text . '</a>';
         $this->logProjectActivity($project->id, $link);
 
         return response()->json(['status' => 400]);
@@ -6118,7 +6142,7 @@ public function updatePmBasicSEO(Request $request){
 
 
         $text = Auth::user()->name . ' finally authorized project deliverable';
-        $link = '<a style="color:blue" href="' . route('projects.show', $project->id) . '?tab=deliverable">' . $text . '</a>';
+        $link = '<a href="' . route('projects.show', $project->id) . '?tab=deliverables">' . $text . '</a>';
         $this->logProjectActivity($project->id, $link);
 
         $user = User::where('id', $project->pm_id)->first();
@@ -6178,7 +6202,7 @@ public function updatePmBasicSEO(Request $request){
             $url = route('projects.show', $data->project_id) . '?tab=deliverables';
 
             $text = Auth::user()->name . ' send delivarable change request to project manager';
-            $link = '<a style="color:blue" href="' . $url . '">' . $text . '</a>';
+            $link = '<a href="' . $url . '">' . $text . '</a>';
             $this->logProjectActivity($data->project->id, $link);
 
             $this->triggerPusher('notification-channel', 'notification', [
@@ -6197,17 +6221,28 @@ public function updatePmBasicSEO(Request $request){
     public function project_activity_time_log_ajax(Request $request)
     {
         $date = explode(' To ', $request->date_range);
+        $startDate = Carbon::createFromFormat($this->global->date_format, $date[0]);
+        $endDate = Carbon::createFromFormat($this->global->date_format, $date[1]);
+
         $activityLog = ProjectActivity::where('project_id', $request->project_id);
 
         if ($request->employee != 'all') {
             $activityLog->where('added_by', $request->employee);
         }
 
-        $activityLog = $activityLog->whereBetween('created_at', [Carbon::parse($date[0])->format('Y-m-d H:i:s'), Carbon::parse($date[1])->format('Y-m-d H:i:s')])
+        $activityLog = $activityLog->whereBetween('created_at', [$startDate, $endDate])
             ->orderBy('id', 'desc')
             ->get();
 
-        $lead_deal_activity_log = LeadsDealsActivityLog::where('project_id', $request->project_id)->orderBy('id', 'desc')->get();
+        $project = Project::where('id', $request->project_id)->first();
+        $deal = Deal::where('id', $project->deal_id)->first();
+        if ($request->employee != 'all') {
+            $lead_deal_activity_log = LeadsDealsActivityLog::where('lead_id', $deal->lead_id)
+                                                           ->where('created_by', $request->employee)
+                                                           ->orderBy('id', 'desc')->get();
+        } else {
+            $lead_deal_activity_log = LeadsDealsActivityLog::where('lead_id', $deal->lead_id)->orderBy('id', 'desc')->get();
+        }
 
         $view = view('projects.ajax.activity_log', compact('activityLog', 'lead_deal_activity_log'))->render();
 
@@ -6216,6 +6251,8 @@ public function updatePmBasicSEO(Request $request){
             'html' => $view
         ]);
     }
+
+
     public function deliverableEstimationTime($deliverableId)
     {
         $deliverable = ProjectDeliverable::find($deliverableId);
