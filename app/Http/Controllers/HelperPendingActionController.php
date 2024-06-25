@@ -2143,4 +2143,37 @@ class HelperPendingActionController extends AccountBaseController
             }
         }
 
+        //New Pm Evaluation Start
+        public function NewPmEvaluation($user)
+        {
+            $new_pm = User::where('id',$user)->first(); 
+            $evaluation_task = EmployeeEvaluationTask::where('user_id',$new_pm->id)->first(); 
+            $task = Task::where('id',$evaluation_task->task_id)->first();
+            $authorizers= User::where('role_id',8)->get();
+            foreach ($authorizers as $key => $authorizer) {
+                $action = new PendingAction();
+                $action->code = 'NDPM';
+                $action->serial = 'NDPM'.'x'.$key;
+                $action->item_name= 'New pm\'s performance evaluation!';
+                $action->heading= 'New pm\'s performance evaluation!';
+                $action->message = 'Fill out initial performance evaluation form for the PM <a href="'.route('employees.show',$new_pm->id).'">'.$new_pm->name.'</a>!';
+                $action->timeframe= 24;
+                $action->client_id = $task->id;
+               $action->task_id = $task->id;
+               $action->developer_id = $new_pm->id;
+                $action->authorization_for= $authorizer->id;
+                $button = [
+                    [
+                        'button_name' => 'Evaluate',
+                        'button_color' => 'primary',
+                        'button_type' => 'redirect_url',
+                        'button_url' => route('employee-evaluation.index'),
+                        'button_url' => route('employee-evaluation.index', ['user_id' => $new_pm->id, 'show' => 'all']),
+                    ],
+                ];
+                $action->button = json_encode($button);
+                $action->save();
+            }
+        }
+
 }
