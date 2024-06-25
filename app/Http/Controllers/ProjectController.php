@@ -1881,6 +1881,8 @@ class ProjectController extends AccountBaseController
                         ->where('end_value', '>=', $findDeal->hourly_rate)
                         ->first();
 
+                if (!$pmGoalSetting)
+                    throw new Exception("Pm goal settings not found.");
                 $project_status_helper = new HelperPmProjectStatusController();
                 $project_status_helper->HourlyProjectPmGoalCreation($pmGoalSetting, $findDeal, $findProject);
             }
@@ -3020,6 +3022,11 @@ class ProjectController extends AccountBaseController
                 $project->deliverable_authorization = 0;
                 $project->authorization_status = 'pending';
             }
+            else if ($project->deal->project_type == 'hourly' && $project->deliverable_authorization == 1){
+                $project->deliverable_authorization = 0;
+                $project->authorization_status = 'pending';
+            }
+
             $project->save();
 
             $log_user = Auth::user();
@@ -5643,19 +5650,22 @@ class ProjectController extends AccountBaseController
     }
     public function DeliverableFinalAuthorizationAccept(Request $request)
     {
-        //  DB::beginTransaction();
+        $request->validate([
+            'project_id' => 'required'
+        ]);
+         DB::beginTransaction();
+        $project = Project::find($request->project_id);
+
         if ($request->denyAuthorization) {
-            $project = Project::find($request->project_id);
             $project->authorization_status = 'canceled';
             $project->project_status = 'canceled';
             $project->deliverable_authorization = 2;
-            $project->save();
         } else {
-            $project = Project::find($request->project_id);
             $project->authorization_status = 'approved';
             $project->deliverable_authorization = 1;
-            $project->save();
         }
+        $project->save();
+
         $actions = PendingAction::whereIn('code', ['DGA', 'DOA', 'DDA'])->where('past_status', 0)->where('project_id', $request->project_id)->get();
         if ($actions != null) {
             foreach ($actions as $key => $action) {
@@ -5745,8 +5755,9 @@ class ProjectController extends AccountBaseController
         $helper->CreateTask($request->project_id);
         $log_user = Auth::user();
 
-        // 2ND TIME TOM MANAGEMENT AUTHORIZATION START
-        if ($request->project_id && $project->deal->project_type == 'fixed') {
+
+        if ($project->deal->project_type == 'fixed') {
+            // 2ND TIME TOM MANAGEMENT AUTHORIZATION START
             $oldDeliverable = ProjectDeliverable::where('project_id', $request->project_id)->first();
 
             $deliverableReAuth = new DeliverableReAuthorization();
@@ -5754,9 +5765,17 @@ class ProjectController extends AccountBaseController
             $deliverableReAuth->project_id = $request->project_id;
             $deliverableReAuth->comment = $request->admin_authorization_comment;
             $deliverableReAuth->save();
+            // 2ND TIME TOM MANAGEMENT AUTHORIZ END
         }
-        // 2ND TIME TOM MANAGEMENT AUTHORIZ END
+        else {
+            // trigger goal creation for hourly project
+            $deliverable = ProjectDeliverable::where(['project_id'=> $request->project_id, 'status' => '0'])->first();
+            if($deliverable)
+                (new HelperPmProjectStatusController)->deliverablePmGoalCreation($deliverable);
+        }
 
+        // authorize deliverables
+        ProjectDeliverable::where(['project_id'=> $request->project_id, 'status' => '0'])->update(['status' => '1']);
 
         $text = Auth::user()->name . ' finally authorized project deliverable';
         $link = '<a style="color:blue" href="' . route('projects.show', $project->id) . '?tab=deliverable">' . $text . '</a>';
@@ -5771,6 +5790,8 @@ class ProjectController extends AccountBaseController
             'redirectUrl' => route('projects.show', $project_id->id) . '?tab=deliverables'
         ]);
         Notification::send($user, new ProjectDeliverableFinalAuthorizationNotificationAccept($project_id));
+
+        DB::commit();
         return response()->json([
             'status' => 400
         ]);

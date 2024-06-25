@@ -180,8 +180,8 @@
                 @if($project->project_challenge == null || $project->project_challenge != "No Challenge" )
                 <button type="button" class="btn btn-primary"  data-toggle="modal" data-target="#deliverablesaddModal"><i class="fas fa-plus"></i> Add Deliverable</button>
                 @include('projects.modals.clientdeliverableaddmodal')
-                @else 
-             
+                @else
+
                 @if ($project->admin_authorization_status == 0)
                     <button type="button" class="btn btn-primary alertAddDeliverable"><i class="fas fa-plus"></i> Add Deliverable</button>
                 @else
@@ -190,7 +190,7 @@
                 @endif
 
               @endif
-               
+
                 @php
                     $client_revision = \App\Models\ProjectDeliverablesClientDisagree::where([
                         'project_id' => $project->id,
@@ -273,7 +273,7 @@
                   </thead>
                   <tbody >
                     @forelse($deliverables as $deliverable)
-                    <tr>
+                    <tr {{ $deliverable->status == 0 ? 'class=bg-lightest-grey' : '' }}>
                         <td>{{$loop->index+1}}</td>
                         <td class="text-center icon-container">
                             @php
@@ -897,8 +897,10 @@
                                     ])->first();
                                 @endphp
                                 @if($project->authorization_status == 'pending' || $checkShowAction && \Auth::user()->role_id == 4)
-                                    <button class="btn btn primary" data-toggle="modal" data-target="#deliverableseditModal{{$deliverable->id}}"><i class="fas fa-edit"></i></button>
-                                    <button class="btn btn primary deleteDeliverable" data-id="{{ $deliverable->id }}"><i class="fas fa-trash"></i></button>
+                                    @if ($deliverable->status == 0)
+                                        <button class="btn btn primary" data-toggle="modal" data-target="#deliverableseditModal{{$deliverable->id}}"><i class="fas fa-edit"></i></button>
+                                        <button class="btn btn primary deleteDeliverable" data-id="{{ $deliverable->id }}"><i class="fas fa-trash"></i></button>
+                                    @endif
                                 @elseif(\Auth::user()->role_id == 1)
                                     <button class="btn btn primary" data-toggle="modal" data-target="#deliverableseditModal{{$deliverable->id}}"><i class="fas fa-edit"></i></button>
                                     <button class="btn btn primary deleteDeliverable" data-id="{{ $deliverable->id }}"><i class="fas fa-trash"></i></button>
@@ -1166,10 +1168,10 @@
         }
 
         const today = new Date(); // get current date
- 
+
         const maxDate = new Date('{{ \Carbon\Carbon::parse($project->deadline)->format("Y-m-d") }}');
-        
-         
+
+
         const dp1 = datepicker('#from_add', {
             position: 'bl',
             minDate: today > maxDate ? maxDate : today, // set minimum date to current date
@@ -1180,7 +1182,7 @@
             disabler: date => date.getDay() === 0 || today > maxDate || date > maxDate,
             ...datepickerConfig
         });
-        
+
 
         const dp2 = datepicker('#to_add', {
             position: 'bl',
