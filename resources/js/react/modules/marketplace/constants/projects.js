@@ -121,3 +121,124 @@ export const project_skills = [
         title: "Data Entry",
     },
 ];
+
+export const listing_types = [
+    {
+        id: 1,
+        value: "featured",
+        title: "Featured",
+    },
+    {
+        id: 2,
+        value: "Sealed",
+        title: "Sealed",
+    },
+    {
+        id: 3,
+        value: "NDA",
+        title: "NDA",
+    },
+    {
+        id: 4,
+        value: "Urgent",
+        title: "Urgent",
+    },
+    {
+        id: 5,
+        value: "Recruiter",
+        title: "Recruiter",
+    },
+    {
+        id: 6,
+        value: "IP Agreement",
+        title: "IP Agreement",
+    },
+];
+
+export const languages = [
+    {
+        id: 1,
+        value: "English",
+        title: "English",
+    },
+    // {
+    //     id: 2,
+    //     value: "Hindi",
+    //     title: "Hindi",
+    // },
+    // {
+    //     id: 3,
+    //     value: "Spanish",
+    //     title: "Spanish",
+    // },
+    // {
+    //     id: 4,
+    //     value: "French",
+    //     title: "French",
+    // },
+    // {
+    //     id: 5,
+    //     value: "German",
+    //     title: "German",
+    // },
+    // {
+    //     id: 6,
+    //     value: "Russian",
+    //     title: "Russian",
+    // },
+    // {
+    //     id: 7,
+    //     value: "Arabic",
+    //     title: "Arabic",
+    // },
+    // {
+    //     id: 8,
+    //     value: "Portuguese",
+    //     title: "Portuguese",
+    // },
+    // {
+    //     id: 9,
+    //     value: "Indonesian",
+    //     title: "Indonesian",
+    // },
+    // {
+    //     id: 10,
+    //     value: "Japanese",
+    //     title: "Japanese",
+    // },
+    // {
+    //     id: 11,
+    //     value: "Chinese",
+    //     title: "Chinese",
+    // },
+    // {
+    //     id: 12,
+    //     value: "Vietnamese",
+    //     title: "Vietnamese",
+    // },
+    // {
+    //     id: 13,
+    //     value: "Thai",
+    //     title: "Thai",
+    // },
+    // {
+    //     id: 14,
+    //     value: "Korean",
+    //     title: "Korean",
+    // },
+    // {
+    //     id: 15,
+    //     value: "Turkish",
+    //     title: "Turkish",
+    // },
+    // {
+    //     id: 16,
+    //     value: "Polish",
+    //     title: "Polish",
+    // },
+    // {
+    //     id: 17,
+    //     value: "Bengali",
+    //     title: "Bengali",
+    // },
+];
