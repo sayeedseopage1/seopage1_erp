@@ -376,22 +376,26 @@ export const NewRulesModalTableColumnsData = [
                                     >
                                         <EditIcon />
                                     </button>
-                                    <button
-                                        onClick={() => {
-                                            action.deleteSingleRules(data);
-                                        }}
-                                        onKeyDown={() => {
-                                            action.deleteSingleRules(data);
-                                        }}
-                                        className="d-flex bg-transparent border-none items-center"
+                                    <Switch.Case
+                                        condition={isDeleteButtonShow?.value}
                                     >
-                                        <i
-                                            className="fa-solid fa-trash ml-2"
-                                            style={{
-                                                fontSize: "20px",
+                                        <button
+                                            onClick={() => {
+                                                action.deleteSingleRules(data);
                                             }}
-                                        ></i>
-                                    </button>
+                                            onKeyDown={() => {
+                                                action.deleteSingleRules(data);
+                                            }}
+                                            className="d-flex bg-transparent border-none items-center"
+                                        >
+                                            <i
+                                                className="fa-solid fa-trash ml-2"
+                                                style={{
+                                                    fontSize: "20px",
+                                                }}
+                                            ></i>
+                                        </button>
+                                    </Switch.Case>
                                 </div>
                                 <ul>
                                     <li
