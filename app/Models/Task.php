@@ -189,7 +189,7 @@ class Task extends BaseModel
         });
 
         static::updated(function ($item) {
-            if ($item->isDirty('board_column_id') && in_array($item->board_column_id, [8, 1]) && $item->getOriginal('board_column_id') === 6) {
+            if ($item->isDirty('board_column_id') && in_array($item->board_column_id, [8, 9, 1]) && $item->getOriginal('board_column_id') === 6) {
                 if(!$item->subtask_id && Auth::user()->role_id == 4 && $lastSubmission = TaskSubmission::where('task_id', $item->id)->orderBy('id', 'desc')->first()){
                     $hoursDifference = Carbon::parse($lastSubmission->created_at)->diffInHours(Carbon::now());
                     
