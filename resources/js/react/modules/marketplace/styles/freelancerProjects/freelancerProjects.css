@@ -160,3 +160,27 @@
     justify-content: space-between;
     gap: 8px
 }
+
+.project_card_date,
+.project_card_rating {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--primary-black);
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+}
+
+.project_card_rating_wrapper {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.project_card_react_rating {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
