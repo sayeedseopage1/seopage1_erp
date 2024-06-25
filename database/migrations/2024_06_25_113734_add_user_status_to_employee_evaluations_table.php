@@ -15,6 +15,8 @@ return new class extends Migration
     {
         Schema::table('employee_evaluations', function (Blueprint $table) {
             $table->string('user_status')->nullable()->after('team_lead_status');
+            $table->integer('team_lead_submission_status')->nullable()->after('user_status');
+            $table->integer('team_lead_avg_rating')->nullable()->after('team_lead_submission_status');
         });
     }
 
@@ -27,6 +29,8 @@ return new class extends Migration
     {
         Schema::table('employee_evaluations', function (Blueprint $table) {
             $table->dropColumn('user_status');
+            $table->dropColumn('team_lead_submission_status');
+            $table->dropColumn('team_lead_avg_rating');
         });
     }
 };
