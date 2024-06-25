@@ -3,7 +3,6 @@
 namespace App\Traits;
 
 use Carbon\Carbon;
-use App\Models\Role;
 use App\Models\Task;
 use App\Helper\Reply;
 use App\Models\Leave;
