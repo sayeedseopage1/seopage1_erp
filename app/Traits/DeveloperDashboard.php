@@ -3,7 +3,6 @@
 namespace App\Traits;
 
 use \Carbon\Carbon;
-use App\Models\Role;
 use App\Models\Task;
 use App\Helper\Reply;
 use App\Models\Leave;
@@ -11,14 +10,12 @@ use App\Models\Holiday;
 use App\Models\TaskType;
 use Carbon\CarbonPeriod;
 use App\Models\TaskHistory;
-use App\Models\TaskRevision;
 use App\Models\ProjectTimeLog;
 use App\Models\DashboardWidget;
 use App\Models\AttendanceSetting;
 use Illuminate\Support\Facades\DB;
 use App\Models\ProjectTimeLogBreak;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Database\Eloquent\Builder;
 
 trait DeveloperDashboard
 {
