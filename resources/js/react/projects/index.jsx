@@ -23,6 +23,10 @@ import ProjectTasks from "./pages/ProjectTasksTable";
 import ProjectDashboard from "./pages/ProjectDashboard";
 import { styledComponentTheme } from "./styledComponentTheme";
 
+// Context
+import ProjectDashboardProvider from "./context/ProjectDashboardProvider";
+
+
 const Subtasks = React.lazy(() => import("../tasks/pages/Subtasks"));
 
 const container = document.getElementById("projectTasksTableContainer");
@@ -100,19 +104,26 @@ if (container) {
 
 // Project Dashboard Container
 if (projectDashboardContainer) {
+    const projectType = projectDashboardContainer.getAttribute("project-type");
     ReactDOM.createRoot(projectDashboardContainer).render(
         <React.StrictMode>
             <ThemeProvider theme={styledComponentTheme}>
                 <Provider store={store}>
                     <DndProvider backend={HTML5Backend}>
-                        <BrowserRouter basename="/account/projects">
-                            <Routes>
-                                <Route
-                                    path="/:projectId"
-                                    element={<ProjectDashboard />}
-                                />
-                            </Routes>
-                        </BrowserRouter>
+                        <ProjectDashboardProvider>
+                            <BrowserRouter basename="/account/projects">
+                                <Routes>
+                                    <Route
+                                        path="/:projectId"
+                                        element={
+                                            <ProjectDashboard
+                                                projectType={projectType}
+                                            />
+                                        }
+                                    />
+                                </Routes>
+                            </BrowserRouter>
+                        </ProjectDashboardProvider>
                     </DndProvider>
                 </Provider>
             </ThemeProvider>
@@ -120,8 +131,6 @@ if (projectDashboardContainer) {
     );
 }
 
-
-
 Container.propTypes = {
     children: PropTypes.node,
-}
+};

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext, useEffect } from "react";
 
 // sections
 import DashboardHeaderSection from "../components/sections/DashboardHeaderSection";
@@ -11,19 +11,36 @@ import DashboardProjectInfoFixedSection from "../components/sections/DashboardPr
 import DashboardProjectInfoHourlySection from "../components/sections/DashboardProjectInfoHourlySection";
 
 // Constants
-import { ProjectData, projectData } from "../constants";
+import { ProjectData } from "../constants";
 
 // Components - UI - Custom
 import Switch from "../../global/Switch";
 
-const ProjectDashboard = () => {
+// context
+import { ProjectDashboardContext } from "../context/ProjectDashboardProvider";
+
+// hooks - custom - useWhyDidYouRender
+import useWhyDidYouRender from "../../hooks/useWhyDidYouRender";
+
+
+const ProjectDashboard = ({ projectType }) => {
+    useWhyDidYouRender("ProjectDashboard");
+    const pathName = window.location.pathname.split("projects/").pop();
+    const { setProject_id, projectData } = useContext(ProjectDashboardContext);
     const [dummyTypeChange, setDummyTypeChange] = React.useState(0);
-    const projectData = ProjectData[dummyTypeChange];
+    const projectDataDummy = ProjectData[dummyTypeChange];
     const [isLoading, setIsLoading] = React.useState(false);
 
     setTimeout(() => {
         setIsLoading(false);
     }, 16000);
+
+    console.log(projectData);
+    console.log(pathName);
+
+    useEffect(() => {
+        setProject_id(pathName);
+    }, [pathName]);
 
     return (
         <section>
@@ -31,13 +48,13 @@ const ProjectDashboard = () => {
             <DashboardHeaderSection
                 setDummyTypeChange={setDummyTypeChange}
                 isLoading={isLoading}
-                projectData={projectData}
+                projectData={projectDataDummy}
             />
             {/* End Project Dashboard Header Section */}
 
             <Switch>
                 {/* Fixed Project Info Section */}
-                <Switch.Case condition={projectData?.projectType === "Fixed"}>
+                <Switch.Case condition={projectType === "fixed"}>
                     <DashboardProjectInfoFixedSection
                         isLoading={isLoading}
                         projectData={projectData}
@@ -46,7 +63,7 @@ const ProjectDashboard = () => {
                 {/* End Fixed Project Info Section */}
 
                 {/* Hourly Project Info Section */}
-                <Switch.Case condition={projectData?.projectType === "Hourly"}>
+                <Switch.Case condition={projectType === "hourly"}>
                     <DashboardProjectInfoHourlySection
                         isLoading={isLoading}
                         projectData={projectData}

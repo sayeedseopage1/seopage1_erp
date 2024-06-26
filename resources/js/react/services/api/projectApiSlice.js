@@ -43,7 +43,7 @@ const projectApiSlice = apiSlice.injectEndpoints({
 
         // deliverable
         getProjectDeliverableStatus: build.query({
-            query: (projectId) =>  `/account/tasks/add-tasks/project-deliverables/${projectId}`
+            query: (projectId) => `/account/tasks/add-tasks/project-deliverables/${projectId}`
         }),
 
         getProjectManagerTaskGuidelineStatus: build.query({
@@ -70,12 +70,12 @@ const projectApiSlice = apiSlice.injectEndpoints({
         }),
 
         // get conversations
-        getPendingTaskAuthorizationConversations:build.query({
+        getPendingTaskAuthorizationConversations: build.query({
             query: (task_id) => `/account/pending-task-conversations/${task_id}`,
             providesTags: ["PENDING_TASK_AUTHORIZATION_CONVERSATIONS"]
         }),
 
-        createPendingTaskAuthorizationConversation:build.mutation({
+        createPendingTaskAuthorizationConversation: build.mutation({
             query: (data) => ({
                 url: `/account/pending-task-conversations`,
                 method: "POST",
@@ -89,7 +89,7 @@ const projectApiSlice = apiSlice.injectEndpoints({
             invalidatesTags: ["PENDING_TASK_AUTHORIZATION_CONVERSATIONS", "AUTHORIZE_PARENT_TASK"]
         }),
 
-        updatePendingTaskAuthorizationConversation:build.mutation({
+        updatePendingTaskAuthorizationConversation: build.mutation({
             query: (data) => ({
                 url: `/account/pending-task-conversations`,
                 method: "PUT",
@@ -101,25 +101,31 @@ const projectApiSlice = apiSlice.injectEndpoints({
                 },
             }),
             invalidatesTags: ["PENDING_TASK_AUTHORIZATION_CONVERSATIONS", "AUTHORIZE_PARENT_TASK"]
-        })
+        }),
+        //  get project Details
+        getProjectDetails: build.query({
+            query: (project_id) => `/account/project-details/${project_id}`
+        }),
+
     })
-}) ;
+});
 
 
 
 export const {
-     useStoreProjectGuidelineMutation,
-     useUpdateProjectGuidelineMutation,
-     useLazyCheckPMTaskGuidelineQuery,
-     useCheckPMTaskGuidelineQuery,
-     useGetMilestoneDetailsQuery,
-     useLazyGetMilestoneDetailsQuery,
-     useLazyGetProjectDeliverableStatusQuery,
-     useLazyGetProjectManagerTaskGuidelineStatusQuery,
-     useGetAuthorizeTasksQuery,
-     useUpdateAuthorizeTaskMutation,
-     useGetPendingTaskAuthorizationConversationsQuery,
-     useCreatePendingTaskAuthorizationConversationMutation,
-     useUpdatePendingTaskAuthorizationConversationMutation
+    useStoreProjectGuidelineMutation,
+    useUpdateProjectGuidelineMutation,
+    useLazyCheckPMTaskGuidelineQuery,
+    useCheckPMTaskGuidelineQuery,
+    useGetMilestoneDetailsQuery,
+    useLazyGetMilestoneDetailsQuery,
+    useLazyGetProjectDeliverableStatusQuery,
+    useLazyGetProjectManagerTaskGuidelineStatusQuery,
+    useGetAuthorizeTasksQuery,
+    useUpdateAuthorizeTaskMutation,
+    useGetPendingTaskAuthorizationConversationsQuery,
+    useCreatePendingTaskAuthorizationConversationMutation,
+    useUpdatePendingTaskAuthorizationConversationMutation,
+    useGetProjectDetailsQuery
 } = projectApiSlice;
 
