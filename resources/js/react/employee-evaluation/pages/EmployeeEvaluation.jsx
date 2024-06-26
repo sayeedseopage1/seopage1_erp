@@ -12,8 +12,31 @@ import _ from "lodash";
 import Card from "../../global/Card";
 import EvaluationTable from "../components/Table/EvaluationTable";
 import { EvaluationTableColumns } from "../components/Table/EvaluationTableColumns";
+import { EvaluationTableColumnsPM } from "../project-manager/components/table/EvaluationTableColumnsPM";
+
+import { useLocation } from "react-router-dom";
 
 const EmployeeEvaluation = () => {
+    const location = useLocation();
+    const type = new URLSearchParams(location.search).get("type");
+
+    const [tableType, setTableType] = useState("Developer");
+    useEffect(() => {
+        switch (type) {
+            case "pm":
+                setTableType("Project Manager");
+                break;
+            case "ld":
+                setTableType("Lead Developer");
+                break;
+            case "sales":
+                setTableType("Sales Executive");
+                break;
+            default:
+                setTableType("Developer");
+        }
+    }, [type]);
+
     const [searchParams, setSearchParams] = useSearchParams();
     const [{ pageIndex, pageSize }, setPagination] = useState({
         pageIndex: 0,
@@ -42,8 +65,32 @@ const EmployeeEvaluation = () => {
     const mainData = data?.data;
     const Evaluations = data?.data.data;
 
+    const filterEvaluationsByRole = (evaluations, role) => {
+        return evaluations?.filter((evaluation) => {
+            switch (role) {
+                case "Project Manager":
+                    return evaluation.role_name === "Test PM";
+                case "Lead Developer":
+                    return evaluation.role_name === "Test LD";
+                case "Sales Executive":
+                    return evaluation.role_name === "Test Sales";
+                default:
+                    return (
+                        evaluation.role_name === "Developer" ||
+                        evaluation.role_name === "Probationary Developer"
+                    );
+            }
+        });
+    };
+
+    const filteredEvaluations = filterEvaluationsByRole(Evaluations, tableType);
+
     const getData = (type) => {
-        let _data = _.orderBy(Evaluations, "managements_decision", "asc");
+        let _data = _.orderBy(
+            filteredEvaluations,
+            "managements_decision",
+            "asc"
+        );
         switch (type) {
             case "all":
                 return _data;
@@ -88,7 +135,11 @@ const EmployeeEvaluation = () => {
     // console.log("filter data", filter);
     return (
         <>
-            <EvaluationTableFilterBar setFilter={setFilter} />
+            <EvaluationTableFilterBar
+                tableType={tableType}
+                setTableType={setTableType}
+                setFilter={setFilter}
+            />
 
             <Card className={styles.card}>
                 <Flex justifyContent="space-between" marginBottom="10px">
@@ -102,18 +153,58 @@ const EmployeeEvaluation = () => {
                         className="font-weight-normal"
                     />
                 </Flex>
-
-                <EvaluationTable
-                    data={tableData(searchParams.get("show"))}
-                    mainData={mainData}
-                    columns={[...EvaluationTableColumns]}
-                    isLoading={isLoading}
-                    isFetching={isFetching}
-                    onPageChange={onPageChange}
-                    sorting={sorting}
-                    tableName="Evaluation Table"
-                    setSorting={setSorting}
-                />
+                {tableType === "Developer" && (
+                    <EvaluationTable
+                        data={tableData(searchParams.get("show"))}
+                        mainData={mainData}
+                        columns={[...EvaluationTableColumns]}
+                        isLoading={isLoading}
+                        isFetching={isFetching}
+                        onPageChange={onPageChange}
+                        sorting={sorting}
+                        tableName="Evaluation Table"
+                        setSorting={setSorting}
+                    />
+                )}
+                {tableType === "Project Manager" && (
+                    <EvaluationTable
+                        data={tableData(searchParams.get("show"))}
+                        mainData={mainData}
+                        columns={[...EvaluationTableColumnsPM]}
+                        isLoading={isLoading}
+                        isFetching={isFetching}
+                        onPageChange={onPageChange}
+                        sorting={sorting}
+                        tableName="Evaluation Table"
+                        setSorting={setSorting}
+                    />
+                )}
+                {tableType === "Lead Developer" && (
+                    <EvaluationTable
+                        data={tableData(searchParams.get("show"))}
+                        mainData={mainData}
+                        columns={[...EvaluationTableColumns]}
+                        isLoading={isLoading}
+                        isFetching={isFetching}
+                        onPageChange={onPageChange}
+                        sorting={sorting}
+                        tableName="Evaluation Table"
+                        setSorting={setSorting}
+                    />
+                )}
+                {tableType === "Sales Executive" && (
+                    <EvaluationTable
+                        data={tableData(searchParams.get("show"))}
+                        mainData={mainData}
+                        columns={[...EvaluationTableColumns]}
+                        isLoading={isLoading}
+                        isFetching={isFetching}
+                        onPageChange={onPageChange}
+                        sorting={sorting}
+                        tableName="Evaluation Table"
+                        setSorting={setSorting}
+                    />
+                )}
             </Card>
         </>
     );
