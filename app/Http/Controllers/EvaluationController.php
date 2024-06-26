@@ -24,6 +24,8 @@ use Illuminate\Support\Facades\DB;
 use Auth;
 use Carbon\Carbon;
 
+use function PHPSTORM_META\type;
+
 class EvaluationController extends AccountBaseController
 {
     public function __construct()
@@ -281,25 +283,30 @@ class EvaluationController extends AccountBaseController
     }
     public function storeSubmissionEvaluation(Request $request)
     {
-        // dd($request->all());
         // DB::beginTransaction();
         $task_sum = EmployeeEvaluationTask::where('user_id',$request->user_id)->sum('avg_rating');
         $task_count = EmployeeEvaluationTask::where('user_id',$request->user_id)->count('avg_rating');
         $avg_rating = $task_count > 0 ? $task_sum / $task_count : 0;
 
         $employee_evaluation = EmployeeEvaluation::where('user_id',$request->user_id)->first();
-        $employee_evaluation->ld_submission_status = 1;
-        $employee_evaluation->lead_dev_id = Auth::user()->id;
         $employee_evaluation->communication = $request->communication;
         $employee_evaluation->professionalism = $request->professionalism;
         $employee_evaluation->identiey_issues = $request->identiey_issues;
         $employee_evaluation->dedication = $request->dedication;
         $employee_evaluation->obedience = $request->obedience;
-        $employee_evaluation->lead_dev_avg_rating = $avg_rating;
+        if($request->confirm_submission == 'team_lead_submitted'){
+            $employee_evaluation->team_lead_id = Auth::user()->id;
+            $employee_evaluation->team_lead_submission_status = 1;
+            $employee_evaluation->team_lead_avg_rating = $avg_rating;
+        }else{
+            $employee_evaluation->ld_submission_status = 1;
+            $employee_evaluation->lead_dev_id = Auth::user()->id;
+            $employee_evaluation->lead_dev_avg_rating = $avg_rating;
+        }
         $employee_evaluation->save();
 
         $evaluation_task = EmployeeEvaluationTask::where('user_id',$request->user_id)->first();
-        $actions = PendingAction::where('code','NDPE')->where('task_id',$evaluation_task->task_id)->where('past_status',0)->get();
+        $actions = PendingAction::whereIn('code',['NDPE','NDPM'])->where('task_id',$evaluation_task->task_id)->where('past_status',0)->get();
         if($actions != null)
         {
             foreach ($actions as $key => $action) {
@@ -315,8 +322,13 @@ class EvaluationController extends AccountBaseController
             $past_action->code = $action->code;
             $past_action->serial = $action->serial;
             $past_action->action_id = $action->id;
-            $past_action->heading= 'New dedeloper '.$dev->name.' evaluations were successfully submitted!';
-            $past_action->message = 'Lead dedeloper <a href="'.route('employees.show',$authorize_by->id).'">'.$authorize_by->name.'</a> has evaluated New Developer <a href="'.route('employees.show',$dev->id).'">'.$dev->name.'</a>!';
+            if(Auth::user()->role_id == 8){
+                $past_action->heading= 'New PM '.$dev->name.' evaluations were successfully submitted!';
+                $past_action->message = 'Team Lead <a href="'.route('employees.show',$authorize_by->id).'">'.$authorize_by->name.'</a> has evaluated New PM <a href="'.route('employees.show',$dev->id).'">'.$dev->name.'</a>!';
+            }else{
+                $past_action->heading= 'New dedeloper '.$dev->name.' evaluations were successfully submitted!';
+                $past_action->message = 'Lead dedeloper <a href="'.route('employees.show',$authorize_by->id).'">'.$authorize_by->name.'</a> has evaluated New Developer <a href="'.route('employees.show',$dev->id).'">'.$dev->name.'</a>!';
+            }
             $past_action->timeframe = $action->timeframe;
             $past_action->authorization_for = $action->authorization_for;
             $past_action->authorized_by = $action->authorized_by;
@@ -326,22 +338,38 @@ class EvaluationController extends AccountBaseController
             $past_action->task_id = $action->task_id;
             $past_action->developer_id = $action->developer_id;
             $past_action->client_id = $action->client_id;
-            $button = [
-                [
-                    'button_name' => 'See Evaluations',
-                    'button_color' => 'primary',
-                    'button_type' => 'redirect_url',
-                    'button_url' => route('employee-evaluation.index'),
-                    'button_url' => route('employee-evaluation.index', ['user_id' => $dev->id,'show' => 'all']),
-                ],
-            ];
+            if(Auth::user()->role_id == 8){
+                $button = [
+                    [
+                        'button_name' => 'See Evaluations',
+                        'button_color' => 'primary',
+                        'button_type' => 'redirect_url',
+                        'button_url' => route('employee-evaluation.index'),
+                        'button_url' => route('employee-evaluation.index', ['user_id' => $dev->id,'show' => 'all', 'type' => 'pm']),
+                    ],
+                ];
+            }else{
+                $button = [
+                    [
+                        'button_name' => 'See Evaluations',
+                        'button_color' => 'primary',
+                        'button_type' => 'redirect_url',
+                        'button_url' => route('employee-evaluation.index'),
+                        'button_url' => route('employee-evaluation.index', ['user_id' => $dev->id,'show' => 'all']),
+                    ],
+                ];
+            }
             $past_action->button = json_encode($button);
             $past_action->save();
             }
         }
-        
-        $helper = new HelperPendingActionController();
-        $helper->leadDevSubmittedNewDevEvaluation($evaluation_task->id);
+        if(Auth::user()->role_id == 8){
+            $helper = new HelperPendingActionController();
+            $helper->TeamLeadSubmittedNewPmEvaluation($evaluation_task->id);
+        }else{
+            $helper = new HelperPendingActionController();
+            $helper->leadDevSubmittedNewDevEvaluation($evaluation_task->id);
+        }
 
         return response()->json(['status'=>200]);
     }

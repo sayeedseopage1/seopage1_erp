@@ -1956,6 +1956,7 @@ class HelperPendingActionController extends AccountBaseController
                 $action->save();
             }
         }
+        
         public function teamLeadSubmittedNewDevEvaluation($evaluation_task)
         {
             $evaluation_task = EmployeeEvaluationTask::where('id',$evaluation_task)->first(); 
@@ -2170,6 +2171,41 @@ class HelperPendingActionController extends AccountBaseController
                         'button_url' => route('employee-evaluation.index'),
                         'button_url' => route('employee-evaluation.index', ['user_id' => $new_pm->id, 'show' => 'all' ,'type' => 'pm']),
                     ],
+                ];
+                $action->button = json_encode($button);
+                $action->save();
+            }
+        }
+        public function TeamLeadSubmittedNewPmEvaluation($evaluation_task)
+        {
+            $evaluation_task = EmployeeEvaluationTask::where('id',$evaluation_task)->first(); 
+            $new_pm = User::where('id',$evaluation_task->user_id)->first(); 
+            $team_lead = User::where('id',$evaluation_task->team_lead_id)->first();
+            $task = Task::where('id',$evaluation_task->task_id)->first();
+            $authorizers= User::where('role_id',1)->get();
+            $updated_at = Carbon::parse($evaluation_task->updated_at);
+            $formatted_date_time = $updated_at->format('d F Y \a\t g:i A');
+            foreach ($authorizers as $key => $authorizer) {
+                $action = new PendingAction();
+                $action->code = 'TLSNPM';
+                $action->serial = 'TLSNPM'.'x'.$key;
+                $action->item_name= 'New pm\'s evaluation!';
+                $action->heading= 'Team Lead '.$team_lead->name.' has submitted evaluations for New PM '.$new_pm->name.'!';
+                $action->message = 'Team Lead <a href="'.route('employees.show',$team_lead->id).'">'.$team_lead->name.'</a> has evaluated New PM <a href="'.route('employees.show',$new_pm->id).'">'.$new_pm->name.'</a> on '.$formatted_date_time.'';
+                $action->timeframe= 24;
+                $action->client_id = $task->client_id;
+               $action->task_id = $task->id;
+               $action->developer_id = $new_pm->id;
+                $action->authorization_for= $authorizer->id;
+                $button = [
+                    [
+                        'button_name' => 'Review',
+                        'button_color' => 'primary',
+                        'button_type' => 'redirect_url',
+                        'button_url' => route('employee-evaluation.index'),
+                        'button_url' => route('employee-evaluation.index', ['user_id' => $new_pm->id, 'show' => 'all', 'type' => 'pm']),
+                    ],
+
                 ];
                 $action->button = json_encode($button);
                 $action->save();
