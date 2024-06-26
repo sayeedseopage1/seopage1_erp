@@ -76,7 +76,10 @@ const AddQuestionsListModal = ({
 
     const [
         editSinglePolicySalesRiskAnalysis,
-        { isLoading: isEditSinglePolicySalesRiskAnalysisLoading },
+        {
+            isLoading: isEditSinglePolicySalesRiskAnalysisLoading,
+            isSuccess: isEditSinglePolicySalesRiskAnalysisSuccess,
+        },
     ] = useEditQuestionSalesRiskAnalysisMutation();
 
     const { data: singlePolicyData, isLoading: isLoadingSinglePolicyData } =
@@ -91,7 +94,10 @@ const AddQuestionsListModal = ({
 
     const [
         saleAnalysisQuestionSave,
-        { isLoading: isSaleAnalysisQuestionSaveLoading },
+        {
+            isLoading: isSaleAnalysisQuestionSaveLoading,
+            isSuccess: isSaleAnalysisQuestionSaveSuccess,
+        },
     ] = useSaleAnalysisQuestionSaveMutation();
 
     // Handle Change
@@ -388,8 +394,6 @@ const AddQuestionsListModal = ({
 
         return "Save Question";
     };
-
-
 
     // Set Placeholder
     useEffect(() => {
@@ -839,7 +843,16 @@ const AddQuestionsListModal = ({
                         </div>
                     </div>
                     <Flex gap="10px" justifyContent="center">
-                        <ModalButton onClick={handleAddQuestion} width="200px">
+                        <ModalButton
+                            onClick={handleAddQuestion}
+                            width="200px"
+                            disabled={
+                                isSaleAnalysisQuestionSaveLoading ||
+                                isEditSinglePolicySalesRiskAnalysisLoading ||
+                                isSaleAnalysisQuestionSaveSuccess ||
+                                isEditSinglePolicySalesRiskAnalysisSuccess
+                            }
+                        >
                             {handleButtonTernary(
                                 isSaleAnalysisQuestionSaveLoading,
                                 isQuestionUpdating,

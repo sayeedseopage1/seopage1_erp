@@ -321,7 +321,6 @@ const SalesRiskQuestionsResponse = () => {
                                 // Here we are checking if the checkbox is not checked, or if the data is saving, or if the data is submitting, or if the data is success
                                 !isChecked ||
                                 isSaving ||
-                                isSubmitting ||
                                 isSuccess
                             }
                             style={{
