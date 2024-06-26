@@ -36,7 +36,7 @@ const ActionEvaluationTablePM = ({ data, table }) => {
     React.useEffect(() => {
         if (data?.team_lead_avg_rating === null) {
             setToolTipTeamLead(
-                `Currently being evaluated by ${data?.added_by_name}`
+                `Currently being evaluated by ${data?.addedByName}`
             );
         }
     }, [data]);
@@ -49,7 +49,7 @@ const ActionEvaluationTablePM = ({ data, table }) => {
         }
         if (data?.team_lead_avg_rating === null) {
             setToolTipAdmin(
-                `Currently being evaluated by ${data?.added_by_name}`
+                `Currently being evaluated by ${data?.addedByName}`
             );
         }
     }, [data]);

@@ -69,11 +69,11 @@ const EmployeeEvaluation = () => {
         return evaluations?.filter((evaluation) => {
             switch (role) {
                 case "Project Manager":
-                    return evaluation.role_name === "Test PM";
+                    return _.includes([15, 4], Number(evaluation.roleId));
                 case "Lead Developer":
-                    return evaluation.role_name === "Test LD";
+                    return _.includes([16, 6], Number(evaluation.roleId));
                 case "Sales Executive":
-                    return evaluation.role_name === "Test Sales";
+                    return _.includes([15, 7], Number(evaluation.roleId));
                 default:
                     return (
                         evaluation.role_name === "Developer" ||
