@@ -1,3 +1,4 @@
+import moment from "moment";
 import {
     FaFileImage,
     FaFilePdf,
@@ -52,4 +53,30 @@ export function shortenFileName(fileName) {
         );
     }
     return fileName;
+}
+
+export function getRemainingTime(biddingDeadline) {
+    // Parse the bidding deadline date
+    const deadlineDate = moment?.(biddingDeadline, "YYYY-MM-DD HH:mm:ss");
+
+    // Get the current date and time
+    const currentDate = moment?.();
+
+    // Calculate the time difference
+    const duration = moment?.duration(deadlineDate?.diff(currentDate));
+
+    // Calculate the remaining days and hours
+    const days = Math.floor(duration?.asDays() ?? 0);
+    const hours = duration?.hours() ?? 0;
+
+    // Format the result based on the remaining time
+    let result;
+    if (days > 0) {
+        result = `BIDDING ENDS IN ${days} DAYS, ${hours} HOURS`;
+    } else {
+        const remainingHours = Math.floor(duration?.asHours() ?? 0);
+        result = `BIDDING ENDS IN ${remainingHours} HOURS`;
+    }
+
+    return result;
 }

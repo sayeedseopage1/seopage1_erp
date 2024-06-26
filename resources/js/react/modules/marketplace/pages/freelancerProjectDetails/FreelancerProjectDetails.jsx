@@ -10,34 +10,39 @@ import Proposals from '../../components/freelancerProjectDetails/sections/Propos
 import Payment from '../../components/freelancerProjectDetails/sections/Payment';
 import Files from '../../components/freelancerProjectDetails/sections/Files';
 import Tasklists from '../../components/freelancerProjectDetails/sections/Tasklists';
+import { dummy_projects } from '../../constants/projects';
 
 const FreelancerProjectDetails = () => {
     const location = useLocation();
     const searchParams = new URLSearchParams(location.search);
     const activeTab = searchParams.get('tab') || 'Details';
 
+    //!! TODO: This is used development only for now, It should be removed in production
+    const singleProject = dummy_projects[0];
+
+    const { id, project_id, title, description, details, currency, budget_range, highest_bid_amount, bids_count, average_rating, reviews_count, skills, client_info, isAwarded, bidding_deadline, created_at, updated_at } = singleProject || {};
+
     return (
         <div className='sp1_marketplace_page_wrapper'>
             <div>
                 <div className='p_d_header'>
                     <div className='p_d_header_title_wrapper'>
-                        <h2 className='p_d_header_title'>Modern Roofing Solutions Online</h2>
-                        <span className='p_d_header_title_badge'>Accepted</span>
+                        <h2 className='p_d_header_title'>{title} <span className='p_d_header_title_badge'>Accepted</span></h2>
                     </div>
                     <div className='p_d_header_bids_amount_wrapper'>
                         <div>
                             <p className='p_d_header_bids_amount_title'>Bids</p>
-                            <span className='p_d_header_bids_amount'>59</span>
+                            <span className='p_d_header_bids_amount'>{bids_count}</span>
                         </div>
                         <div>
                             <p className='p_d_header_bids_amount_title'>Average bid</p>
-                            <span className='p_d_header_bids_amount'>$168 USD</span>
+                            <span className='p_d_header_bids_amount'>{highest_bid_amount} {currency}</span>
                         </div>
                     </div>
                 </div>
                 <div className='sp1_marketplace_section_wrapper'>
                     <div className='p_d_tab_wrapper'>
-                        <ProjectDetailsTab isAwarded={true} />
+                        <ProjectDetailsTab isAwarded={isAwarded} />
                         <div className='p_d_tab_action_wrapper'>
                             <button className='bg-transparent'>
                                 <img src={bookmarkIcon} alt="bookmarkIcon" />
@@ -50,7 +55,7 @@ const FreelancerProjectDetails = () => {
                     <div className=''>
                         <Switch>
                             <Switch.Case condition={activeTab === 'Details'}>
-                                <ProjectDetails />
+                                <ProjectDetails singleProject={singleProject} />
                             </Switch.Case>
                             <Switch.Case condition={activeTab === 'Proposals'}>
                                 <Proposals />

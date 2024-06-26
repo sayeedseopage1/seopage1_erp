@@ -30,6 +30,7 @@ export const dummy_projects = [
         reviews_count: 2,
         skills: ["Content Writing", "PHP", "SEO", "Copywriting"],
         isAwarded: true,
+        bidding_deadline: "2024-06-25 07:37:00",
         client_info: {
             user_id: 34567,
             profile_image_url: "https://i.ibb.co/jHYks1p/client-image.png",
@@ -90,6 +91,7 @@ export const dummy_projects = [
         reviews_count: 2,
         skills: ["Content Writing", "SEO", "Copywriting"],
         isAwarded: false,
+        bidding_deadline: "2024-06-27 07:37:00",
         client_info: {
             user_id: 34567,
             profile_image_url: "https://i.ibb.co/jHYks1p/client-image.png",
@@ -150,6 +152,7 @@ export const dummy_projects = [
         reviews_count: 1,
         skills: ["Content Writing", "SEO", "Copywriting"],
         isAwarded: false,
+        bidding_deadline: "2024-06-29 05:37:00",
         client_info: {
             user_id: 34567,
             profile_image_url: "https://i.ibb.co/jHYks1p/client-image.png",
@@ -161,7 +164,7 @@ export const dummy_projects = [
             },
             average_rating: 3.5,
             reviews_count: 2,
-            member_since: "2024-06-25 07:37:00",
+            member_since: "2024-06-25 09:40:00",
             client_engagement: {
                 contracted_freelancer: 0,
                 invite_freelancer: 0,
@@ -210,6 +213,7 @@ export const dummy_projects = [
         reviews_count: 10,
         skills: ["Content Writing", "SEO", "Copywriting"],
         isAwarded: true,
+        bidding_deadline: "2024-06-25 07:37:00",
         client_info: {
             user_id: 34567,
             profile_image_url: "https://i.ibb.co/jHYks1p/client-image.png",

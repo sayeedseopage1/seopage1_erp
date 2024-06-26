@@ -1,8 +1,7 @@
 import React from 'react';
 import '../../../styles/freelancerProjectDetails/projectDetails.css'
-import { dummy_projects } from '../../../constants/projects';
 import flagIcon from '../../../assets/freelancerProjectDetails/flag.svg';
-import { Input } from 'antd';
+import { Divider, Input } from 'antd';
 import InfoWithIconTitle from '../ui/InfoWithIconTitle';
 import moment from 'moment';
 import { FaLocationDot, FaUser } from "react-icons/fa6";
@@ -18,16 +17,15 @@ import { IoCall } from "react-icons/io5";
 import ClientInfoCard from '../ui/ClientInfoCard';
 import FractionalRating from '../../commonComponents/FractionalRating';
 import { BiSolidCommentDots } from "react-icons/bi";
+import { getRemainingTime } from '../../../utils';
+import vectorGrowIcon from '../../../assets/freelancerProjectDetails/Vector-grow.svg'
 
 const { TextArea } = Input;
 
 // #058430
 
-const ProjectDetails = () => {
-  //!! TODO: This is used development only for now, It should be removed in production
-  const singleProject = dummy_projects[0];
-
-  const { id, project_id, title, description, details, currency, budget_range, highest_bid_amount, bids_count, average_rating, reviews_count, skills, client_info, created_at, updated_at } = singleProject || {};
+const ProjectDetails = ({ singleProject }) => {
+  const { id, project_id, title, description, details, currency, budget_range, highest_bid_amount, bids_count, average_rating, reviews_count, skills, client_info, isAwarded, bidding_deadline, created_at, updated_at } = singleProject || {};
 
   const { profile_image_url, name, location, member_since, client_engagement, client_verification } = client_info || {};
 
@@ -39,6 +37,9 @@ const ProjectDetails = () => {
             <h4 className='p_d_title_600'>Project Details:</h4>
             <h4 className='p_d_title_600'>{budget_range} {currency}</h4>
           </div>
+          {
+            !isAwarded && <div className="p_d_bidding_ends"><GoClockFill /> <p>{getRemainingTime(bidding_deadline)}</p></div>
+          }
           {/* project details content */}
           <div className='p_d_wrapper' dangerouslySetInnerHTML={{ __html: details }}></div>
           {/* project details skills */}
@@ -92,6 +93,7 @@ const ProjectDetails = () => {
       </div>
       {/* about client  */}
       <div className='p_d_content_wrapper p_d_content_right'>
+        {/* client info */}
         <ClientInfoCard title="About the Client">
           <InfoWithIconTitle icon={<FaLocationDot />} title={location?.city} />
           <InfoWithIconTitle img_url={`/flags/4x3/${location?.iso}.svg`} title={location?.country} />
@@ -110,13 +112,13 @@ const ProjectDetails = () => {
           </div>
           <InfoWithIconTitle icon={<GoClockFill />} title={`Member since ${moment(member_since).format('MMM DD, YYYY')}`} />
         </ClientInfoCard>
-
+        {/* client engagement */}
         <ClientInfoCard title="Client Engagement">
           <InfoWithIconTitle icon={<MdPeopleAlt />} title={`Contacted ${client_engagement?.contracted_freelancer} freelancers`} />
           <InfoWithIconTitle icon={<IoPersonAdd />} title={`Invited ${client_engagement?.invite_freelancer} freelancers to bid`} />
           <InfoWithIconTitle icon={<RiComputerFill />} title={`Completed ${client_engagement?.completed_project} projects`} />
         </ClientInfoCard>
-
+        {/* client verification */}
         <ClientInfoCard title="Client Verification">
           <InfoWithIconTitle icon={<PiIdentificationCardFill color={client_verification?.identity_verified ? '#058430' : '#000'} />} title={`Identify verified`} />
           <InfoWithIconTitle icon={<HiMiniShieldCheck color={client_verification?.payment_verified ? '#058430' : '#000'} />} title={`Payment verified`} />
@@ -125,6 +127,20 @@ const ProjectDetails = () => {
           <InfoWithIconTitle icon={<FaUser color={client_verification?.profile_completed ? '#058430' : '#000'} />} title={`Profile completed`} />
           <InfoWithIconTitle icon={<IoCall color={client_verification?.phone_verified ? '#058430' : '#000'} />} title={`Phone verified`} />
         </ClientInfoCard>
+        {/* Premier Member */}
+        {
+          !isAwarded && <div>
+            <Divider />
+            <div className='p_d_title_wrapper'>
+              <h4 className='p_d_title_600'>Premier Member</h4>
+              <div className='p_d_insights'>
+                <img src={vectorGrowIcon} alt="vectorGrowIcon" />
+                <p>Insights</p>
+              </div>
+            </div>
+            <p className='sp1_marketplace_default_text'>230 bids left out of 1500 (6)</p>
+          </div>
+        }
       </div>
     </div>
   );

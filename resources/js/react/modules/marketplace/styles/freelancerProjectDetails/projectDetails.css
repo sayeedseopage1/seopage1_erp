@@ -26,6 +26,14 @@
     line-height: normal;
 }
 
+.p_d_bidding_ends {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 5px;
+    margin-bottom: 8px;
+}
+
 .p_d_wrapper {
     color: var(--primary-black);
     font-size: 16px;
@@ -125,4 +133,15 @@
 
 .info_with_icon_img {
     width: 24px;
+}
+
+.p_d_insights {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    color: var(--primary-pink);
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 400;
 }

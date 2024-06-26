@@ -44,7 +44,7 @@ const ProjectDetailsTab = ({ isAwarded }) => {
         navigate(`/?tab=${key}`);
     };
     return (
-        <Tabs activeKey={activeTab} items={items} onChange={onChange} />
+        <Tabs activeKey={activeTab} items={!isAwarded ? items.slice(0, 2) : items} onChange={onChange} />
     );
 };
 
