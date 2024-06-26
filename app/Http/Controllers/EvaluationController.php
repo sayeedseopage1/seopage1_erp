@@ -254,15 +254,19 @@ class EvaluationController extends AccountBaseController
 
     public function storeEmployeeTaskEvaluation(Request $request)
     {
-        // dd($request->all());
         $evaluation_task = EmployeeEvaluationTask::where('id',$request->evaluation_id)->first();
         $evaluation_task->qw_first_chance = $request->qw_first_chance;
         $evaluation_task->qw_first_revision = $request->qw_first_revision;
         $evaluation_task->qw_second_revision = $request->qw_second_revision;
         $evaluation_task->speed_of_work = $request->speed_of_work;
         $evaluation_task->understand_instruction = $request->understand_instruction;
-        $evaluation_task->lead_dev_id = Auth::user()->id;
-        $evaluation_task->lead_dev_cmnt = $request->lead_dev_cmnt;
+        if(Auth::user()->role_id == 8){
+            $evaluation_task->team_lead_id = Auth::user()->id;
+            $evaluation_task->team_lead_cmnt = $request->team_lead_cmnt;
+        }else{
+            $evaluation_task->lead_dev_id = Auth::user()->id;
+            $evaluation_task->lead_dev_cmnt = $request->lead_dev_cmnt;
+        }
 
         $total_ratings = array_sum([
             $request->qw_first_chance,$request->qw_first_revision,$request->qw_second_revision,$request->speed_of_work,$request->understand_instruction
@@ -358,7 +362,11 @@ class EvaluationController extends AccountBaseController
         $evaluation_task->qw_second_revision = $request->qw_second_revision;
         $evaluation_task->speed_of_work = $request->speed_of_work;
         $evaluation_task->understand_instruction = $request->understand_instruction;
-        $evaluation_task->lead_dev_cmnt = $request->lead_dev_cmnt;
+        if(Auth::user()->role_id == 8){
+            $evaluation_task->team_lead_cmnt = $request->team_lead_cmnt;
+        }else{
+            $evaluation_task->lead_dev_cmnt = $request->lead_dev_cmnt;
+        }
         
         $total_ratings = array_sum([
             $request->qw_first_chance,$request->qw_first_revision,$request->qw_second_revision,$request->speed_of_work,$request->understand_instruction
