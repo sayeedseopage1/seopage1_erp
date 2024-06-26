@@ -273,7 +273,7 @@ const EvaluationTaskListModalPM = ({
         await taskRatingFinalSubmission({
             ...formData,
             user_id: singleEvaluation?.user_id,
-            confirm_submission: "lead_dev_submitted",
+            confirm_submission: "team_lead_submitted",
             _token: document
                 .querySelector("meta[name='csrf-token']")
                 .getAttribute("content"),
