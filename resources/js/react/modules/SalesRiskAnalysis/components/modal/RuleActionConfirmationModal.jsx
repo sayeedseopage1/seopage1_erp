@@ -86,6 +86,7 @@ const RuleActionConfirmationModal = ({
                             onClick={() => {
                                 handleStatusUpdate();
                             }}
+                            disabled={isLoading}
                         >
                             {isLoading
                                 ? "Updating..."

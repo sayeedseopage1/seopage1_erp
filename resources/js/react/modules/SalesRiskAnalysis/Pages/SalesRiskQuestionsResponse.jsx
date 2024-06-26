@@ -40,7 +40,7 @@ const SalesRiskQuestionsResponse = () => {
     // fetch policy questions
     const { data, isLoading } = useSalesRiskDealsQuestionListQuery();
 
-    const [saleAnalysisQuestionSave, { isLoading: isSaving }] =
+    const [saleAnalysisQuestionSave, { isLoading: isSaving, isSuccess }] =
         useSaleRiskQuestionAnswerSaveMutation();
 
     const questions = data?.data;
@@ -220,13 +220,15 @@ const SalesRiskQuestionsResponse = () => {
             (item) => item.parent_id !== question.id
         );
         const idSet = new Set(inputsData.map((item) => item.id));
-        const removeChildIfParentNotExists = removeAlreadyExistChild.filter((item) => {
-            // If item has no parent_id, include it
-            if (!item.parent_id) {
-                return true;
+        const removeChildIfParentNotExists = removeAlreadyExistChild.filter(
+            (item) => {
+                // If item has no parent_id, include it
+                if (!item.parent_id) {
+                    return true;
+                }
+                return idSet.has(item.parent_id);
             }
-            return idSet.has(item.parent_id);
-        });
+        );
 
         const addSelectValue = removeChildIfParentNotExists.map((item) => {
             if (item.id === question.id) {
@@ -250,7 +252,8 @@ const SalesRiskQuestionsResponse = () => {
         if (question.questions?.length) {
             const getChildWithSelectedValue = allQuestions.filter(
                 (item) =>
-                    item.parent_id === question.id && item.value === getQuestionValue()
+                    item.parent_id === question.id &&
+                    item.value === getQuestionValue()
             );
             const addInputFiled = getChildWithSelectedValue.map((item) => ({
                 id: item?.id,
@@ -266,7 +269,6 @@ const SalesRiskQuestionsResponse = () => {
 
         return setInputsData(addSelectValue);
     };
-
 
     return (
         <section>
@@ -315,7 +317,13 @@ const SalesRiskQuestionsResponse = () => {
                                 handleSubmit();
                             }}
                             className="btn btn-primary d-flex align-items-center justify-content-center"
-                            disabled={!isChecked}
+                            disabled={
+                                // Here we are checking if the checkbox is not checked, or if the data is saving, or if the data is submitting, or if the data is success
+                                !isChecked ||
+                                isSaving ||
+                                isSubmitting ||
+                                isSuccess
+                            }
                             style={{
                                 width: "250px",
                             }}
