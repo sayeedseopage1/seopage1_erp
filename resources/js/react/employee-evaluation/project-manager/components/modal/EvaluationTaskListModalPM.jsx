@@ -95,8 +95,7 @@ const EvaluationTaskListModalPM = ({
         taskRatingFinalSubmission,
         { isLoading: isLoadingTeamLeadFinalSubmission },
     ] = useStoreTaskRatingFinalSubmissionMutation();
-    const [teamLeadSubmission, { isLoading: isLoadingTeamLeadReview }] =
-        useStoreTeamLeadReviewMutation();
+
     const [adminRejection, { isLoading: isAdminRejecting }] =
         useStoreAdminRejectedMutation();
     const [adminAuthorization, { isLoading: isLoadingAdminAuthorization }] =
@@ -157,6 +156,14 @@ const EvaluationTaskListModalPM = ({
         );
     }, [isAllTaskRated, dateExpired, isPreviousTasks]);
 
+    console.log(
+        "is al task",
+        isAllTaskRated,
+        "date expired",
+        dateExpired,
+        "is previous task",
+        isPreviousTasks
+    );
     React.useEffect(() => {
         if (historyData?.data && latestRound) {
             if (
