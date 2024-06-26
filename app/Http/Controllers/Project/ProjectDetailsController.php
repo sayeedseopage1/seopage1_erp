@@ -32,7 +32,12 @@ class ProjectDetailsController extends Controller
         $projectArray = $project->toArray();
         // return $tasks->count();
         
-        $projectArray['progress'] = $tasks->count() ? round(((clone $tasks)->where('status','completed')->count()/$tasks->count())*100) : 0;
+        $projectArray['progress'] = $tasks->count() ? round(((clone $tasks)->where('board_column_id', 4)->count()/$tasks->count())*100) : 0;
+        $boardColumnsCollection = collect([1, 2, 3, 4, 6, 7, 8, 9]);
+        $countProgressArray = $boardColumnsCollection->map(function ($id) use ($tasks) {
+            return (clone $tasks)->where('board_column_id', $id)->count();
+        });
+        $projectArray['progress_chart_values'] = $countProgressArray;
 
         $pendingDeadlineExtensionRequests = $project->projectDeadlineExtension->where('status', 1)->count();
         if( Auth::user()->role_id == 4 && $project->status == 'in progress' ){
