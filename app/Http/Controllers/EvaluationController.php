@@ -471,6 +471,7 @@ class EvaluationController extends AccountBaseController
     }
     public function storeAuthorization(Request $request)
     {
+        dd($request->all());
         // DB::beginTransaction();
         if($request->status == 'authorize')
         {
