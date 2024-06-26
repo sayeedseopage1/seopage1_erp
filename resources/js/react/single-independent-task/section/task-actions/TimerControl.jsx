@@ -172,11 +172,11 @@ const TimerControl = ({ task, timerStart, setTimerStart, auth }) => {
                 workReport &&
                 workReport.data &&
                 (workReport.data.check_in_check_out.check_in_status ||
-                    auth.roleId === 14) &&
+                    _.includes([14, 15, 16, 17], Number(auth.roleId))) &&
                 (workReport.data.daily_task_report.daily_submission_status ||
-                    auth.roleId === 14) &&
+                    _.includes([14, 15, 16, 17], Number(auth.roleId))) &&
                 (workReport.data.hours_log_report.hours_log_report_status ||
-                    auth.roleId === 14)
+                    _.includes([14, 15, 16, 17], Number(auth.roleId)))
             ) {
                 await startTimerApi({
                     task_id: task?.id,
@@ -470,7 +470,7 @@ const TimerControl = ({ task, timerStart, setTimerStart, auth }) => {
                 startTimer={startTimerControl}
             />
 
-            {auth.roleId === 14 && (
+            {_.includes([14, 15, 16, 17], Number(auth.roleId)) && (
                 <>
                     <ExpiredTimeModalForNewEmployee
                         showExpirationWarningModal={showExpirationWarningModal}
