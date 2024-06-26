@@ -235,6 +235,7 @@ const SalesRiskAnalysisTable = ({
                     selectedRule,
                     policyKeys
                 );
+                setIsRuleUpdating(true);
                 setEditRuleData(payload);
                 setEditRuleModalOpen(true);
             },
@@ -660,6 +661,9 @@ const SalesRiskAnalysisTable = ({
             setEditPolicyDataValidation(validation);
         }
     }, [editPolicyData]);
+
+
+
     return (
         <React.Fragment>
             <div
