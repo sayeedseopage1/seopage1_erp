@@ -245,6 +245,89 @@ export const dummy_projects = [
     },
 ];
 
+export const project_proposals = [
+    {
+        id: 1,
+        project_id: 16297556,
+        bid_amount: 5000,
+        currency: "INR",
+        bidding_time: "2024-06-21 07:37:00",
+        proposal_title: "This a test apply test posting a project",
+        proposal_message: `<div>
+           With over 12 years of React Native expertise and a deep understanding of Algolia's search algorithms, I am primed to enhance your app's search functionality with cutting-edge AI capabilities. Let's elevate your user experience together.
+           </div>`,
+        balance: 0.2,
+        success_rate: 100,
+        freelancer_info: {
+            user_id: 7384267,
+            profile_image_url: "https://i.ibb.co/MBQrkK0/user2.png",
+            name: "Marry Doe",
+            user_name: "marry_doe",
+            is_new_freelancer: false,
+            location: {
+                iso: "US",
+                country: "United States",
+                city: "New York",
+            },
+            average_rating: 4.5,
+            reviews_count: 2,
+            member_since: "2024-06-20 07:37:00",
+            freelancer_engagement: {
+                contracted_with_client: 0,
+                completed_project: 0,
+            },
+            freelancer_verification: {
+                identity_verified: true,
+                payment_verified: true,
+                deposit_made: true,
+                email_verified: true,
+                profile_completed: true,
+                phone_verified: true,
+            },
+        },
+    },
+    {
+        id: 2,
+        project_id: 16297556,
+        bid_amount: 3500,
+        currency: "INR",
+        bidding_time: "2024-06-21 07:37:00",
+        proposal_title: "This a test apply test posting a project",
+        proposal_message: `<div>
+           With over 12 years of React Native expertise and a deep understanding of Algolia's search algorithms, I am primed to enhance your app's search functionality with cutting-edge AI capabilities. Let's elevate your user experience together.
+           </div>`,
+        balance: null,
+        success_rate: null,
+        freelancer_info: {
+            user_id: 7384269,
+            profile_image_url: "https://i.ibb.co/n8shFcG/user1.png",
+            name: "Abul Hossain",
+            user_name: "abulh43",
+            is_new_freelancer: true,
+            location: {
+                iso: "BD",
+                country: "Bangladesh",
+                city: "Dhaka",
+            },
+            average_rating: null,
+            reviews_count: null,
+            member_since: "2024-06-20 07:37:00",
+            freelancer_engagement: {
+                contracted_with_client: 0,
+                completed_project: 0,
+            },
+            freelancer_verification: {
+                identity_verified: true,
+                payment_verified: true,
+                deposit_made: true,
+                email_verified: true,
+                profile_completed: true,
+                phone_verified: true,
+            },
+        },
+    },
+];
+
 export const project_types = [
     {
         id: 1,

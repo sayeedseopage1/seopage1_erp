@@ -74,3 +74,244 @@
     background: var(--primary-white);
     padding: 24px;
 }
+
+/******************* project details tab section  *********************/
+.p_d_wrapper {
+    display: grid;
+    grid-template-columns: 4fr 1fr;
+    gap: 20px;
+}
+
+.p_d_content_left {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.p_d_title_wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    margin-bottom: 12px;
+}
+
+.p_d_title_600 {
+    color: var(--primary-black);
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: normal;
+}
+
+.p_d_bidding_ends {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 5px;
+    margin-bottom: 8px;
+}
+
+.p_d_wrapper {
+    color: var(--primary-black);
+    font-size: 16px;
+    font-style: normal;
+    line-height: 28px;
+}
+
+.p_d_skills_wrapper {
+    margin-top: 30px;
+}
+
+.p_d_skills_contents {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+    gap: 21px;
+}
+
+.p_d_skill {
+    min-width: 66px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 20px;
+    border: 1px solid var(--secondary-gray-3);
+    padding: 6px 8px;
+    font-size: 15px;
+    line-height: 21px;
+}
+
+.p_d_footer_wrapper {
+    margin-top: 30px;
+}
+
+.p_d_report_btn {
+    background-color: transparent;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+    border: none;
+    padding: 0;
+}
+
+.p_d_scam_alert_wrapper {
+    border-radius: 15px;
+    border: 1px solid var(--primary-blue);
+    background: rgba(20, 146, 230, 0.10);
+    padding: 12px;
+    margin-top: 20px;
+}
+
+.p_d_scam_alert_btn {
+    color: var(--primary-blue);
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 28px;
+    background-color: transparent;
+    margin-top: 8px;
+}
+
+.p_d_clarification_board {
+    display: flex;
+    align-items: flex-start;
+    gap: 20px;
+}
+
+.p_d_clarification_board_input {
+    flex: auto;
+}
+
+.message_input {
+    overflow-y: auto !important;
+}
+
+.p_d_client_image {
+    width: 42px;
+    height: 42px;
+    border-radius: 8px;
+}
+
+
+/* about client  */
+.p_d_about_client_section {
+    margin-bottom: 16px;
+}
+
+.info_with_icon {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 8px;
+    margin-bottom: 8px;
+}
+
+.info_with_icon_img {
+    width: 24px;
+}
+
+.p_d_insights {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    color: var(--primary-pink);
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 400;
+}
+
+/******************** Proposals page tab section ********************/
+.p_d_proposal_card {
+    border-radius: 9px;
+    border: 1px solid var(--light-blue-2);
+    background: var(--primary-white);
+    padding: 20px;
+    max-width: 1235px;
+    width: 100%;
+    margin-bottom: 15px;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.p_d_proposal_card_top,
+.p_d_proposal_card_bottom {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 10px;
+}
+
+.p_d_proposal_card_avatar {
+    width: 83px;
+    height: 83px;
+    border-radius: 13px;
+    object-fit: cover;
+    object-position: center;
+}
+
+.p_d_proposal_user_info {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 20px;
+}
+
+.p_d_normal_flex {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.p_d_proposal_card_name {
+    color: var(--primary-black);
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 28px;
+}
+
+.p_d_proposal_card_user_name {
+    font-weight: 400;
+}
+
+.p_d_proposal_card_title {
+    color: var(--primary-black);
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 28px;
+}
+
+.p_d_proposal_message {
+    max-width: 628px;
+    width: 100%;
+    color: var(--primary-black);
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+}
+
+.p_d_proposal_card_price {
+    color: var(--primary-black);
+    font-size: 24px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 28px;
+}
+
+.p_d_proposal_report_btn {
+    background-color: transparent;
+    border: none;
+    padding: 0;
+    color: var(--primary-blue);
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+}
