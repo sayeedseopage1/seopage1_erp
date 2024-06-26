@@ -527,6 +527,7 @@ class TimelogController extends AccountBaseController
 
     public function stopTimer(Request $request)
     {
+        // DB::beginTransaction();
      if(Auth::user()->role_id == 1)
      {
         $timeId = $request->timeId;
@@ -542,7 +543,11 @@ class TimelogController extends AccountBaseController
         $timeLog->save();
 
         /**EMPLOYEE EVALUATION START */
-        $taskFind = Task::where('id',$request->task_id)->where('u_id',null)->where('independent_task_status',1)->first(); //Find SubTask
+        if(Auth::user()->role_id == 15){
+            $taskFind = Task::where('id',$request->task_id)->where('u_id','!=',null)->where('independent_task_status',1)->first();
+        }else{
+            $taskFind = Task::where('id',$request->task_id)->where('u_id',null)->where('independent_task_status',1)->first();
+        }
         if($taskFind != null){
             $evaluation = EmployeeEvaluationTask::where('task_id',$taskFind->id)->first();
             if($evaluation !=null)
@@ -589,7 +594,11 @@ class TimelogController extends AccountBaseController
         $timeLog->save();
 
         /**EMPLOYEE EVALUATION START */
-        $taskFind = Task::where('id',$request->task_id)->where('u_id',null)->where('independent_task_status',1)->first(); //Find SubTask
+        if(Auth::user()->role_id == 15){
+            $taskFind = Task::where('id',$request->task_id)->where('u_id','!=',null)->where('independent_task_status',1)->first();
+        }else{
+            $taskFind = Task::where('id',$request->task_id)->where('u_id',null)->where('independent_task_status',1)->first();
+        }
         if($taskFind != null){
             $evaluation = EmployeeEvaluationTask::where('task_id',$taskFind->id)->first();
             if($evaluation !=null)
