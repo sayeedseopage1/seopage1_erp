@@ -18469,7 +18469,7 @@ var TimerControl = function TimerControl(_ref) {
         var currentTime = new Date();
         var timeDifference = _expireDate.getTime() - currentTime.getTime();
         setTimeLeft(Math.max(0, Math.floor(timeDifference / 1000)));
-        if (currentTime >= _expireDate) {
+        if (currentTime >= _expireDate && auth.roleId === 14) {
           setExpiredTimerForNewEmployee(true);
           stopTimer();
           clearInterval(intervalRef.current); // Stop the interval
