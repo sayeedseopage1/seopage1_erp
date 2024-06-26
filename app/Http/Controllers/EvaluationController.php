@@ -471,7 +471,7 @@ class EvaluationController extends AccountBaseController
     }
     public function storeAuthorization(Request $request)
     {
-        dd($request->all());
+        // dd($request->all());
         // DB::beginTransaction();
         if($request->status == 'authorize')
         {
@@ -485,9 +485,15 @@ class EvaluationController extends AccountBaseController
             $evaluation->employee_status = 1;
             $evaluation->save();
 
-            $user= User::find($request->user_id);
-            $user->role_id= 5;
-            $user->save();
+            if($request->role_id == 15){
+                $user= User::find($request->user_id);
+                $user->role_id= 4;
+                $user->save();
+            }else{
+                $user= User::find($request->user_id);
+                $user->role_id= 5;
+                $user->save();
+            }
 
             $userId = $user->id;
             $roleId = $user->role_id;
@@ -507,12 +513,18 @@ class EvaluationController extends AccountBaseController
             $userSession = new AppSettingController();
             $userSession->deleteSessions([$user->id]);
 
-            $employee_details = EmployeeDetails::where('user_id',$request->user_id)->first();
-            $employee_details->designation_id = 26;
-            $employee_details->save();
+            if($request->role_id == 15){
+                $employee_details = EmployeeDetails::where('user_id',$request->user_id)->first();
+                $employee_details->designation_id = 22;
+                $employee_details->save(); 
+            }else{
+                $employee_details = EmployeeDetails::where('user_id',$request->user_id)->first();
+                $employee_details->designation_id = 26;
+                $employee_details->save();   
+            }
 
             $evaluation_task = EmployeeEvaluationTask::where('user_id',$request->user_id)->first();
-            $actions = PendingAction::where('code','TLSDE')->where('task_id',$evaluation_task->task_id)->where('past_status',0)->get();
+            $actions = PendingAction::whereIn('code',['TLSDE','TLSNPM'])->where('task_id',$evaluation_task->task_id)->where('past_status',0)->get();
             if($actions != null)
             {
                 foreach ($actions as $key => $action) {
@@ -529,8 +541,13 @@ class EvaluationController extends AccountBaseController
                 $past_action->code = $action->code;
                 $past_action->serial = $action->serial;
                 $past_action->action_id = $action->id;
-                $past_action->heading= 'New Developer '.$dev->name.' was authorize for real work by Top Management '.$authorize_by->name.'!';
-                $past_action->message = 'Top Management <a href="'.route('employees.show',$authorize_by->id).'">'.$authorize_by->name.'</a> has authorized New Developer <a href="'.route('employees.show',$dev->id).'">'.$dev->name.'</a> for real work from ';
+                if($action->code == 'TLSNPM'){
+                    $past_action->heading= 'New PM '.$dev->name.' was authorize for real work by Top Management '.$authorize_by->name.'!';
+                    $past_action->message = 'Top Management <a href="'.route('employees.show',$authorize_by->id).'">'.$authorize_by->name.'</a> has authorized New PM <a href="'.route('employees.show',$dev->id).'">'.$dev->name.'</a> for real work from ';
+                }else{
+                    $past_action->heading= 'New Developer '.$dev->name.' was authorize for real work by Top Management '.$authorize_by->name.'!';
+                    $past_action->message = 'Top Management <a href="'.route('employees.show',$authorize_by->id).'">'.$authorize_by->name.'</a> has authorized New Developer <a href="'.route('employees.show',$dev->id).'">'.$dev->name.'</a> for real work from ';
+                }
                 $past_action->timeframe = $action->timeframe;
                 $past_action->authorization_for = $action->authorization_for;
                 $past_action->authorized_by = $action->authorized_by;
@@ -540,22 +557,39 @@ class EvaluationController extends AccountBaseController
                 $past_action->task_id = $action->task_id;
                 $past_action->developer_id = $action->developer_id;
                 $past_action->client_id = $action->client_id;
-                $button = [
-                    [
-                        'button_name' => 'See Evaluations',
-                        'button_color' => 'primary',
-                        'button_type' => 'redirect_url',
-                        'button_url' => route('employee-evaluation.index'),
-                        'button_url' => route('employee-evaluation.index', ['user_id' => $dev->id,'show' => 'all']),
-                    ],
-                ];
+                if($action->code == 'TLSNPM'){
+                    $button = [
+                        [
+                            'button_name' => 'See Evaluations',
+                            'button_color' => 'primary',
+                            'button_type' => 'redirect_url',
+                            'button_url' => route('employee-evaluation.index'),
+                            'button_url' => route('employee-evaluation.index', ['user_id' => $dev->id,'show' => 'all', 'type' => 'pm']),
+                        ],
+                    ];
+                }else{
+                    $button = [
+                        [
+                            'button_name' => 'See Evaluations',
+                            'button_color' => 'primary',
+                            'button_type' => 'redirect_url',
+                            'button_url' => route('employee-evaluation.index'),
+                            'button_url' => route('employee-evaluation.index', ['user_id' => $dev->id,'show' => 'all']),
+                        ],
+                    ];
+                }
+                
                 $past_action->button = json_encode($button);
                 $past_action->save();
                 }
             }
-
-            $helper = new HelperPendingActionController();
-            $helper->evaluationAuthForAdmin($evaluation_task->id);
+            if($request->role_id == 15){
+                $helper = new HelperPendingActionController();
+                $helper->evaluationAuthTopManagement($evaluation_task->id);
+            }else{
+                $helper = new HelperPendingActionController();
+                $helper->evaluationAuthForAdmin($evaluation_task->id);
+            }
 
             return response()->json([
                 'message' => 'Top management authorized successfully',
