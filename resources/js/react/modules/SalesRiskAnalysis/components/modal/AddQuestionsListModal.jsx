@@ -54,10 +54,9 @@ const AddQuestionsListModal = ({
     refetchSaleRiskAnalysis,
     isQuestionUpdating,
     setIsQuestionUpdating,
-    isYesNoRulesLoading
+    isYesNoRulesLoading,
+    singlePolicyDataByIDorKey,
 }) => {
-    
-    
     const modalRef = useRef(null);
     const { questionsAnswerType, policies, allQuestions, yesNoRules } =
         useContext(SalesRiskAnalysisContext);
@@ -318,7 +317,6 @@ const AddQuestionsListModal = ({
                     toast.error(errorMessage);
                 });
             } else {
-                console.log(error);
                 toast.error("Something went wrong");
             }
         }
@@ -371,7 +369,8 @@ const AddQuestionsListModal = ({
 
     const handleButtonTernary = (
         isSaleAnalysisQuestionSaveLoading,
-        isQuestionUpdating , isYesNoRulesLoading
+        isQuestionUpdating,
+        isYesNoRulesLoading
     ) => {
         if (
             isSaleAnalysisQuestionSaveLoading ||
@@ -379,8 +378,8 @@ const AddQuestionsListModal = ({
         ) {
             return "Saving...";
         }
-        if(isYesNoRulesLoading){
-            return "Loading..."
+        if (isYesNoRulesLoading) {
+            return "Loading...";
         }
 
         if (isQuestionUpdating) {
@@ -389,6 +388,8 @@ const AddQuestionsListModal = ({
 
         return "Save Question";
     };
+
+
 
     // Set Placeholder
     useEffect(() => {
@@ -436,8 +437,6 @@ const AddQuestionsListModal = ({
             }));
         }
     }, [isLoadingSinglePolicyData]);
-
-
 
     return (
         <CustomModal
@@ -566,10 +565,11 @@ const AddQuestionsListModal = ({
                                     selected={singleQuestion?.type}
                                     setSelected={handleChange}
                                     isDisableUse={
-                                        singleQuestion?.type?.name ===
+                                        (singleQuestion?.type?.name ===
                                             "yesNo" &&
-                                        singleQuestion?.question_key?.name ===
-                                            "yesNoRules" || isQuestionUpdating
+                                            singleQuestion?.question_key
+                                                ?.name === "yesNoRules") ||
+                                        isQuestionUpdating
                                     }
                                 />
                             </ModalSelectContainer>
@@ -753,7 +753,8 @@ const AddQuestionsListModal = ({
                                             setSelected={handleChange}
                                             isDisableUse={
                                                 singleQuestion?.question_key
-                                                    ?.name === "yesNoRules" || isQuestionUpdating
+                                                    ?.name === "yesNoRules" ||
+                                                isQuestionUpdating
                                             }
                                         />
                                     </ModalSelectContainer>
@@ -783,7 +784,11 @@ const AddQuestionsListModal = ({
                                                     singleQuestion?.rule_id
                                                 }
                                                 setSelected={handleChange}
-                                                isDisableUse={isQuestionUpdating}
+                                                isDisableUse={
+                                                    isQuestionUpdating &&
+                                                    yesNoRules?.data?.length ===
+                                                        0
+                                                }
                                             />
                                         </ModalSelectContainer>
                                         {singleQuestionValidation?.rule_id && (
@@ -837,7 +842,8 @@ const AddQuestionsListModal = ({
                         <ModalButton onClick={handleAddQuestion} width="200px">
                             {handleButtonTernary(
                                 isSaleAnalysisQuestionSaveLoading,
-                                isQuestionUpdating , isYesNoRulesLoading
+                                isQuestionUpdating,
+                                isYesNoRulesLoading
                             )}
                         </ModalButton>
                         <ModalButton

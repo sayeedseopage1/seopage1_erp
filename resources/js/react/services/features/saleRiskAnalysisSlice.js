@@ -16,6 +16,12 @@ const initialState = {
       name: "enable_edit_policy",
       label: "Enable Edit Policy",
       value: false,
+    },
+    {
+      id: 3,
+      name: "enable_delete_rule",
+      label: "Enable Delete Rule",
+      value: false,
     }
   ]
 }

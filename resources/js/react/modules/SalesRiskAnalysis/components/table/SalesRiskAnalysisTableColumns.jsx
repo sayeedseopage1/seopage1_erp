@@ -21,7 +21,6 @@ export const SalesRiskAnalysisTableColumns = [
         cell: ({ row, table }) => {
             const data = row?.original;
             const action = table.options.meta;
-
             return (
                 <div className="d-flex flex-column">
                     <div className="d-flex align-items-center mb-2">
@@ -35,7 +34,7 @@ export const SalesRiskAnalysisTableColumns = [
                                 type="checkbox"
                                 checked={data?.status == "1"}
                                 readOnly
-                                id="customSwitch1"
+                                id={`policyStatusSwitch-${data?.id}`}
                                 onClick={() => {
                                     action.handlePolicyStatus(data);
                                 }}
@@ -52,11 +51,10 @@ export const SalesRiskAnalysisTableColumns = [
                                         ? "Disable Now"
                                         : "Enable Now"
                                 }
-                                htmlFor="customSwitch1"
+                                htmlFor={`policyStatusSwitch-${data?.id}`}
                                 style={{
                                     cursor: "pointer",
                                 }}
-                            
                             >
                                 {/* Empty string as label */}
                             </label>{" "}
@@ -65,7 +63,6 @@ export const SalesRiskAnalysisTableColumns = [
                             onClick={() => {
                                 action.handleEditPolicy(data);
                             }}
-                            
                             className="d-flex align-items-center bg-transparent"
                         >
                             <Tooltip text={`Edit Policy`}>
@@ -452,7 +449,6 @@ export const SalesRiskAnalysisTableColumns = [
                                                     "no"
                                                 );
                                             }}
-                                           
                                             className="d-flex align-items-center bg-transparent"
                                         >
                                             <Tooltip text={`Edit Policy Rule`}>
@@ -471,11 +467,10 @@ export const SalesRiskAnalysisTableColumns = [
                                                 marginLeft: "10px",
                                             }}
                                             onClick={() => {
-                                                data.status === "1" &&
-                                                    action.handleRuleStatus(
-                                                        rule,
-                                                        data
-                                                    );
+                                                action.handleRuleStatus(
+                                                    rule,
+                                                    data
+                                                );
                                             }}
                                         >
                                             <Tooltip

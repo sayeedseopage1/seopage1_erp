@@ -243,6 +243,7 @@ const SalesRiskAnalysisTable = ({
                 setAddQuestionsModalOpen(true);
             },
             handlePolicyStatus: (row) => {
+                
                 setStatusActionData({
                     ...row,
                     modalType: "Policy",

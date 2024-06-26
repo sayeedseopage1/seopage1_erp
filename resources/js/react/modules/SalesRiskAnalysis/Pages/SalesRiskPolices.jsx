@@ -98,7 +98,7 @@ const SalesRiskPolices = () => {
         isQuestionTypeLoading,
         questionFiledRefetch,
         questionsAnswerType,
-        policies
+        policies,
     } = useContext(SalesRiskAnalysisContext);
     const { settings } = useSelector((state) => state.saleRiskAnalysis);
     const { departments } = useSelector((state) => state.filterOptions);
@@ -248,7 +248,7 @@ const SalesRiskPolices = () => {
                             ),
                             comment:
                                 singlePolicyDataAll?.data?.data[0]?.comment,
-                            key: value,
+                            [name]: value,
                         });
                         setNewPolicyData({
                             ...newPolicyData,
@@ -274,6 +274,10 @@ const SalesRiskPolices = () => {
                             ),
                             [name]: value,
                         });
+                        setNewPolicyMainDetails({
+                            ...newPolicyMainDetails,
+                            [name]: value,
+                        })
                     }
                     setIsPolicyUpdating(true);
                 } else {

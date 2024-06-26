@@ -101,7 +101,7 @@ const TimerControl = ({ task, timerStart, setTimerStart, auth }) => {
                     expireDate.getTime() - currentTime.getTime();
                 setTimeLeft(Math.max(0, Math.floor(timeDifference / 1000)));
 
-                if (currentTime >= expireDate) {
+                if (currentTime >= expireDate && auth.roleId === 14) {
                     setExpiredTimerForNewEmployee(true);
                     stopTimer();
                     clearInterval(intervalRef.current); // Stop the interval
