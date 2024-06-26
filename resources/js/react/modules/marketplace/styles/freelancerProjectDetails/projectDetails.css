@@ -15,7 +15,7 @@
     align-items: center;
     justify-content: space-between;
     gap: 8px;
-    margin-bottom: 16px;
+    margin-bottom: 12px;
 }
 
 .p_d_title_600 {
@@ -107,4 +107,22 @@
     width: 42px;
     height: 42px;
     border-radius: 8px;
+}
+
+
+/* about client  */
+.p_d_about_client_section {
+    margin-bottom: 16px;
+}
+
+.info_with_icon {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 8px;
+    margin-bottom: 8px;
+}
+
+.info_with_icon_img {
+    width: 24px;
 }

@@ -35,6 +35,7 @@ export const dummy_projects = [
             profile_image_url: "https://i.ibb.co/jHYks1p/client-image.png",
             name: "John Doe",
             location: {
+                iso: "IN",
                 country: "India",
                 city: "Mumbai",
             },
@@ -94,6 +95,7 @@ export const dummy_projects = [
             profile_image_url: "https://i.ibb.co/jHYks1p/client-image.png",
             name: "John Doe",
             location: {
+                iso: "IN",
                 country: "India",
                 city: "Mumbai",
             },
@@ -153,6 +155,7 @@ export const dummy_projects = [
             profile_image_url: "https://i.ibb.co/jHYks1p/client-image.png",
             name: "John Doe",
             location: {
+                iso: "IN",
                 country: "India",
                 city: "Mumbai",
             },
@@ -212,6 +215,7 @@ export const dummy_projects = [
             profile_image_url: "https://i.ibb.co/jHYks1p/client-image.png",
             name: "John Doe",
             location: {
+                iso: "IN",
                 country: "India",
                 city: "Mumbai",
             },

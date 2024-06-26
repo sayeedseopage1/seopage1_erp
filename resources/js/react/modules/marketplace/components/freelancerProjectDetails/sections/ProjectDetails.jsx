@@ -3,8 +3,25 @@ import '../../../styles/freelancerProjectDetails/projectDetails.css'
 import { dummy_projects } from '../../../constants/projects';
 import flagIcon from '../../../assets/freelancerProjectDetails/flag.svg';
 import { Input } from 'antd';
+import InfoWithIconTitle from '../ui/InfoWithIconTitle';
+import moment from 'moment';
+import { FaLocationDot, FaUser } from "react-icons/fa6";
+import { GoClockFill } from "react-icons/go";
+import { MdPeopleAlt } from "react-icons/md";
+import { IoPersonAdd } from "react-icons/io5";
+import { RiComputerFill } from "react-icons/ri";
+import { PiIdentificationCardFill } from "react-icons/pi";
+import { HiMiniShieldCheck } from "react-icons/hi2";
+import { PiShoppingBagOpenBold } from "react-icons/pi";
+import { TbMailFilled } from "react-icons/tb";
+import { IoCall } from "react-icons/io5";
+import ClientInfoCard from '../ui/ClientInfoCard';
+import FractionalRating from '../../commonComponents/FractionalRating';
+import { BiSolidCommentDots } from "react-icons/bi";
 
 const { TextArea } = Input;
+
+// #058430
 
 const ProjectDetails = () => {
   //!! TODO: This is used development only for now, It should be removed in production
@@ -55,6 +72,7 @@ const ProjectDetails = () => {
             </div>
           </div>
         </div>
+        {/* project details clarification board */}
         <div className='p_d_content_wrapper'>
           <div className='p_d_title_wrapper'>
             <h4 className='p_d_title_600'>Clarification Board:</h4>
@@ -72,8 +90,41 @@ const ProjectDetails = () => {
           </div>
         </div>
       </div>
+      {/* about client  */}
       <div className='p_d_content_wrapper p_d_content_right'>
+        <ClientInfoCard title="About the Client">
+          <InfoWithIconTitle icon={<FaLocationDot />} title={location?.city} />
+          <InfoWithIconTitle img_url={`/flags/4x3/${location?.iso}.svg`} title={location?.country} />
+          <div className='d-flex align-items-center'>
+            <div className='d-flex align-items-center mr-2'>
+              <FaUser className='mr-1' />
+              <div className='project_card_rating'>
+                <FractionalRating stop={5} value={client_info?.average_rating} />
+                <p>{client_info?.average_rating}</p>
+              </div>
+            </div>
+            <div className='project_card_rating'>
+              <BiSolidCommentDots className='mr-1' />
+              <p>{reviews_count}</p>
+            </div>
+          </div>
+          <InfoWithIconTitle icon={<GoClockFill />} title={`Member since ${moment(member_since).format('MMM DD, YYYY')}`} />
+        </ClientInfoCard>
 
+        <ClientInfoCard title="Client Engagement">
+          <InfoWithIconTitle icon={<MdPeopleAlt />} title={`Contacted ${client_engagement?.contracted_freelancer} freelancers`} />
+          <InfoWithIconTitle icon={<IoPersonAdd />} title={`Invited ${client_engagement?.invite_freelancer} freelancers to bid`} />
+          <InfoWithIconTitle icon={<RiComputerFill />} title={`Completed ${client_engagement?.completed_project} projects`} />
+        </ClientInfoCard>
+
+        <ClientInfoCard title="Client Verification">
+          <InfoWithIconTitle icon={<PiIdentificationCardFill color={client_verification?.identity_verified ? '#058430' : '#000'} />} title={`Identify verified`} />
+          <InfoWithIconTitle icon={<HiMiniShieldCheck color={client_verification?.payment_verified ? '#058430' : '#000'} />} title={`Payment verified`} />
+          <InfoWithIconTitle icon={<PiShoppingBagOpenBold color={client_verification?.deposit_made ? '#058430' : '#000'} />} title={`Deposit made`} />
+          <InfoWithIconTitle icon={<TbMailFilled color={client_verification?.email_verified ? '#058430' : '#000'} />} title={`Email verified`} />
+          <InfoWithIconTitle icon={<FaUser color={client_verification?.profile_completed ? '#058430' : '#000'} />} title={`Profile completed`} />
+          <InfoWithIconTitle icon={<IoCall color={client_verification?.phone_verified ? '#058430' : '#000'} />} title={`Phone verified`} />
+        </ClientInfoCard>
       </div>
     </div>
   );
