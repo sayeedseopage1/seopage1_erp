@@ -305,6 +305,7 @@ const EvaluationTaskListModalPM = ({
         await adminAuthorization({
             status: "authorize",
             user_id: singleEvaluation.user_id,
+            role_id: singleEvaluation.roleId,
             managements_cmnt: adminComment,
             _token: document
                 .querySelector("meta[name='csrf-token']")
@@ -488,9 +489,7 @@ const EvaluationTaskListModalPM = ({
                         </div>
                     )}
 
-                {(auth.roleId === 1 ||
-                    auth.roleId === 8 ||
-                    auth.roleId === 6) &&
+                {(auth.roleId === 1 || auth.roleId === 8) &&
                     singleEvaluation.managements_decision !== null && (
                         <section>
                             <SectionFlex>
