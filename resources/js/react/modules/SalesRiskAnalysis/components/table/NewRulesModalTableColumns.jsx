@@ -34,7 +34,11 @@ export const NewRulesModalTableColumnsData = [
                                 }}
                                 className="py-3 d-flex align-items-center"
                             >
-                                {data.title}
+                                <Tooltip text={data.title}>
+                                    <p className="singleline-ellipsis">
+                                        {data.title}
+                                    </p>
+                                </Tooltip>
                                 <span className="ml-2">
                                     {" "}
                                     {data?.ruleComment ? (
@@ -58,7 +62,11 @@ export const NewRulesModalTableColumnsData = [
                                 }}
                                 className="py-3 d-flex align-items-center"
                             >
-                                {data.title}
+                                <Tooltip text={data.title}>
+                                    <p className="singleline-ellipsis">
+                                        {data.title}
+                                    </p>
+                                </Tooltip>
                                 <span className="ml-2">
                                     {data?.ruleComment ? (
                                         <Tooltip text={data?.ruleComment}>
@@ -125,7 +133,11 @@ export const NewRulesModalTableColumnsData = [
                                     }}
                                     className="py-3 pr-2 d-flex align-items-center"
                                 >
-                                    {data.title}
+                                    <Tooltip text={data.title}>
+                                        <p className="singleline-ellipsis">
+                                            {data.title}
+                                        </p>
+                                    </Tooltip>
                                     <span className="ml-2">
                                         {data?.ruleComment ? (
                                             <Tooltip text={data?.ruleComment}>

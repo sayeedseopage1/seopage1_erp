@@ -54,7 +54,11 @@ const EditCountryListModal = ({
                     )}
                 </div>
                 <Flex gap="10px" justifyContent="center">
-                    <ModalButton onClick={handleUpdateRules} width="177px">
+                    <ModalButton
+                        onClick={handleUpdateRules}
+                        width="177px"
+                        disabled={isLoading}
+                    >
                         {isLoading ? "Loading..." : "Update Rule"}
                     </ModalButton>
                     <ModalButton

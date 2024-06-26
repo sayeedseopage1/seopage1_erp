@@ -206,7 +206,11 @@ export const SalesRiskAnalysisTableColumns = [
                                         }}
                                         className="py-3 d-flex align-items-center"
                                     >
-                                        {rule.title}
+                                        <Tooltip text={rule.title}>
+                                            <span className="mr-2 singleline-ellipsis">
+                                                {rule.title}
+                                            </span>
+                                        </Tooltip>
                                         <span className="ml-2">
                                             {rule?.comment ? (
                                                 <Tooltip text={rule?.comment}>
@@ -295,10 +299,11 @@ export const SalesRiskAnalysisTableColumns = [
                                             }}
                                             className="py-3 mr-2 d-flex align-items-center"
                                         >
-                                            <span className="mr-2">
-                                                {" "}
-                                                {rule.title}
-                                            </span>
+                                            <Tooltip text={rule.title}>
+                                                <span className="mr-2 singleline-ellipsis">
+                                                    {rule.title}
+                                                </span>
+                                            </Tooltip>
                                             {rule?.comment ? (
                                                 <Tooltip text={rule?.comment}>
                                                     {" "}
@@ -342,9 +347,11 @@ export const SalesRiskAnalysisTableColumns = [
                                         }}
                                         className="py-3 d-flex align-items-center"
                                     >
-                                        <span className="mr-2">
-                                            {rule.title}
-                                        </span>
+                                        <Tooltip text={rule.title}>
+                                            <span className="mr-2 singleline-ellipsis">
+                                                {rule.title}
+                                            </span>
+                                        </Tooltip>
                                         {rule?.comment ? (
                                             <Tooltip text={rule?.comment}>
                                                 <i className="fa-solid fa-circle-info"></i>
