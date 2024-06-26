@@ -158,7 +158,7 @@ const EvaluationRatingModalPM = ({
                 }),
         },
     ];
-
+    console.log("data", data);
     const handleSubmit = async (e) => {
         e.preventDefault();
         const requiredFields = [
