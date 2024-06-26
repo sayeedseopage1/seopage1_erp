@@ -75,7 +75,7 @@ const EvaluationTaskListModalPM = ({
 
     const auth = useAuth();
     const [cumulativeAverage, setCumulativeAverage] = React.useState(
-        singleEvaluation?.lead_dev_avg_rating
+        singleEvaluation?.team_lead_avg_rating
     );
     const { evaluationObject } = useEmployeeEvaluation();
     const [latestRoundTasks, setLatestRoundTasks] = useState([]);
@@ -462,7 +462,7 @@ const EvaluationTaskListModalPM = ({
                 {/* admin view section start */}
                 {auth.roleId === 1 &&
                     singleEvaluation.managements_decision === null &&
-                    singleEvaluation.team_lead_status === 1 &&
+                    // singleEvaluation.team_lead_status === 1 &&
                     singleEvaluation.team_lead_submission_status === 1 && (
                         <div>
                             <section>

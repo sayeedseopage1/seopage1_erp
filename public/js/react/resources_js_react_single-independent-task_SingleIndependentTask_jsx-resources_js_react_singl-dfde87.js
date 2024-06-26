@@ -18546,7 +18546,7 @@ var TimerControl = function TimerControl(_ref) {
             return checkWorkReport().unwrap();
           case 4:
             workReport = _context.sent;
-            if (!(workReport && workReport.data && (workReport.data.check_in_check_out.check_in_status || auth.roleId === 14) && (workReport.data.daily_task_report.daily_submission_status || auth.roleId === 14) && (workReport.data.hours_log_report.hours_log_report_status || auth.roleId === 14))) {
+            if (!(workReport && workReport.data && (workReport.data.check_in_check_out.check_in_status || lodash__WEBPACK_IMPORTED_MODULE_5___default().includes([14, 15, 16, 17], Number(auth.roleId))) && (workReport.data.daily_task_report.daily_submission_status || lodash__WEBPACK_IMPORTED_MODULE_5___default().includes([14, 15, 16, 17], Number(auth.roleId))) && (workReport.data.hours_log_report.hours_log_report_status || lodash__WEBPACK_IMPORTED_MODULE_5___default().includes([14, 15, 16, 17], Number(auth.roleId))))) {
               _context.next = 10;
               break;
             }
@@ -18759,7 +18759,7 @@ var TimerControl = function TimerControl(_ref) {
     }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)(_stop_timer_LessTrackTimerModal__WEBPACK_IMPORTED_MODULE_8__["default"], {
       stopTimer: stopTimer,
       startTimer: startTimerControl
-    }), auth.roleId === 14 && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsxs)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.Fragment, {
+    }), lodash__WEBPACK_IMPORTED_MODULE_5___default().includes([14, 15, 16, 17], Number(auth.roleId)) && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsxs)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.Fragment, {
       children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)(_ExpiredTimeModalForNewEmployee__WEBPACK_IMPORTED_MODULE_11__["default"], {
         showExpirationWarningModal: showExpirationWarningModal,
         setShowExpirationWarningModal: setShowExpirationWarningModal,
