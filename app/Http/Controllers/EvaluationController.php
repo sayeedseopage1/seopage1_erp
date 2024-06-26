@@ -9,6 +9,7 @@ use App\Models\EmployeeEvaluationTask;
 use App\Models\EvaluationHistory;
 use App\Models\PendingAction;
 use App\Models\PendingActionPast;
+use App\Models\PMAssign;
 use App\Models\ProjectTimeLog;
 use App\Models\RoleUser;
 use App\Models\Role;
@@ -178,7 +179,7 @@ class EvaluationController extends AccountBaseController
 
     public function getSingleEvaluation($user_id)
     {
-        $evaluationQuery = EmployeeEvaluation::select('employee_evaluations.*', 'added_by.id as added_by_id', 'added_by.name as added_by_name', 'tasks.id as task_id', 'roles.name as role_name', 'tmLead.name as team_lead_name')
+        $evaluationQuery = EmployeeEvaluation::select('employee_evaluations.*', 'added_by.id as added_by_id', 'added_by.name as added_by_name', 'tasks.id as task_id','roles.id as roleId', 'roles.name as role_name', 'tmLead.name as team_lead_name')
         ->selectRaw('MIN(sub_tasks.created_at) as first_task_assign_on')
         ->selectRaw('MIN(project_time_logs.created_at) as started_working_on')
         ->selectRaw('COUNT(DISTINCT task_users.id) as total_task_assigned')
@@ -494,6 +495,19 @@ class EvaluationController extends AccountBaseController
                 $user->role_id= 5;
                 $user->save();
             }
+            if($user->role_id == 4)
+            {
+                $pmassign= new PMAssign();
+                $pmassign->pm_id= $request->user_id;
+                $pmassign->project_count= 0;
+                $pmassign->amount=0;
+                $pmassign->save();
+
+
+            }
+            $changeEmployeeRolePermission = user()->permission('change_employee_role');
+
+            abort_403($changeEmployeeRolePermission != 'all');
 
             $userId = $user->id;
             $roleId = $user->role_id;
