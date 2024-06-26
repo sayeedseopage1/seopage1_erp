@@ -2246,5 +2246,40 @@ class HelperPendingActionController extends AccountBaseController
                 $action->save();
             }
         }
+        public function evaluationRejectTopManagement($evaluation_task)
+        {
+            $evaluation_task = EmployeeEvaluationTask::where('id',$evaluation_task)->first(); 
+            $new_pm = User::where('id',$evaluation_task->user_id)->first(); 
+            $top_management = User::where('id',Auth::user()->id)->first(); 
+            $task = Task::where('id',$evaluation_task->task_id)->first();
+            $authorizers = User::whereIn('role_id', [8, 6])->get();
+            $updated_at = Carbon::parse($evaluation_task->updated_at);
+            $formatted_date_time = $updated_at->format('d F Y \a\t g:i A');
+            foreach ($authorizers as $key => $authorizer) {
+                $action = new PendingAction();
+                $action->code = 'ERFTM';
+                $action->serial = 'ERFTM'.'x'.$key;
+                $action->item_name= 'Evaluation reject for admin!';
+                $action->heading= 'New PM '.$new_pm->name.' was rejected for real work by Top Management '.$top_management->name.'!';
+                $action->message = 'Top Management <a href="'.route('employees.show',$top_management->id).'">'.$top_management->name.'</a> has rejected New PM <a href="'.route('employees.show',$new_pm->id).'">'.$new_pm->name.'</a> for real work from '.$formatted_date_time.'';
+                $action->timeframe= 24;
+                $action->client_id = $task->client_id;
+               $action->task_id = $task->id;
+               $action->developer_id = $new_pm->id;
+                $action->authorization_for= $authorizer->id;
+                $button = [
+                    [
+                        'button_name' => 'Acknowledge It',
+                        'button_color' => 'primary',
+                        'button_type' => 'modal',
+                        'button_url' => '',
+                        'modal_form'=> false,
+                    ],
+
+                ];
+                $action->button = json_encode($button);
+                $action->save();
+            }
+        }
 
 }
