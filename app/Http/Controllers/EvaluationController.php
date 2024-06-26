@@ -179,7 +179,7 @@ class EvaluationController extends AccountBaseController
 
     public function getSingleEvaluation($user_id)
     {
-        $evaluationQuery = EmployeeEvaluation::select('employee_evaluations.*', 'added_by.id as added_by_id', 'added_by.name as added_by_name', 'tasks.id as task_id','roles.id as roleId', 'roles.name as role_name', 'tmLead.name as team_lead_name')
+        $evaluationQuery = EmployeeEvaluation::select('employee_evaluations.*', 'added_by.id as added_by_id', 'added_by.name as added_by_name','addedBy.id as addedById','addedBy.name as addedByName','tasks.id as task_id','roles.id as roleId', 'roles.name as role_name', 'tmLead.name as team_lead_name')
         ->selectRaw('MIN(sub_tasks.created_at) as first_task_assign_on')
         ->selectRaw('MIN(project_time_logs.created_at) as started_working_on')
         ->selectRaw('COUNT(DISTINCT task_users.id) as total_task_assigned')
@@ -189,6 +189,10 @@ class EvaluationController extends AccountBaseController
         ->leftJoin('sub_tasks', 'employee_evaluations.user_id', '=', 'sub_tasks.assigned_to')
         ->leftJoin('tasks', 'sub_tasks.task_id', '=', 'tasks.id')
         ->leftJoin('users as added_by', 'sub_tasks.added_by', '=', 'added_by.id')
+        //this is for pm evaluation only start
+        ->leftJoin('tasks as mainTask', 'employee_evaluation_tasks.task_id', '=', 'mainTask.id')
+        ->leftJoin('users as addedBy', 'mainTask.added_by', '=', 'addedBy.id')
+        //this is for pm evaluation only end
         ->leftJoin('users', 'employee_evaluations.user_id', '=', 'users.id')
         ->leftJoin('users as tmLead', 'employee_evaluations.team_lead_id', '=', 'tmLead.id')
         ->leftJoin('roles', 'users.role_id', '=', 'roles.id')
