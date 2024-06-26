@@ -121,6 +121,7 @@ class EvaluationController extends AccountBaseController
 
         $evaluationQuery = EmployeeEvaluation::select('employee_evaluations.*','added_by.id as added_by_id','added_by.name as added_by_name','addedBy.id as addedById','addedBy.name as addedByName','tasks.id as task_id','roles.id as roleId','roles.name as role_name', 'tmLead.name as team_lead_name')
                     ->selectRaw('MIN(sub_tasks.created_at) as first_task_assign_on')
+                    ->selectRaw('MIN(mainTask.created_at) as firstTaskAssignOn')
                     ->selectRaw('MIN(project_time_logs.created_at) as started_working_on')
                     ->selectRaw('COUNT(DISTINCT task_users.id) as total_task_assigned')
                     ->selectRaw('COUNT(DISTINCT employee_evaluation_tasks.submission_date) as total_task_submit')
@@ -181,6 +182,7 @@ class EvaluationController extends AccountBaseController
     {
         $evaluationQuery = EmployeeEvaluation::select('employee_evaluations.*', 'added_by.id as added_by_id', 'added_by.name as added_by_name','addedBy.id as addedById','addedBy.name as addedByName','tasks.id as task_id','roles.id as roleId', 'roles.name as role_name', 'tmLead.name as team_lead_name')
         ->selectRaw('MIN(sub_tasks.created_at) as first_task_assign_on')
+        ->selectRaw('MIN(mainTask.created_at) as firstTaskAssignOn')
         ->selectRaw('MIN(project_time_logs.created_at) as started_working_on')
         ->selectRaw('COUNT(DISTINCT task_users.id) as total_task_assigned')
         ->selectRaw('COUNT(DISTINCT employee_evaluation_tasks.submission_date) as total_task_submit')
