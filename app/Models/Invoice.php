@@ -141,7 +141,7 @@ class Invoice extends BaseModel
                     
 
                     $projectMilestone = ProjectMilestone::with('project.client')->find($item->milestone_id);
-                    $activity = 'You marked milestone '.$projectMilestone->milestone_title??null. ', from project <a style="color:blue" href="'.route('projects.show',$projectMilestone->project->id??null).'">'.$projectMilestone->project->project_name??null. '</a> for client: <a style="color:blue" href="'.route('clients.show', $projectMilestone->project->client->id??null).'">'. $projectMilestone->project->client->name??null. '</a> as complete';
+                    $activity = 'You marked milestone '.($projectMilestone->milestone_title??null). ', from project <a style="color:blue" href="'.route('projects.show',$projectMilestone->project->id??null).'">'.$projectMilestone->project->project_name??null. '</a> for client: <a style="color:blue" href="'.route('clients.show', $projectMilestone->project->client->id??null).'">'. $projectMilestone->project->client->name??null. '</a> as complete';
 
                     // Project Manager Point Distribution ( Milestone release )
                     if($is_all_paid) ProjectManagerPointLogic::distribute(4, $item->project_id, $is_all_paid, null, $activity);
