@@ -460,4 +460,9 @@ class Project extends BaseModel
     {
         return $this->hasOne(QCSubmission::class, 'project_id');
     }
+
+    public function projectDispute()
+    {
+        return $this->hasOne(ProjectDispute::class, 'project_id');
+    }
 }
