@@ -328,10 +328,10 @@ const EvaluationRatingModalPM = ({
                                 <TeamLeadName>
                                     By{" "}
                                     <a
-                                        href={`/account/employees/${data?.added_by_id}`}
+                                        href={`/account/employees/${data?.addedById}`}
                                         target="_blank"
                                     >
-                                        {data?.added_by_name}
+                                        {data?.addedByName}
                                     </a>{" "}
                                     on{" "}
                                     <span>{FormatDate(data?.updated_at)}</span>
@@ -350,10 +350,10 @@ const EvaluationRatingModalPM = ({
                             <TeamLeadName>
                                 By{" "}
                                 <a
-                                    href={`/account/employees/${data?.added_by_id}`}
+                                    href={`/account/employees/${data?.addedById}`}
                                     target="_blank"
                                 >
-                                    {data?.added_by_name}
+                                    {data?.addedByName}
                                 </a>{" "}
                                 on <span>{FormatDate(data?.updated_at)}</span>
                             </TeamLeadName>
