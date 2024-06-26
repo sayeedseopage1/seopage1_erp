@@ -48,6 +48,7 @@ const CommentModal = ({ comment }) => {
                             border: "none",
                             boxShadow: "0px 0px 10px 0px rgba(0, 0, 0, 0.2)",
                             blur: "5px",
+                            overflow: "auto",
                         },
                     }}
                     isOpen={modalIsOpen}
@@ -85,6 +86,7 @@ const CommentContainer = styled.div`
     padding: 15px;
     border-radius: 5px;
     background-color: #f9f9f9;
+    overflow: auto;
 `;
 
 const CommentText = styled.div`

@@ -59,7 +59,7 @@ export const EvaluationTableColumnsPM = [
         accessorKey: "first_task_assign_on",
         cell: ({ row }) => {
             const data = row.original;
-            return <div>{FormatDate(data?.first_task_assign_on)}</div>;
+            return <div>{FormatDate(data?.firstTaskAssignOn)}</div>;
         },
     },
     {
