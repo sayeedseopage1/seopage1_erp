@@ -15,6 +15,7 @@
     align-items: center;
     justify-content: space-between;
     gap: 8px;
+    margin-bottom: 16px;
 }
 
 .p_d_title_600 {
@@ -23,7 +24,6 @@
     font-style: normal;
     font-weight: 600;
     line-height: normal;
-    margin-bottom: 16px;
 }
 
 .p_d_wrapper {
@@ -50,9 +50,11 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    border-radius: 26px;
+    border-radius: 20px;
     border: 1px solid var(--secondary-gray-3);
     padding: 6px 8px;
+    font-size: 15px;
+    line-height: 21px;
 }
 
 .p_d_footer_wrapper {
@@ -67,4 +69,42 @@
     gap: 7px;
     border: none;
     padding: 0;
+}
+
+.p_d_scam_alert_wrapper {
+    border-radius: 15px;
+    border: 1px solid var(--primary-blue);
+    background: rgba(20, 146, 230, 0.10);
+    padding: 12px;
+    margin-top: 20px;
+}
+
+.p_d_scam_alert_btn {
+    color: var(--primary-blue);
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 28px;
+    background-color: transparent;
+    margin-top: 8px;
+}
+
+.p_d_clarification_board {
+    display: flex;
+    align-items: flex-start;
+    gap: 20px;
+}
+
+.p_d_clarification_board_input {
+    flex: auto;
+}
+
+.message_input {
+    overflow-y: auto !important;
+}
+
+.p_d_client_image {
+    width: 42px;
+    height: 42px;
+    border-radius: 8px;
 }
