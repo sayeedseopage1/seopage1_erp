@@ -39,6 +39,7 @@ const RevisionModalBody = ({
                 isOpen={isEvaluationRevisionModal}
                 onRequestClose={() => setIsEvaluationRevisionModal(false)}
                 ariaHideApp={false}
+                closeTimeoutMS={500}
             >
                 <Card className={styles.revision_card}>
                     <Card.Head

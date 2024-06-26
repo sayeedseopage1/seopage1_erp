@@ -434,6 +434,7 @@ const EvaluationTaskListModal = ({
             ariaHideApp={false}
             isOpen={isEvaluationModal}
             onRequestClose={() => setIsEvaluationModal(false)}
+            closeTimeoutMS={500}
         >
             <TitleAndTableSection>
                 <EvalTableTitle>

@@ -174,6 +174,7 @@ const EvaluationAcknowledgeSubtaskModal = ({
             ariaHideApp={false}
             isOpen={acknowledgementSubtask}
             onRequestClose={() => setAcknowledgementSubtask(false)}
+            closeTimeoutMS={500}
         >
             <section>
                 <EvalTableTitle>

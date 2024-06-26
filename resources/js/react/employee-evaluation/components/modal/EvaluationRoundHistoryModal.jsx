@@ -54,6 +54,7 @@ const EvaluationRoundHistoryModal = ({ data }) => {
                 isOpen={isOpen}
                 onRequestClose={() => setIsOpen(false)}
                 ariaHideApp={false}
+                closeTimeoutMS={500}
             >
                 <Card className={styles.revision_card}>
                     <Card.Head
