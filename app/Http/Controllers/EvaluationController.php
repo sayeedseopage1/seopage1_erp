@@ -237,12 +237,14 @@ class EvaluationController extends AccountBaseController
             'taskboard_columns.priority as task_board_column_priority',
             'task_submissions.screen_record_link',
             'tasks.id as task_id',
-            'users.id as added_by_id','users.name as added_by_name'
+            'users.id as added_by_id','users.name as added_by_name',
+            'addedBy.id as addedById','addedBy.name as addedByName'
         )
         ->leftJoin('tasks', 'employee_evaluation_tasks.task_id', 'tasks.id')
         ->leftJoin('taskboard_columns', 'tasks.board_column_id', 'taskboard_columns.id')
         ->leftJoin('task_submissions', 'tasks.id', 'task_submissions.task_id')
         ->leftJoin('users', 'employee_evaluation_tasks.lead_dev_id', 'users.id')
+        ->leftJoin('users as addedBy', 'employee_evaluation_tasks.team_lead_id', 'addedBy.id')
         ->where('employee_evaluation_tasks.user_id', $id)
         ->get();
 
