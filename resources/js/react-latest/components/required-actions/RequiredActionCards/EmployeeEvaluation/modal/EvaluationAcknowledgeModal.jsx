@@ -215,7 +215,7 @@ const EvaluationAcknowledgeModal = ({
             {auth.roleId === 8 &&
                 !_.includes(
                     [4, 6, 7, 15, 16, 17],
-                    Number(singleEvaluation?.roleId ?? 15)
+                    Number(singleEvaluation?.roleId)
                 ) && (
                     <section>
                         <SectionFlex>
