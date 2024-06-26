@@ -4,6 +4,23 @@ export const dummy_projects = [
         title: "Permanent Content Writer with SEO Knowledge Required (Monthly Basis) Quote Your Desired Monthly Payout",
         description:
             "We are seeking a talented and experienced Content Writer with a strong understanding of SEO principles to join  our team on a permanent basis. The ideal candidate will be responsible for creating compelling, engaging, and optimized content for various platforms, including website, blog, social media, and email campaigns. This role requires a blend of creativity and technical expertise. The ideal candidate will be responsible for creating compelling, engaging, and optimized content for various platforms, including website, blog, social media, and email campaigns. This role requires a blend of creativity and technical expertise. ",
+        details: `
+            <div>
+              <p>I'm looking for a skilled designer to create a layout for my website that targets professionals and businesses.</p>
+              <strong>Key Points:</strong>
+              <ul>
+                <li>I need a professional and clean design that resonates with my target audience.</li>
+                <li>The layout should be user-friendly, easy to navigate, and create a positive impression for visitors.</li>
+                <li>The design should be versatile to accommodate various content types and call-to-actions.</li>
+              </ul>
+              <strong>Ideal Skills:</strong>
+              <ul>
+                <li>Proven experience in website design, particularly for business-focused sites.</li>
+                <li>Ability to create designs that are both aesthetically pleasing and functional.</li>
+                <li>Understanding of user experience principles to create a layout that is easy and intuitive to use.</li>
+              </ul>
+            </div>
+          `,
         currency: "INR",
         budget_range: "10,000 - 15,000",
         highest_bid_amount: 8000,
@@ -19,6 +36,23 @@ export const dummy_projects = [
         title: "Personal Narrative Blog Creation",
         description:
             "Content Writer with SEO Knowledge Required (Monthly Basis) Quote Your Desired Monthly Payout.This role requires a blend of creativity and technical expertise. The ideal candidate will be responsible for creating compelling, engaging, and optimized content for various platforms, including website, blog, social media, and email campaigns. This role requires a blend of creativity and technical expertise.This role requires a blend of creativity and technical expertise. The ideal candidate will be responsible for creating compelling, engaging, and optimized content for various platforms, including website, blog, social media, and email campaigns. This role requires a blend of creativity and technical expertise. ",
+        details: `
+            <div>
+                <p>I'm looking for a skilled designer to create a layout for my website that targets professionals and businesses.</p>
+                <strong>Key Points:</strong>
+                <ul>
+                <li>I need a professional and clean design that resonates with my target audience.</li>
+                <li>The layout should be user-friendly, easy to navigate, and create a positive impression for visitors.</li>
+                <li>The design should be versatile to accommodate various content types and call-to-actions.</li>
+                </ul>
+                <strong>Ideal Skills:</strong>
+                <ul>
+                <li>Proven experience in website design, particularly for business-focused sites.</li>
+                <li>Ability to create designs that are both aesthetically pleasing and functional.</li>
+                <li>Understanding of user experience principles to create a layout that is easy and intuitive to use.</li>
+                </ul>
+            </div>
+          `,
         currency: "INR",
         budget_range: "10,000 - 15,000",
         highest_bid_amount: 8000,
@@ -34,6 +68,23 @@ export const dummy_projects = [
         title: "Online Music Blog Article Writer",
         description:
             "Content Writer with SEO Knowledge Required (Monthly Basis) Quote Your Desired Monthly Payout.This role requires a blend of creativity and technical expertise. The ideal candidate will be responsible for creating compelling, engaging, and optimized content for various platforms, including website, blog, social media, and email campaigns. This role requires a blend of creativity and technical expertise.This role requires a blend of creativity and technical expertise. The ideal candidate will be responsible for creating compelling, engaging, and optimized content for various platforms, including website, blog, social media, and email campaigns. This role requires a blend of creativity and technical expertise. ",
+        details: `
+            <div>
+                <p>I'm looking for a skilled designer to create a layout for my website that targets professionals and businesses.</p>
+                <strong>Key Points:</strong>
+                <ul>
+                <li>I need a professional and clean design that resonates with my target audience.</li>
+                <li>The layout should be user-friendly, easy to navigate, and create a positive impression for visitors.</li>
+                <li>The design should be versatile to accommodate various content types and call-to-actions.</li>
+                </ul>
+                <strong>Ideal Skills:</strong>
+                <ul>
+                <li>Proven experience in website design, particularly for business-focused sites.</li>
+                <li>Ability to create designs that are both aesthetically pleasing and functional.</li>
+                <li>Understanding of user experience principles to create a layout that is easy and intuitive to use.</li>
+                </ul>
+            </div>
+          `,
         currency: "INR",
         budget_range: "12,000 - 20,000",
         highest_bid_amount: 9700,
@@ -49,6 +100,23 @@ export const dummy_projects = [
         title: "Engaging Travel & Lifestyle Blog Content",
         description:
             "Content Writer with SEO Knowledge Required (Monthly Basis) Quote Your Desired Monthly Payout.This role requires a blend of creativity and technical expertise. The ideal candidate will be responsible for creating compelling, engaging, and optimized content for various platforms, including website, blog, social media, and email campaigns. This role requires a blend of creativity and technical expertise.This role requires a blend of creativity and technical expertise. The ideal candidate will be responsible for creating compelling, engaging, and optimized content for various platforms, including website, blog, social media, and email campaigns. This role requires a blend of creativity and technical expertise. ",
+        details: `
+            <div>
+              <p>I'm looking for a skilled designer to create a layout for my website that targets professionals and businesses.</p>
+              <strong>Key Points:</strong>
+              <ul>
+                <li>I need a professional and clean design that resonates with my target audience.</li>
+                <li>The layout should be user-friendly, easy to navigate, and create a positive impression for visitors.</li>
+                <li>The design should be versatile to accommodate various content types and call-to-actions.</li>
+              </ul>
+              <strong>Ideal Skills:</strong>
+              <ul>
+                <li>Proven experience in website design, particularly for business-focused sites.</li>
+                <li>Ability to create designs that are both aesthetically pleasing and functional.</li>
+                <li>Understanding of user experience principles to create a layout that is easy and intuitive to use.</li>
+              </ul>
+            </div>
+          `,
         currency: "INR",
         budget_range: "5,000 - 9,000",
         highest_bid_amount: 5700,
