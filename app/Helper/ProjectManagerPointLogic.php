@@ -64,7 +64,7 @@ class ProjectManagerPointLogic
             }elseif($criteriaId == 11){
                 $activity = 'First submission for project <a style="color:blue" href="'.route('projects.show',$project->id).'">'.$project->project_name. '</a> from client <a style="color:blue" href="'.route('clients.show', $project->client->id).'">'. $project->client->name. '</a> is made within 100 hours after the project started!';
             }elseif($criteriaId == 17){
-                $activity = 'You crossed '.$comparable_value.' billable hours for your hourly projects this week!';
+                // $activity = 'You crossed '.$comparable_value.' billable hours for your hourly projects this week!';
             }elseif($criteriaId == 19){
                 $activity = 'First submission for project <a style="color:blue" href="'.route('projects.show',$project->id).'">'.$project->project_name. '</a> from client <a style="color:blue" href="'.route('clients.show', $project->client->id).'">'. $project->client->name. '</a> is made within 100 hours after the project started!';
             }

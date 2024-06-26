@@ -44,7 +44,8 @@ class CheckBillableHoursWeekly extends Command
                 ->get();
             
             if($referenceProjectId = $projects->isNotEmpty() ? $projects->first()->id : null) {
-                ProjectManagerPointLogic::distribute(17, $referenceProjectId, (int) $projects->sum('times_sum_total_minutes') / 60);
+                $activity = 'You crossed '.(int) ($projects->sum('times_sum_total_minutes') / 60).' hours '.($projects->sum('times_sum_total_minutes') % 60).' minutes billable for your hourly projects this week!';
+                ProjectManagerPointLogic::distribute(17, $referenceProjectId, (int) $projects->sum('times_sum_total_minutes') / 60, null, $activity);
             }
         });
     }
