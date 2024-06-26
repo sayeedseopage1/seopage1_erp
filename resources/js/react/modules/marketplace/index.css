@@ -9,6 +9,7 @@
     --primary-gray: #ffffff33;
     --secondary-gray: #7C7A7A;
     --secondary-gray-2: #838383;
+    --secondary-gray-3: #B4B4B4;
     --light-gray: #DCDCDC;
     --primary-black: #000;
     --primary-red: #F66;
@@ -42,4 +43,13 @@ p {
 .sp1_marketplace_section_wrapper {
     background-color: var(--light-blue);
     padding: 20px 29px;
+}
+
+.sp1_marketplace_default_text {
+    color: var(--primary-black);
+    font-family: 'Poppins', sans-serif;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
 }

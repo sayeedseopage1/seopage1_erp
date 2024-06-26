@@ -4,6 +4,12 @@
     gap: 20px;
 }
 
+.p_d_content_left {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
 .p_d_title_wrapper {
     display: flex;
     align-items: center;
@@ -18,4 +24,47 @@
     font-weight: 600;
     line-height: normal;
     margin-bottom: 16px;
+}
+
+.p_d_wrapper {
+    color: var(--primary-black);
+    font-size: 16px;
+    font-style: normal;
+    line-height: 28px;
+}
+
+.p_d_skills_wrapper {
+    margin-top: 30px;
+}
+
+.p_d_skills_contents {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+    gap: 21px;
+}
+
+.p_d_skill {
+    min-width: 66px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 26px;
+    border: 1px solid var(--secondary-gray-3);
+    padding: 6px 8px;
+}
+
+.p_d_footer_wrapper {
+    margin-top: 30px;
+}
+
+.p_d_report_btn {
+    background-color: transparent;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+    border: none;
+    padding: 0;
 }
