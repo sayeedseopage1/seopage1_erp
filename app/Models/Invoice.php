@@ -154,7 +154,7 @@ class Invoice extends BaseModel
                     $activity = 'You billed '.$totalHours.' hours for your hourly project <a style="color:blue" href="'.route('projects.show',$project->id).'">'.$project->project_name. '</a> from client <a style="color:blue" href="'.route('clients.show', $project->client->id).'">'. $project->client->name. '</a> this week!';
 
                     // Project Manager Point Distribution ( Billed amount every week )
-                    ProjectManagerPointLogic::distribute(18, $item->project_id, 1, ($item->total/100) * Factor::find(45)->points);
+                    ProjectManagerPointLogic::distribute(18, $item->project_id, 1, ($item->total/100) * Factor::find(45)->points, $activity);
                 }
             }
         });

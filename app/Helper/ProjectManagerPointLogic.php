@@ -72,7 +72,7 @@ class ProjectManagerPointLogic
             CashPoint::create([
                 'user_id' => $project->pm_id,
                 'project_id' => $projectId,
-                'activity' => $activity,
+                'activity' => $activity??'N/A',
                 'gained_as' => 'Individual',
                 'points' => abs($earned_points),
                 'total_points_earn' => $earned_points > 0 ? $earned_points : 0,
