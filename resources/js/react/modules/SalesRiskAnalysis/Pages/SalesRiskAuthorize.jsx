@@ -107,7 +107,7 @@ const SalesRiskAuthorize = () => {
     }, [data?.data, isLoading]);
 
     // project extend images Api call
-    const [saleRiskAnalysisActionHandler, { isLoading: isActionLoading }] =
+    const [saleRiskAnalysisActionHandler, { isLoading: isActionLoading , isSuccess }] =
         useSaleRiskAnalysisActionsMutation();
 
     // handle authorize and deny
@@ -693,7 +693,7 @@ const SalesRiskAuthorize = () => {
                     closeModal={handleCloseSaleRiskActionModal}
                     statusActionData={statusActionData}
                     handleStatusUpdate={handleAuthorize}
-                    isLoading={isActionLoading}
+                    isLoading={isActionLoading || isSuccess}
                     isInputShow={true}
                     setInputValue={setAuthorizeComment}
                     modalContent={{

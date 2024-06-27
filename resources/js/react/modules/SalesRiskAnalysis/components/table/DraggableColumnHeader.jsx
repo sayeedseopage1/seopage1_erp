@@ -66,6 +66,12 @@ export const DraggableColumnHeader = ({
 
     drag(drop(dropRef));
 
+    const columnStyles = {
+        id: { minWidth: "50px", width: "50px", maxWidth: "50px" },
+        authorized_by: { minWidth: "170px", width: "170px", maxWidth: "170px" },
+    };
+
+    const columnStyle = columnStyles[column.id] || {};
     return (
         <th
             ref={dropRef}
@@ -76,9 +82,7 @@ export const DraggableColumnHeader = ({
                     isOver && (column.id !== "expend" || column.id !== "action")
                         ? "#f3f3f3"
                         : "",
-                minWidth: column.id === "id" && "50px",
-                width: column.id === "id" && "50px",
-                maxWidth: column.id === "id" && "50px",
+                ...columnStyle,
             }}
             className={`sp1_tasks_th sp1_tasks_th--${column.id} ${className}`}
             {...props}
