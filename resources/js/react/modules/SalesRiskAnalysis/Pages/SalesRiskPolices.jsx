@@ -98,7 +98,7 @@ const SalesRiskPolices = () => {
         isQuestionTypeLoading,
         questionFiledRefetch,
         questionsAnswerType,
-        policies
+        policies,
     } = useContext(SalesRiskAnalysisContext);
     const { settings } = useSelector((state) => state.saleRiskAnalysis);
     const { departments } = useSelector((state) => state.filterOptions);
@@ -248,7 +248,7 @@ const SalesRiskPolices = () => {
                             ),
                             comment:
                                 singlePolicyDataAll?.data?.data[0]?.comment,
-                            key: value,
+                            [name]: value,
                         });
                         setNewPolicyData({
                             ...newPolicyData,
@@ -274,8 +274,22 @@ const SalesRiskPolices = () => {
                             ),
                             [name]: value,
                         });
+                        setNewPolicyMainDetails({
+                            ...newPolicyMainDetails,
+                            [name]: value,
+                        });
                     }
-                    setIsPolicyUpdating(true);
+
+                    // this will check if add policy button is enabled or not, if enabled then it will not update the policy
+                    // if not enabled then it will update the policy
+                    const checkIsAddPolicyButtonEnabled = settings?.find(
+                        (setting) =>
+                            setting?.name === "enable_add_policy_button"
+                    )?.value;
+
+                    if (!checkIsAddPolicyButtonEnabled) {
+                        setIsPolicyUpdating(true);
+                    }
                 } else {
                     setNewPolicyData({
                         ...newPolicyData,

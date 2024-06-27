@@ -136,7 +136,7 @@ const AddNewPolicyModal = ({
                             </ModalSelectContainer>
                             {newPolicyDataValidation?.key && (
                                 <p className="text-danger">
-                                    Rule key is required
+                                    Policy key is required
                                 </p>
                             )}
                         </div>

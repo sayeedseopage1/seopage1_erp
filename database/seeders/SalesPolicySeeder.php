@@ -128,7 +128,7 @@ class SalesPolicySeeder extends Seeder
                 "sequence" => 1,
                 "comment" => "",
             ],
-            [
+            /* [
                 "id" => 9,
                 "title" => "Less Than 50%",
                 "parent_id" => 7,
@@ -169,7 +169,7 @@ class SalesPolicySeeder extends Seeder
                 "status" => "1",
                 "sequence" => 4,
                 "comment" => "",
-            ],
+            ], */
             [
                 "id" => 12,
                 "title" => "Client issue theat",

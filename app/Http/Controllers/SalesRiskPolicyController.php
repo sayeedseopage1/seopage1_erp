@@ -280,6 +280,7 @@ class SalesRiskPolicyController extends AccountBaseController
 
     function ruleList(Request $req)
     {
+
         if (auth()->user()->role_id != 1) /* admin*/ {
             abort_403(user()->permission('manage_company_setting') !== 'all');
         }
@@ -287,23 +288,22 @@ class SalesRiskPolicyController extends AccountBaseController
         try {
             if ($req->policy_id) {
                 // check if policy is parent or not
-                if (SalesRiskPolicy::findOrFail($req->policy_id)->parent_id == null) {
+                $policy = SalesRiskPolicy::find($req->policy_id);
+                if ($policy && $policy->parent_id == null) {
 
-                    $data = SalesRiskPolicy::where('id', $req->policy_id)->get()->map(function ($item) {
-                        return [
-                            'id' => $item->id,
-                            'title' => $item->title,
-                            'key' => $item->key,
-                            'ruleList' => SalesRiskPolicy::where('parent_id', $item->id)->orderBy('sequence')->get(['id', 'title',  'type', 'parent_id', 'value_type', 'value', 'points', 'status', 'comment']),
-                            'department' => [
-                                'id' => $item->department,
-                                'name' => Team::with('childs')->find($item->department)->team_name
-                            ],
-                            'status' => $item->status,
-                            'comment' => $item->comment,
-                            'questionCount' => SalesPolicyQuestion::parent()->where('policy_id', $item->id)->count()
-                        ];
-                    });
+                    $data = [
+                        'id' => $policy->id,
+                        'title' => $policy->title,
+                        'key' => $policy->key,
+                        'ruleList' => SalesRiskPolicy::where('parent_id', $policy->id)->orderBy('sequence')->get(['id', 'title',  'type', 'parent_id', 'value_type', 'value', 'points', 'status', 'comment']),
+                        'department' => [
+                            'id' => $policy->department,
+                            'name' => Team::with('childs')->find($policy->department)->team_name
+                        ],
+                        'status' => $policy->status,
+                        'comment' => $policy->comment,
+                        'questionCount' => SalesPolicyQuestion::parent()->where('policy_id', $policy->id)->count()
+                    ];
 
                     return response()->json(['status' => 'success', 'data' => $data]);
                 } else {
@@ -365,7 +365,7 @@ class SalesRiskPolicyController extends AccountBaseController
 
             return response()->json(['data' => $data]);
         } catch (\Throwable $th) {
-            //throw $th;
+            // throw $th;
             return response()->json([
                 'status' => 'error',
                 'message' => 'Application error'
@@ -385,18 +385,20 @@ class SalesRiskPolicyController extends AccountBaseController
 
         try {
             $policy = SalesRiskPolicy::findOrFail($id);
+            $policy->status = $status;
+            $policy->save();
 
-            // if parent id is not null
-            if ($policy->parent_id) {
-                $policy->status = $status;
+            // if policy parent
+            if ($policy->parent_id == null)
+                SalesRiskPolicy::where('parent_id', $id)->update(['status' => $status]);
+            else if ($status == 1) {
+                $count = SalesRiskPolicy::where(['parent_id' => $policy->parent_id, 'status' => '1'])->count();
+                if ($count > 0) SalesRiskPolicy::whereId($policy->parent_id)->update(['status' => '1']);
             } else {
-                SalesRiskPolicy::where('parent_id', $id)->update([
-                    'status' => $status
-                ]);
-                $policy->status = $status;
+                $count = SalesRiskPolicy::where('parent_id', $policy->parent_id)->where('status', '1')->count();
+                if ($count == 0) SalesRiskPolicy::whereId($policy->parent_id)->update(['status' => '0']);
             }
 
-            $policy->save();
             return response()->json(['status' => 'success', 'message' => 'Policy status changed.']);
         } catch (\Throwable $th) {
             // throw $th;
@@ -491,7 +493,7 @@ class SalesRiskPolicyController extends AccountBaseController
         if (auth()->user()->role_id != 1) /* admin*/ {
             abort_403(user()->permission('manage_company_setting') !== 'all');
         }
-        
+
         $validator = Validator::make($req->all(), [
             'title' => 'required',
             'key' => 'required|in:' . implode(',', array_keys(SalesRiskPolicy::$keys)),
@@ -665,35 +667,54 @@ class SalesRiskPolicyController extends AccountBaseController
 
     function renderQuestionList(Request $req)
     {
-        $deal = Deal::find($req->session()->get('deal_id'));
-        $dealStage = DealStage::where('lead_id', $deal->lead->id)->first();
+        try {
+            $deal = Deal::find($req->session()->get('deal_id'));
+            $dealStage = DealStage::where('lead_id', $deal->lead->id)->first();
 
-        $data = SalesPolicyQuestion::parent()
-            ->where(function ($query) use ($dealStage) {
-                // excluding weekend question on Saturday and Sunday deal's
-                if (!in_array(Carbon::parse($dealStage->updated_at)->format('D'), ['Sat', 'Sun'])) $query->whereNot('key', 'availableWeekend');
-            })
-            ->get()->filter(fn ($item) => SalesRiskPolicy::find($item->policy_id)->status)
-            ->map(function ($item) {
-                $data = [
-                    'id' => $item->id,
-                    'title' => $item->title,
-                    'key' => $item->key,
-                    'type' => $item->type,
-                    'value' => json_decode($item->value) ? json_decode($item->value) : $item->value,
-                    'placeholder' => $item->placeholder,
-                    'parent_id' => $item->parent_id,
-                    'policy_id' => $item->policy_id,
-                    'policy_title' => SalesRiskPolicy::find($item->policy_id)->title,
-                    'comment' => $item->comment,
-                    'questions' => self::questionListChild($item->id)
-                ];
-                return $data;
-            })->toArray();
+            $data = SalesPolicyQuestion::parent()
+                ->where(function ($query) use ($dealStage) {
+                    // excluding weekend question except Saturday and Sunday deal's
+                    if (!in_array(Carbon::parse($dealStage->updated_at)->format('D'), ['Sat', 'Sun']))
+                        $query->whereNot('key', 'availableWeekend');
+                    else if (Carbon::parse($dealStage->updated_at)->format('D') == 'Fri' && Carbon::parse($dealStage->updated_at)->format('H') < 17)
+                        $query->whereNot('key', 'availableWeekend');
+                })
+                ->get()
+                ->filter(fn ($item) => SalesRiskPolicy::find($item->policy_id)->status)
+                ->filter(function ($item) {
+                    if ($item->key == 'yesNoRules')
+                        return SalesRiskPolicy::find($item->value)->status;
+                    else
+                        return true;
+                })
+                ->map(function ($item) {
 
-        $currency = Currency::find($deal->original_currency_id);
+                    // check if rule is enable
+                    if ($item->key == 'yesNoRules' && SalesRiskPolicy::find($item->value)->status == 0) return;
 
-        return response()->json(['status' => 'success', 'data' => ['questionList' => array_values($data), 'currency' => [$currency->currency_code, $currency->currency_name, $currency->currency_symbol]]]);
+                    $data = [
+                        'id' => $item->id,
+                        'title' => $item->title,
+                        'key' => $item->key,
+                        'type' => $item->type,
+                        'value' => json_decode($item->value) ? json_decode($item->value) : $item->value,
+                        'placeholder' => $item->placeholder,
+                        'parent_id' => $item->parent_id,
+                        'policy_id' => $item->policy_id,
+                        'policy_title' => SalesRiskPolicy::find($item->policy_id)->title,
+                        'comment' => $item->comment,
+                        'questions' => self::questionListChild($item->id)
+                    ];
+                    return $data;
+                })->toArray();
+
+            $currency = Currency::find($deal->original_currency_id);
+
+            return response()->json(['status' => 'success', 'data' => ['questionList' => array_values($data), 'currency' => [$currency->currency_code, $currency->currency_name, $currency->currency_symbol]]]);
+        } catch (\Throwable $th) {
+            // throw $th;
+            return response()->json(['status' => 'error', 'message' => $th->getMessage(), 'code' => $th->getLine()]);
+        }
     }
 
     function questionValueSave(Request $req)
@@ -772,7 +793,7 @@ class SalesRiskPolicyController extends AccountBaseController
             // if error then delete previous records
             PolicyQuestionValue::where('deal_id', $dealId)->delete();
 
-            // throw $th;
+            throw $th;
             return response()->json(['status' => 'error', 'message' => 'Data did not stored successfully.'], 500);
         }
     }
@@ -1085,8 +1106,7 @@ class SalesRiskPolicyController extends AccountBaseController
                     $data[] = ['id' => $questions[1]->id, 'title' => $questions[1]->title, 'value' => $value, 'parent_id' => $questions[1]->parent_id];
                     $policyIdList[$policy[1]->id] = $value;
 
-                    if (isset($questions[2]) && isset($questionAns[$questions[2]->id]))
-                    {
+                    if (isset($questions[2]) && isset($questionAns[$questions[2]->id])) {
                         $value = $questionAns[$questions[2]->id];
                         $data[] = ['id' => $questions[2]->id, 'title' => $questions[2]->title, 'value' => $value, 'parent_id' => $questions[1]->parent_id];
                     }
@@ -1142,6 +1162,8 @@ class SalesRiskPolicyController extends AccountBaseController
             $questions = SalesPolicyQuestion::where('key', 'yesNoRules')->get();
             foreach ((object) $questions as $key => $item) {
                 // $rule_id = json_decode($item->value)->rule_id;
+                if (!isset($questionAns[$item->id])) continue;
+
                 $rule = SalesRiskPolicy::where('id', $item->value)->first();
                 $value = $questionAns[$item->id];
 
@@ -1312,7 +1334,7 @@ class SalesRiskPolicyController extends AccountBaseController
 
             return $calculationData;
         } catch (\Throwable $th) {
-            // throw $th;
+            throw $th;
             return ['points' => null, 'error' => $th->getMessage()];
         }
     }
@@ -1477,11 +1499,11 @@ class SalesRiskPolicyController extends AccountBaseController
                 COUNT(IF( sale_analysis_status IN ('authorized', 'auto-authorized'), 1, null)) as authorized,
                 COUNT(IF( sale_analysis_status = 'denied', 1, null)) as denied"
             ))->leftJoin('policy_question_values as pqv', 'pqv.deal_id', 'deals.id')
-            ->whereIn('sale_analysis_status', ['analysis', 'authorized', 'auto-authorized', 'denied'])
-            ->where(function ($query) use ($req){
-                if (!in_array(auth()->user()->role_id, [1, 8])) $query->where('submitted_by', auth()->user()->id);
-                if ($req->client_id) $query->where('client_id', $req->client_id);
-            })->whereBetween('deals.created_at', [$req->start_date, $req->end_date])->first();
+                ->whereIn('sale_analysis_status', ['analysis', 'authorized', 'auto-authorized', 'denied'])
+                ->where(function ($query) use ($req) {
+                    if (!in_array(auth()->user()->role_id, [1, 8])) $query->where('submitted_by', auth()->user()->id);
+                    if ($req->client_id) $query->where('client_id', $req->client_id);
+                })->whereBetween('deals.created_at', [$req->start_date, $req->end_date])->first();
 
             $extra = collect(['counts' => $counts]);
             $data = $extra->merge($data);
@@ -1521,12 +1543,10 @@ class SalesRiskPolicyController extends AccountBaseController
                 $deal->authorization_status = 2;
                 $deal->released_at = Carbon::now();
                 event(new SalesPolicyEvent('sales_lead_authorization', $deal));
-            }
-            else event(new SalesPolicyEvent('pending_large_from_submission', $deal));
+            } else event(new SalesPolicyEvent('pending_large_from_submission', $deal));
 
             // pending action post update
             event(new SalesPolicyEvent('sales_risk_authorization', $deal, ['past' => 'accept']));
-
         } elseif ($status == '0') {
             $deal->sale_analysis_status = 'denied';
 
