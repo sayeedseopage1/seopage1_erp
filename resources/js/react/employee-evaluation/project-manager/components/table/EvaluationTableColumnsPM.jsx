@@ -10,6 +10,7 @@ import Person from "../../../components/Table/Person";
 import ActionEvaluationTablePM from "./ActionEvaluationTablePM";
 import AssignedTasksData from "../../../components/Table/AssignedTasksData";
 import SubmittedTasksData from "../../../components/Table/SubmittedTasksData";
+import EvaluationRoundHistoryModalPM from "../modal/EvaluationRoundHistoryModalPM";
 
 export const EvaluationTableColumnsPM = [
     {
@@ -77,7 +78,7 @@ export const EvaluationTableColumnsPM = [
         accessorKey: "round_requied",
         cell: ({ row }) => {
             const data = row.original;
-            return <EvaluationRoundHistoryModal data={data} />;
+            return <EvaluationRoundHistoryModalPM data={data} />;
         },
     },
     {
