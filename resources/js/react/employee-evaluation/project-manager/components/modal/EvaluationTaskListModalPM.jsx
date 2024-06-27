@@ -423,7 +423,11 @@ const EvaluationTaskListModalPM = ({
                         <span>Cumulative Average:</span>
                         <span>
                             {" "}
-                            {Number(cumulativeAverage)?.toFixed(2) ?? 0}
+                            {Number(
+                                cumulativeAverage === NaN
+                                    ? 0
+                                    : cumulativeAverage
+                            )?.toFixed(2) ?? 0}
                             {console.log("cumulative avg", cumulativeAverage)}
                         </span>
                     </span>

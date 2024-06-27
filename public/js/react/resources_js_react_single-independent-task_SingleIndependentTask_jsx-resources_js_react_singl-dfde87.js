@@ -15255,7 +15255,7 @@ var MarkAsComplete = function MarkAsComplete(_ref) {
                     className: "fa-solid fa-circle-plus"
                   }), "Add Another Link"]
                 })]
-              }), auth.roleId === 14 && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_13__.jsxs)("div", {
+              }), _includes([14, 15, 16, 17], Number(auth.roleId)) && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_13__.jsxs)("div", {
                 className: "form-group",
                 children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_13__.jsxs)("label", {
                   htmlFor: "exampleFormControlInput1",
