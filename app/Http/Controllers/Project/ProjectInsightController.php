@@ -18,7 +18,7 @@ class ProjectInsightController extends Controller
 
         return response()->json([
             'code' => 200,
-            'data' => $data
+            'data' => $data??[]
         ]);
     }
 
@@ -70,7 +70,7 @@ class ProjectInsightController extends Controller
 
         return response()->json([
             'code' => 200,
-            'data' => $data
+            'data' => $data??[]
         ]);
     }
 
@@ -78,7 +78,7 @@ class ProjectInsightController extends Controller
     {
         return response()->json([
             'code' => 200,
-            'data' => ProjectDeadlineExtension::where('project_id',$project_id)->where('status', 1)->first()
+            'data' => ProjectDeadlineExtension::where('project_id',$project_id)->where('status', 1)->first()??[]
         ]);
     }
 }
