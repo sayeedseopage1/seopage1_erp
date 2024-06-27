@@ -1,0 +1,57 @@
+.list_of_milestones_page_wrapper {
+    border-radius: 9px;
+    border: 1px solid var(--light-blue-2);
+}
+
+.list_of_milestones_header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 35px;
+}
+
+.list_of_milestones_table_wrapper {
+    padding: 27px;
+    background-color: var(--primary-white);
+    border-radius: 9px;
+    border: 1px solid var(--light-blue-2);
+}
+
+.table-row-odd {
+    background-color: #E8F4FC;
+}
+
+.list_of_milestones_btn_wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+}
+
+.list_of_milestones_btn {
+    background-color: var(--primary-blue);
+    padding: 11px 22px;
+    border: 1px solid var(--primary-blue);
+    color: var(--primary-white);
+}
+
+.list_of_milestones_btn_outline {
+    background-color: var(--primary-white);
+    padding: 11px 22px;
+    border: 1px solid var(--primary-blue);
+    color: var(--primary-blue);
+}
+
+.list_of_milestones_show_pages_select {
+    margin-top: 24px;
+}
+
+.list_of_milestones_show_pages_select .ant-select-selector {
+    border-radius: 0 !important;
+    border: 1px solid var(--primary-blue) !important;
+    color: var(--primary-white) !important;
+    padding: 11px 22px !important;
+}
+
+.list_of_milestones_show_pages_select .ant-select-arrow {
+    color: var(--primary-white) !important;
+}

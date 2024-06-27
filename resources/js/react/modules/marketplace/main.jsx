@@ -8,6 +8,7 @@ import { store } from "../../services/store";
 import './index.css';
 import FreelancerMessage from "./pages/message/FreelancerMessage";
 import FreelancerProjects from "./pages/freelancerProjects/FreelancerProjects";
+import ListOfMileStones from "./pages/listOfMilestones/ListOfMileStones";
 
 const Content = () => {
     return (
@@ -51,7 +52,7 @@ const marketPlaceRoutes = [
         id: 5,
         rootId: 'marketplaceMilestones',
         path: 'marketeplace-milestones',
-        element: <h2>Marketplace Milestones</h2>,
+        element: <ListOfMileStones />,
         contextProvider: React.Fragment
     },
     {
