@@ -38,7 +38,8 @@ const TextLoaderDynamic = ({
                     />
                 </Switch.Case>
                 <Switch.Case condition={number > 1}>
-                    {[...Array(number)].map((placeholder, index) => {
+                    {[...Array(number)].map((_, index) => {
+                        const uniqueKey = `placeholder-${index}`;
                         const isFullSize = index < fullSizeCount;
                         const isLast = index === number - 1;
                         const getWidth = (() => {
@@ -56,7 +57,7 @@ const TextLoaderDynamic = ({
                         return (
                             <Placeholder
                                 className={className}
-                                key={placeholder}
+                                key={uniqueKey}
                                 width={`${getWidth}%`}
                                 height={height}
                             />

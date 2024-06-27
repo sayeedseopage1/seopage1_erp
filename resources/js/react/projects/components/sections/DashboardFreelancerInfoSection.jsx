@@ -27,7 +27,7 @@ import TextLoaderDynamic from "../loader/TextLoaderDynamic";
  */
 
 const DashboardFreelancerInfoSection = ({ projectData, isLoading }) => {
-    const dealInfo = projectData?.projectData?.project?.deal;
+    const dealInfo = projectData?.deal;
     return (
         <div className={`${style.dashboardFreelancerInfoSection} mb-4`}>
             <Switch>

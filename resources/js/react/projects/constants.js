@@ -1013,17 +1013,19 @@ export const ProjectBudgetData = {
         {
             id: 1,
             title: "Project Budget",
-            price: "1000",
-            currency: "USD",
-            currency_symbol: "$",
+            price: '',
+            currency: "",
+            currency_symbol: "",
+            key: "project_budget",
             icon: "/images/dollar-circle.png"
         },
         {
             id: 2,
             title: "Project Budget",
-            price: "650",
-            currency: "AUD",
-            currency_symbol: "AUD",
+            price: "",
+            currency: "",
+            currency_symbol: "",
+            key: "amount",
             icon: "/images/money-tick.png"
         }
     ],
@@ -1031,17 +1033,19 @@ export const ProjectBudgetData = {
         {
             id: 1,
             title: "Upsold Amount",
-            price: "200",
-            currency: "USD",
-            currency_symbol: "$",
+            price: "",
+            currency: "",
+            currency_symbol: "",
+            key: "upsell_amount",
             icon: "/images/dollar-circle.png"
         },
         {
             id: 2,
             title: "Upsold Amount",
-            price: "130",
-            currency: "AUD",
-            currency_symbol: "AUD",
+            price: "",
+            currency: "",
+            currency_symbol: "",
+            key: "upsell_actual_amount",
             icon: "/images/money-tick.png"
         }
     ],
@@ -1050,13 +1054,15 @@ export const ProjectBudgetData = {
             id: 1,
             title: "Estimated Time",
             time: "04:33 hour",
+            key: "estimate_time_in_hours",
             icon: "/images/timer.png"
         },
         {
             id: 2,
+            title: "Hours Logged",
             time: "04:33 hour",
+            key: "logged_time_in_hours",
             icon: "/images/timer.png",
-            title: "Hours Logged"
         },
 
     ],
@@ -1065,25 +1071,28 @@ export const ProjectBudgetData = {
         {
             id: 1,
             title: "Earning",
-            price: "800",
-            currency: "USD",
-            currency_symbol: "$",
+            price: "",
+            currency: "",
+            currency_symbol: "",
+            key: "earnings",
             icon: "/images/dollar-circle.png"
         },
         {
             id: 2,
             title: "Earning",
-            price: "200",
-            currency: "AUD",
-            currency_symbol: "AUD",
+            price: "",
+            currency: "",
+            currency_symbol: "",
+            key: "actual_earnings",
             icon: "/images/money-tick.png"
         },
         {
             id: 3,
             title: "Expenses",
-            price: "200",
-            currency: "USD",
-            currency_symbol: "$",
+            price: "",
+            currency: "",
+            currency_symbol: "",
+            key: "total_expenses",
             icon: "/images/dollar-circle.png"
         }
     ]

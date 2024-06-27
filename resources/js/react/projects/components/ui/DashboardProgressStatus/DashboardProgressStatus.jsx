@@ -12,7 +12,7 @@ const DashboardProgressStatus = ({ title, className = "", statusType }) => {
         const bgColor = ProjectProgressStatus.find(
             (status) => status.tag === statusType
         );
-        return bgColor.color || "#00B5FF";
+        return bgColor?.color || "#00B5FF";
     };
 
     return (

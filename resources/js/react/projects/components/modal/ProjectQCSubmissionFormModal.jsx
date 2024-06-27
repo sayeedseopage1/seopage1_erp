@@ -43,27 +43,30 @@ const payloadData = {
             uptime_monitoring: 1,
             final_backup: 1,
             slogan: 1,
-            admin_comment_qc: null,
+            admin_comment: null,
         },
     },
 };
-
-
 
 /**
  *  Project QC Submission Form Modal
  *  @param {boolean} isModalOpen - Modal Open State
  *  @param {function} closeModal - Close Modal Event Handler
+ *  @param {object} modalData - Modal Data
  *  @returns {JSX.Element}
- *  @description Project QC Submission Form Modal Component For Submit Project QC Form Data and Admin Comment 
- * 
+ *  @description Project QC Submission Form Modal Component For Submit Project QC Form Data and Admin Comment
+ *
  *  This modal will be used by Admin to submit the project QC form data and admin comment
  */
 
-const ProjectQCSubmissionFormModal = ({ isModalOpen, closeModal }) => {
-    const [modalData, setModalData] = useState(ProjectQualityControlDummyData);
+const ProjectQCSubmissionFormModal = ({
+    isModalOpen,
+    closeModal,
+    modalData,
+    isLoading,
+}) => {
+    const [qcSubmissionFormData, setQCSubmissionFormData] = useState(ProjectQualityControlDummyData);
     const [adminComment, setAdminComment] = useState("");
-    const [isLoading, setIsLoading] = useState(false);
     const [isSubmitting, setIsSubmitting] = useState(false);
 
     // Handle Admin Comment
@@ -72,9 +75,9 @@ const ProjectQCSubmissionFormModal = ({ isModalOpen, closeModal }) => {
         try {
             // TODO: Implement the API call to submit the admin comment
             await new Promise((resolve) => setTimeout(resolve, 2000));
-            setModalData({
+            setQCSubmissionFormData({
                 ...modalData,
-                admin_comment_qc: adminComment,
+                admin_comment: adminComment,
             });
             setIsSubmitting(false);
             toast.success("Project QC Authorized Successfully");
@@ -85,43 +88,18 @@ const ProjectQCSubmissionFormModal = ({ isModalOpen, closeModal }) => {
         }
     };
 
-    // Dummy Fetch Data
-    const dataPromise = new Promise((resolve, reject) => {
-        setTimeout(() => {
-            resolve(payloadData);
-        }, 5000);
-    });
-
-    // Fetch All Data Dummy
-    const fetchAllData = async () => {
-        setIsLoading(true);
-        try {
-            // TODO: Implement the API call to submit the admin comment
-            const res = await dataPromise;
-            const resData = res.data.qc_data;
-            const formatStep = (step) =>
-                step.map((item) => ({
-                    ...item,
-                    value: resData[item.key],
-                }));
-            setModalData({
-                stepOne: formatStep(modalData.stepOne),
-                stepTwo: formatStep(modalData.stepTwo),
-                admin_comment_qc: resData.admin_comment_qc,
-            });
-
-            setIsLoading(false);
-        } catch (error) {
-            console.log(error);
-        }
-    };
-
-    // Fetch Data
     useEffect(() => {
-        if (isModalOpen) {
-            fetchAllData();
-        }
-    }, [isModalOpen]);
+        const formatStep = (step) =>
+            step.map((item) => ({
+                ...item,
+                value: modalData[item.key],
+            }));
+        setQCSubmissionFormData({
+            stepOne: formatStep(qcSubmissionFormData.stepOne),
+            stepTwo: formatStep(qcSubmissionFormData.stepTwo),
+            admin_comment: modalData.admin_comment,
+        });
+    }, [modalData, isLoading]);
 
     // Reset Data
     const resetData = () => {
@@ -141,10 +119,13 @@ const ProjectQCSubmissionFormModal = ({ isModalOpen, closeModal }) => {
                 closeModal={closeModal}
                 className="customModalHeaderWithSticky"
             />
-            <ModalContentContainer className="px-0" style={{
-                height: "calc(85vh - 100px)",
-                overflowY: "auto",
-            }}>
+            <ModalContentContainer
+                className="px-0"
+                style={{
+                    height: "calc(85vh - 100px)",
+                    overflowY: "auto",
+                }}
+            >
                 <ModalContentContainer>
                     <div className="stepHeader">
                         <h3>
@@ -164,7 +145,7 @@ const ProjectQCSubmissionFormModal = ({ isModalOpen, closeModal }) => {
                                 </tr>
                             </thead>
                             <tbody>
-                                {modalData?.stepOne?.map((data) => (
+                                {qcSubmissionFormData?.stepOne?.map((data) => (
                                     <tr
                                         key={data.id}
                                         className="projectQCSModal"
@@ -232,7 +213,7 @@ const ProjectQCSubmissionFormModal = ({ isModalOpen, closeModal }) => {
                                 </tr>
                             </thead>
                             <tbody>
-                                {modalData?.stepTwo?.map((data) => (
+                                {qcSubmissionFormData?.stepTwo?.map((data) => (
                                     <tr
                                         key={data.id}
                                         className="projectQCSModal"
@@ -289,22 +270,22 @@ const ProjectQCSubmissionFormModal = ({ isModalOpen, closeModal }) => {
                 <ModalContentContainer>
                     <CustomTextArea
                         label={
-                            modalData.admin_comment_qc
+                            modalData.status === "accepted"
                                 ? "Admin Comment"
                                 : "Comments"
                         }
                         placeholder={"Write your comments here"}
                         name="admin_comment"
-                        value={modalData.admin_comment_qc}
+                        value={modalData.admin_comment}
                         onChange={(e) => {
                             setAdminComment(e.target.value);
                         }}
                         rows={6}
                         cols={50}
                         isDangerHtml={htmlTagRegex.test(
-                            modalData.admin_comment_qc
+                            modalData.admin_comment
                         )}
-                        isDisabled={modalData.admin_comment_qc ?? false}
+                        isDisabled={modalData.status === "accepted" ? true : false}
                     />
                 </ModalContentContainer>
                 {/* Buttons */}
@@ -312,7 +293,7 @@ const ProjectQCSubmissionFormModal = ({ isModalOpen, closeModal }) => {
                     <div className="modalButtonContainer">
                         <Switch>
                             <Switch.Case
-                                condition={!modalData.admin_comment_qc}
+                                condition={modalData.status !== "accepted"}
                             >
                                 <SingleButton
                                     label={
@@ -344,5 +325,6 @@ export default ProjectQCSubmissionFormModal;
 
 ProjectQCSubmissionFormModal.propTypes = {
     isModalOpen: PropTypes.bool,
-    closeModal: PropTypes.func
+    closeModal: PropTypes.func,
+    modalData: PropTypes.object,
 };

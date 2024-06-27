@@ -106,7 +106,19 @@ const projectApiSlice = apiSlice.injectEndpoints({
         getProjectDetails: build.query({
             query: (project_id) => `/account/project-details/${project_id}`
         }),
-
+        // get project taskList
+        getProjectTaskList: build.query({
+            query: (project_id) => `/account/project-tasks/${project_id}`
+        }),
+        // get project milestone
+        getProjectMilestone: build.query({
+            query: (project_id) => `/account/project-milestones/${project_id}`
+        }),
+        // get project pending extension History
+        getProjectPendingExtensionHistory: build.query({
+            query: (project_id) => `/account/project-pending-extension/${project_id}`,
+            providesTags: ["PROJECT_PENDING_EXTENSION_HISTORY"]
+        }),
     })
 });
 
@@ -126,6 +138,9 @@ export const {
     useGetPendingTaskAuthorizationConversationsQuery,
     useCreatePendingTaskAuthorizationConversationMutation,
     useUpdatePendingTaskAuthorizationConversationMutation,
-    useGetProjectDetailsQuery
+    useGetProjectDetailsQuery,
+    useGetProjectTaskListQuery,
+    useGetProjectMilestoneQuery,
+    useGetProjectPendingExtensionHistoryQuery
 } = projectApiSlice;
 

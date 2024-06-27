@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 import PropTypes from "prop-types";
 
 // style
@@ -15,8 +15,8 @@ import DashboardDataTable from "../Table/DashboardDataTable";
 import { DashboardDataTableTaskColumns } from "../Table/DashboardDataTableTaskColumns";
 import { DashboardDataTableMilestoneColumns } from "../Table/DashboardDataTableMilestoneColumns";
 
-// constants
-import { DashboardMileStoneTableData, DashboardTaskTableData } from "../../constants";
+// context
+import { ProjectDashboardContext } from "../../context/ProjectDashboardProvider";
 
 /**
  * Dashboard Task And Milestone Section
@@ -27,10 +27,20 @@ import { DashboardMileStoneTableData, DashboardTaskTableData } from "../../const
  * @description Dashboard Task And Milestone Section Component for showing task and milestone on the dashboard page.
  */
 
+const DashboardTaskAndMileStoneSection = () => {
+    const {
+        projectTaskList,
+        isProjectTaskListLoading,
+        refetchProjectTaskList,
+        projectMilestoneList,
+        isProjectMilestoneLoading,
+        refetchProjectMilestone,
+    } = useContext(ProjectDashboardContext);
 
-const DashboardTaskAndMileStoneSection = ({
-    isLoading
-}) => {
+
+    console.log(projectTaskList)
+    console.log(projectMilestoneList)
+
     return (
         <div className={`${style.dashboardTaskAndMileStoneSection} mb-4`}>
             <SectionContainer>
@@ -41,22 +51,25 @@ const DashboardTaskAndMileStoneSection = ({
                         <DashboardDataTable
                             tableColumns={DashboardDataTableTaskColumns}
                             tableName="Task List"
-                            tableData={DashboardTaskTableData}
-                            isLoading={isLoading}
+                            tableData={projectTaskList}
+                            isLoading={isProjectTaskListLoading}
                         />
                     </div>
                 </div>
             </SectionContainer>
             <SectionContainer>
-                <DashboardCardTitle title="Project Milestones" isBorderUse={false} />
+                <DashboardCardTitle
+                    title="Project Milestones"
+                    isBorderUse={false}
+                />
                 <div className="sp1_tlr_container">
                     <div className="sp1_tlr_tbl_container mx-0 py-3">
                         {/* Dashboard Project Milestones Table */}
                         <DashboardDataTable
                             tableColumns={DashboardDataTableMilestoneColumns}
                             tableName="Project Milestones"
-                            tableData={DashboardMileStoneTableData}
-                            isLoading={isLoading}
+                            tableData={projectMilestoneList}
+                            isLoading={isProjectMilestoneLoading}
                         />
                     </div>
                 </div>
@@ -67,6 +80,4 @@ const DashboardTaskAndMileStoneSection = ({
 
 export default DashboardTaskAndMileStoneSection;
 
-DashboardTaskAndMileStoneSection.propTypes = {
-    isLoading: PropTypes.bool,
-};
+DashboardTaskAndMileStoneSection.propTypes = {};

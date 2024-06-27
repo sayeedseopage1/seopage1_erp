@@ -17,8 +17,8 @@ import DashboardCardTitle from "../ui/DashboardCardTitle/DashboardCardTitle";
  * @returns {JSX.Element} - Rendered component
  * @description DashboardClientAndPMCard component for showing client and project manager info on the dashboard page.
  */
-const DashboardClientAndPMCard = ({ projectData, className = "" }) => {
-    const projectInfo = projectData?.projectData;
+const DashboardClientAndPMCard = ({ projectData, className = "", isProjectDetailsLoading }) => {
+   
     return (
         <>
             {/* Client Card */}
@@ -27,31 +27,31 @@ const DashboardClientAndPMCard = ({ projectData, className = "" }) => {
                 <div className="d-flex align-items-center py-4">
                     <div className="dashboardCardPersonImage">
                         <a
-                            href={`/account/clients/${projectInfo?.client?.client_id}`}
+                            href={`/account/clients/${projectData?.client?.id}`}
                         >
                             <PersonAvatar
-                                name={projectInfo?.client?.name}
-                                avatar={projectInfo?.client?.image_url}
+                                name={projectData?.client?.name}
+                                avatar={projectData?.client?.image_url}
                             />
                         </a>
                     </div>
                     <div className="d-flex flex-column ml-3">
                         <a
                             className="dashboardCardPersonName"
-                            href={`/account/clients/${projectInfo?.client?.client_id}`}
+                            href={`/account/clients/${projectData?.client?.id}`}
                         >
-                            {projectInfo?.client?.name}
+                            {projectData?.client?.name}
                         </a>
                         <div className="d-flex align-items-center dashboardCardPersonCountry">
                             <img
                                 src={`/flags/4x3/${
-                                    projectInfo?.client?.country?.iso || "BD"
+                                    projectData?.client?.country?.iso || "BD"
                                 }.svg`}
                                 alt="client country flag"
                                 className="mr-1"
                             />
                             <span>
-                                {projectInfo?.client?.country?.nicename}
+                                {projectData?.client?.country?.nicename}
                             </span>
                         </div>
                     </div>
@@ -67,31 +67,31 @@ const DashboardClientAndPMCard = ({ projectData, className = "" }) => {
                 <div className="d-flex align-items-center py-4">
                     <div className="dashboardCardPersonImage">
                         <a
-                            href={`/account/employees/${projectInfo?.pm?.pm_id}`}
+                            href={`/account/employees/${projectData?.pm?.id}`}
                         >
                             <PersonAvatar
-                                name={projectInfo?.pm?.name}
-                                avatar={projectInfo?.pm?.image_url}
+                                name={projectData?.pm?.name}
+                                avatar={projectData?.pm?.image_url}
                             />
                         </a>
                     </div>
                     <div className="d-flex flex-column ml-3">
                         <a
                             className="dashboardCardPersonName"
-                            href={`/account/employees/${projectInfo?.pm?.client_id}`}
+                            href={`/account/employees/${projectData?.pm?.id}`}
                         >
-                            {projectInfo?.pm?.name}
+                            {projectData?.pm?.name}
                         </a>
                         <div className="d-flex align-items-center dashboardCardPersonCountry">
                             <img
                                 src={`/flags/4x3/${
-                                    projectInfo?.pm?.country?.iso || "BD"
+                                    projectData?.pm?.country?.iso || "BD"
                                 }.svg`}
                                 alt="pm country flag"
                                 className="mr-1"
                             />
                             <span>
-                                {projectInfo?.client?.country?.nicename}
+                                {projectData?.client?.country?.nicename}
                             </span>
                         </div>
                     </div>
@@ -107,4 +107,5 @@ export default DashboardClientAndPMCard;
 DashboardClientAndPMCard.propTypes = {
     projectData: PropTypes.object.isRequired,
     className: PropTypes.string,
+    isProjectDetailsLoading: PropTypes.bool,
 };

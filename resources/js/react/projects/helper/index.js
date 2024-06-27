@@ -3,7 +3,7 @@ const urlPattern = /(?:https?:\/\/[\w-]+(?:\.[\w-]+)+(?:[\w.,@?^=%&:/~+#-]*[\w@?
 export function formatHttp(text) {
   const formattedText = text?.replace(urlPattern, (url) => {
 
-    if (!/<a\s+href\s*=\s*(?:(['"])(?:.*?)\1|([^\s>]+))(?=[^>]*?>)/i.test(url)){
+    if (!/<a\s+href\s*=\s*(?:(['"])(?:.*?)\1|([^\s>]+))(?=[^>]*?>)/i.test(url)) {
       return `<a href="${url}" target="_blank">${url}</a>`;
     }
     return url;
@@ -37,3 +37,12 @@ export const handleLoadingComponent = (isLoading, loadingComponent, renderDataCo
 
 
 export const htmlTagRegex = /<\/?[a-z][\s\S]*>/i;
+
+
+export const extractMessageLink = (message) => {
+  if (message) {
+    return message.split('<br>').map(link => link.trim()).filter(link => link.length > 0);
+  } else {
+    return []
+  }
+}

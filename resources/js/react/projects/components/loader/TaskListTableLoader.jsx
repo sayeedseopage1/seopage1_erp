@@ -19,7 +19,7 @@ export default function TaskListTableLoader({ prevItemLength = 7, tableCol }) {
             </td>
             {tableCol.slice(0, tableCol?.length - 1).map((placeholder) => {
                 return (
-                    <td key={placeholder} className="sp1_tasks_td">
+                    <td key={placeholder?.id} className="sp1_tasks_td">
                         <div className="d-flex align-items-center justify-content-center">
                             <Placeholder
                                 width="80px"

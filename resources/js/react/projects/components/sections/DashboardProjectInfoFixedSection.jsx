@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 
 // UI Components - Custom
@@ -28,21 +28,157 @@ import style from "./styles/dashboardProjectInfoFixedSection.module.css";
  *
  */
 
-const DashboardProjectInfoFixedSection = ({ projectData }) => {
+const DashboardProjectInfoFixedSection = ({
+    projectData,
+    isProjectDetailsLoading,
+}) => {
+    const [projectBudgetData, setProjectBudgetData] =
+        useState(ProjectBudgetData);
+
+    useEffect(() => {
+        if (projectData && !isProjectDetailsLoading) {
+            const updateProjectBudget = projectBudgetData.project_budget.map(
+                (budget) => {
+                    if (budget.key === "project_budget") {
+                        return {
+                            ...budget,
+                            price: projectData?.project_budget,
+                            currency: projectData?.currency?.currency_code,
+                            currency_symbol:
+                                projectData?.currency?.currency_symbol,
+                        };
+                    } else if (budget.key === "amount") {
+                        return {
+                            ...budget,
+                            price: Number(projectData?.deal.amount).toFixed(2),
+                            currency:
+                                projectData?.deal?.original_currency
+                                    .currency_code,
+                            currency_symbol:
+                                projectData?.deal?.original_currency
+                                    ?.currency_symbol,
+                        };
+                    }
+                }
+            );
+
+            const earningExpenses = projectBudgetData.earning_expenses.map(
+                (budget) => {
+                    if (budget.key === "earnings") {
+                        return {
+                            ...budget,
+                            price: projectData?.earnings,
+                            currency: projectData?.currency?.currency_code,
+                            currency_symbol:
+                                projectData?.currency?.currency_symbol,
+                        };
+                    } else if (budget.key === "actual_earnings") {
+                        return {
+                            ...budget,
+                            price: projectData?.actual_earnings,
+                            currency:
+                                projectData?.deal?.original_currency
+                                    ?.currency_code,
+                            currency_symbol:
+                                projectData?.deal?.original_currency
+                                    ?.currency_symbol,
+                        };
+                    } else if (budget.key === "total_expenses") {
+                        return {
+                            ...budget,
+                            price: projectData?.total_expenses,
+                            currency: projectData?.currency?.currency_code,
+                            currency_symbol:
+                                projectData?.currency?.currency_symbol,
+                        };
+                    }
+                }
+            );
+
+            const updateUpsoldAmount = projectBudgetData.upsold_amount.map(
+                (budget) => {
+                    if (budget.key === "upsell_amount") {
+                        return {
+                            ...budget,
+                            price: projectData?.deal?.upsell_amount,
+                            currency: projectData?.currency?.currency_code,
+                            currency_symbol:
+                                projectData?.currency?.currency_symbol,
+                        };
+                    } else if (budget.key === "upsell_actual_amount") {
+                        return {
+                            ...budget,
+                            price: projectData?.deal?.upsell_actual_amount,
+                            currency:
+                                projectData?.deal?.original_currency
+                                    ?.currency_code,
+                            currency_symbol:
+                                projectData?.deal?.original_currency
+                                    ?.currency_symbol,
+                        };
+                    }
+                }
+            );
+
+            const hoursLogged = projectBudgetData.hours_logged.map(
+                (logInfo) => {
+                    if (logInfo.key === "estimate_time_in_hours") {
+                        return {
+                            ...logInfo,
+                            time: `${projectData?.estimate_time_in_hours} Hours`,
+                        };
+                    } else if (logInfo.key === "logged_time_in_hours") {
+                        let totalTime;
+
+                        if (projectData?.logged_time_in_hours > 0) {
+                            if (
+                                projectData?.additional_logged_time_in_minutes >
+                                24
+                            ) {
+                                totalTime = `${projectData?.logged_time_in_hours} Hours ${projectData?.additional_logged_time_in_minutes} Minutes`;
+                            }
+                            totalTime = `${projectData?.logged_time_in_hours} Hours`;
+                        }
+
+                        return {
+                            ...logInfo,
+                            time: totalTime,
+                        };
+                    }
+                }
+            );
+
+            setProjectBudgetData({
+                ...projectBudgetData,
+                project_budget: updateProjectBudget,
+                earning_expenses: earningExpenses,
+                upsold_amount: updateUpsoldAmount,
+                hours_logged: hoursLogged,
+            });
+        }
+    }, [projectData, isProjectDetailsLoading, ProjectBudgetData]);
+
     return (
         <SectionWrapper className="my-4 row m-0">
             {/* Client And PM Card */}
             <div
                 className={`d-flex flex-column justify-content-between  px-0 ${style.clientInfoCard}`}
             >
-                <DashboardClientAndPMCard projectData={projectData} />
+                <DashboardClientAndPMCard
+                    projectData={projectData}
+                    isProjectDetailsLoading={isProjectDetailsLoading}
+                />
             </div>
             {/* End Client And PM Card */}
             {/* Project Progress */}
             <div
                 className={`d-flex  px-0 px-md-3 my-4 my-md-0 ${style.projectProgressInfoCard}`}
             >
-                <DashboardProgress projectData={projectData} style={style} />
+                <DashboardProgress
+                    projectData={projectData}
+                    style={style}
+                    isProjectDetailsLoading={isProjectDetailsLoading}
+                />
             </div>
             {/* End Project Progress */}
             {/* Project Budget And Upsold Amount */}
@@ -57,7 +193,7 @@ const DashboardProjectInfoFixedSection = ({ projectData }) => {
                     />
                     <div className="pt-3 pt-md-0 py-0 py-md-3">
                         <div className="d-flex justify-content-md-between flex-column flex-md-row ">
-                            {ProjectBudgetData?.project_budget.map((budget) => (
+                            {projectBudgetData?.project_budget.map((budget) => (
                                 <DashboardCardPricingInfo
                                     key={budget?.id}
                                     amount={budget.price}
@@ -79,14 +215,14 @@ const DashboardProjectInfoFixedSection = ({ projectData }) => {
                     />
                     <div className="pt-3 pt-md-0 py-0 py-md-3">
                         <div className="d-flex justify-content-between flex-column flex-md-row">
-                            {ProjectBudgetData?.upsold_amount.map((budget) => (
+                            {projectBudgetData?.upsold_amount?.map((budget) => (
                                 <DashboardCardPricingInfo
-                                    key={budget.id}
-                                    amount={budget.price}
-                                    title={budget.title}
-                                    icon={budget.icon}
-                                    currency={budget.currency}
-                                    currency_symbol={budget.currency_symbol}
+                                    key={budget?.id}
+                                    amount={budget?.price}
+                                    title={budget?.title}
+                                    icon={budget?.icon}
+                                    currency={budget?.currency}
+                                    currency_symbol={budget?.currency_symbol}
                                 />
                             ))}
                         </div>
@@ -104,16 +240,16 @@ const DashboardProjectInfoFixedSection = ({ projectData }) => {
                     color="#ffffff"
                     className="d-flex justify-content-between flex-column flex-md-row estimatedTimeHoursLoggedCard"
                 >
-                    {ProjectBudgetData.hours_logged.map((logInfo) => (
+                    {projectBudgetData.hours_logged.map((logInfo) => (
                         <div className="d-flex flex-column" key={logInfo.id}>
                             <DashboardCardTitle
-                                title={logInfo.title}
+                                title={logInfo?.title}
                                 isBorderUse={true}
                             />
                             <DashboardCardPricingInfo
-                                key={logInfo.id}
-                                amount={logInfo.time}
-                                icon={logInfo.icon}
+                                key={logInfo?.id}
+                                amount={logInfo?.time}
+                                icon={logInfo?.icon}
                                 className="py-3"
                             />
                         </div>
@@ -130,14 +266,14 @@ const DashboardProjectInfoFixedSection = ({ projectData }) => {
                         isBorderUse={true}
                     />
                     <div className="d-flex justify-content-between flex-wrap py-3">
-                        {ProjectBudgetData.earning_expenses.map((moneyInfo) => (
+                        {projectBudgetData.earning_expenses.map((moneyInfo) => (
                             <DashboardCardPricingInfo
-                                key={moneyInfo.id}
-                                amount={moneyInfo.price}
-                                title={moneyInfo.title}
-                                icon={moneyInfo.icon}
-                                currency={moneyInfo.currency}
-                                currency_symbol={moneyInfo.currency_symbol}
+                                key={moneyInfo?.id}
+                                amount={moneyInfo?.price}
+                                title={moneyInfo?.title}
+                                icon={moneyInfo?.icon}
+                                currency={moneyInfo?.currency}
+                                currency_symbol={moneyInfo?.currency_symbol}
                             />
                         ))}
                     </div>
@@ -152,4 +288,5 @@ export default DashboardProjectInfoFixedSection;
 
 DashboardProjectInfoFixedSection.propTypes = {
     projectData: PropTypes.object.isRequired,
+    isProjectDetailsLoading: PropTypes.bool.isRequired,
 };

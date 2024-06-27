@@ -34,7 +34,6 @@ const DashboardProjectGuideAndChallengeSection = ({
     isLoading,
     projectData,
 }) => {
-    const projectInfo = projectData?.projectData?.project;
 
     return (
         <div
@@ -54,7 +53,7 @@ const DashboardProjectGuideAndChallengeSection = ({
                     isLoading,
                     // This will be shown when the data is loading
                     <SectionContentContainer
-                        color="linear-gradient(0deg, #F2F9FE 0%, #F2F9FE 100%), #D9D9D9"
+                        color="#FFF"
                         maxHeight="35vh"
                     >
                         <TextLoaderDynamic
@@ -82,7 +81,7 @@ const DashboardProjectGuideAndChallengeSection = ({
                         dangerouslySetInnerHTML={{
                             __html:
                                 !isLoading &&
-                                formatHttp(projectInfo?.project_summary),
+                                formatHttp(projectData?.project_summary),
                         }}
                     />
                 )}
@@ -119,8 +118,8 @@ const DashboardProjectGuideAndChallengeSection = ({
                         </>,
                         // This will be shown when the data is loaded
                         <p>
-                            {projectInfo?.project_challenges ??
-                                projectInfo?.comment}
+                            {projectData?.project_challenges ??
+                                projectData?.comments}
                         </p>
                     )}
                 </SectionContentContainer>

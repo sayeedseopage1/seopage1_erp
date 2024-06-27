@@ -18,48 +18,34 @@ import { handleLoadingComponent } from "../../helper";
 // Components - Styled Components
 import { ModalContentContainer } from "../ui/styledComponents";
 
-
-/** 
+/**
  * PM Task Guideline Modal
  * @param {boolean} isModalOpen - Is Modal Open
  * @param {function} closeModal - Close Modal
  * @param {object} modalData - Modal Data
  * @returns {JSX.Element}
  * @description - PM Task Guideline Modal Component for Parent Task Guideline Details.
- * 
+ *
  * This modal will be used by PM and Admin
- * 
+ *
  */
 
-const PMTaskGuidelineModal = ({ isModalOpen, closeModal, modalData }) => {
-    const [isLoading, setIsLoading] = React.useState(false);
-    const [pmTaskGuidelineData, setPmTaskGuidelineData] = React.useState();
-
-    // Dummy Data
-    const dataPromise = new Promise((resolve, reject) => {
-        setTimeout(() => {
-            resolve(modalData);
-        }, 5000);
-    });
-
-    // Fetch Data Pm Task Guideline Dummy Data
-    const fetchData = async () => {
-        setIsLoading(true);
-        try {
-            const data = await dataPromise;
-            setPmTaskGuidelineData(data);
-            setIsLoading(false);
-        } catch (error) {
-            console.error("Error fetching data: ", error);
-        }
+const PMTaskGuidelineModal = ({
+    isModalOpen,
+    closeModal,
+    modalData,
+    isLoading,
+}) => {
+    // Convert Color String to Array
+    const formatStringArray = (color) => {
+        let cleanedStr = _.trim(color, '"');
+        const resultArray = JSON.parse(cleanedStr);
+        return resultArray;
     };
 
-    // Fetch Data Pm Task Guideline
-    React.useEffect(() => {
-        if (isModalOpen) {
-            fetchData();
-        }
-    }, [isModalOpen]);
+    const convertedColor = formatStringArray(modalData?.color);
+    const convertedColorDesc = formatStringArray(modalData?.color_description);
+    const convertedReferenceLink = formatStringArray(modalData?.reference_link);
 
     return (
         <CustomAntModal
@@ -94,8 +80,7 @@ const PMTaskGuidelineModal = ({ isModalOpen, closeModal, modalData }) => {
                                             height="16px"
                                         />,
                                         <p className="p-0">
-                                            {pmTaskGuidelineData?.theme_details ===
-                                            1
+                                            {modalData?.theme_details === 1
                                                 ? "Yes"
                                                 : "No"}
                                         </p>
@@ -116,18 +101,16 @@ const PMTaskGuidelineModal = ({ isModalOpen, closeModal, modalData }) => {
                                         <Switch>
                                             <Switch.Case
                                                 condition={
-                                                    pmTaskGuidelineData?.theme_name
+                                                    modalData?.theme_name
                                                 }
                                             >
                                                 <p className="p-0">
-                                                    {
-                                                        pmTaskGuidelineData?.theme_name
-                                                    }
+                                                    {modalData?.theme_name}
                                                 </p>
                                             </Switch.Case>
                                             <Switch.Case
                                                 condition={
-                                                    !pmTaskGuidelineData?.theme_name
+                                                    !modalData?.theme_name
                                                 }
                                             >
                                                 <p className="p-0">
@@ -151,23 +134,19 @@ const PMTaskGuidelineModal = ({ isModalOpen, closeModal, modalData }) => {
                                         />,
                                         <Switch>
                                             <Switch.Case
-                                                condition={
-                                                    pmTaskGuidelineData?.theme_url
-                                                }
+                                                condition={modalData?.theme_url}
                                             >
                                                 <a
                                                     target="_blank"
                                                     rel="noreferrer"
-                                                    href={
-                                                        pmTaskGuidelineData?.theme_url
-                                                    }
+                                                    href={modalData?.theme_url}
                                                 >
                                                     View On New Tab
                                                 </a>
                                             </Switch.Case>
                                             <Switch.Case
                                                 condition={
-                                                    !pmTaskGuidelineData?.theme_url
+                                                    !modalData?.theme_url
                                                 }
                                             >
                                                 <p className="p-0">
@@ -196,8 +175,7 @@ const PMTaskGuidelineModal = ({ isModalOpen, closeModal, modalData }) => {
                                             height="16px"
                                         />,
                                         <p className="p-0">
-                                            {pmTaskGuidelineData?.color_schema ===
-                                            1
+                                            {modalData?.color_schema === 1
                                                 ? "Yes"
                                                 : "No"}
                                         </p>
@@ -219,18 +197,18 @@ const PMTaskGuidelineModal = ({ isModalOpen, closeModal, modalData }) => {
                                         <Switch>
                                             <Switch.Case
                                                 condition={
-                                                    pmTaskGuidelineData?.primary_color
+                                                    modalData?.primary_color
                                                 }
                                             >
                                                 <ColorItem
                                                     color={
-                                                        pmTaskGuidelineData?.primary_color
+                                                        modalData?.primary_color
                                                     }
                                                 />
                                             </Switch.Case>
                                             <Switch.Case
                                                 condition={
-                                                    !pmTaskGuidelineData?.primary_color
+                                                    !modalData?.primary_color
                                                 }
                                             >
                                                 <p>Not Shared</p>
@@ -254,12 +232,12 @@ const PMTaskGuidelineModal = ({ isModalOpen, closeModal, modalData }) => {
                                         <Switch>
                                             <Switch.Case
                                                 condition={
-                                                    pmTaskGuidelineData?.primary_color_description
+                                                    modalData?.primary_color_description
                                                 }
                                             >
                                                 <ColorItem
                                                     desc={
-                                                        pmTaskGuidelineData?.primary_color_description
+                                                        modalData?.primary_color_description
                                                     }
                                                     isDescUse={true}
                                                     isColorUse={false}
@@ -267,7 +245,7 @@ const PMTaskGuidelineModal = ({ isModalOpen, closeModal, modalData }) => {
                                             </Switch.Case>
                                             <Switch.Case
                                                 condition={
-                                                    !pmTaskGuidelineData?.primary_color_description
+                                                    !modalData?.primary_color_description
                                                 }
                                             >
                                                 <p>Not Shared</p>
@@ -291,12 +269,11 @@ const PMTaskGuidelineModal = ({ isModalOpen, closeModal, modalData }) => {
                                         <Switch>
                                             <Switch.Case
                                                 condition={
-                                                    pmTaskGuidelineData?.color
-                                                        ?.length > 0
+                                                    convertedColor?.length > 0
                                                 }
                                             >
                                                 <ol className="d-flex flex-wrap">
-                                                    {pmTaskGuidelineData?.color?.map(
+                                                    {convertedColor?.map(
                                                         (color, i) => {
                                                             return (
                                                                 <li key={color}>
@@ -316,9 +293,8 @@ const PMTaskGuidelineModal = ({ isModalOpen, closeModal, modalData }) => {
                                             </Switch.Case>
                                             <Switch.Case
                                                 condition={
-                                                    pmTaskGuidelineData?.color
-                                                        ?.length === 0 ||
-                                                    !pmTaskGuidelineData?.color
+                                                    convertedColor?.length ===
+                                                        0 || !modalData?.color
                                                 }
                                             >
                                                 <p>Not Shared</p>
@@ -342,11 +318,12 @@ const PMTaskGuidelineModal = ({ isModalOpen, closeModal, modalData }) => {
                                         <Switch>
                                             <Switch.Case
                                                 condition={
-                                                    pmTaskGuidelineData?.color_description
+                                                    convertedColorDesc?.length >
+                                                    0
                                                 }
                                             >
                                                 <ol className="d-flex flex-column">
-                                                    {pmTaskGuidelineData?.color_description?.map(
+                                                    {convertedColorDesc?.map(
                                                         (desc, i) => {
                                                             return (
                                                                 <li key={desc}>
@@ -369,7 +346,8 @@ const PMTaskGuidelineModal = ({ isModalOpen, closeModal, modalData }) => {
                                             </Switch.Case>
                                             <Switch.Case
                                                 condition={
-                                                    !pmTaskGuidelineData?.color_description
+                                                    convertedColorDesc.length ===
+                                                    0
                                                 }
                                             >
                                                 <p>Not Shared</p>
@@ -397,8 +375,7 @@ const PMTaskGuidelineModal = ({ isModalOpen, closeModal, modalData }) => {
                                             height="16px"
                                         />,
                                         <p className="p-0">
-                                            {pmTaskGuidelineData?.design_details ===
-                                            1
+                                            {modalData?.design_details === 1
                                                 ? "Yes"
                                                 : "No"}
                                         </p>
@@ -419,20 +396,14 @@ const PMTaskGuidelineModal = ({ isModalOpen, closeModal, modalData }) => {
                                         />,
                                         <Switch>
                                             <Switch.Case
-                                                condition={
-                                                    pmTaskGuidelineData?.design
-                                                }
+                                                condition={modalData?.design}
                                             >
                                                 <p className="p-0">
-                                                    {
-                                                        pmTaskGuidelineData?.design
-                                                    }
+                                                    {modalData?.design}
                                                 </p>
                                             </Switch.Case>
                                             <Switch.Case
-                                                condition={
-                                                    !pmTaskGuidelineData?.design
-                                                }
+                                                condition={!modalData?.design}
                                             >
                                                 <p className="p-0">
                                                     Not Shared
@@ -456,13 +427,12 @@ const PMTaskGuidelineModal = ({ isModalOpen, closeModal, modalData }) => {
                                         <Switch>
                                             <Switch.Case
                                                 condition={
-                                                    pmTaskGuidelineData
-                                                        ?.reference_link
+                                                    convertedReferenceLink
                                                         ?.length > 0
                                                 }
                                             >
                                                 <ol className="orderListItem">
-                                                    {pmTaskGuidelineData?.reference_link?.map(
+                                                    {convertedReferenceLink?.map(
                                                         (link) => {
                                                             return (
                                                                 <li key={link}>
@@ -487,10 +457,9 @@ const PMTaskGuidelineModal = ({ isModalOpen, closeModal, modalData }) => {
                                             </Switch.Case>
                                             <Switch.Case
                                                 condition={
-                                                    pmTaskGuidelineData
-                                                        ?.reference_link
+                                                    convertedReferenceLink
                                                         ?.length === 0 ||
-                                                    !pmTaskGuidelineData?.reference_link
+                                                    !modalData?.reference_link
                                                 }
                                             >
                                                 <p>Not Shared</p>
@@ -514,18 +483,18 @@ const PMTaskGuidelineModal = ({ isModalOpen, closeModal, modalData }) => {
                                         <Switch>
                                             <Switch.Case
                                                 condition={
-                                                    pmTaskGuidelineData?.instruction
+                                                    modalData?.instruction
                                                 }
                                             >
                                                 <p
                                                     dangerouslySetInnerHTML={{
-                                                        __html: pmTaskGuidelineData?.instruction,
+                                                        __html: modalData?.instruction,
                                                     }}
                                                 />
                                             </Switch.Case>
                                             <Switch.Case
                                                 condition={
-                                                    !pmTaskGuidelineData?.instruction
+                                                    !modalData?.instruction
                                                 }
                                             >
                                                 <p>Not Shared</p>
@@ -552,8 +521,7 @@ const PMTaskGuidelineModal = ({ isModalOpen, closeModal, modalData }) => {
                                             height="16px"
                                         />,
                                         <p className="p-0">
-                                            {pmTaskGuidelineData?.plugin_research ===
-                                            1
+                                            {modalData?.plugin_research === 1
                                                 ? "Yes"
                                                 : "No"}
                                         </p>
@@ -574,18 +542,16 @@ const PMTaskGuidelineModal = ({ isModalOpen, closeModal, modalData }) => {
                                         <Switch>
                                             <Switch.Case
                                                 condition={
-                                                    pmTaskGuidelineData?.plugin_name
+                                                    modalData?.plugin_name
                                                 }
                                             >
                                                 <p className="p-0">
-                                                    {
-                                                        pmTaskGuidelineData?.plugin_name
-                                                    }
+                                                    {modalData?.plugin_name}
                                                 </p>
                                             </Switch.Case>
                                             <Switch.Case
                                                 condition={
-                                                    !pmTaskGuidelineData?.plugin_name
+                                                    !modalData?.plugin_name
                                                 }
                                             >
                                                 <p>Not Shared</p>
@@ -608,22 +574,20 @@ const PMTaskGuidelineModal = ({ isModalOpen, closeModal, modalData }) => {
                                         <Switch>
                                             <Switch.Case
                                                 condition={
-                                                    pmTaskGuidelineData?.plugin_url
+                                                    modalData?.plugin_url
                                                 }
                                             >
                                                 <a
                                                     target="_blank"
                                                     rel="noreferrer"
-                                                    href={
-                                                        pmTaskGuidelineData?.plugin_url
-                                                    }
+                                                    href={modalData?.plugin_url}
                                                 >
                                                     View On New Tab
                                                 </a>
                                             </Switch.Case>
                                             <Switch.Case
                                                 condition={
-                                                    !pmTaskGuidelineData?.plugin_url
+                                                    !modalData?.plugin_url
                                                 }
                                             >
                                                 <p>Not Shared</p>
@@ -647,18 +611,18 @@ const PMTaskGuidelineModal = ({ isModalOpen, closeModal, modalData }) => {
                                         <Switch>
                                             <Switch.Case
                                                 condition={
-                                                    pmTaskGuidelineData?.instruction_plugin
+                                                    modalData?.instruction_plugin
                                                 }
                                             >
                                                 <p
                                                     dangerouslySetInnerHTML={{
-                                                        __html: pmTaskGuidelineData?.instruction_plugin,
+                                                        __html: modalData?.instruction_plugin,
                                                     }}
                                                 />
                                             </Switch.Case>
                                             <Switch.Case
                                                 condition={
-                                                    !pmTaskGuidelineData?.instruction_plugin
+                                                    !modalData?.instruction_plugin
                                                 }
                                             >
                                                 <p>Not Shared</p>
@@ -681,14 +645,14 @@ const PMTaskGuidelineModal = ({ isModalOpen, closeModal, modalData }) => {
                                         <Switch>
                                             <Switch.Case
                                                 condition={
-                                                    pmTaskGuidelineData?.google_drive_link
+                                                    modalData?.google_drive_link
                                                 }
                                             >
                                                 <a
                                                     target="_blank"
                                                     rel="noreferrer"
                                                     href={
-                                                        pmTaskGuidelineData?.google_drive_link
+                                                        modalData?.google_drive_link
                                                     }
                                                 >
                                                     View On New Tab
@@ -696,7 +660,7 @@ const PMTaskGuidelineModal = ({ isModalOpen, closeModal, modalData }) => {
                                             </Switch.Case>
                                             <Switch.Case
                                                 condition={
-                                                    !pmTaskGuidelineData?.google_drive_link
+                                                    !modalData?.google_drive_link
                                                 }
                                             >
                                                 <p>Not Shared</p>
@@ -719,4 +683,5 @@ PMTaskGuidelineModal.propTypes = {
     isModalOpen: PropTypes.bool,
     closeModal: PropTypes.func,
     modalData: PropTypes.object,
+    isLoading: PropTypes.bool,
 };

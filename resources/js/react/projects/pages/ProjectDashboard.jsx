@@ -10,9 +10,6 @@ import DashboardSalesAndPMInfoSection from "../components/sections/DashboardSale
 import DashboardProjectInfoFixedSection from "../components/sections/DashboardProjectInfoFixedSection";
 import DashboardProjectInfoHourlySection from "../components/sections/DashboardProjectInfoHourlySection";
 
-// Constants
-import { ProjectData } from "../constants";
-
 // Components - UI - Custom
 import Switch from "../../global/Switch";
 
@@ -22,41 +19,48 @@ import { ProjectDashboardContext } from "../context/ProjectDashboardProvider";
 // hooks - custom - useWhyDidYouRender
 import useWhyDidYouRender from "../../hooks/useWhyDidYouRender";
 
-
 const ProjectDashboard = ({ projectType }) => {
     useWhyDidYouRender("ProjectDashboard");
-    const pathName = window.location.pathname.split("projects/").pop();
-    const { setProject_id, projectData } = useContext(ProjectDashboardContext);
-    const [dummyTypeChange, setDummyTypeChange] = React.useState(0);
-    const projectDataDummy = ProjectData[dummyTypeChange];
-    const [isLoading, setIsLoading] = React.useState(false);
-
-    setTimeout(() => {
-        setIsLoading(false);
-    }, 16000);
+    const pathName = window?.location?.pathname?.split("projects/").pop();
+    const { setProject_id, projectData, isProjectDetailsLoading } = useContext(
+        ProjectDashboardContext
+    );
 
     console.log(projectData);
-    console.log(pathName);
 
+    // get project id from the url path and set it to the context
     useEffect(() => {
         setProject_id(pathName);
     }, [pathName]);
 
+    const isVShowAllViewModalButtons = () => {
+        const buttons = projectData?.buttons;
+
+        return (
+            buttons?.pm_task_guidline ||
+            buttons?.project_qc_data ||
+            buttons?.completion_form_data ||
+            buttons?.see_project_dispute
+        );
+    };
+
     return (
         <section>
-            {/* Project Dashboard Header Section */}
-            <DashboardHeaderSection
-                setDummyTypeChange={setDummyTypeChange}
-                isLoading={isLoading}
-                projectData={projectDataDummy}
-            />
-            {/* End Project Dashboard Header Section */}
-
             <Switch>
+                {/* Project Dashboard Header Section */}
+                <DashboardHeaderSection
+                    isLoading={isProjectDetailsLoading}
+                    projectData={{
+                        ...projectData,
+                        projectType,
+                    }}
+                />
+                {/* End Project Dashboard Header Section */}
+
                 {/* Fixed Project Info Section */}
                 <Switch.Case condition={projectType === "fixed"}>
                     <DashboardProjectInfoFixedSection
-                        isLoading={isLoading}
+                        isLoading={isProjectDetailsLoading}
                         projectData={projectData}
                     />
                 </Switch.Case>
@@ -65,44 +69,46 @@ const ProjectDashboard = ({ projectType }) => {
                 {/* Hourly Project Info Section */}
                 <Switch.Case condition={projectType === "hourly"}>
                     <DashboardProjectInfoHourlySection
-                        isLoading={isLoading}
+                        isLoading={isProjectDetailsLoading}
                         projectData={projectData}
                     />
                 </Switch.Case>
                 {/* End Hourly Project Info Section */}
+
+                {/* Project Dashboard Actions Button Section */}
+                <Switch.Case condition={isVShowAllViewModalButtons()}>
+                    <DashboardActionButtonSection
+                        projectData={projectData}
+                        isLoading={isProjectDetailsLoading}
+                    />
+                </Switch.Case>
+                {/* End Project Dashboard Actions Button Section */}
+
+                {/* Project Dashboard Task and Milestone Section */}
+                <DashboardTaskAndMileStoneSection />
+                {/* End Project Dashboard Task and Milestone Section */}
+
+                {/* Project Freelancer Info Section */}
+                <DashboardFreelancerInfoSection
+                    isLoading={isProjectDetailsLoading}
+                    projectData={projectData}
+                />
+                {/* End Project Freelancer Info Section */}
+
+                {/* Project Guide and Challenge Section */}
+                <DashboardProjectGuideAndChallengeSection
+                    isLoading={isProjectDetailsLoading}
+                    projectData={projectData}
+                />
+                {/* End Project Guide and Challenge Section */}
+
+                {/* Project Sales and PM Info Section */}
+                <DashboardSalesAndPMInfoSection
+                    isLoading={isProjectDetailsLoading}
+                    projectData={projectData}
+                />
+                {/* End Project Sales and PM Info Section */}
             </Switch>
-
-            {/* Project Dashboard Actions Button Section */}
-            <DashboardActionButtonSection
-                projectData={projectData}
-                isLoading={isLoading}
-            />
-            {/* End Project Dashboard Actions Button Section */}
-
-            {/* Project Dashboard Task and Milestone Section */}
-            <DashboardTaskAndMileStoneSection isLoading={isLoading} />
-            {/* End Project Dashboard Task and Milestone Section */}
-
-            {/* Project Freelancer Info Section */}
-            <DashboardFreelancerInfoSection
-                isLoading={isLoading}
-                projectData={projectData}
-            />
-            {/* End Project Freelancer Info Section */}
-
-            {/* Project Guide and Challenge Section */}
-            <DashboardProjectGuideAndChallengeSection
-                isLoading={isLoading}
-                projectData={projectData}
-            />
-            {/* End Project Guide and Challenge Section */}
-
-            {/* Project Sales and PM Info Section */}
-            <DashboardSalesAndPMInfoSection
-                isLoading={isLoading}
-                projectData={projectData}
-            />
-            {/* End Project Sales and PM Info Section */}
         </section>
     );
 };

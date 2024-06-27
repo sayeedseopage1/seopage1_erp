@@ -33,8 +33,8 @@ import { formatHttp, handleLoadingComponent } from "../../helper";
  */
 
 const DashboardSalesAndPMInfoSection = ({ projectData, isLoading }) => {
-    const projectInfo = projectData?.projectData?.project;
-    const dealInfo = projectData?.projectData?.project?.deal;
+    const projectInfo = projectData;
+    const dealInfo = projectData?.deal;
     return (
         <React.Fragment>
             <DashboardCardTitle
@@ -253,19 +253,10 @@ const DashboardSalesAndPMInfoSection = ({ projectData, isLoading }) => {
                             isLoading,
                             <>
                                 <TextLoaderDynamic
-                                    number={3}
+                                    number={5}
                                     widthDeference={20}
                                     hight={16}
-                                    fullSizeCount={3}
-                                    className="mb-2"
-                                    parentClassName="pl-4 pt-3"
-                                />
-                                <br />
-                                <TextLoaderDynamic
-                                    number={4}
-                                    widthDeference={10}
-                                    hight={16}
-                                    fullSizeCount={1}
+                                    fullSizeCount={4}
                                     className="mb-2"
                                     parentClassName="pl-4 pt-3"
                                 />
@@ -284,7 +275,7 @@ const DashboardSalesAndPMInfoSection = ({ projectData, isLoading }) => {
                     </SectionContainer>
                     {/* End Logo Reference */}
                     {/* login Information */}
-                    <SectionContainer>
+                    <SectionContainer >
                         <DashboardCardTitle
                             title={
                                 DetailsSalesExecutiveConstant?.requiredLogins
@@ -324,73 +315,129 @@ const DashboardSalesAndPMInfoSection = ({ projectData, isLoading }) => {
                 </div>
             </div>
             {/* End Details shared by the sales executive */}
-            <DashboardCardTitle
-                title="Comments by Project Manager:"
-                isBorderUse={false}
-            />
-            {/* Comments by Project Manager */}
-            <div className={`${style.dashboardSalesAndPMInfoSection}`}>
-                <SectionContainer>
-                    {/* Requirements Defined*/}
-                    <SectionContentContainer
-                        color="#D8EDFC"
-                        maxHeight="35vh"
-                        className="pt-3 mb-4"
-                    >
-                        {" "}
-                        <DashboardCardTitle
-                            title="Were the requirements properly defined by Sales"
-                            isBorderUse={true}
-                            borderType="dotted"
-                            className="mb-3"
-                        />
-                        {handleLoadingComponent(
-                            isLoading,
-                            <TextLoaderDynamic
-                                number={5}
-                                widthDeference={20}
-                                hight={16}
-                                fullSizeCount={2}
-                                className="mb-2"
-                            />,
-                            <p className="boldText">
-                                {projectInfo?.requirement_defined}
-                            </p>
-                        )}
-                    </SectionContentContainer>
-                    {/* End Requirements Defined*/}
-                    {/* Deadline Provided */}
-                    <SectionContentContainer
-                        color="#D8EDFC"
-                        maxHeight="35vh"
-                        className="pt-3"
-                    >
-                        <DashboardCardTitle
-                            title="Is the deadline provided by sales realistic"
-                            isBorderUse={true}
-                            borderType="dotted"
-                            className="mb-3"
-                        />
-                        {handleLoadingComponent(
-                            isLoading,
-                            <TextLoaderDynamic
-                                number={5}
-                                widthDeference={20}
-                                hight={16}
-                                fullSizeCount={1}
-                                className="mb-2"
-                            />,
-                            <p className="boldText">
-                                {projectInfo?.deadline_meet}
-                            </p>
-                        )}
-                    </SectionContentContainer>
-                    {/* End Deadline Provided */}
-                </SectionContainer>
 
+            <div className={`${style.dashboardSalesAndPMInfoSection} ${style.dashboardSalesAndPMInfoReverseSection}`}>
                 <div>
-                    {/* Any other notes for the project manager/technical team */}
+                    {/* End Details shared by the sales executive */}
+                    <DashboardCardTitle
+                        title="Comments by Seals Lead:"
+                        isBorderUse={false}
+                    />
+                    {/* Comments by Project Manager */}
+
                     <SectionContainer>
+                        {/* Requirements Defined*/}
+                        <SectionContentContainer
+                            color="#D8EDFC"
+                            maxHeight="35vh"
+                            className="pt-3 mb-4"
+                        >
+                            {" "}
+                            <DashboardCardTitle
+                                title="Did the sales executive defined requirements for this project properly?"
+                                isBorderUse={true}
+                                borderType="dotted"
+                                className="mb-3"
+                            />
+                            {handleLoadingComponent(
+                                isLoading,
+                                <TextLoaderDynamic
+                                    number={5}
+                                    widthDeference={20}
+                                    hight={16}
+                                    fullSizeCount={2}
+                                    className="mb-2"
+                                />,
+                                <SectionContentContainer
+                                    color="#D8EDFC"
+                                    maxHeight="35vh"
+                                    className="pt-0"
+                                    dangerouslySetInnerHTML={{
+                                        __html:
+                                            !isLoading &&
+                                            formatHttp(
+                                                dealInfo?.requirment_define
+                                            ),
+                                    }}
+                                />
+                            )}
+                        </SectionContentContainer>
+                        {/* End Requirements Defined*/}
+                        {/* Price Authorization */}
+                        <SectionContentContainer
+                            color="#D8EDFC"
+                            maxHeight="35vh"
+                            className="pt-3 mb-4"
+                        >
+                            <DashboardCardTitle
+                                title="Did the sales executive set price for this project properly?"
+                                isBorderUse={true}
+                                borderType="dotted"
+                                className="mb-3"
+                            />
+                            {handleLoadingComponent(
+                                isLoading,
+                                <TextLoaderDynamic
+                                    number={5}
+                                    widthDeference={20}
+                                    hight={16}
+                                    fullSizeCount={1}
+                                    className="mb-2"
+                                />,
+                                <SectionContentContainer
+                                    color="#D8EDFC"
+                                    maxHeight="35vh"
+                                    className="pt-0"
+                                    dangerouslySetInnerHTML={{
+                                        __html:
+                                            !isLoading &&
+                                            formatHttp(
+                                                dealInfo?.price_authorization
+                                            ),
+                                    }}
+                                />
+                            )}
+                        </SectionContentContainer>
+                        {/* End Deadline Provided */}
+                        <SectionContentContainer
+                            color="#D8EDFC"
+                            maxHeight="35vh"
+                            className="pt-3"
+                        >
+                            <DashboardCardTitle
+                                title="Did the sales executive set deadline for this project correctly?"
+                                isBorderUse={true}
+                                borderType="dotted"
+                                className="mb-3"
+                            />
+                            {handleLoadingComponent(
+                                isLoading,
+                                <TextLoaderDynamic
+                                    number={5}
+                                    widthDeference={20}
+                                    hight={16}
+                                    fullSizeCount={1}
+                                    className="mb-2"
+                                />,
+                                <SectionContentContainer
+                                    color="#D8EDFC"
+                                    maxHeight="35vh"
+                                    className="pt-0"
+                                    dangerouslySetInnerHTML={{
+                                        __html:
+                                            !isLoading &&
+                                            formatHttp(
+                                                dealInfo?.project_deadline_authorization
+                                            ),
+                                    }}
+                                />
+                            )}
+                        </SectionContentContainer>
+                    </SectionContainer>
+                </div>
+                <div className="flex flex-column">
+                    {/* Any other notes for the project manager/technical team */}
+                    <SectionContainer className="mb-4">
                         <DashboardCardTitle
                             title="Any other notes for the project manager/technical team"
                             isBorderUse={true}
@@ -399,17 +446,17 @@ const DashboardSalesAndPMInfoSection = ({ projectData, isLoading }) => {
                         {handleLoadingComponent(
                             isLoading,
                             <TextLoaderDynamic
-                                number={6}
+                                number={5}
                                 widthDeference={20}
                                 hight={16}
                                 fullSizeCount={2}
                                 className="mb-2"
-                                parentClassName="pl-4"
+                                parentClassName="pl-4 pt-3"
                             />,
                             <SectionContentContainer
                                 color="linear-gradient(0deg, #F2F9FE 0%, #F2F9FE 100%), #D9D9D9"
                                 maxHeight="35vh"
-                                className="pt-3"
+                                className="pt-3 "
                                 dangerouslySetInnerHTML={{
                                     __html:
                                         !isLoading &&
@@ -419,6 +466,70 @@ const DashboardSalesAndPMInfoSection = ({ projectData, isLoading }) => {
                         )}
                     </SectionContainer>
                     {/* End Any other notes for the project manager/technical team */}
+                    {/* End Details shared by the sales executive */}
+                    <DashboardCardTitle
+                        title="Comments by Project Manager:"
+                        isBorderUse={false}
+                    />
+                    {/* Comments by Project Manager */}
+
+                    <SectionContainer>
+                        {/* Requirements Defined*/}
+                        <SectionContentContainer
+                            color="#D8EDFC"
+                            maxHeight="35vh"
+                            className="pt-3 mb-4"
+                        >
+                            {" "}
+                            <DashboardCardTitle
+                                title="Were the requirements properly defined by Sales"
+                                isBorderUse={true}
+                                borderType="dotted"
+                                className="mb-3"
+                            />
+                            {handleLoadingComponent(
+                                isLoading,
+                                <TextLoaderDynamic
+                                    number={5}
+                                    widthDeference={20}
+                                    hight={16}
+                                    fullSizeCount={2}
+                                    className="mb-2"
+                                />,
+                                <p className="boldText">
+                                    {projectInfo?.requirement_defined}
+                                </p>
+                            )}
+                        </SectionContentContainer>
+                        {/* End Requirements Defined*/}
+                        {/* Deadline Provided */}
+                        <SectionContentContainer
+                            color="#D8EDFC"
+                            maxHeight="35vh"
+                            className="pt-3"
+                        >
+                            <DashboardCardTitle
+                                title="Is the deadline provided by sales realistic"
+                                isBorderUse={true}
+                                borderType="dotted"
+                                className="mb-3"
+                            />
+                            {handleLoadingComponent(
+                                isLoading,
+                                <TextLoaderDynamic
+                                    number={5}
+                                    widthDeference={20}
+                                    hight={16}
+                                    fullSizeCount={1}
+                                    className="mb-2"
+                                />,
+                                <p className="boldText">
+                                    {projectInfo?.deadline_meet}
+                                </p>
+                            )}
+                        </SectionContentContainer>
+                        {/* End Deadline Provided */}
+                    </SectionContainer>
                 </div>
             </div>
             {/* End Comments by Project Manager */}

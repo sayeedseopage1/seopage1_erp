@@ -3,21 +3,23 @@ import DashboardProgressStatus from "../ui/DashboardProgressStatus/DashboardProg
 
 // Constants
 import { ProjectProgressStatus } from "../../constants";
+import dayjs from "dayjs";
+
 
 export const DashboardDataTableTaskColumns = [
     {
         id: "task_name",
         header: "Task name",
-        accessorKey: "task_name",
+        accessorKey: "heading",
         cell: ({ row }) => {
             const data = row.original;
             return (
                 <a
-                    href={`/account/tasks/${data.task_id}`}
+                    href={`/account/tasks/${data?.id}`}
                     className="singleline-ellipsis"
-                    title={data.task_name}
+                    title={data.heading}
                 >
-                    {data.task_name}
+                    {data.heading}
                 </a>
             );
         },
@@ -25,12 +27,12 @@ export const DashboardDataTableTaskColumns = [
     {
         id: "creation_date",
         header: "Creation date",
-        accessorKey: "creation_date",
+        accessorKey: "create_on",
     },
     {
         id: "due_date",
         header: "Due date",
-        accessorKey: "due_date",
+        accessorKey: "due_on",
     },
     {
         id: "status",
@@ -39,7 +41,7 @@ export const DashboardDataTableTaskColumns = [
         cell: ({ row }) => {
             const data = row.original;
             const statusData = ProjectProgressStatus?.find(
-                (status) => status?.name === data?.status
+                (status) => status?.name === data?.board_column?.column_name
             );
             return (
                 <DashboardProgressStatus
@@ -53,24 +55,50 @@ export const DashboardDataTableTaskColumns = [
     {
         id: "tracking_start_time",
         header: "Tracking start time",
-        accessorKey: "tracking_start_time",
+        accessorKey: "logged_start_time",
         cell: ({ row }) => {
             const data = row.original;
             return (
                 <span className="singleline-ellipsis">
-                    {data.tracking_start_time ?? "Not started yet"}
+                    {dayjs(data?.logged_start_time).format(
+                        "DD-MM-YYYY h:mm:ss A" 
+                    ) ?? "Not started yet"}
                 </span>
             );
         },
     },
     {
-        id: "estimated_hours",
+        id: "estimate_hours",
         header: "Estimated hours",
-        accessorKey: "estimated_hours",
+        accessorKey: "estimate_hours",
+        cell: ({ row }) => {
+            const data = row.original;
+
+            const formatEstimateHours = (data) => {
+                if (data?.estimate_hours === null) {
+                    return "Not estimated yet";
+                }
+
+                if (data?.estimate_hours === 0) {
+                    return "0";
+                } else if (data?.estimate_hours > 0) {
+                    return `${data?.estimate_hours} Hours ${
+                        data?.estimate_minutes && data?.estimate_minutes !== 0
+                            ? ` ${data?.estimate_minutes} Minutes`
+                            : ""
+                    }`;
+                }
+            };
+            return (
+                <span className="singleline-ellipsis">
+                    {formatEstimateHours(data)}
+                </span>
+            );
+        },
     },
     {
         id: "logged_hours",
         header: "Logged hours",
-        accessorKey: "logged_hours",
+        accessorKey: "hours_logged",
     },
 ];

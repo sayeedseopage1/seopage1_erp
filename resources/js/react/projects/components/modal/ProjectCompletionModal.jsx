@@ -32,64 +32,50 @@ import Loader from "../../../global/Loader";
  * This modal will be used by Admin to authorize the project completion.
  */
 
-const ProjectCompletionModal = ({ isModalOpen, closeModal, modalData }) => {
-    const [isLoading, setIsLoading] = useState(true);
+const ProjectCompletionModal = ({
+    isModalOpen,
+    closeModal,
+    modalData,
+    isLoading,
+}) => {
     const [adminComment, setAdminComment] = useState("");
-    const [projectCompletionData, setProjectCompletionData] = useState({
-        project_submission: {},
-        project_portfolio: {},
-    });
-    const { project_submission, project_portfolio } = projectCompletionData;
+    const [projectCompletionData, setProjectCompletionData] =
+        useState(modalData);
     const [isSubmitting, setIsSubmitting] = useState(false);
 
     // Handle Admin Comment
     const handleAdminComment = () => {
         setIsSubmitting(true);
-        try {
-            // TODO: Implement the API call to submit the admin comment
-            setTimeout(() => {
-                setProjectCompletionData((prev) => {
-                    return {
-                        ...prev,
-                        project_submission: {
-                            ...prev.project_submission,
-                            admin_comment: adminComment,
-                        },
-                    };
-                });
-                setIsSubmitting(false);
-                toast.success("Project Completion Authorized Successfully");
-            }, 5000);
-        } catch (error) {
-            console.log(error);
-        }
+        // try {
+        //     // TODO: Implement the API call to submit the admin comment
+        //     setTimeout(() => {
+        //         setProjectCompletionData((prev) => {
+        //             return {
+        //                 ...prev,
+        //                 projectCompletionData.project_submission: {
+        //                     ...prev.projectCompletionData.project_submission,
+        //                     admin_comment: adminComment,
+        //                 },
+        //             };
+        //         });
+        //         setIsSubmitting(false);
+        //         toast.success("Project Completion Authorized Successfully");
+        //     }, 5000);
+        // } catch (error) {
+        //     console.log(error);
+        // }
     };
 
-    // Dummy Fetch Data
-    const dataPromise = new Promise((resolve, reject) => {
-        setTimeout(() => {
-            resolve(modalData);
-        }, 5000);
-    });
-
-    // Fetch Data Deadline Change History
-    const fetchData = async () => {
-        setIsLoading(true);
-        try {
-            const data = await dataPromise;
-            setProjectCompletionData(data);
-            setIsLoading(false);
-        } catch (error) {
-            console.error("Error fetching data: ", error);
-        }
+    // Convert Color String to Array
+    const formatStringArray = (color) => {
+        let cleanedStr = _.trim(color, '"');
+        const resultArray = JSON.parse(cleanedStr);
+        return resultArray;
     };
 
-    // Fetch Data on Modal Open
-    useEffect(() => {
-        if (isModalOpen) {
-            fetchData();
-        }
-    }, []);
+    const convertedPluginList = formatStringArray(
+        projectCompletionData?.project_portfolio?.plugin_list
+    );
 
     return (
         <CustomAntModal
@@ -118,27 +104,47 @@ const ProjectCompletionModal = ({ isModalOpen, closeModal, modalData }) => {
                             />,
                             <Switch>
                                 <Switch.Case
-                                    condition={project_submission?.actual_link}
+                                    condition={
+                                        projectCompletionData
+                                            ?.project_submission?.actual_link
+                                    }
                                 >
                                     <a
-                                        href={project_submission?.actual_link}
+                                        href={
+                                            projectCompletionData
+                                                ?.project_submission
+                                                ?.actual_link
+                                        }
                                         target="_blank"
                                         rel="noopener noreferrer"
                                         className="singleline-ellipsis ml-1"
                                     >
-                                        {project_submission?.actual_link}
+                                        {
+                                            projectCompletionData
+                                                ?.project_submission
+                                                ?.actual_link
+                                        }
                                     </a>
                                 </Switch.Case>
                                 <Switch.Case
-                                    condition={!project_submission?.dummy_link}
+                                    condition={
+                                        !projectCompletionData
+                                            ?.project_submission?.dummy_link
+                                    }
                                 >
                                     <a
-                                        href={project_submission?.dummy_link}
+                                        href={
+                                            projectCompletionData
+                                                ?.project_submission?.dummy_link
+                                        }
                                         target="_blank"
                                         rel="noopener noreferrer"
                                         className="singleline-ellipsis ml-1"
                                     >
-                                        {project_submission?.dummy_link}
+                                        {
+                                            projectCompletionData
+                                                ?.project_submission?.dummy_link
+                                        }
                                     </a>
                                 </Switch.Case>
                             </Switch>
@@ -166,17 +172,22 @@ const ProjectCompletionModal = ({ isModalOpen, closeModal, modalData }) => {
                                         <Placeholder height={16} width="50%" />,
                                         <Switch>
                                             <Switch.Case
-                                                condition={project_submission}
+                                                condition={
+                                                    projectCompletionData?.project_submission
+                                                }
                                             >
                                                 <p>
-                                                    {project_submission?.qc_protocol ===
-                                                    1
+                                                    {projectCompletionData
+                                                        ?.project_submission
+                                                        ?.qc_protocol === 1
                                                         ? "Yes"
                                                         : "No"}
                                                 </p>
                                             </Switch.Case>
                                             <Switch.Case
-                                                condition={!project_submission}
+                                                condition={
+                                                    !projectCompletionData?.project_submission
+                                                }
                                             >
                                                 <p>--</p>
                                             </Switch.Case>
@@ -194,17 +205,22 @@ const ProjectCompletionModal = ({ isModalOpen, closeModal, modalData }) => {
                                         <Placeholder height={16} width="50%" />,
                                         <Switch>
                                             <Switch.Case
-                                                condition={project_submission}
+                                                condition={
+                                                    projectCompletionData?.project_submission
+                                                }
                                             >
                                                 <p>
-                                                    {project_submission?.qc_protocol ===
-                                                    1
+                                                    {projectCompletionData
+                                                        ?.project_submission
+                                                        ?.qc_protocol === 1
                                                         ? "Yes"
                                                         : "No"}
                                                 </p>
                                             </Switch.Case>
                                             <Switch.Case
-                                                condition={!project_submission}
+                                                condition={
+                                                    !projectCompletionData?.project_submission
+                                                }
                                             >
                                                 <p>--</p>
                                             </Switch.Case>
@@ -224,12 +240,16 @@ const ProjectCompletionModal = ({ isModalOpen, closeModal, modalData }) => {
                                         <Placeholder height={16} width="50%" />,
                                         <Switch>
                                             <Switch.Case
-                                                condition={project_submission}
+                                                condition={
+                                                    projectCompletionData?.project_submission
+                                                }
                                             >
                                                 <div>
                                                     <Switch.Case
                                                         condition={
-                                                            project_submission?.login_information ===
+                                                            projectCompletionData
+                                                                ?.project_submission
+                                                                ?.login_information ===
                                                             1
                                                         }
                                                     >
@@ -238,7 +258,9 @@ const ProjectCompletionModal = ({ isModalOpen, closeModal, modalData }) => {
                                                         </p>
                                                         <Switch.Case
                                                             condition={
-                                                                project_submission.login_url
+                                                                projectCompletionData
+                                                                    ?.project_submission
+                                                                    .login_url
                                                             }
                                                         >
                                                             <p className="singleline-ellipsis mb-1 d-flex">
@@ -247,14 +269,18 @@ const ProjectCompletionModal = ({ isModalOpen, closeModal, modalData }) => {
                                                                 </strong>{" "}
                                                                 <a
                                                                     href={
-                                                                        project_submission.login_url
+                                                                        projectCompletionData
+                                                                            ?.project_submission
+                                                                            .login_url
                                                                     }
                                                                     target="_blank"
                                                                     rel="noopener noreferrer"
                                                                     className="singleline-ellipsis w-50 ml-1"
                                                                 >
                                                                     {
-                                                                        project_submission.login_url
+                                                                        projectCompletionData
+                                                                            ?.project_submission
+                                                                            .login_url
                                                                     }
                                                                 </a>
                                                             </p>
@@ -265,7 +291,9 @@ const ProjectCompletionModal = ({ isModalOpen, closeModal, modalData }) => {
                                                                 Login:
                                                             </strong>{" "}
                                                             {
-                                                                project_submission.login
+                                                                projectCompletionData
+                                                                    ?.project_submission
+                                                                    .login
                                                             }
                                                         </p>
 
@@ -274,7 +302,9 @@ const ProjectCompletionModal = ({ isModalOpen, closeModal, modalData }) => {
                                                                 Password:
                                                             </strong>{" "}
                                                             {
-                                                                project_submission.password
+                                                                projectCompletionData
+                                                                    ?.project_submission
+                                                                    .password
                                                             }
                                                         </p>
                                                         <p className="d-flex mb-1">
@@ -283,21 +313,27 @@ const ProjectCompletionModal = ({ isModalOpen, closeModal, modalData }) => {
                                                             </strong>{" "}
                                                             <a
                                                                 href={
-                                                                    project_submission.screenshot
+                                                                    projectCompletionData
+                                                                        ?.project_submission
+                                                                        .screenshot
                                                                 }
                                                                 target="_blank"
                                                                 rel="noopener noreferrer"
                                                                 className="singleline-ellipsis w-50 ml-1"
                                                             >
                                                                 {
-                                                                    project_submission.screenshot
+                                                                    projectCompletionData
+                                                                        ?.project_submission
+                                                                        .screenshot
                                                                 }
                                                             </a>
                                                         </p>
                                                     </Switch.Case>
                                                     <Switch.Case
                                                         condition={
-                                                            project_submission?.login_information ===
+                                                            projectCompletionData
+                                                                ?.project_submission
+                                                                ?.login_information ===
                                                             0
                                                         }
                                                     >
@@ -306,7 +342,9 @@ const ProjectCompletionModal = ({ isModalOpen, closeModal, modalData }) => {
                                                 </div>
                                             </Switch.Case>
                                             <Switch.Case
-                                                condition={!project_submission}
+                                                condition={
+                                                    !projectCompletionData?.project_submission
+                                                }
                                             >
                                                 <p>--</p>
                                             </Switch.Case>
@@ -324,17 +362,22 @@ const ProjectCompletionModal = ({ isModalOpen, closeModal, modalData }) => {
                                         <Placeholder height={16} width="50%" />,
                                         <Switch>
                                             <Switch.Case
-                                                condition={project_submission}
+                                                condition={
+                                                    projectCompletionData?.project_submission
+                                                }
                                             >
                                                 <p>
-                                                    {project_submission?.drive_yes ===
-                                                    1
+                                                    {projectCompletionData
+                                                        ?.project_submission
+                                                        ?.drive_yes === 1
                                                         ? "Yes"
                                                         : "No"}
                                                 </p>
                                             </Switch.Case>
                                             <Switch.Case
-                                                condition={!project_submission}
+                                                condition={
+                                                    !projectCompletionData?.project_submission
+                                                }
                                             >
                                                 <p>--</p>
                                             </Switch.Case>
@@ -355,12 +398,16 @@ const ProjectCompletionModal = ({ isModalOpen, closeModal, modalData }) => {
                                         <Placeholder height={16} width="50%" />,
                                         <Switch>
                                             <Switch.Case
-                                                condition={project_submission}
+                                                condition={
+                                                    projectCompletionData?.project_submission
+                                                }
                                             >
                                                 <div>
                                                     <Switch.Case
                                                         condition={
-                                                            project_submission?.drive_information ===
+                                                            projectCompletionData
+                                                                ?.project_submission
+                                                                ?.drive_information ===
                                                             1
                                                         }
                                                     >
@@ -374,21 +421,27 @@ const ProjectCompletionModal = ({ isModalOpen, closeModal, modalData }) => {
                                                             </strong>{" "}
                                                             <a
                                                                 href={
-                                                                    project_submission.google_link
+                                                                    projectCompletionData
+                                                                        ?.project_submission
+                                                                        .google_link
                                                                 }
                                                                 target="_blank"
                                                                 rel="noopener noreferrer"
                                                                 className="singleline-ellipsis w-50 ml-1"
                                                             >
                                                                 {
-                                                                    project_submission.google_link
+                                                                    projectCompletionData
+                                                                        ?.project_submission
+                                                                        .google_link
                                                                 }
                                                             </a>
                                                         </p>
                                                     </Switch.Case>
                                                     <Switch.Case
                                                         condition={
-                                                            project_submission?.drive_information ===
+                                                            projectCompletionData
+                                                                ?.project_submission
+                                                                ?.drive_information ===
                                                             0
                                                         }
                                                     >
@@ -397,7 +450,9 @@ const ProjectCompletionModal = ({ isModalOpen, closeModal, modalData }) => {
                                                 </div>
                                             </Switch.Case>
                                             <Switch.Case
-                                                condition={!project_submission}
+                                                condition={
+                                                    !projectCompletionData?.project_submission
+                                                }
                                             >
                                                 <p>--</p>
                                             </Switch.Case>
@@ -415,15 +470,23 @@ const ProjectCompletionModal = ({ isModalOpen, closeModal, modalData }) => {
                                         <Placeholder height={16} width="50%" />,
                                         <Switch>
                                             <Switch.Case
-                                                condition={project_submission}
+                                                condition={
+                                                    projectCompletionData?.project_submission
+                                                }
                                             >
                                                 <p>
-                                                    {project_submission?.rating}
+                                                    {
+                                                        projectCompletionData
+                                                            ?.project_submission
+                                                            ?.rating
+                                                    }
                                                     /10
                                                 </p>
                                             </Switch.Case>
                                             <Switch.Case
-                                                condition={!project_submission}
+                                                condition={
+                                                    !projectCompletionData?.project_submission
+                                                }
                                             >
                                                 <p>--</p>
                                             </Switch.Case>
@@ -443,16 +506,22 @@ const ProjectCompletionModal = ({ isModalOpen, closeModal, modalData }) => {
                                         <Placeholder height={16} width="50%" />,
                                         <Switch>
                                             <Switch.Case
-                                                condition={project_submission}
+                                                condition={
+                                                    projectCompletionData?.project_submission
+                                                }
                                             >
                                                 <p>
                                                     {
-                                                        project_submission?.comments
+                                                        projectCompletionData
+                                                            ?.project_submission
+                                                            ?.comments
                                                     }
                                                 </p>
                                             </Switch.Case>
                                             <Switch.Case
-                                                condition={!project_submission}
+                                                condition={
+                                                    !projectCompletionData?.project_submission
+                                                }
                                             >
                                                 <p>--</p>
                                             </Switch.Case>
@@ -473,17 +542,23 @@ const ProjectCompletionModal = ({ isModalOpen, closeModal, modalData }) => {
                                         <Placeholder height={16} width="50%" />,
                                         <Switch>
                                             <Switch.Case
-                                                condition={project_submission}
+                                                condition={
+                                                    projectCompletionData?.project_submission
+                                                }
                                             >
                                                 <p>
                                                     {
-                                                        project_submission?.requirements
+                                                        projectCompletionData
+                                                            ?.project_submission
+                                                            ?.requirements
                                                     }
                                                     /10
                                                 </p>
                                             </Switch.Case>
                                             <Switch.Case
-                                                condition={!project_submission}
+                                                condition={
+                                                    !projectCompletionData?.project_submission
+                                                }
                                             >
                                                 <p>--</p>
                                             </Switch.Case>
@@ -503,16 +578,22 @@ const ProjectCompletionModal = ({ isModalOpen, closeModal, modalData }) => {
                                         <Placeholder height={16} width="50%" />,
                                         <Switch>
                                             <Switch.Case
-                                                condition={project_submission}
+                                                condition={
+                                                    projectCompletionData?.project_submission
+                                                }
                                             >
                                                 <p>
                                                     {
-                                                        project_submission?.comments2
+                                                        projectCompletionData
+                                                            ?.project_submission
+                                                            ?.comments2
                                                     }
                                                 </p>
                                             </Switch.Case>
                                             <Switch.Case
-                                                condition={!project_submission}
+                                                condition={
+                                                    !projectCompletionData?.project_submission
+                                                }
                                             >
                                                 <p>--</p>
                                             </Switch.Case>
@@ -533,15 +614,23 @@ const ProjectCompletionModal = ({ isModalOpen, closeModal, modalData }) => {
                                         <Placeholder height={16} width="50%" />,
                                         <Switch>
                                             <Switch.Case
-                                                condition={project_submission}
+                                                condition={
+                                                    projectCompletionData?.project_submission
+                                                }
                                             >
                                                 <p>
-                                                    {project_submission?.price}
+                                                    {
+                                                        projectCompletionData
+                                                            ?.project_submission
+                                                            ?.price
+                                                    }
                                                     /10
                                                 </p>
                                             </Switch.Case>
                                             <Switch.Case
-                                                condition={!project_submission}
+                                                condition={
+                                                    !projectCompletionData?.project_submission
+                                                }
                                             >
                                                 <p>--</p>
                                             </Switch.Case>
@@ -562,16 +651,22 @@ const ProjectCompletionModal = ({ isModalOpen, closeModal, modalData }) => {
                                         <Placeholder height={16} width="50%" />,
                                         <Switch>
                                             <Switch.Case
-                                                condition={project_submission}
+                                                condition={
+                                                    projectCompletionData?.project_submission
+                                                }
                                             >
                                                 <p>
                                                     {
-                                                        project_submission?.comments3
+                                                        projectCompletionData
+                                                            ?.project_submission
+                                                            ?.comments3
                                                     }
                                                 </p>
                                             </Switch.Case>
                                             <Switch.Case
-                                                condition={!project_submission}
+                                                condition={
+                                                    !projectCompletionData?.project_submission
+                                                }
                                             >
                                                 <p>--</p>
                                             </Switch.Case>
@@ -589,16 +684,22 @@ const ProjectCompletionModal = ({ isModalOpen, closeModal, modalData }) => {
                                         <Placeholder height={16} width="50%" />,
                                         <Switch>
                                             <Switch.Case
-                                                condition={project_portfolio}
+                                                condition={
+                                                    projectCompletionData?.project_portfolio
+                                                }
                                             >
                                                 <p>
                                                     {
-                                                        project_portfolio?.cms_name
+                                                        projectCompletionData
+                                                            ?.project_portfolio
+                                                            ?.cms_name
                                                     }
                                                 </p>
                                             </Switch.Case>
                                             <Switch.Case
-                                                condition={!project_portfolio}
+                                                condition={
+                                                    !projectCompletionData?.project_portfolio
+                                                }
                                             >
                                                 <p>--</p>
                                             </Switch.Case>
@@ -616,16 +717,22 @@ const ProjectCompletionModal = ({ isModalOpen, closeModal, modalData }) => {
                                         <Placeholder height={16} width="50%" />,
                                         <Switch>
                                             <Switch.Case
-                                                condition={project_portfolio}
+                                                condition={
+                                                    projectCompletionData?.project_portfolio
+                                                }
                                             >
                                                 <p>
                                                     {
-                                                        project_portfolio?.website_type
+                                                        projectCompletionData
+                                                            ?.project_portfolio
+                                                            ?.website_type
                                                     }
                                                 </p>
                                             </Switch.Case>
                                             <Switch.Case
-                                                condition={!project_portfolio}
+                                                condition={
+                                                    !projectCompletionData?.project_portfolio
+                                                }
                                             >
                                                 <p>--</p>
                                             </Switch.Case>
@@ -644,36 +751,46 @@ const ProjectCompletionModal = ({ isModalOpen, closeModal, modalData }) => {
                                         <Switch>
                                             <Switch.Case
                                                 condition={
-                                                    project_submission.niche
+                                                    projectCompletionData
+                                                        ?.project_submission
+                                                        ?.niche
                                                 }
                                             >
                                                 <p>
                                                     {
-                                                        project_submission.category_name
+                                                        projectCompletionData
+                                                            ?.project_submission
+                                                            .category_name
                                                     }
                                                 </p>
                                             </Switch.Case>
                                             <Switch.Case
                                                 condition={
-                                                    !project_submission.niche
+                                                    !projectCompletionData
+                                                        ?.project_submission
+                                                        .niche
                                                 }
                                             >
                                                 <Switch.Case
                                                     condition={
-                                                        project_portfolio
+                                                        projectCompletionData?.project_portfolio
                                                     }
                                                 >
                                                     <p>
                                                         {
-                                                            project_portfolio?.category_name
+                                                            projectCompletionData
+                                                                ?.project_portfolio
+                                                                ?.category_name
                                                         }
                                                     </p>
                                                 </Switch.Case>
                                             </Switch.Case>
                                             <Switch.Case
                                                 condition={
-                                                    !project_portfolio &&
-                                                    !project_submission.niche
+                                                    !projectCompletionData?.project_portfolio &&
+                                                    !projectCompletionData
+                                                        ?.project_submission
+                                                        .niche
                                                 }
                                             >
                                                 <p>--</p>
@@ -694,23 +811,30 @@ const ProjectCompletionModal = ({ isModalOpen, closeModal, modalData }) => {
                                         <Placeholder height={16} width="50%" />,
                                         <Switch>
                                             <Switch.Case
-                                                condition={project_portfolio}
+                                                condition={
+                                                    projectCompletionData?.project_portfolio
+                                                }
                                             >
                                                 <p className="mb-1">
                                                     Number of pages:{" "}
                                                     {
-                                                        project_portfolio?.main_page_number
+                                                        projectCompletionData
+                                                            ?.project_portfolio
+                                                            ?.main_page_number
                                                     }
                                                 </p>
                                                 <p>
                                                     Name of pages:{" "}
-                                                    {
-                                                        project_portfolio?.main_page_name
-                                                    }
+                                                    {projectCompletionData
+                                                        ?.project_portfolio
+                                                        ?.main_page_name ||
+                                                        "--"}
                                                 </p>
                                             </Switch.Case>
                                             <Switch.Case
-                                                condition={!project_portfolio}
+                                                condition={
+                                                    !projectCompletionData?.project_portfolio
+                                                }
                                             >
                                                 <p>--</p>
                                             </Switch.Case>
@@ -730,23 +854,30 @@ const ProjectCompletionModal = ({ isModalOpen, closeModal, modalData }) => {
                                         <Placeholder height={16} width="50%" />,
                                         <Switch>
                                             <Switch.Case
-                                                condition={project_portfolio}
+                                                condition={
+                                                    projectCompletionData?.project_portfolio
+                                                }
                                             >
                                                 <p className="mb-1">
                                                     Number of pages:{" "}
                                                     {
-                                                        project_portfolio?.secondary_page_number
+                                                        projectCompletionData
+                                                            ?.project_portfolio
+                                                            ?.secondary_page_number
                                                     }
                                                 </p>
                                                 <p>
                                                     Name of pages:{" "}
-                                                    {
-                                                        project_portfolio?.secondary_page_name
-                                                    }
+                                                    {projectCompletionData
+                                                        ?.project_portfolio
+                                                        ?.secondary_page_name ||
+                                                        "--"}
                                                 </p>
                                             </Switch.Case>
                                             <Switch.Case
-                                                condition={!project_portfolio}
+                                                condition={
+                                                    !projectCompletionData?.project_portfolio
+                                                }
                                             >
                                                 <p>--</p>
                                             </Switch.Case>
@@ -764,16 +895,22 @@ const ProjectCompletionModal = ({ isModalOpen, closeModal, modalData }) => {
                                         <Placeholder height={16} width="50%" />,
                                         <Switch>
                                             <Switch.Case
-                                                condition={project_portfolio}
+                                                condition={
+                                                    projectCompletionData?.project_portfolio
+                                                }
                                             >
                                                 <p>
                                                     {
-                                                        project_portfolio.backup_email_address
+                                                        projectCompletionData
+                                                            ?.project_portfolio
+                                                            .backup_email_address
                                                     }
                                                 </p>
                                             </Switch.Case>
                                             <Switch.Case
-                                                condition={!project_portfolio}
+                                                condition={
+                                                    !projectCompletionData?.project_portfolio
+                                                }
                                             >
                                                 <p>--</p>
                                             </Switch.Case>
@@ -791,16 +928,22 @@ const ProjectCompletionModal = ({ isModalOpen, closeModal, modalData }) => {
                                         <Placeholder height={16} width="50%" />,
                                         <Switch>
                                             <Switch.Case
-                                                condition={project_portfolio}
+                                                condition={
+                                                    projectCompletionData?.project_portfolio
+                                                }
                                             >
                                                 <p>
                                                     {
-                                                        project_portfolio.day_interval
+                                                        projectCompletionData
+                                                            ?.project_portfolio
+                                                            ?.day_interval
                                                     }
                                                 </p>
                                             </Switch.Case>
                                             <Switch.Case
-                                                condition={!project_portfolio}
+                                                condition={
+                                                    !projectCompletionData?.project_portfolio
+                                                }
                                             >
                                                 <p>--</p>
                                             </Switch.Case>
@@ -821,16 +964,39 @@ const ProjectCompletionModal = ({ isModalOpen, closeModal, modalData }) => {
                                         <Placeholder height={16} width="50%" />,
                                         <Switch>
                                             <Switch.Case
-                                                condition={project_portfolio}
+                                                condition={
+                                                    projectCompletionData?.project_portfolio
+                                                }
                                             >
-                                                <p
-                                                    dangerouslySetInnerHTML={{
-                                                        __html: project_portfolio?.description,
-                                                    }}
-                                                />
+                                                <Switch.Case
+                                                    condition={
+                                                        projectCompletionData
+                                                            ?.project_portfolio
+                                                            ?.description
+                                                    }
+                                                >
+                                                    <p
+                                                        dangerouslySetInnerHTML={{
+                                                            __html: projectCompletionData
+                                                                ?.project_portfolio
+                                                                ?.description,
+                                                        }}
+                                                    />
+                                                </Switch.Case>
+                                                <Switch.Case
+                                                    condition={
+                                                        !projectCompletionData
+                                                            ?.project_portfolio
+                                                            ?.description
+                                                    }
+                                                >
+                                                    <p>--</p>
+                                                </Switch.Case>
                                             </Switch.Case>
                                             <Switch.Case
-                                                condition={!project_portfolio}
+                                                condition={
+                                                    !projectCompletionData?.project_portfolio
+                                                }
                                             >
                                                 <p>--</p>
                                             </Switch.Case>
@@ -848,31 +1014,38 @@ const ProjectCompletionModal = ({ isModalOpen, closeModal, modalData }) => {
                                         <Placeholder height={16} width="50%" />,
                                         <Switch>
                                             <Switch.Case
-                                                condition={project_portfolio}
+                                                condition={
+                                                    projectCompletionData?.project_portfolio
+                                                }
                                             >
                                                 <Switch.Case
                                                     condition={
-                                                        project_portfolio?.theme_id
+                                                        projectCompletionData
+                                                            ?.project_portfolio
+                                                            ?.theme_id
                                                     }
                                                 >
                                                     <p>
                                                         {
-                                                            project_portfolio
-                                                                ?.website_theme
+                                                            projectCompletionData
+                                                                ?.project_portfolio
+                                                                ?.theme
                                                                 ?.theme_name
                                                         }
                                                     </p>
                                                     <Switch.Case
                                                         condition={
-                                                            project_portfolio
-                                                                ?.website_theme
+                                                            projectCompletionData
+                                                                ?.project_portfolio
+                                                                ?.theme
                                                                 ?.theme_url
                                                         }
                                                     >
                                                         <a
                                                             href={
-                                                                project_portfolio
-                                                                    ?.website_theme
+                                                                projectCompletionData
+                                                                    ?.project_portfolio
+                                                                    ?.theme
                                                                     ?.theme_url
                                                             }
                                                             target="_blank"
@@ -880,8 +1053,9 @@ const ProjectCompletionModal = ({ isModalOpen, closeModal, modalData }) => {
                                                             className="singleline-ellipsis"
                                                         >
                                                             {
-                                                                project_portfolio
-                                                                    ?.website_theme
+                                                                projectCompletionData
+                                                                    ?.project_portfolio
+                                                                    ?.theme
                                                                     ?.theme_url
                                                             }
                                                         </a>
@@ -889,36 +1063,48 @@ const ProjectCompletionModal = ({ isModalOpen, closeModal, modalData }) => {
                                                 </Switch.Case>
                                                 <Switch.Case
                                                     condition={
-                                                        !project_portfolio?.theme_id
+                                                        !projectCompletionData
+                                                            ?.project_portfolio
+                                                            ?.theme_id
                                                     }
                                                 >
                                                     <p>
                                                         {
-                                                            project_portfolio?.theme_name
+                                                            projectCompletionData
+                                                                ?.project_portfolio
+                                                                ?.theme_name
                                                         }
                                                     </p>
                                                     <Switch.Case
                                                         condition={
-                                                            project_portfolio?.theme_url
+                                                            projectCompletionData
+                                                                ?.project_portfolio
+                                                                ?.theme_url
                                                         }
                                                     >
                                                         <a
                                                             href={
-                                                                project_portfolio?.theme_url
+                                                                projectCompletionData
+                                                                    ?.project_portfolio
+                                                                    ?.theme_url
                                                             }
                                                             target="_blank"
                                                             rel="noopener noreferrer"
                                                             className="singleline-ellipsis"
                                                         >
                                                             {
-                                                                project_portfolio?.theme_url
+                                                                projectCompletionData
+                                                                    ?.project_portfolio
+                                                                    ?.theme_url
                                                             }
                                                         </a>
                                                     </Switch.Case>
                                                 </Switch.Case>
                                             </Switch.Case>
                                             <Switch.Case
-                                                condition={!project_portfolio}
+                                                condition={
+                                                    !projectCompletionData?.project_portfolio
+                                                }
                                             >
                                                 <p>--</p>
                                             </Switch.Case>
@@ -936,17 +1122,23 @@ const ProjectCompletionModal = ({ isModalOpen, closeModal, modalData }) => {
                                         <Placeholder height={16} width="50%" />,
                                         <Switch>
                                             <Switch.Case
-                                                condition={project_portfolio}
+                                                condition={
+                                                    projectCompletionData?.project_portfolio
+                                                }
                                             >
                                                 <p>
-                                                    {project_portfolio?.plugin_information ===
+                                                    {projectCompletionData
+                                                        ?.project_portfolio
+                                                        ?.plugin_information ===
                                                     1
                                                         ? "Yes"
                                                         : "No"}
                                                 </p>
                                             </Switch.Case>
                                             <Switch.Case
-                                                condition={!project_portfolio}
+                                                condition={
+                                                    !projectCompletionData?.project_portfolio
+                                                }
                                             >
                                                 <p>--</p>
                                             </Switch.Case>
@@ -967,38 +1159,37 @@ const ProjectCompletionModal = ({ isModalOpen, closeModal, modalData }) => {
                                         <Switch>
                                             <Switch.Case
                                                 condition={
-                                                    project_portfolio
-                                                        ?.plugin_list?.length
+                                                    convertedPluginList?.length
                                                 }
                                             >
-                                                {project_portfolio?.plugin_list?.map(
+                                                {projectCompletionData?.project_portfolio?.plugins?.map(
                                                     (plugin) => (
                                                         <div
                                                             key={
-                                                                plugin.plugin_name
+                                                                plugin?.plugin_name
                                                             }
                                                             className="mb-2"
                                                         >
                                                             <p>
                                                                 {
-                                                                    plugin.plugin_name
+                                                                    plugin?.plugin_name
                                                                 }
                                                             </p>
                                                             <Switch.Case
                                                                 condition={
-                                                                    plugin.plugin_url
+                                                                    plugin?.plugin_url
                                                                 }
                                                             >
                                                                 <a
                                                                     href={
-                                                                        plugin.plugin_url
+                                                                        plugin?.plugin_url
                                                                     }
                                                                     target="_blank"
                                                                     rel="noopener noreferrer"
                                                                     className="singleline-ellipsis"
                                                                 >
                                                                     {
-                                                                        plugin.plugin_url
+                                                                        plugin?.plugin_url
                                                                     }
                                                                 </a>
                                                             </Switch.Case>
@@ -1007,7 +1198,11 @@ const ProjectCompletionModal = ({ isModalOpen, closeModal, modalData }) => {
                                                 )}
                                             </Switch.Case>
                                             <Switch.Case
-                                                condition={!project_portfolio}
+                                                condition={
+                                                    !projectCompletionData?.project_portfolio ||
+                                                    convertedPluginList?.length ===
+                                                        0
+                                                }
                                             >
                                                 <p>--</p>
                                             </Switch.Case>
@@ -1027,11 +1222,15 @@ const ProjectCompletionModal = ({ isModalOpen, closeModal, modalData }) => {
                                         <Placeholder height={16} width="50%" />,
                                         <Switch>
                                             <Switch.Case
-                                                condition={project_submission}
+                                                condition={
+                                                    projectCompletionData?.project_submission
+                                                }
                                             >
                                                 <Switch.Case
                                                     condition={
-                                                        project_submission?.dummy_information
+                                                        projectCompletionData
+                                                            ?.project_submission
+                                                            ?.dummy_information
                                                     }
                                                 >
                                                     <p className="mb-1">Yes</p>
@@ -1043,21 +1242,27 @@ const ProjectCompletionModal = ({ isModalOpen, closeModal, modalData }) => {
                                                         </strong>{" "}
                                                         <a
                                                             href={
-                                                                project_submission.dummy_link
+                                                                projectCompletionData
+                                                                    ?.project_submission
+                                                                    .dummy_link
                                                             }
                                                             target="_blank"
                                                             rel="noopener noreferrer"
                                                             className="singleline-ellipsis w-50 ml-1"
                                                         >
                                                             {
-                                                                project_submission.dummy_link
+                                                                projectCompletionData
+                                                                    ?.project_submission
+                                                                    .dummy_link
                                                             }
                                                         </a>
                                                     </p>
                                                 </Switch.Case>
                                             </Switch.Case>
                                             <Switch.Case
-                                                condition={!project_submission}
+                                                condition={
+                                                    !projectCompletionData?.project_submission
+                                                }
                                             >
                                                 <p>--</p>
                                             </Switch.Case>
@@ -1078,17 +1283,22 @@ const ProjectCompletionModal = ({ isModalOpen, closeModal, modalData }) => {
                                         <Placeholder height={16} width="50%" />,
                                         <Switch>
                                             <Switch.Case
-                                                condition={project_submission}
+                                                condition={
+                                                    projectCompletionData?.project_submission
+                                                }
                                             >
                                                 <p>
-                                                    {project_submission?.notify ===
-                                                    1
+                                                    {projectCompletionData
+                                                        ?.project_submission
+                                                        ?.notify === 1
                                                         ? "Yes"
                                                         : "No"}
                                                 </p>
                                             </Switch.Case>
                                             <Switch.Case
-                                                condition={!project_submission}
+                                                condition={
+                                                    !projectCompletionData?.project_submission
+                                                }
                                             >
                                                 <p>--</p>
                                             </Switch.Case>
@@ -1108,17 +1318,22 @@ const ProjectCompletionModal = ({ isModalOpen, closeModal, modalData }) => {
                                         <Placeholder height={16} width="50%" />,
                                         <Switch>
                                             <Switch.Case
-                                                condition={project_submission}
+                                                condition={
+                                                    projectCompletionData?.project_submission
+                                                }
                                             >
                                                 <p>
-                                                    {project_submission?.actual_yes ===
-                                                    1
+                                                    {projectCompletionData
+                                                        ?.project_submission
+                                                        ?.actual_yes === 1
                                                         ? "Yes"
                                                         : "No"}
                                                 </p>
                                             </Switch.Case>
                                             <Switch.Case
-                                                condition={!project_submission}
+                                                condition={
+                                                    !projectCompletionData?.project_submission
+                                                }
                                             >
                                                 <p>--</p>
                                             </Switch.Case>
@@ -1138,11 +1353,15 @@ const ProjectCompletionModal = ({ isModalOpen, closeModal, modalData }) => {
                                         <Placeholder height={16} width="50%" />,
                                         <Switch>
                                             <Switch.Case
-                                                condition={project_submission}
+                                                condition={
+                                                    projectCompletionData?.project_submission
+                                                }
                                             >
                                                 <Switch.Case
                                                     condition={
-                                                        project_submission?.dummy_information ===
+                                                        projectCompletionData
+                                                            ?.project_submission
+                                                            ?.dummy_information ===
                                                         1
                                                     }
                                                 >
@@ -1154,21 +1373,27 @@ const ProjectCompletionModal = ({ isModalOpen, closeModal, modalData }) => {
                                                         </strong>{" "}
                                                         <a
                                                             href={
-                                                                project_submission.actual_link
+                                                                projectCompletionData
+                                                                    ?.project_submission
+                                                                    .actual_link
                                                             }
                                                             target="_blank"
                                                             rel="noopener noreferrer"
                                                             className="singleline-ellipsis w-50 ml-1"
                                                         >
                                                             {
-                                                                project_submission.actual_link
+                                                                projectCompletionData
+                                                                    ?.project_submission
+                                                                    .actual_link
                                                             }
                                                         </a>
                                                     </p>
                                                 </Switch.Case>
                                                 <Switch.Case
                                                     condition={
-                                                        project_submission?.dummy_information ===
+                                                        projectCompletionData
+                                                            ?.project_submission
+                                                            ?.dummy_information ===
                                                         0
                                                     }
                                                 >
@@ -1176,7 +1401,9 @@ const ProjectCompletionModal = ({ isModalOpen, closeModal, modalData }) => {
                                                 </Switch.Case>
                                             </Switch.Case>
                                             <Switch.Case
-                                                condition={!project_submission}
+                                                condition={
+                                                    !projectCompletionData?.project_submission
+                                                }
                                             >
                                                 <p>--</p>
                                             </Switch.Case>
@@ -1192,22 +1419,28 @@ const ProjectCompletionModal = ({ isModalOpen, closeModal, modalData }) => {
             <ModalContentContainer>
                 <CustomTextArea
                     label={
-                        project_submission.admin_comment
+                        projectCompletionData?.project_submission.admin_comment
                             ? "Admin Comment"
                             : "Comments"
                     }
                     placeholder={"Write your comments here"}
                     name="admin_comment"
-                    value={project_submission.admin_comment ?? adminComment}
+                    value={
+                        projectCompletionData?.project_submission
+                            .admin_comment ?? adminComment
+                    }
                     onChange={(e) => {
                         setAdminComment(e.target.value);
                     }}
                     rows={6}
                     cols={50}
                     isDangerHtml={htmlTagRegex.test(
-                        project_submission?.admin_comment
+                        projectCompletionData?.project_submission?.admin_comment
                     )}
-                    isDisabled={project_submission?.admin_comment ?? false}
+                    isDisabled={
+                        projectCompletionData?.project_submission
+                            ?.admin_comment ?? false
+                    }
                 />
             </ModalContentContainer>
             {/* Buttons */}
@@ -1215,7 +1448,10 @@ const ProjectCompletionModal = ({ isModalOpen, closeModal, modalData }) => {
                 <div className="modalButtonContainer">
                     <Switch>
                         <Switch.Case
-                            condition={!project_submission?.admin_comment}
+                            condition={
+                                !projectCompletionData?.project_submission
+                                    ?.admin_comment
+                            }
                         >
                             <SingleButton
                                 label={

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 import PropTypes from "prop-types";
 import { BsPinAngle } from "react-icons/bs";
 import { LiaEdit } from "react-icons/lia";
@@ -13,6 +13,12 @@ import style from "./styles/dashboardHeaderSection.module.css";
 import WorkingEnvironmentModal from "../modal/WorkingEnvironmentModal";
 import TaskGuidelineNeedsAuthorizedAdmin from "../modal/TaskGuidelineNeedsAuthorizedAdmin";
 
+// Icons
+import RefreshIcon from "../ui/Icons/RefreshIcon";
+
+// Context
+import { ProjectDashboardContext } from "../../context/ProjectDashboardProvider";
+
 // ShortName
 // WN - WorkingEnvironment;
 // TGABA - TaskGuidelineNeedsAuthorizedByAdmin;
@@ -26,14 +32,17 @@ import TaskGuidelineNeedsAuthorizedAdmin from "../modal/TaskGuidelineNeedsAuthor
  * @param {function} props.setDummyTypeChange - Set Dummy Type Change
  * @returns {JSX.Element} - Rendered component
  * @description Dashboard Header Section Component for showing header section on the dashboard page.
- *  
+ *
  */
 
-const DashboardHeaderSection = ({ projectData, isLoading, setDummyTypeChange }) => {
+const DashboardHeaderSection = ({ projectData, isLoading }) => {
+    const { refetchProjectDetails, isProjectDetailsLoading } = useContext(
+        ProjectDashboardContext
+    );
     const [isWNModalOpen, setIsWNModalOpen] = React.useState(false);
     const [isTGABAModalOpen, setIsTGABAModalOpen] = React.useState(false);
 
-     // Handle Modal Open and Close Function with Action Function as Parameter (if needed)
+    // Handle Modal Open and Close Function with Action Function as Parameter (if needed)
     const handleModal = (setModalOpenFunc, isOpen, action) => {
         setModalOpenFunc(isOpen);
         if (action) {
@@ -41,73 +50,36 @@ const DashboardHeaderSection = ({ projectData, isLoading, setDummyTypeChange }) 
         }
     };
 
-
     return (
         <div className="d-flex flex-column flex-md-row justify-content-md-between mb-4">
             <div className="d-flex mb-3 mb-md-0">
                 <Button
-                    onClick={()  => handleModal(setIsWNModalOpen, true)}
-                    className={`${style?.dashboardHeaderButton}`}
+                    className={`${style?.dashboardHeaderForType} text-capitalize`}
                 >
-                    Working Environment
+                    Project Type: {projectData?.projectType}
                 </Button>
                 <Button
-                    onClick={() => {
-                        setDummyTypeChange((prev) => (prev === 0 ? 1 : 0));
-                    }}
-                    className={`${style?.dashboardHeaderForType} ml-2`}
+                    onClick={() => handleModal(setIsWNModalOpen, true)}
+                    className={`${style?.dashboardHeaderButton} ml-2`}
                 >
-                    Project Type: {projectData.projectType}
+                    Working Environment
                 </Button>
             </div>
             <div className="d-flex mb-3 mb-md-0 ">
                 <Button
-                    onClick={()  => handleModal(setIsTGABAModalOpen, true)}
+                    onClick={() => handleModal(setIsTGABAModalOpen, true)}
                     className={`${style?.dashboardHeaderButton}`}
                 >
                     Mark as complete
                 </Button>
-                {/* Action DropDown */}
-                <div className={`dropdown ml-2  ${style.actionButtonDropdown}`}>
-                    <button
-                        className={`btn btn-lg bg-white  f-15 px-2 py-1 text-dark-grey text-capitalize rounded dropdown-toggle ${style?.dashboardHeaderButton} ${style.actionButton}`}
-                        type="button"
-                        data-toggle="dropdown"
-                        aria-haspopup="true"
-                        aria-expanded="true"
-                    >
-                        Action <i className="icon-options-vertical icons"></i>
-                    </button>
-                    <div
-                        className="dropdown-menu dropdown-menu-right border-grey rounded b-shadow-4 p-0 "
-                        aria-labelledby="dropdownMenuLink"
-                        style={{
-                            position: "absolute",
-                            willChange: "transform",
-                            top: "0px",
-                            left: "0px",
-                            transform: "translate3d(-80px, 39px, 0px)",
-                        }}
-                    >
-                        <a
-                            className="dropdown-item openRightModal"
-                            href="http://localhost:8000/account/projects/1181/edit"
-                        >
-                            <LiaEdit className="mr-2" />
-                            Edit Project
-                        </a>
-                        <hr className="my-1" />
-                        <a
-                            className="dropdown-item"
-                            id="pinnedItem"
-                            data-pinned="unpinned"
-                            href="#"
-                        >
-                            <BsPinAngle className="mr-2" />
-                            Pin Project
-                        </a>
-                    </div>
-                </div>
+                {/* Refresh Button */}
+
+                <Button
+                    onClick={() => refetchProjectDetails()}
+                    className={`${style?.refreshButton} ml-2`}
+                >
+                    <RefreshIcon className={isProjectDetailsLoading && style?.refreshButtonActive} />
+                </Button>
             </div>
 
             {/* ----- Modal ------ */}
@@ -116,8 +88,8 @@ const DashboardHeaderSection = ({ projectData, isLoading, setDummyTypeChange }) 
             {isWNModalOpen && (
                 <WorkingEnvironmentModal
                     isModalOpen={isWNModalOpen}
-                    closeModal={()  => handleModal(setIsWNModalOpen, false)}
-                    modalData={projectData?.projectData?.working_environment}
+                    closeModal={() => handleModal(setIsWNModalOpen, false)}
+                    modalData={projectData?.working_environment}
                     isLoading={isLoading}
                 />
             )}
@@ -144,5 +116,4 @@ export default DashboardHeaderSection;
 DashboardHeaderSection.propTypes = {
     projectData: PropTypes.object,
     isLoading: PropTypes.bool,
-    setDummyTypeChange: PropTypes.func,
 };

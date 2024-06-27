@@ -44,7 +44,7 @@ const WithoutDraggableColumnHeader = ({
         status: "center",
         due_date: "center",
         tracking_start_time: "center",
-        estimated_hours: "center",
+        estimate_hours: "center",
         logged_hours: "center",
         default: "flex-start",
     };

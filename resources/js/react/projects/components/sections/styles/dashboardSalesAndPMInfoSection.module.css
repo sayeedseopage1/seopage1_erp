@@ -5,10 +5,26 @@
   grid-gap: 16px;
 }
 
+.dashboardSalesAndPMInfoReverseSection{
+  grid-template-areas: "area1 area2";
+}
+
+.dashboardSalesAndPMInfoReverseSection > :nth-child(1) {
+  grid-area: area1;
+}
+
+.dashboardSalesAndPMInfoReverseSection > :nth-child(2) {
+  grid-area: area2;
+}
 
 @media (max-width: 768px) {
   .dashboardSalesAndPMInfoSection {
     grid-template-columns: 1fr;
+  }
+  .dashboardSalesAndPMInfoReverseSection{
+    grid-template-areas: 
+      "area1"
+      "area2";
   }
   
 }
@@ -16,7 +32,7 @@
 @media screen and (max-width: 450px){
   .dashboardSalesAndPMInfoSection{
     display: flex;
-    flex-direction: column;
+    flex-direction: column-reverse;
     gap:16px
   }
 }

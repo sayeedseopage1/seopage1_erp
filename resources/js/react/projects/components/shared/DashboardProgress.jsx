@@ -1,5 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
+import dayjs from "dayjs";
 import { LuCalendarDays } from "react-icons/lu";
 
 // UI Components - Custom
@@ -26,7 +27,12 @@ import DeadlineChangeHistoryModal from "../modal/DeadlineChangeHistoryModal";
  *  @description DashboardProgress component to render project progress
  */
 
-const DashboardProgress = ({ projectData, style, className = "" }) => {
+const DashboardProgress = ({
+    projectData,
+    style,
+    className = "",
+    isProjectDetailsLoading,
+}) => {
     const [isDeadlineHistoryModalOpen, setIsDeadlineHistoryModalOpen] =
         React.useState(false);
     const projectInfo = projectData?.projectData;
@@ -39,12 +45,18 @@ const DashboardProgress = ({ projectData, style, className = "" }) => {
         }
     };
 
+    // Format the date
+
+    const formatDate = (date) => {
+        return dayjs(date).format("DD MMM YYYY");
+    };
+
     return (
         <CardWrapper color="#ffffff" className={`${className}`}>
             <DashboardCardTitle
                 title="Project Progress"
                 isBorderUse={true}
-                rightText={`Completed: ${projectInfo?.project?.progress}%`}
+                rightText={`Completed: ${projectData?.progress}%`}
                 rightTextColor={"#70CA62"}
             />
 
@@ -54,7 +66,7 @@ const DashboardProgress = ({ projectData, style, className = "" }) => {
                         <p>Start Date</p>
                         <span className="flexItemCenter">
                             <LuCalendarDays className="mr-1" />
-                            {projectInfo?.project?.start_date}
+                            {formatDate(projectData?.start_date)}
                         </span>
                     </div>
                     <div className="flexColumn">
@@ -63,8 +75,7 @@ const DashboardProgress = ({ projectData, style, className = "" }) => {
                             className="flexItemCenter cursor-pointer deadlineBtn"
                             style={{
                                 color:
-                                    new Date(projectInfo?.project?.deadline) <
-                                    new Date()
+                                    formatDate(projectData?.deadline) < new Date()
                                         ? "#FF0000"
                                         : "#000000",
                             }}
@@ -73,12 +84,12 @@ const DashboardProgress = ({ projectData, style, className = "" }) => {
                             }
                         >
                             <LuCalendarDays className="mr-1" />{" "}
-                            {projectInfo?.project?.deadline}
+                            {formatDate(projectData?.deadline)}
                         </button>
                     </div>
                 </div>
                 {/* Dashboard Chart */}
-                <ProjectProgressChart chartData={[0, 15, 70, 15, 0, 0, 0, 0]} />
+                <ProjectProgressChart chartData={projectData?.progress_chart_values} />
             </div>
             <div
                 className={`${style.dashboardProgressStatusContainer} mt-2 mt-md-5`}
@@ -117,4 +128,5 @@ DashboardProgress.propTypes = {
     projectData: PropTypes.object.isRequired,
     style: PropTypes.object,
     className: PropTypes.string,
+    isProjectDetailsLoading: PropTypes.bool.isRequired,
 };

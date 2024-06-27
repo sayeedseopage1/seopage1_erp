@@ -36,6 +36,28 @@
   color: #000;
 }
 
+.refreshButton {
+  background-color: #D8EBDA !important;
+  border: 1px solid #70CA62;
+  border-radius: 5px;
+  padding: 9px 19px !important;
+  margin-top: 0 !important;
+  margin-bottom: 0 !important;
+}
+
+.refreshButtonActive {
+  animation: rotate 1s linear infinite;
+}
+
+@keyframes rotate {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
+}
 
 
 
@@ -54,10 +76,12 @@
     font-family: Poppins, sans-serif;
     width: 50%;
   }
-  .actionButton{
+
+  .actionButton {
     width: 100% !important;
   }
-  .actionButtonDropdown{
+
+  .actionButtonDropdown {
     width: 50% !important;
   }
 
@@ -78,10 +102,11 @@
     width: 50%;
   }
 
-  .actionButton{
+  .actionButton {
     width: 100% !important;
   }
-  .actionButtonDropdown{
+
+  .actionButtonDropdown {
     width: 50% !important;
   }
 

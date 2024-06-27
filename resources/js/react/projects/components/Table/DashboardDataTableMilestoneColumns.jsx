@@ -1,4 +1,4 @@
-
+import dayjs from "dayjs";
 
 /**
  * This file contains the columns for the milestone table in the dashboard.
@@ -9,15 +9,15 @@ export const DashboardDataTableMilestoneColumns = [
     {
         id: "milestone_name",
         header: "Milestone name",
-        accessorKey: "milestone_name",
+        accessorKey: "milestone_title",
         cell: ({ row }) => {
             const data = row.original;
             return (
                 <span
                     className="singleline-ellipsis"
-                    title={data.milestone_name}
+                    title={data.milestone_title}
                 >
-                    {data.milestone_name}
+                    {data.milestone_title}
                 </span>
             );
         },
@@ -30,8 +30,8 @@ export const DashboardDataTableMilestoneColumns = [
             const data = row.original;
             return (
                 <span className="singleline-ellipsis">
-                    {data.milestone_currency_symbol}{" "}
-                    {data.milestone_cost ?? "Not set"} {data.milestone_currency}
+                    {data?.currency_symbol}{" "}
+                    {data.cost ?? "Not set"} {data?.currency_code}
                 </span>
             );
         },
@@ -39,7 +39,17 @@ export const DashboardDataTableMilestoneColumns = [
     {
         id: "creation_date",
         header: "Creation date",
-        accessorKey: "creation_date",
+        accessorKey: "created_at",
+        cell: ({ row }) => {
+            const data = row.original;
+            return (
+                <span className="singleline-ellipsis">
+                    {dayjs(data?.created_at).format(
+                        "DD-MM-YYYY h:mm:ss A" 
+                    ) ?? "Not started yet"}
+                </span>
+            );
+        },
     },
     {
         id: "status",
@@ -53,8 +63,8 @@ export const DashboardDataTableMilestoneColumns = [
                         
                         style={{
                             backgroundColor:
-                                data.status === "Paid" ? "#CAEDE1" : "#F9C8CC",
-                            color: data.status === "Paid" ? "#119254" : "#F00",
+                                data.status === "complete" ? "#CAEDE1" : "#F9C8CC",
+                            color: data.status === "complete" ? "#119254" : "#F00",
                         }}
                     >
                         {data.status}
