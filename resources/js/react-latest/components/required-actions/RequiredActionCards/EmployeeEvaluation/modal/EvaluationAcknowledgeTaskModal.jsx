@@ -33,9 +33,10 @@ import useCounterStore from "../../../../../Zustand/store";
 
 import { toast } from "react-toastify";
 import { useAcknowledgePendingActionsPastMutation } from "../../../../../services/api/pendingActionsApiSlice";
-import { EvaluationTaskTableColumns } from "../../../../../../react/employee-evaluation/components/Table/EvaluationTaskTableColumns";
+import { Skeleton } from "antd";
 import _ from "lodash";
 import evaluationDesignation from "../../../../../utils/evaluation-designation";
+import { EvaluationTaskTableColumnsPM } from "../../../../../../react/employee-evaluation/project-manager/components/table/EvaluationTaskTableColumnsPM";
 const EvaluationAcknowledgeTaskModal = ({
     acknowledgementTask,
     setAcknowledgementTask,
@@ -107,29 +108,6 @@ const EvaluationAcknowledgeTaskModal = ({
         setPagination(paginate);
     };
 
-    const handleAcknowledgedItLeadDev = async () => {
-        try {
-            const response = await updatePendingAction({
-                user_id: singleEvaluation?.user_id,
-                acknowledged: "lead_dev",
-            }).unwrap();
-
-            if (response?.status == 200) {
-                if (singleEvaluation?.managements_decision == "One more week") {
-                    setAcknowledgementTask(false);
-                    increaseCount();
-                    window.open(response?.url, "_blank");
-                } else {
-                    toast.success("Acknowledge successful!");
-                    setAcknowledgementTask(false);
-                    increaseCount();
-                }
-            }
-        } catch (error) {
-            console.error("Error updating pending action:", error);
-        }
-    };
-
     const handleAcknowledgedItTeamLead = async () => {
         try {
             const response = await updatePendingAction({
@@ -197,7 +175,7 @@ const EvaluationAcknowledgeTaskModal = ({
                 </EvalTableSubTitle>
                 <EvaluationTable
                     data={tasks}
-                    columns={[...EvaluationTaskTableColumns]}
+                    columns={[...EvaluationTaskTableColumnsPM]}
                     isLoading={isLoading}
                     onPageChange={onPageChange}
                     sorting={sorting}
@@ -253,8 +231,8 @@ const EvaluationAcknowledgeTaskModal = ({
                         {singleEvaluation?.managements_name}
                     </NameLink>
                     {` has `}
-                    <span>{singleEvaluation?.managements_decision}</span>
-                    {` New Developer `}
+                    <span>{singleEvaluation?.managements_decision}</span>{" "}
+                    {`${designation}`}{" "}
                     <NameLink href="#">{singleEvaluation?.user_name}</NameLink>
                     {` for real work on `}
                     <ReviewTableSubTitleDate>
@@ -306,22 +284,6 @@ const EvaluationAcknowledgeTaskModal = ({
                             {singleEvaluation?.managements_decision ===
                             "One more week"
                                 ? "Acknowledge & create a task"
-                                : "Ok,Acknowledged it"}
-                        </div>
-                    </Button>
-                )}
-                {auth.roleId === 6 && (
-                    <Button
-                        onClick={handleAcknowledgedItLeadDev}
-                        isLoading={isLoadingTeamLeadAndLeadDev}
-                        size="md"
-                        className="ml-2"
-                    >
-                        <div>
-                            {" "}
-                            {singleEvaluation?.managements_decision ===
-                            "One more week"
-                                ? "Acknowledge & create sub-tasks"
                                 : "Ok,Acknowledged it"}
                         </div>
                     </Button>

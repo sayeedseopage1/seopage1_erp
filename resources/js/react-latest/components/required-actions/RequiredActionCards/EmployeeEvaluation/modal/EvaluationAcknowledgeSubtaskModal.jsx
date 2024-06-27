@@ -130,29 +130,6 @@ const EvaluationAcknowledgeSubtaskModal = ({
         }
     };
 
-    const handleAcknowledgedItTeamLead = async () => {
-        try {
-            const response = await updatePendingAction({
-                user_id: singleEvaluation?.user_id,
-                acknowledged: "team_lead",
-            }).unwrap();
-
-            if (response?.status == 200) {
-                if (singleEvaluation?.managements_decision == "One more week") {
-                    setAcknowledgementSubtask(false);
-                    increaseCount();
-                    window.open(response?.url, "_blank");
-                } else {
-                    toast.success("Acknowledge successful!");
-                    setAcknowledgementSubtask(false);
-                    increaseCount();
-                }
-            }
-        } catch (error) {
-            console.error("Error updating pending action:", error);
-        }
-    };
-
     return (
         <ReactModal
             style={{
@@ -289,22 +266,6 @@ const EvaluationAcknowledgeSubtaskModal = ({
                     Close
                 </Button>
 
-                {auth.roleId === 8 && (
-                    <Button
-                        onClick={handleAcknowledgedItTeamLead}
-                        isLoading={isLoadingTeamLeadAndLeadDev}
-                        size="md"
-                        className="ml-2"
-                    >
-                        <div>
-                            {" "}
-                            {singleEvaluation?.managements_decision ===
-                            "One more week"
-                                ? "Acknowledge & create a task"
-                                : "Ok,Acknowledged it"}
-                        </div>
-                    </Button>
-                )}
                 {auth.roleId === 6 && (
                     <Button
                         onClick={handleAcknowledgedItLeadDev}

@@ -43,7 +43,6 @@ const EvaluationRequiredRoundsTaskListModalPM = ({
     setIsEvaluationModal,
     singleEvaluation,
 }) => {
-    const [dateExpired, setDateExpired] = React.useState(false);
     React.useEffect(() => {
         setDateExpired(new Date(singleEvaluation?.exp_date) < Date.now());
     }, [singleEvaluation]);
