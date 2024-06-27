@@ -24,8 +24,8 @@ class IncentiveFactorController extends Controller
         $startDate = $request->start_date ? Carbon::parse($request->start_date)->startOfDay() : Carbon::now()->startOfMonth();
         $endDate = Carbon::parse($request->end_date ?? now())->endOfDay();
         $user_id = $request->user_id ?? null;
-        $prevMonthStartDate = $startDate->subMonth()->startOfMonth();
-        $prevMonthEndDate = $endDate->subMonth()->endOfMonth();
+        $prevMonthStartDate = $startDate->copy()->subMonth()->startOfMonth();
+        $prevMonthEndDate = $endDate->copy()->subMonth()->endOfMonth();
 
         $cashPoints = CashPoint::where('user_id', $request->user_id)->whereBetween('created_at', [$startDate, $endDate])->whereNotNull('factor_id')->get();
         $total_points = $cashPoints->sum('total_points_earn') - $cashPoints->sum('total_points_lost');
