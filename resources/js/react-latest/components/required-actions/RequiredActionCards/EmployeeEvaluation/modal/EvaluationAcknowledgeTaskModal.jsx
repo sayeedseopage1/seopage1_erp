@@ -134,6 +134,7 @@ const EvaluationAcknowledgeTaskModal = ({
         try {
             const response = await updatePendingAction({
                 user_id: singleEvaluation?.user_id,
+                role_id: singleEvaluation.roleId,
                 acknowledged: "team_lead",
             }).unwrap();
 
