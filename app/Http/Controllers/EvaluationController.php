@@ -884,17 +884,32 @@ class EvaluationController extends AccountBaseController
             $past_action->action_id = $action->id;
             if($evaluation->employee_status == 1)
             {
-                $past_action->heading= 'New Developer '.$dev->name.' was authorize for real work by Top Management '.$authorize_by->name.'!';
-                $past_action->message = 'Top Management <a href="'.route('employees.show',$authorize_by->id).'">'.$authorize_by->name.'</a> has authorized New Developer <a href="'.route('employees.show',$dev->id).'">'.$dev->name.'</a> for real work from ';
+                if($request->role_id == 15){
+                    $past_action->heading= 'New PM '.$dev->name.' was authorize for real work by Top Management '.$authorize_by->name.'!';
+                    $past_action->message = 'Top Management <a href="'.route('employees.show',$authorize_by->id).'">'.$authorize_by->name.'</a> has authorized New PM <a href="'.route('employees.show',$dev->id).'">'.$dev->name.'</a> for real work from ';
+                }else{
+                    $past_action->heading= 'New Developer '.$dev->name.' was authorize for real work by Top Management '.$authorize_by->name.'!';
+                    $past_action->message = 'Top Management <a href="'.route('employees.show',$authorize_by->id).'">'.$authorize_by->name.'</a> has authorized New Developer <a href="'.route('employees.show',$dev->id).'">'.$dev->name.'</a> for real work from ';
+                }
             }
             if($evaluation_history->employee_status == 2)
             {
-                $past_action->heading= 'Top Management '.$top_management->name.' has extended & created a new task for the trial period for New Developer '.$dev->name.'!';
-                $past_action->message = 'Top Management <a href="'.route('employees.show',$top_management->id).'">'.$top_management->name.'</a> has extended & created a new task for New Developer <a href="'.route('employees.show',$dev->id).'">'.$dev->name.'</a> from ';
+                if($request->role_id == 15){
+                    $past_action->heading= 'Top Management '.$top_management->name.' has extended & created a new task for the trial period for New PM '.$dev->name.'!';
+                    $past_action->message = 'Top Management <a href="'.route('employees.show',$top_management->id).'">'.$top_management->name.'</a> has extended & created a new task for New PM <a href="'.route('employees.show',$dev->id).'">'.$dev->name.'</a> from ';
+                }else{
+                    $past_action->heading= 'Top Management '.$top_management->name.' has extended & created a new task for the trial period for New Developer '.$dev->name.'!';
+                    $past_action->message = 'Top Management <a href="'.route('employees.show',$top_management->id).'">'.$top_management->name.'</a> has extended & created a new task for New Developer <a href="'.route('employees.show',$dev->id).'">'.$dev->name.'</a> from ';
+                }
             }
             if ($evaluation->employee_status == 3) {
-                $past_action->heading= 'New Developer '.$dev->name.' was rejected for real work by Top Management '.$top_management->name.'!';
-                $past_action->message = 'Top Management <a href="'.route('employees.show',$top_management->id).'">'.$top_management->name.'</a> has authorized New Developer <a href="'.route('employees.show',$dev->id).'">'.$dev->name.'</a> for real work from ';
+                if($request->role_id == 15){
+                    $past_action->heading= 'New PM '.$dev->name.' was rejected for real work by Top Management '.$top_management->name.'!';
+                    $past_action->message = 'Top Management <a href="'.route('employees.show',$top_management->id).'">'.$top_management->name.'</a> has authorized New PM <a href="'.route('employees.show',$dev->id).'">'.$dev->name.'</a> for real work from ';
+                }else{
+                    $past_action->heading= 'New Developer '.$dev->name.' was rejected for real work by Top Management '.$top_management->name.'!';
+                    $past_action->message = 'Top Management <a href="'.route('employees.show',$top_management->id).'">'.$top_management->name.'</a> has authorized New Developer <a href="'.route('employees.show',$dev->id).'">'.$dev->name.'</a> for real work from ';
+                }
             }
             $past_action->timeframe = $action->timeframe;
             $past_action->authorization_for = $action->authorization_for;
