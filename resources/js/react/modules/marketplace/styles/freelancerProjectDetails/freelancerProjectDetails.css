@@ -421,3 +421,36 @@
 .file_download_btn span {
     padding: 5px;
 }
+
+/******************** Task list page tab section ********************/
+.task_list_page_wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+    min-height: 60vh;
+    text-align: center
+}
+
+.task_list_page_title {
+    color: var(--primary-black);
+    font-size: 24px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+}
+
+.task_list_page_description {
+    color: var(--primary-black);
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+}
+
+.task_list_page_btn {
+    border: 1px solid var(--light-gray);
+    padding: 8px;
+    background-color: transparent;
+    margin-top: 22px;
+}
