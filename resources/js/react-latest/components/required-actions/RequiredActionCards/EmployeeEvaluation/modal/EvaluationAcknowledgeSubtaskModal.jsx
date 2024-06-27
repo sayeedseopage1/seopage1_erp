@@ -48,9 +48,6 @@ const EvaluationAcknowledgeSubtaskModal = ({
         "One more week": "blue",
         default: "blue",
     };
-    const decisionColor =
-        DecisionColor[singleEvaluation?.managements_decision] ||
-        DecisionColor["default"];
 
     const auth = useAuth();
     const { setEvaluationObject } = useEmployeeEvaluation();
@@ -226,9 +223,9 @@ const EvaluationAcknowledgeSubtaskModal = ({
                         {singleEvaluation?.managements_name}
                     </NameLink>
                     {` has `}
-                    <span style={{ color: decisionColor }}>
+                    <span style={{ color: "blue" }}>
                         {singleEvaluation?.managements_decision}
-                    </span>
+                    </span>{" "}
                     {` New Developer `}
                     <NameLink href="#">{singleEvaluation?.user_name}</NameLink>
                     {` for real work on `}

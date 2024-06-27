@@ -268,7 +268,9 @@ const EvaluationAcknowledgeModal = ({
                         {singleEvaluation?.managements_name}
                     </NameLink>
                     {` has `}
-                    <span>{singleEvaluation?.managements_decision}</span>{" "}
+                    <span style={{ color: "blue" }}>
+                        {singleEvaluation?.managements_decision}
+                    </span>{" "}
                     {`${designation}`}{" "}
                     <NameLink href="#">{singleEvaluation?.user_name}</NameLink>
                     {` for real work on `}
