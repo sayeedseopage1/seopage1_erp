@@ -43,11 +43,6 @@ const EvaluationRequiredRoundsTaskListModalPM = ({
     setIsEvaluationModal,
     singleEvaluation,
 }) => {
-    React.useEffect(() => {
-        setDateExpired(new Date(singleEvaluation?.exp_date) < Date.now());
-    }, [singleEvaluation]);
-    // console.log(singleEvaluation?.user_name, dateExpired);
-
     const auth = useAuth();
     const [cumulativeAverage, setCumulativeAverage] = React.useState(
         singleEvaluation?.team_lead_avg_rating

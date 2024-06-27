@@ -191,7 +191,7 @@ const EvaluationRatingTable = ({ data, averageRating }) => {
                                     }
                                     className="link_color"
                                 >
-                                    {data?.revision_number ?? "0"}
+                                    {Revisions?.length ?? "0"}
                                 </div>
                             </td>
 

@@ -35,13 +35,11 @@ import { Button } from "react-bootstrap";
 import {
     useGetTaskListQuery,
     useStoreTaskRatingFinalSubmissionMutation,
-    useStoreTeamLeadReviewMutation,
     useStoreAdminRejectedMutation,
     useStoreAdminAuthorizedMutation,
     useStoreAdminExtendedMutation,
     useGetEvaluationHistoryQuery,
 } from "../../../../services/api/EvaluationApiSlice.js";
-import { useEffect } from "react";
 
 import React from "react";
 
@@ -152,8 +150,9 @@ const EvaluationTaskListModalPM = ({
     }, [latestRoundTasks]);
 
     React.useEffect(() => {
-        setConfirmButtonDisabled(!dateExpired);
-        // !isAllTaskRated || !dateExpired || isPreviousTasks
+        setConfirmButtonDisabled(
+            !isAllTaskRated || !dateExpired || isPreviousTasks
+        );
     }, [isAllTaskRated, dateExpired, isPreviousTasks]);
 
     console.log(
