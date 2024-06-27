@@ -15255,7 +15255,7 @@ var MarkAsComplete = function MarkAsComplete(_ref) {
                     className: "fa-solid fa-circle-plus"
                   }), "Add Another Link"]
                 })]
-              }), _includes([14, 15, 16, 17], Number(auth.roleId)) && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_13__.jsxs)("div", {
+              }), lodash__WEBPACK_IMPORTED_MODULE_0___default().includes([14, 15, 16, 17], Number(auth.roleId)) && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_13__.jsxs)("div", {
                 className: "form-group",
                 children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_13__.jsxs)("label", {
                   htmlFor: "exampleFormControlInput1",
@@ -18519,7 +18519,7 @@ var TimerControl = function TimerControl(_ref) {
         var currentTime = new Date();
         var timeDifference = _expireDate.getTime() - currentTime.getTime();
         setTimeLeft(Math.max(0, Math.floor(timeDifference / 1000)));
-        if (currentTime >= _expireDate && _includes([14, 15, 16, 17], Number(auth.roleId))) {
+        if (currentTime >= _expireDate && lodash__WEBPACK_IMPORTED_MODULE_5___default().includes([14, 15, 16, 17], Number(auth.roleId))) {
           setExpiredTimerForNewEmployee(true);
           stopTimer();
           clearInterval(intervalRef.current); // Stop the interval

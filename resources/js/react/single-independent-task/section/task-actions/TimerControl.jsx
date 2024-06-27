@@ -103,7 +103,7 @@ const TimerControl = ({ task, timerStart, setTimerStart, auth }) => {
 
                 if (
                     currentTime >= expireDate &&
-                    _includes([14, 15, 16, 17], Number(auth.roleId))
+                    _.includes([14, 15, 16, 17], Number(auth.roleId))
                 ) {
                     setExpiredTimerForNewEmployee(true);
                     stopTimer();
