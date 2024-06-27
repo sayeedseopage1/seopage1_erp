@@ -52,7 +52,7 @@ const ProposalCard = ({ item }) => {
                     </div>
                 </div>
                 <div className='text-right'>
-                    <h2 className='p_d_proposal_card_price'>{bid_amount} {currency}</h2>
+                    <h2 className='p_d_proposal_card_price'>{currency?.symbol}{bid_amount} {currency?.code}</h2>
                     <p className='sp1_marketplace_default_text'>{moment(bidding_time).fromNow()}</p>
                 </div>
             </div>

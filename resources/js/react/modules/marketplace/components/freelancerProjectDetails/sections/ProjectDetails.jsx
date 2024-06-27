@@ -22,10 +22,8 @@ import vectorGrowIcon from '../../../assets/freelancerProjectDetails/Vector-grow
 
 const { TextArea } = Input;
 
-// #058430
-
 const ProjectDetails = ({ singleProject }) => {
-  const { id, project_id, title, description, details, currency, budget_range, highest_bid_amount, bids_count, average_rating, reviews_count, skills, client_info, isAwarded, bidding_deadline, created_at, updated_at } = singleProject || {};
+  const { project_id, details, currency, budget_range, reviews_count, skills, client_info, isAwarded, bidding_deadline, } = singleProject || {};
 
   const { profile_image_url, name, location, member_since, client_engagement, client_verification } = client_info || {};
 
@@ -35,7 +33,7 @@ const ProjectDetails = ({ singleProject }) => {
         <div className='p_d_content_wrapper'>
           <div className='p_d_title_wrapper'>
             <h4 className='p_d_title_600'>Project Details:</h4>
-            <h4 className='p_d_title_600'>{budget_range} {currency}</h4>
+            <h4 className='p_d_title_600'>{currency?.symbol}{budget_range} {currency?.code}</h4>
           </div>
           {
             !isAwarded && <div className="p_d_bidding_ends"><GoClockFill /> <p>{getRemainingTime(bidding_deadline)}</p></div>
@@ -48,7 +46,7 @@ const ProjectDetails = ({ singleProject }) => {
               <h4 className='p_d_title_600'>Skills Required:</h4>
             </div>
             <div className='p_d_skills_contents'>
-              {skills.map((skill, index) => (
+              {skills?.map((skill, index) => (
                 <div className='p_d_skill' key={index}>
                   <span className='p_d_skill_text'>{skill}</span>
                 </div>

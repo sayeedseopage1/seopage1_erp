@@ -20,7 +20,7 @@ const FreelancerProjectDetails = () => {
     //!! TODO: This is used development only for now, It should be removed in production
     const singleProject = dummy_projects[0];
 
-    const { id, project_id, title, description, details, currency, budget_range, highest_bid_amount, bids_count, average_rating, reviews_count, skills, client_info, isAwarded, bidding_deadline, created_at, updated_at } = singleProject || {};
+    const { id, project_id, title, description, details, currency, budget_range, average_bid_amount, bids_count, average_rating, reviews_count, skills, client_info, isAwarded, bidding_deadline, created_at, updated_at } = singleProject || {};
 
     return (
         <div className='sp1_marketplace_page_wrapper'>
@@ -36,7 +36,7 @@ const FreelancerProjectDetails = () => {
                         </div>
                         <div>
                             <p className='p_d_header_bids_amount_title'>Average bid</p>
-                            <span className='p_d_header_bids_amount'>{highest_bid_amount} {currency}</span>
+                            <span className='p_d_header_bids_amount'>{currency?.symbol}{average_bid_amount} {currency?.code}</span>
                         </div>
                     </div>
                 </div>

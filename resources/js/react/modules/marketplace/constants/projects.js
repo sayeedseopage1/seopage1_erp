@@ -22,9 +22,12 @@ export const dummy_projects = [
                 </ul>
             </div>
             `,
-        currency: "INR",
+        currency: {
+            code: "USD",
+            symbol: "$",
+        },
         budget_range: "10,000 - 15,000",
-        highest_bid_amount: 8000,
+        average_bid_amount: 8000,
         bids_count: 36,
         average_rating: 4.8,
         reviews_count: 2,
@@ -36,9 +39,9 @@ export const dummy_projects = [
             profile_image_url: "https://i.ibb.co/jHYks1p/client-image.png",
             name: "John Doe",
             location: {
-                iso: "IN",
-                country: "India",
-                city: "Mumbai",
+                iso: "US",
+                country: "United States",
+                city: "California",
             },
             average_rating: 3.5,
             reviews_count: 2,
@@ -83,9 +86,12 @@ export const dummy_projects = [
                 </ul>
             </div>
             `,
-        currency: "INR",
+        currency: {
+            code: "USD",
+            symbol: "$",
+        },
         budget_range: "10,000 - 15,000",
-        highest_bid_amount: 8000,
+        average_bid_amount: 8000,
         bids_count: 48,
         average_rating: 3.3,
         reviews_count: 2,
@@ -97,9 +103,9 @@ export const dummy_projects = [
             profile_image_url: "https://i.ibb.co/jHYks1p/client-image.png",
             name: "John Doe",
             location: {
-                iso: "IN",
-                country: "India",
-                city: "Mumbai",
+                iso: "US",
+                country: "United States",
+                city: "New York",
             },
             average_rating: 3.5,
             reviews_count: 2,
@@ -144,9 +150,12 @@ export const dummy_projects = [
                 </ul>
             </div>
             `,
-        currency: "INR",
+        currency: {
+            code: "EUR",
+            symbol: "€",
+        },
         budget_range: "12,000 - 20,000",
-        highest_bid_amount: 9700,
+        average_bid_amount: 9700,
         bids_count: 23,
         average_rating: 4.6,
         reviews_count: 1,
@@ -158,9 +167,9 @@ export const dummy_projects = [
             profile_image_url: "https://i.ibb.co/jHYks1p/client-image.png",
             name: "John Doe",
             location: {
-                iso: "IN",
-                country: "India",
-                city: "Mumbai",
+                iso: "FR",
+                country: "France",
+                city: "Paris",
             },
             average_rating: 3.5,
             reviews_count: 2,
@@ -205,9 +214,12 @@ export const dummy_projects = [
                 </ul>
             </div>
             `,
-        currency: "INR",
+        currency: {
+            code: "AUD",
+            symbol: "$",
+        },
         budget_range: "5,000 - 9,000",
-        highest_bid_amount: 5700,
+        average_bid_amount: 5700,
         bids_count: 52,
         average_rating: 4.2,
         reviews_count: 10,
@@ -219,9 +231,9 @@ export const dummy_projects = [
             profile_image_url: "https://i.ibb.co/jHYks1p/client-image.png",
             name: "John Doe",
             location: {
-                iso: "IN",
-                country: "India",
-                city: "Mumbai",
+                iso: "AU",
+                country: "Australia",
+                city: "Sydney",
             },
             average_rating: 3.5,
             reviews_count: 2,
@@ -249,8 +261,11 @@ export const project_proposals = [
     {
         id: 1,
         project_id: 16297556,
-        bid_amount: 5000,
-        currency: "INR",
+        bid_amount: 11200,
+        currency: {
+            code: "USD",
+            symbol: "$",
+        },
         bidding_time: "2024-06-21 07:37:00",
         proposal_title: "This a test apply test posting a project",
         proposal_message: `<div>
@@ -289,8 +304,11 @@ export const project_proposals = [
     {
         id: 2,
         project_id: 16297556,
-        bid_amount: 3500,
-        currency: "INR",
+        bid_amount: 6500,
+        currency: {
+            code: "USD",
+            symbol: "$",
+        },
         bidding_time: "2024-06-21 07:37:00",
         proposal_title: "This a test apply test posting a project",
         proposal_message: `<div>

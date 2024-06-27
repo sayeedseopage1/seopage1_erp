@@ -5,18 +5,18 @@ import moment from 'moment';
 import FractionalRating from '../../commonComponents/FractionalRating';
 
 const ProjectCard = ({ item }) => {
-    const { title, description, currency, budget_range, highest_bid_amount, bids_count, average_rating, reviews_count, skills, created_at } = item || {};
+    const { title, description, currency, budget_range, average_bid_amount, bids_count, average_rating, reviews_count, skills, created_at } = item || {};
     return (
         <div className='project_card_wrapper'>
             <div className='project_card_header'>
                 <h2 className='project_card_title'>{title}</h2>
                 <div className='project_card_bids_wrapper'>
                     <p className='project_card_bids project_normal_text'>{bids_count} {bids_count > 1 ? 'bids' : 'bid'}</p>
-                    <p className='project_card_price'>{highest_bid_amount} {currency}</p>
+                    <p className='project_card_price'>{currency?.symbol}{average_bid_amount} {currency?.code}</p>
                 </div>
             </div>
             <div className='project_card_body'>
-                <p className='project_normal_text'>Budget {budget_range} {currency}</p>
+                <p className='project_normal_text'>Budget {budget_range} {currency?.code}</p>
                 <p className='project_normal_text project_card_description'>{description}</p>
                 <div className='project_card_skills'>
                     {
