@@ -980,8 +980,9 @@ class EvaluationController extends AccountBaseController
     }
     public function EmployeeEvaluationHistory($id)
     {
-        $history = EvaluationHistory::select('evaluation_histories.*', 'users.name as team_lead_name')
+        $history = EvaluationHistory::select('evaluation_histories.*', 'users.name as team_lead_name','role.role_id as roleId')
                 ->leftJoin('users', 'evaluation_histories.team_lead_id', 'users.id')
+                ->leftJoin('users as role', 'evaluation_histories.user_id', 'role.id')
                 ->where('user_id', $id)
                 ->get();
         return response()->json([
