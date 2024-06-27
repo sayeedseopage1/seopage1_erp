@@ -54,3 +54,12 @@ p {
     font-weight: 400;
     line-height: normal;
 }
+
+.sp1_marketplace_sm_text {
+    color: var(--primary-black);
+    font-family: 'Poppins', sans-serif;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+}

@@ -45,7 +45,7 @@ const ProposalCard = ({ item }) => {
                             }
                             <div className='p_d_normal_flex'>
                                 <img src={`/flags/4x3/${location?.iso}.svg`} className='info_with_icon_img' alt={location?.country} />
-                                <p className='sp1_marketplace_default_text'>{location?.country}</p>
+                                <p className='sp1_marketplace_sm_text'>{location?.country}</p>
                             </div>
                         </div>
                         <p className='p_d_proposal_card_title'>{proposal_title}</p>
@@ -59,7 +59,7 @@ const ProposalCard = ({ item }) => {
             <div className='p_d_proposal_card_bottom'>
                 <div className='p_d_proposal_message' dangerouslySetInnerHTML={{ __html: proposal_message }}></div>
                 <div className='text-right'>
-                    <p>Replies within a few minutes</p>
+                    <p className='sp1_marketplace_sm_text'>Replies within a few minutes</p>
                     <button className='p_d_proposal_report_btn'>Report Bid</button>
                 </div>
             </div>

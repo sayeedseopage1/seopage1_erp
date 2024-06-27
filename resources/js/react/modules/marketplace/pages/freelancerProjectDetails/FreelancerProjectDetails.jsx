@@ -18,7 +18,7 @@ const FreelancerProjectDetails = () => {
     const activeTab = searchParams.get('tab') || 'Details';
 
     //!! TODO: This is used development only for now, It should be removed in production
-    const singleProject = dummy_projects[0];
+    const singleProject = dummy_projects[1];
 
     const { id, project_id, title, description, details, currency, budget_range, average_bid_amount, bids_count, average_rating, reviews_count, skills, client_info, isAwarded, bidding_deadline, created_at, updated_at } = singleProject || {};
 
@@ -27,7 +27,7 @@ const FreelancerProjectDetails = () => {
             <div>
                 <div className='p_d_header'>
                     <div className='p_d_header_title_wrapper'>
-                        <h2 className='p_d_header_title'>{title} <span className='p_d_header_title_badge'>Accepted</span></h2>
+                        <h2 className='p_d_header_title'>{title} {isAwarded && <span className='p_d_header_title_badge'>Accepted</span>}</h2>
                     </div>
                     <div className='p_d_header_bids_amount_wrapper'>
                         <div>
