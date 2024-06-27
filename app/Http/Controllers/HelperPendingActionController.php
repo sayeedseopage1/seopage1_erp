@@ -2088,8 +2088,13 @@ class HelperPendingActionController extends AccountBaseController
                 $action->code = 'EEFA';
                 $action->serial = 'EEFA'.'x'.$key;
                 $action->item_name= 'Evaluation extend for admin!';
-                $action->heading= 'Top Management '.$top_management->name.' has extended the trial period for New Developer '.$new_dev->name.'!';
-                $action->message = 'Top Management <a href="'.route('employees.show',$top_management->id).'">'.$top_management->name.'</a> has extended the trial period for one more week for New Developer <a href="'.route('employees.show',$new_dev->id).'">'.$new_dev->name.'</a> from '.$formatted_date_time.'';
+                if($evaluation_task->user_status == 'PM'){
+                    $action->heading= 'Top Management '.$top_management->name.' has extended the trial period for New PM '.$new_dev->name.'!';
+                    $action->message = 'Top Management <a href="'.route('employees.show',$top_management->id).'">'.$top_management->name.'</a> has extended the trial period for one more week for New PM <a href="'.route('employees.show',$new_dev->id).'">'.$new_dev->name.'</a> from '.$formatted_date_time.'';
+                }else{
+                    $action->heading= 'Top Management '.$top_management->name.' has extended the trial period for New Developer '.$new_dev->name.'!';
+                    $action->message = 'Top Management <a href="'.route('employees.show',$top_management->id).'">'.$top_management->name.'</a> has extended the trial period for one more week for New Developer <a href="'.route('employees.show',$new_dev->id).'">'.$new_dev->name.'</a> from '.$formatted_date_time.'';
+                }
                 $action->timeframe= 24;
                 $action->client_id = $task->client_id;
                 $action->task_id = $task->id;

@@ -6,7 +6,6 @@ import Dropdown from "./Dropdown";
 import Tooltip from "./Tooltip";
 import SearchBox from "./SearchBox";
 
-
 const DepartmentSelect = ({
     data,
     onSelect,
@@ -17,11 +16,12 @@ const DepartmentSelect = ({
     sidebarItem = false,
     className,
 }) => {
-    const [query, setQuery] = React.useState('');
+    const [query, setQuery] = React.useState("");
     let _department;
 
-
-    _department = _.filter(data, (dept) => _.includes(_.lowerCase(dept.team_name), _.lowerCase(query)));
+    _department = _.filter(data, (dept) =>
+        _.includes(_.lowerCase(dept.team_name), _.lowerCase(query))
+    );
 
     React.useMemo(() => {
         if (!query) {
@@ -46,27 +46,36 @@ const DepartmentSelect = ({
                     }  ${isDisabled ? "sp1_remove_toggle_icon" : ""}`}
                     disabled={isDisabled}
                 >
-                    <Tooltip text={_.startCase(selected?.team_name)} key="select-department-sal-risk">
+                    <Tooltip
+                        text={_.startCase(selected?.team_name)}
+                        key="select-department-sal-risk"
+                    >
                         <span
                             data-toggle={"tooltip"}
                             id="select-department-sal-risk"
                         >
-                            {selected?.team_name
-                                ? <span>{_.startCase(selected?.team_name)}</span>
-                                : "Select Department"}
+                            {selected?.team_name ? (
+                                <span>{_.startCase(selected?.team_name)}</span>
+                            ) : (
+                                "Select Department"
+                            )}
                         </span>
                     </Tooltip>
                 </Dropdown.Toggle>
                 <Dropdown.Menu id="cnx_dropdown__menu_open--department">
                     <div>
-                        <SearchBox autoFocus={true} value={query} onChange={setQuery} />
+                        <SearchBox
+                            autoFocus={true}
+                            value={query}
+                            onChange={setQuery}
+                        />
                     </div>
                     <div className="sp1_filter--users">
                         {_department?.map((dept) => (
                             <Dropdown.Item
                                 key={dept.id}
                                 className={
-                                    selected?.id === dept.id
+                                    Number(selected?.id) === dept.id
                                         ? "sp1__pp_filter_dd_item active"
                                         : "sp1__pp_filter_dd_item"
                                 }
@@ -76,7 +85,7 @@ const DepartmentSelect = ({
                                             name: "department",
                                             value: dept,
                                         },
-                                    })
+                                    });
                                 }}
                             >
                                 {dept.team_name}

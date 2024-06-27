@@ -92,7 +92,7 @@ export const formatMultipleRuleData = (data ,policyKeys) => {
   return singlePolicy
 }
 
-export const formatEditRuleData = (data, selectedRow) => {
+export const formatEditRuleData = (data, selectedRow, policyKeys) => {
 
   const payload = {
     id: selectedRow.id,
@@ -101,6 +101,7 @@ export const formatEditRuleData = (data, selectedRow) => {
     policyType: PolicyTypeItems.data.find(
       (item) => item?.name === selectedRow?.type
     ),
+    key: policyKeys?.data.find(item => item.name === data.key),
     title: selectedRow.title,
     valueType: {
       id: 1,

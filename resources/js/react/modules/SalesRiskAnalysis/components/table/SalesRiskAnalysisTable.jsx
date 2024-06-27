@@ -168,7 +168,7 @@ const SalesRiskAnalysisTable = ({
 
     const [
         submitPolicyData,
-        { isLoading: isLoadingEditSalesRiskAnalysisPolicy },
+        { isLoading: isLoadingEditSalesRiskAnalysisPolicy , isSuccess: isSuccessPolicy },
     ] = useEditSinglePolicySalesRiskAnalysisMutation();
 
     // default columns
@@ -235,6 +235,7 @@ const SalesRiskAnalysisTable = ({
                     selectedRule,
                     policyKeys
                 );
+                setIsRuleUpdating(true);
                 setEditRuleData(payload);
                 setEditRuleModalOpen(true);
             },
@@ -243,7 +244,6 @@ const SalesRiskAnalysisTable = ({
                 setAddQuestionsModalOpen(true);
             },
             handlePolicyStatus: (row) => {
-                
                 setStatusActionData({
                     ...row,
                     modalType: "Policy",
@@ -269,7 +269,6 @@ const SalesRiskAnalysisTable = ({
                         ),
                     });
                 }
-
                 setEditPolicyDefaultData({
                     policyName: data.title,
                     department: {
@@ -282,11 +281,10 @@ const SalesRiskAnalysisTable = ({
                         (item) => item.name === data.key
                     ),
                 });
-
                 setEditPolicyModalOpen(true);
             },
             handleEditCountryList: (data, selectedRule) => {
-                const payload = formatEditRuleData(data, selectedRule);
+                const payload = formatEditRuleData(data, selectedRule, policyKeys);
                 setEditRuleData(payload);
                 setEditCountryListModalOpen(true);
             },
@@ -660,6 +658,9 @@ const SalesRiskAnalysisTable = ({
             setEditPolicyDataValidation(validation);
         }
     }, [editPolicyData]);
+
+
+
     return (
         <React.Fragment>
             <div
