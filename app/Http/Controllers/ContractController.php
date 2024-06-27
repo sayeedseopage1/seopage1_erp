@@ -564,7 +564,11 @@ class ContractController extends AccountBaseController
         $existing_client = User::where('user_name', $request->user_name)->first();
         $chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ01234567890123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
         $suffle = substr(str_shuffle($chars), 0, 6);
-        $deal = $deal ? Deal::where('lead_id', $deal->lead_id)->first() ?: new Deal() : new Deal();
+
+        $deal = Deal::where('deal_id', $deal->short_code)->first();
+        if(!$deal )
+            $deal = new Deal();
+
         $deal->deal_id = $request->deal_id;
         $deal->project_name = $request->project_name;
         $deal->profile_link = $request->profile_link;
@@ -608,7 +612,6 @@ class ContractController extends AccountBaseController
         }
 
         $deal->save();
-        // dd($deal);
         //$lead_con_id = Lead::where('id', $request->lead_id)->first();
         if (Auth::id() != null) {
             $agent_id = SalesCount::where('user_id', Auth::id())->first();
