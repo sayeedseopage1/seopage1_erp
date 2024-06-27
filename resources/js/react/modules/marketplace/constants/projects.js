@@ -346,6 +346,167 @@ export const project_proposals = [
     },
 ];
 
+export const freelancer_project_files = [
+    {
+        id: 1,
+        filename: "sdfsdfsdf.jpg",
+        hashname: "sdfsdfsdf.jpg",
+        size: "43",
+        owner: {
+            user_id: 176736,
+            name: "Lari W",
+            user_name: "LWtrimmer",
+        },
+        created_at: "2024-06-25 16:19:00",
+        updated_at: "2024-06-25 18:37:00",
+        file_url: "https://picsum.photos/id/237/200/300",
+        file_type: "image",
+    },
+    {
+        id: 2,
+        filename: "document1.pdf",
+        hashname: "document1.pdf",
+        size: "1024",
+        owner: {
+            user_id: 176737,
+            name: "Jane D",
+            user_name: "JaneDoe",
+        },
+        created_at: "2024-06-26 10:00:00",
+        updated_at: "2024-06-26 11:00:00",
+        file_url: "https://www.clickdimensions.com/links/TestPDFfile.pdf",
+        file_type: "document",
+    },
+    {
+        id: 3,
+        filename: "video1.mp4",
+        hashname: "video1.mp4",
+        size: "20480",
+        owner: {
+            user_id: 176738,
+            name: "Mark S",
+            user_name: "MarkSmith",
+        },
+        created_at: "2024-06-27 08:30:00",
+        updated_at: "2024-06-27 09:30:00",
+        file_url:
+            "https://seopage1storage.s3.ap-southeast-1.amazonaws.com/video1.mp4",
+        file_type: "video",
+    },
+    {
+        id: 4,
+        filename: "image2.png",
+        hashname: "image2.png",
+        size: "2048",
+        owner: {
+            user_id: 176739,
+            name: "Alice K",
+            user_name: "AliceKing",
+        },
+        created_at: "2024-06-28 14:15:00",
+        updated_at: "2024-06-28 15:15:00",
+        file_url:
+            "https://seopage1storage.s3.ap-southeast-1.amazonaws.com/image2.png",
+        file_type: "image",
+    },
+    {
+        id: 5,
+        filename: "presentation1.pptx",
+        hashname: "presentation1.pptx",
+        size: "5120",
+        owner: {
+            user_id: 176740,
+            name: "Bob L",
+            user_name: "BobLee",
+        },
+        created_at: "2024-06-29 09:45:00",
+        updated_at: "2024-06-29 10:45:00",
+        file_url:
+            "https://seopage1storage.s3.ap-southeast-1.amazonaws.com/presentation1.pptx",
+        file_type: "document",
+    },
+    {
+        id: 6,
+        filename: "video2.mov",
+        hashname: "video2.mov",
+        size: "40960",
+        owner: {
+            user_id: 176741,
+            name: "Cathy P",
+            user_name: "CathyParker",
+        },
+        created_at: "2024-06-30 12:00:00",
+        updated_at: "2024-06-30 13:00:00",
+        file_url:
+            "https://seopage1storage.s3.ap-southeast-1.amazonaws.com/video2.mov",
+        file_type: "video",
+    },
+    {
+        id: 7,
+        filename: "document2.docx",
+        hashname: "document2.docx",
+        size: "2048",
+        owner: {
+            user_id: 176742,
+            name: "David M",
+            user_name: "DavidMiller",
+        },
+        created_at: "2024-07-01 08:00:00",
+        updated_at: "2024-07-01 09:00:00",
+        file_url:
+            "https://seopage1storage.s3.ap-southeast-1.amazonaws.com/document2.docx",
+        file_type: "document",
+    },
+    {
+        id: 8,
+        filename: "image3.gif",
+        hashname: "image3.gif",
+        size: "512",
+        owner: {
+            user_id: 176743,
+            name: "Eve R",
+            user_name: "EveRoss",
+        },
+        created_at: "2024-07-02 10:30:00",
+        updated_at: "2024-07-02 11:30:00",
+        file_url:
+            "https://seopage1storage.s3.ap-southeast-1.amazonaws.com/image3.gif",
+        file_type: "image",
+    },
+    {
+        id: 9,
+        filename: "video3.avi",
+        hashname: "video3.avi",
+        size: "10240",
+        owner: {
+            user_id: 176744,
+            name: "Frank H",
+            user_name: "FrankHarrison",
+        },
+        created_at: "2024-07-03 14:45:00",
+        updated_at: "2024-07-03 15:45:00",
+        file_url:
+            "https://seopage1storage.s3.ap-southeast-1.amazonaws.com/video3.avi",
+        file_type: "video",
+    },
+    {
+        id: 10,
+        filename: "document3.txt",
+        hashname: "document3.txt",
+        size: "1024",
+        owner: {
+            user_id: 176745,
+            name: "Grace T",
+            user_name: "GraceTaylor",
+        },
+        created_at: "2024-07-04 09:15:00",
+        updated_at: "2024-07-04 10:15:00",
+        file_url:
+            "https://seopage1storage.s3.ap-southeast-1.amazonaws.com/document3.txt",
+        file_type: "document",
+    },
+];
+
 export const project_types = [
     {
         id: 1,

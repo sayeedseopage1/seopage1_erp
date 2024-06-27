@@ -65,6 +65,7 @@
         "html-to-text": "^9.0.5",
         "immutability-helper": "^3.1.1",
         "install": "^0.13.0",
+        "js-file-download": "^0.4.12",
         "laravel-echo": "^1.11.2",
         "libphonenumber-js": "^1.10.49",
         "mix": "^0.0.1",
