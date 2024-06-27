@@ -152,8 +152,9 @@ const EvaluationTaskListModalPM = ({
     }, [latestRoundTasks]);
 
     React.useEffect(() => {
-        setConfirmButtonDisabled(!dateExpired);
-        // !isAllTaskRated || !dateExpired || isPreviousTasks
+        setConfirmButtonDisabled(
+            !isAllTaskRated || !dateExpired || isPreviousTasks
+        );
     }, [isAllTaskRated, dateExpired, isPreviousTasks]);
 
     console.log(
