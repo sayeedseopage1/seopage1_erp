@@ -717,8 +717,6 @@ class EvaluationController extends AccountBaseController
                 $evaluation->employee_status = 2;
                 $evaluation->save();
 
-                // dd($evaluation);
-
                 $history = new EvaluationHistory();
                 $history->user_id = $evaluation->user_id;  
                 $history->parent_task_id = $request->task_id;  
@@ -733,6 +731,7 @@ class EvaluationController extends AccountBaseController
                 $history->team_lead_cmnt = $evaluation->team_lead_cmnt;  
                 $history->managements_cmnt = $evaluation->managements_cmnt;  
                 $history->lead_dev_avg_rating = $evaluation->lead_dev_avg_rating;
+                $history->team_lead_avg_rating = $evaluation->team_lead_avg_rating;
                 $history->managements_decision = $evaluation->managements_decision;  
                 $history->managements_id = $evaluation->managements_id;  
                 $history->managements_name = $evaluation->managements_name;  
@@ -740,6 +739,7 @@ class EvaluationController extends AccountBaseController
                 $history->accept_rejected = $evaluation->accept_rejected;  
                 $history->pending_action_sending_time = $evaluation->pending_action_sending_time;  
                 $history->ld_submission_status = $evaluation->ld_submission_status;  
+                $history->team_lead_submission_status = $evaluation->team_lead_submission_status;  
                 $history->lead_dev_id = $evaluation->lead_dev_id;  
                 $history->team_lead_id = $evaluation->team_lead_id;  
                 $history->lead_dev_acknowledged = $evaluation->lead_dev_acknowledged;  
@@ -750,7 +750,7 @@ class EvaluationController extends AccountBaseController
                 $history->save();
 
                 $evaluation_task = EmployeeEvaluationTask::where('user_id',$request->user_id)->first();
-                $actions = PendingAction::where('code','TLSDE')->where('task_id',$evaluation_task->task_id)->where('past_status',0)->get();
+                $actions = PendingAction::whereIn('code',['TLSDE','TLSNPM'])->where('task_id',$evaluation_task->task_id)->where('past_status',0)->get();
                 if($actions != null)
                 {
                     foreach ($actions as $key => $action) {
@@ -767,8 +767,13 @@ class EvaluationController extends AccountBaseController
                     $past_action->code = $action->code;
                     $past_action->serial = $action->serial;
                     $past_action->action_id = $action->id;
-                    $past_action->heading= 'Top Management '.$authorize_by->name.' has extended the trial period for New Developer '.$dev->name.'!';
-                    $past_action->message = 'Top Management <a href="'.route('employees.show',$authorize_by->id).'">'.$authorize_by->name.'</a> has extended the trial period for one more week for New Developer <a href="'.route('employees.show',$dev->id).'">'.$dev->name.'</a> from ';
+                    if($action->code == 'TLSNPM'){
+                        $past_action->heading= 'Top Management '.$authorize_by->name.' has extended the trial period for New PM '.$dev->name.'!';
+                        $past_action->message = 'Top Management <a href="'.route('employees.show',$authorize_by->id).'">'.$authorize_by->name.'</a> has extended the trial period for one more week for New PM <a href="'.route('employees.show',$dev->id).'">'.$dev->name.'</a> from ';
+                    }else{
+                        $past_action->heading= 'Top Management '.$authorize_by->name.' has extended the trial period for New Developer '.$dev->name.'!';
+                        $past_action->message = 'Top Management <a href="'.route('employees.show',$authorize_by->id).'">'.$authorize_by->name.'</a> has extended the trial period for one more week for New Developer <a href="'.route('employees.show',$dev->id).'">'.$dev->name.'</a> from ';
+                    }
                     $past_action->timeframe = $action->timeframe;
                     $past_action->authorization_for = $action->authorization_for;
                     $past_action->authorized_by = $action->authorized_by;
@@ -778,15 +783,27 @@ class EvaluationController extends AccountBaseController
                     $past_action->task_id = $action->task_id;
                     $past_action->developer_id = $action->developer_id;
                     $past_action->client_id = $action->client_id;
-                    $button = [
-                        [
-                            'button_name' => 'See Evaluations',
-                            'button_color' => 'primary',
-                            'button_type' => 'redirect_url',
-                            'button_url' => route('employee-evaluation.index'),
-                            'button_url' => route('employee-evaluation.index', ['user_id' => $dev->id, 'show' => 'all']),
-                        ],
-                    ];
+                    if($action->code == 'TLSNPM'){
+                        $button = [
+                            [
+                                'button_name' => 'See Evaluations',
+                                'button_color' => 'primary',
+                                'button_type' => 'redirect_url',
+                                'button_url' => route('employee-evaluation.index'),
+                                'button_url' => route('employee-evaluation.index', ['user_id' => $dev->id, 'show' => 'all', 'type' => 'pm']),
+                            ],
+                        ];
+                    }else{
+                        $button = [
+                            [
+                                'button_name' => 'See Evaluations',
+                                'button_color' => 'primary',
+                                'button_type' => 'redirect_url',
+                                'button_url' => route('employee-evaluation.index'),
+                                'button_url' => route('employee-evaluation.index', ['user_id' => $dev->id, 'show' => 'all']),
+                            ],
+                        ];
+                    }
                     $past_action->button = json_encode($button);
                     $past_action->save();
                     }
@@ -801,6 +818,7 @@ class EvaluationController extends AccountBaseController
                 $evaluation->dedication = null;
                 $evaluation->obedience = null;
                 $evaluation->lead_dev_avg_rating = null;
+                $evaluation->team_lead_avg_rating = null;
                 $evaluation->team_lead_cmnt = null;
                 $evaluation->managements_cmnt = null;
                 $evaluation->managements_decision = null;
@@ -810,6 +828,7 @@ class EvaluationController extends AccountBaseController
                 $evaluation->accept_rejected = null;
                 $evaluation->pending_action_sending_time = null;
                 $evaluation->ld_submission_status = 0;
+                $evaluation->team_lead_submission_status = 0;
                 $evaluation->lead_dev_id = null;
                 $evaluation->team_lead_id = null;
                 $evaluation->team_lead_cmnt_at = null;
@@ -817,7 +836,7 @@ class EvaluationController extends AccountBaseController
                 $evaluation->employee_status = 0; 
                 $evaluation->save();
 
-                // dd($evaluation);
+                // dd('ok');
             });
 
             return response()->json([
