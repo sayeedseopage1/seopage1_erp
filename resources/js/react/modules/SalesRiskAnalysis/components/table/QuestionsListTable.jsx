@@ -37,11 +37,16 @@ const QuestionsListTable = ({
     setIsQuestionUpdating,
     onPageChange,
     handleOpenAddQuestionsModal,
-    setIsYesNoRulesLoading
+    setIsYesNoRulesLoading,
+    getSinglePolicyDataByIDorKey,
+    questionFiledRefetch
 }) => {
-    const { questionsAnswerType, yesNoRules, questionAnswerKeys } = useContext(
-        SalesRiskAnalysisContext
-    );
+    const {
+        questionsAnswerType,
+        yesNoRules,
+        questionAnswerKeys,
+        setYesNoRules,
+    } = useContext(SalesRiskAnalysisContext);
     const [sorting, setSorting] = React.useState([]);
     const [expanded, setExpanded] = React.useState({});
     const [data, setData] = React.useState(tableData?.data || []);
@@ -97,24 +102,6 @@ const QuestionsListTable = ({
         [pageIndex, pageSize]
     );
 
-    const [
-        getSinglePolicy,
-        {
-            data: singlePolicyDataByIDorKey,
-            isLoading: isLoadingSinglePolicyDataByIDorKey,
-        },
-    ] = useLazyGetSinglePolicySalesRiskAnalysisQuery();
-
-    const getSinglePolicyDataByIDorKey = async (key) => {
-        try {
-            const response = await getSinglePolicy(`key=${key}`);
-            return response;
-        } catch (error) {
-            return error;
-        }
-    };
-
-
     const table = useReactTable({
         data,
         columns,
@@ -140,15 +127,47 @@ const QuestionsListTable = ({
             editSingleQuestion: async (row) => {
                 setIsQuestionUpdating(true);
                 handleOpenAddQuestionsModal();
-                let ruleId ;
+                let ruleId;
 
-                if(row?.key === "yesNoRules"){
+                if (row?.key === "yesNoRules") {
                     setIsYesNoRulesLoading(true);
-                    const res = await getSinglePolicyDataByIDorKey(row?.key)
-                    const item = res?.data?.data?.[0].ruleList?.find(item => item?.id === row?.value);
-                    const check = item ? { ...item, label: item?.title } : undefined;
+                    questionFiledRefetch();
+                    const res = await getSinglePolicyDataByIDorKey(row?.key);
+                    const selectedRule = res?.data?.data?.[0].ruleList?.find(
+                        (item) => item?.id === row?.value
+                    );
+                    const check = selectedRule
+                        ? { ...selectedRule, label: selectedRule?.title }
+                        : undefined;
+                    setYesNoRules((prev) => {
+                        if (prev.data.length === 0) {
+                            return {
+                                ...prev,
+                                data: [],
+                            };
+                        } else {
+                            const newSet = _.uniqBy(prev.data, "id");
+                            const formatMainData = prev.mainData.map((item) => {
+                                return {
+                                    id: item?.id,
+                                    label: item?.title,
+                                    title: item?.title,
+                                };
+                            });
+                            const newSetWithSelected = _.uniqBy(
+                                [...formatMainData, check],
+                                "id"
+                            );
+                            return {
+                                ...prev,
+                                data: selectedRule
+                                    ? newSetWithSelected
+                                    : newSet,
+                            };
+                        }
+                    });
                     setIsYesNoRulesLoading(false);
-                    ruleId = check
+                    ruleId = check;
                 }
                 const parent_question = allQuestions.find(
                     (item) => item?.id === row?.parent_id
@@ -173,7 +192,6 @@ const QuestionsListTable = ({
                     parent_question_for: row?.value,
                     listItem: row.type === "list" ? row?.value : [],
                 };
-
 
                 if (row?.parent_question?.type === "list") {
                     setSingleQuestion({
