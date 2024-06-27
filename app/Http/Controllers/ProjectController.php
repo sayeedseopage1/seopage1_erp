@@ -943,7 +943,11 @@ class ProjectController extends AccountBaseController
     $link = '<a href="' . route('projects.show', $project->id) . '">' . $text . '</a>';
     $this->logProjectActivity($project->id, $link);
 
-        return response()->json(['status'=>400]);
+        // return response()->json(['status'=>400]);
+        return response()->json([
+            'status' => 200,
+            'data' => 'Project Dispute authorization completed successfully'
+        ]);
     }
 
 
@@ -5651,8 +5655,12 @@ public function updatePmBasicSEO(Request $request){
         $link = '<a href="' . route('projects.show', $project_id->id) . '">' . $text . '</a>';
         $this->logProjectActivity($project_id->id, $link);
 
-        Toastr::success('Project Submission Request Accepted Successfully', 'Success', ["positionClass" => "toast-top-right"]);
-        return back();
+        // Toastr::success('Project Submission Request Accepted Successfully', 'Success', ["positionClass" => "toast-top-right"]);
+        // return back();
+        return response()->json([
+            'status' => 200,
+            'data' => 'Project submission authorization completed successfully'
+        ]);
     }
     public function ProjectSubmissionQC(Request $request)
     {
@@ -5849,8 +5857,12 @@ public function updatePmBasicSEO(Request $request){
         $link = '<a href="' . route('projects.show', $project_id->id) . '">' . $text . '</a>';
         $this->logProjectActivity($project_id->id, $link);
 
-        Toastr::success('Project Q&C Request Accepted Successfully', 'Success', ["positionClass" => "toast-top-right"]);
-        return back();
+        // Toastr::success('Project Q&C Request Accepted Successfully', 'Success', ["positionClass" => "toast-top-right"]);
+        // return back();
+        return response()->json([
+            'status' => 200,
+            'data' => 'Project QC authorization completed successfully'
+        ]);
     }
 
     public function DeliverableAuthorizationRequest(Request $request)
