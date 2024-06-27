@@ -157,7 +157,8 @@
     //dd( $diff_in_minutes);
     $pm_project= App\Models\PMProject::where('project_id',$project->id)->first();
 ?>
-@if(($signature == null && $project->authorization_status == 'pending' )  || ($signature != null && $project->deliverable_authorization == 0))
+
+@if(($project->authorization_status == 'pending' )  || ($signature != null && $project->deliverable_authorization == 0))
 
     @if($project->pm_id == Auth::id() && Auth::user()->role_id != 1)
 
@@ -273,8 +274,8 @@
                   </thead>
                   <tbody >
                     @forelse($deliverables as $deliverable)
-                    <tr {{ $deliverable->status == 0 ? 'class=bg-lightest-grey' : '' }}>
-                        <td>{{$loop->index+1}}</td>
+                    <tr>
+                        <td>{{$loop->index+1}} {!! $deliverable->status == 0 ? '<span class="badge badge-primary">New</span>' : '' !!}</td>
                         <td class="text-center icon-container">
                             @php
                                 $data = \App\Models\DelivarableColumnEdit::where([

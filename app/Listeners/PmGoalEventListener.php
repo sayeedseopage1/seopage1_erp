@@ -182,6 +182,7 @@ class PmGoalEventListener
     {
         $projectId = $event->data['projectId'];
         $totalMinutes = ProjectTimeLog::where('project_id', $projectId)->sum('total_minutes');
+        // dd($totalMinutes);
 
         if ($totalMinutes < 60) return;
 
@@ -201,42 +202,55 @@ class PmGoalEventListener
 
         if ($projectPriority == 'regular' || $projectPriority == 'priority') {
             $goal = ProjectPmGoal::where(['project_id' => $projectId, 'goal_code' => '3HT', 'goal_status' => 0])->first();
-            if($goal && time() <= strtotime($goal->goal_end_date))
-            {
+            if ($goal && time() <= strtotime($goal->goal_end_date)) {
                 $goal->goal_status = 1;
                 $goal->save();
             }
-        }
-        else if ($totalMinutes >= 4*60 && $totalMinutes < 5*60 && $projectPriority == 'highPriority')
-        {
+
+            $totalMinutes -= (3 * 60);
+        } else if ($totalMinutes >= 4 * 60 && $totalMinutes < 5 * 60 && $projectPriority == 'highPriority') {
             $goal = ProjectPmGoal::where(['project_id' => $projectId, 'goal_code' => '4HT', 'goal_status' => 0])->first();
-            if($goal && time() <= strtotime($goal->goal_end_date))
-            {
+            if ($goal && time() <= strtotime($goal->goal_end_date)) {
                 $goal->goal_status = 1;
                 $goal->save();
             }
-        }
-        else if($totalMinutes >= 5*60 && $projectPriority == 'topMostPriority')
-        {
+            $totalMinutes -= 4 * 60;
+        } else if ($totalMinutes >= 5 * 60 && $projectPriority == 'topMostPriority') {
             $goal = ProjectPmGoal::where(['project_id' => $projectId, 'goal_code' => '5HT', 'goal_status' => 0])->first();
-            if($goal && time() <= strtotime($goal->goal_end_date))
-            {
+            if ($goal && time() <= strtotime($goal->goal_end_date)) {
                 $goal->goal_status = 1;
                 $goal->save();
             }
-        }
-        else return;
+            $totalMinutes -= 5 * 60;
+        } else return;
         // 2nd goal completion end ----------------------- //
 
-        $goalCount =  ProjectPmGoal::where('project_id', $projectId)->whereNotIn('goal_code', ['HTA','3HT','4HT','5HT'])->count();
-        if($goalCount < 1) return;
+        // find next goal
+        $goals = ProjectPmGoal::where(['project_id' => $projectId])->whereNotIn('goal_code', ['HTA', '3HT', '4HT', '5HT'])->get();
+        // dd($totalMinutes);
+        if (count($goals) < 1) return;
+        // $total = 0;
+        // $dIds = [];
+        foreach ($goals as $item) {
 
-        $deliverable = ProjectDeliverable::where('project_id', $projectId)->first();
-        if($goalCount == 1)
-        {
+            $data = json_decode($item->data);
+            if (!isset($data->deliverable_id)) return;
 
+            if (!$deliverable = ProjectDeliverable::find($data->deliverable_id)) return;
+
+            // check deliverable time exceeded
+            if ($item->goal_status == 0 && time() <= strtotime($item->goal_end_date)) {
+                // dd($dIds, $total, $totalMinutes, ($deliverable->estimation_time * 60));
+                if ($totalMinutes >= ($deliverable->estimation_time * 60)) {
+                    $item->goal_status = 1;
+                    $item->save();
+                    break;
+                } else return;
+            } else {
+                // $total += $deliverable->estimation_time;
+                // $dIds[] = [$deliverable->id => $deliverable->estimation_time ];
+                $totalMinutes -= ($deliverable->estimation_time * 60);
+            }
         }
-
-
     }
 }

@@ -5653,6 +5653,7 @@ class ProjectController extends AccountBaseController
         $request->validate([
             'project_id' => 'required'
         ]);
+
          DB::beginTransaction();
         $project = Project::find($request->project_id);
 
@@ -5660,9 +5661,21 @@ class ProjectController extends AccountBaseController
             $project->authorization_status = 'canceled';
             $project->project_status = 'canceled';
             $project->deliverable_authorization = 2;
+
+            ProjectDeliverable::where(['project_id'=> $request->project_id, 'status' => '0'])->update(['status' => '-1']);
         } else {
             $project->authorization_status = 'approved';
             $project->deliverable_authorization = 1;
+
+            // trigger goal creation for hourly project
+            if ($project->deal->project_type == 'hourly'){
+                $deliverable = ProjectDeliverable::where(['project_id'=> $request->project_id, 'status' => '0'])->first();
+                if($deliverable)
+                    (new HelperPmProjectStatusController)->deliverablePmGoalCreation($deliverable);
+            }
+
+            // authorize deliverables
+            ProjectDeliverable::where(['project_id'=> $request->project_id, 'status' => '0'])->update(['status' => '1']);
         }
         $project->save();
 
@@ -5767,15 +5780,6 @@ class ProjectController extends AccountBaseController
             $deliverableReAuth->save();
             // 2ND TIME TOM MANAGEMENT AUTHORIZ END
         }
-        else {
-            // trigger goal creation for hourly project
-            $deliverable = ProjectDeliverable::where(['project_id'=> $request->project_id, 'status' => '0'])->first();
-            if($deliverable)
-                (new HelperPmProjectStatusController)->deliverablePmGoalCreation($deliverable);
-        }
-
-        // authorize deliverables
-        ProjectDeliverable::where(['project_id'=> $request->project_id, 'status' => '0'])->update(['status' => '1']);
 
         $text = Auth::user()->name . ' finally authorized project deliverable';
         $link = '<a style="color:blue" href="' . route('projects.show', $project->id) . '?tab=deliverable">' . $text . '</a>';

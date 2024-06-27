@@ -862,7 +862,9 @@ class TimelogController extends AccountBaseController
         }
 
         // this event should calculate total hour and complete goal
-        event(new PmGoalEvent('task_time_stopped', ['projectId' => $timeLog->project_id]));
+        $project = Project::find($timeLog->project_id);
+        if($project && $project->deal->project_type == 'hourly')
+            event(new PmGoalEvent('task_time_stopped', ['projectId' => $timeLog->project_id]));
 
         $this->activeTimerCount = $this->activeTimerCount->count();
         // /dd("sjdnkasdnas");
