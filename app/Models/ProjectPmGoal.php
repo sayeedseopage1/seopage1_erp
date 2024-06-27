@@ -39,21 +39,21 @@ class ProjectPmGoal extends Model
                     'code' => 'MPMR',
                     'name' => 'At least one more milestone released.',
                     'type' => 'more_milestone_released',
-                    'complete' => 'At least one more milestone (Milestone ABC) was successfully released.',
+                    'complete' => 'At least one more milestone was successfully released.',
                     'expire' => 'At least one more milestone was not released within the specified timeframe.'
                 ],
                 [
                     'code' => 'MMPMR',
                     'name' => 'At least 1 more milestone released.',
                     'type' => 'more_and_more_milestone_released',
-                    'complete' => 'At least one more milestone (Milestone ABC) was successfully released.',
+                    'complete' => 'At least one more milestone was successfully released.',
                     'expire' => 'At least one more milestone was not released within the specified timeframe.'
                 ],
                 [
                     'code' => 'OMMR',
                     'name' => 'This 1 more milestone need to be released.',
                     'type' => 'one_more_milestone_released',
-                    'complete' => 'At least one more milestone (Milestone XYZ) was successfully released.',
+                    'complete' => 'At least one more milestone was successfully released.',
                     'expire' => 'At least one more milestone was not released within the specified timeframe.'
                 ],
 
@@ -78,7 +78,7 @@ class ProjectPmGoal extends Model
                     'name' => '1st milestone has to be released.',
                     'single' => 'One milestone has to be released.',
                     'type' => '1st_milestone_released',
-                    'complete' => 'The first milestone (Milestone XYZ) was successfully released.',
+                    'complete' => 'The first milestone was successfully released.',
                     'expire' => 'The first milestone was not released within the specified timeframe.'
                 ],
                 [
@@ -92,7 +92,7 @@ class ProjectPmGoal extends Model
                     'code' => 'MMPMR',
                     'name' => 'At least 1 more milestone released.',
                     'type' => 'more_and_more_milestone_released',
-                    'complete' => 'At least one more milestone (Milestone ABC) was successfully released.',
+                    'complete' => 'At least one more milestone was successfully released.',
                     'expire' => 'At least one more milestone was not released within the specified timeframe.'
                 ],
                 [
@@ -107,8 +107,8 @@ class ProjectPmGoal extends Model
                 'code' => 'ERAG',
                 'name' => 'Remaining amount has to be released.',
                 'type' => 'reaming_amount_gaol',
-            	'complete' => 'The remaining amount ($150) was successfully released.',
-            	'expire' => 'The remaining amount ($150) was not released within the specified timeframe.'
+            	'complete' => 'The remaining amount was successfully released.',
+            	'expire' => 'The remaining amount was not released within the specified timeframe.'
             ],
         ],
         'hourly' => [

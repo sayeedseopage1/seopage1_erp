@@ -78,10 +78,12 @@ class PmGoalEventListener
         // if ($task != 1) return;
 
         $goal = ProjectPmGoal::where(['project_id' => $projectId, 'goal_code' => 'TSM'])->first();
+        $goalCodes = ProjectPmGoal::$goalCodes[$goal->project_type][$goal->project_category];
 
         if (time() > strtotime($goal->goal_end_date)) return;
 
         $goal->goal_status = 1;
+        $goal->expired_meet_description = $goalCodes[''];
         $goal->save();
     }
 
@@ -94,10 +96,9 @@ class PmGoalEventListener
 
         // initial milestones
         $paidAmount = Invoice::where(['project_id' => $project->id, 'status' => 'paid'])->sum('total');
-        $projectAccept = PMProject::where('project_id', $project->id)->first();
         $milestones = ProjectMilestone::from('project_milestones as mile')->join('invoices as in', 'in.milestone_id', 'mile.id')
             ->select('mile.*', 'in.status')
-            ->where('mile.project_id', $project->id)->where('mile.created_at', '<=', $projectAccept->created_at);
+            ->where('mile.project_id', $project->id)->where('mile.created_at', '<=', $project->deal->released_at);
 
         $milestoneSum = $milestones->sum('actual_cost');
         $milestoneCount = $milestones->count();
