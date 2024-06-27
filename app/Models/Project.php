@@ -465,4 +465,9 @@ class Project extends BaseModel
     {
         return $this->hasOne(ProjectDispute::class, 'project_id');
     }
+
+    public function projectDeliverables()
+    {
+        return $this->hasMany(ProjectDeliverable::class, 'project_id');
+    }
 }
