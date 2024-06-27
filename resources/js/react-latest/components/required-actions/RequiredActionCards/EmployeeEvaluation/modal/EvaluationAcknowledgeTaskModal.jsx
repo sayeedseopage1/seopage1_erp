@@ -35,6 +35,7 @@ import { toast } from "react-toastify";
 import { useAcknowledgePendingActionsPastMutation } from "../../../../../services/api/pendingActionsApiSlice";
 import { EvaluationTaskTableColumns } from "../../../../../../react/employee-evaluation/components/Table/EvaluationTaskTableColumns";
 import _ from "lodash";
+import evaluationDesignation from "../../../../../utils/evaluation-designation";
 const EvaluationAcknowledgeTaskModal = ({
     acknowledgementTask,
     setAcknowledgementTask,
@@ -87,7 +88,13 @@ const EvaluationAcknowledgeTaskModal = ({
 
         fetchTasks();
     }, [developerId]);
-
+    const designation = evaluationDesignation(singleEvaluation?.roleId);
+    const evaluator = _.includes(
+        [4, 6, 7, 15, 16, 17],
+        Number(singleEvaluation?.roleId)
+    )
+        ? "Team Lead"
+        : "Lead Developer";
     // console.log("single evaluation", singleEvaluation);
     const [sorting, setSorting] = useState([]);
 
@@ -171,20 +178,20 @@ const EvaluationAcknowledgeTaskModal = ({
         >
             <section>
                 <EvalTableTitle>
-                    <span>New Developer Evaluation :</span>
+                    <span>{`${designation} Evaluation :`}</span>
                     <span>{singleEvaluation?.user_name}</span>
                 </EvalTableTitle>
 
                 <EvalTableSubTitle>
-                    {`Lead Developer `}
+                    {evaluator}
                     <NameLink href="#">
                         {singleEvaluation?.added_by_name}
                     </NameLink>
-                    {` has evaluated New Developer `}
+                    {` has evaluated ${designation} `}
                     <NameLink href="#">{singleEvaluation?.user_name}</NameLink>
                     {` on `}
                     <span style={{ color: "green" }}>
-                        {singleEvaluation?.team_lead_cmnt_at}
+                        {FormatDate(singleEvaluation?.updated_at)}
                     </span>
                 </EvalTableSubTitle>
                 <EvaluationTable

@@ -15,6 +15,7 @@ import { EvaluationTableColumns } from "../components/Table/EvaluationTableColum
 import { EvaluationTableColumnsPM } from "../project-manager/components/table/EvaluationTableColumnsPM";
 
 import { useLocation } from "react-router-dom";
+import filterEvaluationsByRole from "../../utils/filterEvaluationsByRole";
 
 const EmployeeEvaluation = () => {
     const location = useLocation();
@@ -64,24 +65,6 @@ const EmployeeEvaluation = () => {
 
     const mainData = data?.data;
     const Evaluations = data?.data.data;
-
-    const filterEvaluationsByRole = (evaluations, role) => {
-        return evaluations?.filter((evaluation) => {
-            switch (role) {
-                case "Project Manager":
-                    return _.includes([15, 4], Number(evaluation.roleId));
-                case "Lead Developer":
-                    return _.includes([16, 6], Number(evaluation.roleId));
-                case "Sales Executive":
-                    return _.includes([15, 7], Number(evaluation.roleId));
-                default:
-                    return (
-                        evaluation.role_name === "Developer" ||
-                        evaluation.role_name === "Probationary Developer"
-                    );
-            }
-        });
-    };
 
     const filteredEvaluations = filterEvaluationsByRole(Evaluations, tableType);
 

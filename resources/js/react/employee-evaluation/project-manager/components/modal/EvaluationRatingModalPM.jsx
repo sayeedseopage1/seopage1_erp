@@ -35,6 +35,7 @@ import RatingSection from "../../../components/modal/RatingSection.jsx";
 import RatingSectionStatic from "../../../components/modal/RatingSectionStatic.jsx";
 import EvaluationRatingTable from "../../../components/Table/EvaluationRatingTable.jsx";
 import { ratingHoverText } from "../../../../utils/ratingHoverText.js";
+import evaluationDesignation from "../../../../../react-latest/utils/evaluation-designation.js";
 
 const EvaluationRatingModalPM = ({
     toggleSingleEvaluationModal,
@@ -62,6 +63,7 @@ const EvaluationRatingModalPM = ({
         team_lead_cmnt: data.team_lead_cmnt ?? "",
     });
 
+    const designation = evaluationDesignation(evaluationObject?.roleId);
     useEffect(() => {
         const fetchData = async () => {
             if (!userIdFromParam) return;
@@ -268,7 +270,7 @@ const EvaluationRatingModalPM = ({
         >
             <RatingTitleAndTableSection>
                 <EvalTableTitle>
-                    <span>New Developer Evaluation :</span>
+                    <span>{`${designation} Evaluation :`}</span>
                     <span>{evaluationObject?.user_name}</span>
                 </EvalTableTitle>
                 <EvaluationRatingTable

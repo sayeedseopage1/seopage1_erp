@@ -56,6 +56,7 @@ import RatingSectionStatic from "../../../components/modal/RatingSectionStatic.j
 import { ratingHoverText } from "../../../../utils/ratingHoverText.js";
 
 import { EvaluationTaskTableColumnsPM } from "../table/EvaluationTaskTableColumnsPM.jsx";
+import evaluationDesignation from "../../../../../react-latest/utils/evaluation-designation.js";
 
 const EvaluationTaskListModalPM = ({
     isEvaluationModal,
@@ -79,7 +80,7 @@ const EvaluationTaskListModalPM = ({
     );
     const { evaluationObject } = useEmployeeEvaluation();
     const [latestRoundTasks, setLatestRoundTasks] = useState([]);
-    const [teamLeadReview, setTeamLeadReview] = useState("");
+
     const [adminComment, setAdminComment] = useState("");
     const [isAllTaskRated, setIsAllTaskRated] = useState(false);
     const [sorting, setSorting] = useState([]);
@@ -109,7 +110,7 @@ const EvaluationTaskListModalPM = ({
     const { data: historyData } = useGetEvaluationHistoryQuery(
         singleEvaluation?.user_id
     );
-
+    const designation = evaluationDesignation(singleEvaluation?.roleId);
     React.useEffect(() => {
         setDateExpired(new Date(singleEvaluation?.exp_date) < Date.now());
     }, [singleEvaluation]);
@@ -415,7 +416,7 @@ const EvaluationTaskListModalPM = ({
         >
             <TitleAndTableSection>
                 <EvalTableTitle>
-                    <span>New Developer Evaluation:</span>
+                    <span>{`${designation} Evaluation :`}</span>
                     <span> {singleEvaluation.user_name}</span>
 
                     <span className="average_rating">
