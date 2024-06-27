@@ -37,7 +37,7 @@ export const priceQuotationsState = {
         client_currency: {},
         deadline: null,
         platform_account: {},
-        step: "view-price-quotation-invoice",
+        step: "submit-price-quotation",
     },
     validation: {
         cms: false,

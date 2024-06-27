@@ -1,6 +1,5 @@
 import React, { useEffect } from "react";
 import PropTypes from "prop-types";
-import { pdf } from "@react-pdf/renderer";
 
 import { toast } from "react-toastify";
 
@@ -35,8 +34,6 @@ import {
     PriceQuotationsInvoiceDummyData,
     QuotationDummyData,
 } from "../../constant";
-import ExportInvoicePDF from "../export/InvoicePdf";
-import ViewPriceQuotationsInvoicePDF from "./ModalContent/ViewPriceQuotationsInvoicePDF";
 import { usePDF } from "react-to-pdf";
 
 const PriceQuotationsGenerateModal = ({
