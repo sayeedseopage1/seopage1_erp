@@ -284,12 +284,15 @@ class IndependentTaskController extends AccountBaseController
             $pendingParentTasks->save();
         }
         if($pendingParentTasks->evaluation_user_id !=null){
-            if(Auth::user()->role_id == 1 || Auth::user()->role_id == 8){
-                $evaluation = EmployeeEvaluation::where('user_id',$pendingParentTasks->evaluation_user_id)->first();
-                $evaluation_history = EvaluationHistory::where('user_id',$pendingParentTasks->evaluation_user_id)->first();
-                if($evaluation->managements_decision == 'One more week' || $evaluation_history->managements_decision == 'One more week'){
-                    $helper = new HelperPendingActionController();
-                    $helper->evaluationAuthTeamLead($evaluation->user_id ? $evaluation->user_id : $evaluation_history->user_id, $independent_task->id);
+            $evaluate_user = User::where('id',$pendingParentTasks->evaluation_user_id)->first();
+            if(!in_array($evaluate_user->role_id, [15, 16, 17])){
+                if(Auth::user()->role_id == 1 || Auth::user()->role_id == 8){
+                    $evaluation = EmployeeEvaluation::where('user_id',$pendingParentTasks->evaluation_user_id)->first();
+                    $evaluation_history = EvaluationHistory::where('user_id',$pendingParentTasks->evaluation_user_id)->first();
+                    if($evaluation->managements_decision == 'One more week' || $evaluation_history->managements_decision == 'One more week'){
+                        $helper = new HelperPendingActionController();
+                        $helper->evaluationAuthTeamLead($evaluation->user_id ? $evaluation->user_id : $evaluation_history->user_id, $independent_task->id);
+                    }
                 }
             }
         }
