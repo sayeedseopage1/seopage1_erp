@@ -6,16 +6,34 @@ use Carbon\Carbon;
 use App\Models\Task;
 use App\Models\Subtask;
 use Illuminate\Http\Request;
+use App\Models\ProjectTimeLog;
 use App\Models\ProjectMilestone;
+use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use App\Models\ProjectDeadlineExtension;
-use App\Models\ProjectTimeLog;
 
 class ProjectInsightController extends Controller
 {
     public function getProjectMilestones($project_id)
     {
-        $data = ProjectMilestone::with('currency:id,currency_code,currency_symbol','original_currency:id,currency_code,currency_symbol')->where('project_id', $project_id)->get();
+        $data = DB::select(
+            DB::raw("
+                SELECT 
+                    pm.*,
+                    c.id as currency_id, c.currency_code as currency_code, c.currency_symbol as currency_symbol,
+                    oc.id as original_currency_id, oc.currency_code as original_currency_code, oc.currency_symbol as original_currency_symbol
+                FROM 
+                    project_milestones pm
+                LEFT JOIN 
+                    currencies c ON pm.currency_id = c.id
+                LEFT JOIN 
+                    currencies oc ON pm.original_currency_id = oc.id
+                WHERE 
+                    pm.project_id = :project_id
+            "), ['project_id' => $project_id]
+        );
+
+        // $data = ProjectMilestone::select(['*','created_at'])->with('currency:id,currency_code,currency_symbol','original_currency:id,currency_code,currency_symbol')->where('project_id', $project_id)->get();
 
         return response()->json([
             'code' => 200,
