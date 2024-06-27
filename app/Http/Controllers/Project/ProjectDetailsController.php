@@ -21,7 +21,7 @@ class ProjectDetailsController extends Controller
      */
     public function __invoke(Request $request, $project_id)
     {
-        $project = Project::select(['id','project_name','project_short_code','client_id','pm_id','start_date','deadline','project_budget','currency_id','deal_id','project_challenge','comments','requirement_defined','deadline_meet','project_summary','status','dispute_status','dispute_admin_comment'])->with('client:id,name,user_name,country_id', 'client.country:id,iso,nicename', 'pm:id,name,country_id', 'pm.country:id,iso,nicename', 'currency:id,currency_code,currency_symbol', 'deal:id,project_type,amount,upsell_actual_amount,profile_link,message_link,original_currency_id,lead_id,price_authorization,requirment_define,project_deadline_authorization,description,description2,description3,description4,description5,description6,description7,description8,description9', 'deal.original_currency:id,currency_code,currency_symbol', 'workingEnvironment:id,project_id,site_url,frontend_password,login_url,email,password', 'pmTaskGuidline', 'pmTaskGuidelineAuthorizations','projectSubmission', 'projectPortfolio.theme', 'projectDeadlineExtension', 'projectQcSubmission', 'projectDispute')->find($project_id);
+        $project = Project::select(['id','project_name','project_short_code','client_id','pm_id','start_date','deadline','project_budget','currency_id','deal_id','project_challenge','comments','requirement_defined','deadline_meet','project_summary','status','dispute_status','dispute_admin_comment'])->with('client:id,name,user_name,country_id', 'client.country:id,iso,nicename', 'pm:id,name,country_id', 'pm.country:id,iso,nicename', 'currency:id,currency_code,currency_symbol', 'deal:id,project_type,amount,upsell_actual_amount,profile_link,message_link,original_currency_id,lead_id,price_authorization,requirment_define,project_deadline_authorization,description,description2,description3,description4,description5,description6,description7,description8,description9', 'deal.original_currency:id,currency_code,currency_symbol', 'workingEnvironment:id,project_id,site_url,frontend_password,login_url,email,password', 'pmTaskGuidline', 'pmTaskGuidelineAuthorizations','projectSubmission', 'projectPortfolio.theme', 'projectDeadlineExtension', 'projectQcSubmission', 'projectDispute','payments','expenses')->find($project_id);
 
         $tasks = Task::where('project_id',$project->id)->whereNull('subtask_id');
 
@@ -30,8 +30,10 @@ class ProjectDetailsController extends Controller
         }
 
         $projectArray = $project->toArray();
-        // return $tasks->count();
         
+        $projectArray['earnings'] = (clone $project->payments)->where('status', 'complete')->sum('amount');
+        $projectArray['actual_earnings'] = (clone $project->payments)->sum('actual_amount');
+        $projectArray['total_expenses'] = (clone $project->expenses)->where('status', 'approved')->sum('price');
         $projectArray['progress'] = $tasks->count() ? round(((clone $tasks)->where('board_column_id', 4)->count()/$tasks->count())*100) : 0;
         $boardColumnsCollection = collect([1, 2, 3, 4, 6, 7, 8, 9]);
         $countProgressArray = $boardColumnsCollection->map(function ($id) use ($tasks) {
@@ -74,6 +76,9 @@ class ProjectDetailsController extends Controller
         unset($projectArray['pm']['user_other_role']);
         unset($projectArray['pm']['role']);
         unset($projectArray['pm']['employee_detail']);
+
+        unset($projectArray['payments']);
+        unset($projectArray['expenses']);
 
         return response()->json(['status' => 200, 'data' => $projectArray]);
     }
