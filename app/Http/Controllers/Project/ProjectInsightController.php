@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use App\Models\ProjectMilestone;
 use App\Http\Controllers\Controller;
 use App\Models\ProjectDeadlineExtension;
+use App\Models\ProjectTimeLog;
 
 class ProjectInsightController extends Controller
 {
@@ -24,7 +25,7 @@ class ProjectInsightController extends Controller
 
     public function getProjectTasks($project_id)
     {
-        $data = Task::select(['id','project_id','heading','start_date','due_date','original_due_date','status','board_column_id','estimate_hours','estimate_minutes'])->with('boardColumn')->where('project_id', $project_id)->whereNull('subtask_id')->get()->map(function($row){
+        $data = Task::select(['id','project_id','heading','start_date','due_date','original_due_date','status','board_column_id','estimate_hours','estimate_minutes'])->with('boardColumn', 'timeLogged')->where('project_id', $project_id)->whereNull('subtask_id')->get()->map(function($row){
             $timeLog = '--';
             if($row->timeLogged) {
                 $totalMinutes = $row->timeLogged->sum('total_minutes');
@@ -45,6 +46,19 @@ class ProjectInsightController extends Controller
             $tas_id = Task::where('id',$row->id)->first();
             $subtasks = Subtask::where('task_id', $tas_id->id)->get();
             
+            // Showing first logged time under a task
+            $row->logged_start_time = null;
+            $taskTimeLog = ProjectTimeLog::where('task_id', $row->id)->first();
+            if($taskTimeLog){
+                $row->logged_start_time = $taskTimeLog->start_time ? Carbon::parse($taskTimeLog->start_time)->format('Y-m-d H:i:s') : null;
+            }
+            else{
+                $subTaskIds = Subtask::where('task_id', $tas_id->id)->pluck('id');
+                $tasksIds = Task::whereIn('subtask_id', $subTaskIds)->pluck('id');
+                $startTime = ProjectTimeLog::whereIn('task_id',$tasksIds)->first()->start_time ?? null;
+                $row->logged_start_time = $startTime ? Carbon::parse($startTime)->format('Y-m-d H:i:s') : null;
+            }
+
             foreach ($subtasks as $subtask) {
                 $task = Task::where('subtask_id', $subtask->id)->first();
                 $totalMinutes = $totalMinutes + $task->timeLogged->sum('total_minutes');
