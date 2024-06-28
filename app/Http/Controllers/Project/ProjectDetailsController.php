@@ -28,7 +28,7 @@ class ProjectDetailsController extends Controller
             'pm:id,name,country_id', 
             'pm.country:id,iso,nicename', 
             'currency:id,currency_code,currency_symbol', 
-            'deal:id,project_type,amount,upsell_amount,upsell_actual_amount,profile_link,message_link,original_currency_id,lead_id,price_authorization,requirment_define,project_deadline_authorization,deal_id,description,description2,description3,description4,description5,description6,description7,description8,description9', 
+            'deal:id,project_type,amount,upsell_amount,upsell_actual_amount,profile_link,message_link,original_currency_id,lead_id,price_authorization,requirment_define,project_deadline_authorization,deal_id,hourly_rate,hubstaff_tracking,second_day_tracked_hours,expect_amount,tracked_hours,certain_amount_hour,long_project,description,description2,description3,description4,description5,description6,description7,description8,description9', 
             'deal.original_currency:id,currency_code,currency_symbol', 
             'deal.dealStage:id,short_code', 
             'workingEnvironment:id,project_id,site_url,frontend_password,login_url,email,password', 
