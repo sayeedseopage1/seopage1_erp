@@ -1,13 +1,13 @@
 import AverageRatingSecondaryMetrics from "../../../components/Table/AverageRatingSecondaryMetrics";
 import { User } from "../../../../utils/user-details";
-import ActionEvaluationRequiredRoundTable from "../../../components/Table/ActionEvaluationRequiredRoundTable";
 import AssignedTasksDataRequiredRound from "../../../components/Table/AssignedTasksDataRequiredRound";
 import SubmittedTasksDataRequiredRound from "../../../components/Table/SubmittedTasksDataRequiredRound";
 import TotalMinRequiredRound from "../../../components/Table/TotalMinRequiredRound";
-import EvaluationRevisionModalRequiredRound from "../../../components/modal/EvaluationRevisionModalRequiredRound";
+// import EvaluationRevisionModalRequiredRound from "../../../components/modal/EvaluationRevisionModalRequiredRound";
 import AverageRatingRequiredRound from "../../../components/Table/AverageRatingRequiredRound";
 import CommentModal from "../../../components/Table/CommentModal";
 import ActionEvaluationRequiredRoundTablePM from "./ActionEvaluationRequiredRoundTablePM";
+import EvaluationRevisionModal from "../../../components/modal/EvaluationRevisionModal";
 const auth = new User(window.Laravel.user);
 export const EvaluationRoundHistoryTableColumnsPM = [
     {
@@ -72,7 +72,7 @@ export const EvaluationRoundHistoryTableColumnsPM = [
             const data = row.original;
             return (
                 <div style={{ marginLeft: "50px" }}>
-                    <EvaluationRevisionModalRequiredRound
+                    <EvaluationRevisionModal
                         data={data}
                         round={row.index + 1}
                     />

@@ -11,7 +11,6 @@ import ActionEvaluationTablePM from "./ActionEvaluationTablePM";
 import AssignedTasksData from "../../../components/Table/AssignedTasksData";
 import SubmittedTasksData from "../../../components/Table/SubmittedTasksData";
 import EvaluationRoundHistoryModalPM from "../modal/EvaluationRoundHistoryModalPM";
-import EvaluationRevisionModalPM from "../modal/EvaluationRevisionModalPM";
 
 export const EvaluationTableColumnsPM = [
     {
@@ -129,7 +128,7 @@ export const EvaluationTableColumnsPM = [
             const data = row.original;
             return (
                 <div style={{ marginLeft: "50px" }}>
-                    <EvaluationRevisionModalPM data={data} />
+                    <EvaluationRevisionModal data={data} />
                 </div>
             );
         },
