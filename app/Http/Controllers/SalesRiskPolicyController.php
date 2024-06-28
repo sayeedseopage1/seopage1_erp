@@ -669,7 +669,7 @@ class SalesRiskPolicyController extends AccountBaseController
     {
         try {
             $deal = Deal::find($req->session()->get('deal_id'));
-            $dealStage = DealStage::where('lead_id', $deal->lead->id)->first();
+            $dealStage = DealStage::where('short_code', $deal->deal_id)->first();
 
             $data = SalesPolicyQuestion::parent()
                 ->where(function ($query) use ($dealStage) {
@@ -1182,7 +1182,7 @@ class SalesRiskPolicyController extends AccountBaseController
             // ----------------------------- common calculations -------------------------- //
 
             // ------------------------------ clientCountry country --------------------------- //
-            $policy = SalesRiskPolicy::where('key', 'clientCountry')->first();
+            $policy = SalesRiskPolicy::where(['key' => 'clientCountry', 'status' => '1'])->first();
 
             if (!$policy) {
                 $pointData['clientCountry']['message'][] = 'Client\'s Country policy not found.';
@@ -1192,6 +1192,11 @@ class SalesRiskPolicyController extends AccountBaseController
             $policies = SalesRiskPolicy::where('parent_id', $policy->id)->get();
 
             $lead = Lead::find($deal->lead_id);
+            if (!$lead) {
+                $pointData['clientCountry']['message'][] = 'Client\'s Country not found (Lead not found). ';
+                goto endClientCountry;
+            }
+
             foreach ($policies as $item) {
 
                 $countries = json_decode($item->value, true);
@@ -1203,6 +1208,9 @@ class SalesRiskPolicyController extends AccountBaseController
                         $policyIdList[$item->id] = $item->id;
                         goto endClientCountry;
                     }
+                    else {
+                        $pointData['clientCountry']['message'][] = 'Client\'s Country policy not found.';
+                    }
                 }
             }
             $pointData['clientCountry']['questionAnswer'][] = ['title' => 'From which country does the client originate?', 'value' => $lead->country, 'parent_id' => null];
@@ -1211,7 +1219,7 @@ class SalesRiskPolicyController extends AccountBaseController
             // ------------------------------ end clientCountry country --------------------------- //
 
             // --------------------------------- projectDeadline -------------------------- //
-            $policy = SalesRiskPolicy::where('key', 'projectDeadline')->first();
+            $policy = SalesRiskPolicy::where(['key' => 'projectDeadline', 'status' => '1'])->first();
 
             if ($policy) {
                 $policies = SalesRiskPolicy::where('parent_id', $policy->id)->get();

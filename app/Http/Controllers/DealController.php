@@ -155,17 +155,24 @@ class DealController extends AccountBaseController
 
     public function store(Request $request)
     {
-    //    dd($request->all());
-        // $request->validate([
-        //     'client_name' => 'required',
-        //     'client_username' => 'required',
-        //     'project_name' => 'required',
-        //     'project_link' => 'required|url',
-        //     'project_type' => 'required',
-        //     'amount' => 'required',
-        //     'description' => 'required',
-        //     'comments' => 'required',
-        // ]);
+        $request->validate([
+            'client_name' => 'required',
+            'client_username' => 'required',
+            'project_name' => 'required',
+            'project_link' => 'required|url',
+            'project_type' => 'required',
+            'description' => 'required',
+            'original_currency_id' => 'required',
+            'comments' => 'required',
+        ]);
+
+        if ($request->project_type == 'fixed') {
+            $request->validate([
+                'amount' => 'required'
+            ]);
+        }
+
+
         $existing_client= User::where('user_name',$request->user_name)->first();
         $chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ01234567890123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
         $suffle = substr(str_shuffle($chars), 0, 6);

@@ -370,7 +370,7 @@
             'lead_id': {{$deal->lead_id}},
             @endif
             'date': '{{$date}}',
-            'deadline': document.getElementById('deadline').value,
+            'deadline': document.getElementById('deadline') ? document.getElementById('deadline').value : null,
             'id': {{$deal->id}},
             'deal_stage': 6,
         }
