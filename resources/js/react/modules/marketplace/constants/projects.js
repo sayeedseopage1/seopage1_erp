@@ -389,8 +389,7 @@ export const freelancer_project_files = [
         },
         created_at: "2024-06-27 08:30:00",
         updated_at: "2024-06-27 09:30:00",
-        file_url:
-            "https://seopage1storage.s3.ap-southeast-1.amazonaws.com/video1.mp4",
+        file_url: "https://www.youtube.com/watch?v=U4_P_l3L_EA",
         file_type: "video",
     },
     {

@@ -9,6 +9,7 @@ import './index.css';
 import FreelancerMessage from "./pages/message/FreelancerMessage";
 import FreelancerProjects from "./pages/freelancerProjects/FreelancerProjects";
 import ListOfMileStones from "./pages/listOfMilestones/ListOfMileStones";
+import BidInsights from "./pages/bidInsights/BidInsights";
 
 const Content = () => {
     return (
@@ -45,7 +46,7 @@ const marketPlaceRoutes = [
         id: 4,
         rootId: 'marketplaceBidInsights',
         path: 'marketeplace-bid-insights',
-        element: <h2>Marketplace Bid Insights</h2>,
+        element: <BidInsights />,
         contextProvider: React.Fragment
     },
     {

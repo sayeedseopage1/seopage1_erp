@@ -57,17 +57,14 @@ const ListOfMilestonesTable = () => {
     const rowClassName = (_record, index) => (index % 2 === 0 ? 'table-row-odd' : '');
 
     return (
-
-        <div className=''>
-            <Table
-                rowKey="id"
-                columns={columns}
-                dataSource={list_of_milestones_data}
-                scroll={{ x: 768 }}
-                pagination={false}
-                rowClassName={rowClassName}
-            />
-        </div>
+        <Table
+            rowKey="id"
+            columns={columns}
+            dataSource={list_of_milestones_data}
+            scroll={{ x: 768 }}
+            pagination={false}
+            rowClassName={rowClassName}
+        />
     );
 };
 
