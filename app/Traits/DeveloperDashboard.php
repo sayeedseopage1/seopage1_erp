@@ -98,6 +98,12 @@ trait DeveloperDashboard
                 $this->number_of_task_others_page_in_this_month,
             ] = $this->numberOfTasksReceived($tasksUserInDate);
 
+
+            [
+                $this->average_number_of_attempts_neededfor_approval_by_client,
+                $this->average_number_of_attempts_neededfor_approval_by_client_data
+            ] = $this->averageNumberofAttemptsNeededforApprovalByClient($tasksUserInDate);
+
             [
                 $this->submit_number_of_tasks_in_this_month_data,
                 $this->submit_number_of_tasks_in_this_month,
@@ -576,14 +582,12 @@ trait DeveloperDashboard
             $startDate = Carbon::now()->startOfMonth();
             $endDate = Carbon::now()->endOfMonth()->addDays(1);
 
-            // $startDate = Carbon::parse('2024-03-01')->startOfMonth();
-            // $endDate = Carbon::parse('2024-03-31')->endOfMonth()->addDays(1);
+            $startDate = Carbon::parse('2024-03-01')->startOfMonth();
+            $endDate = Carbon::parse('2024-03-31')->endOfMonth()->addDays(1);
 
 
             $tasksUserInDate = Task::whereBetween('created_at', [$startDate, $endDate])
                 ->whereRelation('taskUsers', 'user_id', $devId);
-
-
 
             $this->username = DB::table('users')->where('id', $devId)->value('name');
             $this->developer_task_data = DB::table('tasks')
@@ -609,6 +613,11 @@ trait DeveloperDashboard
             ] = $this->numberOfTasksReceived($tasksUserInDate);
 
             [
+                $this->average_number_of_attempts_neededfor_approval_by_client,
+                $this->average_number_of_attempts_neededfor_approval_by_client_data
+            ] = $this->averageNumberofAttemptsNeededforApprovalByClient($tasksUserInDate);
+
+            [
                 $this->submit_number_of_tasks_in_this_month_data,
                 $this->submit_number_of_tasks_in_this_month,
                 $this->submit_number_of_tasks_primary_page_in_this_month_data,
@@ -622,64 +631,64 @@ trait DeveloperDashboard
             //-----------------------------number of tasks approved in first attempt(in cycle) Client-----------------------//
 
 
-            $first_attempt_approve_task_data_client = DB::table('tasks')
-                ->select(
-                    'tasks.id',
-                    'tasks.heading',
-                    'tasks.client_name',
-                    'tasks.due_date',
-                    'tasks.created_at as task_creation_date',
-                    'tasks.updated_at as task_approval_date',
-                    'client.name as clientName',
-                    'client.id as clientId',
-                    'cl.name as cl_name',
-                    'cl.id as cl_id',
-                    DB::raw('MIN(task_submissions.created_at) as task_submission_date'),
-                    'taskboard_columns.column_name',
-                    'taskboard_columns.label_color as label_color'
-                )
-                ->join('task_users', 'tasks.id', '=', 'task_users.task_id')
-                ->leftJoin('projects', 'tasks.project_id', '=', 'projects.id')
-                ->join('taskboard_columns', 'taskboard_columns.id', '=', 'tasks.board_column_id')
-                ->leftJoin('task_submissions', 'tasks.id', '=', 'task_submissions.task_id')
-                ->leftJoin('users as client', 'client.id', '=', 'projects.client_id')
-                ->leftJoin('users as cl', 'cl.id', '=', 'tasks.client_id')
-                ->join('task_history', 'tasks.id', '=', 'task_history.task_id')
-                ->where('tasks.board_column_id', 4)
-                ->where('tasks.updated_at', '>=', $startDate)
-                ->where('tasks.updated_at', '<', $endDate)
-                ->where('task_users.user_id', $devId)
-                ->whereNotExists(function ($query) {
-                    $query->select(DB::raw(1))
-                        ->from('task_revisions')
-                        ->whereRaw('task_revisions.task_id = tasks.id');
-                })
-                ->groupBy('tasks.id')
-                ->orderBy('tasks.updated_at', 'desc')
-                ->get();
+            // $first_attempt_approve_task_data_client = DB::table('tasks')
+            //     ->select(
+            //         'tasks.id',
+            //         'tasks.heading',
+            //         'tasks.client_name',
+            //         'tasks.due_date',
+            //         'tasks.created_at as task_creation_date',
+            //         'tasks.updated_at as task_approval_date',
+            //         'client.name as clientName',
+            //         'client.id as clientId',
+            //         'cl.name as cl_name',
+            //         'cl.id as cl_id',
+            //         DB::raw('MIN(task_submissions.created_at) as task_submission_date'),
+            //         'taskboard_columns.column_name',
+            //         'taskboard_columns.label_color as label_color'
+            //     )
+            //     ->join('task_users', 'tasks.id', '=', 'task_users.task_id')
+            //     ->leftJoin('projects', 'tasks.project_id', '=', 'projects.id')
+            //     ->join('taskboard_columns', 'taskboard_columns.id', '=', 'tasks.board_column_id')
+            //     ->leftJoin('task_submissions', 'tasks.id', '=', 'task_submissions.task_id')
+            //     ->leftJoin('users as client', 'client.id', '=', 'projects.client_id')
+            //     ->leftJoin('users as cl', 'cl.id', '=', 'tasks.client_id')
+            //     ->join('task_history', 'tasks.id', '=', 'task_history.task_id')
+            //     ->where('tasks.board_column_id', 4)
+            //     ->where('tasks.updated_at', '>=', $startDate)
+            //     ->where('tasks.updated_at', '<', $endDate)
+            //     ->where('task_users.user_id', $devId)
+            //     ->whereNotExists(function ($query) {
+            //         $query->select(DB::raw(1))
+            //             ->from('task_revisions')
+            //             ->whereRaw('task_revisions.task_id = tasks.id');
+            //     })
+            //     ->groupBy('tasks.id')
+            //     ->orderBy('tasks.updated_at', 'desc')
+            //     ->get();
 
-            $first_attempt_approve_task_primary_page_client = 0;
-            foreach ($first_attempt_approve_task_data_client as $item) {
-                $type = TaskType::where('task_id', $item->id)->first();
-                if ($type != null && $type->page_type == 'Primary Page Development') {
-                    $first_attempt_approve_task_primary_page_client++;
+            // $first_attempt_approve_task_primary_page_client = 0;
+            // foreach ($first_attempt_approve_task_data_client as $item) {
+            //     $type = TaskType::where('task_id', $item->id)->first();
+            //     if ($type != null && $type->page_type == 'Primary Page Development') {
+            //         $first_attempt_approve_task_primary_page_client++;
 
-                }
+            //     }
 
-            }
-            $first_attempt_approve_task_secondary_page_client = 0;
-            foreach ($first_attempt_approve_task_data_client as $item) {
-                $type = TaskType::where('task_id', $item->id)->first();
-                if ($type != null && $type->page_type == 'Secondary Page Development') {
-                    $first_attempt_approve_task_secondary_page_client++;
+            // }
+            // $first_attempt_approve_task_secondary_page_client = 0;
+            // foreach ($first_attempt_approve_task_data_client as $item) {
+            //     $type = TaskType::where('task_id', $item->id)->first();
+            //     if ($type != null && $type->page_type == 'Secondary Page Development') {
+            //         $first_attempt_approve_task_secondary_page_client++;
 
-                }
+            //     }
 
-            }
+            // }
 
-            $this->first_attempt_approve_task_in_this_month_client_data = $first_attempt_approve_task_data_client;
-            $this->first_attempt_approve_task_primary_page_in_this_month_client = $first_attempt_approve_task_primary_page_client;
-            $this->first_attempt_approve_task_secondary_page_in_this_month_client = $first_attempt_approve_task_secondary_page_client;
+            // $this->first_attempt_approve_task_in_this_month_client_data = $first_attempt_approve_task_data_client;
+            // $this->first_attempt_approve_task_primary_page_in_this_month_client = $first_attempt_approve_task_primary_page_client;
+            // $this->first_attempt_approve_task_secondary_page_in_this_month_client = $first_attempt_approve_task_secondary_page_client;
 
 
 
@@ -706,7 +715,7 @@ trait DeveloperDashboard
                 $this->approved_task_by_client_in_first_attempt_secondary_page,
                 $this->approved_task_by_client_in_first_attempt_other_data,
                 $this->approved_task_by_client_in_first_attempt_other,
-            ] = $this->approvedTaskByClientinFirstAttempt($startDate);
+            ] = $this->approvedTaskByClientinFirstAttempt($startDate, $endDate, $devId);
 
 
             // --------------Average number of attempts needed for approval(in cycle) lead developer-----------------------------//
@@ -1280,60 +1289,92 @@ trait DeveloperDashboard
         ];
     }
 
-    private function approvedTaskByClientinFirstAttempt($tasksUserInDate)
+    private function approvedTaskByClientinFirstAttempt($startDate, $endDate, $devId)
     {
-
-        $devId = Auth::id();
-        $startDate = Carbon::parse('2024-01-01')->startOfMonth();
-        $endDate = Carbon::parse('2024-06-31')->endOfMonth()->addDays(1);
-
-
-        $tasksUserInDate = Task::whereBetween('created_at', [$startDate, $endDate])
-            ->whereRelation('taskUsers', 'user_id', $devId);
-        // Subtask link, Task type, client, project manager, lead developer, created on, Submitted on, Approved on (By client)
-        $tasksUserInDate = $tasksUserInDate->with(
-            'taskType:id,task_id,task_type,page_type',
+        $tasksUserInDate = Task::with(
+            'taskType',
             'project:id,pm_id,client_id',
             'project.pm:id,name',
             'project.client:id,name',
-            'revisions'
-        )
-            ->where('board_column_id', 4)
-            ->whereDoesntHave('revisions', function (Builder $query) {
-                $query->where('dispute_between', 'like', 'LDR')
-                    ->orWhere('is_accept', '!=', '1')
-                    ->orWhereNotIn('final_responsible_person', ['D', null])
-                    ->orWhereRelation('taskRevisionDispute', 'raised_against_percent', '>', 50);
-            })
-            ->select('id', 'created_at', 'heading', 'board_column_id', 'project_id');
+            'revisions',
+            'revisions.taskRevisionDispute',
+            'latestTaskSubmission',
+            'latestTaskApprove',
+            'taskUser',
+        )->withCount(['revisions'])
+            ->whereBetween('created_at', [$startDate, $endDate])
+            ->whereRelation('taskUsers', 'user_id', $devId)
+            ->doesntHave('revisions');
+
+            // dd($tasksUserInDate->get());
+        // ->whereHas('revisions', function (Builder $query) {
+        //     $query->orWhere('dispute_between', 'LDR')
+        //         ->where('is_accept', 0)
+        //         ->where('final_responsible_person', '!=', 'D')
+        //         ->orWhereRelation('taskRevisionDispute', 'raised_against_percent', '>', 50);
+        // });
+
+
 
         $approved_primary = clone $tasksUserInDate;
         $approved_secondary = clone $tasksUserInDate;
         $approved_others = clone $tasksUserInDate;
-        
 
-        $number_of_tasks_approved_data = $tasksUserInDate->whereRelation('revisions', 'id', '=', 1770)->get();
+
+        $number_of_tasks_approved_data = $tasksUserInDate->orWhere(function ($query) use ($startDate, $endDate, $devId) {
+            $query->whereBetween('created_at', [$startDate, $endDate])
+                ->whereRelation('taskUsers', 'user_id', $devId)
+                ->whereHas('revisions', function (Builder $query) {
+                    $query->where('is_accept', 0)
+                        ->where('final_responsible_person', '!=', 'D')
+                        ->where('dispute_between', 'LDR')
+                        ->orWhereRelation('taskRevisionDispute', 'raised_against_percent', '>', 50);
+                });
+        })->get();
         $number_of_tasks_approved = $tasksUserInDate->count();
-
-        $number_of_tasks_approved_primary_data = $approved_primary->whereRelation('taskType', 'page_type', '=', 'Primary Page Development')->get();
+            // dd($number_of_tasks_approved_data);
+        $number_of_tasks_approved_primary_data = $approved_primary->whereRelation('taskType', 'page_type', 'Primary Page Development')->orWhere(function ($query) use ($startDate, $endDate, $devId) {
+            $query->whereBetween('created_at', [$startDate, $endDate])
+                ->whereRelation('taskUsers', 'user_id', $devId)
+                ->whereRelation('taskType', 'page_type', 'Primary Page Development')
+                ->whereHas('revisions', function (Builder $query) {
+                    $query->where('is_accept', 0)
+                        ->where('final_responsible_person', '!=', 'D')
+                        ->where('dispute_between', 'LDR')
+                        ->orWhereRelation('taskRevisionDispute', 'raised_against_percent', '>', 50);
+                });
+        })->get();
         $number_of_tasks_approved_primary = $approved_primary->count();
 
-        $number_of_tasks_approved_secondary_data = $approved_secondary->whereRelation('taskType', 'page_type', '=', 'Secondary Page Development')->get();
+
+        $number_of_tasks_approved_secondary_data = $approved_secondary->whereRelation('taskType', 'page_type', 'Secondary Page Development')
+            ->orWhere(function ($query) use ($startDate, $endDate, $devId) {
+                $query->whereBetween('created_at', [$startDate, $endDate])
+                    ->whereRelation('taskUsers', 'user_id', $devId)
+                    ->whereRelation('taskType', 'page_type', 'Secondary Page Development')
+                    ->whereHas('revisions', function (Builder $query) {
+                        $query->where('is_accept', 0)
+                            ->where('final_responsible_person', '!=', 'D')
+                            ->where('dispute_between', 'LDR')
+                            ->orWhereRelation('taskRevisionDispute', 'raised_against_percent', '>', 50);
+                    });
+            })->get();
         $number_of_tasks_approved_secondary = $approved_secondary->count();
 
-        $number_of_tasks_approved_others_date = $approved_others->whereNotIn('id', array_merge($number_of_tasks_approved_primary_data->pluck('id')->toArray(), $number_of_tasks_approved_secondary_data->pluck('id')->toArray()))->get();
+        $number_of_tasks_approved_others_date = $approved_others->whereNotIn('id', array_merge($number_of_tasks_approved_primary_data->pluck('id')->toArray(), $number_of_tasks_approved_secondary_data->pluck('id')->toArray()))
+            ->orWhere(function ($query) use ($startDate, $endDate, $devId,$number_of_tasks_approved_primary_data, $number_of_tasks_approved_secondary_data) {
+                $query->whereBetween('created_at', [$startDate, $endDate])
+                    ->whereRelation('taskUsers', 'user_id', $devId)
+                    ->whereNotIn('id', array_merge($number_of_tasks_approved_primary_data->pluck('id')->toArray(), $number_of_tasks_approved_secondary_data->pluck('id')->toArray()))
+                    ->whereHas('revisions', function (Builder $query) {
+                        $query->where('is_accept', 0)
+                            ->where('final_responsible_person', '!=', 'D')
+                            ->where('dispute_between', 'LDR')
+                            ->orWhereRelation('taskRevisionDispute', 'raised_against_percent', '>', 50);
+                    });
+            })->get();
         $number_of_tasks_approved_others = $approved_others->count();
 
-        dd(
-            $number_of_tasks_approved_data,
-            $number_of_tasks_approved,
-            $number_of_tasks_approved_primary_data,
-            $number_of_tasks_approved_primary,
-            $number_of_tasks_approved_secondary_data,
-            $number_of_tasks_approved_secondary,
-            $number_of_tasks_approved_others_date,
-            $number_of_tasks_approved_others,
-        );
 
         return [
             $number_of_tasks_approved_data,
@@ -1409,6 +1450,28 @@ trait DeveloperDashboard
         return [
             $average_number_of_attempts_needed,
             $avg_no_of_submission_needed_for_app_by_lead_dev,
+        ];
+    }
+
+
+    private function averageNumberofAttemptsNeededforApprovalByClient($tasksUserInDate)
+    {
+        $average_number_of_attempts_neededfor_approval_by_client_data = $tasksUserInDate->with(
+            'taskType',
+            'project:id,pm_id,client_id',
+            'project.pm:id,name',
+            'project.client:id,name',
+            'submissions',
+            'latestTaskSubmission',
+            'latestTaskApprove',
+            'taskUser',
+        )->withCount(['submissions'])->get();
+
+        $average_number_of_attempts_neededfor_approval_by_client = round($average_number_of_attempts_neededfor_approval_by_client_data->sum('submissions_count') / $average_number_of_attempts_neededfor_approval_by_client_data->count(), 2);
+
+        return [
+            $average_number_of_attempts_neededfor_approval_by_client,
+            $average_number_of_attempts_neededfor_approval_by_client_data
         ];
     }
 

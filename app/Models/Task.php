@@ -563,6 +563,15 @@ class Task extends BaseModel
     {
         return $this->hasMany(TaskRevision::class);
     }
+    public function notResponsibleDeveloperRevisions()
+    {
+        return $this->hasMany(TaskRevision::class)
+            ->orWhere('dispute_between', 'LDR')
+            ->where('is_accept', 0)
+            ->where('final_responsible_person', '!=', 'D')
+            ->orWhereRelation('taskRevisionDispute', 'raised_against_percent', '>', 50);
+    }
+
     public function taskRevisionDispute()
     {
         return $this->hasMany(TaskRevisionDispute::class, 'task_id');

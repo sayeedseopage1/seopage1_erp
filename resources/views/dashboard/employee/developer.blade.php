@@ -442,8 +442,8 @@
                                 <div class="d-flex flex-wrap">
                                     <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
                                         <a href="#" data-toggle="modal"
-                                            data-target="#first_attempt_approve_task_client{{ count($first_attempt_approve_task_in_this_month_client_data) }}">
-                                            {{ count($first_attempt_approve_task_in_this_month_client_data) }}
+                                            data-target="#first_attempt_approve_task_client{{ $approved_task_by_client_in_first_attempt }}">
+                                            {{ count($approved_task_by_client_in_first_attempt_data) }}
                                         </a>
 
                                     </p>
@@ -489,8 +489,8 @@
 
                                     <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
                                         <a href="#" data-toggle="modal"
-                                            data-target="#avg_task_approval_client{{ count($average_number_of_tasks_approved_client_data) }}">
-                                            {{ round($average_submission_aproval_in_this_month_client, 2) }}
+                                            data-target="#avg_task_approval_client{{ count($average_number_of_attempts_neededfor_approval_by_client_data) }}">
+                                            {{ $average_number_of_attempts_neededfor_approval_by_client }}
                                         </a>
                                     </p>
                                     @include('dashboard.ajax.developerdashboard.modals.avg_task_approval_client')
