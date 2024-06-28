@@ -73,7 +73,7 @@ const DashboardActionButtonSection = ({ projectData, isLoading }) => {
                     className={`${style.dashboardActionLeftButton}`}
                 >
                     <Switch.Case
-                        condition={ViewModalButtons?.project_qc_submission}
+                        condition={ViewModalButtons?.extend_deadline_form}
                     >
                         <Button
                             onClick={() =>
@@ -124,7 +124,7 @@ const DashboardActionButtonSection = ({ projectData, isLoading }) => {
                         </Button>
                     </Switch.Case>
                     <Switch.Case
-                        condition={ViewModalButtons?.see_project_dispute}
+                        condition={ViewModalButtons?.see_project_dispute && !ViewModalButtons?.project_dispute_authorization}
                     >
                         <Button
                             onClick={() =>
@@ -132,7 +132,7 @@ const DashboardActionButtonSection = ({ projectData, isLoading }) => {
                             }
                             className={`${style.dashboardActionButton}`}
                         >
-                            Dispute Form
+                            See Dispute
                         </Button>
                     </Switch.Case>
                 </SectionContainer>
@@ -168,48 +168,48 @@ const DashboardActionButtonSection = ({ projectData, isLoading }) => {
                     closeModal={() =>
                         handleModal(setIsProjectDEModalOpen, false)
                     }
-                    modalData={projectData?.projectData?.project}
+                    modalData={projectData}
                     isLoading={isLoading}
                 />
             )}
 
             {/* Project QC Submission Form */}
-
             {isProjectQCSFModalOpen && (
                 <ProjectQCSubmissionFormModal
                     isModalOpen={isProjectQCSFModalOpen}
-                    modalData={projectData?.project_qc_submission}
+                    modalData={{
+                        project_qc_submission: projectData?.project_qc_submission,
+                        buttons: projectData?.buttons,
+                        
+                    }}
                     isLoading={isLoading}
                     closeModal={() =>
                         handleModal(setIsProjectQCSFModalOpen, false)
                     }
                 />
             )}
-
-            {/* Dispute Project Form */}
-
+            {/* Dispute Project Show Data */}
             {isDisputeProjectModalOpen && (
-                <DisputeProjectFromModal
+                <DisputeProjectAuthorizeModal
                     isModalOpen={isDisputeProjectModalOpen}
                     closeModal={() =>
-                        handleModal(setIsDisputeProjectModalOpen, false)
-                    }
-                    setDummyDisputeData={setDummyDisputeData}
-                />
-            )}
-
-            {/* Dispute Project Authorization Form */}
-
-            {isDisputeProjectAuthorizeModalOpen && (
-                <DisputeProjectAuthorizeModal
-                    isModalOpen={isDisputeProjectAuthorizeModalOpen}
-                    closeModal={() =>
                         handleModal(
-                            setIsDisputeProjectAuthorizeModalOpen,
+                            setIsDisputeProjectModalOpen,
                             false
                         )
                     }
-                    payloadData={dummyDisputeData?.disputeData}
+                    modalData={{
+                        disputeData: projectData?.project_dispute,
+                        pm: projectData.pm,
+                        client: projectData.client,
+                        projectData: {
+                            id: projectData.id,
+                            project_budget: projectData.project_budget,
+                            currency: projectData.currency,
+                            dispute_admin_comment: projectData?.dispute_admin_comment,
+                        },
+                    }}
+                    isLoading={isLoading}
                 />
             )}
         </div>

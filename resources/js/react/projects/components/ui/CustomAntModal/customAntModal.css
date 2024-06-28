@@ -158,6 +158,10 @@
 }
 
 
+.confirmationModal .ant-modal-content {
+  padding: 0 !important;
+}
+
 
 @media screen and (max-width: 768px) {
   .customAntModalTitleWithClose .ant-modal-title {

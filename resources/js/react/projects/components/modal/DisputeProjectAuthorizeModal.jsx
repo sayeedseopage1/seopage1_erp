@@ -21,6 +21,14 @@ import { handleLoadingComponent, htmlTagRegex } from "../../helper";
 
 // Constants
 import { ProjectDisputeAuthorizationsData } from "../../constants";
+import { useDisputeProjectAuthorizationMutation } from "../../../services/api/projectApiSlice";
+import dayjs from "dayjs";
+import { useAuth } from "../../../hooks/useAuth";
+import {
+    isStateAllHaveValue,
+    markEmptyFieldsValidation,
+} from "../../../utils/stateValidation";
+import AuthorizeCommentView from "../shared/AuthorizeCommentView";
 
 /**
  *  Dispute Project Authorize Modal
@@ -29,86 +37,110 @@ import { ProjectDisputeAuthorizationsData } from "../../constants";
  *  @param {object} payloadData - Payload Data
  *  @returns {JSX.Element}
  *  @description Dispute Project Authorize Modal component to render dispute project authorize modal
- * 
+ *
  *  This modal will be used by Admin to authorize the dispute
  */
 
 const DisputeProjectAuthorizeModal = ({
     isModalOpen,
     closeModal,
-    payloadData,
+    modalData,
+    isLoading,
 }) => {
-    const [isLoading, setIsLoading] = React.useState(false);
-    const [isSubmitting, setIsSubmitting] = React.useState(false);
+    const user = useAuth();
     const [adminComment, setAdminComment] = React.useState("");
-    const [modalData, setModalData] = React.useState(
-        ProjectDisputeAuthorizationsData
-    );
+    const [
+        disputeAuthorizationDataValidation,
+        setDisputeAuthorizationDataValidation,
+    ] = React.useState({
+        adminComment: false,
+        isSubmitting: false,
+    });
+    const [
+        projectDisputeAuthorizationsData,
+        setProjectDisputeAuthorizationsData,
+    ] = React.useState(ProjectDisputeAuthorizationsData);
 
-    // Fetch all data for the modal
-    const fetchAllData = async () => {
-        setIsLoading(true);
-        try {
-            // TODO: Implement the API call to submit the admin comment
-            const res = await dataPromise;
-            const formatedData = ProjectDisputeAuthorizationsData.map(
-                (item) => ({
-                    ...item,
-                    value: res[item.key],
-                })
-            );
-            setModalData(formatedData);
-            setIsLoading(false);
-        } catch (error) {
-            console.log(error);
-        }
-    };
+    //
+
+    const [
+        disputeProjectAuthorization,
+        { isLoading: isDisputeProjectAuthorizationLoading },
+    ] = useDisputeProjectAuthorizationMutation();
 
     // Handle Admin Comment
     const handleAdminComment = async () => {
-        setIsSubmitting(true);
+        const isEmpty = isStateAllHaveValue({ adminComment });
+        if (isEmpty) {
+            const validation = markEmptyFieldsValidation({ adminComment });
+            setDisputeAuthorizationDataValidation({
+                ...disputeAuthorizationDataValidation,
+                ...validation,
+                isSubmitting: true,
+            });
+            return;
+        }
         try {
-            setTimeout(() => {
+            const payload = {
+                dispute_admin_comment: adminComment,
+                project_id: modalData?.projectData?.id,
+            };
+
+            const res = await disputeProjectAuthorization(payload).unwrap();
+            if (res.status === 200) {
                 toast.success("Dispute authorized successfully");
-                const updatedData = modalData.map((item) => {
-                    if (item.key === "dispute_admin_comment") {
-                        return {
-                            ...item,
-                            value: adminComment,
-                        };
-                    }
-                    return item;
-                });
-                setModalData(updatedData);
-                setIsSubmitting(false);
-            }, 3000);
+                closeModal();
+                setAdminComment("");
+            }
         } catch (error) {
             console.log(error);
             toast.error("Failed to authorize the dispute");
         }
     };
 
-    // Dummy data promise
-    const dataPromise = new Promise((resolve, reject) => {
-        setTimeout(() => {
-            resolve(payloadData);
-        }, 5000);
-    });
-
     // Get Dispute Admin Comment
     const getDisputeAdminComment = () => {
-        const adminComment = modalData?.find(
+        const adminComment = projectDisputeAuthorizationsData?.find(
             (item) => item.key === "dispute_admin_comment"
         );
-        return adminComment.value;
+        return adminComment?.value;
     };
 
-    // Dummy data Fetch
     useEffect(() => {
-        if (isModalOpen) {
-            fetchAllData();
+        if (modalData?.disputeData) {
+            const formattedData = ProjectDisputeAuthorizationsData.map(
+                (item) => {
+                    let value;
+
+                    if (item.key === "project_value") {
+                        value = `${modalData?.projectData?.currency?.currency_symbol} ${modalData?.projectData?.project_budget} ${modalData?.projectData?.currency?.currency_code}`;
+                    } else if (item.key === "created_at") {
+                        value = dayjs(modalData?.disputeData[item.key]).format(
+                            "DD-MM-YYYY"
+                        );
+                    } else {
+                        value = modalData?.disputeData[item.key];
+                    }
+                    return {
+                        ...item,
+                        value: value,
+                    };
+                }
+            );
+            setProjectDisputeAuthorizationsData(formattedData);
         }
-    }, [isModalOpen]);
+    }, [modalData?.disputeData]);
+
+    // Validation on Submit
+    useEffect(() => {
+        if (disputeAuthorizationDataValidation.isSubmitting) {
+            const validation = markEmptyFieldsValidation({ adminComment });
+            setDisputeAuthorizationDataValidation({
+                ...disputeAuthorizationDataValidation,
+                ...validation,
+            });
+        }
+    }, [adminComment, disputeAuthorizationDataValidation.isSubmitting]);
 
     return (
         <CustomAntModal
@@ -143,7 +175,7 @@ const DisputeProjectAuthorizeModal = ({
                             </tr>
                         </thead>
                         <tbody>
-                            {modalData
+                            {projectDisputeAuthorizationsData
                                 ?.filter(
                                     (item) =>
                                         item.key !== "dispute_admin_comment"
@@ -168,7 +200,6 @@ const DisputeProjectAuthorizeModal = ({
                                                         width="50%"
                                                     />
                                                 </div>,
-
                                                 <Switch>
                                                     <Switch.Case
                                                         condition={
@@ -221,54 +252,102 @@ const DisputeProjectAuthorizeModal = ({
                         </tbody>
                     </table>
                 </div>
-                {/* Admin Comment */}
-                <ModalContentContainer className="px-0">
-                    <CustomTextArea
-                        label={
-                            getDisputeAdminComment()
-                                ? "Admin Comment"
-                                : "Comments"
+                <Switch>
+                    {/* Admin Comment */}
+                    <Switch.Case
+                        condition={
+                            user.getRoleId() === 1 &&
+                            modalData.buttons?.project_dispute_authorization
                         }
-                        placeholder={"Write your comments here"}
-                        name="dispute_admin_comment"
-                        value={getDisputeAdminComment() ?? adminComment}
-                        onChange={(e) => {
-                            setAdminComment(e.target.value);
-                        }}
-                        rows={6}
-                        cols={50}
-                        isDangerHtml={htmlTagRegex.test(
-                            getDisputeAdminComment()
-                        )}
-                        isDisabled={getDisputeAdminComment() ?? false}
-                    />
-                </ModalContentContainer>
-                {/* Buttons */}
-                <ModalContentContainer className="pt-0 px-0">
-                    <div className="modalButtonContainer">
-                        <Switch>
-                            <Switch.Case condition={!getDisputeAdminComment()}>
+                    >
+                        <ModalContentContainer className="px-0">
+                            <CustomTextArea
+                                label={
+                                    getDisputeAdminComment()
+                                        ? "Admin Comment"
+                                        : "Comments"
+                                }
+                                placeholder={"Write your comments here"}
+                                name="dispute_admin_comment"
+                                value={
+                                    modalData?.projectData
+                                        ?.dispute_admin_comment ?? adminComment
+                                }
+                                onChange={(e) => {
+                                    setAdminComment(e.target.value);
+                                }}
+                                rows={6}
+                                cols={50}
+                                isDangerHtml={htmlTagRegex.test(
+                                    getDisputeAdminComment()
+                                )}
+                                isRequired={true}
+                                isDisabled={getDisputeAdminComment() ?? false}
+                            />
+                            {disputeAuthorizationDataValidation.adminComment && (
+                                <span className="text-danger">
+                                    Admin Comment is required
+                                </span>
+                            )}
+                        </ModalContentContainer>
+                    </Switch.Case>
+                    {/* Admin Comment */}
+                    <Switch.Case
+                        condition={
+                            modalData?.projectData?.dispute_admin_comment
+                        }
+                    >
+                        <ModalContentContainer className="px-0">
+                            <AuthorizeCommentView
+                                comment={
+                                    modalData?.projectData
+                                        ?.dispute_admin_comment
+                                }
+                            />
+                        </ModalContentContainer>
+                    </Switch.Case>
+                    {/* Buttons */}
+                    <Switch.Case
+                        condition={
+                            user.getRoleId() === 1 &&
+                            modalData.buttons?.project_dispute_authorization
+                        }
+                    >
+                        <ModalContentContainer className="pt-0 px-0">
+                            <div className="modalButtonContainer">
+                                <Switch>
+                                    <Switch.Case
+                                        condition={!getDisputeAdminComment()}
+                                    >
+                                        <SingleButton
+                                            label={
+                                                isDisputeProjectAuthorizationLoading ? (
+                                                    <Loader title="Authorizing" />
+                                                ) : (
+                                                    "Authorize"
+                                                )
+                                            }
+                                            onClick={handleAdminComment}
+                                            type="primary"
+                                            isDisabled={
+                                                isDisputeProjectAuthorizationLoading
+                                            }
+                                        />
+                                    </Switch.Case>
+                                </Switch>
                                 <SingleButton
-                                    label={
-                                        isSubmitting ? (
-                                            <Loader title="Authorizing" />
-                                        ) : (
-                                            "Authorize"
-                                        )
+                                    label="Close"
+                                    className=""
+                                    onClick={closeModal}
+                                    type="secondary"
+                                    isDisabled={
+                                        isDisputeProjectAuthorizationLoading
                                     }
-                                    onClick={handleAdminComment}
-                                    type="primary"
                                 />
-                            </Switch.Case>
-                        </Switch>
-                        <SingleButton
-                            label="Close"
-                            className=""
-                            onClick={closeModal}
-                            type="secondary"
-                        />
-                    </div>
-                </ModalContentContainer>
+                            </div>
+                        </ModalContentContainer>
+                    </Switch.Case>
+                </Switch>
             </ModalContentContainer>
         </CustomAntModal>
     );
@@ -279,5 +358,6 @@ export default DisputeProjectAuthorizeModal;
 DisputeProjectAuthorizeModal.propTypes = {
     isModalOpen: PropTypes.bool.isRequired,
     closeModal: PropTypes.func.isRequired,
-    payloadData: PropTypes.object,
+    modalData: PropTypes.object,
+    isLoading: PropTypes.bool,
 };

@@ -104,7 +104,8 @@ const projectApiSlice = apiSlice.injectEndpoints({
         }),
         //  get project Details
         getProjectDetails: build.query({
-            query: (project_id) => `/account/project-details/${project_id}`
+            query: (project_id) => `/account/project-details/${project_id}`,
+            providesTags: ["SINGLE_PROJECT_DETAILS"]
         }),
         // get project taskList
         getProjectTaskList: build.query({
@@ -115,10 +116,122 @@ const projectApiSlice = apiSlice.injectEndpoints({
             query: (project_id) => `/account/project-milestones/${project_id}`
         }),
         // get project pending extension History
-        getProjectPendingExtensionHistory: build.query({
+        getProjectPendingExtension: build.query({
             query: (project_id) => `/account/project-pending-extension/${project_id}`,
             providesTags: ["PROJECT_PENDING_EXTENSION_HISTORY"]
         }),
+
+        // Project Completion form authorization
+        authorizeCompletionForm: build.mutation({
+            query: (data) => ({
+                url: `/account/submission-accept`,
+                method: "POST",
+                body: {
+                    ...data,
+                    _token: document
+                        .querySelector("meta[name='csrf-token']")
+                        .getAttribute("content"),
+                },
+            }),
+            invalidatesTags: ["SINGLE_PROJECT_DETAILS"]
+        }),
+        // Project QC form authorization
+        authorizeQcForm: build.mutation({
+            query: (data) => ({
+                url: `/account/qc-submission-accept`,
+                method: "POST",
+                body: {
+                    ...data,
+                    _token: document
+                        .querySelector("meta[name='csrf-token']")
+                        .getAttribute("content"),
+                },
+            }),
+            invalidatesTags: ["SINGLE_PROJECT_DETAILS"]
+        }),
+        // Project Deadline Extension form
+        deadlineExtensionRequest: build.mutation({
+            query: (data) => ({
+                url: `store-project-deadline-exp`,
+                method: "POST",
+                body: {
+                    ...data,
+                    _token: document
+                        .querySelector("meta[name='csrf-token']")
+                        .getAttribute("content"),
+                },
+            }),
+            invalidatesTags: ["SINGLE_PROJECT_DETAILS"]
+        }),
+
+        // Project Deadline Extension form authorization
+        authorizeDeadlineExtensionForm: build.mutation({
+            query: (data) => ({
+                url: `store-project-deadline-exp-auth`,
+                method: "POST",
+                body: {
+                    ...data,
+                    _token: document
+                        .querySelector("meta[name='csrf-token']")
+                        .getAttribute("content"),
+                },
+            }),
+            invalidatesTags: ["SINGLE_PROJECT_DETAILS"]
+        }),
+        // Project Incomplete from admin
+        incompleteProject: build.mutation({
+            query: (data) => ({
+                url: `/acoounts/projects/incomplete`,
+                method: "POST",
+                body: {
+                    ...data,
+                    _token: document
+                        .querySelector("meta[name='csrf-token']")
+                        .getAttribute("content"),
+                },
+            }),
+            invalidatesTags: ["SINGLE_PROJECT_DETAILS"]
+        }),
+        // Project Dispute form
+        disputeProject: build.mutation({
+            query: (data) => ({
+                url: `/projects/dispute/store`,
+                method: "POST",
+                body: {
+                    ...data,
+                    _token: document
+                        .querySelector("meta[name='csrf-token']")
+                        .getAttribute("content"),
+                },
+            }),
+            invalidatesTags: ["SINGLE_PROJECT_DETAILS"]
+        }),
+
+        // Project dispute Authorization
+        disputeProjectAuthorization: build.mutation({
+            query: (data) => ({
+                url: `projects/dispute/authorization`,
+                method: "POST",
+                body: {
+                    ...data,
+                    _token: document
+                        .querySelector("meta[name='csrf-token']")
+                        .getAttribute("content"),
+                },
+            }),
+            invalidatesTags: ["SINGLE_PROJECT_DETAILS"]
+        }),
+        // Project Task Guideline Authorization - approve
+        authorizeTaskApprovedGuideline: build.query({
+            query: (id) => `task-guideline-approved-authorization/${id}`,
+            invalidatesTags: ["SINGLE_PROJECT_DETAILS"]
+        }),
+        // Project Task Guideline Authorization - reject
+        authorizeTaskRejectGuideline: build.query({
+            query: (id) => `task-guideline-deny-authorization/${id}`,
+            invalidatesTags: ["SINGLE_PROJECT_DETAILS"]
+        }),
+
     })
 });
 
@@ -141,6 +254,15 @@ export const {
     useGetProjectDetailsQuery,
     useGetProjectTaskListQuery,
     useGetProjectMilestoneQuery,
-    useGetProjectPendingExtensionHistoryQuery
+    useGetProjectPendingExtensionQuery,
+    useAuthorizeCompletionFormMutation,
+    useAuthorizeQcFormMutation,
+    useDeadlineExtensionRequestMutation,
+    useAuthorizeDeadlineExtensionFormMutation,
+    useIncompleteProjectMutation,
+    useDisputeProjectMutation,
+    useDisputeProjectAuthorizationMutation,
+    useLazyAuthorizeTaskApprovedGuidelineQuery,
+    useLazyAuthorizeTaskRejectGuidelineQuery,
 } = projectApiSlice;
 

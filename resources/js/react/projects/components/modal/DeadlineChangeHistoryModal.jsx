@@ -20,6 +20,8 @@ import "./styles/deadlineChangeHistoryModal.css";
  * Deadline Change History Modal
  * @param {boolean} isModalOpen - Is Modal Open
  * @param {function} closeModal - Close Modal
+ * @param {boolean} isLoading - Is Loading
+ * @param {array} modalData - Modal Data
  * @returns {JSX.Element}
  * @description - Deadline Change History Modal Component For Show Deadline Change History
  * 
@@ -27,36 +29,9 @@ import "./styles/deadlineChangeHistoryModal.css";
  * 
  */
 
-const DeadlineChangeHistoryModal = ({ isModalOpen, closeModal }) => {
-    const [projectDeadlineHistory, setProjectDeadlineHistory] = React.useState(
-        []
-    );
-    const [isLoading, setIsLoading] = React.useState(true);
+const DeadlineChangeHistoryModal = ({ isModalOpen, closeModal , isLoading, modalData  }) => {
 
-    // Dummy Fetch Data
-    const dataPromise = new Promise((resolve, reject) => {
-        setTimeout(() => {
-            resolve(ProjectDeadlineHistoryDummyData);
-        }, 5000);
-    });
-
-    // Fetch Data Deadline Change History
-    const fetchData = async () => {
-        setIsLoading(true);
-        try {
-            const data = await dataPromise;
-            setProjectDeadlineHistory(data);
-            setIsLoading(false);
-        } catch (error) {
-            console.error("Error fetching data: ", error);
-        }
-    };
-
-    useEffect(() => {
-        if (isModalOpen) {
-            fetchData();
-        }
-    }, [isModalOpen]);
+   
 
     return (
         <CustomAntModal
@@ -71,7 +46,7 @@ const DeadlineChangeHistoryModal = ({ isModalOpen, closeModal }) => {
                     <DashboardDataTable
                         tableColumns={DashBoardDeadlineHistoryModalColumns}
                         tableName="Deadline Change History"
-                        tableData={projectDeadlineHistory}
+                        tableData={modalData}
                         isLoading={isLoading}
                         tableHight="50vh"
                     />
@@ -86,4 +61,6 @@ export default DeadlineChangeHistoryModal;
 DeadlineChangeHistoryModal.propTypes = {
     isModalOpen: PropTypes.bool.isRequired,
     closeModal: PropTypes.func.isRequired,
+    isLoading: PropTypes.bool,
+    modalData: PropTypes.array,
 };

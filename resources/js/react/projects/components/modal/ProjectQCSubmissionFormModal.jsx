@@ -20,6 +20,10 @@ import Switch from "../../../global/Switch";
 // Constants
 import { ProjectQualityControlDummyData } from "../../constants";
 import { Placeholder } from "../../../global/Placeholder";
+import { useAuth } from "../../../hooks/useAuth";
+import AuthorizeCommentView from "../shared/AuthorizeCommentView";
+import { useAuthorizeQcFormMutation } from "../../../services/api/projectApiSlice";
+import { toast } from "react-toastify";
 
 // Dummy Data
 const payloadData = {
@@ -65,26 +69,39 @@ const ProjectQCSubmissionFormModal = ({
     modalData,
     isLoading,
 }) => {
-    const [qcSubmissionFormData, setQCSubmissionFormData] = useState(ProjectQualityControlDummyData);
+    const [qcSubmissionFormData, setQCSubmissionFormData] = useState(
+        ProjectQualityControlDummyData
+    );
+    const user = useAuth();
+    const [actionType, setActionType] = useState("");
     const [adminComment, setAdminComment] = useState("");
     const [isSubmitting, setIsSubmitting] = useState(false);
 
+    const [authorizeQcForm, { isLoading: isAuthorizeQCFormLoading }] =
+        useAuthorizeQcFormMutation();
+
     // Handle Admin Comment
     const handleAdminComment = async () => {
-        setIsSubmitting(true);
+        setActionType(type);
         try {
-            // TODO: Implement the API call to submit the admin comment
-            await new Promise((resolve) => setTimeout(resolve, 2000));
-            setQCSubmissionFormData({
-                ...modalData,
-                admin_comment: adminComment,
-            });
-            setIsSubmitting(false);
-            toast.success("Project QC Authorized Successfully");
-            resetData();
+            const payload = {
+                project_id: modalData.id,
+                deny: type === "deny" ? null : "approve",
+                adminComment: adminComment,
+            };
+            const res = await authorizeQcForm(payload).unwrap();
+            if (res.status === 200) {
+                if (type === "approve") {
+                    toast.success("Project QC Approved Successfully");
+                } else {
+                    toast.success("Project QC Denied Successfully");
+                }
+                closeModal();
+                setAdminComment("");
+                setActionType("");
+            }
         } catch (error) {
-            console.log(error);
-            toast.error("Failed to authorize the project QC");
+            toast.error("Something went wrong");
         }
     };
 
@@ -265,57 +282,105 @@ const ProjectQCSubmissionFormModal = ({
                             </tbody>
                         </table>
                     </div>
+                    <Switch>
+                        <Switch.Case
+                            condition={modalData?.project_qc_submission?.status}
+                        >
+                            <AuthorizeCommentView
+                                comment={
+                                    modalData?.project_qc_submission
+                                        ?.admin_comment
+                                }
+                            />
+                        </Switch.Case>
+                    </Switch>
                 </ModalContentContainer>
-                {/* Admin Comment */}
-                <ModalContentContainer>
-                    <CustomTextArea
-                        label={
-                            modalData.status === "accepted"
-                                ? "Admin Comment"
-                                : "Comments"
+                <Switch>
+                    <Switch.Case
+                        condition={
+                            user.getRoleId() === 1 &&
+                            modalData.buttons?.project_qc_authorization
                         }
-                        placeholder={"Write your comments here"}
-                        name="admin_comment"
-                        value={modalData.admin_comment}
-                        onChange={(e) => {
-                            setAdminComment(e.target.value);
-                        }}
-                        rows={6}
-                        cols={50}
-                        isDangerHtml={htmlTagRegex.test(
-                            modalData.admin_comment
-                        )}
-                        isDisabled={modalData.status === "accepted" ? true : false}
-                    />
-                </ModalContentContainer>
-                {/* Buttons */}
-                <ModalContentContainer className="pt-0">
-                    <div className="modalButtonContainer">
-                        <Switch>
-                            <Switch.Case
-                                condition={modalData.status !== "accepted"}
-                            >
+                    >
+                        {/* Admin Comment */}
+                        <ModalContentContainer>
+                            <CustomTextArea
+                                label={
+                                    modalData?.status === "accepted"
+                                        ? "Admin Comment"
+                                        : "Comments"
+                                }
+                                placeholder={"Write your comments here"}
+                                name="admin_comment"
+                                value={
+                                    modalData.project_qc_submission
+                                        .admin_comment
+                                }
+                                onChange={(e) => {
+                                    setAdminComment(e.target.value);
+                                }}
+                                rows={6}
+                                cols={50}
+                                isDangerHtml={htmlTagRegex.test(
+                                    modalData.admin_comment
+                                )}
+                                isDisabled={
+                                    modalData.status === "accepted"
+                                        ? true
+                                        : false
+                                }
+                            />
+                        </ModalContentContainer>
+                    </Switch.Case>
+                    {/* Buttons */}
+                    <Switch.Case
+                        condition={
+                            user.getRoleId() === 1 &&
+                            modalData.buttons?.project_qc_authorization
+                        }
+                    >
+                        <ModalContentContainer className="pt-0">
+                            <div className="modalButtonContainer">
+                                <Switch>
+                                    <Switch.Case
+                                        condition={
+                                            modalData?.status !== "accepted"
+                                        }
+                                    >
+                                        <SingleButton
+                                            label={
+                                                isAuthorizeQCFormLoading &&
+                                                actionType === "deny"  ? (
+                                                    <Loader title="Authorizing" />
+                                                ) : (
+                                                    "Authorize"
+                                                )
+                                            }
+                                            onClick={() => handleAdminComment("approve")}
+                                            type="primary"
+                                        />
+                                    </Switch.Case>
+                                </Switch>
                                 <SingleButton
                                     label={
-                                        isSubmitting ? (
-                                            <Loader title="Authorizing" />
+                                        isAuthorizeQCFormLoading &&
+                                        actionType === "deny" ? (
+                                            <Loader title="Denying" />
                                         ) : (
-                                            "Authorize"
+                                            "Deny"
                                         )
                                     }
-                                    onClick={handleAdminComment}
-                                    type="primary"
+                                    className=""
+                                    onClick={() => handleAdminComment("deny")}
+                                    type="secondary"
+                                    isDisabled={
+                                        isAuthorizeQCFormLoading
+                                    }
                                 />
-                            </Switch.Case>
-                        </Switch>
-                        <SingleButton
-                            label="Close"
-                            className=""
-                            onClick={closeModal}
-                            type="secondary"
-                        />
-                    </div>
-                </ModalContentContainer>
+                            </div>
+                        </ModalContentContainer>
+                    </Switch.Case>
+                </Switch>
             </ModalContentContainer>
         </CustomAntModal>
     );

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 
 // UI Components - Custom
@@ -23,6 +23,7 @@ import { handleLoadingComponent } from "../../helper";
 
 // Components - Loader
 import TextLoaderDynamic from "../loader/TextLoaderDynamic";
+import Switch from "../../../global/Switch";
 
 /**
  * Dashboard Project Info Hourly Section
@@ -35,6 +36,131 @@ import TextLoaderDynamic from "../loader/TextLoaderDynamic";
  */
 
 const DashboardProjectInfoHourlySection = ({ projectData, isLoading }) => {
+    const [projectBudgetData, setProjectBudgetData] =
+        useState(ProjectBudgetData);
+
+    useEffect(() => {
+        if (projectData && !isLoading) {
+            const updateProjectBudget = projectBudgetData.project_budget.map(
+                (budget) => {
+                    if (budget.key === "project_budget") {
+                        return {
+                            ...budget,
+                            price: projectData?.project_budget,
+                            currency: projectData?.currency?.currency_code,
+                            currency_symbol:
+                                projectData?.currency?.currency_symbol,
+                        };
+                    } else if (budget.key === "amount") {
+                        return {
+                            ...budget,
+                            price: Number(projectData?.deal.amount).toFixed(2),
+                            currency:
+                                projectData?.deal?.original_currency
+                                    .currency_code,
+                            currency_symbol:
+                                projectData?.deal?.original_currency
+                                    ?.currency_symbol,
+                        };
+                    }
+                }
+            );
+
+            const earningExpenses = projectBudgetData.earning_expenses.map(
+                (budget) => {
+                    if (budget.key === "earnings") {
+                        return {
+                            ...budget,
+                            price: projectData?.earnings,
+                            currency: projectData?.currency?.currency_code,
+                            currency_symbol:
+                                projectData?.currency?.currency_symbol,
+                        };
+                    } else if (budget.key === "actual_earnings") {
+                        return {
+                            ...budget,
+                            price: projectData?.actual_earnings,
+                            currency:
+                                projectData?.deal?.original_currency
+                                    ?.currency_code,
+                            currency_symbol:
+                                projectData?.deal?.original_currency
+                                    ?.currency_symbol,
+                        };
+                    } else if (budget.key === "total_expenses") {
+                        return {
+                            ...budget,
+                            price: projectData?.total_expenses,
+                            currency: projectData?.currency?.currency_code,
+                            currency_symbol:
+                                projectData?.currency?.currency_symbol,
+                        };
+                    }
+                }
+            );
+
+            const updateUpsoldAmount = projectBudgetData.upsold_amount.map(
+                (budget) => {
+                    if (budget.key === "upsell_amount") {
+                        return {
+                            ...budget,
+                            price: projectData?.deal?.upsell_amount,
+                            currency: projectData?.currency?.currency_code,
+                            currency_symbol:
+                                projectData?.currency?.currency_symbol,
+                        };
+                    } else if (budget.key === "upsell_actual_amount") {
+                        return {
+                            ...budget,
+                            price: projectData?.deal?.upsell_actual_amount,
+                            currency:
+                                projectData?.deal?.original_currency
+                                    ?.currency_code,
+                            currency_symbol:
+                                projectData?.deal?.original_currency
+                                    ?.currency_symbol,
+                        };
+                    }
+                }
+            );
+
+            const hoursLogged = projectBudgetData.hours_logged.map(
+                (logInfo) => {
+                    if (logInfo.key === "estimate_time_in_hours") {
+                        return {
+                            ...logInfo,
+                            time: `${projectData?.estimate_time_in_hours} Hours`,
+                        };
+                    }
+                    let totalTime;
+                    if (logInfo.key === "logged_time_in_hours") {
+                        if (projectData?.logged_time_in_hours > 0) {
+                            if (
+                                projectData?.additional_logged_time_in_minutes >
+                                0
+                            ) {
+                                totalTime = `${projectData?.logged_time_in_hours} Hours ${projectData?.additional_logged_time_in_minutes} Min.`;
+                            } else {
+                                totalTime = `${projectData?.logged_time_in_hours} Hours`;
+                            }
+                        }
+                    }
+                    return {
+                        ...logInfo,
+                        time: totalTime,
+                    };
+                }
+            );
+
+            setProjectBudgetData({
+                ...projectBudgetData,
+                project_budget: updateProjectBudget,
+                earning_expenses: earningExpenses,
+                upsold_amount: updateUpsoldAmount,
+                hours_logged: hoursLogged,
+            });
+        }
+    }, [projectData, isLoading, ProjectBudgetData]);
     return (
         <SectionWrapper className="my-4 m-0 projectHourlyContainer">
             <div className={`px-0 ${style.projectHourlyLeft}`}>
@@ -75,12 +201,12 @@ const DashboardProjectInfoHourlySection = ({ projectData, isLoading }) => {
                             className="d-flex flex-column h-100"
                         >
                             <DashboardCardTitle
-                                title={ProjectBudgetData?.hours_logged[1].title}
+                                title={projectBudgetData?.hours_logged[1].title}
                                 isBorderUse={true}
                             />
                             <DashboardCardPricingInfo
-                                amount={ProjectBudgetData?.hours_logged[1].time}
-                                icon={ProjectBudgetData?.hours_logged[1].icon}
+                                amount={projectBudgetData?.hours_logged[1].time}
+                                icon={projectBudgetData?.hours_logged[1].icon}
                                 isLoading={isLoading}
                                 loaderInformation={{
                                     number: 1,
@@ -99,7 +225,7 @@ const DashboardProjectInfoHourlySection = ({ projectData, isLoading }) => {
                                 isBorderUse={true}
                             />
                             <div className="d-flex justify-content-between py-3">
-                                {ProjectBudgetData?.earning_expenses
+                                {projectBudgetData?.earning_expenses
                                     .slice(0, 1)
                                     .map((moneyInfo) => (
                                         <DashboardCardPricingInfo
@@ -121,7 +247,7 @@ const DashboardProjectInfoHourlySection = ({ projectData, isLoading }) => {
                                     ))}
                             </div>
                             <div className="d-flex">
-                                {ProjectBudgetData?.earning_expenses
+                                {projectBudgetData?.earning_expenses
                                     .slice(2, 3)
                                     .map((moneyInfo) => (
                                         <DashboardCardPricingInfo
@@ -171,7 +297,7 @@ const DashboardProjectInfoHourlySection = ({ projectData, isLoading }) => {
                                     parentClassName="py-3 w-75"
                                 />,
                                 <p className="questionAnswerDashboard">
-                                    2 Hours
+                                    {projectData?.deal?.tracked_hours ?? "--"}
                                 </p>
                             )}
                             <DashboardCardTitle
@@ -186,7 +312,8 @@ const DashboardProjectInfoHourlySection = ({ projectData, isLoading }) => {
                                     parentClassName="py-3 w-75"
                                 />,
                                 <p className="questionAnswerDashboard">
-                                    3 Hours
+                                    {projectData?.deal
+                                        ?.second_day_tracked_hours ?? "--"}
                                 </p>
                             )}
                         </CardWrapper>
@@ -213,7 +340,34 @@ const DashboardProjectInfoHourlySection = ({ projectData, isLoading }) => {
                                     hight={25}
                                     parentClassName="py-3 w-75"
                                 />,
-                                <p className="questionAnswerDashboard">yes</p>
+                                <p className="questionAnswerDashboard">
+                                    <Switch>
+                                        <Switch.Case
+                                            condition={
+                                                projectData?.deal
+                                                    ?.hubstaff_tracking === null
+                                            }
+                                        >
+                                            --
+                                        </Switch.Case>
+                                        <Switch.Case
+                                            condition={
+                                                projectData?.deal
+                                                    ?.hubstaff_tracking === 0
+                                            }
+                                        >
+                                            No
+                                        </Switch.Case>
+                                        <Switch.Case
+                                            condition={
+                                                projectData?.deal
+                                                    ?.hubstaff_tracking === 1
+                                            }
+                                        >
+                                            Yes
+                                        </Switch.Case>
+                                    </Switch>
+                                </p>
                             )}
                         </CardWrapper>
                     </div>
@@ -244,7 +398,10 @@ const DashboardProjectInfoHourlySection = ({ projectData, isLoading }) => {
                             <div className="pt-3 pt-md-0 py-0 py-md-3">
                                 <div className="d-flex justify-content-md-between flex-column flex-md-row ">
                                     <DashboardCardPricingInfo
-                                        amount="1-5 hours"
+                                        amount={
+                                            projectBudgetData.hours_logged?.[0]
+                                                ?.time
+                                        }
                                         icon="/images/timer.png"
                                         className="w-100"
                                         isLoading={isLoading}
@@ -271,7 +428,7 @@ const DashboardProjectInfoHourlySection = ({ projectData, isLoading }) => {
                                 }}
                             >
                                 <DashboardCardPricingInfo
-                                    amount="10.00 GBP (£)"
+                                    amount={`${projectData?.deal?.original_currency?.currency_symbol} ${projectData?.deal?.actual_hourly_rate} ${projectData?.deal?.original_currency?.currency_code}`}
                                     isLoading={isLoading}
                                     className="w-100"
                                     loaderInformation={{
@@ -281,7 +438,7 @@ const DashboardProjectInfoHourlySection = ({ projectData, isLoading }) => {
                                     }}
                                 />
                                 <DashboardCardPricingInfo
-                                    amount="17.00 USD ($)"
+                                    amount={`${projectData?.currency?.currency_symbol} ${projectData?.deal?.hourly_rate} ${projectData?.currency?.currency_code}`}
                                     className="w-100"
                                     isLoading={isLoading}
                                     loaderInformation={{

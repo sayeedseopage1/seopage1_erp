@@ -651,7 +651,7 @@ export const ProjectDisputeAuthorizationsData = [
     {
         id: 1,
         title: "Dispute Date",
-        key: "dispute_date",
+        key: "created_at",
         value: null,
     },
     {
@@ -1053,14 +1053,14 @@ export const ProjectBudgetData = {
         {
             id: 1,
             title: "Estimated Time",
-            time: "04:33 hour",
+            time: "",
             key: "estimate_time_in_hours",
             icon: "/images/timer.png"
         },
         {
             id: 2,
             title: "Hours Logged",
-            time: "04:33 hour",
+            time: "",
             key: "logged_time_in_hours",
             icon: "/images/timer.png",
         },

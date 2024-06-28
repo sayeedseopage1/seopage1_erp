@@ -127,24 +127,24 @@ const DashboardProjectInfoFixedSection = ({
                             ...logInfo,
                             time: `${projectData?.estimate_time_in_hours} Hours`,
                         };
-                    } else if (logInfo.key === "logged_time_in_hours") {
-                        let totalTime;
-
+                    }
+                    let totalTime;
+                    if (logInfo.key === "logged_time_in_hours") {
                         if (projectData?.logged_time_in_hours > 0) {
                             if (
                                 projectData?.additional_logged_time_in_minutes >
-                                24
+                                0
                             ) {
-                                totalTime = `${projectData?.logged_time_in_hours} Hours ${projectData?.additional_logged_time_in_minutes} Minutes`;
+                                totalTime = `${projectData?.logged_time_in_hours} Hours ${projectData?.additional_logged_time_in_minutes} Min.`;
+                            } else {
+                                totalTime = `${projectData?.logged_time_in_hours} Hours`;
                             }
-                            totalTime = `${projectData?.logged_time_in_hours} Hours`;
                         }
-
-                        return {
-                            ...logInfo,
-                            time: totalTime,
-                        };
                     }
+                    return {
+                        ...logInfo,
+                        time: totalTime,
+                    };
                 }
             );
 

@@ -5,13 +5,12 @@ import PropTypes from "prop-types";
 import {
     useGetProjectDetailsQuery,
     useGetProjectMilestoneQuery,
-    useGetProjectPendingExtensionHistoryQuery,
     useGetProjectTaskListQuery,
+    useGetProjectPendingExtensionQuery,
 } from "../../services/api/projectApiSlice";
 
 // helper
 import { extractMessageLink } from "../helper";
-
 
 /**
  *  @typedef {Object} ProjectDashboardContextType
@@ -25,9 +24,9 @@ import { extractMessageLink } from "../helper";
  *  @property {any[]} projectMilestoneList - List of project milestones
  *  @property {boolean} isProjectMilestoneLoading - Loading state
  *  @property {function} refetchProjectMilestone - Refetch project milestone list
- *  @property {any[]} projectDeadlineExtensionHistory - List of project deadline extension history
- *  @property {boolean} isProjectPendingExtensionHistoryLoading - Loading state
- *  @property {function} refetchProjectPendingExtensionHistory - Refetch project deadline extension history
+ *  @property {any[]} projectPendingDeadlineExtensionData- List of project deadline extension history
+ *  @property {boolean} isProjectPendingExtensionLoading - Loading state
+ *  @property {function} refetchProjectPendingExtension - Refetch project deadline extension history
  */
 
 /** @type {React.Context<ProjectDashboardContextType | undefined>} */
@@ -38,8 +37,8 @@ const ProjectDashboardProvider = ({ children }) => {
     const [projectTaskList, setProjectTaskList] = React.useState([]);
     const [projectMilestoneList, setProjectMilestoneList] = React.useState([]);
     const [
-        projectDeadlineExtensionHistory,
-        setProjectDeadlineExtensionHistory,
+        projectPendingDeadlineExtensionData,
+        setProjectPendingDeadlineExtensionData,
     ] = React.useState([]);
     const [project_id, setProject_id] = React.useState(null);
 
@@ -79,11 +78,11 @@ const ProjectDashboardProvider = ({ children }) => {
 
     // get project deadline extension history query
     const {
-        data: projectPendingExtensionHistory,
-        isFetching: isProjectPendingExtensionHistoryFetching,
-        isLoading: isProjectPendingExtensionHistoryLoading,
-        refetch: refetchProjectPendingExtensionHistory,
-    } = useGetProjectPendingExtensionHistoryQuery(project_id, {
+        data: projectPendingExtensionResponse,
+        isFetching: isProjectPendingExtensionFetching,
+        isLoading: isProjectPendingExtensionLoading,
+        refetch: refetchProjectPendingExtension,
+    } = useGetProjectPendingExtensionQuery(project_id, {
         skip: !project_id,
         refetchOnMountOrArgChange: true,
     });
@@ -141,28 +140,36 @@ const ProjectDashboardProvider = ({ children }) => {
     ]);
 
     // set project deadline extension history data to the state when fetched successfully
-
     useEffect(() => {
         if (
-            projectPendingExtensionHistory &&
-            !isProjectPendingExtensionHistoryFetching &&
-            !isProjectPendingExtensionHistoryLoading
+            projectPendingExtensionResponse &&
+            !isProjectPendingExtensionFetching &&
+            !isProjectPendingExtensionLoading
         ) {
-            setProjectDeadlineExtensionHistory(
-                projectPendingExtensionHistory?.data
+            setProjectPendingDeadlineExtensionData(
+                projectPendingExtensionResponse?.data
             );
         }
     }, [
-        projectPendingExtensionHistory,
-        isProjectPendingExtensionHistoryFetching,
-        isProjectPendingExtensionHistoryLoading,
+        projectPendingExtensionResponse,
+        isProjectPendingExtensionFetching,
+        isProjectPendingExtensionLoading,
     ]);
 
-      /** @type {ProjectDashboardContextType} */   
+    // refetch all project dashboard data
+    const refetchAllProjectDashboardData = () => {
+        refetchProjectDetails();
+        refetchProjectTaskList();
+        refetchProjectMilestone();
+        refetchProjectPendingExtension();
+    };
+
+    /** @type {ProjectDashboardContextType} */
     const ProjectDashboardValue = React.useMemo(() => {
         return {
             projectData,
             setProject_id,
+            refetchAllProjectDashboardData,
             isProjectDetailsLoading:
                 isProjectDetailsLoading || isProjectDetailsFetching,
             refetchProjectDetails,
@@ -174,11 +181,11 @@ const ProjectDashboardProvider = ({ children }) => {
             isProjectMilestoneLoading:
                 isProjectMilestoneLoading || isProjectMilestoneFetching,
             refetchProjectMilestone,
-            projectDeadlineExtensionHistory,
-            isProjectPendingExtensionHistoryLoading:
-                isProjectPendingExtensionHistoryLoading ||
-                isProjectPendingExtensionHistoryFetching,
-            refetchProjectPendingExtensionHistory,
+            projectPendingDeadlineExtensionData,
+            isProjectPendingExtensionLoading:
+                isProjectPendingExtensionLoading ||
+                isProjectPendingExtensionFetching,
+            refetchProjectPendingExtension,
         };
     });
 

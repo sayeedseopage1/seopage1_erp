@@ -15,7 +15,7 @@ import style from "./customButtons.module.css";
  */
 
 
-const CustomButton = ({ value, onChange }) => {
+const CustomButton = ({ value, onChange , isDisabled = false }) => {
     return (
         <div className="d-flex">
             <button
@@ -26,6 +26,7 @@ const CustomButton = ({ value, onChange }) => {
                 } `}
                 onClick={() => onChange(1)}
                 value={value}
+                disabled={isDisabled}
             >
                 Yes
             </button>
@@ -37,6 +38,7 @@ const CustomButton = ({ value, onChange }) => {
                 } `}
                 onClick={() => onChange(0)}
                 value={value}
+                disabled={isDisabled}
             >
                 No
             </button>
@@ -49,4 +51,5 @@ export default CustomButton;
 CustomButton.propTypes = {
     value: PropTypes.number || null,
     onChange: PropTypes.func,
+    isDisabled: PropTypes.bool,
 };

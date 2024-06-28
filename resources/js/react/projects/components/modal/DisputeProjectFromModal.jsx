@@ -1,6 +1,7 @@
 import React, { useEffect } from "react";
 import PropTypes from "prop-types";
 import { toast } from "react-toastify";
+import isEmail from "validator/lib/isEmail";
 
 // UI Components - Custom
 import CustomAntModal from "../ui/CustomAntModal/CustomAntModal";
@@ -19,11 +20,9 @@ import {
     isStateAllHaveValue,
     markEmptyFieldsValidation,
 } from "../../../utils/stateValidation";
-import isEmail from "validator/lib/isEmail";
+import { useDisputeProjectMutation } from "../../../services/api/projectApiSlice";
 
 const data = {
-    client_username: "",
-    project_value: "",
     description1: "",
     description2: "",
     description3: "",
@@ -46,8 +45,6 @@ const data = {
 };
 
 const fontDataValidation = {
-    client_username: false,
-    project_value: false,
     description1: false,
     description2: false,
     description3: false,
@@ -78,14 +75,15 @@ const fontDataValidation = {
  *  @param {function} setDummyDisputeData - Set Dummy Dispute Data Event Handler
  *  @returns {JSX.Element}
  *  @description DisputeProjectFromModal component to render dispute project form modal
- * 
+ *
  *  This modal will be used by Admin
  */
 
 const DisputeProjectFromModal = ({
     isModalOpen,
     closeModal,
-    setDummyDisputeData,
+    modalData,
+    isLoading,
 }) => {
     const [formData, setFormData] = React.useState(data);
     const [formValidation, setFormValidation] =
@@ -101,8 +99,11 @@ const DisputeProjectFromModal = ({
         });
     };
 
+    const [submitDisputeProject, { isLoading: isDisputeProjectLoading }] =
+        useDisputeProjectMutation();
+
     // Handle Dispute Submit
-    const handleDisputeSubmit = () => {
+    const handleDisputeSubmit = async () => {
         const { description9, ...rest } = formData;
         const isEmpty = isStateAllHaveValue(rest);
         if (isEmpty) {
@@ -127,24 +128,24 @@ const DisputeProjectFromModal = ({
             toast.error("Invalid Email");
             return;
         }
-        setIsSubmitting(true);
+
         try {
-            //TODO: API Call to submit the form
-            setTimeout(() => {
-                setIsSubmitting(false);
-                closeModal();
-                setDummyDisputeData({
-                    isDisputeSubmitted: true,
-                    disputeData: {
-                        ...formData,
-                        dispute_date: new Date().toLocaleDateString(),
-                    },
-                });
+            const payload = {
+                ...formData,
+                client_username: modalData?.client?.user_name,
+                project_value: modalData?.project_budget,
+                project_id: modalData?.id,
+            };
+            const res = await submitDisputeProject(payload).unwrap();
+
+            if(res.status === 200) {
                 toast.success("Dispute Form Submitted Successfully");
                 resetData();
-            }, 2000);
+                closeModal();
+            
+            }
         } catch (error) {
-            setIsSubmitting(false);
+            toast.error("Something went wrong, Please try again");
         }
     };
 
@@ -221,22 +222,18 @@ const DisputeProjectFromModal = ({
                         <CustomInput
                             label="1. Clients username on freelancer.com"
                             placeholder="Enter text"
-                            errorText="Client username is required"
-                            isRequired={true}
-                            value={formData?.client_username}
-                            isError={formValidation?.client_username}
+                            value={modalData?.client?.user_name}
                             fieldName="client_username"
-                            onChange={handleInputChange}
+                            isReadOnly
+                            type="text"
                         />
                         <CustomInput
                             label="2. Project value (Mention with currency)"
                             placeholder="Enter Amount with currency"
-                            errorText="Project value is required"
                             isRequired={true}
                             fieldName="project_value"
-                            value={formData?.project_value}
-                            isError={formValidation?.project_value}
-                            onChange={handleInputChange}
+                            isReadOnly
+                            value={`${modalData?.currency?.currency_symbol} ${modalData?.project_budget} ${modalData?.currency?.currency_code} `}
                             type="text"
                         />
                     </div>
@@ -524,7 +521,7 @@ const DisputeProjectFromModal = ({
                     <div className="modalButtonContainer ">
                         <SingleButton
                             label={
-                                isSubmitting ? (
+                                isDisputeProjectLoading ? (
                                     <Loader title="Submitting" />
                                 ) : (
                                     "Submit"
@@ -532,12 +529,14 @@ const DisputeProjectFromModal = ({
                             }
                             onClick={handleDisputeSubmit}
                             type="primary"
+                            isDisabled={isDisputeProjectLoading}
                         />
                         <SingleButton
                             label="Close"
                             className=""
                             onClick={closeModal}
                             type="secondary"
+                            isDisabled={isDisputeProjectLoading}
                         />
                     </div>
                 </ModalContentContainer>

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 import PropTypes from "prop-types";
 import dayjs from "dayjs";
 import { LuCalendarDays } from "react-icons/lu";
@@ -17,6 +17,9 @@ import { ProjectProgressStatus } from "../../constants";
 // Modal
 import DeadlineChangeHistoryModal from "../modal/DeadlineChangeHistoryModal";
 
+// Context
+import { ProjectDashboardContext } from "../../context/ProjectDashboardProvider";
+
 /**
  *
  *  DashboardProgress component
@@ -30,12 +33,13 @@ import DeadlineChangeHistoryModal from "../modal/DeadlineChangeHistoryModal";
 const DashboardProgress = ({
     projectData,
     style,
-    className = "",
-    isProjectDetailsLoading,
+    className = ""
 }) => {
+    const { projectDeadlineExtensionHistory, isProjectDetailsLoading } = useContext(
+        ProjectDashboardContext
+    );
     const [isDeadlineHistoryModalOpen, setIsDeadlineHistoryModalOpen] =
         React.useState(false);
-    const projectInfo = projectData?.projectData;
 
     // Handle Modal Open and Close
     const handleModal = (setModalOpenFunc, isOpen, action) => {
@@ -75,11 +79,13 @@ const DashboardProgress = ({
                             className="flexItemCenter cursor-pointer deadlineBtn"
                             style={{
                                 color:
-                                    formatDate(projectData?.deadline) < new Date()
+                                    formatDate(projectData?.deadline) <
+                                    new Date()
                                         ? "#FF0000"
                                         : "#000000",
                             }}
                             onClick={() =>
+                                projectData?.project_deadline_extension?.length &&
                                 handleModal(setIsDeadlineHistoryModalOpen, true)
                             }
                         >
@@ -89,7 +95,9 @@ const DashboardProgress = ({
                     </div>
                 </div>
                 {/* Dashboard Chart */}
-                <ProjectProgressChart chartData={projectData?.progress_chart_values} />
+                <ProjectProgressChart
+                    chartData={projectData?.progress_chart_values}
+                />
             </div>
             <div
                 className={`${style.dashboardProgressStatusContainer} mt-2 mt-md-5`}
@@ -112,8 +120,8 @@ const DashboardProgress = ({
                     closeModal={() =>
                         handleModal(setIsDeadlineHistoryModalOpen, false)
                     }
-                    modalData={projectInfo?.project}
-                    isLoading={false}
+                    modalData={projectData?.project_deadline_extension}
+                    isLoading={isProjectDetailsLoading}
                 />
             )}
 

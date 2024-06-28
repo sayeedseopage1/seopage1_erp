@@ -27,16 +27,12 @@ const WithoutDraggableColumnHeader = ({
     // Define column styles
     const columnStyles = {
         id: { minWidth: "50px", width: "50px", maxWidth: "50px" },
-        questionType: { minWidth: "90px", width: "90px", maxWidth: "90px" },
-        ruleList: { minWidth: "300px", width: "300px", maxWidth: "300px" },
-        expend: { minWidth: "60px", width: "60px", maxWidth: "60px" },
-        question_title: {
-            minWidth: "300px",
-            width: "300px",
-            maxWidth: "300px",
-        },
-    };
-
+        previous_deadline: { minWidth: "180px", width: "180px", maxWidth: "180px" },
+        admin_comment: { minWidth: "180px", width: "180px", maxWidth: "180px" },
+        reason: { minWidth: "180px", width: "180px", maxWidth: "180px" },
+        approved_on: { minWidth: "180px", width: "180px", maxWidth: "160px" },
+        approved_by: { minWidth: "180px", width: "180px", maxWidth: "180px" },
+    }
     // Define column justify content
     const columnJustifyContent = {
         milestone_cost: "center",

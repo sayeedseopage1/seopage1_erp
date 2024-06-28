@@ -410,6 +410,39 @@ export const ModalContentContainer = styled.div`
 
     
   }
+
+  .authorizeCommentViewWrapper{
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    font-family: Poppins, sans-serif !important;
+
+    h6{
+      color: #000;
+      font-size: 16px;
+      font-style: normal;
+      font-family: Poppins, sans-serif !important;
+      font-weight: 500;
+      line-height: normal;
+      margin-bottom: 0;
+    }
+
+    p{
+      color: #000;
+      font-family: Poppins, sans-serif;
+      font-size: 14px;
+      font-style: normal;
+      font-weight: 400;
+      line-height: normal;
+    }
+
+    div{
+      color: #000;
+      font-family: Poppins, sans-serif;
+      font-style: normal;
+      line-height: normal;
+    }
+  }
   
   .TGABAHeaderContainer{
       border-top: 1px solid #DDDCDC;
@@ -467,6 +500,58 @@ export const ModalContentContainer = styled.div`
     }
 
   }
+
+  .confirmationModalContentWrapper{
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      gap: 10px;
+
+      svg{
+        width: 8em;
+        height: 8em;
+        fill: #f8bb86;
+        animation: svgAnimation 0.5s ease-in-out;
+      }
+      .confirmationModalContent{
+        gap: 10px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        h2{
+          color: #000;
+          font-family: Poppins, sans-serif;
+          font-size: 18px;
+          font-style: normal;
+          font-weight: 500;
+          line-height: normal;
+          margin-bottom: 0 !important;
+        }
+
+        p{
+          color: #000;
+          font-family: Poppins, sans-serif;
+          font-size: 14px;
+          font-style: normal;
+          font-weight: 400;
+          line-height: normal;
+        }
+      }
+  }
+
+  @keyframes svgAnimation {
+  0% {
+    transform: scale(0.5);
+    opacity: 0;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
 
   .modalContentHeader{
     border-radius: 8px;
@@ -672,7 +757,6 @@ export const ModalContentContainer = styled.div`
 
 
   /* Project Deadline modal */
-
   .deadlineInfo{
     display: flex;
     justify-content: space-between;

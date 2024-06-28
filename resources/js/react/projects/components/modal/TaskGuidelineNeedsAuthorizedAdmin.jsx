@@ -8,6 +8,10 @@ import CustomModalHeader from "../ui/CustomModalHeader/CustomModalHeader";
 // Components - Table
 import { ModalContentContainer } from "../ui/styledComponents";
 import CustomButton from "../ui/CustomButton/CustomButton";
+import {
+    useLazyAuthorizeTaskApprovedGuidelineQuery,
+    useLazyAuthorizeTaskRejectGuidelineQuery,
+} from "../../../services/api/projectApiSlice";
 
 /**
  *  TaskGuidelineNeedsAuthorizedAdmin component
@@ -16,7 +20,7 @@ import CustomButton from "../ui/CustomButton/CustomButton";
  *  @param {array} modalData - Modal Data
  *  @returns {JSX.Element}
  *  @description TaskGuidelineNeedsAuthorizedAdmin component to render task guideline needs authorized by admin modal
- * 
+ *
  *  This modal will be used by Admin to authorize the task guideline
  */
 
@@ -27,8 +31,16 @@ const TaskGuidelineNeedsAuthorizedAdmin = ({
 }) => {
     const [inputData, setInputData] = React.useState(modalData);
 
+    const [
+        taskGuidelineApproved,
+        { isLoading: isTaskGuidelineApprovedLoading },
+    ] = useLazyAuthorizeTaskApprovedGuidelineQuery();
+
+    const [taskGuidelineReject, { isLoading: isTaskGuidelineRejectLoading }] =
+        useLazyAuthorizeTaskRejectGuidelineQuery();
+
     // Handle Input Change
-    const handleInputChange = (item, value) => {
+    const handleTaskGuideline = async (item, value) => {
         const updatedData = inputData.map((data) => {
             if (data.id === item.id) {
                 return { ...data, status: value };
@@ -36,6 +48,15 @@ const TaskGuidelineNeedsAuthorizedAdmin = ({
             return data;
         });
         setInputData(updatedData);
+
+        try {
+            const requestItem =
+                value === 0 ? taskGuidelineReject : taskGuidelineApproved;
+            const response = await requestItem(item.id);
+            console.log(response);
+        } catch (error) {
+            console.error(error);
+        }
     };
 
     return (
@@ -68,8 +89,13 @@ const TaskGuidelineNeedsAuthorizedAdmin = ({
                                 <div className="col-4">
                                     <CustomButton
                                         value={item.status}
+                                        //  TODO: Need to add loading state
+                                        isDisabled={
+                                            isTaskGuidelineApprovedLoading ||
+                                            isTaskGuidelineRejectLoading
+                                        }
                                         onChange={(value) =>
-                                            handleInputChange(item, value)
+                                            handleTaskGuideline(item, value)
                                         }
                                     />
                                 </div>

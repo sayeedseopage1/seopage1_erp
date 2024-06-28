@@ -24,6 +24,8 @@ import {
 
 // Toast
 import { toast } from "react-toastify";
+import { useDeadlineExtensionRequestMutation } from "../../../services/api/projectApiSlice";
+import dayjs from "dayjs";
 
 /**
  *  Project Deadline Extension Modal
@@ -60,6 +62,14 @@ const ProjectDeadlineExtensionModal = ({
     });
     const [isSubmitting, setIsSubmitting] = useState(false);
 
+
+    const [
+        deadlineExtensionRequest,
+        {
+            isLoading: isDeadlineExtensionRequestLoading,
+        }
+    ] = useDeadlineExtensionRequestMutation()
+
     const handleDeadlineExtension = async () => {
         const isEmpty = isStateAllHaveValue(deadlineExtensionData);
         if (isEmpty) {
@@ -71,19 +81,25 @@ const ProjectDeadlineExtensionModal = ({
             });
             return;
         }
-        setIsSubmitting(true);
         try {
-            // TODO: API Call Here
-            setTimeout(() => {
-                setIsSubmitting(false);
+            const payload = {
+                new_deadline: dayjs(deadlineExtensionData.newDeadline).format("YYYY-MM-DD"),
+                extension: deadlineExtensionData.reason,
+                description: deadlineExtensionData.description,
+                old_deadline: dayjs(deadlineExtensionData.modalData?.deadline).format("YYYY-MM-DD"),
+                project_id: modalData?.id,
+            };
+            const res = await deadlineExtensionRequest(payload).unwrap()
+            if(res.status === 200) {
                 closeModal();
                 toast.success(
                     "Deadline Extension Request Submitted Successfully"
                 );
                 resetData();
-            }, 2000);
+            }
+
         } catch (error) {
-            setIsSubmitting(false);
+            console.log(error)
             toast.error("An error occurred. Please try again later");
         }
 
@@ -143,7 +159,7 @@ const ProjectDeadlineExtensionModal = ({
                             type="text"
                             id="oldDeadline"
                             className="isDisabled"
-                            value={modalData?.deadline}
+                            value={dayjs(modalData?.deadline).format("MM/DD/YYYY")}
                         />
                         <span
                             className="mt-1"
@@ -161,6 +177,7 @@ const ProjectDeadlineExtensionModal = ({
                             type="date"
                             id="newDeadline"
                             name="newDeadline"
+                            minDate={dayjs(modalData?.deadline)}
                             placeholder="mm/dd/yyyy"
                             value={deadlineExtensionData?.newDeadline}
                             onChange={(e) => {
@@ -198,10 +215,10 @@ const ProjectDeadlineExtensionModal = ({
                             }}
                             value={deadlineExtensionData?.reason}
                         >
-                            <Radio value={1}>Client was unavailable</Radio>
-                            <Radio value={2}>Couldn't complete on time</Radio>
-                            <Radio value={3}>Upsale/Cross sale</Radio>
-                            <Radio value={4}>Other</Radio>
+                            <Radio value={"Client was unavailable"}>Client was unavailable</Radio>
+                            <Radio value={"Couldn't Complete On Time"}>Couldn't complete on time</Radio>
+                            <Radio value={"Upsale/Cross sale"}>Upsale/Cross sale</Radio>
+                            <Radio value={"Others"}>Other</Radio>
                         </Radio.Group>
                     </div>
                     {deadLineExtensionDataValidation.reason && (
@@ -237,7 +254,7 @@ const ProjectDeadlineExtensionModal = ({
                 <div className="modalButtonContainer">
                     <SingleButton
                         label={
-                            isSubmitting ? (
+                            isDeadlineExtensionRequestLoading ? (
                                 <Loader title="Submitting" />
                             ) : (
                                 "Submit"
@@ -245,6 +262,7 @@ const ProjectDeadlineExtensionModal = ({
                         }
                         onClick={handleDeadlineExtension}
                         type="primary"
+                        isDisabled={isDeadlineExtensionRequestLoading}
                     />
                 </div>
             </ModalContentContainer>

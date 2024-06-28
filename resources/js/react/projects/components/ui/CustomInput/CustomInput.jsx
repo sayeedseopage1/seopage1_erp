@@ -42,6 +42,7 @@ const CustomInput = ({
     isRequired = false,
     className,
     fieldName,
+    isReadOnly = false,
     ...rest
 }) => {
     return (
@@ -95,7 +96,9 @@ const CustomInput = ({
                         placeholder={placeholder}
                         value={value}
                         name={fieldName}
+                        readOnly={isReadOnly}
                         required={isRequired}
+                        disabled={isReadOnly}
                         onChange={onChange}
                         {...rest}
                     />
@@ -120,4 +123,5 @@ CustomInput.propTypes = {
     isRequired: PropTypes.bool,
     className: PropTypes.string,
     fieldName: PropTypes.string,
+    isReadOnly: PropTypes.bool,
 };

@@ -22,14 +22,24 @@ const CustomTextArea = ({
     isDisabled = false,
     isDangerHtml = false,
     isRequired = false,
+    isLabelDangerHtml = false,
     className = "",
 }) => {
-
-    
     return (
         <div className={`customTextArea ${className}`}>
-            <label htmlFor={name}>{label} {isRequired && <sup>*</sup>}</label>
             <Switch>
+                <Switch.Case condition={isLabelDangerHtml}>
+                    <label
+                        htmlFor={name}
+                        dangerouslySetInnerHTML={{ __html: label }}
+                    />
+                </Switch.Case>
+                <Switch.Case condition={!isLabelDangerHtml}>
+                    <label htmlFor={name}>
+                        {label} {isRequired && <sup>*</sup>}
+                    </label>
+                </Switch.Case>
+
                 <Switch.Case condition={isDangerHtml}>
                     <div
                         className={`dangerHtml ${parentClass} ${
@@ -68,7 +78,7 @@ CustomTextArea.propTypes = {
     placeholder: PropTypes.string,
     rows: PropTypes.number,
     cols: PropTypes.number,
-    isRequired : PropTypes.bool,
+    isRequired: PropTypes.bool,
     parentClass: PropTypes.string,
     isDisabled: PropTypes.bool,
     isDangerHtml: PropTypes.bool,

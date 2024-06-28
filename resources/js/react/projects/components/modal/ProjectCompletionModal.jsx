@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import PropTypes from "prop-types";
-import { toast } from "react-toastify";
 
 // Components - Custom
 import CustomAntModal from "../ui/CustomAntModal/CustomAntModal";
@@ -20,6 +19,10 @@ import { Placeholder } from "../../../global/Placeholder";
 // Components - UI - Global
 import Switch from "../../../global/Switch";
 import Loader from "../../../global/Loader";
+import AuthorizeCommentView from "../shared/AuthorizeCommentView";
+import { useAuthorizeCompletionFormMutation } from "../../../services/api/projectApiSlice";
+import { toast } from "react-toastify";
+import { useAuth } from "../../../hooks/useAuth";
 
 /**
  * Project Completion Modal
@@ -38,37 +41,47 @@ const ProjectCompletionModal = ({
     modalData,
     isLoading,
 }) => {
+    const user = useAuth();
     const [adminComment, setAdminComment] = useState("");
+    const [actionType, setActionType] = useState("");
     const [projectCompletionData, setProjectCompletionData] =
         useState(modalData);
     const [isSubmitting, setIsSubmitting] = useState(false);
 
+    const [
+        authorizeCompletionForm,
+        { isLoading: isAuthorizeCompletionFormLoading },
+    ] = useAuthorizeCompletionFormMutation()
+
     // Handle Admin Comment
-    const handleAdminComment = () => {
-        setIsSubmitting(true);
-        // try {
-        //     // TODO: Implement the API call to submit the admin comment
-        //     setTimeout(() => {
-        //         setProjectCompletionData((prev) => {
-        //             return {
-        //                 ...prev,
-        //                 projectCompletionData.project_submission: {
-        //                     ...prev.projectCompletionData.project_submission,
-        //                     admin_comment: adminComment,
-        //                 },
-        //             };
-        //         });
-        //         setIsSubmitting(false);
-        //         toast.success("Project Completion Authorized Successfully");
-        //     }, 5000);
-        // } catch (error) {
-        //     console.log(error);
-        // }
+    const handleAdminComment = async (type) => {
+        setActionType(type);
+        try {
+            const payload = {
+                project_id: modalData.id,
+                deny: type === "deny" ? null : "approve",
+                admin_comment: adminComment,
+            }
+            const res = await authorizeCompletionForm(payload).unwrap();
+            if (res.status === 200) {
+                if (type === "approve") {
+                    toast.success("Project Completion Approved Successfully");
+                } else {
+                    toast.success("Project Completion Rejected Successfully");
+                }
+                closeModal();
+                setAdminComment("");
+                setActionType("");
+            }
+        } catch (error) {
+            toast.error("Error occurred while authorizing the project completion");
+        }
     };
 
     // Convert Color String to Array
-    const formatStringArray = (color) => {
-        let cleanedStr = _.trim(color, '"');
+    const formatStringArray = (item) => {
+        if (!item) return [];
+        let cleanedStr = _.trim(item, '"');
         const resultArray = JSON.parse(cleanedStr);
         return resultArray;
     };
@@ -260,7 +273,7 @@ const ProjectCompletionModal = ({
                                                             condition={
                                                                 projectCompletionData
                                                                     ?.project_submission
-                                                                    .login_url
+                                                                    ?.login_url
                                                             }
                                                         >
                                                             <p className="singleline-ellipsis mb-1 d-flex">
@@ -271,7 +284,7 @@ const ProjectCompletionModal = ({
                                                                     href={
                                                                         projectCompletionData
                                                                             ?.project_submission
-                                                                            .login_url
+                                                                            ?.login_url
                                                                     }
                                                                     target="_blank"
                                                                     rel="noopener noreferrer"
@@ -280,7 +293,7 @@ const ProjectCompletionModal = ({
                                                                     {
                                                                         projectCompletionData
                                                                             ?.project_submission
-                                                                            .login_url
+                                                                            ?.login_url
                                                                     }
                                                                 </a>
                                                             </p>
@@ -293,7 +306,7 @@ const ProjectCompletionModal = ({
                                                             {
                                                                 projectCompletionData
                                                                     ?.project_submission
-                                                                    .login
+                                                                    ?.login
                                                             }
                                                         </p>
 
@@ -304,7 +317,7 @@ const ProjectCompletionModal = ({
                                                             {
                                                                 projectCompletionData
                                                                     ?.project_submission
-                                                                    .password
+                                                                    ?.password
                                                             }
                                                         </p>
                                                         <p className="d-flex mb-1">
@@ -315,7 +328,7 @@ const ProjectCompletionModal = ({
                                                                 href={
                                                                     projectCompletionData
                                                                         ?.project_submission
-                                                                        .screenshot
+                                                                        ?.screenshot
                                                                 }
                                                                 target="_blank"
                                                                 rel="noopener noreferrer"
@@ -324,7 +337,7 @@ const ProjectCompletionModal = ({
                                                                 {
                                                                     projectCompletionData
                                                                         ?.project_submission
-                                                                        .screenshot
+                                                                        ?.screenshot
                                                                 }
                                                             </a>
                                                         </p>
@@ -423,7 +436,7 @@ const ProjectCompletionModal = ({
                                                                 href={
                                                                     projectCompletionData
                                                                         ?.project_submission
-                                                                        .google_link
+                                                                        ?.google_link
                                                                 }
                                                                 target="_blank"
                                                                 rel="noopener noreferrer"
@@ -432,7 +445,7 @@ const ProjectCompletionModal = ({
                                                                 {
                                                                     projectCompletionData
                                                                         ?.project_submission
-                                                                        .google_link
+                                                                        ?.google_link
                                                                 }
                                                             </a>
                                                         </p>
@@ -760,7 +773,7 @@ const ProjectCompletionModal = ({
                                                     {
                                                         projectCompletionData
                                                             ?.project_submission
-                                                            .category_name
+                                                            ?.category_name
                                                     }
                                                 </p>
                                             </Switch.Case>
@@ -768,7 +781,7 @@ const ProjectCompletionModal = ({
                                                 condition={
                                                     !projectCompletionData
                                                         ?.project_submission
-                                                        .niche
+                                                        ?.niche
                                                 }
                                             >
                                                 <Switch.Case
@@ -790,7 +803,7 @@ const ProjectCompletionModal = ({
                                                     !projectCompletionData?.project_portfolio &&
                                                     !projectCompletionData
                                                         ?.project_submission
-                                                        .niche
+                                                        ?.niche
                                                 }
                                             >
                                                 <p>--</p>
@@ -903,7 +916,7 @@ const ProjectCompletionModal = ({
                                                     {
                                                         projectCompletionData
                                                             ?.project_portfolio
-                                                            .backup_email_address
+                                                            ?.backup_email_address
                                                     }
                                                 </p>
                                             </Switch.Case>
@@ -1244,7 +1257,7 @@ const ProjectCompletionModal = ({
                                                             href={
                                                                 projectCompletionData
                                                                     ?.project_submission
-                                                                    .dummy_link
+                                                                    ?.dummy_link
                                                             }
                                                             target="_blank"
                                                             rel="noopener noreferrer"
@@ -1253,7 +1266,7 @@ const ProjectCompletionModal = ({
                                                             {
                                                                 projectCompletionData
                                                                     ?.project_submission
-                                                                    .dummy_link
+                                                                    ?.dummy_link
                                                             }
                                                         </a>
                                                     </p>
@@ -1375,7 +1388,7 @@ const ProjectCompletionModal = ({
                                                             href={
                                                                 projectCompletionData
                                                                     ?.project_submission
-                                                                    .actual_link
+                                                                    ?.actual_link
                                                             }
                                                             target="_blank"
                                                             rel="noopener noreferrer"
@@ -1384,7 +1397,7 @@ const ProjectCompletionModal = ({
                                                             {
                                                                 projectCompletionData
                                                                     ?.project_submission
-                                                                    .actual_link
+                                                                    ?.actual_link
                                                             }
                                                         </a>
                                                     </p>
@@ -1415,65 +1428,110 @@ const ProjectCompletionModal = ({
                     </table>
                 </div>
             </ModalContentContainer>
+
             {/* Admin Comment */}
-            <ModalContentContainer>
-                <CustomTextArea
-                    label={
-                        projectCompletionData?.project_submission.admin_comment
-                            ? "Admin Comment"
-                            : "Comments"
-                    }
-                    placeholder={"Write your comments here"}
-                    name="admin_comment"
-                    value={
-                        projectCompletionData?.project_submission
-                            .admin_comment ?? adminComment
-                    }
-                    onChange={(e) => {
-                        setAdminComment(e.target.value);
-                    }}
-                    rows={6}
-                    cols={50}
-                    isDangerHtml={htmlTagRegex.test(
-                        projectCompletionData?.project_submission?.admin_comment
-                    )}
-                    isDisabled={
-                        projectCompletionData?.project_submission
-                            ?.admin_comment ?? false
-                    }
-                />
-            </ModalContentContainer>
-            {/* Buttons */}
-            <ModalContentContainer className="pt-0">
-                <div className="modalButtonContainer">
-                    <Switch>
-                        <Switch.Case
-                            condition={
-                                !projectCompletionData?.project_submission
+            <Switch>
+                <ModalContentContainer>
+                    <Switch.Case
+                        condition={
+                            user.getRoleId() === 1 &&
+                            projectCompletionData?.modalData
+                                ?.completion_form_authorization
+                        }
+                    >
+                        <CustomTextArea
+                            label={
+                                projectCompletionData?.project_submission
                                     ?.admin_comment
+                                    ? "Admin Comment"
+                                    : "Comments"
                             }
-                        >
+                            placeholder={"Write your comments here"}
+                            name="admin_comment"
+                            value={
+                                projectCompletionData?.project_submission
+                                    .admin_comment ?? adminComment
+                            }
+                            onChange={(e) => {
+                                setAdminComment(e.target.value);
+                            }}
+                            rows={6}
+                            cols={50}
+                            isDangerHtml={htmlTagRegex.test(
+                                projectCompletionData?.project_submission
+                                    ?.admin_comment
+                            )}
+                            isDisabled={
+                                projectCompletionData?.project_submission
+                                    ?.admin_comment ?? false
+                            }
+                        />
+                    </Switch.Case>
+                    <Switch.Case
+                        condition={modalData?.project_submission.status}
+                    >
+                        <AuthorizeCommentView
+                            comment={
+                                modalData?.project_submission?.admin_comment
+                            }
+                        />
+                    </Switch.Case>
+                </ModalContentContainer>
+
+                {/* Buttons */}
+                <Switch.Case
+                    condition={
+                        user.getRoleId() === 1 &&
+                        projectCompletionData?.modalData
+                            ?.completion_form_authorization
+                    }
+                >
+                    <ModalContentContainer className="pt-0">
+                        <div className="modalButtonContainer">
+                            <Switch>
+                                <Switch.Case
+                                    condition={
+                                        !projectCompletionData
+                                            ?.project_submission?.admin_comment
+                                    }
+                                >
+                                    <SingleButton
+                                        label={
+                                            isAuthorizeCompletionFormLoading &&
+                                            actionType === "approve" ? (
+                                                <Loader title="Authorizing" />
+                                            ) : (
+                                                "Authorize"
+                                            )
+                                        }
+                                        onClick={() =>
+                                            handleAdminComment("approve")
+                                        }
+                                        type="primary"
+                                        isDisabled={
+                                            isAuthorizeCompletionFormLoading
+                                        }
+                                    />
+                                </Switch.Case>
+                            </Switch>
                             <SingleButton
                                 label={
-                                    isSubmitting ? (
-                                        <Loader title="Authorizing" />
+                                    isAuthorizeCompletionFormLoading &&
+                                    actionType === "deny" ? (
+                                        <Loader title="Denying" />
                                     ) : (
-                                        "Authorize"
+                                        "Deny"
                                     )
                                 }
-                                onClick={handleAdminComment}
-                                type="primary"
+                                className=""
+                                onClick={() => handleAdminComment("deny")}
+                                type="secondary"
+                                isDisabled={isAuthorizeCompletionFormLoading}
                             />
-                        </Switch.Case>
-                    </Switch>
-                    <SingleButton
-                        label="Close"
-                        className=""
-                        onClick={closeModal}
-                        type="secondary"
-                    />
-                </div>
-            </ModalContentContainer>
+                        </div>
+                    </ModalContentContainer>
+                </Switch.Case>
+            </Switch>
         </CustomAntModal>
     );
 };

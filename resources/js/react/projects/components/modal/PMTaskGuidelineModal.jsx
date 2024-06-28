@@ -37,8 +37,9 @@ const PMTaskGuidelineModal = ({
     isLoading,
 }) => {
     // Convert Color String to Array
-    const formatStringArray = (color) => {
-        let cleanedStr = _.trim(color, '"');
+    const formatStringArray = (item) => {
+        if (!item) return [];
+        let cleanedStr = _.trim(item, '"');
         const resultArray = JSON.parse(cleanedStr);
         return resultArray;
     };

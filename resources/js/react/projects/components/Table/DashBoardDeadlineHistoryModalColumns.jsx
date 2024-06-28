@@ -4,22 +4,31 @@ import { CreatedBy } from "../../../ProjectStatus/components/table/ui";
 import TablePopover from "../TablePopover";
 import PersonAvatar from "../PersonAvatar";
 import Switch from "../../../global/Switch";
+import dayjs from "dayjs";
 
 export const DashBoardDeadlineHistoryModalColumns = [
     {
         id: "previous_deadline",
         header: "Previous Deadline",
-        accessorKey: "previous_deadline",
-    },
-    {
-        id: "requested_on",
-        header: "Requested On",
-        accessorKey: "requested_on",
+        accessorKey: "old_deadline",
         cell: ({ row }) => {
             const data = row.original;
             return (
                 <div className="d-flex justify-content-start align-items-center">
-                    <p>{data.requested_on}</p>
+                    <p>{data.old_deadline}</p>
+                </div>
+            );
+        },
+    },
+    {
+        id: "requested_on",
+        header: "Requested On",
+        accessorKey: "deadline_requested_pm",
+        cell: ({ row }) => {
+            const data = row.original;
+            return (
+                <div className="d-flex justify-content-start align-items-center">
+                    <p>{data.deadline_requested_pm}</p>
                 </div>
             );
         },
@@ -27,12 +36,12 @@ export const DashBoardDeadlineHistoryModalColumns = [
     {
         id: "reason",
         header: "Reason",
-        accessorKey: "reason",
+        accessorKey: "description",
         cell: ({ row }) => {
             const data = row.original;
             return (
                 <TablePopover
-                    text={data?.reason}
+                    text={data?.description}
                     btnClass="text-left"
                     isDangerHtml={true}
                 />
@@ -45,6 +54,29 @@ export const DashBoardDeadlineHistoryModalColumns = [
         accessorKey: "request_status",
         cell: ({ row }) => {
             const data = row.original;
+
+            const getStatus = (status) => {
+                switch (status) {
+                    case 1:
+                        return {
+                            text: "Pending",
+                            color: "rgb(245, 195, 8)",
+                        };
+                    case 2:
+                        return {
+                            text: "Approved",
+                            color: "rgb(103, 156, 13)",
+                        };
+                    case 3:
+                        return {
+                            text: "Denied",
+                            color: "rgb(255, 0, 0)",
+                        };
+                }
+            };
+
+            const status = getStatus(data.status);
+
             return (
                 <div className="d-flex justify-content-start align-items-center pl-4">
                     <div
@@ -55,14 +87,10 @@ export const DashBoardDeadlineHistoryModalColumns = [
                             marginRight: "4px",
                             padding: "2px 10px",
                             color: "white",
-                            backgroundColor: data.request_status.includes(
-                                "Approved"
-                            )
-                                ? "rgb(103, 156, 13)"
-                                : "rgb(245, 195, 8)",
+                            backgroundColor: status?.color,
                         }}
                     >
-                        <p>{data.request_status}</p>
+                        <p>{status.text}</p>
                     </div>
                 </div>
             );
@@ -79,7 +107,12 @@ export const DashBoardDeadlineHistoryModalColumns = [
                 <div className="d-flex justify-content-start align-items-center">
                     <Switch>
                         <Switch.Case condition={data?.approved_on}>
-                            <p>{data.approved_on}</p>
+                            <p>
+                                {" "}
+                                {dayjs(data.approved_on).format(
+                                    "DD-MM-YYYY h:mm:ss A"
+                                )}
+                            </p>
                         </Switch.Case>
                         <Switch.Case condition={!data?.approved_on}>
                             <span>Not Available Yet</span>
@@ -97,20 +130,44 @@ export const DashBoardDeadlineHistoryModalColumns = [
             const data = row.original;
             return (
                 <Switch>
-                    <Switch.Case condition={data?.approved_by_id}>
+                    <Switch.Case condition={data?.approved_by?.id}>
                         <CreatedBy
-                            href={`/account/employees/${data?.approved_by_id}`}
+                            href={`/account/employees/${data?.approved_by?.id}`}
                         >
                             <PersonAvatar
-                                name={data?.approved_by_name}
-                                avatar={data?.approved_by_photo}
+                                name={data?.approved_by?.name}
+                                avatar={data?.approved_by?.image_url}
                                 imageParentClass="rounded-circle"
                                 imageClass="rounded-circle"
                             />
-                            <span>{data.approved_by_name}</span>
+                            <span>{data?.approved_by?.name}</span>
                         </CreatedBy>
                     </Switch.Case>
-                    <Switch.Case condition={data?.approved_by_id === null}>
+                    <Switch.Case condition={data?.approved_by === null}>
+                        <p className="d-flex justify-content-start align-items-center">
+                            Not Available Yet
+                        </p>
+                    </Switch.Case>
+                </Switch>
+            );
+        },
+    },
+    {
+        id: "admin_comment",
+        header: "Admin Comment",
+        accessorKey: "admin_comment",
+        cell: ({ row }) => {
+            const data = row.original;
+            return (
+                <Switch>
+                    <Switch.Case condition={data?.admin_comment}>
+                        <TablePopover
+                            text={data?.admin_comment}
+                            btnClass="text-left"
+                            isDangerHtml={true}
+                        />
+                    </Switch.Case>
+                    <Switch.Case condition={data?.admin_comment === null}>
                         <p className="d-flex justify-content-start align-items-center">
                             Not Available Yet
                         </p>
@@ -122,16 +179,16 @@ export const DashBoardDeadlineHistoryModalColumns = [
     {
         id: "extended_deadline",
         header: "Extended Deadline",
-        accessorKey: "extended_deadline",
+        accessorKey: "deadline_extend_admin",
         cell: ({ row }) => {
             const data = row.original;
             return (
                 <div className="d-flex justify-content-start align-items-center">
                     <Switch>
-                        <Switch.Case condition={data?.extended_deadline}>
-                            <p>{data.extended_deadline}</p>
+                        <Switch.Case condition={data?.deadline_extend_admin}>
+                            <p>{data.deadline_extend_admin}</p>
                         </Switch.Case>
-                        <Switch.Case condition={!data?.extended_deadline}>
+                        <Switch.Case condition={!data?.deadline_extend_admin}>
                             <span>Not Available Yet</span>
                         </Switch.Case>
                     </Switch>
