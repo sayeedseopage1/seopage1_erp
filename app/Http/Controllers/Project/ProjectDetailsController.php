@@ -21,7 +21,32 @@ class ProjectDetailsController extends Controller
      */
     public function __invoke(Request $request, $project_id)
     {
-        $project = Project::select(['id','project_name','project_short_code','client_id','pm_id','start_date','deadline','project_budget','currency_id','deal_id','project_challenge','comments','requirement_defined','deadline_meet','project_summary','status','dispute_status','dispute_admin_comment'])->with('client:id,name,user_name,country_id', 'client.country:id,iso,nicename', 'pm:id,name,country_id', 'pm.country:id,iso,nicename', 'currency:id,currency_code,currency_symbol', 'deal:id,project_type,amount,upsell_amount,upsell_actual_amount,profile_link,message_link,original_currency_id,lead_id,price_authorization,requirment_define,project_deadline_authorization,deal_id,description,description2,description3,description4,description5,description6,description7,description8,description9', 'deal.original_currency:id,currency_code,currency_symbol', 'deal.dealStage:id,short_code', 'workingEnvironment:id,project_id,site_url,frontend_password,login_url,email,password', 'pmTaskGuidline', 'pmTaskGuidelineAuthorizations','projectSubmission', 'projectPortfolio.theme', 'projectPortfolio.projectNiche:id,category_name', 'projectPortfolio.cmsCategory:id,cms_name', 'projectDeadlineExtension', 'projectQcSubmission', 'projectDispute','payments','expenses','times','projectDeliverables')->find($project_id);
+        $project = Project::select(['id','project_name','project_short_code','client_id','pm_id','start_date','deadline','project_budget','currency_id','deal_id','project_challenge','comments','requirement_defined','deadline_meet','project_summary','status','dispute_status','dispute_admin_comment'])
+        ->with(
+            'client:id,name,user_name,country_id', 
+            'client.country:id,iso,nicename', 
+            'pm:id,name,country_id', 
+            'pm.country:id,iso,nicename', 
+            'currency:id,currency_code,currency_symbol', 
+            'deal:id,project_type,amount,upsell_amount,upsell_actual_amount,profile_link,message_link,original_currency_id,lead_id,price_authorization,requirment_define,project_deadline_authorization,deal_id,description,description2,description3,description4,description5,description6,description7,description8,description9', 
+            'deal.original_currency:id,currency_code,currency_symbol', 
+            'deal.dealStage:id,short_code', 
+            'workingEnvironment:id,project_id,site_url,frontend_password,login_url,email,password', 
+            'pmTaskGuidline', 
+            'pmTaskGuidelineAuthorizations',
+            'projectSubmission', 
+            'projectPortfolio.theme', 
+            'projectPortfolio.projectNiche:id,category_name', 
+            'projectPortfolio.cmsCategory:id,cms_name', 
+            'projectDeadlineExtension', 
+            'projectDeadlineExtension.approvedBy:id,name,country_id', 
+            'projectQcSubmission', 
+            'projectDispute',
+            'payments',
+            'expenses',
+            'times',
+            'projectDeliverables'
+            )->find($project_id);
 
         $tasks = Task::where('project_id',$project->id)->whereNull('subtask_id');
 
@@ -84,6 +109,25 @@ class ProjectDetailsController extends Controller
         unset($projectArray['expenses']);
         unset($projectArray['times']);
         unset($projectArray['project_deliverables']);
+
+        // unset($projectArray['project_deadline_extension']['approved_by']['modules']);
+        // dd($projectArray['project_deadline_extension']);
+        // foreach($projectArray['project_deadline_extension'] as $deadlineExtension){
+        //     unset($deadlineExtension['approved_by']['modules']);
+        //     unset($deadlineExtension['approved_by']['modules']);
+        // }
+
+        // Unset modules from approved_by in project_deadline_extension
+        foreach ($projectArray['project_deadline_extension'] as &$deadlineExtension) {
+            if (isset($deadlineExtension['approved_by'])) {
+                unset($deadlineExtension['approved_by']['modules']);
+                unset($deadlineExtension['approved_by']['client_details']);
+                unset($deadlineExtension['approved_by']['session']);
+                unset($deadlineExtension['approved_by']['user_other_role']);
+                unset($deadlineExtension['approved_by']['role']);
+                unset($deadlineExtension['approved_by']['employee_detail']);
+            }
+        }
 
         return response()->json(['status' => 200, 'data' => $projectArray]);
     }
