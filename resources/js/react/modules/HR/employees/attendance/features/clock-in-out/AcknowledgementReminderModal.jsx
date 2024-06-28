@@ -16,6 +16,7 @@ import Card from "../../../../../../global/Card";
 
 import styles from "./tracked-time-table/Table/card.module.css";
 import formatTimeTo12Hour from "../../../../../../utils/formatTimeTo12Hour";
+import formatTimeTo12HourSecond from "../../../../../../utils/formatTimeTo12HourWithoutSecond";
 
 /**
  * * This components responsible for showing daily working report to developer
@@ -74,14 +75,17 @@ const AcknowledgementReminderModal = ({
                     }
                 )
                 .then((res) => {
+                    console.log("response ", res, "status", res.data.status);
                     if (res.data.status === 422) {
+                        console.log("inside status");
+
                         Swal.fire({
                             position: "center",
                             icon: "error",
                             title: `${res.data.title}`,
-                            text: `${formatTimeTo12Hour(
+                            text: `${formatTimeTo12HourSecond(
                                 res.data.start
-                            )} - ${formatTimeTo12Hour(res.data.end)}\n${
+                            )} - ${formatTimeTo12HourSecond(res.data.end)}\n${
                                 res.data.message
                             }`,
                             showConfirmButton: true,
