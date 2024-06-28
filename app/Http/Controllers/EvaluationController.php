@@ -1005,5 +1005,21 @@ class EvaluationController extends AccountBaseController
             'data' => $history
         ]);
     }
+    public function evaluationTotalTaskRevision($user_id, $round)
+    {
+        $evaluation_task = EmployeeEvaluationTask::where('user_id', $user_id)->where('round', $round)->get();
+        $revision_count = TaskRevision::whereIn('task_id', $evaluation_task->pluck('task_id'))->count();
+        $revisions = TaskRevision::whereIn('task_id', $evaluation_task->pluck('task_id'))->get();
+        foreach($revisions as $revision)
+        {
+            $revision->task_heading = Task::where('id', $revision->task_id)->value('heading');
+            $revision->added_by_name = User::where('id', $revision->added_by)->value('name');
+        }
+        return response()->json([
+            'status' => 200,
+            'revision_count' => $revision_count,
+            'revisions' => $revisions
+        ]);
+    }
 
 }
