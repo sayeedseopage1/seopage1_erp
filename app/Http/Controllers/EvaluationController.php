@@ -315,7 +315,7 @@ class EvaluationController extends AccountBaseController
         $employee_evaluation->save();
 
         $evaluation_task = EmployeeEvaluationTask::where('user_id',$request->user_id)->first();
-        $actions = PendingAction::whereIn('code',['NDPE','NDPM'])->where('task_id',$evaluation_task->task_id)->where('past_status',0)->get();
+        $actions = PendingAction::whereIn('code',['NDPE','NDPM','NLDE'])->where('task_id',$evaluation_task->task_id)->where('past_status',0)->get();
         if($actions != null)
         {
             foreach ($actions as $key => $action) {
@@ -331,9 +331,12 @@ class EvaluationController extends AccountBaseController
             $past_action->code = $action->code;
             $past_action->serial = $action->serial;
             $past_action->action_id = $action->id;
-            if(Auth::user()->role_id == 8){
+            if($action->code == 'NDPM'){
                 $past_action->heading= 'New PM '.$dev->name.' evaluations were successfully submitted!';
                 $past_action->message = 'Team Lead <a href="'.route('employees.show',$authorize_by->id).'">'.$authorize_by->name.'</a> has evaluated New PM <a href="'.route('employees.show',$dev->id).'">'.$dev->name.'</a>!';
+            }elseif($action->code == 'NLDE'){
+                $past_action->heading= 'New Sales '.$dev->name.' evaluations were successfully submitted!';
+                $past_action->message = 'Team Lead <a href="'.route('employees.show',$authorize_by->id).'">'.$authorize_by->name.'</a> has evaluated New Sales <a href="'.route('employees.show',$dev->id).'">'.$dev->name.'</a>!';
             }else{
                 $past_action->heading= 'New dedeloper '.$dev->name.' evaluations were successfully submitted!';
                 $past_action->message = 'Lead dedeloper <a href="'.route('employees.show',$authorize_by->id).'">'.$authorize_by->name.'</a> has evaluated New Developer <a href="'.route('employees.show',$dev->id).'">'.$dev->name.'</a>!';
@@ -347,7 +350,7 @@ class EvaluationController extends AccountBaseController
             $past_action->task_id = $action->task_id;
             $past_action->developer_id = $action->developer_id;
             $past_action->client_id = $action->client_id;
-            if(Auth::user()->role_id == 8){
+            if($action->code == 'NDPM'){
                 $button = [
                     [
                         'button_name' => 'See Evaluations',
@@ -355,6 +358,16 @@ class EvaluationController extends AccountBaseController
                         'button_type' => 'redirect_url',
                         'button_url' => route('employee-evaluation.index'),
                         'button_url' => route('employee-evaluation.index', ['user_id' => $dev->id,'show' => 'all', 'type' => 'pm']),
+                    ],
+                ];
+            }elseif($action->code == 'NLDE'){
+                $button = [
+                    [
+                        'button_name' => 'See Evaluations',
+                        'button_color' => 'primary',
+                        'button_type' => 'redirect_url',
+                        'button_url' => route('employee-evaluation.index'),
+                        'button_url' => route('employee-evaluation.index', ['user_id' => $dev->id,'show' => 'all', 'type' => 'ld']),
                     ],
                 ];
             }else{
@@ -481,7 +494,7 @@ class EvaluationController extends AccountBaseController
     public function storeAuthorization(Request $request)
     {
         // dd($request->all());
-        // DB::beginTransaction();
+        DB::beginTransaction();
         if($request->status == 'authorize')
         {
             $evaluation = EmployeeEvaluation::where('user_id',$request->user_id)->first();

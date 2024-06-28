@@ -2152,31 +2152,68 @@ class HelperPendingActionController extends AccountBaseController
         //New Pm Evaluation Start
         public function NewPmEvaluation($user)
         {
+            $evaluation = EmployeeEvaluation::where('user_id',$user)->first();
             $new_pm = User::where('id',$user)->first(); 
             $evaluation_task = EmployeeEvaluationTask::where('user_id',$new_pm->id)->first(); 
             $task = Task::where('id',$evaluation_task->task_id)->first();
             $authorizers= User::where('role_id',8)->get();
             foreach ($authorizers as $key => $authorizer) {
                 $action = new PendingAction();
-                $action->code = 'NDPM';
-                $action->serial = 'NDPM'.'x'.$key;
-                $action->item_name= 'New pm\'s performance evaluation!';
-                $action->heading= 'New pm\'s performance evaluation!';
-                $action->message = 'Fill out initial performance evaluation form for the PM <a href="'.route('employees.show',$new_pm->id).'">'.$new_pm->name.'</a>!';
+                if($evaluation->user_status == 'PM'){
+                    $action->code = 'NDPM';
+                    $action->serial = 'NDPM'.'x'.$key;
+                    $action->item_name= 'New pm\'s performance evaluation!';
+                    $action->heading= 'New pm\'s performance evaluation!';
+                    $action->message = 'Fill out initial performance evaluation form for the PM <a href="'.route('employees.show',$new_pm->id).'">'.$new_pm->name.'</a>!';
+                }elseif($evaluation->user_status == 'LD'){
+                    $action->code = 'NLDE';
+                    $action->serial = 'NLDE'.'x'.$key;
+                    $action->item_name= 'New lead\'s performance evaluation!';
+                    $action->heading= 'New lead\'s performance evaluation!';
+                    $action->message = 'Fill out initial performance evaluation form for the Lead Developer <a href="'.route('employees.show',$new_pm->id).'">'.$new_pm->name.'</a>!';
+                }else{
+                    $action->code = 'NSEE';
+                    $action->serial = 'NSEE'.'x'.$key;
+                    $action->item_name= 'New Sales Executive\'s performance evaluation!';
+                    $action->heading= 'New New Sales Executive\'s performance evaluation!';
+                    $action->message = 'Fill out initial performance evaluation form for the New Sales Executive <a href="'.route('employees.show',$new_pm->id).'">'.$new_pm->name.'</a>!';
+                }
                 $action->timeframe= 24;
                 $action->client_id = $task->id;
-               $action->task_id = $task->id;
-               $action->developer_id = $new_pm->id;
+                $action->task_id = $task->id;
+                $action->developer_id = $new_pm->id;
                 $action->authorization_for= $authorizer->id;
-                $button = [
-                    [
-                        'button_name' => 'Evaluate',
-                        'button_color' => 'primary',
-                        'button_type' => 'redirect_url',
-                        'button_url' => route('employee-evaluation.index'),
-                        'button_url' => route('employee-evaluation.index', ['user_id' => $new_pm->id, 'show' => 'all' ,'type' => 'pm']),
-                    ],
-                ];
+                if($evaluation->user_status == 'PM'){
+                    $button = [
+                        [
+                            'button_name' => 'Evaluate',
+                            'button_color' => 'primary',
+                            'button_type' => 'redirect_url',
+                            'button_url' => route('employee-evaluation.index'),
+                            'button_url' => route('employee-evaluation.index', ['user_id' => $new_pm->id, 'show' => 'all' ,'type' => 'pm']),
+                        ],
+                    ];
+                }elseif($evaluation->user_status == 'LD'){
+                    $button = [
+                        [
+                            'button_name' => 'Evaluate',
+                            'button_color' => 'primary',
+                            'button_type' => 'redirect_url',
+                            'button_url' => route('employee-evaluation.index'),
+                            'button_url' => route('employee-evaluation.index', ['user_id' => $new_pm->id, 'show' => 'all' ,'type' => 'ld']),
+                        ],
+                    ];
+                }else{
+                    $button = [
+                        [
+                            'button_name' => 'Evaluate',
+                            'button_color' => 'primary',
+                            'button_type' => 'redirect_url',
+                            'button_url' => route('employee-evaluation.index'),
+                            'button_url' => route('employee-evaluation.index', ['user_id' => $new_pm->id, 'show' => 'all' ,'type' => 'se']),
+                        ],
+                    ];
+                }
                 $action->button = json_encode($button);
                 $action->save();
             }
@@ -2185,6 +2222,7 @@ class HelperPendingActionController extends AccountBaseController
         {
             $evaluation_task = EmployeeEvaluationTask::where('id',$evaluation_task)->first(); 
             $new_pm = User::where('id',$evaluation_task->user_id)->first(); 
+            $evaluation = EmployeeEvaluation::where('user_id',$evaluation_task->user_id)->first();
             $team_lead = User::where('id',$evaluation_task->team_lead_id)->first();
             $task = Task::where('id',$evaluation_task->task_id)->first();
             $authorizers= User::where('role_id',1)->get();
@@ -2192,26 +2230,64 @@ class HelperPendingActionController extends AccountBaseController
             $formatted_date_time = $updated_at->format('d F Y \a\t g:i A');
             foreach ($authorizers as $key => $authorizer) {
                 $action = new PendingAction();
-                $action->code = 'TLSNPM';
-                $action->serial = 'TLSNPM'.'x'.$key;
-                $action->item_name= 'New pm\'s evaluation!';
-                $action->heading= 'Team Lead '.$team_lead->name.' has submitted evaluations for New PM '.$new_pm->name.'!';
-                $action->message = 'Team Lead <a href="'.route('employees.show',$team_lead->id).'">'.$team_lead->name.'</a> has evaluated New PM <a href="'.route('employees.show',$new_pm->id).'">'.$new_pm->name.'</a> on '.$formatted_date_time.'';
+                if($evaluation->user_status == 'PM'){
+                    $action->code = 'TLSNPM';
+                    $action->serial = 'TLSNPM'.'x'.$key;
+                    $action->item_name= 'New pm\'s evaluation!';
+                    $action->heading= 'Team Lead '.$team_lead->name.' has submitted evaluations for New PM '.$new_pm->name.'!';
+                    $action->message = 'Team Lead <a href="'.route('employees.show',$team_lead->id).'">'.$team_lead->name.'</a> has evaluated New PM <a href="'.route('employees.show',$new_pm->id).'">'.$new_pm->name.'</a> on '.$formatted_date_time.'';
+                }elseif($evaluation->user_status == 'LD'){
+                    $action->code = 'TLSNLD';
+                    $action->serial = 'TLSNLD'.'x'.$key;
+                    $action->item_name= 'New lead developer\'s evaluation!';
+                    $action->heading= 'Team Lead '.$team_lead->name.' has submitted evaluations for New Lead developer '.$new_pm->name.'!';
+                    $action->message = 'Team Lead <a href="'.route('employees.show',$team_lead->id).'">'.$team_lead->name.'</a> has evaluated New Lead Developer <a href="'.route('employees.show',$new_pm->id).'">'.$new_pm->name.'</a> on '.$formatted_date_time.'';
+                }else{
+                    $action->code = 'TLSNSE';
+                    $action->serial = 'TLSNSE'.'x'.$key;
+                    $action->item_name= 'New sales\'s evaluation!';
+                    $action->heading= 'Team Lead '.$team_lead->name.' has submitted evaluations for New sales '.$new_pm->name.'!';
+                    $action->message = 'Team Lead <a href="'.route('employees.show',$team_lead->id).'">'.$team_lead->name.'</a> has evaluated New sales <a href="'.route('employees.show',$new_pm->id).'">'.$new_pm->name.'</a> on '.$formatted_date_time.'';
+                }
                 $action->timeframe= 24;
                 $action->client_id = $task->client_id;
-               $action->task_id = $task->id;
-               $action->developer_id = $new_pm->id;
+                $action->task_id = $task->id;
+                $action->developer_id = $new_pm->id;
                 $action->authorization_for= $authorizer->id;
-                $button = [
-                    [
-                        'button_name' => 'Review',
-                        'button_color' => 'primary',
-                        'button_type' => 'redirect_url',
-                        'button_url' => route('employee-evaluation.index'),
-                        'button_url' => route('employee-evaluation.index', ['user_id' => $new_pm->id, 'show' => 'all', 'type' => 'pm']),
-                    ],
-
-                ];
+                if($evaluation->user_status == 'PM'){
+                    $button = [
+                        [
+                            'button_name' => 'Review',
+                            'button_color' => 'primary',
+                            'button_type' => 'redirect_url',
+                            'button_url' => route('employee-evaluation.index'),
+                            'button_url' => route('employee-evaluation.index', ['user_id' => $new_pm->id, 'show' => 'all', 'type' => 'pm']),
+                        ],
+    
+                    ];
+                }elseif($evaluation->user_status == 'LD'){
+                    $button = [
+                        [
+                            'button_name' => 'Review',
+                            'button_color' => 'primary',
+                            'button_type' => 'redirect_url',
+                            'button_url' => route('employee-evaluation.index'),
+                            'button_url' => route('employee-evaluation.index', ['user_id' => $new_pm->id, 'show' => 'all', 'type' => 'ld']),
+                        ],
+    
+                    ];
+                }else{
+                    $button = [
+                        [
+                            'button_name' => 'Review',
+                            'button_color' => 'primary',
+                            'button_type' => 'redirect_url',
+                            'button_url' => route('employee-evaluation.index'),
+                            'button_url' => route('employee-evaluation.index', ['user_id' => $new_pm->id, 'show' => 'all', 'type' => 'se']),
+                        ],
+    
+                    ];
+                }
                 $action->button = json_encode($button);
                 $action->save();
             }

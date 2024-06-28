@@ -543,7 +543,7 @@ class TimelogController extends AccountBaseController
         $timeLog->save();
 
         /**EMPLOYEE EVALUATION START */
-        if(Auth::user()->role_id == 15){
+        if(Auth::user()->role_id == 15 || Auth::user()->role_id == 16 || Auth::user()->role_id == 17){
             $taskFind = Task::where('id',$request->task_id)->where('u_id','!=',null)->where('independent_task_status',1)->first();
         }else{
             $taskFind = Task::where('id',$request->task_id)->where('u_id',null)->where('independent_task_status',1)->first();
@@ -594,7 +594,7 @@ class TimelogController extends AccountBaseController
         $timeLog->save();
 
         /**EMPLOYEE EVALUATION START */
-        if(Auth::user()->role_id == 15){
+        if(Auth::user()->role_id == 15 || Auth::user()->role_id == 16 || Auth::user()->role_id == 17){
             $taskFind = Task::where('id',$request->task_id)->where('u_id','!=',null)->where('independent_task_status',1)->first();
         }else{
             $taskFind = Task::where('id',$request->task_id)->where('u_id',null)->where('independent_task_status',1)->first();
