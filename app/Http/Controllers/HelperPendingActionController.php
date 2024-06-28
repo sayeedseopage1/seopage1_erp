@@ -2091,6 +2091,12 @@ class HelperPendingActionController extends AccountBaseController
                 if($evaluation_task->user_status == 'PM'){
                     $action->heading= 'Top Management '.$top_management->name.' has extended the trial period for New PM '.$new_dev->name.'!';
                     $action->message = 'Top Management <a href="'.route('employees.show',$top_management->id).'">'.$top_management->name.'</a> has extended the trial period for one more week for New PM <a href="'.route('employees.show',$new_dev->id).'">'.$new_dev->name.'</a> from '.$formatted_date_time.'';
+                }elseif($evaluation_task->user_status == 'LD'){
+                    $action->heading= 'Top Management '.$top_management->name.' has extended the trial period for New Lead developer '.$new_dev->name.'!';
+                    $action->message = 'Top Management <a href="'.route('employees.show',$top_management->id).'">'.$top_management->name.'</a> has extended the trial period for one more week for New Lead developer <a href="'.route('employees.show',$new_dev->id).'">'.$new_dev->name.'</a> from '.$formatted_date_time.'';
+                }elseif($evaluation_task->user_status == 'SE'){
+                    $action->heading= 'Top Management '.$top_management->name.' has extended the trial period for New Sales Executive '.$new_dev->name.'!';
+                    $action->message = 'Top Management <a href="'.route('employees.show',$top_management->id).'">'.$top_management->name.'</a> has extended the trial period for one more week for New Sales Executive <a href="'.route('employees.show',$new_dev->id).'">'.$new_dev->name.'</a> from '.$formatted_date_time.'';
                 }else{
                     $action->heading= 'Top Management '.$top_management->name.' has extended the trial period for New Developer '.$new_dev->name.'!';
                     $action->message = 'Top Management <a href="'.route('employees.show',$top_management->id).'">'.$top_management->name.'</a> has extended the trial period for one more week for New Developer <a href="'.route('employees.show',$new_dev->id).'">'.$new_dev->name.'</a> from '.$formatted_date_time.'';
@@ -2210,7 +2216,7 @@ class HelperPendingActionController extends AccountBaseController
                             'button_color' => 'primary',
                             'button_type' => 'redirect_url',
                             'button_url' => route('employee-evaluation.index'),
-                            'button_url' => route('employee-evaluation.index', ['user_id' => $new_pm->id, 'show' => 'all' ,'type' => 'se']),
+                            'button_url' => route('employee-evaluation.index', ['user_id' => $new_pm->id, 'show' => 'all' ,'type' => 'sales_executive']),
                         ],
                     ];
                 }
@@ -2283,7 +2289,7 @@ class HelperPendingActionController extends AccountBaseController
                             'button_color' => 'primary',
                             'button_type' => 'redirect_url',
                             'button_url' => route('employee-evaluation.index'),
-                            'button_url' => route('employee-evaluation.index', ['user_id' => $new_pm->id, 'show' => 'all', 'type' => 'se']),
+                            'button_url' => route('employee-evaluation.index', ['user_id' => $new_pm->id, 'show' => 'all', 'type' => 'sales_executive']),
                         ],
     
                     ];
@@ -2296,6 +2302,7 @@ class HelperPendingActionController extends AccountBaseController
         {
             $evaluation_task = EmployeeEvaluationTask::where('id',$evaluation_task)->first(); 
             $new_pm = User::where('id',$evaluation_task->user_id)->first(); 
+            $evaluation = EmployeeEvaluation::where('user_id',$evaluation_task->user_id)->first();
             $top_management = User::where('id',Auth::user()->id)->first(); 
             $task = Task::where('id',$evaluation_task->task_id)->first();
             $authorizers = User::where('role_id', 8)->get();
@@ -2306,8 +2313,16 @@ class HelperPendingActionController extends AccountBaseController
                 $action->code = 'EAFTM';
                 $action->serial = 'EAFTM'.'x'.$key;
                 $action->item_name= 'Evaluation auth for admin!';
-                $action->heading= 'New PM '.$new_pm->name.' was authorize for real work by Top Management '.$top_management->name.'!';
-                $action->message = 'Top Management <a href="'.route('employees.show',$top_management->id).'">'.$top_management->name.'</a> has authorized New PM <a href="'.route('employees.show',$new_pm->id).'">'.$new_pm->name.'</a> for real work from '.$formatted_date_time.'';
+                if($evaluation->user_status == 'PM'){
+                    $action->heading= 'New PM '.$new_pm->name.' was authorize for real work by Top Management '.$top_management->name.'!';
+                    $action->message = 'Top Management <a href="'.route('employees.show',$top_management->id).'">'.$top_management->name.'</a> has authorized New PM <a href="'.route('employees.show',$new_pm->id).'">'.$new_pm->name.'</a> for real work from '.$formatted_date_time.'';
+                }elseif($evaluation->user_status == 'LD'){
+                    $action->heading= 'New Lead Developer '.$new_pm->name.' was authorize for real work by Top Management '.$top_management->name.'!';
+                    $action->message = 'Top Management <a href="'.route('employees.show',$top_management->id).'">'.$top_management->name.'</a> has authorized New lead developer <a href="'.route('employees.show',$new_pm->id).'">'.$new_pm->name.'</a> for real work from '.$formatted_date_time.'';
+                }else{
+                    $action->heading= 'New sales executive'.$new_pm->name.' was authorize for real work by Top Management '.$top_management->name.'!';
+                    $action->message = 'Top Management <a href="'.route('employees.show',$top_management->id).'">'.$top_management->name.'</a> has authorized New sales executive <a href="'.route('employees.show',$new_pm->id).'">'.$new_pm->name.'</a> for real work from '.$formatted_date_time.'';
+                }
                 $action->timeframe= 24;
                 $action->client_id = $task->client_id;
                $action->task_id = $task->id;
@@ -2331,9 +2346,10 @@ class HelperPendingActionController extends AccountBaseController
         {
             $evaluation_task = EmployeeEvaluationTask::where('id',$evaluation_task)->first(); 
             $new_pm = User::where('id',$evaluation_task->user_id)->first(); 
+            $evaluation = EmployeeEvaluation::where('user_id',$evaluation_task->user_id)->first();
             $top_management = User::where('id',Auth::user()->id)->first(); 
             $task = Task::where('id',$evaluation_task->task_id)->first();
-            $authorizers = User::whereIn('role_id', [8, 6])->get();
+            $authorizers = User::where('role_id', 8)->get();
             $updated_at = Carbon::parse($evaluation_task->updated_at);
             $formatted_date_time = $updated_at->format('d F Y \a\t g:i A');
             foreach ($authorizers as $key => $authorizer) {
@@ -2341,8 +2357,16 @@ class HelperPendingActionController extends AccountBaseController
                 $action->code = 'ERFTM';
                 $action->serial = 'ERFTM'.'x'.$key;
                 $action->item_name= 'Evaluation reject for admin!';
-                $action->heading= 'New PM '.$new_pm->name.' was rejected for real work by Top Management '.$top_management->name.'!';
-                $action->message = 'Top Management <a href="'.route('employees.show',$top_management->id).'">'.$top_management->name.'</a> has rejected New PM <a href="'.route('employees.show',$new_pm->id).'">'.$new_pm->name.'</a> for real work from '.$formatted_date_time.'';
+                if($evaluation->user_status == 'PM'){
+                    $action->heading= 'New PM '.$new_pm->name.' was rejected for real work by Top Management '.$top_management->name.'!';
+                    $action->message = 'Top Management <a href="'.route('employees.show',$top_management->id).'">'.$top_management->name.'</a> has rejected New PM <a href="'.route('employees.show',$new_pm->id).'">'.$new_pm->name.'</a> for real work from '.$formatted_date_time.'';
+                }elseif($evaluation->user_status == 'LD'){
+                    $action->heading= 'New lead developer '.$new_pm->name.' was rejected for real work by Top Management '.$top_management->name.'!';
+                    $action->message = 'Top Management <a href="'.route('employees.show',$top_management->id).'">'.$top_management->name.'</a> has rejected New lead developer <a href="'.route('employees.show',$new_pm->id).'">'.$new_pm->name.'</a> for real work from '.$formatted_date_time.'';
+                }else{
+                    $action->heading= 'New sales executive '.$new_pm->name.' was rejected for real work by Top Management '.$top_management->name.'!';
+                    $action->message = 'Top Management <a href="'.route('employees.show',$top_management->id).'">'.$top_management->name.'</a> has rejected New sales executive <a href="'.route('employees.show',$new_pm->id).'">'.$new_pm->name.'</a> for real work from '.$formatted_date_time.'';
+                }
                 $action->timeframe= 24;
                 $action->client_id = $task->client_id;
                $action->task_id = $task->id;

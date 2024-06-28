@@ -494,7 +494,7 @@ class EvaluationController extends AccountBaseController
     public function storeAuthorization(Request $request)
     {
         // dd($request->all());
-        DB::beginTransaction();
+        // DB::beginTransaction();
         if($request->status == 'authorize')
         {
             $evaluation = EmployeeEvaluation::where('user_id',$request->user_id)->first();
@@ -510,6 +510,14 @@ class EvaluationController extends AccountBaseController
             if($request->role_id == 15){
                 $user= User::find($request->user_id);
                 $user->role_id= 4;
+                $user->save();
+            }elseif($request->role_id == 16){
+                $user= User::find($request->user_id);
+                $user->role_id= 6;
+                $user->save();
+            }elseif($request->role_id == 17){
+                $user= User::find($request->user_id);
+                $user->role_id= 7;
                 $user->save();
             }else{
                 $user= User::find($request->user_id);
@@ -552,6 +560,14 @@ class EvaluationController extends AccountBaseController
                 $employee_details = EmployeeDetails::where('user_id',$request->user_id)->first();
                 $employee_details->designation_id = 22;
                 $employee_details->save(); 
+            }elseif($request->role_id == 16){
+                $employee_details = EmployeeDetails::where('user_id',$request->user_id)->first();
+                $employee_details->designation_id = 23;
+                $employee_details->save(); 
+            }elseif($request->role_id == 17){
+                $employee_details = EmployeeDetails::where('user_id',$request->user_id)->first();
+                $employee_details->designation_id = 19;
+                $employee_details->save(); 
             }else{
                 $employee_details = EmployeeDetails::where('user_id',$request->user_id)->first();
                 $employee_details->designation_id = 26;
@@ -559,7 +575,7 @@ class EvaluationController extends AccountBaseController
             }
 
             $evaluation_task = EmployeeEvaluationTask::where('user_id',$request->user_id)->first();
-            $actions = PendingAction::whereIn('code',['TLSDE','TLSNPM'])->where('task_id',$evaluation_task->task_id)->where('past_status',0)->get();
+            $actions = PendingAction::whereIn('code',['TLSDE','TLSNPM','TLSNLD'])->where('task_id',$evaluation_task->task_id)->where('past_status',0)->get();
             if($actions != null)
             {
                 foreach ($actions as $key => $action) {
@@ -579,6 +595,9 @@ class EvaluationController extends AccountBaseController
                 if($action->code == 'TLSNPM'){
                     $past_action->heading= 'New PM '.$dev->name.' was authorize for real work by Top Management '.$authorize_by->name.'!';
                     $past_action->message = 'Top Management <a href="'.route('employees.show',$authorize_by->id).'">'.$authorize_by->name.'</a> has authorized New PM <a href="'.route('employees.show',$dev->id).'">'.$dev->name.'</a> for real work from ';
+                }elseif($action->code == 'TLSNLD'){
+                    $past_action->heading= 'New lead developer '.$dev->name.' was authorize for real work by Top Management '.$authorize_by->name.'!';
+                    $past_action->message = 'Top Management <a href="'.route('employees.show',$authorize_by->id).'">'.$authorize_by->name.'</a> has authorized New lead developer <a href="'.route('employees.show',$dev->id).'">'.$dev->name.'</a> for real work from ';
                 }else{
                     $past_action->heading= 'New Developer '.$dev->name.' was authorize for real work by Top Management '.$authorize_by->name.'!';
                     $past_action->message = 'Top Management <a href="'.route('employees.show',$authorize_by->id).'">'.$authorize_by->name.'</a> has authorized New Developer <a href="'.route('employees.show',$dev->id).'">'.$dev->name.'</a> for real work from ';
@@ -600,6 +619,16 @@ class EvaluationController extends AccountBaseController
                             'button_type' => 'redirect_url',
                             'button_url' => route('employee-evaluation.index'),
                             'button_url' => route('employee-evaluation.index', ['user_id' => $dev->id,'show' => 'all', 'type' => 'pm']),
+                        ],
+                    ];
+                }elseif($action->code == 'TLSNLD'){
+                    $button = [
+                        [
+                            'button_name' => 'See Evaluations',
+                            'button_color' => 'primary',
+                            'button_type' => 'redirect_url',
+                            'button_url' => route('employee-evaluation.index'),
+                            'button_url' => route('employee-evaluation.index', ['user_id' => $dev->id,'show' => 'all', 'type' => 'ld']),
                         ],
                     ];
                 }else{
@@ -642,7 +671,7 @@ class EvaluationController extends AccountBaseController
             $evaluation->save();
 
             $evaluation_task = EmployeeEvaluationTask::where('user_id',$request->user_id)->first();
-            $actions = PendingAction::whereIn('code',['TLSDE','TLSNPM'])->where('task_id',$evaluation_task->task_id)->where('past_status',0)->get();
+            $actions = PendingAction::whereIn('code',['TLSDE','TLSNPM','TLSNLD'])->where('task_id',$evaluation_task->task_id)->where('past_status',0)->get();
             if($actions != null)
             {
                 foreach ($actions as $key => $action) {
@@ -662,6 +691,9 @@ class EvaluationController extends AccountBaseController
                 if($action->code == 'TLSNPM'){
                     $past_action->heading= 'New PM '.$dev->name.' was rejected for real work by Top Management '.$authorize_by->name.'!';
                     $past_action->message = 'Top Management <a href="'.route('employees.show',$authorize_by->id).'">'.$authorize_by->name.'</a> has rejected New PM <a href="'.route('employees.show',$dev->id).'">'.$dev->name.'</a> for real work from ';
+                }elseif($action->code == 'TLSNLD'){
+                    $past_action->heading= 'New lead developer '.$dev->name.' was rejected for real work by Top Management '.$authorize_by->name.'!';
+                    $past_action->message = 'Top Management <a href="'.route('employees.show',$authorize_by->id).'">'.$authorize_by->name.'</a> has rejected New lead developer <a href="'.route('employees.show',$dev->id).'">'.$dev->name.'</a> for real work from ';
                 }else{
                     $past_action->heading= 'New Developer '.$dev->name.' was rejected for real work by Top Management '.$authorize_by->name.'!';
                     $past_action->message = 'Top Management <a href="'.route('employees.show',$authorize_by->id).'">'.$authorize_by->name.'</a> has rejected New Developer <a href="'.route('employees.show',$dev->id).'">'.$dev->name.'</a> for real work from ';
@@ -686,6 +718,16 @@ class EvaluationController extends AccountBaseController
                             'button_url' => route('employee-evaluation.index', ['user_id' => $dev->id,'show' => 'all', 'type' => 'pm']),
                         ],
                     ];
+                }elseif($action->code == 'TLSNLD'){
+                    $button = [
+                        [
+                            'button_name' => 'See Evaluations',
+                            'button_color' => 'primary',
+                            'button_type' => 'redirect_url',
+                            'button_url' => route('employee-evaluation.index'),
+                            'button_url' => route('employee-evaluation.index', ['user_id' => $dev->id,'show' => 'all', 'type' => 'ld']),
+                        ],
+                    ];
                 }else{
                     $button = [
                         [
@@ -708,7 +750,6 @@ class EvaluationController extends AccountBaseController
                 $helper = new HelperPendingActionController();
                 $helper->evaluationRejectForAdmin($evaluation_task->id);
             }
-
             return response()->json([
                 'message' => 'Top management reject successfully',
                 'status' =>200
@@ -763,7 +804,7 @@ class EvaluationController extends AccountBaseController
                 $history->save();
 
                 $evaluation_task = EmployeeEvaluationTask::where('user_id',$request->user_id)->first();
-                $actions = PendingAction::whereIn('code',['TLSDE','TLSNPM'])->where('task_id',$evaluation_task->task_id)->where('past_status',0)->get();
+                $actions = PendingAction::whereIn('code',['TLSDE','TLSNPM','TLSNLD'])->where('task_id',$evaluation_task->task_id)->where('past_status',0)->get();
                 if($actions != null)
                 {
                     foreach ($actions as $key => $action) {
@@ -783,6 +824,9 @@ class EvaluationController extends AccountBaseController
                     if($action->code == 'TLSNPM'){
                         $past_action->heading= 'Top Management '.$authorize_by->name.' has extended the trial period for New PM '.$dev->name.'!';
                         $past_action->message = 'Top Management <a href="'.route('employees.show',$authorize_by->id).'">'.$authorize_by->name.'</a> has extended the trial period for one more week for New PM <a href="'.route('employees.show',$dev->id).'">'.$dev->name.'</a> from ';
+                    }elseif($action->code == 'TLSNLD'){
+                        $past_action->heading= 'Top Management '.$authorize_by->name.' has extended the trial period for New Lead Developer '.$dev->name.'!';
+                        $past_action->message = 'Top Management <a href="'.route('employees.show',$authorize_by->id).'">'.$authorize_by->name.'</a> has extended the trial period for one more week for New Lead developer <a href="'.route('employees.show',$dev->id).'">'.$dev->name.'</a> from ';
                     }else{
                         $past_action->heading= 'Top Management '.$authorize_by->name.' has extended the trial period for New Developer '.$dev->name.'!';
                         $past_action->message = 'Top Management <a href="'.route('employees.show',$authorize_by->id).'">'.$authorize_by->name.'</a> has extended the trial period for one more week for New Developer <a href="'.route('employees.show',$dev->id).'">'.$dev->name.'</a> from ';
@@ -804,6 +848,16 @@ class EvaluationController extends AccountBaseController
                                 'button_type' => 'redirect_url',
                                 'button_url' => route('employee-evaluation.index'),
                                 'button_url' => route('employee-evaluation.index', ['user_id' => $dev->id, 'show' => 'all', 'type' => 'pm']),
+                            ],
+                        ];
+                    }elseif($action->code == 'TLSNLD'){
+                        $button = [
+                            [
+                                'button_name' => 'See Evaluations',
+                                'button_color' => 'primary',
+                                'button_type' => 'redirect_url',
+                                'button_url' => route('employee-evaluation.index'),
+                                'button_url' => route('employee-evaluation.index', ['user_id' => $dev->id, 'show' => 'all', 'type' => 'ld']),
                             ],
                         ];
                     }else{
@@ -848,10 +902,7 @@ class EvaluationController extends AccountBaseController
                 $evaluation->team_lead_status = 0;
                 $evaluation->employee_status = 0; 
                 $evaluation->save();
-
-                // dd('ok');
             });
-
             return response()->json([
                 'message' => 'Top management extend successfully',
                 'status' =>200
