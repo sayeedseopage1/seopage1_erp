@@ -16,6 +16,7 @@ import { EvaluationTableColumnsPM } from "../project-manager/components/table/Ev
 
 import { useLocation } from "react-router-dom";
 import filterEvaluationsByRole from "../../utils/filterEvaluationsByRole";
+import { EvaluationTableColumnsLD } from "../lead-developer/components/table/EvaluationTableColumnsLD";
 
 const EmployeeEvaluation = () => {
     const location = useLocation();
@@ -115,7 +116,6 @@ const EmployeeEvaluation = () => {
         setPagination(paginate);
     };
 
-    // console.log("filter data", filter);
     return (
         <>
             <EvaluationTableFilterBar
@@ -166,7 +166,7 @@ const EmployeeEvaluation = () => {
                     <EvaluationTable
                         data={tableData(searchParams.get("show"))}
                         mainData={mainData}
-                        columns={[...EvaluationTableColumnsPM]}
+                        columns={[...EvaluationTableColumnsLD]}
                         isLoading={isLoading}
                         isFetching={isFetching}
                         onPageChange={onPageChange}

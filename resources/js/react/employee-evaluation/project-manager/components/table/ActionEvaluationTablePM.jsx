@@ -157,19 +157,11 @@ const ActionEvaluationTablePM = ({ data, table }) => {
                                         >
                                             Evaluating
                                         </Switch.Case>
-                                        <Switch.Case
-                                            condition={
-                                                data?.team_lead_avg_rating !==
-                                                null
-                                            }
-                                        >
-                                            Reviewing
-                                        </Switch.Case>
+
                                         <Switch.Case
                                             condition={
                                                 data?.team_lead_submission_status ===
-                                                    1 &&
-                                                data?.team_lead_status === 1
+                                                1
                                             }
                                         >
                                             Authorize
