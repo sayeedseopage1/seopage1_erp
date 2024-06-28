@@ -1,16 +1,12 @@
 import React, { useEffect } from "react";
-import RevisionModalBody from "./RevisionModalBody";
-import { useGetAllRevisionListQuery } from "../../../services/api/EvaluationApiSlice";
-import { EvaluationRevisionTableColumnsWithTasks } from "../Table/EvaluationRevisionTableColumnsWithTasks";
 
-const EvaluationRevisionModal = ({ data }) => {
+import { EvaluationRevisionTableColumnsWithTasks } from "../../../components/Table/EvaluationRevisionTableColumnsWithTasks";
+import RevisionModalBody from "../../../components/modal/RevisionModalBody";
+import { useGetAllRevisionListByRoundNumberQuery } from "../../../../services/api/EvaluationApiSlice";
+
+const EvaluationRevisionModalPM = ({ data }) => {
     const [isEvaluationRevisionModal, setIsEvaluationRevisionModal] =
         React.useState(false);
-    const { data: revisionData, isLoading } = useGetAllRevisionListQuery(
-        data?.task_id
-    );
-
-    const Revisions = revisionData?.data;
 
     const [round, setRound] = React.useState(1);
 
@@ -37,7 +33,20 @@ const EvaluationRevisionModal = ({ data }) => {
     }, [data]);
 
     console.log("round number", round);
+    // make query string
+    const queryString = (object) => {
+        const queryObject = _.pickBy(object, Boolean);
+        return new URLSearchParams(queryObject).toString();
+    };
+    const { data: revisionData, isLoading } =
+        useGetAllRevisionListByRoundNumberQuery(
+            queryString({
+                user_id: data?.user_id,
+                round: round,
+            })
+        );
 
+    const Revisions = revisionData?.data;
     return (
         <>
             <div
@@ -58,4 +67,4 @@ const EvaluationRevisionModal = ({ data }) => {
     );
 };
 
-export default EvaluationRevisionModal;
+export default EvaluationRevisionModalPM;

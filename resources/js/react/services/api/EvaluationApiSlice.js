@@ -101,6 +101,10 @@ const evaluationApiSlice = apiSlice.injectEndpoints({
             query: (taskId) => `account/evaluation-total-revision/${taskId}`,
             providesTags: ["ALL_REVISION"],
         }),
+        getAllRevisionListByRoundNumber: build.query({
+            query: (query) => `account/evaluation-total-task-revision/${query}`,
+            providesTags: ["ALL_REVISION"],
+        }),
         getEvaluationHistory: build.query({
             query: (userId) => `account/evaluation-history/${userId}`,
             providesTags: ["EVALUATION_HISTORY"],
@@ -122,6 +126,7 @@ export const {
     useGetEvaluationListQuery,
     useGetRevisionListQuery,
     useGetAllRevisionListQuery,
+    useGetAllRevisionListByRoundNumberQuery,
     useGetSingleEvaluationQuery,
     useGetEvaluationHistoryQuery,
 } = evaluationApiSlice;
