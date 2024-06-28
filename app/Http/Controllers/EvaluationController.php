@@ -860,7 +860,7 @@ class EvaluationController extends AccountBaseController
 
         $evaluation_task = EmployeeEvaluationTask::where('user_id',$request->user_id)->first();
         $evaluation_history = EvaluationHistory::where('user_id', $request->user_id)->first();
-        $actions = PendingAction::where('developer_id',$request->user_id)->whereIn('code', ['EAFA', 'ERFA', 'EEFA'])->where('past_status',0)->get();
+        $actions = PendingAction::where('developer_id',$request->user_id)->whereIn('code', ['EAFA', 'ERFA', 'EEFA','EAFTM', 'ERFTM'])->where('past_status',0)->get();
         // dd($actions);
         if($actions != null)
         {
@@ -892,7 +892,7 @@ class EvaluationController extends AccountBaseController
                     $past_action->message = 'Top Management <a href="'.route('employees.show',$authorize_by->id).'">'.$authorize_by->name.'</a> has authorized New Developer <a href="'.route('employees.show',$dev->id).'">'.$dev->name.'</a> for real work from ';
                 }
             }
-            if($evaluation_history->employee_status == 2)
+            if($evaluation_history != null && $evaluation_history->employee_status == 2)
             {
                 if($request->role_id == 15){
                     $past_action->heading= 'Top Management '.$top_management->name.' has extended & created a new task for the trial period for New PM '.$dev->name.'!';
