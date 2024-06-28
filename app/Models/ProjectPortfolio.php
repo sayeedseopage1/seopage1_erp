@@ -14,6 +14,16 @@ class ProjectPortfolio extends Model
        return $this->hasOne(ProjectWebsiteTheme::class, 'id', 'theme_id');
     }
 
+    public function projectNiche()
+    {
+        return $this->hasOne(ProjectNiche::class, 'id', 'niche');
+    }
+
+    public function cmsCategory()
+    {
+        return $this->hasOne(ProjectCms::class, 'id', 'cms_category');
+    }
+
     public function getPluginsAttribute()
     {
         if(!$this->plugin_list) return null;

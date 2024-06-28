@@ -48,4 +48,9 @@ class Deal extends Model
     public function pm_project(){
         return $this->hasOne(PMProject::class, 'deal_id');
     }
+
+    public function dealStage()
+    {
+        return $this->hasOne(DealStage::class, 'short_code', 'deal_id');
+    }
 }
