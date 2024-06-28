@@ -109,15 +109,7 @@ class ProjectDetailsController extends Controller
         unset($projectArray['expenses']);
         unset($projectArray['times']);
         unset($projectArray['project_deliverables']);
-
-        // unset($projectArray['project_deadline_extension']['approved_by']['modules']);
-        // dd($projectArray['project_deadline_extension']);
-        // foreach($projectArray['project_deadline_extension'] as $deadlineExtension){
-        //     unset($deadlineExtension['approved_by']['modules']);
-        //     unset($deadlineExtension['approved_by']['modules']);
-        // }
-
-        // Unset modules from approved_by in project_deadline_extension
+        
         foreach ($projectArray['project_deadline_extension'] as &$deadlineExtension) {
             if (isset($deadlineExtension['approved_by'])) {
                 unset($deadlineExtension['approved_by']['modules']);
