@@ -1,0 +1,237 @@
+const user_profile = {
+    id: 1,
+    user_id: 3455567,
+    profile_image_url: "https://i.ibb.co/KzXrYs5/Rectangle-5674.png",
+    cover_image: "https://i.ibb.co/pLcfgj0/Rectangle-968.png",
+    name: "Rajat C.",
+    user_name: "rajat07me",
+    bio: "Content & Web Developer | SEO & Digital Marketer",
+    average_rating: 5.0,
+    reviews_count: 3380,
+    earnings_score: 10.0,
+    top_rated_percentage: 8.1,
+    job_success: {
+        jobs_completed: 96,
+        on_budget: 96,
+        on_time: 96,
+        repeat_hire_rate: 96,
+    },
+    is_online: true,
+    hourly_rate: 35,
+    location: {
+        iso: "BD",
+        country: "Bangladesh",
+        city: "Sylhet",
+    },
+    local_time: "12:44 PM",
+    recommendations_count: 195,
+    is_online: true,
+    member_since: "2024-06-25 07:37:00",
+    general_description:
+        "I entered the field of content writing in 2010, driven by a passion for quality content creation.I managed several projects single-handedly which were published on reputed platforms on the web. I gained much experience while completing projects, and I decided to create my own venture. Sensing the demand for quality creative services that had the power to transform the web space, I incorporated SEOPage1 in 2013.",
+    user_verification: {
+        identity_verified: true,
+        payment_verified: true,
+        deposit_made: true,
+        email_verified: true,
+        profile_completed: true,
+        phone_verified: true,
+        facebook_connected: true,
+    },
+    user_certification: [
+        {
+            id: 1,
+            name: "US English 1",
+            completed: "86%",
+            iso: "US",
+        },
+        {
+            id: 2,
+            name: "US English 2",
+            completed: "60%",
+            iso: "US",
+        },
+        {
+            id: 3,
+            name: "UK English 1",
+            completed: "30%",
+            iso: "UK",
+        },
+        {
+            id: 4,
+            name: "General Orientation Exam 1",
+            completed: "70%",
+            iso: null,
+        },
+    ],
+    top_skills: [
+        {
+            id: 1,
+            name: "Article Writing",
+            projects: 1727,
+        },
+        {
+            id: 2,
+            name: "Copywriting",
+            projects: 2727,
+        },
+        {
+            id: 3,
+            name: "Ghostwriting",
+            projects: 3786,
+        },
+        {
+            id: 4,
+            name: "Article Rewriting",
+            projects: 1897,
+        },
+    ],
+    related_tags: [
+        {
+            id: 1,
+            name: "Article Writers in Bangladesh",
+        },
+        {
+            id: 2,
+            name: "Article Writers",
+        },
+        {
+            id: 3,
+            name: "Copywriters",
+        },
+        {
+            id: 4,
+            name: "Ghostwriters",
+        },
+    ],
+    recent_community_articles: [
+        {
+            id: 1,
+            title: "The Importance of WebRTC to Your Website",
+            category: "Design",
+            created_at: "2024-06-25 07:37:00",
+        },
+        {
+            id: 2,
+            title: "Using OpenTok For WebRTC",
+            category: "Development",
+            created_at: "2024-06-25 07:37:00",
+        },
+    ],
+    portfolio: [
+        {
+            id: 1,
+            thumbnail: "https://i.ibb.co/TKns0Yc/Rectangle-5688.png",
+            title: "Landing Page Design",
+            category: "Design",
+            created_at: "2024-06-25 07:37:00",
+        },
+        {
+            id: 2,
+            thumbnail:
+                "https://i.ibb.co/WPLd3mH/c495d869d24928c2abeba2af0b465d91.png",
+            title: "Landing Page Design",
+            category: "Design",
+            created_at: "2024-06-25 07:37:00",
+        },
+        {
+            id: 3,
+            thumbnail:
+                "https://i.ibb.co/j5yv9cY/a6374cbc4a3101a44777affaf930b729.png",
+            title: "Landing Page Design",
+            category: "Design",
+            created_at: "2024-06-25 07:37:00",
+        },
+        {
+            id: 4,
+            thumbnail: "https://i.ibb.co/ft7NJmj/Rectangle-5685.png",
+            title: "Landing Page Design",
+            category: "Design",
+            created_at: "2024-06-25 07:37:00",
+        },
+        {
+            id: 5,
+            thumbnail: "https://i.ibb.co/Tv9SK47/Rectangle-5684.png",
+            title: "Landing Page Design",
+            category: "Design",
+            created_at: "2024-06-25 07:37:00",
+        },
+        {
+            id: 6,
+            thumbnail: "https://i.ibb.co/y43yVz3/Rectangle-5683.png",
+            title: "Landing Page Design",
+            category: "Design",
+            created_at: "2024-06-25 07:37:00",
+        },
+    ],
+    reviews: [
+        {
+            id: 1,
+            rating: 5,
+            comment: "Great Work!",
+            created_at: "2024-06-25 07:37:00",
+            project: {
+                id: 1,
+                title: "Fixing the website",
+                amount: 1250,
+                currency: {
+                    code: "USD",
+                    symbol: "$",
+                },
+                tags: [
+                    {
+                        id: 1,
+                        name: "Article Writing",
+                    },
+                    {
+                        id: 2,
+                        name: "Copywriting",
+                    },
+                ],
+            },
+            client_info: {
+                user_id: 472342,
+                name: "John Doe",
+                user_name: "johndoe",
+                profile_image_url: "https://i.ibb.co/jHYks1p/client-image.png",
+                location: {
+                    iso: "US",
+                    country: "United States",
+                    city: "New York",
+                },
+            },
+        },
+    ],
+    experiences: [
+        {
+            id: 1,
+            designation: "Owner",
+            company_name: "SEOPAGE1.LTD. (www.seopage1.net)",
+            description:
+                "SEOPage1 was launched in June 10, 2010 initially as a content writing agency with headquarters in Dhaka, Bangladesh. Our services revolve primarily around 1. Creating quality content, 2. On-page optimization, and 3. Helping clients to have better search engine results with our contents. Our team started with 6 dedicated members who were experts in writing articles, blog posts, web contents, E-books and all other types of contents.",
+            start_date: "2010-06-10 07:37:00",
+            end_date: null,
+        },
+    ],
+    educations: [
+        {
+            id: 1,
+            institution:
+                "University of Engineering and Technology, Rajshahi, Bangladesh",
+            degree: "B.S.C in MECHANICAL ENGINEERING",
+            field_of_study: "Computer Science",
+            start_date: "2007-06-10 07:37:00",
+            end_date: "2011-06-10 07:37:00",
+        },
+    ],
+    qualifications: [
+        {
+            id: 1,
+            name: "Dutch Bangla Bank Limited Scholarship",
+            institution: "Dutch Bangla Bank Limited",
+            start_date: "2007-06-10 07:37:00",
+            end_date: null,
+        },
+    ],
+    is_verified: true,
+};

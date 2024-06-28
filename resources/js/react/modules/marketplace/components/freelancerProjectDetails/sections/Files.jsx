@@ -92,7 +92,7 @@ const Files = () => {
             key: 'owner',
             render: (text) => <div className='sp1_marketplace_sm_text'>
                 <p>{text?.name}</p>
-                <p>{text?.user_name}</p>
+                <p>@{text?.user_name}</p>
             </div>,
         },
         {

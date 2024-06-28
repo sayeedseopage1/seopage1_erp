@@ -1,6 +1,7 @@
 .list_of_milestones_page_wrapper {
     border-radius: 9px;
     border: 1px solid var(--light-blue-2);
+    min-height: 85vh;
 }
 
 .list_of_milestones_header {
