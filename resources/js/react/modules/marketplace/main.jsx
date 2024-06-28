@@ -10,6 +10,7 @@ import FreelancerMessage from "./pages/message/FreelancerMessage";
 import FreelancerProjects from "./pages/freelancerProjects/FreelancerProjects";
 import ListOfMileStones from "./pages/listOfMilestones/ListOfMileStones";
 import BidInsights from "./pages/bidInsights/BidInsights";
+import FreelancerProfile from "./pages/marketPlaceProfile/FreelancerProfile";
 
 const Content = () => {
     return (
@@ -60,7 +61,7 @@ const marketPlaceRoutes = [
         id: 6,
         rootId: 'marketplaceProfile',
         path: 'marketeplace-profile',
-        element: <h2>Marketplace Profile</h2>,
+        element: <FreelancerProfile />,
         contextProvider: React.Fragment
     },
 ]
