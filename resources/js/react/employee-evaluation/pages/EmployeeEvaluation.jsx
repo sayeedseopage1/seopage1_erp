@@ -30,7 +30,7 @@ const EmployeeEvaluation = () => {
             case "ld":
                 setTableType("Lead Developer");
                 break;
-            case "sales":
+            case "sales_executive":
                 setTableType("Sales Executive");
                 break;
             default:
@@ -166,7 +166,7 @@ const EmployeeEvaluation = () => {
                     <EvaluationTable
                         data={tableData(searchParams.get("show"))}
                         mainData={mainData}
-                        columns={[...EvaluationTableColumns]}
+                        columns={[...EvaluationTableColumnsPM]}
                         isLoading={isLoading}
                         isFetching={isFetching}
                         onPageChange={onPageChange}
@@ -179,7 +179,7 @@ const EmployeeEvaluation = () => {
                     <EvaluationTable
                         data={tableData(searchParams.get("show"))}
                         mainData={mainData}
-                        columns={[...EvaluationTableColumns]}
+                        columns={[...EvaluationTableColumnsPM]}
                         isLoading={isLoading}
                         isFetching={isFetching}
                         onPageChange={onPageChange}
