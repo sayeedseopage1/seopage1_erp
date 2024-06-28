@@ -124,7 +124,7 @@ class HelperPmProjectStatusController extends AccountBaseController
                 $goal->client_id = $findDeal->client_id;
                 $goal->pm_id = $findDeal->pm_id;
                 $goal->project_type = $findDeal->project_type;
-                $goal->project_category = 'Regular';
+                $goal->project_category = $pmGoalSetting->category;
 
                 $goal->goal_code = $goalCodes[$i]['code'];
                 $goal->goal_name = $goalCodes[$i]['name'];
@@ -143,7 +143,7 @@ class HelperPmProjectStatusController extends AccountBaseController
                     $goal->client_id = $findDeal->client_id;
                     $goal->pm_id = $findDeal->pm_id;
                     $goal->project_type = $findDeal->project_type;
-                    $goal->project_category = 'Regular';
+                    $goal->project_category = $pmGoalSetting->category;
                     $goal->goal_start_date = $goal_start_date;
 
                     if ($i < 6) {
@@ -500,6 +500,7 @@ class HelperPmProjectStatusController extends AccountBaseController
         $goal->goal_start_date = $lastGoal->goal_start_date;
         $goal->goal_end_date = Carbon::parse($lastGoal->goal_start_date)->addDay($lastGoal->duration + $goalDuration);
         $goal->duration = $lastGoal->duration + $goalDuration;
+        $goal->data = json_encode(['milestone_id' => $milestone->id]);
         $goal->added_by = Auth::user()->id;
         $goal->save();
     }

@@ -60,11 +60,18 @@ class PmGoalEventListener
     public function newTaskAddedEventHandle($event)
     {
         $projectId = $event->data['projectId'];
-        $taskCount = Task::where('project_id', $projectId)->count();
-        if ($taskCount > 1) return;
 
         $goal = ProjectPmGoal::where(['project_id' => $projectId, 'goal_code' => 'DCS'])->first();
-        if (time() > strtotime($goal->goal_end_date)) return;
+        if (!$goal && time() > strtotime($goal->goal_end_date)) return;
+
+        $goalCodes = ProjectPmGoal::$goalCodes[$goal->project_type][$goal->project_category];
+
+        foreach ($goalCodes as $item) {
+            if ($item['code'] == 'DCS') {
+                $goal->expired_meet_description = $item['complete'];
+                break;
+            }
+        }
 
         $goal->goal_status = 1;
         $goal->save();
@@ -78,12 +85,18 @@ class PmGoalEventListener
         // if ($task != 1) return;
 
         $goal = ProjectPmGoal::where(['project_id' => $projectId, 'goal_code' => 'TSM'])->first();
-        $goalCodes = ProjectPmGoal::$goalCodes[$goal->project_type][$goal->project_category];
 
         if (time() > strtotime($goal->goal_end_date)) return;
 
+        $goalCodes = ProjectPmGoal::$goalCodes[$goal->project_type][$goal->project_category];
+        foreach ($goalCodes as $item) {
+            if ($item['code'] == 'TSM') {
+                $goal->expired_meet_description = $item['complete'];
+                break;
+            }
+        }
+
         $goal->goal_status = 1;
-        $goal->expired_meet_description = $goalCodes[''];
         $goal->save();
     }
 
@@ -96,16 +109,25 @@ class PmGoalEventListener
 
         // initial milestones
         $paidAmount = Invoice::where(['project_id' => $project->id, 'status' => 'paid'])->sum('total');
-        $milestones = ProjectMilestone::from('project_milestones as mile')->join('invoices as in', 'in.milestone_id', 'mile.id')
+        $milestones = ProjectMilestone::from('project_milestones as mile')->leftJoin('invoices as in', 'in.milestone_id', 'mile.id')
             ->select('mile.*', 'in.status')
-            ->where('mile.project_id', $project->id)->where('mile.created_at', '<=', $project->deal->released_at);
+            ->where('mile.project_id', $project->id)->where('mile.created_at', '<=', $project->deal->released_at) /* ->get() */;
+
+        // dd($milestones);
 
         $milestoneSum = $milestones->sum('actual_cost');
         $milestoneCount = $milestones->count();
         $paidMilestoneCount = $milestones->where(['in.status' => 'paid'])->count();
+        // dd(
+        //     $project->deal->released_at,
+        //     $milestoneSum,
+        //     $milestoneCount,
+        //     $paidMilestoneCount,
+        //     $milestoneSum >= $paidAmount && $paidMilestoneCount >= ($milestoneCount / 2)
+        // );
 
         $goal = ProjectPmGoal::where('project_id', $project->id)->first();
-        if ($goal->project_type == 'fixed' && strtolower($goal->project_category) == 'regular') {
+        if ($goal->project_type == 'fixed' && $goal->project_category == 'regular') {
             self::fixedRegularPmGoalCompletion($project, $invoice, $milestoneSum, $paidAmount, $milestoneCount, $paidMilestoneCount);
             return;
         } else if ($goal->project_type == 'fixed') {
@@ -118,9 +140,23 @@ class PmGoalEventListener
     {
         $projectBudget = $project->deal->actual_amount;
 
+        // dd(
+        //     $milestoneSum >= $paidAmount && $paidMilestoneCount >= ($milestoneCount / 2),
+        //     $projectBudget > $milestoneSum && $projectBudget == $paidAmount,
+        //     $projectBudget < $paidAmount
+        // );
+
         if ($milestoneSum >= $paidAmount && $paidMilestoneCount >= ($milestoneCount / 2)) {
             $goal = ProjectPmGoal::whereIn('goal_code', ['FPMR', 'MPMR', 'MMPMR', 'OMMR'])->where(['project_id' => $project->id, 'goal_status' => 0])->first();
             if (!$goal || time() > strtotime($goal->goal_end_date)) return;
+
+            $goalCodes = ProjectPmGoal::$goalCodes[$goal->project_type][$goal->project_category];
+            foreach ($goalCodes as $item) {
+                if ($item['code'] == $goal->goal_code) {
+                    $goal->expired_meet_description = $item['complete'];
+                    break;
+                }
+            }
 
             $goal->goal_status = 1;
             $goal->save();
@@ -128,22 +164,18 @@ class PmGoalEventListener
             $goal = ProjectPmGoal::where(['project_id' => $project->id, 'goal_code' => 'ERAG'])->first();
             if (!$goal || time() > strtotime($goal->goal_end_date)) return;
 
+            $goalCodes = ProjectPmGoal::$goalCodes[$goal->project_type][$goal->project_category];
+            foreach ($goalCodes as $item) {
+                if ($item['code'] == $goal->goal_code) {
+                    $goal->expired_meet_description = $item['complete'];
+                    break;
+                }
+            }
+
             $goal->goal_status = 1;
             $goal->save();
         } else if ($projectBudget < $paidAmount) {
-            // extra goal fulfilled
-            $extraGoal = ProjectPmGoal::where(['project_id' => $project->id, 'goal_code' => 'ERAG', 'goal_status' => 0])->first();
-            $extraGoal->goal_status = 1;
-            $extraGoal->save();
-
-            $milestone = ProjectMilestone::where(['id' => $invoice->milestone_id, 'parent_id' => null, 'status' => 'complete'])->first();
-            if (!$milestone) return;
-
-            $goal = ProjectPmGoal::where(['project_id' => $project->id, 'goal_code' => 'UOMMR'])->first();
-            if (!$goal || time() > strtotime($goal->goal_end_date)) return;
-
-            $goal->goal_status = 1;
-            $goal->save();
+            self::fixedExtraMoreGoalCompletion($project->id);
         }
     }
 
@@ -164,19 +196,47 @@ class PmGoalEventListener
             $goal->goal_status = 1;
             $goal->save();
         } else if ($projectBudget < $paidAmount) {
-            $extraGoal = ProjectPmGoal::where(['project_id' => $project->id, 'goal_code' => 'ERAG', 'goal_status' => 0])->first();
+            self::fixedExtraMoreGoalCompletion($project->id);
+        }
+    }
+
+    private function fixedExtraMoreGoalCompletion($projectId)
+    {
+        // extra goal fulfilled
+        $extraGoal = ProjectPmGoal::where(['project_id' => $projectId, 'goal_code' => 'ERAG', 'goal_status' => 0])->first();
+
+        if ($extraGoal && time() <= strtotime($extraGoal->goal_end_date)) {
+            $goalCodes = ProjectPmGoal::$goalCodes[$extraGoal->project_type][$extraGoal->project_category];
+            foreach ($goalCodes as $item) {
+                if ($item['code'] == $extraGoal->goal_code) {
+                    $extraGoal->expired_meet_description = $item['complete'];
+                    break;
+                }
+            }
+
             $extraGoal->goal_status = 1;
             $extraGoal->save();
-
-            $milestone = ProjectMilestone::where(['id' => $invoice->milestone_id, 'parent_id' => null, 'status' => 'complete'])->first();
-            if (!$milestone) return;
-
-            $goal = ProjectPmGoal::where(['project_id' => $project->id, 'goal_code' => 'UOMMR'])->first();
-            if (!$goal || time() > strtotime($goal->goal_end_date)) return;
-
-            $goal->goal_status = 1;
-            $goal->save();
         }
+
+        $goal = ProjectPmGoal::where(['project_id' => $projectId, 'goal_code' => 'UOMMR', 'goal_status' => 0])->first();
+        if (!$goal || time() > strtotime($goal->goal_end_date)) return;
+
+        $data = json_decode($goal->data);
+        if (!($data || isset($data->milestone_id))) return;
+
+        $milestone = ProjectMilestone::where(['id' => $data->milestone_id, 'parent_id' => null, 'status' => 'complete'])->first();
+        if (!$milestone) return;
+
+        $goalCodes = ProjectPmGoal::$goalCodes[$goal->project_type][$goal->project_category];
+        foreach ($goalCodes as $item) {
+            if ($item['code'] == $goal->goal_code) {
+                $goal->expired_meet_description = $item['complete'];
+                break;
+            }
+        }
+
+        $goal->goal_status = 1;
+        $goal->save();
     }
 
     private function hourlyGoalCompletion($event)
