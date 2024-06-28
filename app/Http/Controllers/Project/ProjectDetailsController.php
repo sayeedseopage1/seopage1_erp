@@ -69,7 +69,7 @@ class ProjectDetailsController extends Controller
             return (clone $tasks)->where('board_column_id', $id)->count();
         });
         $projectArray['progress_chart_values'] = $countProgressArray;
-        $projectArray['deal']['actual_hourly_rate'] = $projectArray['deal']['hourly_rate'];
+        $projectArray['deal']['actual_hourly_rate'] = $projectArray['deal']['hourly_rate']??0;
         $projectArray['deal']['hourly_rate'] = $projectArray['deal']['hourly_rate'] / Currency::find($projectArray['deal']['original_currency_id'])->exchange_rate ?? 1;
 
         $pendingDeadlineExtensionRequests = $project->projectDeadlineExtension->where('status', 1)->count();
