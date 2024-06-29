@@ -157,7 +157,6 @@ const DisputeProjectFromModal = ({
 
     // Helper Function to check if email is invalid
     function isEmailInvalid(email) {
-        console.log("isEmailInvalid", email, isEmail(email));
         return !isEmail(email);
     }
 

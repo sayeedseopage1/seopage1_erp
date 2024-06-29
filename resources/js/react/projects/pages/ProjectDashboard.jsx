@@ -30,8 +30,6 @@ const ProjectDashboard = ({ projectType }) => {
         ProjectDashboardContext
     );
 
-    console.log(projectData);
-
     // get project id from the url path and set it to the context
     useEffect(() => {
         setProject_id(pathName);

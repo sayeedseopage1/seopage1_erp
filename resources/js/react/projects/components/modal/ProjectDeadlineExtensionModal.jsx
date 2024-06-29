@@ -99,7 +99,6 @@ const ProjectDeadlineExtensionModal = ({
             }
 
         } catch (error) {
-            console.log(error)
             toast.error("An error occurred. Please try again later");
         }
 

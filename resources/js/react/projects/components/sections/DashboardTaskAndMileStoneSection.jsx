@@ -42,8 +42,6 @@ const DashboardTaskAndMileStoneSection = () => {
         refetchProjectMilestone,
     } = useContext(ProjectDashboardContext);
 
-    console.log(projectTaskList);
-    console.log(projectMilestoneList);
 
     return (
         <div className={`${style.dashboardTaskAndMileStoneSection} mb-4`}>

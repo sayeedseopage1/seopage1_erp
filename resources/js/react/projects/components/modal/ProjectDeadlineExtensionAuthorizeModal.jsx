@@ -40,6 +40,7 @@ const ProjectDeadlineExtensionAuthorizeModal = ({
     isModalOpen,
     closeModal,
     modalData,
+    isLoading
 }) => {
     const user = useAuth();
     const [actionType, setActionType] = useState("");
@@ -126,6 +127,15 @@ const ProjectDeadlineExtensionAuthorizeModal = ({
             isSubmitting: false,
         });
     };
+
+
+    useEffect(() => {
+        if(!isLoading && modalData?.projectPendingDeadlineExtensionData){
+            setDeadlineExtensionData({
+                ...modalData?.projectPendingDeadlineExtensionData,
+            });
+        }
+    }, [isLoading, modalData?.projectPendingDeadlineExtensionData]);
 
     return (
         <CustomAntModal

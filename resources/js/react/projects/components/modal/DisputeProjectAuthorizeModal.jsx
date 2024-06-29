@@ -98,7 +98,6 @@ const DisputeProjectAuthorizeModal = ({
                 setAdminComment("");
             }
         } catch (error) {
-            console.log(error);
             toast.error("Failed to authorize the dispute");
         }
     };

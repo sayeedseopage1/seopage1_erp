@@ -132,6 +132,8 @@ const DashboardHeaderSection = ({ projectData, isLoading }) => {
             !isLoading
         ) {
             handleModal(setIsPDAuthorizationModalOpen, true);
+        } else if (modalType === "deadline_extension_authorization" && !isLoading) {
+            handleModal(setIsDEAuthorizeModalOpen, true);
         }
     }, []);
 
