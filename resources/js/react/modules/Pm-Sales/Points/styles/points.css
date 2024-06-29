@@ -1,0 +1,155 @@
+.points_selector .ant-select-selector {
+    background-color: transparent !important;
+    border: 0 !important;
+}
+
+.ant-select-focused:where(.css-dev-only-do-not-override-kghr11).ant-select-outlined:not(.ant-select-disabled):not(.ant-select-customize-input):not(.ant-pagination-size-changer) .ant-select-selector {
+    border-color: transparent !important;
+    box-shadow: 0 0 0 0 rgba(5, 145, 255, 0.1);
+    outline: 0;
+}
+
+.point_selector_container {
+    display: flex;
+    align-items: center;
+    /* gap: 4px; */
+}
+
+.points_selector .ant-select-selection-item,
+.point_selector_item {
+    overflow: hidden;
+    color: #1492E6;
+    text-overflow: ellipsis;
+    font-family: Poppins, sans-serif;
+    font-size: 12px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+}
+
+.point_selector_label_container {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.point_selector_label {
+    overflow: hidden;
+    color: #000;
+    text-overflow: ellipsis;
+    font-family: Poppins, sans-serif;
+    font-size: 12px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+}
+
+.point_table_data {
+    color: #000;
+    font-family: Poppins, sans-serif;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+    padding: 18px 0px;
+}
+
+.point_table_data strong {
+    color: #1492E6;
+    font-weight: 400;
+}
+
+.point_table_data_neg {
+    color: #F66;
+}
+
+.point_table_data_pos {
+    color: #70CA62;
+}
+
+.point_table_data_arrow {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+}
+
+.table-row-odd {
+    background-color: #F2F9FE;
+}
+
+/* point history banner  */
+.point_history_nav_container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.point_history_banner {
+    border-radius: 8px;
+    background: #FFF;
+    padding: 5px 20px;
+    max-width: 963px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    flex: 1;
+}
+
+.point_history_banner_item {
+    color: #000;
+    font-family: Poppins, sans-serif;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.point_history_nav {
+    /* max-width: 589px; */
+    /* flex: 1; */
+    display: flex;
+    align-items: center;
+    gap: 17px;
+    justify-content: space-between;
+}
+
+.point_history_refresh_btn {
+    color: #1492E6;
+    font-family: Poppins, sans-serif;
+    font-size: 17px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+    cursor: pointer;
+    background-color: transparent;
+    border: 1px solid #1492E6;
+    border-radius: 6px;
+    padding: 12px;
+
+    @media screen and (max-width: 1200px) {
+        font-size: 13px;
+        padding: 10px;
+    }
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+.loading-icon {
+    animation: spin 1s linear infinite;
+}

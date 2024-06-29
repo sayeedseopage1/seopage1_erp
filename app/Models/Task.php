@@ -2,19 +2,23 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
+use App\Models\Subtask;
+use App\Models\TaskSubmission;
+use App\Models\TaskBoardColumn;
 use App\Observers\TaskObserver;
+use App\Models\ProjectMilestone;
 use App\Traits\CustomFieldsTrait;
+use App\Models\Scopes\OrderByDesc;
+use Illuminate\Support\Facades\Auth;
+use App\Helper\ProjectManagerPointLogic;
+use Illuminate\Notifications\Notifiable;
+use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
-use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\Relations\HasOne;
-use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Notifications\Notifiable;
-use App\Models\Subtask;
-use App\Models\ProjectMilestone;
-use App\Models\TaskBoardColumn;
-use App\Models\Scopes\OrderByDesc;
-use App\Models\TaskSubmission;
+use App\Models\Factor;
 
 /**
  * App\Models\Task
@@ -141,6 +145,98 @@ class Task extends BaseModel
     protected $appends = ['due_on', 'create_on'];
     protected $guarded = ['id'];
     public $customFieldModel = 'App\Models\Task';
+
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::created(function ($item) {
+            if(!$item->subtask_id && !$item->independent_task_status){
+                $project = Project::with('deal')->find($item->project_id);
+                if($latestTask = Task::where('id', '!=', $item->id)->where('project_id', $project->id)->orderBy('id', 'desc')->first()){
+                    $start_date = Carbon::createFromFormat('Y-m-d H:i:s', $latestTask->created_at);
+                    $countSundays = $start_date->diffInDaysFiltered(function (Carbon $date) {
+                        return $date->dayOfWeek === Carbon::SUNDAY;
+                    }, Carbon::now());
+                    $hoursDifference = Carbon::now()->diffInHours($start_date) - ($countSundays * 24);
+                    if($hoursDifference > 0){
+                        $points = (int) ($hoursDifference/24) * Factor::where('criteria_id', 12)->first()->points;
+                        // Project Manager Point Distribution ( Task hold time during assign phase )
+                        // ProjectManagerPointLogic::distribute(12, $item->project_id, abs($points) ? 1 : 0, $points);
+                    }
+                }else{
+                    $start_date = Carbon::createFromFormat('Y-m-d H:i:s', $project->project_acceptance_time ?? now());
+                    $countSundays = $start_date->diffInDaysFiltered(function (Carbon $date) {
+                        return $date->dayOfWeek === Carbon::SUNDAY;
+                    }, Carbon::now());
+                    $acceptanceToFirstTaskDuration = (Carbon::now()->diffInMinutes($start_date)/60) - ($countSundays * 24);
+                    // Project Manager Point Distribution ( If all the tasks are created in the first 2 dayse )
+                    ProjectManagerPointLogic::distribute(6, $item->project_id, $acceptanceToFirstTaskDuration);
+
+                    $hoursDifference = (Carbon::now()->diffInMinutes($start_date)/60) - 24 - ($countSundays * 24); // This 24 hours check 48 hours for below condition
+                    if($hoursDifference > 0){
+                        $points = (int) ($hoursDifference/24) * Factor::where('criteria_id', 12)->first()->points;
+
+                        $taskitem = Task::with('project.client')->find($item->id);
+                        $activity = 'Your task hold time for task <a style="color:blue" href="'.route('tasks.show',$taskitem->id??null).'">'.$taskitem->heading??null. '</a> (Project <a style="color:blue" href="'.route('projects.show',$taskitem->project->id??null).'">'.$taskitem->project->project_name??null. '</a> from client  <a style="color:blue" href="'.route('clients.show', $taskitem->project->client->id??null).'">'. $taskitem->project->client->name??null. '</a>) is more than 48 hours during assign phase';
+
+                        // Project Manager Point Distribution ( Task hold time during assign phase )
+                        ProjectManagerPointLogic::distribute(12, $item->project_id, abs($points) ? 1 : 0, $points, $activity);
+                    }
+                }
+            }
+        });
+
+        static::updated(function ($item) {
+            if ($item->isDirty('board_column_id') && in_array($item->board_column_id, [8, 9, 1]) && $item->getOriginal('board_column_id') === 6) {
+                if(!$item->subtask_id && Auth::user()->role_id == 4 && $lastSubmission = TaskSubmission::where('task_id', $item->id)->orderBy('id', 'desc')->first()){
+                    $hoursDifference = Carbon::parse($lastSubmission->created_at)->diffInHours(Carbon::now());
+                    
+                    $taskitem = Task::with('project.client')->find($item->id);
+                    $activity = 'You did not take any action of this submitted task <a style="color:blue" href="'.route('tasks.show',$taskitem->id??null).'">'.$taskitem->heading??null. '</a>, for project <a style="color:blue" href="'.route('projects.show',$taskitem->project->id??null).'">'.$taskitem->project->project_name??null. '</a>  (Client <a style="color:blue" href="'.route('clients.show', $taskitem->project->client->id??null).'">'. $taskitem->project->client->name??null. '</a>) in 36 hours';
+
+                    // Project Manager Point Distribution ( Reviewing the work )
+                    ProjectManagerPointLogic::distribute(8, $item->project_id, $hoursDifference, null, $activity);
+                }
+
+                if(!$item->subtask_id && Auth::user()->role_id == 4){
+                    $lastSubmissionTime = Carbon::parse(TaskSubmission::where('task_id', $item->id)->orderBy('id', 'desc')->first()->created_at);
+                    if(!TaskSubmission::where('task_id', $item->id)->where('created_at', '<', $lastSubmissionTime->format('Y-m-d H:i'))->count()){
+                        // First Submission
+                        $start_date = $lastSubmissionTime;
+                        $countSundays = $start_date->diffInDaysFiltered(function (Carbon $date) {
+                            return $date->dayOfWeek === Carbon::SUNDAY;
+                        }, Carbon::now());
+                        $hoursDifference = Carbon::now()->diffInHours($start_date) - ($countSundays * 24);
+                        if($hoursDifference > 0){
+                            $points = (int) ($hoursDifference/12) * Factor::where('criteria_id', 13)->first()->points;
+                            
+                            $taskitem = Task::with('project.client')->find($item->id);
+                            $activity = 'Your task hold time for task <a style="color:blue" href="'.route('tasks.show',$taskitem->id??null).'">'.$taskitem->heading??null. '</a> (Project <a style="color:blue" href="'.route('projects.show',$taskitem->project->id??null).'">'.$taskitem->project->project_name??null. '</a> from client <a style="color:blue" href="'.route('clients.show', $taskitem->project->client->id??null).'">'. $taskitem->project->client->name??null. '</a>) is more than 12 hours during submission phase';
+
+                            // Project Manager Point Distribution ( Task hold time during submission phase )
+                            ProjectManagerPointLogic::distribute(13, $item->project_id, abs($points) ? 1 : 0, $points, $activity);
+                        }
+                    }else{
+                        $start_date = $lastSubmissionTime;
+                        $countSundays = $start_date->diffInDaysFiltered(function (Carbon $date) {
+                            return $date->dayOfWeek === Carbon::SUNDAY;
+                        }, Carbon::now());
+                        $hoursDifference = Carbon::now()->diffInHours($start_date) - ($countSundays * 24);
+                        if($hoursDifference > 0){
+                            $points = (int) ($hoursDifference/4) * Factor::where('criteria_id', 14)->first()->points;
+                            
+                            $taskitem = Task::with('project.client')->find($item->id);
+                            $activity = 'Your task hold time for task <a style="color:blue" href="'.route('tasks.show',$taskitem->id??null).'">'.$taskitem->heading??null. '</a> (Project <a style="color:blue" href="'.route('projects.show',$taskitem->project->id??null).'">'.$taskitem->project->project_name??null. '</a> from client <a style="color:blue" href="'.route('clients.show', $taskitem->project->client->id??null).'">'. $taskitem->project->client->name??null. '</a>) is more than 4 hours during revision submission phase';
+
+                            // Project Manager Point Distribution ( Task hold time during revision submission )
+                            ProjectManagerPointLogic::distribute(14, $item->project_id, abs($points) ? 1 : 0, $points, $activity);
+                        }
+                    }
+                }
+            }
+        });
+    }
 
     protected static function booted()
     {

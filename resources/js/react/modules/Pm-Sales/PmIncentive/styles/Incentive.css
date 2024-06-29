@@ -1,0 +1,990 @@
+/* ******************************
+    Common starts here
+ ********************************* */
+
+.incentive_wrapper {
+    background: #F7FAFF;
+    padding: 0px 30px;
+    font-family: 'Poppins', sans-serif;
+}
+
+.incentive_inner_wrapper {
+    background: #FFFFFF;
+    padding: 30px;
+    border-radius: 16px;
+    min-height: 75vh;
+}
+
+.title_wrapper {
+    padding-left: 28px;
+    margin-top: 50px;
+}
+
+.section_title {
+    font-weight: 500;
+    font-size: 20px;
+    line-height: 32px;
+    letter-spacing: -0.4px;
+    margin-bottom: 23px;
+}
+
+.clickable_link {
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+.custom_divider {
+    height: 39px;
+    width: 1px;
+    background: #D8D8D8;
+}
+
+.custom_divider_two {
+    width: 1px;
+    background-color: #ffffff;
+    height: 100px;
+}
+
+.incentive_success_btn,
+.incentive_danger_btn {
+    border-radius: 11px;
+    font-family: Poppins, sans-serif;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+    padding: 11px 18px;
+    min-width: 104px;
+}
+
+.incentive_success_btn {
+    background: #CAEDE1;
+    color: #119254;
+}
+
+.incentive_danger_btn {
+    background: #F9C8CC;
+    color: #F00;
+}
+
+.incentives_modal_close {
+    background-color: transparent;
+    color: #fff;
+}
+
+/* ******************************
+    Common ends here
+ ********************************* */
+
+
+/* ********************************************
+    Filter bar and point card starts here
+ ********************************************** */
+.filter_bar {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+    align-items: center;
+    width: 100%;
+    padding: 36px 0px;
+}
+
+.filter_bar_left,
+.filter_bar_right {
+    display: flex;
+    gap: 1.5rem;
+    justify-content: center;
+    align-items: center;
+}
+
+.point_banner {
+    display: flex;
+    align-items: center;
+    padding: 22px 29px;
+    color: #FFFFFF;
+    border-radius: 16px;
+    gap: 28px;
+    background-color: #F2F9FE;
+}
+
+.point_card {
+    background-color: #1492E6;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 12px;
+    width: 100%;
+    border-radius: 9px;
+    padding: 24px;
+}
+
+.point_card_image_wrapper {
+    padding: 8px;
+    background-color: #4CA7E8;
+    border-radius: 6px;
+}
+
+.secondary_point_card_image_wrapper {
+    padding: 8px;
+    background-color: #CEEBFF;
+    border-radius: 6px;
+}
+
+.informationCircle {
+    margin-left: 5px;
+    margin-bottom: 3px;
+    color: #8F8F8F;
+
+}
+
+.point_title {
+    font-weight: 500;
+    font-size: 16px;
+}
+
+.point_score {
+    font-weight: 600;
+    font-size: 20px;
+}
+
+/* ********************************************
+    Filter bar and point card ends here
+ ********************************************** */
+
+/* ********************************************
+    Ideal Vs Achieved starts here
+ ********************************************** */
+
+.ideal_vs_achieved_container {
+    padding: 22px 29px;
+    margin-top: 32px;
+    border-radius: 16px;
+    background-color: #F2F9FE;
+}
+
+.ideal_vs_achieved_container .chart_parent .chart_wrapper:last-child {
+    border: 1px solid #1492E6
+}
+
+.chart_parent {
+    display: flex;
+    gap: 28px;
+    flex-direction: row;
+    margin-bottom: 28px;
+}
+
+.chart_section_container {
+    padding: 22px 29px;
+    margin-top: 20px;
+    border-radius: 16px;
+    background-color: #F2F9FE;
+}
+
+.chart_wrapper {
+    background-color: #ffffff;
+    border-radius: 15px;
+    padding: 25px;
+    width: 50%;
+    position: relative;
+    max-height: 450px;
+}
+
+.secondary_chart_wrapper {
+    background-color: #E1F3FF;
+    border-radius: 15px;
+    padding: 25px;
+    width: 50%;
+    position: relative;
+}
+
+.chart_wrapper_inner {
+    width: 100%;
+}
+
+.chart_button {
+    font-size: 16px;
+    font-weight: 500;
+    color: #1492E6;
+    background-color: #F2F9FE;
+    border-radius: 5px;
+    padding: 5px 30px;
+    letter-spacing: -0.32px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+
+.chart_button_secondary {
+    font-size: 16px;
+    font-weight: 500;
+    color: #FFFFFF;
+    background-color: #2FADFF;
+    border-radius: 5px;
+    padding: 5px 30px;
+    letter-spacing: -0.32px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+
+.incentive_button_wrapper {
+    display: flex;
+    align-items: center;
+    gap: 13px;
+}
+
+.y_axis_arrow {
+    transform: rotate(-90deg) translateX(-50%);
+    transform-origin: top left;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 15px;
+    position: absolute;
+    top: 45%;
+    left: 0;
+}
+
+.chart_axis_title {
+    font-size: 12px;
+    font-weight: 500;
+    line-height: 32px;
+    text-align: center;
+    color: #1492E6;
+    margin-top: 7px;
+}
+
+.chart_axis_icon {
+    width: 20%;
+}
+
+.chart_yAxis_icon {
+    transform: rotate(90deg);
+}
+
+.x_axis_arrow {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    margin-top: -15px;
+}
+
+.chart_ratio {
+    color: #000;
+    text-align: center;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 14px;
+    letter-spacing: -0.28px;
+}
+
+.chart_ratio_value_pos {
+    color: #70CA62;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: 14px;
+    letter-spacing: -0.28px;
+}
+
+.chart_ratio_value_neg {
+    color: #FF0000;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: 14px;
+    letter-spacing: -0.28px;
+}
+
+.chart_title {
+    color: #000;
+    font-family: Poppins, sans-serif;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+    margin-left: 8px;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.chart_header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+}
+
+.chart_tooltip {
+    color: #000;
+    text-align: left;
+    font-family: Poppins, sans-serif;
+    font-size: 12px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 14px;
+    border-radius: 8px;
+    padding: 8px;
+}
+
+
+
+/* ********************************************
+    Ideal Vs Achieved ends here
+ ********************************************** */
+
+
+/* ******************************
+    stats info  starts here
+ ********************************* */
+.stats_info_wrapper {
+    background-color: #F2F9FE;
+    padding: 22px 29px;
+    border-radius: 16px;
+    margin-top: 50px;
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+}
+
+.stats_info_outer {
+    width: 55%;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+.stats_score_outer {
+    width: 35%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.stats_score_inner {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 28px;
+}
+
+.progress_card_wrapper {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+}
+
+.progress_card_desc_wrapper {
+    width: 100%;
+}
+
+.progress_card_desc_pos {
+    font-size: 14px;
+    font-weight: 500;
+    color: #000000;
+}
+
+.progress_card_desc_neg {
+    font-size: 14px;
+    font-weight: 500;
+    color: #FF6666;
+}
+
+.progress_card_stats_wrapper {
+    width: 100%;
+}
+
+.progress_card_stats_inner {
+    display: flex;
+    justify-content: space-between;
+    gap: 8px;
+    font-size: 12px;
+    font-weight: 500;
+}
+
+.stats_score_child {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 12px;
+}
+
+.stats_info_icon_wrapper {
+    padding: 8px;
+    background: #CEEBFF;
+    border-radius: 6px;
+}
+
+.stats_info_desc {
+    font-size: 16px;
+    font-weight: 500;
+    color: #000000;
+}
+
+.stats_info_link {
+    font-size: 16px;
+    font-weight: 600;
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+.stats_info_note {
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 21px;
+}
+
+/* ******************************
+    stats info ends here
+ ********************************* */
+
+/* ******************************
+ upSale/cross sale start here
+********************************* */
+
+.secondary_point_banner {
+    display: flex;
+    justify-content: space-between;
+    padding: 22px;
+    color: #FFFFFF;
+    border-radius: 10px;
+    gap: 15px;
+    background-color: #E1F3FF;
+    margin-top: 28px;
+}
+
+.secondary_point_card_wrapper {
+    width: 49.5%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 12px;
+}
+
+.secondary_point_card {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    gap: 12px;
+}
+
+.secondary_point_banner_bonus {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 15px;
+    padding: 22px;
+    color: #FFFFFF;
+    border-radius: 10px;
+    background-color: #E1F3FF;
+    margin-top: 28px;
+}
+
+.secondary_point_banner_bonus .secondary_point_card_wrapper {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    border-right: 1px solid #AAE3FF;
+    padding-right: 10px;
+}
+
+.secondary_point_banner_bonus .secondary_point_card_wrapper:last-child {
+    border-right: none;
+}
+
+/* ******************************
+ upSale/cross sale ends here
+********************************* */
+
+
+/* ******************************
+ Final incentive value banner start here
+********************************* */
+.final_incentive_banner_wrapper {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-radius: 13px;
+    padding: 20px 30px;
+    margin-top: 21px;
+    background-color: #1492E6;
+    gap: 40px;
+}
+
+.incentive_amount_card {
+    width: 280px;
+    background-color: #ffffff;
+    border-radius: 13px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    padding: 30px;
+    text-align: center;
+}
+
+.incentive_amount_details {
+    color: #ffffff;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    font-size: 14px;
+    flex: 1;
+}
+
+.incentive_amount_list {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+    max-width: 320px;
+}
+
+
+/* ******************************
+  Final incentive value banner ends here
+********************************* */
+
+
+
+/*********************************
+            modals starts here
+*********************************/
+
+.modal_point_row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 22px;
+    color: #000;
+    font-family: Poppins, sans-serif;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 14px;
+}
+
+.modal_point_note {
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 14px;
+    margin-top: 40px;
+    text-align: center;
+}
+
+.edit_chart_data_modal_alert {
+    margin-top: -20px;
+    margin-bottom: 25px;
+    color: #000;
+    text-align: center;
+    font-family: Poppins, sans-serif;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 21px;
+    border-radius: 5px;
+    border: 1px dashed #B2EBD0;
+    background: rgba(20, 185, 106, 0.10);
+}
+
+.edit_chart_data_modal_title {
+    text-align: center;
+    color: #000;
+    font-family: Poppins, sans-serif;
+    font-size: 32px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+}
+
+.edit_chart_data_modal_content {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    color: #000;
+    font-family: Poppins, sans-serif;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 14px;
+    padding: 40px;
+}
+
+.edit_chart_data_sub_title {
+    color: #000;
+    font-family: Poppins, sans-serif;
+    font-size: 18px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 21px;
+}
+
+.point_edit_modal_title {
+    color: #000;
+    font-family: Poppins, sans-serif;
+    font-size: 20px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+    text-align: center;
+    margin-bottom: 0;
+}
+
+.point_edit_modal_content {
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 14px;
+    color: #8F8F8F;
+    font-family: Poppins, sans-serif;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+    margin-bottom: 37px;
+    margin-top: 18px;
+}
+
+.point_edit_modal_input {
+    max-width: 332px;
+    width: 100%;
+    border-radius: 9px;
+    border: 1px solid #B1B1B1;
+    padding: 10px;
+    margin: 0 auto;
+    color: #8F8F8F;
+    font-family: Poppins, sans-serif;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+}
+
+.edit_chart_data_modal_top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+}
+
+.ideal_vs_achieved_chart_data_actions {
+    max-width: 201px;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 13px;
+}
+
+.ideal_vs_achieved_chart_data_actions_buttons {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+}
+
+.ideal_vs_achieved_chart_data_actions_range {
+    color: #1492E6;
+    font-family: Poppins, sans-serif;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+    border-radius: 5px;
+    border: 1px solid #1492E6;
+    padding: 13px 20px;
+    background-color: transparent;
+}
+
+.ideal_vs_achieved_axis_data {
+    display: flex;
+    max-width: 248px;
+    width: 100%;
+    height: 99px;
+    padding: 8px 16px;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-end;
+    gap: 12px;
+    flex-shrink: 0;
+    border-radius: 9px;
+    background: rgba(20, 146, 230, 0.05);
+}
+
+.ideal_vs_achieved_axis_data p {
+    color: #1492E6;
+    font-family: Poppins, sans-serif;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 21px;
+    /* 150% */
+}
+
+.chart_data_add,
+.chart_data_remove {
+    min-width: 95px;
+    padding: 8px 20px;
+    border-radius: 5px;
+    color: #FFF;
+    font-family: Poppins, sans-serif;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+}
+
+.chart_data_add {
+    background: #1492E6;
+}
+
+.chart_data_remove {
+    background: #F66;
+}
+
+.ratio_edit_button {
+    border-radius: 64px;
+    background: #D9D9D9;
+    color: #1E1E1E;
+    font-family: Poppins, sans-serif;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 21px;
+    padding: 4px 21px;
+    /* 150% */
+}
+
+.ratio_text {
+    color: #000;
+    font-family: Poppins, sans-serif;
+    font-size: 20px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 21px;
+    /* 105% */
+}
+
+.ratio_wrapper {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.ratio_card {
+    padding: 16px 0;
+    border-bottom: 1px solid #E8E8E8;
+}
+
+.edit_chart_data_modal_content_wrapper {
+    max-height: 450px;
+    overflow-y: scroll;
+}
+
+.edit_chart_data_modal_content_wrapper .ratio_card:last-child {
+    border-bottom: none;
+}
+
+.add_new_axis_item_modal .ant-modal-content {
+    padding: 0;
+}
+
+.add_new_axis_item_modal_header {
+    padding: 17px;
+    text-align: center;
+    border-bottom: 1px solid #EFEFEF;
+}
+
+.add_new_axis_item_modal_header h4 {
+    color: #000;
+    font-family: Poppins, sans-serif;
+    font-size: 20px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+    margin: 0;
+}
+
+.add_new_axis_item_modal_body {
+    padding: 22px;
+}
+
+.axis_item_modal_inputs_inner {
+    display: flex;
+    align-items: flex-start;
+    gap: 11px;
+    max-width: 294px;
+    margin: auto;
+}
+
+.axis_item_modal_inputs_title {
+    text-align: center;
+    margin-bottom: 10px;
+    color: #8F8F8F;
+    font-family: Poppins, sans-serif;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+}
+
+.select_ratio_range_modal_inputs {
+    display: flex;
+    gap: 18px;
+    max-width: 294px;
+    align-items: center;
+    justify-content: space-between;
+    margin: auto;
+}
+
+.remove_axis_item_table_title,
+.remove_axis_item_table_data {
+    color: #000;
+    font-family: Poppins, sans-serif;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 21px;
+}
+
+.remove_axis_item_table_wrapper {
+    max-width: 314px;
+    margin: 0px auto;
+}
+
+
+.swal2-icon-custom {
+    margin-bottom: -25px !important;
+    border: none !important;
+}
+
+.chart_edit_modal_button {
+    min-width: 135px;
+    border-radius: 8px;
+    border: 1px solid #1492E6;
+    background-color: #1492E6;
+    padding: 10px 20px;
+    font-size: 16px;
+    font-weight: 500;
+    color: #fff;
+}
+
+.chart_edit_modal_button_secondary {
+    min-width: 135px;
+    border-radius: 8px;
+    border: 1px solid #1492E6;
+    background-color: transparent;
+    padding: 10px 20px;
+    font-size: 16px;
+    font-weight: 500;
+    color: #1492E6;
+}
+
+/*********************************
+            modals ends
+*********************************/
+
+@media only screen and (min-width: 1501px) and (max-width: 1600px) {
+    .chart_axis_icon {
+        width: 18%;
+    }
+}
+
+@media only screen and (min-width: 1401px) and (max-width: 1500px) {
+    .chart_axis_icon {
+        width: 18%;
+    }
+}
+
+@media only screen and (min-width: 1301px) and (max-width: 1400px) {
+    .chart_axis_icon {
+        width: 18%;
+    }
+}
+
+@media only screen and (min-width: 1201px) and (max-width: 1300px) {
+    .chart_axis_icon {
+        width: 15%;
+    }
+}
+
+@media only screen and (min-width:993px) and (max-width: 1200px) {
+    .chart_parent {
+        flex-direction: column;
+    }
+
+    .secondary_chart_wrapper,
+    .chart_wrapper {
+        width: 100%;
+    }
+
+    .chart_axis_icon {
+        width: 18%;
+    }
+}
+
+@media only screen and (min-width:769px) and (max-width: 992px) {
+    .chart_parent {
+        flex-direction: column;
+    }
+
+    .secondary_chart_wrapper,
+    .chart_wrapper {
+        width: 100%;
+    }
+
+    .chart_axis_icon {
+        width: 18%;
+    }
+}
+
+@media only screen and (min-width:577px) and (max-width: 768px) {
+    .chart_parent {
+        flex-direction: column;
+    }
+
+    .secondary_chart_wrapper,
+    .chart_wrapper {
+        width: 100%;
+    }
+
+    .chart_axis_icon {
+        width: 18%;
+    }
+}
+
+@media only screen and (max-width:578px) {
+
+    .chart_parent {
+        flex-direction: column;
+    }
+
+    .secondary_chart_wrapper,
+    .chart_wrapper {
+        width: 100%;
+        padding: 10px;
+    }
+
+    .y_axis_arrow {
+        display: none;
+    }
+
+    .x_axis_arrow {
+        display: none;
+    }
+
+    .chart_axis_icon {
+        width: 18%;
+    }
+}

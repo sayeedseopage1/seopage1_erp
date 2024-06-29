@@ -955,6 +955,7 @@ class ProjectController extends AccountBaseController
      */
     public function update(UpdateProject $request, $id)
     {
+
         //kpi distribution start from here
     //    DB::beginTransaction();
         $find_project_id = Project::where('id', $id)->first();
@@ -2132,6 +2133,7 @@ class ProjectController extends AccountBaseController
 
         }
         $project->project_status = 'Accepted';
+        $project->project_acceptance_time = Carbon::now();
         //$project->added_by= Auth::id();
         $project->last_updated_by = Auth::id();
         //$project_admin= User::where('role_id',6)->first();

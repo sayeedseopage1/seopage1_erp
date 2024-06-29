@@ -1,16 +1,17 @@
-import { configureStore,  } from "@reduxjs/toolkit";
+import { configureStore } from "@reduxjs/toolkit";
 import { apiSlice } from "./api/apiSlice";
 import employeeWiseTableDataReducer from "./features/employeeWiseTableDataSlice";
 import projectWiseDataTableReducer from "./features/projectWiseTableDataSlice";
-import taskWiseDataTableReducer from './features/taskWiseTableDataSlice';
-import usersReducer from './features/usersSlice';
+import taskWiseDataTableReducer from "./features/taskWiseTableDataSlice";
+import usersReducer from "./features/usersSlice";
 import pointPageFilterReducer from "./features/pointPageFilterSlice";
-import subtaskReducer from './features/subTaskSlice';
+import subtaskReducer from "./features/subTaskSlice";
 import timeLogHistoryReducer from "./features/timeLogHistorySlice";
-import tasksReducer from './features/tasksSlice';
+import tasksReducer from "./features/tasksSlice";
 import errorSlice from "./features/errorSlice";
 import filterOptionReducer from "./features/filterOptionSlice";
 import saleRiskAnalysisReducer from './features/saleRiskAnalysisSlice';
+import PmIncentiveSliceReducer from "./features/Pm-Sales/pmIncentiveSlice";
 
 export const store = configureStore({
     reducer: {
@@ -25,13 +26,14 @@ export const store = configureStore({
         timeLogHistory: timeLogHistoryReducer,
         tasks: tasksReducer,
         filterOptions: filterOptionReducer,
-        error: errorSlice
+        error: errorSlice,
+        pmIncentive: PmIncentiveSliceReducer,
     },
 
-   // serializableCheck: false,
+    // serializableCheck: false,
 
-   middleware: (getDefaultMiddleware) =>
-    getDefaultMiddleware().concat(apiSlice.middleware),
+    middleware: (getDefaultMiddleware) =>
+        getDefaultMiddleware().concat(apiSlice.middleware),
     serializableCheck: false,
     devTools: true,
 });

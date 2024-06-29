@@ -1,0 +1,95 @@
+.coming-soon-container {
+    background-color: #E1F3FF;
+    min-height: 70vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.coming-soon-content {
+    color: #000000;
+    text-align: center;
+}
+
+.coming-soon-title,
+.coming-soon-text,
+.coming-soon-subtext {
+    margin-bottom: 1rem;
+}
+
+.coming-soon-title {
+    font-weight: bold;
+    margin-bottom: 1rem;
+}
+
+.coming-soon-text {
+    margin-bottom: 2rem;
+}
+
+.divider-container {
+    display: flex;
+    justify-content: center;
+}
+
+.divider {
+    width: 2.5rem;
+    height: 0.25rem;
+    background-color: #000000;
+    margin-bottom: 0.5rem;
+}
+
+@media (min-width: 768px) {
+    .coming-soon-title {
+        font-size: 3rem;
+    }
+
+    .coming-soon-text {
+        font-size: 1.125rem;
+    }
+
+    .coming-soon-subtext {
+        font-size: 0.875rem;
+    }
+}
+
+@media (min-width: 1024px) {
+    .coming-soon-title {
+        font-size: 4rem;
+    }
+
+    .coming-soon-text {
+        font-size: 1.25rem;
+    }
+
+    .coming-soon-subtext {
+        font-size: 1rem;
+    }
+}
+
+@media (min-width: 1280px) {
+    .coming-soon-title {
+        font-size: 5rem;
+    }
+
+    .coming-soon-text {
+        font-size: 1.5rem;
+    }
+
+    .coming-soon-subtext {
+        font-size: 1.125rem;
+    }
+}
+
+@media (max-width: 767px) {
+    .coming-soon-title {
+        font-size: 2rem;
+    }
+
+    .coming-soon-text {
+        font-size: 1rem;
+    }
+
+    .coming-soon-subtext {
+        font-size: 0.75rem;
+    }
+}

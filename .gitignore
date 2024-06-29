@@ -33,6 +33,11 @@ storage/reviewed
 *.bak
 .prettierrc.json
 
+# Fot testing
+docker-compose.yml
+sonarqube-scanner.js
+.scannerwork
+
 __TODO__
 package-lock.json
 

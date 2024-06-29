@@ -43,6 +43,10 @@ export const apiSlice = createApi({
         "GET_SALES_RISK_ANALYSIS_INPUT_FIELDS",
         "ALL_REVISION",
         "EVALUATION_HISTORY",
+        "GET_PM_POINT_FACTORS",
+        "GET_INCENTIVE_FACTORS",
+        "GET_ACHIEVED_INCENTIVE",
+        "GET_INCENTIVE_HELD_AMOUNT",
     ],
     endpoints: () => ({}),
 });

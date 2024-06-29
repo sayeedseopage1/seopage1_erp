@@ -21,10 +21,30 @@ export const isStateAllHaveValue = (objectState) => {
 export const isArrayObjectEmpty = (arr, skipKey) => {
   return arr.some(obj => {
     return Object.entries(obj).some(([key, value]) => {
-      if (skipKey?.length && skipKey.includes(key)) {
-        return false; // Skip this key
+      if(typeof skipKey === "string"){
+        if (skipKey && key === skipKey) {
+          return false; // Skip this key
+      }
+      } else {
+        if (skipKey?.length && skipKey.includes(key)) {
+          return false; // Skip this key
+        }
       }
       return value === null || value === undefined || value === "";
     });
   });
+   
 };
+
+
+
+// export const isArrayObjectEmpty = (arr, skipKey) => {
+//     return arr.some((obj) => {
+//         return Object.entries(obj).some(([key, value]) => {
+//             if (skipKey && key === skipKey) {
+//                 return false; // Skip this key
+//             }
+//             return value === null || value === undefined || value === "";
+//         });
+//     });
+// };

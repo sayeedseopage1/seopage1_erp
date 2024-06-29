@@ -12,3 +12,7 @@ import './digital-marketing/DmWonDeals/main';
 
 // Sales Risk Analysis
 import './SalesRiskAnalysis/main';
+// pm sales
+import './Pm-Sales/PointFactors/main'
+import './Pm-Sales/Points/main'
+import './Pm-Sales/PmIncentive/main'

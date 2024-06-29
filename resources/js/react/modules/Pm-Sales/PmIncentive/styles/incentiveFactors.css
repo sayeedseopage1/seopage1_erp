@@ -1,0 +1,316 @@
+.incentive_criteria_factor_title {
+    background: #1492E6;
+    color: #FFF;
+    font-family: Poppins, sans-serif;
+    font-size: 24px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: normal;
+    text-transform: uppercase;
+    text-align: center;
+    padding: 19px;
+    margin-bottom: 28px;
+}
+
+.incentive_criteria_factor_note {
+    border-radius: 9px;
+    border: 1px dashed rgba(20, 185, 106, 0.50);
+    background: rgba(20, 185, 106, 0.05);
+    padding: 17px;
+    color: #14B96A;
+    font-family: Poppins, sans-serif;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+    text-align: center;
+    margin-bottom: 24px;
+    max-width: 32%;
+    width: 100%;
+}
+
+.incentive_criteria_factors {
+    display: flex;
+    gap: 15px;
+    width: 100%;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.criteria_card {
+    border-radius: 11px;
+    background: #BCE4FF;
+    padding: 20px;
+    max-width: 32%;
+    width: 100%;
+}
+
+.criteria_card_title {
+    color: #000;
+    font-family: Poppins, sans-serif;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: normal;
+    text-decoration-line: underline;
+    text-align: center;
+}
+
+.factor_header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    margin-bottom: 10px;
+}
+
+.factor_header div {
+    color: #000;
+    font-family: Poppins;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+}
+
+.factor_body {
+    border-radius: 10px;
+    background: #A3D1F0;
+    padding: 10px;
+    min-height: 300px;
+}
+
+.factor_card {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    align-items: center;
+}
+
+.factor_title,
+.factor_description {
+    color: #000;
+    font-family: Poppins, sans-serif;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+    /* border: 1px solid #B5E1FF; */
+}
+
+.factor_description {
+    text-align: right;
+}
+
+.factor_card> :nth-child(1) {
+    border-right: 1px solid #B5E1FF;
+    border-bottom: 1px solid #B5E1FF;
+    padding: 11px 5px;
+}
+
+.factor_card> :nth-child(2) {
+    border-bottom: 1px solid #B5E1FF;
+    padding: 11px 5px;
+}
+
+.factor_card:last-child> :nth-child(1),
+.factor_card:last-child> :nth-child(2) {
+    border-bottom: none !important;
+}
+
+
+.criteria_factor_notes_wrapper {
+    display: flex;
+    gap: 15px;
+    width: 100%;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.criteria_card_divider {
+    border: 1px solid #55BBFF;
+    border-bottom: none;
+}
+
+
+@media only screen and (max-width: 1600px) {
+    .criteria_card {
+        max-width: 49%;
+    }
+
+    .incentive_criteria_factor_note {
+        max-width: 49%;
+        font-size: 14px;
+    }
+
+    .factor_title,
+    .factor_description {
+        font-size: 14px;
+    }
+
+    .factor_header div {
+        font-size: 14px;
+    }
+
+}
+
+@media only screen and (max-width: 1060px) {
+    .criteria_card {
+        max-width: 48%;
+    }
+
+    .criteria_card_title {
+        font-size: 14px;
+    }
+
+    .incentive_criteria_factor_note {
+        max-width: 48%;
+        font-size: 14px;
+    }
+
+    .factor_title,
+    .factor_description {
+        font-size: 14px;
+    }
+
+    .factor_header div {
+        font-size: 14px;
+    }
+
+    .incentive_criteria_factor_title {
+        font-size: 20px;
+    }
+}
+
+@media only screen and (max-width: 800px) {
+    .criteria_card {
+        max-width: 100%;
+    }
+
+    .incentive_criteria_factor_note {
+        max-width: 100%;
+        font-size: 12px;
+    }
+
+    .factor_title,
+    .factor_description {
+        font-size: 12px;
+    }
+
+    .factor_header div {
+        font-size: 12px;
+    }
+
+    .incentive_criteria_factor_title {
+        font-size: 18px;
+    }
+}
+
+
+/************************* old design css **************************************/
+.incentive_factors_title {
+    color: #000;
+    font-size: 32px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: normal;
+    text-align: center;
+    margin-bottom: 35px;
+}
+
+.incentive_factors_wrapper {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 16px;
+}
+
+.incentive_factors_bottom {
+    border-radius: 12px;
+    background: #BCE4FF;
+    padding: 16px 24px;
+    display: flex;
+    justify-content: space-between;
+    gap: 15px;
+    margin-top: 24px;
+}
+
+.incentive_factors_bottom_text {
+    max-width: 570px;
+    display: flex;
+    color: #000;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+}
+
+.incentive_factors_bottom_text span {
+    color: #f66;
+}
+
+.incentive_factors_card {
+    border-radius: 12px;
+    background: #BCE4FF;
+    padding: 24px;
+}
+
+.incentive_factors_card_header {
+    border-left: 4px solid #1492E6;
+    padding-left: 11px;
+}
+
+.incentive_factors_card_title {
+    color: #000;
+    font-family: Poppins, sans-serif;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+    margin-bottom: 20px;
+}
+
+.incentive_factors_card_list li {
+    list-style-type: disc;
+    margin-left: 22px;
+    margin-bottom: 15px;
+    color: #000;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+}
+
+/* ##################################################
+                    responsive styles  
+ ####################################################*/
+
+@media only screen and (min-width: 577px) and (max-width: 1400px) {
+    .incentive_factors_wrapper {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+@media only screen and (max-width: 768px) {
+    .incentive_factors_bottom {
+        flex-direction: column;
+    }
+
+    .incentive_factors_bottom .custom_divider {
+        display: none;
+    }
+
+    .incentive_factors_title {
+        font-size: 22px;
+        margin-bottom: 26px;
+    }
+}
+
+@media only screen and (max-width: 576px) {
+    .incentive_factors_wrapper {
+        grid-template-columns: repeat(1, minmax(0, 1fr));
+    }
+
+    .incentive_factors_title {
+        font-size: 18px;
+        margin-bottom: 26px;
+    }
+}

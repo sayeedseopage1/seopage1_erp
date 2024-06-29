@@ -1,0 +1,100 @@
+import * as React from 'react';
+import PropTypes from 'prop-types';
+
+
+const JqueryDateRangePicker = ({
+    setStartDate,
+    setEndDate,
+    onApply
+}) => {
+
+    const handleTimePicker = () => {
+        if (window.$) {
+            let $ = window.$;
+            let moment = window.moment;
+
+            $(function () {
+                // let start = moment().subtract(23, 'months').startOf('month');
+                let start = moment().startOf('year')
+                let end = moment(); // Set end date to today
+
+                setStartDate(start.format());
+                setEndDate(end.format());
+
+
+                function cb(start, end) {
+                    setStartDate(start.format('YYYY-MM-DD'));
+                    setEndDate(end.format('YYYY-MM-DD'));
+                    onApply(start.format('YYYY-MM-DD'), end.format('YYYY-MM-DD'));
+                    $('#jqueryDatePicker div.sp1__jquery_date_text')
+                        .html(start.format('MMMM D, YYYY') + ' to ' + end.format('MMMM D, YYYY'));
+                }
+
+                $('#jqueryDatePicker').daterangepicker({
+                    locale: {
+                        format: 'MMMM D, YYYY',
+                        customRangeLabel: "Custom Range",
+                        separator: " To ",
+                        applyLabel: "Apply",
+                        cancelLabel: "Cancel",
+                        daysOfWeek: [
+                            'Su', 'Mo', 'Tu',
+                            'We', 'Th', 'Fr',
+                            'Sa'
+                        ],
+                        monthNames: ['January', 'February',
+                            "March", "April",
+                            "May",
+                            "June", "July",
+                            "August",
+                            "September", "October",
+                            "November", "December"
+                        ],
+                        firstDay: parseInt("1")
+                    },
+                    startDate: start, // Default start date set to the beginning of the year
+                    endDate: end, // Default end date set to today
+                    datePicker: true,
+                    ranges: {
+                        // 'Today': [moment(), moment()],
+                        // 'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+                        // 'Last 7 Days': [moment().subtract(6, 'days'), moment()],
+                        // 'Last 30 Days': [moment().subtract(29, 'days'), moment()],
+                        'This Month': [moment().startOf('month'), moment().endOf('month')],
+                        'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')],
+                        'Last 3 Months': [moment().subtract(3, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')],
+                        'This Year': [moment().startOf('year'), moment().endOf('year')],
+                        'Last 12 Months': [moment().subtract(12, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')],
+                        'Last Year': [moment().subtract(1, 'year').startOf('year'), moment().subtract(1, 'year').endOf('year')],
+                        'Last 2 Years': [moment().subtract(2, 'year').startOf('year'), moment().subtract(1, 'year').endOf('year')]
+                    }
+                }, cb);
+
+                cb(start, end);
+
+            });
+        }
+    }
+
+    React.useEffect(() => {
+        handleTimePicker();
+    }, []);
+
+
+    return (
+        <div id="jqueryDatePicker" className='sp1__jquery_date_picker' style={{ position: 'relative' }}>
+            <div className='sp1__jquery_date_btn'>
+                <i className="fa-solid fa-calendar-days"></i>
+            </div>
+            <div className='sp1__jquery_date_text'></div>
+        </div>
+    )
+}
+
+export default JqueryDateRangePicker;
+
+JqueryDateRangePicker.propTypes = {
+    setStartDate: PropTypes.func,
+    setEndDate: PropTypes.func,
+    onApply: PropTypes.func
+}

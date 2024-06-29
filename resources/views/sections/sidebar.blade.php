@@ -446,15 +446,43 @@
                         </a>
                     </li>
                 @endif
-                @if (Auth::user()->role_id == 1 || Auth::user()->role_id == 4 || Auth::user()->role_id == 8)
-                    <x-menu-item class="policy-menu" icon="chat-left-text" :text="__('PM Payment History')" :count="$unreadMessagesCount"
-                        :link="route('pm-payment-history.index')">
-                        <x-slot name="iconPath">
-                            <path
-                                d="M5.757 1.071a.5.5 0 0 1 .172.686L3.383 6h9.234L10.07 1.757a.5.5 0 1 1 .858-.514L13.783 6H15a1 1 0 0 1 1 1v1a1 1 0 0 1-1 1v4.5a2.5 2.5 0 0 1-2.5 2.5h-9A2.5 2.5 0 0 1 1 13.5V9a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h1.217L5.07 1.243a.5.5 0 0 1 .686-.172zM2 9v4.5A1.5 1.5 0 0 0 3.5 15h9a1.5 1.5 0 0 0 1.5-1.5V9H2zM1 7v1h14V7H1zm3 3a.5.5 0 0 1 .5.5v3a.5.5 0 0 1-1 0v-3A.5.5 0 0 1 4 10zm2 0a.5.5 0 0 1 .5.5v3a.5.5 0 0 1-1 0v-3A.5.5 0 0 1 6 10zm2 0a.5.5 0 0 1 .5.5v3a.5.5 0 0 1-1 0v-3A.5.5 0 0 1 8 10zm2 0a.5.5 0 0 1 .5.5v3a.5.5 0 0 1-1 0v-3a.5.5 0 0 1 .5-.5zm2 0a.5.5 0 0 1 .5.5v3a.5.5 0 0 1-1 0v-3a.5.5 0 0 1 .5-.5z">
-                            </path>
-                        </x-slot>
-                    </x-menu-item>
+                @if(Auth::user()->role_id == 1 || Auth::user()->role_id == 4 || Auth::user()->role_id == 8)
+                <x-menu-item icon="chat-left-text" :text="'PM Performance'">
+                    <x-slot name="iconPath">
+                        <path d="M5.757 1.071a.5.5 0 0 1 .172.686L3.383 6h9.234L10.07 1.757a.5.5 0 1 1 .858-.514L13.783 6H15a1 1 0 0 1 1 1v1a1 1 0 0 1-1 1v4.5a2.5 2.5 0 0 1-2.5 2.5h-9A2.5 2.5 0 0 1 1 13.5V9a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h1.217L5.07 1.243a.5.5 0 0 1 .686-.172zM2 9v4.5A1.5 1.5 0 0 0 3.5 15h9a1.5 1.5 0 0 0 1.5-1.5V9H2zM1 7v1h14V7H1zm3 3a.5.5 0 0 1 .5.5v3a.5.5 0 0 1-1 0v-3A.5.5 0 0 1 4 10zm2 0a.5.5 0 0 1 .5.5v3a.5.5 0 0 1-1 0v-3A.5.5 0 0 1 6 10zm2 0a.5.5 0 0 1 .5.5v3a.5.5 0 0 1-1 0v-3A.5.5 0 0 1 8 10zm2 0a.5.5 0 0 1 .5.5v3a.5.5 0 0 1-1 0v-3a.5.5 0 0 1 .5-.5zm2 0a.5.5 0 0 1 .5.5v3a.5.5 0 0 1-1 0v-3a.5.5 0 0 1 .5-.5z"></path>
+                    </x-slot>
+                    <div class="accordionItemContent pb-2">
+                        <!-- NAV ITEM - CUSTOMERS COLLAPASE MENU -->
+                        <x-sub-menu-item :link="route('pm-payment-history.index')" :text="__('PM Payment History')" :count="$unreadMessagesCount"/>
+                        <div class="accordionItemContent pb-0">
+                            <div class="accordion sidebar_sub_item" id="accordionExample">
+                                <div class="accordion-item sidebar_sub_item_accordion_item">
+                                    <div class="accordion-header" id="headingOne">
+                                        <div class="accordion-button sidebar_sub_item_btn d-flex" type="button" data-toggle="collapse" data-target="#collapse1" aria-expanded="true" aria-controls="collapse1">
+                                            Points
+                                            <i class="fa fa-angle-right" aria-hidden="true" style="margin-left: auto; margin-right: 5px; font-size: 16px;"></i>
+                                        </div>
+                                    </div>
+                                    <div id="collapse1" class="accordion-collapse collapse" aria-labelledby="headingOne" data-parent="#accordionExample">
+                                        <div class="accordion-body sidebar_sub_item_body">
+                                            @if(Auth::user()->role_id == 1 || Auth::user()->role_id == 4)
+                                            <a href="{{route('project.manager.point.factors')}}" class="text-lightest">
+                                                Point Criteria
+                                            </a>
+                                            @endif
+                                            <a href="{{route('project.manager.points')}}" class="text-lightest">
+                                                Point History
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        {{-- <x-sub-menu-item :link="route('project.manager.point.factors')" :text="'Point Factors'" />
+                        <x-sub-menu-item :link="route('project.manager.points')" :text="'Points'" /> --}}
+                        <x-sub-menu-item :link="route('project.manager.incentives')" :text="'Incentive'" />
+                    </div>
+                </x-menu-item>
                 @endif
                 @if (Auth::user()->role_id == 1 || Auth::user()->role_id == 7 || Auth::user()->role_id == 8)
                     <x-menu-item class="policy-menu" icon="chat-left-text" :text="__('Policy')" :count="$unreadMessagesCount"

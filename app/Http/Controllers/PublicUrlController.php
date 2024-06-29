@@ -27,6 +27,7 @@ use App\Http\Requests\Admin\Contract\SignRequest;
 use App\Models\Project;
 use App\Events\SignedEvent;
 use App\Events\ProjectSignedEvent;
+use App\Helper\ProjectManagerPointLogic;
 use Notification;
 use App\Notifications\ClientDeliverableSignNotification;
 use App\Models\User;
@@ -130,31 +131,36 @@ class PublicUrlController extends Controller
 
         $sign->signature = $imageName;
         $sign->save();
+
+        // Project Manager Point Distribution ( Signing the deliverables )
+        if($released_time = Project::with('deal')->find($id)->deal->released_at ?? null) ProjectManagerPointLogic::distribute(1, $id, Carbon::parse($released_time)->diffInHours(Carbon::now()));
+        
+
         if($request->email != 'rajat07me@gmail.com' && $request->email != 'rajat07me@seopage1.net')
         {
            // dd("true");
             $project= Project::where('id',$this->project->id)->first();
-        $deal= Deal::where('id',$project->deal_id)->first();
-        $client = new ClientForm();
-        $client->deal_id=$project->deal_id;
+            $deal= Deal::where('id',$project->deal_id)->first();
+            $client = new ClientForm();
+            $client->deal_id=$project->deal_id;
 
-        $client->client_email= $request->email;
-        $client->client_phone= $request->phone_no;
-        $client->client_whatsapp= $request->phone_no;
+            $client->client_email= $request->email;
+            $client->client_phone= $request->phone_no;
+            $client->client_whatsapp= $request->phone_no;
 
-        $client->save();
-        $deal_id= Deal::find($client->deal_id);
-        //dd($deal);
+            $client->save();
+            $deal_id= Deal::find($client->deal_id);
+            //dd($deal);
 
-        $deal_id->submission_status= 'Submitted';
-        $deal_id->save();
-        $usr= User::where('id',$deal->client_id)->first();
-        //dd($usr);
-        $user=User::find($usr->id);
-        $user->mobile= $request->client_phone;
-        $user->email= $request->email;
+            $deal_id->submission_status= 'Submitted';
+            $deal_id->save();
+            $usr= User::where('id',$deal->client_id)->first();
+            //dd($usr);
+            $user=User::find($usr->id);
+            $user->mobile= $request->client_phone;
+            $user->email= $request->email;
 
-        $user->save();
+            $user->save();
 
         }
         $actions = PendingAction::where('code','SDCA')->where('past_status',0)->where('project_id',$sign->project_id)->get();
