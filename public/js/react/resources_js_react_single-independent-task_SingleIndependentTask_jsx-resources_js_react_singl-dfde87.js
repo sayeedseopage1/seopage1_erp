@@ -14724,7 +14724,7 @@ var ExpiredNotifyModalForNewEmployee = function ExpiredNotifyModalForNewEmployee
     isPendingModalOpen = _useState2[0],
     setIsPendingModalOpen = _useState2[1];
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(function () {
-    if (timeLeft <= 0 && expireDateForTrainer !== null) {
+    if (timeLeft < 0 && expireDateForTrainer !== null) {
       setShowExpirationNotifyModal(true);
     }
   }, [timeLeft]);

@@ -10,7 +10,7 @@ const ExpiredNotifyModalForNewEmployee = ({
 }) => {
     const [isPendingModalOpen, setIsPendingModalOpen] = useState(false);
     useEffect(() => {
-        if (timeLeft <= 0 && expireDateForTrainer !== null) {
+        if (timeLeft < 0 && expireDateForTrainer !== null) {
             setShowExpirationNotifyModal(true);
         }
     }, [timeLeft]);
