@@ -47,21 +47,21 @@ export const user_profile = {
         },
         {
             id: 2,
+            name: "General Orientation Exam 1",
+            completed: "70%",
+            iso: null,
+        },
+        {
+            id: 3,
             name: "US English 2",
             completed: "60%",
             iso: "US",
         },
         {
-            id: 3,
+            id: 4,
             name: "UK English 1",
             completed: "30%",
-            iso: "UK",
-        },
-        {
-            id: 4,
-            name: "General Orientation Exam 1",
-            completed: "70%",
-            iso: null,
+            iso: "GB",
         },
     ],
     top_skills: [
