@@ -2168,9 +2168,9 @@ class HelperPendingActionController extends AccountBaseController
                 if($evaluation->user_status == 'PM'){
                     $action->code = 'NDPM';
                     $action->serial = 'NDPM'.'x'.$key;
-                    $action->item_name= 'New pm\'s performance evaluation!';
-                    $action->heading= 'New pm\'s performance evaluation!';
-                    $action->message = 'Fill out initial performance evaluation form for the PM <a href="'.route('employees.show',$new_pm->id).'">'.$new_pm->name.'</a>!';
+                    $action->item_name= 'Performance evaluation for new Project Manager!';
+                    $action->heading= 'Performance evaluation for new Project Manager!';
+                    $action->message = 'Fill out the initial performance evaluation form for the new Project Manager <a href="'.route('employees.show',$new_pm->id).'">'.$new_pm->name.'</a>!';
                 }elseif($evaluation->user_status == 'LD'){
                     $action->code = 'NLDE';
                     $action->serial = 'NLDE'.'x'.$key;
@@ -2239,9 +2239,9 @@ class HelperPendingActionController extends AccountBaseController
                 if($evaluation->user_status == 'PM'){
                     $action->code = 'TLSNPM';
                     $action->serial = 'TLSNPM'.'x'.$key;
-                    $action->item_name= 'New pm\'s evaluation!';
-                    $action->heading= 'Team Lead '.$team_lead->name.' has submitted evaluations for New PM '.$new_pm->name.'!';
-                    $action->message = 'Team Lead <a href="'.route('employees.show',$team_lead->id).'">'.$team_lead->name.'</a> has evaluated New PM <a href="'.route('employees.show',$new_pm->id).'">'.$new_pm->name.'</a> on '.$formatted_date_time.'';
+                    $action->item_name= 'Team leader\'s evaluation report on new Project Manager!';
+                    $action->heading= 'Team leader\'s evaluation report on new Project Manager!';
+                    $action->message = 'Team Leader <a href="'.route('employees.show',$team_lead->id).'">'.$team_lead->name.'</a> has evaluated new Project Manager <a href="'.route('employees.show',$new_pm->id).'">'.$new_pm->name.'</a> on '.$formatted_date_time.'';
                 }elseif($evaluation->user_status == 'LD'){
                     $action->code = 'TLSNLD';
                     $action->serial = 'TLSNLD'.'x'.$key;
