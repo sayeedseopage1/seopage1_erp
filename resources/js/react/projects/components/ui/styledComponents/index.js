@@ -181,9 +181,9 @@ export const CardWrapper = styled.div`
   .questionAnswerDashboard{
     color: #000;
     font-family: Poppins;
-    font-size: 16px;
+    font-size: 14px;
     font-style: normal;
-    font-weight: 600;
+    font-weight: 400;
     line-height: normal;
     margin: 16px 0;
   }
@@ -272,6 +272,17 @@ export const CardWrapper = styled.div`
         width: 115px;
         height: 115px;
       }
+    }
+
+    .projectDashboardProgressLoader{
+        height: 150px !important;
+        width: 150px !important;
+        border-radius: 50% !important;
+
+        @media (max-width: 768px) {
+          height: 115px !important;
+          width: 100% !important;
+        }
     }
   }
 

@@ -4,11 +4,12 @@ import PropTypes from "prop-types";
 // style
 import style from "./styles/dashboardTaskAndMileStoneSection.module.css";
 
-// components - custom
+// components - styled components
 import { SectionContainer } from "../ui/styledComponents";
 
 // components - ui - shared
 import DashboardCardTitle from "../ui/DashboardCardTitle/DashboardCardTitle";
+import SingleButton from "../ui/CustomButton/SingleButton";
 
 // components - table
 import DashboardDataTable from "../Table/DashboardDataTable";
@@ -17,6 +18,10 @@ import { DashboardDataTableMilestoneColumns } from "../Table/DashboardDataTableM
 
 // context
 import { ProjectDashboardContext } from "../../context/ProjectDashboardProvider";
+
+
+// loader
+import Loader from "../../../global/Loader";
 
 /**
  * Dashboard Task And Milestone Section
@@ -37,14 +42,27 @@ const DashboardTaskAndMileStoneSection = () => {
         refetchProjectMilestone,
     } = useContext(ProjectDashboardContext);
 
-
-    console.log(projectTaskList)
-    console.log(projectMilestoneList)
+    console.log(projectTaskList);
+    console.log(projectMilestoneList);
 
     return (
         <div className={`${style.dashboardTaskAndMileStoneSection} mb-4`}>
             <SectionContainer>
-                <DashboardCardTitle title="Task List" isBorderUse={false} />
+                <div className="d-flex justify-content-between align-items-center">
+                    <DashboardCardTitle title="Task List" isBorderUse={false} />
+                    <SingleButton
+                        label={
+                            isProjectTaskListLoading ? (
+                                <Loader title="Refreshing" />
+                            ) : (
+                                "Refresh"
+                            )
+                        }
+                        className="mr-0"
+                        onClick={() => refetchProjectTaskList()}
+                        type="primary"
+                    />
+                </div>
                 <div className="sp1_tlr_container">
                     <div className="sp1_tlr_tbl_container mx-0 py-3">
                         {/* Dashboard Task Table */}
@@ -58,10 +76,24 @@ const DashboardTaskAndMileStoneSection = () => {
                 </div>
             </SectionContainer>
             <SectionContainer>
-                <DashboardCardTitle
-                    title="Project Milestones"
-                    isBorderUse={false}
-                />
+                <div className="d-flex justify-content-between align-items-center">
+                    <DashboardCardTitle
+                        title="Project Milestones"
+                        isBorderUse={false}
+                    />
+                    <SingleButton
+                        label={
+                            isProjectMilestoneLoading ? (
+                                <Loader title="Refreshing" />
+                            ) : (
+                                "Refresh"
+                            )
+                        }
+                        className="mr-0"
+                        onClick={() => refetchProjectMilestone()}
+                        type="primary"
+                    />
+                </div>
                 <div className="sp1_tlr_container">
                     <div className="sp1_tlr_tbl_container mx-0 py-3">
                         {/* Dashboard Project Milestones Table */}

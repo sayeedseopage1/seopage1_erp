@@ -211,7 +211,7 @@ const DashboardProjectInfoHourlySection = ({ projectData, isLoading }) => {
                                 loaderInformation={{
                                     number: 1,
                                     height: 21,
-                                    parentClassName: "w-100 py-3",
+                                    parentClassName: "w-100",
                                 }}
                                 className="py-3"
                             />

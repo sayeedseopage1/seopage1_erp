@@ -1,8 +1,13 @@
 import React from "react";
 import PropTypes from "prop-types";
+
+// style
+import style from "../sections/styles/dashboardHeaderSection.module.css";
+
+// ui components
 import Button from "../ui/customComponents/Button/Button";
 
-const PageNavigateButtons = ({ navigateData, style, className }) => {
+const PageNavigateButtons = ({ navigateData, className = "" }) => {
     return (
         <div className={`${className}`}>
             <Button
@@ -31,6 +36,5 @@ export default PageNavigateButtons;
 
 PageNavigateButtons.propTypes = {
     navigateData: PropTypes.object,
-    style: PropTypes.object,
     className: PropTypes.string,
 };

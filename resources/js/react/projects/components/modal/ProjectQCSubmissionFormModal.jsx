@@ -2,7 +2,10 @@ import React, { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 
 // Components - Styled Components
-import { ModalContentContainer } from "../ui/styledComponents";
+import {
+    ModalContentContainer,
+    SectionContentContainer,
+} from "../ui/styledComponents";
 
 // Components - Custom
 import CustomModalHeader from "../ui/CustomModalHeader/CustomModalHeader";
@@ -24,6 +27,8 @@ import { useAuth } from "../../../hooks/useAuth";
 import AuthorizeCommentView from "../shared/AuthorizeCommentView";
 import { useAuthorizeQcFormMutation } from "../../../services/api/projectApiSlice";
 import { toast } from "react-toastify";
+import DashboardCardTitle from "../ui/DashboardCardTitle/DashboardCardTitle";
+import TextLoaderDynamic from "../loader/TextLoaderDynamic";
 
 // Dummy Data
 const payloadData = {
@@ -286,12 +291,60 @@ const ProjectQCSubmissionFormModal = ({
                         <Switch.Case
                             condition={modalData?.project_qc_submission?.status}
                         >
-                            <AuthorizeCommentView
-                                comment={
-                                    modalData?.project_qc_submission
-                                        ?.admin_comment
-                                }
-                            />
+                            <SectionContentContainer
+                                color="#D8EDFC"
+                                maxHeight="35vh"
+                                className="pt-3 mt-3"
+                            >
+                                <DashboardCardTitle
+                                    title="Admin Comment"
+                                    isBorderUse={true}
+                                    borderType="dotted"
+                                    className="mb-3"
+                                />
+                                {handleLoadingComponent(
+                                    isLoading,
+                                    <TextLoaderDynamic
+                                        number={5}
+                                        widthDeference={20}
+                                        hight={16}
+                                        fullSizeCount={1}
+                                        className="mb-2"
+                                    />,
+                                    <p className="boldText">
+                                        <p className="boldText">
+                                            <Switch.Case
+                                                condition={htmlTagRegex.test(
+                                                    modalData
+                                                        ?.project_qc_submission
+                                                        ?.admin_comment
+                                                )}
+                                            >
+                                                <p
+                                                    dangerouslySetInnerHTML={{
+                                                        __html: modalData
+                                                            ?.project_qc_submission
+                                                            ?.admin_comment,
+                                                    }}
+                                                ></p>
+                                            </Switch.Case>
+                                            <Switch.Case
+                                                condition={
+                                                    !htmlTagRegex.test(
+                                                        modalData
+                                                            ?.project_qc_submission
+                                                            ?.admin_comment
+                                                    )
+                                                }
+                                            >
+                                                {modalData
+                                                    ?.project_qc_submission
+                                                    ?.admin_comment ?? "--"}
+                                            </Switch.Case>
+                                        </p>
+                                    </p>
+                                )}
+                            </SectionContentContainer>
                         </Switch.Case>
                     </Switch>
                 </ModalContentContainer>
@@ -350,13 +403,15 @@ const ProjectQCSubmissionFormModal = ({
                                         <SingleButton
                                             label={
                                                 isAuthorizeQCFormLoading &&
-                                                actionType === "deny"  ? (
+                                                actionType === "deny" ? (
                                                     <Loader title="Authorizing" />
                                                 ) : (
                                                     "Authorize"
                                                 )
                                             }
-                                            onClick={() => handleAdminComment("approve")}
+                                            onClick={() =>
+                                                handleAdminComment("approve")
+                                            }
                                             type="primary"
                                         />
                                     </Switch.Case>
@@ -373,9 +428,7 @@ const ProjectQCSubmissionFormModal = ({
                                     className=""
                                     onClick={() => handleAdminComment("deny")}
                                     type="secondary"
-                                    isDisabled={
-                                        isAuthorizeQCFormLoading
-                                    }
+                                    isDisabled={isAuthorizeQCFormLoading}
                                 />
                             </div>
                         </ModalContentContainer>

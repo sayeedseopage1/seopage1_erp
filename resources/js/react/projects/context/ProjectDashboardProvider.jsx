@@ -172,6 +172,7 @@ const ProjectDashboardProvider = ({ children }) => {
             refetchAllProjectDashboardData,
             isProjectDetailsLoading:
                 isProjectDetailsLoading || isProjectDetailsFetching,
+            // isProjectDetailsLoading: true,
             refetchProjectDetails,
             projectTaskList,
             isProjectTaskListLoading:

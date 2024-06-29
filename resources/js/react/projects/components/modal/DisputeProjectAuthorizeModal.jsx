@@ -14,7 +14,10 @@ import Loader from "../../../global/Loader";
 import { Placeholder } from "../../../global/Placeholder";
 
 // UI Components - Styled Components
-import { ModalContentContainer } from "../ui/styledComponents";
+import {
+    ModalContentContainer,
+    SectionContentContainer,
+} from "../ui/styledComponents";
 
 // Helper
 import { handleLoadingComponent, htmlTagRegex } from "../../helper";
@@ -29,6 +32,8 @@ import {
     markEmptyFieldsValidation,
 } from "../../../utils/stateValidation";
 import AuthorizeCommentView from "../shared/AuthorizeCommentView";
+import DashboardCardTitle from "../ui/DashboardCardTitle/DashboardCardTitle";
+import TextLoaderDynamic from "../loader/TextLoaderDynamic";
 
 /**
  *  Dispute Project Authorize Modal
@@ -297,14 +302,57 @@ const DisputeProjectAuthorizeModal = ({
                             modalData?.projectData?.dispute_admin_comment
                         }
                     >
-                        <ModalContentContainer className="px-0">
-                            <AuthorizeCommentView
-                                comment={
-                                    modalData?.projectData
-                                        ?.dispute_admin_comment
-                                }
+                        <SectionContentContainer
+                            color="#D8EDFC"
+                            maxHeight="35vh"
+                            className="pt-3 mt-3"
+                        >
+                            <DashboardCardTitle
+                                title="Admin Comment"
+                                isBorderUse={true}
+                                borderType="dotted"
+                                className="mb-3"
                             />
-                        </ModalContentContainer>
+                            {handleLoadingComponent(
+                                isLoading,
+                                <TextLoaderDynamic
+                                    number={5}
+                                    widthDeference={20}
+                                    hight={16}
+                                    fullSizeCount={1}
+                                    className="mb-2"
+                                />,
+                                <p className="boldText">
+                                    <p className="boldText">
+                                        <Switch.Case
+                                            condition={htmlTagRegex.test(
+                                                modalData?.projectData
+                                                    ?.dispute_admin_comment
+                                            )}
+                                        >
+                                            <p
+                                                dangerouslySetInnerHTML={{
+                                                    __html: modalData
+                                                        ?.projectData
+                                                        ?.dispute_admin_comment,
+                                                }}
+                                            ></p>
+                                        </Switch.Case>
+                                        <Switch.Case
+                                            condition={
+                                                !htmlTagRegex.test(
+                                                    modalData?.projectData
+                                                        ?.dispute_admin_comment
+                                                )
+                                            }
+                                        >
+                                            {modalData?.projectData
+                                                ?.dispute_admin_comment ?? "--"}
+                                        </Switch.Case>
+                                    </p>
+                                </p>
+                            )}
+                        </SectionContentContainer>
                     </Switch.Case>
                     {/* Buttons */}
                     <Switch.Case

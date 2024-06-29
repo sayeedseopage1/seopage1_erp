@@ -28,15 +28,12 @@ import style from "./styles/dashboardProjectInfoFixedSection.module.css";
  *
  */
 
-const DashboardProjectInfoFixedSection = ({
-    projectData,
-    isProjectDetailsLoading,
-}) => {
+const DashboardProjectInfoFixedSection = ({ projectData, isLoading }) => {
     const [projectBudgetData, setProjectBudgetData] =
         useState(ProjectBudgetData);
 
     useEffect(() => {
-        if (projectData && !isProjectDetailsLoading) {
+        if (projectData && !isLoading) {
             const updateProjectBudget = projectBudgetData.project_budget.map(
                 (budget) => {
                     if (budget.key === "project_budget") {
@@ -156,7 +153,7 @@ const DashboardProjectInfoFixedSection = ({
                 hours_logged: hoursLogged,
             });
         }
-    }, [projectData, isProjectDetailsLoading, ProjectBudgetData]);
+    }, [projectData, isLoading, ProjectBudgetData]);
 
     return (
         <SectionWrapper className="my-4 row m-0">
@@ -166,7 +163,7 @@ const DashboardProjectInfoFixedSection = ({
             >
                 <DashboardClientAndPMCard
                     projectData={projectData}
-                    isProjectDetailsLoading={isProjectDetailsLoading}
+                    isLoading={isLoading}
                 />
             </div>
             {/* End Client And PM Card */}
@@ -177,7 +174,7 @@ const DashboardProjectInfoFixedSection = ({
                 <DashboardProgress
                     projectData={projectData}
                     style={style}
-                    isProjectDetailsLoading={isProjectDetailsLoading}
+                    isLoading={isLoading}
                 />
             </div>
             {/* End Project Progress */}
@@ -201,6 +198,12 @@ const DashboardProjectInfoFixedSection = ({
                                     icon={budget?.icon}
                                     currency={budget?.currency}
                                     currency_symbol={budget?.currency_symbol}
+                                    isLoading={isLoading}
+                                    loaderInformation={{
+                                        number: 1,
+                                        height: 21,
+                                        parentClassName: "w-100",
+                                    }}
                                 />
                             ))}
                         </div>
@@ -223,6 +226,12 @@ const DashboardProjectInfoFixedSection = ({
                                     icon={budget?.icon}
                                     currency={budget?.currency}
                                     currency_symbol={budget?.currency_symbol}
+                                    isLoading={isLoading}
+                                    loaderInformation={{
+                                        number: 1,
+                                        height: 21,
+                                        parentClassName: "w-100",
+                                    }}
                                 />
                             ))}
                         </div>
@@ -251,6 +260,12 @@ const DashboardProjectInfoFixedSection = ({
                                 amount={logInfo?.time}
                                 icon={logInfo?.icon}
                                 className="py-3"
+                                isLoading={isLoading}
+                                loaderInformation={{
+                                    number: 1,
+                                    height: 21,
+                                    parentClassName: "w-100",
+                                }}
                             />
                         </div>
                     ))}
@@ -274,6 +289,12 @@ const DashboardProjectInfoFixedSection = ({
                                 icon={moneyInfo?.icon}
                                 currency={moneyInfo?.currency}
                                 currency_symbol={moneyInfo?.currency_symbol}
+                                isLoading={isLoading}
+                                loaderInformation={{
+                                    number: 1,
+                                    height: 21,
+                                    parentClassName: "w-100",
+                                }}
                             />
                         ))}
                     </div>
@@ -288,5 +309,5 @@ export default DashboardProjectInfoFixedSection;
 
 DashboardProjectInfoFixedSection.propTypes = {
     projectData: PropTypes.object.isRequired,
-    isProjectDetailsLoading: PropTypes.bool.isRequired,
+    isLoading: PropTypes.bool.isRequired,
 };

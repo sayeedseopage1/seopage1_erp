@@ -34,7 +34,6 @@ const DashboardProjectGuideAndChallengeSection = ({
     isLoading,
     projectData,
 }) => {
-
     return (
         <div
             className={`${style.dashboardProjectGuideAndChallengeSection} mb-4`}
@@ -52,10 +51,7 @@ const DashboardProjectGuideAndChallengeSection = ({
                 {handleLoadingComponent(
                     isLoading,
                     // This will be shown when the data is loading
-                    <SectionContentContainer
-                        color="#FFF"
-                        maxHeight="35vh"
-                    >
+                    <SectionContentContainer color="#FFF" maxHeight="35vh">
                         <TextLoaderDynamic
                             number={4}
                             widthDeference={20}
@@ -119,7 +115,8 @@ const DashboardProjectGuideAndChallengeSection = ({
                         // This will be shown when the data is loaded
                         <p>
                             {projectData?.project_challenges ??
-                                projectData?.comments}
+                                projectData?.comments ??
+                                "N/A"}
                         </p>
                     )}
                 </SectionContentContainer>

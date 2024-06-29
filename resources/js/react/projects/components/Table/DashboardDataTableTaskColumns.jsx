@@ -5,7 +5,6 @@ import DashboardProgressStatus from "../ui/DashboardProgressStatus/DashboardProg
 import { ProjectProgressStatus } from "../../constants";
 import dayjs from "dayjs";
 
-
 export const DashboardDataTableTaskColumns = [
     {
         id: "task_name",
@@ -40,9 +39,28 @@ export const DashboardDataTableTaskColumns = [
         accessorKey: "status",
         cell: ({ row }) => {
             const data = row.original;
-            const statusData = ProjectProgressStatus?.find(
-                (status) => status?.name === data?.board_column?.column_name
-            );
+            // Get status data
+            const getStatusData = () => {
+                switch (data?.board_column_id) {
+                    case 1:
+                        return ProjectProgressStatus[0];
+                    case 2:
+                        return ProjectProgressStatus[1];
+                    case 3:
+                        return ProjectProgressStatus[2];
+                    case 4:
+                        return ProjectProgressStatus[3];
+                    case 6:
+                        return ProjectProgressStatus[4];
+                    case 7:
+                        return ProjectProgressStatus[5];
+                    case 8:
+                        return ProjectProgressStatus[6];
+                    case 9:
+                        return ProjectProgressStatus[7];
+                }
+            }
+            const statusData = getStatusData()
             return (
                 <DashboardProgressStatus
                     title={statusData?.name}
@@ -61,7 +79,7 @@ export const DashboardDataTableTaskColumns = [
             return (
                 <span className="singleline-ellipsis">
                     {dayjs(data?.logged_start_time).format(
-                        "DD-MM-YYYY h:mm:ss A" 
+                        "DD-MM-YYYY h:mm:ss A"
                     ) ?? "Not started yet"}
                 </span>
             );

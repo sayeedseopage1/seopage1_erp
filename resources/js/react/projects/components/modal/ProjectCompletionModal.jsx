@@ -8,7 +8,10 @@ import CustomTextArea from "../ui/CustomTextArea/CustomTextArea";
 import SingleButton from "../ui/CustomButton/SingleButton";
 
 // Components - Styled Components
-import { ModalContentContainer } from "../ui/styledComponents";
+import {
+    ModalContentContainer,
+    SectionContentContainer,
+} from "../ui/styledComponents";
 
 // Helper
 import { handleLoadingComponent, htmlTagRegex } from "../../helper";
@@ -23,6 +26,8 @@ import AuthorizeCommentView from "../shared/AuthorizeCommentView";
 import { useAuthorizeCompletionFormMutation } from "../../../services/api/projectApiSlice";
 import { toast } from "react-toastify";
 import { useAuth } from "../../../hooks/useAuth";
+import TextLoaderDynamic from "../loader/TextLoaderDynamic";
+import DashboardCardTitle from "../ui/DashboardCardTitle/DashboardCardTitle";
 
 /**
  * Project Completion Modal
@@ -51,7 +56,7 @@ const ProjectCompletionModal = ({
     const [
         authorizeCompletionForm,
         { isLoading: isAuthorizeCompletionFormLoading },
-    ] = useAuthorizeCompletionFormMutation()
+    ] = useAuthorizeCompletionFormMutation();
 
     // Handle Admin Comment
     const handleAdminComment = async (type) => {
@@ -61,7 +66,7 @@ const ProjectCompletionModal = ({
                 project_id: modalData.id,
                 deny: type === "deny" ? null : "approve",
                 admin_comment: adminComment,
-            }
+            };
             const res = await authorizeCompletionForm(payload).unwrap();
             if (res.status === 200) {
                 if (type === "approve") {
@@ -74,7 +79,9 @@ const ProjectCompletionModal = ({
                 setActionType("");
             }
         } catch (error) {
-            toast.error("Error occurred while authorizing the project completion");
+            toast.error(
+                "Error occurred while authorizing the project completion"
+            );
         }
     };
 
@@ -1470,11 +1477,56 @@ const ProjectCompletionModal = ({
                     <Switch.Case
                         condition={modalData?.project_submission.status}
                     >
-                        <AuthorizeCommentView
-                            comment={
-                                modalData?.project_submission?.admin_comment
-                            }
-                        />
+                        <SectionContentContainer
+                            color="#D8EDFC"
+                            maxHeight="35vh"
+                            className="pt-3 mt-3"
+                        >
+                            <DashboardCardTitle
+                                title="Admin Comment"
+                                isBorderUse={true}
+                                borderType="dotted"
+                                className="mb-3"
+                            />
+                            {handleLoadingComponent(
+                                isLoading,
+                                <TextLoaderDynamic
+                                    number={5}
+                                    widthDeference={20}
+                                    hight={16}
+                                    fullSizeCount={1}
+                                    className="mb-2"
+                                />,
+
+                                <p className="boldText">
+                                    <Switch.Case
+                                        condition={htmlTagRegex.test(
+                                            modalData?.project_submission
+                                                ?.admin_comment
+                                        )}
+                                    >
+                                        <p
+                                            dangerouslySetInnerHTML={{
+                                                __html: modalData
+                                                    ?.project_submission
+                                                    ?.admin_comment,
+                                            }}
+                                        ></p>
+                                    </Switch.Case>
+                                    <Switch.Case
+                                        condition={
+                                            !htmlTagRegex.test(
+                                                modalData?.project_submission
+                                                    ?.admin_comment
+                                            )
+                                        }
+                                    >
+                                        {modalData?.project_submission
+                                            ?.admin_comment ?? "--"}
+                                    </Switch.Case>
+                                </p>
+                            )}
+                        </SectionContentContainer>
                     </Switch.Case>
                 </ModalContentContainer>
 

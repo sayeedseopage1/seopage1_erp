@@ -7,9 +7,9 @@ import Switch from "../../../global/Switch";
 // Helper
 import { htmlTagRegex } from "../../helper";
 
-const AuthorizeCommentView = ({ comment }) => {
+const AuthorizeCommentView = ({ comment , className ="" }) => {
     return (
-        <div className="d-flex">
+        <div className={`d-flex ${className}`}>
             <div className="authorizeCommentViewWrapper">
                 <h6>Authorize Comment:</h6>
                 <Switch>
@@ -34,4 +34,5 @@ export default AuthorizeCommentView;
 
 AuthorizeCommentView.propTypes = {
     comment: PropTypes.string,
+    className: PropTypes.string,
 };

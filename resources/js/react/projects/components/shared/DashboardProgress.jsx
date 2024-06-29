@@ -19,6 +19,8 @@ import DeadlineChangeHistoryModal from "../modal/DeadlineChangeHistoryModal";
 
 // Context
 import { ProjectDashboardContext } from "../../context/ProjectDashboardProvider";
+import { handleLoadingComponent } from "../../helper";
+import { Placeholder } from "../../../global/Placeholder";
 
 /**
  *
@@ -33,11 +35,11 @@ import { ProjectDashboardContext } from "../../context/ProjectDashboardProvider"
 const DashboardProgress = ({
     projectData,
     style,
-    className = ""
+    className = "",
+    isLoading,
 }) => {
-    const { projectDeadlineExtensionHistory, isProjectDetailsLoading } = useContext(
-        ProjectDashboardContext
-    );
+    const { projectDeadlineExtensionHistory, isProjectDetailsLoading } =
+        useContext(ProjectDashboardContext);
     const [isDeadlineHistoryModalOpen, setIsDeadlineHistoryModalOpen] =
         React.useState(false);
 
@@ -62,15 +64,21 @@ const DashboardProgress = ({
                 isBorderUse={true}
                 rightText={`Completed: ${projectData?.progress}%`}
                 rightTextColor={"#70CA62"}
+                isLoading={isLoading}
+                rightLoadingText="Completed: Loading..."
             />
 
             <div className="flexBetween my-3 dashboardProgressData">
-                <div className="flexColumn justify-content-between dashboardProgressDataDates">
+                <div className="flexColumn justify-content-between dashboardProgressDataDates w-50">
                     <div className="flexColumn">
                         <p>Start Date</p>
                         <span className="flexItemCenter">
-                            <LuCalendarDays className="mr-1" />
-                            {formatDate(projectData?.start_date)}
+                            <LuCalendarDays size={20} className="mr-1" />
+                            {handleLoadingComponent(
+                                isLoading,
+                                <Placeholder height="20px" width="100%" />,
+                                formatDate(projectData?.start_date)
+                            )}
                         </span>
                     </div>
                     <div className="flexColumn">
@@ -85,19 +93,30 @@ const DashboardProgress = ({
                                         : "#000000",
                             }}
                             onClick={() =>
-                                projectData?.project_deadline_extension?.length &&
+                                projectData?.project_deadline_extension
+                                    ?.length &&
+                                !isLoading &&
                                 handleModal(setIsDeadlineHistoryModalOpen, true)
                             }
                         >
-                            <LuCalendarDays className="mr-1" />{" "}
-                            {formatDate(projectData?.deadline)}
+                            <LuCalendarDays size={20} className="mr-1" />{" "}
+                            {handleLoadingComponent(
+                                isLoading,
+                                <Placeholder height="20px" width="100%" />,
+                                formatDate(projectData?.deadline)
+                            )}
                         </button>
                     </div>
                 </div>
                 {/* Dashboard Chart */}
-                <ProjectProgressChart
-                    chartData={projectData?.progress_chart_values}
-                />
+
+                {handleLoadingComponent(
+                    isLoading,
+                    <Placeholder className="projectDashboardProgressLoader" />,
+                    <ProjectProgressChart
+                        chartData={projectData?.progress_chart_values}
+                    />
+                )}
             </div>
             <div
                 className={`${style.dashboardProgressStatusContainer} mt-2 mt-md-5`}

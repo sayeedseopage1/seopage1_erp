@@ -9,6 +9,7 @@ import DashboardProjectGuideAndChallengeSection from "../components/sections/Das
 import DashboardSalesAndPMInfoSection from "../components/sections/DashboardSalesAndPMInfoSection";
 import DashboardProjectInfoFixedSection from "../components/sections/DashboardProjectInfoFixedSection";
 import DashboardProjectInfoHourlySection from "../components/sections/DashboardProjectInfoHourlySection";
+import PageNavigateButtons from "../components/shared/PageNavigateButtons";
 
 // Components - UI - Custom
 import Switch from "../../global/Switch";
@@ -18,6 +19,9 @@ import { ProjectDashboardContext } from "../context/ProjectDashboardProvider";
 
 // hooks - custom - useWhyDidYouRender
 import useWhyDidYouRender from "../../hooks/useWhyDidYouRender";
+
+// Components - styled components
+import { SectionContainer } from "../components/ui/styledComponents";
 
 const ProjectDashboard = ({ projectType }) => {
     useWhyDidYouRender("ProjectDashboard");
@@ -33,6 +37,7 @@ const ProjectDashboard = ({ projectType }) => {
         setProject_id(pathName);
     }, [pathName]);
 
+    // check if the view all view modal buttons are visible
     const isVShowAllViewModalButtons = () => {
         const buttons = projectData?.buttons;
 
@@ -108,6 +113,15 @@ const ProjectDashboard = ({ projectType }) => {
                     projectData={projectData}
                 />
                 {/* End Project Sales and PM Info Section */}
+
+                {/* Page Navigate Buttons */}
+                <SectionContainer className="mt-4 d-flex d-md-none">
+                    <PageNavigateButtons
+                        className="d-flex d-md-none"
+                        navigateData={projectData}
+                    />
+                </SectionContainer>
+                {/* End Page Navigate Buttons */}
             </Switch>
         </section>
     );

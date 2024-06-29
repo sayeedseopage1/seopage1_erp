@@ -69,73 +69,102 @@ const DashboardActionButtonSection = ({ projectData, isLoading }) => {
     return (
         <div className={`${style.dashboardActionButtonSection} mb-4`}>
             <Switch>
-                <SectionContainer
-                    className={`${style.dashboardActionLeftButton}`}
+                <Switch.Case
+                    condition={
+                        ViewModalButtons?.extend_deadline_form ||
+                        ViewModalButtons?.pm_task_guidline
+                    }
                 >
-                    <Switch.Case
-                        condition={ViewModalButtons?.extend_deadline_form}
+                    <SectionContainer
+                        className={`${style.dashboardActionLeftButton}`}
                     >
-                        <Button
-                            onClick={() =>
-                                handleModal(setIsProjectDEModalOpen, true)
-                            }
-                            className={`${style.dashboardActionButton}`}
+                        <Switch.Case
+                            condition={ViewModalButtons?.extend_deadline_form}
                         >
-                            Project Deadline Ext. Request
-                        </Button>
-                    </Switch.Case>
-                    <Switch.Case condition={ViewModalButtons?.pm_task_guidline}>
-                        <Button
-                            onClick={() =>
-                                handleModal(setIsPmTaskGuidelineModalOpen, true)
-                            }
-                            className={`${style.dashboardActionButton}`}
+                            <Button
+                                onClick={() =>
+                                    handleModal(setIsProjectDEModalOpen, true)
+                                }
+                                className={`${style.dashboardActionButton}`}
+                            >
+                                Project Deadline Ext. Request
+                            </Button>
+                        </Switch.Case>
+                        <Switch.Case
+                            condition={ViewModalButtons?.pm_task_guidline}
                         >
-                            PM Task Guideline
-                        </Button>
-                    </Switch.Case>
-                </SectionContainer>
-                <SectionContainer
-                    className={`${style.dashboardActionRightButton}`}
+                            <Button
+                                onClick={() =>
+                                    handleModal(
+                                        setIsPmTaskGuidelineModalOpen,
+                                        true
+                                    )
+                                }
+                                className={`${style.dashboardActionButton}`}
+                            >
+                                PM Task Guideline
+                            </Button>
+                        </Switch.Case>
+                    </SectionContainer>
+                </Switch.Case>
+                <Switch.Case
+                    condition={
+                        ViewModalButtons?.project_qc_data ||
+                        ViewModalButtons?.completion_form_data ||
+                        (ViewModalButtons?.see_project_dispute &&
+                            !ViewModalButtons?.project_dispute_authorization)
+                    }
                 >
-                    <Switch.Case condition={ViewModalButtons?.project_qc_data}>
-                        <Button
-                            onClick={() =>
-                                handleModal(setIsProjectQCSFModalOpen, true)
-                            }
-                            className={`${style.dashboardActionButton}`}
-                        >
-                            QC Form
-                        </Button>
-                    </Switch.Case>
-                    <Switch.Case
-                        condition={ViewModalButtons?.completion_form_data}
+                    <SectionContainer
+                        className={`${style.dashboardActionRightButton}`}
                     >
-                        <Button
-                            onClick={() =>
-                                handleModal(
-                                    setIsProjectCompletionModalOpen,
-                                    true
-                                )
-                            }
-                            className={`${style.dashboardActionButton}`}
+                        <Switch.Case
+                            condition={ViewModalButtons?.project_qc_data}
                         >
-                            Completion Form
-                        </Button>
-                    </Switch.Case>
-                    <Switch.Case
-                        condition={ViewModalButtons?.see_project_dispute && !ViewModalButtons?.project_dispute_authorization}
-                    >
-                        <Button
-                            onClick={() =>
-                                handleModal(setIsDisputeProjectModalOpen, true)
-                            }
-                            className={`${style.dashboardActionButton}`}
+                            <Button
+                                onClick={() =>
+                                    handleModal(setIsProjectQCSFModalOpen, true)
+                                }
+                                className={`${style.dashboardActionButton}`}
+                            >
+                                QC Form
+                            </Button>
+                        </Switch.Case>
+                        <Switch.Case
+                            condition={ViewModalButtons?.completion_form_data}
                         >
-                            See Dispute
-                        </Button>
-                    </Switch.Case>
-                </SectionContainer>
+                            <Button
+                                onClick={() =>
+                                    handleModal(
+                                        setIsProjectCompletionModalOpen,
+                                        true
+                                    )
+                                }
+                                className={`${style.dashboardActionButton}`}
+                            >
+                                Completion Form
+                            </Button>
+                        </Switch.Case>
+                        <Switch.Case
+                            condition={
+                                ViewModalButtons?.see_project_dispute &&
+                                !ViewModalButtons?.project_dispute_authorization
+                            }
+                        >
+                            <Button
+                                onClick={() =>
+                                    handleModal(
+                                        setIsDisputeProjectModalOpen,
+                                        true
+                                    )
+                                }
+                                className={`${style.dashboardActionButton}`}
+                            >
+                                See Dispute
+                            </Button>
+                        </Switch.Case>
+                    </SectionContainer>
+                </Switch.Case>
             </Switch>
 
             {/* Modal */}
@@ -178,9 +207,9 @@ const DashboardActionButtonSection = ({ projectData, isLoading }) => {
                 <ProjectQCSubmissionFormModal
                     isModalOpen={isProjectQCSFModalOpen}
                     modalData={{
-                        project_qc_submission: projectData?.project_qc_submission,
+                        project_qc_submission:
+                            projectData?.project_qc_submission,
                         buttons: projectData?.buttons,
-                        
                     }}
                     isLoading={isLoading}
                     closeModal={() =>
@@ -193,10 +222,7 @@ const DashboardActionButtonSection = ({ projectData, isLoading }) => {
                 <DisputeProjectAuthorizeModal
                     isModalOpen={isDisputeProjectModalOpen}
                     closeModal={() =>
-                        handleModal(
-                            setIsDisputeProjectModalOpen,
-                            false
-                        )
+                        handleModal(setIsDisputeProjectModalOpen, false)
                     }
                     modalData={{
                         disputeData: projectData?.project_dispute,
@@ -206,7 +232,8 @@ const DashboardActionButtonSection = ({ projectData, isLoading }) => {
                             id: projectData.id,
                             project_budget: projectData.project_budget,
                             currency: projectData.currency,
-                            dispute_admin_comment: projectData?.dispute_admin_comment,
+                            dispute_admin_comment:
+                                projectData?.dispute_admin_comment,
                         },
                     }}
                     isLoading={isLoading}

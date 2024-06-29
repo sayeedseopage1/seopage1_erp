@@ -13,6 +13,7 @@ import Popover from "../../Popover";
 
 // Styles
 import style from "../../popover.module.css";
+import { handleLoadingComponent } from "../../../helper";
 
 const DashboardCardTitle = ({
     title,
@@ -22,17 +23,18 @@ const DashboardCardTitle = ({
     infoText,
     rightText,
     rightTextColor,
-    className
+    rightLoadingText = "Loading...",
+    className,
+    isLoading,
 }) => {
-
     return (
         <CardTitle
             border={isBorderUse ? `1px ${borderType} #D8D8D8` : "none"}
             className={`d-flex justify-content-between align-items-center ${className}`}
         >
-            <p>
-                {title}{" "}
-                <Switch>
+            <Switch>
+                <p>
+                    {title}
                     <Switch.Case condition={isInfoIconUse}>
                         <Popover className="d-inline">
                             <Popover.Button className="infoPopoverButton d-inline">
@@ -47,18 +49,18 @@ const DashboardCardTitle = ({
                             </Popover.Panel>
                         </Popover>
                     </Switch.Case>
-                </Switch>
-            </p>
+                </p>
 
-            {rightText && (
-                <span
-                    style={{
-                        color: rightTextColor,
-                    }}
-                >
-                    {rightText}
-                </span>
-            )}
+                {rightText && (
+                    <span
+                        style={{
+                            color: rightTextColor,
+                        }}
+                    >
+                        {handleLoadingComponent(isLoading, rightLoadingText, rightText)}
+                    </span>
+                )}
+            </Switch>
         </CardTitle>
     );
 };
@@ -68,10 +70,12 @@ export default DashboardCardTitle;
 DashboardCardTitle.propTypes = {
     title: PropTypes.string.isRequired,
     isBorderUse: PropTypes.bool,
+    rightLoadingText: PropTypes.string,
     rightText: PropTypes.string,
     rightTextColor: PropTypes.string,
     isInfoIconUse: PropTypes.bool,
     infoText: PropTypes.string,
     className: PropTypes.string,
     borderType: PropTypes.string,
+    isLoading: PropTypes.bool,
 };
