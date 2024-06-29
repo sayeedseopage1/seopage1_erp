@@ -510,6 +510,7 @@ class HelperPmProjectStatusController extends AccountBaseController
         $preGoals = ProjectPmGoal::where('project_id', $deliverable->project_id);
         $goalCount = $preGoals->count();
         $lastGoal = $preGoals->first();
+        $goalCodes = ProjectPmGoal::$goalCodes['hourly']['newMilestone'];
 
         switch ($goalCount) {
             case 2:
@@ -536,9 +537,9 @@ class HelperPmProjectStatusController extends AccountBaseController
         $goal->project_type = $lastGoal->project_type;
         $goal->project_category = $lastGoal->project_category;
 
-        $goal->goal_code = 'HP' . $goalCount;
-        $goal->goal_name = 'If at least ' . $deliverable->estimation_time . ' hours have been tracked';
-        $goal->goal_type = 'hourly_project_no' . $goalCount;
+        $goal->goal_code = $goalCodes['code'];
+        $goal->goal_name = $goalCodes['name'];
+        $goal->goal_type = $goalCodes['type'];
         $goal->goal_start_date = $lastGoal->goal_start_date;
 
         $endDate = $deliverable->created_at;

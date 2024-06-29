@@ -107,8 +107,8 @@ class ProjectPmGoal extends Model
                 'code' => 'ERAG',
                 'name' => 'Remaining amount has to be released.',
                 'type' => 'reaming_amount_gaol',
-            	'complete' => 'The remaining amount was successfully released.',
-            	'expire' => 'The remaining amount was not released within the specified timeframe.'
+                'complete' => 'The remaining amount was successfully released.',
+                'expire' => 'The remaining amount was not released within the specified timeframe.'
             ],
         ],
         'hourly' => [
@@ -297,6 +297,13 @@ class ProjectPmGoal extends Model
                     'expire' => 'At least 18 hours were not tracked during that week within the specified timeframe.'
                 ],
             ],
+            'newMilestone' => [
+                'code' => 'RAM',
+                'name' => 'Release one more added milestone',
+                'type' => 'release_added_milestone',
+                'complete' => 'One more milestone have been released.',
+                'expire' => 'One more milestone have not been released within the specified timeframe.'
+            ]
         ],
         'upsell' => [
             'code' => 'UOMMR',
