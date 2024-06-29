@@ -223,3 +223,20 @@
     flex-direction: column;
     gap: 6px;
 }
+
+/* reviews pagination design  */
+.reviews_pagination li.ant-pagination-item:not(.ant-pagination-item-active) {
+    background: #DDE5F2 !important;
+}
+
+.reviews_pagination li.ant-pagination-item:not(.ant-pagination-item-active) a {
+    color: #BCC5D3 !important;
+}
+
+.reviews_pagination .ant-pagination-item-active a {
+    color: #ffffff !important;
+}
+
+.reviews_pagination button.ant-pagination-item-link {
+    background: #DFDFDF !important;
+}

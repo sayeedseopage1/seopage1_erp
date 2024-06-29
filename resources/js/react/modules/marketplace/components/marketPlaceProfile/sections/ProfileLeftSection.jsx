@@ -13,7 +13,7 @@ import moment from 'moment';
 import FractionalRating from '../../commonComponents/FractionalRating';
 import { AiFillDollarCircle } from 'react-icons/ai';
 import { FaBarcode } from "react-icons/fa";
-import { Progress, Tabs } from 'antd';
+import { Pagination, Progress, Tabs } from 'antd';
 import threeDotIcon from '../../../assets/marketplaceProfile/dot-three.svg';
 
 const generalDescItems = [
@@ -119,7 +119,11 @@ const ProfileLeftSection = ({ profileData }) => {
                     <button className=''>Edit</button>
                 </div>
             }>
-                card body
+                <div>
+                    <div className='reviews_pagination text-center'>
+                        <Pagination defaultCurrent={1} total={50} />
+                    </div>
+                </div>
             </LgDataCardWithHeader>
             <LgDataCardWithHeader title={"Experience"} actionCompo={
                 <div className='personal_info_action_wrapper'>
