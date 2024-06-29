@@ -104,8 +104,9 @@ const ProfileLeftSection = ({ profileData }) => {
                 </div>
             </div>
             <LgDataCardWithHeader title={"Portfolio"} actionCompo={
-                <div>
-                    <button className=''>Edit</button>
+                <div className='personal_info_action_wrapper'>
+                    <button className='list_of_milestones_btn_outline'>Edit Layout</button>
+                    <button className='list_of_milestones_btn'>Manage</button>
                 </div>
             }>
                 card body
@@ -118,29 +119,29 @@ const ProfileLeftSection = ({ profileData }) => {
                 card body
             </LgDataCardWithHeader>
             <LgDataCardWithHeader title={"Experience"} actionCompo={
-                <div>
-                    <button className=''>Edit</button>
+                <div className='personal_info_action_wrapper'>
+                    <button className='list_of_milestones_btn'>Add Experience</button>
                 </div>
             }>
                 card body
             </LgDataCardWithHeader>
             <LgDataCardWithHeader title={"Education"} actionCompo={
-                <div>
-                    <button className=''>Edit</button>
+                <div className='personal_info_action_wrapper'>
+                    <button className='list_of_milestones_btn'>Add Education</button>
                 </div>
             }>
                 card body
             </LgDataCardWithHeader>
             <LgDataCardWithHeader title={"Qualifications"} actionCompo={
-                <div>
-                    <button className=''>Edit</button>
+                <div className='personal_info_action_wrapper'>
+                    <button className='list_of_milestones_btn'>Add Qualification</button>
                 </div>
             }>
                 card body
             </LgDataCardWithHeader>
             <LgDataCardWithHeader title={"Publications"} actionCompo={
-                <div>
-                    <button className=''>Edit</button>
+                <div className='personal_info_action_wrapper'>
+                    <button className='list_of_milestones_btn'>Add Publication</button>
                 </div>
             }>
                 card body
