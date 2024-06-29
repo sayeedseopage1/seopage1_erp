@@ -201,6 +201,42 @@ export const user_profile = {
                 },
             },
         },
+        {
+            id: 2,
+            rating: 3.7,
+            comment: "Nice Work!",
+            created_at: "2024-06-25 07:37:00",
+            project: {
+                id: 1,
+                title: "Fixing the website 2",
+                amount: 1080,
+                currency: {
+                    code: "USD",
+                    symbol: "$",
+                },
+                tags: [
+                    {
+                        id: 1,
+                        name: "Article Writing",
+                    },
+                    {
+                        id: 2,
+                        name: "Copywriting",
+                    },
+                ],
+            },
+            client_info: {
+                user_id: 472342,
+                name: "John Doe",
+                user_name: "johndoe",
+                profile_image_url: "https://i.ibb.co/jHYks1p/client-image.png",
+                location: {
+                    iso: "US",
+                    country: "United States",
+                    city: "New York",
+                },
+            },
+        },
     ],
     experiences: [
         {

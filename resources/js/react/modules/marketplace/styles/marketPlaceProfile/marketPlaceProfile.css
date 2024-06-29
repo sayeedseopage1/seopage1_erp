@@ -224,7 +224,154 @@
     gap: 6px;
 }
 
+.review_rating {
+    color: #5B5B5B;
+    font-family: Roboto, sans-serif;
+    font-size: 20px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+}
+
+.profile_reviews_label {
+    color: var(--primary-black);
+    font-size: 20px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+    margin-right: 16px;
+}
+
+.profile_reviews_select .ant-select-selector {
+    border: 2px solid var(--light-blue-2) !important;
+    border-radius: 0 !important;
+    color: #2C2C2C !important;
+}
+
+.profile_reviews_select .ant-select-arrow {
+    color: var(--primary-black) !important;
+}
+
+.filtered_reviews_result {
+    color: var(--primary-black);
+    font-size: 24px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+}
+
+.profile_review_card {
+    padding: 24px 0px;
+    border-bottom: 1px solid #C2C2C2;
+}
+
+.profile_review_card_last {
+    border-bottom: none !important;
+}
+
+.review_card_top_section {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 10px;
+}
+
+.review_tags_wrapper {
+    display: flex;
+    align-items: center;
+    gap: 16px
+}
+
+.review_client_flag {
+    width: 24px;
+}
+
+.reviewed_project_amount {
+    color: var(--primary-black);
+    font-size: 20px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+}
+
+.reviewed_project_title {
+    color: var(--primary-black);
+    font-size: 20px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: normal;
+    margin-top: 20px;
+}
+
+.review_share_btn {
+    background-color: transparent;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    border: none;
+    padding: 0;
+    color: var(--primary-black);
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+    margin-top: 12px;
+}
+
+.review_share_btn img {
+    width: 16px;
+}
+
+.review_card_top_section_right {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+}
+
+.review_card_body {
+    margin-top: 9px;
+    font-size: 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.review_comment {
+    color: var(--primary-black);
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+}
+
+.reviewed_client_info {
+    margin-top: 14px;
+}
+
+.review_client_name {
+    color: var(--primary-black);
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+}
+
+.review_tag {
+    color: var(--primary-blue);
+    display: flex;
+    align-items: center;
+    gap: 3px;
+    cursor: pointer;
+}
+
+.review_client_user_name {
+    font-weight: 400;
+}
+
 /* reviews pagination design  */
+.reviews_pagination {
+    text-align: center;
+}
+
 .reviews_pagination li.ant-pagination-item:not(.ant-pagination-item-active) {
     background: #DDE5F2 !important;
 }
