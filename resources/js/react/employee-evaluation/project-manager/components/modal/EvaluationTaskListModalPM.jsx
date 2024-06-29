@@ -102,29 +102,39 @@ const EvaluationTaskListModalPM = ({
     const [adminExtended, { isLoading: isLoadingAdminExtended }] =
         useStoreAdminExtendedMutation();
 
-    const { data, isLoading, isFetching } = useGetTaskListQuery(
-        singleEvaluation?.user_id
-    );
+    const {
+        data: TaskList,
+        isLoading,
+        isFetching,
+    } = useGetTaskListQuery(singleEvaluation?.user_id);
     const { data: historyData } = useGetEvaluationHistoryQuery(
         singleEvaluation?.user_id
     );
     const designation = evaluationDesignation(singleEvaluation?.roleId);
+
     React.useEffect(() => {
         setDateExpired(new Date(singleEvaluation?.exp_date) < Date.now());
     }, [singleEvaluation]);
 
     React.useEffect(() => {
-        if (data?.data) {
-            const latestRound = Math.max(
-                ...data.data.map((task) => task.round)
-            );
-            setLatestRound(latestRound);
-            const tasks = data.data.filter(
+        if (singleEvaluation) {
+            if (singleEvaluation?.round_requied === 0) {
+                setLatestRound(1);
+            } else {
+                setLatestRound(2);
+            }
+        }
+    }, [singleEvaluation]);
+
+    React.useEffect(() => {
+        if (latestRound && TaskList) {
+            const tasks = TaskList?.data.filter(
                 (task) => task.round === latestRound
             );
+
             setLatestRoundTasks(tasks);
         }
-    }, [data]);
+    }, [latestRound, TaskList]);
 
     React.useEffect(() => {
         if (latestRoundTasks.length > 0) {
@@ -155,24 +165,16 @@ const EvaluationTaskListModalPM = ({
         );
     }, [isAllTaskRated, dateExpired, isPreviousTasks]);
 
-    console.log(
-        "is al task",
-        isAllTaskRated,
-        "date expired",
-        dateExpired,
-        "is previous task",
-        isPreviousTasks
-    );
     React.useEffect(() => {
         if (historyData?.data && latestRound) {
             if (
-                historyData.data.length > 0 &&
+                historyData?.data.length > 0 &&
                 latestRound === historyData.data.length
             ) {
                 setIsPreviousTasks(true);
             }
         }
-    }, [historyData, latestRound, data]);
+    }, [historyData, latestRound, TaskList]);
 
     const formFields = [
         {
