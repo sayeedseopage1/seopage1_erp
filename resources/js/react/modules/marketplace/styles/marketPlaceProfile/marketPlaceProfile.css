@@ -217,3 +217,9 @@
     font-weight: 500;
     line-height: normal;
 }
+
+.lg_data_card_flex_col {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}

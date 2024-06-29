@@ -12,7 +12,7 @@ const { reputationIcon, userIcon1, userIcon2,
 
 const ProfileRightSection = ({ profileData }) => {
 
-    const { id, user_id, profile_image_url, cover_image, name, user_name, bio, average_rating, reviews_count, earnings_score, top_rated_percentage, job_success: { jobs_completed, on_budget, on_time, repeat_hire_rate }, is_online, hourly_rate, location: { iso, country, city }, local_time, recommendations_count, member_since, general_description, user_verification: { identity_verified, payment_verified, email_verified, phone_verified, facebook_connected }, user_certification, top_skills, related_tags, recent_community_articles, portfolio, reviews, experiences, educations, qualifications, publications, is_verified } = profileData || {};
+    const { user_verification: { identity_verified, payment_verified, email_verified, phone_verified, facebook_connected }, user_certification, top_skills, related_tags, recent_community_articles } = profileData || {};
 
     return (
         <div className='marketplace_profile_right_side'>
