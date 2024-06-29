@@ -218,7 +218,11 @@ const DashboardHeaderSection = ({ projectData, isLoading }) => {
                             Project Completion Authorize
                         </Button>
                     </Switch.Case>
-                    <Switch.Case condition={actionButtons?.explain_dispute && user?.roleId !== 1}>
+                    <Switch.Case
+                        condition={
+                            actionButtons?.explain_dispute && user?.roleId !== 1
+                        }
+                    >
                         <Button
                             onClick={() =>
                                 handleModal(setIsExplainDisputeModalOpen, true)
@@ -284,6 +288,7 @@ const DashboardHeaderSection = ({ projectData, isLoading }) => {
                     closeModal={() =>
                         handleModal(setIsTGABAModalOpen, false, () => {
                             searchParams?.delete("modal_type");
+                            setSearchParams(searchParams);
                         })
                     }
                     modalData={projectData?.pm_task_guideline_authorizations}
@@ -298,6 +303,7 @@ const DashboardHeaderSection = ({ projectData, isLoading }) => {
                     closeModal={() =>
                         handleModal(setIsIncompleteModalOpen, false, () => {
                             searchParams?.delete("modal_type");
+                            setSearchParams(searchParams);
                         })
                     }
                     modalData={{
@@ -318,6 +324,7 @@ const DashboardHeaderSection = ({ projectData, isLoading }) => {
                     closeModal={() =>
                         handleModal(setIsDEAuthorizeModalOpen, false, () => {
                             searchParams?.delete("modal_type");
+                            setSearchParams(searchParams);
                         })
                     }
                     modalData={{
@@ -334,6 +341,7 @@ const DashboardHeaderSection = ({ projectData, isLoading }) => {
                     closeModal={() =>
                         handleModal(setIsExplainDisputeModalOpen, false, () => {
                             searchParams?.delete("modal_type");
+                            setSearchParams(searchParams);
                         })
                     }
                     modalData={projectData}
@@ -349,6 +357,7 @@ const DashboardHeaderSection = ({ projectData, isLoading }) => {
                             false,
                             () => {
                                 searchParams?.delete("modal_type");
+                                setSearchParams(searchParams);
                             }
                         )
                     }
@@ -375,6 +384,7 @@ const DashboardHeaderSection = ({ projectData, isLoading }) => {
                     closeModal={() =>
                         handleModal(setIsQCSubmissionModalOpen, false, () => {
                             searchParams?.delete("modal_type");
+                            setSearchParams(searchParams);
                         })
                     }
                     modalData={{
@@ -395,6 +405,7 @@ const DashboardHeaderSection = ({ projectData, isLoading }) => {
                             false,
                             () => {
                                 searchParams?.delete("modal_type");
+                                setSearchParams(searchParams);
                             }
                         )
                     }
