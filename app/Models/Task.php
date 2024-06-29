@@ -517,6 +517,10 @@ class Task extends BaseModel
     {
         return $this->hasMany(TaskSubmission::class);
     }
+    public function submittedByAuthUser()
+    {
+        return $this->hasMany(TaskSubmission::class)->where('user_id', auth()->id());
+    }
 
     /*public function review()
     {

@@ -7,7 +7,6 @@
         <link rel="stylesheet" href="{{ asset('vendor/full-calendar/main.min.css') }}">
     @endif
     <style>
-
         .h-200 {
             max-height: 340px;
             overflow-y: auto;
@@ -511,8 +510,8 @@
 
                                     <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
                                         <a href="#" data-toggle="modal"
-                                            data-target="#percentage_task_with_revision{{ count($percentage_of_tasks_with_revision_data) }}">
-                                            {{ round($percentage_of_tasks_with_revision, 2) }}%
+                                            data-target="#percentage_task_with_revision{{ $percentage_of_tasks_with_revision_other_count }}">
+                                            {{ $percentage_of_tasks_with_revision }}%
                                         </a>
                                     </p>
                                     @include('dashboard.ajax.developerdashboard.modals.percentage_task_with_revision')
@@ -532,8 +531,8 @@
                                 <div class="d-flex flex-wrap">
                                     <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
                                         <a href="#" data-toggle="modal"
-                                            data-target="#total_no_of_revision{{ count($revision_task_data) }}">
-                                            {{ round($number_of_total_revision_for_this_month, 2) }}%
+                                            data-target="#total_no_of_revision{{ $number_of_total_revision }}">
+                                            {{ $number_of_total_revision }}
                                         </a>
                                     </p>
                                     @include('dashboard.ajax.developerdashboard.modals.total_num_of_revision')
@@ -645,7 +644,8 @@
                             class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0">
                             <div class="d-block text-capitalize">
                                 <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">
-                                    Percentage of Task Where Given Estimated Time was Missed (for first submission plus revisions)
+                                    Percentage of Task Where Given Estimated Time was Missed (for first submission plus
+                                    revisions)
                                 </h5>
                                 <div class="d-flex flex-wrap">
 

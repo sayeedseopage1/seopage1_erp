@@ -1,11 +1,14 @@
 <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
-<div id="percentage_task_with_revision{{ count($percentage_of_tasks_with_revision_data) }}" class="modal fade"
+<div id="percentage_task_with_revision{{ $percentage_of_tasks_with_revision_other_count }}" class="modal fade"
     tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-xl">
         <div class="modal-content">
             <div class="modal-header">
                 <div class="modal-title">
-                    <h4>Percentage of tasks with revisions: {{ round($percentage_of_tasks_with_revision, 2) }}%</h4>
+                    <h4>Revisions Taks: {{ $percentage_of_tasks_with_revision_count }}</h4>
+                    <h4>Primary Page: {{ $percentage_of_tasks_with_revision_primary_count }}</h4>
+                    <h4>Secondary Page: {{ $percentage_of_tasks_with_revision_secondary_count }}</h4>
+                    <h4>Others: {{ $percentage_of_tasks_with_revision_other_count }}</h4>
                 </div>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
@@ -49,7 +52,7 @@
                                 </td>
                                 <td>{{ $row->firstTaskSubmission->created_at }}</td>
                                 <td
-                                    title="@foreach ($row->revisions as $revision)({{ ++$loop->index }}): By {{$revision->revision_status}} On {{ $revision->created_at }}&#xA; @endforeach">
+                                    title="@foreach ($row->revisions as $revision)({{ ++$loop->index }}): By {{ $revision->revision_status }} On {{ $revision->created_at }}&#xA; @endforeach">
                                     ({{ $row->revisions->count() }})
                                 </td>
                             </tr>

@@ -1,12 +1,12 @@
 <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
-<div id="total_no_of_revision" class="modal fade" tabindex="-1"
+<div id="total_no_of_revision{{ $number_of_total_revision }}" class="modal fade" tabindex="-1"
     aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-xl">
         <div class="modal-content">
             <div class="modal-header">
                 <div class="modal-title">
                     <h4>Number of Submitted Tasks: __</h4>
-                    <h4>Number of Tasks with revisions: {{ count($revision_task_data) }}</h4>
+                    <h4>Number of Tasks with revisions: {{ $number_of_total_revision }}</h4>
                 </div>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
@@ -22,17 +22,17 @@
                             <th scope="col">Client Name</th>
                             <th scope="col">Revision Requested by</th>
                             <th scope="col">Responsible Person</th>
-                            <th>Reason for revision</th>
+                            <th scope="col">Reason for revision</th>
                             <th scope="col">disputed(Y/N)</th>
                             <th scope="col">Total comments</th>
                             <th scope="col">Verdict</th>
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach ($revision_task_data as $row)
+                        @foreach ($number_of_total_revision_data as $row)
                             @foreach ($row?->revisions as $revision)
                                 <tr>
-                                    <td>{{ $loop->index + 1 }}</td>
+                                    <td>{{ $loop->parent->iteration . '.' . $loop->iteration }}</td>
                                     <td>
                                         <a href="{{ route('tasks.show', $row->id) }}">{{ $row->heading }}<a>
                                     </td>
