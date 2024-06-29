@@ -14,6 +14,7 @@ import FractionalRating from '../../commonComponents/FractionalRating';
 import { AiFillDollarCircle } from 'react-icons/ai';
 import { FaBarcode } from "react-icons/fa";
 import { Progress, Tabs } from 'antd';
+import threeDotIcon from '../../../assets/marketplaceProfile/dot-three.svg';
 
 const generalDescItems = [
     {
@@ -125,13 +126,33 @@ const ProfileLeftSection = ({ profileData }) => {
                     <button className='list_of_milestones_btn'>Add Experience</button>
                 </div>
             }>
-                card body
+                <div className='d-flex justify-content-end'>
+                    <button className='bg-transparent'> <img src={threeDotIcon} alt="threeDotIcon" /></button>
+                </div>
+                {experiences?.map(({ id, designation, company_name, description, start_date, end_date }) => {
+                    const startDate = moment(start_date);
+                    const endDate = end_date ? moment(end_date).format("YYYY") : "Present";
+
+                    return (
+                        <div key={id}>
+                            <div className='lg_data_card_flex_col'>
+                                <p className='sp1_marketplace_default_text'>{designation}</p>
+                                <p className='sp1_marketplace_default_text' style={{ fontWeight: "600" }}>{company_name}</p>
+                                <p className='sp1_marketplace_default_text'>{`${startDate.format("YYYY")}-${endDate}`}</p>
+                            </div>
+                            <p className='sp1_marketplace_default_text mt-4'>{description}</p>
+                        </div>
+                    );
+                })}
             </LgDataCardWithHeader>
             <LgDataCardWithHeader title={"Education"} actionCompo={
                 <div className='personal_info_action_wrapper'>
                     <button className='list_of_milestones_btn'>Add Education</button>
                 </div>
             }>
+                <div className='d-flex justify-content-end'>
+                    <button className='bg-transparent'> <img src={threeDotIcon} alt="threeDotIcon" /></button>
+                </div>
                 {educations?.map(({ id, degree, institution, start_date, end_date }) => {
                     const startDate = moment(start_date);
                     const endDate = moment(end_date);
@@ -168,7 +189,18 @@ const ProfileLeftSection = ({ profileData }) => {
                     <button className='list_of_milestones_btn'>Add Publication</button>
                 </div>
             }>
-                card body
+                <div className='d-flex justify-content-end'>
+                    <button className='bg-transparent'> <img src={threeDotIcon} alt="threeDotIcon" /></button>
+                </div>
+                {
+                    publications?.map(({ id, name, title, description }) => (
+                        <div className='lg_data_card_flex_col' key={id}>
+                            <p className='sp1_marketplace_default_text' style={{ fontWeight: "600" }}>{name}</p>
+                            <p className='sp1_marketplace_default_text'>{title}</p>
+                            <p className='sp1_marketplace_default_text'>{description}</p>
+                        </div>
+                    ))
+                }
             </LgDataCardWithHeader>
         </div>
     );

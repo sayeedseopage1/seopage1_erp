@@ -238,7 +238,7 @@ export const user_profile = {
             id: 1,
             name: "Guide to Desert Boots for Men and Women",
             title: "www.ezinearticles.com",
-            details:
+            description:
                 "Are you planning to go on a desert holiday? If you are, then you should certainly purchase a pair of desert boots. Such footwear can not only be worn by those who need to spend time in the desert but they can also be worn by people in general as well. These shoes are popular because they can be very comfortable in places with hot and dry weather. They are manufactured in such a way that they can protect people's feet against heat and high temperature. The fact that they are very comfortable to wear, i",
         },
     ],

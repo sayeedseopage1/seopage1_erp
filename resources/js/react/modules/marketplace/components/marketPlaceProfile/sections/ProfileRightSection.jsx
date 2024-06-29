@@ -4,7 +4,7 @@ import InfoWithIconTitle from '../../freelancerProjectDetails/ui/InfoWithIconTit
 import { IoMdCheckmark } from "react-icons/io";
 import { RxCross2 } from "react-icons/rx";
 import { verificationIcons } from '../../../assets/marketplaceProfile/verificationIcons';
-import boxTickIcon from '../../../assets/marketplaceProfile/box-tick.svg'
+import boxTickIcon from '../../../assets/marketplaceProfile/box-tick.svg';
 import moment from 'moment';
 const { reputationIcon, userIcon1, userIcon2,
     paymentIcon1, paymentIcon2, callIcon1, callIcon2,
@@ -92,7 +92,7 @@ const ProfileRightSection = ({ profileData }) => {
                             <div key={item?.id} className=''>
                                 <p className='personal_info_mb sp1_marketplace_default_text' style={{ fontWeight: 500 }}>{item?.title}</p>
                                 <div className='marketplace_profile_flex_between' style={{ color: "#767676", fontSize: "14px" }}>
-                                    <span>{item?.category}</span>
+                                    <span>in {item?.category}</span>
                                     <span>{moment(item?.created_at).format('MMM DD, YYYY')}</span>
                                 </div>
                             </div>
