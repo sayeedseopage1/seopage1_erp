@@ -61,7 +61,6 @@ class EmployeeEvaluation extends Command
                     $data->pending_action_sending_time = Carbon::now();
                     $data->save();
                 }else{
-                    dd('Developer'); 
                     $helper = new HelperPendingActionController();
                     $helper->NewDeveloperEvaluation($data->user_id);
                     $data->pending_action_sending_time = Carbon::now();
