@@ -11,6 +11,7 @@ import {
     flexRender,
 } from "@tanstack/react-table";
 import WithoutDraggableColumnHeader from "./WithoutDraggableColumnHeader";
+import { useSelector } from "react-redux";
 
 const NewRulesModalTable = ({
     newPolicyInputData,
@@ -21,6 +22,7 @@ const NewRulesModalTable = ({
     setNewPolicyInputData,
     setEditPolicyDeleteData,
 }) => {
+    const { settings } = useSelector((state) => state.saleRiskAnalysis);
     const [sorting, setSorting] = React.useState([]);
     const [expanded, setExpanded] = React.useState({});
     const [data, setData] = React.useState(newPolicyInputData || []);
@@ -82,7 +84,9 @@ const NewRulesModalTable = ({
                     }
                 });
             },
+            settingsValue: settings,
         },
+
     });
 
     return (

@@ -263,7 +263,8 @@ const EditPolicyModal = ({
                     <Switch>
                         <Switch.Case
                             condition={
-                                isRuleUpdating || isPolicyEditEnabled ||
+                                isRuleUpdating ||
+                                isPolicyEditEnabled ||
                                 editPolicyData?.key?.name === "yesNoRules"
                             }
                         >
@@ -300,7 +301,11 @@ const EditPolicyModal = ({
                     </Switch>
                 </div>
                 <Flex gap="10px" justifyContent="center">
-                    <ModalButton onClick={handleEditPolicyUpdate} width="177px">
+                    <ModalButton
+                        onClick={handleEditPolicyUpdate}
+                        width="177px"
+                        disabled={isLoading}
+                    >
                         {isLoading ? "Loading..." : "Update Policy"}
                     </ModalButton>
                     <ModalButton
