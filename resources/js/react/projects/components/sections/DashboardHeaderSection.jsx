@@ -1,5 +1,6 @@
 import React, { useContext } from "react";
 import PropTypes from "prop-types";
+import { useSearchParams } from "react-router-dom";
 
 // Components - Custom
 import Button from "../ui/customComponents/Button/Button";
@@ -31,6 +32,7 @@ import DisputeProjectFromModal from "../modal/DisputeProjectFromModal";
 import DisputeProjectAuthorizeModal from "../modal/DisputeProjectAuthorizeModal";
 import ProjectQCSubmissionFormModal from "../modal/ProjectQCSubmissionFormModal";
 import ProjectCompletionModal from "../modal/ProjectCompletionModal";
+import { useAuth } from "../../../hooks/useAuth";
 
 // ShortName
 // WN - WorkingEnvironment;
@@ -51,6 +53,7 @@ import ProjectCompletionModal from "../modal/ProjectCompletionModal";
  */
 
 const DashboardHeaderSection = ({ projectData, isLoading }) => {
+    const user = useAuth();
     const {
         isProjectDetailsLoading,
         refetchAllProjectDashboardData,
@@ -58,7 +61,7 @@ const DashboardHeaderSection = ({ projectData, isLoading }) => {
         isProjectPendingExtensionLoading,
     } = useContext(ProjectDashboardContext);
     const actionButtons = projectData?.buttons;
-
+    const [searchParams, setSearchParams] = useSearchParams();
     //  Modal State
     const [isWNModalOpen, setIsWNModalOpen] = React.useState(false);
     const [isTGABAModalOpen, setIsTGABAModalOpen] = React.useState(false);
@@ -110,6 +113,27 @@ const DashboardHeaderSection = ({ projectData, isLoading }) => {
             toast.error("Failed to mark project as incomplete!");
         }
     };
+    const modalType = searchParams.get("modal_type");
+    // Opening this modal will be for pending actions
+    React.useEffect(() => {
+        if (modalType === "pm_task_guidline_authorization" && !isLoading) {
+            handleModal(setIsTGABAModalOpen, true);
+        } else if (modalType === "project_qc_authorization" && !isLoading) {
+            handleModal(setIsQCSubmissionModalOpen, true);
+        } else if (
+            modalType === "completion_form_authorization" &&
+            !isLoading
+        ) {
+            handleModal(setIsCompletionAuthorizeModalOpen, true);
+        } else if (modalType === "explain_dispute" && user?.roleId !== 1) {
+            handleModal(setIsExplainDisputeModalOpen, true);
+        } else if (
+            modalType === "project_dispute_authorization" &&
+            !isLoading
+        ) {
+            handleModal(setIsPDAuthorizationModalOpen, true);
+        }
+    }, []);
 
     return (
         <div className="d-flex flex-column flex-md-row justify-content-md-between mb-4">
@@ -180,9 +204,7 @@ const DashboardHeaderSection = ({ projectData, isLoading }) => {
                         </Button>
                     </Switch.Case>
                     <Switch.Case
-                        condition={
-                            actionButtons?.completion_form_authorization
-                        }
+                        condition={actionButtons?.completion_form_authorization}
                     >
                         <Button
                             onClick={() =>
@@ -196,7 +218,7 @@ const DashboardHeaderSection = ({ projectData, isLoading }) => {
                             Project Completion Authorize
                         </Button>
                     </Switch.Case>
-                    <Switch.Case condition={actionButtons?.explain_dispute}>
+                    <Switch.Case condition={actionButtons?.explain_dispute && user?.roleId !== 1}>
                         <Button
                             onClick={() =>
                                 handleModal(setIsExplainDisputeModalOpen, true)
@@ -259,7 +281,11 @@ const DashboardHeaderSection = ({ projectData, isLoading }) => {
             {isTGABAModalOpen && (
                 <TaskGuidelineNeedsAuthorizedAdmin
                     isModalOpen={isTGABAModalOpen}
-                    closeModal={() => handleModal(setIsTGABAModalOpen, false)}
+                    closeModal={() =>
+                        handleModal(setIsTGABAModalOpen, false, () => {
+                            searchParams?.delete("modal_type");
+                        })
+                    }
                     modalData={projectData?.pm_task_guideline_authorizations}
                     isLoading={isLoading}
                 />
@@ -270,7 +296,9 @@ const DashboardHeaderSection = ({ projectData, isLoading }) => {
                 <ConfirmationModal
                     isModalOpen={isIncompleteModalOpen}
                     closeModal={() =>
-                        handleModal(setIsIncompleteModalOpen, false)
+                        handleModal(setIsIncompleteModalOpen, false, () => {
+                            searchParams?.delete("modal_type");
+                        })
                     }
                     modalData={{
                         modalTitle: "Mark as Incomplete",
@@ -288,7 +316,9 @@ const DashboardHeaderSection = ({ projectData, isLoading }) => {
                 <ProjectDeadlineExtensionAuthorizeModal
                     isModalOpen={isDEAuthorizeModalOpen}
                     closeModal={() =>
-                        handleModal(setIsDEAuthorizeModalOpen, false)
+                        handleModal(setIsDEAuthorizeModalOpen, false, () => {
+                            searchParams?.delete("modal_type");
+                        })
                     }
                     modalData={{
                         projectPendingDeadlineExtensionData:
@@ -302,7 +332,9 @@ const DashboardHeaderSection = ({ projectData, isLoading }) => {
                 <DisputeProjectFromModal
                     isModalOpen={isExplainDisputeModalOpen}
                     closeModal={() =>
-                        handleModal(setIsExplainDisputeModalOpen, false)
+                        handleModal(setIsExplainDisputeModalOpen, false, () => {
+                            searchParams?.delete("modal_type");
+                        })
                     }
                     modalData={projectData}
                     isLoading={isLoading}
@@ -312,7 +344,13 @@ const DashboardHeaderSection = ({ projectData, isLoading }) => {
                 <DisputeProjectAuthorizeModal
                     isModalOpen={isPDAuthorizationModalOpen}
                     closeModal={() =>
-                        handleModal(setIsPDAuthorizationModalOpen, false)
+                        handleModal(
+                            setIsPDAuthorizationModalOpen,
+                            false,
+                            () => {
+                                searchParams?.delete("modal_type");
+                            }
+                        )
                     }
                     modalData={{
                         disputeData: projectData?.project_dispute,
@@ -335,11 +373,15 @@ const DashboardHeaderSection = ({ projectData, isLoading }) => {
                 <ProjectQCSubmissionFormModal
                     isModalOpen={isQCSubmissionModalOpen}
                     closeModal={() =>
-                        handleModal(setIsQCSubmissionModalOpen, false)
+                        handleModal(setIsQCSubmissionModalOpen, false, () => {
+                            searchParams?.delete("modal_type");
+                        })
                     }
                     modalData={{
-                        project_qc_submission: projectData?.project_qc_submission,
+                        project_qc_submission:
+                            projectData?.project_qc_submission,
                         buttons: projectData?.buttons,
+                        id: projectData?.id,
                     }}
                     isLoading={isLoading}
                 />
@@ -348,7 +390,13 @@ const DashboardHeaderSection = ({ projectData, isLoading }) => {
                 <ProjectCompletionModal
                     isModalOpen={isCompletionAuthorizeModalOpen}
                     closeModal={() =>
-                        handleModal(setIsCompletionAuthorizeModalOpen, false)
+                        handleModal(
+                            setIsCompletionAuthorizeModalOpen,
+                            false,
+                            () => {
+                                searchParams?.delete("modal_type");
+                            }
+                        )
                     }
                     modalData={projectData}
                     isLoading={isLoading}

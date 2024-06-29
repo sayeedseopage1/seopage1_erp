@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext, useEffect } from "react";
 import PropTypes from "prop-types";
 
 // Components - Custom
@@ -12,6 +12,12 @@ import {
     useLazyAuthorizeTaskApprovedGuidelineQuery,
     useLazyAuthorizeTaskRejectGuidelineQuery,
 } from "../../../services/api/projectApiSlice";
+import { handleLoadingComponent } from "../../helper";
+import _ from "lodash";
+import TaskGuidelineAuthorizeLoader from "../loader/TaskGuidlineAuthorizeLoader";
+import ProjectDashboard from "../../pages/ProjectDashboard";
+import { ProjectDashboardContext } from "../../context/ProjectDashboardProvider";
+import { toast } from "react-toastify";
 
 /**
  *  TaskGuidelineNeedsAuthorizedAdmin component
@@ -28,36 +34,58 @@ const TaskGuidelineNeedsAuthorizedAdmin = ({
     isModalOpen,
     closeModal,
     modalData,
+    isLoading,
 }) => {
-    const [inputData, setInputData] = React.useState(modalData);
+    const { projectData, refetchProjectDetails } = useContext(
+        ProjectDashboardContext
+    );
+    const [inputData, setInputData] = React.useState(
+        modalData || projectData?.pm_task_guideline_authorizations
+    );
 
     const [
         taskGuidelineApproved,
-        { isLoading: isTaskGuidelineApprovedLoading },
+        { isLoading: isTaskGuidelineApprovedLoading , status: taskGuidelineApprovedStatus  },
     ] = useLazyAuthorizeTaskApprovedGuidelineQuery();
 
-    const [taskGuidelineReject, { isLoading: isTaskGuidelineRejectLoading }] =
+    const [taskGuidelineReject, { isLoading: isTaskGuidelineRejectLoading, status: taskGuidelineRejectStatus  }] =
         useLazyAuthorizeTaskRejectGuidelineQuery();
 
     // Handle Input Change
     const handleTaskGuideline = async (item, value) => {
-        const updatedData = inputData.map((data) => {
-            if (data.id === item.id) {
-                return { ...data, status: value };
-            }
-            return data;
-        });
-        setInputData(updatedData);
-
         try {
             const requestItem =
                 value === 0 ? taskGuidelineReject : taskGuidelineApproved;
             const response = await requestItem(item.id);
-            console.log(response);
+            if (response?.data?.success === 200) {
+                if (value === 1) {
+                    toast.success(`${item.name} Approved Successfully`);
+                } else {
+                    toast.success(`${item.name} Rejected Successfully`);
+                }
+                refetchProjectDetails();
+            }
         } catch (error) {
             console.error(error);
         }
     };
+
+    useEffect(() => {
+        if (!isLoading && projectData) {
+            setInputData(projectData?.pm_task_guideline_authorizations);
+        }
+    }, [isLoading, projectData]);
+
+    useEffect(() => {
+        if (inputData) {
+            const isAllStatusUpdate = inputData.every(
+                (item) => item.status !== 0
+            );
+            if (isAllStatusUpdate) {
+                closeModal();
+            }
+        }
+    }, [inputData]);
 
     return (
         <CustomAntModal
@@ -75,32 +103,40 @@ const TaskGuidelineNeedsAuthorizedAdmin = ({
                 </div>
                 <div className="w-100 overflow-auto">
                     <div className="dashboardModalTableContainer TGABAContentContainer">
-                        {inputData.map((item) => (
-                            <div
-                                className="row m-0 dashboardModalTableItem"
-                                key={item.id}
-                            >
-                                <div className="col-6 align-items-center d-flex">
-                                    {item.name}
-                                </div>
-                                <div className="col-2 d-flex align-items-center">
-                                    No
-                                </div>
-                                <div className="col-4">
-                                    <CustomButton
-                                        value={item.status}
-                                        //  TODO: Need to add loading state
-                                        isDisabled={
-                                            isTaskGuidelineApprovedLoading ||
-                                            isTaskGuidelineRejectLoading
-                                        }
-                                        onChange={(value) =>
-                                            handleTaskGuideline(item, value)
-                                        }
-                                    />
-                                </div>
-                            </div>
-                        ))}
+                        {handleLoadingComponent(
+                            isLoading,
+                            <TaskGuidelineAuthorizeLoader />,
+                            inputData
+                                ?.filter((item) => item?.status === 0)
+                                .map((item) => (
+                                    <div
+                                        className="row m-0 dashboardModalTableItem"
+                                        key={item.id}
+                                    >
+                                        <div className="col-6 align-items-center d-flex">
+                                            {item.name}
+                                        </div>
+                                        <div className="col-2 d-flex align-items-center">
+                                            No
+                                        </div>
+                                        <div className="col-4">
+                                            <CustomButton
+                                                //  TODO: Need to add loading state
+                                                isDisabled={
+                                                    isTaskGuidelineApprovedLoading ||
+                                                    isTaskGuidelineRejectLoading || taskGuidelineApprovedStatus === "pending" || taskGuidelineRejectStatus === "pending"
+                                                }
+                                                onChange={(value) =>
+                                                    handleTaskGuideline(
+                                                        item,
+                                                        value
+                                                    )
+                                                }
+                                            />
+                                        </div>
+                                    </div>
+                                ))
+                        )}
                     </div>
                 </div>
             </ModalContentContainer>
@@ -114,4 +150,5 @@ TaskGuidelineNeedsAuthorizedAdmin.propTypes = {
     isModalOpen: PropTypes.bool,
     closeModal: PropTypes.func,
     modalData: PropTypes.arrayOf(PropTypes.object),
+    isLoading: PropTypes.bool,
 };

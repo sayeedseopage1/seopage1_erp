@@ -37,6 +37,12 @@
   padding: 16px;
 }
 
+
+.dashboardActionButtonPending {
+  background: #FFC107 !important;
+  color: #000 !important;
+}
+
 @media (min-width: 1342px) and (max-width: 1601px) {
   .dashboardActionButton {
     padding: 12px;

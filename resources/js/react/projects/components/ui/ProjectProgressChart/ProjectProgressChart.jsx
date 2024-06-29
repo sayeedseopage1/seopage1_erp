@@ -12,9 +12,8 @@ import {
     PointElement,
 } from "chart.js";
 
-
-import "./projectProgressChart.css"
-
+import "./projectProgressChart.css";
+import Switch from "../../../../global/Switch";
 
 Chart.register(
     PieController,
@@ -27,12 +26,12 @@ Chart.register(
     PointElement
 );
 
-const ProjectProgressChart = ({chartData}) => {
+const ProjectProgressChart = ({ chartData = [] }) => {
     const options = {
         responsive: false,
         plugins: {
             legend: {
-              display: false
+                display: false,
             },
             title: {
                 display: false,
@@ -71,9 +70,26 @@ const ProjectProgressChart = ({chartData}) => {
             },
         ],
     };
+
+    const isChartDataAllZero = chartData?.every((data) => data === 0);
+
     return (
         <div className="projectProgressChartDashboard">
-            <Pie options={options} data={data} width={150} height={150} />
+            <Switch>
+                <Switch.Case condition={!isChartDataAllZero}>
+                    <Pie
+                        options={options}
+                        data={data}
+                        width={150}
+                        height={150}
+                    />
+                </Switch.Case>
+                <Switch.Case condition={isChartDataAllZero}>
+                    <div className="emptyProjectProgressChart">
+                        <p>No data available</p>
+                    </div>
+                </Switch.Case>
+            </Switch>
         </div>
     );
 };

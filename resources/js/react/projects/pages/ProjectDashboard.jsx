@@ -45,7 +45,7 @@ const ProjectDashboard = ({ projectType }) => {
             buttons?.pm_task_guidline ||
             buttons?.project_qc_data ||
             buttons?.completion_form_data ||
-            buttons?.see_project_dispute
+            buttons?.see_project_dispute || buttons?.extend_deadline_form
         );
     };
 

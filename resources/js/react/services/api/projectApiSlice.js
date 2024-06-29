@@ -124,7 +124,7 @@ const projectApiSlice = apiSlice.injectEndpoints({
         // Project Completion form authorization
         authorizeCompletionForm: build.mutation({
             query: (data) => ({
-                url: `/account/submission-accept`,
+                url: `projects/submission-accept`,
                 method: "POST",
                 body: {
                     ...data,
@@ -138,7 +138,7 @@ const projectApiSlice = apiSlice.injectEndpoints({
         // Project QC form authorization
         authorizeQcForm: build.mutation({
             query: (data) => ({
-                url: `/account/qc-submission-accept`,
+                url: `projects/qc-submission-accept`,
                 method: "POST",
                 body: {
                     ...data,

@@ -18,6 +18,7 @@ import ProjectQCSubmissionFormModal from "../modal/ProjectQCSubmissionFormModal"
 import DisputeProjectFromModal from "../modal/DisputeProjectFromModal";
 import DisputeProjectAuthorizeModal from "../modal/DisputeProjectAuthorizeModal";
 import Switch from "../../../global/Switch";
+import { useAuth } from "../../../hooks/useAuth";
 
 // Modal Names
 // ProjectDE = Project Deadline Extension
@@ -35,7 +36,7 @@ import Switch from "../../../global/Switch";
 
 const DashboardActionButtonSection = ({ projectData, isLoading }) => {
     const ViewModalButtons = projectData?.buttons;
-
+    const user = useAuth()
     // Dummy for Dispute Project Authorization Modal
     const [dummyDisputeData, setDummyDisputeData] = React.useState({
         isDisputeSubmitted: false,
@@ -78,6 +79,18 @@ const DashboardActionButtonSection = ({ projectData, isLoading }) => {
                     <SectionContainer
                         className={`${style.dashboardActionLeftButton}`}
                     >
+                        <Switch.Case
+                            condition={
+                                ViewModalButtons?.extend_deadline_pending
+                            }
+                        >
+                            <Button
+                                disabled
+                                className={`${style.dashboardActionButton} ${style.dashboardActionButtonPending}`}
+                            >
+                                Project Deadline Ext. Pending
+                            </Button>
+                        </Switch.Case>
                         <Switch.Case
                             condition={ViewModalButtons?.extend_deadline_form}
                         >
@@ -131,7 +144,7 @@ const DashboardActionButtonSection = ({ projectData, isLoading }) => {
                             </Button>
                         </Switch.Case>
                         <Switch.Case
-                            condition={ViewModalButtons?.completion_form_data}
+                            condition={ViewModalButtons?.completion_form_data && user.getId() !== 1}
                         >
                             <Button
                                 onClick={() =>

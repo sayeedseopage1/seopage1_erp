@@ -25,7 +25,7 @@ const CustomButton = ({ value, onChange , isDisabled = false }) => {
                         : style.customBtn_primary
                 } `}
                 onClick={() => onChange(1)}
-                value={value}
+
                 disabled={isDisabled}
             >
                 Yes
@@ -37,7 +37,6 @@ const CustomButton = ({ value, onChange , isDisabled = false }) => {
                         : style.customBtn_secondary
                 } `}
                 onClick={() => onChange(0)}
-                value={value}
                 disabled={isDisabled}
             >
                 No

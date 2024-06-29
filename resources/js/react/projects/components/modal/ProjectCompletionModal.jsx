@@ -22,7 +22,6 @@ import { Placeholder } from "../../../global/Placeholder";
 // Components - UI - Global
 import Switch from "../../../global/Switch";
 import Loader from "../../../global/Loader";
-import AuthorizeCommentView from "../shared/AuthorizeCommentView";
 import { useAuthorizeCompletionFormMutation } from "../../../services/api/projectApiSlice";
 import { toast } from "react-toastify";
 import { useAuth } from "../../../hooks/useAuth";
@@ -51,7 +50,6 @@ const ProjectCompletionModal = ({
     const [actionType, setActionType] = useState("");
     const [projectCompletionData, setProjectCompletionData] =
         useState(modalData);
-    const [isSubmitting, setIsSubmitting] = useState(false);
 
     const [
         authorizeCompletionForm,
@@ -63,7 +61,7 @@ const ProjectCompletionModal = ({
         setActionType(type);
         try {
             const payload = {
-                project_id: modalData.id,
+                id: modalData?.project_submission?.id,
                 deny: type === "deny" ? null : "approve",
                 admin_comment: adminComment,
             };
@@ -96,6 +94,12 @@ const ProjectCompletionModal = ({
     const convertedPluginList = formatStringArray(
         projectCompletionData?.project_portfolio?.plugin_list
     );
+
+    useEffect(() => {
+        if (!isLoading && modalData) {
+            setProjectCompletionData(modalData);
+        }
+    }, [modalData]);
 
     return (
         <CustomAntModal
@@ -1442,7 +1446,7 @@ const ProjectCompletionModal = ({
                     <Switch.Case
                         condition={
                             user.getRoleId() === 1 &&
-                            projectCompletionData?.modalData
+                            projectCompletionData?.buttons
                                 ?.completion_form_authorization
                         }
                     >
@@ -1457,7 +1461,7 @@ const ProjectCompletionModal = ({
                             name="admin_comment"
                             value={
                                 projectCompletionData?.project_submission
-                                    .admin_comment ?? adminComment
+                                    ?.admin_comment ?? adminComment
                             }
                             onChange={(e) => {
                                 setAdminComment(e.target.value);
@@ -1475,7 +1479,11 @@ const ProjectCompletionModal = ({
                         />
                     </Switch.Case>
                     <Switch.Case
-                        condition={modalData?.project_submission.status}
+                        condition={
+                            modalData?.project_submission?.status ===
+                                "accepted" ||
+                            modalData?.project_submission?.status === "revision"
+                        }
                     >
                         <SectionContentContainer
                             color="#D8EDFC"
@@ -1534,7 +1542,7 @@ const ProjectCompletionModal = ({
                 <Switch.Case
                     condition={
                         user.getRoleId() === 1 &&
-                        projectCompletionData?.modalData
+                        projectCompletionData?.buttons
                             ?.completion_form_authorization
                     }
                 >

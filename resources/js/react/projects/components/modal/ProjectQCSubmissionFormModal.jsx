@@ -80,19 +80,18 @@ const ProjectQCSubmissionFormModal = ({
     const user = useAuth();
     const [actionType, setActionType] = useState("");
     const [adminComment, setAdminComment] = useState("");
-    const [isSubmitting, setIsSubmitting] = useState(false);
 
     const [authorizeQcForm, { isLoading: isAuthorizeQCFormLoading }] =
         useAuthorizeQcFormMutation();
 
     // Handle Admin Comment
-    const handleAdminComment = async () => {
+    const handleAdminComment = async (type) => {
         setActionType(type);
         try {
             const payload = {
-                project_id: modalData.id,
-                deny: type === "deny" ? null : "approve",
-                adminComment: adminComment,
+                id: modalData?.project_qc_submission?.id,
+                deny: type === "deny" ? "deny" : null,
+                admin_comment: adminComment,
             };
             const res = await authorizeQcForm(payload).unwrap();
             if (res.status === 200) {
@@ -111,23 +110,19 @@ const ProjectQCSubmissionFormModal = ({
     };
 
     useEffect(() => {
-        const formatStep = (step) =>
-            step.map((item) => ({
-                ...item,
-                value: modalData[item.key],
-            }));
-        setQCSubmissionFormData({
-            stepOne: formatStep(qcSubmissionFormData.stepOne),
-            stepTwo: formatStep(qcSubmissionFormData.stepTwo),
-            admin_comment: modalData.admin_comment,
-        });
-    }, [modalData, isLoading]);
-
-    // Reset Data
-    const resetData = () => {
-        setAdminComment("");
-    };
-
+        if (modalData?.project_qc_submission && !isLoading) {
+            const formatStep = (step) =>
+                step.map((item) => ({
+                    ...item,
+                    value: modalData?.project_qc_submission[item.key],
+                }));
+            setQCSubmissionFormData({
+                stepOne: formatStep(qcSubmissionFormData.stepOne),
+                stepTwo: formatStep(qcSubmissionFormData.stepTwo),
+                admin_comment: modalData?.project_qc_submission?.admin_comment,
+            });
+        }
+    }, [modalData?.project_qc_submission, isLoading]);
     return (
         <CustomAntModal
             isModalOpen={isModalOpen}
@@ -289,7 +284,12 @@ const ProjectQCSubmissionFormModal = ({
                     </div>
                     <Switch>
                         <Switch.Case
-                            condition={modalData?.project_qc_submission?.status}
+                            condition={
+                                modalData?.project_qc_submission?.status ===
+                                    "accepted" ||
+                                modalData?.project_qc_submission?.status ===
+                                    "denied"
+                            }
                         >
                             <SectionContentContainer
                                 color="#D8EDFC"
@@ -366,8 +366,8 @@ const ProjectQCSubmissionFormModal = ({
                                 placeholder={"Write your comments here"}
                                 name="admin_comment"
                                 value={
-                                    modalData.project_qc_submission
-                                        .admin_comment
+                                    modalData?.project_qc_submission
+                                        ?.admin_comment
                                 }
                                 onChange={(e) => {
                                     setAdminComment(e.target.value);
@@ -403,7 +403,7 @@ const ProjectQCSubmissionFormModal = ({
                                         <SingleButton
                                             label={
                                                 isAuthorizeQCFormLoading &&
-                                                actionType === "deny" ? (
+                                                actionType === "approve" ? (
                                                     <Loader title="Authorizing" />
                                                 ) : (
                                                     "Authorize"
@@ -413,6 +413,7 @@ const ProjectQCSubmissionFormModal = ({
                                                 handleAdminComment("approve")
                                             }
                                             type="primary"
+                                            isDisabled={isAuthorizeQCFormLoading}
                                         />
                                     </Switch.Case>
                                 </Switch>
