@@ -102,29 +102,39 @@ const EvaluationTaskListModalPM = ({
     const [adminExtended, { isLoading: isLoadingAdminExtended }] =
         useStoreAdminExtendedMutation();
 
-    const { data, isLoading, isFetching } = useGetTaskListQuery(
-        singleEvaluation?.user_id
-    );
+    const {
+        data: TaskList,
+        isLoading,
+        isFetching,
+    } = useGetTaskListQuery(singleEvaluation?.user_id);
     const { data: historyData } = useGetEvaluationHistoryQuery(
         singleEvaluation?.user_id
     );
     const designation = evaluationDesignation(singleEvaluation?.roleId);
+
     React.useEffect(() => {
         setDateExpired(new Date(singleEvaluation?.exp_date) < Date.now());
     }, [singleEvaluation]);
 
     React.useEffect(() => {
-        if (data?.data) {
-            const latestRound = Math.max(
-                ...data.data.map((task) => task.round)
-            );
-            setLatestRound(latestRound);
-            const tasks = data.data.filter(
+        if (singleEvaluation) {
+            if (singleEvaluation?.round_requied === 0) {
+                setLatestRound(1);
+            } else {
+                setLatestRound(2);
+            }
+        }
+    }, [singleEvaluation]);
+
+    React.useEffect(() => {
+        if (latestRound && TaskList) {
+            const tasks = TaskList?.data.filter(
                 (task) => task.round === latestRound
             );
+
             setLatestRoundTasks(tasks);
         }
-    }, [data]);
+    }, [latestRound, TaskList]);
 
     React.useEffect(() => {
         if (latestRoundTasks.length > 0) {
@@ -132,20 +142,29 @@ const EvaluationTaskListModalPM = ({
                 (task) => ![1, 2, 3].includes(task?.task_board_column_id)
             );
 
-            const cumulativeSum = tasksToRate.reduce(
-                (acc, cur) => acc + Number(cur.avg_rating ?? 0),
-                0
-            );
+            if (tasksToRate?.length > 0) {
+                const cumulativeSum = tasksToRate.reduce(
+                    (acc, cur) => acc + Number(cur.avg_rating ?? 0),
+                    0
+                );
 
-            console.log("tasks to rate", tasksToRate);
-            const average = cumulativeSum / tasksToRate.length;
-            setCumulativeAverage(average);
+                const average = cumulativeSum / tasksToRate.length;
+                setCumulativeAverage(average);
 
-            const isAllTaskRated =
-                tasksToRate.length ===
-                tasksToRate.filter((task) => task.team_lead_cmnt !== null)
-                    .length;
-            setIsAllTaskRated(isAllTaskRated);
+                // console.log("tasks to rate", tasksToRate);
+                // console.log("cumu sum", cumulativeSum);
+                // console.log("avg", average);
+
+                const isAllTaskRated =
+                    tasksToRate.length ===
+                    tasksToRate.filter((task) => task.team_lead_cmnt !== null)
+                        .length;
+                setIsAllTaskRated(isAllTaskRated);
+            } else {
+                // Handle case when tasksToRate is empty
+                setCumulativeAverage(0);
+                setIsAllTaskRated(false);
+            }
         }
     }, [latestRoundTasks]);
 
@@ -155,24 +174,16 @@ const EvaluationTaskListModalPM = ({
         );
     }, [isAllTaskRated, dateExpired, isPreviousTasks]);
 
-    console.log(
-        "is al task",
-        isAllTaskRated,
-        "date expired",
-        dateExpired,
-        "is previous task",
-        isPreviousTasks
-    );
     React.useEffect(() => {
         if (historyData?.data && latestRound) {
             if (
-                historyData.data.length > 0 &&
+                historyData?.data.length > 0 &&
                 latestRound === historyData.data.length
             ) {
                 setIsPreviousTasks(true);
             }
         }
-    }, [historyData, latestRound, data]);
+    }, [historyData, latestRound, TaskList]);
 
     const formFields = [
         {
@@ -422,12 +433,9 @@ const EvaluationTaskListModalPM = ({
                         <span>Cumulative Average:</span>
                         <span>
                             {" "}
-                            {Number(
-                                cumulativeAverage === NaN
-                                    ? 0
-                                    : cumulativeAverage
-                            )?.toFixed(2) ?? 0}
-                            {console.log("cumulative avg", cumulativeAverage)}
+                            {isNaN(cumulativeAverage)
+                                ? 0
+                                : Number(cumulativeAverage).toFixed(2)}
                         </span>
                     </span>
                 </EvalTableTitle>
