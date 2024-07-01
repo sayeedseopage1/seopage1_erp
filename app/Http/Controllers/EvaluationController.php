@@ -10,6 +10,8 @@ use App\Models\EvaluationHistory;
 use App\Models\PendingAction;
 use App\Models\PendingActionPast;
 use App\Models\ProjectTimeLog;
+use App\Models\RoleUser;
+use App\Models\Role;
 use App\Models\SubTask;
 use App\Models\Task;
 use App\Models\TaskboardColumn;
@@ -445,6 +447,24 @@ class EvaluationController extends AccountBaseController
             $user= User::find($request->user_id);
             $user->role_id= 5;
             $user->save();
+
+            $userId = $user->id;
+            $roleId = $user->role_id;
+            $employeeRole = Role::where('name', 'employee')->first();
+
+            $user = User::withoutGlobalScopes(['active'])->findOrFail($userId);
+
+            RoleUser::where('user_id', $user->id)->delete();
+            $user->roles()->attach($employeeRole->id);
+
+            if ($employeeRole->id != $roleId) {
+                $user->roles()->attach($roleId);
+            }
+
+            $user->assignUserRolePermission($roleId);
+
+            $userSession = new AppSettingController();
+            $userSession->deleteSessions([$user->id]);
 
             $employee_details = EmployeeDetails::where('user_id',$request->user_id)->first();
             $employee_details->designation_id = 26;

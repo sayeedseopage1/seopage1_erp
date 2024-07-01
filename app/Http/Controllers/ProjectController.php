@@ -6502,7 +6502,6 @@ public function updatePmBasicSEO(Request $request){
         return $datatable->render('projects.ajax.project_deadline_extension',$this->data);
     }
     public function storeProjectDeadline(Request $request){
-        // dd($request->all());
         $validator = $request->validate([
             'new_deadline' => 'required',
             'extension' => 'required',
@@ -6533,6 +6532,9 @@ public function updatePmBasicSEO(Request $request){
         $project_F->deadline_auth_status = 1;
         $project_F->save();
 
+        $helper = new HelperPendingActionController();
+        $helper->projectDeadlineExtForAdmin($pd_ext->project_id);
+
         return response()->json([
             'status'=>200
         ]);
@@ -6544,7 +6546,7 @@ public function updatePmBasicSEO(Request $request){
     }
 
     public function storeAuthorization(Request $request){
-        // dd($request->all());
+        // DB::beginTransaction();
         $validator = $request->validate([
             'new_deadline' => 'required',
         ], [
@@ -6582,6 +6584,53 @@ public function updatePmBasicSEO(Request $request){
             $project = Project::where('id',$request->project_id)->first();
             $project->deadline_auth_status = 0;
             $project->save();
+        }
+        $actions = PendingAction::where('code','PDER')->where('project_id',$request->project_id)->where('past_status',0)->get();
+        if($actions != null)
+        {
+            foreach ($actions as $key => $action) {
+            $action->authorized_by= Auth::id();
+            $action->authorized_at= Carbon::now();
+            $action->past_status = 1;
+            $action->save();
+            $authorize_by= User::where('id',$action->authorized_by)->first();
+            $project = Project::where('id',$pde->project_id)->first();
+            $pm = User::where('id',$project->pm_id)->first();
+            $client = User::where('id',$project->client_id)->first();
+                
+            $past_action= new PendingActionPast();
+            $past_action->item_name = $action->item_name;
+            $past_action->code = $action->code;
+            $past_action->serial = $action->serial;
+            $past_action->action_id = $action->id;
+            if($pde->status == 2){
+                $past_action->heading= 'Project Deadline Extension Request Accepted!';
+                $past_action->message = 'Deadline extension request by project manager <a href="'.route('employees.show',$pm->id).'">'.$pm->name.'</a> for project <a href="'.route('projects.show',$project->id).'">'.$project->project_name.'</a> from client <a href="'.route('clients.show',$client->id).'">'.$client->name.'</a> was authorized by <a href="'.route('employees.show',Auth::user()->id).'">'.Auth::user()->name.'</a>!';
+            }else{
+                $past_action->heading= 'Project Deadline Extension Request Denied';
+                $past_action->message = 'Deadline extension request by project manager <a href="'.route('employees.show',$pm->id).'">'.$pm->name.'</a> for project <a href="'.route('projects.show',$project->id).'">'.$project->project_name.'</a> from client <a href="'.route('clients.show',$client->id).'">'.$client->name.'</a> was denied by <a href="'.route('employees.show',Auth::user()->id).'">'.Auth::user()->name.'</a>!';
+            }
+            
+            $past_action->timeframe = $action->timeframe;
+            $past_action->authorization_for = $action->authorization_for;
+            $past_action->authorized_by = $action->authorized_by;
+            $past_action->authorized_at = $action->authorized_at;
+            $past_action->expired_status = $action->expired_status;
+            $past_action->past_status = $action->past_status;
+            $past_action->task_id = $action->task_id;
+            $past_action->developer_id = $action->developer_id;
+            $past_action->client_id = $action->client_id;
+            $button = [
+                [
+                    'button_name' => 'View details',
+                    'button_color' => 'primary',
+                    'button_type' => 'redirect_url',
+                    'button_url' => route('pde-request')
+                ],
+            ];
+            $past_action->button = json_encode($button);
+            $past_action->save();
+            }
         }
 
         return response()->json([

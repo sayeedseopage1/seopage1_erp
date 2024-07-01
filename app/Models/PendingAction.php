@@ -25,6 +25,8 @@ class PendingAction extends Model
                 $buttonName = 'project_qc_authorization';
             }elseif($pendingAction->code == 'PCA'){
                 $buttonName = 'completion_form_authorization';
+            }elseif($pendingAction->code == 'PDER'){
+                $buttonName = 'deadline_extension_authorization';
             }
             
             if($buttonName){
