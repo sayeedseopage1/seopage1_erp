@@ -266,8 +266,9 @@ const DashboardHeaderSection = ({ projectData, isLoading }) => {
                     >
                         <RefreshIcon
                             className={
-                                isProjectDetailsLoading &&
-                                style?.refreshButtonActive
+                                isProjectDetailsLoading
+                                    ? style?.refreshButtonActive
+                                    : ""
                             }
                         />
                         <span className="d-flex d-md-none ml-2 text-dark">

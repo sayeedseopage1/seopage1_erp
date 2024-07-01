@@ -152,8 +152,8 @@ const DashboardProgress = ({
 export default DashboardProgress;
 
 DashboardProgress.propTypes = {
-    projectData: PropTypes.object.isRequired,
+    projectData: PropTypes.any,
     style: PropTypes.object,
     className: PropTypes.string,
-    isProjectDetailsLoading: PropTypes.bool.isRequired,
+    isProjectDetailsLoading: PropTypes.any,
 };

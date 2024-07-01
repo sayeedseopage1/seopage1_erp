@@ -24,7 +24,6 @@ import useWhyDidYouRender from "../../hooks/useWhyDidYouRender";
 import { SectionContainer } from "../components/ui/styledComponents";
 
 const ProjectDashboard = ({ projectType }) => {
-    useWhyDidYouRender("ProjectDashboard");
     const pathName = window?.location?.pathname?.split("projects/").pop();
     const { setProject_id, projectData, isProjectDetailsLoading } = useContext(
         ProjectDashboardContext

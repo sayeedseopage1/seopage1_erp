@@ -119,7 +119,7 @@ const DashboardClientAndPMCard = ({
 export default DashboardClientAndPMCard;
 
 DashboardClientAndPMCard.propTypes = {
-    projectData: PropTypes.object.isRequired,
+    projectData: PropTypes.any,
     className: PropTypes.string,
     isProjectDetailsLoading: PropTypes.bool,
 };

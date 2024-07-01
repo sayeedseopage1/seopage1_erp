@@ -54,7 +54,7 @@ export default DashboardCardPricingInfo;
 
 DashboardCardPricingInfo.propTypes = {
     title: PropTypes.string,
-    amount: PropTypes.string.isRequired,
+    amount: PropTypes.string || PropTypes.number,
     currency: PropTypes.string,
     currency_symbol: PropTypes.string,
     icon: PropTypes.string,

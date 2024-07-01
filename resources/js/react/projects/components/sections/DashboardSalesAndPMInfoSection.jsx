@@ -540,6 +540,6 @@ const DashboardSalesAndPMInfoSection = ({ projectData, isLoading }) => {
 export default DashboardSalesAndPMInfoSection;
 
 DashboardSalesAndPMInfoSection.propTypes = {
-    projectData: PropTypes.object.isRequired,
+    projectData: PropTypes.any,
     isLoading: PropTypes.bool.isRequired,
 };

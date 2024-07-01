@@ -11,7 +11,7 @@ const RefreshIcon = ({className}) => {
             fill="none"
             className={className}
         >
-            <g clip-path="url(#clip0_12529_3290)">
+            <g clipPath="url(#clip0_12529_3290)">
                 <path
                     d="M25.5 13.2266C25.5 6.323 19.9036 0.726562 13 0.726562C6.09644 0.726562 0.5 6.323 0.5 13.2266C0.5 20.1301 6.09644 25.7266 13 25.7266C19.9036 25.7266 25.5 20.1301 25.5 13.2266Z"
                     fill="#70CA62"
