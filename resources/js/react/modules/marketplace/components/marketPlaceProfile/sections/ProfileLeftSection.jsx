@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import LgDataCardWithHeader from '../ui/LgDataCardWithHeader';
 import moment from 'moment';
 import { Pagination, Select } from 'antd';
@@ -9,6 +9,20 @@ import ProfilePersonalInfoSection from './ProfilePersonalInfoSection';
 
 const ProfileLeftSection = ({ profileData }) => {
     const { reviews, experiences, educations, qualifications, publications } = profileData || {};
+
+    const [currentPage, setCurrentPage] = useState(1);
+    const reviewsPerPage = 5;
+
+    // Calculate the reviews to display on the current page
+    const currentReviews = reviews?.slice(
+        (currentPage - 1) * reviewsPerPage,
+        currentPage * reviewsPerPage
+    );
+
+    // Handle page change
+    const handlePageChange = (page) => {
+        setCurrentPage(page);
+    };
 
     const handleReviewFilterChange = (value) => {
         console.log(`selected ${value}`);
@@ -52,17 +66,24 @@ const ProfileLeftSection = ({ profileData }) => {
                 </div>
             }>
                 <div className='profile_review_wrapper'>
-                    <h2 className='filtered_reviews_result'>Showing 1-5 out of 50+ reviews</h2>
+                    <h2 className='filtered_reviews_result'>
+                        Showing {(currentPage - 1) * reviewsPerPage + 1}-{Math.min(currentPage * reviewsPerPage, reviews?.length)} out of {reviews?.length} reviews
+                    </h2>
                     {
-                        reviews?.map((item, index) => {
-                            const isLast = index === reviews?.length - 1;
+                        currentReviews?.map((item, index) => {
+                            const isLast = index === currentReviews?.length - 1;
                             return (
                                 <ReviewCard item={item} isLast={isLast} key={item?.id} />
                             );
                         })
                     }
                     <div className='reviews_pagination'>
-                        <Pagination defaultCurrent={1} total={50} />
+                        <Pagination
+                            current={currentPage}
+                            total={reviews?.length}
+                            pageSize={reviewsPerPage}
+                            onChange={handlePageChange}
+                        />
                     </div>
                 </div>
             </LgDataCardWithHeader>
