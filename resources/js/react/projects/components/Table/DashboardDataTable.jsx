@@ -95,7 +95,7 @@ const DashboardDataTable = ({
                 <thead
                     className="sp1_tasks_thead"
                     style={{
-                        zIndex: 0,
+                        zIndex: 1,
                     }}
                 >
                     {table.getHeaderGroups().map((headerGroup) => (

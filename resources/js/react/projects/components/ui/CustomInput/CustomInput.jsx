@@ -11,6 +11,7 @@ import Popover from "../../Popover";
 // style
 import style from "../../popover.module.css";
 import styles from "./customInput.module.css";
+import { Placeholder } from "../../../../global/Placeholder";
 
 /**
  *  CustomInput component
@@ -43,6 +44,7 @@ const CustomInput = ({
     className,
     fieldName,
     isReadOnly = false,
+    isLoading = false,
     ...rest
 }) => {
     return (
@@ -76,7 +78,7 @@ const CustomInput = ({
                 Conditional rendering of input field based on type prop
             */}
             <Switch>
-                <Switch.Case condition={type === "textarea"}>
+                <Switch.Case condition={type === "textarea" && !isLoading}>
                     <input
                         type="textarea"
                         className={`${styles.customInputTextArea} ${className}`}
@@ -89,7 +91,7 @@ const CustomInput = ({
                         {...rest}
                     />
                 </Switch.Case>
-                <Switch.Case condition={type !== "textarea"}>
+                <Switch.Case condition={type !== "textarea" && !isLoading}>
                     <input
                         type={type}
                         className={`${styles.customInput} ${className}`}
@@ -102,6 +104,9 @@ const CustomInput = ({
                         onChange={onChange}
                         {...rest}
                     />
+                </Switch.Case>
+                <Switch.Case condition={type !== "textarea" && isLoading}>
+                    <Placeholder className="w-100" height="40px" />
                 </Switch.Case>
             </Switch>
             {isError && <p className="mt-1 text-danger">{errorText}</p>}
@@ -124,4 +129,5 @@ CustomInput.propTypes = {
     className: PropTypes.string,
     fieldName: PropTypes.string,
     isReadOnly: PropTypes.bool,
+    isLoading: PropTypes.bool,
 };

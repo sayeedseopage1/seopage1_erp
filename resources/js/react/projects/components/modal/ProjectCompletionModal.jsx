@@ -62,7 +62,7 @@ const ProjectCompletionModal = ({
         try {
             const payload = {
                 id: modalData?.project_submission?.id,
-                deny: type === "deny" ? null : "approve",
+                deny: type === "deny" ? "deny" : null,
                 admin_comment: adminComment,
             };
             const res = await authorizeCompletionForm(payload).unwrap();
@@ -153,6 +153,8 @@ const ProjectCompletionModal = ({
                                 <Switch.Case
                                     condition={
                                         !projectCompletionData
+                                            ?.project_submission?.actual_link &&
+                                        projectCompletionData
                                             ?.project_submission?.dummy_link
                                     }
                                 >
@@ -170,6 +172,16 @@ const ProjectCompletionModal = ({
                                                 ?.project_submission?.dummy_link
                                         }
                                     </a>
+                                </Switch.Case>
+                                <Switch.Case
+                                    condition={
+                                        !projectCompletionData
+                                            ?.project_submission?.actual_link &&
+                                        !projectCompletionData
+                                            ?.project_submission?.dummy_link
+                                    }
+                                >
+                                    <p>Not Provided</p>
                                 </Switch.Case>
                             </Switch>
                         )}
@@ -716,7 +728,7 @@ const ProjectCompletionModal = ({
                                                     {
                                                         projectCompletionData
                                                             ?.project_portfolio
-                                                            ?.cms_name
+                                                            ?.cms_category?.cms_name
                                                     }
                                                 </p>
                                             </Switch.Case>
@@ -749,7 +761,7 @@ const ProjectCompletionModal = ({
                                                     {
                                                         projectCompletionData
                                                             ?.project_portfolio
-                                                            ?.website_type
+                                                            ?.website_type?.website_type
                                                     }
                                                 </p>
                                             </Switch.Case>
@@ -783,8 +795,8 @@ const ProjectCompletionModal = ({
                                                 <p>
                                                     {
                                                         projectCompletionData
-                                                            ?.project_submission
-                                                            ?.category_name
+                                                            ?.project_portfolio
+                                                            ?.project_niche?.category_name
                                                     }
                                                 </p>
                                             </Switch.Case>
@@ -1506,7 +1518,7 @@ const ProjectCompletionModal = ({
                                     className="mb-2"
                                 />,
 
-                                <p className="boldText">
+                                <p>
                                     <Switch.Case
                                         condition={htmlTagRegex.test(
                                             modalData?.project_submission

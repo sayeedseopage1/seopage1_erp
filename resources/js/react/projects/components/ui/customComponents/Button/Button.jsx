@@ -30,7 +30,7 @@ export default Button;
 
 Button.propTypes = {
     children: PropTypes.node.isRequired,
-    onClick: PropTypes.func.isRequired,
+    onClick: PropTypes.any,
     type: PropTypes.string,
     className: PropTypes.string,
     disabled: PropTypes.bool,

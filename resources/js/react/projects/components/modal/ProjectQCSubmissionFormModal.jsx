@@ -311,8 +311,8 @@ const ProjectQCSubmissionFormModal = ({
                                         fullSizeCount={1}
                                         className="mb-2"
                                     />,
-                                    <p className="boldText">
-                                        <p className="boldText">
+                                    <p >
+                                        <p>
                                             <Switch.Case
                                                 condition={htmlTagRegex.test(
                                                     modalData

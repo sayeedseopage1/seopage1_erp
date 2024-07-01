@@ -226,6 +226,7 @@ const DisputeProjectFromModal = ({
                             fieldName="client_username"
                             isReadOnly
                             type="text"
+                            isLoading={isLoading}
                         />
                         <CustomInput
                             label="2. Project value (Mention with currency)"
@@ -235,6 +236,7 @@ const DisputeProjectFromModal = ({
                             isReadOnly
                             value={`${modalData?.currency?.currency_symbol} ${modalData?.project_budget} ${modalData?.currency?.currency_code} `}
                             type="text"
+                            isLoading={isLoading}
                         />
                     </div>
 

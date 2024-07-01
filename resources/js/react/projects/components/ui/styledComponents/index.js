@@ -269,8 +269,8 @@ export const CardWrapper = styled.div`
       width: 150px;
       height: 150px;
       @media (max-width: 768px) {
-        width: 115px;
-        height: 115px;
+        width: 115px !important;
+        height: 115px !important;
       }
     }
 
@@ -873,6 +873,9 @@ export const ModalContentContainer = styled.div`
       font-weight: 500;
       line-height: normal;
       margin-bottom: 12px;
+      @media screen  and (max-width: 768px) {
+        font-size: 18px;
+      }
     }
     p{
       color: #F00;

@@ -284,7 +284,7 @@ const DashboardProjectInfoFixedSection = ({ projectData, isLoading }) => {
                         {projectBudgetData.earning_expenses.map((moneyInfo) => (
                             <DashboardCardPricingInfo
                                 key={moneyInfo?.id}
-                                amount={moneyInfo?.price}
+                                amount={Number(moneyInfo?.price)?.toFixed(2)}
                                 title={moneyInfo?.title}
                                 icon={moneyInfo?.icon}
                                 currency={moneyInfo?.currency}

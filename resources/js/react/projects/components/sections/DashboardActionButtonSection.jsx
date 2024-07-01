@@ -36,7 +36,7 @@ import { useAuth } from "../../../hooks/useAuth";
 
 const DashboardActionButtonSection = ({ projectData, isLoading }) => {
     const ViewModalButtons = projectData?.buttons;
-    const user = useAuth()
+    const user = useAuth();
     // Dummy for Dispute Project Authorization Modal
     const [dummyDisputeData, setDummyDisputeData] = React.useState({
         isDisputeSubmitted: false,
@@ -122,8 +122,10 @@ const DashboardActionButtonSection = ({ projectData, isLoading }) => {
                 </Switch.Case>
                 <Switch.Case
                     condition={
-                        ViewModalButtons?.project_qc_data ||
-                        ViewModalButtons?.completion_form_data ||
+                        (ViewModalButtons?.project_qc_data &&
+                            !ViewModalButtons?.project_qc_authorization) ||
+                        (ViewModalButtons?.completion_form_data &&
+                            !ViewModalButtons?.completion_form_authorization) ||
                         (ViewModalButtons?.see_project_dispute &&
                             !ViewModalButtons?.project_dispute_authorization)
                     }
@@ -132,7 +134,13 @@ const DashboardActionButtonSection = ({ projectData, isLoading }) => {
                         className={`${style.dashboardActionRightButton}`}
                     >
                         <Switch.Case
-                            condition={ViewModalButtons?.project_qc_data}
+                            condition={
+                                ViewModalButtons?.project_qc_data &&
+                                !ViewModalButtons?.project_qc_authorization &&
+                                projectData?.project_qc_submission &&
+                                projectData?.project_qc_submission?.status ===
+                                    "accepted"
+                            }
                         >
                             <Button
                                 onClick={() =>
@@ -144,7 +152,13 @@ const DashboardActionButtonSection = ({ projectData, isLoading }) => {
                             </Button>
                         </Switch.Case>
                         <Switch.Case
-                            condition={ViewModalButtons?.completion_form_data && user.getId() !== 1}
+                            condition={
+                                ViewModalButtons?.completion_form_data &&
+                                !ViewModalButtons?.completion_form_authorization &&
+                                projectData?.project_submission &&
+                                projectData?.project_submission?.status ===
+                                    "accepted"
+                            }
                         >
                             <Button
                                 onClick={() =>

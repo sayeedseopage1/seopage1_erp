@@ -39,5 +39,5 @@ export default RefreshIcon;
 
 
 RefreshIcon.propTypes = {
-    className: PropTypes.string,
+    className: PropTypes.any,
 }

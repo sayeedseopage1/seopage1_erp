@@ -161,7 +161,7 @@ const DashboardHeaderSection = ({ projectData, isLoading }) => {
                         navigateData={projectData}
                     />
                 </div>
-                <div className="d-flex mb-3 mb-md-0 ">
+                <div className={`${style?.dashboardHeaderLeftButtonWrapper}`}>
                     <Switch.Case
                         condition={
                             actionButtons?.deadline_extension_authorization
@@ -171,7 +171,7 @@ const DashboardHeaderSection = ({ projectData, isLoading }) => {
                             onClick={() =>
                                 handleModal(setIsDEAuthorizeModalOpen, true)
                             }
-                            className={`${style?.dashboardHeaderButton} ${style.dashboardHeaderButtonAnimation}`}
+                            className={`${style?.dashboardHeaderButton} ${style.dashboardHeaderButtonAnimation} ml-0 ml-md-2`}
                             disabled={isProjectPendingExtensionLoading}
                         >
                             {isProjectPendingExtensionLoading ? (
@@ -191,7 +191,7 @@ const DashboardHeaderSection = ({ projectData, isLoading }) => {
                             onClick={() =>
                                 handleModal(setIsTGABAModalOpen, true)
                             }
-                            className={`${style?.dashboardHeaderButton} ${style.dashboardHeaderButtonAnimation} ml-2`}
+                            className={`${style?.dashboardHeaderButton} ${style.dashboardHeaderButtonAnimation} ml-0 ml-md-2`}
                         >
                             PM Task Guideline Authorize
                         </Button>
@@ -203,7 +203,7 @@ const DashboardHeaderSection = ({ projectData, isLoading }) => {
                             onClick={() =>
                                 handleModal(setIsQCSubmissionModalOpen, true)
                             }
-                            className={`${style?.dashboardHeaderButton} ${style.dashboardHeaderButtonAnimation} ml-2`}
+                            className={`${style?.dashboardHeaderButton} ${style.dashboardHeaderButtonAnimation} ml-0 ml-md-2`}
                         >
                             Project QC Authorize
                         </Button>
@@ -218,7 +218,7 @@ const DashboardHeaderSection = ({ projectData, isLoading }) => {
                                     true
                                 )
                             }
-                            className={`${style?.dashboardHeaderButton} ${style.dashboardHeaderButtonAnimation} ml-2`}
+                            className={`${style?.dashboardHeaderButton} ${style.dashboardHeaderButtonAnimation} ml-0 ml-md-2`}
                         >
                             Project Completion Authorize
                         </Button>
@@ -232,7 +232,7 @@ const DashboardHeaderSection = ({ projectData, isLoading }) => {
                             onClick={() =>
                                 handleModal(setIsExplainDisputeModalOpen, true)
                             }
-                            className={`${style?.dashboardHeaderButton} ${style.dashboardHeaderButtonAnimation} ml-2`}
+                            className={`${style?.dashboardHeaderButton} ${style.dashboardHeaderButtonAnimation} ml-0 ml-md-2`}
                         >
                             Explain Dispute
                         </Button>
@@ -244,7 +244,7 @@ const DashboardHeaderSection = ({ projectData, isLoading }) => {
                             onClick={() =>
                                 handleModal(setIsPDAuthorizationModalOpen, true)
                             }
-                            className={`${style?.dashboardHeaderButton} ${style.dashboardHeaderButtonAnimation} ml-2`}
+                            className={`${style?.dashboardHeaderButton} ${style.dashboardHeaderButtonAnimation} ml-0 ml-md-2`}
                         >
                             Dispute Authorization
                         </Button>
@@ -254,7 +254,7 @@ const DashboardHeaderSection = ({ projectData, isLoading }) => {
                             onClick={() =>
                                 handleModal(setIsIncompleteModalOpen, true)
                             }
-                            className={`${style?.dashboardHeaderButton} ${style.dashboardHeaderButtonAnimation} ml-2`}
+                            className={`${style?.dashboardHeaderButton} ${style.dashboardHeaderButtonAnimation} ml-0 ml-md-2`}
                         >
                             Mark as incomplete
                         </Button>
@@ -262,7 +262,7 @@ const DashboardHeaderSection = ({ projectData, isLoading }) => {
                     {/* Refresh Button */}
                     <Button
                         onClick={() => refetchAllProjectDashboardData()}
-                        className={`${style?.refreshButton} ml-2`}
+                        className={`${style?.refreshButton} ml-0 ml-md-2 d-flex align-items-center justify-content-center`}
                     >
                         <RefreshIcon
                             className={
@@ -270,6 +270,11 @@ const DashboardHeaderSection = ({ projectData, isLoading }) => {
                                 style?.refreshButtonActive
                             }
                         />
+                        <span className="d-flex d-md-none ml-2 text-dark">
+                            {isProjectDetailsLoading
+                                ? "Refreshing..."
+                                : "Refresh"}
+                        </span>
                     </Button>
                 </div>
             </Switch>

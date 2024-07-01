@@ -2,7 +2,7 @@ import dayjs from "dayjs";
 import { DatePicker } from "antd";
 import PropTypes from "prop-types";
 import { toast } from "react-toastify";
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 
 // UI Components - Modal
 import CustomAntModal from "../ui/CustomAntModal/CustomAntModal";
@@ -19,6 +19,7 @@ import { ModalContentContainer } from "../ui/styledComponents";
 
 // Components - Global
 import Loader from "../../../global/Loader";
+import { Placeholder } from "../../../global/Placeholder";
 
 // Components - Custom
 import SingleButton from "../ui/CustomButton/SingleButton";
@@ -35,18 +36,21 @@ import { htmlTagRegex } from "../../helper";
 // Hooks
 import { useAuth } from "../../../hooks/useAuth";
 
+// Context
+import { ProjectDashboardContext } from "../../context/ProjectDashboardProvider";
 
 const ProjectDeadlineExtensionAuthorizeModal = ({
     isModalOpen,
     closeModal,
     modalData,
-    isLoading
+    isLoading,
 }) => {
     const user = useAuth();
     const [actionType, setActionType] = useState("");
     const [deadlineExtensionData, setDeadlineExtensionData] = useState(
         modalData?.projectPendingDeadlineExtensionData
     );
+    const { isProjectDetailsLoading } = useContext(ProjectDashboardContext);
     const [
         deadLineExtensionDataValidation,
         setDeadLineExtensionDataValidation,
@@ -128,9 +132,8 @@ const ProjectDeadlineExtensionAuthorizeModal = ({
         });
     };
 
-
     useEffect(() => {
-        if(!isLoading && modalData?.projectPendingDeadlineExtensionData){
+        if (!isLoading && modalData?.projectPendingDeadlineExtensionData) {
             setDeadlineExtensionData({
                 ...modalData?.projectPendingDeadlineExtensionData,
             });
@@ -163,7 +166,9 @@ const ProjectDeadlineExtensionAuthorizeModal = ({
                             type="text"
                             id="old_deadline"
                             className="isDisabled"
-                            value={dayjs(deadlineExtensionData?.old_deadline)?.format("YYYY-MM-DD")}
+                            value={dayjs(
+                                deadlineExtensionData?.old_deadline
+                            )?.format("YYYY-MM-DD")}
                         />
                         <span
                             className="mt-1"
@@ -183,7 +188,7 @@ const ProjectDeadlineExtensionAuthorizeModal = ({
                             name="new_deadline"
                             placeholder="mm/dd/yyyy"
                             value={dayjs(deadlineExtensionData?.new_deadline)}
-                            onChange={(e) => { 
+                            onChange={(e) => {
                                 setDeadlineExtensionData({
                                     ...deadlineExtensionData,
                                     new_deadline: e,
@@ -191,33 +196,55 @@ const ProjectDeadlineExtensionAuthorizeModal = ({
                             }}
                         />
 
-                        {<span
-                            className="text-danger mt-1"
-                            style={{
-                                height: "20px",
-                            }}
-                        >
-                            {deadLineExtensionDataValidation.new_deadline &&
-                                "New Deadline is required"}
-                        </span>}
+                        {
+                            <span
+                                className="text-danger mt-1"
+                                style={{
+                                    height: "20px",
+                                }}
+                            >
+                                {deadLineExtensionDataValidation.new_deadline &&
+                                    "New Deadline is required"}
+                            </span>
+                        }
                     </div>
                 </div>
                 {/* Reason */}
                 <div className="deadlineExtensionOptions">
-                    <h6 className="mb-2">
-                        Explanation why{" "}
-                        <span className="text-warning">
-                            {" "}
-                            {modalData?.pm?.name}
-                        </span>{" "}
-                        need more time to complete this project?
-                    </h6>
-                    <div>
-                        <Switch>
+                    <Switch>
+                        <h6 className="mb-2 d-flex flex-wrap">
+                            Explanation why{" "}
                             <Switch.Case
-                                condition={htmlTagRegex.test(
-                                    deadlineExtensionData?.description
-                                )}
+                                condition={
+                                    modalData?.pm?.name &&
+                                    !isProjectDetailsLoading
+                                }
+                            >
+                                <span className="text-warning mx-1">
+                                    {modalData?.pm?.name}
+                                </span>{" "}
+                            </Switch.Case>
+                            <Switch.Case
+                                condition={
+                                    !modalData?.pm?.name &&
+                                    isProjectDetailsLoading
+                                }
+                            >
+                                <Placeholder
+                                    width="20%"
+                                    height="25px"
+                                    className="inline-block mx-1"
+                                />
+                            </Switch.Case>
+                            need more time to complete this project?
+                        </h6>
+                        <div>
+                            <Switch.Case
+                                condition={
+                                    htmlTagRegex.test(
+                                        deadlineExtensionData?.description
+                                    ) && !isLoading
+                                }
                             >
                                 <div
                                     dangerouslySetInnerHTML={{
@@ -229,13 +256,21 @@ const ProjectDeadlineExtensionAuthorizeModal = ({
                                 condition={
                                     !htmlTagRegex.test(
                                         deadlineExtensionData?.description
-                                    )
+                                    ) && !isLoading
                                 }
                             >
                                 {deadlineExtensionData?.description}
                             </Switch.Case>
-                        </Switch>
-                    </div>
+                            <Switch.Case
+                                condition={
+                                    !deadlineExtensionData?.description &&
+                                    isLoading
+                                }
+                            >
+                                <Placeholder width="50%" height="18px" />
+                            </Switch.Case>
+                        </div>
+                    </Switch>
                 </div>
             </ModalContentContainer>
             {/* Admin Comment */}
@@ -258,7 +293,7 @@ const ProjectDeadlineExtensionAuthorizeModal = ({
                     }}
                 />
             </ModalContentContainer>
-            
+
             {/* Buttons */}
             <ModalContentContainer className="pt-0">
                 <div className="modalButtonContainer">
@@ -275,7 +310,11 @@ const ProjectDeadlineExtensionAuthorizeModal = ({
                             handleDeadlineExtensionAuthorize("accept")
                         }
                         type="primary"
-                        isDisabled={isDeadlineExtensionLoading}
+                        isDisabled={
+                            isDeadlineExtensionLoading ||
+                            isLoading ||
+                            isProjectDetailsLoading
+                        }
                     />
                     <SingleButton
                         label={
@@ -288,7 +327,11 @@ const ProjectDeadlineExtensionAuthorizeModal = ({
                         }
                         onClick={() => handleDeadlineExtensionAuthorize("deny")}
                         type="secondary"
-                        isDisabled={isDeadlineExtensionLoading}
+                        isDisabled={
+                            isDeadlineExtensionLoading ||
+                            isLoading ||
+                            isProjectDetailsLoading
+                        }
                     />
                 </div>
             </ModalContentContainer>

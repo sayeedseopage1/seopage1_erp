@@ -483,6 +483,6 @@ const DashboardProjectInfoHourlySection = ({ projectData, isLoading }) => {
 export default DashboardProjectInfoHourlySection;
 
 DashboardProjectInfoHourlySection.propTypes = {
-    projectData: PropTypes.object.isRequired,
+    projectData: PropTypes.object || null,
     isLoading: PropTypes.bool,
 };
