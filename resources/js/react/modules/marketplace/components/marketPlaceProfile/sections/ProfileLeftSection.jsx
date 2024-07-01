@@ -5,6 +5,7 @@ import { Pagination, Select } from 'antd';
 import threeDotIcon from '../../../assets/marketplaceProfile/dot-three.svg';
 import ReviewCard from '../ui/ReviewCard';
 import ProfilePersonalInfoSection from './ProfilePersonalInfoSection';
+import { antdPaginate } from '../../../utils/antdPaginate';
 
 
 const ProfileLeftSection = ({ profileData }) => {
@@ -13,11 +14,8 @@ const ProfileLeftSection = ({ profileData }) => {
     const [currentPage, setCurrentPage] = useState(1);
     const reviewsPerPage = 5;
 
-    // Calculate the reviews to display on the current page
-    const currentReviews = reviews?.slice(
-        (currentPage - 1) * reviewsPerPage,
-        currentPage * reviewsPerPage
-    );
+    // Get the reviews for the current page
+    const currentReviews = antdPaginate(reviews, currentPage, reviewsPerPage);
 
     // Handle page change
     const handlePageChange = (page) => {
@@ -83,6 +81,7 @@ const ProfileLeftSection = ({ profileData }) => {
                             total={reviews?.length}
                             pageSize={reviewsPerPage}
                             onChange={handlePageChange}
+                            responsive
                         />
                     </div>
                 </div>

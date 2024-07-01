@@ -8,12 +8,24 @@ import {
     FaFile,
 } from "react-icons/fa";
 
+/**
+ * Validates a URL using a regular expression.
+ *
+ * @param {string} url - The URL to be validated.
+ * @return {boolean} Returns true if the URL is valid, false otherwise.
+ */
 export const validateUrl = (url) => {
     // Regular expression for URL validation
     const urlRegex = /^(ftp|http|https):\/\/[^ "]+$/;
     return urlRegex.test(url);
 };
 
+/**
+ * Returns a React component representing an icon for a given file extension.
+ *
+ * @param {string} extension - The file extension to get the icon for.
+ * @return {React.Component} A React component representing an icon for the given file extension.
+ */
 export function getFileIcon(extension) {
     switch (extension?.toLowerCase()) {
         case "png":
@@ -37,6 +49,12 @@ export function getFileIcon(extension) {
     }
 }
 
+/**
+ * Shortens a file name by removing characters from the middle if the name is longer than 3 characters.
+ *
+ * @param {string} fileName - The name of the file to be shortened.
+ * @return {string} The shortened file name. If the name is shorter than or equal to 3 characters, the original name is returned.
+ */
 export function shortenFileName(fileName) {
     const nameWithoutExtension = fileName?.substring(
         0,
@@ -55,6 +73,12 @@ export function shortenFileName(fileName) {
     return fileName;
 }
 
+/**
+ * Calculates the remaining time until the bidding deadline and formats it as a string indicating the remaining days and hours.
+ *
+ * @param {string} biddingDeadline - The deadline for bidding in "YYYY-MM-DD HH:mm:ss" format.
+ * @return {string} A string indicating the remaining time until the bidding deadline.
+ */
 export function getRemainingTime(biddingDeadline) {
     // Parse the bidding deadline date
     const deadlineDate = moment?.(biddingDeadline, "YYYY-MM-DD HH:mm:ss");
