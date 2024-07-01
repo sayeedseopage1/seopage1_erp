@@ -6,10 +6,11 @@ import threeDotIcon from '../../../assets/marketplaceProfile/dot-three.svg';
 import ReviewCard from '../ui/ReviewCard';
 import ProfilePersonalInfoSection from './ProfilePersonalInfoSection';
 import { antdPaginate } from '../../../utils/antdPaginate';
+import ProfilePortfolioSection from './ProfilePortfolioSection';
 
 
 const ProfileLeftSection = ({ profileData }) => {
-    const { reviews, experiences, educations, qualifications, publications } = profileData || {};
+    const { portfolio, reviews, experiences, educations, qualifications, publications } = profileData || {};
 
     const [currentPage, setCurrentPage] = useState(1);
     const reviewsPerPage = 5;
@@ -34,7 +35,7 @@ const ProfileLeftSection = ({ profileData }) => {
                     <button className='list_of_milestones_btn'>Manage</button>
                 </div>
             }>
-                portfolio
+                <ProfilePortfolioSection portfolio={portfolio} profileData={profileData} />
             </LgDataCardWithHeader>
             <LgDataCardWithHeader title={"Reviews"} actionCompo={
                 <div>

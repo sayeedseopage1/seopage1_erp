@@ -121,46 +121,266 @@ export const user_profile = {
     portfolio: [
         {
             id: 1,
-            thumbnail: "https://i.ibb.co/TKns0Yc/Rectangle-5688.png",
+            thumbnails: [
+                {
+                    id: 1,
+                    url: "https://i.ibb.co/WPLd3mH/c495d869d24928c2abeba2af0b465d91.png",
+                },
+                {
+                    id: 2,
+                    url: "https://i.ibb.co/j5yv9cY/a6374cbc4a3101a44777affaf930b729.png",
+                },
+                {
+                    id: 3,
+                    url: "https://i.ibb.co/ft7NJmj/Rectangle-5685.png",
+                },
+                {
+                    id: 4,
+                    url: "https://i.ibb.co/ft7NJmj/Rectangle-5685.png",
+                },
+            ],
+            img_url:
+                "https://i.ibb.co/WPLd3mH/c495d869d24928c2abeba2af0b465d91.png",
+            skills: [
+                {
+                    id: 1,
+                    name: "Web Design",
+                },
+                {
+                    id: 2,
+                    name: "Development",
+                },
+                {
+                    id: 3,
+                    name: "Design",
+                },
+                {
+                    id: 4,
+                    name: "SEO",
+                },
+            ],
             title: "Landing Page Design",
-            category: "Design",
+            category: "Web Design & Development",
             created_at: "2024-06-25 07:37:00",
         },
         {
             id: 2,
-            thumbnail:
+            thumbnails: [
+                {
+                    id: 1,
+                    url: "https://i.ibb.co/WPLd3mH/c495d869d24928c2abeba2af0b465d91.png",
+                },
+                {
+                    id: 2,
+                    url: "https://i.ibb.co/j5yv9cY/a6374cbc4a3101a44777affaf930b729.png",
+                },
+                {
+                    id: 3,
+                    url: "https://i.ibb.co/ft7NJmj/Rectangle-5685.png",
+                },
+                {
+                    id: 4,
+                    url: "https://i.ibb.co/ft7NJmj/Rectangle-5685.png",
+                },
+            ],
+            img_url:
                 "https://i.ibb.co/WPLd3mH/c495d869d24928c2abeba2af0b465d91.png",
+            skills: [
+                {
+                    id: 1,
+                    name: "Web Design",
+                },
+                {
+                    id: 2,
+                    name: "Development",
+                },
+                {
+                    id: 3,
+                    name: "Design",
+                },
+                {
+                    id: 4,
+                    name: "SEO",
+                },
+            ],
             title: "Landing Page Design",
-            category: "Design",
+            category: "Web Design & Development",
             created_at: "2024-06-25 07:37:00",
         },
         {
             id: 3,
-            thumbnail:
-                "https://i.ibb.co/j5yv9cY/a6374cbc4a3101a44777affaf930b729.png",
+            thumbnails: [
+                {
+                    id: 1,
+                    url: "https://i.ibb.co/WPLd3mH/c495d869d24928c2abeba2af0b465d91.png",
+                },
+                {
+                    id: 2,
+                    url: "https://i.ibb.co/j5yv9cY/a6374cbc4a3101a44777affaf930b729.png",
+                },
+                {
+                    id: 3,
+                    url: "https://i.ibb.co/ft7NJmj/Rectangle-5685.png",
+                },
+                {
+                    id: 4,
+                    url: "https://i.ibb.co/ft7NJmj/Rectangle-5685.png",
+                },
+            ],
+            img_url:
+                "https://i.ibb.co/WPLd3mH/c495d869d24928c2abeba2af0b465d91.png",
+            skills: [
+                {
+                    id: 1,
+                    name: "Web Design",
+                },
+                {
+                    id: 2,
+                    name: "Development",
+                },
+                {
+                    id: 3,
+                    name: "Design",
+                },
+                {
+                    id: 4,
+                    name: "SEO",
+                },
+            ],
             title: "Landing Page Design",
-            category: "Design",
+            category: "Web Design & Development",
             created_at: "2024-06-25 07:37:00",
         },
         {
             id: 4,
-            thumbnail: "https://i.ibb.co/ft7NJmj/Rectangle-5685.png",
+            thumbnails: [
+                {
+                    id: 1,
+                    url: "https://i.ibb.co/WPLd3mH/c495d869d24928c2abeba2af0b465d91.png",
+                },
+                {
+                    id: 2,
+                    url: "https://i.ibb.co/j5yv9cY/a6374cbc4a3101a44777affaf930b729.png",
+                },
+                {
+                    id: 3,
+                    url: "https://i.ibb.co/ft7NJmj/Rectangle-5685.png",
+                },
+                {
+                    id: 4,
+                    url: "https://i.ibb.co/ft7NJmj/Rectangle-5685.png",
+                },
+            ],
+            img_url:
+                "https://i.ibb.co/WPLd3mH/c495d869d24928c2abeba2af0b465d91.png",
+            skills: [
+                {
+                    id: 1,
+                    name: "Web Design",
+                },
+                {
+                    id: 2,
+                    name: "Development",
+                },
+                {
+                    id: 3,
+                    name: "Design",
+                },
+                {
+                    id: 4,
+                    name: "SEO",
+                },
+            ],
             title: "Landing Page Design",
-            category: "Design",
+            category: "Web Design & Development",
             created_at: "2024-06-25 07:37:00",
         },
         {
             id: 5,
-            thumbnail: "https://i.ibb.co/Tv9SK47/Rectangle-5684.png",
+            thumbnails: [
+                {
+                    id: 1,
+                    url: "https://i.ibb.co/WPLd3mH/c495d869d24928c2abeba2af0b465d91.png",
+                },
+                {
+                    id: 2,
+                    url: "https://i.ibb.co/j5yv9cY/a6374cbc4a3101a44777affaf930b729.png",
+                },
+                {
+                    id: 3,
+                    url: "https://i.ibb.co/ft7NJmj/Rectangle-5685.png",
+                },
+                {
+                    id: 4,
+                    url: "https://i.ibb.co/ft7NJmj/Rectangle-5685.png",
+                },
+            ],
+            img_url:
+                "https://i.ibb.co/WPLd3mH/c495d869d24928c2abeba2af0b465d91.png",
+            skills: [
+                {
+                    id: 1,
+                    name: "Web Design",
+                },
+                {
+                    id: 2,
+                    name: "Development",
+                },
+                {
+                    id: 3,
+                    name: "Design",
+                },
+                {
+                    id: 4,
+                    name: "SEO",
+                },
+            ],
             title: "Landing Page Design",
-            category: "Design",
+            category: "Web Design & Development",
             created_at: "2024-06-25 07:37:00",
         },
         {
             id: 6,
-            thumbnail: "https://i.ibb.co/y43yVz3/Rectangle-5683.png",
+            thumbnails: [
+                {
+                    id: 1,
+                    url: "https://i.ibb.co/WPLd3mH/c495d869d24928c2abeba2af0b465d91.png",
+                },
+                {
+                    id: 2,
+                    url: "https://i.ibb.co/j5yv9cY/a6374cbc4a3101a44777affaf930b729.png",
+                },
+                {
+                    id: 3,
+                    url: "https://i.ibb.co/ft7NJmj/Rectangle-5685.png",
+                },
+                {
+                    id: 4,
+                    url: "https://i.ibb.co/ft7NJmj/Rectangle-5685.png",
+                },
+            ],
+            img_url:
+                "https://i.ibb.co/WPLd3mH/c495d869d24928c2abeba2af0b465d91.png",
+            skills: [
+                {
+                    id: 1,
+                    name: "Web Design",
+                },
+                {
+                    id: 2,
+                    name: "Development",
+                },
+                {
+                    id: 3,
+                    name: "Design",
+                },
+                {
+                    id: 4,
+                    name: "SEO",
+                },
+            ],
             title: "Landing Page Design",
-            category: "Design",
+            category: "Web Design & Development",
             created_at: "2024-06-25 07:37:00",
         },
     ],

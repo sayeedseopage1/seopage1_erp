@@ -387,3 +387,142 @@
 .reviews_pagination button.ant-pagination-item-link {
     background: #DFDFDF !important;
 }
+
+/* portfolio section styles  */
+.marketplace_profile_portfolio {
+    width: 100%;
+    max-width: 1162px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2px;
+}
+
+.marketplace_portfolio_item {
+    width: 100%;
+    height: 366px;
+    overflow: hidden;
+    position: relative;
+}
+
+.marketplace_portfolio_item_content {
+    position: absolute;
+    bottom: -148px;
+    left: 0;
+    right: 0;
+    transition: all 0.3s ease-in-out;
+    background-color: var(--primary-white);
+    padding: 5px;
+    text-align: center;
+}
+
+.marketplace_portfolio_item:hover {
+    cursor: pointer;
+    box-shadow: 1px 1px 5px 1px rgba(0, 0, 0, 0.2);
+}
+
+.marketplace_portfolio_item:hover .marketplace_portfolio_item_content {
+    bottom: 0;
+}
+
+.marketplace_portfolio_item_img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    background-color: var(--light-blue-2);
+    scale: 1;
+}
+
+.marketplace_portfolio_item_img:hover {
+    scale: 1.1;
+    transition: 0.5s;
+}
+
+.portfolio_modal_header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 10px;
+}
+
+.portfolio_modal_close {
+    background-color: transparent;
+    color: var(--primary-black);
+    font-size: 22px;
+    font-style: normal;
+    font-weight: 500;
+}
+
+.portfolio_modal_wrapper {
+    width: 100%;
+    display: grid;
+    grid-template-columns: 3fr 2fr;
+    margin-top: 20px;
+}
+
+.portfolio_modal_content_left {
+    padding-right: 10px;
+    border-right: 2px solid var(--light-blue-2);
+}
+
+.portfolio_modal_content_right {
+    padding-left: 10px;
+}
+
+.portfolio_modal_title {
+    color: var(--primary-black);
+    font-size: 24px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: normal;
+    margin-bottom: 10px;
+}
+
+.portfolio_modal_sub_title {
+    color: var(--primary-black);
+    font-size: 18px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: normal;
+    margin-bottom: 6px;
+}
+
+.portfolio_personal_info {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 10px;
+}
+
+.portfolio_modal_avatar_wrapper {
+    position: relative;
+    display: inline-block;
+    margin-right: 10px;
+}
+
+.portfolio_modal_active_status {
+    position: absolute;
+    bottom: -7px;
+    right: -7px;
+}
+
+.portfolio_modal_avatar {
+    width: 65px;
+    height: 65px;
+    object-fit: cover;
+    object-position: center;
+}
+
+/* .slider-content {
+    bottom: -148px;
+    box-shadow: 0px -5px 23px 7px rgba(0, 0, 0, 0.7);
+    left: 0;
+    right: 0;
+    margin: auto;
+    transition: all 0.3s ease-in-out;
+}
+
+.swiper:hover .slider-content {
+    bottom: 0;
+} */
