@@ -2,7 +2,6 @@ const urlPattern = /(?:https?:\/\/[\w-]+(?:\.[\w-]+)+(?:[\w.,@?^=%&:/~+#-]*[\w@?
 
 export function formatHttp(text) {
   const formattedText = text?.replace(urlPattern, (url) => {
-
     if (!/<a\s+href\s*=\s*(?:(['"])(?:.*?)\1|([^\s>]+))(?=[^>]*?>)/i.test(url)) {
       return `<a href="${url}" target="_blank">${url}</a>`;
     }
@@ -10,6 +9,7 @@ export function formatHttp(text) {
   });
   return formattedText;
 }
+
 
 
 /**
