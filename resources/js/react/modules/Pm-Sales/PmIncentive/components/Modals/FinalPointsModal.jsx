@@ -3,7 +3,6 @@ import CustomAntdModal from '../ui/CustomAntdModal';
 import PropTypes from 'prop-types';
 
 const FinalPointsModal = ({ antdModalOpen, setAntdModalOpen, unreleasedIncentive, bonusPointsIncentive, bonusPointsData }) => {
-
     return (
         <div>
             <CustomAntdModal
@@ -36,7 +35,7 @@ export default FinalPointsModal;
 FinalPointsModal.propTypes = {
     antdModalOpen: PropTypes.bool,
     setAntdModalOpen: PropTypes.func,
-    unreleasedIncentive: PropTypes.number,
-    bonusPointsIncentive: PropTypes.number.isRequired,
+    unreleasedIncentive: PropTypes.any,
+    bonusPointsIncentive: PropTypes.any,
     bonusPointsData: PropTypes.number,
 }
