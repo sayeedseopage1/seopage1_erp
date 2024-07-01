@@ -5,6 +5,7 @@ import {
     useGetAllRevisionListQuery,
 } from "../../../services/api/EvaluationApiSlice";
 import { EvaluationRevisionTableColumnsWithTasks } from "../Table/EvaluationRevisionTableColumnsWithTasks";
+import { Spin } from "antd";
 const EvaluationRevisionModal = ({ data }) => {
     const [isEvaluationRevisionModal, setIsEvaluationRevisionModal] =
         React.useState(false);
@@ -56,7 +57,7 @@ const EvaluationRevisionModal = ({ data }) => {
                 onClick={() => setIsEvaluationRevisionModal(true)}
                 className="link_color"
             >
-                {Revisions?.length ?? "0"}
+                {isLoading ? <Spin /> : Revisions?.length}
             </div>
 
             <RevisionModalBody
