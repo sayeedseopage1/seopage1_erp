@@ -190,8 +190,7 @@ class Task extends BaseModel
         static::updated(function ($item) {
             if ($item->isDirty('board_column_id') && in_array($item->board_column_id, [8, 9, 1]) && $item->getOriginal('board_column_id') === 6) {
                 if(!$item->subtask_id && Auth::user()->role_id == 4 && $lastSubmission = TaskSubmission::where('task_id', $item->id)->orderBy('id', 'desc')->first()){
-                    $hoursDifference = Carbon::parse($lastSubmission->created_at)->diffInHours(Carbon::now());
-                    
+                    $hoursDifference = Carbon::parse($lastSubmission->created_at)->diffInMinutes(Carbon::now()) / 60;
                     $taskitem = Task::with('project.client')->find($item->id);
                     $activity = 'You did not take any action of this submitted task <a style="color:blue" href="'.route('tasks.show',$taskitem->id??null).'">'.$taskitem->heading??null. '</a>, for project <a style="color:blue" href="'.route('projects.show',$taskitem->project->id??null).'">'.$taskitem->project->project_name??null. '</a>  (Client <a style="color:blue" href="'.route('clients.show', $taskitem->project->client->id??null).'">'. $taskitem->project->client->name??null. '</a>) in 36 hours';
 
