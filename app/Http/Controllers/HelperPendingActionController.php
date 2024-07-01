@@ -1911,7 +1911,6 @@ class HelperPendingActionController extends AccountBaseController
                         'button_name' => 'Evaluate',
                         'button_color' => 'primary',
                         'button_type' => 'redirect_url',
-                        'button_url' => route('employee-evaluation.index'),
                         'button_url' => route('employee-evaluation.index', ['user_id' => $new_dev->id, 'show' => 'all']),
                     ],
 
@@ -2092,8 +2091,8 @@ class HelperPendingActionController extends AccountBaseController
                     $action->heading= 'Top Management has extended the trial period for new Project Manager!';
                     $action->message = 'Top Management <a href="'.route('employees.show',$top_management->id).'">'.$top_management->name.'</a> has extended the trial period for new Project Manager <a href="'.route('employees.show',$new_dev->id).'">'.$new_dev->name.'!</a>';
                 }elseif($evaluation->user_status == 'LD'){
-                    $action->heading= 'Top Management '.$top_management->name.' has extended the trial period for New Lead developer '.$new_dev->name.'!';
-                    $action->message = 'Top Management <a href="'.route('employees.show',$top_management->id).'">'.$top_management->name.'</a> has extended the trial period for one more week for New Lead developer <a href="'.route('employees.show',$new_dev->id).'">'.$new_dev->name.'</a> from '.$formatted_date_time.'';
+                    $action->heading= 'Top Management has extended the trial period for the new Lead Developer!';
+                    $action->message = 'Top Management <a href="'.route('employees.show',$top_management->id).'">'.$top_management->name.'</a> has extended the trial period for New Lead Developer <a href="'.route('employees.show',$new_dev->id).'">'.$new_dev->name.'</a>!';
                 }elseif($evaluation->user_status == 'SE'){
                     $action->heading= 'Top Management '.$top_management->name.' has extended the trial period for New Sales Executive '.$new_dev->name.'!';
                     $action->message = 'Top Management <a href="'.route('employees.show',$top_management->id).'">'.$top_management->name.'</a> has extended the trial period for one more week for New Sales Executive <a href="'.route('employees.show',$new_dev->id).'">'.$new_dev->name.'</a> from '.$formatted_date_time.'';
@@ -2106,7 +2105,7 @@ class HelperPendingActionController extends AccountBaseController
                 $action->task_id = $task->id;
                 $action->developer_id = $new_dev->id;
                 $action->authorization_for= $authorizer->id;
-                if($evaluation->user_status == 'PM'){
+                if($evaluation->user_status == 'PM' || $evaluation->user_status == 'LD'){
                     $button = [
                         [
                             'button_name' => 'Create a new task',
@@ -2187,9 +2186,9 @@ class HelperPendingActionController extends AccountBaseController
                 }elseif($evaluation->user_status == 'LD'){
                     $action->code = 'NLDE';
                     $action->serial = 'NLDE'.'x'.$key;
-                    $action->item_name= 'New lead\'s performance evaluation!';
-                    $action->heading= 'New lead\'s performance evaluation!';
-                    $action->message = 'Fill out initial performance evaluation form for the Lead Developer <a href="'.route('employees.show',$new_pm->id).'">'.$new_pm->name.'</a>!';
+                    $action->item_name= 'Performance evaluation for new Lead Developer!';
+                    $action->heading= 'Performance evaluation for new Lead Developer!';
+                    $action->message = 'Fill out the initial performance evaluation form for the new Lead Developer <a href="'.route('employees.show',$new_pm->id).'">'.$new_pm->name.'</a>';
                 }else{
                     $action->code = 'NSEE';
                     $action->serial = 'NSEE'.'x'.$key;
@@ -2208,7 +2207,6 @@ class HelperPendingActionController extends AccountBaseController
                             'button_name' => 'Evaluate',
                             'button_color' => 'primary',
                             'button_type' => 'redirect_url',
-                            'button_url' => route('employee-evaluation.index'),
                             'button_url' => route('employee-evaluation.index', ['user_id' => $new_pm->id, 'show' => 'all' ,'type' => 'pm']),
                         ],
                     ];
@@ -2218,7 +2216,6 @@ class HelperPendingActionController extends AccountBaseController
                             'button_name' => 'Evaluate',
                             'button_color' => 'primary',
                             'button_type' => 'redirect_url',
-                            'button_url' => route('employee-evaluation.index'),
                             'button_url' => route('employee-evaluation.index', ['user_id' => $new_pm->id, 'show' => 'all' ,'type' => 'ld']),
                         ],
                     ];
@@ -2228,7 +2225,6 @@ class HelperPendingActionController extends AccountBaseController
                             'button_name' => 'Evaluate',
                             'button_color' => 'primary',
                             'button_type' => 'redirect_url',
-                            'button_url' => route('employee-evaluation.index'),
                             'button_url' => route('employee-evaluation.index', ['user_id' => $new_pm->id, 'show' => 'all' ,'type' => 'sales_executive']),
                         ],
                     ];
@@ -2258,9 +2254,9 @@ class HelperPendingActionController extends AccountBaseController
                 }elseif($evaluation->user_status == 'LD'){
                     $action->code = 'TLSNLD';
                     $action->serial = 'TLSNLD'.'x'.$key;
-                    $action->item_name= 'New lead developer\'s evaluation!';
-                    $action->heading= 'Team Lead '.$team_lead->name.' has submitted evaluations for New Lead developer '.$new_pm->name.'!';
-                    $action->message = 'Team Lead <a href="'.route('employees.show',$team_lead->id).'">'.$team_lead->name.'</a> has evaluated New Lead Developer <a href="'.route('employees.show',$new_pm->id).'">'.$new_pm->name.'</a> on '.$formatted_date_time.'';
+                    $action->item_name= 'Team Leader\'s evaluation report on new Lead Developer!';
+                    $action->heading= 'Team Leader\'s evaluation report on new Lead Developer!';
+                    $action->message = 'Team Leader <a href="'.route('employees.show',$team_lead->id).'">'.$team_lead->name.'</a> has evaluated the new Lead Developer <a href="'.route('employees.show',$new_pm->id).'">'.$new_pm->name.'!</a>';
                 }else{
                     $action->code = 'TLSNSE';
                     $action->serial = 'TLSNSE'.'x'.$key;
@@ -2279,10 +2275,8 @@ class HelperPendingActionController extends AccountBaseController
                             'button_name' => 'Review',
                             'button_color' => 'primary',
                             'button_type' => 'redirect_url',
-                            'button_url' => route('employee-evaluation.index'),
                             'button_url' => route('employee-evaluation.index', ['user_id' => $new_pm->id, 'show' => 'all', 'type' => 'pm']),
                         ],
-    
                     ];
                 }elseif($evaluation->user_status == 'LD'){
                     $button = [
@@ -2290,10 +2284,8 @@ class HelperPendingActionController extends AccountBaseController
                             'button_name' => 'Review',
                             'button_color' => 'primary',
                             'button_type' => 'redirect_url',
-                            'button_url' => route('employee-evaluation.index'),
                             'button_url' => route('employee-evaluation.index', ['user_id' => $new_pm->id, 'show' => 'all', 'type' => 'ld']),
                         ],
-    
                     ];
                 }else{
                     $button = [
