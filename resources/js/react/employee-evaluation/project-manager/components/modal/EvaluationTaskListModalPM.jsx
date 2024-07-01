@@ -142,20 +142,29 @@ const EvaluationTaskListModalPM = ({
                 (task) => ![1, 2, 3].includes(task?.task_board_column_id)
             );
 
-            const cumulativeSum = tasksToRate.reduce(
-                (acc, cur) => acc + Number(cur.avg_rating ?? 0),
-                0
-            );
+            if (tasksToRate?.length > 0) {
+                const cumulativeSum = tasksToRate.reduce(
+                    (acc, cur) => acc + Number(cur.avg_rating ?? 0),
+                    0
+                );
 
-            console.log("tasks to rate", tasksToRate);
-            const average = cumulativeSum / tasksToRate.length;
-            setCumulativeAverage(average);
+                const average = cumulativeSum / tasksToRate.length;
+                setCumulativeAverage(average);
 
-            const isAllTaskRated =
-                tasksToRate.length ===
-                tasksToRate.filter((task) => task.team_lead_cmnt !== null)
-                    .length;
-            setIsAllTaskRated(isAllTaskRated);
+                // console.log("tasks to rate", tasksToRate);
+                // console.log("cumu sum", cumulativeSum);
+                // console.log("avg", average);
+
+                const isAllTaskRated =
+                    tasksToRate.length ===
+                    tasksToRate.filter((task) => task.team_lead_cmnt !== null)
+                        .length;
+                setIsAllTaskRated(isAllTaskRated);
+            } else {
+                // Handle case when tasksToRate is empty
+                setCumulativeAverage(0);
+                setIsAllTaskRated(false);
+            }
         }
     }, [latestRoundTasks]);
 
@@ -424,12 +433,9 @@ const EvaluationTaskListModalPM = ({
                         <span>Cumulative Average:</span>
                         <span>
                             {" "}
-                            {Number(
-                                cumulativeAverage === NaN
-                                    ? 0
-                                    : cumulativeAverage
-                            )?.toFixed(2) ?? 0}
-                            {console.log("cumulative avg", cumulativeAverage)}
+                            {isNaN(cumulativeAverage)
+                                ? 0
+                                : Number(cumulativeAverage).toFixed(2)}
                         </span>
                     </span>
                 </EvalTableTitle>
