@@ -5,7 +5,7 @@ import EditIcon from "../Styles/ui/EditIcon";
 import Switch from "../../../../../global/Switch";
 import { auth } from "../../../PmIncentive/constants";
 import { Popover } from "antd";
-import { IoInformationCircle } from "react-icons/io5";
+import infoIcon from '../../../PmIncentive/assets/info-icon.png';
 
 export const PointFactorsColumns = [
     {
@@ -35,7 +35,7 @@ export const PointFactorsColumns = [
                                         width: "220px"
                                     }}
                                 >
-                                    <IoInformationCircle size={15} className='informationCircle' />
+                                    <img src={infoIcon} alt="infoIcon" />
                                 </Popover>
                             </>
                         ) : (

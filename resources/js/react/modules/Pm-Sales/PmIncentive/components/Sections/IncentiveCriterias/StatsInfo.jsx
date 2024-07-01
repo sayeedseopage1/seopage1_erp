@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import StatsInfoProgressCard from './StatsInfoProgressCard';
 import pointIconDark from '../../../assets/pointIconDark.svg'
-import { IoInformationCircle } from "react-icons/io5";
 import IncentivePointModal from '../../Modals/IncentivePointModal';
 import { Popover, Skeleton } from 'antd';
 import AverageProgressCard from './AverageProgressCard';
 import { useDispatch, useSelector } from 'react-redux';
 import { regularIncentivePoints } from '../../../../../../services/features/Pm-Sales/pmIncentiveSlice';
 import useIncentive from '../../../hooks/useIncentive';
+import infoIcon from '../../../assets/info-icon.png';
 
 const StatsInfo = () => {
     const [incentivePointsModalOpen, setIncentivePointsModalOpen] = useState(false);
@@ -69,7 +69,7 @@ const StatsInfo = () => {
                                         width: "220px"
                                     }}
                                 >
-                                    <IoInformationCircle className='informationCircle' />
+                                    <img src={infoIcon} alt="infoIcon" />
                                 </Popover>
                             </p>
                             <div

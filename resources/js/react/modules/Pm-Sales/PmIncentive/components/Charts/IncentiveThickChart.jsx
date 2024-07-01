@@ -3,11 +3,11 @@ import Chart from "react-apexcharts";
 import arrow1 from '../../assets/arrow-1.svg'
 import arrow2 from '../../assets/arrow-2.svg'
 import { Popover } from "antd";
-import { IoInformationCircle } from "react-icons/io5";
 import line18 from '../../assets/Line18.svg'
 import line19 from '../../assets/Line19.svg'
 import { rangesForLongValue, rangesForShortValue } from "../../constants/rangesColor";
 import PropTypes from 'prop-types';
+import infoIcon from '../../assets/info-icon.png'
 
 const IncentiveThickChart = ({ chartData }) => {
     const chartRef = useRef(null);
@@ -185,7 +185,7 @@ const IncentiveThickChart = ({ chartData }) => {
                             width: "220px"
                         }}
                     >
-                        <IoInformationCircle className='informationCircle' />
+                        <img src={infoIcon} alt="infoIcon" />
                     </Popover>}
                 </div>
                 <button
