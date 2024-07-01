@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import pointIconDark from '../../../assets/pointIconDark.svg'
 import cashBag from '../../../assets/cashBag.svg'
-import { IoInformationCircle } from 'react-icons/io5';
 import FinalPointsModal from '../../Modals/FinalPointsModal';
 import { Popover } from 'antd';
 import IncentiveEditButton from '../../ui/IncentiveEditButton';
@@ -11,6 +10,7 @@ import { auth } from '../../../constants';
 import { useDispatch, useSelector } from 'react-redux';
 import { bonusPointsPoints } from '../../../../../../services/features/Pm-Sales/pmIncentiveSlice';
 import useIncentive from '../../../hooks/useIncentive';
+import infoIcon from '../../../assets/info-icon.png'
 
 const BonusPointsPointBanner = () => {
     const [finalPointsModalOpen, setFinalPointsModalOpen] = useState(false);
@@ -52,7 +52,7 @@ const BonusPointsPointBanner = () => {
                                     width: "220px"
                                 }}
                             >
-                                <IoInformationCircle className='informationCircle' />
+                                <img src={infoIcon} alt="infoIcon" />
                             </Popover>
                         </p>
 
@@ -78,7 +78,7 @@ const BonusPointsPointBanner = () => {
                                     width: "220px"
                                 }}
                             >
-                                <IoInformationCircle className='informationCircle' />
+                                <img src={infoIcon} alt="infoIcon" />
                             </Popover>
                         </p>
 
