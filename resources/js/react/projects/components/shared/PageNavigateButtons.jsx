@@ -23,7 +23,7 @@ const PageNavigateButtons = ({ navigateData, className = "" }) => {
                 Deal Page
             </Button>
             <Button
-                onClick={() => window.open(`/account/deals/${navigateData?.deal?.lead_id}`, "_blank")}
+                onClick={() => window.open(`/account/leads/${navigateData?.deal?.lead_id}`, "_blank")}
                 className={`${style?.dashboardHeaderButton} ml-2`}
             >
                 Lead Page
