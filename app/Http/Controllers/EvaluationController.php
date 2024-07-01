@@ -583,7 +583,6 @@ class EvaluationController extends AccountBaseController
                 $action->past_status = 1;
                 $action->save();
                 $authorize_by= User::where('id',$action->authorized_by)->first();
-                $teamLead= User::where('id',$evaluation->team_lead_id)->first();
                 $dev= User::where('id',$evaluation->user_id)->first();
                     
                 $past_action= new PendingActionPast();
@@ -592,8 +591,8 @@ class EvaluationController extends AccountBaseController
                 $past_action->serial = $action->serial;
                 $past_action->action_id = $action->id;
                 if($action->code == 'TLSNPM'){
-                    $past_action->heading= 'New PM '.$dev->name.' was authorize for real work by Top Management '.$authorize_by->name.'!';
-                    $past_action->message = 'Top Management <a href="'.route('employees.show',$authorize_by->id).'">'.$authorize_by->name.'</a> has authorized New PM <a href="'.route('employees.show',$dev->id).'">'.$dev->name.'</a> for real work from ';
+                    $past_action->heading= $action->heading;
+                    $past_action->message = 'New Project Manager <a href="'.route('employees.show',$dev->id).'">'.$dev->name.'</a> was '. '<span class="text-success">Authorized</span>' .' for real work by Top Management <a href="'.route('employees.show',$authorize_by->id).'">'.$authorize_by->name.'</a>';
                 }elseif($action->code == 'TLSNLD'){
                     $past_action->heading= 'New lead developer '.$dev->name.' was authorize for real work by Top Management '.$authorize_by->name.'!';
                     $past_action->message = 'Top Management <a href="'.route('employees.show',$authorize_by->id).'">'.$authorize_by->name.'</a> has authorized New lead developer <a href="'.route('employees.show',$dev->id).'">'.$dev->name.'</a> for real work from ';
@@ -688,8 +687,8 @@ class EvaluationController extends AccountBaseController
                 $past_action->serial = $action->serial;
                 $past_action->action_id = $action->id;
                 if($action->code == 'TLSNPM'){
-                    $past_action->heading= 'New PM '.$dev->name.' was rejected for real work by Top Management '.$authorize_by->name.'!';
-                    $past_action->message = 'Top Management <a href="'.route('employees.show',$authorize_by->id).'">'.$authorize_by->name.'</a> has rejected New PM <a href="'.route('employees.show',$dev->id).'">'.$dev->name.'</a> for real work from ';
+                    $past_action->heading= $action->heading;
+                    $past_action->message = 'New Project Manager <a href="'.route('employees.show',$dev->id).'">'.$dev->name.'</a> was '. '<span class="text-danger">Rejected</span>' .' for real work by Top Management <a href="'.route('employees.show',$authorize_by->id).'">'.$authorize_by->name.'</a>';
                 }elseif($action->code == 'TLSNLD'){
                     $past_action->heading= 'New lead developer '.$dev->name.' was rejected for real work by Top Management '.$authorize_by->name.'!';
                     $past_action->message = 'Top Management <a href="'.route('employees.show',$authorize_by->id).'">'.$authorize_by->name.'</a> has rejected New lead developer <a href="'.route('employees.show',$dev->id).'">'.$dev->name.'</a> for real work from ';
@@ -710,7 +709,7 @@ class EvaluationController extends AccountBaseController
                 if($action->code == 'TLSNPM'){
                     $button = [
                         [
-                            'button_name' => 'See Evaluations',
+                            'button_name' => 'View Evaluation',
                             'button_color' => 'primary',
                             'button_type' => 'redirect_url',
                             'button_url' => route('employee-evaluation.index'),
@@ -821,8 +820,8 @@ class EvaluationController extends AccountBaseController
                     $past_action->serial = $action->serial;
                     $past_action->action_id = $action->id;
                     if($action->code == 'TLSNPM'){
-                        $past_action->heading= 'Top Management '.$authorize_by->name.' has extended the trial period for New PM '.$dev->name.'!';
-                        $past_action->message = 'Top Management <a href="'.route('employees.show',$authorize_by->id).'">'.$authorize_by->name.'</a> has extended the trial period for one more week for New PM <a href="'.route('employees.show',$dev->id).'">'.$dev->name.'</a> from ';
+                        $past_action->heading= $action->heading;
+                        $past_action->message = 'Top Management <a href="'.route('employees.show',$authorize_by->id).'">'.$authorize_by->name.'</a> has '. '<span class="text-primary">extended </span>' .' the trial period for new Project Manager <a href="'.route('employees.show',$dev->id).'">'.$dev->name.'</a>';
                     }elseif($action->code == 'TLSNLD'){
                         $past_action->heading= 'Top Management '.$authorize_by->name.' has extended the trial period for New Lead Developer '.$dev->name.'!';
                         $past_action->message = 'Top Management <a href="'.route('employees.show',$authorize_by->id).'">'.$authorize_by->name.'</a> has extended the trial period for one more week for New Lead developer <a href="'.route('employees.show',$dev->id).'">'.$dev->name.'</a> from ';

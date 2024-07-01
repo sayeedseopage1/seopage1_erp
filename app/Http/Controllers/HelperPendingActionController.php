@@ -2088,13 +2088,13 @@ class HelperPendingActionController extends AccountBaseController
                 $action->code = 'EEFA';
                 $action->serial = 'EEFA'.'x'.$key;
                 $action->item_name= 'Evaluation extend for admin!';
-                if($evaluation_task->user_status == 'PM'){
-                    $action->heading= 'Top Management '.$top_management->name.' has extended the trial period for New PM '.$new_dev->name.'!';
-                    $action->message = 'Top Management <a href="'.route('employees.show',$top_management->id).'">'.$top_management->name.'</a> has extended the trial period for one more week for New PM <a href="'.route('employees.show',$new_dev->id).'">'.$new_dev->name.'</a> from '.$formatted_date_time.'';
-                }elseif($evaluation_task->user_status == 'LD'){
+                if($evaluation->user_status == 'PM'){
+                    $action->heading= 'Top Management has extended the trial period for new Project Manager!';
+                    $action->message = 'Top Management <a href="'.route('employees.show',$top_management->id).'">'.$top_management->name.'</a> has extended the trial period for new Project Manager <a href="'.route('employees.show',$new_dev->id).'">'.$new_dev->name.'!</a>';
+                }elseif($evaluation->user_status == 'LD'){
                     $action->heading= 'Top Management '.$top_management->name.' has extended the trial period for New Lead developer '.$new_dev->name.'!';
                     $action->message = 'Top Management <a href="'.route('employees.show',$top_management->id).'">'.$top_management->name.'</a> has extended the trial period for one more week for New Lead developer <a href="'.route('employees.show',$new_dev->id).'">'.$new_dev->name.'</a> from '.$formatted_date_time.'';
-                }elseif($evaluation_task->user_status == 'SE'){
+                }elseif($evaluation->user_status == 'SE'){
                     $action->heading= 'Top Management '.$top_management->name.' has extended the trial period for New Sales Executive '.$new_dev->name.'!';
                     $action->message = 'Top Management <a href="'.route('employees.show',$top_management->id).'">'.$top_management->name.'</a> has extended the trial period for one more week for New Sales Executive <a href="'.route('employees.show',$new_dev->id).'">'.$new_dev->name.'</a> from '.$formatted_date_time.'';
                 }else{
@@ -2106,16 +2106,29 @@ class HelperPendingActionController extends AccountBaseController
                 $action->task_id = $task->id;
                 $action->developer_id = $new_dev->id;
                 $action->authorization_for= $authorizer->id;
-                $button = [
-                    [
-                        'button_name' => 'Acknowledge & create a task',
-                        'button_color' => 'primary',
-                        'button_type' => 'modal',
-                        'button_url' => '',
-                        'modal_form'=> false,
-                    ],
+                if($evaluation->user_status == 'PM'){
+                    $button = [
+                        [
+                            'button_name' => 'Create a new task',
+                            'button_color' => 'primary',
+                            'button_type' => 'modal',
+                            'button_url' => '',
+                            'modal_form'=> false,
+                        ],
 
-                ];
+                    ];
+                }else{
+                    $button = [
+                        [
+                            'button_name' => 'Acknowledge & create a task',
+                            'button_color' => 'primary',
+                            'button_type' => 'modal',
+                            'button_url' => '',
+                            'modal_form'=> false,
+                        ],
+
+                    ];
+                }
                 $action->button = json_encode($button);
                 $action->save();
             }
@@ -2241,7 +2254,7 @@ class HelperPendingActionController extends AccountBaseController
                     $action->serial = 'TLSNPM'.'x'.$key;
                     $action->item_name= 'Team leader\'s evaluation report on new Project Manager!';
                     $action->heading= 'Team leader\'s evaluation report on new Project Manager!';
-                    $action->message = 'Team Leader <a href="'.route('employees.show',$team_lead->id).'">'.$team_lead->name.'</a> has evaluated new Project Manager <a href="'.route('employees.show',$new_pm->id).'">'.$new_pm->name.'</a> on '.$formatted_date_time.'';
+                    $action->message = 'Team Leader <a href="'.route('employees.show',$team_lead->id).'">'.$team_lead->name.'</a> has evaluated new Project Manager <a href="'.route('employees.show',$new_pm->id).'">'.$new_pm->name.'!</a>';
                 }elseif($evaluation->user_status == 'LD'){
                     $action->code = 'TLSNLD';
                     $action->serial = 'TLSNLD'.'x'.$key;
