@@ -324,7 +324,7 @@ class EvaluationController extends AccountBaseController
             $action->past_status = 1;
             $action->save();
             $authorize_by= User::where('id',$action->authorized_by)->first();
-            $dev= User::where('id',$employee_evaluation->user_id)->first();
+            $dev = User::where('id',$employee_evaluation->user_id)->first();
                 
             $past_action= new PendingActionPast();
             $past_action->item_name = $action->item_name;
@@ -332,8 +332,8 @@ class EvaluationController extends AccountBaseController
             $past_action->serial = $action->serial;
             $past_action->action_id = $action->id;
             if($action->code == 'NDPM'){
-                $past_action->heading= 'New PM '.$dev->name.' evaluations were successfully submitted!';
-                $past_action->message = 'Team Lead <a href="'.route('employees.show',$authorize_by->id).'">'.$authorize_by->name.'</a> has evaluated New PM <a href="'.route('employees.show',$dev->id).'">'.$dev->name.'</a>!';
+                $past_action->heading= $action->heading;
+                $past_action->message = 'New Project Manager <a href="'.route('employees.show',$dev->id).'">'.$dev->name.'\'s </a> evaluations were successfully submitted!';
             }elseif($action->code == 'NLDE'){
                 $past_action->heading= 'New Sales '.$dev->name.' evaluations were successfully submitted!';
                 $past_action->message = 'Team Lead <a href="'.route('employees.show',$authorize_by->id).'">'.$authorize_by->name.'</a> has evaluated New Sales <a href="'.route('employees.show',$dev->id).'">'.$dev->name.'</a>!';
@@ -353,10 +353,9 @@ class EvaluationController extends AccountBaseController
             if($action->code == 'NDPM'){
                 $button = [
                     [
-                        'button_name' => 'See Evaluations',
+                        'button_name' => 'View Evaluation',
                         'button_color' => 'primary',
                         'button_type' => 'redirect_url',
-                        'button_url' => route('employee-evaluation.index'),
                         'button_url' => route('employee-evaluation.index', ['user_id' => $dev->id,'show' => 'all', 'type' => 'pm']),
                     ],
                 ];
