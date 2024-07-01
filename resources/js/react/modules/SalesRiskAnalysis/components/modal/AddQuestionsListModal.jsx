@@ -54,10 +54,9 @@ const AddQuestionsListModal = ({
     refetchSaleRiskAnalysis,
     isQuestionUpdating,
     setIsQuestionUpdating,
-    isYesNoRulesLoading
+    isYesNoRulesLoading,
+    singlePolicyDataByIDorKey,
 }) => {
-    
-    
     const modalRef = useRef(null);
     const { questionsAnswerType, policies, allQuestions, yesNoRules } =
         useContext(SalesRiskAnalysisContext);
@@ -77,7 +76,10 @@ const AddQuestionsListModal = ({
 
     const [
         editSinglePolicySalesRiskAnalysis,
-        { isLoading: isEditSinglePolicySalesRiskAnalysisLoading },
+        {
+            isLoading: isEditSinglePolicySalesRiskAnalysisLoading,
+            isSuccess: isEditSinglePolicySalesRiskAnalysisSuccess,
+        },
     ] = useEditQuestionSalesRiskAnalysisMutation();
 
     const { data: singlePolicyData, isLoading: isLoadingSinglePolicyData } =
@@ -92,7 +94,10 @@ const AddQuestionsListModal = ({
 
     const [
         saleAnalysisQuestionSave,
-        { isLoading: isSaleAnalysisQuestionSaveLoading },
+        {
+            isLoading: isSaleAnalysisQuestionSaveLoading,
+            isSuccess: isSaleAnalysisQuestionSaveSuccess,
+        },
     ] = useSaleAnalysisQuestionSaveMutation();
 
     // Handle Change
@@ -318,7 +323,6 @@ const AddQuestionsListModal = ({
                     toast.error(errorMessage);
                 });
             } else {
-                console.log(error);
                 toast.error("Something went wrong");
             }
         }
@@ -371,7 +375,8 @@ const AddQuestionsListModal = ({
 
     const handleButtonTernary = (
         isSaleAnalysisQuestionSaveLoading,
-        isQuestionUpdating , isYesNoRulesLoading
+        isQuestionUpdating,
+        isYesNoRulesLoading
     ) => {
         if (
             isSaleAnalysisQuestionSaveLoading ||
@@ -379,8 +384,8 @@ const AddQuestionsListModal = ({
         ) {
             return "Saving...";
         }
-        if(isYesNoRulesLoading){
-            return "Loading..."
+        if (isYesNoRulesLoading) {
+            return "Loading...";
         }
 
         if (isQuestionUpdating) {
@@ -436,8 +441,6 @@ const AddQuestionsListModal = ({
             }));
         }
     }, [isLoadingSinglePolicyData]);
-
-
 
     return (
         <CustomModal
@@ -566,10 +569,11 @@ const AddQuestionsListModal = ({
                                     selected={singleQuestion?.type}
                                     setSelected={handleChange}
                                     isDisableUse={
-                                        singleQuestion?.type?.name ===
+                                        (singleQuestion?.type?.name ===
                                             "yesNo" &&
-                                        singleQuestion?.question_key?.name ===
-                                            "yesNoRules" || isQuestionUpdating
+                                            singleQuestion?.question_key
+                                                ?.name === "yesNoRules") ||
+                                        isQuestionUpdating
                                     }
                                 />
                             </ModalSelectContainer>
@@ -753,7 +757,8 @@ const AddQuestionsListModal = ({
                                             setSelected={handleChange}
                                             isDisableUse={
                                                 singleQuestion?.question_key
-                                                    ?.name === "yesNoRules" || isQuestionUpdating
+                                                    ?.name === "yesNoRules" ||
+                                                isQuestionUpdating
                                             }
                                         />
                                     </ModalSelectContainer>
@@ -783,7 +788,11 @@ const AddQuestionsListModal = ({
                                                     singleQuestion?.rule_id
                                                 }
                                                 setSelected={handleChange}
-                                                isDisableUse={isQuestionUpdating}
+                                                isDisableUse={
+                                                    isQuestionUpdating &&
+                                                    yesNoRules?.data?.length ===
+                                                        0
+                                                }
                                             />
                                         </ModalSelectContainer>
                                         {singleQuestionValidation?.rule_id && (
@@ -834,10 +843,20 @@ const AddQuestionsListModal = ({
                         </div>
                     </div>
                     <Flex gap="10px" justifyContent="center">
-                        <ModalButton onClick={handleAddQuestion} width="200px">
+                        <ModalButton
+                            onClick={handleAddQuestion}
+                            width="200px"
+                            disabled={
+                                isSaleAnalysisQuestionSaveLoading ||
+                                isEditSinglePolicySalesRiskAnalysisLoading ||
+                                isSaleAnalysisQuestionSaveSuccess ||
+                                isEditSinglePolicySalesRiskAnalysisSuccess
+                            }
+                        >
                             {handleButtonTernary(
                                 isSaleAnalysisQuestionSaveLoading,
-                                isQuestionUpdating , isYesNoRulesLoading
+                                isQuestionUpdating,
+                                isYesNoRulesLoading
                             )}
                         </ModalButton>
                         <ModalButton

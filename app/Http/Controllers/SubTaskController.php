@@ -520,11 +520,12 @@ class SubTaskController extends AccountBaseController
             $helper->NewTaskAssign($task_s);
             // $actions = PendingAction::where('serial','NTTAx'.$request->user_id)->where('past_status',0)->get();
             // dd($actions);
-
-            $assigned_to = User::find($subTask->assigned_to);
-            $text = 'Subtask ' .$subTask->title. ' has been created against task ' . $parent_task->heading . ' and assigned to ' . $assigned_to->name;
-            $link = '<a href="' . route('tasks.show', $task->id) . '">' . $text . '</a>';
-            $this->logProjectActivity($task->project_id, $link);
+            if($task->project_id != null){
+                $assigned_to = User::find($subTask->assigned_to);
+                $text = 'Subtask ' .$subTask->title. ' has been created against task ' . $parent_task->heading . ' and assigned to ' . $assigned_to->name;
+                $link = '<a href="' . route('tasks.show', $task->id) . '">' . $text . '</a>';
+                $this->logProjectActivity($task->project_id, $link);
+            }
             
             /**EMPLOYEE EVALUATION START */
             $taskFind = Task::where('subtask_id',$subTask->id)->where('u_id',null)->where('independent_task_status',1)->first(); //Find SubTask
@@ -536,7 +537,7 @@ class SubTaskController extends AccountBaseController
                         $evaluation->start_date = Carbon::now();
                         $emp_start_task = $evaluation->start_date;
 
-                        $exp_date = Carbon::parse($emp_start_task)->addDays(7);
+                        $exp_date = Carbon::parse($emp_start_task)->addDays(6);
                         $countSundays = 0;
                         $currentDate = $emp_start_task->copy(); 
                         while ($currentDate->lte($exp_date)) {
@@ -546,7 +547,7 @@ class SubTaskController extends AccountBaseController
                             $currentDate->addDay(); 
                         }
                         
-                        $evaluation->exp_date = Carbon::parse($emp_start_task)->addDays(7 + $countSundays);
+                        $evaluation->exp_date = Carbon::parse($emp_start_task)->addDays(6 + $countSundays);
                         
                         $evaluation->save();
                     }
