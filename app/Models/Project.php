@@ -443,7 +443,7 @@ class Project extends BaseModel
 
     public function projectSubmission()
     {
-        return $this->hasOne(ProjectSubmission::class, 'project_id');
+        return $this->hasOne(ProjectSubmission::class, 'project_id')->orderBy('id', 'desc');
     }
 
     public function projectPortfolio()
