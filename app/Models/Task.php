@@ -234,6 +234,22 @@ class Task extends BaseModel
                     }
                 }
             }
+
+            // If client approved task withing required hours but he did not submit the task to client approval withing required hours so PM get negative points
+            if ($item->isDirty('board_column_id') && in_array($item->board_column_id, [9]) && $item->getOriginal('board_column_id') === 8) {
+                if(!$item->subtask_id && Auth::user()->role_id == 4 && $lastSubmission = TaskSubmission::where('task_id', $item->id)->orderBy('id', 'desc')->first()){
+                    $statusChangedTime = Carbon::parse(TaskHistory::where('task_id', $item->id)->where('board_column_id', 8)->orderBy('id', 'desc')->first()->created_at);
+                    $prevTime = Carbon::parse($lastSubmission->created_at)->diffInMinutes($statusChangedTime) / 60;
+                    if($prevTime <= Factor::find(19)->upper_limit){
+                        $hoursDifference = Carbon::parse($lastSubmission->created_at)->diffInMinutes(Carbon::now()) / 60;
+                        $taskitem = Task::with('project.client')->find($item->id);
+                        $activity = 'You did not take any action of this submitted task <a style="color:blue" href="'.route('tasks.show',$taskitem->id??null).'">'.$taskitem->heading??null. '</a>, for project <a style="color:blue" href="'.route('projects.show',$taskitem->project->id??null).'">'.$taskitem->project->project_name??null. '</a>  (Client <a style="color:blue" href="'.route('clients.show', $taskitem->project->client->id??null).'">'. $taskitem->project->client->name??null. '</a>) in 36 hours';
+
+                        // Project Manager Point Distribution ( Reviewing the work )
+                        ProjectManagerPointLogic::distribute(8, $item->project_id, $hoursDifference, null, $activity);
+                    }
+                }
+            }
         });
     }
 
