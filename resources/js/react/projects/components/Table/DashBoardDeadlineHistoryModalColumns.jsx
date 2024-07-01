@@ -114,8 +114,16 @@ export const DashBoardDeadlineHistoryModalColumns = [
                                 )}
                             </p>
                         </Switch.Case>
-                        <Switch.Case condition={!data?.approved_on}>
+
+                        <Switch.Case
+                            condition={!data?.approved_on && data.status === 1}
+                        >
                             <span>Not Available Yet</span>
+                        </Switch.Case>
+                        <Switch.Case
+                            condition={!data?.approved_on && data.status !== 1}
+                        >
+                            <span>--</span>
                         </Switch.Case>
                     </Switch>
                 </div>
@@ -143,11 +151,22 @@ export const DashBoardDeadlineHistoryModalColumns = [
                             <span>{data?.approved_by?.name}</span>
                         </CreatedBy>
                     </Switch.Case>
-                    <Switch.Case condition={data?.approved_by === null}>
-                        <p className="d-flex justify-content-start align-items-center">
+                    <p className="d-flex justify-content-start align-items-center">
+                        <Switch.Case
+                            condition={
+                                data?.approved_by === null && data.status === 1
+                            }
+                        >
                             Not Available Yet
-                        </p>
-                    </Switch.Case>
+                        </Switch.Case>
+                        <Switch.Case
+                            condition={
+                                data?.approved_by === null && data.status !== 1
+                            }
+                        >
+                            --
+                        </Switch.Case>
+                    </p>
                 </Switch>
             );
         },

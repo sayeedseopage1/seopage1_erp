@@ -1,12 +1,15 @@
 import React, { useEffect } from "react";
 import PropTypes from "prop-types";
 import { toast } from "react-toastify";
+import dayjs from "dayjs";
 
 // UI Components - Custom
 import CustomAntModal from "../ui/CustomAntModal/CustomAntModal";
 import SingleButton from "../ui/CustomButton/SingleButton";
 import CustomModalHeader from "../ui/CustomModalHeader/CustomModalHeader";
 import CustomTextArea from "../ui/CustomTextArea/CustomTextArea";
+import DashboardCardTitle from "../ui/DashboardCardTitle/DashboardCardTitle";
+
 
 // Components - Global
 import Switch from "../../../global/Switch";
@@ -24,15 +27,20 @@ import { handleLoadingComponent, htmlTagRegex } from "../../helper";
 
 // Constants
 import { ProjectDisputeAuthorizationsData } from "../../constants";
+
+// Services - API
 import { useDisputeProjectAuthorizationMutation } from "../../../services/api/projectApiSlice";
-import dayjs from "dayjs";
+
+// Hooks
 import { useAuth } from "../../../hooks/useAuth";
+
+// Utils
 import {
     isStateAllHaveValue,
     markEmptyFieldsValidation,
 } from "../../../utils/stateValidation";
-import AuthorizeCommentView from "../shared/AuthorizeCommentView";
-import DashboardCardTitle from "../ui/DashboardCardTitle/DashboardCardTitle";
+
+// Components - Loader
 import TextLoaderDynamic from "../loader/TextLoaderDynamic";
 
 /**

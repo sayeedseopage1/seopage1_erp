@@ -66,7 +66,9 @@ export const DashboardDataTableMilestoneColumns = [
                                 data.status === "complete" ? "#CAEDE1" : "#F9C8CC",
                             color: data.status === "complete" ? "#119254" : "#F00",
                         }}
+                        className="text-capitalize"
                     >
+
                         {data.status}
                     </p>
                 </div>

@@ -70,6 +70,10 @@
     width: 50%;
   }
 
+  .dashboardHeaderButtonAnimation {
+    animation: fadeInUp 1s ease-in-out;
+  }
+
   .dashboardHeaderForType {
     padding: 9px 19px !important;
     font-size: 12px !important;
@@ -85,6 +89,19 @@
     width: 50% !important;
   }
 
+}
+
+
+@keyframes fadeInUp {
+  0% {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 @media screen and (max-width: 375px) {

@@ -1,7 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
 import { isURL } from "validator";
-import { is } from "immutable";
 
 const PersonAvatar = ({ avatar, name, url, imageClass = "", imageParentClass = "" }) => {
 

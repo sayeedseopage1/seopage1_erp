@@ -308,6 +308,6 @@ const DashboardProjectInfoFixedSection = ({ projectData, isLoading }) => {
 export default DashboardProjectInfoFixedSection;
 
 DashboardProjectInfoFixedSection.propTypes = {
-    projectData: PropTypes.object.isRequired,
-    isLoading: PropTypes.bool.isRequired,
+    projectData: PropTypes.object,
+    isLoading: PropTypes.bool
 };

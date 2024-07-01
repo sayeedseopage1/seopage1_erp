@@ -1,11 +1,8 @@
-import React, { useEffect } from "react";
+import React from "react";
 import PropTypes from "prop-types";
 
 // UI Components - Custom
 import CustomAntModal from "../ui/CustomAntModal/CustomAntModal";
-
-// Constants
-import { ProjectDeadlineHistoryDummyData } from "../../constants";
 
 // Components - Table
 import DashboardDataTable from "../Table/DashboardDataTable";

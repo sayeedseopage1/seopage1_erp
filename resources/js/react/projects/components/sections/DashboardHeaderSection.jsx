@@ -132,7 +132,10 @@ const DashboardHeaderSection = ({ projectData, isLoading }) => {
             !isLoading
         ) {
             handleModal(setIsPDAuthorizationModalOpen, true);
-        } else if (modalType === "deadline_extension_authorization" && !isLoading) {
+        } else if (
+            modalType === "deadline_extension_authorization" &&
+            !isLoading
+        ) {
             handleModal(setIsDEAuthorizeModalOpen, true);
         }
     }, []);
@@ -168,7 +171,7 @@ const DashboardHeaderSection = ({ projectData, isLoading }) => {
                             onClick={() =>
                                 handleModal(setIsDEAuthorizeModalOpen, true)
                             }
-                            className={`${style?.dashboardHeaderButton}`}
+                            className={`${style?.dashboardHeaderButton} ${style.dashboardHeaderButtonAnimation}`}
                             disabled={isProjectPendingExtensionLoading}
                         >
                             {isProjectPendingExtensionLoading ? (
@@ -188,7 +191,7 @@ const DashboardHeaderSection = ({ projectData, isLoading }) => {
                             onClick={() =>
                                 handleModal(setIsTGABAModalOpen, true)
                             }
-                            className={`${style?.dashboardHeaderButton} ml-2`}
+                            className={`${style?.dashboardHeaderButton} ${style.dashboardHeaderButtonAnimation} ml-2`}
                         >
                             PM Task Guideline Authorize
                         </Button>
@@ -200,7 +203,7 @@ const DashboardHeaderSection = ({ projectData, isLoading }) => {
                             onClick={() =>
                                 handleModal(setIsQCSubmissionModalOpen, true)
                             }
-                            className={`${style?.dashboardHeaderButton} ml-2`}
+                            className={`${style?.dashboardHeaderButton} ${style.dashboardHeaderButtonAnimation} ml-2`}
                         >
                             Project QC Authorize
                         </Button>
@@ -215,7 +218,7 @@ const DashboardHeaderSection = ({ projectData, isLoading }) => {
                                     true
                                 )
                             }
-                            className={`${style?.dashboardHeaderButton} ml-2`}
+                            className={`${style?.dashboardHeaderButton} ${style.dashboardHeaderButtonAnimation} ml-2`}
                         >
                             Project Completion Authorize
                         </Button>
@@ -229,7 +232,7 @@ const DashboardHeaderSection = ({ projectData, isLoading }) => {
                             onClick={() =>
                                 handleModal(setIsExplainDisputeModalOpen, true)
                             }
-                            className={`${style?.dashboardHeaderButton} ml-2`}
+                            className={`${style?.dashboardHeaderButton} ${style.dashboardHeaderButtonAnimation} ml-2`}
                         >
                             Explain Dispute
                         </Button>
@@ -241,7 +244,7 @@ const DashboardHeaderSection = ({ projectData, isLoading }) => {
                             onClick={() =>
                                 handleModal(setIsPDAuthorizationModalOpen, true)
                             }
-                            className={`${style?.dashboardHeaderButton} ml-2`}
+                            className={`${style?.dashboardHeaderButton} ${style.dashboardHeaderButtonAnimation} ml-2`}
                         >
                             Dispute Authorization
                         </Button>
@@ -251,7 +254,7 @@ const DashboardHeaderSection = ({ projectData, isLoading }) => {
                             onClick={() =>
                                 handleModal(setIsIncompleteModalOpen, true)
                             }
-                            className={`${style?.dashboardHeaderButton} ml-2`}
+                            className={`${style?.dashboardHeaderButton} ${style.dashboardHeaderButtonAnimation} ml-2`}
                         >
                             Mark as incomplete
                         </Button>

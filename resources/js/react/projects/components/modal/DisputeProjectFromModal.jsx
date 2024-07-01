@@ -72,7 +72,8 @@ const fontDataValidation = {
  *  DisputeProjectFromModal component
  *  @param {boolean} isModalOpen - Modal open state
  *  @param {function} closeModal - Close Modal Event Handler
- *  @param {function} setDummyDisputeData - Set Dummy Dispute Data Event Handler
+ *  @param {object}  modalData - Modal Data Object
+ *  @param {boolean} isLoading - Is Loading State
  *  @returns {JSX.Element}
  *  @description DisputeProjectFromModal component to render dispute project form modal
  *
@@ -549,5 +550,5 @@ export default DisputeProjectFromModal;
 DisputeProjectFromModal.propTypes = {
     isModalOpen: PropTypes.bool,
     closeModal: PropTypes.func,
-    setDummyDisputeData: PropTypes.func,
+    modalData: PropTypes.object,
 };
