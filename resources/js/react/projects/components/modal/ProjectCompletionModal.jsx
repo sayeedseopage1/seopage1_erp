@@ -761,7 +761,7 @@ const ProjectCompletionModal = ({
                                                     {
                                                         projectCompletionData
                                                             ?.project_portfolio
-                                                            ?.website_type?.website_type
+                                                            ?.project_website_type?.website_type
                                                     }
                                                 </p>
                                             </Switch.Case>
