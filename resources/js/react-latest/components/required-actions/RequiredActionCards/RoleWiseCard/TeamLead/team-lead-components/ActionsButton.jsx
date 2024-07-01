@@ -148,7 +148,7 @@ const ActionsButton = ({ data }) => {
                                     }}
                                     className={`${style.action_btn}`}
                                 >
-                                    Acknowledge & create a task
+                                    Create a new task
                                 </button>
                             )}
                         </div>
