@@ -39,6 +39,7 @@ class ProjectDetailsController extends Controller
             'projectPortfolio.theme', 
             'projectPortfolio.projectNiche:id,category_name', 
             'projectPortfolio.cmsCategory:id,cms_name', 
+            'projectPortfolio.projectWebsiteType:id,website_type', 
             'projectDeadlineExtension', 
             'projectDeadlineExtension.approvedBy:id,name,country_id', 
             'projectQcSubmission', 

@@ -30,4 +30,9 @@ class ProjectPortfolio extends Model
         $pluginIds = json_decode($this->plugin_list, true);
         return ProjectWebsitePlugin::whereIn('id', $pluginIds)->get(['id', 'plugin_name', 'plugin_url']) ?? null;
     }
+
+    public function projectWebsiteType()
+    {
+        return $this->hasOne(ProjectWebsiteType::class, 'id', 'website_type');
+    }
 }
