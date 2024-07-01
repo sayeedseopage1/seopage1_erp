@@ -182,6 +182,7 @@ class PmGoalEventListener
     {
         $projectBudget = $project->deal->actual_amount;
         $goalCodes = ProjectPmGoal::$goalCodes['fixed']['priority'];
+
         if ($paidMilestoneCount == 1) {
             $goal = ProjectPmGoal::where(['project_id' => $project->id, 'goal_code' => 'FMR', 'goal_status' => 0])->first();
             if (!$goal || time() > strtotime($goal->goal_end_date)) return;
@@ -193,7 +194,7 @@ class PmGoalEventListener
             }
             $goal->goal_status = 1;
             $goal->save();
-        } else if ($paidMilestoneCount > 1 && $milestoneCount < $paidMilestoneCount) {
+        } else if ($paidMilestoneCount > 1 && $milestoneCount >= $paidMilestoneCount) {
             $goal = ProjectPmGoal::whereIn('goal_code', ['MPMR', 'MMPMR', 'OMMR'])->where(['project_id' => $project->id, 'goal_status' => 0])->first();
             if (!$goal || time() > strtotime($goal->goal_end_date)) return;
             foreach ($goalCodes as $item) {
@@ -204,7 +205,7 @@ class PmGoalEventListener
             }
             $goal->goal_status = 1;
             $goal->save();
-        } else if ($projectBudget < $paidAmount) {
+        } else if ($projectBudget <= $paidAmount) {
             self::fixedExtraMoreGoalCompletion($project->id);
         }
     }
