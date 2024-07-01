@@ -428,7 +428,15 @@ const DashboardProjectInfoHourlySection = ({ projectData, isLoading }) => {
                                 }}
                             >
                                 <DashboardCardPricingInfo
-                                    amount={`${projectData?.deal?.original_currency?.currency_symbol} ${projectData?.deal?.actual_hourly_rate} ${projectData?.deal?.original_currency?.currency_code}`}
+                                    amount={`${
+                                        projectData?.deal?.original_currency
+                                            ?.currency_symbol
+                                    } ${Number(
+                                        projectData?.deal?.actual_hourly_rate
+                                    )?.toFixed(2)} ${
+                                        projectData?.deal?.original_currency
+                                            ?.currency_code
+                                    }`}
                                     isLoading={isLoading}
                                     className="w-100"
                                     loaderInformation={{
@@ -438,7 +446,7 @@ const DashboardProjectInfoHourlySection = ({ projectData, isLoading }) => {
                                     }}
                                 />
                                 <DashboardCardPricingInfo
-                                    amount={`${projectData?.currency?.currency_symbol} ${projectData?.deal?.hourly_rate} ${projectData?.currency?.currency_code}`}
+                                    amount={`${projectData?.currency?.currency_symbol} ${Number(projectData?.deal?.hourly_rate)?.toFixed(2)} ${projectData?.currency?.currency_code}`}
                                     className="w-100"
                                     isLoading={isLoading}
                                     loaderInformation={{
