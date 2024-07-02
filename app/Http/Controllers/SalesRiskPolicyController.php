@@ -1161,28 +1161,28 @@ class SalesRiskPolicyController extends AccountBaseController
             // -------------------------------- yesNoRules ------------------------------ //
             $questions = SalesPolicyQuestion::where('key', 'yesNoRules')->get();
             foreach ((object) $questions as $key => $item) {
-                // $rule_id = json_decode($item->value)->rule_id;
-                if (!isset($questionAns[$item->id])) continue;
-                // dd($item);
-                echo '<br>';
                 
-                $rule = SalesRiskPolicy::where('id', $item->value)->first();
-                if($rule == null)
-                    dd($item);
-                echo '<br>';
-                $value = $questionAns[$item->id];
+                if (!isset($questionAns[$item->id])) continue;
 
-                if ($value == 'yes') {
-                    $points += (float) json_decode($rule->value)->yes->point;
-                    $pointData['yesNoRules' . $key]['points'] = json_decode($rule->value)->yes->point;
-                } else {
-                    $points += (float) json_decode($rule->value)->no->point;
-                    $pointData['yesNoRules' . $key]['points'] = json_decode($rule->value)->no->point;
+                if ($item->parent_id == null) {
+                    $rule = SalesRiskPolicy::where('id', $item->value)->first();
+                    $value = $questionAns[$item->id];
+
+                    if ($value == 'yes') {
+                        $points += (float) json_decode($rule->value)->yes->point;
+                        $pointData['yesNoRules' . $key]['points'] = json_decode($rule->value)->yes->point;
+                    } else {
+                        $points += (float) json_decode($rule->value)->no->point;
+                        $pointData['yesNoRules' . $key]['points'] = json_decode($rule->value)->no->point;
+                    }
+                    $policyIdList[$rule->id] = $value;
+                    $pointData['yesNoRules' . $key]['questionAnswer'][] = ['id' => $item->id, 'title' => $item->title, 'value' => $value, 'parent_id' => null];
                 }
-                $policyIdList[$rule->id] = $value;
-                $pointData['yesNoRules' . $key]['questionAnswer'][] = ['id' => $item->id, 'title' => $item->title, 'value' => $value, 'parent_id' => null];
+                else{
+                    $value = $questionAns[$item->id];
+                    $pointData['yesNoRules' . $key]['questionAnswer'][] = ['id' => $item->id, 'title' => $item->title, 'value' => $value, 'parent_id' => $item->parent_id];
+                }
             }
-            dd();
 
             // -------------------------------- end yesNoRules ------------------------------ //
 
@@ -1214,8 +1214,7 @@ class SalesRiskPolicyController extends AccountBaseController
                         $pointData['clientCountry']['points'] = $item->points;
                         $policyIdList[$item->id] = $item->id;
                         goto endClientCountry;
-                    }
-                    else {
+                    } else {
                         $pointData['clientCountry']['message'][] = 'Client\'s Country policy not found.';
                     }
                 }
