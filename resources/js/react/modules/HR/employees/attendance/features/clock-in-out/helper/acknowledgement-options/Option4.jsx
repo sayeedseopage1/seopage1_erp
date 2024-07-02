@@ -158,10 +158,10 @@ const Option4 = ({
     };
 
     //overlapping validation
-    let newOverlappingTimes = [];
-    let lastClockOutTime = lastClockData?.clock_out_time
-        ? extractTime(lastClockData?.clock_out_time)
-        : "23:00:00";
+    // let newOverlappingTimes = [];
+    // let lastClockOutTime = lastClockData?.clock_out_time
+    //     ? extractTime(lastClockData?.clock_out_time)
+    //     : "23:00:00";
 
     const handleSubmission = (e, submissionType) => {
         e.preventDefault();
@@ -176,54 +176,56 @@ const Option4 = ({
             return;
         }
 
-        if (
-            checkOverlapRange(lastClockOutTime, [
-                { id: "de2sew", start: durationStart, end: durationEnd },
-            ])
-        ) {
-            Swal.fire({
-                position: "center",
-                icon: "error",
-                title: "You have selected wrong time range!",
-                text: `You must select time within this time range: 07:45 AM - (${formatTimeTo12Hour(
-                    lastClockOutTime
-                )}).`,
-                showConfirmButton: true,
-            });
-            return;
-        }
+        // if (
+        //     checkOverlapRange(lastClockOutTime, [
+        //         { id: "de2sew", start: durationStart, end: durationEnd },
+        //     ])
+        // ) {
+        //     Swal.fire({
+        //         position: "center",
+        //         icon: "error",
+        //         title: "You have selected wrong time range!",
+        //         text: `You must select time within this time range: 07:45 AM - (${formatTimeTo12Hour(
+        //             lastClockOutTime
+        //         )}).`,
+        //         showConfirmButton: true,
+        //     });
+        //     return;
+        // }
 
-        if (
-            checkOverlap(
-                newOverlappingTimes,
-                [{ id: "de2sew", start: durationStart, end: durationEnd }],
-                trackedTimeHistory
-            )
-        ) {
-            Swal.fire({
-                position: "center",
-                icon: "error",
-                title: "Your selected time is overlapping with your tracked time!",
-                text: `Overlapping time: ${newOverlappingTimes
-                    ?.map(
-                        (t) =>
-                            `${formatTimeTo12Hour(
-                                t.trackedStart
-                            )} - ${formatTimeTo12Hour(t.trackedEnd)}`
-                    )
-                    .join(", ")}`,
-                showConfirmButton: true,
-            });
-            return;
-        }
+        // if (
+        //     checkOverlap(
+        //         newOverlappingTimes,
+        //         [{ id: "de2sew", start: durationStart, end: durationEnd }],
+        //         trackedTimeHistory
+        //     )
+        // ) {
+        //     Swal.fire({
+        //         position: "center",
+        //         icon: "error",
+        //         title: "Your selected time is overlapping with your tracked time!",
+        //         text: `Overlapping time: ${newOverlappingTimes
+        //             ?.map(
+        //                 (t) =>
+        //                     `${formatTimeTo12Hour(
+        //                         t.trackedStart
+        //                     )} - ${formatTimeTo12Hour(t.trackedEnd)}`
+        //             )
+        //             .join(", ")}`,
+        //         showConfirmButton: true,
+        //     });
+        //     return;
+        // }
 
+        setSType(submissionType);
+
+        onSubmit(fd, submissionType, onBack, [
+            { id: "de2sew", start: durationStart, end: durationEnd },
+        ]);
         if (submissionType === "CONTINUE") {
             setDurationStart("");
             setDurationEnd("");
         }
-        setSType(submissionType);
-
-        onSubmit(fd, submissionType, onBack);
     };
 
     return (
@@ -503,6 +505,7 @@ const Option4 = ({
                                         </label>
                                         <Space wrap>
                                             <TimePicker
+                                                needConfirm={false}
                                                 use12Hours
                                                 format="h:mm a"
                                                 defaultValue={durationStart}
@@ -525,6 +528,7 @@ const Option4 = ({
                                         </label>
                                         <Space wrap>
                                             <TimePicker
+                                                needConfirm={false}
                                                 use12Hours
                                                 format="h:mm a"
                                                 defaultValue={durationEnd}

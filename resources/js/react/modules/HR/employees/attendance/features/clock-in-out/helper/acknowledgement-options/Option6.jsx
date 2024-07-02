@@ -67,10 +67,10 @@ const Option6 = ({
     };
 
     //overlapping validation
-    let newOverlappingTimes = [];
-    let lastClockOutTime = lastClockData?.clock_out_time
-        ? extractTime(lastClockData?.clock_out_time)
-        : "23:00:00";
+    // let newOverlappingTimes = [];
+    // let lastClockOutTime = lastClockData?.clock_out_time
+    //     ? extractTime(lastClockData?.clock_out_time)
+    //     : "23:00:00";
 
     // handle form submit
     const handleSubmission = (e, submissionType) => {
@@ -91,39 +91,39 @@ const Option6 = ({
             });
             return;
         }
-        if (checkOverlapRange(lastClockOutTime, durations)) {
-            Swal.fire({
-                position: "center",
-                icon: "error",
-                title: "You have selected wrong time range!",
-                text: `You must select time within this time range: 07:45 AM - (${formatTimeTo12Hour(
-                    lastClockOutTime
-                )}).`,
-                showConfirmButton: true,
-            });
-            return;
-        }
+        // if (checkOverlapRange(lastClockOutTime, durations)) {
+        //     Swal.fire({
+        //         position: "center",
+        //         icon: "error",
+        //         title: "You have selected wrong time range!",
+        //         text: `You must select time within this time range: 07:45 AM - (${formatTimeTo12Hour(
+        //             lastClockOutTime
+        //         )}).`,
+        //         showConfirmButton: true,
+        //     });
+        //     return;
+        // }
 
-        if (checkOverlap(newOverlappingTimes, durations, trackedTimeHistory)) {
-            Swal.fire({
-                position: "center",
-                icon: "error",
-                title: "Your selected time is overlapping with your tracked time!",
-                text: `Overlapping time: ${newOverlappingTimes
-                    ?.map(
-                        (t) =>
-                            `${formatTimeTo12Hour(
-                                t.trackedStart
-                            )} - ${formatTimeTo12Hour(t.trackedEnd)}`
-                    )
-                    .join(", ")}`,
-                showConfirmButton: true,
-            });
-            return;
-        }
+        // if (checkOverlap(newOverlappingTimes, durations, trackedTimeHistory)) {
+        //     Swal.fire({
+        //         position: "center",
+        //         icon: "error",
+        //         title: "Your selected time is overlapping with your tracked time!",
+        //         text: `Overlapping time: ${newOverlappingTimes
+        //             ?.map(
+        //                 (t) =>
+        //                     `${formatTimeTo12Hour(
+        //                         t.trackedStart
+        //                     )} - ${formatTimeTo12Hour(t.trackedEnd)}`
+        //             )
+        //             .join(", ")}`,
+        //         showConfirmButton: true,
+        //     });
+        //     return;
+        // }
 
         setSType(submissionType);
-        onSubmit(data, submissionType, onBack);
+        onSubmit(data, submissionType, onBack, durations);
     };
     return (
         <React.Fragment>

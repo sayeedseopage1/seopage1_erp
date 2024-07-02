@@ -58,20 +58,6 @@ const Option1 = ({
         ]);
     };
 
-    const setDuration = () => {
-        if (fromAndToValidation(durations)) {
-            return;
-        } else {
-            setDurations([
-                {
-                    start: "",
-                    end: "",
-                    id: "d32sew",
-                },
-            ]);
-        }
-    };
-
     console.log("durations", durations);
     // editor data change
     const handleEditorChange = (e, editor) => {
@@ -80,10 +66,10 @@ const Option1 = ({
     };
 
     //overlapping validation
-    let newOverlappingTimes = [];
-    let lastClockOutTime = lastClockData?.clock_out_time
-        ? extractTime(lastClockData?.clock_out_time)
-        : "23:00:00";
+    // let newOverlappingTimes = [];
+    // let lastClockOutTime = lastClockData?.clock_out_time
+    //     ? extractTime(lastClockData?.clock_out_time)
+    //     : "23:00:00";
 
     const handleSubmission = (e, submissionType) => {
         e.preventDefault();
@@ -105,50 +91,50 @@ const Option1 = ({
 
             return setError({ comment: "Please explain the reason here!" });
         }
-        if (fromAndToValidation(durations)) {
-            Swal.fire({
-                position: "center",
-                icon: "error",
-                title: "Invalid Time Range",
-                text: "The end time should be greater than the start time.",
-                showConfirmButton: true,
-            });
-            return;
-        }
+        // if (fromAndToValidation(durations)) {
+        //     Swal.fire({
+        //         position: "center",
+        //         icon: "error",
+        //         title: "Invalid Time Range",
+        //         text: "The end time should be greater than the start time.",
+        //         showConfirmButton: true,
+        //     });
+        //     return;
+        // }
 
-        if (checkOverlapRange(lastClockOutTime, durations)) {
-            Swal.fire({
-                position: "center",
-                icon: "error",
-                title: "You have selected wrong time range!",
-                text: `You must select time within this time range: 07:45 AM - ${formatTimeTo12Hour(
-                    lastClockOutTime
-                )}.`,
-                showConfirmButton: true,
-            });
-            return;
-        }
+        // if (checkOverlapRange(lastClockOutTime, durations)) {
+        //     Swal.fire({
+        //         position: "center",
+        //         icon: "error",
+        //         title: "You have selected wrong time range!",
+        //         text: `You must select time within this time range: 07:45 AM - ${formatTimeTo12Hour(
+        //             lastClockOutTime
+        //         )}.`,
+        //         showConfirmButton: true,
+        //     });
+        //     return;
+        // }
 
-        if (checkOverlap(newOverlappingTimes, durations, trackedTimeHistory)) {
-            Swal.fire({
-                position: "center",
-                icon: "error",
-                title: "Your selected time is overlapping with your tracked time!",
-                text: `Overlapping time: ${newOverlappingTimes
-                    ?.map(
-                        (t) =>
-                            `${formatTimeTo12Hour(
-                                t.trackedStart
-                            )} - ${formatTimeTo12Hour(t.trackedEnd)}`
-                    )
-                    .join(", ")}`,
-                showConfirmButton: true,
-            });
-            return;
-        }
+        // if (checkOverlap(newOverlappingTimes, durations, trackedTimeHistory)) {
+        //     Swal.fire({
+        //         position: "center",
+        //         icon: "error",
+        //         title: "Your selected time is overlapping with your tracked time!",
+        //         text: `Overlapping time: ${newOverlappingTimes
+        //             ?.map(
+        //                 (t) =>
+        //                     `${formatTimeTo12Hour(
+        //                         t.trackedStart
+        //                     )} - ${formatTimeTo12Hour(t.trackedEnd)}`
+        //             )
+        //             .join(", ")}`,
+        //         showConfirmButton: true,
+        //     });
+        //     return;
+        // }
 
         setSType(submissionType);
-        onSubmit(data, submissionType, onBack);
+        onSubmit(data, submissionType, onBack, durations);
     };
 
     return (
@@ -262,7 +248,13 @@ const Option1 = ({
                                     className="ml-2"
                                     onClick={(e) => {
                                         handleSubmission(e, "CONTINUE");
-                                        setDuration();
+                                        setDurations([
+                                            {
+                                                start: "",
+                                                end: "",
+                                                id: "d32sew",
+                                            },
+                                        ]);
                                     }}
                                     isLoading={
                                         sType === "CONTINUE" && isLoading

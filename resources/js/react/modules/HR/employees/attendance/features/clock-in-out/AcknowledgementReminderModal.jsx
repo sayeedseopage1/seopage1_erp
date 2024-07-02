@@ -17,6 +17,10 @@ import Card from "../../../../../../global/Card";
 import styles from "./tracked-time-table/Table/card.module.css";
 import formatTimeTo12Hour from "../../../../../../utils/formatTimeTo12Hour";
 import formatTimeTo12HourSecond from "../../../../../../utils/formatTimeTo12HourWithoutSecond";
+import extractTime from "../../../../../../utils/extractTime";
+import { fromAndToValidation } from "../../../../../../utils/fromAndToValidation";
+import checkOverlapRange from "../../../../../../utils/checkOverlapRange";
+import checkOverlap from "../../../../../../utils/checkOverlap";
 
 /**
  * * This components responsible for showing daily working report to developer
@@ -52,8 +56,60 @@ const AcknowledgementReminderModal = ({
 
     const [timeLeft, setTImeLeft] = useState();
     console.log("last clock data", lastClockData);
+    //overlapping validation
+    let newOverlappingTimes = [];
+    let lastClockOutTime = lastClockData?.clock_out_time
+        ? extractTime(lastClockData?.clock_out_time)
+        : "23:00:00";
+
     // handle form submission
-    const handleSubmitForm = async (data, submissionType, cb) => {
+    const handleSubmitForm = async (data, submissionType, cb, durations) => {
+        if (durations) {
+            if (fromAndToValidation(durations)) {
+                Swal.fire({
+                    position: "center",
+                    icon: "error",
+                    title: "Invalid Time Range",
+                    text: "The end time should be greater than the start time.",
+                    showConfirmButton: true,
+                });
+                return;
+            }
+
+            if (checkOverlapRange(lastClockOutTime, durations)) {
+                Swal.fire({
+                    position: "center",
+                    icon: "error",
+                    title: "You have selected wrong time range!",
+                    text: `You must select time within this time range: 07:45 AM - ${formatTimeTo12Hour(
+                        lastClockOutTime
+                    )}.`,
+                    showConfirmButton: true,
+                });
+                return;
+            }
+
+            if (
+                checkOverlap(newOverlappingTimes, durations, trackedTimeHistory)
+            ) {
+                Swal.fire({
+                    position: "center",
+                    icon: "error",
+                    title: "Your selected time is overlapping with your tracked time!",
+                    text: `Overlapping time: ${newOverlappingTimes
+                        ?.map(
+                            (t) =>
+                                `${formatTimeTo12Hour(
+                                    t.trackedStart
+                                )} - ${formatTimeTo12Hour(t.trackedEnd)}`
+                        )
+                        .join(", ")}`,
+                    showConfirmButton: true,
+                });
+                return;
+            }
+        }
+
         setIsSubmitting(true);
 
         try {
@@ -120,6 +176,14 @@ const AcknowledgementReminderModal = ({
 
             setIsSubmitting(false);
         } catch (error) {
+            Swal.fire({
+                position: "center",
+                icon: "error",
+                title: `Server Error 500!`,
+                text: `${error.message}`,
+                showConfirmButton: true,
+            });
+            setIsSubmitting(false);
             console.log(error);
         }
 

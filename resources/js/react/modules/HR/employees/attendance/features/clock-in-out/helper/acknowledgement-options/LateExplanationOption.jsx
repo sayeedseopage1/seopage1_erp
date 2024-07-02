@@ -9,6 +9,7 @@ import extractTime from "../../../../../../../../utils/extractTime";
 import checkOverlap from "../../../../../../../../utils/checkOverlap";
 import checkOverlapRange from "../../../../../../../../utils/checkOverlapRange";
 import formatTimeTo12Hour from "../../../../../../../../utils/formatTimeTo12Hour";
+import { fromAndToValidation } from "../../../../../../../../utils/fromAndToValidation";
 /**
  * this component responsible for rendering late explanation form for user
  */
@@ -73,10 +74,10 @@ const LateExplanationOption = ({
     };
 
     //overlapping validation
-    let newOverlappingTimes = [];
-    let lastClockOutTime = lastClockData?.clock_out_time
-        ? extractTime(lastClockData?.clock_out_time)
-        : "23:00:00";
+    // let newOverlappingTimes = [];
+    // let lastClockOutTime = lastClockData?.clock_out_time
+    //     ? extractTime(lastClockData?.clock_out_time)
+    //     : "23:00:00";
 
     // handle submission
     const handleSubmission = (e, submissionType) => {
@@ -99,53 +100,66 @@ const LateExplanationOption = ({
             });
             return;
         }
-        if (
-            checkOverlapRange(lastClockOutTime, [
-                { id: "de2sew", start: durationStart, end: durationEnd },
-            ])
-        ) {
-            Swal.fire({
-                position: "center",
-                icon: "error",
-                title: "You have selected wrong time range!",
-                text: `You must select time within this time range: 07:45 AM - (${formatTimeTo12Hour(
-                    lastClockOutTime
-                )}).`,
-                showConfirmButton: true,
-            });
-            return;
-        }
 
-        if (
-            checkOverlap(
-                newOverlappingTimes,
-                [{ id: "de2sew", start: durationStart, end: durationEnd }],
-                trackedTimeHistory
-            )
-        ) {
-            Swal.fire({
-                position: "center",
-                icon: "error",
-                title: "Your selected time is overlapping with your tracked time!",
-                text: `Overlapping time: ${newOverlappingTimes
-                    ?.map(
-                        (t) =>
-                            `${formatTimeTo12Hour(
-                                t.trackedStart
-                            )} - ${formatTimeTo12Hour(t.trackedEnd)}`
-                    )
-                    .join(", ")}`,
-                showConfirmButton: true,
-            });
-            return;
-        }
+        // if (
+        //     checkOverlapRange(lastClockOutTime, [
+        //         { id: "de2sew", start: durationStart, end: durationEnd },
+        //     ])
+        // ) {
+        //     Swal.fire({
+        //         position: "center",
+        //         icon: "error",
+        //         title: "You have selected wrong time range!",
+        //         text: `You must select time within this time range: 07:45 AM - (${formatTimeTo12Hour(
+        //             lastClockOutTime
+        //         )}).`,
+        //         showConfirmButton: true,
+        //     });
+        //     return;
+        // }
+        // if (fromAndToValidation(durations)) {
+        //     Swal.fire({
+        //         position: "center",
+        //         icon: "error",
+        //         title: "Invalid Time Range",
+        //         text: "The end time should be greater than the start time.",
+        //         showConfirmButton: true,
+        //     });
+        //     return;
+        // }
+
+        // if (
+        //     checkOverlap(
+        //         newOverlappingTimes,
+        //         [{ id: "de2sew", start: durationStart, end: durationEnd }],
+        //         trackedTimeHistory
+        //     )
+        // ) {
+        //     Swal.fire({
+        //         position: "center",
+        //         icon: "error",
+        //         title: "Your selected time is overlapping with your tracked time!",
+        //         text: `Overlapping time: ${newOverlappingTimes
+        //             ?.map(
+        //                 (t) =>
+        //                     `${formatTimeTo12Hour(
+        //                         t.trackedStart
+        //                     )} - ${formatTimeTo12Hour(t.trackedEnd)}`
+        //             )
+        //             .join(", ")}`,
+        //         showConfirmButton: true,
+        //     });
+        //     return;
+        // }
 
         if (submissionType === "CONTINUE") {
             setDurationStart("");
             setDurationEnd("");
         }
         setSType(submissionType);
-        onSubmit(data, submissionType, onBack);
+        onSubmit(data, submissionType, onBack, [
+            { id: "de2sew", start: durationStart, end: durationEnd },
+        ]);
     };
 
     return (
@@ -183,6 +197,7 @@ const LateExplanationOption = ({
                                     <Space wrap>
                                         <TimePicker
                                             use12Hours
+                                            needConfirm={false}
                                             format="h:mm a"
                                             defaultValue={durationStart}
                                             onChange={(time) =>
@@ -205,6 +220,7 @@ const LateExplanationOption = ({
                                     <Space wrap>
                                         <TimePicker
                                             use12Hours
+                                            needConfirm={false}
                                             format="h:mm a"
                                             defaultValue={durationEnd}
                                             onChange={(time) =>
