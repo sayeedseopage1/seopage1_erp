@@ -154,7 +154,7 @@ const EvaluationTaskListModal = ({
 
                 const isAllTaskRated =
                     tasksToRate.length ===
-                    tasksToRate.filter((task) => task.team_lead_cmnt !== null)
+                    tasksToRate.filter((task) => task.lead_dev_cmnt !== null)
                         .length;
                 setIsAllTaskRated(isAllTaskRated);
             } else {
