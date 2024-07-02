@@ -82,13 +82,11 @@ class HelperPmProjectStatusController extends AccountBaseController
     {
         if (!in_array($pmGoalSetting->category, array_keys(Project::$categories))) return new Exception('Project priority type is invalid');
 
-        // dd($pmGoalSetting);
         $milestoneCount = ProjectMilestone::where('project_id', $findProject->id)->count();
         $milestoneSum = (new ProjectMilestoneController)->getCostSum($findProject->id);
 
         // --------------- calculate total number of days for the project --------------------- //
-        $extraGoal = $milestoneSum < $findDeal->actual_amount ? 1 : 0;
-
+        $extraGoal = (int) ($milestoneSum < (float) $findDeal->amount);
         $totalRequiredDays = self::calculateProjectRequiredDays($pmGoalSetting->category, $milestoneCount + $extraGoal);
         // ------------- end -------------- //
 

@@ -1860,11 +1860,10 @@ class ProjectController extends AccountBaseController
 
         // PROJECT PM GOAL SETTINGS START
         if ($project->status == 'not started') {
-            // dd($project);
 
             $findProject = Project::where('id', $request->project_id)->first();
             $findDeal = Deal::where('id', $findProject->deal_id)->first();
-            // dd($findDeal->project_type);
+
             if ($findDeal->project_type == 'fixed') {
                 if ($project->project_budget) {
                     $pmGoalSetting = PmGoalSetting::where('project_type', 'fixed')->where('initial_value', '<=', $findProject->project_budget)

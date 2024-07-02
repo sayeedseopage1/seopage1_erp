@@ -108,7 +108,10 @@ class PmGoalEventListener
         $project = Project::find($invoice->project_id);
 
         // initial milestones
-        $paidAmount = Invoice::where(['project_id' => $project->id, 'status' => 'paid'])->sum('total');
+        $paidInvoice = Invoice::where(['project_id' => $project->id, 'status' => 'paid']);
+        $paidAmount = $paidInvoice->sum('total');
+        $paidMilestoneCount = $paidInvoice->count();
+
         $milestones = ProjectMilestone::from('project_milestones as mile')->leftJoin('invoices as in', 'in.milestone_id', 'mile.id')
             ->select('mile.*', 'in.status')
             ->where('mile.project_id', $project->id)->where('mile.created_at', '<=', $project->deal->released_at) /* ->get() */;
@@ -117,7 +120,7 @@ class PmGoalEventListener
 
         $milestoneSum = $milestones->sum('actual_cost');
         $milestoneCount = $milestones->count();
-        $paidMilestoneCount = $milestones->where(['in.status' => 'paid'])->count();
+
         // dd(
         //     $project->deal->released_at,
         //     $milestoneSum,
@@ -182,6 +185,12 @@ class PmGoalEventListener
     {
         $projectBudget = $project->deal->actual_amount;
         $goalCodes = ProjectPmGoal::$goalCodes['fixed']['priority'];
+
+        // dd(
+        //     $paidMilestoneCount == 1,
+        //     $paidMilestoneCount > 1 && $milestoneCount >= $paidMilestoneCount,
+        //     $projectBudget <= $paidAmount
+        // );
 
         if ($paidMilestoneCount == 1) {
             $goal = ProjectPmGoal::where(['project_id' => $project->id, 'goal_code' => 'FMR', 'goal_status' => 0])->first();
