@@ -11,6 +11,7 @@ const ProjectCard = ({ item }) => {
     const toggleDescription = () => {
         setIsExpanded(!isExpanded);
     };
+
     return (
         <div className='project_card_wrapper'>
             <div className='project_card_header'>
@@ -23,9 +24,9 @@ const ProjectCard = ({ item }) => {
             <div className='project_card_body'>
                 <p className='project_normal_text'>Budget {budget_range} {currency?.code}</p>
                 <div className='project_normal_text project_card_description'>
-                    <span dangerouslySetInnerHTML={{ __html: details }} className={isExpanded ? 'expanded' : 'truncated'}>
+                    <div dangerouslySetInnerHTML={{ __html: details }} className={isExpanded ? 'expanded' : 'truncated'}>
                         {/* {description} */}
-                    </span>
+                    </div>
                     {!isExpanded && (
                         <span className='more-btn' onClick={toggleDescription}> more</span>
                     )}
