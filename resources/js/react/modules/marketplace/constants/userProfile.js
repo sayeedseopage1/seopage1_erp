@@ -188,23 +188,23 @@ export const user_profile = {
             skills: [
                 {
                     id: 1,
-                    name: "Web Design",
+                    name: "Content Writing",
                 },
                 {
                     id: 2,
-                    name: "Development",
+                    name: "SEO",
                 },
                 {
                     id: 3,
-                    name: "Design",
+                    name: "Marketing",
                 },
                 {
                     id: 4,
-                    name: "SEO",
+                    name: "Copywriting",
                 },
             ],
-            title: "Landing Page Design",
-            category: "Web Design & Development",
+            title: "Content Writing",
+            category: "Content Writing",
             created_at: "2024-06-25 07:37:00",
         },
         {
@@ -232,11 +232,11 @@ export const user_profile = {
             skills: [
                 {
                     id: 1,
-                    name: "Web Design",
+                    name: "Graphic Design",
                 },
                 {
                     id: 2,
-                    name: "Development",
+                    name: "UX/UI",
                 },
                 {
                     id: 3,
@@ -248,7 +248,7 @@ export const user_profile = {
                 },
             ],
             title: "Landing Page Design",
-            category: "Web Design & Development",
+            category: "Graphic Design",
             created_at: "2024-06-25 07:37:00",
         },
         {

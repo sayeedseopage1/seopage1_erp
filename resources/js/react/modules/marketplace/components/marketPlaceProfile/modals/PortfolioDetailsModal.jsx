@@ -8,7 +8,7 @@ import { AiFillDollarCircle } from 'react-icons/ai';
 import { FaBarcode } from 'react-icons/fa';
 
 const PortfolioDetailsModal = ({ item, isOpen, setIsOpen, profileData }) => {
-    const { id, thumbnails, skills, category, img_url } = item || {};
+    const { thumbnails, skills, category } = item || {};
     const { hourly_rate, earnings_score, reviews_count, average_rating, name, profile_image_url, location } = profileData || {};
     return (
         <Modal className='portfolio_modal'

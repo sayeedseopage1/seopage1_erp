@@ -13,7 +13,7 @@ const ProfileLeftSection = ({ profileData }) => {
     const { portfolio, reviews, experiences, educations, qualifications, publications } = profileData || {};
 
     const [currentPage, setCurrentPage] = useState(1);
-    const reviewsPerPage = 5;
+    const reviewsPerPage = 1;
 
     // Get the reviews for the current page
     const currentReviews = antdPaginate(reviews, currentPage, reviewsPerPage);

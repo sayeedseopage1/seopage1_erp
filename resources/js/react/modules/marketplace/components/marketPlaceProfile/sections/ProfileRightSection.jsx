@@ -54,7 +54,7 @@ const ProfileRightSection = ({ profileData }) => {
             </InfoCardWithHeader>
             <InfoCardWithHeader title="Certifications">
                 {
-                    user_certification.map((item) => (
+                    user_certification?.map((item) => (
                         <div key={item?.id} className='marketplace_profile_flex_between'>
                             <InfoWithIconTitle img_url={item?.iso ? `/flags/4x3/${item?.iso}.svg` : boxTickIcon} title={item?.name} />
                             <span className='personal_info_mb sp1_marketplace_default_text'>{
@@ -66,7 +66,7 @@ const ProfileRightSection = ({ profileData }) => {
             </InfoCardWithHeader>
             <InfoCardWithHeader title="Top Skills">
                 {
-                    top_skills.map((item) => (
+                    top_skills?.map((item) => (
                         <div key={item?.id} className='marketplace_profile_flex_between'>
                             <p className='personal_info_mb sp1_marketplace_default_text'>{item?.name}</p>
                             <span className='personal_info_mb sp1_marketplace_default_text'>{
