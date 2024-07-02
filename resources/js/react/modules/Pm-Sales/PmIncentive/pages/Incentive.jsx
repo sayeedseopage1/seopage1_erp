@@ -20,7 +20,7 @@ import IncentiveCriteriaFactors from '../components/Sections/IncentiveFactors/In
 const Incentive = () => {
     const [tab, setTab] = useState("current");
     const [filterByPeriod, setFilterByPeriod] = useState("monthly");
-    const { incentiveTypesLoading } = useIncentive();
+    const { incentiveTypesLoading, incentiveTypesIsFetching } = useIncentive();
     const [queryForAchievedIncentive, setQueryForAchievedIncentive] = useState({})
     const [queryForIncentiveHeldAmounts, setQueryForIncentiveHeldAmounts] = useState({})
 
@@ -53,54 +53,55 @@ const Incentive = () => {
 
     const incentiveHeldAmountsData = incentiveHeldAmounts?.data
 
-    if (incentiveTypesLoading) {
-        return <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
-            <Spinner />
-        </div>
-    }
+    // if (incentiveTypesLoading || incentiveTypesIsFetching) {
+    //     return <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
+    //         <Spinner />
+    //     </div>
+    // }
 
     return (
         <div>
             <IncentiveFilter filterByPeriod={filterByPeriod} setQueryForAchievedIncentive={setQueryForAchievedIncentive} setQueryForIncentiveHeldAmounts={setQueryForIncentiveHeldAmounts} tab={tab} />
             <div className='incentive_wrapper'>
                 <FilterBar tab={tab} queryStringForIncentiveHeldAmounts={queryStringForIncentiveHeldAmounts} queryForIncentiveHeldAmounts={queryForIncentiveHeldAmounts} setTab={setTab} filterByPeriod={filterByPeriod} setFilterByPeriod={setFilterByPeriod} />
+                {
+                    (incentiveTypesLoading || incentiveTypesIsFetching) ? <Spinner /> : <Switch>
+                        <Switch.Case condition={tab == "current"}>
+                            <Switch>
+                                <Switch.Case condition={filterByPeriod == "monthly"}>
+                                    <div className='incentive_inner_wrapper'>
+                                        <PointBanner />
+                                        {/******* This is regular incentive ***********/}
+                                        <IdealVsAchieved />
+                                        <StatsInfo />
+                                        {/******* This is UpSale CrossSale incentive ***********/}
+                                        <UpsaleCrossSale />
+                                        {/******* This is Bonus Point incentive ***********/}
+                                        <BonusPoints />
+                                        <FinalIncentiveBanner />
+                                    </div>
+                                </Switch.Case>
+                                <Switch.Case condition={filterByPeriod == "quarterly" || filterByPeriod == "yearly"}>
+                                    <div className='incentive_inner_wrapper'>
+                                        <QuarterAndYearlyTable data={achievedIncentiveHistoryData} isFetching={achievedIncentiveHistoryIsFetching} isLoading={achievedIncentiveHistoryLoading} />
+                                    </div>
+                                </Switch.Case>
+                            </Switch>
+                        </Switch.Case>
+                        <Switch.Case condition={tab == "held_amount"}>
+                            <div className='incentive_inner_wrapper'>
+                                <HeldAmounts data={incentiveHeldAmountsData} isFetching={incentiveHeldAmountsIsFetching} isLoading={incentiveHeldAmountsLoading} />
+                            </div>
+                        </Switch.Case>
+                        <Switch.Case condition={tab == "incentive_factors"}>
+                            <div className='incentive_inner_wrapper'>
+                                {/* <IncentiveFactors /> */}
+                                <IncentiveCriteriaFactors />
+                            </div>
+                        </Switch.Case>
+                    </Switch>
+                }
 
-                <Switch>
-                    <Switch.Case condition={tab == "current"}>
-
-                        <Switch>
-                            <Switch.Case condition={filterByPeriod == "monthly"}>
-                                <div className='incentive_inner_wrapper'>
-                                    <PointBanner />
-                                    {/******* This is regular incentive ***********/}
-                                    <IdealVsAchieved />
-                                    <StatsInfo />
-                                    {/******* This is UpSale CrossSale incentive ***********/}
-                                    <UpsaleCrossSale />
-                                    {/******* This is Bonus Point incentive ***********/}
-                                    <BonusPoints />
-                                    <FinalIncentiveBanner />
-                                </div>
-                            </Switch.Case>
-                            <Switch.Case condition={filterByPeriod == "quarterly" || filterByPeriod == "yearly"}>
-                                <div className='incentive_inner_wrapper'>
-                                    <QuarterAndYearlyTable data={achievedIncentiveHistoryData} isFetching={achievedIncentiveHistoryIsFetching} isLoading={achievedIncentiveHistoryLoading} />
-                                </div>
-                            </Switch.Case>
-                        </Switch>
-                    </Switch.Case>
-                    <Switch.Case condition={tab == "held_amount"}>
-                        <div className='incentive_inner_wrapper'>
-                            <HeldAmounts data={incentiveHeldAmountsData} isFetching={incentiveHeldAmountsIsFetching} isLoading={incentiveHeldAmountsLoading} />
-                        </div>
-                    </Switch.Case>
-                    <Switch.Case condition={tab == "incentive_factors"}>
-                        <div className='incentive_inner_wrapper'>
-                            {/* <IncentiveFactors /> */}
-                            <IncentiveCriteriaFactors />
-                        </div>
-                    </Switch.Case>
-                </Switch>
             </div>
         </div>
     );
