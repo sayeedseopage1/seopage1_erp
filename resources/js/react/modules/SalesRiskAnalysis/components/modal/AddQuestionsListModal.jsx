@@ -43,6 +43,7 @@ import { formatAPIErrors } from "../../../../utils/formatAPIErrors";
 
 import { SalesRiskAnalysisContext } from "../../context/SalesRiskAnalysisProvider";
 import BlurModalLoader from "../loader/BlurModalLoader";
+import { useSelector } from "react-redux";
 
 const AddQuestionsListModal = ({
     open,
@@ -60,6 +61,8 @@ const AddQuestionsListModal = ({
     const modalRef = useRef(null);
     const { questionsAnswerType, policies, allQuestions, yesNoRules } =
         useContext(SalesRiskAnalysisContext);
+    const { settings } = useSelector((state) => state.saleRiskAnalysis);
+    const isEditEnabled = settings?.value;
     const [disableAddOtherRuleQuestion, setDisableAddOtherRuleQuestion] =
         useState(true);
     const [questions, setQuestions] = useState([]);
@@ -161,6 +164,9 @@ const AddQuestionsListModal = ({
                 setSingleQuestion({
                     ...singleQuestion,
                     [name]: value,
+                    policy_id: policies?.data?.find(
+                        (item) => item?.key === value?.name
+                    ),
                 });
             }
         } else if (name === "policy_id") {
@@ -255,7 +261,8 @@ const AddQuestionsListModal = ({
 
         if (
             singleQuestion?.question_key?.name === "yesNoRules" &&
-            !singleQuestion?.rule_id
+            !singleQuestion?.rule_id &&
+            !singleQuestion.parent_question
         ) {
             setSingleQuestionValidation((prev) => {
                 return {
@@ -302,8 +309,17 @@ const AddQuestionsListModal = ({
             payload.value = JSON.stringify(updateId);
         }
 
-        if (singleQuestion?.question_key?.name === "yesNoRules") {
+        if (
+            singleQuestion?.question_key?.name === "yesNoRules" &&
+            !singleQuestion.parent_question
+        ) {
             payload.value = singleQuestion?.rule_id?.id;
+        } else if (
+            singleQuestion?.question_key?.name === "yesNoRules" &&
+            singleQuestion?.parent_question &&
+            singleQuestion?.parent_question?.type === "yesNo"
+        ) {
+            payload.value = singleQuestion?.parent_question_for;
         }
         try {
             const res = isQuestionUpdating
@@ -414,6 +430,7 @@ const AddQuestionsListModal = ({
                 ...validation,
                 rule_id:
                     singleQuestion?.question_key?.name === "yesNoRules" &&
+                    !singleQuestion.parent_question &&
                     !singleQuestion?.rule_id
                         ? true
                         : false,
@@ -442,6 +459,41 @@ const AddQuestionsListModal = ({
         }
     }, [isLoadingSinglePolicyData]);
 
+    const isAnswerTypeDisabled = () => {
+        if (!isEditEnabled && !isQuestionUpdating) {
+            return true;
+        } else if (isEditEnabled && isQuestionUpdating) {
+            return false;
+        } else if (isEditEnabled && !isQuestionUpdating) {
+            return false;
+        } else if (!isEditEnabled && isQuestionUpdating) {
+            return true;
+        } else if (
+            singleQuestion?.type?.name === "yesNo" &&
+            singleQuestion?.question_key?.name === "yesNoRules"
+        ) {
+            return true;
+        } else {
+            return false;
+        }
+    };
+
+    const isPolicyNameDisabled = () => {
+        if (!isEditEnabled && !isQuestionUpdating) {
+            return true;
+        } else if (isEditEnabled && isQuestionUpdating) {
+            return false;
+        } else if (isEditEnabled && !isQuestionUpdating) {
+            return false;
+        } else if (!isEditEnabled && isQuestionUpdating) {
+            return true;
+        } else if (singleQuestion?.question_key?.name === "yesNoRules") {
+            return true;
+        } else {
+            return false;
+        }
+    };
+
     return (
         <CustomModal
             id="addQuestionsModal"
@@ -463,7 +515,9 @@ const AddQuestionsListModal = ({
                     condition={
                         questionsAnswerType?.data?.find(
                             (item) => item.name === "yesNoRules"
-                        ) === undefined && !isQuestionUpdating
+                        ) === undefined &&
+                        !isQuestionUpdating &&
+                        !isEditEnabled
                     }
                 >
                     <BlurModalLoader
@@ -535,16 +589,20 @@ const AddQuestionsListModal = ({
                                                     ? !isItemYesNo
                                                     : false;
 
+                                                // add disabled property to the item object and return it back to the data array of the dropdown if
+                                                // the item is not yesNo and the add other rule question is disabled
                                                 return {
                                                     ...item,
-                                                    disabled,
+                                                    disabled: isEditEnabled
+                                                        ? false
+                                                        : disabled,
                                                 };
                                             }
                                         ),
                                     }}
                                     selected={singleQuestion?.question_key}
                                     setSelected={handleChange}
-                                    isDisableUse={true}
+                                    isDisableUse={!isEditEnabled}
                                 />
                             </ModalSelectContainer>
                             {singleQuestionValidation?.question_key && (
@@ -568,13 +626,7 @@ const AddQuestionsListModal = ({
                                     data={QuestionsTypes}
                                     selected={singleQuestion?.type}
                                     setSelected={handleChange}
-                                    isDisableUse={
-                                        (singleQuestion?.type?.name ===
-                                            "yesNo" &&
-                                            singleQuestion?.question_key
-                                                ?.name === "yesNoRules") ||
-                                        isQuestionUpdating
-                                    }
+                                    isDisableUse={isAnswerTypeDisabled()}
                                 />
                             </ModalSelectContainer>
                             {singleQuestionValidation?.type && (
@@ -602,30 +654,24 @@ const AddQuestionsListModal = ({
                                     setSingleQuestion={setSingleQuestion}
                                 />
                             </Switch.Case>
-                            <Switch.Case
-                                condition={
-                                    singleQuestion?.question_key?.name !==
-                                    "yesNoRules"
-                                }
-                            >
-                                <div className="row mb-4 align-items-first">
-                                    <ModalInputLabel className="col-4">
-                                        Parent Question
-                                    </ModalInputLabel>
-                                    <div className="col-8 px-0 flex-column">
-                                        <ModalSelectContainer>
-                                            <QuestionsSelect
-                                                filedName="parent_question"
-                                                data={allQuestions}
-                                                selected={
-                                                    singleQuestion?.parent_question
-                                                }
-                                                setSelected={handleChange}
-                                            />
-                                        </ModalSelectContainer>
-                                    </div>
+
+                            <div className="row mb-4 align-items-first">
+                                <ModalInputLabel className="col-4">
+                                    Parent Question
+                                </ModalInputLabel>
+                                <div className="col-8 px-0 flex-column">
+                                    <ModalSelectContainer>
+                                        <QuestionsSelect
+                                            filedName="parent_question"
+                                            data={allQuestions}
+                                            selected={
+                                                singleQuestion?.parent_question
+                                            }
+                                            setSelected={handleChange}
+                                        />
+                                    </ModalSelectContainer>
                                 </div>
-                            </Switch.Case>
+                            </div>
                             <Switch.Case
                                 condition={
                                     singleQuestion?.parent_question?.type ===
@@ -755,11 +801,7 @@ const AddQuestionsListModal = ({
                                             data={policies}
                                             selected={singleQuestion?.policy_id}
                                             setSelected={handleChange}
-                                            isDisableUse={
-                                                singleQuestion?.question_key
-                                                    ?.name === "yesNoRules" ||
-                                                isQuestionUpdating
-                                            }
+                                            isDisableUse={isPolicyNameDisabled()}
                                         />
                                     </ModalSelectContainer>
                                     {singleQuestionValidation?.policy_id && (
@@ -772,7 +814,8 @@ const AddQuestionsListModal = ({
                             <Switch.Case
                                 condition={
                                     singleQuestion?.question_key?.name ===
-                                    "yesNoRules"
+                                        "yesNoRules" &&
+                                    !singleQuestion?.parent_question
                                 }
                             >
                                 <div className="row mb-4 align-items-first">
@@ -791,7 +834,8 @@ const AddQuestionsListModal = ({
                                                 isDisableUse={
                                                     isQuestionUpdating &&
                                                     yesNoRules?.data?.length ===
-                                                        0
+                                                        0 &&
+                                                    !isEditEnabled
                                                 }
                                             />
                                         </ModalSelectContainer>
@@ -805,8 +849,9 @@ const AddQuestionsListModal = ({
                             </Switch.Case>
                             <Switch.Case
                                 condition={
+                                    isEditEnabled ||
                                     singleQuestion?.question_key?.name !==
-                                    "yesNoRules"
+                                        "yesNoRules"
                                 }
                             >
                                 <div className="row mb-4 align-items-first">

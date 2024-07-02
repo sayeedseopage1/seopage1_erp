@@ -20,9 +20,8 @@
 .filter_menu{
   max-height: 70vh;
   overflow-y: auto;
-  width: 205px;
+  width: 220px;
 }
-
 
 .list{
   display: flex;

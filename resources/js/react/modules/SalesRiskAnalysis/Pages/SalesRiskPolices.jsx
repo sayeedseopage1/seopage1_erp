@@ -282,12 +282,9 @@ const SalesRiskPolices = () => {
 
                     // this will check if add policy button is enabled or not, if enabled then it will not update the policy
                     // if not enabled then it will update the policy
-                    const checkIsAddPolicyButtonEnabled = settings?.find(
-                        (setting) =>
-                            setting?.name === "enable_add_policy_button"
-                    )?.value;
+                    const checkIsEditButtonEnable = settings?.value;
 
-                    if (!checkIsAddPolicyButtonEnabled) {
+                    if (!checkIsEditButtonEnable) {
                         setIsPolicyUpdating(true);
                     }
                 } else {
@@ -611,11 +608,7 @@ const SalesRiskPolices = () => {
                         <Switch>
                             <Switch.Case
                                 condition={
-                                    settings?.find(
-                                        (item) =>
-                                            item?.name ===
-                                            "enable_add_policy_button"
-                                    )?.value === true
+                                    settings?.value
                                 }
                             >
                                 <button
