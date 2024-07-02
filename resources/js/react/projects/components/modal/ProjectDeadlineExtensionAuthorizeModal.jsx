@@ -187,6 +187,7 @@ const ProjectDeadlineExtensionAuthorizeModal = ({
                             id="new_deadline"
                             name="new_deadline"
                             placeholder="mm/dd/yyyy"
+                            minDate={dayjs(deadlineExtensionData?.old_deadline)?.add(1, "day")}
                             value={dayjs(deadlineExtensionData?.new_deadline)}
                             onChange={(e) => {
                                 setDeadlineExtensionData({

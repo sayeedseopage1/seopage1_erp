@@ -45,11 +45,19 @@ const TaskGuidelineNeedsAuthorizedAdmin = ({
 
     const [
         taskGuidelineApproved,
-        { isLoading: isTaskGuidelineApprovedLoading , status: taskGuidelineApprovedStatus  },
+        {
+            isLoading: isTaskGuidelineApprovedLoading,
+            status: taskGuidelineApprovedStatus,
+        },
     ] = useLazyAuthorizeTaskApprovedGuidelineQuery();
 
-    const [taskGuidelineReject, { isLoading: isTaskGuidelineRejectLoading, status: taskGuidelineRejectStatus  }] =
-        useLazyAuthorizeTaskRejectGuidelineQuery();
+    const [
+        taskGuidelineReject,
+        {
+            isLoading: isTaskGuidelineRejectLoading,
+            status: taskGuidelineRejectStatus,
+        },
+    ] = useLazyAuthorizeTaskRejectGuidelineQuery();
 
     // Handle Input Change
     const handleTaskGuideline = async (item, value) => {
@@ -105,7 +113,13 @@ const TaskGuidelineNeedsAuthorizedAdmin = ({
                     <div className="dashboardModalTableContainer TGABAContentContainer">
                         {handleLoadingComponent(
                             isLoading,
-                            <TaskGuidelineAuthorizeLoader />,
+                            <TaskGuidelineAuthorizeLoader
+                                dataLength={
+                                    inputData?.filter(
+                                        (item) => item?.status === 0
+                                    )?.length
+                                }
+                            />,
                             inputData
                                 ?.filter((item) => item?.status === 0)
                                 .map((item) => (
@@ -124,7 +138,11 @@ const TaskGuidelineNeedsAuthorizedAdmin = ({
                                                 //  TODO: Need to add loading state
                                                 isDisabled={
                                                     isTaskGuidelineApprovedLoading ||
-                                                    isTaskGuidelineRejectLoading || taskGuidelineApprovedStatus === "pending" || taskGuidelineRejectStatus === "pending"
+                                                    isTaskGuidelineRejectLoading ||
+                                                    taskGuidelineApprovedStatus ===
+                                                        "pending" ||
+                                                    taskGuidelineRejectStatus ===
+                                                        "pending"
                                                 }
                                                 onChange={(value) =>
                                                     handleTaskGuideline(

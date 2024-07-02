@@ -91,7 +91,7 @@ const ProjectQCSubmissionFormModal = ({
             const payload = {
                 id: modalData?.project_qc_submission?.id,
                 deny: type === "deny" ? "deny" : null,
-                admin_comment: adminComment,
+                admin_comment_qc: adminComment,
             };
             const res = await authorizeQcForm(payload).unwrap();
             if (res.status === 200) {

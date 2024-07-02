@@ -176,7 +176,7 @@ const ProjectDeadlineExtensionModal = ({
                             type="date"
                             id="newDeadline"
                             name="newDeadline"
-                            minDate={dayjs(modalData?.deadline)}
+                            minDate={dayjs(modalData?.deadline).add(1, 'day')}
                             placeholder="mm/dd/yyyy"
                             value={deadlineExtensionData?.newDeadline}
                             onChange={(e) => {

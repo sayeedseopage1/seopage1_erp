@@ -186,11 +186,25 @@ export const DashBoardDeadlineHistoryModalColumns = [
                             isDangerHtml={true}
                         />
                     </Switch.Case>
-                    <Switch.Case condition={data?.admin_comment === null}>
-                        <p className="d-flex justify-content-start align-items-center">
+                    <p className="d-flex justify-content-start align-items-center">
+                        <Switch.Case
+                            condition={
+                                data?.admin_comment === null &&
+                                !data?.approved_by?.id
+                            }
+                        >
                             Not Available Yet
-                        </p>
-                    </Switch.Case>
+                        </Switch.Case>
+
+                        <Switch.Case
+                            condition={
+                                data?.admin_comment === null &&
+                                data?.approved_by?.id
+                            }
+                        >
+                            --
+                        </Switch.Case>
+                    </p>
                 </Switch>
             );
         },
@@ -207,8 +221,21 @@ export const DashBoardDeadlineHistoryModalColumns = [
                         <Switch.Case condition={data?.deadline_extend_admin}>
                             <p>{data.deadline_extend_admin}</p>
                         </Switch.Case>
-                        <Switch.Case condition={!data?.deadline_extend_admin}>
+                        <Switch.Case
+                            condition={
+                                !data?.deadline_extend_admin &&
+                                !data?.approved_by?.id
+                            }
+                        >
                             <span>Not Available Yet</span>
+                        </Switch.Case>
+                        <Switch.Case
+                            condition={
+                                !data?.deadline_extend_admin &&
+                                data?.approved_by?.id
+                            }
+                        >
+                            <span>--</span>
                         </Switch.Case>
                     </Switch>
                 </div>

@@ -41,6 +41,7 @@
 .dashboardActionButtonPending {
   background: #FFC107 !important;
   color: #000 !important;
+  cursor: not-allowed !important;
 }
 
 @media (min-width: 1342px) and (max-width: 1601px) {
