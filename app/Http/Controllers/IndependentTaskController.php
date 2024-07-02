@@ -46,26 +46,59 @@ class IndependentTaskController extends AccountBaseController
     }
 
 
-    public function independentTaskGet(){
-
+    public function independentTaskGet()
+    {
         $pendingParentTask = DB::table('pending_parent_tasks')
-                            ->leftJoin('users as user', 'pending_parent_tasks.user_id', '=', 'user.id')
-                            ->leftJoin('roles as userRole', 'user.role_id', '=', 'userRole.id')
-                            ->leftJoin('users as addedBy', 'pending_parent_tasks.added_by', '=', 'addedBy.id')
-                            ->leftJoin('roles as addedByRole', 'addedBy.role_id', '=', 'addedByRole.id')
-                            ->leftJoin('users as authorizeBy', 'pending_parent_tasks.authorize_by', '=', 'authorizeBy.id')
-                            ->leftJoin('users as client', 'pending_parent_tasks.client_id', '=', 'client.id')
-                            ->select('pending_parent_tasks.login_url','pending_parent_tasks.reference_site','pending_parent_tasks.password','pending_parent_tasks.user_name',
-
-                            'pending_parent_tasks.id','pending_parent_tasks.heading','pending_parent_tasks.description','pending_parent_tasks.start_date','pending_parent_tasks.due_date','pending_parent_tasks.category_id','pending_parent_tasks.board_column_id','pending_parent_tasks.need_authorization','pending_parent_tasks.approval_status','user.id as assign_to_id','user.name as assign_to_name','user.image as assign_to_avator','userRole.name as assign_to_designation','pending_parent_tasks.u_id','pending_parent_tasks.independent_task_status','addedBy.id as assign_by_id','addedBy.name as assign_by_name','addedBy.image as assign_by_avator','addedByRole.name as assign_by_designation','authorizeBy.id as authorize_by_id','authorizeBy.name as authorize_by_name','authorizeBy.image as authorize_by_avator','client.id as existing_client_id','client.name as existing_client_name','pending_parent_tasks.client_name as new_client','pending_parent_tasks.comment','pending_parent_tasks.created_at as creation_date')
-                            ->where('pending_parent_tasks.independent_task_status', '1')
-                            ->get();
+        ->leftJoin('users as user', 'pending_parent_tasks.user_id', '=', 'user.id')
+        ->leftJoin('roles as userRole', 'user.role_id', '=', 'userRole.id')
+        ->leftJoin('users as addedBy', 'pending_parent_tasks.added_by', '=', 'addedBy.id')
+        ->leftJoin('roles as addedByRole', 'addedBy.role_id', '=', 'addedByRole.id')
+        ->leftJoin('users as authorizeBy', 'pending_parent_tasks.authorize_by', '=', 'authorizeBy.id')
+        ->leftJoin('users as client', 'pending_parent_tasks.client_id', '=', 'client.id')
+        ->leftJoin('tasks', 'pending_parent_tasks.u_id', '=', 'tasks.u_id') 
+        ->select(
+            'pending_parent_tasks.login_url',
+            'pending_parent_tasks.reference_site',
+            'pending_parent_tasks.password',
+            'pending_parent_tasks.user_name',
+            'pending_parent_tasks.id',
+            'pending_parent_tasks.heading',
+            'pending_parent_tasks.description',
+            'pending_parent_tasks.start_date',
+            'pending_parent_tasks.due_date',
+            'pending_parent_tasks.category_id',
+            'pending_parent_tasks.board_column_id',
+            'pending_parent_tasks.need_authorization',
+            'pending_parent_tasks.approval_status',
+            'user.id as assign_to_id',
+            'user.name as assign_to_name',
+            'user.image as assign_to_avatar',
+            'userRole.name as assign_to_designation',
+            'pending_parent_tasks.u_id',
+            'pending_parent_tasks.independent_task_status',
+            'addedBy.id as assign_by_id',
+            'addedBy.name as assign_by_name',
+            'addedBy.image as assign_by_avatar',
+            'addedByRole.name as assign_by_designation',
+            'authorizeBy.id as authorize_by_id',
+            'authorizeBy.name as authorize_by_name',
+            'authorizeBy.image as authorize_by_avatar',
+            'client.id as existing_client_id',
+            'client.name as existing_client_name',
+            'pending_parent_tasks.client_name as new_client',
+            'pending_parent_tasks.comment',
+            'pending_parent_tasks.created_at as creation_date',
+            DB::raw('COALESCE(tasks.id, NULL) as task_id') 
+        )
+            ->where('pending_parent_tasks.independent_task_status', '1')
+            ->get();
 
         return response()->json([
-            'pendingParentTask'=> $pendingParentTask,
-            'status'=>200
+            'pendingParentTask' => $pendingParentTask,
+            'status' => 200
         ]);
     }
+
 
     public function create()
     {

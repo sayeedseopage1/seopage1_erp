@@ -9281,17 +9281,17 @@ var RevisionSection = function RevisionSection(_ref) {
     className: "sp1_task_right_card mb-3",
     ref: setToggleRef,
     style: {
-      maxHeight: '450px'
+      maxHeight: "450px"
     },
     children: [isOpen && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("button", {
       "aria-label": "openCommentModalButton",
       className: "sp1_task_right_dl_toggle",
       onClick: toggle,
       style: {
-        zIndex: isOpen ? '110' : ''
+        zIndex: isOpen ? "110" : ""
       },
       children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("i", {
-        className: "fa-solid fa-circle-chevron-".concat(isOpen ? 'right' : 'left'),
+        className: "fa-solid fa-circle-chevron-".concat(isOpen ? "right" : "left"),
         style: {
           color: "#276fec"
         }
@@ -9304,12 +9304,12 @@ var RevisionSection = function RevisionSection(_ref) {
       })
     }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("div", {
       className: "d-flex align-items-center mb-2",
-      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("div", {
+      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("div", {
         className: "",
         style: {
-          width: '150px'
+          width: "150px"
         },
-        children: "Deadline Meet : "
+        children: ["Deadline Meet :", " "]
       }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("div", {
         className: "d-flex align-items-center",
         children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(_global_Rating__WEBPACK_IMPORTED_MODULE_1__["default"], {
@@ -9318,12 +9318,12 @@ var RevisionSection = function RevisionSection(_ref) {
       })]
     }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("div", {
       className: "d-flex align-items-center mb-2",
-      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("div", {
+      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("div", {
         className: "",
         style: {
-          width: '150px'
+          width: "150px"
         },
-        children: "Submission Quality: "
+        children: ["Submission Quality:", " "]
       }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("div", {
         className: "d-flex align-items-center",
         children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(_global_Rating__WEBPACK_IMPORTED_MODULE_1__["default"], {
@@ -9332,30 +9332,16 @@ var RevisionSection = function RevisionSection(_ref) {
       })]
     }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("div", {
       className: "d-flex align-items-center mb-2",
-      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("div", {
+      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("div", {
         className: "",
         style: {
-          width: '150px'
+          width: "150px"
         },
-        children: "Req. Fullfillment: "
+        children: ["Req. Fullfillment:", " "]
       }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("div", {
         className: "d-flex align-items-center",
         children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(_global_Rating__WEBPACK_IMPORTED_MODULE_1__["default"], {
           rating: Number(data === null || data === void 0 ? void 0 : data.req_fullfillment)
-        })
-      })]
-    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("div", {
-      className: "d-flex align-items-center mb-2",
-      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("div", {
-        className: "",
-        style: {
-          width: '150px'
-        },
-        children: "Overall Task Ratings: "
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("div", {
-        className: "d-flex align-items-center",
-        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(_global_Rating__WEBPACK_IMPORTED_MODULE_1__["default"], {
-          rating: Number(data === null || data === void 0 ? void 0 : data.overall_tasks)
         })
       })]
     }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("div", {
@@ -9365,8 +9351,8 @@ var RevisionSection = function RevisionSection(_ref) {
         children: "Comments:"
       }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("div", {
         style: {
-          color: '#777',
-          fontSize: '13px'
+          color: "#777",
+          fontSize: "13px"
         },
         children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("div", {
           className: "sp1_ck_content",
