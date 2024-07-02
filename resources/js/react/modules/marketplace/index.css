@@ -65,3 +65,43 @@ p {
     font-weight: 400;
     line-height: normal;
 }
+
+@media only screen and (min-width: 1201px) and (max-width: 1600px) {
+
+    .sp1_marketplace_page_wrapper,
+    .sp1_marketplace_section_wrapper {
+        padding: 25px;
+    }
+}
+
+@media only screen and (min-width: 993px) and (max-width: 1200px) {
+
+    .sp1_marketplace_page_wrapper,
+    .sp1_marketplace_section_wrapper {
+        padding: 20px;
+    }
+}
+
+@media only screen and (min-width: 769px) and (max-width: 992px) {
+
+    .sp1_marketplace_page_wrapper,
+    .sp1_marketplace_section_wrapper {
+        padding: 15px;
+    }
+}
+
+@media only screen and (min-width: 576px) and (max-width: 768px) {
+
+    .sp1_marketplace_page_wrapper,
+    .sp1_marketplace_section_wrapper {
+        padding: 15px;
+    }
+}
+
+@media only screen and (max-width: 576px) {
+
+    .sp1_marketplace_page_wrapper,
+    .sp1_marketplace_section_wrapper {
+        padding: 15px;
+    }
+}

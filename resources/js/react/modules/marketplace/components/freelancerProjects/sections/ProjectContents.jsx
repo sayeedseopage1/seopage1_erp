@@ -1,6 +1,7 @@
 import { Select } from "antd";
 import { dummy_projects } from "../../../constants/projects";
 import ProjectCard from "../ui/ProjectCard";
+import ProjectsFilterDrawer from "../ui/ProjectsFilterDrawer";
 
 const ProjectContents = () => {
 
@@ -37,6 +38,9 @@ const ProjectContents = () => {
                             },
                         ]}
                     />
+                </div>
+                <div className="projects_filter_drawer_wrapper">
+                    <ProjectsFilterDrawer />
                 </div>
             </div>
             <div className='projects_content_body'>

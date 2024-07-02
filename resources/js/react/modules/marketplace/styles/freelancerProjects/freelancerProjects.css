@@ -7,6 +7,14 @@
 }
 
 /* filter bar */
+.projects_default_filter_bar_wrapper {
+    display: block;
+}
+
+.projects_filter_drawer_wrapper {
+    display: none;
+}
+
 .projects_page_filter_bar {
     padding: 30px;
     background-color: var(--primary-white);
@@ -226,6 +234,7 @@
     display: grid;
     grid-template-columns: 3fr 1fr;
     align-items: flex-start;
+    gap: 10px;
     margin-bottom: 15px;
 }
 
@@ -233,7 +242,8 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    gap: 8px
+    gap: 8px;
+    flex-wrap: wrap;
 }
 
 .project_card_title {
@@ -313,7 +323,7 @@
 .project_card_skills {
     display: flex;
     align-items: center;
-    gap: 25px;
+    gap: 15px;
     flex-wrap: wrap;
 }
 
@@ -330,7 +340,8 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    gap: 8px
+    gap: 8px;
+    flex-wrap: wrap;
 }
 
 .project_card_date,
@@ -355,4 +366,205 @@
     display: flex;
     align-items: center;
     gap: 12px;
+}
+
+.projects_filter_btn {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    color: var(--primary-white);
+    /* border: 1px solid var(--primary-white); */
+    border-radius: 5px;
+    background: none;
+    padding: 8px 12px;
+}
+
+
+/* responsive css */
+/* @media only screen and (width >=1200px) {
+    .projects_page_wrapper {
+        border-radius: 9px;
+        border: 1px solid var(--light-blue-2);
+        display: grid;
+        grid-template-columns: 1fr 2fr;
+        gap: 27px;
+    }
+
+    .projects_default_filter_bar_wrapper {
+        display: block;
+    }
+
+    .projects_filter_drawer_wrapper {
+        display: none;
+    }
+} */
+
+@media only screen and (min-width: 1201px) and (max-width: 1600px) {}
+
+@media only screen and (min-width: 993px) and (max-width: 1200px) {
+    .projects_page_wrapper {
+        grid-template-columns: 1fr;
+        gap: 0px;
+    }
+
+    .projects_default_filter_bar_wrapper {
+        display: none;
+    }
+
+    .projects_filter_drawer_wrapper {
+        display: block;
+    }
+
+    .projects_content_header {
+        padding: 15px;
+        justify-content: flex-end;
+        gap: 20px;
+    }
+
+    .projects_content_body {
+        padding: 15px;
+    }
+
+    .projects_content_alert_title,
+    .projects_content_header_title {
+        display: none;
+    }
+
+    .project_card_title {
+        font-size: 18px;
+    }
+
+    .project_normal_text,
+    .project_card_price,
+    .project_card_skill,
+    .project_card_date {
+        font-size: 14px;
+    }
+
+
+}
+
+@media only screen and (min-width: 769px) and (max-width: 992px) {
+    .projects_page_wrapper {
+        grid-template-columns: 1fr;
+        gap: 0px;
+    }
+
+    .projects_default_filter_bar_wrapper {
+        display: none;
+    }
+
+    .projects_filter_drawer_wrapper {
+        display: block;
+    }
+
+    .projects_content_header {
+        padding: 15px;
+        justify-content: flex-end;
+        gap: 20px;
+    }
+
+    .projects_content_body {
+        padding: 15px;
+    }
+
+    .projects_content_alert_title,
+    .projects_content_header_title {
+        display: none;
+    }
+
+    .project_card_title {
+        font-size: 18px;
+    }
+
+    .project_normal_text,
+    .project_card_price,
+    .project_card_skill,
+    .project_card_date {
+        font-size: 14px;
+    }
+
+}
+
+@media only screen and (min-width: 576px) and (max-width: 768px) {
+    .projects_page_wrapper {
+        grid-template-columns: 1fr;
+        gap: 0px;
+    }
+
+    .projects_default_filter_bar_wrapper {
+        display: none;
+    }
+
+    .projects_filter_drawer_wrapper {
+        display: block;
+    }
+
+    .projects_content_header {
+        padding: 15px;
+        justify-content: flex-end;
+        gap: 20px;
+    }
+
+    .projects_content_body {
+        padding: 15px;
+    }
+
+    .projects_content_alert_title,
+    .projects_content_header_title {
+        display: none;
+    }
+
+    .project_card_title {
+        font-size: 18px;
+    }
+
+    .project_normal_text,
+    .project_card_price,
+    .project_card_skill,
+    .project_card_date {
+        font-size: 14px;
+    }
+
+}
+
+@media only screen and (max-width: 576px) {
+    .projects_page_wrapper {
+        grid-template-columns: 1fr;
+        gap: 0px;
+    }
+
+    .projects_default_filter_bar_wrapper {
+        display: none;
+    }
+
+    .projects_filter_drawer_wrapper {
+        display: block;
+    }
+
+    .projects_content_header {
+        padding: 15px;
+        justify-content: flex-end;
+        gap: 20px;
+    }
+
+    .projects_content_body {
+        padding: 15px;
+    }
+
+    .projects_content_alert_title,
+    .projects_content_header_title {
+        display: none;
+    }
+
+    .project_card_title {
+        font-size: 18px;
+    }
+
+    .project_normal_text,
+    .project_card_price,
+    .project_card_skill,
+    .project_card_date {
+        font-size: 14px;
+    }
 }

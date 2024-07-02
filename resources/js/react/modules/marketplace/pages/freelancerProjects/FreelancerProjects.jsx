@@ -20,7 +20,9 @@ const FreelancerProjects = () => {
         >
             <div className='sp1_marketplace_page_wrapper'>
                 <div className='sp1_marketplace_section_wrapper projects_page_wrapper'>
-                    <ProjectsFilterBar />
+                    <div className='projects_default_filter_bar_wrapper'>
+                        <ProjectsFilterBar />
+                    </div>
                     <ProjectContents />
                 </div>
             </div>
