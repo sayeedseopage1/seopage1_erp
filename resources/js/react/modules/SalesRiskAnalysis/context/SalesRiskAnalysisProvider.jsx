@@ -18,6 +18,8 @@ export const SalesRiskAnalysisContext = createContext({});
 const SalesRiskAnalysisProvider = ({ children }) => {
     const dispatch = useDispatch();
     const { departments } = useSelector((state) => state.filterOptions);
+    const { settings } = useSelector((state) => state.saleRiskAnalysis);
+    const isEditEnabled = settings?.value;
     const [questionsAnswerType, setQuestionsAnswerType] = React.useState({});
     const [policies, setPolicies] = React.useState({});
     const [yesNoRules, setYesNoRules] = React.useState([]);
@@ -90,7 +92,7 @@ const SalesRiskAnalysisProvider = ({ children }) => {
                     ([key]) =>
                         !(
                             key === "yesNoRules" &&
-                            !questionFieldsData?.data?.yesNoRules.length
+                            !questionFieldsData?.data?.yesNoRules.length && !isEditEnabled
                         )
                 )
                 .map(([key, value], index) => {
@@ -175,7 +177,7 @@ const SalesRiskAnalysisProvider = ({ children }) => {
                 mainData: questionFieldsData?.data?.yesNoRules,
             });
         }
-    }, [questionFieldsData, questionTypeLoading]);
+    }, [questionFieldsData, questionTypeLoading, isEditEnabled]);
 
     let isQuestionTypeLoading = questionTypeStatus === "pending" ? true : false;
 
