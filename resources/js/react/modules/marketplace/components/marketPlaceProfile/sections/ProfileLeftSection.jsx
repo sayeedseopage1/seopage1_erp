@@ -36,6 +36,9 @@ const ProfileLeftSection = ({ profileData }) => {
                 </div>
             }>
                 <ProfilePortfolioSection portfolio={portfolio} profileData={profileData} />
+                <div className='text-center'>
+                    <button className='portfolio_load_more_btn mt-5'>Load More</button>
+                </div>
             </LgDataCardWithHeader>
             <LgDataCardWithHeader title={"Reviews"} actionCompo={
                 <div>

@@ -124,7 +124,7 @@ export const user_profile = {
             thumbnails: [
                 {
                     id: 1,
-                    url: "https://i.ibb.co/WPLd3mH/c495d869d24928c2abeba2af0b465d91.png",
+                    url: "https://i.ibb.co/zPYZ6sZ/Rectangle-5688.png",
                 },
                 {
                     id: 2,
@@ -168,7 +168,7 @@ export const user_profile = {
             thumbnails: [
                 {
                     id: 1,
-                    url: "https://i.ibb.co/WPLd3mH/c495d869d24928c2abeba2af0b465d91.png",
+                    url: "https://i.ibb.co/y0x7sgZ/c495d869d24928c2abeba2af0b465d91.png",
                 },
                 {
                     id: 2,
@@ -212,7 +212,7 @@ export const user_profile = {
             thumbnails: [
                 {
                     id: 1,
-                    url: "https://i.ibb.co/WPLd3mH/c495d869d24928c2abeba2af0b465d91.png",
+                    url: "https://i.ibb.co/fNmz2QC/a6374cbc4a3101a44777affaf930b729.png",
                 },
                 {
                     id: 2,
@@ -271,8 +271,7 @@ export const user_profile = {
                     url: "https://i.ibb.co/ft7NJmj/Rectangle-5685.png",
                 },
             ],
-            img_url:
-                "https://i.ibb.co/WPLd3mH/c495d869d24928c2abeba2af0b465d91.png",
+            img_url: "https://i.ibb.co/DtNLLPh/Rectangle-5685.png",
             skills: [
                 {
                     id: 1,
@@ -300,7 +299,7 @@ export const user_profile = {
             thumbnails: [
                 {
                     id: 1,
-                    url: "https://i.ibb.co/WPLd3mH/c495d869d24928c2abeba2af0b465d91.png",
+                    url: "https://i.ibb.co/tZy9rt7/Rectangle-5684.png",
                 },
                 {
                     id: 2,
@@ -344,7 +343,7 @@ export const user_profile = {
             thumbnails: [
                 {
                     id: 1,
-                    url: "https://i.ibb.co/WPLd3mH/c495d869d24928c2abeba2af0b465d91.png",
+                    url: "https://i.ibb.co/9VyYCC6/Rectangle-5683.png",
                 },
                 {
                     id: 2,

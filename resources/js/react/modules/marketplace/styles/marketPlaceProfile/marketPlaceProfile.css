@@ -395,7 +395,7 @@
     margin: 0 auto;
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    gap: 2px;
+    /* gap: 2px; */
 }
 
 .marketplace_portfolio_item {
@@ -431,11 +431,11 @@
     object-fit: cover;
     object-position: center;
     background-color: var(--light-blue-2);
-    scale: 1;
+    transform: scale(1);
 }
 
 .marketplace_portfolio_item_img:hover {
-    scale: 1.1;
+    transform: scale(1.1);
     transition: 0.5s;
 }
 
@@ -514,7 +514,18 @@
     object-position: center;
 }
 
+.portfolio_load_more_btn {
+    color: #2C2C2C;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+    border: 1px solid #767676;
+    padding: 8px;
+    background-color: transparent;
+}
 
+/* overwrite default css */
 .marketplace_portfolio_item .slick-prev::after {
     display: none !important;
 }
