@@ -1163,8 +1163,13 @@ class SalesRiskPolicyController extends AccountBaseController
             foreach ((object) $questions as $key => $item) {
                 // $rule_id = json_decode($item->value)->rule_id;
                 if (!isset($questionAns[$item->id])) continue;
-
+                // dd($item);
+                echo '<br>';
+                
                 $rule = SalesRiskPolicy::where('id', $item->value)->first();
+                if($rule == null)
+                    dd($item);
+                echo '<br>';
                 $value = $questionAns[$item->id];
 
                 if ($value == 'yes') {
@@ -1177,6 +1182,8 @@ class SalesRiskPolicyController extends AccountBaseController
                 $policyIdList[$rule->id] = $value;
                 $pointData['yesNoRules' . $key]['questionAnswer'][] = ['id' => $item->id, 'title' => $item->title, 'value' => $value, 'parent_id' => null];
             }
+            dd();
+
             // -------------------------------- end yesNoRules ------------------------------ //
 
             // ----------------------------- common calculations -------------------------- //
