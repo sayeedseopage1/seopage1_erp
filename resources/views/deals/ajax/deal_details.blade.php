@@ -714,7 +714,8 @@
     // dd($dealStage);
     //$value= $deal->actual_amount. $currency->currency_symbol;
     //  $bid_value= $deal->bid_value. $currency->currency_symbol;
-    $salesDeal = App\Models\Deal::where('lead_id', $deal->lead_id)->first();
+    if ($deal->lead_id) 
+        $salesDeal = App\Models\Deal::where('lead_id', $deal->lead_id)->first();
     ?>
     <section class="seodeals py-5">
         <div class="custom_container">
@@ -758,7 +759,7 @@
                 <div class="col-md-4 text-center">
                     <div class="deal_item ">
                         <h3>Deal Status</h3><br>
-                        @if ($salesDeal)
+                        @if (isset($salesDeal))
                             <input type="hidden" value="{{ $salesDeal->id }}">
                             @if ($salesDeal->sale_analysis_status == 'analysis')
                                 @if (auth()->user()->role_id == 1)
@@ -797,7 +798,7 @@
                                         </h2>
                                     </div>
                                 @endif
-                                
+
                             @elseif($salesDeal->sale_analysis_status == 'previous-won')
                                 <div class="text-center">
                                     <h2 style="color:green;">Previous Won</h2>
