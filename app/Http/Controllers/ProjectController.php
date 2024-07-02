@@ -2480,10 +2480,6 @@ class ProjectController extends AccountBaseController
                     abort(403);
                 }
                 break;
-
-            case 'dashboard-temp':
-                $this->view = 'projects.ajax.dashboard-temp';
-                break;
             case 'deliverables':
                 $this->view = 'projects.ajax.deliverables';
                 break;
@@ -2546,7 +2542,8 @@ class ProjectController extends AccountBaseController
 
                 $this->hoursLogged = intdiv($hoursLogged - $breakMinutes, 60);
                 $this->expenses = Expense::where(['project_id' => $id, 'status' => 'approved'])->sum('price');
-                $this->view = 'projects.ajax.overview';
+                // $this->view = 'projects.ajax.overview';
+                $this->view = 'projects.ajax.dashboard';
                 break;
         }
 
