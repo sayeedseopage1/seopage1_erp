@@ -2164,7 +2164,8 @@ class HelperPendingActionController extends AccountBaseController
                         'button_name' => 'Review',
                         'button_color' => 'primary',
                         'button_type' => 'redirect_url',
-                        'button_url' => route('pde-request'),
+                        // 'button_url' => route('pde-request'),
+                        'button_url' => route('projects.show', $project->id),
                     ],
 
                 ];
