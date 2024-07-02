@@ -33,6 +33,7 @@ const DurationTime = ({
             <div className="col-5 input-group d-flex flex-column">
                 <Space wrap>
                     <TimePicker
+                        needConfirm={false}
                         use12Hours
                         format="h:mm a"
                         defaultValue={start}
@@ -47,6 +48,7 @@ const DurationTime = ({
             <div className="col-5 input-group d-flex flex-column">
                 <Space wrap>
                     <TimePicker
+                        needConfirm={false}
                         use12Hours
                         format="h:mm a"
                         defaultValue={end}

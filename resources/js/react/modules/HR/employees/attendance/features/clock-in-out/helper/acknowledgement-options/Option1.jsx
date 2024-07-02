@@ -8,6 +8,7 @@ import formatTimeTo12Hour from "../../../../../../../../utils/formatTimeTo12Hour
 import checkOverlapRange from "../../../../../../../../utils/checkOverlapRange";
 import checkOverlap from "../../../../../../../../utils/checkOverlap";
 import Swal from "sweetalert2";
+import { fromAndToValidation } from "../../../../../../../../utils/fromAndToValidation";
 
 /**
  * * this component show the first acknowledgement option
@@ -57,6 +58,21 @@ const Option1 = ({
         ]);
     };
 
+    const setDuration = () => {
+        if (fromAndToValidation(durations)) {
+            return;
+        } else {
+            setDurations([
+                {
+                    start: "",
+                    end: "",
+                    id: "d32sew",
+                },
+            ]);
+        }
+    };
+
+    console.log("durations", durations);
     // editor data change
     const handleEditorChange = (e, editor) => {
         const data = editor.getData();
@@ -88,6 +104,16 @@ const Option1 = ({
             });
 
             return setError({ comment: "Please explain the reason here!" });
+        }
+        if (fromAndToValidation(durations)) {
+            Swal.fire({
+                position: "center",
+                icon: "error",
+                title: "Invalid Time Range",
+                text: "The end time should be greater than the start time.",
+                showConfirmButton: true,
+            });
+            return;
         }
 
         if (checkOverlapRange(lastClockOutTime, durations)) {
@@ -236,13 +262,7 @@ const Option1 = ({
                                     className="ml-2"
                                     onClick={(e) => {
                                         handleSubmission(e, "CONTINUE");
-                                        setDurations([
-                                            {
-                                                start: "",
-                                                end: "",
-                                                id: "d32sew",
-                                            },
-                                        ]);
+                                        setDuration();
                                     }}
                                     isLoading={
                                         sType === "CONTINUE" && isLoading
