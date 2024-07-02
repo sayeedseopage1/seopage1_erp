@@ -786,7 +786,7 @@ class SalesRiskPolicyController extends AccountBaseController
                 'status' => 'success',
                 'message' => 'Questions values stored successfully.',
                 'redirectUrl' => route('edit-deal-details', $dealId),
-                'data' => ['points' => $calculation['points']]
+                'data' => ['points' => $calculation['points'] > 0 ? 0 : -1 ]
             ]);
         } catch (\Throwable $th) {
             DB::rollBack();
