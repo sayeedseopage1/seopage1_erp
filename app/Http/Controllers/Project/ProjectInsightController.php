@@ -21,13 +21,16 @@ class ProjectInsightController extends Controller
                 SELECT 
                     pm.*,
                     c.id as currency_id, c.currency_code as currency_code, c.currency_symbol as currency_symbol,
-                    oc.id as original_currency_id, oc.currency_code as original_currency_code, oc.currency_symbol as original_currency_symbol
+                    oc.id as original_currency_id, oc.currency_code as original_currency_code, oc.currency_symbol as original_currency_symbol,
+                    inv.id as invoice_id, inv.status as paid_status
                 FROM 
                     project_milestones pm
                 LEFT JOIN 
                     currencies c ON pm.currency_id = c.id
                 LEFT JOIN 
                     currencies oc ON pm.original_currency_id = oc.id
+                LEFT JOIN
+                    invoices inv ON pm.id = inv.milestone_id
                 WHERE 
                     pm.project_id = :project_id
             "), ['project_id' => $project_id]
