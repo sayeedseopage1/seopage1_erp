@@ -99,7 +99,6 @@ const SalesRiskAnalysisProvider = ({ children }) => {
                         name: key,
                         label: value,
                     };
-                    f;
                 });
             const questionKeys = Object.entries(
                 questionFieldsData?.data?.questionKeys
@@ -173,6 +172,7 @@ const SalesRiskAnalysisProvider = ({ children }) => {
                 emptyOptionsLabel: "Select Rule",
                 id: "rule",
                 data: yesNoRulesData,
+                mainData: questionFieldsData?.data?.yesNoRules,
             });
         }
     }, [questionFieldsData, questionTypeLoading]);
@@ -190,6 +190,7 @@ const SalesRiskAnalysisProvider = ({ children }) => {
             yesNoRules,
             isQuestionTypeLoading,
             questionFiledRefetch,
+            setYesNoRules
         };
     });
 

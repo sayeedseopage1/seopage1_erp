@@ -12,7 +12,10 @@ import QuestionsListTable from "../components/table/QuestionsListTable";
 import { QuestionsListTableColumns } from "../components/table/QuestionsListTableColumns";
 
 //APi services
-import { useSaleAnalysisQuestionsListQuery } from "../../../services/api/salesRiskAnalysisSlice";
+import {
+    useLazyGetSinglePolicySalesRiskAnalysisQuery,
+    useSaleAnalysisQuestionsListQuery,
+} from "../../../services/api/salesRiskAnalysisSlice";
 import { set } from "lodash";
 import { SalesRiskAnalysisContext } from "../context/SalesRiskAnalysisProvider";
 import Switch from "../components/Switch";
@@ -21,9 +24,15 @@ import Loader from "../../../global/Loader";
 const SalesRiskQuestionList = () => {
     const [isYesNoRulesLoading, setIsYesNoRulesLoading] = React.useState(false);
 
-    const { isQuestionTypeLoading ,questionFiledRefetch, questionsAnswerType, policies } = useContext(SalesRiskAnalysisContext);
+    const {
+        isQuestionTypeLoading,
+        questionFiledRefetch,
+        questionsAnswerType,
+        setYesNoRules,
+        policies,
+    } = useContext(SalesRiskAnalysisContext);
     const [addQuestionsModalOpenClicked, setAddQuestionsModalOpenClicked] =
-    React.useState(false);
+        React.useState(false);
     const [{ pageIndex, pageSize }, setPagination] = React.useState({
         pageIndex: 0,
         pageSize: 10,
@@ -65,6 +74,24 @@ const SalesRiskQuestionList = () => {
         })
     );
 
+    // get single policy data by id or key
+    const [
+        getSinglePolicy,
+        {
+            data: singlePolicyDataByIDorKey,
+            isLoading: isLoadingSinglePolicyDataByIDorKey,
+        },
+    ] = useLazyGetSinglePolicySalesRiskAnalysisQuery();
+
+    const getSinglePolicyDataByIDorKey = async (key) => {
+        try {
+            const response = await getSinglePolicy(`key=${key}`);
+            return response;
+        } catch (error) {
+            return error;
+        }
+    };
+
     // questions list data
     const questionsList = data?.data;
 
@@ -99,6 +126,16 @@ const SalesRiskQuestionList = () => {
     const openAddQuestionsModal = () => {
         questionFiledRefetch();
         setAddQuestionsModalOpenClicked(true);
+        setYesNoRules((prev) => {
+            return {
+                ...prev,
+                data: prev?.data?.filter((item) => {
+                    if (prev?.mainData?.map((i) => i?.id).includes(item?.id)) {
+                        return item;
+                    }
+                }),
+            };
+        });
     };
 
     useEffect(() => {
@@ -106,29 +143,28 @@ const SalesRiskQuestionList = () => {
             if (!isQuestionTypeLoading) {
                 handleOpenAddQuestionsModal();
                 handleOpenAddQuestionsModal();
-                    const isYesNoRulesExist = questionsAnswerType.data.find(
-                        (item) => item.name === "yesNoRules"
-                    );
-                    setSingleQuestion({
-                        ...singleQuestion,
-                        question_key: isYesNoRulesExist,
-                        type: isYesNoRulesExist && {
-                            id: 2,
-                            label: "Yes/No",
-                            name: "yesNo",
-                        },
-                        title: "",
-                        policy_id:
-                            isYesNoRulesExist &&
-                            policies.data.find((item) =>
-                                item.key.includes("yesNo")
-                            ),
-                    });
+                const isYesNoRulesExist = questionsAnswerType.data.find(
+                    (item) => item.name === "yesNoRules"
+                );
+                setSingleQuestion({
+                    ...singleQuestion,
+                    question_key: isYesNoRulesExist,
+                    type: isYesNoRulesExist && {
+                        id: 2,
+                        label: "Yes/No",
+                        name: "yesNo",
+                    },
+                    title: "",
+                    policy_id:
+                        isYesNoRulesExist &&
+                        policies.data.find((item) =>
+                            item.key.includes("yesNo")
+                        ),
+                });
                 setAddQuestionsModalOpenClicked(false);
             }
         }
     }, [addQuestionsModalOpenClicked, isQuestionTypeLoading]);
-
 
     return (
         <React.Fragment>
@@ -181,6 +217,10 @@ const SalesRiskQuestionList = () => {
                         handleOpenAddQuestionsModal={
                             handleOpenAddQuestionsModal
                         }
+                        getSinglePolicyDataByIDorKey={
+                            getSinglePolicyDataByIDorKey
+                        }
+                        questionFiledRefetch={questionFiledRefetch}
                     />
                 </div>
             </div>
@@ -197,6 +237,8 @@ const SalesRiskQuestionList = () => {
                     setIsQuestionUpdating={setIsQuestionUpdating}
                     setAddQuestionsData={setSingleQuestion}
                     refetchSaleRiskAnalysis={refetch}
+                    singlePolicyDataByIDorKey={singlePolicyDataByIDorKey}
+                    
                 />
             )}
         </React.Fragment>

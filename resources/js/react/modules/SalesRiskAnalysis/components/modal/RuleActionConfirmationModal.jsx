@@ -86,6 +86,7 @@ const RuleActionConfirmationModal = ({
                             onClick={() => {
                                 handleStatusUpdate();
                             }}
+                            disabled={isLoading}
                         >
                             {isLoading
                                 ? "Updating..."
@@ -95,6 +96,7 @@ const RuleActionConfirmationModal = ({
                         <button
                             className="btn btn-warning ml-2 text-white"
                             onClick={closeModal}
+                            disabled={isLoading}
                         >
                             No, Cancel
                         </button>

@@ -6,6 +6,7 @@ import PropTypes from "prop-types";
 const WithoutDraggableColumnHeader = ({
     header,
     table,
+    key,
     className = "",
     isNewRuleModal,
     ...props
@@ -52,6 +53,7 @@ const WithoutDraggableColumnHeader = ({
             }}
             className={`sp1_tasks_th sp1_tasks_th--${column.id} ${className}`}
             {...props}
+            key={key}
         >
             <div
                 style={{

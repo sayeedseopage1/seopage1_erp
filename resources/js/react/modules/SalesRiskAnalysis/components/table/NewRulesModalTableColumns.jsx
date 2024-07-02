@@ -34,7 +34,11 @@ export const NewRulesModalTableColumnsData = [
                                 }}
                                 className="py-3 d-flex align-items-center"
                             >
-                                {data.title}
+                                <Tooltip text={data.title}>
+                                    <p className="singleline-ellipsis">
+                                        {data.title}
+                                    </p>
+                                </Tooltip>
                                 <span className="ml-2">
                                     {" "}
                                     {data?.ruleComment ? (
@@ -58,7 +62,11 @@ export const NewRulesModalTableColumnsData = [
                                 }}
                                 className="py-3 d-flex align-items-center"
                             >
-                                {data.title}
+                                <Tooltip text={data.title}>
+                                    <p className="singleline-ellipsis">
+                                        {data.title}
+                                    </p>
+                                </Tooltip>
                                 <span className="ml-2">
                                     {data?.ruleComment ? (
                                         <Tooltip text={data?.ruleComment}>
@@ -125,7 +133,11 @@ export const NewRulesModalTableColumnsData = [
                                     }}
                                     className="py-3 pr-2 d-flex align-items-center"
                                 >
-                                    {data.title}
+                                    <Tooltip text={data.title}>
+                                        <p className="singleline-ellipsis">
+                                            {data.title}
+                                        </p>
+                                    </Tooltip>
                                     <span className="ml-2">
                                         {data?.ruleComment ? (
                                             <Tooltip text={data?.ruleComment}>
@@ -307,6 +319,9 @@ export const NewRulesModalTableColumnsData = [
         cell: ({ row, table }) => {
             const data = row?.original;
             const action = table.options.meta;
+            const isDeleteButtonShow = action?.settingsValue.find(
+                (item) => item.name === "enable_delete_rule"
+            );
             return (
                 <div className="d-flex justify-content-end flex-column align-items-end">
                     <Switch>
@@ -332,26 +347,29 @@ export const NewRulesModalTableColumnsData = [
                                             index: row?.index,
                                         });
                                     }}
-                                    
                                 >
                                     <EditIcon />
                                 </button>
-                                <button
-                                    onClick={() => {
-                                        action.deleteSingleRules(data);
-                                    }}
-                                    onKeyDown={() => {
-                                        action.deleteSingleRules(data);
-                                    }}
-                                    className="d-flex bg-transparent border-none items-center"
+                                <Switch.Case
+                                    condition={isDeleteButtonShow?.value}
                                 >
-                                    <i
-                                        className="fa-solid fa-trash ml-2"
-                                        style={{
-                                            fontSize: "20px",
+                                    <button
+                                        onClick={() => {
+                                            action.deleteSingleRules(data);
                                         }}
-                                    ></i>
-                                </button>
+                                        onKeyDown={() => {
+                                            action.deleteSingleRules(data);
+                                        }}
+                                        className="d-flex bg-transparent border-none items-center"
+                                    >
+                                        <i
+                                            className="fa-solid fa-trash ml-2"
+                                            style={{
+                                                fontSize: "20px",
+                                            }}
+                                        ></i>
+                                    </button>
+                                </Switch.Case>
                             </SalesPointsContainer>
                         </Switch.Case>
                         <Switch.Case
@@ -370,22 +388,26 @@ export const NewRulesModalTableColumnsData = [
                                     >
                                         <EditIcon />
                                     </button>
-                                    <button
-                                        onClick={() => {
-                                            action.deleteSingleRules(data);
-                                        }}
-                                        onKeyDown={() => {
-                                            action.deleteSingleRules(data);
-                                        }}
-                                        className="d-flex bg-transparent border-none items-center"
+                                    <Switch.Case
+                                        condition={isDeleteButtonShow?.value}
                                     >
-                                        <i
-                                            className="fa-solid fa-trash ml-2"
-                                            style={{
-                                                fontSize: "20px",
+                                        <button
+                                            onClick={() => {
+                                                action.deleteSingleRules(data);
                                             }}
-                                        ></i>
-                                    </button>
+                                            onKeyDown={() => {
+                                                action.deleteSingleRules(data);
+                                            }}
+                                            className="d-flex bg-transparent border-none items-center"
+                                        >
+                                            <i
+                                                className="fa-solid fa-trash ml-2"
+                                                style={{
+                                                    fontSize: "20px",
+                                                }}
+                                            ></i>
+                                        </button>
+                                    </Switch.Case>
                                 </div>
                                 <ul>
                                     <li
