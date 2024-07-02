@@ -399,6 +399,7 @@
     }
 } */
 
+/*********** media queries for responsive design  ******************/
 @media only screen and (min-width: 1201px) and (max-width: 1600px) {}
 
 @media only screen and (min-width: 993px) and (max-width: 1200px) {

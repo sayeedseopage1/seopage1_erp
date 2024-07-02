@@ -573,3 +573,14 @@
     font-weight: 400;
     line-height: normal;
 }
+
+/*********** media queries for responsive design  ******************/
+@media only screen and (min-width: 1201px) and (max-width: 1600px) {}
+
+@media only screen and (min-width: 993px) and (max-width: 1200px) {}
+
+@media only screen and (min-width: 769px) and (max-width: 992px) {}
+
+@media only screen and (min-width: 576px) and (max-width: 768px) {}
+
+@media only screen and (max-width: 576px) {}

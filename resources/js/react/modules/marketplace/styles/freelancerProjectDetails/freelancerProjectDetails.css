@@ -80,6 +80,10 @@
     display: grid;
     grid-template-columns: 4fr 1fr;
     gap: 20px;
+    color: var(--primary-black);
+    font-size: 16px;
+    font-style: normal;
+    line-height: 28px;
 }
 
 .p_d_content_left {
@@ -110,13 +114,6 @@
     justify-content: flex-end;
     gap: 5px;
     margin-bottom: 8px;
-}
-
-.p_d_wrapper {
-    color: var(--primary-black);
-    font-size: 16px;
-    font-style: normal;
-    line-height: 28px;
 }
 
 .p_d_skills_wrapper {
@@ -453,4 +450,40 @@
     padding: 8px;
     background-color: transparent;
     margin-top: 22px;
+}
+
+/*********** media queries for responsive design  ******************/
+@media only screen and (min-width: 1201px) and (max-width: 1600px) {
+    .p_d_wrapper {
+        grid-template-columns: 2fr 1fr;
+        gap: 20px;
+    }
+}
+
+@media only screen and (min-width: 993px) and (max-width: 1200px) {
+    .p_d_wrapper {
+        grid-template-columns: 2fr 1fr;
+        gap: 15px;
+    }
+}
+
+@media only screen and (min-width: 769px) and (max-width: 992px) {
+    .p_d_wrapper {
+        grid-template-columns: 2fr 1fr;
+        gap: 15px;
+    }
+}
+
+@media only screen and (min-width: 576px) and (max-width: 768px) {
+    .p_d_wrapper {
+        grid-template-columns: 1fr;
+        gap: 15px;
+    }
+}
+
+@media only screen and (max-width: 576px) {
+    .p_d_wrapper {
+        grid-template-columns: 1fr;
+        gap: 15px;
+    }
 }
