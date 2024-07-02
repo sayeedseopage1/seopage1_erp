@@ -266,7 +266,7 @@
     margin-bottom: 20px;
 }
 
-.project_card_description {
+/* .project_card_description {
     display: block;
     display: -webkit-box;
     max-width: 100%;
@@ -275,6 +275,40 @@
     overflow: hidden;
     text-overflow: ellipsis;
     cursor: pointer;
+} */
+
+.project_card_description {
+    position: relative;
+}
+
+.truncated {
+    display: -webkit-box;
+    max-width: 100%;
+    -webkit-line-clamp: 4;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.expanded {
+    display: block;
+    max-width: 100%;
+}
+
+.more-btn,
+.less-btn {
+    color: blue;
+    cursor: pointer;
+    margin-left: 5px;
+}
+
+.more-btn {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    background: white;
+    /* Adjust background color if needed */
+    padding-left: 5px;
 }
 
 .project_card_skills {
