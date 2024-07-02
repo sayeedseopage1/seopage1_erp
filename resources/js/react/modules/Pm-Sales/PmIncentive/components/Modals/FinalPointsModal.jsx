@@ -22,7 +22,7 @@ const FinalPointsModal = ({ antdModalOpen, setAntdModalOpen, unreleasedIncentive
                     <hr />
                     <div className="modal_point_row">
                         <p>Your final points: <span>({parseFloat(bonusPointsIncentive)}*{parseFloat(unreleasedIncentive)}%)</span></p>{" "}
-                        <span className={`${bonusPointsData > 0 ? 'progress_card_desc_pos' : 'progress_card_desc_neg'}`}>{parseFloat(bonusPointsData)}pt</span>
+                        <span className={`${bonusPointsData > 0 ? 'progress_card_desc_pos' : 'progress_card_desc_neg'}`}>{parseFloat(bonusPointsData)?.toFixed(2)}pt</span>
                     </div>
                 </>
             </CustomAntdModal>
@@ -37,5 +37,5 @@ FinalPointsModal.propTypes = {
     setAntdModalOpen: PropTypes.func,
     unreleasedIncentive: PropTypes.any,
     bonusPointsIncentive: PropTypes.any,
-    bonusPointsData: PropTypes.number,
+    bonusPointsData: PropTypes.any,
 }

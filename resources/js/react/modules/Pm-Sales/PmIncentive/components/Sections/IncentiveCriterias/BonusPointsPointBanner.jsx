@@ -30,7 +30,8 @@ const BonusPointsPointBanner = () => {
 
     useEffect(() => {
         if (bonusIncentiveTypes) {
-            dispatch(bonusPointsPoints((parseFloat(bonusPointsIncentive) * parseFloat(unreleasedIncentive)) / 100));
+            let res = (parseFloat(bonusPointsIncentive) * parseFloat(unreleasedIncentive)) / 100
+            dispatch(bonusPointsPoints(parseFloat(res)?.toFixed(2)));
         }
     }, [bonusIncentiveTypes, incentive_criterias]);
 
@@ -52,7 +53,7 @@ const BonusPointsPointBanner = () => {
                                     width: "220px"
                                 }}
                             >
-                                <img src={infoIcon} alt="infoIcon" />
+                                <img src={infoIcon} alt="infoIcon" style={{ marginLeft: "4px" }} />
                             </Popover>
                         </p>
 
@@ -78,7 +79,7 @@ const BonusPointsPointBanner = () => {
                                     width: "220px"
                                 }}
                             >
-                                <img src={infoIcon} alt="infoIcon" />
+                                <img src={infoIcon} alt="infoIcon" style={{ marginLeft: "4px" }} />
                             </Popover>
                         </p>
 
@@ -96,7 +97,7 @@ const BonusPointsPointBanner = () => {
                     <div className="">
                         <p className='point_title point_details_wrapper' style={{ color: "#000000" }}>
                             Final points: <button onClick={() => setFinalPointsModalOpen(true)} className='point_score clickable_link bg-transparent' style={{ color: "#1492E6" }}>
-                                {bonusPointsData}pt
+                                {parseFloat(bonusPointsData)?.toFixed(2)}pt
                             </button>
                         </p>
 

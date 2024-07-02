@@ -20,7 +20,8 @@ const StatsInfo = () => {
 
     useEffect(() => {
         if (allIncentiveTypes) {
-            dispatch(regularIncentivePoints((parseFloat(allIncentiveTypes?.data?.total_points) * regularPointAverage) / 100));
+            let res = (parseFloat(allIncentiveTypes?.data?.total_points) * regularPointAverage) / 100
+            dispatch(regularIncentivePoints(parseFloat(res).toFixed(2)));
         }
     }, [allIncentiveTypes, regularPointAverage]);
 
@@ -61,7 +62,7 @@ const StatsInfo = () => {
                         <div className="">
                             <p className="stats_info_desc point_details_wrapper">
                                 Your actual incentive points: <button className={`${regularIncentivePointsData > 0 ? 'progress_card_desc_pos' : 'progress_card_desc_neg'} stats_info_link bg-transparent`} onClick={() => setIncentivePointsModalOpen(true)}>
-                                    {regularIncentivePointsData}pt
+                                    {parseFloat(regularIncentivePointsData)?.toFixed(2)}pt
                                 </button>
                                 <Popover
                                     content='This is after multiplying your regular points with the average percentage calculated earlier'
@@ -69,7 +70,7 @@ const StatsInfo = () => {
                                         width: "220px"
                                     }}
                                 >
-                                    <img src={infoIcon} alt="infoIcon" />
+                                    <img src={infoIcon} alt="infoIcon" style={{ marginLeft: "4px" }} />
                                 </Popover>
                             </p>
                             <div
