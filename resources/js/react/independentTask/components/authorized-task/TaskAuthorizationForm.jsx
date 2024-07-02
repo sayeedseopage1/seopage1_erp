@@ -2,7 +2,7 @@ import dayjs from "dayjs";
 import _ from "lodash";
 import React, { useEffect, useState } from "react";
 import Swal from "sweetalert2";
-import withReactContent from 'sweetalert2-react-content';
+import withReactContent from "sweetalert2-react-content";
 import Avatar from "../../../global/Avatar";
 import Card from "../../../global/Card";
 import {
@@ -20,7 +20,7 @@ import DatePickerComponent from "./DatePicker";
 import QuestionAnswer from "./QuestionAnswer";
 import TaskAuthorizationQuestionAnswers from "./TaskAuthorizationQuestionAnswers";
 import UserSelectionList from "./UserSelectionList";
-import './ckeditor.css';
+import "./ckeditor.css";
 import styles from "./taskAuthorization.module.css";
 
 const day = new CompareDate();
@@ -57,11 +57,11 @@ const TaskAuthorizationForm = ({ data, table }) => {
         data: conversationData,
         isLoading: isConversationLoading,
         isFetching,
-        refetch:conversationRefetch,
+        refetch: conversationRefetch,
     } = useGetIndependentTaskAuthorizationConversationsQuery(data.id);
 
-
-    const [updateIndependentTaskStatus, {isError}] = useUpdateIndependentTaskStatusMutation();
+    const [updateIndependentTaskStatus, { isError }] =
+        useUpdateIndependentTaskStatusMutation();
 
     // console.log({ conversationData, isConversationLoading });
 
@@ -74,9 +74,9 @@ const TaskAuthorizationForm = ({ data, table }) => {
         }
     }, [radio]);
 
-    useEffect(()=>{
-      conversationRefetch();
-    },[refreshState])
+    useEffect(() => {
+        conversationRefetch();
+    }, [refreshState]);
 
     // console.log({ chat: data?.conversations });
     // const [conversations, setConversations] = React.useState(data.conversations);
@@ -87,8 +87,10 @@ const TaskAuthorizationForm = ({ data, table }) => {
 
     const open = () => setVisible(true);
 
-
-    const hasUpdateConversations = _.filter(conversationData?.data, c => c.has_update)
+    const hasUpdateConversations = _.filter(
+        conversationData?.data,
+        (c) => c.has_update
+    );
 
     // update status on close
     const close = async () => {
@@ -97,18 +99,22 @@ const TaskAuthorizationForm = ({ data, table }) => {
 
         // if has conversion with has_update
         // then update the status if user close the modal
-        if(_.size(hasUpdateConversations) > 0){
+        if (_.size(hasUpdateConversations) > 0) {
             try {
-                await updateIndependentTaskStatus(hasUpdateConversations).unwrap();
+                await updateIndependentTaskStatus(
+                    hasUpdateConversations
+                ).unwrap();
             } catch (error) {
-                if(error.originalStatus === 500){
+                if (error.originalStatus === 500) {
                     withReactContent(Swal).fire({
-                        icon: 'error',
-                        html: <>
-                            <h1>500</h1>
-                            <h3>Oops! Something went wrong.</h3>
-                        </>
-                    })
+                        icon: "error",
+                        html: (
+                            <>
+                                <h1>500</h1>
+                                <h3>Oops! Something went wrong.</h3>
+                            </>
+                        ),
+                    });
                 }
             }
         }
@@ -175,7 +181,19 @@ const TaskAuthorizationForm = ({ data, table }) => {
         await putIndependentAuthorizeTask(_data)
             .unwrap()
             .then((res) => {
-                // console.log(res);
+                if (res.status === 400) {
+                    Swal.fire({
+                        position: "center",
+                        icon: "error",
+                        title: "Error!",
+                        text: "This task has already been authorized.",
+                        showConfirmButton: true,
+                    });
+
+                    window.location.reload();
+                    return;
+                }
+
                 if (status) {
                     Swal.fire({
                         position: "center",
@@ -257,9 +275,8 @@ const TaskAuthorizationForm = ({ data, table }) => {
                                     </h2>
                                 </div>
 
-
                                 <div className={styles.task_info}>
-                                     {/* approval_status */}
+                                    {/* approval_status */}
                                     <div className={styles.inline_flex}>
                                         <div
                                             className={styles.task_info__label}
@@ -386,8 +403,6 @@ const TaskAuthorizationForm = ({ data, table }) => {
                                         </div>
                                     </div>
 
-
-
                                     {/* heading */}
                                     <div className={styles.inline_flex}>
                                         <div
@@ -408,7 +423,9 @@ const TaskAuthorizationForm = ({ data, table }) => {
                                             Login URL
                                         </div>
                                         <div className={styles.task_info__text}>
-                                            <a href={data.login_url}>{data.login_url}</a>
+                                            <a href={data.login_url}>
+                                                {data.login_url}
+                                            </a>
                                         </div>
                                     </div>
 
@@ -437,19 +454,26 @@ const TaskAuthorizationForm = ({ data, table }) => {
                                     </div>
 
                                     {/* ref site */}
-                                    {
-                                        data.reference_site &&
+                                    {data.reference_site && (
                                         <div className={styles.inline_flex}>
                                             <div
-                                                className={styles.task_info__label}
+                                                className={
+                                                    styles.task_info__label
+                                                }
                                             >
                                                 Reference page
                                             </div>
-                                            <div className={styles.task_info__text}>
-                                                <a href={data.reference_site}>{data.reference_site}</a>
+                                            <div
+                                                className={
+                                                    styles.task_info__text
+                                                }
+                                            >
+                                                <a href={data.reference_site}>
+                                                    {data.reference_site}
+                                                </a>
                                             </div>
                                         </div>
-                                    }
+                                    )}
 
                                     {/* description */}
                                     <div
@@ -606,8 +630,8 @@ const TaskAuthorizationForm = ({ data, table }) => {
                                                     styles.task_info__text
                                                 }
                                             >
-                                                {(data.existing_client_id ||
-                                                    data.new_client)? (
+                                                {data.existing_client_id ||
+                                                data.new_client ? (
                                                     <>
                                                         <Avatar
                                                             name={
@@ -636,8 +660,10 @@ const TaskAuthorizationForm = ({ data, table }) => {
                                                                 : data.new_client}
                                                         </a>
                                                     </>
-                                                ): (
-                                                    <span className="text-danger">Not Applicable</span>
+                                                ) : (
+                                                    <span className="text-danger">
+                                                        Not Applicable
+                                                    </span>
                                                 )}
                                             </div>
                                         )}
@@ -776,7 +802,8 @@ const TaskAuthorizationForm = ({ data, table }) => {
 
                                             {/* has question radio input */}
                                             {!(
-                                                (user.getRoleId() === 1 || user.getRoleId() === 8) &&
+                                                (user.getRoleId() === 1 ||
+                                                    user.getRoleId() === 8) &&
                                                 user.id === data.assign_by_id
                                             ) && (
                                                 <div
