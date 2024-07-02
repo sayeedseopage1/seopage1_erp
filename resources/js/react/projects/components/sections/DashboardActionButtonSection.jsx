@@ -73,7 +73,7 @@ const DashboardActionButtonSection = ({ projectData, isLoading }) => {
                 <Switch.Case
                     condition={
                         ViewModalButtons?.extend_deadline_form ||
-                        ViewModalButtons?.pm_task_guidline
+                        ViewModalButtons?.pm_task_guidline || ViewModalButtons?.extend_deadline_pending
                     }
                 >
                     <SectionContainer

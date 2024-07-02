@@ -36,18 +36,20 @@ const DashboardProjectInfoFixedSection = ({ projectData, isLoading }) => {
         if (projectData && !isLoading) {
             const updateProjectBudget = projectBudgetData.project_budget.map(
                 (budget) => {
-                    if (budget.key === "project_budget") {
+                    if (budget.key === "project_budget" && projectData?.project_budget) {
+                        const totalAmount = Number(projectData?.deal?.amount) +  Number(projectData?.deal?.upsell_amount);
                         return {
                             ...budget,
-                            price: projectData?.project_budget,
+                            price: totalAmount.toFixed(2),
                             currency: projectData?.currency?.currency_code,
                             currency_symbol:
                                 projectData?.currency?.currency_symbol,
                         };
                     } else if (budget.key === "amount") {
+                        const totalAmount = Number(projectData?.deal?.actual_amount) +  Number(projectData?.deal?.upsell_actual_amount);
                         return {
                             ...budget,
-                            price: Number(projectData?.deal.amount).toFixed(2),
+                            price: totalAmount.toFixed(2),
                             currency:
                                 projectData?.deal?.original_currency
                                     .currency_code,

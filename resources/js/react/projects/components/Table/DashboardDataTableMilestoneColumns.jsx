@@ -57,6 +57,25 @@ export const DashboardDataTableMilestoneColumns = [
         accessorKey: "status",
         cell: ({ row }) => {
             const data = row.original;
+
+
+
+            //TODO: need to complete this function
+            const getStatusData = () => {
+                if(!data?.paid_status && data?.status === "incomplete") {
+                    return "Unpaid"
+                } else if(data?.paid_status && data?.status) {
+                    return data.paid_status
+                }  else if(!data?.paid_status && data?.status === "cancelled") {
+                    return "Cancelled"
+                }
+            }
+
+            const status = getStatusData();
+
+
+            
+
             return (
                 <div className="dashboardMilestoneTableStatus">
                     <p

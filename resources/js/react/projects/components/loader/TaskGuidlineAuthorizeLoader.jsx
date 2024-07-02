@@ -8,8 +8,8 @@ import { Placeholder } from "../../../global/Placeholder";
 // UI Components - Custom
 import CustomButton from "../ui/CustomButton/CustomButton";
 
-const TaskGuidelineAuthorizeLoader = () => {
-    return _.times(4, (index) => {
+const TaskGuidelineAuthorizeLoader = ({ dataLength = 4 }) => {
+    return _.times(dataLength, (index) => {
         return (
             <div className="row m-0 dashboardModalTableItem" key={index}>
                 <div className="col-6 align-items-center d-flex">
@@ -19,7 +19,7 @@ const TaskGuidelineAuthorizeLoader = () => {
                     <Placeholder width="100%" height="13px" />
                 </div>
                 <div className="col-4">
-                    <CustomButton value={index} isDisabled />
+                    <CustomButton isDisabled />
                 </div>
             </div>
         );
@@ -28,4 +28,6 @@ const TaskGuidelineAuthorizeLoader = () => {
 
 export default TaskGuidelineAuthorizeLoader;
 
-TaskGuidelineAuthorizeLoader.propTypes = {};
+TaskGuidelineAuthorizeLoader.propTypes = {
+    dataLength: PropTypes.number,
+};

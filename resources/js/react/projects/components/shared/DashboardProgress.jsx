@@ -53,6 +53,10 @@ const DashboardProgress = ({
 
     // Format the date
 
+    const isPastDate = (date) => {
+        return dayjs(date).isBefore(dayjs());
+    };
+
     const formatDate = (date) => {
         return dayjs(date).format("DD MMM YYYY");
     };
@@ -86,11 +90,9 @@ const DashboardProgress = ({
                         <button
                             className="flexItemCenter cursor-pointer deadlineBtn"
                             style={{
-                                color:
-                                    formatDate(projectData?.deadline) <
-                                    new Date()
-                                        ? "#FF0000"
-                                        : "#000000",
+                                color: isPastDate(projectData?.deadline)
+                                    ? "#FF0000"
+                                    : "#000000",
                             }}
                             onClick={() =>
                                 projectData?.project_deadline_extension
