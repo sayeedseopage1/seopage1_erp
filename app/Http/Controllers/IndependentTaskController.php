@@ -171,131 +171,139 @@ class IndependentTaskController extends AccountBaseController
     {
         // dd($request->all());
         // DB::beginTransaction();
-        if($request->approval_status == 1){
-            $pendingParentTasks = PendingParentTasks::find($id);
-            $pendingParentTasks->start_date = $request->start_date;
-            $pendingParentTasks->due_date = $request->due_date;
-            $pendingParentTasks->approval_status = $request->approval_status;
-            $pendingParentTasks->comment = $request->comment;
-            $pendingParentTasks->authorize_by = Auth::user()->id;
-            if($request->client_id){
-                $pendingParentTasks->client_id = $request->client_id;
-            }else{
-                $pendingParentTasks->client_name = $request->client;
-            }
-            $pendingParentTasks->save();
-
-            $independent_task = new Task();
-            $independent_task->heading = $pendingParentTasks->heading;
-            $independent_task->description = $pendingParentTasks->description;
-            $independent_task->start_date = $pendingParentTasks->start_date;
-            $independent_task->due_date = $pendingParentTasks->due_date;
-            $independent_task->task_category_id = $pendingParentTasks->category_id;
-            $independent_task->priority = $pendingParentTasks->priority;
-            $independent_task->board_column_id = $pendingParentTasks->board_column_id;
-            $independent_task->added_by = $pendingParentTasks->added_by;
-            $independent_task->pp_task_id = $pendingParentTasks->id;
-            $independent_task->u_id = $pendingParentTasks->u_id;
-            $independent_task->independent_task_status = $pendingParentTasks->independent_task_status;
-            if($pendingParentTasks->client_id !=null){
-                $independent_task->client_id = $pendingParentTasks->client_id;
-            }else{
-                $independent_task->client_name = $pendingParentTasks->client_name;
-            }
-            $independent_task->created_by = $pendingParentTasks->added_by;
-            $independent_task->added_by = $pendingParentTasks->added_by;
-            $independent_task->save();
-
-            if ($request->hasFile('file')) {
-                $files = $request->file('file');
-                $destinationPath = storage_path('app/public/');
-                $file_name = [];
-
-                foreach ($files as $file) {
-                    $ppTaskFile = TaskFile::where('task_id',$pendingParentTasks->id);
-                    $ppTaskFile->task_id = $independent_task->id;
-                    $filename = uniqid() . '.' . $file->getClientOriginalExtension();
-                    array_push($file_name, $filename);
-                    $ppTaskFile->user_id = $independent_task->user_id;;
-                    $ppTaskFile->filename = $filename;
-                    $ppTaskFile->hashname = $filename;
-                    $ppTaskFile->size = $file->getSize();
-                    $ppTaskFile->save();
-
-                    Storage::disk('s3')->put('/' . $filename, file_get_contents($file));
-
-                    $this->logTaskActivity($independent_task->id, $independent_task->user_id, 'fileActivity', $independent_task->board_column_id);
+        $checkTaskAuth = PendingParentTasks::find($id);
+        if($checkTaskAuth->approval_status == null){
+            if($request->approval_status == 1){
+                $pendingParentTasks = PendingParentTasks::find($id);
+                $pendingParentTasks->start_date = $request->start_date;
+                $pendingParentTasks->due_date = $request->due_date;
+                $pendingParentTasks->approval_status = $request->approval_status;
+                $pendingParentTasks->comment = $request->comment;
+                $pendingParentTasks->authorize_by = Auth::user()->id;
+                if($request->client_id){
+                    $pendingParentTasks->client_id = $request->client_id;
+                }else{
+                    $pendingParentTasks->client_name = $request->client;
                 }
-            }
+                $pendingParentTasks->save();
 
-            $task_user = new TaskUser();
-            $task_user->task_id = $independent_task->id;
-            $task_user->user_id = $pendingParentTasks->user_id;
-            $task_user->save();
+                $independent_task = new Task();
+                $independent_task->heading = $pendingParentTasks->heading;
+                $independent_task->description = $pendingParentTasks->description;
+                $independent_task->start_date = $pendingParentTasks->start_date;
+                $independent_task->due_date = $pendingParentTasks->due_date;
+                $independent_task->task_category_id = $pendingParentTasks->category_id;
+                $independent_task->priority = $pendingParentTasks->priority;
+                $independent_task->board_column_id = $pendingParentTasks->board_column_id;
+                $independent_task->added_by = $pendingParentTasks->added_by;
+                $independent_task->pp_task_id = $pendingParentTasks->id;
+                $independent_task->u_id = $pendingParentTasks->u_id;
+                $independent_task->independent_task_status = $pendingParentTasks->independent_task_status;
+                if($pendingParentTasks->client_id !=null){
+                    $independent_task->client_id = $pendingParentTasks->client_id;
+                }else{
+                    $independent_task->client_name = $pendingParentTasks->client_name;
+                }
+                $independent_task->created_by = $pendingParentTasks->added_by;
+                $independent_task->added_by = $pendingParentTasks->added_by;
+                $independent_task->save();
+
+                if ($request->hasFile('file')) {
+                    $files = $request->file('file');
+                    $destinationPath = storage_path('app/public/');
+                    $file_name = [];
+
+                    foreach ($files as $file) {
+                        $ppTaskFile = TaskFile::where('task_id',$pendingParentTasks->id);
+                        $ppTaskFile->task_id = $independent_task->id;
+                        $filename = uniqid() . '.' . $file->getClientOriginalExtension();
+                        array_push($file_name, $filename);
+                        $ppTaskFile->user_id = $independent_task->user_id;;
+                        $ppTaskFile->filename = $filename;
+                        $ppTaskFile->hashname = $filename;
+                        $ppTaskFile->size = $file->getSize();
+                        $ppTaskFile->save();
+
+                        Storage::disk('s3')->put('/' . $filename, file_get_contents($file));
+
+                        $this->logTaskActivity($independent_task->id, $independent_task->user_id, 'fileActivity', $independent_task->board_column_id);
+                    }
+                }
+
+                $task_user = new TaskUser();
+                $task_user->task_id = $independent_task->id;
+                $task_user->user_id = $pendingParentTasks->user_id;
+                $task_user->save();
 
 
-            $user = User::where('id',$pendingParentTasks->user_id)->first();
+                $user = User::where('id',$pendingParentTasks->user_id)->first();
 
-            Notification::send($user, new ApproveIndependentTasksNotification($pendingParentTasks));
+                Notification::send($user, new ApproveIndependentTasksNotification($pendingParentTasks));
 
 
-        }else{
-            $pendingParentTasks = PendingParentTasks::find($id);
-            $pendingParentTasks->start_date = $request->start_date;
-            $pendingParentTasks->due_date = $request->due_date;
-            $pendingParentTasks->approval_status = $request->approval_status;
-            $pendingParentTasks->comment = $request->comment;
-            $pendingParentTasks->authorize_by = Auth::user()->id;
-            if($request->client_id){
-                $pendingParentTasks->client_id = $request->client_id;
             }else{
-                $pendingParentTasks->client_name = $request->client;
+                $pendingParentTasks = PendingParentTasks::find($id);
+                $pendingParentTasks->start_date = $request->start_date;
+                $pendingParentTasks->due_date = $request->due_date;
+                $pendingParentTasks->approval_status = $request->approval_status;
+                $pendingParentTasks->comment = $request->comment;
+                $pendingParentTasks->authorize_by = Auth::user()->id;
+                if($request->client_id){
+                    $pendingParentTasks->client_id = $request->client_id;
+                }else{
+                    $pendingParentTasks->client_name = $request->client;
+                }
+                $pendingParentTasks->save();
             }
-            $pendingParentTasks->save();
-        }
 
-        $actions = PendingAction::where('code','INDTA')->where('past_status',0)->where('ind_task_id',$id)->get();
-        if($actions != null)
-        {
-            foreach ($actions as $key => $action) 
+            $actions = PendingAction::where('code','INDTA')->where('past_status',0)->where('ind_task_id',$id)->get();
+            if($actions != null)
             {
-                $action->authorized_by= Auth::id();
-                $action->authorized_at= Carbon::now();
-                $action->past_status = 1;
-                $action->save();
-                $taskAddded = User::where('id',$pendingParentTasks->added_by)->first();
-                $role = Role::where('id',$taskAddded->role_id)->first();
-                $past_action= new PendingActionPast();
-                $past_action->item_name = $action->item_name;
-                $past_action->code = $action->code;
-                $past_action->serial = $action->serial;
-                $past_action->action_id = $action->id;
-                $past_action->heading = $action->heading;
-                $past_action->message = 'Independent task <a href="'.route('tasks.show',$independent_task->id).'">'.$independent_task->heading.'</a> created by '.$role->display_name.' <a href="'.route('employees.show',$taskAddded->id).'">'.$taskAddded->name.'</a> was authorized by <a href="'.route('employees.show',Auth::user()->id).'">'.Auth::user()->name.'</a>!';
-                $past_action->timeframe = $action->timeframe;
-                $past_action->authorization_for = $action->authorization_for;
-                $past_action->authorized_by = $action->authorized_by;
-                $past_action->authorized_at = $action->authorized_at;
-                $past_action->expired_status = $action->expired_status;
-                $past_action->past_status = $action->past_status;
-                $past_action->save();
-            }
-        }
-
-        if($pendingParentTasks->evaluation_user_id !=null){
-            if(Auth::user()->role_id == 1 || Auth::user()->role_id == 8){
-                $evaluation = EmployeeEvaluation::where('user_id',$pendingParentTasks->evaluation_user_id)->first();
-                $evaluation_history = EvaluationHistory::where('user_id',$pendingParentTasks->evaluation_user_id)->first();
-                if($evaluation->managements_decision == 'One more week' || $evaluation_history->managements_decision == 'One more week'){
-                    $helper = new HelperPendingActionController();
-                    $helper->evaluationAuthTeamLead($evaluation->user_id ? $evaluation->user_id : $evaluation_history->user_id, $independent_task->id);
+                foreach ($actions as $key => $action) 
+                {
+                    $action->authorized_by= Auth::id();
+                    $action->authorized_at= Carbon::now();
+                    $action->past_status = 1;
+                    $action->save();
+                    $taskAddded = User::where('id',$pendingParentTasks->added_by)->first();
+                    $role = Role::where('id',$taskAddded->role_id)->first();
+                    $past_action= new PendingActionPast();
+                    $past_action->item_name = $action->item_name;
+                    $past_action->code = $action->code;
+                    $past_action->serial = $action->serial;
+                    $past_action->action_id = $action->id;
+                    $past_action->heading = $action->heading;
+                    $past_action->message = 'Independent task <a href="'.route('tasks.show',$independent_task->id).'">'.$independent_task->heading.'</a> created by '.$role->display_name.' <a href="'.route('employees.show',$taskAddded->id).'">'.$taskAddded->name.'</a> was authorized by <a href="'.route('employees.show',Auth::user()->id).'">'.Auth::user()->name.'</a>!';
+                    $past_action->timeframe = $action->timeframe;
+                    $past_action->authorization_for = $action->authorization_for;
+                    $past_action->authorized_by = $action->authorized_by;
+                    $past_action->authorized_at = $action->authorized_at;
+                    $past_action->expired_status = $action->expired_status;
+                    $past_action->past_status = $action->past_status;
+                    $past_action->save();
                 }
             }
+
+            if($pendingParentTasks->evaluation_user_id !=null){
+                if(Auth::user()->role_id == 1 || Auth::user()->role_id == 8){
+                    $evaluation = EmployeeEvaluation::where('user_id',$pendingParentTasks->evaluation_user_id)->first();
+                    $evaluation_history = EvaluationHistory::where('user_id',$pendingParentTasks->evaluation_user_id)->first();
+                    if($evaluation->managements_decision == 'One more week' || $evaluation_history->managements_decision == 'One more week'){
+                        $helper = new HelperPendingActionController();
+                        $helper->evaluationAuthTeamLead($evaluation->user_id ? $evaluation->user_id : $evaluation_history->user_id, $independent_task->id);
+                    }
+                }
+            }
+            
+            return response()->json([
+                'status'=>'success'
+            ],200);
+        }else{
+            return response()->json([
+                'status'=> 400,
+                'message' => 'Task Already Authorized'
+            ]);
         }
-        
-        return response()->json([
-            'status'=>'success'
-        ],200);
     }
 
     /**
