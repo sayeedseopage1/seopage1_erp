@@ -97,10 +97,12 @@ class Incentive
                 $incentiveCriteria->acquired_percent = $projects->count() ? number_format(($projects->where('deadline', '<', now())->count() / $projects->count()) * 100, 2) : 0;
                 self::findIncentive($incentiveCriteria);
             }elseif($incentiveCriteria->id == 7){
-                $pm_created_clients = Project::where('added_by', $user_id)->where('created_at', '>=', $startDate)->pluck('client_id');
-                $pm_assigned_clients = Project::where('pm_id', $user_id)->whereIn('client_id', $pm_created_clients)->where('created_at', '>=', $startDate)->pluck('client_id')->toArray();
-                $retension_this_month = count(array_keys(array_filter(array_count_values($pm_assigned_clients), fn($count) => $count > 1)));
-                $incentiveCriteria->acquired_percent = $pm_created_clients->count() ? number_format(((Project::whereIn('client_id', $pm_created_clients)->where('pm_id', $user_id)->where('created_at', '<=', $startDate)->pluck('client_id')->count() + $retension_this_month) / $pm_created_clients->count())*100, 2) : 0;
+                $thisMonthPmClientIds = Project::where('added_by', $user_id)->where('created_at', '>=', $startDate)->pluck('client_id');
+                $pevUniqueClientIdsCameThisMonth = array_unique(Project::where('added_by', $user_id)->whereIn('client_id', $thisMonthPmClientIds)->where('created_at', '<', $startDate)->pluck('client_id')->toArray());
+                $thisMonthRetentionCliendIds = array_keys(array_filter(array_count_values($thisMonthPmClientIds->toArray()), fn($count) => $count > 1));
+                $actualRetentionClientThisMonth = array_diff($thisMonthRetentionCliendIds, $pevUniqueClientIdsCameThisMonth);
+                $clientRetention = count(array_unique($thisMonthPmClientIds->toArray())) ? ((count($actualRetentionClientThisMonth) + count($pevUniqueClientIdsCameThisMonth))/count(array_unique($thisMonthPmClientIds->toArray())))*100 : 0;
+                $incentiveCriteria->acquired_percent = $clientRetention;
                 self::findIncentive($incentiveCriteria);
             }elseif($incentiveCriteria->id == 8){
                 $incentiveCriteria->acquired_percent = ProjectMilestone::select('project_milestones.*')
