@@ -603,8 +603,13 @@
         font-size: 16px;
     }
 
+    .portfolio_modal_sub_title {
+        font-size: 16px;
+    }
+
     /* reviews section  */
-    .filtered_reviews_result {
+    .filtered_reviews_result,
+    .portfolio_modal_title {
         font-size: 22px;
     }
 }
@@ -684,8 +689,13 @@
         font-size: 18px;
     }
 
+    .portfolio_modal_sub_title {
+        font-size: 16px;
+    }
+
     /* reviews section  */
-    .filtered_reviews_result {
+    .filtered_reviews_result,
+    .portfolio_modal_title {
         font-size: 22px;
     }
 }
@@ -765,8 +775,14 @@
         font-size: 18px;
     }
 
+    .portfolio_modal_sub_title,
+    .portfolio_modal_category {
+        font-size: 16px;
+    }
+
     /* reviews section  */
-    .filtered_reviews_result {
+    .filtered_reviews_result,
+    .portfolio_modal_title {
         font-size: 22px;
     }
 
@@ -850,8 +866,14 @@
         font-size: 18px;
     }
 
+    .portfolio_modal_sub_title,
+    .portfolio_modal_category {
+        font-size: 14px;
+    }
+
     /* reviews section  */
-    .filtered_reviews_result {
+    .filtered_reviews_result,
+    .portfolio_modal_title {
         font-size: 16px;
     }
 
@@ -985,8 +1007,14 @@
         font-size: 12px;
     }
 
+    .portfolio_modal_sub_title,
+    .portfolio_modal_category {
+        font-size: 12px;
+    }
+
     /* reviews section  */
-    .filtered_reviews_result {
+    .filtered_reviews_result,
+    .portfolio_modal_title {
         font-size: 14px;
     }
 

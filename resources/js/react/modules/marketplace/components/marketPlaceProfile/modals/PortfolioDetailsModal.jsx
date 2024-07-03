@@ -51,7 +51,7 @@ const PortfolioDetailsModal = ({ item, isOpen, setIsOpen, profileData }) => {
                     <div>
                         <div className='mb-3'>
                             <h4 className='portfolio_modal_sub_title'>About the project</h4>
-                            <p>{category}</p>
+                            <p className='portfolio_modal_category'>{category}</p>
                         </div>
 
                         <h4 className='portfolio_modal_sub_title'>Skills</h4>
