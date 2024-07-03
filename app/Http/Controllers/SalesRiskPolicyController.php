@@ -962,7 +962,7 @@ class SalesRiskPolicyController extends AccountBaseController
                     $pointData['milestone']['message'][] = 'Milestone total amount not found.';
                     goto endMilestone;
                 }
-
+                // dd($value, $deal->actual_amount);
                 $percentage = $value / $deal->actual_amount * 100;
                 // ------------------- end percentage calculation
 
