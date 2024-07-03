@@ -16,6 +16,7 @@ import useIncentive from '../hooks/useIncentive';
 import { useGetAchievedIncentiveQuery, useGetIncentiveHeldAmountQuery } from '../../../../services/api/Pm-Sales/PmIncentiveApiSlice';
 import _ from 'lodash';
 import IncentiveCriteriaFactors from '../components/Sections/IncentiveFactors/IncentiveCriteriaFactors';
+import IncentivePageSkeleton from '../components/loader/IncentivePageSkeleton';
 
 const Incentive = () => {
     const [tab, setTab] = useState("current");
@@ -59,13 +60,14 @@ const Incentive = () => {
     //     </div>
     // }
 
+
     return (
         <div>
             <IncentiveFilter filterByPeriod={filterByPeriod} setQueryForAchievedIncentive={setQueryForAchievedIncentive} setQueryForIncentiveHeldAmounts={setQueryForIncentiveHeldAmounts} tab={tab} />
             <div className='incentive_wrapper'>
                 <FilterBar tab={tab} queryStringForIncentiveHeldAmounts={queryStringForIncentiveHeldAmounts} queryForIncentiveHeldAmounts={queryForIncentiveHeldAmounts} setTab={setTab} filterByPeriod={filterByPeriod} setFilterByPeriod={setFilterByPeriod} />
                 {
-                    (incentiveTypesLoading || incentiveTypesIsFetching) ? <Spinner /> : <Switch>
+                    (incentiveTypesLoading || incentiveTypesIsFetching) ? <IncentivePageSkeleton /> : <Switch>
                         <Switch.Case condition={tab == "current"}>
                             <Switch>
                                 <Switch.Case condition={filterByPeriod == "monthly"}>

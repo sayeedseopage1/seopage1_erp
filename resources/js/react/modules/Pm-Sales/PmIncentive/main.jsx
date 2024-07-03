@@ -12,7 +12,6 @@ import './styles/Incentive.responsive.css'
 import { ConfigProvider } from "antd";
 import IncentiveDataProvider from "./Provider/IncentiveDataProvider";
 
-
 const Content = () => {
     return (
         <React.Fragment>
@@ -21,7 +20,6 @@ const Content = () => {
         </React.Fragment>
     );
 };
-
 
 const container = document.getElementById("projectMangerIncentive");
 if (container) {
