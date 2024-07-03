@@ -189,8 +189,8 @@ const TaskAuthorizationForm = ({ data, table }) => {
                         text: "This task has already been authorized.",
                         showConfirmButton: true,
                     });
-
-                    window.location.reload();
+                    handleRefresh();
+                    // window.location.reload();
                     return;
                 }
 
