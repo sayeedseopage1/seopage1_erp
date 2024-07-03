@@ -254,7 +254,7 @@
 
 .p_d_proposal_user_info {
     display: flex;
-    align-items: center;
+    align-items: flex-start;
     justify-content: flex-start;
     gap: 20px;
 }
@@ -301,6 +301,7 @@
     font-style: normal;
     font-weight: 500;
     line-height: 28px;
+    text-wrap: nowrap;
 }
 
 .p_d_proposal_report_btn {
@@ -356,10 +357,11 @@
     color: var(--primary-black);
 }
 
-.files_page_filter_btn_wrapper {
+.project_card_rating_wrapper {
     display: flex;
-    flex-direction: column;
-    gap: 15px;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
 }
 
 .inactive_files_filter_btn {
@@ -463,6 +465,12 @@
     .p_d_header_title {
         font-size: 22px;
     }
+
+    /* proposals section */
+    .p_d_proposal_card_price {
+        font-size: 22px;
+        line-height: 24px;
+    }
 }
 
 @media only screen and (min-width: 993px) and (max-width: 1200px) {
@@ -477,6 +485,12 @@
 
     .p_d_description {
         font-size: 14px;
+    }
+
+    /* proposals section */
+    .p_d_proposal_card_price {
+        font-size: 22px;
+        line-height: 24px;
     }
 }
 
@@ -497,6 +511,12 @@
 
     .p_d_description {
         font-size: 14px;
+    }
+
+    /* proposals section */
+    .p_d_proposal_card_price {
+        font-size: 22px;
+        line-height: 24px;
     }
 }
 
@@ -527,6 +547,12 @@
     .p_d_description,
     .p_d_title_600 {
         font-size: 14px;
+    }
+
+    /* proposals section */
+    .p_d_proposal_card_price {
+        font-size: 20px;
+        line-height: 22px;
     }
 }
 
@@ -561,5 +587,24 @@
     .p_d_description,
     .p_d_title_600 {
         font-size: 12px;
+    }
+
+    /* proposals section */
+    .p_d_proposal_user_info {
+        flex-direction: column;
+    }
+
+    .p_d_proposal_card_price {
+        font-size: 14px;
+        line-height: normal;
+    }
+
+    .p_d_proposal_card_title,
+    .p_d_proposal_message {
+        font-size: 12px;
+    }
+
+    .p_d_proposal_report_btn {
+        font-size: 11px;
     }
 }

@@ -112,4 +112,8 @@ p {
     .sp1_marketplace_default_text {
         font-size: 12px;
     }
+
+    .sp1_marketplace_sm_text {
+        font-size: 11px;
+    }
 }
