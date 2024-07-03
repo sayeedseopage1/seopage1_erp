@@ -311,7 +311,7 @@ const AddQuestionsListModal = ({
             if (singleQuestion?.type?.name === "longText") {
                 payload.value = JSON.stringify({
                     selected: singleQuestion?.parent_question_for,
-                    isRequired: singleQuestion?.isLongTextRequired,
+                    isRequired: singleQuestion?.isLongTextRequired || false,
                 });
             } else {
                 payload.value = singleQuestion?.parent_question_for;
@@ -338,7 +338,7 @@ const AddQuestionsListModal = ({
         ) {
             payload.value = JSON?.stringify({
                 selected: singleQuestion?.parent_question_for,
-                isRequired: singleQuestion?.isLongTextRequired,
+                isRequired: singleQuestion?.isLongTextRequired || false,
             });
         }
 

@@ -103,7 +103,12 @@ const SalesRiskQuestionsResponse = () => {
     // handle submit
     const handleSubmit = async () => {
         // skip key
-        const skipKey = ["is_Active_YesNo", "parent_id", "placeholder", "value"];
+        const skipKey = [
+            "is_Active_YesNo",
+            "parent_id",
+            "placeholder",
+            "value",
+        ];
         // check if all inputs are empty
 
         const formattedData = inputsData.filter((item) => {
@@ -119,12 +124,14 @@ const SalesRiskQuestionsResponse = () => {
             setIsSubmitting(true);
         } else {
             try {
-                const payload = inputsData.map((item) => {
-                    return {
-                        id: item.id,
-                        value: item[`question_${item.id}`],
-                    };
-                });
+                const payload = inputsData
+                    ?.filter((item) => item[`question_${item.id}`])
+                    ?.map((item) => {
+                        return {
+                            id: item.id,
+                            value: item[`question_${item.id}`],
+                        };
+                    });
 
                 const res = await saleAnalysisQuestionSave(payload);
 
