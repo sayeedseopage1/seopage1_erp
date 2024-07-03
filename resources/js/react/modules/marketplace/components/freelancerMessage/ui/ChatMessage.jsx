@@ -16,7 +16,7 @@ const ChatMessage = ({ message: messageDetails, user, isRight }) => {
                 <img className='message_user_avatar' style={isRight ? { marginTop: '24px' } : {}} src={profileImage} alt={name} />
                 <img className='active_status' style={{ width: '11px', height: '11px', borderRadius: '50%', }} src={activeIcon} alt="activeIcon" />
             </div>
-            <div>
+            <div className={`${isRight ? 'chat_message_container_right' : 'chat_message_container_left'}`}>
                 {
                     isRight && <div>
                         <p className='message_user'>{name} <span style={{ color: '#AAA' }}>{moment(time_created).format('MMM DD, YYYY')}</span></p>
@@ -26,7 +26,7 @@ const ChatMessage = ({ message: messageDetails, user, isRight }) => {
                     <h4 className='chat_message'>{message}</h4>
                     <div className='message_time_and_read'>
                         <span className='message_time_created'>{moment(time_created).format('hh:mm A')}</span>
-                        <img src={is_read ? checkIcon : checkIcon2} alt="checkIcon" />
+                        <img className='message_read_icon' src={is_read ? checkIcon : checkIcon2} alt="checkIcon" />
                     </div>
                 </div>
             </div>

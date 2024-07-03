@@ -19,9 +19,15 @@ const FreelancerMessage = () => {
         >
             <div className='sp1_marketplace_page_wrapper'>
                 <div className='marketplace_message_wrapper'>
-                    <ChatList />
-                    <ChatBox />
-                    <ChatActionList />
+                    <div className='chat_list_lg'>
+                        <ChatList />
+                    </div>
+                    <div className='chat_box_lg'>
+                        <ChatBox />
+                    </div>
+                    <div className='chat_action_list_lg'>
+                        <ChatActionList />
+                    </div>
                 </div>
             </div>
         </ConfigProvider>

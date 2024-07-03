@@ -206,6 +206,7 @@
 .chat_user_avatar_wrapper {
     position: relative;
     display: inline-block;
+    min-width: 45px;
 }
 
 .chat_user_avatar {
@@ -403,7 +404,7 @@
     font-style: normal;
     font-weight: 400;
     line-height: normal;
-    max-width: 330px;
+    max-width: 80%;
 }
 
 .message_time_created {
@@ -412,13 +413,18 @@
     font-style: normal;
     font-weight: 400;
     line-height: normal;
+    text-wrap: nowrap;
+}
+
+.message_read_icon {
+    width: 18px;
 }
 
 .message_time_and_read {
     flex: auto;
     display: flex;
     align-items: center;
-    justify-content: space-between;
+    justify-content: flex-end;
     gap: 5px;
 }
 
@@ -429,6 +435,17 @@
     object-fit: cover;
     object-position: center;
     border: 1px solid var(--light-blue-2);
+}
+
+.chat_message_container_left {
+    width: 70%;
+}
+
+.chat_message_container_right {
+    width: 70%;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
 }
 
 .chat_message_right {
@@ -575,12 +592,299 @@
 }
 
 /*********** media queries for responsive design  ******************/
-@media only screen and (min-width: 1201px) and (max-width: 1600px) {}
+@media only screen and (min-width: 1201px) and (max-width: 1600px) {
 
-@media only screen and (min-width: 993px) and (max-width: 1200px) {}
+    .chat_box_wrapper {
+        padding: 20px 10px 0px 10px;
+    }
 
-@media only screen and (min-width: 769px) and (max-width: 992px) {}
+    .chat_message {
+        font-size: 14px;
+    }
 
-@media only screen and (min-width: 576px) and (max-width: 768px) {}
+    .message_time_created {
+        font-size: 10px;
+    }
 
-@media only screen and (max-width: 576px) {}
+    .message_input_wrapper {
+        gap: 4px;
+        padding: 0px 5px;
+    }
+
+    .message_send_actions {
+        gap: 8px;
+    }
+
+    .message_send_actions_wrapper {
+        padding: 14px;
+    }
+
+    .file_upload {
+        width: 50px;
+        height: 59px;
+    }
+
+    .message_send_btn {
+        min-width: 50px;
+    }
+
+    .chat_header_name {
+        font-size: 18px;
+    }
+
+    .chat_header_user_name {
+        font-size: 14px;
+    }
+
+    .chat_list_section_wrapper,
+    .chat_action_section_wrapper {
+        padding: 15px;
+    }
+
+    .chat_action_item_title {
+        font-size: 14px;
+    }
+}
+
+@media only screen and (min-width: 993px) and (max-width: 1200px) {
+    .marketplace_message_wrapper {
+        display: grid;
+        grid-template-columns: 1fr 2fr;
+    }
+
+    .chat_box_wrapper {
+        padding: 20px 10px 0px 10px;
+    }
+
+    .chat_message {
+        font-size: 14px;
+    }
+
+    .message_time_created {
+        font-size: 10px;
+    }
+
+    .message_input_wrapper {
+        gap: 4px;
+        padding: 0px 5px;
+    }
+
+    .message_send_actions {
+        gap: 8px;
+    }
+
+    .message_send_btn {
+        min-width: 60px;
+    }
+
+    .chat_action_list_lg {
+        display: none;
+
+    }
+
+    .chat_header_name {
+        font-size: 18px;
+    }
+
+    .chat_header_user_name {
+        font-size: 14px;
+    }
+
+    .chat_list_section_wrapper,
+    .chat_action_section_wrapper {
+        padding: 15px;
+    }
+
+    .chat_action_item_title {
+        font-size: 14px;
+    }
+
+    .chat_action_avatar {
+        width: 75px;
+        height: 75px;
+    }
+}
+
+@media only screen and (min-width: 769px) and (max-width: 992px) {
+    .marketplace_message_wrapper {
+        display: grid;
+        grid-template-columns: 1fr 2fr;
+    }
+
+    .chat_box_wrapper {
+        padding: 20px 10px 0px 10px;
+    }
+
+    .chat_message {
+        font-size: 14px;
+    }
+
+    .message_time_created {
+        font-size: 10px;
+    }
+
+    .message_input_wrapper {
+        gap: 4px;
+        padding: 0px 5px;
+    }
+
+    .message_send_actions {
+        gap: 8px;
+    }
+
+    .message_send_btn {
+        min-width: 60px;
+    }
+
+    .chat_action_list_lg {
+        display: none;
+
+    }
+
+    .chat_header_name {
+        font-size: 16px;
+    }
+
+    .chat_header_user_name {
+        font-size: 12px;
+    }
+
+    .chat_list_section_wrapper,
+    .chat_action_section_wrapper {
+        padding: 15px;
+    }
+
+    .chat_action_item_title {
+        font-size: 14px;
+    }
+
+    .chat_action_avatar {
+        width: 75px;
+        height: 75px;
+    }
+}
+
+@media only screen and (min-width: 576px) and (max-width: 768px) {
+    .marketplace_message_wrapper {
+        display: grid;
+        grid-template-columns: 1fr;
+    }
+
+    .chat_box_wrapper {
+        padding: 20px 10px 0px 10px;
+    }
+
+    .chat_message {
+        font-size: 14px;
+    }
+
+    .message_time_created {
+        font-size: 10px;
+    }
+
+    .message_input_wrapper {
+        gap: 4px;
+        padding: 0px 5px;
+    }
+
+    .message_send_actions {
+        gap: 8px;
+    }
+
+    .message_send_btn {
+        min-width: 60px;
+    }
+
+    .chat_action_list_lg {
+        display: none;
+
+    }
+
+    .chat_box_lg {
+        display: none;
+    }
+
+    .chat_header_name {
+        font-size: 16px;
+    }
+
+    .chat_header_user_name {
+        font-size: 12px;
+    }
+
+    .chat_list_section_wrapper,
+    .chat_action_section_wrapper {
+        padding: 15px;
+    }
+
+    .chat_action_item_title {
+        font-size: 14px;
+    }
+
+    .chat_action_avatar {
+        width: 75px;
+        height: 75px;
+    }
+}
+
+@media only screen and (max-width: 576px) {
+    .marketplace_message_wrapper {
+        display: grid;
+        grid-template-columns: 1fr;
+    }
+
+    .chat_box_wrapper {
+        padding: 20px 10px 0px 10px;
+    }
+
+    .chat_message {
+        font-size: 14px;
+    }
+
+    .message_time_created {
+        font-size: 10px;
+    }
+
+    .message_input_wrapper {
+        gap: 4px;
+        padding: 0px 5px;
+    }
+
+    .message_send_actions {
+        gap: 8px;
+    }
+
+    .message_send_btn {
+        min-width: 60px;
+    }
+
+    .chat_action_list_lg {
+        display: none;
+    }
+
+    .chat_box_lg {
+        display: none;
+    }
+
+    .chat_header_name {
+        font-size: 16px;
+    }
+
+    .chat_header_user_name {
+        font-size: 12px;
+    }
+
+    .chat_list_section_wrapper,
+    .chat_action_section_wrapper {
+        padding: 15px;
+    }
+
+    .chat_action_item_title {
+        font-size: 14px;
+    }
+
+    .chat_action_avatar {
+        width: 75px;
+        height: 75px;
+    }
+}
