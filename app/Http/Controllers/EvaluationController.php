@@ -525,8 +525,9 @@ class EvaluationController extends AccountBaseController
             {
                 $pmassign= new PMAssign();
                 $pmassign->pm_id= $request->user_id;
-                $pmassign->project_count= 0;
-                $pmassign->amount=0;
+                $pmassign->project_count = 0;
+                $pmassign->amount = 0;
+                $pmassign->status = 0;
                 $pmassign->save();
 
 
