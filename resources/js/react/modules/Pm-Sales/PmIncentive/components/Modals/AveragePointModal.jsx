@@ -22,7 +22,7 @@ const AveragePointModal = ({ antdModalOpen, setAntdModalOpen, item: statsInfoDat
             if (failMinimumSlab) {
                 dispatch(regularPointAverage(0));
             } else {
-                dispatch(regularPointAverage(totalIncentive / incentive_criterias?.length));
+                dispatch(regularPointAverage((totalIncentive / incentive_criterias?.length)?.toFixed(2)));
             }
         }
     }, [incentive_criterias]); // Depend on incentive_criterias and setAveragePoints
@@ -55,7 +55,7 @@ const AveragePointModal = ({ antdModalOpen, setAntdModalOpen, item: statsInfoDat
                         </span>
                         </p>
                         {/* Apply a class based on whether the averagePoints is positive or not */}
-                        <span className={`${pmIncentive?.regularPointAverage > 0 ? 'progress_card_desc_pos' : 'progress_card_desc_neg'}`}>{pmIncentive?.regularPointAverage}%</span>
+                        <span className={`${pmIncentive?.regularPointAverage > 0 ? 'progress_card_desc_pos' : 'progress_card_desc_neg'}`}>{(pmIncentive?.regularPointAverage)?.toFixed(2)}%</span>
                     </div>
                 </div>
                 {/* Render a note about the incentive slab rule */}

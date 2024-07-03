@@ -6,7 +6,7 @@ const Spinner = ({
     borderRightColor = "transparent",
 }) => {
     return (
-        <div className="d-flex align-items-center justify-content-center w-100" style={{ height: "200px" }}>
+        <div className="d-flex align-items-center justify-content-center w-100" style={{ height: "80vh" }}>
             <div
                 className="spinner-border text-dark mr-2"
                 role="status"

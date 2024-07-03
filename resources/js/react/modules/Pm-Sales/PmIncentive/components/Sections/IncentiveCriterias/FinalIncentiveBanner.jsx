@@ -12,7 +12,7 @@ const FinalIncentiveBanner = () => {
     const finalUpSaleCrossTaka = parseFloat(upSaleCrossSalePoints) * parseFloat(upSaleCrossSaleTypes?.cash_value)
     const finalBonusTaka = parseFloat(bonusPointsPoints) * parseFloat(bonusIncentiveTypes?.cash_value)
 
-    const finalIncentiveTaka = finalRegularTaka + finalUpSaleCrossTaka + finalBonusTaka
+    const finalIncentiveTaka = parseFloat(finalRegularTaka + finalUpSaleCrossTaka + finalBonusTaka)?.toFixed(2)
 
     return (
         <div className='final_incentive_banner_wrapper'>
@@ -33,7 +33,7 @@ const FinalIncentiveBanner = () => {
                     </p>
                     <p>
                         Final incentive amount for the regular points: {regularIncentivePoints}*{parseFloat(regularIncentiveTypes?.cash_value)}={" "}
-                        <span style={{ fontWeight: '600' }}>{finalRegularTaka} Taka</span>
+                        <span style={{ fontWeight: '600' }}>{parseFloat(finalRegularTaka)?.toFixed(2)} Taka</span>
                     </p>
                 </div>
                 <div className="custom_divider_two"></div>
@@ -48,7 +48,7 @@ const FinalIncentiveBanner = () => {
                     </p>
                     <p>
                         Incentive amount from the upsale/cross sales points: {upSaleCrossSalePoints}*{parseFloat(upSaleCrossSaleTypes?.cash_value)}={" "}
-                        <span style={{ fontWeight: '600' }}>{finalUpSaleCrossTaka} Taka</span>
+                        <span style={{ fontWeight: '600' }}>{parseFloat(finalUpSaleCrossTaka)?.toFixed(2)} Taka</span>
                     </p>
                 </div>
                 <div className="custom_divider_two"></div>
@@ -63,7 +63,7 @@ const FinalIncentiveBanner = () => {
                     </p>
                     <p>
                         Incentive amount from bonus points: {bonusPointsPoints}*{parseFloat(bonusIncentiveTypes?.cash_value)}={" "}
-                        <span style={{ fontWeight: '600' }}>{finalBonusTaka} Taka</span>
+                        <span style={{ fontWeight: '600' }}>{parseFloat(finalBonusTaka)?.toFixed(2)} Taka</span>
                     </p>
                 </div>
             </div>

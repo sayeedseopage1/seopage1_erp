@@ -24,7 +24,7 @@ const IncentivePointModal = ({ antdModalOpen, setAntdModalOpen, regularPointAver
                     <hr />
                     <div className="modal_point_row">
                         <p>Your actual incentive points: <span>({totalPoints}*{regularPointAverage}%)</span></p>{" "}
-                        <span className={`${regularIncentivePointsData > 0 ? 'progress_card_desc_pos' : 'progress_card_desc_neg'}`}>{regularIncentivePointsData}</span>
+                        <span className={`${regularIncentivePointsData > 0 ? 'progress_card_desc_pos' : 'progress_card_desc_neg'}`}>{parseFloat(regularIncentivePointsData)?.toFixed(2)}</span>
                     </div>
                 </>
             </CustomAntdModal>
@@ -37,7 +37,7 @@ export default IncentivePointModal;
 IncentivePointModal.propTypes = {
     antdModalOpen: PropTypes.bool,
     setAntdModalOpen: PropTypes.func,
-    regularPointAverage: PropTypes.number,
-    regularIncentivePointsData: PropTypes.number,
+    regularPointAverage: PropTypes.any,
+    regularIncentivePointsData: PropTypes.any,
     totalPoints: PropTypes.number
 }

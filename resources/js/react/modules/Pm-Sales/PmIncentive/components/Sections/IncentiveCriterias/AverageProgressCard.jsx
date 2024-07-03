@@ -15,7 +15,7 @@ const AverageProgressCard = ({ item, regularPointAverage }) => {
             </div>
             <div className="w-100">
                 <button onClick={() => setAveragePointsModalOpen(true)} className={`${regularPointAverage > 0 ? 'progress_card_desc_pos' : 'progress_card_desc_neg'} stats_info_link bg-transparent`}>
-                    {regularPointAverage}%
+                    {regularPointAverage?.toFixed(2)}%
                 </button>
 
                 <AveragePointModal

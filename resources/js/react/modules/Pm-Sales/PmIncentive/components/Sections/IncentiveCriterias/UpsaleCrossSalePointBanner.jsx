@@ -24,7 +24,7 @@ const UpsaleCrossSalePointBanner = () => {
     useEffect(() => {
         if (upSaleCrossSaleTypes) {
             let res = (parseFloat(incentive_criterias[0]?.acquired_percent) * parseFloat(incentive_criterias[0]?.obtained_incentive)) / 100
-            dispatch(upSaleCrossSalePoints(res));
+            dispatch(upSaleCrossSalePoints(parseFloat(res)?.toFixed(2)));
         }
     }, [upSaleCrossSaleTypes, incentive_criterias]);
 
@@ -38,7 +38,7 @@ const UpsaleCrossSalePointBanner = () => {
                         </span>
                         <div className="">
                             <p className='point_title point_details_wrapper' style={{ color: "#000000" }}>Your upsale/cross sales points: <button onClick={() => setUpsaleCrossSalePointsModalOpen(true)} className='point_score clickable_link bg-transparent' style={{ color: "#1492E6" }}>
-                                {upsaleCrossSalePointsData}pt
+                                {parseFloat(upsaleCrossSalePointsData)?.toFixed(2)}pt
                             </button></p>
 
                             <UpsaleCrossSalePointModal
