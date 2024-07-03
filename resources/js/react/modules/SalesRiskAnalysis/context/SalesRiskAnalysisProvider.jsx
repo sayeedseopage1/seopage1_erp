@@ -85,23 +85,32 @@ const SalesRiskAnalysisProvider = ({ children }) => {
 
     React.useEffect(() => {
         if (questionFieldsData && !questionTypeLoading) {
+            // const questionTypeData = Object.entries(
+            //     questionFieldsData?.data?.questionKeys
+            // )
+            //     .filter(
+            //         ([key]) =>
+            //             !(
+            //                 key === "yesNoRules" &&
+            //                 !questionFieldsData?.data?.yesNoRules.length && !isEditEnabled
+            //             )
+            //     )
+            //     .map(([key, value], index) => {
+            //         return {
+            //             id: index + 1,
+            //             name: key,
+            //             label: value,
+            //         };
+            //     });
             const questionTypeData = Object.entries(
                 questionFieldsData?.data?.questionKeys
-            )
-                .filter(
-                    ([key]) =>
-                        !(
-                            key === "yesNoRules" &&
-                            !questionFieldsData?.data?.yesNoRules.length && !isEditEnabled
-                        )
-                )
-                .map(([key, value], index) => {
-                    return {
-                        id: index + 1,
-                        name: key,
-                        label: value,
-                    };
-                });
+            ).map(([key, value], index) => {
+                return {
+                    id: index + 1,
+                    name: key,
+                    label: value,
+                };
+            });
             const questionKeys = Object.entries(
                 questionFieldsData?.data?.questionKeys
             ).map(([key, value], index) => {
@@ -192,7 +201,7 @@ const SalesRiskAnalysisProvider = ({ children }) => {
             yesNoRules,
             isQuestionTypeLoading,
             questionFiledRefetch,
-            setYesNoRules
+            setYesNoRules,
         };
     });
 

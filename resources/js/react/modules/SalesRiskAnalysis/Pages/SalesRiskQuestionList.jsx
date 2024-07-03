@@ -145,7 +145,6 @@ const SalesRiskQuestionList = () => {
         if (addQuestionsModalOpenClicked) {
             if (!isQuestionTypeLoading) {
                 handleOpenAddQuestionsModal();
-                handleOpenAddQuestionsModal();
                 const isYesNoRulesExist = questionsAnswerType.data.find(
                     (item) => item.name === "yesNoRules"
                 );

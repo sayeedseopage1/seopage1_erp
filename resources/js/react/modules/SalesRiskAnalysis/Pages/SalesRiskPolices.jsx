@@ -606,11 +606,7 @@ const SalesRiskPolices = () => {
                 <div className="d-flex justify-content-between align-items-center">
                     <div className="d-flex flex-column flex-md-row align-items-start align-items-md-center">
                         <Switch>
-                            <Switch.Case
-                                condition={
-                                    settings?.value
-                                }
-                            >
+                            <Switch.Case condition={settings?.value}>
                                 <button
                                     onClick={
                                         isQuestionTypeLoading
@@ -618,6 +614,9 @@ const SalesRiskPolices = () => {
                                             : () => openAddModal("policy")
                                     }
                                     className="btn btn-info mb-3 mb-md-0 mr-3"
+                                    style={{
+                                        padding: "9px 12px",
+                                    }}
                                 >
                                     <Switch.Case
                                         condition={isQuestionTypeLoading}

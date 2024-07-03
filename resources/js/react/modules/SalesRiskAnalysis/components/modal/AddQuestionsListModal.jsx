@@ -482,7 +482,7 @@ const AddQuestionsListModal = ({
 
     const isAnswerTypeDisabled = () => {
         if (!isEditEnabled && !isQuestionUpdating) {
-            return true;
+            return false;
         } else if (isEditEnabled && isQuestionUpdating) {
             return false;
         } else if (isEditEnabled && !isQuestionUpdating) {
@@ -531,7 +531,7 @@ const AddQuestionsListModal = ({
             maxHeight="85vh"
             isCloseButtonShow={true}
         >
-            <Switch>
+            {/* <Switch>
                 <Switch.Case
                     condition={
                         questionsAnswerType?.data?.find(
@@ -553,7 +553,7 @@ const AddQuestionsListModal = ({
                         }
                     />
                 </Switch.Case>
-            </Switch>
+            </Switch> */}
 
             {/* Modal Content */}
             <div className="d-flex flex-column justify-content-center">
@@ -645,7 +645,31 @@ const AddQuestionsListModal = ({
                                 <ModalSelectContainer>
                                     <CustomDropDown
                                         filedName="type"
-                                        data={QuestionsTypes}
+                                        data={{
+                                            ...QuestionsTypes,
+                                            data: isEditEnabled
+                                                ? QuestionsTypes?.data
+                                                : QuestionsTypes?.data?.map(
+                                                      (item) => {
+                                                          if (
+                                                              item.name ===
+                                                                  "yesNo" ||
+                                                              item.name ===
+                                                                  "longText"
+                                                          ) {
+                                                              return {
+                                                                  ...item,
+                                                                  disabled: false,
+                                                              };
+                                                          } else {
+                                                              return {
+                                                                  ...item,
+                                                                  disabled: true,
+                                                              };
+                                                          }
+                                                      }
+                                                  ),
+                                        }}
                                         selected={singleQuestion?.type}
                                         setSelected={handleChange}
                                         isDisableUse={isAnswerTypeDisabled()}
@@ -666,7 +690,7 @@ const AddQuestionsListModal = ({
                                         id="scrollTarget"
                                         className="d-flex align-items-center my-2  w-100"
                                     >
-                                        <div className="px-0 flex-column">
+                                        <div className="px-0 flex-column mr-1">
                                             <ModalSelectContainer className="mr-2">
                                                 <CustomInputCheckbox
                                                     type="checkbox"
@@ -848,27 +872,33 @@ const AddQuestionsListModal = ({
                                 </div>
                             </Switch.Case>
 
-                            <div className="row mb-4 align-items-first">
-                                <ModalInputLabel className="col-4">
-                                    Policy Name<sup>*</sup>{" "}
-                                </ModalInputLabel>
-                                <div className="col-8 px-0 flex-column">
-                                    <ModalSelectContainer>
-                                        <CustomDropDown
-                                            filedName="policy_id"
-                                            data={policies}
-                                            selected={singleQuestion?.policy_id}
-                                            setSelected={handleChange}
-                                            isDisableUse={isPolicyNameDisabled()}
-                                        />
-                                    </ModalSelectContainer>
-                                    {singleQuestionValidation?.policy_id && (
-                                        <p className="text-danger py-1">
-                                            Policy Name is required
-                                        </p>
-                                    )}
+                            <Switch.Case
+                                condition={isEditEnabled || isQuestionUpdating}
+                            >
+                                <div className="row mb-4 align-items-first">
+                                    <ModalInputLabel className="col-4">
+                                        Policy Name<sup>*</sup>{" "}
+                                    </ModalInputLabel>
+                                    <div className="col-8 px-0 flex-column">
+                                        <ModalSelectContainer>
+                                            <CustomDropDown
+                                                filedName="policy_id"
+                                                data={policies}
+                                                selected={
+                                                    singleQuestion?.policy_id
+                                                }
+                                                setSelected={handleChange}
+                                                isDisableUse={isPolicyNameDisabled()}
+                                            />
+                                        </ModalSelectContainer>
+                                        {singleQuestionValidation?.policy_id && (
+                                            <p className="text-danger py-1">
+                                                Policy Name is required
+                                            </p>
+                                        )}
+                                    </div>
                                 </div>
-                            </div>
+                            </Switch.Case>
                             <Switch.Case
                                 condition={
                                     singleQuestion?.question_key?.name ===
