@@ -89,7 +89,7 @@ class Incentive
                 $incentiveCriteria->acquired_percent = Project::selectRaw('FORMAT((SUM(CASE WHEN project_milestones.status = "canceled" THEN 1 ELSE 0 END) / SUM(CASE WHEN project_milestones.status = "complete" THEN 1 ELSE 0 END)) * 100, 2) as milestone_cancelation_rate')
                 ->join('project_milestones', 'projects.id', '=', 'project_milestones.project_id')
                 ->where([['projects.pm_id', $user_id],['projects.status', 'in progress'],['projects.project_status', 'Accepted']])
-                ->whereBetween('project_milestones.created_at', [$startDate, $endDate])
+                // ->whereBetween('project_milestones.created_at', [$startDate, $endDate])
                 ->first()->milestone_cancelation_rate??0;
                 self::findIncentive($incentiveCriteria);
             }elseif($incentiveCriteria->id == 6){

@@ -105,7 +105,7 @@ class DisbursePmIncentiveMonthly extends Command
                 $milestone_cancelation_rate = Project::selectRaw('FORMAT((SUM(CASE WHEN project_milestones.status = "canceled" THEN 1 ELSE 0 END) / SUM(CASE WHEN project_milestones.status = "complete" THEN 1 ELSE 0 END)) * 100, 2) as milestone_cancelation_rate')
                 ->join('project_milestones', 'projects.id', '=', 'project_milestones.project_id')
                 ->where([['projects.pm_id', $user->id],['projects.status', 'in progress'],['projects.project_status', 'Accepted']])
-                ->whereBetween('project_milestones.created_at', [$startDate, $endDate])
+                // ->whereBetween('project_milestones.created_at', [$startDate, $endDate])
                 ->first()->milestone_cancelation_rate;
                 $obtainedIncentive[] = Incentive::progressiveStore(5, $user->id, $milestone_cancelation_rate, $now);
                 // End
