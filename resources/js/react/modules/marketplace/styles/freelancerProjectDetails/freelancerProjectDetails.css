@@ -466,6 +466,10 @@
         font-size: 22px;
     }
 
+    .p_d_skill_text {
+        font-size: 14px;
+    }
+
     /* proposals section */
     .p_d_proposal_card_price {
         font-size: 22px;
@@ -489,11 +493,17 @@
         gap: 15px;
     }
 
-    .p_d_header_title {
+    .p_d_header_title,
+    .task_list_page_title {
         font-size: 22px;
     }
 
-    .p_d_description {
+    .p_d_description,
+    .task_list_page_description {
+        font-size: 14px;
+    }
+
+    .p_d_skill_text {
         font-size: 14px;
     }
 
@@ -521,7 +531,8 @@
         gap: 15px;
     }
 
-    .p_d_header_title {
+    .p_d_header_title,
+    .task_list_page_title {
         font-size: 22px;
     }
 
@@ -530,8 +541,13 @@
         align-items: start;
     }
 
-    .p_d_description {
+    .p_d_description,
+    .task_list_page_description {
         font-size: 14px;
+    }
+
+    .p_d_skill_text {
+        font-size: 12px;
     }
 
     /* proposals section */
@@ -550,6 +566,13 @@
     .files_page_content_wrapper {
         padding: 20px;
     }
+
+    /* Task lists  */
+    .task_list_page_btn {
+        padding: 8px;
+        margin-top: 14px;
+        font-size: 14px;
+    }
 }
 
 @media only screen and (min-width: 576px) and (max-width: 768px) {
@@ -558,7 +581,8 @@
         gap: 15px;
     }
 
-    .p_d_header_title {
+    .p_d_header_title,
+    .task_list_page_title {
         font-size: 20px;
     }
 
@@ -577,9 +601,15 @@
     }
 
     .p_d_description,
+    .task_list_page_description,
     .p_d_title_600 {
         font-size: 14px;
     }
+
+    .p_d_skill_text {
+        font-size: 12px;
+    }
+
 
     /* proposals section */
     .p_d_proposal_card_price {
@@ -597,6 +627,13 @@
     .files_page_content_wrapper {
         padding: 20px;
     }
+
+    /* Task lists  */
+    .task_list_page_btn {
+        padding: 6px;
+        margin-top: 14px;
+        font-size: 12px;
+    }
 }
 
 @media only screen and (max-width: 576px) {
@@ -605,7 +642,8 @@
         gap: 15px;
     }
 
-    .p_d_header_title {
+    .p_d_header_title,
+    .task_list_page_title {
         font-size: 14px;
     }
 
@@ -629,9 +667,15 @@
     }
 
     .p_d_description,
-    .p_d_title_600 {
+    .p_d_title_600,
+    .task_list_page_description {
         font-size: 12px;
     }
+
+    .p_d_skill_text {
+        font-size: 12px;
+    }
+
 
     /* proposals section */
     .p_d_proposal_user_info {
@@ -661,5 +705,12 @@
     .files_page_filter_wrapper,
     .files_page_content_wrapper {
         padding: 16px;
+    }
+
+    /* Task lists  */
+    .task_list_page_btn {
+        padding: 6px;
+        margin-top: 14px;
+        font-size: 12px;
     }
 }
