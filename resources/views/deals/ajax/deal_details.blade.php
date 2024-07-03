@@ -716,6 +716,8 @@
     //  $bid_value= $deal->bid_value. $currency->currency_symbol;
     if ($deal->lead_id) 
         $salesDeal = App\Models\Deal::where('lead_id', $deal->lead_id)->first();
+    else 
+        $salesDeal = App\Models\Deal::where('deal_id', $deal->short_code)->first();
     ?>
     <section class="seodeals py-5">
         <div class="custom_container">
