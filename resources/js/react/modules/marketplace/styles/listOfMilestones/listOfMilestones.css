@@ -68,4 +68,11 @@
 
 @media only screen and (min-width: 576px) and (max-width: 768px) {}
 
-@media only screen and (max-width: 576px) {}
+@media only screen and (max-width: 576px) {
+
+    .list_of_milestones_btn,
+    .list_of_milestones_btn_outline {
+        padding: 8px 12px;
+        font-size: 12px;
+    }
+}

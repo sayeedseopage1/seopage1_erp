@@ -462,7 +462,8 @@
         gap: 20px;
     }
 
-    .p_d_header_title {
+    .p_d_header_title,
+    .task_list_page_title {
         font-size: 22px;
     }
 

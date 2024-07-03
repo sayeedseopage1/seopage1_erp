@@ -47,42 +47,45 @@ const ProfilePersonalInfoSection = ({ profileData }) => {
                 </div>
             </div>
             <div className='personal_info_right'>
-                <div className='d-flex align-items-start justify-content-between'>
-                    <div className='mr-2'>
-                        <h4 className='freelancer_name'>{name} <span className='freelancer_user_name'>@{user_name}</span> {is_verified && <img src={verifiedIcon} alt="verifiedIcon" />}</h4>
-                        <p className='freelancer_bio'>{bio}</p>
+                <div>
+
+                    <div className='d-flex align-items-start justify-content-between'>
+                        <div className='mr-2'>
+                            <h4 className='freelancer_name'>{name} <span className='freelancer_user_name'>@{user_name}</span> {is_verified && <img src={verifiedIcon} alt="verifiedIcon" />}</h4>
+                            <p className='freelancer_bio'>{bio}</p>
+                        </div>
+                        <div className='personal_info_action_wrapper'>
+                            <button className='share_btn'><img src={shareIcon} alt="shareIcon" /></button>
+                            <button className='list_of_milestones_btn'>Edit Profile</button>
+                        </div>
                     </div>
-                    <div className='personal_info_action_wrapper'>
-                        <button className='share_btn'><img src={shareIcon} alt="shareIcon" /></button>
-                        <button className='list_of_milestones_btn'>Edit Profile</button>
+                    <div className='profile_stats'>
+                        <div className='profile_rating'>
+                            <FractionalRating stop={5} value={average_rating} />
+                            <p>{average_rating}({reviews_count})</p>
+                        </div>
+                        <div className='p_d_normal_flex'>
+                            <AiFillDollarCircle size={25} color='#058430' /> <FaBarcode size={25} color='#058430' /> <span>{earnings_score}</span>
+                        </div>
+                        <div className='p_d_normal_flex'>
+                            <img src={handShakeIcon} alt="handShakeIcon" />
+                            <Progress
+                                percent={top_rated_percentage * 10}
+                                showInfo={false}
+                                strokeLinecap="square"
+                                trailColor="#CFECFF"
+                                strokeColor={'##1492E6'}
+                                size={[95, 13]}
+                            />
+                            <span>{top_rated_percentage}%</span>
+                        </div>
                     </div>
-                </div>
-                <div className='profile_stats'>
-                    <div className='profile_rating'>
-                        <FractionalRating stop={5} value={average_rating} />
-                        <p>{average_rating}({reviews_count})</p>
+                    <div className='profile_job_success'>
+                        <div><span className={`${jobs_completed > 60 ? 'job_success_rate' : ''}`}>{jobs_completed}%</span> Jobs Completed</div>
+                        <div><span className={`${jobs_completed > 60 ? 'job_success_rate' : ''}`}>{on_budget}%</span> On Budget</div>
+                        <div><span className={`${jobs_completed > 60 ? 'job_success_rate' : ''}`}>{on_time}%</span> On Time</div>
+                        <div><span className={`${jobs_completed > 60 ? 'job_success_rate' : ''}`}>{repeat_hire_rate}%</span> Repeat Hire Rate</div>
                     </div>
-                    <div className='p_d_normal_flex'>
-                        <AiFillDollarCircle size={25} color='#058430' /> <FaBarcode size={25} color='#058430' /> <span>{earnings_score}</span>
-                    </div>
-                    <div className='p_d_normal_flex'>
-                        <img src={handShakeIcon} alt="handShakeIcon" />
-                        <Progress
-                            percent={top_rated_percentage * 10}
-                            showInfo={false}
-                            strokeLinecap="square"
-                            trailColor="#CFECFF"
-                            strokeColor={'##1492E6'}
-                            size={[95, 13]}
-                        />
-                        <span>{top_rated_percentage}%</span>
-                    </div>
-                </div>
-                <div className='profile_job_success'>
-                    <div><span className={`${jobs_completed > 60 ? 'job_success_rate' : ''}`}>{jobs_completed}%</span> Jobs Completed</div>
-                    <div><span className={`${jobs_completed > 60 ? 'job_success_rate' : ''}`}>{on_budget}%</span> On Budget</div>
-                    <div><span className={`${jobs_completed > 60 ? 'job_success_rate' : ''}`}>{on_time}%</span> On Time</div>
-                    <div><span className={`${jobs_completed > 60 ? 'job_success_rate' : ''}`}>{repeat_hire_rate}%</span> Repeat Hire Rate</div>
                 </div>
                 <div className='profile_general_description'>
                     <Tabs
