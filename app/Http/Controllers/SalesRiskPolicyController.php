@@ -1120,45 +1120,8 @@ class SalesRiskPolicyController extends AccountBaseController
 
             // ----------------------------- end doneByElse ------------------------- //
 
-            // -------------------------------- routeWork -------------------------- //
-            $questions = SalesPolicyQuestion::where('key', 'routeWork')->orderBy('sequence')->get();
-            if (count($questions) > 0) {
-
-                $policy = SalesRiskPolicy::where('parent_id', $questions[0]->policy_id)->get();
-
-                if (isset($questionAns[$questions[0]->id]))
-                    $value = $questionAns[$questions[0]->id];
-                else {
-                    $pointData['routeWork']['message'][] = "routeWork value is not added.";
-                    goto endRouteWork;
-                }
-
-                if ($value == 'yes') {
-                    $points += (float) json_decode($policy[0]->value)->yes->point;
-                    $pointData['routeWork']['points'] = json_decode($policy[0]->value)->yes->point;
-                } else {
-                    $points += (float) json_decode($policy[0]->value)->no->point;
-                    $pointData['routeWork']['points'] = json_decode($policy[0]->value)->no->point;
-                }
-                $policyIdList[$policy[0]->id] = $value;
-
-                $pointData['routeWork']['questionAnswer'][] = ['id' => $questions[0]->id, 'title' => $questions[0]->title, 'value' => $value, 'parent_id' => null];
-
-                if (isset($questions[1]) && isset($questionAns[$questions[1]->id]))
-                    $pointData['routeWork']['questionAnswer'][] = ['id' => $questions[1]->id, 'title' => $questions[1]->title, 'value' => $questionAns[$questions[1]->id], 'parent_id' => $questions[1]->parent_id];
-                if (isset($questions[2]) && isset($questionAns[$questions[2]->id]))
-                    $pointData['routeWork']['questionAnswer'][] = ['id' => $questions[2]->id, 'title' => $questions[2]->title, 'value' => $questionAns[$questions[2]->id], 'parent_id' => $questions[2]->parent_id];
-                
-            } else {
-                $pointData['routeWork']['message'][] = "routeWork questions are not added.";
-            }
-
-            endRouteWork:
-            // -------------------------------- end routeWork -------------------------- //
-
-            // ---------------------------- availableWeekend, firstSubmission, acceptPriceProposal ------------------------------//
-
-            foreach (['availableWeekend', 'firstSubmission', 'acceptPriceProposal'] as $item) {
+            // ---------------------------- routeWork, availableWeekend, firstSubmission, acceptPriceProposal ------------------------------//
+            foreach (['routeWork', 'availableWeekend', 'firstSubmission', 'acceptPriceProposal'] as $item) {
                 $questions = SalesPolicyQuestion::where('key', $item)->orderBy('sequence')->get();
                 if (count($questions) > 0) {
 
@@ -1184,9 +1147,9 @@ class SalesRiskPolicyController extends AccountBaseController
 
                     if (isset($questions[1]) && isset($questionAns[$questions[1]->id]))
                         $pointData[$item]['questionAnswer'][] = ['id' => $questions[1]->id, 'title' => $questions[1]->title, 'value' => $questionAns[$questions[1]->id], 'parent_id' => $questions[1]->parent_id];
-                    else {
-                        $pointData[$item]['message'][] = "$item 2nd value is not added. Question Id:";
-                    }
+
+                    if (isset($questions[2]) && isset($questionAns[$questions[2]->id]))
+                        $pointData[$item]['questionAnswer'][] = ['id' => $questions[2]->id, 'title' => $questions[2]->title, 'value' => $questionAns[$questions[2]->id], 'parent_id' => $questions[2]->parent_id];
                 } else {
                     $pointData[$item]['message'][] = "$item questions are not added.";
                 }
