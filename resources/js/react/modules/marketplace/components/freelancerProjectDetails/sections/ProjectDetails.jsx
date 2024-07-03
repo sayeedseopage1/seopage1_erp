@@ -39,7 +39,7 @@ const ProjectDetails = ({ singleProject }) => {
             !isAwarded && <div className="p_d_bidding_ends"><GoClockFill /> <p>{getRemainingTime(bidding_deadline)}</p></div>
           }
           {/* project details content */}
-          <div className='p_d_wrapper' dangerouslySetInnerHTML={{ __html: details }}></div>
+          <div className='p_d_wrapper p_d_description' dangerouslySetInnerHTML={{ __html: details }}></div>
           {/* project details skills */}
           <div className='p_d_skills_wrapper'>
             <div className='p_d_title_wrapper'>

@@ -60,6 +60,7 @@
     align-items: center;
     justify-content: space-between;
     gap: 10px;
+    flex-wrap: wrap;
 }
 
 .p_d_tab_action_wrapper {
@@ -458,12 +459,24 @@
         grid-template-columns: 2fr 1fr;
         gap: 20px;
     }
+
+    .p_d_header_title {
+        font-size: 22px;
+    }
 }
 
 @media only screen and (min-width: 993px) and (max-width: 1200px) {
     .p_d_wrapper {
         grid-template-columns: 2fr 1fr;
         gap: 15px;
+    }
+
+    .p_d_header_title {
+        font-size: 22px;
+    }
+
+    .p_d_description {
+        font-size: 14px;
     }
 }
 
@@ -472,6 +485,19 @@
         grid-template-columns: 2fr 1fr;
         gap: 15px;
     }
+
+    .p_d_header_title {
+        font-size: 22px;
+    }
+
+    .p_d_header {
+        padding: 11px 20px;
+        align-items: start;
+    }
+
+    .p_d_description {
+        font-size: 14px;
+    }
 }
 
 @media only screen and (min-width: 576px) and (max-width: 768px) {
@@ -479,11 +505,61 @@
         grid-template-columns: 1fr;
         gap: 15px;
     }
+
+    .p_d_header_title {
+        font-size: 20px;
+    }
+
+    .p_d_header_title_badge {
+        font-size: 12px;
+        margin: 3px;
+    }
+
+    .p_d_header {
+        padding: 11px 15px;
+        align-items: start;
+    }
+
+    .p_d_header_bids_amount {
+        font-size: 18px;
+    }
+
+    .p_d_description,
+    .p_d_title_600 {
+        font-size: 14px;
+    }
 }
 
 @media only screen and (max-width: 576px) {
     .p_d_wrapper {
         grid-template-columns: 1fr;
         gap: 15px;
+    }
+
+    .p_d_header_title {
+        font-size: 14px;
+    }
+
+    .p_d_header_title_badge {
+        font-size: 12px;
+        margin: 3px;
+    }
+
+    .p_d_header {
+        padding: 11px 15px;
+        align-items: start;
+    }
+
+    .p_d_header_bids_amount {
+        font-size: 14px;
+    }
+
+    .p_d_tab_wrapper {
+        margin-bottom: 10px;
+    }
+
+    .p_d_description,
+    .p_d_title_600 {
+        font-size: 12px;
     }
 }

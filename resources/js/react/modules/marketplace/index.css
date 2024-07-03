@@ -96,6 +96,10 @@ p {
     .sp1_marketplace_section_wrapper {
         padding: 15px;
     }
+
+    .sp1_marketplace_default_text {
+        font-size: 14px;
+    }
 }
 
 @media only screen and (max-width: 576px) {
@@ -103,5 +107,9 @@ p {
     .sp1_marketplace_page_wrapper,
     .sp1_marketplace_section_wrapper {
         padding: 15px;
+    }
+
+    .sp1_marketplace_default_text {
+        font-size: 12px;
     }
 }
