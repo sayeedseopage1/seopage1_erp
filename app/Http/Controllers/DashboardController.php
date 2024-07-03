@@ -616,6 +616,12 @@ class DashboardController extends AccountBaseController
 
                 if ($userDeveloperHoursTrack) {
                     $logStatus = true;
+
+                    if ($createdAt->dayOfWeek === Carbon::SATURDAY) {
+                        $minimum_log_hours = 270;
+                    } else {
+                        $minimum_log_hours = 420;
+                    }
                 } else {
 
                     if ($createdAt->dayOfWeek === Carbon::SATURDAY) {
@@ -648,6 +654,27 @@ class DashboardController extends AccountBaseController
         $userLog = ProjectTimeLog::where('user_id', $user_id)->whereDate('created_at', $userClockIn->created_at)->get();
         $lastLogData = Attendance::where('user_id', $user_id)->whereDate('created_at', $userClockIn->created_at)->orderBy('created_at', 'desc')->first();
 
+        $devTimes = DeveloperStopTimer::where('user_id', $user_id)->whereDate('date', '=', $userClockIn->created_at)->orderBy('created_at', 'desc')->get();
+        $totalTime = 0;
+        foreach ($devTimes as $dev) {
+            $durations = json_decode($dev->durations, true);
+            $hour = $dev->transition_hours;
+            $minute = $dev->transition_minutes;
+            $totalTime += ($hour * 60) + $minute;
+            if($durations){
+                foreach ($durations as $duration) {
+                    $start = Carbon::parse($duration['start']);
+                    $end = Carbon::parse($duration['end']);
+                    $differenceInMinutes = $end->diffInMinutes($start);
+                    $totalTime += $differenceInMinutes;
+                }            
+            }            
+        }
+        if($incomplete_hours > $totalTime){
+            $logStatus = false;
+        }else{
+            $logStatus = true;
+        }
         return response()->json([
             'data' => [
                 'check_in_check_out' => [
@@ -741,7 +768,26 @@ class DashboardController extends AccountBaseController
         $incomplete_hours = $minimum_log_hours - $userTotalMin;
         $userLog = ProjectTimeLog::where('user_id', $user_id)->whereDate('created_at', $userClockIn->created_at)->get();
         $lastLogData = Attendance::where('user_id', $user_id)->whereDate('created_at', $userClockIn->created_at)->orderBy('created_at', 'desc')->first();
+        $devTimes = DeveloperStopTimer::where('user_id', $user_id)->whereDate('date', '=', $userClockIn->created_at)->orderBy('created_at', 'desc')->get();
+        $totalTime = 0;
+        foreach ($devTimes as $dev) {
+            $durations = json_decode($dev->durations, true);
+            $hour = $dev->transition_hours;
+            $minute = $dev->transition_minutes;
+            $totalTime += ($hour * 60) + $minute;
 
+            foreach ($durations as $duration) {
+                $start = Carbon::parse($duration['start']);
+                $end = Carbon::parse($duration['end']);
+                $differenceInMinutes = $end->diffInMinutes($start);
+                $totalTime += $differenceInMinutes;
+            }
+        }
+        if($incomplete_hours > $totalTime){
+            $logStatus = false;
+        }else{
+            $logStatus = true;
+        }
         return response()->json([
             'data' => [
                 'check_in_check_out' => [
@@ -779,19 +825,22 @@ class DashboardController extends AccountBaseController
             $devDurations = json_decode($devStopTimer->durations, true);
             $start = [];
             $end = [];
-
-            foreach ($devDurations as $value) {
-                $start = $value['start'];
-                $end = $value['end'];
+            if($devDurations != null){
+                foreach ($devDurations as $value) {
+                    $start = $value['start'];
+                    $end = $value['end'];
+                }
             }
 
             $inputDurations = json_decode($request->durations, true);
             $request_start = [];
             $request_end = [];
 
-            foreach ($inputDurations as $value) {
-                $request_start = $value['start'];
-                $request_end = $value['end'];
+            if($inputDurations != null){
+                foreach ($inputDurations as $value) {
+                    $request_start = $value['start'];
+                    $request_end = $value['end'];
+                }
             }
 
             $oldhr = Carbon::parse($start)->format('H:i');
@@ -888,14 +937,20 @@ class DashboardController extends AccountBaseController
                 
                 // dd($devTimes);
                 $totalDifferenceInMinutes = 0;
-                foreach ($devTimes as $dev) {
-                    $durations = json_decode($dev->durations, true);
-
-                    foreach ($durations as $duration) {
-                        $start = Carbon::parse($duration['start']);
-                        $end = Carbon::parse($duration['end']);
-                        $differenceInMinutes = $end->diffInMinutes($start);
-                        $totalDifferenceInMinutes += $differenceInMinutes;
+                if($devTimes != null) {
+                    foreach ($devTimes as $dev) {
+                        $durations = json_decode($dev->durations, true);
+                        $hour = $dev->transition_hours;
+                        $minute = $dev->transition_minutes;
+                        $totalDifferenceInMinutes += ($hour * 60) + $minute;
+                        if($durations != null) {
+                            foreach ($durations as $duration) {
+                                $start = Carbon::parse($duration['start']);
+                                $end = Carbon::parse($duration['end']);
+                                $differenceInMinutes = $end->diffInMinutes($start);
+                                $totalDifferenceInMinutes += $differenceInMinutes;
+                            }
+                        }
                     }
                 }
 
