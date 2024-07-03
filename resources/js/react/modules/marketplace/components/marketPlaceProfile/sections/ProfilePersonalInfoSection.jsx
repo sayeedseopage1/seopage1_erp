@@ -37,6 +37,16 @@ const ProfilePersonalInfoSection = ({ profileData }) => {
         <div className='personal_info_wrapper'>
             <div className='personal_info_left'>
                 <img className='user_profile_image' src={profile_image_url} alt={name} />
+                <div className='personal_info_right_top freelancer_name_wrapper_small'>
+                    <div className='mr-2 '>
+                        <h4 className='freelancer_name'>{name} <span className='freelancer_user_name'>@{user_name}</span> {is_verified && <img src={verifiedIcon} alt="verifiedIcon" />}</h4>
+                        <p className='freelancer_bio'>{bio}</p>
+                    </div>
+                    <div className='personal_info_action_wrapper'>
+                        <button className='share_btn'><img src={shareIcon} alt="shareIcon" /></button>
+                        <button className='list_of_milestones_btn'>Edit Profile</button>
+                    </div>
+                </div>
                 <div className='personal_info_left_content'>
                     <InfoWithIconTitle icon={<GoDotFill size={22} color={is_online ? "#058430" : "#000"} />} title={is_online ? "I'm online!" : "Offline"} />
                     <InfoWithIconTitle img_url={dollarSquare} title={`$${hourly_rate} USD/hour`} />
@@ -48,9 +58,8 @@ const ProfilePersonalInfoSection = ({ profileData }) => {
             </div>
             <div className='personal_info_right'>
                 <div>
-
-                    <div className='d-flex align-items-start justify-content-between'>
-                        <div className='mr-2'>
+                    <div className='personal_info_right_top freelancer_name_wrapper'>
+                        <div className='mr-2 '>
                             <h4 className='freelancer_name'>{name} <span className='freelancer_user_name'>@{user_name}</span> {is_verified && <img src={verifiedIcon} alt="verifiedIcon" />}</h4>
                             <p className='freelancer_bio'>{bio}</p>
                         </div>

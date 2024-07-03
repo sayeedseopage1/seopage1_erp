@@ -75,6 +75,14 @@
     gap: 8px;
 }
 
+.personal_info_right_top {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
 .personal_info_mb {
     margin-bottom: 8px;
 }
@@ -102,6 +110,10 @@
     display: flex;
     flex-direction: column;
     gap: 20px;
+}
+
+.freelancer_name_wrapper_small {
+    display: none;
 }
 
 .freelancer_name {
@@ -143,6 +155,8 @@
 .user_profile_image {
     width: 100%;
     height: 379px;
+    object-fit: cover;
+    object-position: center;
 }
 
 .profile_stats {
@@ -558,6 +572,37 @@
         padding: 24px;
     }
 
+    /* profile personal info  */
+    .personal_info_wrapper {
+        padding: 18px;
+        gap: 28px;
+    }
+
+    .freelancer_name {
+        font-size: 20px;
+    }
+
+    .freelancer_bio {
+        font-size: 16px;
+    }
+
+    .share_btn img {
+        width: 20px;
+        height: 26px;
+    }
+
+    .profile_stats {
+        gap: 20px;
+        font-size: 16px;
+    }
+
+    .profile_job_success {
+        row-gap: 15px;
+        column-gap: 30px;
+        margin-top: 30px;
+        font-size: 16px;
+    }
+
     /* reviews section  */
     .filtered_reviews_result {
         font-size: 22px;
@@ -573,9 +618,35 @@
         grid-template-columns: 1fr;
     }
 
+    /* profile personal info  */
     .personal_info_wrapper {
         flex-direction: column;
         gap: 24px;
+    }
+
+    .freelancer_name {
+        font-size: 20px;
+    }
+
+    .freelancer_bio {
+        font-size: 16px;
+    }
+
+    .share_btn img {
+        width: 20px;
+        height: 26px;
+    }
+
+    .profile_stats {
+        gap: 20px;
+        font-size: 16px;
+    }
+
+    .profile_job_success {
+        row-gap: 15px;
+        column-gap: 30px;
+        margin-top: 30px;
+        font-size: 16px;
     }
 
     .personal_info_left {
@@ -628,9 +699,35 @@
         grid-template-columns: 1fr;
     }
 
+    /* profile personal info  */
     .personal_info_wrapper {
         flex-direction: column;
         gap: 24px;
+    }
+
+    .freelancer_name {
+        font-size: 20px;
+    }
+
+    .freelancer_bio {
+        font-size: 16px;
+    }
+
+    .share_btn img {
+        width: 20px;
+        height: 26px;
+    }
+
+    .profile_stats {
+        gap: 20px;
+        font-size: 16px;
+    }
+
+    .profile_job_success {
+        row-gap: 15px;
+        column-gap: 30px;
+        margin-top: 30px;
+        font-size: 16px;
     }
 
     .personal_info_left {
@@ -688,9 +785,35 @@
         grid-template-columns: 1fr;
     }
 
+    /* profile personal info  */
     .personal_info_wrapper {
         flex-direction: column;
         gap: 24px;
+    }
+
+    .freelancer_name {
+        font-size: 20px;
+    }
+
+    .freelancer_bio {
+        font-size: 16px;
+    }
+
+    .share_btn img {
+        width: 20px;
+        height: 26px;
+    }
+
+    .profile_stats {
+        gap: 20px;
+        font-size: 16px;
+    }
+
+    .profile_job_success {
+        row-gap: 15px;
+        column-gap: 30px;
+        margin-top: 30px;
+        font-size: 16px;
     }
 
     .personal_info_left {
@@ -764,20 +887,76 @@
         grid-template-columns: 1fr;
     }
 
+    /* profile personal info  */
     .personal_info_wrapper {
         flex-direction: column;
         gap: 24px;
     }
 
-    .personal_info_left {
+    .freelancer_name_wrapper_small {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+    }
+
+    .freelancer_name_wrapper {
+        display: none;
+    }
+
+    .freelancer_name {
+        font-size: 20px;
+    }
+
+    .freelancer_bio {
+        font-size: 16px;
+    }
+
+    .share_btn img {
+        width: 20px;
+        height: 26px;
+    }
+
+    .profile_stats {
+        gap: 20px;
+        font-size: 16px;
+        justify-content: center;
+    }
+
+    .profile_job_success {
+        margin-top: 23px;
+        font-size: 16px;
+        display: flex;
+        justify-content: center;
+        flex-wrap: wrap;
+        gap: 15px;
+    }
+
+    /* .personal_info_left {
         flex-direction: row;
         gap: 20px;
         max-width: 100%;
+    } */
+
+    .personal_info_left {
+        flex-direction: column;
+        gap: 20px;
+        max-width: 100%;
+        align-items: center;
+    }
+
+    .personal_info_left_content {
+        margin-top: 11px;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 5px;
+        justify-content: center;
     }
 
     .user_profile_image {
         width: 100%;
-        height: 379px;
+        height: 200px;
+        max-width: 200px;
     }
 
     .personal_info_right {

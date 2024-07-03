@@ -28,7 +28,7 @@ const ProfileLeftSection = ({ profileData }) => {
     }
     return (
         <div className='marketplace_profile_left_side'>
-            {/* <ProfilePersonalInfoSection profileData={profileData} /> */}
+            <ProfilePersonalInfoSection profileData={profileData} />
             <LgDataCardWithHeader title={"Portfolio"} actionCompo={
                 <div className='personal_info_action_wrapper'>
                     <button className='list_of_milestones_btn_outline'>Edit Layout</button>
