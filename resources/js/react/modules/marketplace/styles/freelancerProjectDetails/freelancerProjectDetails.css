@@ -471,6 +471,16 @@
         font-size: 22px;
         line-height: 24px;
     }
+
+    /* files section */
+    .files_page_wrapper {
+        gap: 10px;
+    }
+
+    .files_page_filter_wrapper,
+    .files_page_content_wrapper {
+        padding: 20px;
+    }
 }
 
 @media only screen and (min-width: 993px) and (max-width: 1200px) {
@@ -491,6 +501,17 @@
     .p_d_proposal_card_price {
         font-size: 22px;
         line-height: 24px;
+    }
+
+    /* files section */
+    .files_page_wrapper {
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+
+    .files_page_filter_wrapper,
+    .files_page_content_wrapper {
+        padding: 20px;
     }
 }
 
@@ -517,6 +538,17 @@
     .p_d_proposal_card_price {
         font-size: 22px;
         line-height: 24px;
+    }
+
+    /* files section */
+    .files_page_wrapper {
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+
+    .files_page_filter_wrapper,
+    .files_page_content_wrapper {
+        padding: 20px;
     }
 }
 
@@ -554,6 +586,17 @@
         font-size: 20px;
         line-height: 22px;
     }
+
+    /* files section */
+    .files_page_wrapper {
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+
+    .files_page_filter_wrapper,
+    .files_page_content_wrapper {
+        padding: 20px;
+    }
 }
 
 @media only screen and (max-width: 576px) {
@@ -567,8 +610,9 @@
     }
 
     .p_d_header_title_badge {
-        font-size: 12px;
+        font-size: 10px;
         margin: 3px;
+        padding: 4px;
     }
 
     .p_d_header {
@@ -606,5 +650,16 @@
 
     .p_d_proposal_report_btn {
         font-size: 11px;
+    }
+
+    /* files section */
+    .files_page_wrapper {
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+
+    .files_page_filter_wrapper,
+    .files_page_content_wrapper {
+        padding: 16px;
     }
 }
