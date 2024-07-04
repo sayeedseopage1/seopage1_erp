@@ -905,9 +905,7 @@ class DashboardController extends AccountBaseController
                 if($devTimes!=null){
                     foreach ($devTimes as $dev) {
                         $durations = json_decode($dev->durations, true);
-                        $hour = $dev->transition_hours;
-                        $minute = $dev->transition_minutes;
-                        $totalTime += ($hour * 60) + $minute;
+
 
                        if($durations!=null){
                             foreach ($durations as $duration) {
