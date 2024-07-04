@@ -899,7 +899,31 @@ class DashboardController extends AccountBaseController
                     $totalMinutes += ($hour * 60) + $minute;
                 }
 
-                $leftMin = $request->incomplete_hours - $totalMinutes;
+                $devTimes = DeveloperStopTimer::where('user_id', $stop_time->user_id)->whereDate('date', '=', $stop_time->date)->orderBy('created_at', 'desc')->get();
+                $totalTime = 0;
+
+                if($devTimes!=null){
+                    foreach ($devTimes as $dev) {
+                        $durations = json_decode($dev->durations, true);
+                        $hour = $dev->transition_hours;
+                        $minute = $dev->transition_minutes;
+                        $totalTime += ($hour * 60) + $minute;
+
+                       if($durations!=null){
+                            foreach ($durations as $duration) {
+                                $start = Carbon::parse($duration['start']);
+                                $end = Carbon::parse($duration['end']);
+                                $differenceInMinutes = $end->diffInMinutes($start);
+                                $totalTime += $differenceInMinutes;
+                            }
+                        }
+                    }
+                    
+                } 
+
+            
+
+                $leftMin = $request->incomplete_hours - $totalMinutes - $totalTime;
                 return response()->json([
                     'status' => 200,
                     'leftMin' => $leftMin
@@ -983,14 +1007,18 @@ class DashboardController extends AccountBaseController
                 }
 
                 $totalDifferenceInMinutes = 0;
-                foreach ($devTimes as $dev) {
-                    $durations = json_decode($dev->durations, true);
+                if ($devTimes !== null) {
+                    foreach ($devTimes as $dev) {
+                        $durations = json_decode($dev->durations, true);
 
-                    foreach ($durations as $duration) {
-                        $start = Carbon::parse($duration['start']);
-                        $end = Carbon::parse($duration['end']);
-                        $differenceInMinutes = $end->diffInMinutes($start);
-                        $totalDifferenceInMinutes += $differenceInMinutes;
+                        if ($durations !== null) {
+                            foreach ($durations as $duration) {
+                                $start = Carbon::parse($duration['start']);
+                                $end = Carbon::parse($duration['end']);
+                                $differenceInMinutes = $end->diffInMinutes($start);
+                                $totalDifferenceInMinutes += $differenceInMinutes;
+                            }
+                        }
                     }
                 }
 
