@@ -2,9 +2,12 @@ import React, { useState } from 'react';
 import '../../styles/listOfMilestones/listOfMilestones.css'
 import ListOfMilestonesTable from '../../components/listOfMilestones/sections/ListOfMilestonesTable';
 import { ConfigProvider, Select } from 'antd';
+import MarketPlaceTableLoader from '../../components/loader/MarketPlaceTableLoader';
 
 const ListOfMileStones = () => {
     const [activeFilterTab, setActiveFilterTab] = useState('incoming');
+    // TODO: this loader state come from api later 
+    const [isMilestoneDataLoading, setIsMilestoneDataLoading] = useState(false);
 
     return (
         <ConfigProvider
@@ -29,7 +32,9 @@ const ListOfMileStones = () => {
                         </div>
                     </div>
                     <div className='list_of_milestones_body list_of_milestones_table_wrapper'>
-                        <ListOfMilestonesTable />
+                        {
+                            isMilestoneDataLoading ? <MarketPlaceTableLoader tableCol={6} prevItemLength={10} /> : <ListOfMilestonesTable />
+                        }
                         <div>
                             <Select
                                 className='list_of_milestones_show_pages_select'
