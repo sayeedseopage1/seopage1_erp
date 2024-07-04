@@ -94,10 +94,30 @@ class DisbursePmIncentiveMonthly extends Command
                 // End
 
                 // Percentage of delayed project
-                $delayed_project_percentage = Project::selectRaw('FORMAT((SUM(CASE WHEN p_m_projects.delayed_status = 1 THEN 1 ELSE 0 END) / SUM(CASE WHEN p_m_projects.delayed_status = NULL THEN 0 ELSE 1 END)) * 100, 2) as delayed_project_percentage')
-                ->join('p_m_projects', 'p_m_projects.project_id', '=', 'projects.id')
-                ->where([['projects.pm_id', $user->id],['projects.status', 'in progress'],['projects.project_status', 'Accepted']])
-                ->first()->delayed_project_percentage;
+                $result = Project::selectRaw('
+                    SUM(CASE WHEN projects.status = "in progress" AND project_status = "Accepted" AND p_m_projects.delayed_status = 1 THEN 1 ELSE 0 END) as inProgressDelayedProjects,
+                    SUM(CASE WHEN projects.status = "in progress" AND project_status = "Accepted" AND p_m_projects.delayed_status = 0 THEN 1 ELSE 0 END) as inProgressNotDelayedProjects,
+                    SUM(CASE WHEN projects.status IN ("finished", "partially finished") AND p_m_projects.delayed_status = 1 AND projects.project_completion_time BETWEEN ? AND ? THEN 1 ELSE 0 END) as completedDelayedProjectsThisMonth,
+                    SUM(CASE WHEN projects.status IN ("finished", "partially finished") AND p_m_projects.delayed_status = 0 AND projects.project_completion_time BETWEEN ? AND ? THEN 1 ELSE 0 END) as completedNonDelayedProjectsThisMonth
+                ', [$startDate, $endDate, $startDate, $endDate])
+                ->where('projects.pm_id', $user->id)
+                ->leftJoin('p_m_projects', 'projects.id', '=', 'p_m_projects.project_id')
+                ->first();
+
+                $inProgressDelayedProjects = $result->inProgressDelayedProjects;
+                $inProgressNotDelayedProjects = $result->inProgressNotDelayedProjects;
+                $completedDelayedProjectsThisMonth = $result->completedDelayedProjectsThisMonth;
+                $completedNonDelayedProjectsThisMonth = $result->completedNonDelayedProjectsThisMonth;
+
+                $totalProjects = $inProgressDelayedProjects + $inProgressNotDelayedProjects + $completedDelayedProjectsThisMonth + $completedNonDelayedProjectsThisMonth;
+                $delayedPercent = $totalProjects > 0 ? (($inProgressDelayedProjects + $completedDelayedProjectsThisMonth) / $totalProjects) * 100 : 0;
+                $delayed_project_percentage = $delayedPercent;
+                
+                // Project::selectRaw('FORMAT((SUM(CASE WHEN p_m_projects.delayed_status = 1 THEN 1 ELSE 0 END) / SUM(CASE WHEN p_m_projects.delayed_status = NULL THEN 0 ELSE 1 END)) * 100, 2) as delayed_project_percentage')
+                // ->join('p_m_projects', 'p_m_projects.project_id', '=', 'projects.id')
+                // ->where([['projects.pm_id', $user->id],['projects.status', 'in progress'],['projects.project_status', 'Accepted']])
+                // ->first()->delayed_project_percentage;
+
                 $obtainedIncentive[] = Incentive::progressiveStore(4, $user->id, $delayed_project_percentage, $now);
                 // End
                 
