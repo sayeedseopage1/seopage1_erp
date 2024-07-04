@@ -176,7 +176,6 @@
 /******/ 		})();
 /******/ 	})();
 /******/ 	
-<<<<<<< HEAD
 /******/ 	/* webpack/runtime/harmony module decorator */
 /******/ 	(() => {
 /******/ 		__webpack_require__.hmd = (module) => {
@@ -192,8 +191,6 @@
 /******/ 		};
 /******/ 	})();
 /******/ 	
-=======
->>>>>>> 204db86148f89c9579d5b9cf2f48a1a0cb6d7d7e
 /******/ 	/* webpack/runtime/hasOwnProperty shorthand */
 /******/ 	(() => {
 /******/ 		__webpack_require__.o = (obj, prop) => (Object.prototype.hasOwnProperty.call(obj, prop))
