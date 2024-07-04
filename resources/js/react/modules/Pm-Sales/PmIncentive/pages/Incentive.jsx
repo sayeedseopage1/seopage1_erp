@@ -17,6 +17,7 @@ import { useGetAchievedIncentiveQuery, useGetIncentiveHeldAmountQuery } from '..
 import _ from 'lodash';
 import IncentiveCriteriaFactors from '../components/Sections/IncentiveFactors/IncentiveCriteriaFactors';
 import IncentivePageSkeleton from '../components/loader/IncentivePageSkeleton';
+import IncentiveFactorPageSkeleton from '../components/loader/IncentiveFactorPageSkeleton';
 
 const Incentive = () => {
     const [tab, setTab] = useState("current");
@@ -101,7 +102,10 @@ const Incentive = () => {
                     <Switch.Case condition={tab == "incentive_factors"}>
                         <div className='incentive_inner_wrapper'>
                             {/* <IncentiveFactors /> */}
-                            <IncentiveCriteriaFactors />
+                            {
+                                (incentiveTypesLoading || incentiveTypesIsFetching) ? <IncentiveFactorPageSkeleton /> : <IncentiveCriteriaFactors />
+                            }
+
                         </div>
                     </Switch.Case>
                 </Switch>
