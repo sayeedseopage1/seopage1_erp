@@ -18,10 +18,10 @@ return new class extends Migration
             $table->timestamp('project_completion_time')->nullable()->after('project_completion_days');
         });
 
-        // foreach(Project::all() as $project){
-        //     $project->project_completion_time = $project->updated_at;
-        //     $project->save();
-        // }
+        foreach(Project::whereIn('status', ['finished', 'partially finished'])->get() as $project){
+            $project->project_completion_time = $project->updated_at;
+            $project->save();
+        }
     }
 
     /**
