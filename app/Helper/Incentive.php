@@ -80,41 +80,30 @@ class Incentive
                 $incentiveCriteria->acquired_percent = $total_points ? number_format(($totalLostPoints / $total_points) * 100, 2) : 0;
                 self::findIncentive($incentiveCriteria);
             }elseif($incentiveCriteria->id == 4){
-                $tempStartDate = Carbon::now()->subMonth()->startOfMonth();
-                $tempEndDate = Carbon::now()->subMonth()->endOfMonth();
-                $inProgressDelayedProjects = Project::where([['pm_id', $user_id],['status', 'in progress'],['project_status', 'Accepted']])->whereHas('pmProject', function($pmProject){
-                    return $pmProject->where('delayed_status', 1);
-                })->count();
+                $result = Project::selectRaw('
+                    SUM(CASE WHEN projects.status = "in progress" AND project_status = "Accepted" AND p_m_projects.delayed_status = 1 THEN 1 ELSE 0 END) as inProgressDelayedProjects,
+                    SUM(CASE WHEN projects.status = "in progress" AND project_status = "Accepted" AND p_m_projects.delayed_status = 0 THEN 1 ELSE 0 END) as inProgressNotDelayedProjects,
+                    SUM(CASE WHEN projects.status IN ("finished", "partially finished") AND p_m_projects.delayed_status = 1 AND projects.project_completion_time BETWEEN ? AND ? THEN 1 ELSE 0 END) as completedDelayedProjectsThisMonth,
+                    SUM(CASE WHEN projects.status IN ("finished", "partially finished") AND p_m_projects.delayed_status = 0 AND projects.project_completion_time BETWEEN ? AND ? THEN 1 ELSE 0 END) as completedNonDelayedProjectsThisMonth
+                ', [$startDate, $endDate, $startDate, $endDate])
+                ->where('projects.pm_id', $user_id)
+                ->leftJoin('p_m_projects', 'projects.id', '=', 'p_m_projects.project_id')
+                ->first();
 
-                $inProgressNotDelayedProjects = Project::where([['pm_id', $user_id],['status', 'in progress'],['project_status', 'Accepted']])->whereHas('pmProject', function($pmProject){
-                    return $pmProject->where('delayed_status', 0);
-                })->count();
+                $inProgressDelayedProjects = $result->inProgressDelayedProjects;
+                $inProgressNotDelayedProjects = $result->inProgressNotDelayedProjects;
+                $completedDelayedProjectsThisMonth = $result->completedDelayedProjectsThisMonth;
+                $completedNonDelayedProjectsThisMonth = $result->completedNonDelayedProjectsThisMonth;
 
-                $completedDelayedProjectsThisMonth = Project::where('pm_id', $user_id)->whereIn('status', ['finished','partially finished'])->whereBetween('updated_at', [$tempStartDate, $tempEndDate])->whereHas('pmProject', function($pmProject){
-                    return $pmProject->where('delayed_status', 1);
-                })->count();
-
-                $completedNonDelayedProjectsThisMonth = Project::where('pm_id', $user_id)->whereIn('status', ['finished','partially finished'])->whereBetween('updated_at', [$tempStartDate, $tempEndDate])->whereHas('pmProject', function($pmProject){
-                    return $pmProject->where('delayed_status', 0);
-                })->count();
-
-                $delayedPercent = (($inProgressDelayedProjects + $completedDelayedProjectsThisMonth) / ($inProgressDelayedProjects + $inProgressNotDelayedProjects + $completedDelayedProjectsThisMonth + $completedNonDelayedProjectsThisMonth)) * 100;
-
-                dd(
-                    "Total Inprogress: " . $inProgressDelayedProjects + $inProgressNotDelayedProjects, 
-                    "Delayed Inprogress: " . $inProgressDelayedProjects, 
-                    "Not Delayed Inprogress: " . $inProgressNotDelayedProjects, 
-                    "Total Completed This Month: " .  $completedDelayedProjectsThisMonth + $completedNonDelayedProjectsThisMonth,
-                    "Delayed Completed This Month: " . $completedDelayedProjectsThisMonth, 
-                    "Not Delayed Completed This Month: " . $completedNonDelayedProjectsThisMonth,
-                    "Delayed Calculation : (" . $inProgressDelayedProjects + $completedDelayedProjectsThisMonth . " / " . $inProgressDelayedProjects + $inProgressNotDelayedProjects + $completedDelayedProjectsThisMonth + $completedNonDelayedProjectsThisMonth . ") * 100",
-                    "Delayed Percent: " .  number_format($delayedPercent, 2)
-                );
+                $totalProjects = $inProgressDelayedProjects + $inProgressNotDelayedProjects + $completedDelayedProjectsThisMonth + $completedNonDelayedProjectsThisMonth;
+                $delayedPercent = $totalProjects > 0 ? (($inProgressDelayedProjects + $completedDelayedProjectsThisMonth) / $totalProjects) * 100 : 0;
+                $incentiveCriteria->acquired_percent = $delayedPercent;
                 
-                $incentiveCriteria->acquired_percent = Project::selectRaw('FORMAT((SUM(CASE WHEN p_m_projects.delayed_status = 1 THEN 1 ELSE 0 END) / SUM(CASE WHEN p_m_projects.delayed_status = NULL THEN 0 ELSE 1 END)) * 100, 2) as delayed_project_percentage')
-                ->join('p_m_projects', 'p_m_projects.project_id', '=', 'projects.id')
-                ->where([['projects.pm_id', $user_id],['projects.status', 'in progress'],['projects.project_status', 'Accepted']])
-                ->first()->delayed_project_percentage??0;
+                // Project::selectRaw('FORMAT((SUM(CASE WHEN p_m_projects.delayed_status = 1 THEN 1 ELSE 0 END) / SUM(CASE WHEN p_m_projects.delayed_status = NULL THEN 0 ELSE 1 END)) * 100, 2) as delayed_project_percentage')
+                // ->join('p_m_projects', 'p_m_projects.project_id', '=', 'projects.id')
+                // ->where([['projects.pm_id', $user_id],['projects.status', 'in progress'],['projects.project_status', 'Accepted']])
+                // ->first()->delayed_project_percentage??0;
+
                 self::findIncentive($incentiveCriteria);
             }elseif($incentiveCriteria->id == 5){
                 $incentiveCriteria->acquired_percent = Project::selectRaw('FORMAT((SUM(CASE WHEN project_milestones.status = "canceled" THEN 1 ELSE 0 END) / SUM(CASE WHEN project_milestones.status = "complete" THEN 1 ELSE 0 END)) * 100, 2) as milestone_cancelation_rate')
