@@ -5,7 +5,11 @@
     padding: 10px 16px;
     border: 1px solid #f2f2f2;
     border-radius: 6px;
-    background-color: #fff; 
+    background-color: #E3F3FF; 
+    border: #C4E4FB;
+    width: 480px;
+    height: 104px;
+    border-radius: 6px;
 }
 
 .portfolio-item:hover{
@@ -161,5 +165,11 @@
 
 .filter-item button:hover{
     color: red;
+}
+
+.portfolio-icon{
+    padding:12px;
+    background-color: #fff;
+    border-radius: 10px;
 }
  
