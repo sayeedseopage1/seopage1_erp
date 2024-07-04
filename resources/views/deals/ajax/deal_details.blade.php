@@ -785,7 +785,7 @@
                                         </h2>
                                     </div>
                                 @endif
-                            @elseif (in_array($salesDeal->sale_analysis_status, ['authorized', 'auto-authorized']))
+                            @elseif (in_array($salesDeal->sale_analysis_status, ['authorized', 'auto-authorized', 'no-analysis']))
 
                                 @if($salesDeal->released_at)
                                     <div class="text-center">
