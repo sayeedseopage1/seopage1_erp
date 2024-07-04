@@ -23,7 +23,7 @@ function createIncentiveArray(arr, incentive) {
     for (let i = 0; i < arr.length; i++) {
         // If the current element matches the incentive, place it in the new array at the same index
         if (arr[i] == parseFloat(incentive)) {
-            newArr[i] = parseFloat(incentive);
+            newArr[i] = parseFloat(incentive)?.toFixed(2);
         }
     }
 
@@ -52,7 +52,7 @@ export const IncentiveFormattedData = (incentiveData) => {
                     {
                         name: criteria?.title,
                         data: criteria?.incentive_factors?.map((factor) =>
-                            parseFloat(factor?.incentive_amount)
+                            parseFloat(factor?.incentive_amount)?.toFixed(2)
                         ),
                     },
                 ],
@@ -86,8 +86,8 @@ export const IncentiveFormattedData = (incentiveData) => {
                         : "Incentive percentage"
                 }`,
                 chartTag: "Achieved",
-                incentive: criteria?.obtained_incentive,
-                ratio: criteria?.acquired_percent,
+                incentive: parseFloat(criteria?.obtained_incentive)?.toFixed(2),
+                ratio: parseFloat(criteria?.acquired_percent)?.toFixed(2),
                 shortTitle: convertToShortTitle(criteria?.title),
                 amountType:
                     criteria?.incentive_factors[0]?.incentive_amount_type,
@@ -118,9 +118,13 @@ export const IncentiveFormattedData = (incentiveData) => {
                         }
 
                         return `${lowerLimit}-${
-                            parseFloat(factor?.limit_type) == 1 ? "$" : ""
+                            parseFloat(factor?.limit_type)?.toFixed(2) == 1
+                                ? "$"
+                                : ""
                         }${upperLimit}${
-                            parseFloat(factor?.limit_type) == 2 ? "%" : ""
+                            parseFloat(factor?.limit_type)?.toFixed(2) == 2
+                                ? "%"
+                                : ""
                         }`;
                     }
                 ),
