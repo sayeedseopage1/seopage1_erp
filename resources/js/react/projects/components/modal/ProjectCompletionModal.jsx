@@ -859,13 +859,13 @@ const ProjectCompletionModal = ({
                                                             ?.main_page_number
                                                     }
                                                 </p>
-                                                <p>
+                                                {/* <p>
                                                     Name of pages:{" "}
                                                     {projectCompletionData
                                                         ?.project_portfolio
                                                         ?.main_page_name ||
                                                         "--"}
-                                                </p>
+                                                </p> */}
                                             </Switch.Case>
                                             <Switch.Case
                                                 condition={
@@ -902,13 +902,13 @@ const ProjectCompletionModal = ({
                                                             ?.secondary_page_number
                                                     }
                                                 </p>
-                                                <p>
+                                                {/* <p>
                                                     Name of pages:{" "}
                                                     {projectCompletionData
                                                         ?.project_portfolio
                                                         ?.secondary_page_name ||
                                                         "--"}
-                                                </p>
+                                                </p> */}
                                             </Switch.Case>
                                             <Switch.Case
                                                 condition={

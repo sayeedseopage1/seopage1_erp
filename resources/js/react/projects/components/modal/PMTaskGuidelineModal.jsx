@@ -428,8 +428,10 @@ const PMTaskGuidelineModal = ({
                                         <Switch>
                                             <Switch.Case
                                                 condition={
-                                                    convertedReferenceLink
-                                                        ?.length > 0
+                                                    convertedReferenceLink?.length >
+                                                        0 &&
+                                                    !modalData?.drive_url &&
+                                                    !modalData?.xd_url
                                                 }
                                             >
                                                 <ol className="orderListItem">
@@ -458,9 +460,51 @@ const PMTaskGuidelineModal = ({
                                             </Switch.Case>
                                             <Switch.Case
                                                 condition={
-                                                    convertedReferenceLink
-                                                        ?.length === 0 ||
-                                                    !modalData?.reference_link
+                                                    convertedReferenceLink?.length ===
+                                                        0 &&
+                                                    modalData?.drive_url &&
+                                                    !modalData?.xd_url
+                                                }
+                                            >
+                                                <ol className="orderListItem">
+                                                    <li>
+                                                        <a
+                                                            target="_blank"
+                                                            rel="noreferrer"
+                                                            href={modalData?.drive_url}
+                                                           
+                                                        >
+                                                            View On New Tab
+                                                        </a>
+                                                    </li>
+                                                </ol>
+                                            </Switch.Case>
+                                            <Switch.Case
+                                                condition={
+                                                    convertedReferenceLink?.length ===
+                                                        0 &&
+                                                    !modalData?.drive_url &&
+                                                    modalData?.xd_url
+                                                }
+                                            >
+                                                <ol className="orderListItem">
+                                                    <li>
+                                                        <a
+                                                            target="_blank"
+                                                            rel="noreferrer"
+                                                            href={modalData?.xd_url}
+                                                           
+                                                        >
+                                                            View On New Tab
+                                                        </a>
+                                                    </li>
+                                                </ol>
+                                            </Switch.Case>
+                                            <Switch.Case
+                                                condition={
+                                                    convertedReferenceLink?.length ===
+                                                        0 &&
+                                                    !modalData?.reference_link && !modalData?.drive_url && !modalData?.xd_url
                                                 }
                                             >
                                                 <p>Not Shared</p>

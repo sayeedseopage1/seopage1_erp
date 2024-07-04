@@ -36,7 +36,7 @@ const DashboardProjectInfoFixedSection = ({ projectData, isLoading }) => {
         if (projectData && !isLoading) {
             const updateProjectBudget = projectBudgetData.project_budget.map(
                 (budget) => {
-                    if (budget.key === "project_budget" && projectData?.project_budget) {
+                    if (budget?.key === "project_budget") {
                         const totalAmount = Number(projectData?.deal?.amount) +  Number(projectData?.deal?.upsell_amount);
                         return {
                             ...budget,
@@ -138,6 +138,8 @@ const DashboardProjectInfoFixedSection = ({ projectData, isLoading }) => {
                             } else {
                                 totalTime = `${projectData?.logged_time_in_hours} Hours`;
                             }
+                        } else {
+                            totalTime = "0 Hours";
                         }
                     }
                     return {
@@ -195,7 +197,7 @@ const DashboardProjectInfoFixedSection = ({ projectData, isLoading }) => {
                             {projectBudgetData?.project_budget.map((budget) => (
                                 <DashboardCardPricingInfo
                                     key={budget?.id}
-                                    amount={budget.price}
+                                    amount={budget?.price}
                                     title={budget?.title}
                                     icon={budget?.icon}
                                     currency={budget?.currency}

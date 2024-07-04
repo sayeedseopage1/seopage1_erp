@@ -181,7 +181,6 @@ const DashboardHeaderSection = ({ projectData, isLoading }) => {
                             )}
                         </Button>
                     </Switch.Case>
-
                     <Switch.Case
                         condition={
                             actionButtons?.pm_task_guidline_authorization
@@ -235,6 +234,23 @@ const DashboardHeaderSection = ({ projectData, isLoading }) => {
                             className={`${style?.dashboardHeaderButton} ${style.dashboardHeaderButtonAnimation} ml-0 ml-md-2`}
                         >
                             Explain Dispute
+                        </Button>
+                    </Switch.Case>
+                    <Switch.Case
+                        condition={
+                            actionButtons?.milestone_cancel_authorization
+                        }
+                    >
+                        <Button
+                            onClick={() =>
+                                window.open(
+                                    `/account/projects/${projectData?.id}?tab=milestones`,
+                                    "_blank"
+                                )
+                            }
+                            className={`${style?.dashboardHeaderButton} ${style.dashboardHeaderButtonAnimation} ml-0 ml-md-2`}
+                        >
+                            Milestone Cancel Authorize
                         </Button>
                     </Switch.Case>
                     <Switch.Case

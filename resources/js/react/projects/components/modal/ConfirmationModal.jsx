@@ -8,6 +8,7 @@ import SingleButton from "../ui/CustomButton/SingleButton";
 
 // UI Components - Styled Components
 import { ModalContentContainer } from "../ui/styledComponents";
+import Loader from "../../../global/Loader";
 
 const ConfirmationModal = ({
     isModalOpen,
@@ -37,7 +38,13 @@ const ConfirmationModal = ({
             <ModalContentContainer>
                 <div className="modalButtonContainer justify-content-center">
                     <SingleButton
-                        label={modalData.confirmationButton}
+                        label={
+                            isLoading ? (
+                                <Loader />
+                            ) : (
+                                modalData.confirmationButton
+                            )
+                        }
                         onClick={handleAction}
                         type="primary"
                         isDisabled={isLoading}

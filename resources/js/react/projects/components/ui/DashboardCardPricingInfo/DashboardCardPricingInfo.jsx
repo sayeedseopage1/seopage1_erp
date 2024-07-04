@@ -19,9 +19,10 @@ const DashboardCardPricingInfo = ({
     className = "",
     isLoading,
     loaderInformation,
+    key
 }) => {
     return (
-        <div className={`dashboardCardPricingInfo ${className}`}>
+        <div key={key} className={`dashboardCardPricingInfo ${className}`}>
             {title && (
                 <div className="mr-2">
                     <h5>
@@ -54,11 +55,12 @@ export default DashboardCardPricingInfo;
 
 DashboardCardPricingInfo.propTypes = {
     title: PropTypes.string,
-    amount: PropTypes.string || PropTypes.number,
+    amount: PropTypes.any,
     currency: PropTypes.string,
     currency_symbol: PropTypes.string,
     icon: PropTypes.string,
     className: PropTypes.string,
     isLoading: PropTypes.bool,
     loaderInformation: PropTypes.object,
+    key: PropTypes.string
 };

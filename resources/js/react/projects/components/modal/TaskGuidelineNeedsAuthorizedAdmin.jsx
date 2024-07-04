@@ -39,6 +39,7 @@ const TaskGuidelineNeedsAuthorizedAdmin = ({
     const { projectData, refetchProjectDetails } = useContext(
         ProjectDashboardContext
     );
+    const [authorizedData, setAuthorizedData] = React.useState(null);
     const [inputData, setInputData] = React.useState(
         modalData || projectData?.pm_task_guideline_authorizations
     );
@@ -62,6 +63,10 @@ const TaskGuidelineNeedsAuthorizedAdmin = ({
     // Handle Input Change
     const handleTaskGuideline = async (item, value) => {
         try {
+            setAuthorizedData({
+                value: value,
+                id: item.id,
+            });
             const requestItem =
                 value === 0 ? taskGuidelineReject : taskGuidelineApproved;
             const response = await requestItem(item.id);
@@ -72,9 +77,10 @@ const TaskGuidelineNeedsAuthorizedAdmin = ({
                     toast.success(`${item.name} Rejected Successfully`);
                 }
                 refetchProjectDetails();
+                setAuthorizedData();
             }
         } catch (error) {
-            console.error(error);
+            toast.error("Something went wrong");
         }
     };
 
@@ -143,6 +149,11 @@ const TaskGuidelineNeedsAuthorizedAdmin = ({
                                                         "pending" ||
                                                     taskGuidelineRejectStatus ===
                                                         "pending"
+                                                }
+                                                value={
+                                                    item?.id ===
+                                                        authorizedData?.id &&
+                                                    authorizedData?.value
                                                 }
                                                 onChange={(value) =>
                                                     handleTaskGuideline(

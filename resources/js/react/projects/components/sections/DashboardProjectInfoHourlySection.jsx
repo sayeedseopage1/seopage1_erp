@@ -71,7 +71,7 @@ const DashboardProjectInfoHourlySection = ({ projectData, isLoading }) => {
                     if (budget.key === "earnings") {
                         return {
                             ...budget,
-                            price: projectData?.earnings,
+                            price: Number(projectData?.earnings)?.toFixed(2),
                             currency: projectData?.currency?.currency_code,
                             currency_symbol:
                                 projectData?.currency?.currency_symbol,
@@ -79,7 +79,7 @@ const DashboardProjectInfoHourlySection = ({ projectData, isLoading }) => {
                     } else if (budget.key === "actual_earnings") {
                         return {
                             ...budget,
-                            price: projectData?.actual_earnings,
+                            price: Number(projectData?.actual_earnings)?.toFixed(2),
                             currency:
                                 projectData?.deal?.original_currency
                                     ?.currency_code,
@@ -90,7 +90,7 @@ const DashboardProjectInfoHourlySection = ({ projectData, isLoading }) => {
                     } else if (budget.key === "total_expenses") {
                         return {
                             ...budget,
-                            price: projectData?.total_expenses,
+                            price: Number(projectData?.total_expenses)?.toFixed(2),
                             currency: projectData?.currency?.currency_code,
                             currency_symbol:
                                 projectData?.currency?.currency_symbol,
@@ -104,7 +104,7 @@ const DashboardProjectInfoHourlySection = ({ projectData, isLoading }) => {
                     if (budget.key === "upsell_amount") {
                         return {
                             ...budget,
-                            price: projectData?.deal?.upsell_amount,
+                            price: Number(projectData?.deal?.upsell_amount)?.toFixed(2),
                             currency: projectData?.currency?.currency_code,
                             currency_symbol:
                                 projectData?.currency?.currency_symbol,
@@ -112,7 +112,7 @@ const DashboardProjectInfoHourlySection = ({ projectData, isLoading }) => {
                     } else if (budget.key === "upsell_actual_amount") {
                         return {
                             ...budget,
-                            price: projectData?.deal?.upsell_actual_amount,
+                            price: Number(projectData?.deal?.upsell_actual_amount).toFixed(2),
                             currency:
                                 projectData?.deal?.original_currency
                                     ?.currency_code,
@@ -143,6 +143,8 @@ const DashboardProjectInfoHourlySection = ({ projectData, isLoading }) => {
                             } else {
                                 totalTime = `${projectData?.logged_time_in_hours} Hours`;
                             }
+                        } else {
+                            totalTime = "0 Hours";
                         }
                     }
                     return {
@@ -201,12 +203,16 @@ const DashboardProjectInfoHourlySection = ({ projectData, isLoading }) => {
                             className="d-flex flex-column h-100"
                         >
                             <DashboardCardTitle
-                                title={projectBudgetData?.hours_logged[1].title}
+                                title={
+                                    projectBudgetData?.hours_logged[1]?.title
+                                }
                                 isBorderUse={true}
                             />
                             <DashboardCardPricingInfo
-                                amount={projectBudgetData?.hours_logged[1].time}
-                                icon={projectBudgetData?.hours_logged[1].icon}
+                                amount={
+                                    projectBudgetData?.hours_logged[1]?.time
+                                }
+                                icon={projectBudgetData?.hours_logged[1]?.icon}
                                 isLoading={isLoading}
                                 loaderInformation={{
                                     number: 1,
@@ -446,7 +452,13 @@ const DashboardProjectInfoHourlySection = ({ projectData, isLoading }) => {
                                     }}
                                 />
                                 <DashboardCardPricingInfo
-                                    amount={`${projectData?.currency?.currency_symbol} ${Number(projectData?.deal?.hourly_rate)?.toFixed(2)} ${projectData?.currency?.currency_code}`}
+                                    amount={`${
+                                        projectData?.currency?.currency_symbol
+                                    } ${Number(
+                                        projectData?.deal?.hourly_rate
+                                    )?.toFixed(2)} ${
+                                        projectData?.currency?.currency_code
+                                    }`}
                                     className="w-100"
                                     isLoading={isLoading}
                                     loaderInformation={{
