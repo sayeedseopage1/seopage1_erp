@@ -77,18 +77,52 @@ const SalesRiskAuthorize = () => {
                 });
             } else {
                 const { pointData, questionData, ...rest } = data?.data ?? {};
-                if (auth.getRoleId() === 1) {
+                if (auth?.getRoleId() === 1) {
+                    // const formatData = Object.entries(data?.data?.pointData)
+                    //     .filter(([key, value]) => "questionAnswer" in value)
+                    //     .map(([key, value]) => ({
+                    //         ...value,
+                    //         key: key,
+                    //         id: key,
+                    //     }));
+
                     const formatData = Object.entries(data?.data?.pointData)
-                        .filter(([key, value]) => "questionAnswer" in value)
+                        .filter(([key, value]) => "questionAnswer" in value) // Only keep entries with `questionAnswer`
                         .map(([key, value]) => ({
                             ...value,
                             key: key,
                             id: key,
                         }));
-
-                    console.log(formatData);
-
-                    setAnswersPoint(formatData);
+                    const filterData = formatData.filter(
+                        (item) =>
+                            item.key.includes("yesNoRules") &&
+                            item?.questionAnswer?.[0]?.parent_id
+                    );
+                    const updateFormatData = formatData.filter(
+                        (item) => !filterData.includes(item)
+                    );
+                    const finalFormatData = updateFormatData.map((item) => {
+                        if (item.key.includes("yesNoRules")) {
+                            const childQuestion = filterData.find((data) =>
+                                item.questionAnswer.some(
+                                    (answer) =>
+                                        answer.id ===
+                                        data.questionAnswer[0]?.parent_id
+                                )
+                            );
+                            if (childQuestion) {
+                                return {
+                                    ...item,
+                                    questionAnswer: [
+                                        ...item.questionAnswer,
+                                        childQuestion.questionAnswer[0],
+                                    ],
+                                };
+                            }
+                        }
+                        return item;
+                    });
+                    setAnswersPoint(finalFormatData);
                 } else {
                     const sortData = [...questionData]?.sort(
                         (a, b) => Number(a.id) - Number(b.id)
@@ -107,8 +141,10 @@ const SalesRiskAuthorize = () => {
     }, [data?.data, isLoading]);
 
     // project extend images Api call
-    const [saleRiskAnalysisActionHandler, { isLoading: isActionLoading , isSuccess }] =
-        useSaleRiskAnalysisActionsMutation();
+    const [
+        saleRiskAnalysisActionHandler,
+        { isLoading: isActionLoading, isSuccess },
+    ] = useSaleRiskAnalysisActionsMutation();
 
     // handle authorize and deny
     const handleAuthorize = async () => {

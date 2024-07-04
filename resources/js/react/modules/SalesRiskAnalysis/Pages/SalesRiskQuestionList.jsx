@@ -20,10 +20,13 @@ import { set } from "lodash";
 import { SalesRiskAnalysisContext } from "../context/SalesRiskAnalysisProvider";
 import Switch from "../components/Switch";
 import Loader from "../../../global/Loader";
+import SettingDropDown from "../components/SettingDropDown";
+import { useSelector } from "react-redux";
 
 const SalesRiskQuestionList = () => {
     const [isYesNoRulesLoading, setIsYesNoRulesLoading] = React.useState(false);
-
+    const { settings } = useSelector((state) => state.saleRiskAnalysis);
+    const isEditEnabled = settings?.value;
     const {
         isQuestionTypeLoading,
         questionFiledRefetch,
@@ -142,7 +145,6 @@ const SalesRiskQuestionList = () => {
         if (addQuestionsModalOpenClicked) {
             if (!isQuestionTypeLoading) {
                 handleOpenAddQuestionsModal();
-                handleOpenAddQuestionsModal();
                 const isYesNoRulesExist = questionsAnswerType.data.find(
                     (item) => item.name === "yesNoRules"
                 );
@@ -191,13 +193,16 @@ const SalesRiskQuestionList = () => {
                         </Switch.Case>
                     </Switch>
                 </button>
-                <RefreshButton
-                    onClick={() => {
-                        refetch();
-                    }}
-                    className="sales_risk_refresh_button"
-                    isLoading={isFetching}
-                />
+                <div className="d-flex">
+                    <RefreshButton
+                        onClick={() => {
+                            refetch();
+                        }}
+                        className="sales_risk_refresh_button"
+                        isLoading={isFetching}
+                    />
+                    <SettingDropDown />
+                </div>
             </div>
             <div className="sp1_tlr_container">
                 <div className="sp1_tlr_tbl_container mx-0 py-3">
@@ -238,7 +243,6 @@ const SalesRiskQuestionList = () => {
                     setAddQuestionsData={setSingleQuestion}
                     refetchSaleRiskAnalysis={refetch}
                     singlePolicyDataByIDorKey={singlePolicyDataByIDorKey}
-                    
                 />
             )}
         </React.Fragment>

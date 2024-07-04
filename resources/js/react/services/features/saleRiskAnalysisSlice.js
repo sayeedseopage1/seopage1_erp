@@ -4,26 +4,12 @@ import { update } from "lodash";
 
 
 const initialState = {
-  settings: [
-    {
-      id: 1,
-      name: "enable_add_policy_button",
-      label: "Enable Add Policy Button",
-      value: false,
-    },
-    {
-      id: 2,
-      name: "enable_edit_policy",
-      label: "Enable Edit Policy",
-      value: false,
-    },
-    {
-      id: 3,
-      name: "enable_delete_rule",
-      label: "Enable Delete Rule",
-      value: false,
-    }
-  ]
+  settings: {
+    id: 1,
+    name: "enable_Edit_Delete",
+    label: "Enable Edit & Delete Mode",
+    value: false,
+  }
 }
 
 
@@ -35,8 +21,7 @@ const saleRiskAnalysisSlice = createSlice({
   reducers: {
     updateSetting(state, action) {
       const { value, name } = action.payload;
-      const setting = state.settings.find(setting => setting.name === name);
-      setting.value = value;
+      state.settings.value = value;
     }
   }
 });

@@ -786,7 +786,7 @@ class SalesRiskPolicyController extends AccountBaseController
                 'status' => 'success',
                 'message' => 'Questions values stored successfully.',
                 'redirectUrl' => route('edit-deal-details', $dealId),
-                'data' => ['points' => $calculation['points']]
+                'data' => ['points' => $calculation['points'] > 0 ? 0 : -1]
             ]);
         } catch (\Throwable $th) {
             DB::rollBack();
@@ -962,7 +962,7 @@ class SalesRiskPolicyController extends AccountBaseController
                     $pointData['milestone']['message'][] = 'Milestone total amount not found.';
                     goto endMilestone;
                 }
-
+                // dd($value, $deal->actual_amount);
                 $percentage = $value / $deal->actual_amount * 100;
                 // ------------------- end percentage calculation
 
@@ -1121,7 +1121,6 @@ class SalesRiskPolicyController extends AccountBaseController
             // ----------------------------- end doneByElse ------------------------- //
 
             // ---------------------------- routeWork, availableWeekend, firstSubmission, acceptPriceProposal ------------------------------//
-
             foreach (['routeWork', 'availableWeekend', 'firstSubmission', 'acceptPriceProposal'] as $item) {
                 $questions = SalesPolicyQuestion::where('key', $item)->orderBy('sequence')->get();
                 if (count($questions) > 0) {
@@ -1148,10 +1147,9 @@ class SalesRiskPolicyController extends AccountBaseController
 
                     if (isset($questions[1]) && isset($questionAns[$questions[1]->id]))
                         $pointData[$item]['questionAnswer'][] = ['id' => $questions[1]->id, 'title' => $questions[1]->title, 'value' => $questionAns[$questions[1]->id], 'parent_id' => $questions[1]->parent_id];
-                    else {
-                        $pointData[$item]['message'][] = "$item 2nd value is not added. Question Id:";
-                        continue;
-                    }
+
+                    if (isset($questions[2]) && isset($questionAns[$questions[2]->id]))
+                        $pointData[$item]['questionAnswer'][] = ['id' => $questions[2]->id, 'title' => $questions[2]->title, 'value' => $questionAns[$questions[2]->id], 'parent_id' => $questions[2]->parent_id];
                 } else {
                     $pointData[$item]['message'][] = "$item questions are not added.";
                 }
@@ -1161,22 +1159,28 @@ class SalesRiskPolicyController extends AccountBaseController
             // -------------------------------- yesNoRules ------------------------------ //
             $questions = SalesPolicyQuestion::where('key', 'yesNoRules')->get();
             foreach ((object) $questions as $key => $item) {
-                // $rule_id = json_decode($item->value)->rule_id;
+
                 if (!isset($questionAns[$item->id])) continue;
 
-                $rule = SalesRiskPolicy::where('id', $item->value)->first();
-                $value = $questionAns[$item->id];
+                if ($item->parent_id == null) {
+                    $rule = SalesRiskPolicy::where('id', $item->value)->first();
+                    $value = $questionAns[$item->id];
 
-                if ($value == 'yes') {
-                    $points += (float) json_decode($rule->value)->yes->point;
-                    $pointData['yesNoRules' . $key]['points'] = json_decode($rule->value)->yes->point;
+                    if ($value == 'yes') {
+                        $points += (float) json_decode($rule->value)->yes->point;
+                        $pointData['yesNoRules' . $key]['points'] = json_decode($rule->value)->yes->point;
+                    } else {
+                        $points += (float) json_decode($rule->value)->no->point;
+                        $pointData['yesNoRules' . $key]['points'] = json_decode($rule->value)->no->point;
+                    }
+                    $policyIdList[$rule->id] = $value;
+                    $pointData['yesNoRules' . $key]['questionAnswer'][] = ['id' => $item->id, 'title' => $item->title, 'value' => $value, 'parent_id' => null];
                 } else {
-                    $points += (float) json_decode($rule->value)->no->point;
-                    $pointData['yesNoRules' . $key]['points'] = json_decode($rule->value)->no->point;
+                    $value = $questionAns[$item->id];
+                    $pointData['yesNoRules' . $key]['questionAnswer'][] = ['id' => $item->id, 'title' => $item->title, 'value' => $value, 'parent_id' => $item->parent_id];
                 }
-                $policyIdList[$rule->id] = $value;
-                $pointData['yesNoRules' . $key]['questionAnswer'][] = ['id' => $item->id, 'title' => $item->title, 'value' => $value, 'parent_id' => null];
             }
+
             // -------------------------------- end yesNoRules ------------------------------ //
 
             // ----------------------------- common calculations -------------------------- //
@@ -1207,8 +1211,7 @@ class SalesRiskPolicyController extends AccountBaseController
                         $pointData['clientCountry']['points'] = $item->points;
                         $policyIdList[$item->id] = $item->id;
                         goto endClientCountry;
-                    }
-                    else {
+                    } else {
                         $pointData['clientCountry']['message'][] = 'Client\'s Country policy not found.';
                     }
                 }
