@@ -2,8 +2,11 @@ import { Select } from "antd";
 import { dummy_projects } from "../../../constants/projects";
 import ProjectCard from "../ui/ProjectCard";
 import ProjectsFilterDrawer from "../ui/ProjectsFilterDrawer";
+import ProjectPageCardLoader from "../../loader/ProjectPageCardLoader";
+import { useState } from "react";
 
 const ProjectContents = () => {
+    const [isProjectDataLoading, setIsProjectDataLoading] = useState(false);
 
     const handleSortChange = (value) => {
         console.log(`selected ${value}`);
@@ -43,11 +46,14 @@ const ProjectContents = () => {
                     <ProjectsFilterDrawer />
                 </div>
             </div>
-            <div className='projects_content_body'>
-                {
-                    dummy_projects?.map(item => <ProjectCard key={item?.id} item={item} />)
-                }
-            </div>
+            {
+                isProjectDataLoading ? <ProjectPageCardLoader /> : <div className='projects_content_body'>
+                    {
+                        dummy_projects?.map(item => <ProjectCard key={item?.id} item={item} />)
+                    }
+                </div>
+            }
+
         </div>
     );
 };
