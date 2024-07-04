@@ -23,6 +23,7 @@ import vectorGrowIcon from '../../../assets/freelancerProjectDetails/Vector-grow
 const { TextArea } = Input;
 
 const ProjectDetails = ({ singleProject }) => {
+
   const { project_id, details, currency, budget_range, reviews_count, skills, client_info, isAwarded, bidding_deadline, } = singleProject || {};
 
   const { profile_image_url, name, location, member_since, client_engagement, client_verification } = client_info || {};

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import '../../styles/freelancerProjectDetails/freelancerProjectDetails.css'
 import ProjectDetailsTab from '../../components/freelancerProjectDetails/ui/ProjectDetailsTab';
 import bookmarkIcon from '../../assets/freelancerProjectDetails/bookmark.svg';
@@ -11,11 +11,15 @@ import Payment from '../../components/freelancerProjectDetails/sections/Payment'
 import Files from '../../components/freelancerProjectDetails/sections/Files';
 import Tasklists from '../../components/freelancerProjectDetails/sections/Tasklists';
 import { dummy_projects } from '../../constants/projects';
+import ProjectDetailsSkeleton from '../../components/loader/ProjectDetailsSkeleton';
 
 const FreelancerProjectDetails = () => {
     const location = useLocation();
     const searchParams = new URLSearchParams(location.search);
     const activeTab = searchParams.get('tab') || 'Details';
+
+    // TODO: it will replaced later with real api loading 
+    const [isProjectDataLoading, setIsProjectDataLoading] = useState(true);
 
     //!! TODO: This is used development only for now, It should be removed in production
     const singleProject = dummy_projects[0];
@@ -55,7 +59,9 @@ const FreelancerProjectDetails = () => {
                     <div className=''>
                         <Switch>
                             <Switch.Case condition={activeTab === 'Details'}>
-                                <ProjectDetails singleProject={singleProject} />
+                                {
+                                    isProjectDataLoading ? <ProjectDetailsSkeleton /> : <ProjectDetails singleProject={singleProject} />
+                                }
                             </Switch.Case>
                             <Switch.Case condition={activeTab === 'Proposals'}>
                                 <Proposals />

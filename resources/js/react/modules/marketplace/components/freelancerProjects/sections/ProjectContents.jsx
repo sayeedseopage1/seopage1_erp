@@ -6,6 +6,7 @@ import ProjectPageCardLoader from "../../loader/ProjectPageCardLoader";
 import { useState } from "react";
 
 const ProjectContents = () => {
+    // TODO: it will replaced later with real api loading 
     const [isProjectDataLoading, setIsProjectDataLoading] = useState(false);
 
     const handleSortChange = (value) => {

@@ -12,12 +12,12 @@ const ProjectPageCardLoader = () => {
                                 <Skeleton.Button active={true} size={'default'} block={true} shape={'default'} />
                             </h2>
                             <div className='project_card_bids_wrapper justify-content-end'>
-                                <p style={{ maxWidth: '70px', width: '100%' }}>
+                                <div style={{ maxWidth: '70px', width: '100%' }}>
                                     <Skeleton.Button active={true} size={'small'} block={true} shape={'default'} />
-                                </p>
-                                <p style={{ maxWidth: '70px', width: '100%' }}>
+                                </div>
+                                <div style={{ maxWidth: '70px', width: '100%' }}>
                                     <Skeleton.Button active={true} size={'small'} block={true} shape={'default'} />
-                                </p>
+                                </div>
                             </div>
                         </div>
                         <div className='project_card_body'>
