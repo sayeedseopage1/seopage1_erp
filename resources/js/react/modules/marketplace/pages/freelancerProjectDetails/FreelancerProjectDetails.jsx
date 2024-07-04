@@ -12,6 +12,7 @@ import Files from '../../components/freelancerProjectDetails/sections/Files';
 import Tasklists from '../../components/freelancerProjectDetails/sections/Tasklists';
 import { dummy_projects } from '../../constants/projects';
 import ProjectDetailsSkeleton from '../../components/loader/ProjectDetailsSkeleton';
+import ProposalsPageSkeleton from '../../components/loader/ProposalsPageSkeleton';
 
 const FreelancerProjectDetails = () => {
     const location = useLocation();
@@ -19,7 +20,7 @@ const FreelancerProjectDetails = () => {
     const activeTab = searchParams.get('tab') || 'Details';
 
     // TODO: it will replaced later with real api loading 
-    const [isProjectDataLoading, setIsProjectDataLoading] = useState(true);
+    const [isProjectDataLoading, setIsProjectDataLoading] = useState(false);
 
     //!! TODO: This is used development only for now, It should be removed in production
     const singleProject = dummy_projects[0];
@@ -64,7 +65,9 @@ const FreelancerProjectDetails = () => {
                                 }
                             </Switch.Case>
                             <Switch.Case condition={activeTab === 'Proposals'}>
-                                <Proposals />
+                                {
+                                    isProjectDataLoading ? <ProposalsPageSkeleton /> : <Proposals />
+                                }
                             </Switch.Case>
                             <Switch.Case condition={activeTab === 'Payment'}>
                                 <Payment />
