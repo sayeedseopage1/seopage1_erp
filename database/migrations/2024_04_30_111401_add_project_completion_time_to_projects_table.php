@@ -1,9 +1,10 @@
 <?php
 
 use App\Models\Project;
-use Illuminate\Database\Migrations\Migration;
-use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Database\Migrations\Migration;
 
 return new class extends Migration
 {
@@ -18,10 +19,11 @@ return new class extends Migration
             $table->timestamp('project_completion_time')->nullable()->after('project_completion_days');
         });
 
-        foreach(Project::whereIn('status', ['finished', 'partially finished'])->get() as $project){
-            $project->project_completion_time = $project->updated_at;
-            $project->save();
-        }
+        DB::table('projects')
+        ->whereIn('status', ['finished', 'partially finished'])
+        ->update(['project_completion_time' => DB::raw('updated_at'), 'updated_at' => DB::raw('updated_at')]);
+
+
     }
 
     /**
