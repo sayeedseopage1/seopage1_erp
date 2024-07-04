@@ -319,9 +319,7 @@ export const NewRulesModalTableColumnsData = [
         cell: ({ row, table }) => {
             const data = row?.original;
             const action = table.options.meta;
-            const isDeleteButtonShow = action?.settingsValue.find(
-                (item) => item.name === "enable_delete_rule"
-            );
+            const isDeleteButtonShow = action?.settingsValue?.value
             return (
                 <div className="d-flex justify-content-end flex-column align-items-end">
                     <Switch>
@@ -351,7 +349,7 @@ export const NewRulesModalTableColumnsData = [
                                     <EditIcon />
                                 </button>
                                 <Switch.Case
-                                    condition={isDeleteButtonShow?.value}
+                                    condition={isDeleteButtonShow}
                                 >
                                     <button
                                         onClick={() => {

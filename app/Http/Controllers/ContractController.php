@@ -585,6 +585,11 @@ class ContractController extends AccountBaseController
         $deal->client_username = $request->user_name;
         $deal->lead_id = $request->lead_id;
         $deal->added_by = Auth::id();
+
+        // no analysis required for hourly project 
+        if ($request->project_type == 'hourly') {
+            $deal->sale_analysis_status = 'no-analysis';
+        }
         //$date= Carbon::now();
 
         $date = date('Y-m-d H:i:s');
@@ -857,6 +862,13 @@ class ContractController extends AccountBaseController
 
                 $this->triggerPusher('lead-updated-channel', 'lead-updated', $pusher_options);
             }
+        }
+
+        if ($request->project_type == 'hourly') {
+            return response()->json([
+                'status' => 'success',
+                'redirectUrl' => route('dealDetails', $deal->id)
+            ]);
         }
 
         return response()->json([
@@ -1305,7 +1317,7 @@ class ContractController extends AccountBaseController
             $client->name = $request->client_name;
             $client->save();
 
-        if(!$request->is_drafted && in_array($deal->sale_analysis_status, ['authorized','auto-authorized'])){
+        if(!$request->is_drafted && in_array($deal->sale_analysis_status, ['authorized','auto-authorized', 'no-analysis'])){
             $lead_developer_id = RoleUser::where('role_id', 6)->get();
             //dd($lead_developer_id);
             foreach ($lead_developer_id as $lead) {
@@ -1316,7 +1328,7 @@ class ContractController extends AccountBaseController
                 $lead_developer->lead_developer_id = $lead->user_id;
                 $lead_developer->save();
             }
-
+            
             // $pm_count = PMAssign::select('project_count')->min('project_count');
             // $pm_user = PMAssign::where('project_count', $pm_count)->first();
             if ($deal->pm_id == null) {
@@ -1453,9 +1465,9 @@ class ContractController extends AccountBaseController
                         $pm_project_update->monthly_actual_project_amount = $pm_project_update->monthly_actual_project_amount + $deal->amount;
                         $pm_project_update->save();
                     }
+                    }
                 }
-            }
-
+                
             $deal_pm_id = Deal::where('id', $request->id)->first();
             $project_id = Project::where('deal_id', $deal_pm_id->id)->first();
             $project_admin_update = Project::find($project_id->id);
@@ -1602,7 +1614,8 @@ class ContractController extends AccountBaseController
             // all good
 
             // pending action for sales lead authorization when removed form draft
-            event(new SalesPolicyEvent('sales_lead_authorization', $deal));
+            if ($deal->project_type == 'fixed') 
+                event(new SalesPolicyEvent('sales_lead_authorization', $deal));
 
         } catch (\Exception $e) {
             DB::rollback();
@@ -2550,8 +2563,9 @@ class ContractController extends AccountBaseController
             $deal->requirment_define = $request->requirment_define;
             $deal->project_deadline_authorization = $request->project_deadline_authorization;
 
-            // pending action for sales lead authorization
-            event(new SalesPolicyEvent('sales_lead_authorization', $deal, ['past' => 'accept']));
+            // pending action for sales lead authorization for fixed project
+            if($deal->project_type == 'fixed')
+                event(new SalesPolicyEvent('sales_lead_authorization', $deal, ['past' => 'accept']));
         }
 
         //kpi settings

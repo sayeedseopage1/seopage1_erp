@@ -34,6 +34,21 @@ class DatabaseSync extends Command
      */
     public function handle()
     {
-        return Command::SUCCESS;
+        try {
+            
+            // deals - status list update
+            $statusList = "'" . implode("','", Deal::$saleAnalysisStatus) . "'";
+            DB::statement("ALTER TABLE `deals`
+            CHANGE COLUMN `sale_analysis_status` `sale_analysis_status` 
+            ENUM(".$statusList.") 
+            NOT NULL DEFAULT 'pending';");
+
+            $this->info('Database sync ends successfully.');
+
+            return Command::SUCCESS;
+        } catch (\Throwable $th) {
+            throw $th;
+        }
+
     }
 }
