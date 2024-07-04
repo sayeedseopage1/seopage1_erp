@@ -39,7 +39,7 @@ const QuestionsListTable = ({
     handleOpenAddQuestionsModal,
     setIsYesNoRulesLoading,
     getSinglePolicyDataByIDorKey,
-    questionFiledRefetch
+    questionFiledRefetch,
 }) => {
     const {
         questionsAnswerType,
@@ -133,8 +133,11 @@ const QuestionsListTable = ({
                     setIsYesNoRulesLoading(true);
                     questionFiledRefetch();
                     const res = await getSinglePolicyDataByIDorKey(row?.key);
+                    let getValue = row?.value.selected
+                        ? row?.value?.selected
+                        : row?.value;
                     const selectedRule = res?.data?.data?.[0].ruleList?.find(
-                        (item) => item?.id === row?.value
+                        (item) => item?.id === getValue
                     );
                     const check = selectedRule
                         ? { ...selectedRule, label: selectedRule?.title }
@@ -172,7 +175,7 @@ const QuestionsListTable = ({
                 const parent_question = allQuestions.find(
                     (item) => item?.id === row?.parent_id
                 );
-                const payload = {
+                let payload = {
                     ...row,
                     id: row?.id,
                     title: row?.title,
@@ -189,9 +192,29 @@ const QuestionsListTable = ({
                         label: row?.policy_title,
                     },
                     rule_id: ruleId,
-                    parent_question_for: row?.value,
+                    parent_question_for: row?.value?.selected
+                        ? row?.value.selected
+                        : row?.value,
                     listItem: row.type === "list" ? row?.value : [],
                 };
+
+                if (
+                    payload?.type?.name === "longText" &&
+                    parent_question?.type === "yesNo"
+                ) {
+                    payload = {
+                        ...payload,
+                        isLongTextRequired: row?.value?.isRequired,
+                    };
+                } else if (
+                    payload?.type?.name === "longText" &&
+                    parent_question?.type !== "yesNo"
+                ) {
+                    payload = {
+                        ...payload,
+                        isLongTextRequired: true,
+                    };
+                }
 
                 if (row?.parent_question?.type === "list") {
                     setSingleQuestion({

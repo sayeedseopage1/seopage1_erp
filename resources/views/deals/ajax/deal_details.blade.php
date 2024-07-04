@@ -716,6 +716,8 @@
     //  $bid_value= $deal->bid_value. $currency->currency_symbol;
     if ($deal->lead_id) 
         $salesDeal = App\Models\Deal::where('lead_id', $deal->lead_id)->first();
+    else 
+        $salesDeal = App\Models\Deal::where('deal_id', $deal->short_code)->first();
     ?>
     <section class="seodeals py-5">
         <div class="custom_container">
@@ -783,7 +785,7 @@
                                         </h2>
                                     </div>
                                 @endif
-                            @elseif (in_array($salesDeal->sale_analysis_status, ['authorized', 'auto-authorized']))
+                            @elseif (in_array($salesDeal->sale_analysis_status, ['authorized', 'auto-authorized', 'no-analysis']))
 
                                 @if($salesDeal->released_at)
                                     <div class="text-center">

@@ -18,6 +18,8 @@ export const SalesRiskAnalysisContext = createContext({});
 const SalesRiskAnalysisProvider = ({ children }) => {
     const dispatch = useDispatch();
     const { departments } = useSelector((state) => state.filterOptions);
+    const { settings } = useSelector((state) => state.saleRiskAnalysis);
+    const isEditEnabled = settings?.value;
     const [questionsAnswerType, setQuestionsAnswerType] = React.useState({});
     const [policies, setPolicies] = React.useState({});
     const [yesNoRules, setYesNoRules] = React.useState([]);
@@ -83,23 +85,32 @@ const SalesRiskAnalysisProvider = ({ children }) => {
 
     React.useEffect(() => {
         if (questionFieldsData && !questionTypeLoading) {
+            // const questionTypeData = Object.entries(
+            //     questionFieldsData?.data?.questionKeys
+            // )
+            //     .filter(
+            //         ([key]) =>
+            //             !(
+            //                 key === "yesNoRules" &&
+            //                 !questionFieldsData?.data?.yesNoRules.length && !isEditEnabled
+            //             )
+            //     )
+            //     .map(([key, value], index) => {
+            //         return {
+            //             id: index + 1,
+            //             name: key,
+            //             label: value,
+            //         };
+            //     });
             const questionTypeData = Object.entries(
                 questionFieldsData?.data?.questionKeys
-            )
-                .filter(
-                    ([key]) =>
-                        !(
-                            key === "yesNoRules" &&
-                            !questionFieldsData?.data?.yesNoRules.length
-                        )
-                )
-                .map(([key, value], index) => {
-                    return {
-                        id: index + 1,
-                        name: key,
-                        label: value,
-                    };
-                });
+            ).map(([key, value], index) => {
+                return {
+                    id: index + 1,
+                    name: key,
+                    label: value,
+                };
+            });
             const questionKeys = Object.entries(
                 questionFieldsData?.data?.questionKeys
             ).map(([key, value], index) => {
@@ -175,7 +186,7 @@ const SalesRiskAnalysisProvider = ({ children }) => {
                 mainData: questionFieldsData?.data?.yesNoRules,
             });
         }
-    }, [questionFieldsData, questionTypeLoading]);
+    }, [questionFieldsData, questionTypeLoading, isEditEnabled]);
 
     let isQuestionTypeLoading = questionTypeStatus === "pending" ? true : false;
 
@@ -190,7 +201,7 @@ const SalesRiskAnalysisProvider = ({ children }) => {
             yesNoRules,
             isQuestionTypeLoading,
             questionFiledRefetch,
-            setYesNoRules
+            setYesNoRules,
         };
     });
 
