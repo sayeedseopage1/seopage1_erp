@@ -226,6 +226,7 @@ use App\Http\Controllers\PointIncentive\GetCriteriaWiseFactorController;
 use App\Http\Controllers\PointIncentive\GetIncentiveHeldAmount;
 use App\Http\Controllers\PointIncentive\GetIncentiveHeldAmountController;
 use App\Http\Controllers\PointIncentive\IncentivePaymentController;
+use App\Models\ProjectMilestone;
 
 /*
 |--------------------------------------------------------------------------
@@ -1906,11 +1907,10 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('type-of-graphic-works', TypeOfGraphicWorkController::class)->name('typeof.graphic.works');
 });
 
-Route::get('test-point/{factorId}/{projectId}/{comparable_value}', function($factorId, $projectId, $comparable_value){
-    return ProjectManagerPointLogic::distribute($factorId, $projectId, $comparable_value) ? 'Point distributed successfully' : 'The condition does not satisfied or something went wrong!';
-});
-
 Route::get('test-calculation/{taskId}', function ($taskId){
+
+    $project = Project::find($taskId);
+
     $startDate = Carbon::now()->startOfMonth();
     $endDate = Carbon::now()->endOfMonth();
     $user_id = 209;

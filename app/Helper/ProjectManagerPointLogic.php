@@ -3,6 +3,7 @@
 namespace App\Helper;
 
 use Carbon\Carbon;
+use App\Models\Task;
 use App\Models\Factor;
 use App\Models\Project;
 use App\Models\Criteria;
@@ -44,7 +45,7 @@ class ProjectManagerPointLogic
 
         try {
             if($criteriaId == 1){
-                $activity = 'Deliverables for project <a style="color:blue" href="'.route('projects.show',$project->id).'">'.$project->project_name. '</a> (Client <a style="color:blue" href="'.route('clients.show', $project->client->id).'">'. $project->client->name. '</a>) have been signed!';
+                $activity = '<a style="color:blue" href="'.route('projects.show',$project->id).'?tab=deliverables">Deliverables</a> for project <a style="color:blue" href="'.route('projects.show',$project->id).'">'.$project->project_name. '</a> (Client <a style="color:blue" href="'.route('clients.show', $project->client->id).'">'. $project->client->name. '</a>) have been signed!';
             }elseif($criteriaId == 2){
                 $activity = 'Your estimated hours for project <a style="color:blue" href="'.route('projects.show',$project->id).'">'.$project->project_name. '</a> from client <a style="color:blue" href="'.route('clients.show', $project->client->id).'">'. $project->client->name. '</a> has matched the logged hours by '.$comparable_value.'%';
             }elseif($criteriaId == 3){
@@ -52,7 +53,8 @@ class ProjectManagerPointLogic
             }elseif($criteriaId == 5){
                 $activity = 'You completed the project <a style="color:blue" href="'.route('projects.show',$project->id).'">'.$project->project_name. '</a> from client <a style="color:blue" href="'.route('clients.show', $project->client->id).'">'. $project->client->name. '</a>';
             }elseif($criteriaId == 6){
-                $activity = 'You have created first tasks for the project <a style="color:blue" href="'.route('projects.show',$project->id).'">'.$project->project_name. '</a> from client <a style="color:blue" href="'.route('clients.show', $project->client->id).'">'. $project->client->name. '</a> at the first '.$comparable_value.' hours';
+                $firstTask = Task::where('project_id', $project->id)->first();
+                $activity = 'You have created first tasks <a style="color:blue" href="'.route('tasks.show',$firstTask->id??null).'">'.($firstTask->heading??null). '</a> for the project <a style="color:blue" href="'.route('projects.show',$project->id).'">'.$project->project_name. '</a> from client <a style="color:blue" href="'.route('clients.show', $project->client->id).'">'. $project->client->name. '</a> at the first '.$comparable_value.' hours';
             }elseif($criteriaId == 7){
                 $activity = 'The deadline for the project <a style="color:blue" href="'.route('projects.show',$project->id).'">'.$project->project_name. '</a> from client <a style="color:blue" href="'.route('clients.show', $project->client->id).'">'. $project->client->name. '</a> has been met!';
             }elseif($criteriaId == 9){
