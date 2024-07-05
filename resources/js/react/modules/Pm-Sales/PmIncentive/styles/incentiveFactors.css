@@ -105,11 +105,13 @@
     border-right: 1px solid #B5E1FF;
     border-bottom: 1px solid #B5E1FF;
     padding: 11px 5px;
+    height: 100%;
 }
 
 .factor_card> :nth-child(2) {
     border-bottom: 1px solid #B5E1FF;
     padding: 11px 5px;
+    height: 100%;
 }
 
 .factor_card:last-child> :nth-child(1),

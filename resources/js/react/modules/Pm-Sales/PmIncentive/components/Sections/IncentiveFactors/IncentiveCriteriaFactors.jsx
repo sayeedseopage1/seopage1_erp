@@ -20,7 +20,7 @@ const IncentiveCriteriaFactors = () => {
                 <IncentiveCriteriaFactorNote content={'Actual regular points will be dependent on the following criteria:'} isImportant={true} isFullWidth={true} />
                 <div className='incentive_criteria_factors'>
                     {
-                        regularData?.map(item => <IncentiveCriteriaFactorCard key={item?.id} item={item} />)
+                        regularData?.map(item => <IncentiveCriteriaFactorCard key={item?.id} item={item} criteriaType={'Regular'} />)
                     }
                 </div>
             </div>
@@ -34,7 +34,7 @@ const IncentiveCriteriaFactors = () => {
                     </div>
                     <div className='incentive_criteria_factors'>
                         {
-                            bonusData?.map(item => <IncentiveCriteriaFactorCard key={item?.id} item={item} />)
+                            bonusData?.map(item => <IncentiveCriteriaFactorCard key={item?.id} item={item} criteriaType={'Bonus'} />)
                         }
                     </div>
                 </div>
@@ -44,7 +44,7 @@ const IncentiveCriteriaFactors = () => {
                 <IncentiveCriteriaFactorTitleBar title={'Up sale/Cross Sale Points'} />
                 <div className='incentive_criteria_factors'>
                     {
-                        upSaleCrossSaleData?.map(item => <IncentiveCriteriaFactorCard key={item?.id} item={item} />)
+                        upSaleCrossSaleData?.map(item => <IncentiveCriteriaFactorCard key={item?.id} item={item} criteriaType={'Upsale/Cross Sales'} />)
                     }
                 </div>
             </div>
