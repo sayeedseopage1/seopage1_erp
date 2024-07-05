@@ -164,11 +164,7 @@ const LeadCreationFormControl = ({ close, presetInitialData = null }) => {
     const [type, setType] = React.useState("fixed");
     const [deadline, setDeadline] = React.useState(null);
 
-    React.useEffect(() => {
-        axios.get(`/account/get-all-country`).then(({ data }) => {
-            setCountries(data);
-        });
-    }, []);
+   
 
     // api hooks
     const { data: currencies } = useCurrencyListQuery();
@@ -356,9 +352,9 @@ const LeadCreationFormControl = ({ close, presetInitialData = null }) => {
         if (!leadInputData.explanation) delete leadInputData.explanation;
         if (!leadInputData.bidpage_screenshot)
             delete leadInputData.bidpage_screenshot;
-        console.log({ leadInputData });
+
         const isEmpty = isStateAllHaveValue(leadInputData);
-        console.log({ isEmpty });
+      
         if (isEmpty) {
             const validation = markEmptyFieldsValidation(leadInputData);
             setLeadInputDataValidation({
@@ -367,11 +363,8 @@ const LeadCreationFormControl = ({ close, presetInitialData = null }) => {
                 isProjectIdUnique: false,
                 isSubmitting: true,
             });
-
             return;
         }
-
-        console.log({ leadInputData });
 
         const isProjectLinkValid = validator.isURL(leadInputData.project_link, {
             protocols: ["http", "https", "ftp"],
@@ -385,7 +378,6 @@ const LeadCreationFormControl = ({ close, presetInitialData = null }) => {
             return;
         }
 
-        console.log({ leadInputData });
 
         try {
             const res = await leadCreate(formData).unwrap();
