@@ -85,6 +85,7 @@ const DealCreationFormControl = ({ close }) => {
         React.useState(initialValidation);
     const [error, setError] = React.useState(initialData);
     const [currency, setCurrency] = React.useState(null);
+    const [selectedClient, setSelectedClient] = React.useState(null);
 
     //client suggestions
 
@@ -167,6 +168,7 @@ const DealCreationFormControl = ({ close }) => {
 
             if (filteredClients.length === 0 && value.trim() !== "") {
                 setClientStatus("new client");
+                setSelectedClient(null);
             } else {
                 setClientStatus("existing client");
             }
@@ -178,10 +180,17 @@ const DealCreationFormControl = ({ close }) => {
     const handleUserSelection = (user) => {
         setShowBar(false);
         setFormData({
+            ...formData,
             client_username: user.user_name,
             client_name: user.name,
         });
-
+        setFormData((state) => ({
+            ...state,
+            country: user?.country_id,
+        }));
+        const country = countries?.data.find( (c) => c?.id === user?.country_id);
+        setSelectedClient(user);
+        setClientCountry(country)
         setClientStatus("existing client");
     };
 
@@ -224,9 +233,7 @@ const DealCreationFormControl = ({ close }) => {
     // handle submission
     const handleSubmit = async (e) => {
         e.preventDefault();
-
         const isEmpty = isStateAllHaveValue(formData);
-
         if (isEmpty) {
             const validation = markEmptyFieldsValidation(formData);
             setFormDataValidation({
@@ -265,6 +272,7 @@ const DealCreationFormControl = ({ close }) => {
         setFormData({ initialData });
         setFormDataValidation(initialValidation);
         setCurrency(null);
+        setSelectedClient(null);
         close();
     };
 
@@ -682,6 +690,7 @@ const DealCreationFormControl = ({ close }) => {
                                                 : "--"
                                         }
                                         className="selection"
+                                        disabled={selectedClient?.country_id === clientCountry?.id}
                                     >
                                         <Select.Options>
                                             <Select.SearchControllerWrapper>
