@@ -1214,7 +1214,7 @@ class SalesRiskPolicyController extends AccountBaseController
                     }
                 }
             }
-            $pointData['clientCountry']['message'][] = 'Client\'s Country not matched with policy.';
+            $pointData['clientCountry']['message'][] = 'Client\'s Country '. $clientCountry->name .' not matched with policy.';
             endClientCountry:
             // ------------------------------ end clientCountry country --------------------------- //
 
