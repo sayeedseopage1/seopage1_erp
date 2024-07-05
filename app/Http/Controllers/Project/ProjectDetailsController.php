@@ -75,7 +75,7 @@ class ProjectDetailsController extends Controller
         $projectArray['deal']['hourly_rate'] = $projectArray['deal']['hourly_rate'] / Currency::find($projectArray['deal']['original_currency_id'])->exchange_rate ?? 1;
 
         $pendingDeadlineExtensionRequests = $project->projectDeadlineExtension->where('status', 1)->count();
-        if( Auth::user()->role_id == 4 && $project->status == 'in progress' ){
+        if( Auth::user()->role_id == 4 && $project->status == 'in progress' && $project->deal->project_type == 'fixed'){
             $projectArray['buttons']['extend_deadline_form'] = !$pendingDeadlineExtensionRequests ? true : false;
             $projectArray['buttons']['extend_deadline_pending'] = $pendingDeadlineExtensionRequests ? true : false;
         }
