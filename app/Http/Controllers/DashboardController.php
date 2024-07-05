@@ -106,6 +106,11 @@ class DashboardController extends AccountBaseController
 
     }
 
+    public function tempDashboard($temp)
+    {
+        return view('dashboard.temp_dashboard', $this->data);
+    }
+
     public function widget(Request $request, $dashboardType)
     {
         $data = $request->all();

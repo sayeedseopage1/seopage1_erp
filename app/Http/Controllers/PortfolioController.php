@@ -275,8 +275,8 @@ class PortfolioController extends AccountBaseController
 
 
     // get portfolio data
-    public function get_portfolio_data(Request $request){
-
+    public function get_portfolio_data(Request $request)
+    {
         $cms = $request->cms ?? null;
         $website_type = $request->website_type ?? null;
         $website_category = $request->website_category ?? null;

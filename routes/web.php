@@ -334,6 +334,7 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
     Route::get('account-unverified', [DashboardController::class, 'accountUnverified'])->name('account_unverified');
     Route::get('checklist', [DashboardController::class, 'checklist'])->name('checklist');
     Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');
+    Route::get('dashboard/{temp?}', [DashboardController::class, 'tempDashboard'])->name('temp_dashboard');
 
     // admin advance dashboard
     Route::get('dashboard-advanced', [DashboardController::class, 'advancedDashboard'])->name('dashboard.advanced');
