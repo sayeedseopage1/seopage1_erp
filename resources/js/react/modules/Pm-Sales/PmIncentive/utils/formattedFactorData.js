@@ -6,6 +6,7 @@ export const formattedFactorData = (incentiveData) => {
             seriesData: criteria?.incentive_factors?.map((factor) =>
                 parseFloat(factor?.incentive_amount)
             ),
+            amountType: criteria?.incentive_amount_type,
             categories: criteria?.incentive_factors?.map(
                 (factor, index, array) => {
                     const isLastFactor = index === array?.length - 1;
@@ -33,7 +34,9 @@ export const formattedFactorData = (incentiveData) => {
             factorsData: item?.categories?.map((category, index) => ({
                 id: index,
                 factorLimit: category,
-                idealValue: item?.seriesData[index],
+                idealValue: `${item?.seriesData[index]}${
+                    item?.amountType == 1 ? "" : "%"
+                }`,
             })),
         };
     });

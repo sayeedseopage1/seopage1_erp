@@ -265,6 +265,18 @@
     margin-top: -15px;
 }
 
+
+.regular_thick_xAxis {
+    position: absolute;
+    right: 0;
+    left: 0;
+    bottom: 30px;
+}
+
+.regular_thick_chart_wrapper .apexcharts-xaxis text {
+    transform: matrix(1, 0, 0, 1, 0, 0);
+}
+
 .chart_ratio {
     color: #000;
     text-align: center;
@@ -974,6 +986,10 @@
     }
 
     .x_axis_arrow {
+        display: none;
+    }
+
+    .regular_thick_xAxis {
         display: none;
     }
 
