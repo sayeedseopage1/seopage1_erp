@@ -202,9 +202,18 @@ class PortfolioController extends AccountBaseController
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function ratingStore(Request $request)
     {
-        //
+        $portfolio = ProjectPortfolio::where('id', $request->portfolio_id)->first();
+        $portfolio->rating_score = $request->rating_score;
+        $portfolio->added_by_comment = $request->added_by_comment;
+        $portfolio->rating_added_by = $request->rating_added_by;
+        $portfolio->save();
+
+        return response()->json([
+            'message' => 'Rating added successfully',
+        ], 200);
+
     }
 
     /**
@@ -236,9 +245,19 @@ class PortfolioController extends AccountBaseController
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function ratingUpdate(Request $request)
     {
-        //
+        $portfolio = ProjectPortfolio::where('id', $request->portfolio_id)->first();
+        $portfolio->rating_score = $request->rating_score;
+        $portfolio->added_by_comment = $request->added_by_comment;
+        $portfolio->rating_updated_by = $request->rating_updated_by;
+        $portfolio->rating_updated_at = Carbon::now();
+        $portfolio->save();
+
+        return response()->json([
+            'message' => 'Rating Updated successfully',
+        ], 200);
+
     }
 
     /**
@@ -275,8 +294,8 @@ class PortfolioController extends AccountBaseController
 
 
     // get portfolio data
-    public function get_portfolio_data(Request $request){
-
+    public function get_portfolio_data(Request $request)
+    {
         $cms = $request->cms ?? null;
         $website_type = $request->website_type ?? null;
         $website_category = $request->website_category ?? null;
