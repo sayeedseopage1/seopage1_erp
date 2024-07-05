@@ -273,6 +273,10 @@
     bottom: 30px;
 }
 
+.regular_thick_chart_wrapper .apexcharts-xaxis text {
+    transform: matrix(1, 0, 0, 1, 0, 0);
+}
+
 .chart_ratio {
     color: #000;
     text-align: center;

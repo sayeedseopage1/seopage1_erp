@@ -217,7 +217,7 @@ const RegularThickChart = ({ chartData }) => {
                     {chartData?.chartTag}
                 </button>
             </div>
-            <div className="chart_wrapper_inner" id={`chart_wrapper_inner_${chartData?.id}`}>
+            <div className="chart_wrapper_inner  regular_thick_chart_wrapper" id={`chart_wrapper_inner_${chartData?.id}`}>
                 <Chart
                     ref={chartRef}
                     type="bar"
