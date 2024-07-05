@@ -23,6 +23,7 @@ return new class extends Migration
             $table->timestamp('generated_on')->nullable();
             $table->decimal('multiplying_factor')->default(1);
             $table->unsignedTinyInteger('confirmation_of_data_accuracy')->default(1);
+            $table->unsignedTinyInteger('status')->default('1')->comment('0 = Inactive, 1 = Active');
             $table->unsignedBigInteger('added_by')->nullable();
             $table->timestamps();
         });

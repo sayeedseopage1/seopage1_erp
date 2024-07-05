@@ -18,6 +18,7 @@ class PlatformAccount extends Model
         'generated_on',
         'multiplying_factor',
         'confirmation_of_data_accuracy',
+        'status',
         'added_by'
     ];
 }
