@@ -60,4 +60,9 @@ class TaskHistory extends BaseModel
         return $this->belongsTo(TaskboardColumn::class, 'board_column_id');
     }
 
+    public function revision()
+    {
+        return $this->hasOne(TaskRevision::class, 'task_id', 'task_id');
+    }
+
 }

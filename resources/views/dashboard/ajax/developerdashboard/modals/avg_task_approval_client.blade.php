@@ -1,5 +1,5 @@
 <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
-<div class="modal fade" id="avg_task_approval_client{{count($average_number_of_attempts_neededfor_approval_by_client_data)}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="avg_task_approval_client{{count($average_number_of_attempts_needed_for_approval_by_client_data)}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-xl">
       <div class="modal-content">
         <div class="modal-header">
@@ -30,7 +30,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach ($approved_task_by_client_in_first_attempt_data as $row)
+                        @foreach ($average_number_of_attempts_needed_for_approval_by_client_data as $row)
                             <tr>
                                 <td>{{ ++$loop->index }}</td>
                                 <td>
@@ -48,7 +48,7 @@
                                 <td>
                                     {{ $row?->project?->pm?->name }}
                                 </td>
-                                <td>{{ $row->taskUser->name }}</td>
+                                <td>{{ $row->createBy->name }}</td>
                                 <td>
                                     {{ $row->created_at }}
                                 </td>

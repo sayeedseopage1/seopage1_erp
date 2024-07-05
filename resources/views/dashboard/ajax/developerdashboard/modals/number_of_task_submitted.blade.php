@@ -20,12 +20,12 @@
                     <thead>
                         <tr>
                             <th scope="col">Sl No</th>
-                            <th scope="col">Created On</th>
                             <th scope="col">Task Name</th>
                             <th scope="col">Task Type</th>
                             <th scope="col">Client Name</th>
                             <th scope="col">Project Manager</th>
-                            <th scope="col">Deadline</th>
+                            <th scope="col">Created On</th>
+                            <th scope="col">Started On</th>
                             <th scope="col">status</th>
                         </tr>
                     </thead>
@@ -33,9 +33,6 @@
                         @foreach ($submit_number_of_tasks_in_this_month_data as $row)
                             <tr>
                                 <td>{{ ++$loop->index }}</td>
-                                <td>
-                                    {{ $row?->created_at }}
-                                </td>
                                 <td>
                                     <a href="{{ route('tasks.show', $row->id) }}">{{ $row->heading }}<a>
                                 </td>
@@ -51,7 +48,12 @@
                                 <td>
                                     {{ $row?->project?->pm?->name }}
                                 </td>
-                                <td>{{ $row->due_date }}</td>
+                                <td>
+                                    {{ $row?->created_at }}
+                                </td>
+                                <td>
+                                    {{ $row?->start_date }}
+                                </td>
                                 <td>
                                     <span style="color: {{ $row->stat->label_color }}">
                                         {{ $row->stat->column_name }}</span>

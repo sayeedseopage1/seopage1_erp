@@ -304,7 +304,6 @@ trait LeadDashboard
                             ->sum('total_minutes');
 
                         $total_spent_revision_developer += $spent_revision_developer;
-
                     } else {
 
                         foreach ($get_sub_task as $subtask) {
@@ -322,10 +321,7 @@ trait LeadDashboard
 
                             $total_spent_revision_developer += $spent_revision_developer;
                         }
-
-
                     }
-
                 }
 
                 $responsible_for_revision = DB::table('task_revisions')
@@ -368,9 +364,7 @@ trait LeadDashboard
                             $total_spent_revision_developer += $spent_revision_developer;
                         }
                     }
-
                 }
-
             }
 
             $this->spent_revision_developer_lead = $total_spent_revision_developer / 60;
@@ -553,7 +547,6 @@ trait LeadDashboard
                 if ($number_of_tasks == 1) {
                     $task_id_store[] = $task->id;
                     $first_attempt_approve_task++;
-
                 }
             }
 
@@ -1103,7 +1096,6 @@ trait LeadDashboard
                 'status' => 'success',
                 'html' => $html,
             ]);
-
         } else {
             $devId = Auth::id();
             $startDate = Carbon::now()->startOfMonth();
@@ -1389,7 +1381,6 @@ trait LeadDashboard
                 if ($number_of_tasks == 1) {
                     $task_id_store[] = $task->id;
                     $first_attempt_approve_task++;
-
                 }
             }
 
@@ -1951,7 +1942,10 @@ trait LeadDashboard
                 $av += $i1;
             }
         }
-        $average_task_submission_time = $av / count($test);
+        $average_task_submission_time = 0;
+        if ($av && count($test)) {
+            $average_task_submission_time = $av / count($test);
+        }
 
         $average_task_submission_time_data = Task::with('revisions', 'project.client', 'project.pm', 'submissions')->find($test);
 
@@ -1959,7 +1953,10 @@ trait LeadDashboard
         //     $average_task_submission_time,
         //     $average_submit_data_lead
         // );
-        return [$average_task_submission_time, $average_task_submission_time_data];
+        return [
+            $average_task_submission_time,
+            $average_task_submission_time_data
+        ];
     }
     private function leadAverageNumberOfInProgressTasks($startDate, $endDate, $devId)
     {
@@ -2065,7 +2062,6 @@ trait LeadDashboard
                     array_push($task, $totalTimeMinutes);
                     //    array_push($task,$i1->id,$i1->created_at, $assign_date->created_at,$totalTimeMinutes);
                 }
-
             }
         }
 
@@ -2166,7 +2162,6 @@ trait LeadDashboard
                     }
                 }
             }
-
         }
 
         //    dd($task);
@@ -2346,7 +2341,7 @@ trait LeadDashboard
             }
         }
         // dd(count($task));
-// dd($average_hold_time/$ind);
+        // dd($average_hold_time/$ind);
         if ($total > 0) {
             $average_hold_time = $average_hold_time / $total;
         }

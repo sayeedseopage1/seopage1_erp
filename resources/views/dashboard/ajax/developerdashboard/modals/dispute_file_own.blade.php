@@ -22,14 +22,13 @@
                             <th scope="col">Dispute filed on</th>
                             <th scope="col">Dispute raised against</th>
                             <th scope="col">Winner</th>
-                            {{-- <th scope="col">status</th> --}}
                         </tr>
                     </thead>
                     <tbody>
                         @foreach ($number_of_dispute_filed_own_data as $row)
-                            @foreach ($row->taskRevisionDispute as $row2)
+                            @foreach ($row->taskRevisionDisputes as $row2)
                                 <tr>
-                                    <td>{{ $loop->index + 1 }}</td>
+                                    <td>{{ $loop->parent->iteration . '.' . $loop->iteration  }}</td>
                                     <td>
                                         <a href="{{ route('tasks.show', $row->id) }}">{{ $row->heading }}<a>
                                     </td>

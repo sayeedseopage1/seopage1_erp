@@ -30,7 +30,7 @@
                     </thead>
                     <tbody>
                         @foreach ($disputes_lead_developer_involved_data as $row)
-                            @foreach ($row->taskRevisionDispute as $row2)
+                            @foreach ($row->taskRevisionDisputes as $row2)
                                 <tr>
                                     <td>{{ $loop->parent->iteration .'.'.  $loop->iteration }}</td>
                                     <td>

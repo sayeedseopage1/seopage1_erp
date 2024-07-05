@@ -54,7 +54,7 @@
                                 <td>
                                     {{ $row?->project?->pm?->name }}
                                 </td>
-                                <td>{{ $row->taskUser->name }}</td>
+                                <td>{{ $row->createBy->name }}</td>
                                 <td>
                                     {{ $row->created_at }}
                                 </td>

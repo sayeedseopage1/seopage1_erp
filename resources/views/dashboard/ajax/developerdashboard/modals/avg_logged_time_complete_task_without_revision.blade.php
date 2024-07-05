@@ -1,13 +1,14 @@
 <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
-<div id="avg_logged_time_complete_task_without_revision{{ count($avg_logged_time_complete_task_without_revision_data) }}" class="modal fade"
-    tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div id="avg_logged_time_complete_task_without_revision{{ count($avg_logged_time_complete_task_without_revision_data) }}"
+    class="modal fade" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-xl">
         <div class="modal-content">
             <div class="modal-header">
                 <div class="modal-title">
-                    <h4>Number of Submitted tasks : {{ count($avg_logged_time_complete_task_without_revision_data) }}</h4>
-                    <h4>Total logged hours:{{ intdiv($avg_logged_time_complete_task_without_revision_total_time, 60)}} Hours</h4>
-                    <h4>Average logged hours {{ intdiv($avg_logged_time_complete_task_without_revision, 60)}} Hours </h4>
+                    <h4>Number of Submitted tasks: {{ count($avg_logged_time_complete_task_without_revision_data) }}
+                    </h4>
+                    <h4>Total logged hours: {{ $avg_logged_time_complete_task_without_revision_total_time }}</h4>
+                    <h4>Average logged hours: {{ $avg_logged_time_complete_task_without_revision }} </h4>
                 </div>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
@@ -41,7 +42,7 @@
                                     {{ $row?->project?->pm?->name }}
                                 </td>
                                 <td>
-                                    {{ intdiv($row->timeLogged->sum('total_minutes'), 60).'h '. ($row->timeLogged->sum('total_minutes') % 60) }}m
+                                    {{ intdiv($row->timeLogged->sum('total_minutes'), 60) . 'h ' . $row->timeLogged->sum('total_minutes') % 60 }}m
                                 </td>
                         @endforeach
                     </tbody>

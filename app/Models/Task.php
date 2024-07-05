@@ -11,6 +11,7 @@ use App\Models\ProjectMilestone;
 use App\Traits\CustomFieldsTrait;
 use App\Models\Scopes\OrderByDesc;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Relations\HasOne;
@@ -140,7 +141,7 @@ class Task extends BaseModel
     use CustomFieldsTrait;
 
     protected $dates = ['due_date', 'completed_on', 'start_date'];
-    protected $appends = ['due_on', 'create_on', 'total_log_time_in_min', 'total_submissions_log_time_in_min'];
+    protected $appends = ['due_on', 'create_on', 'total_log_time_in_min', 'total_submissions_log_time_in_min', 'total_estimate_minutes'];
     protected $guarded = ['id'];
     public $customFieldModel = 'App\Models\Task';
 
@@ -152,13 +153,19 @@ class Task extends BaseModel
     protected function totalLogTimeInMin(): Attribute
     {
         return new Attribute(
-            get: fn() => $this->timeLogged->sum('total_minutes'),
+            get: fn () => $this->timeLogged->sum('total_minutes'),
         );
     }
     protected function totalSubmissionsLogTimeInMin(): Attribute
     {
         return new Attribute(
-            get: fn() => $this->submissions->sum('total_log_time'),
+            get: fn () => $this->submissions->sum('total_log_time'),
+        );
+    }
+    protected function totalEstimateMinutes(): Attribute
+    {
+        return new Attribute(
+            get: fn () => ($this->estimate_hours * 60) + $this->estimate_minutes,
         );
     }
 
@@ -231,6 +238,48 @@ class Task extends BaseModel
     {
         return $this->hasMany(TaskHistory::class, 'task_id')->orderBy('id', 'desc');
     }
+    public function firstHistoryForDevDoing(): HasOne
+    {
+        return $this->hasOne(TaskHistory::class, 'task_id')->ofMany([
+            'created_at' => 'min',
+            'id' => 'min',
+        ], function (Builder $query) {
+            $query->where('board_column_id', '=', 3);
+        });
+    }
+
+    public function firstHistoryForDevReview(): HasOne
+    {
+        return $this->hasOne(TaskHistory::class, 'task_id')->ofMany([
+            'created_at' => 'min',
+            'id' => 'min',
+        ], function (Builder $query) {
+            $query->where('board_column_id', '=', 6);
+        });
+    }
+    public function lastHistoryForDevReview(): HasOne
+    {
+        return $this->hasOne(TaskHistory::class, 'task_id')->ofMany([
+            'created_at' => 'max',
+            'id' => 'max',
+        ], function (Builder $query) {
+            $query->where('board_column_id', '=', 6);
+        });
+    }
+
+    public function firstHistoryForLeadDevApproval(): HasOne
+    {
+        return $this->hasOne(TaskHistory::class, 'task_id')->ofMany([
+            'created_at' => 'min',
+            'id' => 'min',
+        ], function (Builder $query) {
+            $query->where('board_column_id', '=', 8);
+        });
+    }
+    public function historyForClientApproval(): HasMany
+    {
+        return $this->hasMany(TaskHistory::class, 'task_id')->where('board_column_id', 9);
+    }
 
     public function completedSubtasks(): HasMany
     {
@@ -279,6 +328,14 @@ class Task extends BaseModel
     public function timeLogged(): HasMany
     {
         return $this->hasMany(ProjectTimeLog::class, 'task_id');
+    }
+    public function timeLoggedWithoutRevision(): HasMany
+    {
+        return $this->timeLogged()->where('revision_status', '=', 0);
+    }
+    public function timeLoggedOnlyRevision(): HasMany
+    {
+        return $this->timeLogged()->where('revision_status', '!=', 0);
     }
 
     public function approvedTimeLogs(): HasMany
@@ -563,20 +620,13 @@ class Task extends BaseModel
     {
         return $this->hasOneThrough(User::class, TaskUser::class, 'task_id', 'id', 'id', 'user_id');
     }
+
     public function revisions()
     {
         return $this->hasMany(TaskRevision::class);
     }
-    public function notResponsibleDeveloperRevisions()
-    {
-        return $this->hasMany(TaskRevision::class)
-            ->orWhere('dispute_between', 'LDR')
-            ->where('is_accept', 0)
-            ->where('final_responsible_person', '!=', 'D')
-            ->orWhereRelation('taskRevisionDispute', 'raised_against_percent', '>', 50);
-    }
-
-    public function taskRevisionDispute()
+  
+    public function taskRevisionDisputes()
     {
         return $this->hasMany(TaskRevisionDispute::class, 'task_id');
     }

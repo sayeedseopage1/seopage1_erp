@@ -31,7 +31,6 @@
                             <th scope="col">Lead Developer</th>
                             <th scope="col">Submitted On</th>
                             <th scope="col">Approved On</th>
-                            {{-- <th scope="col">status</th> --}}
                         </tr>
                     </thead>
                     <tbody>
@@ -57,14 +56,10 @@
                                     {{ $row?->project?->pm?->name }}
                                 </td>
                                 <td>
-                                    {{ $row?->taskUser?->name }}
+                                    {{ $row?->createBy?->name }}
                                 </td>
                                 <td>{{ $row?->latestTaskSubmission?->created_at }}</td>
                                 <td>{{ $row?->latestTaskApprove?->created_at }}</td>
-                                {{-- <td>
-                                    <span style="color: {{ $row->stat->label_color }}">
-                                        {{ $row->stat->column_name }}</span>
-                                </td> --}}
                             </tr>
                         @endforeach
                     </tbody>

@@ -7,9 +7,9 @@
                 <div class="modal-title">
                     <h4>Number of Submitted tasks : {{ count($average_submission_time_in_this_month_data) }}</h4>
                     <h4>
-                        Total logged hours: {{ intdiv($average_submission_time_in_this_month_total_time, 60) }} Hours
+                        Total logged hours: {{ $average_submission_time_in_this_month_total_time }}
                     </h4>
-                    <h4>Average logged hours {{ intdiv($average_submission_time_in_this_month, 60) }} Hours</h4>
+                    <h4>Average logged hours {{ $average_submission_time_in_this_month }} </h4>
                 </div>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
