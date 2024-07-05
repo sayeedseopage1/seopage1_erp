@@ -6,12 +6,11 @@ import { formattedFactorData } from '../../../utils/formattedFactorData';
 import IncentiveCriteriaFactorCard from './IncentiveCriteriaFactorCard';
 
 const IncentiveCriteriaFactors = () => {
-    const { allIncentiveTypes, regularIncentiveTypes, upSaleCrossSaleTypes, bonusIncentiveTypes, incentiveTypesLoading, incentiveTypesIsFetching } = useIncentive()
+    const { regularIncentiveTypes, upSaleCrossSaleTypes, bonusIncentiveTypes } = useIncentive()
 
     const regularData = formattedFactorData(regularIncentiveTypes)
     const bonusData = formattedFactorData(bonusIncentiveTypes)
     const upSaleCrossSaleData = formattedFactorData(upSaleCrossSaleTypes)
-    // console.log(regularData)
 
     return (
         <div>

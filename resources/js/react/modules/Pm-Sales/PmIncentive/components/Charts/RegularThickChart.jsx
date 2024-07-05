@@ -68,8 +68,8 @@ const RegularThickChart = ({ chartData }) => {
         },
         grid: { show: !0, strokeDashArray: 3, position: "back" },
         xaxis: {
-            categories: chartData?.categories,
-            // categories: Array.from({ length: Math.ceil(maxXValue) + 1 }, (_, i) => (i % 10 === 0 ? i : '')),
+            // categories: chartData?.categories,
+            categories: Array.from({ length: Math.ceil(maxXValue) + 1 }, (_, i) => (i % 10 === 0 ? i : '')),
             tickPlacement: "on",
             labels: {
                 formatter: (val) => {
@@ -80,17 +80,21 @@ const RegularThickChart = ({ chartData }) => {
                     fontFamily: "poppins",
                     fontWeight: 500,
                     colors: ["#000000"]
-                }
+                },
+
+                // trim: true,
+                // rotate: -2,
+
             },
             scrollbar: {
                 enabled: false
             },
             axisTicks: {
-                show: !0,
+                show: true,
                 borderType: "solid",
                 color: "#78909C",
                 width: 8,
-                height: 9,
+                height: 3,
                 offsetX: 0,
                 offsetY: 0
             },
@@ -116,21 +120,21 @@ const RegularThickChart = ({ chartData }) => {
             enabled: true,
             formatter: function (val, opts) {
                 const { dataPointIndex } = opts;
-                // Apply special case for the first bar when all values are zero
-                if (isAllZero && opts.dataPointIndex == 0) {
-                    return chartData?.ratio != null
-                        ? `⬤ ${chartData?.shortTitle}: ${chartData?.limitType == 1 ? "$" : ""}${chartData?.ratio}${chartData?.limitType == 2 ? "%" : ""}`
-                        : `⬤ ${chartData?.shortTitle}: N/A`;
+                const category = Array.from({ length: Math.ceil(maxXValue) + 1 }, (_, i) => i)[dataPointIndex];
+
+                // Check if the current data point category matches the ratio value
+                if (isAllZero && category == parseInt(chartData?.ratio)) {
+                    return [`⬤ ${chartData?.shortTitle}: ${chartData?.limitType == 1 ? "$" : ""}${chartData?.ratio}${chartData?.limitType == 2 ? "%" : ""}`, `Incentive: ${val}${chartData?.amountType == 1 ? "" : "%"}`];
                 }
+
                 if (dataPointIndex === 0 || dataPointIndex === seriesLength - 1) {
                     return ""; // Hide the label for the first and last bars
                 }
                 return val ? `${chartData?.limitType == 1 ? "$" : ""}${chartData?.ratio}${chartData?.limitType == 2 ? "%" : ""}, ${val}${chartData?.amountType == 1 ? "" : "%"}` : "";
             },
             offsetY: -25,
-            offsetX: isAllZero ? 10 : 0,
             style: {
-                fontSize: "14px",
+                fontSize: "12px",
                 fontFamily: "poppins",
                 fontWeight: 500,
                 colors: isAllZero ? ['#FF0000'] : ["#1492E6"],
@@ -148,8 +152,9 @@ const RegularThickChart = ({ chartData }) => {
                     ranges: chartData?.id == 8 ? rangesForShortValue : rangesForLongValue
                 },
                 dataLabels: {
+                    orientation: isAllZero ? "vertical" : "horizontal",
                     position: "top",
-                    maxItems: 100,
+                    maxItems: 5,
                     color: "#00A0EE",
                     hideOverflowingLabels: !0,
                     total: {
@@ -187,9 +192,6 @@ const RegularThickChart = ({ chartData }) => {
         data: barData
     }];
 
-    console.log("first", chartData?.series)
-    console.log("second", chartSeries)
-
     return (
         <>
             <div className="y_axis_arrow">
@@ -219,11 +221,11 @@ const RegularThickChart = ({ chartData }) => {
                 <Chart
                     ref={chartRef}
                     type="bar"
-                    series={chartData?.series}
+                    series={chartSeries}
                     options={options}
-                    height={300}
+                    height={319}
                 ></Chart>
-                <div className="x_axis_arrow">
+                <div className="x_axis_arrow regular_thick_xAxis">
                     <img src={arrow1} className="chart_axis_icon" alt="arrow1" />
                     <h2 className="chart_axis_title">{chartData.title}</h2>
                     <img src={arrow2} className="chart_axis_icon" alt="arrow2" />

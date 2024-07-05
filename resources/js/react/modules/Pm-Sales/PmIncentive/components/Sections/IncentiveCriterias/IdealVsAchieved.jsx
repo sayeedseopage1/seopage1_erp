@@ -5,7 +5,7 @@ import { IncentiveFormattedData } from '../../../utils/formattedChartData';
 import ChartDataLoader from '../../loader/ChartDataLoader';
 import useIncentive from '../../../hooks/useIncentive';
 // import RegularPointsThickChart from '../../Charts/RegularPointsThickChart';
-// import RegularThickChart from '../../Charts/RegularThickChart';
+import RegularThickChart from '../../Charts/RegularThickChart';
 
 const IdealVsAchieved = () => {
     const { regularIncentiveTypes, incentiveTypesLoading } = useIncentive();
@@ -24,8 +24,8 @@ const IdealVsAchieved = () => {
                             <IncentiveBarChart chartData={item?.ideal} />
                         </div>
                         <div className="chart_wrapper">
-                            <IncentiveThickChart chartData={item?.achieved} />
-                            {/* <RegularThickChart chartData={item?.achieved} /> */}
+                            {/* <IncentiveThickChart chartData={item?.achieved} /> */}
+                            <RegularThickChart chartData={item?.achieved} />
                         </div>
                     </div>
                 }

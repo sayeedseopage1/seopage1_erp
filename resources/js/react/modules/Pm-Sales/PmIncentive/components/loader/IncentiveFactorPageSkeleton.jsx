@@ -13,7 +13,7 @@ const IncentiveFactorPageSkeleton = () => {
                 </div>
                 <div className='incentive_criteria_factors'>
                     {
-                        Array(3).fill(0).map((_, index) => (
+                        Array(6).fill(0).map((_, index) => (
                             <div key={index} className='criteria_card'>
                                 <p style={{ width: '200px', margin: 'auto' }}><Skeleton.Button active={true} size={'small'} block={true} shape={'default'} /> </p>
                                 <hr className='criteria_card_divider' style={{ color: "#55BBFF" }} />

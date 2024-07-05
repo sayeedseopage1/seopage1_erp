@@ -1,4 +1,4 @@
-import { useRef } from "react";
+import { useEffect, useRef } from "react";
 import Chart from "react-apexcharts";
 import arrow1 from '../../assets/arrow-1.svg'
 import arrow2 from '../../assets/arrow-2.svg'
@@ -103,21 +103,33 @@ const IncentiveThickChart = ({ chartData }) => {
             enabled: true,
             formatter: function (val, opts) {
                 const { dataPointIndex } = opts;
-                // Apply special case for the first bar when all values are zero
-                if (isAllZero && opts.dataPointIndex == 0) {
-                    return chartData?.ratio != null
-                        ? `⬤ ${chartData?.shortTitle}: ${chartData?.limitType == 1 ? "$" : ""}${chartData?.ratio}${chartData?.limitType == 2 ? "%" : ""}`
-                        : `⬤ ${chartData?.shortTitle}: N/A`;
+                const category = chartData?.categories[dataPointIndex];
+
+                const ratio = parseFloat(chartData?.ratio);
+
+                // Function to check if ratio falls within a given range
+                function isInRange(ratio, range) {
+                    const [min, max] = range.split('-').map(val => parseFloat(val.replace(/[$%]/g, '').replace(',', '')));
+                    return ratio >= min && ratio <= max;
                 }
+
+                // Determine the type of category (dollar or percentage)
+                const isDollarRange = category.includes('$');
+                const isPercentageRange = category.includes('%');
+
+                // Show the series value and ratio when incentive is less than or equal to 0 and the ratio is in the current category range
+                if (chartData?.incentive <= 0 && ((isDollarRange && isInRange(ratio, category)) || (isPercentageRange && isInRange(ratio, category)))) {
+                    return [`⬤ ${chartData?.shortTitle}: ${chartData?.limitType == 1 ? "$" : ""}${chartData?.ratio}${chartData?.limitType == 2 ? "%" : ""}`, `Incentive: ${val}${chartData?.amountType == 1 ? "" : "%"}`];
+                }
+
                 if (dataPointIndex === 0 || dataPointIndex === seriesLength - 1) {
                     return ""; // Hide the label for the first and last bars
                 }
                 return val ? `${chartData?.limitType == 1 ? "$" : ""}${chartData?.ratio}${chartData?.limitType == 2 ? "%" : ""}, ${val}${chartData?.amountType == 1 ? "" : "%"}` : "";
             },
             offsetY: -25,
-            offsetX: isAllZero ? 10 : 0,
             style: {
-                fontSize: "14px",
+                fontSize: "12px",
                 fontFamily: "poppins",
                 fontWeight: 500,
                 colors: isAllZero ? ['#FF0000'] : ["#1492E6"],
@@ -125,7 +137,7 @@ const IncentiveThickChart = ({ chartData }) => {
         },
         plotOptions: {
             bar: {
-                horizontal: !1,
+                horizontal: false,
                 endingShape: "rounded",
                 distributed: !1,
                 borderRadius: 0,
@@ -135,6 +147,7 @@ const IncentiveThickChart = ({ chartData }) => {
                     ranges: chartData?.id == 8 ? rangesForShortValue : rangesForLongValue
                 },
                 dataLabels: {
+                    orientation: isAllZero ? "vertical" : "horizontal",
                     position: "top",
                     maxItems: 100,
                     color: "#00A0EE",
@@ -148,7 +161,7 @@ const IncentiveThickChart = ({ chartData }) => {
                             color: "#00A0EE",
                             fontSize: "12px",
                             fontFamily: void 0,
-                            fontWeight: 600
+                            fontWeight: 400,
                         }
                     },
                 },
@@ -168,6 +181,14 @@ const IncentiveThickChart = ({ chartData }) => {
             }
         },
     }
+
+    useEffect(() => {
+        if (chartRef.current) {
+            chartRef.current.chart?.updateOptions({
+                dataLabels: options.dataLabels,
+            }, false);
+        }
+    }, [chartData]); // Update options when chartData changes
 
     return (
         <>

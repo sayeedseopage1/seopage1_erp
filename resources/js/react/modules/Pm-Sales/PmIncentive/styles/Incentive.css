@@ -265,6 +265,14 @@
     margin-top: -15px;
 }
 
+
+.regular_thick_xAxis {
+    position: absolute;
+    right: 0;
+    left: 0;
+    bottom: 30px;
+}
+
 .chart_ratio {
     color: #000;
     text-align: center;
@@ -974,6 +982,10 @@
     }
 
     .x_axis_arrow {
+        display: none;
+    }
+
+    .regular_thick_xAxis {
         display: none;
     }
 

@@ -27,8 +27,6 @@ function createIncentiveArray(arr, incentive) {
         }
     }
 
-    // console.log(newArr);
-
     return newArr;
 }
 
