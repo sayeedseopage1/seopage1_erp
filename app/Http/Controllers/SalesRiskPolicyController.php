@@ -793,7 +793,7 @@ class SalesRiskPolicyController extends AccountBaseController
             // if error then delete previous records
             PolicyQuestionValue::where('deal_id', $dealId)->delete();
 
-            throw $th;
+            // throw $th;
             return response()->json(['status' => 'error', 'message' => 'Data did not stored successfully.'], 500);
         }
     }
@@ -1195,29 +1195,26 @@ class SalesRiskPolicyController extends AccountBaseController
 
             $policies = SalesRiskPolicy::where('parent_id', $policy->id)->get();
 
-            $lead = Lead::find($deal->lead_id);
-            if (!$lead) {
-                $pointData['clientCountry']['message'][] = 'Client\'s Country not found (Lead not found). ';
+            $client = User::find($deal->client_id);
+            if (!$client || $client->country_id == null) {
+                $pointData['clientCountry']['message'][] = 'Client\'s country is not found. ';
                 goto endClientCountry;
             }
 
+            $clientCountry = Country::find($client->country_id);
             foreach ($policies as $item) {
-
                 $countries = json_decode($item->value, true);
                 foreach ($countries as $country) {
-                    if ($lead->country == array_values($country)[0]) {
+                    if ($clientCountry->iso == array_keys($country)[0]) {
                         $points += $item->points;
-                        $pointData['clientCountry']['questionAnswer'][] = ['title' => 'From which country does the client originate?', 'value' => array_values($country)[0], 'parent_id' => null];
+                        $pointData['clientCountry']['questionAnswer'][] = ['title' => 'From which country does the client originate?', 'value' => $clientCountry->name, 'parent_id' => null];
                         $pointData['clientCountry']['points'] = $item->points;
                         $policyIdList[$item->id] = $item->id;
                         goto endClientCountry;
-                    } else {
-                        $pointData['clientCountry']['message'][] = 'Client\'s Country policy not found.';
                     }
                 }
             }
-            $pointData['clientCountry']['questionAnswer'][] = ['title' => 'From which country does the client originate?', 'value' => $lead->country, 'parent_id' => null];
-            $pointData['clientCountry']['points'] = 0;
+            $pointData['clientCountry']['message'][] = 'Client\'s Country not matched with policy.';
             endClientCountry:
             // ------------------------------ end clientCountry country --------------------------- //
 
@@ -1345,7 +1342,7 @@ class SalesRiskPolicyController extends AccountBaseController
 
             return $calculationData;
         } catch (\Throwable $th) {
-            throw $th;
+            // throw $th;
             return ['points' => null, 'error' => $th->getMessage()];
         }
     }
@@ -1368,14 +1365,12 @@ class SalesRiskPolicyController extends AccountBaseController
                 ];
             });
 
-        PolicyPointHistory::updateOrCreate(
-            ['deal_id' => $deal_id],
-            [
-                'policy' => json_encode($data),
-                'points' => $calculationData['points'],
-                'point_report' => json_encode($calculationData)
-            ]
-        );
+        PolicyPointHistory::create([
+            'deal_id' => $deal_id,
+            'policy' => json_encode($data),
+            'points' => $calculationData['points'],
+            'point_report' => json_encode($calculationData)
+        ]);
     }
 
     function questionValueReport($deal_id)
@@ -1419,7 +1414,6 @@ class SalesRiskPolicyController extends AccountBaseController
         try {
 
             $calculation = self::calculatePolicyPoint($deal_id);
-            // self::policyHistoryStore($deal_id);
 
             if ($calculation['points'] === null) {
                 return response()->json(['status' => 'error', 'message' => $calculation['error'], 'data' => ['points' => null]]);
@@ -1460,8 +1454,7 @@ class SalesRiskPolicyController extends AccountBaseController
             $itemsTransformed = $itemsPaginated
                 ->getCollection()
                 ->map(function ($item) {
-
-                    $lead = Lead::find($item->lead_id);
+                    $country = User::find($item->client_id)->country;
                     $user = $item->sale_authorize_by ?  User::find($item->sale_authorize_by) : null;
                     $data = [
                         'client_id' => $item->client_id,
@@ -1472,7 +1465,7 @@ class SalesRiskPolicyController extends AccountBaseController
                         'project_name' => $item->project_name,
                         'project_budget' => $item->actual_amount,
                         'lead_id' => $item->lead_id,
-                        'country' => $lead ? $lead->country : '',
+                        'country' => $country ? $country->name : '',
                         'award_time' => $item->award_time,
                         'authorize_by_id' => $item->sale_authorize_by,
                         'authorize_on' => $item->sale_authorize_on,
