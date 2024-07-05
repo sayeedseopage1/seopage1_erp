@@ -51,6 +51,12 @@ class ProjectDetailsController extends Controller
             'projectDeliverables'
             )->find($project_id);
 
+        abort_if((!(Auth::user()->role_id == 1 || Auth::user()->role_id == 8) && $project->pm_id != Auth::user()->id), 403);
+
+        // if(Auth::user()->role_id != 1 || Auth::user()->role_id != 8){
+        //     if($project->pm_id != Auth::user()->id) abort(403);
+        // }
+            
         $tasks = Task::where('project_id',$project->id)->whereNull('subtask_id');
 
         if (!$project) {
