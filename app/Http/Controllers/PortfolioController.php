@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use App\Models\PendingAction;
 use App\Models\Project;
 use App\Models\ProjectCms;
 use App\Models\ProjectNiche;
@@ -209,6 +210,56 @@ class PortfolioController extends AccountBaseController
         $portfolio->added_by_comment = $request->added_by_comment;
         $portfolio->rating_added_by = $request->rating_added_by;
         $portfolio->save();
+
+        $actions = PendingAction::where('code','WSR')->where('past_status',0)->where('portfolio_id',$portfolio->id)->get();
+        if($actions != null)
+        {
+            foreach ($actions as $key => $action) 
+            {
+                $action->authorized_by= Auth::id();
+                $action->authorized_at= Carbon::now();
+                $action->past_status = 1;
+                $action->save();
+                
+                $project = Project::where('id',$portfolio->project_id)->first();
+                $project_submission = ProjectSubmission::where('project_id',$project->id)->first();
+                $pm = User::where('id',$project->pm_id)->first();
+                $client = User::where('id',$project->client_id)->first();
+                $authorize_by= User::where('id',$action->authorized_by)->first();
+
+                $past_action= new PendingActionPast();
+                $past_action->item_name = $action->item_name;
+                $past_action->code = $action->code;
+                $past_action->serial = $action->serial;
+                $past_action->action_id = $action->id;
+                $past_action->heading = 'Website rating added successfully!';
+                if($portfolio->portfolio_link != null){
+                    $past_action->message = 'Website <a href="'.$portfolio->portfolio_link.'">'.$portfolio->portfolio_link.'</a> for client <a href="'.route('clients.show',$client->id).'">'.$client->name.'</a> by PM <a href="'.route('employees.show',$pm->id).'">'.$pm->name.'</a> was rated by <a href="'.route('employees.show',$authorize_by->id).'">'.$authorize_by->name.'</a>';
+                    }elseif($project_submission->dummy_link != null){
+                        $past_action->message = 'Website <a href="'.$project_submission->dummy_link.'">'.$project_submission->dummy_link.'</a> for client <a href="'.route('clients.show',$client->id).'">'.$client->name.'</a> by PM <a href="'.route('employees.show',$pm->id).'">'.$pm->name.'</a> was rated by <a href="'.route('employees.show',$authorize_by->id).'">'.$authorize_by->name.'</a>';
+                    }else{
+                        $past_action->message = 'Website <span class="text-danger">No Link Provided</span> for client <a href="'.route('clients.show',$client->id).'">'.$client->name.'</a> by PM <a href="'.route('employees.show',$pm->id).'">'.$pm->name.'</a> was rated by <a href="'.route('employees.show',$authorize_by->id).'">'.$authorize_by->name.'</a>';
+                    }
+                $past_action->timeframe = $action->timeframe;
+                $past_action->authorization_for = $action->authorization_for;
+                $past_action->authorized_by = $action->authorized_by;
+                $past_action->authorized_at = $action->authorized_at;
+                $past_action->expired_status = $action->expired_status;
+                $past_action->past_status = $action->past_status;
+                $past_action->project_id = $action->project_id;
+                $past_action->client_id = $action->client_id;
+                $button = [
+                    [
+                        'button_name' => 'View rating',
+                        'button_color' => 'primary',
+                        'button_type' => 'redirect_url',
+                        'button_url' => route('portfolio.index', ['protfolio_id' => $portfolio->id, 'modal' => 'show-rating']),
+                    ],
+                ];
+                $past_action->button = json_encode($button);
+                $past_action->save();
+            }
+        }
 
         return response()->json([
             'message' => 'Rating added successfully',
