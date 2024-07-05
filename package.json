@@ -21,7 +21,8 @@
         "resolve-url-loader": "^3.1.0",
         "sass": "^1.38.1",
         "sass-loader": "^12.1.0",
-        "webpack": "^5.23.0"
+        "webpack": "^5.23.0",
+        "webpack-bundle-analyzer": "^4.10.2"
     },
     "dependencies": {
         "@ckeditor/ckeditor5-build-classic": "^38.0.1",
