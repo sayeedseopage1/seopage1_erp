@@ -153,19 +153,19 @@ class Task extends BaseModel
     protected function totalLogTimeInMin(): Attribute
     {
         return new Attribute(
-            get: fn () => $this->timeLogged->sum('total_minutes'),
+            get: fn() => $this->timeLogged->sum('total_minutes'),
         );
     }
     protected function totalSubmissionsLogTimeInMin(): Attribute
     {
         return new Attribute(
-            get: fn () => $this->submissions->sum('total_log_time'),
+            get: fn() => $this->submissions->sum('total_log_time'),
         );
     }
     protected function totalEstimateMinutes(): Attribute
     {
         return new Attribute(
-            get: fn () => ($this->estimate_hours * 60) + $this->estimate_minutes,
+            get: fn() => ($this->estimate_hours * 60) + $this->estimate_minutes,
         );
     }
 
@@ -596,12 +596,12 @@ class Task extends BaseModel
 
     public function latestTaskApprove()
     {
-        return $this->hasOne(TaskApprove::class)->latestOfMany();
+        return $this->hasOne(TaskApprove::class)->orderBy('id', 'desc');
     }
 
     public function latestTaskSubmission()
     {
-        return $this->hasOne(TaskSubmission::class)->latestOfMany();
+        return $this->hasOne(TaskSubmission::class, 'task_id')->orderBy('id', 'desc');
     }
     public function firstTaskSubmission()
     {
@@ -625,7 +625,7 @@ class Task extends BaseModel
     {
         return $this->hasMany(TaskRevision::class);
     }
-  
+
     public function taskRevisionDisputes()
     {
         return $this->hasMany(TaskRevisionDispute::class, 'task_id');

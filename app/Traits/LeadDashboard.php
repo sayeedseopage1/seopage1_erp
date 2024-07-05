@@ -15,11 +15,13 @@ use App\Models\AttendanceSetting;
 use Illuminate\Support\Facades\DB;
 use App\Models\ProjectTimeLogBreak;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Database\Eloquent\Builder;
 
 trait LeadDashboard
 {
     public function LeadDashboard()
     {
+
         $this->viewEventPermission = user()->permission('view_events');
         $this->viewNoticePermission = user()->permission('view_notice');
         $this->editTimelogPermission = user()->permission('edit_timelogs');
@@ -1098,18 +1100,35 @@ trait LeadDashboard
             ]);
         } else {
             $devId = Auth::id();
+
             $startDate = Carbon::now()->startOfMonth();
+            $endDate = Carbon::now()->endOfMonth()->addDays(1);
 
-            $endDate1 = Carbon::now()->endOfMonth();
-
-            $endDate = Carbon::parse($endDate1)->addDays(1)->format('Y-m-d');
-
-            $this->startDate1 = Carbon::parse($startDate);
-            $this->endDate1 = Carbon::parse($endDate1);
-
-
+            $startDate1 = Carbon::parse('2024-05-01')->startOfMonth();
+            $endDate1 = Carbon::parse('2024-05-31')->endOfMonth()->addDays(1);
 
             $this->username_lead = DB::table('users')->where('id', $devId)->value('name');
+
+            $taskWithStartEndDateWithIdWithConfirm = Task::whereBetween('created_at', [$startDate1, $endDate1])
+                ->whereRelation('taskUsers', 'user_id', auth()->id())
+                ->whereNull('subtask_id')
+                ->where('board_column_id', 4);
+
+            $leadDevNumberOfApprovedTaskByClientInFirstAttempt = clone $taskWithStartEndDateWithIdWithConfirm;
+
+            [
+                $this->number_of_approved_tasks_on_1st_attempt_by_client,
+                $this->number_of_approved_tasks_on_1st_attempt_by_client_data,
+            ] = $this->leadDevNumberOfApprovedTaskByClientInFirstAttempt($leadDevNumberOfApprovedTaskByClientInFirstAttempt);
+
+            $leadDevAvgNumberOfAttemptsNeededForApprovalByClient = clone $taskWithStartEndDateWithIdWithConfirm;
+            [
+                $this->avg_number_of_attempts_needed_for_approval_by_client,
+                $this->total_number_of_attempts_needed_for_approval_by_client,
+                $this->total_number_of_attempts_needed_for_approval_by_client_data,
+            ] = $this->leadDevAvgNumberOfAttemptsNeededForApprovalByClient($leadDevAvgNumberOfAttemptsNeededForApprovalByClient);
+
+            $leadDevNumberOfApprovedTaskByClientInFirstAttempt = clone $taskWithStartEndDateWithIdWithConfirm;
 
             [
                 $this->number_of_tasks_received_lead,
@@ -1617,6 +1636,39 @@ trait LeadDashboard
         ];
     }
 
+    private function leadDevNumberOfApprovedTaskByClientInFirstAttempt($taskWithStartEndDateWithIdWithConfirm)
+    {
+
+        $task_ids = $taskWithStartEndDateWithIdWithConfirm->get()->pluck('id')->toArray();
+
+        $number_of_approved_tasks_on_1st_attempt_by_client_data = $taskWithStartEndDateWithIdWithConfirm
+            ->select('id', 'created_at', 'due_date', 'heading', 'board_column_id', 'project_id')
+            ->doesntHave('revisions')
+            ->orWhere(function ($query) use ($task_ids) {
+                $query->whereIn('id', $task_ids)
+                    ->whereHas('revisions', function (Builder $query) {
+                        $query->where('final_responsible_person', '!=', 'LD')
+                            // ->where('is_accept', 0)
+                            ->where('dispute_between', 'PLR')
+                            ->orWhereRelation('taskRevisionDispute', 'raised_against_percent', '>', 50);
+                    });
+            })
+            ->with(
+                'stat:id,label_color,column_name',
+                'project.pm:id,name',
+                'project.client:id,name',
+                'project:id,pm_id,client_id',
+                'latestTaskSubmission:id,task_id,created_at',
+                'latestTaskApprove:id,task_id,created_at',
+            )
+            ->get();
+
+        return [
+            $number_of_approved_tasks_on_1st_attempt_by_client_data->count(),
+            $number_of_approved_tasks_on_1st_attempt_by_client_data
+        ];
+    }
+
     private function leadNumberOfApprovedTasksOn1stAttemptByProjectManager($startDate, $endDate, $devId)
     {
         $number_of_approved_tasks_on_1st_attempt_by_project_manager = 0;
@@ -1686,6 +1738,53 @@ trait LeadDashboard
         ];
     }
 
+    private function leadDevAvgNumberOfAttemptsNeededForApprovalByClient($taskWithStartEndDateWithIdWithConfirm)
+    {
+        $task_ids = $taskWithStartEndDateWithIdWithConfirm->get()->pluck('id')->toArray();
+
+        $number_of_attempts_needed_for_approval_by_client = $taskWithStartEndDateWithIdWithConfirm
+            ->select('id', 'created_at', 'due_date', 'heading', 'board_column_id', 'project_id')
+            ->doesntHave('revisions')
+            ->orWhere(function ($query) use ($task_ids) {
+                $query->whereIn('id', $task_ids)
+                    ->whereHas('revisions', function (Builder $query) {
+                        $query->where('final_responsible_person', '=', 'LD')
+                            // ->where('is_accept', 0)
+                            ->where('dispute_between', 'PLR')
+                            ->orWhereRelation('taskRevisionDispute', 'raised_against_percent', '<', 50);
+                    });
+            })
+            ->withCount([
+                'revisions as only_responsible_revisions_count' => function ($query) {
+                    $query->where('final_responsible_person', '=', 'LD')
+                        // ->where('is_accept', 0)
+                        ->where('dispute_between', 'PLR')
+                        ->orWhereRelation('taskRevisionDispute', 'raised_against_percent', '<', 50);
+                }
+            ])
+            ->with(
+                'taskType:id,task_id,task_type,page_type',
+                'project.pm:id,name',
+                'project.client:id,name',
+                'project:id,pm_id,client_id',
+                'stat:id,label_color,column_name',
+                'latestTaskApprove:id,task_id,created_at',
+                'latestTaskSubmission:id,task_id,created_at',
+                'taskUser'
+            )->get();
+
+        $total_attempts = $number_of_attempts_needed_for_approval_by_client->sum('only_responsible_revisions_count') + $number_of_attempts_needed_for_approval_by_client->count();
+        $avg_no_attempts = 0;
+        if ($total_attempts) {
+            $avg_no_attempts = round($total_attempts / $number_of_attempts_needed_for_approval_by_client->count(), 2);
+        }
+
+        return [
+            $avg_no_attempts,
+            $total_attempts,
+            $number_of_attempts_needed_for_approval_by_client,
+        ];
+    }
     private function leadAvgNumberOfAttemptsNeededForApprovalByProjectManager($startDate, $endDate, $devId)
     {
         $number_of_tasks_completed = DB::table('task_history')
@@ -2624,8 +2723,8 @@ trait LeadDashboard
             }
         }
         // dd($disputes_lost, $test, $disputes_filed);
-        $number_of_disputes_filed_lead_developer_data = Task::with('project.pm', 'project.client', 'taskRevisionDispute.disputeWinner', 'taskRevisionDispute.raisedAgainst', 'taskRevisionDispute.raisedBy')->find($disputes_filed);
-        $number_of_disputes_lost_by_lead_developer_data = Task::with('project.pm', 'project.client', 'taskRevisionDispute.disputeWinner', 'taskRevisionDispute.raisedAgainst', 'taskRevisionDispute.raisedBy')->find($disputes_lost);
+        $number_of_disputes_filed_lead_developer_data = Task::with('project.pm', 'project.client', 'taskRevisionDisputes.disputeWinner', 'taskRevisionDisputes.raisedAgainst', 'taskRevisionDisputes.raisedBy')->find($disputes_filed);
+        $number_of_disputes_lost_by_lead_developer_data = Task::with('project.pm', 'project.client', 'taskRevisionDisputes.disputeWinner', 'taskRevisionDisputes.raisedAgainst', 'taskRevisionDisputes.raisedBy')->find($disputes_lost);
         $disputes_raised_by_lead_developer_not_resolved_yet = ($number_of_disputes_filed_lead_developer - ($number_of_disputes_win_by_lead_developer + $number_of_disputes_lost_by_lead_developer));
 
         // dd(
@@ -2710,7 +2809,7 @@ trait LeadDashboard
             }
         }
 
-        $disputes_lead_developer_involved_data = Task::with('project.pm', 'project.client', 'taskRevisionDispute.disputeWinner', 'taskRevisionDispute.raisedAgainst', 'taskRevisionDispute.raisedBy')->find($test);
+        $disputes_lead_developer_involved_data = Task::with('project.pm', 'project.client', 'taskRevisionDisputes.disputeWinner', 'taskRevisionDisputes.raisedAgainst', 'taskRevisionDisputes.raisedBy')->find($test);
         $disputes_lead_developer_involved_not_resolved_yet = (count($disputes_lead_developer_involved) - ($number_of_disputes_win_by_lead_developer + $number_of_disputes_lost_by_lead_developer));
 
         // dd(

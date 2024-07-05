@@ -1,84 +1,80 @@
 <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
-<div class="modal fade" id="avg_num_of_approval_by_client{{count($first_attempt_approve_task_data_client_lead)}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div id="avg_num_of_approval_by_client{{ $total_number_of_attempts_needed_for_approval_by_client }}" class="modal fade"
+    tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-xl">
-      <div class="modal-content">
-        <div class="modal-header">
-          <div class="modal-title"><h4>Submitted Tasks: {{$submit_number_of_tasks_in_this_month_lead}}</h4>
-         
-             </div>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
-        </div>
-        <div class="modal-body">
-            <table id="avg_num_approve_by_client_table" class="display" style="width:100%">
-                <thead>
-                  <tr>
-                    <th scope="col">Sl No</th>
-                    <th scope="col">Assign Date</th>
-                    <th scope="col">Task Name</th>
-                    <th scope="col">Client Name</th>
-                    <th scope="col">Submission Date</th>
-                    <th scope="col">Deadline</th>
-                    <th scope="col">status</th>
-                    <th scope="col">Revision Count</th>
-                  </tr>
-                </thead>
-                <tbody>
-                    @foreach($first_attempt_approve_task_data_client_lead as $row)
-                    <tr>
-                        <td>{{$loop->index+1}}</td>
-                        <td>
-                            {{$row->assign_date}}
-                          
-                        </td>
-                        <td>
-                            <a href="{{route('tasks.show',$row->id)}}">{{$row->heading}}<a>
-                         
-                        </td>
-                        <td>
-                            @if($row->cl_id != null)
-                            {{$row->cl_name}}
-                            @elseif($row->client_name != null)
-                            {{$row->client_name}}
-                            @else 
-                           <a href="{{route('clients.show',$row->clientId)}}"> {{$row->clientName}}</a>
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-title">
+                    {{-- <h4>Submitted Tasks: {{$submit_number_of_tasks_in_this_month_lead}}</h4> --}}
 
-                            @endif
+                </div>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <table id="avg_num_approve_by_client_table" class="display" style="width:100%">
+                    <thead>
+                        <tr>
+                            <th scope="col">Sl No</th>
+                            <th scope="col">Task Name</th>
+                            <th scope="col">Task Type</th>
+                            <th scope="col">Client Name</th>
+                            <th scope="col">Project Manager</th>
+                            <th scope="col">Lead Developer</th>
+                            <th scope="col">Created On</th>
+                            <th scope="col">Submission On</th>
+                            <th scope="col">No Of Att. Needed For Approval</th>
+                            <th scope="col">Approved On</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach ($total_number_of_attempts_needed_for_approval_by_client_data as $row)
+                            <tr>
+                                <td>{{ ++$loop->index }}</td>
+                                <td>
+                                    <a href="{{ route('tasks.show', $row->id) }}">{{ $row->heading }}<a>
+                                </td>
+                                <td>
+                                    {{ $row->taskType?->task_type ?? $row->taskType?->page_type}}
+                                </td>
+                                <td>
+                                    @if ($row?->project?->client)
+                                        <a href="{{ route('clients.show', $row->project->client->id) }}">
+                                            {{ $row->project->client->name }}</a>
+                                    @endif
+                                </td>
+                                <td>
+                                    {{ $row?->project?->pm?->name ?? 'Unknown' }}
+                                </td>
+                                <td>
+                                    {{ $row->taskUser?->name }}
+                                </td>
+                                <td>
+                                    {{ $row->created_at }}
+                                </td>
+                                <td>
+                                    {{ $row->latestTaskSubmission?->created_at }}
+                                </td>
+                                <td>
+                                    {{ $row->only_responsible_revisions_count + 1 }}
+                                </td>
+                                <td>{{ $row->latestTaskApprove?->created_at }}</td>
+                            </tr>
+                        @endforeach
 
-                        </td>
-                        <td>
-                            @if($row->board_column_id == 1 || $row->board_column_id == 2 || $row->board_column_id == 3)
-                            N\A 
-                            @else 
-                            {{$row->submission_date}}
-                        @endif
-                    </td>
-                        <td>{{$row->due_date}}</td>
-                        <td>
-                          <span style="color: {{$row->label_color}}"> {{$row->column_name}}</span>
-                        </td>
-                        <td>
-                          {{-- <a href="#" data-toggle="modal" data-target="#revision_count_modal{{ $key }}">
-                              {{$row->revision_count}}
-                            </a> --}}
-                            --
-                        </td>
-                    </tr>
-                    @endforeach
-                   
-                </tbody>
-              </table>
+                    </tbody>
+                </table>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
         </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        </div>
-      </div>
     </div>
-  </div>
+</div>
 
-  {{-- @foreach($first_attempt_approve_task_data_client_lead as $key => $row)
-  @if ($row->revision_count !='0')
+{{-- @foreach ($first_attempt_approve_task_data_client_lead as $key => $row)
+  @if ($row->revision_count != '0')
   @php
     $task_revisions = App\Models\TaskRevision::where('task_id',$row->id)->get();
   @endphp
@@ -151,25 +147,25 @@
                       {{$task_revision->created_at}}
                   </td>
                   <td>
-                    @if ($rp_client !=null)
+                    @if ($rp_client != null)
                     <a href="{{ route('clients.show',$rp_client->id) }}">{{ $rp_client->name }}</a>
                     @endif
-                    @if ($rp_developer !=null)
+                    @if ($rp_developer != null)
                     <a href="{{ route('employees.show',$rp_developer->id) }}">{{ $rp_developer->name }}</a>
                     @endif
-                    @if ($rp_pm !=null)
+                    @if ($rp_pm != null)
                     <a href="{{ route('employees.show',$rp_pm->id) }}">{{ $rp_pm->name }}</a>
                     @endif
-                    @if ($rp_lead_dev !=null)
+                    @if ($rp_lead_dev != null)
                     <a href="{{ route('employees.show',$rp_lead_dev->id) }}">{{ $rp_lead_dev->name }}</a>
                     @endif
-                    @if ($rp_ud !=null)
+                    @if ($rp_ud != null)
                     <a href="{{ route('employees.show',$rp_ud->id) }}">{{ $rp_ud->name }}</a>
                     @endif
-                    @if ($rp_gd !=null)
+                    @if ($rp_gd != null)
                     <a href="{{ route('employees.show',$rp_gd->id) }}">{{ $rp_gd->name }}</a>
                     @endif
-                    @if ($rp_sales !=null)
+                    @if ($rp_sales != null)
                     <a href="{{ route('employees.show',$rp_sales->id) }}">{{ $rp_sales->name }}</a>
                     @endif
                   </td>
@@ -187,11 +183,9 @@
   @endif
   @endforeach --}}
 
-
-
-  <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
-  <script>
-      new DataTable('#avg_num_approve_by_client_table',{
+<script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+<script>
+    new DataTable('#avg_num_approve_by_client_table', {
         "dom": 't<"d-flex"l<"ml-auto"ip>><"clear">',
-      });
-  </script>
+    });
+</script>
