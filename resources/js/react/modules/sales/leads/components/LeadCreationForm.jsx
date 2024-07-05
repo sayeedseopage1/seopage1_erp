@@ -341,7 +341,6 @@ const LeadCreationFormControl = ({ close, presetInitialData = null }) => {
         setError(_error);
         return Object.keys(_error)?.length === 0;
     };
-    console.log("lead form data", formData);
 
     // handle submission
     const handleSubmit = async (e) => {
@@ -483,7 +482,6 @@ const LeadCreationFormControl = ({ close, presetInitialData = null }) => {
 
     React.useEffect(() => {
         if (error?.isSubmitting) {
-            console.log("error", error);
             isValid();
         }
     }, [formData]);
