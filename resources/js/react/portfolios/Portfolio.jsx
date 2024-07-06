@@ -10,8 +10,6 @@ import {
 import _ from "lodash";
 import Pagination from "./components/Pagination";
 import { Placeholder } from "../global/Placeholder";
-
-import Button from "../global/Button";
 import PortfolioFilterBar from "./components/filter/PortfolioFilterBar";
 import ListOrTableView from "./components/filter/ListorTableView";
 import DataTable from "./components/Table/DataTable";
@@ -71,8 +69,7 @@ const Portfolio = () => {
             theme_id: _theme?.id,
             plugin_name: _plugin?.plugin_name,
             plugin_id: _plugin?.id,
-            rating: _rating?.id,
-            rating_name: _rating?.name,
+            rating_id: _rating?.id,
         };
 
         const queryObject = _.pickBy(query, Boolean);
@@ -144,87 +141,94 @@ const Portfolio = () => {
     };
 
     return (
-        <section className="p-4">
-            <section
+        <section>
+            <div
                 style={{
-                    display: "flex",
-                    flexDirection: "row",
-                    gap: "10px",
-                    backgroundColor: "#F2F9FE",
-                    padding: "20px",
-                    border: "1px solid #E0E9EF",
-                    borderRadius: "6px",
+                    marginLeft: "5px",
+                    marginRight: "5px",
+                    marginTop: "10px",
                 }}
             >
-                <PortfolioFilterBar
-                    cms={cms}
-                    setCms={setCms}
-                    cmsSearch={cmsSearch}
-                    setCmsSearch={setCmsSearch}
-                    websiteType={websiteType}
-                    websiteCategorySearch={websiteCategorySearch}
-                    websiteCategory={websiteCategory}
-                    websiteTypeSearch={websiteTypeSearch}
-                    filterMenuItems={filterMenuItems}
-                    setWebsiteTypeSearch={setWebsiteTypeSearch}
-                    setWebsiteType={setWebsiteType}
-                    setWebsiteCategorySearch={setWebsiteCategorySearch}
-                    setWebsiteCategory={setWebsiteCategory}
-                    subCategorySearch={subCategorySearch}
-                    setSubCategorySearch={setSubCategorySearch}
-                    subCategory={subCategory}
-                    theme={theme}
-                    themeSearch={themeSearch}
-                    setThemeSearch={setThemeSearch}
-                    setTheme={setTheme}
-                    plugin={plugin}
-                    pluginSearch={pluginSearch}
-                    setPluginSearch={setPluginSearch}
-                    setPlugin={setPlugin}
-                    subNiches={subNiches}
-                    setSubCategory={setSubCategory}
-                    filterThemes={filterThemes}
-                    filterPlugin={filterPlugin}
-                    rating={rating}
-                    setRating={setRating}
-                />
-            </section>
+                <section
+                    style={{
+                        backgroundColor: "#F2F9FE",
+                        padding: "20px",
+                        border: "1px solid #E0E9EF",
+                        borderRadius: "6px",
+                    }}
+                >
+                    <PortfolioFilterBar
+                        cms={cms}
+                        setCms={setCms}
+                        cmsSearch={cmsSearch}
+                        setCmsSearch={setCmsSearch}
+                        websiteType={websiteType}
+                        websiteCategorySearch={websiteCategorySearch}
+                        websiteCategory={websiteCategory}
+                        websiteTypeSearch={websiteTypeSearch}
+                        filterMenuItems={filterMenuItems}
+                        setWebsiteTypeSearch={setWebsiteTypeSearch}
+                        setWebsiteType={setWebsiteType}
+                        setWebsiteCategorySearch={setWebsiteCategorySearch}
+                        setWebsiteCategory={setWebsiteCategory}
+                        subCategorySearch={subCategorySearch}
+                        setSubCategorySearch={setSubCategorySearch}
+                        subCategory={subCategory}
+                        theme={theme}
+                        themeSearch={themeSearch}
+                        setThemeSearch={setThemeSearch}
+                        setTheme={setTheme}
+                        plugin={plugin}
+                        pluginSearch={pluginSearch}
+                        setPluginSearch={setPluginSearch}
+                        setPlugin={setPlugin}
+                        subNiches={subNiches}
+                        setSubCategory={setSubCategory}
+                        filterThemes={filterThemes}
+                        filterPlugin={filterPlugin}
+                        rating={rating}
+                        setRating={setRating}
+                    />
+                </section>
 
-            <section
-                style={{
-                    backgroundColor: "#F2F9FE",
-                    padding: "10px",
-                    border: "1px solid #E0E9EF",
-                    borderRadius: "6px",
-                    marginTop: "15px",
-                }}
-            >
-                <ListOrTableView
-                    tableView={tableView}
-                    setTableView={setTableView}
-                />
-            </section>
+                <section
+                    style={{
+                        backgroundColor: "#F2F9FE",
+                        padding: "10px",
+                        border: "1px solid #E0E9EF",
+                        borderRadius: "6px",
+                        marginTop: "15px",
+                    }}
+                >
+                    <ListOrTableView
+                        tableView={tableView}
+                        setTableView={setTableView}
+                    />
+                </section>
 
-            <section>
-                <AppliedFilters
-                    cms={cms}
-                    setCms={setCms}
-                    websiteType={websiteType}
-                    setWebsiteType={setWebsiteType}
-                    websiteCategory={websiteCategory}
-                    setWebsiteCategory={setWebsiteCategory}
-                    subCategory={subCategory}
-                    setSubCategory={setSubCategory}
-                    theme={theme}
-                    setTheme={setTheme}
-                    plugin={plugin}
-                    setPlugin={setPlugin}
-                />
-            </section>
+                <section>
+                    <AppliedFilters
+                        cms={cms}
+                        setCms={setCms}
+                        websiteType={websiteType}
+                        setWebsiteType={setWebsiteType}
+                        websiteCategory={websiteCategory}
+                        setWebsiteCategory={setWebsiteCategory}
+                        subCategory={subCategory}
+                        setSubCategory={setSubCategory}
+                        theme={theme}
+                        setTheme={setTheme}
+                        plugin={plugin}
+                        setPlugin={setPlugin}
+                        rating={rating}
+                        setRating={setRating}
+                    />
+                </section>
+            </div>
 
             {tableView === "listView" ? (
                 <div>
-                    <div className="row py-3">
+                    <div className="row py-4 mx-1">
                         {dataLoading || filterMenuIsLoading ? (
                             _.times(pageSize, (n) => (
                                 <div className="col-3 mb-2" key={n}>
@@ -346,12 +350,21 @@ const Portfolio = () => {
                             </div>
                         )}
                     </div>
-                    {/* pagination */}
                 </div>
             ) : (
-                <div style={{ marginTop: "20px" }}>
+                <div
+                    style={{
+                        marginTop: "20px",
+                        backgroundColor: "#F2F9FE",
+                        padding: "10px",
+                        border: "1px solid #E0E9EF",
+                        borderRadius: "6px",
+                        marginLeft: "5px",
+                        marginRight: "5px",
+                    }}
+                >
                     <DataTable
-                        tableData={portfolio}
+                        tableData={portfolio?.data}
                         tableColumns={PortfolioTableColumns}
                         isLoading={dataLoading || filterMenuIsLoading}
                         tableName="portfolio Table"

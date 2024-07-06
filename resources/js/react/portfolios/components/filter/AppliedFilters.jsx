@@ -13,6 +13,8 @@ const AppliedFilters = ({
     setTheme,
     plugin,
     setPlugin,
+    rating,
+    setRating,
 }) => {
     return (
         <div>
@@ -21,7 +23,8 @@ const AppliedFilters = ({
             websiteCategory ||
             subCategory ||
             theme ||
-            plugin ? (
+            plugin ||
+            rating ? (
                 <div className="mt-3">
                     <h6 className="mb-2">Applied filteres: </h6>
                     <div
@@ -114,6 +117,19 @@ const AppliedFilters = ({
                                     </span>
                                 </span>
                                 <button onClick={() => setPlugin(null)}>
+                                    <i className="fa-solid fa-xmark" />
+                                </button>
+                            </div>
+                        )}
+                        {rating && (
+                            <div className="filter-item">
+                                <span>
+                                    <span className="f-12 ">Rating: </span>{" "}
+                                    <span className="font-weight-bold">
+                                        {rating.name}{" "}
+                                    </span>
+                                </span>
+                                <button onClick={() => setRating(null)}>
                                     <i className="fa-solid fa-xmark" />
                                 </button>
                             </div>

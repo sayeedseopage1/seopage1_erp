@@ -4,6 +4,7 @@ import React, { useState, useEffect } from "react";
 import PortfolioModal from "./components/PortfolioModal";
 import { useLazyGetPortfolioDataByIdQuery } from "../services/api/portfolioApiSlice";
 import Button from "../global/Button";
+import PortfolioButtons from "./components/PortfolioButtons";
 
 const PortfolioItem = ({ id, url, onClick, isLoading }) => {
     const [showModal, setShowModal] = useState(false);
@@ -50,10 +51,7 @@ const PortfolioItem = ({ id, url, onClick, isLoading }) => {
     return (
         <>
             <div className="portfolio-item">
-                <div
-                    className="portfolio-icon"
-                    style={{ width: "70px", height: "65px" }}
-                >
+                <div className="portfolio-icon">
                     <img
                         src={`https://www.google.com/s2/favicons?domain=${url}&sz=256`}
                         alt=""
@@ -75,74 +73,18 @@ const PortfolioItem = ({ id, url, onClick, isLoading }) => {
                         </span>
                     </div>
 
-                    <div
-                        style={{
-                            display: "flex",
-                            flexDirection: "row",
-                            gap: "10px",
-                        }}
-                    >
-                        <Button className="price_quotation_custom_button price_quotation_custom_button_primary">
-                            Edit
-                        </Button>
-
-                        <div>
-                            <button
-                                ref={setRefEl}
-                                aria-label="copy-text"
-                                onClick={(e) => {
-                                    e.stopPropagation();
-                                    copyToClipboard(url);
-                                    setIsCopied(true);
-                                }}
-                                style={{
-                                    width: "75px",
-                                    height: "42px",
-                                    padding: "5px 10px 5px 10px",
-                                    display: "inline-block",
-                                    textAlign: "center",
-                                    border: "1px solid #1492E6",
-                                    backgroundColor: "#E3F3FF",
-                                    borderRadius: "5px",
-                                    color: "#1492E6",
-                                }}
-                            >
-                                {isCopied ? (
-                                    <i
-                                        className="fa-solid fa-check"
-                                        style={{ width: "100%" }}
-                                    />
-                                ) : (
-                                    <span style={{ width: "100%" }}>Copy</span>
-                                )}
-
-                                {isCopied && (
-                                    <div
-                                        className="dispute-tooltip"
-                                        ref={setPopperEl}
-                                        style={styles.popper}
-                                        {...attributes.popper}
-                                    >
-                                        <div className="dispute-tooltip-content">
-                                            Copied
-                                        </div>
-                                        <div
-                                            ref={setArrowElement}
-                                            style={styles.arrow}
-                                            className="dispute-notif-arrow"
-                                        />
-                                    </div>
-                                )}
-                            </button>
-                        </div>
-
-                        <Button
-                            className="price_quotation_custom_button price_quotation_custom_button_primary"
-                            onClick={handleToggleModal}
-                        >
-                            Open
-                        </Button>
-                    </div>
+                    <PortfolioButtons
+                        url={url}
+                        copyToClipboard={copyToClipboard}
+                        setRefEl={setRefEl}
+                        setPopperEl={setPopperEl}
+                        setArrowElement={setArrowElement}
+                        handleToggleModal={handleToggleModal}
+                        isCopied={isCopied}
+                        setIsCopied={setIsCopied}
+                        styles={styles}
+                        attributes={attributes}
+                    />
                 </div>
 
                 <div>
