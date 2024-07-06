@@ -37,7 +37,7 @@ const DataTable = ({
     // Table State
     const [sorting, setSorting] = React.useState([]);
     const [expanded, setExpanded] = React.useState({});
-    const [data, setData] = React.useState(tableData?.data || []);
+    const [data, setData] = React.useState(tableData || []);
     const [skipPageReset, setSkipPageReset] = React.useState(false);
     const [{ pageIndex, pageSize }, setPagination] = React.useState({
         pageIndex: 0,
@@ -45,10 +45,7 @@ const DataTable = ({
     });
 
     // Price Quotations Data
-    const _priceQuotations = React.useMemo(
-        () => tableData?.data,
-        [tableData?.data]
-    );
+    const _priceQuotations = React.useMemo(() => tableData, [tableData]);
     React.useEffect(() => {
         if (_.size(_priceQuotations) === _.size(data)) {
             setSkipPageReset(true);
