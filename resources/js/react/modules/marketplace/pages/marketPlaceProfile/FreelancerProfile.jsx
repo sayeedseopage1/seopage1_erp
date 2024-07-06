@@ -1,12 +1,14 @@
-import React from 'react';
+import React, { useState } from 'react';
 import '../../styles/marketPlaceProfile/marketPlaceProfile.css';
 import { user_profile } from '../../constants/userProfile';
 import ProfileLeftSection from '../../components/marketPlaceProfile/sections/ProfileLeftSection';
 import ProfileRightSection from '../../components/marketPlaceProfile/sections/ProfileRightSection';
 import { ConfigProvider } from 'antd';
+import ProfileRightSectionLoader from '../../components/loader/ProfileRightSectionLoader';
 
 const FreelancerProfile = () => {
     const { cover_image } = user_profile || {}
+    const [isProfileLoading, setIsProfileLoading] = useState(true);
     return (
         <ConfigProvider
             theme={{
@@ -23,7 +25,9 @@ const FreelancerProfile = () => {
                     <div className='marketplace_profile_body'>
                         <div className='marketplace_profile_body_contents'>
                             <ProfileLeftSection profileData={user_profile} />
-                            <ProfileRightSection profileData={user_profile} />
+                            {
+                                isProfileLoading ? <ProfileRightSectionLoader /> : <ProfileRightSection profileData={user_profile} />
+                            }
                         </div>
                     </div>
                 </div>
