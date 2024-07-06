@@ -1570,7 +1570,7 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
     // Graphic task files delete
     Route::get('graphic-task-file/delete/{id}', [TaskController::class, 'deleteGraphicTaskFile'])->name('graphic.task.file.delete');
     Route::resource('platform-accounts', PlatformAccountController::class)->except(['create','edit','destroy']);
-    Route::get('get-clients-from-deal-stage', [PriceQuotationInsightController::class, 'getDealStageClients']);
+    Route::get('get-clients-from-deal-stage', [PriceQuotationInsightController::class, 'getClientsFromDealStage']);
 });
 
 //custom route for seopage1
