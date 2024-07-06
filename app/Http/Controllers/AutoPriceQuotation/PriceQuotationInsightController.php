@@ -17,4 +17,13 @@ class PriceQuotationInsightController extends Controller
             'data' => $data
         ]);
     }
+
+    public function getDealNameFromDealStage($client_username)
+    {
+        $data = DealStage::select(['id','short_code','client_username','client_name','project_name','actual_amount','amount','deal_status'])->where('client_username', $client_username)->get();
+        return response()->json([
+            'status' => 200,
+            'data' => $data
+        ]);
+    }
 }
