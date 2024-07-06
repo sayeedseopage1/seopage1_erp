@@ -22,16 +22,7 @@ import checkOverlapRange from "../../../../../../../../utils/checkOverlapRange";
 import formatTimeTo12Hour from "../../../../../../../../utils/formatTimeTo12Hour";
 import extractTime from "../../../../../../../../utils/extractTime";
 
-const Option4 = ({
-    trackedTimeHistory,
-    lastClockData,
-    checked,
-    index,
-    onChange,
-    onSubmit,
-    isLoading,
-    onBack,
-}) => {
+const Option4 = ({ checked, index, onChange, onSubmit, isLoading, onBack }) => {
     const [data, setData] = React.useState({
         comment: "",
         responsible_person: "",
@@ -44,7 +35,6 @@ const Option4 = ({
         client: "",
     });
 
-    // console.log("data in option 4", data);
     const [durationStart, setDurationStart] = React.useState("");
     const [durationEnd, setDurationEnd] = React.useState("");
     const [person, setPerson] = React.useState({});
@@ -75,26 +65,6 @@ const Option4 = ({
             setData({ ...data, [e.target.name]: e.target.value });
         }
     };
-
-    // setup time field
-    // React.useEffect(() => {
-    //     // start time
-    //     window
-    //         .$("#timepicker1")
-    //         .timepicker("setTime", durationStart)
-    //         .on("changeTime.timepicker", function (e) {
-    //             setDurationStart(e.target.value);
-    //         });
-
-    //     // end time
-    //     window
-    //         .$("#timepicker2")
-    //         .timepicker("setTime", durationEnd)
-    //         .on("changeTime.timepicker", function (e) {
-    //             setDurationEnd(e.target.value);
-    //             // console.log(e.timeStamp)
-    //         });
-    // }, [checked]);
 
     // responsible person ID
     const responsiblePersonId = (id) => {
@@ -157,12 +127,6 @@ const Option4 = ({
         ]),
     };
 
-    //overlapping validation
-    // let newOverlappingTimes = [];
-    // let lastClockOutTime = lastClockData?.clock_out_time
-    //     ? extractTime(lastClockData?.clock_out_time)
-    //     : "23:00:00";
-
     const handleSubmission = (e, submissionType) => {
         e.preventDefault();
 
@@ -176,56 +140,11 @@ const Option4 = ({
             return;
         }
 
-        // if (
-        //     checkOverlapRange(lastClockOutTime, [
-        //         { id: "de2sew", start: durationStart, end: durationEnd },
-        //     ])
-        // ) {
-        //     Swal.fire({
-        //         position: "center",
-        //         icon: "error",
-        //         title: "You have selected wrong time range!",
-        //         text: `You must select time within this time range: 07:45 AM - (${formatTimeTo12Hour(
-        //             lastClockOutTime
-        //         )}).`,
-        //         showConfirmButton: true,
-        //     });
-        //     return;
-        // }
-
-        // if (
-        //     checkOverlap(
-        //         newOverlappingTimes,
-        //         [{ id: "de2sew", start: durationStart, end: durationEnd }],
-        //         trackedTimeHistory
-        //     )
-        // ) {
-        //     Swal.fire({
-        //         position: "center",
-        //         icon: "error",
-        //         title: "Your selected time is overlapping with your tracked time!",
-        //         text: `Overlapping time: ${newOverlappingTimes
-        //             ?.map(
-        //                 (t) =>
-        //                     `${formatTimeTo12Hour(
-        //                         t.trackedStart
-        //                     )} - ${formatTimeTo12Hour(t.trackedEnd)}`
-        //             )
-        //             .join(", ")}`,
-        //         showConfirmButton: true,
-        //     });
-        //     return;
-        // }
-
         setSType(submissionType);
 
         onSubmit(fd, submissionType, onBack, [
             { id: "de2sew", start: durationStart, end: durationEnd },
         ]);
-        if (submissionType === "CONTINUE") {
-            setDurationStart("");
-            setDurationEnd("");
-        }
     };
 
     return (

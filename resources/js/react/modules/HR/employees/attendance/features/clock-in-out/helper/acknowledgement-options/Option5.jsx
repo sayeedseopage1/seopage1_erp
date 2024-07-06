@@ -12,17 +12,7 @@ import formatTimeTo12Hour from "../../../../../../../../utils/formatTimeTo12Hour
 import checkOverlapRange from "../../../../../../../../utils/checkOverlapRange";
 import checkOverlap from "../../../../../../../../utils/checkOverlap";
 import Swal from "sweetalert2";
-const Option5 = ({
-    checked,
-    index,
-    onChange,
-    onSubmit,
-    isLoading,
-    onBack,
-
-    trackedTimeHistory,
-    lastClockData,
-}) => {
+const Option5 = ({ checked, index, onChange, onSubmit, isLoading, onBack }) => {
     const [task, setTask] = React.useState(null);
     const [durations, setDurations] = React.useState([
         { start: "", end: "", id: "de2sew" },
@@ -64,11 +54,6 @@ const Option5 = ({
         return !errCount;
     };
 
-    //overlapping validation
-    // let newOverlappingTimes = [];
-    // let lastClockOutTime = lastClockData?.clock_out_time
-    //     ? extractTime(lastClockData?.clock_out_time)
-    //     : "23:00:00";
     // handle form submit
     const handleSubmission = (e, submissionType) => {
         e.preventDefault();
@@ -88,39 +73,9 @@ const Option5 = ({
             });
             return;
         }
-        // if (checkOverlapRange(lastClockOutTime, durations)) {
-        //     Swal.fire({
-        //         position: "center",
-        //         icon: "error",
-        //         title: "You have selected wrong time range!",
-        //         text: `You must select time within this time range: 07:45 AM - (${formatTimeTo12Hour(
-        //             lastClockOutTime
-        //         )}).`,
-        //         showConfirmButton: true,
-        //     });
-        //     return;
-        // }
-
-        // if (checkOverlap(newOverlappingTimes, durations, trackedTimeHistory)) {
-        //     Swal.fire({
-        //         position: "center",
-        //         icon: "error",
-        //         title: "Your selected time is overlapping with your tracked time!",
-        //         text: `Overlapping time: ${newOverlappingTimes
-        //             ?.map(
-        //                 (t) =>
-        //                     `${formatTimeTo12Hour(
-        //                         t.trackedStart
-        //                     )} - ${formatTimeTo12Hour(t.trackedEnd)}`
-        //             )
-        //             .join(", ")}`,
-        //         showConfirmButton: true,
-        //     });
-        //     return;
-        // }
 
         setSType(submissionType);
-        onSubmit(data, submissionType, onBack, durations);
+        onSubmit(data, submissionType, onBack, durations, setDurations);
     };
 
     return (
@@ -236,13 +191,6 @@ const Option5 = ({
                                     className="ml-2"
                                     onClick={(e) => {
                                         handleSubmission(e, "CONTINUE");
-                                        setDurations([
-                                            {
-                                                start: "",
-                                                end: "",
-                                                id: "d32sew",
-                                            },
-                                        ]);
                                     }}
                                     isLoading={
                                         sType === "CONTINUE" && isLoading

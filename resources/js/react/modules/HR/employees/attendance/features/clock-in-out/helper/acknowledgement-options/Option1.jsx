@@ -14,20 +14,8 @@ import { fromAndToValidation } from "../../../../../../../../utils/fromAndToVali
  * * this component show the first acknowledgement option
  */
 
-const Option1 = ({
-    sType,
-    setSType,
-    checked,
-    index,
-    onChange,
-    onSubmit,
-    isLoading,
-    onBack,
-    trackedTimeHistory,
-    lastClockData,
-}) => {
+const Option1 = ({ checked, index, onChange, onSubmit, isLoading, onBack }) => {
     const [comment, setComment] = React.useState("");
-    const [error, setError] = React.useState(null);
     const [durations, setDurations] = React.useState([
         {
             start: "",
@@ -35,10 +23,14 @@ const Option1 = ({
             id: "d32sew",
         },
     ]);
-
-    // unique id
+    const [error, setError] = React.useState(null);
     const uniqueId = Math.random().toString(6).slice(2);
+    const [sType, setSType] = React.useState("");
 
+    const handleEditorChange = (e, editor) => {
+        const data = editor.getData();
+        setComment(data);
+    };
     // remove duration
     const onRemove = (e, id) => {
         e.preventDefault();
@@ -57,19 +49,19 @@ const Option1 = ({
             },
         ]);
     };
+    const isValid = () => {
+        let errCount = 0;
+        let err = new Object();
 
-    console.log("durations", durations);
-    // editor data change
-    const handleEditorChange = (e, editor) => {
-        const data = editor.getData();
-        setComment(data);
+        if (comment === "") {
+            err.comment = "Please explaine the reason here!";
+            errCount++;
+        }
+        setError(err);
+        return !errCount;
     };
 
-    //overlapping validation
-    // let newOverlappingTimes = [];
-    // let lastClockOutTime = lastClockData?.clock_out_time
-    //     ? extractTime(lastClockData?.clock_out_time)
-    //     : "23:00:00";
+    // editor data change
 
     const handleSubmission = (e, submissionType) => {
         e.preventDefault();
@@ -81,60 +73,18 @@ const Option1 = ({
             comment,
         };
 
-        if (comment === "") {
+        if (!isValid()) {
             Swal.fire({
                 position: "center",
                 icon: "error",
-                title: "Please fill up all required fields!",
+                title: "Please fill up the all required fields!",
                 showConfirmButton: true,
             });
-
-            return setError({ comment: "Please explain the reason here!" });
+            return;
         }
-        // if (fromAndToValidation(durations)) {
-        //     Swal.fire({
-        //         position: "center",
-        //         icon: "error",
-        //         title: "Invalid Time Range",
-        //         text: "The end time should be greater than the start time.",
-        //         showConfirmButton: true,
-        //     });
-        //     return;
-        // }
-
-        // if (checkOverlapRange(lastClockOutTime, durations)) {
-        //     Swal.fire({
-        //         position: "center",
-        //         icon: "error",
-        //         title: "You have selected wrong time range!",
-        //         text: `You must select time within this time range: 07:45 AM - ${formatTimeTo12Hour(
-        //             lastClockOutTime
-        //         )}.`,
-        //         showConfirmButton: true,
-        //     });
-        //     return;
-        // }
-
-        // if (checkOverlap(newOverlappingTimes, durations, trackedTimeHistory)) {
-        //     Swal.fire({
-        //         position: "center",
-        //         icon: "error",
-        //         title: "Your selected time is overlapping with your tracked time!",
-        //         text: `Overlapping time: ${newOverlappingTimes
-        //             ?.map(
-        //                 (t) =>
-        //                     `${formatTimeTo12Hour(
-        //                         t.trackedStart
-        //                     )} - ${formatTimeTo12Hour(t.trackedEnd)}`
-        //             )
-        //             .join(", ")}`,
-        //         showConfirmButton: true,
-        //     });
-        //     return;
-        // }
 
         setSType(submissionType);
-        onSubmit(data, submissionType, onBack, durations);
+        onSubmit(data, submissionType, onBack, durations, setDurations);
     };
 
     return (
@@ -248,13 +198,6 @@ const Option1 = ({
                                     className="ml-2"
                                     onClick={(e) => {
                                         handleSubmission(e, "CONTINUE");
-                                        setDurations([
-                                            {
-                                                start: "",
-                                                end: "",
-                                                id: "d32sew",
-                                            },
-                                        ]);
                                     }}
                                     isLoading={
                                         sType === "CONTINUE" && isLoading

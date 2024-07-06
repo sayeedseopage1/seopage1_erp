@@ -50,12 +50,12 @@ const AcknowledgementReminderModal = ({
     incomplete_hours,
     onSubmit,
 }) => {
-    const [sType, setSType] = React.useState("");
+    // const [sType, setSType] = React.useState("");
     const [step, setStep] = React.useState(0);
     const [isSubmitting, setIsSubmitting] = React.useState(false);
 
     const [timeLeft, setTImeLeft] = useState();
-    console.log("last clock data", lastClockData);
+
     //overlapping validation
     let newOverlappingTimes = [];
     let lastClockOutTime = lastClockData?.clock_out_time
@@ -63,7 +63,13 @@ const AcknowledgementReminderModal = ({
         : "23:00:00";
 
     // handle form submission
-    const handleSubmitForm = async (data, submissionType, cb, durations) => {
+    const handleSubmitForm = async (
+        data,
+        submissionType,
+        cb,
+        durations,
+        setDurations
+    ) => {
         if (durations) {
             if (fromAndToValidation(durations)) {
                 Swal.fire({
@@ -131,10 +137,8 @@ const AcknowledgementReminderModal = ({
                     }
                 )
                 .then((res) => {
-                    console.log("response ", res, "status", res.data.status);
+                    console.log("response ", res);
                     if (res.data.status === 422) {
-                        console.log("inside status");
-
                         Swal.fire({
                             position: "center",
                             icon: "error",
@@ -165,6 +169,16 @@ const AcknowledgementReminderModal = ({
                         return;
                     }
 
+                    if (res.data.status === 200 && setDurations !== undefined) {
+                        setDurations([
+                            {
+                                start: "",
+                                end: "",
+                                id: "d32sew",
+                            },
+                        ]);
+                    }
+
                     setTImeLeft(res.data.leftMin);
                     if (submissionType !== "CONTINUE") {
                         onSubmit();
@@ -186,8 +200,6 @@ const AcknowledgementReminderModal = ({
             setIsSubmitting(false);
             console.log(error);
         }
-
-        console.log("selected times", data);
     };
 
     return (
@@ -265,7 +277,6 @@ const AcknowledgementReminderModal = ({
                                     </Card>
                                 </div>
                             )}
-                        {console.log("project timelog", trackedTimeHistory)}
 
                         {timeLeft > 0 && (
                             <div className="alert alert-warning text-center">
@@ -287,12 +298,9 @@ const AcknowledgementReminderModal = ({
                                         condition={!step || step === 1}
                                     >
                                         <Option1
-                                            sType={sType}
-                                            setSType={setSType}
-                                            trackedTimeHistory={
-                                                trackedTimeHistory
-                                            }
-                                            lastClockData={lastClockData}
+                                            // sType={sType}
+                                            // setSType={setSType}
+
                                             checked={step === 1}
                                             index={1}
                                             onChange={(e) =>
@@ -325,10 +333,6 @@ const AcknowledgementReminderModal = ({
                                         condition={!step || step === 3}
                                     >
                                         <Option3
-                                            trackedTimeHistory={
-                                                trackedTimeHistory
-                                            }
-                                            lastClockData={lastClockData}
                                             checked={step === 3}
                                             index={3}
                                             onChange={(e) =>
@@ -349,10 +353,6 @@ const AcknowledgementReminderModal = ({
                                         condition={!step || step === 4}
                                     >
                                         <Option4
-                                            trackedTimeHistory={
-                                                trackedTimeHistory
-                                            }
-                                            lastClockData={lastClockData}
                                             checked={step === 4}
                                             index={4}
                                             onChange={(e) =>
@@ -369,10 +369,6 @@ const AcknowledgementReminderModal = ({
                                         condition={!step || step === 5}
                                     >
                                         <Option5
-                                            trackedTimeHistory={
-                                                trackedTimeHistory
-                                            }
-                                            lastClockData={lastClockData}
                                             checked={step === 5}
                                             index={5}
                                             onChange={(e) =>
@@ -389,10 +385,6 @@ const AcknowledgementReminderModal = ({
                                         condition={!step || step === 6}
                                     >
                                         <Option6
-                                            trackedTimeHistory={
-                                                trackedTimeHistory
-                                            }
-                                            lastClockData={lastClockData}
                                             checked={step === 6}
                                             index={6}
                                             onChange={(e) =>

@@ -14,8 +14,6 @@ import formatTimeTo12Hour from "../../../../../../../../utils/formatTimeTo12Hour
  */
 
 const LeavingEarlyExplanation = ({
-    trackedTimeHistory,
-    lastClockData,
     checked,
     index,
     onChange,
@@ -31,26 +29,6 @@ const LeavingEarlyExplanation = ({
     const [durationStart, setDurationStart] = React.useState("");
     const [durationEnd, setDurationEnd] = React.useState("");
     const [sType, setSType] = React.useState(""); // submission type
-
-    // setup time field
-    // React.useEffect(() => {
-    //     // start time
-    //     window
-    //         .$("#timepicker1")
-    //         .timepicker("setTime", durationStart)
-    //         .on("changeTime.timepicker", function (e) {
-    //             setDurationStart(e.target.value);
-    //         });
-
-    //     // end time
-    //     window
-    //         .$("#timepicker2")
-    //         .timepicker("setTime", durationEnd)
-    //         .on("changeTime.timepicker", function (e) {
-    //             setDurationEnd(e.target.value);
-    //             // console.log(e.timeStamp)
-    //         });
-    // }, [checked]);
 
     // form validation checking
     const isValid = () => {
@@ -71,12 +49,6 @@ const LeavingEarlyExplanation = ({
         const data = editor.getData();
         setComment(data);
     };
-
-    //overlapping validation
-    // let newOverlappingTimes = [];
-    // let lastClockOutTime = lastClockData?.clock_out_time
-    //     ? extractTime(lastClockData?.clock_out_time)
-    //     : "23:00:00";
 
     // handle submission
     const handleSubmission = (e, submissionType) => {
@@ -99,55 +71,10 @@ const LeavingEarlyExplanation = ({
             return;
         }
 
-        // if (
-        //     checkOverlapRange(lastClockOutTime, [
-        //         { id: "de2sew", start: durationStart, end: durationEnd },
-        //     ])
-        // ) {
-        //     Swal.fire({
-        //         position: "center",
-        //         icon: "error",
-        //         title: "You have selected wrong time range!",
-        //         text: `You must select time within this time range: 07:45 AM - (${formatTimeTo12Hour(
-        //             lastClockOutTime
-        //         )}).`,
-        //         showConfirmButton: true,
-        //     });
-        //     return;
-        // }
-
-        // if (
-        //     checkOverlap(
-        //         newOverlappingTimes,
-        //         [{ id: "de2sew", start: durationStart, end: durationEnd }],
-        //         trackedTimeHistory
-        //     )
-        // ) {
-        //     Swal.fire({
-        //         position: "center",
-        //         icon: "error",
-        //         title: "Your selected time is overlapping with your tracked time!",
-        //         text: `Overlapping time: ${newOverlappingTimes
-        //             ?.map(
-        //                 (t) =>
-        //                     `${formatTimeTo12Hour(
-        //                         t.trackedStart
-        //                     )} - ${formatTimeTo12Hour(t.trackedEnd)}`
-        //             )
-        //             .join(", ")}`,
-        //         showConfirmButton: true,
-        //     });
-        //     return;
-        // }
-
         setSType(submissionType);
         onSubmit(data, submissionType, onBack, [
             { id: "de2sew", start: durationStart, end: durationEnd },
         ]);
-        if (submissionType === "CONTINUE") {
-            setDurationStart("");
-            setDurationEnd("");
-        }
     };
 
     return (

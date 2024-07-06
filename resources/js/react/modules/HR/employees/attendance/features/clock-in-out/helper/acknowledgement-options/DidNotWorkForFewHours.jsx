@@ -72,12 +72,6 @@ const DidNotWorkForFewHours = ({
         return !errCount;
     };
 
-    //overlapping validation
-    // let newOverlappingTimes = [];
-    // let lastClockOutTime = lastClockData?.clock_out_time
-    //     ? extractTime(lastClockData?.clock_out_time)
-    //     : "23:00:00";
-
     // handle form submit
     const handleSubmission = (e, submissionType) => {
         e.preventDefault();
@@ -97,39 +91,9 @@ const DidNotWorkForFewHours = ({
             });
             return;
         }
-        // if (checkOverlapRange(lastClockOutTime, durations)) {
-        //     Swal.fire({
-        //         position: "center",
-        //         icon: "error",
-        //         title: "You have selected wrong time range!",
-        //         text: `You must select time within this time range: 07:45 AM - (${formatTimeTo12Hour(
-        //             lastClockOutTime
-        //         )}).`,
-        //         showConfirmButton: true,
-        //     });
-        //     return;
-        // }
-
-        // if (checkOverlap(newOverlappingTimes, durations, trackedTimeHistory)) {
-        //     Swal.fire({
-        //         position: "center",
-        //         icon: "error",
-        //         title: "Your selected time is overlapping with your tracked time!",
-        //         text: `Overlapping time: ${newOverlappingTimes
-        //             ?.map(
-        //                 (t) =>
-        //                     `${formatTimeTo12Hour(
-        //                         t.trackedStart
-        //                     )} - ${formatTimeTo12Hour(t.trackedEnd)}`
-        //             )
-        //             .join(", ")}`,
-        //         showConfirmButton: true,
-        //     });
-        //     return;
-        // }
 
         setSType(submissionType);
-        onSubmit(data, submissionType, onBack, durations);
+        onSubmit(data, submissionType, onBack, durations, setDurations);
     };
 
     return (
@@ -240,13 +204,6 @@ const DidNotWorkForFewHours = ({
                                     className="ml-2"
                                     onClick={(e) => {
                                         handleSubmission(e, "CONTINUE");
-                                        setDurations([
-                                            {
-                                                start: "",
-                                                end: "",
-                                                id: "d32sew",
-                                            },
-                                        ]);
                                     }}
                                     isLoading={
                                         sType === "CONTINUE" && isLoading
