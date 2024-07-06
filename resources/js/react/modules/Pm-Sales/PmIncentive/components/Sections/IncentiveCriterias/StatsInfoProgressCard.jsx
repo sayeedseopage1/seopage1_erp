@@ -14,15 +14,15 @@ const StatsInfoProgressCard = ({ item }) => {
             </div>
             <div className="w-100">
                 <span className={`${parseFloat(obtained_incentive) > 0 ? 'progress_card_desc_pos' : 'progress_card_desc_neg'}`}>
-                    Achieved: {parseFloat(obtained_incentive)}%
+                    Achieved: {parseFloat(obtained_incentive)?.toFixed(2)}%
                 </span>
             </div>
             <div className="progress_card_stats_wrapper">
                 <div className="progress_card_stats_inner">
                     <span style={{ marginBottom: '6px' }}>{title}</span>
-                    <span style={{ marginBottom: '6px' }}>{parseFloat(acquired_percent)}/{parseFloat(incentive_factors[incentive_factors.length - 1]?.upper_limit)}%</span>
+                    <span style={{ marginBottom: '6px' }}>{parseFloat(acquired_percent)?.toFixed(2)}/{parseFloat(incentive_factors[incentive_factors.length - 1]?.upper_limit)}%</span>
                 </div>
-                <GradientProgressBar progress={parseFloat(acquired_percent)} incentive={parseFloat(obtained_incentive)} />
+                <GradientProgressBar progress={parseFloat(acquired_percent)} incentive={parseFloat(obtained_incentive)?.toFixed(2)} />
             </div>
         </div>
     );

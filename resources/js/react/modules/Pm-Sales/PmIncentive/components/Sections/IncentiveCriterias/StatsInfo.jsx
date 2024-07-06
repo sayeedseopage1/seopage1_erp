@@ -50,7 +50,7 @@ const StatsInfo = () => {
                         <div className="">
                             <p className="stats_info_desc point_details_wrapper">Your Regular points: <span
                                 className='stats_info_link' style={{ textDecoration: 'none' }}>
-                                {parseFloat(allIncentiveTypes?.data?.total_points)}pt
+                                {parseFloat(allIncentiveTypes?.data?.total_points)?.toFixed(2)}pt
                             </span></p>
                         </div>
                     </div>

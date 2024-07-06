@@ -42,7 +42,7 @@ const AveragePointModal = ({ antdModalOpen, setAntdModalOpen, item: statsInfoDat
                             <p>{item?.title}: </p>{" "}
                             {/* Apply a class based on whether the obtained_incentive is positive or not */}
                             <span className={`${parseFloat(item?.obtained_incentive) > 0 ? 'progress_card_desc_pos' : 'progress_card_desc_neg'}`}>
-                                {parseFloat(item?.obtained_incentive)}%
+                                {parseFloat(item?.obtained_incentive)?.toFixed(2)}%
                             </span>
                         </div>
                     ))}
@@ -50,7 +50,7 @@ const AveragePointModal = ({ antdModalOpen, setAntdModalOpen, item: statsInfoDat
                     {/* Render the total incentive average calculation */}
                     <div className="modal_point_row">
                         <p>Total incentive average:<span>
-                            ({incentive_criterias?.map(item => `${parseFloat(item?.obtained_incentive)}%`).join(' + ')})
+                            ({incentive_criterias?.map(item => `${parseFloat(item?.obtained_incentive)?.toFixed(2)}%`).join(' + ')})
                             / {incentive_criterias?.length}
                         </span>
                         </p>

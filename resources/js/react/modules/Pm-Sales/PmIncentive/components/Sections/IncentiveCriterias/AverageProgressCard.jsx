@@ -15,7 +15,7 @@ const AverageProgressCard = ({ item, regularPointAverage }) => {
             </div>
             <div className="w-100">
                 <button onClick={() => setAveragePointsModalOpen(true)} className={`${regularPointAverage > 0 ? 'progress_card_desc_pos' : 'progress_card_desc_neg'} stats_info_link bg-transparent`}>
-                    {regularPointAverage?.toFixed(2)}%
+                    {parseFloat(regularPointAverage)?.toFixed(2)}%
                 </button>
 
                 <AveragePointModal
@@ -27,9 +27,9 @@ const AverageProgressCard = ({ item, regularPointAverage }) => {
             <div className="progress_card_stats_wrapper">
                 <div className="progress_card_stats_inner">
                     <span style={{ marginBottom: '6px' }}>Average</span>
-                    <span style={{ marginBottom: '6px' }}>{regularPointAverage}/100%</span>
+                    <span style={{ marginBottom: '6px' }}>{parseFloat(regularPointAverage)?.toFixed(2)}/100%</span>
                 </div>
-                <GradientProgressBar incentive={regularPointAverage} isAverage={true} />
+                <GradientProgressBar incentive={parseFloat(regularPointAverage)?.toFixed(2)} isAverage={true} />
             </div>
         </div>
     );

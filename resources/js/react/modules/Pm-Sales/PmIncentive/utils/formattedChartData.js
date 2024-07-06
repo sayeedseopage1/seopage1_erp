@@ -60,8 +60,14 @@ export const IncentiveFormattedData = (incentiveData) => {
                 categories: criteria?.incentive_factors?.map(
                     (factor, index, array) => {
                         const isLastFactor = index === array?.length - 1;
-                        const lowerLimit = parseFloat(factor?.lower_limit);
-                        const upperLimit = parseFloat(factor?.upper_limit);
+                        const lowerLimit =
+                            criteria?.id != 10
+                                ? parseFloat(factor?.lower_limit)
+                                : parseFloat(factor?.lower_limit)?.toFixed(2);
+                        const upperLimit =
+                            criteria?.id != 10
+                                ? parseFloat(factor?.upper_limit)
+                                : parseFloat(factor?.upper_limit)?.toFixed(2);
 
                         if (isLastFactor && lowerLimit === upperLimit) {
                             return `${lowerLimit}-Higher`;

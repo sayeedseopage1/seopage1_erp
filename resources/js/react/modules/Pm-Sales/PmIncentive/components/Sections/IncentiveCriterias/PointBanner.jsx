@@ -20,7 +20,7 @@ const PointBanner = () => {
                 </span>
                 {
                     incentiveTypesLoading ? <Placeholder width="60%" height={28} /> : <p className='point_title point_details_wrapper'>
-                        Your obtained points: <span className='point_score'>{allIncentiveTypes?.data?.total_points} pt</span> &nbsp;
+                        Your obtained points: <span className='point_score'>{parseFloat(allIncentiveTypes?.data?.total_points).toFixed(2)} pt</span> &nbsp;
                     </p>
                 }
             </div>
@@ -32,7 +32,7 @@ const PointBanner = () => {
                 {incentiveTypesLoading ? <Placeholder width="60%" height={28} /> :
                     <p className='point_title point_details_wrapper'>
                         Cash value: <span className='point_score'>
-                            {parseFloat(regularIncentiveTypes?.cash_value)} Taka
+                            {parseFloat(regularIncentiveTypes?.cash_value).toFixed(2)} Taka
                         </span> &nbsp; {auth?.isHasRolePermission(1) && (
                             <IncentiveEditButton onClick={() => setEditPointDataModalOpen(true)} className="chart_button">
                             </IncentiveEditButton>
