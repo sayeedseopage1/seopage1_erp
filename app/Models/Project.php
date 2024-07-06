@@ -17,6 +17,7 @@ use App\Models\ProjectDeliverable;
 use App\Models\WorkingEnvironment;
 use App\Observers\ProjectObserver;
 use App\Models\ProjectDeadlineExtension;
+use App\Models\PMTaskGuidelineAuthorization;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use App\Models\ProjectDeliverablesClientDisagree;
 use Illuminate\Database\Eloquent\Relations\HasOne;
@@ -446,7 +447,7 @@ class Project extends BaseModel
 
     public function pmTaskGuidelineAuthorizations()
     {
-        return $this->hasMany(PmTaskGuidelineAuthorization::class, 'project_id');
+        return $this->hasMany(PMTaskGuidelineAuthorization::class, 'project_id');
     }
 
     public function projectSubmission()
