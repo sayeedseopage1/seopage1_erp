@@ -50,21 +50,28 @@ const PortfolioItem = ({ id, url, onClick, isLoading }) => {
     return (
         <>
             <div className="portfolio-item">
-                <div className="portfolio-icon">
+                <div
+                    className="portfolio-icon"
+                    style={{ width: "70px", height: "65px" }}
+                >
                     <img
                         src={`https://www.google.com/s2/favicons?domain=${url}&sz=256`}
                         alt=""
-                        width={`42px`}
-                        height={`42px`}
+                        style={{ width: "100%", height: "100%" }}
                     />
                 </div>
 
-                <div className="flex flex-col">
-                    <div className="singleline-ellipsis">
+                <div
+                    className="flex flex-col mb-2"
+                    style={{
+                        borderRight: "1px dashed #ddd",
+                        paddingRight: "15px",
+                    }}
+                >
+                    <div className="singleline-ellipsis mb-2">
                         <span> URL: </span>
                         <span className="portfolio-item-link">
-                            {" "}
-                            {url?.slice(0, 50)}{" "}
+                            {url?.slice(0, 30) + "..."}
                         </span>
                     </div>
 
@@ -75,10 +82,7 @@ const PortfolioItem = ({ id, url, onClick, isLoading }) => {
                             gap: "10px",
                         }}
                     >
-                        <Button
-                            className="price_quotation_custom_button price_quotation_custom_button_primary"
-                            size="md"
-                        >
+                        <Button className="price_quotation_custom_button price_quotation_custom_button_primary">
                             Edit
                         </Button>
 
@@ -91,17 +95,25 @@ const PortfolioItem = ({ id, url, onClick, isLoading }) => {
                                     copyToClipboard(url);
                                     setIsCopied(true);
                                 }}
-                                className="price_quotation_custom_button price_quotation_custom_button_primary"
+                                style={{
+                                    width: "75px",
+                                    height: "42px",
+                                    padding: "5px 10px 5px 10px",
+                                    display: "inline-block",
+                                    textAlign: "center",
+                                    border: "1px solid #1492E6",
+                                    backgroundColor: "#E3F3FF",
+                                    borderRadius: "5px",
+                                    color: "#1492E6",
+                                }}
                             >
                                 {isCopied ? (
-                                    <i className="fa-solid fa-check" />
+                                    <i
+                                        className="fa-solid fa-check"
+                                        style={{ width: "100%" }}
+                                    />
                                 ) : (
-                                    <Button
-                                        className="price_quotation_custom_button price_quotation_custom_button_secondary"
-                                        size="md"
-                                    >
-                                        Copy
-                                    </Button>
+                                    <span style={{ width: "100%" }}>Copy</span>
                                 )}
 
                                 {isCopied && (
@@ -125,13 +137,17 @@ const PortfolioItem = ({ id, url, onClick, isLoading }) => {
                         </div>
 
                         <Button
-                            className="price_quotation_custom_button price_quotation_custom_button_secondary"
-                            size="md"
+                            className="price_quotation_custom_button price_quotation_custom_button_primary"
                             onClick={handleToggleModal}
                         >
                             Open
                         </Button>
                     </div>
+                </div>
+
+                <div>
+                    <span style={{ color: "gold", fontSize: "24px" }}>⭐</span>
+                    <span>5/5</span>
                 </div>
             </div>
 
