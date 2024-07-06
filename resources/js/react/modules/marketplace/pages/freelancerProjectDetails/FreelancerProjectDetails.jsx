@@ -73,7 +73,7 @@ const FreelancerProjectDetails = () => {
                                 <Payment />
                             </Switch.Case>
                             <Switch.Case condition={activeTab === 'Files'}>
-                                <Files />
+                                <Files isProjectDataLoading={isProjectDataLoading} />
                             </Switch.Case>
                             <Switch.Case condition={activeTab === 'Task-lists'}>
                                 <Tasklists />

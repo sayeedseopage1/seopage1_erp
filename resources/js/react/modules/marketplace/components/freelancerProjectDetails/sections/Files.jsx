@@ -11,6 +11,8 @@ import moment from 'moment';
 import fileDownload from 'js-file-download';
 import axios from 'axios';
 import { MdOutlineKeyboardArrowDown } from "react-icons/md";
+import MarketPlaceTableLoader from '../../loader/MarketPlaceTableLoader';
+import FilesFilterSkeleton from '../../loader/FilesFilterSkeleton';
 
 /**
  * Renders the Files component which displays a table of files with filter options.
@@ -25,7 +27,7 @@ import { MdOutlineKeyboardArrowDown } from "react-icons/md";
  * @return {JSX.Element} The rendered Files component.
  */
 
-const Files = () => {
+const Files = ({ isProjectDataLoading }) => {
     const [activeFilterTab, setActiveFilterTab] = useState('all');
     const [activeFiles, setActiveFiles] = useState([...freelancer_project_files]);
     const [fileInputData, setFileInputData] = useState([]);
@@ -136,18 +138,21 @@ const Files = () => {
                     <div className='files_page_header_title_wrapper'>
                         <h4 className='files_page_header_title'>Filter</h4>
                     </div>
-                    <div className='files_page_filter_btn_wrapper'>
-                        {filtersBtnData?.map(filter => (
-                            <FilesFilterButton
-                                key={filter?.type}
-                                isActive={activeFilterTab === filter?.type}
-                                onClick={() => handleFilterChange(filter?.type)}
-                                icon={filter?.icon}
-                                label={filter?.label}
-                                count={filter?.count}
-                            />
-                        ))}
-                    </div>
+                    {
+                        isProjectDataLoading ? <FilesFilterSkeleton /> : <div className='files_page_filter_btn_wrapper'>
+                            {filtersBtnData?.map(filter => (
+                                <FilesFilterButton
+                                    key={filter?.type}
+                                    isActive={activeFilterTab === filter?.type}
+                                    onClick={() => handleFilterChange(filter?.type)}
+                                    icon={filter?.icon}
+                                    label={filter?.label}
+                                    count={filter?.count}
+                                />
+                            ))}
+                        </div>
+                    }
+
                 </div>
                 <div className='files_page_content_wrapper'>
                     <div className='files_page_header_title_wrapper'>
@@ -163,13 +168,16 @@ const Files = () => {
                             />
                         </label>
                     </div>
-                    <Table
-                        rowKey="id"
-                        columns={columns}
-                        dataSource={activeFiles}
-                        scroll={{ x: 768 }}
-                        pagination={false}
-                    />
+                    {
+                        isProjectDataLoading ? <MarketPlaceTableLoader tableCol={5} prevItemLength={5} /> : <Table
+                            rowKey="id"
+                            columns={columns}
+                            dataSource={activeFiles}
+                            scroll={{ x: 768 }}
+                            pagination={false}
+                        />
+                    }
+
                 </div>
             </div>
         </ConfigProvider>
