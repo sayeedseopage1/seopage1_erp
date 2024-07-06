@@ -1574,6 +1574,7 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
     Route::get('get-deal-name-from-deal-stage/{client_username}', [PriceQuotationInsightController::class, 'getDealNameFromDealStage']);
     Route::get('get-cms-list', [PriceQuotationInsightController::class, 'getCmsList']);
     Route::get('get-project-niches', [PriceQuotationInsightController::class, 'getProjectNiche']);
+    Route::get('get-currencies', [PriceQuotationInsightController::class, 'getCurrencies']);
 });
 
 //custom route for seopage1

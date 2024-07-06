@@ -6,6 +6,7 @@ use App\Models\DealStage;
 use App\Models\ProjectCms;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Models\Currency;
 use App\Models\ProjectNiche;
 
 class PriceQuotationInsightController extends Controller
@@ -42,6 +43,15 @@ class PriceQuotationInsightController extends Controller
     {
         $category_name = $request->get('category_name');
         $data = ProjectNiche::where('category_name', 'like', "%{$category_name}%")->get();
+        return response()->json([
+            'status' => 200,
+            'data' => $data
+        ]);
+    }
+
+    public function getCurrencies()
+    {
+        $data = Currency::get();
         return response()->json([
             'status' => 200,
             'data' => $data
