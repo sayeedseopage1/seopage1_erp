@@ -507,7 +507,11 @@ class TimelogController extends AccountBaseController
                 $html = $this->showActiveTimer()->render();
                 return Reply::successWithData(__('messages.timerStoppedSuccessfully'), ['html' => $html, 'activeTimerCount' => $this->activeTimerCount]);
             } else {
-                return Reply::error(__('messages.timerAlreadyStopped') . ' ' . __('messages.pleaseReloadPage'));
+                return response()->json([
+                    'message' => 'Timer already stopped',
+                    'status' => 400,
+        
+                ]);
             }
         } else {
             $timeId = $request->id;
@@ -592,7 +596,11 @@ class TimelogController extends AccountBaseController
                     'message' => 'Timer Stopped Successfully',
                 ]);
             } else {
-                return Reply::error(__('timerAlreadyStopped') . ' ' . __('pleaseReloadPage'));
+                return response()->json([
+                    'message' => 'Timer already stopped',
+                    'status' => 400,
+        
+                ]);
             }
         }
     }
