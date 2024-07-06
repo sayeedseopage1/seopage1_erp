@@ -1572,6 +1572,8 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
     Route::resource('platform-accounts', PlatformAccountController::class)->except(['create','edit','destroy']);
     Route::get('get-clients-from-deal-stage', [PriceQuotationInsightController::class, 'getClientsFromDealStage']);
     Route::get('get-deal-name-from-deal-stage/{client_username}', [PriceQuotationInsightController::class, 'getDealNameFromDealStage']);
+    Route::get('get-cms-list', [PriceQuotationInsightController::class, 'getCmsList']);
+    Route::get('get-project-niches', [PriceQuotationInsightController::class, 'getProjectNiche']);
 });
 
 //custom route for seopage1
