@@ -172,6 +172,7 @@ use App\Http\Controllers\RecurringInvoiceController;
 use App\Http\Controllers\TicketCustomFormController;
 use App\Http\Controllers\AttendanceSettingController;
 use App\Http\Controllers\AutoPriceQuotation\PlatformAccountController;
+use App\Http\Controllers\AutoPriceQuotation\PriceQuotationInsightController;
 use App\Http\Controllers\ClientSubCategoryController;
 use App\Http\Controllers\KnowledgeBaseFileController;
 use App\Http\Controllers\LeadSourceSettingController;
@@ -1568,8 +1569,8 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
 
     // Graphic task files delete
     Route::get('graphic-task-file/delete/{id}', [TaskController::class, 'deleteGraphicTaskFile'])->name('graphic.task.file.delete');
-    Route::get('testr/{id}', [PlatformAccountController::class, 'update']);
     Route::resource('platform-accounts', PlatformAccountController::class)->except(['create','edit','destroy']);
+    Route::get('get-clients-from-deal-stage', [PriceQuotationInsightController::class, 'getDealStageClients']);
 });
 
 //custom route for seopage1
