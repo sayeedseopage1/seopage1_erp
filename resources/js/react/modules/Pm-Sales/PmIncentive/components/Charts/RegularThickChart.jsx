@@ -18,15 +18,22 @@ const RegularThickChart = ({ chartData }) => {
         incentive_factors
     } = chartData;
 
-    const isAllZero = chartData?.incentive == 0;
-    const seriesLength = chartData?.seriesData.length;
-
     // Calculate the maximum value for the x-axis from the upper limit of the last incentive factor
     const maxXValue = parseFloat(incentive_factors[incentive_factors?.length - 1]?.upper_limit);
 
     // Create an array with a single bar at the ratio position
     const barData = new Array(Math.ceil(maxXValue) + 1).fill(0);
-    barData[Math.floor(ratio)] = parseFloat(series[0]?.data[0]);
+    // barData[Math.floor(ratio)] = parseFloat(initialBarData);
+
+
+    const isAllZero = chartData?.incentive == 0;
+    const initialBarData = series[0]?.data?.find(val => parseFloat(val) > 0)
+
+    if (!isNaN(parseFloat(initialBarData))) {
+        barData[Math.floor(ratio)] = parseFloat(initialBarData);
+    }
+
+
 
     const options = {
         title: {
@@ -127,12 +134,13 @@ const RegularThickChart = ({ chartData }) => {
                     return [`⬤ ${chartData?.shortTitle}: ${chartData?.limitType == 1 ? "$" : ""}${chartData?.ratio}${chartData?.limitType == 2 ? "%" : ""}`, `Incentive: ${val}${chartData?.amountType == 1 ? "" : "%"}`];
                 }
 
-                if (dataPointIndex === 0 || dataPointIndex === seriesLength - 1) {
-                    return ""; // Hide the label for the first and last bars
-                }
+                // if (dataPointIndex === seriesLength - 1) {
+                //     return ""; // Hide the label for the first and last bars
+                // }
                 return val ? `${chartData?.limitType == 1 ? "$" : ""}${chartData?.ratio}${chartData?.limitType == 2 ? "%" : ""}, ${val}${chartData?.amountType == 1 ? "" : "%"}` : "";
             },
-            offsetY: -25,
+            offsetY: isAllZero ? -25 : 0,
+            offsetX: isAllZero ? 0 : 15,
             style: {
                 fontSize: "12px",
                 fontFamily: "poppins",
@@ -146,16 +154,18 @@ const RegularThickChart = ({ chartData }) => {
                 endingShape: "rounded",
                 distributed: !1,
                 borderRadius: 0,
-                columnWidth: "9px",
+                columnWidth: "13px",
                 borderRadiusApplication: "last",
                 colors: {
                     ranges: chartData?.id == 8 ? rangesForShortValue : rangesForLongValue
                 },
                 dataLabels: {
-                    orientation: isAllZero ? "vertical" : "horizontal",
-                    position: "top",
+                    // orientation: isAllZero ? "vertical" : "horizontal",
+                    orientation: "vertical",
+                    position: isAllZero ?
+                        "top" : chartData?.incentive > 40 ? "center" : "bottom",
                     maxItems: 5,
-                    color: "#00A0EE",
+
                     hideOverflowingLabels: !0,
                     total: {
                         enabled: !1,
@@ -163,7 +173,6 @@ const RegularThickChart = ({ chartData }) => {
                         offsetX: 0,
                         offsetY: 0,
                         style: {
-                            color: "#00A0EE",
                             fontSize: "12px",
                             fontFamily: void 0,
                             fontWeight: 600
