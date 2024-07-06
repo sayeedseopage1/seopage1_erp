@@ -61,9 +61,7 @@ const EditPolicyModal = ({
     } = editPolicyAction;
     const { policyKeys } = useContext(SalesRiskAnalysisContext);
     const { settings } = useSelector((state) => state.saleRiskAnalysis);
-    const isPolicyEditEnabled = settings?.find(
-        (setting) => setting.name === "enable_edit_policy"
-    )?.value;
+    const isEditEnabled = settings?.value;
     const { departments } = useSelector((state) => state.filterOptions);
     let allSelectedCountries = [];
 
@@ -97,7 +95,7 @@ const EditPolicyModal = ({
                                 type="text"
                                 className="w-100"
                                 name="policyName"
-                                readOnly={!isPolicyEditEnabled}
+                                readOnly={!isEditEnabled}
                                 value={editPolicyDefaultData?.policyName}
                                 onChange={handlePolicyEditChange}
                                 placeholder="Write Here"
@@ -117,7 +115,7 @@ const EditPolicyModal = ({
                             <ModalSelectContainer>
                                 <DepartmentSelect
                                     data={departments}
-                                    isDisabled={!isPolicyEditEnabled}
+                                    isDisabled={!isEditEnabled}
                                     selected={editPolicyDefaultData?.department}
                                     setSelectedDept={handlePolicyEditChange}
                                 />
@@ -140,7 +138,7 @@ const EditPolicyModal = ({
                                     data={policyKeys}
                                     selected={editPolicyDefaultData?.key}
                                     setSelected={handlePolicyEditChange}
-                                    isDisableUse={!isPolicyEditEnabled}
+                                    isDisableUse={!isEditEnabled}
                                 />
                             </ModalSelectContainer>
                             {editPolicyDataValidation?.key && (
@@ -159,7 +157,7 @@ const EditPolicyModal = ({
                                 type="text"
                                 className="w-100"
                                 name="comment"
-                                readOnly={!isPolicyEditEnabled}
+                                readOnly={isEditEnabled}
                                 value={editPolicyDefaultData?.comment}
                                 onChange={handlePolicyEditChange}
                                 placeholder="Write Here"
@@ -193,7 +191,7 @@ const EditPolicyModal = ({
                     <Switch>
                         <Switch.Case
                             condition={
-                                isPolicyEditEnabled ||
+                                isEditEnabled ||
                                 editPolicyData?.key?.name === "yesNoRules"
                             }
                         >
@@ -264,7 +262,7 @@ const EditPolicyModal = ({
                         <Switch.Case
                             condition={
                                 isRuleUpdating ||
-                                isPolicyEditEnabled ||
+                                isEditEnabled ||
                                 editPolicyData?.key?.name === "yesNoRules"
                             }
                         >

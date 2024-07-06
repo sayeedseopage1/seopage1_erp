@@ -133,9 +133,21 @@ export const SalesAnalysisReportTableColumns = [
         accessorKey: "country",
         cell: ({ row }) => {
             const data = row?.original;
+
+            const getCountry = (country) => {
+                if (
+                    country === "" ||
+                    country === null ||
+                    country === undefined
+                ) {
+                    return "N/A";
+                } else {
+                    return country;
+                }
+            };
             return (
                 <p className="multiline-ellipsis">
-                    {data?.country ?? "Not Available Yet"}
+                    {getCountry(data?.country)}
                 </p>
             );
         },
