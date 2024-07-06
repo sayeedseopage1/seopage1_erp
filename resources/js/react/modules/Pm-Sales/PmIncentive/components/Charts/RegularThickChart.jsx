@@ -154,7 +154,7 @@ const RegularThickChart = ({ chartData }) => {
                 endingShape: "rounded",
                 distributed: !1,
                 borderRadius: 0,
-                columnWidth: "13px",
+                columnWidth: "9px",
                 borderRadiusApplication: "last",
                 colors: {
                     ranges: chartData?.id == 8 ? rangesForShortValue : rangesForLongValue
