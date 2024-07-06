@@ -1570,11 +1570,11 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
     // Graphic task files delete
     Route::get('graphic-task-file/delete/{id}', [TaskController::class, 'deleteGraphicTaskFile'])->name('graphic.task.file.delete');
     Route::resource('platform-accounts', PlatformAccountController::class)->except(['create','edit','destroy']);
-    Route::get('get-clients-from-deal-stage', [PriceQuotationInsightController::class, 'getClientsFromDealStage']);
-    Route::get('get-deal-name-from-deal-stage/{client_username}', [PriceQuotationInsightController::class, 'getDealNameFromDealStage']);
-    Route::get('get-cms-list', [PriceQuotationInsightController::class, 'getCmsList']);
-    Route::get('get-project-niches', [PriceQuotationInsightController::class, 'getProjectNiche']);
-    Route::get('get-currencies', [PriceQuotationInsightController::class, 'getCurrencies']);
+    Route::get('get-clients-from-deal-stage', [PriceQuotationInsightController::class, 'getClientsFromDealStage'])->name('get.clients.from.deal.stage');
+    Route::get('get-deal-name-from-deal-stage/{client_username}', [PriceQuotationInsightController::class, 'getDealNameFromDealStage'])->name('get.deal.name.from.deal.stage');
+    Route::get('get-cms-list', [PriceQuotationInsightController::class, 'getCmsList'])->name('get.cms.list');
+    Route::get('get-project-niches', [PriceQuotationInsightController::class, 'getProjectNiche'])->name('get.project.niches');
+    Route::get('get-currencies', [PriceQuotationInsightController::class, 'getCurrencies'])->name('get.currencies');
 });
 
 //custom route for seopage1
