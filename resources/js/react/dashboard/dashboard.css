@@ -1,0 +1,61 @@
+:root {
+  --primaryBlue: #1492E6;
+  --primaryDarkBlue: #D8EFFF;
+  --primaryLightBlue: #F2F9FE;
+  --primaryDarkText: #000000;
+  --primaryGrayText: #757575;
+  --primaryLightGrayText: #8F8F8F;
+  --primaryLightText: #FFFFFF;
+  --priMaryWhiteBg: #FFFFFF;
+  --primaryLightWhiteBg: #EEE;
+  --borderColor: #C6C6C6;
+  --primaryLightBorder: #E0E9EF;
+  --primarySuccess: #70CA62;
+  --primaryDanger: #FF6666;
+  --primaryLightDanger: #fd6b6b;
+  --primaryExtraLightDanger: #FBEEF0;
+  --borderRadius: 6px;
+  --primaryLightBorderRadius: 3px;
+  --primaryBoxShadow: 6px 12px 80px rgba(0, 0, 0, 0.07);
+  --primaryFont: 'Poppins', sans-serif;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* Error boundary */
+
+.sp1_dashboard_error_boundary {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 85vh;
+}
+
+.sp1_dashboard_error_content {
+  background-color: #f8d7da;
+  border: 1px solid var(--borderColor);
+  padding: 20px;
+  max-width: 80%;
+  border-radius: 10px;
+}
+
+
+details {
+  white-space: pre-wrap;
+  margin-top: 10px;
+}

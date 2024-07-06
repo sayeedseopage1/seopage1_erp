@@ -1,0 +1,39 @@
+.sp1_dashboard_month_filter_wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    padding: 20px;
+    background: var(--priMaryWhiteBg);
+    border: 1px solid var(--primaryLightBorder);
+    border-radius: var(--borderRadius);
+    box-shadow:
+        6px 12px 80px rgba(0, 0, 0, 0.07);
+}
+
+
+.sp1_dashboard_month_filter_navigation {
+    padding: 6px;
+    border: none;
+    cursor: pointer;
+    color: var(--primaryLightText);
+    border-radius: var(--primaryLightBorderRadius);
+    background-color: var(--primaryBlue);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+
+.sp1_dashboard_month_filter_text {
+    font-family: var(--primaryFont);
+    font-size: 20px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+    color: var(--primaryDarkText);
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    margin-bottom: 0px;
+}
