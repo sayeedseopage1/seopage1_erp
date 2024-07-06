@@ -353,6 +353,7 @@ class PortfolioController extends AccountBaseController
         $website_sub_category = $request->website_sub_category ?? null;
         $theme_id = $request->theme_id ?? null;
         $plugin_id = $request->plugin_id ?? null;
+        $rating = $request->rating ?? null;
         $limit = $request->page_size ?? 30;
 
         // $itemsPaginated = SalesRiskPolicy::where('parent_id', null)->offset($req->input('limit', 10) * $req->input('page', 1))->paginate($req->input('limit', 10));
@@ -362,7 +363,7 @@ class PortfolioController extends AccountBaseController
         ->where('pp.portfolio_link', '!=', null)
         ->whereNotIn('pp.portfolio_link',["n/a", "N/A", "na", "NA"])
         ->where('ps.status', 'accepted')
-        ->where(function($query) use ($cms, $website_type, $website_category, $website_sub_category, $theme_id, $plugin_id) {
+        ->where(function($query) use ($cms, $website_type, $website_category, $website_sub_category, $theme_id, $plugin_id, $rating) {
             if ($cms) {
                 $query->where('pp.cms_category', $cms);
             }
@@ -385,6 +386,10 @@ class PortfolioController extends AccountBaseController
 
             if ($plugin_id) {
                 $query->whereJsonContains('pp.plugin_list', [$plugin_id]);
+            }
+
+            if ($rating) {
+                $query->where('pp.rating_score', $rating);
             }
 
         })
@@ -396,7 +401,7 @@ class PortfolioController extends AccountBaseController
         ->where('pp.portfolio_link', '!=', null)
         ->whereNotIn('pp.portfolio_link',["n/a", "N/A", "na", "NA"])
         ->where('ps.status', 'accepted')
-        ->where(function($query) use ($cms, $website_type, $website_category, $website_sub_category, $theme_id, $plugin_id) {
+        ->where(function($query) use ($cms, $website_type, $website_category, $website_sub_category, $theme_id, $plugin_id ,$rating) {
             if ($cms) {
                 $query->where('pp.cms_category', $cms);
             }
@@ -419,6 +424,10 @@ class PortfolioController extends AccountBaseController
 
             if ($plugin_id) {
                 $query->whereJsonContains('pp.plugin_list', [$plugin_id]);
+            }
+
+            if ($rating) {
+                $query->where('pp.rating_score', $rating);
             }
 
         })
