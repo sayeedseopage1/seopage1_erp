@@ -25,7 +25,7 @@ const CashValueBonusEditModal = ({ bonusIncentiveTypes, antdModalOpen, setAntdMo
             }
             const response = await editIncentiveTypes({ id: bonusIncentiveTypes?.id, payload }).unwrap();
             if (response?.status == 200) {
-                toast.success(response.message);
+                toast.success('Bonus point cash value updated successfully');
                 reset();
                 setAntdModalOpen(false)
             } else {

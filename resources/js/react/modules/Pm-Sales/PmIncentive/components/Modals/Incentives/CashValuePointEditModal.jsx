@@ -27,7 +27,7 @@ const CashValuePointEditModal = ({ regularIncentiveTypes, antdModalOpen, setAntd
             if (response?.status == 200) {
                 setAntdModalOpen(false)
                 reset();
-                toast.success(response.message);
+                toast.success("Regular point cash value updated successfully");
             } else {
                 toast.warning(response.message);
             }

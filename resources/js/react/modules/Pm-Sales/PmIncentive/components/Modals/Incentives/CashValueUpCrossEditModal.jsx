@@ -25,7 +25,7 @@ const CashValueUpCrossEditModal = ({ upSaleCrossSaleTypes, antdModalOpen, setAnt
             }
             const response = await editIncentiveTypes({ id: upSaleCrossSaleTypes?.id, payload }).unwrap();
             if (response?.status == 200) {
-                toast.success(response.message);
+                toast.success('Upsale/Cross sale point cash value updated successfully');
                 reset();
                 setAntdModalOpen(false)
             } else {
