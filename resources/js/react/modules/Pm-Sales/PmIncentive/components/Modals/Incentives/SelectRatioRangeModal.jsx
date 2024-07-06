@@ -22,7 +22,7 @@ const SelectRatioRangeModal = ({ singleCriteria, chartDataId, antdModalOpen, set
             return
         }
         if (Number(data?.max_limit) < parseFloat(singleCriteria?.data?.incentive_factors[singleCriteria?.data?.incentive_factors?.length - 1]?.upper_limit)) {
-            toast.error(`X Axis range can not less than ${singleCriteria?.data?.incentive_factors[singleCriteria?.data?.incentive_factors?.length - 1]?.upper_limit}, At first you need to remove X Axis Item`)
+            toast.error(`X Axis range can not less than ${singleCriteria?.data?.incentive_factors[singleCriteria?.data?.incentive_factors?.length - 1]?.upper_limit}, At first you need to update or remove X Axis Ratio`)
             return
         }
 
