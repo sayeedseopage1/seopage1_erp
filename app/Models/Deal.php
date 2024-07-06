@@ -2,11 +2,12 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
-use App\Models\Currency;
-use App\Models\User;
 use App\Models\Lead;
+use App\Models\User;
+use App\Models\Currency;
+use App\Models\DealStage;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Deal extends Model
 {

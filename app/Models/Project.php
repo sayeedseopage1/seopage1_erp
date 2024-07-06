@@ -2,20 +2,28 @@
 
 namespace App\Models;
 
-use App\Observers\ProjectObserver;
-use App\Traits\CustomFieldsTrait;
 use Carbon\Carbon;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
-use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\Relations\HasOne;
-use Illuminate\Database\Eloquent\SoftDeletes;
 use App\Models\Deal;
 use App\Models\User;
-use App\Models\ProjectCategory;
+use App\Models\QCSubmission;
 use App\Models\ProjectStatus;
+use App\Models\ProjectDispute;
+use App\Models\PmTaskGuideline;
+use App\Models\ProjectCategory;
+use App\Models\ProjectPortfolio;
+use App\Models\ProjectSubmission;
+use App\Traits\CustomFieldsTrait;
+use App\Models\ProjectDeliverable;
+use App\Models\WorkingEnvironment;
+use App\Observers\ProjectObserver;
+use App\Models\ProjectDeadlineExtension;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use App\Models\ProjectDeliverablesClientDisagree;
+use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 /**
  * App\Models\Project
