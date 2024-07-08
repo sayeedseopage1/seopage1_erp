@@ -172,6 +172,7 @@ use App\Http\Controllers\RecurringInvoiceController;
 use App\Http\Controllers\TicketCustomFormController;
 use App\Http\Controllers\AttendanceSettingController;
 use App\Http\Controllers\AutoPriceQuotation\PlatformAccountController;
+use App\Http\Controllers\AutoPriceQuotation\PriceQuotationController;
 use App\Http\Controllers\AutoPriceQuotation\PriceQuotationInsightController;
 use App\Http\Controllers\ClientSubCategoryController;
 use App\Http\Controllers\KnowledgeBaseFileController;
@@ -1575,6 +1576,8 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
     Route::get('get-cms-list', [PriceQuotationInsightController::class, 'getCmsList'])->name('get.cms.list');
     Route::get('get-project-niches', [PriceQuotationInsightController::class, 'getProjectNiche'])->name('get.project.niches');
     Route::get('get-currencies', [PriceQuotationInsightController::class, 'getCurrencies'])->name('get.currencies');
+    Route::resource('price-quotations', PriceQuotationController::class)->only(['store']);
+    Route::get('test-store', [PriceQuotationController::class, 'store']);
 });
 
 //custom route for seopage1
