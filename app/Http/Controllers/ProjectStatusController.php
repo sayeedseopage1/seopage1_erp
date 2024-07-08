@@ -31,9 +31,6 @@ class ProjectStatusController extends AccountBaseController
     {
         parent::__construct();
         $this->pageTitle = 'Project Status';
-        
-        // if (!in_array(Auth::user()->role_id, [1, 8, 4])) 
-        //     abort_403(true);
 
         $this->middleware(function ($request, $next) {
             abort_403(!in_array($this->user->role_id, [1, 8, 4]));
