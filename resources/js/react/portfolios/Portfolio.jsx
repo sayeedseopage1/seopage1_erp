@@ -341,6 +341,7 @@ const Portfolio = () => {
                                 {_.map(portfolio?.data, (item, index) => (
                                     <div key={item.id}>
                                         <PortfolioItem
+                                            portfolioData={item}
                                             id={item?.id}
                                             isLoading={dataLoading}
                                             url={item?.portfolio_link?.toLowerCase()}

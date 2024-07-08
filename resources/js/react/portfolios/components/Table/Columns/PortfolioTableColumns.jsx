@@ -3,95 +3,101 @@ import ActionRating from "./ActionRating";
 
 export const PortfolioTableColumns = [
     {
+        id: "clientName",
+        header: "Client",
+        accessorKey: "clientName",
+        cell: ({ row }) => {
+            const data = row.original;
+
+            return (
+                <a
+                    className="portfolio-item-link"
+                    href={`account/employees/${data?.clientId}`}
+                    target="_blank"
+                >
+                    {data?.clientName}
+                </a>
+            );
+        },
+    },
+    {
+        id: "pmName",
+        header: "Project Manager",
+        accessorKey: "pmName",
+        cell: ({ row }) => {
+            const data = row.original;
+
+            return (
+                <a
+                    className="portfolio-item-link"
+                    href={`account/employees/${data?.pmId}`}
+                    target="_blank"
+                >
+                    {data?.pmName}
+                </a>
+            );
+        },
+    },
+    {
         id: "portfolio_link",
-        header: "Website Url",
+        header: "Website URL",
         accessorKey: "portfolio_link",
         cell: ({ row }) => {
             const data = row.original;
 
-            return <div>{data?.portfolio_link?.slice(0, 30) + "..."}</div>;
+            return (
+                <a
+                    className="portfolio-item-link"
+                    href={`${data?.portfolio_link}`}
+                    target="_blank"
+                >
+                    {data?.portfolio_link?.slice(0, 30) + "..."}
+                </a>
+            );
         },
     },
     {
-        id: "website_type",
-        header: "Website Type",
-        accessorKey: "website_type",
+        id: "category_name",
+        header: "Category",
+        accessorKey: "category_name",
         cell: ({ row }) => {
             const data = row.original;
 
-            return <div>{data?.website_type}</div>;
+            return <div>{data?.category_name}</div>;
         },
     },
     {
-        id: "theme_id",
-        header: "Theme Id",
-        accessorKey: "theme_id",
+        id: "sub_category_name",
+        header: "Sub Category",
+        accessorKey: "sub_category_name",
         cell: ({ row }) => {
             const data = row.original;
 
-            return <div>{data?.theme_id}</div>;
+            return <div>{data?.sub_category_name}</div>;
+        },
+    },
+
+    {
+        id: "theme_name",
+        header: "Theme",
+        accessorKey: "theme_name",
+        cell: ({ row }) => {
+            const data = row.original;
+
+            return <div>{data?.theme_name}</div>;
         },
     },
     {
-        id: "cms_category",
-        header: "Cms Category",
-        accessorKey: "cms_category",
+        id: "cms_name",
+        header: "Website CMS",
+        accessorKey: "cms_name",
         cell: ({ row }) => {
             const data = row.original;
 
-            return <div>{data?.cms_category}</div>;
+            return <div>{data?.cms_name}</div>;
         },
     },
-    {
-        id: "sub_niche",
-        header: "Sub Niche",
-        accessorKey: "sub_niche",
-        cell: ({ row }) => {
-            const data = row.original;
 
-            return <div>{data?.sub_niche}</div>;
-        },
-    },
-    {
-        id: "sub_niche",
-        header: "Sub Niche",
-        accessorKey: "sub_niche",
-        cell: ({ row }) => {
-            const data = row.original;
-
-            return <div>{data?.sub_niche}</div>;
-        },
-    },
-    {
-        id: "sub_niche",
-        header: "Sub Niche",
-        accessorKey: "sub_niche",
-        cell: ({ row }) => {
-            const data = row.original;
-
-            return <div>{data?.sub_niche}</div>;
-        },
-    },
-    {
-        id: "sub_niche",
-        header: "Sub Niche",
-        accessorKey: "sub_niche",
-        cell: ({ row }) => {
-            const data = row.original;
-
-            return <div>{data?.sub_niche}</div>;
-        },
-    },
-    {
-        id: "sub_niche",
-        header: "Sub Niche",
-        accessorKey: "sub_niche",
-        cell: ({ row }) => {
-            const data = row.original;
-
-            return <div>{data?.sub_niche}</div>;
-        },
-    },
     {
         id: "action",
         header: () => {

@@ -6,7 +6,7 @@ import { useLazyGetPortfolioDataByIdQuery } from "../services/api/portfolioApiSl
 import Button from "../global/Button";
 import PortfolioButtons from "./components/PortfolioButtons";
 
-const PortfolioItem = ({ id, url, onClick, isLoading }) => {
+const PortfolioItem = ({ portfolioData, id, url, onClick, isLoading }) => {
     const [showModal, setShowModal] = useState(false);
     const [state, copyToClipboard] = useCopyToClipboard();
     const [isCopied, setIsCopied] = useState(false);
@@ -74,6 +74,8 @@ const PortfolioItem = ({ id, url, onClick, isLoading }) => {
                     </div>
 
                     <PortfolioButtons
+                        portfolioData={portfolioData}
+                        id={id}
                         url={url}
                         copyToClipboard={copyToClipboard}
                         setRefEl={setRefEl}
@@ -89,7 +91,7 @@ const PortfolioItem = ({ id, url, onClick, isLoading }) => {
 
                 <div>
                     <span style={{ color: "gold", fontSize: "24px" }}>⭐</span>
-                    <span>5/5</span>
+                    <span>{`${portfolioData?.rating_score ?? 0}/5`}</span>
                 </div>
             </div>
 

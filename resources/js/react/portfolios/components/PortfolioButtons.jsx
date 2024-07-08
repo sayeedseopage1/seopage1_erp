@@ -1,9 +1,11 @@
 import React from "react";
 import Button from "../../global/Button";
-import ReactModal from "react-modal";
+
 import RatingModal from "./Modal/RatingModal";
 
 const PortfolioButtons = ({
+    portfolioData,
+    id,
     url,
     copyToClipboard,
     setRefEl,
@@ -16,6 +18,7 @@ const PortfolioButtons = ({
     attributes,
 }) => {
     const [showEditModal, setShowEditModal] = React.useState(false);
+
     const handleEditButton = () => {
         setShowEditModal(true);
     };
@@ -92,6 +95,8 @@ const PortfolioButtons = ({
             </Button>
 
             <RatingModal
+                portfolioData={portfolioData}
+                id={id}
                 showModal={showEditModal}
                 setShowModal={setShowEditModal}
             />
