@@ -1,4 +1,5 @@
 import Button from "../../../../global/Button";
+import ActionRating from "./ActionRating";
 
 export const PortfolioTableColumns = [
     {
@@ -52,6 +53,46 @@ export const PortfolioTableColumns = [
         },
     },
     {
+        id: "sub_niche",
+        header: "Sub Niche",
+        accessorKey: "sub_niche",
+        cell: ({ row }) => {
+            const data = row.original;
+
+            return <div>{data?.sub_niche}</div>;
+        },
+    },
+    {
+        id: "sub_niche",
+        header: "Sub Niche",
+        accessorKey: "sub_niche",
+        cell: ({ row }) => {
+            const data = row.original;
+
+            return <div>{data?.sub_niche}</div>;
+        },
+    },
+    {
+        id: "sub_niche",
+        header: "Sub Niche",
+        accessorKey: "sub_niche",
+        cell: ({ row }) => {
+            const data = row.original;
+
+            return <div>{data?.sub_niche}</div>;
+        },
+    },
+    {
+        id: "sub_niche",
+        header: "Sub Niche",
+        accessorKey: "sub_niche",
+        cell: ({ row }) => {
+            const data = row.original;
+
+            return <div>{data?.sub_niche}</div>;
+        },
+    },
+    {
         id: "action",
         header: () => {
             return <div>Rate</div>;
@@ -60,11 +101,7 @@ export const PortfolioTableColumns = [
         cell: ({ row }) => {
             const data = row.original;
 
-            return (
-                <div>
-                    <Button variant="primary">Rate</Button>
-                </div>
-            );
+            return <ActionRating data={data} />;
         },
     },
 ];
