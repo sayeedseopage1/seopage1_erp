@@ -413,6 +413,7 @@ class PortfolioController extends AccountBaseController
             }
 
         })
+        ->orderBy('pp.rating_score', 'desc')
         ->distinct();
 
         $rawData2 = DB::table('project_portfolios as pp')
@@ -471,6 +472,7 @@ class PortfolioController extends AccountBaseController
             }
 
         })
+        ->orderBy('pp.rating_score', 'desc')
         ->distinct();
 
         $totalRow = $rawData1->get()->count();
