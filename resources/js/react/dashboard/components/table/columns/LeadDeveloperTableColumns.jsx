@@ -1,0 +1,134 @@
+import { Popover } from "antd";
+import dayjs from "dayjs";
+import Switch from "../../../../global/Switch";
+import PopoverLink from "../../shared/PopoverLink";
+
+export const LeadDeveloperTableColumns = {};
+
+const LeadDeveloperCompleteTableColumns = [
+    {
+        id: "id",
+        header: "SL",
+        cell: ({ row }) => {
+            const data = row.original;
+            return (
+                <span
+                    className="singleline-ellipsis"
+                    title={data.milestone_title}
+                >
+                    {row.index + 1}
+                </span>
+            );
+        },
+    },
+    {
+        id: "created_at",
+        header: "Creation Date",
+        accessorKey: "created_at",
+        cell: ({ row }) => {
+            const data = row.original;
+            return (
+                <span className="singleline-ellipsis">
+                    {dayjs(data?.created_at).format("DD-MM-YYYY h:mm:ss A") ??
+                        "Not started yet"}
+                </span>
+            );
+        },
+    },
+    {
+        id: "heading",
+        header: "Task Name",
+        accessorKey: "heading",
+        cell: ({ row }) => {
+            const data = row.original;
+            return (
+                <PopoverLink
+                    url={`/account/tasks/${data?.id}`}
+                    label={data?.heading}
+                />
+            );
+        },
+    },
+    {
+        id: "clientName",
+        header: "Client Name",
+        accessorKey: "clientName",
+        cell: ({ row }) => {
+            const data = row.original;
+            return (
+                <Switch>
+                    <Switch.Case condition={data?.ProjectId !== null}>
+                        <PopoverLink
+                            url={`/account/clients/${data?.client_id}`}
+                            label={data?.clientName}
+                        />
+                    </Switch.Case>
+                    <Switch.Case condition={data?.task_client_name !== null}>
+                        <span className="singleline-ellipsis">
+                            {data?.task_client_name}
+                        </span>
+                    </Switch.Case>
+                    <Switch.Case
+                        condition={
+                            data?.cl_name === null &&
+                            data?.task_client_name === null
+                        }
+                    >
+                        <span className="singleline-ellipsis">
+                            {data?.cl_name}
+                        </span>
+                    </Switch.Case>
+                </Switch>
+            );
+        },
+    },
+    {
+        id: "submission_date",
+        header: "Submission Date",
+        accessorKey: "submission_date",
+        cell: ({ row }) => {
+            const data = row.original;
+            return (
+                <span className="singleline-ellipsis">
+                    <Switch>
+                        <Switch.Case
+                            condition={[2, 1, 3].includes(
+                                data?.board_column_id
+                            )}
+                        >
+                            N/A
+                        </Switch.Case>
+                        <Switch.Case
+                            condition={
+                                ![2, 1, 3].includes(data?.board_column_id)
+                            }
+                        >
+                            {dayjs(data?.submission_date).format(
+                                "DD-MM-YYYY h:mm:ss A"
+                            ) ?? "Not started yet"}
+                        </Switch.Case>
+                    </Switch>
+                </span>
+            );
+        },
+    },
+    {
+        id: "current_status",
+        header: "Current Status",
+        accessorKey: "current_status",
+        cell: ({ row }) => {
+            const data = row.original;
+            return (
+                <span
+                    style={{ color: data?.label_color }}
+                    className="singleline-ellipsis task-status"
+                >
+                    {data?.current_status}
+                </span>
+            );
+        },
+    },
+];
+
+
+LeadDeveloperTableColumns.Complete = LeadDeveloperCompleteTableColumns;

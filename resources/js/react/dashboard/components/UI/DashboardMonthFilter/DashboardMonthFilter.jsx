@@ -15,7 +15,10 @@ import Switch from "../../../../global/Switch";
 const DashboardMonthFilter = ({ setFilter, isLoading }) => {
     const targetedDay = 15;
     const [monthDate, setMonthDate] = useState(dayjs());
-    const [direction, setDirection] = useState(""); // ["prev", "next"]
+    const [direction, setDirection] = useState({
+        active: "prev",
+        inActive: "",
+    }); // ["prev", "next"]
 
     // format date range
     const formatDateRange = (date) => {
@@ -28,7 +31,13 @@ const DashboardMonthFilter = ({ setFilter, isLoading }) => {
 
     // handle month filter navigation
     const handleMonthFilterNavigation = (direction) => {
-        setDirection(direction);
+        setDirection((prevDirection) => {
+            return {
+                ...prevDirection,
+                active: direction,
+                inActive: direction === "prev" ? "next" : "prev",
+            };
+        });
         setMonthDate((prevDate) => {
             if (direction === "prev") {
                 return prevDate.subtract(1, "month");
@@ -62,10 +71,24 @@ const DashboardMonthFilter = ({ setFilter, isLoading }) => {
                     onClick={() => handleMonthFilterNavigation("prev")}
                     disabled={isLoading}
                 >
-                    <Switch.Case condition={isLoading && direction === "prev"}>
-                        <Loader title="" />
+                    <Switch.Case condition={isLoading}>
+                        <Switch.Case condition={direction.active === "prev"}>
+                            <div
+                                className="spinner-border text-dark"
+                                role="status"
+                                style={{
+                                    width: "14px",
+                                    height: "14px",
+                                    border: "0.14em solid rgba(0, 0, 0, .25)",
+                                    borderRightColor: "transparent",
+                                }}
+                            />
+                        </Switch.Case>
+                        <Switch.Case condition={direction.active !== "prev"}>
+                            <GrLinkPrevious />
+                        </Switch.Case>
                     </Switch.Case>
-                    <Switch.Case condition={isLoading || !isLoading && direction !== "prev"}>
+                    <Switch.Case condition={!isLoading}>
                         <GrLinkPrevious />
                     </Switch.Case>
                 </button>
@@ -77,10 +100,24 @@ const DashboardMonthFilter = ({ setFilter, isLoading }) => {
                     onClick={() => handleMonthFilterNavigation("next")}
                     disabled={isLoading}
                 >
-                    <Switch.Case condition={isLoading && direction === "next"}>
-                        <Loader title="" />
+                    <Switch.Case condition={isLoading}>
+                        <Switch.Case condition={direction.active === "next"}>
+                            <div
+                                className="spinner-border text-dark"
+                                role="status"
+                                style={{
+                                    width: "14px",
+                                    height: "14px",
+                                    border: "0.14em solid rgba(0, 0, 0, .25)",
+                                    borderRightColor: "transparent",
+                                }}
+                            />
+                        </Switch.Case>
+                        <Switch.Case condition={direction.active !== "next"}>
+                            <GrLinkNext />
+                        </Switch.Case>
                     </Switch.Case>
-                    <Switch.Case condition={isLoading || !isLoading && direction !== "next"}>
+                    <Switch.Case condition={!isLoading}>
                         <GrLinkNext />
                     </Switch.Case>
                 </button>
