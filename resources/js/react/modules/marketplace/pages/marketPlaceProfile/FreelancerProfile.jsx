@@ -24,7 +24,7 @@ const FreelancerProfile = () => {
                     <img className='marketplace_cover_image' src={cover_image} alt="cover_image" />
                     <div className='marketplace_profile_body'>
                         <div className='marketplace_profile_body_contents'>
-                            <ProfileLeftSection profileData={user_profile} />
+                            <ProfileLeftSection profileData={user_profile} isProfileLoading={isProfileLoading} />
                             {
                                 isProfileLoading ? <ProfileRightSectionLoader /> : <ProfileRightSection profileData={user_profile} />
                             }
