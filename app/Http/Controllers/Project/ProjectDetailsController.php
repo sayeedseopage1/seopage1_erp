@@ -95,7 +95,7 @@ class ProjectDetailsController extends Controller
         $projectArray['buttons']['project_qc_data'] = $project->projectQcSubmission ? true : false;
         $projectArray['buttons']['completion_form_authorization'] = (Auth::user()->role_id == 1 || Auth::user()->role_id == 8) && ($project->projectSubmission && $project->projectSubmission->status == 'pending') ? true : false;
         $projectArray['buttons']['completion_form_data'] = $project->projectSubmission ? true : false;
-        $projectArray['buttons']['milestone_cancel_authorization'] = (Auth::user()->role_id == 1 || Auth::user()->role_id == 8) && $project->milestones->where('cancelation_status', 'submitted')->count() ? true : false;
+        $projectArray['buttons']['milestone_cancel_authorization'] = (Auth::user()->role_id == 1 || Auth::user()->role_id == 8) && $project->milestones->where('cancelation_status', 'submitted')->count() && $project->status != 'canceled' ? true : false;
 
         if($project->status == 'in progress' || $project->status == 'not started' || $project->status == 'on hold'){
             $projectArray['buttons']['mark_as_incomplete'] = $project->dispute_status != 1 && (Auth::user()->role_id == 1 || Auth::user()->role_id == 8) ? true : false;
