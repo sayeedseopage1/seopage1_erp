@@ -14,6 +14,9 @@ import RequiredActionsCard_LeadDev_Past from "./RoleWiseCard/LeadDeveloper/Requi
 import RequiredActionsCard_PM_Expire from "./RoleWiseCard/ProjectManager/RequiredActionsCard_PM_Expire";
 import RequiredActionsCard_PM_Live from "./RoleWiseCard/ProjectManager/RequiredActionsCard_PM_Live";
 import RequiredActionsCard_PM_Past from "./RoleWiseCard/ProjectManager/RequiredActionsCard_PM_Past";
+import RequiredActionsCard_SalesEx_Expire from "./RoleWiseCard/SalesExecutive/RequiredActionsCard_SalesEx_Expire";
+import RequiredActionsCard_SalesEx_Live from "./RoleWiseCard/SalesExecutive/RequiredActionsCard_SalesEx_Live";
+import RequiredActionsCard_SalesEx_Past from "./RoleWiseCard/SalesExecutive/RequiredActionsCard_SalesEx_Past";
 import RequiredActionsCard_TeamLead_Expire from "./RoleWiseCard/TeamLead/RequiredActionsCard_TeamLead_Expire";
 import RequiredActionsCard_TeamLead_Live from "./RoleWiseCard/TeamLead/RequiredActionsCard_TeamLead_Live";
 import RequiredActionsCard_TeamLead_Past from "./RoleWiseCard/TeamLead/RequiredActionsCard_TeamLead_Past";
@@ -69,6 +72,14 @@ export default function RequiredActionsCard({ role, data, status }) {
                     return <RequiredActionsCard_Developer_Expire data={data} />;
                 } else {
                     return <RequiredActionsCard_Developer_Past data={data} />;
+                }
+            case 7: // Sale Executive
+                if (status === "live") {
+                    return <RequiredActionsCard_SalesEx_Live data={data} />;
+                } else if (status === "expire") {
+                    return <RequiredActionsCard_SalesEx_Expire data={data} />;
+                } else {
+                    return <RequiredActionsCard_SalesEx_Past data={data} />;
                 }
 
             case 9: // ui/ux

@@ -7,16 +7,36 @@
 						<th>On</th>
 						<th>By</th>
 						<th>Activity</th>
+						<th>Time difference</th>
 					</x-slot>
-					@foreach($activityLog as $value)
+					@php
+						$previousFirst = ($lead_deal_activity_log->isNotEmpty() && $lead_deal_activity_log->first()->created_at) ? $lead_deal_activity_log->first()->created_at->copy()->setSecond(0) : null;
+						$logActivity = ($activityLog->isNotEmpty() && $activityLog->last()->created_at) ? $activityLog->last() : null;
+						$currectLast = ($logActivity && $logActivity->created_at) ? $logActivity->created_at->copy()->setSecond(0) : null;
+						$intervalTime = ($previousFirst && $currectLast) ? $currectLast->diff($previousFirst) : null;
+					@endphp
+					@foreach($activityLog as $loopIndex => $value)
+					@php
+						$previousLog = $activityLog->get($loopIndex + 1);
+						$previousTime = $previousLog ? $previousLog->created_at->copy()->setSecond(0) : null;
+						$currentTime = $value->created_at->copy()->setSecond(0);
+						if($logActivity->id == $value->id){
+							$timeDifference = $intervalTime;
+						}else {
+							$timeDifference = $previousTime ? $currentTime->diff($previousTime) : null;
+						}
+					@endphp
 					<tr>
-						<td>{{$value->created_at->format('Y-m-d g:i A')}}<br>(GMT {{$value->created_at->format('P')}})</td>
+						<td>{{$value->created_at->format('j M Y h:i A')}}</td>
 						<td>
 							@if(is_null($value->addedBy))
 								---
 							@else
-							<img src="{{URL::asset('user-uploads/avatar/'.$value->addedBy->image ?? 'avatar_blank.png')}}" class="mr-3 taskEmployeeImg rounded-circle" alt="{{$value->addedBy->name}}" title="{{$value->addedBy->name}}">
-							{{$value->addedBy->name}}
+								@if ($value->addedBy->image != null)
+								<img src="{{URL::asset('user-uploads/avatar/'.$value->addedBy->image ?? 'avatar_blank.png')}}" class="mr-3 taskEmployeeImg rounded-circle" alt="{{$value->addedBy->name}}" title="{{$value->addedBy->name}}">{{$value->addedBy->name}}
+								@else
+								<img src="{{URL::asset('user-uploads/avatar/avatar_blank.png')}}" class="mr-3 taskEmployeeImg rounded-circle" alt="{{$value->addedBy->name}}" title="{{$value->addedBy->name}}">{{$value->addedBy->name}}
+								@endif
 							@endif
 						</td>
 						<td>
@@ -57,23 +77,33 @@
 								{!! html_entity_decode($value->activity, ENT_QUOTES, 'UTF-8') !!}
 							@endif
 						</td>
+						<td>{{$timeDifference ? $timeDifference->format('%h hour %i minutes') : 'N/A'}}</td>
 					</tr>
 					@endforeach
-					
-					@foreach($lead_deal_activity_log as $value)
+					@foreach($lead_deal_activity_log as $loopIndex => $value)
+					@php
+						$previousLog = $lead_deal_activity_log->get($loopIndex + 1);
+						$previousTime = $previousLog ? $previousLog->created_at->copy()->setSecond(0) : null;
+						$currentTime = $value->created_at->copy()->setSecond(0);
+						$timeDifference = $previousTime ? $currentTime->diff($previousTime) : null;
+					@endphp
 					<tr>
-						<td>{{$value->created_at->format('Y-m-d g:i A')}}<br>(GMT {{$value->created_at->format('P')}})</td>
+						<td>{{$value->created_at->format('j M Y h:i A')}}</td>
 						<td>
 							@if(is_null($value->addedBy))
 								---
 							@else
-							<img src="{{URL::asset('user-uploads/avatar/'.$value->addedBy->image ?? 'avatar_blank.png')}}" class="mr-3 taskEmployeeImg rounded-circle" alt="{{$value->addedBy->name ?? '--'}}" title="{{$value->addedBy->name ?? '--'}}">
-							{{$value->addedBy->name ?? '--'}}
+								@if ($value->addedBy->image != null)
+								<img src="{{URL::asset('user-uploads/avatar/'.$value->addedBy->image ?? 'avatar_blank.png')}}" class="mr-3 taskEmployeeImg rounded-circle" alt="{{$value->addedBy->name ?? '--'}}" title="{{$value->addedBy->name ?? '--'}}">{{$value->addedBy->name ?? '--'}}
+								@else
+								<img src="{{URL::asset('user-uploads/avatar/avatar_blank.png')}}" class="mr-3 taskEmployeeImg rounded-circle" alt="{{$value->addedBy->name ?? '--'}}" title="{{$value->addedBy->name ?? '--'}}">{{$value->addedBy->name ?? '--'}}
+								@endif
 							@endif
 						</td>
 						<td>
 							{!! html_entity_decode($value->message, ENT_QUOTES, 'UTF-8') !!}
 						</td>
+						<td>{{$timeDifference ? $timeDifference->format('%h hour %i minutes') : 'N/A'}}</td>
 					</tr>
 					@endforeach
 				</x-table>
@@ -87,16 +117,25 @@
 		}
 	</style>
 	@php
-		$myCollection = collect($activityLog);
-		$uniqueCollection = $myCollection->unique('user_id');
+	$all_log_users = App\Models\Project::select('project_activity.added_by', 'leads_deals_activity_logs.created_by')
+					->leftJoin('deals', 'deals.id', '=', 'projects.deal_id')
+					->leftJoin('leads', 'leads.id', '=', 'deals.lead_id')
+					->leftJoin('project_activity', 'project_activity.project_id', '=', 'projects.id')
+					->leftJoin('leads_deals_activity_logs', 'leads_deals_activity_logs.lead_id', '=', 'leads.id')
+					->where('projects.id', $project->id)
+					->get();
+	$userIds = $all_log_users->pluck('added_by')->merge($all_log_users->pluck('created_by'))->unique();
+	$users = App\Models\User::whereIn('id', $userIds)->get();
+	$totalMilestone = App\Models\ProjectMilestone::where('project_id', $project->id)->count();
+	$totalTask = App\Models\Task::where('project_id', $project->id)->where('subtask_id', null)->count();
 	@endphp
-	<div class="row mx-0">
+	<div class="row mx-0 sticky-top" style="background-color: rgb(242, 244, 247); z-index:1; top: 110px">
 		<form action="" class="w-100" id="filter-form">
 			@csrf
 			<input type="hidden" name="project_id" value="{{request()->route('project')}}">
-	        <div class="d-block d-lg-flex d-md-flex my-3">
-	            <div class="align-items-center d-flex pl-0 py-1 mr-3 w-100">
-		            <div class="col-12 col-sm-3 p-0">
+			<div class="row mt-4 mb-2">
+				<div class="col-md-4">
+					<div class="p-0">
 		                <label class="f-14 text-dark-grey mb-12" data-label="" for="status">Status</label>
 		                <div class="border input-group rounded">
 		                    <div class="input-group-prepend">
@@ -107,21 +146,45 @@
 		                    <input type="text" class="position-relative text-dark form-control border-0 p-2 text-left f-14 f-w-500" name="date_range" id="datatableRange_al" placeholder="Start Date And End Date">
 		               </div>
 		            </div>
-		            <div class="col-12 col-sm-4">
-		                <div class="select-box py-2 px-0 mr-3">
-		                    <x-forms.label :fieldLabel="__('Employee')" fieldId="employee" />
-		                    <select class="form-control select-picker" name="employee" id="employee" data-live-search="false" data-size="8">
-		                        <option value="all">@lang('app.all')</option>
-		                        @foreach($uniqueCollection as $value)
-		                        @if(!is_null($value->addedBy))
-		                        <option value="{{$value->addedBy->id}}">{{$value->addedBy->name}}</option>
-		                        @endif
-		                        @endforeach
-		                    </select>
-		                </div>
-		            </div>
-		        </div>
-	        </div>
+				</div>
+				<div class="col-md-2">
+					<div class="">
+						<label class="f-14 text-dark-grey mb-12" data-label="" for="employee">Employee</label>
+						<select class="form-control select-picker" name="employee" id="employee" data-live-search="false" data-size="8">
+							<option value="all">@lang('app.all')</option>
+							@foreach($users as $user)
+								<option value="{{ $user->id }}">{{ $user->name }}</option>
+							@endforeach
+						</select>
+					</div>
+				</div>
+				<div class="col-md-2">
+					<div class="form-group">
+						<label for="">Client</label>
+						<input type="text" name="" id="" class="form-control height-35 f-14" value="{{$client->name}}" readonly>
+					</div>
+				</div>
+				<div class="col-md-2">
+					<div class="form-group">
+						<label for="">Number of Milestones</label><br>
+						<div style="background: #e9ecef; padding: 5px; border-radius: 5px">
+							<h6>
+								<a target="_blank" href="{{route('projects.show', $project->id).'?tab=milestones'}}" class="ml-1">{{$totalMilestone}}</a>
+							</h6>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-2">
+					<div class="form-group">
+						<label for="">Number of Tasks</label><br>
+						<div style="background: #e9ecef; padding: 5px; border-radius: 5px">
+							<h6>
+								<a target="_blank" href="{{route('projects.show', $project->id).'?tab=tasks'}}" class="ml-1">{{$totalTask}}</a>
+							</h6>
+						</div>
+					</div>
+				</div>
+			</div>
 	    </form>
 	</div>
 	<div id="activityLog">
@@ -142,8 +205,12 @@
 								@if(is_null($value->addedBy))
 									---
 								@else
-								<img src="{{URL::asset('user-uploads/avatar/'.$value->addedBy->image ?? 'avatar_blank.png')}}" class="mr-3 taskEmployeeImg rounded-circle" alt="{{$value->addedBy->name}}" title="{{$value->addedBy->name}}">
-								{{$value->addedBy->name}}
+									@if ($value->addedBy->image != null)
+									<img src="{{URL::asset('user-uploads/avatar/'.$value->addedBy->image ?? 'avatar_blank.png')}}" class="mr-3 taskEmployeeImg rounded-circle" alt="{{$value->addedBy->name}}" title="{{$value->addedBy->name}}">{{$value->addedBy->name}}
+									@else
+									<img src="{{URL::asset('user-uploads/avatar/avatar_blank.png')}}" class="mr-3 taskEmployeeImg rounded-circle" alt="{{$value->addedBy->name}}" title="{{$value->addedBy->name}}">{{$value->addedBy->name}}
+									@endif
+								
 								@endif
 							</td>
 							<td>

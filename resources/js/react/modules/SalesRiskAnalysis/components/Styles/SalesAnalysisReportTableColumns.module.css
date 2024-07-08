@@ -1,0 +1,10 @@
+.sp1_tasks_td .viewBtn{
+  padding: 4px 11px;
+  width: fit-content;
+  font-size: 13px;
+  color: #fff !important;
+}
+
+.sp1_tasks_td .viewBtn:hover{
+  text-decoration: none !important;
+}

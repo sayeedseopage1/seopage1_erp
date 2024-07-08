@@ -1,11 +1,11 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { ColumnContent } from "./ui";
 import { IoIosSend } from "react-icons/io";
 import ButtonStyles from "./ActionButton.module.css";
 import SingleEvaluationModal from "../modal/SingleEvaluationModal";
 import { useAuth } from "../../../../../../react/hooks/useAuth";
 
-const ActionDropdown = ({ data, table }) => {
+const ActionDropdown = ({ data, singleEvaluation }) => {
     const auth = useAuth();
     const [isSingleEvaluationModalOpen, setSingleEvaluationModalOpen] =
         useState(false);
@@ -18,10 +18,10 @@ const ActionDropdown = ({ data, table }) => {
                 {auth.roleId === 6 && (
                     <button
                         className={ButtonStyles.sendContainer}
-                        disabled={data.finalSubmissionStatus}
+                        // disabled={data?.avg_rating}
                     >
-                        {data?.evaluationStatus === "completed" ? (
-                            <h4>{data?.averageRating}</h4>
+                        {data?.avg_rating ? (
+                            <h4>{data?.avg_rating}</h4>
                         ) : (
                             <div>
                                 <IoIosSend
@@ -41,24 +41,11 @@ const ActionDropdown = ({ data, table }) => {
                 )}
 
                 {(auth.roleId === 8 || auth.roleId === 1) && (
-                    <button className={ButtonStyles.sendContainer}>
-                        {data?.evaluationStatus === "completed" ? (
-                            <h4>{data?.averageRating}</h4>
-                        ) : (
-                            <div>
-                                <IoIosSend
-                                    className={ButtonStyles.send}
-                                    color="#fff"
-                                    size={`20px`}
-                                />
-                                <IoIosSend
-                                    className={ButtonStyles.send2}
-                                    color="#696666"
-                                    size={`20px`}
-                                />
-                                <p>Evaluate</p>
-                            </div>
-                        )}
+                    <button
+                        className={ButtonStyles.sendContainer}
+                        style={{ color: "white", fontSize: "16px" }}
+                    >
+                        {data?.avg_rating}
                     </button>
                 )}
             </ColumnContent>
@@ -66,6 +53,7 @@ const ActionDropdown = ({ data, table }) => {
             <SingleEvaluationModal
                 isSingleEvaluationModalOpen={isSingleEvaluationModalOpen}
                 toggleSingleEvaluationModal={toggleSingleEvaluationModal}
+                singleEvaluation={singleEvaluation}
                 data={data}
             />
         </React.Fragment>

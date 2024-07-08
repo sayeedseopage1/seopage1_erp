@@ -26,7 +26,6 @@ const FilterSidebar = ({
     close,
     isDev,
 }) => {
-    const auth = useAuth();
     return (
         <div className="sp1_filter_sidebar">
             <div className="sp1_filter_sidebar_header">
@@ -45,18 +44,13 @@ const FilterSidebar = ({
                     sidebarOpen={true}
                     roleIds={null}
                 />
-
-                <Switch>
-                    <Switch.Case condition={isHigherRole}>
-                        <UserFilter
-                            title="Project Manager"
-                            state={pm}
-                            sidebarOpen={true}
-                            setState={setPm}
-                            roleIds={[4]}
-                        />
-                    </Switch.Case>
-                </Switch>
+                <UserFilter
+                    title="Project Manager"
+                    state={pm}
+                    sidebarOpen={true}
+                    setState={setPm}
+                    roleIds={[4]}
+                />
                 <SearchBox
                     value={search}
                     onChange={setSearch}

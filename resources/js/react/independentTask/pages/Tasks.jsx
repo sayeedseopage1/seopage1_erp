@@ -1,5 +1,6 @@
 import _ from "lodash";
-import React from "react";
+import React, { useEffect } from "react";
+
 // import { useDispatch, useSelector } from "react-redux";
 // import { useCheckUnAuthorizedTaskTypeQuery, useLazyGetTaskTypeDataQuery, useLazyGetTasksQuery, useUpdateTasktypeAuthStatusMutation } from "../../services/api/tasksApiSlice";
 // import { storeTasks } from "../../services/features/tasksSlice";
@@ -21,87 +22,39 @@ import TaskAuthorization from "../components/authorized-task/TaskAuthorization";
 import TableFilter from "../components/table/TableFilter";
 import { defaultColumnVisibility } from "../constant";
 import { useRefresh } from "../index";
+import { useLocation } from "react-router-dom";
 import IndependentTaskExportButton from "../components/IndependentTasksExportButton";
 
 const Tasks = ({ tableData, isLoading, onFilter, filter }) => {
-    // const {tasks} = useSelector(s => s.tasks)
-    // const [tasksType, setTasksType] = React.useState([]);
-    // const dispatch = useDispatch();
-    // const [getTasks, { isFetching }] = useLazyGetTasksQuery();
-    // const [filter, setFilter] = React.useState(null);
+    const [userId, setUserId] = useState(null);
+    // Custom hook to parse query parameters
+    const useQuery = () => {
+        return new URLSearchParams(useLocation().search);
+    };
+
+    const query = useQuery();
+
+    useEffect(() => {
+        const status = query.get("status");
+        const user_id = query.get("user_id");
+
+        if (status === "one_more_week" && user_id) {
+            // Save the user_id in state
+            setUserId(user_id);
+            setShowIndividualTaskCreationForm(true);
+        }
+    }, []);
+
     const [search, setSearch] = useState("");
     const { refresh, handleRefresh } = useRefresh();
     const [showIndividualTaskCreationForm, setShowIndividualTaskCreationForm] =
         useState(false);
-    // const [showAuthorizationModal, setShowAuthorizationModal] = React.useState(false);
-    // const [showAuthorizationTableModal, setShowAuthorizationTableModal] = React.useState(false);
-    // const [activeModalTaskTypeData, setActiveModalTaskTypeData] = React.useState(null);
-    // const [comment, setComment] = React.useState('');
+
     const [columnVisibility, setColumnVisibility] = useState(
         defaultColumnVisibility
     );
 
-    // api function
-    // const [updateTasktypeAuthStatus, { isLoading }] = useUpdateTasktypeAuthStatusMutation();
-    // const { data: unAuthorizedType } = useCheckUnAuthorizedTaskTypeQuery();
     const auth = new User(window.Laravel.user);
-
-    // const onFilter = (filter) => {
-
-    //     const queryObject = _.pickBy(filter, Boolean);
-    //     const queryString = new URLSearchParams(queryObject).toString();
-    //     setFilter(queryObject);
-
-    //     if (filter?.start_date && filter?.end_date) {
-    //         getTasks(`?${queryString}`)
-    //             .unwrap()
-    //             .then(res => {
-    //                 let _data = res?.tasks
-    //                 if (auth.getRoleId() === 4) {
-    //                     _data = _.filter(res.tasks, d => Number(d.project_manager_id) === auth.getId());
-    //                 } else if (auth.getRoleId() === 6 || auth.getRoleId() === 9 || auth.getRoleId() === 10) {
-    //                     _data = _.filter(res.tasks, d => Number(d.assigned_to_id) === auth.getId());
-    //                 }
-
-    //                 const data = _.orderBy(_data, 'due_date', 'desc');
-    //                 dispatch(storeTasks({ tasks: data }))
-    //             })
-    //             .catch(err => console.log(err))
-    //     }
-    // }
-
-    // const [getTaskTypeData,{ isFetching: tasksTypeDataIsFetching }] = useLazyGetTaskTypeDataQuery();
-
-    // fetch table data
-    // const fetchTasksTypeData = async () => {
-    //     try {
-    //         const res = await getTaskTypeData().unwrap();
-    //         setTasksType(res.data);
-
-    //         setShowAuthorizationTableModal(true)
-    //     } catch (err) {
-    //         console.log(err)
-    //     }
-    // }
-
-    // update tasks-type authorization status
-    // const handleUpdateTaskTypeAuthorizationStatus = async (e, type, task_type_id) => {
-    //     e.preventDefault();
-    //     try {
-    //         const res = await updateTasktypeAuthStatus({ status: type, task_type_id, comment }).unwrap();
-    //         // console.log(res)
-    //         if (res) {
-    //             setTasksType(prev => _.map(prev, d => d.id === task_type_id ? { ...prev, authorization_status: res.authorization_status } : prev))
-    //             setActiveModalTaskTypeData(null);
-    //             close();
-    //         }
-    //     } catch (err) {
-    //         console.log(err)
-    //     }
-    // }
-
-    // const closeTable = () => setShowAuthorizationTableModal(false);
-    // const close = () => setShowAuthorizationModal(false);
 
     let tableColumns = TaskTableColumns;
 
@@ -127,6 +80,7 @@ const Tasks = ({ tableData, isLoading, onFilter, filter }) => {
                         onClick={handleRefresh}
                         variant="primary"
                         disabled={refresh}
+                        style={{ paddingTop: "5px", paddingBottom: "5px" }}
                     >
                         {refresh && (
                             <span
@@ -182,6 +136,7 @@ const Tasks = ({ tableData, isLoading, onFilter, filter }) => {
                     </div>
 
                     <IndependentTaskCreationForm
+                        userId={userId}
                         isOpen={showIndividualTaskCreationForm}
                         close={() => setShowIndividualTaskCreationForm(false)}
                         projectName={"independent-task-creation-form"}

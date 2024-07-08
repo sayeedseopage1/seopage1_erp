@@ -3,7 +3,7 @@
     "scripts": {
         "dev": "npm run development",
         "development": "mix",
-        "watch": "set NODE_OPTIONS=--max-old-space-size=8000 && mix watch",
+        "watch": "set NODE_OPTIONS=--max-old-space-size=8192 && mix watch",
         "watch-poll": "mix watch -- --watch-options-poll=1000",
         "hot": "mix watch --hot",
         "prod": "npm run production",
@@ -62,6 +62,7 @@
         "frappe-charts": "^1.5.5",
         "fs": "^0.0.1-security",
         "html-to-text": "^9.0.5",
+        "http": "^0.0.1-security",
         "immutability-helper": "^3.1.1",
         "install": "^0.13.0",
         "laravel-echo": "^1.11.2",

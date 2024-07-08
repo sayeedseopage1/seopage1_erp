@@ -3,36 +3,125 @@ import { apiSlice } from "./apiSlice";
 const evaluationApiSlice = apiSlice.injectEndpoints({
     endpoints: (build) => ({
         getTaskList: build.query({
-            query: (assignToId) =>
-                `http://localhost:3000/api/task/all-tasks/assign-to/${assignToId}`,
-            providesTags: ["All_TASKS"],
+            query: (userId) => `account/employee-evaluation-task/${userId}`,
+            providesTags: ["ALL_TASKS"],
         }),
-        updateTask: build.mutation({
-            query: ({ taskId, data }) => ({
-                url: `http://localhost:3000/api/task/update-task/${taskId}`,
-                method: "PUT",
+        getSingleTask: build.query({
+            query: (taskId) => `account/evaluation-task/${taskId}`,
+        }),
+        storeTaskRating: build.mutation({
+            query: (data) => ({
+                url: `account/employee-task-evaluation-store`,
+                method: "POST",
                 body: data,
                 formData: true,
             }),
-            invalidatesTags: ["All_TASKS"],
+            invalidatesTags: [
+                "ALL_TASKS",
+                "ALL_EVALUATION",
+                "EVALUATION_HISTORY",
+            ],
         }),
+
+        storeTaskRatingFinalSubmission: build.mutation({
+            query: (data) => ({
+                url: `account/employee-evaluation-submission-store`,
+                method: "POST",
+                body: data,
+                formData: true,
+            }),
+            invalidatesTags: ["ALL_TASKS", "ALL_EVALUATION"],
+        }),
+        updateTaskRatingSubmission: build.mutation({
+            query: (data) => ({
+                url: `/account/employee-task-evaluation-update`,
+                method: "POST",
+                body: data,
+                formData: true,
+            }),
+            invalidatesTags: ["ALL_TASKS", "ALL_EVALUATION"],
+        }),
+        storeTeamLeadReview: build.mutation({
+            query: (data) => ({
+                url: `/account/employee-evaluation-team-lead-cmnt`,
+                method: "POST",
+                body: data,
+                formData: true,
+            }),
+            invalidatesTags: ["ALL_EVALUATION"],
+        }),
+        storeAdminAuthorized: build.mutation({
+            query: (data) => ({
+                url: `/account/employee-evaluation-authorization`,
+                method: "POST",
+                body: data,
+                formData: true,
+            }),
+            invalidatesTags: ["ALL_EVALUATION"],
+        }),
+        storeAdminRejected: build.mutation({
+            query: (data) => ({
+                url: `/account/employee-evaluation-authorization`,
+                method: "POST",
+                body: data,
+                formData: true,
+            }),
+            invalidatesTags: ["ALL_EVALUATION"],
+        }),
+        storeAdminExtended: build.mutation({
+            query: (data) => ({
+                url: `/account/employee-evaluation-authorization`,
+                method: "POST",
+                body: data,
+                formData: true,
+            }),
+            invalidatesTags: ["ALL_EVALUATION"],
+        }),
+
         finalTaskSubmissionStatus: build.mutation({
             query: (assignToId) => ({
                 url: `http://localhost:3000/api/task/finalSubmissionStatus/${assignToId}`,
                 method: "PUT",
             }),
-            invalidatesTags: ["All_TASKS", "All_EVALUATION"],
+            invalidatesTags: ["ALL_TASKS", "ALL_EVALUATION"],
         }),
         getEvaluationList: build.query({
-            query: () => `http://localhost:3000/api/evaluation/get-evaluation`,
-            providesTags: ["All_EVALUATION"],
+            query: (query) => `/account/get-all-evaluation?${query}`,
+            providesTags: ["ALL_EVALUATION"],
+        }),
+        getSingleEvaluation: build.query({
+            query: (userId) => `/account/get-single-evaluation/${userId}`,
+            providesTags: ["ALL_EVALUATION"],
+        }),
+        getRevisionList: build.query({
+            query: (taskId) => `account/employee-task-revision/${taskId}`,
+            providesTags: ["ALL_REVISION"],
+        }),
+        getAllRevisionList: build.query({
+            query: (taskId) => `account/evaluation-total-revision/${taskId}`,
+            providesTags: ["ALL_REVISION"],
+        }),
+        getEvaluationHistory: build.query({
+            query: (userId) => `account/evaluation-history/${userId}`,
+            providesTags: ["EVALUATION_HISTORY"],
         }),
     }),
 });
 
 export const {
     useGetTaskListQuery,
-    useUpdateTaskMutation,
+    useGetSingleTaskQuery,
+    useStoreTaskRatingMutation,
+    useStoreTeamLeadReviewMutation,
+    useStoreAdminAuthorizedMutation,
+    useStoreAdminRejectedMutation,
+    useStoreAdminExtendedMutation,
+    useUpdateTaskRatingSubmissionMutation,
+    useStoreTaskRatingFinalSubmissionMutation,
     useFinalTaskSubmissionStatusMutation,
     useGetEvaluationListQuery,
+    useGetRevisionListQuery,
+    useGetAllRevisionListQuery,
+    useGetSingleEvaluationQuery,
+    useGetEvaluationHistoryQuery,
 } = evaluationApiSlice;

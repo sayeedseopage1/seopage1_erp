@@ -1,0 +1,87 @@
+.customAccordionWrapper {
+  width: 80%;
+  border: none;
+  box-shadow: none;
+}
+
+.customAccordionCardHead {
+  width: 100%;
+  display: flex !important;
+  justify-content: space-between !important;
+  align-items: center !important;
+  background-color: #f6f9ff !important;
+  color: #8F8F8F;
+  font-family: Poppins, sans-serif;
+  font-size: 18px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+  padding: 16px 24px 0 24px !important;
+}
+
+.customAccordionCardHeadInactive {
+  border-bottom-left-radius: 10px;
+  border-bottom-right-radius: 10px;
+  padding-bottom: 16px !important;
+}
+
+.activeBorderHeading {
+  border-bottom: 1px solid #E4EDFF !important;
+  padding-bottom: 16px !important;
+}
+
+.customAccordion__Icon {
+  color: #8F8F8F !important;
+  background-color: transparent !important;
+  border-radius: 0;
+}
+
+.customAccordionCardBody {
+  background-color: #f6f9ff !important;
+  padding: 0px 24px !important;
+  cursor: pointer !important;
+}
+
+.customAccordionCardBodyUL {
+  list-style-type: none;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.customAccordionCardBodyUL li {
+  color: #8F8F8F;
+  font-family: Poppins, sans-serif;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+}
+.customAccordionCardBodyUL button {
+  background-color: transparent;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  padding: 16px 0;
+  text-align: left;
+  width: 100%;
+}
+
+.customAccordionCardBodyUL li:hover {
+  background-color: #e1ebff;
+}
+
+.activeBorder {
+  border-bottom: 1px solid #E4EDFF !important;
+}
+
+.activeItem {
+  background-color: #e1ebff !important;
+}
+
+@media screen and (max-width: 768px) {
+  .customAccordionWrapper {
+    width: 100%;
+  }
+  
+}

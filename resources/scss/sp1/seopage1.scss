@@ -1,4 +1,6 @@
 @import "single-task-page";
+@import "evaluation-page" ;
+
 
 .text-hover-underline:hover{
   text-decoration: underline;
@@ -29,6 +31,11 @@
     }
   }
 
+
+  .link_color{
+    color: #2323ee !important;
+    cursor:pointer;
+  }
   .skeleton-loading {
     width: fit-content;
     padding: 3px ;
@@ -164,6 +171,10 @@ abbr{
   -webkit-user-select: none;
   -moz-user-select: none;
   user-select: none;
+}
+.cnx_dropdown__item_disabled{
+  pointer-events: none;
+  opacity: 0.5;
 }
 
 .font-medium{

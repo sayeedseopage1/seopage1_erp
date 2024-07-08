@@ -1,48 +1,99 @@
 @extends('layouts.app')
-@section('content')
-    <div class="container-fluid">
-        <div class="row">
-            <div class="col-md-12">
-                <button type="button" class="btn-primary rounded f-14 mt-5" data-toggle="modal" data-target="#addwebsitepluginmodal">
-                    <i class="fa fa-plus mr-1"></i>Add Website Plugin
-                </button>
-                @include('projects.modals.addwebsitepluginmodal')
-                <div class="card mt-3">
-                    <div class="card-header bg-white border-0 text-capitalize d-flex justify-content-between p-20">
-                        <h4 class="f-18 f-w-500 mb-0">Website Plugin</h4>
+@push('datatable-styles')
+    @include('sections.datatable_css')
+@endpush
+@section('filter-section')
+    <x-filters.filter-box>
+        <div class="task-search d-flex  py-1 px-lg-3 px-0 border-right-grey align-items-center">
+            <form class="w-100 mr-1 mr-lg-0 mr-md-1 ml-md-1 ml-0 ml-lg-0">
+                <div class="input-group bg-grey rounded">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text border-0 bg-additional-grey">
+                            <i class="fa fa-search f-13 text-dark-grey"></i>
+                        </span>
                     </div>
-                    <table class="table table-hover">
-                        <thead>
-                        <tr class="text-center">
-                            <th>#</th>
-                            <th>Plugin Name</th>
-                            <th>Plugin Url</th>
-                            <th>Action</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        @php
-                            $key = $website_plugins->currentPage() * $website_plugins->perPage() - $website_plugins->perPage() + 1;
-                        @endphp
-                        @foreach($website_plugins as $website_plugin)
-                            <tr class="text-center">
-                                <td>{{ $key ++ }}</td>
-                                <td> {{$website_plugin->plugin_name}} </td>
-                                <td> {{$website_plugin->plugin_url}} </td>
-                                <td>
-                                    <a href="" class="btn btn-primary update_website_plugin_form" data-toggle="modal" data-target="#editwebsitepluginmodal" data-id="{{ $website_plugin->id }}" data-name="{{ $website_plugin->plugin_name }}" data-url="{{ $website_plugin->plugin_url }}">
-                                        <i class="fa fa-edit"></i>
-                                    </a>
-                                </td>
-
-                            </tr>
-                        @endforeach
-                        </tbody>
-                    </table>
-                    <div class="row my-3 ml-3">{{ $website_plugins->links() }}</div>
+                    <input type="text" class="form-control f-14 p-1 border-additional-grey" id="search-text-field"
+                        placeholder="@lang('app.startTyping')">
                 </div>
-            </div>
+            </form>
+        </div>
+
+        <!-- RESET START -->
+        <div class="select-box d-flex py-1 px-lg-2 px-md-2 px-0">
+            <x-forms.button-secondary class="btn-xs d-none" id="reset-filters" icon="times-circle">
+                @lang('app.clearFilters')
+            </x-forms.button-secondary>
+        </div>
+        <!-- RESET END -->
+
+    </x-filters.filter-box>
+@endsection
+
+@section('content')
+    <!-- CONTENT WRAPPER START -->
+    <div class="content-wrapper">
+        <button type="button" class="btn-primary rounded f-14" data-toggle="modal" data-target="#addwebsitepluginmodal">
+            <i class="fa fa-plus mr-1"></i>Add Website Plugin
+        </button>
+        <div class="d-flex flex-column w-tables rounded mt-3 bg-white">
+                {!! $dataTable->table(['class' => 'table table-hover border-0 w-100']) !!}
         </div>
     </div>
-    @include('projects.modals.editwebsitepluginmodal')
+    @include('projects.modals.addwebsitepluginmodal')
+    <!-- CONTENT WRAPPER END -->
 @endsection
+
+@push('scripts')
+    @include('sections.datatable_js')
+    <script>
+        $('#project-website-plugin-table').on('preXhr.dt', function(e, settings, data) {
+
+            var searchText = $('#search-text-field').val();
+            data['searchText'] = searchText;
+        });
+
+        const showTable = () => {
+            window.LaravelDataTables["project-website-plugin-table"].draw();
+        }
+
+
+
+        $('#search-text-field').on('change keyup', function() {
+           if ($('#search-text-field').val() != "") {
+                $('#reset-filters').removeClass('d-none');
+                showTable();
+            } else {
+                $('#reset-filters').addClass('d-none');
+                showTable();
+            }
+        });
+
+        $('#reset-filters').click(function() {
+            $('#filter-form')[0].reset();
+            $('.filter-box #status').val('not finished');
+            $('.filter-box .select-picker').selectpicker("refresh");
+            $('#reset-filters').addClass('d-none');
+            showTable();
+        });
+
+        $('#reset-filters-2').click(function() {
+            $('#filter-form')[0].reset();
+            $('.filter-box #status').val('not finished');
+            $('.filter-box .select-picker').selectpicker("refresh");
+            $('#reset-filters').addClass('d-none');
+            showTable();
+        });
+
+    </script>
+
+    <script>
+        $('body').on('click', '.project-website-plugin-modal', function() {
+            let id = $(this).data('project-website-plugin-id');
+            let searchQuery = "?id=" + id;
+            let url = "{{ route('edit-website-plugin') }}" + searchQuery;
+
+            $(MODAL_LG + ' ' + MODAL_HEADING).html('...');
+            $.ajaxModal(MODAL_LG, url);
+        });
+    </script>
+@endpush

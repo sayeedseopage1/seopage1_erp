@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 // use DB;
 use Auth;
 use Validator;
+use App\Models\EmployeeEvaluation;
+use App\Models\EmployeeEvaluationTask;
 use Notification;
 use Carbon\Carbon;
 use App\Models\Role;
@@ -26,6 +28,7 @@ use Illuminate\Support\Facades\DB;
 use App\Models\AuthorizationAction;
 use Illuminate\Support\Facades\Storage;
 use App\Http\Requests\SubTask\StoreSubTask;
+use App\Models\EvaluationHistory;
 use App\Notifications\PrimaryPageNotification;
 
 class SubTaskController extends AccountBaseController
@@ -517,6 +520,48 @@ class SubTaskController extends AccountBaseController
             $helper->NewTaskAssign($task_s);
             // $actions = PendingAction::where('serial','NTTAx'.$request->user_id)->where('past_status',0)->get();
             // dd($actions);
+            if($task->project_id != null){
+                $assigned_to = User::find($subTask->assigned_to);
+                $text = 'Subtask ' .$subTask->title. ' has been created against task ' . $parent_task->heading . ' and assigned to ' . $assigned_to->name;
+                $link = '<a href="' . route('tasks.show', $task->id) . '">' . $text . '</a>';
+                $this->logProjectActivity($task->project_id, $link);
+            }
+            
+            /**EMPLOYEE EVALUATION START */
+            $taskFind = Task::where('subtask_id',$subTask->id)->where('u_id',null)->where('independent_task_status',1)->first(); //Find SubTask
+            if($taskFind != null){
+                $task_user = User::where('id', $subTask->assigned_to)->first();
+                if($task_user->role_id == 14){
+                    $evaluation = EmployeeEvaluation::where('user_id', $subTask->assigned_to)->first();
+                    if ($evaluation->start_date == null) {
+                        $evaluation->start_date = Carbon::now();
+                        $emp_start_task = $evaluation->start_date;
+
+                        $exp_date = Carbon::parse($emp_start_task)->addDays(6);
+                        $countSundays = 0;
+                        $currentDate = $emp_start_task->copy(); 
+                        while ($currentDate->lte($exp_date)) {
+                            if ($currentDate->dayOfWeek === Carbon::SUNDAY) {
+                                $countSundays++;
+                            }
+                            $currentDate->addDay(); 
+                        }
+                        
+                        $evaluation->exp_date = Carbon::parse($emp_start_task)->addDays(6 + $countSundays);
+                        
+                        $evaluation->save();
+                    }
+                    $evaluation_history = EvaluationHistory::where('user_id', $subTask->assigned_to)->count();
+                    $evaluation_task = new EmployeeEvaluationTask();
+                    $evaluation_task->user_id = $subTask->assigned_to;
+                    $evaluation_task->task_id = $taskFind->id;
+                    $evaluation_task->task_name = $taskFind->heading;
+                    $evaluation_task->assign_date = $taskFind->created_at;
+                    $evaluation_task->round = $evaluation_history + 1;
+                    $evaluation_task->save();
+                }
+            }
+            /**EMPLOYEE EVALUATION END */
 
             $task = $subTask->task;
             $this->logTaskActivity($task->id, $this->user->id, 'subTaskCreateActivity', $task->board_column_id, $subTask->id);
@@ -532,7 +577,7 @@ class SubTaskController extends AccountBaseController
                 ]
             ]);
         } catch (\Throwable $th) {
-            // throw $th;
+            throw $th;
             DB::rollBack();
             return response()->json([
                 'status' => 400,
@@ -540,7 +585,6 @@ class SubTaskController extends AccountBaseController
     
             ]);
         }
-        
     }
 
     /**
