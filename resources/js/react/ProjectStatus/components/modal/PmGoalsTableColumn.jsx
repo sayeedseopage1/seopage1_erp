@@ -115,7 +115,7 @@ export const PmGoalsTableColumns = [
                         new Date(row.original?.goal_end_date) > new Date()
                             ? styles?.tableAnchor
                             : ""
-                    }`}
+                    } d-flex justify-content-center align-items-center`}
                     style={{
                         textDecoration: data?.goal_extension_history
                             ? "underline"
@@ -148,7 +148,7 @@ export const PmGoalsTableColumns = [
                         new Date(row.original?.goal_end_date) > new Date()
                             ? styles?.tableAnchor
                             : ""
-                    }`}
+                    } d-flex justify-content-center align-items-center`}
                     style={{
                         textDecoration: data?.goal_expired_history
                             ? "underline"
@@ -159,6 +159,7 @@ export const PmGoalsTableColumns = [
                         data.goal_expired_history &&
                             handle.deadlineExplanationHistoryClick(data);
                     }}
+                    
                 >
                     {data.goal_expired_history}
                 </span>

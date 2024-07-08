@@ -20,6 +20,8 @@ import ReviewExtendRequestModal from "./ReviewExtendModal";
 import GoalExtensionHistoryModal from "./GoalExtensionHistoryModal";
 import DeadlineExplanationHistoryModal from "./DeadlineExplanationHistoryModal";
 import PmGoalsTableLoader from "../loader/PmGoalsTableLoader";
+import style from "../styles/pmgoaltable.module.css";
+
 
 import { useLazyGetGoalExpiredHistoryQuery, useLazyGetGoalExtensionHistoryQuery, useLazyGetProjectExtendImagesQuery } from "../../../services/api/projectStatusApiSlice";
 import ProjectStatusTablePagination from "../ProjectStatusTablePagination";

@@ -6,6 +6,7 @@ import { PmGoalsTableColumns } from "./PmGoalsTableColumn";
 import PmGoalsTable from "./PmGoalsTable";
 import { IoClose } from "react-icons/io5";
 import { useSearchParams } from "react-router-dom";
+import { useAuth } from "../../../hooks/useAuth";
 
 const ProjectModal = ({
     refetchPmGoal,
@@ -17,6 +18,7 @@ const ProjectModal = ({
     projectStatus,
     setProjectDetails,
 }) => {
+    const auth = useAuth();
     const [updatePmGoal, setUpdatePmGoal] = React.useState([]);
     const [searchParams, setSearchParams] = useSearchParams();
 
@@ -53,9 +55,16 @@ const ProjectModal = ({
                 setSearchParams(searchParams);
             }
         } else {
-            setUpdatePmGoal(pmGoal)
+            setUpdatePmGoal(pmGoal);
         }
     }, [isOpen, pmGoal, projectStatus, searchParams]);
+
+    const filterTableColumns = () => {
+        if (auth.getRoleId() === 1 || auth.getRoleId() === 4) {
+            return PmGoalsTableColumns;
+        }
+        return PmGoalsTableColumns.filter((column) => column.id !== "action");
+    };
 
     return (
         <>
@@ -101,7 +110,7 @@ const ProjectModal = ({
                     pmGoal={updatePmGoal}
                     tableName="pmGoalsTable"
                     isLoading={isFetchingPmGoal}
-                    PmGoalsTableColumns={PmGoalsTableColumns}
+                    PmGoalsTableColumns={filterTableColumns()}
                     isFetchingPmGoal={isFetchingPmGoal}
                 />
             </ReactModal>
