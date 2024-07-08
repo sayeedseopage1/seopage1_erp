@@ -1,8 +1,9 @@
 import React from 'react';
 import { CiSearch } from "react-icons/ci";
 import ChatListItem from '../ui/ChatListItem';
+import ChatListLoader from '../../loader/ChatListLoader';
 
-const ChatList = () => {
+const ChatList = ({ isMessageLoading }) => {
     return (
         <div>
             <div className='chat_header_wrapper' style={{ borderTopLeftRadius: '8px' }}>
@@ -18,13 +19,15 @@ const ChatList = () => {
                     <p className='chat_list_title'>Chats</p>
                     <p className='chat_request'>Request</p>
                 </div>
-                <div className='chat_list_wrapper'>
-                    {
-                        Array(5).fill(0).map((item, index) => (
-                            <ChatListItem key={index} />
-                        ))
-                    }
-                </div>
+                {
+                    isMessageLoading ? <ChatListLoader /> : <div className='chat_list_wrapper'>
+                        {
+                            Array(5).fill(0).map((item, index) => (
+                                <ChatListItem key={index} />
+                            ))
+                        }
+                    </div>
+                }
             </div>
         </div>
     );

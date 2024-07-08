@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import '../../styles/message/freelancerMessage.css'
 import ChatList from '../../components/freelancerMessage/sections/ChatList';
 import ChatBox from '../../components/freelancerMessage/sections/ChatBox';
@@ -6,6 +6,14 @@ import ChatActionList from '../../components/freelancerMessage/sections/ChatActi
 import { ConfigProvider } from 'antd';
 
 const FreelancerMessage = () => {
+    //! TODO: this is used for development purpose only
+    const [isMessageLoading, setIsMessageLoading] = React.useState(true);
+    useEffect(() => {
+        setTimeout(() => {
+            setIsMessageLoading(false);
+        }, 3000);
+    }, []);
+
     return (
         <ConfigProvider
             theme={{
@@ -20,13 +28,13 @@ const FreelancerMessage = () => {
             <div className='sp1_marketplace_page_wrapper'>
                 <div className='marketplace_message_wrapper'>
                     <div className='chat_list_lg'>
-                        <ChatList />
+                        <ChatList isMessageLoading={isMessageLoading} />
                     </div>
                     <div className='chat_box_lg'>
-                        <ChatBox />
+                        <ChatBox isMessageLoading={isMessageLoading} />
                     </div>
                     <div className='chat_action_list_lg'>
-                        <ChatActionList />
+                        <ChatActionList isMessageLoading={isMessageLoading} />
                     </div>
                 </div>
             </div>

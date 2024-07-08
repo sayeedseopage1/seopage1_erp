@@ -10,10 +10,12 @@ import { Input } from 'antd';
 import { getFileIcon, shortenFileName } from '../../../utils';
 import Picker from 'emoji-picker-react';
 import { TiDelete } from 'react-icons/ti';
+import InnerChatLoader from '../../loader/InnerChatLoader';
+import ChatBoxHeaderAvatarLoader from '../../loader/ChatBoxHeaderAvatarLoader';
 
 const { TextArea } = Input;
 
-const ChatBox = () => {
+const ChatBox = ({ isMessageLoading }) => {
     const [messageInputData, setMessageInputData] = useState("");
     const [fileInputData, setFileInputData] = useState([]);
     const [filePreviews, setFilePreviews] = useState([]);
@@ -53,24 +55,29 @@ const ChatBox = () => {
         <div>
             <div className='chat_header_wrapper'>
                 <div className='chat_box_header'>
-                    <div className='chat_box_header_content'>
-                        <div className='chat_user_avatar_wrapper'>
-                            <img src={userProfile} alt="" className='chat_user_avatar' />
-                            <img src={chatActiveIcon} alt="chatActiveIcon" className='active_status' />
-                        </div>
-                        <div>
-                            <div className='chat_header_name_wrapper'>
-                                <h4 className='chat_header_name'>Ahmad12issa</h4>
-                                <p className='chat_header_user_name'>@Ahmad12Issa</p>
+                    {
+                        isMessageLoading ? <ChatBoxHeaderAvatarLoader /> : <div className='chat_box_header_content'>
+                            <div className='chat_user_avatar_wrapper'>
+                                <img src={userProfile} alt="" className='chat_user_avatar' />
+                                <img src={chatActiveIcon} alt="chatActiveIcon" className='active_status' />
                             </div>
-                            <p className='chat_header_designation'>Sky FLY UI UX Designer</p>
+                            <div>
+                                <div className='chat_header_name_wrapper'>
+                                    <h4 className='chat_header_name'>Ahmad12issa</h4>
+                                    <p className='chat_header_user_name'>@Ahmad12Issa</p>
+                                </div>
+                                <p className='chat_header_designation'>Sky FLY UI UX Designer</p>
+                            </div>
                         </div>
-                    </div>
+                    }
+
                 </div>
             </div>
             <div className='chat_box_wrapper'>
                 <div className='chat_box_content_wrapper'>
-                    <ChatContents />
+                    {
+                        isMessageLoading ? <InnerChatLoader /> : <ChatContents />
+                    }
                 </div>
                 <div className='message_send_actions_wrapper'>
                     {
