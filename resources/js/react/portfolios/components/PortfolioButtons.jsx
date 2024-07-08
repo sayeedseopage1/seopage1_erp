@@ -34,7 +34,11 @@ const PortfolioButtons = ({
                 className="price_quotation_custom_button price_quotation_custom_button_primary"
                 onClick={handleEditButton}
             >
-                Edit
+                {portfolioData?.rating_score ? (
+                    <span>Edit</span>
+                ) : (
+                    <span>Rate</span>
+                )}
             </Button>
 
             <div>
