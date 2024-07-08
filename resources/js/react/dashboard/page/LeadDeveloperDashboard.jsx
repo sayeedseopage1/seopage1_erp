@@ -90,27 +90,7 @@ const LeadDeveloperDashboard = () => {
                 gap="20px"
                 padding="20px 0"
             >
-                <CustomCardHeader
-                    title="Total Projects"
-                    border
-                    borderStyle="0.1px solid var(--primaryBorderBlue)"
-                />
-                <CustomCardInfo
-                    isLoading={isLoading}
-                    cardData={{
-                        title: "Total Projects",
-                        subTitle: "(This Month)",
-                        value: 10,
-                        isColorChange: true,
-                        loadingValueWidth: "80%",
-                        isModalOpen: false,
-                        info: {
-                            content: "Total Projects",
-                            trigger: "hover",
-                        },
-                    }}
-                    className="align-items-start"
-                />
+                
             </SectionWrapper>
 
             <SectionWrapper>
