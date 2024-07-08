@@ -122,12 +122,13 @@ const IncentiveThickChart = ({ chartData }) => {
                     return [`⬤ ${chartData?.shortTitle}: ${chartData?.limitType == 1 ? "$" : ""}${chartData?.ratio}${chartData?.limitType == 2 ? "%" : ""}`, `Incentive: ${val}${chartData?.amountType == 1 ? "" : "%"}`];
                 }
 
-                if (dataPointIndex === 0 || dataPointIndex === seriesLength - 1) {
+                if (dataPointIndex === seriesLength - 1) {
                     return ""; // Hide the label for the first and last bars
                 }
                 return val ? `${chartData?.limitType == 1 ? "$" : ""}${chartData?.ratio}${chartData?.limitType == 2 ? "%" : ""}, ${val}${chartData?.amountType == 1 ? "" : "%"}` : "";
             },
-            offsetY: -25,
+            offsetY: isAllZero ? -25 : 0,
+            offsetX: isAllZero ? 0 : 15,
             style: {
                 fontSize: "12px",
                 fontFamily: "poppins",
@@ -147,9 +148,10 @@ const IncentiveThickChart = ({ chartData }) => {
                     ranges: chartData?.id == 8 ? rangesForShortValue : rangesForLongValue
                 },
                 dataLabels: {
-                    orientation: isAllZero ? "vertical" : "horizontal",
-                    position: "top",
-                    maxItems: 100,
+                    orientation: "vertical",
+                    position: isAllZero ?
+                        "top" : chartData?.incentive > 40 ? "center" : "bottom",
+                    maxItems: 5,
                     color: "#00A0EE",
                     hideOverflowingLabels: !0,
                     total: {
