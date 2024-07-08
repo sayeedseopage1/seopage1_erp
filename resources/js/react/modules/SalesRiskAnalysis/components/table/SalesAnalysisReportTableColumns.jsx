@@ -195,18 +195,22 @@ export const SalesAnalysisReportTableColumns = [
             const data = row?.original;
             return (
                 <Switch>
-                    <Switch.Case condition={data?.points}>
+                    <Switch.Case
+                        condition={
+                            data?.points !== null && data?.points !== undefined
+                        }
+                    >
                         <p className="multiline-ellipsis">{data?.points}</p>
                     </Switch.Case>
-                    <Switch.Case condition={!data?.points}>
+                    <Switch.Case
+                        condition={
+                            data?.points === null || data?.points === undefined
+                        }
+                    >
                         {["previous-won", "previous-denied"].includes(
-                            data?.status.toLowerCase()
+                            data?.status?.toLowerCase()
                         ) ? (
-                            <p
-                                style={{
-                                    ...customStyle.previousAuthorized,
-                                }}
-                            >
+                            <p style={{ ...customStyle.previousAuthorized }}>
                                 Previous Report
                             </p>
                         ) : (
