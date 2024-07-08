@@ -396,8 +396,20 @@ class PortfolioController extends AccountBaseController
                 $query->whereJsonContains('pp.plugin_list', [$plugin_id]);
             }
 
-            if ($rating) {
-                $query->where('pp.rating_score', $rating);
+            $ratingRanges = [
+                1 => [0.25, 1.75],
+                2 => [2.00, 2.75],
+                3 => [3.00, 3.75],
+                4 => [4.00, 4.75],
+                5 => [5.00],
+            ];
+            
+            if (isset($rating) && array_key_exists($rating, $ratingRanges)) {
+                $range = $ratingRanges[$rating];
+                $query->where('pp.rating_score', '>=', $range[0]);
+                if (count($range) > 1) {
+                    $query->where('pp.rating_score', '<=', $range[1]);
+                }
             }
 
         })
@@ -442,8 +454,20 @@ class PortfolioController extends AccountBaseController
                 $query->whereJsonContains('pp.plugin_list', [$plugin_id]);
             }
 
-            if ($rating) {
-                $query->where('pp.rating_score', $rating);
+            $ratingRanges = [
+                1 => [0.25, 1.75],
+                2 => [2.00, 2.75],
+                3 => [3.00, 3.75],
+                4 => [4.00, 4.75],
+                5 => [5.00],
+            ];
+            
+            if (isset($rating) && array_key_exists($rating, $ratingRanges)) {
+                $range = $ratingRanges[$rating];
+                $query->where('pp.rating_score', '>=', $range[0]);
+                if (count($range) > 1) {
+                    $query->where('pp.rating_score', '<=', $range[1]);
+                }
             }
 
         })
