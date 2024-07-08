@@ -4,12 +4,65 @@ import { IoIosStar } from "react-icons/io";
 import { FaQuestion } from "react-icons/fa6";
 import { RxCross2 } from "react-icons/rx";
 import FractionalRating from "../../../global/FractionalRating";
-import Button from "../../../global/Button";
-const RatingModal = ({ showModal, setShowModal }) => {
-    const [rating, setRating] = React.useState(0);
+
+import { useUpdatePortfolioRatingMutation } from "../../../services/api/portfolioApiSlice";
+import { useAuth } from "../../../hooks/useAuth";
+import Swal from "sweetalert2";
+import { toast } from "react-toastify";
+
+const RatingModal = ({ portfolioData, id, showModal, setShowModal }) => {
+    const auth = useAuth();
+    const [updatePortfolioRating, { isLoading }] =
+        useUpdatePortfolioRatingMutation();
+    const [rating, setRating] = React.useState(
+        portfolioData?.rating_score ?? 0
+    );
+    const [comment, setComment] = React.useState(
+        portfolioData?.added_by_comment ?? ""
+    );
+
     const handleRatingChange = (newRating) => {
         setRating(newRating);
     };
+
+    const handleCommentSubmit = async () => {
+        if (!comment) {
+            Swal.fire({
+                icon: "error",
+                title: "Oops...",
+                text: "Please write a comment!",
+            });
+            return;
+        }
+        if (rating <= 0) {
+            Swal.fire({
+                icon: "error",
+                title: "Oops...",
+                text: "Please rate the website!",
+            });
+            return;
+        }
+        try {
+            await updatePortfolioRating({
+                portfolio_id: id,
+                rating_score: rating,
+                added_by_comment: comment,
+                rating_updated_by: auth.userId,
+            }).unwrap();
+            toast.success(
+                "Thank you for your feedback! Rating submitted successfully."
+            );
+            setShowModal(false);
+        } catch (error) {
+            console.error(error);
+            Swal.fire({
+                icon: "error",
+                title: "Oops...",
+                text: "Something went wrong!",
+            });
+        }
+    };
+
     return (
         <div>
             <ReactModal
@@ -31,6 +84,7 @@ const RatingModal = ({ showModal, setShowModal }) => {
                 }}
                 isOpen={showModal}
                 onRequestClose={() => setShowModal(false)}
+                ariaHideApp={false}
             >
                 <div>
                     <div className="portfolio_modal_header">
@@ -41,7 +95,7 @@ const RatingModal = ({ showModal, setShowModal }) => {
                             <FaQuestion color="white" size={"20px"} />
                         </div>
                         <div
-                            onClick={() => setShowEditModal(false)}
+                            onClick={() => setShowModal(false)}
                             className="portfolio_close_icon"
                         >
                             <RxCross2 color="white" size={"25px"} />
@@ -70,13 +124,18 @@ const RatingModal = ({ showModal, setShowModal }) => {
                         </div>
 
                         <textarea
+                            value={comment}
+                            onChange={(e) => setComment(e.target.value)}
                             placeholder="Write a comment..."
                             className="portfolio_comment_box"
                         ></textarea>
 
                         <div>
-                            <button className="portfolio_rating_submission_button">
-                                Submit
+                            <button
+                                className="portfolio_rating_submission_button"
+                                onClick={handleCommentSubmit}
+                            >
+                                {isLoading ? "Submitting..." : "Submit"}
                             </button>
                         </div>
                     </div>
