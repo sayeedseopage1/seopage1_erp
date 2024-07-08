@@ -92,8 +92,8 @@ const PortfolioButtons = ({
             </Button>
 
             <RatingModal
-                showEditModal={showEditModal}
-                setShowEditModal={setShowEditModal}
+                showModal={showEditModal}
+                setShowModal={setShowEditModal}
             />
         </div>
     );
