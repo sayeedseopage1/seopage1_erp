@@ -314,7 +314,6 @@ class PmGoalEventListener
 
         // find next goal
         $goals = ProjectPmGoal::where(['project_id' => $projectId])->whereNotIn('goal_code', ['HTA', '3HT', '4HT', '5HT'])->get();
-        // dd($totalMinutes);
         if (count($goals) < 1) return;
         // $total = 0;
         // $dIds = [];
@@ -326,12 +325,13 @@ class PmGoalEventListener
             if (!$deliverable = ProjectDeliverable::find($data->deliverable_id)) return;
 
             // check deliverable time exceeded
-            if ($item->goal_status == 0 && time() <= strtotime($item->goal_end_date)) {
+            if ($item->goal_status == 0) {
+                if (time() > strtotime($item->goal_end_date)) return;
                 // dd($dIds, $total, $totalMinutes, ($deliverable->estimation_time * 60));
                 if ($totalMinutes >= ($deliverable->estimation_time * 60)) {
                     foreach ($goalCodes as $code) {
-                        if ($code['code'] == $goal->goal_code) {
-                            $goal->expired_meet_description = $code['complete'];
+                        if ($code['code'] == $item->goal_code) {
+                            $item->expired_meet_description = $code['complete'];
                             break;
                         }
                     }
