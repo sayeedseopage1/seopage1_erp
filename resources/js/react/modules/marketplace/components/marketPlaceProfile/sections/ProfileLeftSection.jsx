@@ -7,10 +7,8 @@ import ReviewCard from '../ui/ReviewCard';
 import ProfilePersonalInfoSection from './ProfilePersonalInfoSection';
 import { antdPaginate } from '../../../utils/antdPaginate';
 import ProfilePortfolioSection from './ProfilePortfolioSection';
-import ProfilePersonalInfoLoader from '../../loader/ProfilePersonalInfoLoader';
 
-
-const ProfileLeftSection = ({ profileData, isProfileLoading }) => {
+const ProfileLeftSection = ({ profileData }) => {
     const { portfolio, reviews, experiences, educations, qualifications, publications } = profileData || {};
 
     const [currentPage, setCurrentPage] = useState(1);
@@ -29,9 +27,7 @@ const ProfileLeftSection = ({ profileData, isProfileLoading }) => {
     }
     return (
         <div className='marketplace_profile_left_side'>
-            {
-                isProfileLoading ? <ProfilePersonalInfoLoader /> : <ProfilePersonalInfoSection profileData={profileData} />
-            }
+            <ProfilePersonalInfoSection profileData={profileData} />
 
             <LgDataCardWithHeader title={"Portfolio"} actionCompo={
                 <div className='personal_info_action_wrapper'>

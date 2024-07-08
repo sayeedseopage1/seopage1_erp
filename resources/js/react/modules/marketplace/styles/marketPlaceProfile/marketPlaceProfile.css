@@ -6,6 +6,11 @@
     border-radius: 10px 10px 0px 0px;
 }
 
+.marketplace_cover_image :where(.css-dev-only-do-not-override-13wlzn6).ant-skeleton {
+    display: block !important;
+    width: 100%;
+}
+
 .marketplace_profile_flex_between {
     display: flex;
     align-items: center;
