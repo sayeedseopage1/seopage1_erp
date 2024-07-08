@@ -353,7 +353,7 @@ class PortfolioController extends AccountBaseController
         $website_sub_category = $request->website_sub_category ?? null;
         $theme_id = $request->theme_id ?? null;
         $plugin_id = $request->plugin_id ?? null;
-        $rating = $request->rating ?? null;
+        $rating = $request->rating_id ?? null;
         $limit = $request->page_size ?? 30;
 
         // $itemsPaginated = SalesRiskPolicy::where('parent_id', null)->offset($req->input('limit', 10) * $req->input('page', 1))->paginate($req->input('limit', 10));
