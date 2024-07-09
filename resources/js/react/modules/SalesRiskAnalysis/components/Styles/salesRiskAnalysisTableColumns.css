@@ -2,6 +2,7 @@
   background-color: #a00000 !important;
   border-color: #a00000 !important;
 }
+
 .sales_risk_status_toggle_not_checked::after {
   background-color: #fff !important;
 }
@@ -9,4 +10,11 @@
 .custom-control-input:checked~.sales_risk_status_toggle_checked::before {
   background-color: #218838 !important;
   border-color: #218838 !important;
+}
+
+
+
+.saleRiskCountryMultiselectDropdown {
+  max-height: 300px !important;
+  overflow-y: auto !important;
 }

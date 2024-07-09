@@ -436,7 +436,7 @@ const AddQuestionsListModal = ({
     useEffect(() => {
         setSingleQuestion({
             ...singleQuestion,
-            placeholder: questionsPlaceholderGenerator(singleQuestion?.type),
+            placeholder: singleQuestion?.placeholder ?? questionsPlaceholderGenerator(singleQuestion?.type),
         });
     }, [singleQuestion?.type]);
 

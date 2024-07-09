@@ -14,6 +14,7 @@ const MultiSelectShowDropDown = ({
     className,
     handleEditCountryList,
     isShow,
+    classNameForMenu
 }) => {
     const _Options = data;
     return (
@@ -45,10 +46,10 @@ const MultiSelectShowDropDown = ({
                     </Tooltip>
                 </Dropdown.Toggle>
                 <Dropdown.Menu
-                    className="cnx_dropdown__menu_open--multiselectShow"
+                    className={`cnx_dropdown__menu_open--multiselectShow  ${classNameForMenu}`}
                     id={`cnx_dropdown__menu_open--${_Options?.id}`}
                 >
-                    <div className="d-flex justify-content-between">
+                    <div className="d-flex justify-content-between countryDropdownHeader">
                         <p>Country list ({_Options?.length})</p>
                         {isShow && (
                             <button

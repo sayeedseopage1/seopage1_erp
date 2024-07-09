@@ -330,6 +330,7 @@ export const SalesRiskAnalysisTableColumns = [
                                                     rule
                                                 );
                                             }}
+                                            classNameForMenu="saleRiskCountryMultiselectDropdown"
                                         />
                                     </div>
                                 </Switch.Case>
