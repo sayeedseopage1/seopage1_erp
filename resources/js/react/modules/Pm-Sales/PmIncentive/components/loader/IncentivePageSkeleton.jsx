@@ -34,7 +34,7 @@ const IncentivePageSkeleton = () => {
             </div>
             <div className='ideal_vs_achieved_container'>
                 {
-                    Array(3).fill(0).map((_, index) => (
+                    Array(7).fill(0).map((_, index) => (
                         <div key={index} className="chart_parent">
                             <div className="chart_wrapper">
                                 <ChartSkeleton heights={heights} />
