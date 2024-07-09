@@ -15,7 +15,7 @@ import ListOrTableView from "./components/filter/ListorTableView";
 import DataTable from "./components/Table/DataTable";
 import { PortfolioTableColumns } from "./components/Table/Columns/PortfolioTableColumns";
 import AppliedFilters from "./components/filter/AppliedFilters";
-
+import { useLocation } from "react-router-dom";
 const Portfolio = () => {
     const [portfolio, setPortfolio] = useState(null);
     const [cms, setCms] = useState(null);
@@ -57,6 +57,15 @@ const Portfolio = () => {
     //mitul work
 
     const [tableView, setTableView] = React.useState("listView");
+    const location = useLocation();
+    const queryParams = new URLSearchParams(location.search);
+    const portfolio_id = queryParams.get("portfolio_id");
+
+    useEffect(() => {
+        if (portfolio_id) {
+            setTableView("tableView");
+        }
+    }, []);
     useEffect(() => {
         const query = {
             page: _pageIndex,

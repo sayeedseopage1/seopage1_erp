@@ -99,9 +99,9 @@ export const PortfolioTableColumns = [
         },
     },
     {
-        id: "category_name",
+        id: "cms",
         header: " Website Type",
-        accessorKey: "category_name",
+
         cell: ({ row }) => {
             const data = row.original;
 

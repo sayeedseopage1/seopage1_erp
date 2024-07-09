@@ -1,11 +1,28 @@
-import React from "react";
+import React, { useEffect } from "react";
 import RatingModal from "../../Modal/RatingModal";
 import { useAuth } from "../../../../hooks/useAuth";
 import _ from "lodash";
+import { useLocation } from "react-router-dom";
 
 const ActionRating = ({ data }) => {
-    const auth = useAuth();
     const [showModal, setShowModal] = React.useState(false);
+    const location = useLocation();
+    const queryParams = new URLSearchParams(location.search);
+    const portfolio_id = queryParams.get("portfolio_id");
+    console.log(
+        "portfolio id from param",
+        portfolio_id,
+        "state portfolio id",
+        data?.id
+    );
+    useEffect(() => {
+        if (portfolio_id == data?.id) {
+            setShowModal(true);
+        }
+    }, [portfolio_id]);
+
+    console.log("show modal", showModal);
+    const auth = useAuth();
     return (
         <div>
             {_.includes([1, 8], auth?.getRoleId()) ? (
