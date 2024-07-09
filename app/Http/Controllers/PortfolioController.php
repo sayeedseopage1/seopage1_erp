@@ -196,6 +196,7 @@ class PortfolioController extends AccountBaseController
      */
     public function ratingStore(Request $request)
     {
+        dd($request->all());
         $portfolio = ProjectPortfolio::where('id', $request->portfolio_id)->first();
         $portfolio->rating_score = $request->rating_score;
         $portfolio->added_by_comment = $request->added_by_comment;
@@ -244,7 +245,7 @@ class PortfolioController extends AccountBaseController
                         'button_name' => 'View rating',
                         'button_color' => 'primary',
                         'button_type' => 'redirect_url',
-                        'button_url' => route('portfolio.index', ['protfolio_id' => $portfolio->id, 'modal' => 'show-rating']),
+                        'button_url' => route('portfolio.index', ['portfolio_id' => $portfolio->id, 'modal' => 'show-rating']),
                     ],
                 ];
                 $past_action->button = json_encode($button);
@@ -289,6 +290,7 @@ class PortfolioController extends AccountBaseController
      */
     public function ratingUpdate(Request $request)
     {
+        dd('update');
         $portfolio = ProjectPortfolio::where('id', $request->portfolio_id)->first();
         $portfolio->rating_score = $request->rating_score;
         $portfolio->added_by_comment = $request->added_by_comment;
