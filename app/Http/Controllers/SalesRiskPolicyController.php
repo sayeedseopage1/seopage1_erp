@@ -962,8 +962,9 @@ class SalesRiskPolicyController extends AccountBaseController
                     $pointData['milestone']['message'][] = 'Milestone total amount not found.';
                     goto endMilestone;
                 }
-                // dd($value, $deal->actual_amount);
-                $percentage = $value / $deal->actual_amount * 100;
+
+                $projectBudget = $deal->actual_amount > 1 ? $deal->actual_amount : $deal->upsell_actual_amount;
+                $percentage = $value / $projectBudget * 100;
                 // ------------------- end percentage calculation
 
                 $data[] = ['id' => $questions[1]->id, 'title' => $questions[1]->title, 'value' => $value . '(' . number_format($percentage, 2) . '%)', 'parent_id' => $questions[1]->parent_id];
