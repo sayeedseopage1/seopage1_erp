@@ -15,6 +15,7 @@ const portfolioApiSlice = apiSlice.injectEndpoints({
 
         getPortfolioDataById: build.query({
             query: (id) => `/account/portfolio/${id}`,
+            providesTags: ["PORTFOLIO_BY_ID"],
         }),
         storePortfolioRating: build.mutation({
             query: (data) => ({
@@ -26,7 +27,7 @@ const portfolioApiSlice = apiSlice.injectEndpoints({
                 },
             }),
 
-            invalidatesTags: ["ALL_PORTFOLIO"],
+            invalidatesTags: ["ALL_PORTFOLIO", "PORTFOLIO_BY_ID"],
         }),
         updatePortfolioRating: build.mutation({
             query: (data) => ({
@@ -38,7 +39,7 @@ const portfolioApiSlice = apiSlice.injectEndpoints({
                 },
             }),
 
-            invalidatesTags: ["ALL_PORTFOLIO"],
+            invalidatesTags: ["ALL_PORTFOLIO", "PORTFOLIO_BY_ID"],
         }),
     }),
 });
