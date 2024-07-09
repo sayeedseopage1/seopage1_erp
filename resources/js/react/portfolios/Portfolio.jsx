@@ -3,6 +3,7 @@ import React, { useState, useEffect } from "react";
 import "./portfolio.css";
 import PortfolioItem from "./PortfolioItem";
 import {
+    useGetPortfolioDataQuery,
     useGetPortfolioFilterMenuItemsQuery,
     useLazyGetPortfolioDataQuery,
 } from "../services/api/portfolioApiSlice";
@@ -16,8 +17,9 @@ import DataTable from "./components/Table/DataTable";
 import { PortfolioTableColumns } from "./components/Table/Columns/PortfolioTableColumns";
 import AppliedFilters from "./components/filter/AppliedFilters";
 import { useLocation } from "react-router-dom";
+
 const Portfolio = () => {
-    const [portfolio, setPortfolio] = useState(null);
+    // const [portfolio, setPortfolio] = useState(null);
     const [cms, setCms] = useState(null);
     const [cmsSearch, setCmsSearch] = useState("");
     const [websiteType, setWebsiteType] = useState(null);
@@ -51,8 +53,8 @@ const Portfolio = () => {
     const _pageSize = React.useMemo(() => pageSize, [pageSize]);
     const _rating = React.useMemo(() => rating, [rating]);
 
-    const [getPortfolioData, { isFetching: dataLoading }] =
-        useLazyGetPortfolioDataQuery();
+    // const [getPortfolioData, { isFetching: dataLoading }] =
+    //     useLazyGetPortfolioDataQuery();
 
     //mitul work
 
@@ -61,13 +63,13 @@ const Portfolio = () => {
     const queryParams = new URLSearchParams(location.search);
     const portfolio_id = queryParams.get("portfolio_id");
 
-    useEffect(() => {
-        if (portfolio_id) {
-            setTableView("tableView");
-        }
-    }, []);
-    useEffect(() => {
-        const query = {
+    const queryString = (object) => {
+        const queryObject = _.pickBy(object, Boolean);
+        return new URLSearchParams(queryObject).toString();
+    };
+
+    const { data, isLoading: dataLoading } = useGetPortfolioDataQuery(
+        queryString({
             page: _pageIndex,
             page_size: _pageSize,
             cms: _cms?.id,
@@ -79,26 +81,52 @@ const Portfolio = () => {
             plugin_name: _plugin?.plugin_name,
             plugin_id: _plugin?.id,
             rating_id: _rating?.id,
-        };
+        }),
+        { refetchOnMountOrArgChange: true }
+    );
 
-        const queryObject = _.pickBy(query, Boolean);
-        const queryString = new URLSearchParams(queryObject).toString();
+    const portfolio = data?.data;
+    console.log("portfolio", portfolio, "data", data);
 
-        (async () => {
-            const res = await getPortfolioData(`?${queryString}`).unwrap();
-            setPortfolio(res);
-        })();
-    }, [
-        _cms,
-        _webCategory,
-        _webtype,
-        _webSubCategory,
-        _theme,
-        _plugin,
-        _pageSize,
-        _pageIndex,
-        _rating,
-    ]);
+    useEffect(() => {
+        if (portfolio_id) {
+            setTableView("tableView");
+        }
+    }, []);
+
+    // useEffect(() => {
+    //     const query = {
+    //         page: _pageIndex,
+    //         page_size: _pageSize,
+    //         cms: _cms?.id,
+    //         website_category: _webCategory?.id,
+    //         website_type: _webtype?.id,
+    //         website_sub_category: _webSubCategory?.id,
+    //         theme_name: _theme?.theme_name,
+    //         theme_id: _theme?.id,
+    //         plugin_name: _plugin?.plugin_name,
+    //         plugin_id: _plugin?.id,
+    //         rating_id: _rating?.id,
+    //     };
+
+    //     const queryObject = _.pickBy(query, Boolean);
+    //     const queryString = new URLSearchParams(queryObject).toString();
+
+    //     (async () => {
+    //         const res = await getPortfolioData(`?${queryString}`).unwrap();
+    //         setPortfolio(res);
+    //     })();
+    // }, [
+    //     _cms,
+    //     _webCategory,
+    //     _webtype,
+    //     _webSubCategory,
+    //     _theme,
+    //     _plugin,
+    //     _pageSize,
+    //     _pageIndex,
+    //     _rating,
+    // ]);
 
     const subNiches = () => {
         let data = _.filter(

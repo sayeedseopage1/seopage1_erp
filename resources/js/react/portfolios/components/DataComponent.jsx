@@ -6,15 +6,14 @@ const DataComponent = ({
     fontSize = "14px",
     color,
     backgroundColor,
-    minWidth = "100%",
-    flexGrow,
+    width = "100%",
+    marginTop = "10px",
+
     children,
 }) => {
     return (
-        <div style={{ flexGrow: flexGrow ?? 0, minWidth: minWidth }}>
-            <strong style={{ fontSize: fontSize, marginBottom: "10px" }}>
-                {label}
-            </strong>
+        <div style={{ width: width }}>
+            <strong style={{ fontSize: fontSize }}>{label}</strong>
             <div
                 style={{
                     color: color,
@@ -22,9 +21,11 @@ const DataComponent = ({
                     display: "flex",
                     alignItems: "center",
                     justifyContent: "flex-start",
-                    height: "60px",
+                    height: "50px",
                     padding: "5px 10px",
                     borderRadius: "6px",
+                    marginTop: `${marginTop}`,
+                    marginBottom: "10px",
                 }}
             >
                 {children} {value}
