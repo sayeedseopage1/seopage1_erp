@@ -33,16 +33,16 @@ const PortfolioModal = ({ isOpen, close, data, isLoading }) => {
                                             label={`Project Name:`}
                                             value={data?.project_name}
                                             fontSize="16px"
-                                            color="#000"
-                                            backgroundColor="#ffffff"
+                                            color="#1492E6"
+                                            backgroundColor="#D8EDFC"
                                             minWidth="50%"
                                         />
                                         <DataComponent
                                             label={`ClientName`}
                                             value={data?.client_name}
                                             fontSize="16px"
-                                            color="#2464b8"
-                                            backgroundColor="#ffffff"
+                                            color="#1492E6"
+                                            backgroundColor="#D8EDFC"
                                             minWidth="50%"
                                         />
                                     </div>

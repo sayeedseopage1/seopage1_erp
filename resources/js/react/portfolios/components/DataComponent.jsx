@@ -8,6 +8,7 @@ const DataComponent = ({
     backgroundColor,
     minWidth = "100%",
     flexGrow,
+    children,
 }) => {
     return (
         <div style={{ flexGrow: flexGrow ?? 0, minWidth: minWidth }}>
@@ -26,7 +27,7 @@ const DataComponent = ({
                     borderRadius: "6px",
                 }}
             >
-                {value}
+                {children} {value}
             </div>
         </div>
     );
