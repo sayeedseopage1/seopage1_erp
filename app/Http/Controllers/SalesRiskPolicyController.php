@@ -771,7 +771,8 @@ class SalesRiskPolicyController extends AccountBaseController
                 }
 
                 // pending action for sales lead authorization
-                event(new SalesPolicyEvent('sales_lead_authorization', $deal));
+                if(auth()->user()->role_id != 4)
+                    event(new SalesPolicyEvent('sales_lead_authorization', $deal));
             } else {
                 $deal->sale_analysis_status = 'analysis';
                 event(new SalesPolicyEvent('sales_risk_authorization', $deal, ['questionValue' => $policyQuestionValue, 'points' => $calculation['points']]));
