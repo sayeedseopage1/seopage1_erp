@@ -85,8 +85,8 @@ const Portfolio = () => {
         { refetchOnMountOrArgChange: true }
     );
 
-    const portfolio = data?.data;
-    console.log("portfolio", portfolio, "data", data);
+    const portfolio = data;
+    console.log("portfolio", portfolio);
 
     useEffect(() => {
         if (portfolio_id) {

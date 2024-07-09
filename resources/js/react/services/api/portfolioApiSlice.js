@@ -9,7 +9,7 @@ const portfolioApiSlice = apiSlice.injectEndpoints({
         }),
 
         getPortfolioData: build.query({
-            query: (query) => `/account/portfolio/data${query}`,
+            query: (query) => `/account/portfolio/data?${query}`,
             providesTags: ["ALL_PORTFOLIO"],
         }),
 
