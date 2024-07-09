@@ -14,7 +14,7 @@ return new class extends Migration
     public function up()
     {
         Schema::table('project_portfolios', function (Blueprint $table) {
-            $table->integer('rating_score')->nullable()->after('added_by');
+            $table->decimal('rating_score')->nullable()->after('added_by');
             $table->longText('added_by_comment')->nullable()->after('rating_score');
             $table->integer('rating_added_by')->nullable()->after('added_by_comment');
             $table->integer('rating_updated_by')->nullable()->after('rating_added_by');

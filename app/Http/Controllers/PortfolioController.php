@@ -4,21 +4,22 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Models\PendingAction;
+use App\Models\PendingActionPast;
 use App\Models\Project;
 use App\Models\ProjectCms;
 use App\Models\ProjectNiche;
 use App\Models\ProjectPortfolio;
+use App\Models\ProjectSubmission;
 use App\Models\ProjectTimeLog;
 use App\Models\ProjectWebsitePlugin;
 use App\Models\ProjectWebsiteTheme;
 use App\Models\ProjectWebsiteType;
+use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Request as FacadesRequest;
-
-use function Google\Auth\Cache\get;
-use function Symfony\Component\HttpClient\Response\select;
 
 class PortfolioController extends AccountBaseController
 {
@@ -41,16 +42,6 @@ class PortfolioController extends AccountBaseController
         $this->website_categories = ProjectNiche::whereNull('parent_category_id')->get();
         $this->website_themes = ProjectWebsiteTheme::all();
         $this->website_plugins = ProjectWebsitePlugin::whereNotNull('plugin_name')->get();
-
-//        $this->portfolios = DB::table('project_portfolios')
-//            ->join('projects', 'project_portfolios.project_id', '=', 'projects.id')
-//            ->join('users', 'projects.client_id', '=', 'users.id')
-//            ->join('project_submissions', 'project_portfolios.project_id', '=', 'project_submissions.project_id')
-//            ->select('project_portfolios.*', 'users.user_name', 'projects.project_name', 'projects.project_budget', 'project_submissions.actual_link')
-//            ->get();
-
-//                dd($this->website_subcategories);
-
         return view('portfolio.index', $this->data);
     }
 
@@ -396,11 +387,24 @@ class PortfolioController extends AccountBaseController
                 $query->whereJsonContains('pp.plugin_list', [$plugin_id]);
             }
 
-            if ($rating) {
-                $query->where('pp.rating_score', $rating);
+            $ratingRanges = [
+                1 => [0.25, 1.75],
+                2 => [2.00, 2.75],
+                3 => [3.00, 3.75],
+                4 => [4.00, 4.75],
+                5 => [5.00],
+            ];
+            
+            if (isset($rating) && array_key_exists($rating, $ratingRanges)) {
+                $range = $ratingRanges[$rating];
+                $query->where('pp.rating_score', '>=', $range[0]);
+                if (count($range) > 1) {
+                    $query->where('pp.rating_score', '<=', $range[1]);
+                }
             }
 
         })
+        ->orderBy('pp.rating_score', 'desc')
         ->distinct();
 
         $rawData2 = DB::table('project_portfolios as pp')
@@ -442,11 +446,24 @@ class PortfolioController extends AccountBaseController
                 $query->whereJsonContains('pp.plugin_list', [$plugin_id]);
             }
 
-            if ($rating) {
-                $query->where('pp.rating_score', $rating);
+            $ratingRanges = [
+                1 => [0.25, 1.75],
+                2 => [2.00, 2.75],
+                3 => [3.00, 3.75],
+                4 => [4.00, 4.75],
+                5 => [5.00],
+            ];
+            
+            if (isset($rating) && array_key_exists($rating, $ratingRanges)) {
+                $range = $ratingRanges[$rating];
+                $query->where('pp.rating_score', '>=', $range[0]);
+                if (count($range) > 1) {
+                    $query->where('pp.rating_score', '<=', $range[1]);
+                }
             }
 
         })
+        ->orderBy('pp.rating_score', 'desc')
         ->distinct();
 
         $totalRow = $rawData1->get()->count();
