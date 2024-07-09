@@ -28,6 +28,6 @@ export default GradientProgressBar;
 
 GradientProgressBar.propTypes = {
     progress: PropTypes.number,
-    incentive: PropTypes.number,
+    incentive: PropTypes.any,
     isAverage: PropTypes.bool
 }
