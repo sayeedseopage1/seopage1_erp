@@ -36,11 +36,11 @@ const PortfolioFilterBar = ({
     setRating,
 }) => {
     const ratingOptions = [
-        { id: "1", name: "Poor (up to 1 star)" },
-        { id: "2", name: "Below Average (up to 2 star)" },
-        { id: "3", name: "Average (up to 3 star)" },
-        { id: "4", name: "Good (up to 4 star)" },
-        { id: "5", name: "Excellent (5 star)" },
+        { id: "1", name: "Poor (0.25 - 1.75)" },
+        { id: "2", name: "Below Average (2.00 - 2.75)" },
+        { id: "3", name: "Average (3.00 - 3.75)" },
+        { id: "4", name: "Good (4.00 - 4.75)" },
+        { id: "5", name: "Excellent (5.00)" },
     ];
     return (
         <div

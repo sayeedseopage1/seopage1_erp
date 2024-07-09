@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-
+import { Link, useSearchParams } from "react-router-dom";
 import "./portfolio.css";
 import PortfolioItem from "./PortfolioItem";
 import {
@@ -17,10 +17,10 @@ import DataTable from "./components/Table/DataTable";
 import { PortfolioTableColumns } from "./components/Table/Columns/PortfolioTableColumns";
 import AppliedFilters from "./components/filter/AppliedFilters";
 import { useLocation } from "react-router-dom";
-import PendingOrCompleted from "./components/filter/PendingOrCompleted";
+import { PendingOrCompleted } from "./components/filter/PendingOrCompleted";
 
 const Portfolio = () => {
-    // const [portfolio, setPortfolio] = useState(null);
+    const [searchParams, setSearchParams] = useSearchParams();
     const [cms, setCms] = useState(null);
     const [cmsSearch, setCmsSearch] = useState("");
     const [websiteType, setWebsiteType] = useState(null);
@@ -69,7 +69,7 @@ const Portfolio = () => {
         return new URLSearchParams(queryObject).toString();
     };
     const [portfolio, setPortfolio] = useState(null);
-    const [pendingOrCompleted, setPendingOrCompleted] = useState("pending");
+    const [pendingOrCompleted, setPendingOrCompleted] = useState("all");
     const { data, isFetching: dataLoading } = useGetPortfolioDataQuery(
         queryString({
             page: _pageIndex,
@@ -159,6 +159,38 @@ const Portfolio = () => {
         return data;
     };
 
+    const getData = (type) => {
+        let _data = _.orderBy(portfolio, "rating_score", "asc");
+        switch (type) {
+            case "all":
+                return _data;
+            case "pending":
+                return _.filter(_data, (d) => d.rating_score === null);
+
+            case "authorized":
+                return _.filter(_data, (d) => d.rating_score !== null);
+            default:
+                return _data;
+        }
+    };
+
+    const _data = {
+        all: getData(null),
+        pending: getData("pending"),
+
+        authorized: getData("authorized"),
+    };
+
+    const tableData = (type) => {
+        if (type) {
+            return _.orderBy(
+                _data[type],
+                ["rating_score", "updated_at"],
+                ["asc", "desc"]
+            );
+        } else return [];
+    };
+
     return (
         <section>
             <div
@@ -224,10 +256,9 @@ const Portfolio = () => {
                         gap: "10px",
                     }}
                 >
-                    {/* <PendingOrCompleted
-                        pendingOrCompleted={pendingOrCompleted}
-                        setPendingOrCompleted={setPendingOrCompleted}
-                    /> */}
+                    <div style={{ marginTop: "10px" }}>
+                        <PendingOrCompleted data={_data} />
+                    </div>
                     <ListOrTableView
                         tableView={tableView}
                         setTableView={setTableView}
@@ -367,16 +398,19 @@ const Portfolio = () => {
                                     background: "#F2F9FE",
                                 }}
                             >
-                                {_.map(portfolio, (item, index) => (
-                                    <div key={item.id}>
-                                        <PortfolioItem
-                                            portfolioData={item}
-                                            id={item?.id}
-                                            isLoading={dataLoading}
-                                            url={item?.portfolio_link?.toLowerCase()}
-                                        />
-                                    </div>
-                                ))}
+                                {_.map(
+                                    tableData(searchParams.get("show")),
+                                    (item, index) => (
+                                        <div key={item.id}>
+                                            <PortfolioItem
+                                                portfolioData={item}
+                                                id={item?.id}
+                                                isLoading={dataLoading}
+                                                url={item?.portfolio_link?.toLowerCase()}
+                                            />
+                                        </div>
+                                    )
+                                )}
                             </div>
                         )}
                     </div>
@@ -394,7 +428,7 @@ const Portfolio = () => {
                     }}
                 >
                     <DataTable
-                        tableData={portfolio}
+                        tableData={tableData(searchParams.get("show"))}
                         tableColumns={PortfolioTableColumns}
                         isLoading={dataLoading || filterMenuIsLoading}
                         tableName="portfolio Table"

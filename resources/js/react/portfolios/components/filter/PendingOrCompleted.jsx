@@ -1,56 +1,71 @@
-import React from "react";
+import { Link, useSearchParams } from "react-router-dom";
+import _ from "lodash";
+import styles from "../../../employee-evaluation/pages/EmployeeEvaluation.module.css";
+export const PendingOrCompleted = (props) => {
+    const [searchParams, setSearchParams] = useSearchParams();
+    const data = props.data;
 
-const PendingOrCompleted = ({ pendingOrCompleted, setPendingOrCompleted }) => {
-    const getBadgeClass = (type) => {
-        const isSelected = pendingOrCompleted === type;
-        let baseClass =
-            "badge px-3 py-2 cursor-pointer badge_opacity_unselected transition-opacity";
+    const handleRouteChange = (e, params) => {
+        e.preventDefault();
 
-        switch (type) {
-            case "pending":
-                baseClass += isSelected
-                    ? " bg-danger text-white badge_opacity_selected"
-                    : " bg-danger";
-                break;
-            case "completed":
-                baseClass += isSelected
-                    ? " bg-success text-white badge_opacity_selected"
-                    : " bg-success";
-                break;
-            case "all":
-                baseClass += isSelected
-                    ? " bg-primary text-white badge_opacity_selected"
-                    : " bg-primary";
-                break;
-            default:
-                break;
+        // Create a new URLSearchParams object with the new parameters
+        const newSearchParams = new URLSearchParams();
+
+        // Set new parameters
+        for (const [key, value] of Object.entries(params)) {
+            newSearchParams.set(key, value);
         }
 
-        return baseClass;
+        // Update the searchParams state with the new URLSearchParams object
+        setSearchParams(newSearchParams);
     };
 
+    const badge = (type) => {
+        return _.size(data[type]);
+    };
     return (
-        <div className="list-table-toggle d-flex justify-content-around">
-            <span
-                className={getBadgeClass("pending")}
-                onClick={() => setPendingOrCompleted("pending")}
-            >
-                Pending
-            </span>
-            <span
-                className={getBadgeClass("completed")}
-                onClick={() => setPendingOrCompleted("completed")}
-            >
-                Completed
-            </span>
-            <span
-                className={getBadgeClass("all")}
-                onClick={() => setPendingOrCompleted("all")}
-            >
-                All
-            </span>
-        </div>
+        <ul className={styles.tabs}>
+            <li>
+                <Link
+                    to="#"
+                    data-type="pending"
+                    onClick={(e) => handleRouteChange(e, { show: "pending" })}
+                    data-active={searchParams.get("show") === "pending"}
+                >
+                    Pending{" "}
+                    <span className="badge badge-light">
+                        {badge("pending")}
+                    </span>
+                </Link>
+            </li>
+
+            <li>
+                <Link
+                    to="#"
+                    data-type="authorized"
+                    onClick={(e) =>
+                        handleRouteChange(e, { show: "authorized" })
+                    }
+                    data-active={searchParams.get("show") === "authorized"}
+                >
+                    Completed{" "}
+                    <span className="badge badge-light">
+                        {badge("authorized")}
+                    </span>
+                </Link>
+            </li>
+
+            <li>
+                <Link
+                    to="#"
+                    data-type="all"
+                    onClick={(e) => handleRouteChange(e, { show: "all" })}
+                    data-active={searchParams.get("show") === "all"}
+                >
+                    All{" "}
+                    <span className="badge badge-light">{badge("all")}</span>
+                </Link>
+            </li>
+        </ul>
     );
 };
-
-export default PendingOrCompleted;
