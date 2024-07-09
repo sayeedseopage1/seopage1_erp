@@ -196,7 +196,6 @@ class PortfolioController extends AccountBaseController
      */
     public function ratingStore(Request $request)
     {
-        dd($request->all());
         $portfolio = ProjectPortfolio::where('id', $request->portfolio_id)->first();
         $portfolio->rating_score = $request->rating_score;
         $portfolio->added_by_comment = $request->added_by_comment;
@@ -290,7 +289,6 @@ class PortfolioController extends AccountBaseController
      */
     public function ratingUpdate(Request $request)
     {
-        dd('update');
         $portfolio = ProjectPortfolio::where('id', $request->portfolio_id)->first();
         $portfolio->rating_score = $request->rating_score;
         $portfolio->added_by_comment = $request->added_by_comment;

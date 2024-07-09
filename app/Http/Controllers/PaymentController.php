@@ -1670,8 +1670,9 @@ class PaymentController extends AccountBaseController
             $text = 'Project has been completed successfully';
             $link = '<a href="' . route('projects.show', $project->id) . '">' . $text . '</a>';
             $this->logProjectActivity($project->id, $link);
-
-            //PENDING ACTION FOR PROJECT PORTFOLIO RATING SYSTEM
+        }
+        //PENDING ACTION FOR PROJECT PORTFOLIO RATING SYSTEM
+        if($project->status == 'finished' || $project->status == 'partially finished'){
             $helper = new HelperPendingActionController();
             $helper->portfolioRating($project->id);
         }

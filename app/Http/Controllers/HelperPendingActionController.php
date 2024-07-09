@@ -2175,7 +2175,7 @@ class HelperPendingActionController extends AccountBaseController
                         'button_name' => 'Rate',
                         'button_color' => 'primary',
                         'button_type' => 'redirect_url',
-                        'button_url' => route('portfolio.index', ['protfolio_id' => $project_portfolio->id, 'modal' => 'true']),
+                        'button_url' => route('portfolio.index', ['portfolio_id' => $project_portfolio->id, 'modal' => 'show-rating']),
                     ],
 
                 ];
