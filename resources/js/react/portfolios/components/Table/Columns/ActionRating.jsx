@@ -20,7 +20,10 @@ const ActionRating = ({ data }) => {
                     </button>
                 )
             ) : (
-                <div> ⭐{data?.rating_score ?? 0}/5</div>
+                <div>
+                    {" "}
+                    {data?.rating_score ? `⭐${data?.rating_score}/5` : "N/A"}
+                </div>
             )}
 
             <RatingModal

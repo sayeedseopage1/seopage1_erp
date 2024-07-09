@@ -90,8 +90,14 @@ const PortfolioItem = ({ portfolioData, id, url, onClick, isLoading }) => {
                 </div>
 
                 <div>
-                    <span style={{ color: "gold", fontSize: "24px" }}>⭐</span>
-                    <span>{`${portfolioData?.rating_score ?? 0}/5`}</span>
+                    <span style={{ color: "gold", fontSize: "24px" }}>
+                        {portfolioData?.rating_score ? "⭐" : ""}
+                    </span>
+                    <span>
+                        {portfolioData?.rating_score
+                            ? ` ${portfolioData?.rating_score}/5`
+                            : "N/A"}
+                    </span>
                 </div>
             </div>
 

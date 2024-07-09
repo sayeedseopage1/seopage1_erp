@@ -58,7 +58,7 @@ export const PortfolioTableColumns = [
     },
     {
         id: "category_name",
-        header: "Category",
+        header: " Niche Category",
         accessorKey: "category_name",
         cell: ({ row }) => {
             const data = row.original;
@@ -66,9 +66,10 @@ export const PortfolioTableColumns = [
             return <div>{data?.category_name}</div>;
         },
     },
+
     {
         id: "sub_category_name",
-        header: "Sub Category",
+        header: "Sub Niche Category",
         accessorKey: "sub_category_name",
         cell: ({ row }) => {
             const data = row.original;
@@ -97,13 +98,23 @@ export const PortfolioTableColumns = [
             return <div>{data?.cms_name}</div>;
         },
     },
+    {
+        id: "category_name",
+        header: " Website Type",
+        accessorKey: "category_name",
+        cell: ({ row }) => {
+            const data = row.original;
+
+            return <div>{data?.category_name}</div>;
+        },
+    },
 
     {
-        id: "action",
+        id: "rating_score",
         header: () => {
             return <div>Rate</div>;
         },
-        accessorKey: "action",
+        accessorKey: "rating_score",
         cell: ({ row }) => {
             const data = row.original;
 

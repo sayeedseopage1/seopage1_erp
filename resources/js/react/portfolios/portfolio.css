@@ -536,3 +536,15 @@ display: flex;
     background: rgba(20, 146, 230, 0.40); /* New background color on hover */
     border-color: rgba(20, 146, 230, 0.60); /* New border color on hover */
 }
+
+.portfolio_item_background{
+   border: 1px solid #E0E9EF;
+   background: #F2F9FE;
+   padding: 20px;
+   height: fit-content;
+   border-radius: 9px;
+   display: flex;
+   justify-content: space-between;
+ 
+   gap: 10px;
+}

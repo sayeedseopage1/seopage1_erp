@@ -2,6 +2,7 @@ import React from "react";
 import Button from "../../global/Button";
 
 import RatingModal from "./Modal/RatingModal";
+import { useAuth } from "../../hooks/useAuth";
 
 const PortfolioButtons = ({
     portfolioData,
@@ -17,6 +18,7 @@ const PortfolioButtons = ({
     styles,
     attributes,
 }) => {
+    const auth = useAuth();
     const [showEditModal, setShowEditModal] = React.useState(false);
 
     const handleEditButton = () => {
@@ -30,16 +32,20 @@ const PortfolioButtons = ({
                 gap: "10px",
             }}
         >
-            <Button
-                className="price_quotation_custom_button price_quotation_custom_button_primary"
-                onClick={handleEditButton}
-            >
-                {portfolioData?.rating_score ? (
-                    <span>Edit</span>
-                ) : (
-                    <span>Rate</span>
-                )}
-            </Button>
+            {_.includes([1], auth.roleId) ||
+            (_.includes([8], auth.roleId) &&
+                portfolioData?.rating_score === null) ? (
+                <Button
+                    className="price_quotation_custom_button price_quotation_custom_button_primary"
+                    onClick={handleEditButton}
+                >
+                    {portfolioData?.rating_score ? (
+                        <span>Edit</span>
+                    ) : (
+                        <span>Rate</span>
+                    )}
+                </Button>
+            ) : null}
 
             <div>
                 <button
