@@ -34,7 +34,7 @@ class SalesRiskPolicyController extends AccountBaseController
         $this->pageTitle = 'Sales Risk Policies';
         // $this->activeSettingMenu = 'sales_risk_policies';
         $this->middleware(function ($request, $next) {
-            if (in_array(auth()->user()->role_id, [1, 7, 8])) /* admin and sale */ {
+            if (in_array(auth()->user()->role_id, [1, 4, 7, 8])) /* admin and sale */ {
                 return $next($request);
             }
             abort_403(user()->permission('manage_company_setting') !== 'all');
@@ -761,13 +761,12 @@ class SalesRiskPolicyController extends AccountBaseController
             }
 
             // deals table status change
-            if ($calculation['points'] >= 0) {
+            if ($calculation['points'] >= 0 || auth()->user()->role_id == 4) {
                 $deal->sale_analysis_status = 'auto-authorized';
                 $deal->sale_authorize_on = date('Y-m-d h:i:s');
 
-                if ($dealStage = DealStage::where('lead_id', $deal->lead_id)->first()) {
+                if ($dealStage = DealStage::where('short_code', $deal->deal_id)->first()) {
                     $dealStage->won_lost = 'Yes';
-                    $dealStage->status = 'pending';
                     $dealStage->save();
                 }
 
@@ -1367,9 +1366,9 @@ class SalesRiskPolicyController extends AccountBaseController
 
         PolicyPointHistory::create([
             'deal_id' => $deal_id,
-            'policy' => json_encode($data),
-            'points' => $calculationData['points'],
-            'point_report' => json_encode($calculationData)
+                'policy' => json_encode($data),
+                'points' => $calculationData['points'],
+                'point_report' => json_encode($calculationData)
         ]);
     }
 
@@ -1536,9 +1535,8 @@ class SalesRiskPolicyController extends AccountBaseController
             $deal->sale_analysis_status = 'authorized';
             $deal->sale_authorize_on = date('Y-m-d h:i:s');
 
-            if ($dealStage = DealStage::where('lead_id', $deal->lead_id)->first()) {
+            if ($dealStage = DealStage::where('short_code', $deal->deal_id)->first()) {
                 $dealStage->won_lost = 'Yes';
-                $dealStage->status = 'pending';
                 $dealStage->save();
             }
 

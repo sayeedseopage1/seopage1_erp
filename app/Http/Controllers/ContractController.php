@@ -227,7 +227,7 @@ class ContractController extends AccountBaseController
             return $next($request);
         });
         $deal = Deal::where('id', $id)->first();
-        if(Auth::user()->role_id!=1 && $deal->status!='pending') abort_403(true);
+        if( !in_array(auth()->user()->role_id, [1, 4]) && $deal->status!='pending') abort_403(true);
         return view('contracts.editdealdetails', $this->data, compact('deal'));
     }
 //storing new deals
@@ -2560,6 +2560,7 @@ public function storeClientDeal(Request $request){
         'client_name' => 'required',
         'project_name' => 'required',
         'amount' => 'required|min:1',
+        'project_type' => 'required'
     ]);
 
     $deal_stage = DealStage::where('id', $request->id)->first();
@@ -2582,7 +2583,8 @@ public function storeClientDeal(Request $request){
         // $deal->won_lost = 'Yes';
         $deal->save();
     } else {
-        $deal->deal_stage = $deal_stage->deal_stage;
+        if ($deal->deal_stage == 5) 
+            $deal->deal_stage = 6;
         $deal->comments = $deal_stage->comments;
         // $deal->won_lost = 'Yes';
         $deal->save();
@@ -2821,9 +2823,17 @@ public function storeClientDeal(Request $request){
             $this->triggerPusher('lead-updated-channel', 'lead-updated', $pusher_options);
         }
     }
+
+        if ($request->project_type == 'hourly') {
+            return response()->json([
+                'status' => 'success',
+                'redirectUrl' => route('dealDetails', $deal->id)
+            ]);
+        }
+        
         return response()->json([
             'status' => 'success',
-            'redirectUrl' => route('dealDetails', $deal->id)
+            'redirectUrl' => route('account.sale-risk-policies.risk-analysis', $deal->id)
         ]);
 }
 public function getAllContracts(Request $request){
