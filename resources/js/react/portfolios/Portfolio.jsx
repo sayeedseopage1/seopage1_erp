@@ -158,6 +158,7 @@ const Portfolio = () => {
                     marginTop: "10px",
                 }}
             >
+                {/* fortfolio filter bar */}
                 <section
                     style={{
                         backgroundColor: "#F2F9FE",
@@ -200,6 +201,7 @@ const Portfolio = () => {
                     />
                 </section>
 
+                {/* list or table view */}
                 <section
                     style={{
                         backgroundColor: "#F2F9FE",
@@ -215,6 +217,7 @@ const Portfolio = () => {
                     />
                 </section>
 
+                {/* applied filters */}
                 <section>
                     <AppliedFilters
                         cms={cms}
