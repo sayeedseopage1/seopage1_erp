@@ -18,6 +18,7 @@ import { LeadDeveloperDummyData } from "../constant";
 import CustomCardInfo from "../components/UI/CustomCardInfo/CustomCardInfo";
 import DashboardDataTable from "../components/table/DashboardDataTable";
 import { LeadDeveloperTableColumns } from "../components/table/columns/LeadDeveloperTableColumns";
+import { LeadDeveloperDataTitle } from "../constant/leadDeveloperConstant";
 
 const LeadDeveloperDashboard = () => {
     const [filter, setFilter] = useState();
@@ -89,15 +90,31 @@ const LeadDeveloperDashboard = () => {
                 className="d-flex flex-column"
                 gap="20px"
                 padding="20px 0"
-            >
-                
-            </SectionWrapper>
+            ></SectionWrapper>
 
             <SectionWrapper>
-                <DashboardDataTable
-                    tableName="LeadDeveloperCompletedProjects"
-                    tableColumns={LeadDeveloperTableColumns?.Complete}
-                />
+                {LeadDeveloperDataTitle?.map((data) => {
+                    return (
+                        <SectionWrapper key={data?.id}>
+                            <CustomCardHeader
+                                title={data?.title}
+                                info={data?.info}
+                                border={true}
+                            />
+                            <CustomCardInfo
+                                cardData={{
+                                    subTitle: data?.subTitle,
+                                    value: data?.value,
+                                    hasPermissionForModal:
+                                        data?.hasPermissionForModal,
+                                    onClick: (data) => {
+                                        console.log(data);
+                                    },
+                                }}
+                            />
+                        </SectionWrapper>
+                    );
+                })}
             </SectionWrapper>
         </SectionWrapper>
     );

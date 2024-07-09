@@ -27,7 +27,7 @@ const defaultProps = {
             content: "",
             trigger: "hover",
         },
-        isModalOpen: false,
+        hasPermissionForModal: false,
         onClick: () => {},
         loadingValueWidth: "80%",
     },
@@ -45,7 +45,7 @@ const CustomCardInfo = ({
         colors,
         onClick,
         subTitle,
-        isModalOpen,
+        hasPermissionForModal,
         isColorChange,
         loadingValueWidth,
     } = cardData;
@@ -91,7 +91,7 @@ const CustomCardInfo = ({
                     style={{
                         color: isChangeValueColor(),
                     }}
-                    onClick={() => isModalOpen && onClick(cardData)}
+                    onClick={() => hasPermissionForModal && onClick(cardData)}
                 >
                     <Switch.Case condition={isLoading}>
                         <Placeholder width={loadingValueWidth} height={16} />
