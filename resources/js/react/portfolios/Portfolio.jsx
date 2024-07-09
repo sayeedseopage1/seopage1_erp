@@ -68,7 +68,7 @@ const Portfolio = () => {
         return new URLSearchParams(queryObject).toString();
     };
 
-    const { data, isLoading: dataLoading } = useGetPortfolioDataQuery(
+    const { data, isFetching: dataLoading } = useGetPortfolioDataQuery(
         queryString({
             page: _pageIndex,
             page_size: _pageSize,
@@ -85,7 +85,8 @@ const Portfolio = () => {
         { refetchOnMountOrArgChange: true }
     );
 
-    const portfolio = data;
+    const portfolio = data?.data;
+    const portfolioMain = data;
     console.log("portfolio", portfolio);
 
     useEffect(() => {
@@ -276,7 +277,7 @@ const Portfolio = () => {
                                 </div>
                             ))
                         ) : !dataLoading &&
-                          _.size(portfolio?.data) === 0 &&
+                          _.size(portfolio) === 0 &&
                           (cms ||
                               websiteType ||
                               websiteCategory ||
@@ -324,7 +325,7 @@ const Portfolio = () => {
                                     filters, please customize filters
                                 </div>
                             </div>
-                        ) : !dataLoading && _.size(portfolio?.data) === 0 ? (
+                        ) : !dataLoading && _.size(portfolio) === 0 ? (
                             <div
                                 className="d-flex flex-column align-items-center justify-content-center w-100"
                                 style={{ height: "30vh" }}
@@ -378,7 +379,7 @@ const Portfolio = () => {
                                     background: "#F2F9FE",
                                 }}
                             >
-                                {_.map(portfolio?.data, (item, index) => (
+                                {_.map(portfolio, (item, index) => (
                                     <div key={item.id}>
                                         <PortfolioItem
                                             portfolioData={item}
@@ -405,7 +406,7 @@ const Portfolio = () => {
                     }}
                 >
                     <DataTable
-                        tableData={portfolio?.data}
+                        tableData={portfolio}
                         tableColumns={PortfolioTableColumns}
                         isLoading={dataLoading || filterMenuIsLoading}
                         tableName="portfolio Table"
@@ -415,14 +416,14 @@ const Portfolio = () => {
             <div>
                 <Pagination
                     currentPage={pageIndex}
-                    perpageRow={portfolio?.per_page}
+                    perpageRow={portfolioMain?.per_page}
                     onPaginate={(v) => setPageIndex(v)}
-                    totalEntry={portfolio?.total}
+                    totalEntry={portfolioMain?.total}
                     onNext={() => setPageIndex((prev) => prev + 1)}
-                    disableNext={!portfolio?.next_page_url}
+                    disableNext={!portfolioMain?.next_page_url}
                     onPrevious={() => setPageIndex((prev) => prev - 1)}
-                    disablePrevious={!portfolio?.prev_page_url}
-                    totalPages={portfolio?.last_page}
+                    disablePrevious={!portfolioMain?.prev_page_url}
+                    totalPages={portfolioMain?.last_page}
                     onPageSize={(v) => setPageSize(v)}
                 />
             </div>
