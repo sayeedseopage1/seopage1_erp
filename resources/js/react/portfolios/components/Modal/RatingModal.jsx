@@ -151,7 +151,11 @@ const RatingModal = ({ portfolioData, id, showModal, setShowModal }) => {
                             >
                                 {isLoading || storeLoading
                                     ? "Submitting..."
-                                    : "Submit"}
+                                    : `${
+                                          portfolioData?.rating_score
+                                              ? "Update"
+                                              : "Submit"
+                                      }`}
                             </button>
                         </div>
                     </div>

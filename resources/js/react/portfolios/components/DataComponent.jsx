@@ -3,9 +3,9 @@ import React from "react";
 const DataComponent = ({
     label,
     value,
-    fontSize = "14px",
-    color,
-    backgroundColor,
+    fontSize = "16px",
+    color = "#8198AA",
+    backgroundColor = "#DFE8EF",
     width = "100%",
     marginTop = "10px",
 

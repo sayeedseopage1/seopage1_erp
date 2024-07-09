@@ -17,6 +17,7 @@ import DataTable from "./components/Table/DataTable";
 import { PortfolioTableColumns } from "./components/Table/Columns/PortfolioTableColumns";
 import AppliedFilters from "./components/filter/AppliedFilters";
 import { useLocation } from "react-router-dom";
+import PendingOrCompleted from "./components/filter/PendingOrCompleted";
 
 const Portfolio = () => {
     // const [portfolio, setPortfolio] = useState(null);
@@ -67,7 +68,8 @@ const Portfolio = () => {
         const queryObject = _.pickBy(object, Boolean);
         return new URLSearchParams(queryObject).toString();
     };
-
+    const [portfolio, setPortfolio] = useState(null);
+    const [pendingOrCompleted, setPendingOrCompleted] = useState("pending");
     const { data, isFetching: dataLoading } = useGetPortfolioDataQuery(
         queryString({
             page: _pageIndex,
@@ -85,8 +87,21 @@ const Portfolio = () => {
         { refetchOnMountOrArgChange: true }
     );
 
-    const portfolio = data?.data;
+    useEffect(() => {
+        if (data) {
+            const filteredData = data?.data.filter((item) =>
+                pendingOrCompleted === "pending"
+                    ? item.rating_score === null
+                    : pendingOrCompleted === "completed"
+                    ? item.rating_score !== null
+                    : true
+            );
+            setPortfolio(filteredData);
+        }
+    }, [data, pendingOrCompleted]);
+
     const portfolioMain = data;
+
     console.log("portfolio", portfolio);
 
     useEffect(() => {
@@ -94,40 +109,6 @@ const Portfolio = () => {
             setTableView("tableView");
         }
     }, []);
-
-    // useEffect(() => {
-    //     const query = {
-    //         page: _pageIndex,
-    //         page_size: _pageSize,
-    //         cms: _cms?.id,
-    //         website_category: _webCategory?.id,
-    //         website_type: _webtype?.id,
-    //         website_sub_category: _webSubCategory?.id,
-    //         theme_name: _theme?.theme_name,
-    //         theme_id: _theme?.id,
-    //         plugin_name: _plugin?.plugin_name,
-    //         plugin_id: _plugin?.id,
-    //         rating_id: _rating?.id,
-    //     };
-
-    //     const queryObject = _.pickBy(query, Boolean);
-    //     const queryString = new URLSearchParams(queryObject).toString();
-
-    //     (async () => {
-    //         const res = await getPortfolioData(`?${queryString}`).unwrap();
-    //         setPortfolio(res);
-    //     })();
-    // }, [
-    //     _cms,
-    //     _webCategory,
-    //     _webtype,
-    //     _webSubCategory,
-    //     _theme,
-    //     _plugin,
-    //     _pageSize,
-    //     _pageIndex,
-    //     _rating,
-    // ]);
 
     const subNiches = () => {
         let data = _.filter(
@@ -238,8 +219,15 @@ const Portfolio = () => {
                         border: "1px solid #E0E9EF",
                         borderRadius: "6px",
                         marginTop: "15px",
+                        display: "flex",
+                        justifyContent: "space-between",
+                        gap: "10px",
                     }}
                 >
+                    {/* <PendingOrCompleted
+                        pendingOrCompleted={pendingOrCompleted}
+                        setPendingOrCompleted={setPendingOrCompleted}
+                    /> */}
                     <ListOrTableView
                         tableView={tableView}
                         setTableView={setTableView}
