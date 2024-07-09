@@ -691,28 +691,39 @@
                             </div>
                           @endif
                           <div class="d-flex flex-row">
-                            <div class="form-check mr-3">
+                            
+                            @if ($deal->project_type == 'hourly')
+                                <div class="form-check mr-3">
+                                    <input class="form-check-input" type="checkbox" value="1" name="is_drafted" id="is_drafted">
+                                    <label class="form-check-label m-1" for="flexCheckDefault">
+                                        Keep it as draft
+                                    </label>
+                                </div>
+                            @else
+                                <div class="form-check mr-3">
 
+                                    @if (in_array($deal->sale_analysis_status, ['pending', 'analysis']))
+                                    <input class="form-check-input" type="checkbox" value="1" name="is_drafted" id="is_drafted" checked disabled>
+                                    <label class="form-check-label m-1" for="flexCheckDefault">
+                                        Keep it as draft <b>(Awaiting for admin authorization)</b>
+                                    </label>
+                                    @else
+                                    <input class="form-check-input" type="checkbox" value="1" name="is_drafted" id="is_drafted">
+                                    <label class="form-check-label m-1" for="flexCheckDefault">
+                                        Keep it as draft
+                                    </label>
+                                    @endif
+                                </div>
                                 @if (in_array($deal->sale_analysis_status, ['pending', 'analysis']))
-                                <input class="form-check-input" type="checkbox" value="1" name="is_drafted" id="is_drafted" checked disabled>
-                                <label class="form-check-label m-1" for="flexCheckDefault">
-                                    Keep it as draft <b>(Awaiting for admin authorization)</b>
-                                </label>
-                                @else
-                                <input class="form-check-input" type="checkbox" value="1" name="is_drafted" id="is_drafted">
-                                <label class="form-check-label m-1" for="flexCheckDefault">
-                                    Keep it as draft
-                                </label>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" value="1" name="final_submission" id="final_submission">
+                                    <label class="form-check-label m-1" for="flexCheckDefault">
+                                        Final Submission
+                                    </label>
+                                </div>
                                 @endif
-                            </div>
-                            @if (in_array($deal->sale_analysis_status, ['pending', 'analysis']))
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox" value="1" name="final_submission" id="final_submission">
-                                <label class="form-check-label m-1" for="flexCheckDefault">
-                                    Final Submission
-                                </label>
-                            </div>
                             @endif
+                            
                           </div>
 
                           <br>

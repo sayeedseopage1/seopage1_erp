@@ -10,7 +10,6 @@ const SettingDropDown = () => {
     const { settings } = useSelector((state) => state.saleRiskAnalysis);
     const dispatch = useDispatch();
 
-
     return (
         <div className={styles.table_filter}>
             <Dropdown>
@@ -22,27 +21,25 @@ const SettingDropDown = () => {
                     className={styles.filter_menu}
                 >
                     <ul className={styles.list}>
-                        {_.map(settings, (setting) => (
-                            <li key={setting.id} className={styles.list_item}>
-                                <label htmlFor={setting.name}>
-                                    <input
-                                        type="checkbox"
-                                        name="column_filter"
-                                        id={setting.name}
-                                        checked={setting.value}
-                                        onChange={(e) => {
-                                            dispatch(
-                                                updateSetting({
-                                                  value: e.target.checked,
-                                                    name: setting.name,
-                                                })
-                                            );
-                                        }}
-                                    />{" "}
-                                    {setting.label}
-                                </label>
-                            </li>
-                        ))}
+                        <li  className={styles.list_item}>
+                            <label htmlFor={settings.name} className="mb-0">
+                                <input
+                                    type="checkbox"
+                                    name="column_filter"
+                                    id={settings.name}
+                                    checked={settings.value}
+                                    onChange={(e) => {
+                                        dispatch(
+                                            updateSetting({
+                                                value: e.target.checked,
+                                                name: settings.name,
+                                            })
+                                        );
+                                    }}
+                                />{" "}
+                                {settings.label}
+                            </label>
+                        </li>
                     </ul>
                 </Dropdown.Menu>
             </Dropdown>

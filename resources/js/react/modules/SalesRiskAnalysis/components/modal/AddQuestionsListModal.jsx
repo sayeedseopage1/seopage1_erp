@@ -19,6 +19,7 @@ import {
     ModalTitle,
     ModalInputLabel,
     ModalSelectContainer,
+    CustomInputCheckbox,
 } from "../ui/Styles/ui";
 
 // global styled components
@@ -43,6 +44,7 @@ import { formatAPIErrors } from "../../../../utils/formatAPIErrors";
 
 import { SalesRiskAnalysisContext } from "../../context/SalesRiskAnalysisProvider";
 import BlurModalLoader from "../loader/BlurModalLoader";
+import { useSelector } from "react-redux";
 
 const AddQuestionsListModal = ({
     open,
@@ -60,6 +62,8 @@ const AddQuestionsListModal = ({
     const modalRef = useRef(null);
     const { questionsAnswerType, policies, allQuestions, yesNoRules } =
         useContext(SalesRiskAnalysisContext);
+    const { settings } = useSelector((state) => state.saleRiskAnalysis);
+    const isEditEnabled = settings?.value;
     const [disableAddOtherRuleQuestion, setDisableAddOtherRuleQuestion] =
         useState(true);
     const [questions, setQuestions] = useState([]);
@@ -116,6 +120,12 @@ const AddQuestionsListModal = ({
                     ],
                     [name]: value,
                 });
+            } else if (value.name === "longText") {
+                setSingleQuestion({
+                    ...singleQuestion,
+                    isLongTextRequired: true,
+                    [name]: value,
+                });
             } else {
                 setSingleQuestion({
                     ...singleQuestion,
@@ -148,6 +158,7 @@ const AddQuestionsListModal = ({
                 setSingleQuestion({
                     ...singleQuestion,
                     [name]: value,
+
                     type: {
                         id: 2,
                         label: "Yes/No",
@@ -161,6 +172,9 @@ const AddQuestionsListModal = ({
                 setSingleQuestion({
                     ...singleQuestion,
                     [name]: value,
+                    policy_id: policies?.data?.find(
+                        (item) => item?.key === value?.name
+                    ),
                 });
             }
         } else if (name === "policy_id") {
@@ -255,7 +269,8 @@ const AddQuestionsListModal = ({
 
         if (
             singleQuestion?.question_key?.name === "yesNoRules" &&
-            !singleQuestion?.rule_id
+            !singleQuestion?.rule_id &&
+            !singleQuestion.parent_question
         ) {
             setSingleQuestionValidation((prev) => {
                 return {
@@ -286,25 +301,47 @@ const AddQuestionsListModal = ({
         if (singleQuestion?.comment) {
             payload.comment = singleQuestion?.comment;
         }
-        if (
-            singleQuestion?.parent_question?.type === "yesNo" ||
-            singleQuestion?.parent_question?.type === "list"
-        ) {
-            payload.value = singleQuestion?.parent_question_for;
-        }
-        if (singleQuestion?.type?.name === "list") {
-            const updateId = singleQuestion?.listItem?.map((item, index) => {
-                return {
-                    id: `${singleQuestion?.policy_id?.id}_${index + 1}`,
-                    title: item?.title,
-                };
-            });
-            payload.value = JSON.stringify(updateId);
+        // if (
+        //     singleQuestion?.parent_question?.type === "yesNo" ||
+        //     singleQuestion?.parent_question?.type === "list"
+        // ) {
+        //     payload.value = singleQuestion?.parent_question_for;
+        // }
+        if (singleQuestion?.parent_question?.type === "yesNo") {
+            if (singleQuestion?.type?.name === "longText") {
+                payload.value = JSON.stringify({
+                    selected: singleQuestion?.parent_question_for,
+                    isRequired: singleQuestion?.isLongTextRequired || false,
+                });
+            } else {
+                payload.value = singleQuestion?.parent_question_for;
+            }
         }
 
-        if (singleQuestion?.question_key?.name === "yesNoRules") {
+        if (
+            singleQuestion?.question_key?.name === "yesNoRules" &&
+            !singleQuestion.parent_question
+        ) {
             payload.value = singleQuestion?.rule_id?.id;
+        } else if (
+            singleQuestion?.question_key?.name === "yesNoRules" &&
+            singleQuestion?.parent_question &&
+            singleQuestion?.parent_question?.type === "yesNo" &&
+            singleQuestion?.type?.name !== "longText"
+        ) {
+            payload.value = singleQuestion?.parent_question_for;
+        } else if (
+            singleQuestion?.question_key?.name === "yesNoRules" &&
+            singleQuestion?.parent_question &&
+            singleQuestion?.parent_question?.type === "yesNo" &&
+            singleQuestion?.type?.name === "longText"
+        ) {
+            payload.value = JSON?.stringify({
+                selected: singleQuestion?.parent_question_for,
+                isRequired: singleQuestion?.isLongTextRequired || false,
+            });
         }
+
         try {
             const res = isQuestionUpdating
                 ? await editSinglePolicySalesRiskAnalysis(payload).unwrap()
@@ -414,6 +451,7 @@ const AddQuestionsListModal = ({
                 ...validation,
                 rule_id:
                     singleQuestion?.question_key?.name === "yesNoRules" &&
+                    !singleQuestion.parent_question &&
                     !singleQuestion?.rule_id
                         ? true
                         : false,
@@ -442,6 +480,41 @@ const AddQuestionsListModal = ({
         }
     }, [isLoadingSinglePolicyData]);
 
+    const isAnswerTypeDisabled = () => {
+        if (!isEditEnabled && !isQuestionUpdating) {
+            return false;
+        } else if (isEditEnabled && isQuestionUpdating) {
+            return false;
+        } else if (isEditEnabled && !isQuestionUpdating) {
+            return false;
+        } else if (!isEditEnabled && isQuestionUpdating) {
+            return true;
+        } else if (
+            singleQuestion?.type?.name === "yesNo" &&
+            singleQuestion?.question_key?.name === "yesNoRules"
+        ) {
+            return true;
+        } else {
+            return false;
+        }
+    };
+
+    const isPolicyNameDisabled = () => {
+        if (!isEditEnabled && !isQuestionUpdating) {
+            return true;
+        } else if (isEditEnabled && isQuestionUpdating) {
+            return false;
+        } else if (isEditEnabled && !isQuestionUpdating) {
+            return false;
+        } else if (!isEditEnabled && isQuestionUpdating) {
+            return true;
+        } else if (singleQuestion?.question_key?.name === "yesNoRules") {
+            return true;
+        } else {
+            return false;
+        }
+    };
+
     return (
         <CustomModal
             id="addQuestionsModal"
@@ -458,12 +531,14 @@ const AddQuestionsListModal = ({
             maxHeight="85vh"
             isCloseButtonShow={true}
         >
-            <Switch>
+            {/* <Switch>
                 <Switch.Case
                     condition={
                         questionsAnswerType?.data?.find(
                             (item) => item.name === "yesNoRules"
-                        ) === undefined && !isQuestionUpdating
+                        ) === undefined &&
+                        !isQuestionUpdating &&
+                        !isEditEnabled
                     }
                 >
                     <BlurModalLoader
@@ -478,7 +553,7 @@ const AddQuestionsListModal = ({
                         }
                     />
                 </Switch.Case>
-            </Switch>
+            </Switch> */}
 
             {/* Modal Content */}
             <div className="d-flex flex-column justify-content-center">
@@ -488,106 +563,164 @@ const AddQuestionsListModal = ({
                 {/* 
                 Questions Table
                 */}
-                <div className="d-flex flex-column mb-4 px-4  w-100">
-                    <div className="row mb-4 align-items-first">
-                        <ModalInputLabel className="col-4">
-                            Question Title <sup>*</sup>{" "}
-                        </ModalInputLabel>
-                        <div className="col-8 flex-column px-0">
-                            <ModalInput
-                                type="text"
-                                className="w-100"
-                                name="title"
-                                value={singleQuestion?.title}
-                                onChange={handleChange}
-                                placeholder="Write Here"
-                            />
-                            {singleQuestionValidation?.title && (
-                                <p className="text-danger py-1">
-                                    Question Title is required
-                                </p>
-                            )}
+                <Switch>
+                    <div className="d-flex flex-column mb-4 px-4  w-100">
+                        <div className="row mb-4 align-items-first">
+                            <ModalInputLabel className="col-4">
+                                Question Title <sup>*</sup>{" "}
+                            </ModalInputLabel>
+                            <div className="col-8 flex-column px-0">
+                                <ModalInput
+                                    type="text"
+                                    className="w-100"
+                                    name="title"
+                                    value={singleQuestion?.title}
+                                    onChange={handleChange}
+                                    placeholder="Write Here"
+                                />
+                                {singleQuestionValidation?.title && (
+                                    <p className="text-danger py-1">
+                                        Question Title is required
+                                    </p>
+                                )}
+                            </div>
                         </div>
-                    </div>
-                    <div
-                        id="scrollTarget"
-                        className="row mb-4 align-items-first"
-                    >
-                        <ModalInputLabel className="col-4">
-                            Question Key<sup>*</sup>
-                        </ModalInputLabel>
-                        <div className="col-8 px-0 flex-column">
-                            <ModalSelectContainer>
-                                <CustomDropDown
-                                    filedName="question_key"
-                                    // data={questionsAnswerType}
-                                    data={{
-                                        ...questionsAnswerType,
-                                        data: questionsAnswerType?.data?.map(
-                                            (item) => {
-                                                const isYesNoRule =
-                                                    disableAddOtherRuleQuestion;
-                                                const isItemYesNo =
-                                                    item?.name.includes(
-                                                        "yesNo"
-                                                    );
-                                                const disabled = isYesNoRule
-                                                    ? !isItemYesNo
-                                                    : false;
+                        <div
+                            id="scrollTarget"
+                            className="row mb-4 align-items-first"
+                        >
+                            <ModalInputLabel className="col-4">
+                                Question Key<sup>*</sup>
+                            </ModalInputLabel>
+                            <div className="col-8 px-0 flex-column">
+                                <ModalSelectContainer>
+                                    <CustomDropDown
+                                        filedName="question_key"
+                                        // data={questionsAnswerType}
+                                        data={{
+                                            ...questionsAnswerType,
+                                            data: questionsAnswerType?.data?.map(
+                                                (item) => {
+                                                    const isYesNoRule =
+                                                        disableAddOtherRuleQuestion;
+                                                    const isItemYesNo =
+                                                        item?.name.includes(
+                                                            "yesNo"
+                                                        );
+                                                    const disabled = isYesNoRule
+                                                        ? !isItemYesNo
+                                                        : false;
 
-                                                return {
-                                                    ...item,
-                                                    disabled,
-                                                };
-                                            }
-                                        ),
-                                    }}
-                                    selected={singleQuestion?.question_key}
-                                    setSelected={handleChange}
-                                    isDisableUse={true}
-                                />
-                            </ModalSelectContainer>
-                            {singleQuestionValidation?.question_key && (
-                                <p className="text-danger py-1">
-                                    Question Key is required
-                                </p>
-                            )}
+                                                    // add disabled property to the item object and return it back to the data array of the dropdown if
+                                                    // the item is not yesNo and the add other rule question is disabled
+                                                    return {
+                                                        ...item,
+                                                        disabled: isEditEnabled
+                                                            ? false
+                                                            : disabled,
+                                                    };
+                                                }
+                                            ),
+                                        }}
+                                        selected={singleQuestion?.question_key}
+                                        setSelected={handleChange}
+                                        isDisableUse={!isEditEnabled}
+                                    />
+                                </ModalSelectContainer>
+                                {singleQuestionValidation?.question_key && (
+                                    <p className="text-danger py-1">
+                                        Question Key is required
+                                    </p>
+                                )}
+                            </div>
                         </div>
-                    </div>
-                    <div
-                        id="scrollTarget"
-                        className="row mb-4 align-items-first"
-                    >
-                        <ModalInputLabel className="col-4">
-                            Answer Type<sup>*</sup>
-                        </ModalInputLabel>
-                        <div className="col-8 px-0 flex-column">
-                            <ModalSelectContainer>
-                                <CustomDropDown
-                                    filedName="type"
-                                    data={QuestionsTypes}
-                                    selected={singleQuestion?.type}
-                                    setSelected={handleChange}
-                                    isDisableUse={
-                                        (singleQuestion?.type?.name ===
-                                            "yesNo" &&
-                                            singleQuestion?.question_key
-                                                ?.name === "yesNoRules") ||
-                                        isQuestionUpdating
+                        <div
+                            id="scrollTarget"
+                            className="row mb-4 align-items-first"
+                        >
+                            <ModalInputLabel className="col-4">
+                                Answer Type<sup>*</sup>
+                            </ModalInputLabel>
+                            <div className="col-8 px-0 flex-column">
+                                <ModalSelectContainer>
+                                    <CustomDropDown
+                                        filedName="type"
+                                        data={{
+                                            ...QuestionsTypes,
+                                            data: isEditEnabled
+                                                ? QuestionsTypes?.data
+                                                : QuestionsTypes?.data?.map(
+                                                      (item) => {
+                                                          if (
+                                                              item.name ===
+                                                                  "yesNo" ||
+                                                              item.name ===
+                                                                  "longText"
+                                                          ) {
+                                                              return {
+                                                                  ...item,
+                                                                  disabled: false,
+                                                              };
+                                                          } else {
+                                                              return {
+                                                                  ...item,
+                                                                  disabled: true,
+                                                              };
+                                                          }
+                                                      }
+                                                  ),
+                                        }}
+                                        selected={singleQuestion?.type}
+                                        setSelected={handleChange}
+                                        isDisableUse={isAnswerTypeDisabled()}
+                                    />
+                                </ModalSelectContainer>
+                                {singleQuestionValidation?.type && (
+                                    <p className="text-danger py-1">
+                                        Answer Type is required
+                                    </p>
+                                )}
+                                <Switch.Case
+                                    condition={
+                                        singleQuestion?.type?.name ===
+                                        "longText"
                                     }
-                                />
-                            </ModalSelectContainer>
-                            {singleQuestionValidation?.type && (
-                                <p className="text-danger py-1">
-                                    Answer Type is required
-                                </p>
-                            )}
+                                >
+                                    <div
+                                        id="scrollTarget"
+                                        className="d-flex align-items-center my-2  w-100"
+                                    >
+                                        <div className="px-0 flex-column mr-1">
+                                            <ModalSelectContainer className="mr-2">
+                                                <CustomInputCheckbox
+                                                    type="checkbox"
+                                                    className="mt-0 mr-0"
+                                                    checked={
+                                                        singleQuestion?.isLongTextRequired
+                                                    }
+                                                    onChange={(e) =>
+                                                        setSingleQuestion({
+                                                            ...singleQuestion,
+                                                            isLongTextRequired:
+                                                                e.target
+                                                                    .checked,
+                                                        })
+                                                    }
+                                                />
+                                            </ModalSelectContainer>
+                                        </div>
+                                        <ModalInputLabel>
+                                            Is answer required{" "}
+                                        </ModalInputLabel>
+                                    </div>
+                                </Switch.Case>
+                            </div>
                         </div>
-                    </div>
-                    {/* 
+
+                        {/* 
                     Add Question Form
                     */}
-                    <Switch>
+
                         <Switch.Case
                             condition={!_.isEmpty(singleQuestion?.type)}
                         >
@@ -602,30 +735,24 @@ const AddQuestionsListModal = ({
                                     setSingleQuestion={setSingleQuestion}
                                 />
                             </Switch.Case>
-                            <Switch.Case
-                                condition={
-                                    singleQuestion?.question_key?.name !==
-                                    "yesNoRules"
-                                }
-                            >
-                                <div className="row mb-4 align-items-first">
-                                    <ModalInputLabel className="col-4">
-                                        Parent Question
-                                    </ModalInputLabel>
-                                    <div className="col-8 px-0 flex-column">
-                                        <ModalSelectContainer>
-                                            <QuestionsSelect
-                                                filedName="parent_question"
-                                                data={allQuestions}
-                                                selected={
-                                                    singleQuestion?.parent_question
-                                                }
-                                                setSelected={handleChange}
-                                            />
-                                        </ModalSelectContainer>
-                                    </div>
+
+                            <div className="row mb-4 align-items-first">
+                                <ModalInputLabel className="col-4">
+                                    Parent Question
+                                </ModalInputLabel>
+                                <div className="col-8 px-0 flex-column">
+                                    <ModalSelectContainer>
+                                        <QuestionsSelect
+                                            filedName="parent_question"
+                                            data={allQuestions}
+                                            selected={
+                                                singleQuestion?.parent_question
+                                            }
+                                            setSelected={handleChange}
+                                        />
+                                    </ModalSelectContainer>
                                 </div>
-                            </Switch.Case>
+                            </div>
                             <Switch.Case
                                 condition={
                                     singleQuestion?.parent_question?.type ===
@@ -744,35 +871,39 @@ const AddQuestionsListModal = ({
                                     </div>
                                 </div>
                             </Switch.Case>
-                            <div className="row mb-4 align-items-first">
-                                <ModalInputLabel className="col-4">
-                                    Policy Name<sup>*</sup>{" "}
-                                </ModalInputLabel>
-                                <div className="col-8 px-0 flex-column">
-                                    <ModalSelectContainer>
-                                        <CustomDropDown
-                                            filedName="policy_id"
-                                            data={policies}
-                                            selected={singleQuestion?.policy_id}
-                                            setSelected={handleChange}
-                                            isDisableUse={
-                                                singleQuestion?.question_key
-                                                    ?.name === "yesNoRules" ||
-                                                isQuestionUpdating
-                                            }
-                                        />
-                                    </ModalSelectContainer>
-                                    {singleQuestionValidation?.policy_id && (
-                                        <p className="text-danger py-1">
-                                            Policy Name is required
-                                        </p>
-                                    )}
+
+                            <Switch.Case
+                                condition={isEditEnabled || isQuestionUpdating}
+                            >
+                                <div className="row mb-4 align-items-first">
+                                    <ModalInputLabel className="col-4">
+                                        Policy Name<sup>*</sup>{" "}
+                                    </ModalInputLabel>
+                                    <div className="col-8 px-0 flex-column">
+                                        <ModalSelectContainer>
+                                            <CustomDropDown
+                                                filedName="policy_id"
+                                                data={policies}
+                                                selected={
+                                                    singleQuestion?.policy_id
+                                                }
+                                                setSelected={handleChange}
+                                                isDisableUse={isPolicyNameDisabled()}
+                                            />
+                                        </ModalSelectContainer>
+                                        {singleQuestionValidation?.policy_id && (
+                                            <p className="text-danger py-1">
+                                                Policy Name is required
+                                            </p>
+                                        )}
+                                    </div>
                                 </div>
-                            </div>
+                            </Switch.Case>
                             <Switch.Case
                                 condition={
                                     singleQuestion?.question_key?.name ===
-                                    "yesNoRules"
+                                        "yesNoRules" &&
+                                    !singleQuestion?.parent_question
                                 }
                             >
                                 <div className="row mb-4 align-items-first">
@@ -791,7 +922,8 @@ const AddQuestionsListModal = ({
                                                 isDisableUse={
                                                     isQuestionUpdating &&
                                                     yesNoRules?.data?.length ===
-                                                        0
+                                                        0 &&
+                                                    !isEditEnabled
                                                 }
                                             />
                                         </ModalSelectContainer>
@@ -805,8 +937,9 @@ const AddQuestionsListModal = ({
                             </Switch.Case>
                             <Switch.Case
                                 condition={
+                                    isEditEnabled ||
                                     singleQuestion?.question_key?.name !==
-                                    "yesNoRules"
+                                        "yesNoRules"
                                 }
                             >
                                 <div className="row mb-4 align-items-first">
@@ -826,50 +959,51 @@ const AddQuestionsListModal = ({
                                 </div>
                             </Switch.Case>
                         </Switch.Case>
-                    </Switch>
-                    <div className="row mb-4 align-items-first">
-                        <ModalInputLabel className="col-4">
-                            Comment
-                        </ModalInputLabel>
-                        <div className="col-8 flex-column px-0">
-                            <ModalInput
-                                type="text"
-                                className="w-100"
-                                name="comment"
-                                value={singleQuestion?.comment}
-                                onChange={handleChange}
-                                placeholder="Write Here"
-                            />
+
+                        <div className="row mb-4 align-items-first">
+                            <ModalInputLabel className="col-4">
+                                Comment
+                            </ModalInputLabel>
+                            <div className="col-8 flex-column px-0">
+                                <ModalInput
+                                    type="text"
+                                    className="w-100"
+                                    name="comment"
+                                    value={singleQuestion?.comment}
+                                    onChange={handleChange}
+                                    placeholder="Write Here"
+                                />
+                            </div>
                         </div>
+                        <Flex gap="10px" justifyContent="center">
+                            <ModalButton
+                                onClick={handleAddQuestion}
+                                width="200px"
+                                disabled={
+                                    isSaleAnalysisQuestionSaveLoading ||
+                                    isEditSinglePolicySalesRiskAnalysisLoading ||
+                                    isSaleAnalysisQuestionSaveSuccess ||
+                                    isEditSinglePolicySalesRiskAnalysisSuccess
+                                }
+                            >
+                                {handleButtonTernary(
+                                    isSaleAnalysisQuestionSaveLoading,
+                                    isQuestionUpdating,
+                                    isYesNoRulesLoading
+                                )}
+                            </ModalButton>
+                            <ModalButton
+                                onClick={handleCloseAddQuestionsModal}
+                                width="200px"
+                                color="white"
+                                border="1px solid #1492E6"
+                                textColor="#1492E6"
+                            >
+                                Do it latter
+                            </ModalButton>
+                        </Flex>
                     </div>
-                    <Flex gap="10px" justifyContent="center">
-                        <ModalButton
-                            onClick={handleAddQuestion}
-                            width="200px"
-                            disabled={
-                                isSaleAnalysisQuestionSaveLoading ||
-                                isEditSinglePolicySalesRiskAnalysisLoading ||
-                                isSaleAnalysisQuestionSaveSuccess ||
-                                isEditSinglePolicySalesRiskAnalysisSuccess
-                            }
-                        >
-                            {handleButtonTernary(
-                                isSaleAnalysisQuestionSaveLoading,
-                                isQuestionUpdating,
-                                isYesNoRulesLoading
-                            )}
-                        </ModalButton>
-                        <ModalButton
-                            onClick={handleCloseAddQuestionsModal}
-                            width="200px"
-                            color="white"
-                            border="1px solid #1492E6"
-                            textColor="#1492E6"
-                        >
-                            Do it latter
-                        </ModalButton>
-                    </Flex>
-                </div>
+                </Switch>
             </div>
         </CustomModal>
     );

@@ -26,6 +26,7 @@ import {
     useSaleRiskQuestionAnswerSaveMutation,
     useSalesRiskDealsQuestionListQuery,
 } from "../../../services/api/salesRiskAnalysisSlice";
+import { object } from "zod";
 
 const SalesRiskQuestionsResponse = () => {
     const [focusedQuestion, setFocusedQuestion] = React.useState([]);
@@ -102,20 +103,35 @@ const SalesRiskQuestionsResponse = () => {
     // handle submit
     const handleSubmit = async () => {
         // skip key
-        const skipKey = ["is_Active_YesNo", "parent_id", "placeholder"];
+        const skipKey = [
+            "is_Active_YesNo",
+            "parent_id",
+            "placeholder",
+            "value",
+        ];
         // check if all inputs are empty
 
-        const isEmpty = isArrayObjectEmpty(inputsData, skipKey);
+        const formattedData = inputsData.filter((item) => {
+            // Check if value is an object and isRequired is false
+            if (typeof item.value === "object" && item.value !== null) {
+                return item.value.isRequired !== false; // Exclude if isRequired is explicitly false
+            }
+            return true; // Include items where value is null, string, array, or non-false object
+        });
+
+        const isEmpty = isArrayObjectEmpty(formattedData, skipKey);
         if (isEmpty) {
             setIsSubmitting(true);
         } else {
             try {
-                const payload = inputsData.map((item) => {
-                    return {
-                        id: item.id,
-                        value: item[`question_${item.id}`],
-                    };
-                });
+                const payload = inputsData
+                    ?.filter((item) => item[`question_${item.id}`])
+                    ?.map((item) => {
+                        return {
+                            id: item.id,
+                            value: item[`question_${item.id}`],
+                        };
+                    });
 
                 const res = await saleAnalysisQuestionSave(payload);
 
@@ -216,8 +232,9 @@ const SalesRiskQuestionsResponse = () => {
             }
             return value;
         };
+
         const removeAlreadyExistChild = inputsData.filter(
-            (item) => item.parent_id !== question.id
+            (item) => item.parent_id !== question?.id
         );
         const idSet = new Set(inputsData.map((item) => item.id));
         const removeChildIfParentNotExists = removeAlreadyExistChild.filter(
@@ -242,6 +259,7 @@ const SalesRiskQuestionsResponse = () => {
 
                 return {
                     ...item,
+                    value: item.value,
                     is_Active_YesNo,
                     [`question_${question.id}`]: getQuestionValue(),
                 };
@@ -249,21 +267,28 @@ const SalesRiskQuestionsResponse = () => {
             return item;
         });
 
+        const getSelectedValue = (value) => {
+            if (value?.selected) {
+                return value?.selected;
+            }
+            return value;
+        };
+
         if (question.questions?.length) {
             const getChildWithSelectedValue = allQuestions.filter(
                 (item) =>
                     item.parent_id === question.id &&
-                    item.value === getQuestionValue()
+                    getSelectedValue(item?.value) === getQuestionValue()
             );
             const addInputFiled = getChildWithSelectedValue.map((item) => ({
                 id: item?.id,
                 questions: item?.questions,
                 type: item.type,
+                value: item.value,
                 parent_id: item.parent_id,
                 is_Active_YesNo: false,
                 [`question_${item?.id}`]: "",
             }));
-
             return setInputsData([...addSelectValue, ...addInputFiled]);
         }
 
@@ -319,9 +344,7 @@ const SalesRiskQuestionsResponse = () => {
                             className="btn btn-primary d-flex align-items-center justify-content-center"
                             disabled={
                                 // Here we are checking if the checkbox is not checked, or if the data is saving, or if the data is submitting, or if the data is success
-                                !isChecked ||
-                                isSaving ||
-                                isSuccess
+                                !isChecked || isSaving || isSuccess
                             }
                             style={{
                                 width: "250px",

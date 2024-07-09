@@ -7,12 +7,15 @@ import Switch from "../Switch";
 
 // utils
 import { generateUniqueString } from "../../../../utils/customUidGenerate";
+import { useSelector } from "react-redux";
 
 const AddQuestionTypeListInputs = ({
     singleQuestion,
     setSingleQuestion,
     isListEmpty,
 }) => {
+    const { settings } = useSelector((state) => state.saleRiskAnalysis);
+    const isEditEnabled = settings?.value;
     let list = [...singleQuestion?.listItem ?? []];
 
 
@@ -31,10 +34,14 @@ const AddQuestionTypeListInputs = ({
                         key={item.id}
                     >
                         <div className="col-12 px-0 d-flex">
-                            <div className="col-11 px-0">
+
+                            <div className="col-11 px-0 d-flex align-items-center">
+                                <p className="col-1 pl-0 text-nowrap">
+                                    {index + 1} .
+                                </p>
                                 <ModalInput
                                     type="text"
-                                    className="w-100"
+                                    className="w-100 col-11" 
                                     name="title"
                                     onChange={(e) => {
                                         if (list[index] && e.target) {
@@ -57,7 +64,7 @@ const AddQuestionTypeListInputs = ({
                                 <Switch>
                                     <Switch.Case
                                         condition={
-                                            list?.length === 1 && index === 0
+                                            list?.length === 1 && index === 0 && isEditEnabled
                                         }
                                     >
                                         <button
@@ -93,7 +100,7 @@ const AddQuestionTypeListInputs = ({
                                     <Switch.Case
                                         condition={
                                             list?.length !== 1 &&
-                                            list?.length - 1 !== index
+                                            list?.length - 1 !== index && isEditEnabled
                                         }
                                     >
                                         <button
@@ -124,7 +131,7 @@ const AddQuestionTypeListInputs = ({
                                     <Switch.Case
                                         condition={
                                             list?.length !== 1 &&
-                                            list?.length - 1 === index
+                                            list?.length - 1 === index && isEditEnabled
                                         }
                                     >
                                         <button
