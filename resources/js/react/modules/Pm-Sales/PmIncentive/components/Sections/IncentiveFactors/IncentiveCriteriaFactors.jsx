@@ -44,7 +44,7 @@ const IncentiveCriteriaFactors = () => {
                 <IncentiveCriteriaFactorTitleBar title={'Up sale/Cross Sale Points'} />
                 <div className='incentive_criteria_factors'>
                     {
-                        upSaleCrossSaleData?.map(item => <IncentiveCriteriaFactorCard key={item?.id} item={item} criteriaType={'Upsale/Cross Sales'} />)
+                        upSaleCrossSaleData?.map(item => <IncentiveCriteriaFactorCard key={item?.id} item={item} criteriaType={'Upsale/Cross sale'} />)
                     }
                 </div>
             </div>

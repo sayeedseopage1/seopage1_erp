@@ -3,7 +3,7 @@ import React from 'react';
 const IncentiveCriteriaFactorCard = ({ item, criteriaType }) => {
     const { id, title, factorsData } = item || {};
 
-    console.log(id, title)
+    console.log(id, title, criteriaType)
 
     return (
         <div className='criteria_card'>
@@ -19,7 +19,7 @@ const IncentiveCriteriaFactorCard = ({ item, criteriaType }) => {
                         <div className='factor_title'>{item?.factorLimit}</div>
                         <div className='factor_description'>
                             {item?.idealValue}
-                            {![9, 11].includes(id) ? ` of ${criteriaType}` : ''} Points
+                            {![9, 11].includes(id) ? ` of ${criteriaType}` : ''} {id == 8 ? 'amount' : 'Points'}
                         </div>
                     </div>
                 ))}

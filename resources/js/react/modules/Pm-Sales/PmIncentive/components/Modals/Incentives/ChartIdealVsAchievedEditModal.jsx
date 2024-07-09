@@ -297,6 +297,7 @@ const ChartIdealVsAchievedEditModal = ({ antdModalOpen, showIdealVsAchievedEditM
             {selectRatioRange && <SelectRatioRangeModal
                 chartDataId={chartDataId}
                 singleCriteria={singleCriteria}
+                chartAxisData={chartAxisData}
                 // setXAxisStartAndEndValue={setXAxisStartAndEndValue}
                 antdModalOpen={selectRatioRange}
                 setAntdModalOpen={setSelectRatioRange}

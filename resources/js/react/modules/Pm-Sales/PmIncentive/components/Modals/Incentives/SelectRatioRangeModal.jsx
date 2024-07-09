@@ -6,7 +6,7 @@ import { Modal } from 'antd';
 import { toast } from 'react-toastify';
 import { useEditIncentiveCriteriaMutation } from '../../../../../../services/api/Pm-Sales/PmIncentiveApiSlice';
 
-const SelectRatioRangeModal = ({ singleCriteria, chartDataId, antdModalOpen, setAntdModalOpen, singleCriteriaLimitType }) => {
+const SelectRatioRangeModal = ({ singleCriteria, chartDataId, antdModalOpen, setAntdModalOpen, singleCriteriaLimitType, chartAxisData }) => {
     const [editIncentiveCriteria, { isLoading: isEditIncentiveCriteriaLoading }] = useEditIncentiveCriteriaMutation()
 
     const {
@@ -21,8 +21,12 @@ const SelectRatioRangeModal = ({ singleCriteria, chartDataId, antdModalOpen, set
             toast.error('Starting Point (X Axis) cannot be greater than or equal to Ending Point (X Axis)')
             return
         }
-        if (Number(data?.max_limit) < parseFloat(singleCriteria?.data?.incentive_factors[singleCriteria?.data?.incentive_factors?.length - 1]?.upper_limit)) {
+        /* if (Number(data?.max_limit) < parseFloat(singleCriteria?.data?.incentive_factors[singleCriteria?.data?.incentive_factors?.length - 1]?.upper_limit)) {
             toast.error(`X Axis range can not be less than ${singleCriteria?.data?.incentive_factors[singleCriteria?.data?.incentive_factors?.length - 1]?.upper_limit}, At first you need to update or remove X Axis Ratio`)
+            return
+        } */
+        if (Number(data?.max_limit) < parseFloat(chartAxisData[chartAxisData?.length - 1]?.upper_limit)) {
+            toast.error(`X Axis range can not be less than ${chartAxisData[chartAxisData?.length - 1]?.upper_limit}, At first you need to update or remove X Axis Ratio`)
             return
         }
 
@@ -112,5 +116,6 @@ SelectRatioRangeModal.propTypes = {
     chartDataId: PropTypes.number,
     antdModalOpen: PropTypes.bool,
     setAntdModalOpen: PropTypes.func,
-    singleCriteriaLimitType: PropTypes.number
+    singleCriteriaLimitType: PropTypes.number,
+    chartAxisData: PropTypes.array,
 };

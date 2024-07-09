@@ -70,6 +70,9 @@ const IncentiveBarChart = ({ chartData }) => {
             toolbar: {
                 show: false,
             },
+            animations: {
+                enabled: false // Disabled animations
+            },
         },
         legend: {
             show: false

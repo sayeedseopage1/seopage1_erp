@@ -35,7 +35,7 @@ const pmSalesApiSlice = apiSlice.injectEndpoints({
         }),
         getSingleIncentiveCriteria: build.query({
             query: (id) => `/account/incentive-criteria/${id}`,
-            providesTags: ["GET_INCENTIVE_FACTORS"],
+            providesTags: ["GET_INCENTIVE_FACTORS", "INCENTIVE_CRITERIA"],
         }),
         editIncentiveTypes: build.mutation({
             query: ({ id, payload }) => ({
@@ -68,7 +68,8 @@ const pmSalesApiSlice = apiSlice.injectEndpoints({
                     "X-CSRF-TOKEN": _token,
                 },
             }),
-            invalidatesTags: ["GET_INCENTIVE_FACTORS"],
+            // invalidatesTags: ["GET_INCENTIVE_FACTORS"],
+            invalidatesTags: ["INCENTIVE_CRITERIA"],
         }),
         addIncentiveFactors: build.mutation({
             query: (payload) => ({
@@ -89,7 +90,7 @@ const pmSalesApiSlice = apiSlice.injectEndpoints({
                     "X-CSRF-TOKEN": _token,
                 },
             }),
-            invalidatesTags: ["GET_INCENTIVE_FACTORS"],
+            invalidatesTags: ["INCENTIVE_CRITERIA"],
         }),
         getAchievedIncentive: build.query({
             query: (query) => `/account/get-achieved-incentive?${query}`,

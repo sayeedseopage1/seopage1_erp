@@ -50,7 +50,10 @@ const IncentiveThickChart = ({ chartData }) => {
                 tools: {
                     zoom: false,
                     reset: false,
-                }
+                },
+                animations: {
+                    enabled: false // Disabled animations
+                },
             }
         },
         grid: { show: !0, strokeDashArray: 3, position: "back" },

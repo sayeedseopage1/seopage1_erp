@@ -273,8 +273,12 @@
     bottom: 30px;
 }
 
-.regular_thick_chart_wrapper .apexcharts-xaxis text {
+/* .regular_thick_chart_wrapper .apexcharts-xaxis text {
     transform: matrix(1, 0, 0, 1, 0, 0);
+} */
+
+.regular_thick_chart_wrapper .apexcharts-xaxis text {
+    transform: translate(2px, 10px);
 }
 
 .chart_ratio {
