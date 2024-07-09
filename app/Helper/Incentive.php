@@ -55,9 +55,15 @@ class Incentive
             $user_id = $request->user_id ?? null;
 
             if($incentiveCriteria->id == 1){
-                $total_tasks = Task::select('tasks.id')->where('tasks.added_by', $user_id)->whereBetween('tasks.created_at', [$startDate, $endDate])->count();
+                $project_manager_lead_percentage = TaskRevision::leftJoin('projects','projects.id','task_revisions.project_id')->where('projects.pm_id',$user_id)->where('task_revisions.dispute_between','PLR')->whereBetween('task_revisions.created_at', [$startDate, $endDate])->sum('task_revisions.raised_by_percent');
+                $project_manager_sales_percentage = TaskRevision::leftJoin('projects','projects.id','task_revisions.project_id')->where('projects.pm_id',$user_id)->where('task_revisions.dispute_between','SPR')->whereBetween('task_revisions.created_at', [$startDate, $endDate])->sum('task_revisions.raised_against_percent');
+                $project_manager_client_percentage = TaskRevision::leftJoin('projects','projects.id','task_revisions.project_id')->where('projects.pm_id',$user_id)->where('task_revisions.dispute_between','CPR')->whereBetween('task_revisions.created_at', [$startDate, $endDate])->sum('task_revisions.raised_against_percent');
                 $pm_revisions = TaskRevision::leftJoin('projects','projects.id','task_revisions.project_id')->where('projects.pm_id', $user_id)->where('task_revisions.final_responsible_person','PM')->whereBetween('task_revisions.created_at', [$startDate, $endDate])->count();
-                $incentiveCriteria->acquired_percent = $total_tasks ? number_format(( $pm_revisions / $total_tasks ) * 100, 2) : 0;
+                
+                $total_tasks = Task::select('tasks.id')->where('tasks.added_by', $user_id)->whereBetween('tasks.created_at', [$startDate, $endDate])->count();
+                $total_pm_revision = ($pm_revisions + ($project_manager_lead_percentage + $project_manager_sales_percentage + $project_manager_client_percentage)/100);
+
+                $incentiveCriteria->acquired_percent = $total_tasks ? number_format(( $total_pm_revision / $total_tasks ) * 100, 2) : 0;
                 self::findIncentive($incentiveCriteria);
             }elseif($incentiveCriteria->id == 2){
                 $projects = Project::select(['id','project_name','pm_id','status','project_status'])
@@ -106,11 +112,30 @@ class Incentive
 
                 self::findIncentive($incentiveCriteria);
             }elseif($incentiveCriteria->id == 5){
-                $incentiveCriteria->acquired_percent = Project::selectRaw('FORMAT((SUM(CASE WHEN project_milestones.status = "canceled" THEN 1 ELSE 0 END) / SUM(CASE WHEN project_milestones.status = "complete" THEN 1 ELSE 0 END)) * 100, 2) as milestone_cancelation_rate')
+                $total_canceled_this_month = Project::join('project_milestones', 'projects.id', '=', 'project_milestones.project_id')
+                    ->where('projects.pm_id', $user_id)
+                    ->whereBetween('project_milestones.updated_at', [$startDate, $endDate])
+                    ->where('projects.project_status', 'Accepted')
+                    ->where('project_milestones.status', 'canceled')
+                    ->sum('cost');
+
+                $total_released_this_month = DB::table('users')
+                ->join('projects', 'users.id', '=', 'projects.pm_id')
                 ->join('project_milestones', 'projects.id', '=', 'project_milestones.project_id')
-                ->where([['projects.pm_id', $user_id],['projects.status', 'in progress'],['projects.project_status', 'Accepted']])
-                // ->whereBetween('project_milestones.created_at', [$startDate, $endDate])
-                ->first()->milestone_cancelation_rate??0;
+                ->join('payments', 'project_milestones.invoice_id', '=', 'payments.invoice_id')
+                ->whereBetween('payments.paid_on', [$startDate, $endDate])
+                ->where('payments.added_by', $user_id)
+                ->whereNot('project_milestones.status', 'canceled')
+                ->where('projects.project_status','Accepted')
+                ->sum('project_milestones.cost');
+                
+                $incentiveCriteria->acquired_percent = $total_released_this_month ? ($total_canceled_this_month / $total_released_this_month) * 100 : 0;
+                
+                // $incentiveCriteria->acquired_percent = Project::selectRaw('FORMAT((SUM(CASE WHEN project_milestones.status = "canceled" THEN 1 ELSE 0 END) / SUM(CASE WHEN project_milestones.status = "complete" THEN 1 ELSE 0 END)) * 100, 2) as milestone_cancelation_rate')
+                // ->join('project_milestones', 'projects.id', '=', 'project_milestones.project_id')
+                // ->where([['projects.pm_id', $user_id],['projects.status', 'in progress'],['projects.project_status', 'Accepted']])
+                // // ->whereBetween('project_milestones.created_at', [$startDate, $endDate])
+                // ->first()->milestone_cancelation_rate??0;
                 self::findIncentive($incentiveCriteria);
             }elseif($incentiveCriteria->id == 6){
                 $projects = Project::where([['projects.pm_id', $user_id],['projects.status', 'in progress'],['projects.project_status', 'Accepted']])->get();
