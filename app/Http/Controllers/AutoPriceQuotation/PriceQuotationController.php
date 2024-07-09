@@ -54,22 +54,33 @@ class PriceQuotationController extends Controller
             'platform_account_id' => 'required|exists:platform_accounts,id',
         ]);
 
-        return $validated;
+        // return $validated;
+
+        $projectsQuery = Project::withSum('times', 'total_minutes')->whereHas('project_submission', function($query) use($validated){
+            return $query->where('created_at', '>', Carbon::parse('2023-12-01')->startOfDay())->where('status', 'accepted');
+        });
         
-        // $projectPortfolio = ProjectPortfolio::where('cms_category', $validated['project_cms_id'])->pluck('project_id');
-        // return Project::whereIn('id', $projectPortfolio)->count();
-
-        return Project::withSum('times', 'total_minutes')->whereHas('project_submission', function($query) use($validated){
-            return $query->where('created_at', '>', Carbon::parse('2023-12-01'))->where('status', 'accepted');
-        })->whereHas('project_portfolio', function($query) use($validated) {
+        $projectWithCmsNiche = (clone $projectsQuery)->whereHas('project_portfolio', function($query) use($validated) {
             return $query->where('cms_category', $validated['project_cms_id'])->where('niche', $validated['project_niche_id']);
-        })->count();
+        });
 
-        return DB::table('projects')->leftJoin('project_portfolios', function($query) use ($validated){
-            $query->on('project_portfolios.project_id', '=', 'projects.id')->where('project_portfolios.cms_category', '=', 1);
-        })->whereNotNull('project_portfolios.project_id')->count();
+        if(!(clone $projectWithCmsNiche)->count()){
+            $projectWithCms = (clone $projectsQuery)->whereHas('project_portfolio', function($query) use($validated) {
+                return $query->where('cms_category', $validated['project_cms_id']);
+            });
 
-        // Project::leftJoin('project_portfolios', 'project_portfolios.project_id', '')
+            if(!(clone $projectWithCms)->count()){
+                $projects = $projectsQuery;
+            }else{
+                $projects = $projectWithCms;
+            }
+        }else{
+            $projects = $projectWithCmsNiche;
+        }
+
+        $total_logged_minutes = $projects->get()->sum('times_sum_total_minutes');
+
+        return $total_logged_hours = $total_logged_minutes / 60;
     }
 
     /**
