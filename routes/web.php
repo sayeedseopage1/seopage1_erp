@@ -1,5 +1,5 @@
 <?php
-
+// die;
 use Route as GlobalRoute;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\CrossDeptWork;
