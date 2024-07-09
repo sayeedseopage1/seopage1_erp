@@ -884,7 +884,6 @@ class ProjectController extends AccountBaseController
 
 
     public function storeDisputeAuthorization(Request $request){
-        DB::beginTransaction();
         $validator =  $request->validate([
             'dispute_admin_comment' => 'required',
 
@@ -943,7 +942,6 @@ class ProjectController extends AccountBaseController
                         $actions = PendingAction::where('code','MCA')->where('past_status',0)->where('milestone_id',$milestone->id)->get();
                         if($actions != null)
                         {
-                            dd('ok');
                             foreach ($actions as $key => $action) 
                             {
                                 $action->authorized_by= Auth::id();
@@ -960,7 +958,7 @@ class ProjectController extends AccountBaseController
                                 $past_action->serial = $action->serial;
                                 $past_action->action_id = $action->id;
                                 $past_action->heading = $action->heading;
-                                $past_action->message = 'Dispute form for <a href="'.route('projects.show',$project->id).'">'.$project->project_name.'</a> from Client <a href="'.route('clients.show',$client->id).'">'.$client->name.'</a> required authorization(Project manager: <a href="'.route('employees.show',$project_manager->id).'">'.$project_manager->name.'</a>) was authorized by <a href="'.route('employees.show',$authorize_by->id).'">'.$authorize_by->name.'</a>';
+                                $past_action->message = 'Milestone cancel authorization for project: <a href="'.route('projects.show',$project->id).'">'.$project->project_name.'</a> from Client <a href="'.route('clients.show',$client->id).'">'.$client->name.'</a> (Project manager: <a href="'.route('employees.show',$project_manager->id).'">'.$project_manager->name.'</a>) was authorized by the system due to project dispute authorized by <a href="'.route('employees.show',$authorize_by->id).'">'.$authorize_by->name.'</a>';
                                 $past_action->timeframe = $action->timeframe;
                                 $past_action->authorization_for = $action->authorization_for;
                                 $past_action->authorized_by = $action->authorized_by;
@@ -972,8 +970,6 @@ class ProjectController extends AccountBaseController
                                 $past_action->client_id = $action->client_id;
                                 $past_action->milestone_id = $action->milestone_id;
                                 $past_action->save();
-                    
-                    
                             }
                         }
                     }
@@ -983,7 +979,6 @@ class ProjectController extends AccountBaseController
         $text = Auth::user()->name . ' authorized project cancelation/dispute form ';
         $link = '<a href="' . route('projects.show', $project->id) . '">' . $text . '</a>';
         $this->logProjectActivity($project->id, $link);
-
         return response()->json(['status'=>400]);
     }
 
