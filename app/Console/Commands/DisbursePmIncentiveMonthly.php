@@ -57,18 +57,14 @@ class DisbursePmIncentiveMonthly extends Command
                 $totalCashValue = 0;
 
                 // Revision vs task ratio
-                $total_tasks = Task::select('tasks.id')
-                ->where('tasks.added_by', $user->id)
-                ->whereBetween('tasks.created_at', [$startDate, $endDate])
-                ->count();
+                $project_manager_lead_percentage = TaskRevision::leftJoin('projects','projects.id','task_revisions.project_id')->where('projects.pm_id',$user->id)->where('task_revisions.dispute_between','PLR')->whereBetween('task_revisions.created_at', [$startDate, $endDate])->sum('task_revisions.raised_by_percent');
+                $project_manager_sales_percentage = TaskRevision::leftJoin('projects','projects.id','task_revisions.project_id')->where('projects.pm_id',$user->id)->where('task_revisions.dispute_between','SPR')->whereBetween('task_revisions.created_at', [$startDate, $endDate])->sum('task_revisions.raised_against_percent');
+                $project_manager_client_percentage = TaskRevision::leftJoin('projects','projects.id','task_revisions.project_id')->where('projects.pm_id',$user->id)->where('task_revisions.dispute_between','CPR')->whereBetween('task_revisions.created_at', [$startDate, $endDate])->sum('task_revisions.raised_against_percent');
+                $pm_revisions = TaskRevision::leftJoin('projects','projects.id','task_revisions.project_id')->where('projects.pm_id', $user->id)->where('task_revisions.final_responsible_person','PM')->whereBetween('task_revisions.created_at', [$startDate, $endDate])->count();
 
-                $pm_revisions = TaskRevision::leftJoin('projects','projects.id','task_revisions.project_id')
-                ->where('projects.pm_id', $user->id)
-                ->where('task_revisions.final_responsible_person','PM')
-                ->whereBetween('task_revisions.created_at', [$startDate, $endDate])
-                ->count();
-
-                $revision_percent = $total_tasks ? number_format(( $pm_revisions / $total_tasks ) * 100, 2) : 0;
+                $total_tasks = Task::select('tasks.id')->where('tasks.added_by', $user->id)->whereBetween('tasks.created_at', [$startDate, $endDate])->count();
+                $total_pm_revision = ($pm_revisions + ($project_manager_lead_percentage + $project_manager_sales_percentage + $project_manager_client_percentage)/100);
+                $revision_percent = $total_tasks ? number_format(( $total_pm_revision / $total_tasks ) * 100, 2) : 0;
                 $obtainedIncentive[] = Incentive::progressiveStore(1, $user->id, $revision_percent, $now);
                 // End
 
@@ -122,11 +118,24 @@ class DisbursePmIncentiveMonthly extends Command
                 // End
                 
                 // Milestone cancelation rate
-                $milestone_cancelation_rate = Project::selectRaw('FORMAT((SUM(CASE WHEN project_milestones.status = "canceled" THEN 1 ELSE 0 END) / SUM(CASE WHEN project_milestones.status = "complete" THEN 1 ELSE 0 END)) * 100, 2) as milestone_cancelation_rate')
+                $total_canceled_this_month = Project::join('project_milestones', 'projects.id', '=', 'project_milestones.project_id')
+                ->where('projects.pm_id', $user->id)
+                ->whereBetween('project_milestones.updated_at', [$startDate, $endDate])
+                ->where('projects.project_status', 'Accepted')
+                ->where('project_milestones.status', 'canceled')
+                ->sum('cost');
+
+                $total_released_this_month = DB::table('users')
+                ->join('projects', 'users.id', '=', 'projects.pm_id')
                 ->join('project_milestones', 'projects.id', '=', 'project_milestones.project_id')
-                ->where([['projects.pm_id', $user->id],['projects.status', 'in progress'],['projects.project_status', 'Accepted']])
-                // ->whereBetween('project_milestones.created_at', [$startDate, $endDate])
-                ->first()->milestone_cancelation_rate;
+                ->join('payments', 'project_milestones.invoice_id', '=', 'payments.invoice_id')
+                ->whereBetween('payments.paid_on', [$startDate, $endDate])
+                ->where('payments.added_by', $user->id)
+                ->whereNot('project_milestones.status', 'canceled')
+                ->where('projects.project_status','Accepted')
+                ->sum('project_milestones.cost');
+                
+                $milestone_cancelation_rate = $total_released_this_month ? ($total_canceled_this_month / $total_released_this_month) * 100 : 0;
                 $obtainedIncentive[] = Incentive::progressiveStore(5, $user->id, $milestone_cancelation_rate, $now);
                 // End
 
