@@ -21,6 +21,13 @@ import { PendingOrCompleted } from "./components/filter/PendingOrCompleted";
 
 const Portfolio = () => {
     const [searchParams, setSearchParams] = useSearchParams();
+
+    useEffect(() => {
+        const newSearchParams = new URLSearchParams(searchParams);
+        newSearchParams.set("show", "pending");
+        setSearchParams(newSearchParams);
+    }, []);
+
     const [cms, setCms] = useState(null);
     const [cmsSearch, setCmsSearch] = useState("");
     const [websiteType, setWebsiteType] = useState(null);
