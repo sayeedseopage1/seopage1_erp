@@ -160,7 +160,7 @@ const Portfolio = () => {
     };
 
     const getData = (type) => {
-        let _data = _.orderBy(portfolio, "rating_score", "asc");
+        let _data = portfolio;
         switch (type) {
             case "all":
                 return _data;
@@ -183,11 +183,7 @@ const Portfolio = () => {
 
     const tableData = (type) => {
         if (type) {
-            return _.orderBy(
-                _data[type],
-                ["rating_score", "updated_at"],
-                ["asc", "desc"]
-            );
+            return _data[type];
         } else return [];
     };
 
