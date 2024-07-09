@@ -509,6 +509,12 @@ class SalesRiskPolicyController extends AccountBaseController
             return response()->json(['status' => 'error', 'message' => 'Validation Error', 'data' => $validator->errors()], 403);
         }
 
+        if ($req->parent_id) {
+            $question = SalesPolicyQuestion::find($req->parent_id);
+            if ($question->type == 'yesNo' && SalesPolicyQuestion::where(['parent_id' => $question->id, 'value' => $req->value])->count())
+                return response()->json(['status' => 'error', 'message' => 'Validation Error: ' . $req->value . ' already added', 'data' => $validator->errors()], 403);
+        }
+
         try {
             $data = [
                 'title' => $req->title,
@@ -771,7 +777,7 @@ class SalesRiskPolicyController extends AccountBaseController
                 }
 
                 // pending action for sales lead authorization
-                if(auth()->user()->role_id != 4)
+                if (auth()->user()->role_id != 4)
                     event(new SalesPolicyEvent('sales_lead_authorization', $deal));
             } else {
                 $deal->sale_analysis_status = 'analysis';
@@ -1215,7 +1221,7 @@ class SalesRiskPolicyController extends AccountBaseController
                     }
                 }
             }
-            $pointData['clientCountry']['message'][] = 'Client\'s Country '. $clientCountry->name .' not matched with policy.';
+            $pointData['clientCountry']['message'][] = 'Client\'s Country ' . $clientCountry->name . ' not matched with policy.';
             endClientCountry:
             // ------------------------------ end clientCountry country --------------------------- //
 
@@ -1368,9 +1374,9 @@ class SalesRiskPolicyController extends AccountBaseController
 
         PolicyPointHistory::create([
             'deal_id' => $deal_id,
-                'policy' => json_encode($data),
-                'points' => $calculationData['points'],
-                'point_report' => json_encode($calculationData)
+            'policy' => json_encode($data),
+            'points' => $calculationData['points'],
+            'point_report' => json_encode($calculationData)
         ]);
     }
 
