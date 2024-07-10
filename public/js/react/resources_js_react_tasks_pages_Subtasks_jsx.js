@@ -1157,7 +1157,7 @@ var Subtasks = function Subtasks() {
                 _data = lodash__WEBPACK_IMPORTED_MODULE_0___default().filter(res.tasks, function (d) {
                   return Number(d.assigned_to_id) === auth.getId();
                 });
-              } else if (auth.getRoleId() === 14) {
+              } else if (lodash__WEBPACK_IMPORTED_MODULE_0___default().includes([14, 15, 16, 17], auth.getRoleId())) {
                 _data = lodash__WEBPACK_IMPORTED_MODULE_0___default().filter(res.tasks, function (d) {
                   return Number(d.assigned_to_id) === auth.getId();
                 });
