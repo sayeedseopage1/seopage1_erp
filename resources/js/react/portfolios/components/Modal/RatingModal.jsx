@@ -13,8 +13,23 @@ import {
 import { useAuth } from "../../../hooks/useAuth";
 import Swal from "sweetalert2";
 import { toast } from "react-toastify";
-
+import { useNavigate, useLocation } from "react-router-dom";
 const RatingModal = ({ portfolioData, id, showModal, setShowModal }) => {
+    const navigate = useNavigate();
+    const location = useLocation();
+
+    const removePortfolioId = () => {
+        const searchParams = new URLSearchParams(location.search);
+        searchParams.delete("portfolio_id");
+
+        navigate(
+            {
+                pathname: location.pathname,
+                search: searchParams.toString(),
+            },
+            { replace: true }
+        );
+    };
     const auth = useAuth();
     const [updatePortfolioRating, { isLoading }] =
         useUpdatePortfolioRatingMutation();
@@ -67,6 +82,7 @@ const RatingModal = ({ portfolioData, id, showModal, setShowModal }) => {
                 toast.success("Rating submission successful.");
             }
             setShowModal(false);
+            removePortfolioId();
         } catch (error) {
             console.error(error);
             Swal.fire({
@@ -151,7 +167,11 @@ const RatingModal = ({ portfolioData, id, showModal, setShowModal }) => {
                             >
                                 {isLoading || storeLoading
                                     ? "Submitting..."
-                                    : "Submit"}
+                                    : `${
+                                          portfolioData?.rating_score
+                                              ? "Update"
+                                              : "Submit"
+                                      }`}
                             </button>
                         </div>
                     </div>

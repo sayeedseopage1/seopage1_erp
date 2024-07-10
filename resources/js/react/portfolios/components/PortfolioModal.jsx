@@ -9,7 +9,7 @@ import { RxCross2 } from "react-icons/rx";
 import DataComponent from "./DataComponent";
 import FractionalRating from "../../global/FractionalRating";
 import { useStorePortfolioRatingMutation } from "../../services/api/portfolioApiSlice";
-
+import { LuExternalLink } from "react-icons/lu";
 import Button from "../../global/Button";
 import { useAuth } from "../../hooks/useAuth";
 import { toast } from "react-toastify";
@@ -74,7 +74,6 @@ const PortfolioModal = ({ isOpen, close, data, isLoading }) => {
                                         <DataComponent
                                             label={`Project Name:`}
                                             value={data?.project_name}
-                                            fontSize="16px"
                                             color="#1492E6"
                                             backgroundColor="#D8EDFC"
                                             width="49%"
@@ -82,7 +81,6 @@ const PortfolioModal = ({ isOpen, close, data, isLoading }) => {
                                         <DataComponent
                                             label={`ClientName:`}
                                             value={data?.client_name}
-                                            fontSize="16px"
                                             color="#1492E6"
                                             backgroundColor="#D8EDFC"
                                             width="49%"
@@ -106,18 +104,33 @@ const PortfolioModal = ({ isOpen, close, data, isLoading }) => {
                                         <DataComponent
                                             label={`Website Link:`}
                                             value={data?.actual_link}
-                                            fontSize="16px"
-                                            color="#8198AA"
-                                            backgroundColor="#DFE8EF"
-                                            width="98%"
+                                            width="80%"
                                         />
+                                        <DataComponent
+                                            label={` `}
+                                            value={``}
+                                            width="18%"
+                                            marginTop={"30px"}
+                                            backgroundColor="#1D82F5"
+                                        >
+                                            <a
+                                                href={data?.actual_link}
+                                                target="_blank"
+                                                style={{
+                                                    margin: "0 auto",
+                                                    cursor: "pointer",
+                                                }}
+                                            >
+                                                <LuExternalLink
+                                                    color="white"
+                                                    size={30}
+                                                />
+                                            </a>
+                                        </DataComponent>
 
                                         <DataComponent
                                             label={`Niche Category:`}
                                             value={data?.niche?.category_name}
-                                            fontSize="16px"
-                                            color="#8198AA"
-                                            backgroundColor="#DFE8EF"
                                             width="49%"
                                         />
                                         <DataComponent
@@ -125,9 +138,6 @@ const PortfolioModal = ({ isOpen, close, data, isLoading }) => {
                                             value={
                                                 data?.sub_niche?.category_name
                                             }
-                                            fontSize="16px"
-                                            color="#8198AA"
-                                            backgroundColor="#DFE8EF"
                                             width="49%"
                                         />
                                         <DataComponent
@@ -135,17 +145,11 @@ const PortfolioModal = ({ isOpen, close, data, isLoading }) => {
                                             value={
                                                 data?.project_budget ?? "0.00"
                                             }
-                                            fontSize="16px"
-                                            color="#8198AA"
-                                            backgroundColor="#DFE8EF"
                                             width="49%"
                                         />
                                         <DataComponent
                                             label={`Theme Name:`}
                                             value={data?.theme_name ?? "--"}
-                                            fontSize="16px"
-                                            color="#8198AA"
-                                            backgroundColor="#DFE8EF"
                                             width="49%"
                                         />
                                     </div>
@@ -271,6 +275,10 @@ const PortfolioModal = ({ isOpen, close, data, isLoading }) => {
                                                     flexDirection: "column",
                                                     gap: "5px",
                                                     alignItems: "flex-start",
+                                                    borderTop:
+                                                        "1px dashed #B5B5B5",
+                                                    paddingTop: "10px",
+                                                    marginTop: "20px",
                                                 }}
                                             >
                                                 <div
@@ -321,56 +329,54 @@ const PortfolioModal = ({ isOpen, close, data, isLoading }) => {
                                                 )}
                                             </div>
                                         )}
+                                    </div>
 
-                                        <div
-                                            style={{
-                                                display: "flex",
-                                                gap: "10px",
-                                                marginTop: "20px",
-                                            }}
-                                        >
-                                            {_.includes([1, 8], auth.roleId) &&
-                                                !data?.rating_score && (
-                                                    <button
-                                                        className="portfolio_modal_submission_button"
-                                                        onClick={
-                                                            handleCommentSubmit
-                                                        }
-                                                    >
-                                                        {storeLoading
-                                                            ? "Submitting..."
-                                                            : "Submit"}
-                                                    </button>
-                                                )}
-                                            {_.includes(
-                                                [1, 8],
-                                                auth.roleId
-                                            ) && (
-                                                <Button
-                                                    variant="tertiary"
-                                                    className="portfolio_modal_close_button"
-                                                    onClick={close}
+                                    {/* button section */}
+                                    <div
+                                        style={{
+                                            display: "flex",
+                                            gap: "10px",
+                                            marginTop: "20px",
+                                            marginBottom: "40px",
+                                            justifyContent: "center",
+                                            alignItems: "center",
+                                        }}
+                                    >
+                                        {_.includes([1, 8], auth.roleId) &&
+                                            !data?.rating_score && (
+                                                <button
+                                                    className="portfolio_modal_submission_button"
+                                                    onClick={
+                                                        handleCommentSubmit
+                                                    }
                                                 >
-                                                    {data?.rating_score
-                                                        ? "Close"
-                                                        : "Do it later"}
-                                                </Button>
+                                                    {storeLoading
+                                                        ? "Submitting..."
+                                                        : "Submit"}
+                                                </button>
                                             )}
+                                        {_.includes([1, 8], auth.roleId) && (
+                                            <Button
+                                                variant="tertiary"
+                                                className="portfolio_modal_close_button"
+                                                onClick={close}
+                                            >
+                                                {data?.rating_score
+                                                    ? "Close"
+                                                    : "Do it later"}
+                                            </Button>
+                                        )}
 
-                                            {/* //sales executive */}
-                                            {!_.includes(
-                                                [1, 8],
-                                                auth.roleId
-                                            ) && (
-                                                <Button
-                                                    variant="tertiary"
-                                                    className="portfolio_modal_close_button"
-                                                    onClick={close}
-                                                >
-                                                    Close
-                                                </Button>
-                                            )}
-                                        </div>
+                                        {/* //sales executive */}
+                                        {!_.includes([1, 8], auth.roleId) && (
+                                            <Button
+                                                variant="tertiary"
+                                                className="portfolio_modal_close_button"
+                                                onClick={close}
+                                            >
+                                                Close
+                                            </Button>
+                                        )}
                                     </div>
                                 </div>
                             )}

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-
+import { Link, useSearchParams } from "react-router-dom";
 import "./portfolio.css";
 import PortfolioItem from "./PortfolioItem";
 import {
@@ -17,9 +17,9 @@ import DataTable from "./components/Table/DataTable";
 import { PortfolioTableColumns } from "./components/Table/Columns/PortfolioTableColumns";
 import AppliedFilters from "./components/filter/AppliedFilters";
 import { useLocation } from "react-router-dom";
+import { PendingOrCompleted } from "./components/filter/PendingOrCompleted";
 
 const Portfolio = () => {
-    // const [portfolio, setPortfolio] = useState(null);
     const [cms, setCms] = useState(null);
     const [cmsSearch, setCmsSearch] = useState("");
     const [websiteType, setWebsiteType] = useState(null);
@@ -53,11 +53,14 @@ const Portfolio = () => {
     const _pageSize = React.useMemo(() => pageSize, [pageSize]);
     const _rating = React.useMemo(() => rating, [rating]);
 
-    // const [getPortfolioData, { isFetching: dataLoading }] =
-    //     useLazyGetPortfolioDataQuery();
-
     //mitul work
+    const [searchParams, setSearchParams] = useSearchParams();
 
+    useEffect(() => {
+        const newSearchParams = new URLSearchParams(searchParams);
+        newSearchParams.set("show", "pending");
+        setSearchParams(newSearchParams);
+    }, []);
     const [tableView, setTableView] = React.useState("listView");
     const location = useLocation();
     const queryParams = new URLSearchParams(location.search);
@@ -68,7 +71,7 @@ const Portfolio = () => {
         return new URLSearchParams(queryObject).toString();
     };
 
-    const { data, isLoading: dataLoading } = useGetPortfolioDataQuery(
+    const { data, isFetching: dataLoading } = useGetPortfolioDataQuery(
         queryString({
             page: _pageIndex,
             page_size: _pageSize,
@@ -85,48 +88,15 @@ const Portfolio = () => {
         { refetchOnMountOrArgChange: true }
     );
 
-    const portfolio = data;
-    console.log("portfolio", portfolio);
+    const portfolioMain = data;
+
+    const portfolio = data?.data;
 
     useEffect(() => {
         if (portfolio_id) {
             setTableView("tableView");
         }
     }, []);
-
-    // useEffect(() => {
-    //     const query = {
-    //         page: _pageIndex,
-    //         page_size: _pageSize,
-    //         cms: _cms?.id,
-    //         website_category: _webCategory?.id,
-    //         website_type: _webtype?.id,
-    //         website_sub_category: _webSubCategory?.id,
-    //         theme_name: _theme?.theme_name,
-    //         theme_id: _theme?.id,
-    //         plugin_name: _plugin?.plugin_name,
-    //         plugin_id: _plugin?.id,
-    //         rating_id: _rating?.id,
-    //     };
-
-    //     const queryObject = _.pickBy(query, Boolean);
-    //     const queryString = new URLSearchParams(queryObject).toString();
-
-    //     (async () => {
-    //         const res = await getPortfolioData(`?${queryString}`).unwrap();
-    //         setPortfolio(res);
-    //     })();
-    // }, [
-    //     _cms,
-    //     _webCategory,
-    //     _webtype,
-    //     _webSubCategory,
-    //     _theme,
-    //     _plugin,
-    //     _pageSize,
-    //     _pageIndex,
-    //     _rating,
-    // ]);
 
     const subNiches = () => {
         let data = _.filter(
@@ -175,6 +145,34 @@ const Portfolio = () => {
             );
         }
         return data;
+    };
+
+    const getData = (type) => {
+        let _data = portfolio;
+        switch (type) {
+            case "all":
+                return _data;
+            case "pending":
+                return _.filter(_data, (d) => d.rating_score === null);
+
+            case "authorized":
+                return _.filter(_data, (d) => d.rating_score !== null);
+            default:
+                return _data;
+        }
+    };
+
+    const _data = {
+        all: getData(null),
+        pending: getData("pending"),
+
+        authorized: getData("authorized"),
+    };
+
+    const tableData = (type) => {
+        if (type) {
+            return _data[type];
+        } else return [];
     };
 
     return (
@@ -237,8 +235,14 @@ const Portfolio = () => {
                         border: "1px solid #E0E9EF",
                         borderRadius: "6px",
                         marginTop: "15px",
+                        display: "flex",
+                        justifyContent: "space-between",
+                        gap: "10px",
                     }}
                 >
+                    <div style={{ marginTop: "10px" }}>
+                        <PendingOrCompleted data={_data} />
+                    </div>
                     <ListOrTableView
                         tableView={tableView}
                         setTableView={setTableView}
@@ -276,7 +280,7 @@ const Portfolio = () => {
                                 </div>
                             ))
                         ) : !dataLoading &&
-                          _.size(portfolio?.data) === 0 &&
+                          _.size(portfolio) === 0 &&
                           (cms ||
                               websiteType ||
                               websiteCategory ||
@@ -324,7 +328,7 @@ const Portfolio = () => {
                                     filters, please customize filters
                                 </div>
                             </div>
-                        ) : !dataLoading && _.size(portfolio?.data) === 0 ? (
+                        ) : !dataLoading && _.size(portfolio) === 0 ? (
                             <div
                                 className="d-flex flex-column align-items-center justify-content-center w-100"
                                 style={{ height: "30vh" }}
@@ -378,16 +382,19 @@ const Portfolio = () => {
                                     background: "#F2F9FE",
                                 }}
                             >
-                                {_.map(portfolio?.data, (item, index) => (
-                                    <div key={item.id}>
-                                        <PortfolioItem
-                                            portfolioData={item}
-                                            id={item?.id}
-                                            isLoading={dataLoading}
-                                            url={item?.portfolio_link?.toLowerCase()}
-                                        />
-                                    </div>
-                                ))}
+                                {_.map(
+                                    tableData(searchParams.get("show")),
+                                    (item, index) => (
+                                        <div key={item.id}>
+                                            <PortfolioItem
+                                                portfolioData={item}
+                                                id={item?.id}
+                                                isLoading={dataLoading}
+                                                url={item?.portfolio_link?.toLowerCase()}
+                                            />
+                                        </div>
+                                    )
+                                )}
                             </div>
                         )}
                     </div>
@@ -405,7 +412,7 @@ const Portfolio = () => {
                     }}
                 >
                     <DataTable
-                        tableData={portfolio?.data}
+                        tableData={tableData(searchParams.get("show"))}
                         tableColumns={PortfolioTableColumns}
                         isLoading={dataLoading || filterMenuIsLoading}
                         tableName="portfolio Table"
@@ -415,14 +422,14 @@ const Portfolio = () => {
             <div>
                 <Pagination
                     currentPage={pageIndex}
-                    perpageRow={portfolio?.per_page}
+                    perpageRow={portfolioMain?.per_page}
                     onPaginate={(v) => setPageIndex(v)}
-                    totalEntry={portfolio?.total}
+                    totalEntry={portfolioMain?.total}
                     onNext={() => setPageIndex((prev) => prev + 1)}
-                    disableNext={!portfolio?.next_page_url}
+                    disableNext={!portfolioMain?.next_page_url}
                     onPrevious={() => setPageIndex((prev) => prev - 1)}
-                    disablePrevious={!portfolio?.prev_page_url}
-                    totalPages={portfolio?.last_page}
+                    disablePrevious={!portfolioMain?.prev_page_url}
+                    totalPages={portfolioMain?.last_page}
                     onPageSize={(v) => setPageSize(v)}
                 />
             </div>

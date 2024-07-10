@@ -601,3 +601,17 @@ display: flex;
     color: #0b79c1;
    
 }
+
+//badge csss
+
+
+
+.badge_opacity_unselected{
+  opacity: .5;
+  
+
+}
+.badge_opacity_selected{
+  opacity: 1;
+
+}
