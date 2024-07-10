@@ -7,6 +7,7 @@ export const CommentAdminSection = styled.section``;
 export const ButtonSection = styled.section``;
 export const RatingTitleAndTableSection = styled.section``;
 export const RatingSectionLeadDev = styled.section``;
+export const RatingSectionTeamLead = styled.section``;
 export const CommentLeadDevSection = styled.section``;
 export const RatingButtonSection = styled.section``;
 export const LeadDevName = styled.div`
@@ -16,8 +17,22 @@ export const LeadDevName = styled.div`
     padding: 3px;
     border: 1px solid grey;
 `;
+export const TeamLeadName = styled.div`
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+    padding: 3px;
+    border: 1px solid grey;
+`;
 
 export const LeadDevComment = styled.div`
+    height: auto;
+    position: relative;
+    width: 100%;
+    padding: 10px;
+    padding-bottom: 40px;
+`;
+export const TeamLeadComment = styled.div`
     height: auto;
     position: relative;
     width: 100%;

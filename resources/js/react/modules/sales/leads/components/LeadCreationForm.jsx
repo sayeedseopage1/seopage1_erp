@@ -165,12 +165,10 @@ const LeadCreationFormControl = ({ close, presetInitialData = null }) => {
     const [deadline, setDeadline] = React.useState(null);
 
     React.useEffect(() => {
-        if (!countries?.length) {
-            axios.get(`/account/get-all-country`).then(({ data }) => {
-                setCountries(data);
-            });
-        }
-    }, [countries]);
+        axios.get(`/account/get-all-country`).then(({ data }) => {
+            setCountries(data);
+        });
+    }, []);
 
     // api hooks
     const { data: currencies } = useCurrencyListQuery();
@@ -347,6 +345,7 @@ const LeadCreationFormControl = ({ close, presetInitialData = null }) => {
         setError(_error);
         return Object.keys(_error)?.length === 0;
     };
+    // console.log("lead form data", formData);
 
     // handle submission
     const handleSubmit = async (e) => {
@@ -357,9 +356,9 @@ const LeadCreationFormControl = ({ close, presetInitialData = null }) => {
         if (!leadInputData.explanation) delete leadInputData.explanation;
         if (!leadInputData.bidpage_screenshot)
             delete leadInputData.bidpage_screenshot;
-
+        // console.log({ leadInputData });
         const isEmpty = isStateAllHaveValue(leadInputData);
-
+        // console.log({ isEmpty });
         if (isEmpty) {
             const validation = markEmptyFieldsValidation(leadInputData);
             setLeadInputDataValidation({
@@ -368,8 +367,11 @@ const LeadCreationFormControl = ({ close, presetInitialData = null }) => {
                 isProjectIdUnique: false,
                 isSubmitting: true,
             });
+
             return;
         }
+
+        // console.log({ leadInputData });
 
         const isProjectLinkValid = validator.isURL(leadInputData.project_link, {
             protocols: ["http", "https", "ftp"],
@@ -382,6 +384,8 @@ const LeadCreationFormControl = ({ close, presetInitialData = null }) => {
             });
             return;
         }
+
+        // console.log({ leadInputData });
 
         try {
             const res = await leadCreate(formData).unwrap();
@@ -467,8 +471,12 @@ const LeadCreationFormControl = ({ close, presetInitialData = null }) => {
 
     // filter
     const getCountries = (data, query) => {
-        return data?.filter((d) =>
-            d?.name?.toLowerCase()?.includes(query?.toLowerCase())
+        return data?.filter(
+            (d) =>
+                d?.name?.toLowerCase()?.includes(query?.toLowerCase()) ||
+                d?.iso3?.toLowerCase()?.includes(query?.toLowerCase()) ||
+                d?.nicename?.toLowerCase()?.includes(query?.toLowerCase()) ||
+                d?.iso?.toLowerCase()?.includes(query?.toLowerCase())
         );
     };
 
@@ -487,6 +495,7 @@ const LeadCreationFormControl = ({ close, presetInitialData = null }) => {
 
     React.useEffect(() => {
         if (error?.isSubmitting) {
+            console.log("error", error);
             isValid();
         }
     }, [formData]);

@@ -297,7 +297,10 @@ const MarkAsComplete = ({ task, auth }) => {
                                 </div>
 
                                 {/* single link for screen recording in case of trainee , role id===14 */}
-                                {auth.roleId === 14 && (
+                                {_.includes(
+                                    [14, 15, 16, 17],
+                                    Number(auth.roleId)
+                                ) && (
                                     <div className="form-group">
                                         <label htmlFor="exampleFormControlInput1">
                                             Screen recording of the last work

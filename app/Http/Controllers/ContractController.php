@@ -2633,6 +2633,10 @@ public function storeClientDeal(Request $request){
     $deal->lead_id = $request->lead_id;
     $deal->added_by = Auth::id();
     $deal->status = 'Accepted';
+
+    if ($request->project_type == 'hourly') {
+        $deal->sale_analysis_status = 'no-analysis';
+    }
     //$date= Carbon::now();
 
     $date = date('Y-m-d H:i:s');

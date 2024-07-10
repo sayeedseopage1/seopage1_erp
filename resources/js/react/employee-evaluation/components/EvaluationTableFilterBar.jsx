@@ -7,7 +7,9 @@ import SearchBox from "../../global/Searchbox";
 import { useUsers } from "../../hooks/useUsers";
 import JqueryDateRangePicker from "./Table/JqueryDateRangePicker";
 
-const EvaluationTableFilterBar = ({ setFilter }) => {
+import FilterItemEvaluation from "./FilterItemEvaluation";
+
+const EvaluationTableFilterBar = ({ setFilter, tableType, setTableType }) => {
     const [startDate, setStartDate] = React.useState(null);
     const [endDate, setEndDate] = React.useState(null);
     const [search, setSearch] = React.useState("");
@@ -52,6 +54,19 @@ const EvaluationTableFilterBar = ({ setFilter }) => {
                     >
                         <SearchBox value={search} onChange={setSearch} />
                     </div>
+
+                    <FilterItemEvaluation
+                        title="Evaluation Type"
+                        items={[
+                            "Developer",
+                            "Project Manager",
+                            "Lead Developer",
+                            "Sales Executive",
+                        ]}
+                        selected={tableType}
+                        isLoading={false}
+                        onSelect={setTableType}
+                    />
                 </Flex>
             </div>
         </React.Fragment>
