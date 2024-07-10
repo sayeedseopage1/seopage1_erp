@@ -10,7 +10,7 @@ import Toaster from "../global/Toaster";
 import {
     useGetTaskStatusQuery,
     useLazyGetTaskDetailsQuery,
-    useLazyGetWorkingEnvironmentQuery
+    useLazyGetWorkingEnvironmentQuery,
 } from "../services/api/SingleTaskPageApi";
 import { storeTask } from "../services/features/subTaskSlice";
 import { BoardColumn, SingleTask } from "../utils/single-task";
@@ -32,6 +32,7 @@ import TaskEditForm from "./section/sub-task/TaskEditForm";
 import SubmittedWork from "./section/submitted-work/SubmittedWork";
 import TaskAction from "./section/task-actions/TaskAction";
 import TimeLogSection from "./section/time-logs/TimeLogSection";
+import { useGetTaskForTotalTimeQuery } from "../services/api/tasksApiSlice";
 
 const RefetchTaskProvider = React.createContext({});
 export const useRefetchTaskDetails = () => {
@@ -65,6 +66,70 @@ const SingleIndependentTask = () => {
 
     const task = new SingleTask(Task); // task instance
     const loggedUser = new User(window?.Laravel?.user); // logged users data
+
+    const [taskForTimeLog, setTaskForTimeLog] = React.useState({});
+    const [totalTime, setTotalTime] = React.useState("");
+    const taskId = task?.id;
+
+    console.log("total time", totalTime);
+    const { data: taskForTime } = useGetTaskForTotalTimeQuery(taskId, {
+        skip: !taskId,
+    });
+    useEffect(() => {
+        setTaskForTimeLog(taskForTime);
+    }, [taskForTime]);
+    const calculateTotalTime = (task) => {
+        if (task) {
+            let totalTimeInMinutes = 0;
+            const parentTimeArray = task?.parent_task_time_log?.split(" ");
+            const subTimeArray = task?.sub_task_time_log?.split(" ");
+
+            if (task?.subtask.length === 0) {
+                if (parentTimeArray && parentTimeArray.length >= 1) {
+                    totalTimeInMinutes += parseInt(parentTimeArray[0]) * 60;
+                    totalTimeInMinutes += parseInt(
+                        parentTimeArray[2] === ""
+                            ? 0
+                            : parseInt(parentTimeArray[2])
+                    );
+                }
+            } else {
+                if (
+                    parentTimeArray &&
+                    parentTimeArray.length >= 1 &&
+                    subTimeArray &&
+                    subTimeArray.length >= 1
+                ) {
+                    totalTimeInMinutes += parseInt(parentTimeArray[0]) * 60;
+                    totalTimeInMinutes += parseInt(
+                        parentTimeArray[2] === ""
+                            ? 0
+                            : parseInt(parentTimeArray[2])
+                    );
+
+                    totalTimeInMinutes += parseInt(subTimeArray[0]) * 60;
+                    if (subTimeArray[0]) {
+                        totalTimeInMinutes += parseInt(
+                            subTimeArray[2] === ""
+                                ? 0
+                                : parseInt(subTimeArray[2])
+                        );
+                    }
+                }
+            }
+
+            const hours = Math.floor(totalTimeInMinutes / 60);
+            const minutes = totalTimeInMinutes % 60;
+
+            setTotalTime(`${hours} hrs ${minutes} mins`);
+        }
+    };
+
+    useEffect(() => {
+        if (taskForTimeLog) {
+            calculateTotalTime(taskForTimeLog.task);
+        }
+    }, [taskForTimeLog]);
 
     useEffect(() => {
         (async () => {
@@ -166,17 +231,17 @@ const SingleIndependentTask = () => {
                             [1, 4, 6, 7, 8],
                             loggedUser?.getRoleId()
                         ) && (
-                                <span className="ml-2">
-                                    (
-                                    <a
-                                        href={`/account/projects/${task.projectId}?tab=tasks`}
-                                        className="f-14"
-                                    >
-                                        See All Tasks
-                                    </a>
-                                    )
-                                </span>
-                            )}
+                            <span className="ml-2">
+                                (
+                                <a
+                                    href={`/account/projects/${task.projectId}?tab=tasks`}
+                                    className="f-14"
+                                >
+                                    See All Tasks
+                                </a>
+                                )
+                            </span>
+                        )}
                     </div>
                 </div>
 
@@ -331,18 +396,18 @@ const SingleIndependentTask = () => {
                                                                 Number(
                                                                     loggedUser?.getId()
                                                                 ) && (
-                                                                    <sup
-                                                                        className="rounded-pill bg-dark text-white px-1 ml-1"
-                                                                        style={{
-                                                                            fontSize:
-                                                                                "10px",
-                                                                            whiteSpace:
-                                                                                "nowrap",
-                                                                        }}
-                                                                    >
-                                                                        It's You
-                                                                    </sup>
-                                                                )}
+                                                                <sup
+                                                                    className="rounded-pill bg-dark text-white px-1 ml-1"
+                                                                    style={{
+                                                                        fontSize:
+                                                                            "10px",
+                                                                        whiteSpace:
+                                                                            "nowrap",
+                                                                    }}
+                                                                >
+                                                                    It's You
+                                                                </sup>
+                                                            )}
                                                         </span>
 
                                                         <span
@@ -393,16 +458,16 @@ const SingleIndependentTask = () => {
                                                                 Number(
                                                                     loggedUser?.getId()
                                                                 ) && (
-                                                                    <sup
-                                                                        className="rounded-pill bg-dark text-white px-1"
-                                                                        style={{
-                                                                            fontSize:
-                                                                                "10px",
-                                                                        }}
-                                                                    >
-                                                                        It's You
-                                                                    </sup>
-                                                                )}
+                                                                <sup
+                                                                    className="rounded-pill bg-dark text-white px-1"
+                                                                    style={{
+                                                                        fontSize:
+                                                                            "10px",
+                                                                    }}
+                                                                >
+                                                                    It's You
+                                                                </sup>
+                                                            )}
                                                         </span>
 
                                                         <span
@@ -643,131 +708,131 @@ const SingleIndependentTask = () => {
                                         {/* project manager guideline */}
                                         {(!_.isEmpty(task?.workEnvData) ||
                                             !_.isEmpty(task?.guidelines)) && (
-                                                <Accordion
-                                                    expendable={false}
-                                                    title="General Guidelines"
-                                                >
-                                                    {/* {task?.hasProjectManagerGuideline && <PMGuideline guideline={task?.PMTaskGuideline} /> } */}
+                                            <Accordion
+                                                expendable={false}
+                                                title="General Guidelines"
+                                            >
+                                                {/* {task?.hasProjectManagerGuideline && <PMGuideline guideline={task?.PMTaskGuideline} /> } */}
 
-                                                    {!_.isEmpty(
-                                                        task?.workEnvData
-                                                    ) && (
-                                                            <div className="sp1_task_card--sub-card">
-                                                                <div
-                                                                    className="px-4 py-3"
-                                                                    style={{
-                                                                        background:
-                                                                            "#F3F5F9",
-                                                                    }}
-                                                                >
-                                                                    <h6 className="mb-2">
-                                                                        Working
-                                                                        Environment
-                                                                    </h6>
-                                                                    <hr />
-                                                                    <div className="row">
-                                                                        {/* working/staging site's url */}
-                                                                        <div className="col-12 col-lg-6 col-xl-4 mb-2 word-break">
-                                                                            <span>
-                                                                                <strong>
-                                                                                    Working/Staging
-                                                                                    Site's
-                                                                                    URL
-                                                                                </strong>
-                                                                                : <br />{" "}
-                                                                                <a
-                                                                                    target="__blank"
-                                                                                    href={
-                                                                                        task
-                                                                                            ?.workEnvData
-                                                                                            ?.site_url
-                                                                                    }
-                                                                                >
-                                                                                    View
-                                                                                    on
-                                                                                    new
-                                                                                    tab
-                                                                                </a>
-                                                                            </span>
-                                                                        </div>
-
-                                                                        {/* frontend password */}
-                                                                        <div className="col-12 col-lg-6 col-xl-4 mb-2 word-break">
-                                                                            <span>
-                                                                                <strong>
-                                                                                    Frontend
-                                                                                    Password
-                                                                                </strong>
-                                                                                : <br />{" "}
-                                                                                {
-                                                                                    task
-                                                                                        ?.workEnvData
-                                                                                        ?.frontend_password
-                                                                                }
-                                                                            </span>
-                                                                        </div>
-
-                                                                        {/* working/staging site's login url */}
-                                                                        <div className="col-12 col-lg-6 col-xl-4 mb-2 word-break">
-                                                                            <span>
-                                                                                <strong>
-                                                                                    Working/Staging
-                                                                                    Site's
-                                                                                    Login
-                                                                                    URL
-                                                                                </strong>
-                                                                                : <br />{" "}
-                                                                                <a
-                                                                                    target="__blank"
-                                                                                    href={
-                                                                                        task
-                                                                                            ?.workEnvData
-                                                                                            ?.login_url
-                                                                                    }
-                                                                                >
-                                                                                    View
-                                                                                    on
-                                                                                    new
-                                                                                    tab
-                                                                                </a>{" "}
-                                                                            </span>
-                                                                        </div>
-
-                                                                        {/* working/staging site's username/email */}
-                                                                        <div className="col-12 col-lg-6 col-xl-4 mb-2 word-break">
-                                                                            <span>
-                                                                                <strong>
-                                                                                    Working/Staging
-                                                                                    Site's
-                                                                                    Username/Email
-                                                                                </strong>
-                                                                                : <br />{" "}
-                                                                                {task
+                                                {!_.isEmpty(
+                                                    task?.workEnvData
+                                                ) && (
+                                                    <div className="sp1_task_card--sub-card">
+                                                        <div
+                                                            className="px-4 py-3"
+                                                            style={{
+                                                                background:
+                                                                    "#F3F5F9",
+                                                            }}
+                                                        >
+                                                            <h6 className="mb-2">
+                                                                Working
+                                                                Environment
+                                                            </h6>
+                                                            <hr />
+                                                            <div className="row">
+                                                                {/* working/staging site's url */}
+                                                                <div className="col-12 col-lg-6 col-xl-4 mb-2 word-break">
+                                                                    <span>
+                                                                        <strong>
+                                                                            Working/Staging
+                                                                            Site's
+                                                                            URL
+                                                                        </strong>
+                                                                        : <br />{" "}
+                                                                        <a
+                                                                            target="__blank"
+                                                                            href={
+                                                                                task
                                                                                     ?.workEnvData
-                                                                                    ?.email ||
-                                                                                    task
-                                                                                        ?.workEnvData
-                                                                                        ?.user_name}
-                                                                            </span>
-                                                                        </div>
+                                                                                    ?.site_url
+                                                                            }
+                                                                        >
+                                                                            View
+                                                                            on
+                                                                            new
+                                                                            tab
+                                                                        </a>
+                                                                    </span>
+                                                                </div>
 
-                                                                        {/* password */}
-                                                                        <div className="col-12 col-lg-6 col-xl-4 mb-2 word-break">
-                                                                            <span>
-                                                                                <strong>
-                                                                                    Password
-                                                                                </strong>
-                                                                                : <br />{" "}
-                                                                                {
-                                                                                    task
-                                                                                        ?.workEnvData
-                                                                                        ?.password
-                                                                                }
-                                                                            </span>
-                                                                        </div>
+                                                                {/* frontend password */}
+                                                                <div className="col-12 col-lg-6 col-xl-4 mb-2 word-break">
+                                                                    <span>
+                                                                        <strong>
+                                                                            Frontend
+                                                                            Password
+                                                                        </strong>
+                                                                        : <br />{" "}
+                                                                        {
+                                                                            task
+                                                                                ?.workEnvData
+                                                                                ?.frontend_password
+                                                                        }
+                                                                    </span>
+                                                                </div>
 
-                                                                        {/* Reference Page */}
-                                                                        {/* <div className="col-12 col-lg-6 col-xl-4 mb-2 word-break">
+                                                                {/* working/staging site's login url */}
+                                                                <div className="col-12 col-lg-6 col-xl-4 mb-2 word-break">
+                                                                    <span>
+                                                                        <strong>
+                                                                            Working/Staging
+                                                                            Site's
+                                                                            Login
+                                                                            URL
+                                                                        </strong>
+                                                                        : <br />{" "}
+                                                                        <a
+                                                                            target="__blank"
+                                                                            href={
+                                                                                task
+                                                                                    ?.workEnvData
+                                                                                    ?.login_url
+                                                                            }
+                                                                        >
+                                                                            View
+                                                                            on
+                                                                            new
+                                                                            tab
+                                                                        </a>{" "}
+                                                                    </span>
+                                                                </div>
+
+                                                                {/* working/staging site's username/email */}
+                                                                <div className="col-12 col-lg-6 col-xl-4 mb-2 word-break">
+                                                                    <span>
+                                                                        <strong>
+                                                                            Working/Staging
+                                                                            Site's
+                                                                            Username/Email
+                                                                        </strong>
+                                                                        : <br />{" "}
+                                                                        {task
+                                                                            ?.workEnvData
+                                                                            ?.email ||
+                                                                            task
+                                                                                ?.workEnvData
+                                                                                ?.user_name}
+                                                                    </span>
+                                                                </div>
+
+                                                                {/* password */}
+                                                                <div className="col-12 col-lg-6 col-xl-4 mb-2 word-break">
+                                                                    <span>
+                                                                        <strong>
+                                                                            Password
+                                                                        </strong>
+                                                                        : <br />{" "}
+                                                                        {
+                                                                            task
+                                                                                ?.workEnvData
+                                                                                ?.password
+                                                                        }
+                                                                    </span>
+                                                                </div>
+
+                                                                {/* Reference Page */}
+                                                                {/* <div className="col-12 col-lg-6 col-xl-4 mb-2 word-break">
                                                                     <span>
                                                                         <strong>
                                                                             Reference
@@ -789,17 +854,17 @@ const SingleIndependentTask = () => {
                                                                         </a>
                                                                     </span>
                                                                 </div> */}
-                                                                    </div>
-                                                                </div>
                                                             </div>
-                                                        )}
+                                                        </div>
+                                                    </div>
+                                                )}
 
-                                                    <Guideline
-                                                        text={task?.guidelines}
-                                                        workEnv={task?.workEnvData}
-                                                    />
-                                                </Accordion>
-                                            )}
+                                                <Guideline
+                                                    text={task?.guidelines}
+                                                    workEnv={task?.workEnvData}
+                                                />
+                                            </Accordion>
+                                        )}
 
                                         {/* task revision */}
                                         {_.size(task?.revisions) > 0 && (
@@ -994,7 +1059,9 @@ const SingleIndependentTask = () => {
                                     <div className="d-flex align-items-center font-weight-bold pl-2">
                                         {(task.isSubtask
                                             ? task?.parentTaskTimeLog
-                                            : task?.totalTimeLog) || "--"}
+                                            : totalTime
+                                            ? totalTime
+                                            : "0 hrs 0 mins") || "--"}
                                     </div>
                                 </div>
                             </div>

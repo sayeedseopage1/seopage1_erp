@@ -167,12 +167,14 @@ class AccountBaseController extends Controller
 
     public function triggerPusher($channel, $event, $data)
     {
-        if ($this->pusherSettings->status) {
+        $pusherSettings = isset($this->pusherSettings) ? $this->pusherSettings : session()->get('pusher_settings');
+
+        if ($pusherSettings->status) {
             $user = User::find($data['user_id']);
 
             Notification::send($user, new PusherNotificaiton($data));
 
-            $pusher = new Pusher($this->pusherSettings->pusher_app_key, $this->pusherSettings->pusher_app_secret, $this->pusherSettings->pusher_app_id, array('cluster' => $this->pusherSettings->pusher_cluster, 'useTLS' => $this->pusherSettings->force_tls));
+            $pusher = new Pusher($pusherSettings->pusher_app_key, $pusherSettings->pusher_app_secret, $pusherSettings->pusher_app_id, array('cluster' => $pusherSettings->pusher_cluster, 'useTLS' => $pusherSettings->force_tls));
             $pusher->trigger($channel, $event, $data);
         }
     }

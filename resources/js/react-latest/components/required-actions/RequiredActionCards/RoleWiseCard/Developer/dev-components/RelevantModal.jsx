@@ -6,7 +6,6 @@ import ReactModal from "react-modal";
 import { Flex } from "../../../EmployeeEvaluation/Table/ui";
 import { useSelector } from "react-redux";
 import { usePendingActionsIdMutation } from "../../../../../../services/api/pendingActionsApiSlice";
-import { useEffect, useState } from "react";
 import React from "react";
 import useCounterStore from "../../../../../../Zustand/store.js";
 
