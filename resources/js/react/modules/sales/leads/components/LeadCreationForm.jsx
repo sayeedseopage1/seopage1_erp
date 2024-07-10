@@ -164,7 +164,13 @@ const LeadCreationFormControl = ({ close, presetInitialData = null }) => {
     const [type, setType] = React.useState("fixed");
     const [deadline, setDeadline] = React.useState(null);
 
-   
+    React.useEffect(() => {
+        if (!countries?.length) {
+            axios.get(`/account/get-all-country`).then(({ data }) => {
+                setCountries(data);
+            });
+        }
+    }, [countries]);
 
     // api hooks
     const { data: currencies } = useCurrencyListQuery();
@@ -353,7 +359,7 @@ const LeadCreationFormControl = ({ close, presetInitialData = null }) => {
             delete leadInputData.bidpage_screenshot;
 
         const isEmpty = isStateAllHaveValue(leadInputData);
-      
+
         if (isEmpty) {
             const validation = markEmptyFieldsValidation(leadInputData);
             setLeadInputDataValidation({
@@ -376,7 +382,6 @@ const LeadCreationFormControl = ({ close, presetInitialData = null }) => {
             });
             return;
         }
-
 
         try {
             const res = await leadCreate(formData).unwrap();

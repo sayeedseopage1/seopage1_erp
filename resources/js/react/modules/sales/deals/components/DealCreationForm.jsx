@@ -121,7 +121,7 @@ const DealCreationFormControl = ({ close }) => {
         axios.get(`/account/get-all-country`).then(({ data }) => {
             setCountries(data);
         });
-    }, []);
+    }, [countries]);
 
     // api hooks
     const { data: currencies } = useCurrencyListQuery();
@@ -188,9 +188,9 @@ const DealCreationFormControl = ({ close }) => {
             ...state,
             country: user?.country_id,
         }));
-        const country = countries?.data.find( (c) => c?.id === user?.country_id);
+        const country = countries?.data.find((c) => c?.id === user?.country_id);
         setSelectedClient(user);
-        setClientCountry(country)
+        setClientCountry(country);
         setClientStatus("existing client");
     };
 
@@ -228,7 +228,6 @@ const DealCreationFormControl = ({ close }) => {
         }));
         setCurrency(null);
     }, [formData.project_type]);
-
 
     // handle submission
     const handleSubmit = async (e) => {
@@ -317,7 +316,10 @@ const DealCreationFormControl = ({ close }) => {
                 updatedDormDataValidation["amount"] = false;
                 delete payload?.amount;
             }
-            const validation = getValidFields(payload, updatedDormDataValidation);
+            const validation = getValidFields(
+                payload,
+                updatedDormDataValidation
+            );
             setFormDataValidation({
                 ...formDataValidation,
                 ...validation,
@@ -690,7 +692,11 @@ const DealCreationFormControl = ({ close }) => {
                                                 : "--"
                                         }
                                         className="selection"
-                                        disabled={selectedClient?.country_id === clientCountry?.id}
+                                        disabled={
+                                            selectedClient?.country_id &&
+                                            selectedClient?.country_id ===
+                                                clientCountry?.id
+                                        }
                                     >
                                         <Select.Options>
                                             <Select.SearchControllerWrapper>
