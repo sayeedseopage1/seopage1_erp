@@ -1294,11 +1294,13 @@ class SalesRiskPolicyController extends AccountBaseController
                 $policies = SalesRiskPolicy::where('parent_id', $policy->id)->get();
                 $pointValue = 0;
                 $data = [];
+                $amount = (float) ($deal->amount > 1 ? $deal->amount : $deal->upsell_amount);
+                
                 foreach ($policies as $item) {
 
                     switch ($item->type) {
                         case 'lessThan':
-                            if ($deal->amount < $item->value) {
+                            if ($amount < $item->value) {
                                 $pointValue = $item->points;
                                 $policyIdList[$item->id] = $item->id;
                                 $data = ['title' => 'Less Then', 'value' => $item->value, 'parent_id' => 'question_id'];
@@ -1306,7 +1308,7 @@ class SalesRiskPolicyController extends AccountBaseController
                             }
                             break;
                         case 'greaterThan':
-                            if ($deal->amount > $item->value) {
+                            if ($amount > $item->value) {
                                 $pointValue = $item->points;
                                 $policyIdList[$item->id] = $item->id;
                                 $data = ['title' => 'Greater Then', 'value' => $item->value, 'parent_id' => 'question_id'];
@@ -1314,7 +1316,7 @@ class SalesRiskPolicyController extends AccountBaseController
                             }
                             break;
                         case 'fixed':
-                            if ($deal->amount == $item->value) {
+                            if ($amount == $item->value) {
                                 $pointValue = $item->points;
                                 $policyIdList[$item->id] = $item->id;
                                 $data = ['title' => 'Fixed', 'value' => $item->value, 'parent_id' => 'question_id'];
@@ -1323,7 +1325,7 @@ class SalesRiskPolicyController extends AccountBaseController
                             break;
                         case 'range':
                             $value = explode(',', $item->value);
-                            if ($deal->amount >= $value[0] && $deal->amount <= $value[1]) {
+                            if ($amount >= $value[0] && $amount <= $value[1]) {
                                 $pointValue = $item->points;
                                 $policyIdList[$item->id] = $item->id;
                                 $data = ['title' => 'Range', 'value' => $value[0] . ' - ' . $value[1], 'parent_id' => 'question_id'];
@@ -1336,7 +1338,7 @@ class SalesRiskPolicyController extends AccountBaseController
                 endProjectBudget:
                 $points += (float) $pointValue;
                 $pointData['projectBudget']['points'] = $pointValue;
-                $pointData['projectBudget']['questionAnswer'][] = ['title' => 'What is the budget for this project?', 'value' => '$' . number_format($deal->amount, 2), 'parent_id' => null];
+                $pointData['projectBudget']['questionAnswer'][] = ['title' => 'What is the budget for this project?', 'value' => '$' . number_format($amount, 2), 'parent_id' => null];
                 $data ? $pointData['projectBudget']['questionAnswer'][] = $data : '';
             } else
                 $pointData['projectBudget']['message'][] = "Project Budget policy is not added.";
