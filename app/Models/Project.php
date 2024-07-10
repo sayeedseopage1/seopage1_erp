@@ -427,7 +427,7 @@ class Project extends BaseModel
     }
 
     public function project_portfolio(){
-        return $this->hasOne(ProjectPortfolio::class, 'project_id');
+        return $this->hasOne(ProjectPortfolio::class, 'project_id')->orderBy('id', 'desc');
     }
 
     public function project_submission(){

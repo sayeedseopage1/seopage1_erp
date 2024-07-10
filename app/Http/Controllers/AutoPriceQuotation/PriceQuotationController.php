@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use App\Models\ProjectPortfolio;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
+use App\Models\Currency;
 
 class PriceQuotationController extends Controller
 {
@@ -56,7 +57,7 @@ class PriceQuotationController extends Controller
 
         // return $validated;
 
-        $projectsQuery = Project::withSum('times', 'total_minutes')->whereHas('project_submission', function($query) use($validated){
+        $projectsQuery = Project::with('project_portfolio')->withSum('times', 'total_minutes')->whereHas('project_submission', function($query) use($validated){
             return $query->where('created_at', '>', Carbon::parse('2023-12-01')->startOfDay())->where('status', 'accepted');
         });
         
@@ -78,9 +79,61 @@ class PriceQuotationController extends Controller
             $projects = $projectWithCmsNiche;
         }
 
-        $total_logged_minutes = $projects->get()->sum('times_sum_total_minutes');
+        // return $projects->get();
 
-        return $total_logged_hours = $total_logged_minutes / 60;
+        $total_logged_minutes = (clone $projects)->get()->sum('times_sum_total_minutes');
+        $total_parimary_pages = (clone $projects)->get()->sum('project_portfolio.main_page_number');
+        $total_secondary_pages = (clone $projects)->get()->sum('project_portfolio.secondary_page_number');
+        $total_logged_hours = $total_logged_minutes / 60;
+
+        // Calculate existing budget by multiplying 20 with obtained logged hours and find unit budget for primary and secondary page
+        $existingProjectBudget = $total_logged_hours * 20;
+        $existingBudgetForEachPrimaryPage = (($existingProjectBudget / 100) * 70) / $total_parimary_pages;
+        $existingBudgetForEachSecondaryPage = (($existingProjectBudget / 100) * 30) / $total_secondary_pages;
+        
+        // Calculate project budget depend on no of primary and secondary pages 
+        $projectBudgetDependOnPrimaryAndSecondaryPages = ($validated['no_of_primary_pages'] * $existingBudgetForEachPrimaryPage) + ($validated['no_of_secondary_pages'] * $existingBudgetForEachSecondaryPage);
+        
+        // Add extra 5% for any missed time tracking by our team with calculated budget
+        $projectBudgetWithMissedTimeTracking = $projectBudgetDependOnPrimaryAndSecondaryPages + (($projectBudgetDependOnPrimaryAndSecondaryPages / 100) * 5);
+
+        // Increase project budget for major functionality (Each functionality will multiplying by 400)
+        $projectBudgetWighMajorFunctionality = $projectBudgetWithMissedTimeTracking + ($validated['no_of_major_functionalities'] ? $validated['no_of_major_functionalities'] * 400 : 0);
+       
+        // Calculate hours for other works and every hour will multiplying by 20 (Speed Optimization: 6 Hours, Content Writing: 3 Hours per 1000 Words, UI Design: 3 Hours per page, Others: User inputs hour value in this field)
+        $contentWritingHours = isset($validated['content_writing']) && $validated['content_writing'] ? (3 / 1000) * $validated['content_writing'] : 0;
+        $speedOptimizationHours = isset($validated['speed_optimization']) && $validated['speed_optimization'] ? 6 : 0;
+        $uiDesignHours = isset($validated['no_of_ui_design_page']) && $validated['no_of_ui_design_page'] ? $validated['no_of_ui_design_page'] * 3 : 0;
+        $logoHours = isset($validated['no_of_logo']) && $validated['no_of_logo'] ? $validated['no_of_logo'] * 3 : 0;
+        $othersHours = isset($validated['others_hours']) && $validated['others_hours'] ? $validated['others_hours'] : 0;
+
+        $totalHoursOfOtherWorks = $contentWritingHours + $speedOptimizationHours + $uiDesignHours + $logoHours + $othersHours;
+        $projectBudgetWithOtherWorks = $projectBudgetWighMajorFunctionality + ($totalHoursOfOtherWorks * 20);
+
+        // Add risk factor value with calculated project budget
+        $projectBudgetWithRiskFactor = $projectBudgetWithOtherWorks + (($projectBudgetWithOtherWorks / 100) * ($validated['risk_factor'] ? $validated['risk_factor'] : 0));
+       
+        // Convert to actual currency if project is in another currency other than usd it will then add extra 6% with calculated project budget
+        $projectBudgetInActualCurrency = Currency::find($validated['currency_id'])->exchange_rate * $projectBudgetWithRiskFactor;
+        $projectBudgetWithCurrencyCheck = $projectBudgetInActualCurrency + ($validated['currency_id'] > 1 ? ($projectBudgetInActualCurrency / 100) * 6 : 0);
+
+        $projectBudgetRounded = round($projectBudgetWithCurrencyCheck);
+
+        // Calculate project hours using no of primary and secondary pages
+        $existingHoursForEachPrimaryPage = (($total_logged_hours / 100) * 70) / $total_parimary_pages;
+        $existingHoursForEachSecondaryPage = (($total_logged_hours / 100) * 30) / $total_secondary_pages;
+
+        // Calculate project stimate hours depend on no of primary and secondary pages 
+        $projectStimatedHoursDependOnPrimaryAndSecondaryPages = ($validated['no_of_primary_pages'] * $existingHoursForEachPrimaryPage) + ($validated['no_of_secondary_pages'] * $existingHoursForEachSecondaryPage);
+
+        $validated['no_of_days'] = 15;
+
+        // Remove 3 days from total no of days due to granular level 
+        $actualNoOfDays = $validated['no_of_days'] - 3;
+        $hoursPerDay = $projectStimatedHoursDependOnPrimaryAndSecondaryPages / $actualNoOfDays;
+        dump($projectStimatedHoursDependOnPrimaryAndSecondaryPages, $actualNoOfDays, $hoursPerDay);
+        dump($validated);
+        dd($existingHoursForEachPrimaryPage, $existingHoursForEachSecondaryPage, $projectStimatedHoursDependOnPrimaryAndSecondaryPages);
     }
 
     /**
