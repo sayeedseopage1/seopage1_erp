@@ -244,7 +244,7 @@ class PortfolioController extends AccountBaseController
                         'button_name' => 'View rating',
                         'button_color' => 'primary',
                         'button_type' => 'redirect_url',
-                        'button_url' => route('portfolio.index', ['portfolio_id' => $portfolio->id, 'modal' => 'show-rating']),
+                        'button_url' => route('portfolio.index', ['portfolio_id' => $portfolio->id, 'show' => 'all']),
                     ],
                 ];
                 $past_action->button = json_encode($button);

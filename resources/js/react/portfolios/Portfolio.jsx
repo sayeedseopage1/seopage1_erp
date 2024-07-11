@@ -21,7 +21,6 @@ import { PendingOrCompleted } from "./components/filter/PendingOrCompleted";
 import { useAuth } from "../hooks/useAuth";
 
 const Portfolio = () => {
-<<<<<<< HEAD
     const auth = useAuth();
     const [searchParams, setSearchParams] = useSearchParams();
 
@@ -31,8 +30,6 @@ const Portfolio = () => {
         setSearchParams(newSearchParams);
     }, []);
 
-=======
->>>>>>> 4539bc37552d453c09145dcb5262ab66033dcc58
     const [cms, setCms] = useState(null);
     const [cmsSearch, setCmsSearch] = useState("");
     const [websiteType, setWebsiteType] = useState(null);
@@ -67,13 +64,7 @@ const Portfolio = () => {
     const _rating = React.useMemo(() => rating, [rating]);
 
     //mitul work
-    const [searchParams, setSearchParams] = useSearchParams();
 
-    useEffect(() => {
-        const newSearchParams = new URLSearchParams(searchParams);
-        newSearchParams.set("show", "pending");
-        setSearchParams(newSearchParams);
-    }, []);
     const [tableView, setTableView] = React.useState("listView");
     const location = useLocation();
     const queryParams = new URLSearchParams(location.search);
@@ -190,22 +181,9 @@ const Portfolio = () => {
 
     return (
         <section>
-            <div
-                style={{
-                    marginLeft: "5px",
-                    marginRight: "5px",
-                    marginTop: "10px",
-                }}
-            >
-                {/* fortfolio filter bar */}
-                <section
-                    style={{
-                        backgroundColor: "#F2F9FE",
-                        padding: "20px",
-                        border: "1px solid #E0E9EF",
-                        borderRadius: "6px",
-                    }}
-                >
+            <div className="portfolio_all_filter_section">
+                {/* portfolio filter bar */}
+                <section className="portfolio_filter_bar">
                     <PortfolioFilterBar
                         cms={cms}
                         setCms={setCms}
@@ -240,29 +218,27 @@ const Portfolio = () => {
                     />
                 </section>
 
-                {/* list or table view */}
-                <section
-                    style={{
-                        backgroundColor: "#F2F9FE",
-                        padding: "10px",
-                        border: "1px solid #E0E9EF",
-                        borderRadius: "6px",
-                        marginTop: "15px",
-                        display: "flex",
-                        justifyContent: "space-between",
-                        gap: "10px",
-                    }}
-                >
-                    {_.includes([1, 8], auth.getRoleId()) && (
-                        <div style={{ marginTop: "10px" }}>
+                {/* list or table view of completed/pending/all filter */}
+                {_.includes([1, 8], auth.getRoleId()) && (
+                    <section className="portfolio_filter_section portfolio_filter_section_multiple">
+                        <div style={{ marginTop: "12px" }}>
                             <PendingOrCompleted data={_data} />
                         </div>
-                    )}
-                    <ListOrTableView
-                        tableView={tableView}
-                        setTableView={setTableView}
-                    />
-                </section>
+
+                        <ListOrTableView
+                            tableView={tableView}
+                            setTableView={setTableView}
+                        />
+                    </section>
+                )}
+                {_.includes([7], auth.getRoleId()) && (
+                    <section className="portfolio_filter_section portfolio_filter_section_single">
+                        <ListOrTableView
+                            tableView={tableView}
+                            setTableView={setTableView}
+                        />
+                    </section>
+                )}
 
                 {/* applied filters */}
                 <section>
@@ -306,35 +282,6 @@ const Portfolio = () => {
                                 className="d-flex flex-column align-items-center justify-content-center w-100"
                                 style={{ height: "30vh" }}
                             >
-                                <div>
-                                    <svg
-                                        width="130"
-                                        height="130"
-                                        viewBox="0 0 80 80"
-                                    >
-                                        <g fill="none" fillRule="evenodd">
-                                            <path d="M0 0h80v80H0z"></path>
-                                            <g
-                                                stroke="#C7C7C7"
-                                                strokeLinecap="round"
-                                                strokeLinejoin="round"
-                                                strokeWidth="2"
-                                            >
-                                                <path d="M75 21.5V30M75 37v30.5a1.5 1.5 0 0 1-1.5 1.5h-67A1.5 1.5 0 0 1 5 67.5V41M5 36.264v-2.57M13 33h12M13 46h12M13 59h12"></path>
-                                                <g>
-                                                    <path d="M34 33h12M34 46h12M34 59h12"></path>
-                                                </g>
-                                                <g>
-                                                    <path d="M55 33h12M55 46h12M55 59h12"></path>
-                                                </g>
-                                                <path
-                                                    fill="#CBCCCD"
-                                                    d="M6.5 12h67a1.5 1.5 0 0 1 1.5 1.5V22H5v-8.5A1.5 1.5 0 0 1 6.5 12z"
-                                                ></path>
-                                            </g>
-                                        </g>
-                                    </svg>
-                                </div>
                                 <div
                                     className="font-weight-bold text-center"
                                     style={{ color: "#919191" }}
@@ -348,35 +295,6 @@ const Portfolio = () => {
                                 className="d-flex flex-column align-items-center justify-content-center w-100"
                                 style={{ height: "30vh" }}
                             >
-                                <div>
-                                    <svg
-                                        width="130"
-                                        height="130"
-                                        viewBox="0 0 80 80"
-                                    >
-                                        <g fill="none" fillRule="evenodd">
-                                            <path d="M0 0h80v80H0z"></path>
-                                            <g
-                                                stroke="#C7C7C7"
-                                                strokeLinecap="round"
-                                                strokeLinejoin="round"
-                                                strokeWidth="2"
-                                            >
-                                                <path d="M75 21.5V30M75 37v30.5a1.5 1.5 0 0 1-1.5 1.5h-67A1.5 1.5 0 0 1 5 67.5V41M5 36.264v-2.57M13 33h12M13 46h12M13 59h12"></path>
-                                                <g>
-                                                    <path d="M34 33h12M34 46h12M34 59h12"></path>
-                                                </g>
-                                                <g>
-                                                    <path d="M55 33h12M55 46h12M55 59h12"></path>
-                                                </g>
-                                                <path
-                                                    fill="#CBCCCD"
-                                                    d="M6.5 12h67a1.5 1.5 0 0 1 1.5 1.5V22H5v-8.5A1.5 1.5 0 0 1 6.5 12z"
-                                                ></path>
-                                            </g>
-                                        </g>
-                                    </svg>
-                                </div>
                                 <div
                                     className="font-weight-bold text-center"
                                     style={{ color: "#919191" }}
@@ -385,18 +303,7 @@ const Portfolio = () => {
                                 </div>
                             </div>
                         ) : (
-                            <div
-                                style={{
-                                    display: "flex",
-                                    flexWrap: "wrap",
-                                    gap: "25px",
-                                    justifyContent: "space-evenly",
-                                    padding: "20px",
-                                    borderRadius: "9px",
-                                    border: "1px solid #E0E9EF",
-                                    background: "#F2F9FE",
-                                }}
-                            >
+                            <div className="portfolio_list_item_parent">
                                 {_.map(
                                     tableData(searchParams.get("show")),
                                     (item, index) => (
@@ -415,17 +322,7 @@ const Portfolio = () => {
                     </div>
                 </div>
             ) : (
-                <div
-                    style={{
-                        marginTop: "20px",
-                        backgroundColor: "#F2F9FE",
-                        padding: "10px",
-                        border: "1px solid #E0E9EF",
-                        borderRadius: "6px",
-                        marginLeft: "5px",
-                        marginRight: "5px",
-                    }}
-                >
+                <div className="portfolio_table_item_parent">
                     <DataTable
                         tableData={tableData(searchParams.get("show"))}
                         tableColumns={PortfolioTableColumns}

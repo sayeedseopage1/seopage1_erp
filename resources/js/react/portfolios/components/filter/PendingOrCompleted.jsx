@@ -28,6 +28,17 @@ export const PendingOrCompleted = (props) => {
             <li>
                 <Link
                     to="#"
+                    data-type="all"
+                    onClick={(e) => handleRouteChange(e, { show: "all" })}
+                    data-active={searchParams.get("show") === "all"}
+                >
+                    All{" "}
+                    <span className="badge badge-light">{badge("all")}</span>
+                </Link>
+            </li>
+            <li>
+                <Link
+                    to="#"
                     data-type="pending"
                     onClick={(e) => handleRouteChange(e, { show: "pending" })}
                     data-active={searchParams.get("show") === "pending"}
@@ -52,18 +63,6 @@ export const PendingOrCompleted = (props) => {
                     <span className="badge badge-light">
                         {badge("authorized")}
                     </span>
-                </Link>
-            </li>
-
-            <li>
-                <Link
-                    to="#"
-                    data-type="all"
-                    onClick={(e) => handleRouteChange(e, { show: "all" })}
-                    data-active={searchParams.get("show") === "all"}
-                >
-                    All{" "}
-                    <span className="badge badge-light">{badge("all")}</span>
                 </Link>
             </li>
         </ul>
