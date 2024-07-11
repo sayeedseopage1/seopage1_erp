@@ -3038,6 +3038,7 @@ var RevisionText = function RevisionText(_ref) {
   var showText = isLong ? (text === null || text === void 0 ? void 0 : text.slice(0, 800)) + "..." : text;
   var date = dayjs__WEBPACK_IMPORTED_MODULE_3___default()(revision === null || revision === void 0 ? void 0 : revision.createdAt).format("MMM DD, YYYY");
   var time = dayjs__WEBPACK_IMPORTED_MODULE_3___default()(revision === null || revision === void 0 ? void 0 : revision.createdAt).format("hh:mm A");
+  console.log("revision in subtask", revision);
   return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)("div", {
     className: "sp1_task_card--sub-card",
     style: {
@@ -12206,7 +12207,7 @@ var SubTaskSection = function SubTaskSection(_ref) {
         task: Task,
         auth: auth,
         status: status
-      }) && !lodash__WEBPACK_IMPORTED_MODULE_10___default().includes([15, 16, 17], Number(auth.roleId)) && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_16__.jsx)(_components_Button__WEBPACK_IMPORTED_MODULE_3__["default"], {
+      }) && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_16__.jsx)(_components_Button__WEBPACK_IMPORTED_MODULE_3__["default"], {
         variant: "tertiary",
         className: "sp1_tark_add_item",
         "aria-label": "addButton",
@@ -13388,7 +13389,7 @@ var Genarel = function Genarel(_ref) {
           },
           children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsxs)("h6", {
             className: "",
-            children: ["Task: ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("a", {
+            children: ["Task:", " ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("a", {
               target: "__blank",
               href: "/account/tasks/".concat(task === null || task === void 0 ? void 0 : task.id),
               className: "text-primary font-weight-normal",
@@ -13493,9 +13494,9 @@ var Genarel = function Genarel(_ref) {
             })]
           }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsxs)("div", {
             className: "sp1_st-list-item",
-            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("div", {
+            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsxs)("div", {
               className: "sp1_st-list-item-head",
-              children: "Priority : "
+              children: ["Priority :", " "]
             }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsxs)("div", {
               className: "sp1_st-list-item-value",
               children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("span", {
@@ -13549,7 +13550,7 @@ var Genarel = function Genarel(_ref) {
           children: ["Start Date", " "]
         }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsxs)("div", {
           className: "col-6 col-sm-7 col-md-9 col-xl-6",
-          children: [": ", isFetching ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)(_global_Placeholder__WEBPACK_IMPORTED_MODULE_8__.Placeholder, {
+          children: [":", " ", isFetching ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)(_global_Placeholder__WEBPACK_IMPORTED_MODULE_8__.Placeholder, {
             width: "80px"
           }) : task === null || task === void 0 ? void 0 : task.getStartDate("MMM DD, YYYY")]
         })]
@@ -13560,7 +13561,7 @@ var Genarel = function Genarel(_ref) {
           children: ["Due Date", " "]
         }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsxs)("div", {
           className: "col-6 col-sm-7 col-md-9 col-xl-6",
-          children: [": ", isFetching ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)(_global_Placeholder__WEBPACK_IMPORTED_MODULE_8__.Placeholder, {
+          children: [":", " ", isFetching ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)(_global_Placeholder__WEBPACK_IMPORTED_MODULE_8__.Placeholder, {
             width: "80px"
           }) : task === null || task === void 0 ? void 0 : task.getDueDate("MMM DD, YYYY")]
         })]
@@ -13571,28 +13572,29 @@ var Genarel = function Genarel(_ref) {
           children: ["Total Hours Logged", " "]
         }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsxs)("div", {
           className: "col-6 col-sm-7 col-md-9 col-xl-6",
-          children: [": ", isFetching ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)(_global_Placeholder__WEBPACK_IMPORTED_MODULE_8__.Placeholder, {
+          children: [":", " ", isFetching ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)(_global_Placeholder__WEBPACK_IMPORTED_MODULE_8__.Placeholder, {
             width: "80px"
           }) : (task === null || task === void 0 ? void 0 : task.parentTaskTimeLog) || "--"]
         })]
       })]
     }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsxs)("div", {
       className: "col-12 border-top py-4 mt-4",
-      children: [_.size(task === null || task === void 0 ? void 0 : task.revisions) > 0 && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)(_components_Accordion__WEBPACK_IMPORTED_MODULE_2__["default"], {
+      children: [_.size(task === null || task === void 0 ? void 0 : task.revisions) > 0 && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsxs)(_components_Accordion__WEBPACK_IMPORTED_MODULE_2__["default"], {
         title: (_$last = _.last(task === null || task === void 0 ? void 0 : task.revisions)) === null || _$last === void 0 ? void 0 : _$last.revisionStatus,
         headingClass: "d-flex align-items-center justify-content-between",
         headingStyle: {
           background: "rgba(227,62,79,1)",
           color: "#fff"
         },
-        children: _.map(task === null || task === void 0 ? void 0 : task.revisions, function (revision, index) {
+        children: [console.log("task revision is genral", task === null || task === void 0 ? void 0 : task.revisions), _.map(task === null || task === void 0 ? void 0 : task.revisions, function (revision, index) {
           return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)(_components_RevisionText__WEBPACK_IMPORTED_MODULE_4__["default"], {
             index: index + 1,
-            date: dayjs__WEBPACK_IMPORTED_MODULE_7___default()(revision.createdAt).format('MMM DD, YYYY'),
-            time: dayjs__WEBPACK_IMPORTED_MODULE_7___default()(revision.createdAt).format('hh:mm a'),
-            text: revision === null || revision === void 0 ? void 0 : revision.comment
+            date: dayjs__WEBPACK_IMPORTED_MODULE_7___default()(revision.createdAt).format("MMM DD, YYYY"),
+            time: dayjs__WEBPACK_IMPORTED_MODULE_7___default()(revision.createdAt).format("hh:mm a"),
+            text: revision === null || revision === void 0 ? void 0 : revision.comment,
+            revision: revision
           }, revision.id);
-        })
+        })]
       }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)(_components_Accordion__WEBPACK_IMPORTED_MODULE_2__["default"], {
         expendable: false,
         title: "Task Descriptions",

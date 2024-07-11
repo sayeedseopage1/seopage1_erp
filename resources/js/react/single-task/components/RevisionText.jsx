@@ -111,7 +111,7 @@ const RevisionText = ({ index, revision }) => {
 
     const date = dayjs(revision?.createdAt).format("MMM DD, YYYY");
     const time = dayjs(revision?.createdAt).format("hh:mm A");
-
+    console.log("revision in subtask", revision);
     return (
         <div className="sp1_task_card--sub-card" style={{ minHeight: "110px" }}>
             <div className="sp1_tc_sc-inx">

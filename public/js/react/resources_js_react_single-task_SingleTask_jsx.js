@@ -3561,6 +3561,7 @@ var RevisionText = function RevisionText(_ref) {
   var showText = isLong ? (text === null || text === void 0 ? void 0 : text.slice(0, 800)) + "..." : text;
   var date = dayjs__WEBPACK_IMPORTED_MODULE_3___default()(revision === null || revision === void 0 ? void 0 : revision.createdAt).format("MMM DD, YYYY");
   var time = dayjs__WEBPACK_IMPORTED_MODULE_3___default()(revision === null || revision === void 0 ? void 0 : revision.createdAt).format("hh:mm A");
+  console.log("revision in subtask", revision);
   return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)("div", {
     className: "sp1_task_card--sub-card",
     style: {
