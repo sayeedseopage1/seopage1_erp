@@ -57,6 +57,9 @@ const Tasks = () => {
                     } else if (
                         auth.getRoleId() === 6 ||
                         auth.getRoleId() === 9 ||
+                        auth.getRoleId() === 15 ||
+                        auth.getRoleId() === 16 ||
+                        auth.getRoleId() === 17 ||
                         auth.getRoleId() === 10
                     ) {
                         _data = _.filter(

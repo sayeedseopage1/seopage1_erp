@@ -404,9 +404,8 @@ class TimelogController extends AccountBaseController
 
             }
         }
-        $task_board_column = TaskboardColumn::where('id', $task_status->board_column_id)->first();
-        //  dd($task_status);
-        $timeLog = new ProjectTimeLog();
+        $task_board_column= TaskboardColumn::where('id',$task_status->board_column_id)->first();
+          $timeLog = new ProjectTimeLog();
 
         $activeTimer = ProjectTimeLog::with('user')
             ->whereNull('end_time')
@@ -429,6 +428,73 @@ class TimelogController extends AccountBaseController
 
                 $task->save();
                 $taskId = $task->id;
+                $timeLog->task_id = $taskId;
+
+                $timeLog->user_id = $this->user->id;
+                $timeLog->start_time = now();
+                $timeLog->hourly_rate = 0;
+                $timeLog->memo = $task_status->heading;
+                $task_revision = TaskRevision::where('task_id',$request->task_id)->first();
+                //    dd($task_revision);
+                    if($task_revision != null)
+                    {
+
+                        $timeLog->revision_id = $task_revision->id;
+                        $timeLog->revision_status = 1;
+
+
+                    }
+                $timeLog->save();
+
+                $checklogCount = ProjectTimeLog::where('task_id', $request->task_id)->count();
+
+                if($checklogCount == 1){
+                    if($timeLog->project_id != null){
+                        $text = 'Developer ' . Auth::user()->name . ' started working on subtask ' . $request->memo;
+                        $link = '<a href="' . route('tasks.show', $request->task_id) . '">' . $text . '</a>';
+                        $this->logProjectActivity($timeLog->project_id, $link);
+                    }
+                }
+
+                function ordinal($number) {
+                    $suffix = ['th', 'st', 'nd', 'rd', 'th', 'th', 'th', 'th', 'th', 'th'];
+                    if (((int)($number % 100 / 10)) == 1) {
+                        $abbreviation = $number . 'th';
+                    } else {
+                        $abbreviation = $number . $suffix[$number % 10];
+                    }
+                    return $abbreviation;
+                }
+
+                $revision = TaskRevision::where('task_id',$request->task_id)->orderBy('id','desc')->first();
+                if($revision != null){
+                    if($timeLog->project_id != null){
+                        $revisionBy = User::where('id', $revision->added_by)->first();
+                        $revision_number = ordinal($revision->revision_no);
+                        $text = 'Developer ' . Auth::user()->name . ' started working on subtask ' . $request->memo . ' for the ' . $revision_number . ' time after a revision was given by ' . $revisionBy->name;
+                        $link = '<a href="' . route('tasks.show', $request->task_id) . '">' . $text . '</a>';
+                        $this->logProjectActivity($timeLog->project_id, $link);
+                    }
+                }
+
+
+
+                if ($request->project_id != '') {
+                    //$this->logProjectActivity($request->project_id, 'modules.tasks.timerStartedBy');
+                    $this->logUserActivity($this->user->id, 'modules.tasks.timerStartedProject');
+                }
+                else {
+                    $this->logUserActivity($this->user->id, 'modules.tasks.timerStartedTask');
+                }
+
+                $this->logTaskActivity($timeLog->task_id, user()->id, 'timerStartedBy');
+
+                return response()->json([
+                    'status' => 'success',
+                    'message' => 'task timer started',
+                    'id' => $timeLog->id,
+                    'task_status'=> $task_board_column,
+                ]);
             }
 
             if ($request->project_id != '') {
@@ -477,132 +543,159 @@ class TimelogController extends AccountBaseController
 
     public function stopTimer(Request $request)
     {
-        if (Auth::user()->role_id == 1) {
-            $timeId = $request->timeId;
-            $timeLog = ProjectTimeLog::find($timeId);
-            if ($timeLog->end_time == null) {
-                $timeLog->end_time = Carbon::now();
-                $timeLog->save();
+        // DB::beginTransaction();
+     if(Auth::user()->role_id == 1)
+     {
+        $timeId = $request->timeId;
+     //   dd( $timeId);
+        $timeLog = ProjectTimeLog::find($timeId);
+        if ($timeLog->end_time == null) {
+            $timeLog->end_time = Carbon::now();
+            $timeLog->save();
 
-                $timeLog->total_hours = (int)$timeLog->end_time->diff($timeLog->start_time)->format('%d') * 24 + (int)$timeLog->end_time->diff($timeLog->start_time)->format('%H');
-                $timeLog->total_minutes = ((int)$timeLog->total_hours * 60) + (int)($timeLog->end_time->diff($timeLog->start_time)->format('%i'));
-                $timeLog->edited_by_user = $this->user->id;
-                $timeLog->save();
+            $timeLog->total_hours = (int)$timeLog->end_time->diff($timeLog->start_time)->format('%d') * 24 + (int)$timeLog->end_time->diff($timeLog->start_time)->format('%H');
+            $timeLog->total_minutes = ((int)$timeLog->total_hours * 60) + (int)($timeLog->end_time->diff($timeLog->start_time)->format('%i'));
+            $timeLog->edited_by_user = $this->user->id;
+            $timeLog->save();
 
-                /**EMPLOYEE EVALUATION START */
-                $taskFind = Task::where('id', $request->task_id)->where('u_id', null)->where('independent_task_status', 1)->first(); //Find SubTask
-                if ($taskFind != null) {
-                    $evaluation = EmployeeEvaluationTask::where('task_id', $taskFind->id)->first();
-                    if ($evaluation != null) {
-                        if ($evaluation != null) {
-                            $evaluation->total_hours = $timeLog->total_hours;
-                            $evaluation->total_min = $timeLog->total_minutes;
-                            $evaluation->save();
-                        }
+            /**EMPLOYEE EVALUATION START */
+            if(Auth::user()->role_id == 15 || Auth::user()->role_id == 16 || Auth::user()->role_id == 17){
+                $taskFind = Task::where('id',$request->task_id)->where('u_id','!=',null)->where('independent_task_status',1)->first();
+            }else{
+                $taskFind = Task::where('id',$request->task_id)->where('u_id',null)->where('independent_task_status',1)->first();
+            }
+            if($taskFind != null){
+                $evaluation = EmployeeEvaluationTask::where('task_id',$taskFind->id)->first();
+                if($evaluation !=null)
+                {
+                    if($evaluation !=null)
+                    {
+                        $evaluation->total_hours = $timeLog->total_hours;
+                        $evaluation->total_min = $timeLog->total_minutes;
+                        $evaluation->save();
                     }
                 }
-
-                /**EMPLOYEE EVALUATION END */
-
-                $html = $this->showActiveTimer()->render();
-                return Reply::successWithData(__('messages.timerStoppedSuccessfully'), ['html' => $html, 'activeTimerCount' => $this->activeTimerCount]);
-            } else {
-                return response()->json([
-                    'message' => 'Timer already stopped',
-                    'status' => 400,
-        
-                ]);
             }
+
+            /**EMPLOYEE EVALUATION END */
+
+            $html = $this->showActiveTimer()->render();
+            return Reply::successWithData(__('messages.timerStoppedSuccessfully'), ['html' => $html, 'activeTimerCount' => $this->activeTimerCount]);
         } else {
-            $timeId = $request->id;
-            $timeLog = ProjectTimeLog::find($timeId);
-            if ($timeLog->end_time == null) {
-                $editTimelogPermission = user()->permission('edit_timelogs');
-                $activeTimelogPermission = user()->permission('manage_active_timelogs');
+            return response()->json([
+                'message' => 'Timer already stopped',
+                'status' => 400,
 
-                abort_403(!(
-                    $editTimelogPermission == 'all'
-                    || ($editTimelogPermission == 'added' && $timeLog->added_by == user()->id)
-                    || ($editTimelogPermission == 'owned'
-                        && (($timeLog->project && $timeLog->project->client_id == user()->id) || $timeLog->user_id == user()->id)
-                    )
-                    || ($editTimelogPermission == 'both' && (($timeLog->project && $timeLog->project->client_id == user()->id) || $timeLog->user_id == user()->id || $timeLog->added_by == user()->id))
-                ));
+            ]);
+        }
 
-                $timeLog->end_time = Carbon::now();
-                $timeLog->save();
-                //   dd($timeLog);
+     }else
+     {
+        $timeId = $request->id;
+        // dd( $timeId);
+        $timeLog = ProjectTimeLog::find($timeId);
+        if ($timeLog->end_time == null) {
+            $editTimelogPermission = user()->permission('edit_timelogs');
+            $activeTimelogPermission = user()->permission('manage_active_timelogs');
 
-                $timeLog->total_hours = (int)$timeLog->end_time->diff($timeLog->start_time)->format('%d') * 24 + (int)$timeLog->end_time->diff($timeLog->start_time)->format('%H');
-                $timeLog->total_minutes = ((int)$timeLog->total_hours * 60) + (int)($timeLog->end_time->diff($timeLog->start_time)->format('%i'));
-                $timeLog->edited_by_user = $this->user->id;
-                $timeLog->save();
+            abort_403(!(
+                $editTimelogPermission == 'all'
+            || ($editTimelogPermission == 'added' && $timeLog->added_by == user()->id)
+            || ($editTimelogPermission == 'owned'
+                && (($timeLog->project && $timeLog->project->client_id == user()->id) || $timeLog->user_id == user()->id)
+                )
+            || ($editTimelogPermission == 'both' && (($timeLog->project && $timeLog->project->client_id == user()->id) || $timeLog->user_id == user()->id || $timeLog->added_by == user()->id))
+            ));
 
-                /**EMPLOYEE EVALUATION START */
-                $taskFind = Task::where('id', $request->task_id)->where('u_id', null)->where('independent_task_status', 1)->first(); //Find SubTask
-                if ($taskFind != null) {
-                    $evaluation = EmployeeEvaluationTask::where('task_id', $taskFind->id)->first();
-                    if ($evaluation != null) {
-                        if ($evaluation->total_min != null) {
-                            $evaluation->total_hours = $evaluation->total_hours + $timeLog->total_hours;
-                            $evaluation->total_min = $evaluation->total_min + $timeLog->total_minutes;
-                            $evaluation->save();
-                        } else {
-                            $evaluation->total_hours = $timeLog->total_hours;
-                            $evaluation->total_min = $timeLog->total_minutes;
-                            $evaluation->save();
-                        }
+            $timeLog->end_time = Carbon::now();
+            $timeLog->save();
+        //   dd($timeLog);
+
+            $timeLog->total_hours = (int)$timeLog->end_time->diff($timeLog->start_time)->format('%d') * 24 + (int)$timeLog->end_time->diff($timeLog->start_time)->format('%H');
+            $timeLog->total_minutes = ((int)$timeLog->total_hours * 60) + (int)($timeLog->end_time->diff($timeLog->start_time)->format('%i'));
+            $timeLog->edited_by_user = $this->user->id;
+            $timeLog->save();
+
+            /**EMPLOYEE EVALUATION START */
+            if(Auth::user()->role_id == 15 || Auth::user()->role_id == 16 || Auth::user()->role_id == 17){
+                $taskFind = Task::where('id',$request->task_id)->where('u_id','!=',null)->where('independent_task_status',1)->first();
+            }else{
+                $taskFind = Task::where('id',$request->task_id)->where('u_id',null)->where('independent_task_status',1)->first();
+            }
+            if($taskFind != null){
+                $evaluation = EmployeeEvaluationTask::where('task_id',$taskFind->id)->first();
+                if($evaluation !=null)
+                {
+                    if($evaluation->total_min !=null)
+                    {
+                        $evaluation->total_hours = $evaluation->total_hours + $timeLog->total_hours;
+                        $evaluation->total_min = $evaluation->total_min + $timeLog->total_minutes;
+                        $evaluation->save();
+                    }else{
+                        $evaluation->total_hours = $timeLog->total_hours;
+                        $evaluation->total_min = $timeLog->total_minutes;
+                        $evaluation->save();
                     }
                 }
-
-                /**EMPLOYEE EVALUATION END */
-
-                // Stop breaktime if active
-                /** @phpstan-ignore-next-line */
-                if (!is_null($timeLog->activeBreak)) {
-                    /** @phpstan-ignore-next-line */
-                    $activeBreak = $timeLog->activeBreak;
-                    $activeBreak->end_time = $timeLog->end_time;
-                    $activeBreak->save();
-                }
-
-                if (!is_null($timeLog->project_id)) {
-                    $this->logProjectActivity($timeLog->project_id, 'modules.tasks.timerStoppedBy');
-                }
-
-                if (!is_null($timeLog->task_id)) {
-                    $this->logTaskActivity($timeLog->task_id, user()->id, 'timerStoppedBy');
-                }
-
-                $this->logUserActivity($this->user->id, 'modules.tasks.timerStoppedBy');
-
-                /** @phpstan-ignore-next-line */
-
-                $html = $this->showActiveTimer()->render();
-
-                $this->activeTimerCount = ProjectTimeLog::whereNull('end_time')
-                    ->join('users', 'users.id', '=', 'project_time_logs.user_id')
-                    ->select('project_time_logs.id');
-
-                if ($this->viewTimelogPermission != 'all' && manage_active_timelogs() != 'all') {
-                    $this->activeTimerCount->where('project_time_logs.user_id', $this->user->id);
-                }
-
-                $this->activeTimerCount = $this->activeTimerCount->count();
-                return response()->json([
-                    'html' => $html,
-                    'activeTimerCount' => $this->activeTimerCount,
-                    'status' => 200,
-                    'message' => 'Timer Stopped Successfully',
-                ]);
-            } else {
-                return response()->json([
-                    'message' => 'Timer already stopped',
-                    'status' => 400,
-        
-                ]);
             }
+
+            /**EMPLOYEE EVALUATION END */
+
+            // Stop breaktime if active
+            /** @phpstan-ignore-next-line */
+            if (!is_null($timeLog->activeBreak)) {
+                /** @phpstan-ignore-next-line */
+                $activeBreak = $timeLog->activeBreak;
+                $activeBreak->end_time = $timeLog->end_time;
+                $activeBreak->save();
+            }
+
+            if (!is_null($timeLog->project_id)) {
+                // $task = Task::where('id',$timeLog->task_id)->first();
+                // $text = 'Developer ' . Auth::user()->name . ' stopped the subtask ' . $task->heading . ' timer';
+                // $link = '<a href="' . route('tasks.show', $timeLog->task_id) . '">' . $text . '</a>';
+                // $this->logProjectActivity($timeLog->project_id, $link);
+            }
+
+            if (!is_null($timeLog->task_id)) {
+                // $this->logTaskActivity($timeLog->task_id, user()->id, 'timerStoppedBy');
+            }
+
+            // $this->logUserActivity($this->user->id, 'modules.tasks.timerStoppedBy');
+
+            /** @phpstan-ignore-next-line */
+
+            $html = $this->showActiveTimer()->render();
+
+            $this->activeTimerCount = ProjectTimeLog::whereNull('end_time')
+                ->join('users', 'users.id', '=', 'project_time_logs.user_id')
+                ->select('project_time_logs.id');
+
+            if ($this->viewTimelogPermission != 'all' && manage_active_timelogs() != 'all') {
+                    $this->activeTimerCount->where('project_time_logs.user_id', $this->user->id);
+            }
+
+            $this->activeTimerCount = $this->activeTimerCount->count();
+            // /dd("sjdnkasdnas");
+            return response()->json([
+                'html' => $html,
+                'activeTimerCount'=> $this->activeTimerCount,
+                'status' => 200,
+                'message'=> 'Timer Stopped Successfully',
+            ]);
+        } else {
+            return response()->json([
+                'message' => 'Timer already stopped',
+                'status' => 400,
+
+            ]);
         }
+
+     }
+    //  /  DB::beginTransaction();
+
+
+       // return Reply::successWithData(__('messages.timerStoppedSuccessfully'), ['html' => $html, 'activeTimerCount' => $this->activeTimerCount]);
     }
 
     /**

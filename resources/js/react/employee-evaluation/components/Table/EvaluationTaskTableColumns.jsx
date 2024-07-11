@@ -86,7 +86,15 @@ export const EvaluationTaskTableColumns = [
     },
     {
         id: "completed_work",
-        header: "Completed Work URL",
+        header: () => {
+            return (
+                <span>
+                    Completed
+                    <br />
+                    Work URL
+                </span>
+            );
+        },
         accessorKey: "completed_work",
 
         cell: ({ row: { original }, className }) => {
@@ -141,6 +149,15 @@ export const EvaluationTaskTableColumns = [
     {
         id: "screen_record_links",
         header: "Screen recording URL of all submitted work",
+        header: () => {
+            return (
+                <span>
+                    Screen recording URL
+                    <br />
+                    of all submitted work
+                </span>
+            );
+        },
         accessorKey: "screen_record_links",
 
         cell: ({ row: { original }, className }) => {
