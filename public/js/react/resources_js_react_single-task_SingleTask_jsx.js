@@ -3438,12 +3438,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var dayjs__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(dayjs__WEBPACK_IMPORTED_MODULE_3__);
 /* harmony import */ var _hooks_useUsers__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../hooks/useUsers */ "./resources/js/react/hooks/useUsers.jsx");
 /* harmony import */ var _utils_user_details__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../utils/user-details */ "./resources/js/react/utils/user-details.js");
-<<<<<<< HEAD
 /* harmony import */ var _utils_react_latest_utils_converTime__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../../utils/../../react-latest/utils/converTime */ "./resources/js/react-latest/utils/converTime.js");
 /* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
-=======
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
->>>>>>> 17ed453e3871e4286ae29a86a463fa34c53349ea
 function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
 function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
 function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
@@ -3539,10 +3535,6 @@ var RevisionText = function RevisionText(_ref) {
     expend = _React$useState2[0],
     setExpend = _React$useState2[1];
   var ref = react__WEBPACK_IMPORTED_MODULE_0__.useRef();
-<<<<<<< HEAD
-=======
-  console.log("revision", revision);
->>>>>>> 17ed453e3871e4286ae29a86a463fa34c53349ea
   var toggleModal = function toggleModal(e) {
     e.preventDefault();
     setExpend(!expend);

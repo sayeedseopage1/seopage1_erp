@@ -22,6 +22,7 @@ import { workingReportError } from "../helper/timer-start-working-report-error-t
 import ExpiredTimeModalForNewEmployee from "./ExpiredTimeModalForNewEmployee";
 import ExpiredNotifyModalForNewEmployee from "./ExpiredNotifyModalForNewEmployee";
 import { useGetSingleEvaluationQuery } from "../../../services/api/EvaluationApiSlice";
+import Swal from "sweetalert2";
 
 // component
 const TimerControl = ({ task, timerStart, setTimerStart, auth }) => {
@@ -312,6 +313,13 @@ const TimerControl = ({ task, timerStart, setTimerStart, auth }) => {
                     setTimerStart(false);
                     setSeconds(0);
                     timerId(null);
+                } else if (res?.status === 400) {
+                    Swal.fire({
+                        icon: "warning",
+                        title: _.startCase(res?.message),
+                        showConfirmButton: true,
+                    });
+                    window.location.reload();
                 } else {
                     Toast.fire({
                         icon: "warning",
