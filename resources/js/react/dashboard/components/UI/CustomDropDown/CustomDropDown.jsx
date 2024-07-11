@@ -8,6 +8,7 @@ import Dropdown from "../../../../global/Dropdown";
 import Switch from "../../../../global/Switch";
 
 import "./customDropDown.css";
+import SearchBox from "../../../../global/Searchbox";
 
 const CustomDropDown = ({
     data,

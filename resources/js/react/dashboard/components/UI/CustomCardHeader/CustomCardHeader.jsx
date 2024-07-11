@@ -15,7 +15,7 @@ const CustomCardHeader = ({
     title,
     info,
     border = false,
-    borderStyle = "0.1px solid var(--primaryLightBorder)",
+    borderStyle = "0.1px solid var(--primaryBorderBlue)",
 }) => {
     return (
         <div className={`${style.sp1_dashboard_card_header_wrapper}`}>
@@ -28,6 +28,7 @@ const CustomCardHeader = ({
                                 ...info,
                                 title,
                             }}
+                            className="ml-1"
                         />
                     </Switch.Case>
                 </h6>

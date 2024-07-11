@@ -24,9 +24,12 @@ const DashboardMonthFilter = ({ setFilter, isLoading }) => {
     const formatDateRange = (date) => {
         let startDate = date.date(targetedDay);
         let endDate = date.add(1, "month").date(targetedDay - 1);
-        return `${startDate.format("MMMM, YYYY")} - ${endDate.format(
-            "MMMM, YYYY"
-        )}`;
+        return (
+            <>
+                <span>{startDate.format("MMM YYYY")}</span> <span>-</span>{" "}
+                <span>{endDate.format("MMM YYYY")}</span>
+            </>
+        );
     };
 
     // handle month filter navigation

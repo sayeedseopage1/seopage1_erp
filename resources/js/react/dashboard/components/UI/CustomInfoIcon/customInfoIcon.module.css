@@ -1,6 +1,6 @@
 .sp1_dashboard_info_icon_wrapper {
   display: inline-block;
-  gap: 5px;
+  align-items: center;
   font-size: 16px;
   margin-bottom: 0px;
 }

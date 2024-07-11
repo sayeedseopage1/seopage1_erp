@@ -349,10 +349,17 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
     Route::post('dashboard/week-timelog', [DashboardController::class, 'weekTimelog'])->name('dashboard.week_timelog');
     //lead developer dashboard
     Route::get('dashboard-lead-dev-performance/{id}', [DashboardController::class, 'leadDevPerformance'])->name('lead-dev-performance');
+    // lead developer dashboard temp
+    Route::get('dashboard-lead-dev-performance/{id}/temp', [DashboardController::class, 'tempLeadDevDashboard'])->name('temp-lead-dev-dashboard');
     //developer dashboard
     Route::get('dashboard-developer-performance/{id}', [DashboardController::class, 'devPerformance'])->name('dev-performance');
+     // lead developer dashboard temp
+     Route::get('dashboard-developer-performance/{id}/temp', [DashboardController::class, 'tempDevDashboard'])->name('temp-dev-dashboard');
     //sales dashboard
     Route::get('dashboard-sales-performance/{id}', [DashboardController::class, 'salesPerformance'])->name('sales-performance');
+    //sales dashboard temp
+    Route::get('dashboard-sales-performance/{id}/temp', [DashboardController::class, 'tempSalesDashboard'])->name('temp-sales-dashboard');
+
 
     //clockin clock out routes
     Route::get('attendances/clock-in-modal', [DashboardController::class, 'clockInModal'])->name('attendances.clock_in_modal');

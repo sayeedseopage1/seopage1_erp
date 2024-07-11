@@ -1,0 +1,30 @@
+.containerClassName{
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.pageLinkClassName{
+  display: inline-block;
+  padding: 6px 16px;
+  min-width: 32px;
+  border-radius: 4px;
+  color: #232b2b;
+  font-size: 13px;
+  border: 1px solid lightgrey;
+}
+
+.pageLinkClassName:hover{
+  background-color: rgba(0 0 0 / 3%);
+}
+
+.activeLinkClassName{
+  background-color: #1D82F5;
+  color: #fff !important;
+  border-color: #1D82F5 ;
+}
+ 
+.activeLinkClassName:hover{
+  color: #fff !important;
+  background-color: #1D82F5 !important;
+}

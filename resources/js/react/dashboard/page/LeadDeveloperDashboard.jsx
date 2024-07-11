@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import PropTypes from "prop-types";
-import { CiCircleInfo } from "react-icons/ci";
 
 // Components - UI - Shared
 import ProfileAvatar from "../components/shared/ProfileAvatar";
+import RefreshButton from "../components/shared/RefreshButton";
 
 // Components - UI - Styled
 import { SectionWrapper } from "../components/UI/StyledComponents";
@@ -12,29 +12,55 @@ import { SectionWrapper } from "../components/UI/StyledComponents";
 import CustomDropDown from "../components/UI/CustomDropDown/CustomDropDown";
 import DashboardMonthFilter from "../components/UI/DashboardMonthFilter/DashboardMonthFilter";
 import CustomCardHeader from "../components/UI/CustomCardHeader/CustomCardHeader";
+import CustomCardInfo from "../components/UI/CustomCardInfo/CustomCardInfo";
 
 // Constants
 import { LeadDeveloperDummyData } from "../constant";
-import CustomCardInfo from "../components/UI/CustomCardInfo/CustomCardInfo";
-import DashboardDataTable from "../components/table/DashboardDataTable";
-import { LeadDeveloperTableColumns } from "../components/table/columns/LeadDeveloperTableColumns";
-import { LeadDeveloperDataTitle } from "../constant/leadDeveloperConstant";
+
+// Components - UI - Modal
+import LeadDeveloperDataModal from "../components/modal/LeadDeveloperDataModal/LeadDeveloperDataModal";
+import LeadDeveloperDashboardContent from "../components/sections/LeadDeveloperDashboardContent";
+
+// Components - Logic - Global
+import Switch from "../../global/Switch";
+
+// Context
+import { LeadDeveloperContext } from "../context/LeadDeveloperContext";
 
 const LeadDeveloperDashboard = () => {
+    const { user } = useContext(LeadDeveloperContext);
     const [filter, setFilter] = useState();
     const [isLoading, setIsLoading] = useState(false);
+    const [isLeadDeveloperModalOpen, setIsLeadDeveloperModalOpen] =
+        useState(false);
+    const [leadDeveloperModalData, setLeadDeveloperModalData] = useState({});
 
-    const handleFilterChange = () => {
+    const handleLoadingCheck = () => {
         setIsLoading(true);
         setTimeout(() => {
-            console.log("Filter Changed", filter);
             setIsLoading(false);
         }, 5000);
     };
 
-    useEffect(() => {
-        handleFilterChange();
-    }, [filter]);
+    /**
+     * Toggles the state of a modal and optionally executes an additional action.
+     *
+     * @param {Function} setModalOpenFunc - Function to set the modal open state.
+     * @param {boolean} isOpen - Boolean indicating whether the modal should be open (true) or closed (false).
+     * @param {Function} [action] - Optional function to execute after setting the modal state.
+     */
+    const handleModal = (setModalOpenFunc, isOpen, action) => {
+        setModalOpenFunc(isOpen);
+        if (action) {
+            action();
+        }
+    };
+
+    const handleModalOpen = (data) => {
+        handleModal(setIsLeadDeveloperModalOpen, true, () => {
+            setLeadDeveloperModalData(data);
+        });
+    };
 
     return (
         <SectionWrapper
@@ -43,79 +69,81 @@ const LeadDeveloperDashboard = () => {
             padding="0px"
             backgroundColor="transparent"
         >
+            {/* Lead Developer Dashboard Header Section */}
             <SectionWrapper
                 className="sp1_dashboard_header_section"
                 border="1px solid var(--primaryLightBorder)"
                 gap="20px"
             >
-                <SectionWrapper
-                    className="sp1_dashboard_header_user_info"
-                    backgroundColor="var(--priMaryWhiteBg)"
-                    border="1px solid var(--primaryLightBorder)"
-                >
-                    <ProfileAvatar
-                        personInfo={{
-                            name: "John Doe",
-                            avatar: "avatar1.jpg",
-                            position: "Sr. Executive",
-                            employeeId: "Seopage1/0131",
-                        }}
-                    />
-                </SectionWrapper>
-                <SectionWrapper
-                    className="d-flex justify-content-between align-items-center"
-                    backgroundColor="var(--primaryLightWhiteBg)"
-                    border="1px solid var(--primaryLightBorder)"
-                    gap="10px"
-                >
-                    <CustomDropDown
-                        data={LeadDeveloperDummyData}
-                        selected={filter?.person}
-                        setSelected={(e) =>
-                            setFilter({
-                                ...filter,
-                                person: e?.target?.value,
-                            })
-                        }
-                        filedName="person"
-                        isMultiple={false}
-                    />
-                    <DashboardMonthFilter
-                        setFilter={setFilter}
-                        isLoading={isLoading}
-                    />
-                </SectionWrapper>
-            </SectionWrapper>
-            <SectionWrapper
-                className="d-flex flex-column"
-                gap="20px"
-                padding="20px 0"
-            ></SectionWrapper>
+                <Switch>
+                    <SectionWrapper
+                        className="sp1_dashboard_header_user_info"
+                        backgroundColor="var(--priMaryWhiteBg)"
+                        border="1px solid var(--primaryLightBorder)"
+                    >
+                        <ProfileAvatar
+                            personInfo={{
+                                name: "John Doe",
+                                avatar: "avatar1.jpg",
+                                position: "Sr. Executive",
+                                employeeId: "Seopage1/0131",
+                            }}
+                            isLoading={isLoading}
+                        />
+                    </SectionWrapper>
 
-            <SectionWrapper>
-                {LeadDeveloperDataTitle?.map((data) => {
-                    return (
-                        <SectionWrapper key={data?.id}>
-                            <CustomCardHeader
-                                title={data?.title}
-                                info={data?.info}
-                                border={true}
+                    <SectionWrapper
+                        className={`sp1_dashboard_header_filter_section ${
+                            user?.roleId === 1
+                                ? "justify-content-between"
+                                : "justify-content-center"
+                        }`}
+                        backgroundColor="var(--primaryLightWhiteBg)"
+                        border="1px solid var(--primaryLightBorder)"
+                        gap="10px"
+                    >
+                        <Switch.Case condition={user?.roleId === 1}>
+                            <CustomDropDown
+                                data={LeadDeveloperDummyData}
+                                selected={filter?.person}
+                                setSelected={(e) =>
+                                    setFilter({
+                                        ...filter,
+                                        person: e?.target?.value,
+                                    })
+                                }
+                                filedName="person"
+                                isSearchBoxUse
                             />
-                            <CustomCardInfo
-                                cardData={{
-                                    subTitle: data?.subTitle,
-                                    value: data?.value,
-                                    hasPermissionForModal:
-                                        data?.hasPermissionForModal,
-                                    onClick: (data) => {
-                                        console.log(data);
-                                    },
-                                }}
-                            />
-                        </SectionWrapper>
-                    );
-                })}
+                        </Switch.Case>
+                        <DashboardMonthFilter
+                            setFilter={setFilter}
+                            isLoading={isLoading}
+                        />
+                    </SectionWrapper>
+                </Switch>
             </SectionWrapper>
+
+            {/* Lead Developer Dashboard Content */}
+            <LeadDeveloperDashboardContent
+                isLoading={isLoading}
+                handleLoadingCheck={handleLoadingCheck} // temp function to check loading
+                handleModalOpen={handleModalOpen}
+            />
+
+            {/* Modal */}
+            {/* <LeadDeveloperDataModal */}
+            {isLeadDeveloperModalOpen && (
+                <LeadDeveloperDataModal
+                    isModalOpen={isLeadDeveloperModalOpen}
+                    closeModal={() =>
+                        handleModal(setIsLeadDeveloperModalOpen, false, () => {
+                            setLeadDeveloperModalData({});
+                        })
+                    }
+                    modalData={leadDeveloperModalData}
+                />
+            )}
         </SectionWrapper>
     );
 };

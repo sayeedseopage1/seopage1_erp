@@ -2,8 +2,6 @@ import React from "react";
 import { flexRender } from "@tanstack/react-table";
 import PropTypes from "prop-types";
 
-
-
 /**
  * Without Draggable Column Header
  * @param {object} props - Component properties
@@ -26,23 +24,13 @@ const WithoutDraggableColumnHeader = ({
 
     // Define column styles
     const columnStyles = {
-        id: { minWidth: "50px", width: "50px", maxWidth: "50px" },
-        previous_deadline: { minWidth: "180px", width: "180px", maxWidth: "180px" },
-        admin_comment: { minWidth: "180px", width: "180px", maxWidth: "180px" },
-        reason: { minWidth: "180px", width: "180px", maxWidth: "180px" },
-        approved_on: { minWidth: "180px", width: "180px", maxWidth: "160px" },
-        approved_by: { minWidth: "180px", width: "180px", maxWidth: "180px" },
-    }
+        id: { minWidth: "80px", width: "80px", maxWidth: "80px" },
+        ...props?.columnStyles,
+    };
     // Define column justify content
     const columnJustifyContent = {
-        milestone_cost: "center",
-        creation_date: "center",
-        status: "center",
-        due_date: "center",
-        tracking_start_time: "center",
-        estimate_hours: "center",
-        logged_hours: "center",
         default: "flex-start",
+        ...props?.columnJustifyContent,
     };
 
     const columnStyle = columnStyles[column.id] || {};
@@ -56,7 +44,7 @@ const WithoutDraggableColumnHeader = ({
                 ...columnStyle,
                 padding: "15px 0",
             }}
-            className={`sp1_tasks_th sp1_tasks_th--${column.id} ${className}`}
+            className={`sp1_dashboard_data_table_thead_th sp1_tasks_th sp1_tasks_th--${column.id} ${className}`}
             {...props}
         >
             <div

@@ -1,8 +1,7 @@
 .sp1_dashboard_custom_dropdown {
   box-shadow:
     6px 12px 80px rgba(0, 0, 0, 0.07);
-  min-width: 300px;
-  max-width: 300px;
+  width: clamp(300px, 0px, 300px);
   border-radius: var(--borderRadius);
 }
 
@@ -83,4 +82,16 @@
 .sp1_dashboard_custom_dropdown .cnx_select_box_tag {
   padding: 6px !important;
   border-radius: 4px !important;
+}
+
+
+
+
+
+/* Mobile Screen Media Query */
+
+@media only screen and (max-width: 768px) {
+  .sp1_dashboard_custom_dropdown {
+    width: 100%;
+  }
 }

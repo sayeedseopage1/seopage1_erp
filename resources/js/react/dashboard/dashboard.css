@@ -2,6 +2,7 @@
   --primaryBlue: #1492E6;
   --primaryDarkBlue: #D8EFFF;
   --primaryLightBlue: #F2F9FE;
+  --primaryLightDarkBlue: #D8EDFC;
   --primaryDarkText: #000000;
   --primaryGrayText: #757575;
   --primaryLightGrayText: #8F8F8F;
@@ -11,6 +12,7 @@
   --borderColor: #C6C6C6;
   --primaryLightBorder: #E0E9EF;
   --primaryBorderBlue: #84C6F4;
+  --primaryDarkBorderBlue: #B1E0FF;
   --primarySuccess: #70CA62;
   --primaryDanger: #FF6666;
   --primaryLightDanger: #fd6b6b;
@@ -20,19 +22,6 @@
   --primaryBoxShadow: 6px 12px 80px rgba(0, 0, 0, 0.07);
   --primaryFont: 'Poppins', sans-serif;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

@@ -20,11 +20,10 @@ import DashboardDataTablePagination from "./DashboardDataTablePagination";
 import EmptyTable from "../../../global/EmptyTable";
 
 // style
-import style from "./style/dashboardDataTable.module.css";
+import "./style/dashboardDataTable.css";
 
 // Components - Logic - Global
 import Switch from "../../../global/Switch";
-
 
 const DashboardDataTable = ({
     tableData,
@@ -120,18 +119,18 @@ const DashboardDataTable = ({
     const TableLoadingComponents = getLoadingComponent || EmptyTable;
 
     return (
-        <div
-            className={`${style.sp1_dashboard_data_table_wrapper} ${className}`}
-            style={{
-                height: "100%",
-                maxHeight: "100%",
-            }}
-        >
-            <Switch>
-                <table className={`${style.sp1_dashboard_data_table}`}>
+        <Switch>
+            <div
+                className={`sp1_dashboard_data_table_wrapper ${className}`}
+                style={{
+                    height: "100%",
+                    maxHeight: "100%",
+                }}
+            >
+                <table className={`sp1_dashboard_data_table`}>
                     {/* table Header */}
                     <thead
-                        className={`${style.sp1_dashboard_data_table_thead}`}
+                        className={`sp1_dashboard_data_table_thead`}
                         style={{
                             zIndex: 0,
                         }}
@@ -139,7 +138,7 @@ const DashboardDataTable = ({
                         {table.getHeaderGroups().map((headerGroup) => (
                             <tr
                                 key={headerGroup.id}
-                                className={`${style.sp1_dashboard_data_table_tr}`}
+                                className={`sp1_dashboard_data_table_tr`}
                             >
                                 {headerGroup.headers.map((header) => {
                                     return (
@@ -172,20 +171,17 @@ const DashboardDataTable = ({
                         ))}
                     </thead>
                     {/* table Body */}
-                    <tbody
-                        className={`${style.sp1_dashboard_data_table_tbody}`}
-                    >
+                    <tbody className={`sp1_dashboard_data_table_tbody`}>
                         {!isLoading &&
                             table.getRowModel().rows.map((row) => {
                                 return (
                                     <tr
-                                        className={`${
-                                            style.sp1_dashboard_data_table_tr
-                                        } ${
-                                            row.parentId !== undefined
-                                                ? "expended_row"
-                                                : ""
-                                        } ${
+                                        className={`sp1_dashboard_data_table_tr
+                                         ${
+                                             row.parentId !== undefined
+                                                 ? "expended_row"
+                                                 : ""
+                                         } ${
                                             row.getIsExpanded()
                                                 ? "expended_parent_row"
                                                 : ""
@@ -196,7 +192,7 @@ const DashboardDataTable = ({
                                             return (
                                                 <td
                                                     key={cell.id}
-                                                    className={`${style.sp1_dashboard_data_table_td} px-2`}
+                                                    className={`sp1_dashboard_data_table_td px-2`}
                                                 >
                                                     {flexRender(
                                                         cell.column.columnDef
@@ -210,22 +206,26 @@ const DashboardDataTable = ({
                                 );
                             })}
                         {/* Loading Table */}
-                        {isLoading && <TableLoadingComponents />}
+                        {isLoading && (
+                            <TableLoadingComponents
+                                tableCol={tableColumns?.length}
+                            />
+                        )}
                     </tbody>
                 </table>
                 {/* Table for empty */}
                 {!isLoading && _.size(table.getRowModel().rows) === 0 && (
                     <EmptyTable />
                 )}
-
-                <Switch.Case condition={options?.isPagination}>
-                    <DashboardDataTablePagination
-                        tableData={tableData}
-                        handlePageSizeChange={handlePageSizeChange}
-                    />
-                </Switch.Case>
-            </Switch>
-        </div>
+            </div>
+            <Switch.Case condition={options?.isPagination}>
+                <DashboardDataTablePagination
+                    tableData={tableData}
+                    handlePageSizeChange={handlePageSizeChange}
+                    className="px-0"
+                />
+            </Switch.Case>
+        </Switch>
     );
 };
 

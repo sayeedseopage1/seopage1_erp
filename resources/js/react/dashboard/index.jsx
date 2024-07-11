@@ -12,8 +12,7 @@ import SalesExecutiveDashboard from "./page/SalesExecutiveDashboard.jsx";
 import LeadDeveloperDashboard from "./page/LeadDeveloperDashboard.jsx";
 
 // styles
-import './dashboard.css'
-
+import "./dashboard.css";
 
 // Store
 import { store } from "../services/store";
@@ -24,16 +23,21 @@ import Toaster from "../global/Toaster";
 // Error boundary component
 import ErrorBoundary from "./helper/ErrorBoundary.jsx";
 
+// Context
+import { LeadDeveloperProvider } from "./context/LeadDeveloperContext.jsx";
+import { DeveloperDashboardProvider } from "./context/DeveloperDashboardContext.jsx";
+import { SaleExecutiveDashboardProvider } from "./context/SalesExecutiveDashboardContext.jsx";
+
 // Content component
-const Content = () => {
-    return (
-        <React.Fragment>
-            <DragLayer />
-            <Outlet />
-            <Toaster />
-        </React.Fragment>
-    );
-};
+const Content = () => (
+    <>
+        <DragLayer />
+        <Outlet />
+        <Toaster />
+    </>
+);
+
+const user = window?.Laravel?.user;
 
 // Custom drag layer
 const DragLayer = () => {
@@ -56,7 +60,6 @@ const DragLayer = () => {
                 top: currentOffset.y,
             }}
         >
-            {/* Render your custom preview here based on the dragged item */}
             {itemType === "column" && (
                 <div
                     className="py-2 px-2 pl-3 bg-white shadow border"
@@ -69,7 +72,7 @@ const DragLayer = () => {
     );
 };
 
-// Dashboard components map
+// Mapping roles to their respective dashboard components
 const dashboardComponents = {
     4: PMDashboard,
     5: DeveloperDashboard,
@@ -77,15 +80,20 @@ const dashboardComponents = {
     7: SalesExecutiveDashboard,
 };
 
-// Function to render the appropriate dashboard based on user role
+// Mapping roles to their respective context providers
+const dashboardContextProviders = {
+    5: DeveloperDashboardProvider,
+    6: LeadDeveloperProvider,
+    7: SaleExecutiveDashboardProvider
+};
+
+
+// Function to get the appropriate dashboard component based on user role
 const renderEmployeeDashboardById = () => {
-    const user = window?.Laravel?.user;
     const DashboardComponent =
         dashboardComponents[user?.role_id] || PMDashboard;
     return <DashboardComponent />;
 };
-
-
 
 // Define your routes data
 const routes = [
@@ -93,83 +101,82 @@ const routes = [
         id: 1,
         containerId: "employeeDashboard",
         baseUrl: "/account/dashboard/temp",
-        contextProvider: null,
+        contextProvider: dashboardContextProviders[user?.role_id] || null,
         pageComponent: renderEmployeeDashboardById(),
     },
     {
         id: 2,
-        containerId: "pmDashboard",
-        baseUrl: "account/dashboard-pm-performance/:pm_id",
+        containerId: "employeeDashboard",
+        baseUrl: "/account/dashboard-pm-performance",
         contextProvider: null,
         pageComponent: <PMDashboard />,
     },
     {
-        id: 2,
-        containerId: "pmDashboard",
-        baseUrl: "account/dashboard-lead-dev-performance/:lead_dev_id",
-        contextProvider: null,
+        id: 3,
+        containerId: "leadAdminDashboard",
+        baseUrl: "/account/dashboard-lead-dev-performance",
+        contextProvider: LeadDeveloperProvider,
         pageComponent: <LeadDeveloperDashboard />,
     },
     {
-        id: 3,
-        containerId: "developerDashboard",
-        baseUrl: "/account/dashboard-developer-performance/:developer_id",
-        contextProvider: null,
+        id: 4,
+        containerId: "devAdminDashboard",
+        baseUrl: "/account/dashboard-developer-performance",
+        contextProvider: DeveloperDashboardProvider,
         pageComponent: <DeveloperDashboard />,
     },
-
     {
-        id: 4,
-        containerId: "salesExecutiveDashboard",
-        baseUrl:
-            "/account/dashboard-sales-performance/:sales_executive_id",
-        contextProvider: null,
+        id: 5,
+        containerId: "salesAdminDashboard",
+        baseUrl: "/account/dashboard-sales-performance",
+        contextProvider: SaleExecutiveDashboardProvider,
         pageComponent: <SalesExecutiveDashboard />,
     },
 ];
 
-
-
 // Render your routes
 const renderRoutes = () => {
-    return routes.map((route) => {
-        // Get the container element
-        const container = document.getElementById(route.containerId);
+    const filterRoutes =
+        user?.role_id === 1
+            ? routes.filter((route) =>
+                  window?.location?.pathname?.includes(
+                      route.baseUrl.split("/")[2]
+                  )
+              )
+            : routes.slice(0, 1);
 
-        // Set default context provider to React.Fragment if not provided
+    filterRoutes.forEach((route) => {
+        const container = document.getElementById(route.containerId);
+        if (!container) return;
+
         const ContextProvider = route.contextProvider || React.Fragment;
-        if (container) {
-            ReactDOM.createRoot(container).render(
-                <React.StrictMode key={route.id}>
-                    <ErrorBoundary>
-                        <Provider store={store}>
-                            <ContextProvider>
-                                <DndProvider backend={HTML5Backend}>
-                                    <BrowserRouter basename={route.baseUrl}>
-                                        <Routes>
+
+        ReactDOM.createRoot(container).render(
+            <React.StrictMode key={route.id}>
+                <ErrorBoundary>
+                    <Provider store={store}>
+                        <ContextProvider>
+                            <DndProvider backend={HTML5Backend}>
+                                <BrowserRouter basename={route.baseUrl}>
+                                    <Routes>
+                                        <Route path="/" element={<Content />}>
                                             <Route
-                                                path="/"
-                                                element={<Content />}
-                                                key={route.id}
-                                            >
-                                                <Route
-                                                    path="/"
-                                                    element={
-                                                        route.pageComponent
-                                                    }
-                                                    key={route.id}
-                                                />
-                                            </Route>
-                                        </Routes>
-                                    </BrowserRouter>
-                                </DndProvider>
-                            </ContextProvider>
-                        </Provider>
-                    </ErrorBoundary>
-                </React.StrictMode>
-            );
-        }
-        return null;
+                                                path={
+                                                    route.id === 1
+                                                        ? ""
+                                                        : ":id/temp"
+                                                }
+                                                element={route.pageComponent}
+                                            />
+                                        </Route>
+                                    </Routes>
+                                </BrowserRouter>
+                            </DndProvider>
+                        </ContextProvider>
+                    </Provider>
+                </ErrorBoundary>
+            </React.StrictMode>
+        );
     });
 };
 

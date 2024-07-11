@@ -1,5 +1,4 @@
 const mix = require("laravel-mix");
-const { BundleAnalyzerPlugin } = require("webpack-bundle-analyzer");
 
 /*
  |--------------------------------------------------------------------------
@@ -45,12 +44,6 @@ mix.js("resources/js/app.jsx", "public/js/react")
     .sourceMaps(true, "source-map")
     .webpackConfig((webpack) => {
         return {
-            // plugins: [
-            //     new BundleAnalyzerPlugin({
-            //         analyzerMode: "static",
-            //         openAnalyzer: false,
-            //     }),
-            // ],
             resolve: {
                 fallback: {
                     crypto: require.resolve("crypto-browserify"),

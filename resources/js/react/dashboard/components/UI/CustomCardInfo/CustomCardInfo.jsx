@@ -37,10 +37,12 @@ const CustomCardInfo = ({
     cardData = defaultProps?.cardData,
     isLoading,
     className = "",
+    ...props
 }) => {
     const {
         info,
         value,
+        valueType,
         title,
         colors,
         onClick,
@@ -63,10 +65,13 @@ const CustomCardInfo = ({
     return (
         <div
             className={`${style.sp1_dashboard_card_info_wrapper} ${className}`}
+            {...props}
         >
             <Switch>
                 <Switch.Case condition={title}>
-                    <p className={`${style.sp1_dashboard_card_info_title}`}>
+                    <p
+                        className={`${style.sp1_dashboard_card_info_title} mt-2`}
+                    >
                         {title}
                         <Switch.Case condition={subTitle}>
                             <span
@@ -86,18 +91,27 @@ const CustomCardInfo = ({
                         </Switch.Case>
                     </p>
                 </Switch.Case>
-                <button
-                    className={`${style.sp1_dashboard_card_info_value}`}
-                    style={{
-                        color: isChangeValueColor(),
-                    }}
-                    onClick={() => hasPermissionForModal && onClick(cardData)}
-                >
-                    <Switch.Case condition={isLoading}>
-                        <Placeholder width={loadingValueWidth} height={16} />
-                    </Switch.Case>
-                    <Switch.Case condition={!isLoading}>{value}</Switch.Case>
-                </button>
+
+                <Switch.Case condition={isLoading}>
+                    <Placeholder
+                        width={loadingValueWidth}
+                        height={25}
+                        className="mt-2"
+                    />
+                </Switch.Case>
+                <Switch.Case condition={!isLoading}>
+                    <button
+                        className={`${style.sp1_dashboard_card_info_value}`}
+                        style={{
+                            color: isChangeValueColor(),
+                        }}
+                        onClick={() =>
+                            hasPermissionForModal && onClick(cardData)
+                        }
+                    >
+                        {value} {valueType}
+                    </button>
+                </Switch.Case>
             </Switch>
         </div>
     );
