@@ -60,7 +60,7 @@ const Select = ({
             }}
         >
             <React.Fragment>
-                <div ref={setElementRef}>
+                <div ref={setElementRef} className={`${props?.disabled ? css?.pointerEventsNone : ""}`}>
                     <div
                         className={`${css.select} ${className}`}
                         onMouseDown={handleClick}

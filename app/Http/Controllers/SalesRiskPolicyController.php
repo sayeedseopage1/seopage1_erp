@@ -34,7 +34,7 @@ class SalesRiskPolicyController extends AccountBaseController
         $this->pageTitle = 'Sales Risk Policies';
         // $this->activeSettingMenu = 'sales_risk_policies';
         $this->middleware(function ($request, $next) {
-            if (in_array(auth()->user()->role_id, [1, 7, 8])) /* admin and sale */ {
+            if (in_array(auth()->user()->role_id, [1, 4, 7, 8])) /* admin and sale */ {
                 return $next($request);
             }
             abort_403(user()->permission('manage_company_setting') !== 'all');
@@ -509,6 +509,12 @@ class SalesRiskPolicyController extends AccountBaseController
             return response()->json(['status' => 'error', 'message' => 'Validation Error', 'data' => $validator->errors()], 403);
         }
 
+        if ($req->parent_id) {
+            $question = SalesPolicyQuestion::find($req->parent_id);
+            if ($question->type == 'yesNo' && SalesPolicyQuestion::where(['parent_id' => $question->id, 'value' => $req->value])->count())
+                return response()->json(['status' => 'error', 'message' => 'Validation Error: ' . $req->value . ' already added', 'data' => $validator->errors()], 403);
+        }
+
         try {
             $data = [
                 'title' => $req->title,
@@ -761,18 +767,18 @@ class SalesRiskPolicyController extends AccountBaseController
             }
 
             // deals table status change
-            if ($calculation['points'] >= 0) {
+            if ($calculation['points'] >= 0 || auth()->user()->role_id == 4) {
                 $deal->sale_analysis_status = 'auto-authorized';
                 $deal->sale_authorize_on = date('Y-m-d h:i:s');
 
-                if ($dealStage = DealStage::where('lead_id', $deal->lead_id)->first()) {
+                if ($dealStage = DealStage::where('short_code', $deal->deal_id)->first()) {
                     $dealStage->won_lost = 'Yes';
-                    $dealStage->status = 'pending';
                     $dealStage->save();
                 }
 
                 // pending action for sales lead authorization
-                event(new SalesPolicyEvent('sales_lead_authorization', $deal));
+                if (auth()->user()->role_id != 4)
+                    event(new SalesPolicyEvent('sales_lead_authorization', $deal));
             } else {
                 $deal->sale_analysis_status = 'analysis';
                 event(new SalesPolicyEvent('sales_risk_authorization', $deal, ['questionValue' => $policyQuestionValue, 'points' => $calculation['points']]));
@@ -793,7 +799,7 @@ class SalesRiskPolicyController extends AccountBaseController
             // if error then delete previous records
             PolicyQuestionValue::where('deal_id', $dealId)->delete();
 
-            throw $th;
+            // throw $th;
             return response()->json(['status' => 'error', 'message' => 'Data did not stored successfully.'], 500);
         }
     }
@@ -962,8 +968,9 @@ class SalesRiskPolicyController extends AccountBaseController
                     $pointData['milestone']['message'][] = 'Milestone total amount not found.';
                     goto endMilestone;
                 }
-                // dd($value, $deal->actual_amount);
-                $percentage = $value / $deal->actual_amount * 100;
+
+                $projectBudget = $deal->actual_amount > 1 ? $deal->actual_amount : $deal->upsell_actual_amount;
+                $percentage = $value / $projectBudget * 100;
                 // ------------------- end percentage calculation
 
                 $data[] = ['id' => $questions[1]->id, 'title' => $questions[1]->title, 'value' => $value . '(' . number_format($percentage, 2) . '%)', 'parent_id' => $questions[1]->parent_id];
@@ -1195,29 +1202,26 @@ class SalesRiskPolicyController extends AccountBaseController
 
             $policies = SalesRiskPolicy::where('parent_id', $policy->id)->get();
 
-            $lead = Lead::find($deal->lead_id);
-            if (!$lead) {
-                $pointData['clientCountry']['message'][] = 'Client\'s Country not found (Lead not found). ';
+            $client = User::find($deal->client_id);
+            if (!$client || $client->country_id == null) {
+                $pointData['clientCountry']['message'][] = 'Client\'s country is not found. ';
                 goto endClientCountry;
             }
 
+            $clientCountry = Country::find($client->country_id);
             foreach ($policies as $item) {
-
                 $countries = json_decode($item->value, true);
                 foreach ($countries as $country) {
-                    if ($lead->country == array_values($country)[0]) {
+                    if ($clientCountry->iso == array_keys($country)[0]) {
                         $points += $item->points;
-                        $pointData['clientCountry']['questionAnswer'][] = ['title' => 'From which country does the client originate?', 'value' => array_values($country)[0], 'parent_id' => null];
+                        $pointData['clientCountry']['questionAnswer'][] = ['title' => 'From which country does the client originate?', 'value' => $clientCountry->name, 'parent_id' => null];
                         $pointData['clientCountry']['points'] = $item->points;
                         $policyIdList[$item->id] = $item->id;
                         goto endClientCountry;
-                    } else {
-                        $pointData['clientCountry']['message'][] = 'Client\'s Country policy not found.';
                     }
                 }
             }
-            $pointData['clientCountry']['questionAnswer'][] = ['title' => 'From which country does the client originate?', 'value' => $lead->country, 'parent_id' => null];
-            $pointData['clientCountry']['points'] = 0;
+            $pointData['clientCountry']['message'][] = 'Client\'s Country ' . $clientCountry->name . ' not matched with policy.';
             endClientCountry:
             // ------------------------------ end clientCountry country --------------------------- //
 
@@ -1290,11 +1294,13 @@ class SalesRiskPolicyController extends AccountBaseController
                 $policies = SalesRiskPolicy::where('parent_id', $policy->id)->get();
                 $pointValue = 0;
                 $data = [];
+                $amount = (float) ($deal->amount > 1 ? $deal->amount : $deal->upsell_amount);
+                
                 foreach ($policies as $item) {
 
                     switch ($item->type) {
                         case 'lessThan':
-                            if ($deal->amount < $item->value) {
+                            if ($amount < $item->value) {
                                 $pointValue = $item->points;
                                 $policyIdList[$item->id] = $item->id;
                                 $data = ['title' => 'Less Then', 'value' => $item->value, 'parent_id' => 'question_id'];
@@ -1302,7 +1308,7 @@ class SalesRiskPolicyController extends AccountBaseController
                             }
                             break;
                         case 'greaterThan':
-                            if ($deal->amount > $item->value) {
+                            if ($amount > $item->value) {
                                 $pointValue = $item->points;
                                 $policyIdList[$item->id] = $item->id;
                                 $data = ['title' => 'Greater Then', 'value' => $item->value, 'parent_id' => 'question_id'];
@@ -1310,7 +1316,7 @@ class SalesRiskPolicyController extends AccountBaseController
                             }
                             break;
                         case 'fixed':
-                            if ($deal->amount == $item->value) {
+                            if ($amount == $item->value) {
                                 $pointValue = $item->points;
                                 $policyIdList[$item->id] = $item->id;
                                 $data = ['title' => 'Fixed', 'value' => $item->value, 'parent_id' => 'question_id'];
@@ -1319,7 +1325,7 @@ class SalesRiskPolicyController extends AccountBaseController
                             break;
                         case 'range':
                             $value = explode(',', $item->value);
-                            if ($deal->amount >= $value[0] && $deal->amount <= $value[1]) {
+                            if ($amount >= $value[0] && $amount <= $value[1]) {
                                 $pointValue = $item->points;
                                 $policyIdList[$item->id] = $item->id;
                                 $data = ['title' => 'Range', 'value' => $value[0] . ' - ' . $value[1], 'parent_id' => 'question_id'];
@@ -1332,7 +1338,7 @@ class SalesRiskPolicyController extends AccountBaseController
                 endProjectBudget:
                 $points += (float) $pointValue;
                 $pointData['projectBudget']['points'] = $pointValue;
-                $pointData['projectBudget']['questionAnswer'][] = ['title' => 'What is the budget for this project?', 'value' => '$' . number_format($deal->amount, 2), 'parent_id' => null];
+                $pointData['projectBudget']['questionAnswer'][] = ['title' => 'What is the budget for this project?', 'value' => '$' . number_format($amount, 2), 'parent_id' => null];
                 $data ? $pointData['projectBudget']['questionAnswer'][] = $data : '';
             } else
                 $pointData['projectBudget']['message'][] = "Project Budget policy is not added.";
@@ -1345,7 +1351,7 @@ class SalesRiskPolicyController extends AccountBaseController
 
             return $calculationData;
         } catch (\Throwable $th) {
-            throw $th;
+            // throw $th;
             return ['points' => null, 'error' => $th->getMessage()];
         }
     }
@@ -1368,14 +1374,12 @@ class SalesRiskPolicyController extends AccountBaseController
                 ];
             });
 
-        PolicyPointHistory::updateOrCreate(
-            ['deal_id' => $deal_id],
-            [
-                'policy' => json_encode($data),
-                'points' => $calculationData['points'],
-                'point_report' => json_encode($calculationData)
-            ]
-        );
+        PolicyPointHistory::create([
+            'deal_id' => $deal_id,
+            'policy' => json_encode($data),
+            'points' => $calculationData['points'],
+            'point_report' => json_encode($calculationData)
+        ]);
     }
 
     function questionValueReport($deal_id)
@@ -1419,7 +1423,6 @@ class SalesRiskPolicyController extends AccountBaseController
         try {
 
             $calculation = self::calculatePolicyPoint($deal_id);
-            // self::policyHistoryStore($deal_id);
 
             if ($calculation['points'] === null) {
                 return response()->json(['status' => 'error', 'message' => $calculation['error'], 'data' => ['points' => null]]);
@@ -1460,8 +1463,7 @@ class SalesRiskPolicyController extends AccountBaseController
             $itemsTransformed = $itemsPaginated
                 ->getCollection()
                 ->map(function ($item) {
-
-                    $lead = Lead::find($item->lead_id);
+                    $country = User::find($item->client_id)->country;
                     $user = $item->sale_authorize_by ?  User::find($item->sale_authorize_by) : null;
                     $data = [
                         'client_id' => $item->client_id,
@@ -1472,7 +1474,7 @@ class SalesRiskPolicyController extends AccountBaseController
                         'project_name' => $item->project_name,
                         'project_budget' => $item->actual_amount,
                         'lead_id' => $item->lead_id,
-                        'country' => $lead ? $lead->country : '',
+                        'country' => $country ? $country->name : '',
                         'award_time' => $item->award_time,
                         'authorize_by_id' => $item->sale_authorize_by,
                         'authorize_on' => $item->sale_authorize_on,
@@ -1543,9 +1545,8 @@ class SalesRiskPolicyController extends AccountBaseController
             $deal->sale_analysis_status = 'authorized';
             $deal->sale_authorize_on = date('Y-m-d h:i:s');
 
-            if ($dealStage = DealStage::where('lead_id', $deal->lead_id)->first()) {
+            if ($dealStage = DealStage::where('short_code', $deal->deal_id)->first()) {
                 $dealStage->won_lost = 'Yes';
-                $dealStage->status = 'pending';
                 $dealStage->save();
             }
 
@@ -1553,6 +1554,7 @@ class SalesRiskPolicyController extends AccountBaseController
                 $deal->is_drafted = 0;
                 $deal->authorization_status = 2;
                 $deal->released_at = Carbon::now();
+                (new ContractController())->dealAssignPmAndLead($deal);
                 event(new SalesPolicyEvent('sales_lead_authorization', $deal));
             } else event(new SalesPolicyEvent('pending_large_from_submission', $deal));
 

@@ -8,7 +8,7 @@ import { useGetTaskListQuery } from "../../../services/api/EvaluationApiSlice";
 import TaskTableAssigned from "./TaskTableAssigned";
 import Popover from "../../../../react-latest/ui/Popover";
 import { convertTime } from "../../../utils/converTime";
-
+import { Spin } from "antd";
 const TaskModalComponent = ({ Tasks, isLoading, title, taskNumbers }) => {
     const [isOpen, setIsOpen] = useState(false);
     const [sorting, setSorting] = useState([]);
@@ -17,7 +17,7 @@ const TaskModalComponent = ({ Tasks, isLoading, title, taskNumbers }) => {
     };
     return (
         <div onClick={() => setIsOpen(true)} className="link_color">
-            {taskNumbers}
+            {isLoading ? <Spin /> : taskNumbers}
 
             <ReactModal
                 style={{

@@ -25,6 +25,13 @@ import Button from "../../../../global/Button";
 import Select from "../../../../global/Select";
 import CKEditor from "../../../../ckeditor/index";
 import { useDealCreateMutation } from "../../../../services/api/dealApiSlice";
+import { useEffect } from "react";
+import { is } from "immutable";
+import {
+    isStateAllHaveValue,
+    markEmptyFieldsValidation,
+} from "../../../../utils/stateValidation";
+import { getValidFields } from "../../../SalesRiskAnalysis/helper/createFromValidation";
 
 const DealCreationForm = ({ isOpen, close }) => {
     return (
@@ -51,21 +58,42 @@ const initialData = {
     project_type: "",
     amount: "",
     original_currency_id: "",
+    country: "",
     description: "",
     comments: "",
+};
+
+const initialValidation = {
+    client_username: false,
+    client_name: false,
+    project_name: false,
+    project_link: false,
+    project_type: false,
+    amount: false,
+    original_currency_id: false,
+    country: false,
+    description: false,
+    comments: false,
+    isProjectLinkInValid: false,
+    isSubmitting: false,
 };
 
 // form
 const DealCreationFormControl = ({ close }) => {
     const [formData, setFormData] = React.useState(initialData);
+    const [formDataValidation, setFormDataValidation] =
+        React.useState(initialValidation);
     const [error, setError] = React.useState(initialData);
     const [currency, setCurrency] = React.useState(null);
+    const [selectedClient, setSelectedClient] = React.useState(null);
 
     //client suggestions
 
     const [suggestions, setSuggestions] = React.useState([]);
     const [showBar, setShowBar] = React.useState(false);
     const [clientStatus, setClientStatus] = React.useState("");
+    const [clientCountry, setClientCountry] = React.useState(null);
+    const [countries, setCountries] = React.useState(null);
     const [clients, setClients] = React.useState(null);
 
     React.useEffect(() => {
@@ -87,6 +115,12 @@ const DealCreationFormControl = ({ close }) => {
         if (formData.client_username === "") {
             setClientStatus("");
         }
+    }, []);
+
+    React.useEffect(() => {
+        axios.get(`/account/get-all-country`).then(({ data }) => {
+            setCountries(data);
+        });
     }, []);
 
     // api hooks
@@ -132,10 +166,9 @@ const DealCreationFormControl = ({ close }) => {
                 client.user_name?.toLowerCase().includes(value?.toLowerCase())
             );
 
-            console.log("inside clients", clients);
-
             if (filteredClients.length === 0 && value.trim() !== "") {
                 setClientStatus("new client");
+                setSelectedClient(null);
             } else {
                 setClientStatus("existing client");
             }
@@ -147,10 +180,17 @@ const DealCreationFormControl = ({ close }) => {
     const handleUserSelection = (user) => {
         setShowBar(false);
         setFormData({
+            ...formData,
             client_username: user.user_name,
             client_name: user.name,
         });
-
+        setFormData((state) => ({
+            ...state,
+            country: user?.country_id,
+        }));
+        const country = countries?.data.find((c) => c?.id === user?.country_id);
+        setSelectedClient(user);
+        setClientCountry(country);
         setClientStatus("existing client");
     };
 
@@ -192,40 +232,27 @@ const DealCreationFormControl = ({ close }) => {
     // handle submission
     const handleSubmit = async (e) => {
         e.preventDefault();
-
-        const isValid = () => {
-            const _error = new Object();
-
-            // check falsy data
-            Object.keys(formData).map((key) => {
-                if (key === "project_link") {
-                    if (!formData[key]) {
-                        _error[key] = "This Field is required!";
-                    } else if (!validator.isURL(formData[key])) {
-                        _error[key] = "Invalid URL";
-                    }
-                } else if (!formData[key]) {
-                    _error[key] = "This Field is required!";
-                }
+        const isEmpty = isStateAllHaveValue(formData);
+        if (isEmpty) {
+            const validation = markEmptyFieldsValidation(formData);
+            setFormDataValidation({
+                ...formDataValidation,
+                ...validation,
+                isSubmitting: true,
             });
+            return;
+        }
 
-            // if project type hourly no need amount
-            if (
-                _error.hasOwnProperty("amount") &&
-                formData.hasOwnProperty("project_type") &&
-                formData["project_type"] === "hourly"
-            ) {
-                delete _error["amount"];
-                delete _error["original_currency_id"];
-            }
+        const isProjectLinkInValid = validator.isURL(formData.project_link, {
+            protocols: ["http", "https", "ftp"],
+        });
 
-            setError(_error);
-            return Object.keys(_error)?.length === 0;
-        };
-
-        if (!isValid()) {
-            toast.error("Please provide all required data!");
-            return null;
+        if (!isProjectLinkInValid) {
+            setFormDataValidation({
+                ...formDataValidation,
+                isProjectLinkInValid: true,
+            });
+            return;
         }
 
         try {
@@ -235,14 +262,16 @@ const DealCreationFormControl = ({ close }) => {
                 handleClose();
             }
         } catch (error) {
-            console.log({ error });
+            toast.error("Failed to create deal");
         }
     };
 
     // handle close form
     const handleClose = () => {
         setFormData({ initialData });
+        setFormDataValidation(initialValidation);
         setCurrency(null);
+        setSelectedClient(null);
         close();
     };
 
@@ -252,12 +281,56 @@ const DealCreationFormControl = ({ close }) => {
         setFormData((state) => ({ ...state, original_currency_id: value.id }));
     };
 
+    // handle clientCountrySelection
+    const handleClientCountrySelection = (value) => {
+        setClientCountry(value);
+        setFormData((state) => ({
+            ...state,
+            country: value?.id,
+        }));
+    };
+
     // filter
     const getCurrencies = (data, query) => {
         return data?.filter((d) =>
             d?.currency_code?.toLowerCase()?.includes(query?.toLowerCase())
         );
     };
+
+    // filter
+    const getCountries = (data, query) => {
+        return data?.filter(
+            (d) =>
+                d?.name?.toLowerCase()?.includes(query?.toLowerCase()) ||
+                d?.iso3?.toLowerCase()?.includes(query?.toLowerCase()) ||
+                d?.nicename?.toLowerCase()?.includes(query?.toLowerCase()) ||
+                d?.iso?.toLowerCase()?.includes(query?.toLowerCase())
+        );
+    };
+
+    useEffect(() => {
+        if (formDataValidation?.isSubmitting) {
+            const payload = formData;
+            let updatedDormDataValidation = formDataValidation;
+            if (payload?.project_type === "hourly") {
+                updatedDormDataValidation["amount"] = false;
+                delete payload?.amount;
+            }
+            const validation = getValidFields(
+                payload,
+                updatedDormDataValidation
+            );
+            setFormDataValidation({
+                ...formDataValidation,
+                ...validation,
+                isProjectLinkInValid:
+                    formData.project_link &&
+                    !validator.isURL(formData.project_link, {
+                        protocols: ["http", "https", "ftp"],
+                    }),
+            });
+        }
+    }, [formData]);
 
     return (
         <Card>
@@ -339,10 +412,16 @@ const DealCreationFormControl = ({ close }) => {
                                         </ul>
                                     </div>
                                 )}
-                                {error?.client_username && (
+                                {/* {error?.client_username && (
                                     <ErrorText>
                                         {" "}
                                         {error?.client_username}{" "}
+                                    </ErrorText>
+                                )} */}
+                                {formDataValidation?.client_username && (
+                                    <ErrorText>
+                                        {" "}
+                                        Client Username is required
                                     </ErrorText>
                                 )}
                             </InputGroup>
@@ -378,10 +457,16 @@ const DealCreationFormControl = ({ close }) => {
                                     ""
                                 )}
 
-                                {error?.client_name && (
+                                {/* {error?.client_name && (
                                     <ErrorText>
                                         {" "}
                                         {error?.client_name}{" "}
+                                    </ErrorText>
+                                )} */}
+                                {formDataValidation?.client_name && (
+                                    <ErrorText>
+                                        {" "}
+                                        Client Name is required
                                     </ErrorText>
                                 )}
                             </InputGroup>
@@ -401,10 +486,16 @@ const DealCreationFormControl = ({ close }) => {
                                     onChange={handleInputChange}
                                     placeholder="Enter project name"
                                 />
-                                {error?.project_name && (
+                                {/* {error?.project_name && (
                                     <ErrorText>
                                         {" "}
                                         {error?.project_name}{" "}
+                                    </ErrorText>
+                                )} */}
+                                {formDataValidation?.project_name && (
+                                    <ErrorText>
+                                        {" "}
+                                        Project Name is required
                                     </ErrorText>
                                 )}
                             </InputGroup>
@@ -424,17 +515,27 @@ const DealCreationFormControl = ({ close }) => {
                                     onChange={handleInputChange}
                                     placeholder="Enter project link"
                                 />
-                                {error?.project_link && (
+                                {/* {error?.project_link && (
                                     <ErrorText>
                                         {" "}
                                         {error?.project_link}{" "}
+                                    </ErrorText>
+                                )} */}
+                                {formDataValidation?.isProjectLinkInValid && (
+                                    <ErrorText>
+                                        The project link format is invalid.{" "}
+                                    </ErrorText>
+                                )}
+                                {formDataValidation?.project_link && (
+                                    <ErrorText>
+                                        Project Link is required
                                     </ErrorText>
                                 )}
                             </InputGroup>
                         </div>
 
                         {/* Project Type */}
-                        <div className="col-md-4">
+                        <div className="col-md-6">
                             <InputGroup>
                                 <Label>
                                     {" "}
@@ -476,11 +577,16 @@ const DealCreationFormControl = ({ close }) => {
                                         {error?.project_type}{" "}
                                     </ErrorText>
                                 )}
+                                {formDataValidation?.project_type && (
+                                    <ErrorText>
+                                        Project Type is required
+                                    </ErrorText>
+                                )}
                             </InputGroup>
                         </div>
 
                         {/* Project Budget */}
-                        <div className="col-md-4">
+                        <div className="col-md-6">
                             <InputGroup>
                                 <Label>
                                     {" "}
@@ -496,14 +602,20 @@ const DealCreationFormControl = ({ close }) => {
                                     onChange={handleInputChange}
                                     placeholder="Enter project Budget"
                                 />
-                                {error?.amount && (
+                                {/* {error?.amount && (
                                     <ErrorText> {error?.amount} </ErrorText>
+                                )} */}
+                                {formDataValidation?.amount && (
+                                    <ErrorText>
+                                        {" "}
+                                        Project Budget is required{" "}
+                                    </ErrorText>
                                 )}
                             </InputGroup>
                         </div>
 
                         {/* Currency */}
-                        <div className="col-md-4">
+                        <div className="col-md-6">
                             <InputGroup>
                                 <Label>
                                     {" "}
@@ -548,15 +660,82 @@ const DealCreationFormControl = ({ close }) => {
                                         </Select.Options>
                                     </Select>
                                 </SelectionMenuWrapper>
-                                {error?.original_currency_id && (
+                                {/* {error?.original_currency_id && (
                                     <ErrorText>
                                         {" "}
                                         {error?.original_currency_id}{" "}
+                                    </ErrorText>
+                                )} */}
+                                {formDataValidation?.original_currency_id && (
+                                    <ErrorText>
+                                        {" "}
+                                        Currency is required{" "}
                                     </ErrorText>
                                 )}
                             </InputGroup>
                         </div>
 
+                        {/* Client Country */}
+                        <div className="col-md-6">
+                            <InputGroup>
+                                <Label>
+                                    {" "}
+                                    Client Country <sup>*</sup> :{" "}
+                                </Label>
+                                <SelectionMenuWrapper>
+                                    <Select
+                                        value={clientCountry}
+                                        onChange={handleClientCountrySelection}
+                                        display={(value) =>
+                                            value
+                                                ? `${value?.nicename} ( ${value?.iso3} )`
+                                                : "--"
+                                        }
+                                        className="selection"
+                                        disabled={
+                                            selectedClient?.country_id &&
+                                            selectedClient?.country_id ===
+                                                clientCountry?.id
+                                        }
+                                    >
+                                        <Select.Options>
+                                            <Select.SearchControllerWrapper>
+                                                {(query) =>
+                                                    getCountries(
+                                                        countries?.data,
+                                                        query
+                                                    )?.map((country) => (
+                                                        <Select.Option
+                                                            key={country.id}
+                                                            value={country}
+                                                        >
+                                                            {({ selected }) => (
+                                                                <div>
+                                                                    {
+                                                                        country?.nicename
+                                                                    }{" "}
+                                                                    {country?.iso3
+                                                                        ? `( ${country?.iso3} )`
+                                                                        : ""}
+                                                                </div>
+                                                            )}
+                                                        </Select.Option>
+                                                    ))
+                                                }
+                                            </Select.SearchControllerWrapper>
+                                        </Select.Options>
+                                    </Select>
+                                </SelectionMenuWrapper>
+                                {/* {error?.country ? (
+                                    <ErrorText> {error?.country} </ErrorText>
+                                ) : (
+                                    <></>
+                                )} */}
+                                {formDataValidation?.country && (
+                                    <ErrorText> Country is required </ErrorText>
+                                )}
+                            </InputGroup>
+                        </div>
                         {/* Project Description */}
                         <div className="col-12">
                             <InputGroup>
@@ -574,10 +753,15 @@ const DealCreationFormControl = ({ close }) => {
                                         }
                                     />
                                 </div>
-                                {error?.description && (
+                                {/* {error?.description && (
                                     <ErrorText>
                                         {" "}
                                         {error?.description}{" "}
+                                    </ErrorText>
+                                )} */}
+                                {formDataValidation?.description && (
+                                    <ErrorText>
+                                        Project Description is required
                                     </ErrorText>
                                 )}
                             </InputGroup>
@@ -602,8 +786,13 @@ const DealCreationFormControl = ({ close }) => {
                                     />
                                 </div>
 
-                                {error?.comments && (
+                                {/* {error?.comments && (
                                     <ErrorText> {error?.comments} </ErrorText>
+                                )} */}
+                                {formDataValidation?.comments && (
+                                    <ErrorText>
+                                        Cover Letter is required
+                                    </ErrorText>
                                 )}
                             </InputGroup>
                         </div>
