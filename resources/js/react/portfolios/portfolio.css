@@ -418,9 +418,13 @@
   gap: 10px;
 
 }
+<<<<<<< HEAD
 
 
 
+=======
+ 
+>>>>>>> 4539bc37552d453c09145dcb5262ab66033dcc58
         .portfolio_overlay {
     background-color: rgba(0, 0, 0, 0.7);
     margin: auto;
@@ -604,6 +608,11 @@ display: flex;
    
 }
 
+<<<<<<< HEAD
+=======
+
+
+>>>>>>> 4539bc37552d453c09145dcb5262ab66033dcc58
 
 .badge_opacity_unselected{
   opacity: .5;

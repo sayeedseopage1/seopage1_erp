@@ -21,6 +21,7 @@ import { PendingOrCompleted } from "./components/filter/PendingOrCompleted";
 import { useAuth } from "../hooks/useAuth";
 
 const Portfolio = () => {
+<<<<<<< HEAD
     const auth = useAuth();
     const [searchParams, setSearchParams] = useSearchParams();
 
@@ -30,6 +31,8 @@ const Portfolio = () => {
         setSearchParams(newSearchParams);
     }, []);
 
+=======
+>>>>>>> 4539bc37552d453c09145dcb5262ab66033dcc58
     const [cms, setCms] = useState(null);
     const [cmsSearch, setCmsSearch] = useState("");
     const [websiteType, setWebsiteType] = useState(null);
@@ -63,11 +66,14 @@ const Portfolio = () => {
     const _pageSize = React.useMemo(() => pageSize, [pageSize]);
     const _rating = React.useMemo(() => rating, [rating]);
 
-    // const [getPortfolioData, { isFetching: dataLoading }] =
-    //     useLazyGetPortfolioDataQuery();
-
     //mitul work
+    const [searchParams, setSearchParams] = useSearchParams();
 
+    useEffect(() => {
+        const newSearchParams = new URLSearchParams(searchParams);
+        newSearchParams.set("show", "pending");
+        setSearchParams(newSearchParams);
+    }, []);
     const [tableView, setTableView] = React.useState("listView");
     const location = useLocation();
     const queryParams = new URLSearchParams(location.search);
@@ -77,8 +83,7 @@ const Portfolio = () => {
         const queryObject = _.pickBy(object, Boolean);
         return new URLSearchParams(queryObject).toString();
     };
-    const [portfolio, setPortfolio] = useState(null);
-    const [pendingOrCompleted, setPendingOrCompleted] = useState("all");
+
     const { data, isFetching: dataLoading } = useGetPortfolioDataQuery(
         queryString({
             page: _pageIndex,
@@ -96,22 +101,9 @@ const Portfolio = () => {
         { refetchOnMountOrArgChange: true }
     );
 
-    useEffect(() => {
-        if (data) {
-            const filteredData = data?.data.filter((item) =>
-                pendingOrCompleted === "pending"
-                    ? item.rating_score === null
-                    : pendingOrCompleted === "completed"
-                    ? item.rating_score !== null
-                    : true
-            );
-            setPortfolio(filteredData);
-        }
-    }, [data, pendingOrCompleted]);
-
     const portfolioMain = data;
 
-    console.log("portfolio", portfolio);
+    const portfolio = data?.data;
 
     useEffect(() => {
         if (portfolio_id) {
