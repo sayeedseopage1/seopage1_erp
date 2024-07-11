@@ -18,13 +18,15 @@ import { PortfolioTableColumns } from "./components/Table/Columns/PortfolioTable
 import AppliedFilters from "./components/filter/AppliedFilters";
 import { useLocation } from "react-router-dom";
 import { PendingOrCompleted } from "./components/filter/PendingOrCompleted";
+import { useAuth } from "../hooks/useAuth";
 
 const Portfolio = () => {
+    const auth = useAuth();
     const [searchParams, setSearchParams] = useSearchParams();
 
     useEffect(() => {
         const newSearchParams = new URLSearchParams(searchParams);
-        newSearchParams.set("show", "pending");
+        newSearchParams.set("show", "all");
         setSearchParams(newSearchParams);
     }, []);
 
@@ -259,9 +261,11 @@ const Portfolio = () => {
                         gap: "10px",
                     }}
                 >
-                    <div style={{ marginTop: "10px" }}>
-                        <PendingOrCompleted data={_data} />
-                    </div>
+                    {_.includes([1, 8], auth.getRoleId()) && (
+                        <div style={{ marginTop: "10px" }}>
+                            <PendingOrCompleted data={_data} />
+                        </div>
+                    )}
                     <ListOrTableView
                         tableView={tableView}
                         setTableView={setTableView}
