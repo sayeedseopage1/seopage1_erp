@@ -11444,7 +11444,7 @@ var SubTaskForm = function SubTaskForm(_ref) {
   };
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(function () {
     // const showEnv = _.size(task?.subtask) === 0 ? true : false;
-    if (auth.getRoleId() === 6 || auth.isHasRolePermission(13)) {
+    if (lodash__WEBPACK_IMPORTED_MODULE_9___default().includes([6, 15, 16], auth.getRoleId()) || auth.isHasRolePermission(13)) {
       dispatch((0,_services_features_subTaskSlice__WEBPACK_IMPORTED_MODULE_13__.setWorkingEnvironmentStatus)(!isFirstSubtask));
     }
   }, [isFirstSubtask]);
