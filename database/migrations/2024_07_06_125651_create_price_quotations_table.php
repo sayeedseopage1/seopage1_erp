@@ -25,7 +25,7 @@ return new class extends Migration
             $table->decimal('total_hours_of_others_works')->nullable();
             $table->unsignedBigInteger('currency_id')->nullable();
             $table->unsignedTinyInteger('deadline_type')->default(1)->comment('1 = Flexible, 2 = Fixed');
-            $table->timestamp('deadline')->nullable();
+            $table->decimal('no_of_days')->nullable();
             $table->foreignId('platform_account_id')->nullable()->constrained();
             $table->decimal('calculated_budget')->default(0);
             $table->decimal('project_budget')->nullable();

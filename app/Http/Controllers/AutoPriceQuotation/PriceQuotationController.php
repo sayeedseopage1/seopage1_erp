@@ -4,11 +4,16 @@ namespace App\Http\Controllers\AutoPriceQuotation;
 
 use Carbon\Carbon;
 use App\Models\Project;
+use App\Models\Currency;
 use Illuminate\Http\Request;
+use App\Models\PlatformAccount;
 use App\Models\ProjectPortfolio;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
-use App\Models\Currency;
+use App\Models\DealStage;
+use App\Models\ProjectCms;
+use App\Models\ProjectNiche;
+use Illuminate\Support\Facades\Validator;
 
 class PriceQuotationController extends Controller
 {
@@ -40,7 +45,7 @@ class PriceQuotationController extends Controller
      */
     public function store(Request $request)
     {
-        $validated = $request->validate([
+        $validator = Validator::make($request->all(), [
             'deal_stage_id' => 'required|exists:deal_stages,id',
             'project_cms_id' => 'required|exists:project_cms,id',
             'project_niche_id' => 'required|exists:project_niches,id',
@@ -48,14 +53,25 @@ class PriceQuotationController extends Controller
             'no_of_secondary_pages' => 'required|numeric',
             'no_of_major_functionalities' => 'required|numeric',
             'risk_factor' => 'required|numeric',
-            'total_hours_of_others_works' => 'nullable',
+            'content_writing' => 'nullable',
+            'speed_optimization' => 'nullable',
+            'no_of_ui_design_page' => 'nullable',
+            'no_of_logo' => 'nullable',
+            'others_hours' => 'nullable',
             'currency_id' => 'required|numeric',
             'deadline_type' => 'required|numeric',
-            'deadline' => 'nullable',
+            'no_of_days' => 'nullable',
             'platform_account_id' => 'required|exists:platform_accounts,id',
+            'is_selected' => 'nullable|numeric|in:0,1'
         ]);
-
-        // return $validated;
+        
+        if ($validator->fails()) {
+            return response()->json([
+                'errors' => $validator->errors()->all()
+            ], 422);
+        }
+        
+        $validated = $validator->validated();
 
         $projectsQuery = Project::with('project_portfolio')->withSum('times', 'total_minutes')->whereHas('project_submission', function($query) use($validated){
             return $query->where('created_at', '>', Carbon::parse('2023-12-01')->startOfDay())->where('status', 'accepted');
@@ -100,11 +116,11 @@ class PriceQuotationController extends Controller
         // Increase project budget for major functionality (Each functionality will multiplying by 400)
         $projectBudgetWighMajorFunctionality = $projectBudgetWithMissedTimeTracking + ($validated['no_of_major_functionalities'] ? $validated['no_of_major_functionalities'] * 400 : 0);
        
-        // Calculate hours for other works and every hour will multiplying by 20 (Speed Optimization: 6 Hours, Content Writing: 3 Hours per 1000 Words, UI Design: 3 Hours per page, Others: User inputs hour value in this field)
+        // Calculate hours for other works and every hour will multiplying by 20 (Speed Optimization: 6 Hours, Content Writing: 3 Hours per 1000 Words, Logo designd: 4 Hours per logo, UI Design: 3 Hours per page, Others: User inputs hour value in this field)
         $contentWritingHours = isset($validated['content_writing']) && $validated['content_writing'] ? (3 / 1000) * $validated['content_writing'] : 0;
         $speedOptimizationHours = isset($validated['speed_optimization']) && $validated['speed_optimization'] ? 6 : 0;
         $uiDesignHours = isset($validated['no_of_ui_design_page']) && $validated['no_of_ui_design_page'] ? $validated['no_of_ui_design_page'] * 3 : 0;
-        $logoHours = isset($validated['no_of_logo']) && $validated['no_of_logo'] ? $validated['no_of_logo'] * 3 : 0;
+        $logoHours = isset($validated['no_of_logo']) && $validated['no_of_logo'] ? $validated['no_of_logo'] * 4 : 0;
         $othersHours = isset($validated['others_hours']) && $validated['others_hours'] ? $validated['others_hours'] : 0;
 
         $totalHoursOfOtherWorks = $contentWritingHours + $speedOptimizationHours + $uiDesignHours + $logoHours + $othersHours;
@@ -126,14 +142,94 @@ class PriceQuotationController extends Controller
         // Calculate project stimate hours depend on no of primary and secondary pages 
         $projectStimatedHoursDependOnPrimaryAndSecondaryPages = ($validated['no_of_primary_pages'] * $existingHoursForEachPrimaryPage) + ($validated['no_of_secondary_pages'] * $existingHoursForEachSecondaryPage);
 
-        $validated['no_of_days'] = 15;
+        // Add hours per day multiplication with calculated project budget
+        $projectBudgetWithDeadlineValue = $projectBudgetRounded;
+        $no_of_day_required = $validated['no_of_days'];
+        if($validated['deadline_type'] == 2){
+            $actualNoOfDays = $validated['no_of_days'] - 3;
+            $hoursPerDay = $projectStimatedHoursDependOnPrimaryAndSecondaryPages / $actualNoOfDays;
+            $multiplicationForHoursPerDay = 1;
+            if($hoursPerDay <= 4){
+                $multiplicationForHoursPerDay = 1;
+            }elseif($hoursPerDay > 4 && $hoursPerDay <= 5.5){
+                $multiplicationForHoursPerDay = 1.2;
+            }elseif($hoursPerDay > 5.5 && $hoursPerDay <= 7){
+                $multiplicationForHoursPerDay = 1.5;
+            }elseif($hoursPerDay > 7 && $hoursPerDay <= 10){
+                $multiplicationForHoursPerDay = 2;
+            }elseif($hoursPerDay > 10){
+                return response()->json([
+                    'status' => 400,
+                    'message' => 'The project is not feasible! The estimated working hours per day are excessive',
+                    'estimated_hours_per_day' => $hoursPerDay
+                ]);
+            }
+            $projectBudgetWithDeadlineValue = $projectBudgetRounded * $multiplicationForHoursPerDay;
+        }elseif($validated['deadline_type'] == 1){
+            $no_of_day_required = ceil($projectStimatedHoursDependOnPrimaryAndSecondaryPages / 4) + 3;
+        }
 
-        // Remove 3 days from total no of days due to granular level 
-        $actualNoOfDays = $validated['no_of_days'] - 3;
-        $hoursPerDay = $projectStimatedHoursDependOnPrimaryAndSecondaryPages / $actualNoOfDays;
-        dump($projectStimatedHoursDependOnPrimaryAndSecondaryPages, $actualNoOfDays, $hoursPerDay);
-        dump($validated);
-        dd($existingHoursForEachPrimaryPage, $existingHoursForEachSecondaryPage, $projectStimatedHoursDependOnPrimaryAndSecondaryPages);
+        // Calculate project budget with multiplying factor of platform account
+        if($validated['platform_account_id']){
+            $platformAccouts = PlatformAccount::where('id', $validated['platform_account_id'])->get();
+        }else{
+            $platformAccouts = PlatformAccount::get();
+        }
+
+        $data = array();
+        foreach($platformAccouts as $key => $platformAccout){
+            $data[$key]['deal_stage'] = DealStage::select(['id','short_code','client_username','project_name'])->find($validated['deal_stage_id']);
+            $data[$key]['project_cms'] = ProjectCms::select(['id','cms_name'])->find($validated['project_cms_id']);
+            $data[$key]['project_niche'] = ProjectNiche::select(['id','category_name'])->find($validated['project_niche_id']);
+            $data[$key]['no_of_primary_pages'] = $validated['no_of_primary_pages'];
+            $data[$key]['no_of_secondary_pages'] = $validated['no_of_secondary_pages'];
+            $data[$key]['no_of_major_functionalities'] = $validated['no_of_major_functionalities'];
+            $data[$key]['risk_factor'] = $validated['risk_factor'];
+            $data[$key]['currency_id'] = Currency::select(['id','currency_name','currency_symbol','currency_code','exchange_rate'])->find($validated['currency_id']);
+            $data[$key]['deadline_type'] = $validated['deadline_type'];
+            $data[$key]['no_of_days'] = $validated['no_of_days'];
+            $data[$key]['platform_account_id'] = $platformAccout->id;
+            $data[$key]['calculated_project_budget'] = $projectBudgetWithDeadlineValue * $platformAccout->multiplying_factor;
+            $data[$key]['calculated_total_hours'] = $projectStimatedHoursDependOnPrimaryAndSecondaryPages;
+            $data[$key]['calculated_no_of_days'] = $no_of_day_required;
+        }
+
+        if(isset($validated['is_selected']) && $validated['is_selected'] == 1){
+            // Store and provide invoice data
+        }else{
+            return response()->json([
+                'status' => 200,
+                'data' => $data,
+                'previous_payloads' => $validated
+            ]);
+        }
+        
+
+
+        // $platformAccounts = PlatformAccount::when(
+        //     !$validated['platform_account_id'], 
+        //     fn($query) => $query->where('id', $validated['platform_account_id'])
+        // )->get();
+        
+        // $data = $platformAccounts->map(function ($platformAccount) use ($validated, $projectBudgetWithDeadlineValue, $no_of_day_required) {
+        //     return [
+        //         'deal_stage_id' => $validated['deal_stage_id'],
+        //         'project_cms_id' => $validated['project_cms_id'],
+        //         'project_niche_id' => $validated['project_niche_id'],
+        //         'no_of_primary_pages' => $validated['no_of_primary_pages'],
+        //         'no_of_secondary_pages' => $validated['no_of_secondary_pages'],
+        //         'no_of_major_functionalities' => $validated['no_of_major_functionalities'],
+        //         'risk_factor' => $validated['risk_factor'],
+        //         'currency_id' => $validated['currency_id'],
+        //         'deadline_type' => $validated['deadline_type'],
+        //         'no_of_days' => $validated['no_of_days'],
+        //         'platform_account_id' => $platformAccount->id,
+        //         'calculated_project_budget' => $projectBudgetWithDeadlineValue * $platformAccount->multiplying_factor,
+        //         'calculated_no_of_days' => $no_of_day_required,
+        //     ];
+        // });
+        
+        // return ($data->toArray());
     }
 
     /**
