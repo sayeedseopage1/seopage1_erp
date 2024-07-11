@@ -33,7 +33,10 @@ import useCounterStore from "../../../../../Zustand/store";
 
 import { toast } from "react-toastify";
 import { useAcknowledgePendingActionsPastMutation } from "../../../../../services/api/pendingActionsApiSlice";
-import { EvaluationTaskTableColumns } from "../../../../../../react/employee-evaluation/components/Table/EvaluationTaskTableColumns";
+import { Skeleton } from "antd";
+import _ from "lodash";
+import evaluationDesignation from "../../../../../utils/evaluation-designation";
+import { EvaluationTaskTableColumnsPM } from "../../../../../../react/employee-evaluation/project-manager/components/table/EvaluationTaskTableColumnsPM";
 const EvaluationAcknowledgeTaskModal = ({
     acknowledgementTask,
     setAcknowledgementTask,
@@ -42,15 +45,6 @@ const EvaluationAcknowledgeTaskModal = ({
     const { increaseCount } = useCounterStore();
     const [updatePendingAction, { isLoading: isLoadingTeamLeadAndLeadDev }] =
         useAcknowledgePendingActionsPastMutation();
-    const DecisionColor = {
-        Accepted: "green",
-        Rejected: "red",
-        "One more week": "blue",
-        default: "blue",
-    };
-    const decisionColor =
-        DecisionColor[singleEvaluation?.managements_decision] ||
-        DecisionColor["default"];
 
     const auth = useAuth();
     const { setEvaluationObject } = useEmployeeEvaluation();
@@ -95,7 +89,13 @@ const EvaluationAcknowledgeTaskModal = ({
 
         fetchTasks();
     }, [developerId]);
-
+    const designation = evaluationDesignation(singleEvaluation?.roleId);
+    const evaluator = _.includes(
+        [4, 6, 7, 15, 16, 17],
+        Number(singleEvaluation?.roleId)
+    )
+        ? "Team Lead"
+        : "Lead Developer";
     // console.log("single evaluation", singleEvaluation);
     const [sorting, setSorting] = useState([]);
 
@@ -108,33 +108,11 @@ const EvaluationAcknowledgeTaskModal = ({
         setPagination(paginate);
     };
 
-    const handleAcknowledgedItLeadDev = async () => {
-        try {
-            const response = await updatePendingAction({
-                user_id: singleEvaluation?.user_id,
-                acknowledged: "lead_dev",
-            }).unwrap();
-
-            if (response?.status == 200) {
-                if (singleEvaluation?.managements_decision == "One more week") {
-                    setAcknowledgementTask(false);
-                    increaseCount();
-                    window.open(response?.url, "_blank");
-                } else {
-                    toast.success("Acknowledge successful!");
-                    setAcknowledgementTask(false);
-                    increaseCount();
-                }
-            }
-        } catch (error) {
-            console.error("Error updating pending action:", error);
-        }
-    };
-
     const handleAcknowledgedItTeamLead = async () => {
         try {
             const response = await updatePendingAction({
                 user_id: singleEvaluation?.user_id,
+                role_id: singleEvaluation.roleId,
                 acknowledged: "team_lead",
             }).unwrap();
 
@@ -175,28 +153,29 @@ const EvaluationAcknowledgeTaskModal = ({
             ariaHideApp={false}
             isOpen={acknowledgementTask}
             onRequestClose={() => setAcknowledgementTask(false)}
+            closeTimeoutMS={500}
         >
             <section>
                 <EvalTableTitle>
-                    <span>New Developer Evaluation :</span>
+                    <span>{`${designation} Evaluation :`}</span>
                     <span>{singleEvaluation?.user_name}</span>
                 </EvalTableTitle>
 
                 <EvalTableSubTitle>
-                    {`Lead Developer `}
+                    {evaluator}
                     <NameLink href="#">
                         {singleEvaluation?.added_by_name}
                     </NameLink>
-                    {` has evaluated New Developer `}
+                    {` has evaluated ${designation} `}
                     <NameLink href="#">{singleEvaluation?.user_name}</NameLink>
                     {` on `}
                     <span style={{ color: "green" }}>
-                        {singleEvaluation?.team_lead_cmnt_at}
+                        {FormatDate(singleEvaluation?.updated_at)}
                     </span>
                 </EvalTableSubTitle>
                 <EvaluationTable
                     data={tasks}
-                    columns={[...EvaluationTaskTableColumns]}
+                    columns={[...EvaluationTaskTableColumnsPM]}
                     isLoading={isLoading}
                     onPageChange={onPageChange}
                     sorting={sorting}
@@ -205,36 +184,40 @@ const EvaluationAcknowledgeTaskModal = ({
                 />
             </section>
 
-            {auth.roleId === 8 && (
-                <section>
-                    <SectionFlex>
-                        <HorizontalLineLeftTL />
-                        <ReviewTitleTL>Team Leader's Review</ReviewTitleTL>
-                        <HorizontalLineRightTL />
-                    </SectionFlex>
+            {auth.roleId === 8 &&
+                !_.includes(
+                    [4, 6, 7, 15, 16, 17],
+                    Number(singleEvaluation?.roleId)
+                ) && (
+                    <section>
+                        <SectionFlex>
+                            <HorizontalLineLeftTL />
+                            <ReviewTitleTL>Team Leader's Review</ReviewTitleTL>
+                            <HorizontalLineRightTL />
+                        </SectionFlex>
 
-                    <ReviewContent>
-                        <div
-                            dangerouslySetInnerHTML={{
-                                __html: singleEvaluation?.team_lead_cmnt,
-                            }}
-                        />
-                        <ReviewFooter>
-                            By{" "}
-                            <a
-                                href={`/account/employees/${singleEvaluation?.team_lead_id}`}
-                                target="_blank"
-                            >
-                                {singleEvaluation?.team_lead_name}
-                            </a>{" "}
-                            on{" "}
-                            <span>
-                                {FormatDate(singleEvaluation?.updated_at)}
-                            </span>
-                        </ReviewFooter>
-                    </ReviewContent>
-                </section>
-            )}
+                        <ReviewContent>
+                            <div
+                                dangerouslySetInnerHTML={{
+                                    __html: singleEvaluation?.team_lead_cmnt,
+                                }}
+                            />
+                            <ReviewFooter>
+                                By{" "}
+                                <a
+                                    href={`/account/employees/${singleEvaluation?.team_lead_id}`}
+                                    target="_blank"
+                                >
+                                    {singleEvaluation?.team_lead_name}
+                                </a>{" "}
+                                on{" "}
+                                <span>
+                                    {FormatDate(singleEvaluation?.updated_at)}
+                                </span>
+                            </ReviewFooter>
+                        </ReviewContent>
+                    </section>
+                )}
 
             <section>
                 <SectionFlex>
@@ -248,10 +231,10 @@ const EvaluationAcknowledgeTaskModal = ({
                         {singleEvaluation?.managements_name}
                     </NameLink>
                     {` has `}
-                    <span style={{ color: decisionColor }}>
+                    <span style={{ color: "blue" }}>
                         {singleEvaluation?.managements_decision}
-                    </span>
-                    {` New Developer `}
+                    </span>{" "}
+                    {`${designation}`}{" "}
                     <NameLink href="#">{singleEvaluation?.user_name}</NameLink>
                     {` for real work on `}
                     <ReviewTableSubTitleDate>
@@ -268,7 +251,10 @@ const EvaluationAcknowledgeTaskModal = ({
 
                     <ReviewFooter>
                         By{" "}
-                        <a href="www.teamLead.com" target="_blank">
+                        <a
+                            href={`/account/employees/${singleEvaluation?.managements_id}`}
+                            target="_blank"
+                        >
                             {singleEvaluation?.managements_name}
                         </a>{" "}
                         on{" "}
@@ -300,22 +286,6 @@ const EvaluationAcknowledgeTaskModal = ({
                             {singleEvaluation?.managements_decision ===
                             "One more week"
                                 ? "Acknowledge & create a task"
-                                : "Ok,Acknowledged it"}
-                        </div>
-                    </Button>
-                )}
-                {auth.roleId === 6 && (
-                    <Button
-                        onClick={handleAcknowledgedItLeadDev}
-                        isLoading={isLoadingTeamLeadAndLeadDev}
-                        size="md"
-                        className="ml-2"
-                    >
-                        <div>
-                            {" "}
-                            {singleEvaluation?.managements_decision ===
-                            "One more week"
-                                ? "Acknowledge & create sub-tasks"
                                 : "Ok,Acknowledged it"}
                         </div>
                     </Button>

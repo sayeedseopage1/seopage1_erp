@@ -301,7 +301,6 @@ class SalesPolicyEventListener
     {
         $data = $this->eventTypes[$event->type];
         $deal = $event->deal;
-        $questionValue = PolicyQuestionValue::where('deal_id', $deal->id)->first();
 
         $userIds = DealStageChange::where('deal_id', $deal->deal_id)->pluck('updated_by')->toArray();
         $userIds = array_unique($userIds);

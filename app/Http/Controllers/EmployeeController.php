@@ -183,7 +183,7 @@ class EmployeeController extends AccountBaseController
         $userSession = new AppSettingController();
         $userSession->deleteSessions([$user->id]);
 
-        /**EMPLOYEE EVALUATION START */
+        /**EVALUATION START */
         if($request->role == 14){
             $employee_evaluation = new EmployeeEvaluation();
             $employee_evaluation->user_id = $user->id; 
@@ -191,7 +191,31 @@ class EmployeeController extends AccountBaseController
             $employee_evaluation->join_date = $user->created_at;
             $employee_evaluation->save();
         }
-        /**EMPLOYEE EVALUATION END */
+        if($request->role == 15){
+            $employee_evaluation = new EmployeeEvaluation();
+            $employee_evaluation->user_id = $user->id; 
+            $employee_evaluation->user_name = $user->name;
+            $employee_evaluation->join_date = $user->created_at;
+            $employee_evaluation->user_status = 'PM';
+            $employee_evaluation->save();
+        }
+        if($request->role == 16){
+            $employee_evaluation = new EmployeeEvaluation();
+            $employee_evaluation->user_id = $user->id; 
+            $employee_evaluation->user_name = $user->name;
+            $employee_evaluation->join_date = $user->created_at;
+            $employee_evaluation->user_status = 'LD';
+            $employee_evaluation->save();
+        }
+        if($request->role == 17){
+            $employee_evaluation = new EmployeeEvaluation();
+            $employee_evaluation->user_id = $user->id; 
+            $employee_evaluation->user_name = $user->name;
+            $employee_evaluation->join_date = $user->created_at;
+            $employee_evaluation->user_status = 'SE';
+            $employee_evaluation->save();
+        }
+        /**EVALUATION END */
 
 
         return Reply::success(__('messages.roleAssigned'));

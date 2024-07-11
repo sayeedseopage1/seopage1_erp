@@ -12,8 +12,32 @@ import _ from "lodash";
 import Card from "../../global/Card";
 import EvaluationTable from "../components/Table/EvaluationTable";
 import { EvaluationTableColumns } from "../components/Table/EvaluationTableColumns";
+import { EvaluationTableColumnsPM } from "../project-manager/components/table/EvaluationTableColumnsPM";
+import { useLocation } from "react-router-dom";
+import filterEvaluationsByRole from "../../utils/filterEvaluationsByRole";
+import { EvaluationTypeFilterTabs } from "../components/EvaluationTypeFilterTab";
 
 const EmployeeEvaluation = () => {
+    const location = useLocation();
+    const type = new URLSearchParams(location.search).get("type");
+
+    const [tableType, setTableType] = useState("Developer");
+    useEffect(() => {
+        switch (type) {
+            case "pm":
+                setTableType("Project Manager");
+                break;
+            case "ld":
+                setTableType("Lead Developer");
+                break;
+            case "sales_executive":
+                setTableType("Sales Executive");
+                break;
+            default:
+                setTableType("Developer");
+        }
+    }, [type]);
+
     const [searchParams, setSearchParams] = useSearchParams();
     const [{ pageIndex, pageSize }, setPagination] = useState({
         pageIndex: 0,
@@ -42,8 +66,14 @@ const EmployeeEvaluation = () => {
     const mainData = data?.data;
     const Evaluations = data?.data.data;
 
+    const filteredEvaluations = filterEvaluationsByRole(Evaluations, tableType);
+
     const getData = (type) => {
-        let _data = _.orderBy(Evaluations, "managements_decision", "asc");
+        let _data = _.orderBy(
+            filteredEvaluations,
+            "managements_decision",
+            "asc"
+        );
         switch (type) {
             case "all":
                 return _data;
@@ -85,14 +115,17 @@ const EmployeeEvaluation = () => {
         setPagination(paginate);
     };
 
-    // console.log("filter data", filter);
     return (
         <>
-            <EvaluationTableFilterBar setFilter={setFilter} />
+            <EvaluationTableFilterBar
+                tableType={tableType}
+                setTableType={setTableType}
+                setFilter={setFilter}
+            />
 
             <Card className={styles.card}>
                 <Flex justifyContent="space-between" marginBottom="10px">
-                    <Tabs data={_data} />
+                    <EvaluationTypeFilterTabs data={_data} />
 
                     <RefreshButton
                         onClick={() => {
@@ -102,104 +135,69 @@ const EmployeeEvaluation = () => {
                         className="font-weight-normal"
                     />
                 </Flex>
-
-                <EvaluationTable
-                    data={tableData(searchParams.get("show"))}
-                    mainData={mainData}
-                    columns={[...EvaluationTableColumns]}
-                    isLoading={isLoading}
-                    isFetching={isFetching}
-                    onPageChange={onPageChange}
-                    sorting={sorting}
-                    tableName="Evaluation Table"
-                    setSorting={setSorting}
-                />
+                {tableType === "Developer" && (
+                    <EvaluationTable
+                        data={tableData(searchParams.get("show"))}
+                        mainData={mainData}
+                        //since evaluation for pm,ld nad sales follows same pattern
+                        //columns are same for all of them(EvaluationTableColumns)
+                        columns={[...EvaluationTableColumns]}
+                        isLoading={isLoading}
+                        isFetching={isFetching}
+                        onPageChange={onPageChange}
+                        sorting={sorting}
+                        tableName="Evaluation Table"
+                        setSorting={setSorting}
+                    />
+                )}
+                {tableType === "Project Manager" && (
+                    <EvaluationTable
+                        data={tableData(searchParams.get("show"))}
+                        mainData={mainData}
+                        //since evaluation for pm,ld nad sales follows same pattern
+                        //columns are same for all of them(pm,ld nad sales)(EvaluationTableColumnsPM)
+                        columns={[...EvaluationTableColumnsPM]}
+                        isLoading={isLoading}
+                        isFetching={isFetching}
+                        onPageChange={onPageChange}
+                        sorting={sorting}
+                        tableName="Evaluation Table"
+                        setSorting={setSorting}
+                    />
+                )}
+                {tableType === "Lead Developer" && (
+                    <EvaluationTable
+                        data={tableData(searchParams.get("show"))}
+                        mainData={mainData}
+                        //since evaluation for pm,ld nad sales follows same pattern
+                        //columns are same for all of them(pm,ld nad sales)(EvaluationTableColumnsPM)
+                        columns={[...EvaluationTableColumnsPM]}
+                        isLoading={isLoading}
+                        isFetching={isFetching}
+                        onPageChange={onPageChange}
+                        sorting={sorting}
+                        tableName="Evaluation Table"
+                        setSorting={setSorting}
+                    />
+                )}
+                {tableType === "Sales Executive" && (
+                    <EvaluationTable
+                        data={tableData(searchParams.get("show"))}
+                        mainData={mainData}
+                        //since evaluation for pm,ld nad sales follows same pattern
+                        //columns are same for all of them(pm,ld nad sales)(EvaluationTableColumnsPM)
+                        columns={[...EvaluationTableColumnsPM]}
+                        isLoading={isLoading}
+                        isFetching={isFetching}
+                        onPageChange={onPageChange}
+                        sorting={sorting}
+                        tableName="Evaluation Table"
+                        setSorting={setSorting}
+                    />
+                )}
             </Card>
         </>
     );
 };
 
 export default EmployeeEvaluation;
-
-const Tabs = (props) => {
-    const [searchParams, setSearchParams] = useSearchParams();
-    const data = props.data;
-    // useEffect(() => {
-    //     setSearchParams({ show: "pending" });
-    // }, []);
-
-    const handleRouteChange = (e, params) => {
-        e.preventDefault();
-
-        // Create a new URLSearchParams object with the new parameters
-        const newSearchParams = new URLSearchParams();
-
-        // Set new parameters
-        for (const [key, value] of Object.entries(params)) {
-            newSearchParams.set(key, value);
-        }
-
-        // Update the searchParams state with the new URLSearchParams object
-        setSearchParams(newSearchParams);
-    };
-
-    const badge = (type) => {
-        return _.size(data[type]);
-    };
-    return (
-        <ul className={styles.tabs}>
-            <li>
-                <Link
-                    to="#"
-                    data-type="pending"
-                    onClick={(e) => handleRouteChange(e, { show: "pending" })}
-                    data-active={searchParams.get("show") === "pending"}
-                >
-                    Pending{" "}
-                    <span className="badge badge-light">
-                        {badge("pending")}
-                    </span>
-                </Link>
-            </li>
-
-            <li>
-                <Link
-                    to="#"
-                    data-type="authorized"
-                    onClick={(e) =>
-                        handleRouteChange(e, { show: "authorized" })
-                    }
-                    data-active={searchParams.get("show") === "authorized"}
-                >
-                    Accepted{" "}
-                    <span className="badge badge-light">
-                        {badge("authorized")}
-                    </span>
-                </Link>
-            </li>
-
-            <li>
-                <Link
-                    to="#"
-                    data-type="denied"
-                    onClick={(e) => handleRouteChange(e, { show: "denied" })}
-                    data-active={searchParams.get("show") === "denied"}
-                >
-                    Denied{" "}
-                    <span className="badge badge-light">{badge("denied")}</span>
-                </Link>
-            </li>
-            <li>
-                <Link
-                    to="#"
-                    data-type="all"
-                    onClick={(e) => handleRouteChange(e, { show: "all" })}
-                    data-active={searchParams.get("show") === "all"}
-                >
-                    All{" "}
-                    <span className="badge badge-light">{badge("all")}</span>
-                </Link>
-            </li>
-        </ul>
-    );
-};
