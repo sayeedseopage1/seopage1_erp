@@ -651,10 +651,10 @@ class DashboardController extends AccountBaseController
 
 
         $incomplete_hours = $minimum_log_hours - $userTotalMin;
-        $userLog = ProjectTimeLog::where('user_id', $user_id)->whereDate('created_at', $userClockIn->created_at)->get();
-        $lastLogData = Attendance::where('user_id', $user_id)->whereDate('created_at', $userClockIn->created_at)->orderBy('created_at', 'desc')->first();
+        $userLog = ProjectTimeLog::where('user_id', $user_id)->whereDate('created_at', $userClockIn->created_at ?? '')->get();
+        $lastLogData = Attendance::where('user_id', $user_id)->whereDate('created_at', $userClockIn->created_at ?? '')->orderBy('created_at', 'desc')->first();
 
-        $devTimes = DeveloperStopTimer::where('user_id', $user_id)->whereDate('date', '=', $userClockIn->created_at)->orderBy('created_at', 'desc')->get();
+        $devTimes = DeveloperStopTimer::where('user_id', $user_id)->whereDate('date', '=', $userClockIn->created_at ?? '')->orderBy('created_at', 'desc')->get();
         $totalTime = 0;
         foreach ($devTimes as $dev) {
             $durations = json_decode($dev->durations, true);
@@ -766,9 +766,9 @@ class DashboardController extends AccountBaseController
     }
 
         $incomplete_hours = $minimum_log_hours - $userTotalMin;
-        $userLog = ProjectTimeLog::where('user_id', $user_id)->whereDate('created_at', $userClockIn->created_at)->get();
-        $lastLogData = Attendance::where('user_id', $user_id)->whereDate('created_at', $userClockIn->created_at)->orderBy('created_at', 'desc')->first();
-        $devTimes = DeveloperStopTimer::where('user_id', $user_id)->whereDate('date', '=', $userClockIn->created_at)->orderBy('created_at', 'desc')->get();
+        $userLog = ProjectTimeLog::where('user_id', $user_id)->whereDate('created_at', $userClockIn->created_at ?? '')->get();
+        $lastLogData = Attendance::where('user_id', $user_id)->whereDate('created_at', $userClockIn->created_at ?? '')->orderBy('created_at', 'desc')->first();
+        $devTimes = DeveloperStopTimer::where('user_id', $user_id)->whereDate('date', '=', $userClockIn->created_at ?? '')->orderBy('created_at', 'desc')->get();
         $totalTime = 0;
         foreach ($devTimes as $dev) {
             $durations = json_decode($dev->durations, true);
