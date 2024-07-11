@@ -16,7 +16,9 @@ return new class extends Migration
         Schema::create('platform_accounts', function (Blueprint $table) {
             $table->id();
             $table->unsignedTinyInteger('type')->nullable()->comment('1 = Freelancer.com, 2 = Upwork, 3 = Fiver');
+            $table->string('company_name')->default('Seopage1');
             $table->string('username');
+            $table->string('name')->nullable();
             $table->text('user_url')->nullable();
             $table->string('email')->nullable();
             $table->unsignedTinyInteger('profile_type')->nullable()->comment('1 = New, 2 = Mid, 3 = Old');

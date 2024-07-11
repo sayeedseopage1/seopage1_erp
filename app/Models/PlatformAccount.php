@@ -11,7 +11,9 @@ class PlatformAccount extends Model
 
     protected $fillable = [
         'type',
+        'company_name',
         'username',
+        'name',
         'user_url',
         'email',
         'profile_type',
