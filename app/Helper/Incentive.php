@@ -139,7 +139,7 @@ class Incentive
                 self::findIncentive($incentiveCriteria);
             }elseif($incentiveCriteria->id == 6){
                 $projects = Project::where([['projects.pm_id', $user_id],['projects.status', 'in progress'],['projects.project_status', 'Accepted']])->get();
-                $incentiveCriteria->acquired_percent = $projects->count() ? number_format(($projects->where('deadline', '<', now())->count() / $projects->count()) * 100, 2) : 0;
+                $incentiveCriteria->acquired_percent = $projects->count() ? number_format(($projects->where('deadline', '<', Carbon::now()->startOfDay())->count() / $projects->count()) * 100, 2) : 0;
                 self::findIncentive($incentiveCriteria);
             }elseif($incentiveCriteria->id == 7){
                 $thisMonthPmClientIds = Project::where('added_by', $user_id)->where('created_at', '>=', $startDate)->pluck('client_id');

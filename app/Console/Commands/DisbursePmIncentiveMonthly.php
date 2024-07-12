@@ -141,7 +141,7 @@ class DisbursePmIncentiveMonthly extends Command
 
                 // Project dateline miss rate
                 $projects = Project::where([['projects.pm_id', $user->id],['projects.status', 'in progress'],['projects.project_status', 'Accepted']])->get();
-                $deadline_miss_rate = $projects->count() ? number_format(($projects->where('deadline', '<', $now)->count() / $projects->count()) * 100, 2) : 0;
+                $deadline_miss_rate = $projects->count() ? number_format(($projects->where('deadline', '<', Carbon::now()->startOfDay())->count() / $projects->count()) * 100, 2) : 0;
                 $obtainedIncentive[] = Incentive::progressiveStore(6, $user->id, $deadline_miss_rate, $now);
                 // End
 
