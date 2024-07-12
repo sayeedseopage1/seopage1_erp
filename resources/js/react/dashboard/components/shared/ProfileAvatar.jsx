@@ -84,4 +84,5 @@ ProfileAvatar.propTypes = {
         name: PropTypes.string,
         avatar: PropTypes.string,
     }),
+    isLoading: PropTypes.bool,
 };

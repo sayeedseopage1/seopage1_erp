@@ -69,4 +69,5 @@ DashboardDataTablePagination.propTypes = {
     tableData: PropTypes.object || PropTypes.array || null,
     pageSize: PropTypes.number,
     reportStatus: PropTypes.string,
+    className: PropTypes.string
 };

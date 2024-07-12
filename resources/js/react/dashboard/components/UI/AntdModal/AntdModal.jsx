@@ -49,6 +49,6 @@ AntdModal.propTypes = {
     children: PropTypes.node,
     isModalOpen: PropTypes.bool,
     closeModal: PropTypes.func,
-    classNames: PropTypes.object,
     parentClassName: PropTypes.string,
+    isCentered: PropTypes.bool,
 };

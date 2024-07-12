@@ -1,6 +1,10 @@
 import * as React from "react";
-import { LeadDeveloperDataTitle } from "../constant/leadDeveloperConstant";
+import PropTypes from "prop-types";
+
+// hooks
 import { useAuth } from "../../hooks/useAuth";
+
+// constant
 import { DeveloperDashboardDataConstant } from "../constant/developerDashboardConstant";
 
 export const DeveloperDashboardContext = React.createContext();
@@ -32,3 +36,8 @@ export const DeveloperDashboardProvider = ({ children }) => {
         </DeveloperDashboardContext.Provider>
     );
 };
+
+
+DeveloperDashboardProvider.propTypes = {
+    children: PropTypes.node,
+}

@@ -1,4 +1,7 @@
 import * as React from "react";
+import PropTypes from "prop-types";
+
+// hooks
 import { useAuth } from "../../hooks/useAuth";
 
 // Constants
@@ -33,3 +36,8 @@ export const SaleExecutiveDashboardProvider = ({ children }) => {
         </SaleExecutiveDashboardContext.Provider>
     );
 };
+
+
+SaleExecutiveDashboardProvider.propTypes = {
+    children: PropTypes.node,
+}

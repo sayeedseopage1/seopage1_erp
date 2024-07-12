@@ -44,7 +44,6 @@ const CustomCardInfo = ({
         value,
         valueType,
         title,
-        colors,
         onClick,
         subTitle,
         hasPermissionForModal,

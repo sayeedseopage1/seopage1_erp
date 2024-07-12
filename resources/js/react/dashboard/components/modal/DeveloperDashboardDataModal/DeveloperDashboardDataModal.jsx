@@ -16,17 +16,17 @@ import { SectionWrapper } from "../../UI/StyledComponents";
 // Components - Table
 import DashboardDataTable from "../../table/DashboardDataTable";
 
-// Components - Loader
-import LeadDashboardModalTableLoader from "../../loader/LeadDashboardModalTableLoader";
 
 // Components - UI - Shared
 import RefreshButton from "../../shared/RefreshButton";
+
+// Components - Loader
 import DeveloperDashboardModalTableLoader from "../../loader/DeveloperDashboardModalTableLoader";
 
 const DeveloperDashboardDataModal = ({ isModalOpen, closeModal, modalData }) => {
     const { query } = modalData;
 
-    const { data, isLoading, isSuccess, isFetching, refetch } =
+    const { isLoading, isFetching, refetch } =
         useGetTestDataQuery(query, {
             refetchOnMountOrArgChange: true,
         });

@@ -1,7 +1,7 @@
 import _ from "lodash";
 import React, { useCallback, useMemo } from "react";
 import PropTypes from "prop-types";
-import { Popover, Tooltip } from "antd";
+import { Tooltip } from "antd";
 
 // Components - UI - Shared
 import Dropdown from "../../../../global/Dropdown";
@@ -188,11 +188,15 @@ export default CustomDropDown;
 
 CustomDropDown.propTypes = {
     data: PropTypes.array || null,
-    selected: PropTypes.shape({
-        id: PropTypes.number,
-        name: PropTypes.string,
-        user_name: PropTypes.string,
-    }),
+    selected: PropTypes.shape(
+        {
+            id: PropTypes.number,
+            name: PropTypes.string,
+            user_name: PropTypes.string,
+        } ||
+            [] ||
+            null
+    ),
     setSelected: PropTypes.func,
     filedName: PropTypes.string,
     isMultiple: PropTypes.bool,

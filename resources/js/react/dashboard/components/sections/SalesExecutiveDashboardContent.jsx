@@ -352,4 +352,8 @@ const SalesExecutiveDashboardContent = ({
 
 export default SalesExecutiveDashboardContent;
 
-SalesExecutiveDashboardContent.propTypes = {};
+SalesExecutiveDashboardContent.propTypes = {
+    isLoading: PropTypes.bool,
+    handleLoadingCheck: PropTypes.func,
+    handleModalOpen: PropTypes.func,
+};

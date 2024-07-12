@@ -16,12 +16,15 @@ import { SectionWrapper } from "../../UI/StyledComponents";
 // Components - Table
 import DashboardDataTable from "../../table/DashboardDataTable";
 
-// Components - Loader
-import LeadDashboardModalTableLoader from "../../loader/LeadDashboardModalTableLoader";
+
 
 // Components - UI - Shared
 import RefreshButton from "../../shared/RefreshButton";
+
+// Components - Logic - Global
 import Switch from "../../../../global/Switch";
+
+// Components - Loader
 import { Placeholder } from "../../../../global/Placeholder";
 import SaleExecutiveDashboardTableLoader from "../../loader/SaleExecutiveDashboardTableLoader";
 
@@ -32,7 +35,7 @@ const SalesExecutiveDashboardDataModal = ({
 }) => {
     const { query } = modalData;
 
-    const { data, isLoading, isSuccess, isFetching, refetch } =
+    const { isLoading, isFetching, refetch } =
         useGetTestDataQuery(query, {
             refetchOnMountOrArgChange: true,
         });

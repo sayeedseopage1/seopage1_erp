@@ -1,15 +1,14 @@
 import dayjs from "dayjs";
 import PropTypes from "prop-types";
-import React, { useState } from "react";
+import React, { useState , useEffect } from "react";
 
 // icons
-import { GrLinkNext } from "react-icons/gr";
-import { GrLinkPrevious } from "react-icons/gr";
+import { GrLinkNext, GrLinkPrevious } from "react-icons/gr";
 
 // style - css
 import style from "./dashboardMonthFilter.module.css";
-import Loader from "../../../../global/Loader";
-import { useEffect } from "react";
+
+// Components - Logic - Shared
 import Switch from "../../../../global/Switch";
 
 const DashboardMonthFilter = ({ setFilter, isLoading }) => {
@@ -78,7 +77,6 @@ const DashboardMonthFilter = ({ setFilter, isLoading }) => {
                         <Switch.Case condition={direction.active === "prev"}>
                             <div
                                 className="spinner-border text-dark"
-                                role="status"
                                 style={{
                                     width: "14px",
                                     height: "14px",
@@ -107,7 +105,6 @@ const DashboardMonthFilter = ({ setFilter, isLoading }) => {
                         <Switch.Case condition={direction.active === "next"}>
                             <div
                                 className="spinner-border text-dark"
-                                role="status"
                                 style={{
                                     width: "14px",
                                     height: "14px",

@@ -1,4 +1,3 @@
-import { Popover } from "antd";
 import dayjs from "dayjs";
 import Switch from "../../../../global/Switch";
 import PopoverLink from "../../shared/PopoverLink";
@@ -285,7 +284,6 @@ const DeveloperModalTableColumns = [
                     {revision_log_min ? `${hours} hrs ${minutes} mins` : "N/A"}
                 </span>
             );
-            F;
         },
     },
     {

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import PropTypes from "prop-types";
 
 // Components - UI - Styled Components
@@ -517,6 +517,7 @@ const DeveloperDashboardContent = ({
                                             style={{
                                                 flex: "1",
                                             }}
+                                            key={data?.id}
                                         />
                                     ))}
                             </SectionWrapper>

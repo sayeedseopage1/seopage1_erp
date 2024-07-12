@@ -1,5 +1,10 @@
 import * as React from "react";
+import PropTypes from "prop-types";
+
+// constant
 import { LeadDeveloperDataTitle } from "../constant/leadDeveloperConstant";
+
+// hooks
 import { useAuth } from "../../hooks/useAuth";
 
 export const LeadDeveloperContext = React.createContext();
@@ -31,3 +36,8 @@ export const LeadDeveloperProvider = ({ children }) => {
         </LeadDeveloperContext.Provider>
     );
 };
+
+
+LeadDeveloperProvider.propTypes = {
+    children: PropTypes.node,
+}

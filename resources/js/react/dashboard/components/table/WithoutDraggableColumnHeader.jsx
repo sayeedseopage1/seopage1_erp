@@ -82,4 +82,5 @@ WithoutDraggableColumnHeader.propTypes = {
     table: PropTypes.object.isRequired,
     className: PropTypes.string,
     isNewRuleModal: PropTypes.bool,
+    props: PropTypes.object,
 };

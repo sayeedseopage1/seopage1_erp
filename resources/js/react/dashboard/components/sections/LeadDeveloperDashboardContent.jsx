@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import PropTypes from "prop-types";
 
 // Components - UI - Styled Components
@@ -472,12 +472,14 @@ const LeadDeveloperDashboardContent = ({
                                                 },
                                                 loadingValueWidth: "20%",
                                                 info: data?.info,
+
                                             }}
                                             isLoading={isLoading}
                                             className="align-items-start"
                                             style={{
                                                 flex: "1",
                                             }}
+                                            key={data?.id}
                                         />
                                     ))}
                             </SectionWrapper>

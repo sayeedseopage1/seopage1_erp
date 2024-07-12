@@ -25,7 +25,7 @@ import RefreshButton from "../../shared/RefreshButton";
 const LeadDeveloperDataModal = ({ isModalOpen, closeModal, modalData }) => {
     const { query } = modalData;
 
-    const { data, isLoading, isSuccess, isFetching, refetch } =
+    const {  isLoading, isFetching, refetch } =
         useGetTestDataQuery(query, {
             refetchOnMountOrArgChange: true,
         });

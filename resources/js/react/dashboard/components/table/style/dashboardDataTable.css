@@ -84,9 +84,6 @@
   padding-right: 8px !important;
 }
 
-/* .sp1_dashboard_data_table_td:first-child {
-  padding-left: 20px !important;
-} */
 
 .sp1_dashboard_data_table_tr:nth-child(odd) {
   background-color: var(--primaryLightBlue);

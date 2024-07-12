@@ -1,9 +1,7 @@
-import React, { useState, useEffect, useContext } from "react";
-import PropTypes from "prop-types";
+import React, { useState, useContext } from "react";
 
 // Components - UI - Shared
 import ProfileAvatar from "../components/shared/ProfileAvatar";
-import RefreshButton from "../components/shared/RefreshButton";
 
 // Components - UI - Styled
 import { SectionWrapper } from "../components/UI/StyledComponents";
@@ -11,8 +9,6 @@ import { SectionWrapper } from "../components/UI/StyledComponents";
 // Components - UI - Custom
 import CustomDropDown from "../components/UI/CustomDropDown/CustomDropDown";
 import DashboardMonthFilter from "../components/UI/DashboardMonthFilter/DashboardMonthFilter";
-import CustomCardHeader from "../components/UI/CustomCardHeader/CustomCardHeader";
-import CustomCardInfo from "../components/UI/CustomCardInfo/CustomCardInfo";
 
 // Constants
 import { LeadDeveloperDummyData } from "../constant";
