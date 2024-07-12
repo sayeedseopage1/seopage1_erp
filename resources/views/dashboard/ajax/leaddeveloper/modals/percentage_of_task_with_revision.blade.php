@@ -5,9 +5,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <div class="modal-title">
-                    <h4>Total number of received tasks: {{ $lead_task }}</h4>
                     <h4>Number Of Tasks With Revisions: {{ $lead_task_with_revision }}</h4>
-                    <h4>Percentage of tasks with revisions: {{ round($percentage_of_tasks_with_revision_lead, 2) }}%
                     </h4>
                 </div>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -42,7 +40,7 @@
                                     {{ $row->created_at }}
                                 </td>
                                 <td>
-                                    {{ $row->revisions->count() ?? 0 }}
+                                    {{ $row->revisions_count ?? 0 }}
                                 </td>
                             </tr>
                         @endforeach

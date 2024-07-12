@@ -43,8 +43,8 @@
                                     {{ $row?->project?->pm?->name ?? 'Unknown' }}
                                 </td>
                                 <td>
-                                    @foreach ($row->submissions as $submission)
-                                        {{ \Carbon\Carbon::parse($submission->created_at)->diffForHumans() }}</br>
+                                    @foreach ($row->historyForReviews as $submission)
+                                        {{ \Carbon\Carbon::parse($submission->created_at)->diffForHumans($row->created_at) }}</br>
                                     @endforeach
                                 </td>
                             </tr>

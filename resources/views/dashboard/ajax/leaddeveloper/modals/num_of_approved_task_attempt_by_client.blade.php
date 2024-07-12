@@ -39,15 +39,15 @@
                                     @endif
                                 </td>
                                 <td>
-                                    {{ $row->created_at }}
+                                    {{ $row->created_at->format('d-m-Y g:i A') }}
                                 </td>
                                 <td>
-                                    {{ $row->due_date }}
+                                    {{ $row->due_date->format('d-m-Y g:i A') }}
                                 </td>
                                 <td>
-                                    {{ $row->latestTaskSubmission?->created_at }}
+                                    {{ $row->latestTaskSubmission?->created_at->format('d-m-Y g:i A') }}
                                 </td>
-                                <td>{{ $row->latestTaskApprove?->created_at }}</td>
+                                <td>{{ $row->latestTaskApprove?->created_at->format('d-m-Y g:i A') }}</td>
                                 <td>
                                     <span style="color: {{ $row->stat->label_color }}">
                                         {{ $row->stat->column_name }}

@@ -27,4 +27,8 @@ class TaskRevisionDispute extends Model
     {
         return $this->belongsTo(User::class, 'raised_against');
     }
+    public function task()
+    {
+        return $this->belongsTo(Task::class);
+    }
 }

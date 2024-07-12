@@ -29,7 +29,7 @@
                     <tbody>
                         @foreach ($first_attempt_approve_task_in_this_month_lead_data as $row)
                             <tr>
-                                <td>{{ $loop->index + 1 }}</td>
+                                <td>{{ ++$loop->index }}</td>
                                 <td>
                                     <a href="{{ route('tasks.show', $row->id) }}">{{ $row->heading }}<a>
                                 </td>
@@ -40,19 +40,20 @@
                                     @endif
                                 </td>
                                 <td>
-                                    {{ $row->created_at }}
+                                    {{ $row->created_at->format('d-m-Y g:i A') }}
                                 </td>
                                 <td>
-                                    {{ $row->due_date }}
+                                    {{ $row->due_date->format('d-m-Y g:i A') }}
                                 </td>
                                 <td>
-                                    {{ $row?->latestTaskSubmission?->created_at }}
+                                    {{ $row?->latestTaskSubmission?->created_at->format('d-m-Y g:i A') }}
                                 </td>
                                 <td>
-                                    {{ $row?->latestTaskApprove?->created_at }}
+                                    {{ $row?->latestTaskApprove?->created_at->format('d-m-Y g:i A') }}
                                 </td>
                                 <td>
-                                    {{ $row?->status }}
+                                    <span style="color: {{ $row->stat->label_color }}">
+                                        {{ $row->stat->column_name }}</span>
                                 </td>
                             </tr>
                         @endforeach

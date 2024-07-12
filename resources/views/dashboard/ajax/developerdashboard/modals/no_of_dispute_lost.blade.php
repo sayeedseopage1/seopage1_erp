@@ -22,33 +22,30 @@
                             <th scope="col">Dispute filed on</th>
                             <th scope="col">Dispute raised against</th>
                             <th scope="col">Winner</th>
-                            {{-- <th scope="col">status</th> --}}
                         </tr>
                     </thead>
                     <tbody>
                         @foreach ($number_of_dispute_lost_data as $row)
-                            @foreach ($row->taskRevisionDisputes as $row2)
-                                <tr>
-                                    <td>{{ $loop->parent->iteration . '.' . $loop->iteration  }}</td>
-                                    <td>
-                                        <a href="{{ route('tasks.show', $row->id) }}">{{ $row->heading }}<a>
-                                    </td>
-                                    <td>
-                                        @if ($row?->project?->client)
-                                            <a href="{{ route('clients.show', $row->project->client->id) }}">
-                                                {{ $row->project->client->name }}</a>
-                                        @endif
-                                    </td>
-                                    <td>
-                                        {{ $row?->project?->pm?->name }}
-                                    </td>
-                                    <td>
-                                        {{ $row2?->created_at }}
-                                    </td>
-                                    <td>{{ $row2?->raisedAgainst?->name }}</td>
-                                    <td>{{ $row2?->disputeWinner?->name }}</td>
-                                </tr>
-                            @endforeach
+                            <tr>
+                                <td>{{ $loop->iteration }}</td>
+                                <td>
+                                    <a href="{{ route('tasks.show', $row?->task?->id) }}">{{ $row?->task?->heading }}<a>
+                                </td>
+                                <td>
+                                    @if ($row?->task?->project?->client)
+                                        <a href="{{ route('clients.show', $row?->task?->project->client->id) }}">
+                                            {{ $row?->task?->project->client->name }}</a>
+                                    @endif
+                                </td>
+                                <td>
+                                    {{ $row?->task?->project?->pm?->name }}
+                                </td>
+                                <td>
+                                    {{ $row?->created_at->format('d-m-Y g:i A') }}
+                                </td>
+                                <td>{{ $row?->raisedAgainst?->name }}</td>
+                                <td>{{ $row?->disputeWinner?->name }}</td>
+                            </tr>
                         @endforeach
                     </tbody>
                 </table>

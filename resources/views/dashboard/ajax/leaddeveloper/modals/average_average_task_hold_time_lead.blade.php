@@ -44,10 +44,10 @@
                                     {{ $row?->project?->pm?->name }}
                                 </td>
                                 <td>
-                                    {{ $row?->created_at }}
+                                    {{ $row?->created_at->format('d-m-Y g:i A') }}
                                 </td>
-                                <td>{{ $row?->firstSubTask?->created_at }}</td>
-                                <td>{{ Carbon\Carbon::parse($row?->firstSubTask?->created_at)->diffForHumans($row?->created_at) }}</td>
+                                <td>{{ $row?->oldestSubTask?->created_at->format('d-m-Y g:i A') }}</td>
+                                <td>{{ Carbon\Carbon::parse($row?->oldestSubTask?->created_at)->diffForHumans($row?->created_at) }}</td>
                             </tr>
                         @endforeach
                     </tbody>

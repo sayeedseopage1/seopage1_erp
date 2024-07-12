@@ -1,6 +1,6 @@
 <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
-<div id="number_of_disputes_involved_in{{ count($disputes_lead_developer_involved_data) }}"
-    class="modal fade" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div id="number_of_disputes_involved_in{{ $disputes_lead_developer_involved }}" class="modal fade" tabindex="-1"
+    aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-xl">
         <div class="modal-content">
             <div class="modal-header">
@@ -30,29 +30,27 @@
                     </thead>
                     <tbody>
                         @foreach ($disputes_lead_developer_involved_data as $row)
-                            @foreach ($row->taskRevisionDisputes as $row2)
-                                <tr>
-                                    <td>{{ $loop->parent->iteration .'.'.  $loop->iteration }}</td>
-                                    <td>
-                                        <a href="{{ route('tasks.show', $row->id) }}">{{ $row->heading }}<a>
-                                    </td>
-                                    <td>
-                                        @if ($row?->project?->client)
-                                            <a href="{{ route('clients.show', $row->project->client->id) }}">
-                                                {{ $row->project->client->name }}</a>
-                                        @endif
-                                    </td>
-                                    <td>
-                                        {{ $row?->project?->pm?->name }}
-                                    </td>
-                                    <td>
-                                        {{ $row2?->created_at }}
-                                    </td>
-                                    <td>{{ $row2?->raisedBy?->name }}</td>
-                                    <td>{{ $row2?->raisedAgainst?->name }}</td>
-                                    <td>{{ $row2?->disputeWinner?->name }}</td>
-                                </tr>
-                            @endforeach
+                            <tr>
+                                <td>{{ $loop->iteration }}</td>
+                                <td>
+                                    <a href="{{ route('tasks.show', $row?->task?->id) }}">{{ $row?->task?->heading }}<a>
+                                </td>
+                                <td>
+                                    @if ($row?->task?->project?->client)
+                                        <a href="{{ route('clients.show', $row?->task?->project?->client?->id) }}">
+                                            {{ $row?->task?->project?->client?->name }}</a>
+                                    @endif
+                                </td>
+                                <td>
+                                    {{ $row?->task?->project?->pm?->name }}
+                                </td>
+                                <td>
+                                    {{ $row?->created_at->format('d-m-Y g:i A') }}
+                                </td>
+                                <td>{{ $row?->raisedBy?->name }}</td>
+                                <td>{{ $row?->raisedAgainst?->name }}</td>
+                                <td>{{ $row?->disputeWinner?->name }}</td>
+                            </tr>
                         @endforeach
                     </tbody>
                 </table>

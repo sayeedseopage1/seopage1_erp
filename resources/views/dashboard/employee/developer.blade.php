@@ -467,7 +467,7 @@
                                         <a href="#" data-toggle="modal"
                                             data-target="#avg_task_approval_lead_developer{{ count($avg_no_of_submission_needed_for_app_by_lead_dev) }}">
 
-                                            {{ round($average_submission_aproval_in_this_month, 2) }}
+                                            {{ round($average_submission_approval_in_this_month, 2) }}
 
                                         </a>
 
@@ -607,7 +607,7 @@
                                     <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
                                         <a href="#" data-toggle="modal"
                                             data-target="#avg_num_in_progress{{ count($average_in_progress_date_range_date) }}">
-                                            {{ $average_in_progress_date_range }} 
+                                            {{ $average_in_progress_date_range }}
                                         </a>
 
                                     </p>
@@ -801,7 +801,7 @@
                                             @if ($task->board_column_id == 2 || $task->board_column_id == 1 || $task->board_column_id == 3)
                                                 N\A
                                             @else
-                                            {{ $task?->latestTaskSubmission?->created_at }}
+                                                {{ $task?->latestTaskSubmission?->created_at }}
                                             @endif
 
                                         </td>

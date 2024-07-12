@@ -1,11 +1,12 @@
 <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
-<div id="avg_num_in_progress_task{{ count($total_in_progress_date_range_table_lead) }}" class="modal fade" tabindex="-1"
+<div id="avg_num_in_progress_task{{ $average_in_progress_date_range_lead }}" class="modal fade" tabindex="-1"
     aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-xl">
         <div class="modal-content">
             <div class="modal-header">
                 <div class="modal-title">
-                    {{-- <h4>Submitted Tasks: {{ $submit_number_of_tasks_in_this_month_lead }}</h4> --}}
+                    <h4>Total Number of Tasks: {{ $total_number_in_task_lead_from_in_pro }}</h4>
+                    <h4>Total Number of In-progress Tasks: {{ $average_in_progress_date_range_lead }}</h4>
 
                 </div>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">

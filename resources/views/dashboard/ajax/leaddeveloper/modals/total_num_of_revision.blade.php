@@ -1,11 +1,11 @@
 <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
-<div id="total_num_of_revision{{ count($number_of_total_revision_for_this_month_lead_data) }}" class="modal fade" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div id="total_num_of_revision{{ $lead_task_with_revision_total }}" class="modal fade" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-xl">
         <div class="modal-content">
             <div class="modal-header">
                 <div class="modal-title">
-                    <h4>Number of tasks: {{  count($number_of_total_revision_for_this_month_lead_data)  }}</h4>
-                    <h4>Total Number of Revisions: {{ $number_of_total_revision_for_this_month_lead }}</h4>
+                    {{-- <h4>Number of tasks: {{  count($number_of_total_revision_for_this_month_lead_data)  }}</h4> --}}
+                    <h4>Total Number of Revisions: {{ $lead_task_with_revision_total }}</h4>
 
                 </div>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -24,7 +24,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach ($number_of_total_revision_for_this_month_lead_data as $row)
+                        @foreach ($lead_task_with_revision_data as $row)
                             <tr>
                                 <td>{{ $loop->index + 1 }}</td>
                                 <td>
@@ -40,7 +40,7 @@
                                     @endif
                                 </td>
                                 <td>
-                                    {{ $row->revisions->count() ?? 0 }}
+                                    {{ $row->revisions_count ?? 0 }}
                                 </td>
                             </tr>
                         @endforeach

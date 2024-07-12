@@ -46,7 +46,7 @@
                                 <td>
                                     {{ $row?->project?->pm?->name }}
                                 </td>
-                                <td>{{ $row?->latestTaskSubmission?->created_at }}</td>
+                                <td>{{ $row?->firstHistoryForDevReview?->created_at->format('d-m-Y g:i A') }}</td>
                                 <td>
                                     @if (array_key_exists($row->id, $all_time_task_id))
                                         {{ round($all_time_task_id[$row->id], 2) * 24 }} hours

@@ -43,16 +43,17 @@
                                     {{ $row?->project?->pm?->name }}
                                 </td>
                                 <td>
-                                    {{ $row->created_at }}
+                                    {{ $row->created_at->format('d-m-Y g:i A') }}
                                 </td>
                                 <td>
-                                    {{ $row?->firstSubTask?->created_at }}
+                                    {{ $row->oldestSubTask?->created_at->format('d-m-Y g:i A') }}
                                 </td>
                                 <td>
-                                    {{ $row?->firstTimeLog?->created_at }}
+                                    {{ $row?->start_date->format('d-m-Y g:i A') }}
                                 </td>
                                 <td>
-                                    {{ $row?->status }}
+                                    <span style="color: {{ $row->stat->label_color }}">
+                                        {{ $row->stat->column_name }}</span>
                                 </td>
                             </tr>
                         @endforeach

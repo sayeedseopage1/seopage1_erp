@@ -141,7 +141,7 @@ class Task extends BaseModel
     use CustomFieldsTrait;
 
     protected $dates = ['due_date', 'completed_on', 'start_date'];
-    protected $appends = ['due_on', 'create_on', 'total_log_time_in_min', 'total_submissions_log_time_in_min', 'total_estimate_minutes'];
+    protected $appends = ['due_on', 'create_on', 'total_log_time_in_min', 'total_log_time_only_revision_in_min', 'total_submissions_log_time_in_min', 'total_log_time_without_revision_in_min', 'total_estimate_minutes'];
     protected $guarded = ['id'];
     public $customFieldModel = 'App\Models\Task';
 
@@ -154,6 +154,18 @@ class Task extends BaseModel
     {
         return new Attribute(
             get: fn() => $this->timeLogged->sum('total_minutes'),
+        );
+    }
+    protected function totalLogTimeWithoutRevisionInMin(): Attribute
+    {
+        return new Attribute(
+            get: fn() => $this->timeLoggedWithoutRevision->sum('total_minutes'),
+        );
+    }
+    protected function totalLogTimeOnlyRevisionInMin(): Attribute
+    {
+        return new Attribute(
+            get: fn() => $this->timeLoggedOnlyRevision->sum('total_minutes'),
         );
     }
     protected function totalSubmissionsLogTimeInMin(): Attribute
@@ -246,6 +258,11 @@ class Task extends BaseModel
         ], function (Builder $query) {
             $query->where('board_column_id', '=', 3);
         });
+    }
+
+    public function historyForReviews()
+    {
+        return $this->hasMany(TaskHistory::class, 'task_id')->where('board_column_id', '=', 6);
     }
 
     public function firstHistoryForDevReview(): HasOne
@@ -583,6 +600,10 @@ class Task extends BaseModel
     {
         return $this->belongsTo(TaskApprove::class, 'task_id', 'id');
     }*/
+    public function TaskApproves()
+    {
+        return $this->hasMany(TaskApprove::class, 'task_id');
+    }
 
     public function graphicWorkDetail()
     {
@@ -607,15 +628,29 @@ class Task extends BaseModel
     {
         return $this->hasOne(TaskSubmission::class)->oldestOfMany();
     }
-    public function firstSubTask()
+    public function taskSubTasks()
     {
-        return $this->hasOne(SubTask::class, 'task_id')->oldestOfMany();
+        return $this->belongsToMany(Task::class, 'sub_tasks', 'task_id', 'id', 'id', 'subtask_id');
+        // ->oldestOfMany()
     }
-    public function firstTimeLog()
-    {
-        return $this->hasOne(ProjectTimeLog::class, 'task_id')->oldestOfMany();
-    }
+    // public function firstTaskSubTasks()
+    // {
+    //     return $this->taskSubTasks()->orderBy('id', 'desc');
+    //     // ->oldestOfMany()
+    // }
+    // public function firstTimeLog()
+    // {
+    //     return $this->hasOneThrough(ProjectTimeLog::class, 'task_id')->oldestOfMany();
+    // }
 
+    public function allSubTask()
+    {
+        return $this->hasMany(Subtask::class, 'task_id', 'id');
+    }
+    public function oldestSubTask()
+    {
+        return $this->hasOne(Subtask::class, 'task_id', 'id')->oldestOfMany();
+    }
     public function taskUser()
     {
         return $this->hasOneThrough(User::class, TaskUser::class, 'task_id', 'id', 'id', 'user_id');

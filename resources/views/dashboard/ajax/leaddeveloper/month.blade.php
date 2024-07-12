@@ -80,12 +80,14 @@
         <div
             class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0">
             <div class="d-block text-capitalize">
-                <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">Number of approved tasks on 1st attempt by Client</h5>
+                <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">
+                    Number of Approved Task By Client in First Attempt
+                </h5>
                 <div class="d-flex flex-wrap">
                     <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
                         <a href="#" data-toggle="modal"
-                            data-target="#num_of_approved_task_attempt_by_client{{ count($first_attempt_approve_task_data_client_lead) }}">
-                            {{ $first_attempt_approve_task_in_this_month_client_lead }}
+                            data-target="#num_of_approved_task_attempt_by_client{{ $number_of_approved_tasks_on_1st_attempt_by_client }}">
+                            {{ $number_of_approved_tasks_on_1st_attempt_by_client }}
                         </a>
 
                     </p>
@@ -107,8 +109,8 @@
 
                     <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
                         <a href="#" data-toggle="modal"
-                            data-target="#average_submission_aproval_in_this_month_lead{{ count($average_submission_aproval_in_this_month_lead_data) }}">
-                            {{ round($average_submission_aproval_in_this_month_lead, 2) }}
+                            data-target="#average_submission_aproval_in_this_month_lead{{ $submission_approval_by_pm_lead }}">
+                            {{ $average_submission_approval_by_pm_lead }}
                         </a>
                     </p>
                     @include('dashboard.ajax.leaddeveloper.modals.average_submission_aproval_in_this_month_lead')
@@ -123,15 +125,16 @@
         <div
             class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0">
             <div class="d-block text-capitalize">
-                <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">Avg number of attempts needed for approval by Client
+                <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">
+                    Avg number of attempts needed for approval by Client
                 </h5>
                 <div class="d-flex flex-wrap">
 
                     <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
                         <a href="#" data-toggle="modal"
-                            data-target="#avg_num_of_approval_by_client{{ count($first_attempt_approve_task_data_client_lead) }}">
+                            data-target="#avg_num_of_approval_by_client{{ $total_number_of_attempts_needed_for_approval_by_client }}">
 
-                            {{ round($average_submission_aproval_in_this_month_client_lead, 2) }}
+                            {{ $avg_number_of_attempts_needed_for_approval_by_client }}
 
                         </a>
                         @include('dashboard.ajax.leaddeveloper.modals.avg_num_of_approval_by_client')
@@ -183,9 +186,9 @@
 
                     <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
                         <a href="#" data-toggle="modal"
-                            data-target="#total_num_of_revision{{ count($number_of_total_revision_for_this_month_lead_data) }}">
+                            data-target="#total_num_of_revision{{ $lead_task_with_revision_total }}">
 
-                            {{ round($number_of_total_revision_for_this_month_lead, 2) }}
+                            {{ $lead_task_with_revision_total }}
 
                         </a>
                         @include('dashboard.ajax.leaddeveloper.modals.total_num_of_revision')
@@ -210,7 +213,7 @@
                         <a href="#" data-toggle="modal"
                             data-target="#avg_task_submission_in_day{{ count($average_task_submit_data) }}">
 
-                            {{ round($average_submission_day_in_this_month_lead, 2) }} Days
+                            {{ $average_submission_day_in_this_month_lead }} Days
 
                         </a>
                         @include('dashboard.ajax.leaddeveloper.modals.avg_task_submission_in_day')
@@ -236,9 +239,9 @@
 
                     <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
                         <a href="#" data-toggle="modal"
-                            data-target="#avg_num_in_progress_task{{ count($total_in_progress_date_range_table_lead) }}">
+                            data-target="#avg_num_in_progress_task{{ $average_in_progress_date_range_lead }}">
 
-                            {{ round($average_in_progress_date_range_lead, 2) }}
+                            {{ $avg_number_of_in_progress_task }}
 
                         </a>
                         @include('dashboard.ajax.leaddeveloper.modals.avg_num_in_progress_task')
@@ -314,7 +317,7 @@
                     <h6 class="mb-0 f-18 font-weight-bold mr-5">
                         Percentage of Tasks Where Given Estimated Time was Missed With Revisions
                         <a href="#" data-toggle="modal"
-                            data-target="#percentage_task_estimate_time_missed{{ count($percentage_of_tasks_where_given_estimated_time_was_missed_with_revision_data) }}">
+                            data-target="#percentage_task_estimate_time_missed{{ $percentage_of_tasks_where_given_estimated_time_was_missed_with_revision }}">
                             {{ round($percentage_number_task_cross_estimate_time_lead, 2) }}%
 
                         </a>
@@ -337,80 +340,6 @@
             </div>
         </div>
     </div>
-</div>
-<div class="row mt-3">
-    <div class="col-md-4">
-        <div
-            class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0">
-            <div class="d-block text-capitalize">
-                <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">Rejection rate</h5>
-                <div class="d-flex flex-wrap">
-
-                    <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
-                        <a href="#" data-toggle="modal" data-target="#">
-
-                            Under Development
-
-                        </a>
-
-                    </p>
-
-                </div>
-            </div>
-            <div class="d-block">
-                <i class="fa fa-list text-lightest f-27"></i>
-            </div>
-        </div>
-    </div>
-    <div class="col-md-4">
-        <div
-            class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0">
-            <div class="d-block text-capitalize">
-                <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">
-                    Cancelation rate
-                </h5>
-                <div class="d-flex flex-wrap">
-
-                    <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
-                        <a href="#" data-toggle="modal" data-target="#">
-
-                            Under Development
-
-                        </a>
-
-                    </p>
-
-                </div>
-            </div>
-            <div class="d-block">
-                <i class="fa fa-list text-lightest f-27"></i>
-            </div>
-        </div>
-    </div>
-    <div class="col-md-4">
-        <div
-            class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0">
-            <div class="d-block text-capitalize">
-                <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">Rate of reassign</h5>
-                <div class="d-flex flex-wrap">
-
-                    <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
-                        <a href="#" data-toggle="modal" data-target="#">
-
-                            Under Development
-
-                        </a>
-
-                    </p>
-
-                </div>
-            </div>
-            <div class="d-block">
-                <i class="fa fa-list text-lightest f-27"></i>
-            </div>
-        </div>
-    </div>
-
 </div>
 <div class="row mt-3">
     <div class="col-md-4">
@@ -444,7 +373,7 @@
                 <div class="d-flex flex-wrap">
 
                     <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
-                        <a href="#" data-target="#auto_approved_tasks{{ count($auto_approved_tasks_data) }}"
+                        <a href="#" data-target="#auto_approved_tasks{{ $auto_approved_tasks }}"
                             data-toggle="modal">
                             {{ $auto_approved_tasks }}
                         </a>
@@ -489,17 +418,17 @@
                     <h6 class="mb-0 f-18 font-weight-bold mr-5">
                         No. of disputes filed:
                         <a href="#"
-                            data-target="#number_of_disputes_filed{{ count($number_of_dispute_filed_own_lead_data) }}"
+                            data-target="#number_of_disputes_filed{{ $number_of_dispute_filed_own_lead }}"
                             data-toggle="modal">
                             {{ $number_of_dispute_filed_own_lead }}
                         </a>
                         @include('dashboard.ajax.leaddeveloper.modals.number_of_disputes_filed')
                     </h6>
                     <h6 class="mb-0 f-18 font-weight-bold mr-5">
-                        No. of disputes (Overall):
+                        No. of disputes filed (Overall):
                         <a href="#" data-toggle="modal"
-                            data-target="#no_of_dispute_overall{{ count($number_of_dispute_filed_all_data_lead) }}">
-                            {{ $number_of_dispute_filed_all_lead }}
+                            data-target="#no_of_dispute_overall{{ $number_of_dispute_filed_own_overall_lead }}">
+                            {{ $number_of_dispute_filed_own_overall_lead }}
                         </a>
                         @include('dashboard.ajax.leaddeveloper.modals.no_of_dispute_overall')
                     </h6>
@@ -520,12 +449,10 @@
                 <div class="d-flex flex-wrap">
 
                     <h6 class="mb-0 f-18 font-weight-bold mr-5">
-                        No. of disputes lost(Raised By Developer):
+                        Number of Disputes Lost (Raised By Lead Developer):
                         <a href="#" data-toggle="modal"
-                            data-target="#no_of_dispute_lost{{ count($number_of_dispute_lost_own_data_lead) }}">
-
-                            {{ $number_of_dispute_lost_own_lead }}
-
+                            data-target="#no_of_dispute_lost{{ $number_of_dispute_lose_own_lead }}">
+                            {{ $number_of_dispute_lose_own_lead }}
                         </a>
                         @include('dashboard.ajax.leaddeveloper.modals.no_of_dispute_lost')
 
@@ -533,10 +460,8 @@
                     <h6 class="mb-0 f-18 font-weight-bold mr-5">
                         No. of disputes lost(Overall):
                         <a href="#" data-toggle="modal"
-                            data-target="#no_of_dispute_lost_overall{{ count($number_of_dispute_lost_all_data_lead) }}">
-
-                            {{ $number_of_dispute_lost_all_lead }}
-
+                            data-target="#no_of_dispute_lost_overall{{ $number_of_dispute_lose_own_overall_lead }}">
+                            {{ $number_of_dispute_lose_own_overall_lead }}
                         </a>
                         @include('dashboard.ajax.leaddeveloper.modals.no_of_dispute_lost_overall')
 
@@ -561,8 +486,8 @@
 
                     <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
                         <a href="#" data-toggle="modal"
-                            data-target="#number_of_disputes_involved_in{{ count($disputes_lead_developer_involved_data) }}">
-                            {{ round($disputes_lead_developer_involved, 2) }}
+                            data-target="#number_of_disputes_involved_in{{ $disputes_lead_developer_involved }}">
+                            {{ $disputes_lead_developer_involved }}
 
                         </a>
                         @include('dashboard.ajax.leaddeveloper.modals.number_of_disputes_involved_in')
@@ -583,8 +508,8 @@
                 <div class="d-flex flex-wrap">
                     <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
                         <a href="#" data-toggle="modal"
-                            data-target="#hours_spent_in_revision{{ count($spent_revision_developer_data_lead) }}">
-                            {{ round($spent_revision_developer_lead, 2) }} Hours
+                            data-target="#hours_spent_in_revision{{ $spent_revision_developer_lead_count }}">
+                            {{ $spent_revision_developer_lead }}
                         </a>
                     </p>
                     @include('dashboard.ajax.leaddeveloper.modals.hours_spent_in_revision')
@@ -609,46 +534,36 @@
                     <th>Client Name</th>
                     <th>Submittion date</th>
                     <th>Current Status</th>
-
                 </x-slot>
 
                 @forelse($tasks as $task)
                     <tr>
                         <td class="pl-20">{{ $loop->index + 1 }}</td>
                         <td>
-                            {{ $task->created_at }}
+                            {{ $task->created_at->format('d-m-Y g:i A') }}
                         </td>
                         <td>
                             <a href="{{ route('tasks.show', $task->id) }}"> {{ $task->heading }}</a>
-
                         </td>
                         <td>
-                            @if ($task->ProjectId != null)
-                                <a href="{{ route('clients.show', $task->client_id) }}">{{ $task->clientName }}</a>
-                            @elseif($task->task_client_name != null)
-                                {{ $task->task_client_name }}
-                            @else
-                                {{ $task->cl_name }}
+                            @if ($task?->project?->client)
+                                <a href="{{ route('clients.show', $task->project->client->id) }}">
+                                    {{ $task->project->client->name }}</a>
                             @endif
-
                         </td>
 
                         <td>
                             @if ($task->board_column_id == 2 || $task->board_column_id == 1 || $task->board_column_id == 3)
                                 N\A
                             @else
-                                {{ $task->submission_date }}
+                                {{ $task?->latestTaskSubmission?->created_at->format('d-m-Y g:i A') }}
                             @endif
 
                         </td>
                         <td>
-                            <span class="task-status" data-task-id="{{ $task->id }}"
-                                style="color: {{ $task->label_color }}; cursor:pointer">
-                                {{ $task->column_name }}
-                            </span>
-
+                            <span style="color: {{ $task->stat->label_color }}">
+                                {{ $task->stat->column_name }}</span>
                         </td>
-
                     </tr>
                 @empty
 
@@ -679,31 +594,22 @@
                     <tr>
                         <td class="pl-20">{{ $loop->index + 1 }}</td>
                         <td>
-                            {{ $task->created_at }}
+                            {{ $task->created_at->format('d-m-Y g:i A') }}
                         </td>
                         <td>
                             <a href="{{ route('tasks.show', $task->id) }}"> {{ $task->heading }}</a>
-
                         </td>
                         <td>
-                            @if ($task->ProjectId != null)
-                                <a href="{{ route('clients.show', $task->client_id) }}">{{ $task->clientName }}</a>
-                            @elseif($task->task_client_name != null)
-                                {{ $task->task_client_name }}
-                            @else
-                                {{ $task->cl_name }}
+                            @if ($task?->project?->client)
+                                <a href="{{ route('clients.show', $task->project->client->id) }}">
+                                    {{ $task->project->client->name }}</a>
                             @endif
-
                         </td>
 
                         <td>
-                            <span class="task-status" data-task-id="{{ $task->id }}"
-                                style="color: {{ $task->label_color }}; cursor:pointer">
-                                {{ $task->column_name }}
-                            </span>
-
+                            <span style="color: {{ $task->stat->label_color }}">
+                                {{ $task->stat->column_name }}</span>
                         </td>
-
                     </tr>
                 @empty
 

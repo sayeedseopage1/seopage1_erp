@@ -1,5 +1,5 @@
 <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
-<div id="average_submission_aproval_in_this_month_lead{{ count($average_submission_aproval_in_this_month_lead_data) }}" class="modal fade"
+<div id="average_submission_aproval_in_this_month_lead{{ $submission_approval_by_pm_lead }}" class="modal fade"
     tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-xl">
         <div class="modal-content">
@@ -27,9 +27,9 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach ($average_submission_aproval_in_this_month_lead_data as $row)
+                        @foreach ($submission_approval_by_pm_lead_data as $row)
                             <tr>
-                                <td>{{ $loop->index + 1 }}</td>
+                                <td>{{ ++$loop->index }}</td>
                                 <td>
                                     <a href="{{ route('tasks.show', $row->id) }}">{{ $row->heading }}<a>
                                 </td>
@@ -52,7 +52,7 @@
                                     {{ $row?->status }}
                                 </td>
                                 <td>
-                                    {{ $row?->revisions?->count() ?? 0 }}
+                                    {{ $row?->revisions_for_responsible + 1 }}
                                 </td>
                             </tr>
                         @endforeach

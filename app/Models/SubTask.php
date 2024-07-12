@@ -75,4 +75,9 @@ class SubTask extends BaseModel
     {
         return $this->hasMany(ProjectTimeLog::class, 'task_id', 'task_id');
     }
+
+    public function firstTimeLog()
+    {
+        return $this->hasOneThrough(ProjectTimeLog::class, Task::class, 'subtask_id', 'task_id')->oldestOfMany();
+    }
 }
