@@ -43,6 +43,7 @@ const PortfolioModal = ({ isOpen, close, data, isLoading }) => {
                 rating_updated_by: auth.userId,
             }).unwrap();
             toast.success("Rating submission successful.");
+            close();
 
             setShowModal(false);
         } catch (error) {
@@ -141,7 +142,7 @@ const PortfolioModal = ({ isOpen, close, data, isLoading }) => {
                                             width="49%"
                                         />
                                         <DataComponent
-                                            label={`Agree Price:`}
+                                            label={`Agreed Price:`}
                                             value={
                                                 data?.project_budget ?? "0.00"
                                             }
@@ -193,7 +194,7 @@ const PortfolioModal = ({ isOpen, close, data, isLoading }) => {
                                             fontSize="16px"
                                             color="#8198AA"
                                             backgroundColor="#DFE8EF"
-                                            width="98%"
+                                            width="100%"
                                         />
 
                                         <DataComponent
@@ -219,6 +220,27 @@ const PortfolioModal = ({ isOpen, close, data, isLoading }) => {
                                             marginTop={"30px"}
                                         >
                                             Secondary page name and number:{" "}
+                                        </DataComponent>
+                                        <DataComponent
+                                            label={`Is There Any Major Functions You Want To Mention About This Project? (Mention the name of the functionality and a brief description with screenshot):`}
+                                            value={""}
+                                            fontSize="16px"
+                                            color="#8198AA"
+                                            backgroundColor="#DFE8EF"
+                                            width="100%"
+                                        >
+                                            {data?.description ? (
+                                                <div
+                                                    dangerouslySetInnerHTML={{
+                                                        __html: data?.description,
+                                                    }}
+                                                />
+                                            ) : (
+                                                <span>
+                                                    No major functionalities to
+                                                    mention for this project
+                                                </span>
+                                            )}
                                         </DataComponent>
                                     </div>
 

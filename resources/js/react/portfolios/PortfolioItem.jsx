@@ -5,6 +5,7 @@ import PortfolioModal from "./components/PortfolioModal";
 import { useLazyGetPortfolioDataByIdQuery } from "../services/api/portfolioApiSlice";
 import Button from "../global/Button";
 import PortfolioButtons from "./components/PortfolioButtons";
+import FractionalRating from "../global/FractionalRating";
 
 const PortfolioItem = ({ portfolioData, id, url, onClick, isLoading }) => {
     const [showModal, setShowModal] = useState(false);
@@ -68,9 +69,13 @@ const PortfolioItem = ({ portfolioData, id, url, onClick, isLoading }) => {
                 >
                     <div className="singleline-ellipsis mb-2">
                         <span> URL: </span>
-                        <span className="portfolio-item-link">
+                        <a
+                            href={url}
+                            target="_blank"
+                            className="portfolio-item-link"
+                        >
                             {url?.slice(0, 30) + "..."}
-                        </span>
+                        </a>
                     </div>
 
                     <PortfolioButtons
@@ -90,14 +95,20 @@ const PortfolioItem = ({ portfolioData, id, url, onClick, isLoading }) => {
                 </div>
 
                 <div>
-                    <span style={{ color: "gold", fontSize: "24px" }}>
-                        {portfolioData?.rating_score ? "⭐" : ""}
-                    </span>
-                    <span>
-                        {portfolioData?.rating_score
-                            ? ` ${portfolioData?.rating_score}/5`
-                            : "N/A"}
-                    </span>
+                    {portfolioData?.rating_score ? (
+                        <>
+                            <FractionalRating
+                                value={Number(portfolioData?.rating_score) / 6}
+                                stop={1}
+                                IconColor={"gold"}
+                                readonly={true}
+                                // fractions={10}
+                            />
+                            <span> {portfolioData?.rating_score}/5</span>
+                        </>
+                    ) : (
+                        <span>N/A</span>
+                    )}
                 </div>
             </div>
 

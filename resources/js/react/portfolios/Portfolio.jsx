@@ -5,7 +5,7 @@ import PortfolioItem from "./PortfolioItem";
 import {
     useGetPortfolioDataQuery,
     useGetPortfolioFilterMenuItemsQuery,
-    useLazyGetPortfolioDataQuery,
+    useLazyGetPortfolioDataByIdQuery,
 } from "../services/api/portfolioApiSlice";
 
 import _ from "lodash";
@@ -19,6 +19,7 @@ import AppliedFilters from "./components/filter/AppliedFilters";
 import { useLocation } from "react-router-dom";
 import { PendingOrCompleted } from "./components/filter/PendingOrCompleted";
 import { useAuth } from "../hooks/useAuth";
+import PortfolioModal from "./components/PortfolioModal";
 
 const Portfolio = () => {
     const auth = useAuth();
@@ -96,12 +97,26 @@ const Portfolio = () => {
 
     const portfolio = data?.data;
 
+    const [dataById, setDataById] = useState([]);
+
+    const [showModal, setShowModal] = useState(false);
+
+    const [getPortfolioDataById, { isFetching }] =
+        useLazyGetPortfolioDataByIdQuery();
+
+    const handleToggleModal = async (portfolio_id) => {
+        setShowModal(true);
+        const res = await getPortfolioDataById(portfolio_id).unwrap();
+        setDataById(res);
+    };
+
     useEffect(() => {
         if (portfolio_id) {
-            setTableView("tableView");
+            setTableView("listView");
+            handleToggleModal(portfolio_id);
         }
     }, []);
-
+    const close = () => setShowModal(false);
     const subNiches = () => {
         let data = _.filter(
             filterMenuItems?.website_categories,
@@ -345,6 +360,13 @@ const Portfolio = () => {
                     onPageSize={(v) => setPageSize(v)}
                 />
             </div>
+
+            <PortfolioModal
+                isOpen={showModal}
+                close={close}
+                data={dataById}
+                isLoading={isFetching}
+            />
         </section>
     );
 };
