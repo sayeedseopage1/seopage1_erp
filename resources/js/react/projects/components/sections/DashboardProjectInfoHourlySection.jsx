@@ -79,7 +79,9 @@ const DashboardProjectInfoHourlySection = ({ projectData, isLoading }) => {
                     } else if (budget.key === "actual_earnings") {
                         return {
                             ...budget,
-                            price: Number(projectData?.actual_earnings)?.toFixed(2),
+                            price: Number(
+                                projectData?.actual_earnings
+                            )?.toFixed(2),
                             currency:
                                 projectData?.deal?.original_currency
                                     ?.currency_code,
@@ -90,7 +92,9 @@ const DashboardProjectInfoHourlySection = ({ projectData, isLoading }) => {
                     } else if (budget.key === "total_expenses") {
                         return {
                             ...budget,
-                            price: Number(projectData?.total_expenses)?.toFixed(2),
+                            price: Number(projectData?.total_expenses)?.toFixed(
+                                2
+                            ),
                             currency: projectData?.currency?.currency_code,
                             currency_symbol:
                                 projectData?.currency?.currency_symbol,
@@ -104,7 +108,9 @@ const DashboardProjectInfoHourlySection = ({ projectData, isLoading }) => {
                     if (budget.key === "upsell_amount") {
                         return {
                             ...budget,
-                            price: Number(projectData?.deal?.upsell_amount)?.toFixed(2),
+                            price: Number(
+                                projectData?.deal?.upsell_amount
+                            )?.toFixed(2),
                             currency: projectData?.currency?.currency_code,
                             currency_symbol:
                                 projectData?.currency?.currency_symbol,
@@ -112,7 +118,9 @@ const DashboardProjectInfoHourlySection = ({ projectData, isLoading }) => {
                     } else if (budget.key === "upsell_actual_amount") {
                         return {
                             ...budget,
-                            price: Number(projectData?.deal?.upsell_actual_amount).toFixed(2),
+                            price: Number(
+                                projectData?.deal?.upsell_actual_amount
+                            ).toFixed(2),
                             currency:
                                 projectData?.deal?.original_currency
                                     ?.currency_code,
@@ -154,12 +162,38 @@ const DashboardProjectInfoHourlySection = ({ projectData, isLoading }) => {
                 }
             );
 
+            const hourlyProjectSales = projectBudgetData?.hourlyProjectSalesData?.map((item) => {
+                if (item?.key === "expect_amount") {
+                    return {
+                        ...item,
+                        answer: projectData?.deal?.expect_amount
+                            ? projectData?.deal?.expect_amount
+                            : "N/A",
+                    };
+                } else if (item?.key === "certain_amount_hour") {
+                    return {
+                        ...item,
+                        answer: projectData?.deal?.certain_amount_hour
+                            ? projectData?.deal?.certain_amount_hour
+                            : "N/A",
+                    };
+                } else if (item?.key === "long_project") {
+                    return {
+                        ...item,
+                        answer: projectData?.deal?.long_project
+                            ? projectData?.deal?.long_project
+                            : "N/A",
+                    };
+                }
+            });
+
             setProjectBudgetData({
                 ...projectBudgetData,
                 project_budget: updateProjectBudget,
                 earning_expenses: earningExpenses,
                 upsold_amount: updateUpsoldAmount,
                 hours_logged: hoursLogged,
+                hourlyProjectSalesData: hourlyProjectSales,
             });
         }
     }, [projectData, isLoading, ProjectBudgetData]);
@@ -473,7 +507,7 @@ const DashboardProjectInfoHourlySection = ({ projectData, isLoading }) => {
                     </CardWrapper>
                     {/* Hourly Rate Related Question */}
                     <CardWrapper color="#ffffff" className="h-100">
-                        {HourlyProjectSalesData?.map((item) => (
+                        {projectBudgetData.hourlyProjectSalesData?.map((item) => (
                             <div className="mb-3" key={item?.id}>
                                 <DashboardCardTitle
                                     title={item?.question}

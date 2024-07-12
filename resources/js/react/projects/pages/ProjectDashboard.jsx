@@ -17,8 +17,7 @@ import Switch from "../../global/Switch";
 // context
 import { ProjectDashboardContext } from "../context/ProjectDashboardProvider";
 
-// hooks - custom - useWhyDidYouRender
-import useWhyDidYouRender from "../../hooks/useWhyDidYouRender";
+import "../project.css";
 
 // Components - styled components
 import { SectionContainer } from "../components/ui/styledComponents";

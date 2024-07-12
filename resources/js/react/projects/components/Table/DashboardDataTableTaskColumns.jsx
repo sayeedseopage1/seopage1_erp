@@ -59,8 +59,8 @@ export const DashboardDataTableTaskColumns = [
                     case 9:
                         return ProjectProgressStatus[7];
                 }
-            }
-            const statusData = getStatusData()
+            };
+            const statusData = getStatusData();
             return (
                 <DashboardProgressStatus
                     title={statusData?.name}
@@ -78,9 +78,11 @@ export const DashboardDataTableTaskColumns = [
             const data = row.original;
             return (
                 <span className="singleline-ellipsis">
-                    {dayjs(data?.logged_start_time).format(
-                        "DD-MM-YYYY h:mm:ss A"
-                    ) ?? "Not started yet"}
+                    {data?.logged_start_time
+                        ? dayjs(data?.logged_start_time).format(
+                              "DD-MM-YYYY h:mm:ss A"
+                          )
+                        : "Not started yet"}
                 </span>
             );
         },

@@ -730,7 +730,7 @@ export const ProjectDisputeAuthorizationsData = [
             The Instruction File) (Optional)`,
         key: "description9",
         value: null,
-    },{
+    }, {
         id: 13,
         title: `Describe The Reason Why We Are Here. In Other Words,
         Write Down Why The Client Is This Much Dissatisfied And
@@ -990,22 +990,7 @@ export const ProjectProgressStatus = [
 
 
 export const HourlyProjectSalesData = [
-    {
-        id: 1,
-        question: "Is the amount of work he expects per hour realistic?",
-        answer: "Asked for 8-10 hours for the mockup task.",
-    },
-    {
-        id: 2,
-        question: `Does the client have any certain amount of hours on mind for the
-        first set of tasks?`,
-        answer: "Not like this, she gave a small task and needs to be done in 1-2 days."
-    },
-    {
-        id: 3,
-        question: "For how long the project may continue?",
-        answer: "The client has a few tasks and the project will be finished when those are done",
-    }
+
 ]
 
 export const ProjectBudgetData = {
@@ -1094,6 +1079,28 @@ export const ProjectBudgetData = {
             currency_symbol: "",
             key: "total_expenses",
             icon: "/images/dollar-circle.png"
+        }
+    ],
+    hourlyProjectSalesData: [
+        {
+            id: 1,
+            question: "Is the amount of work he expects per hour realistic?",
+            answer: "",
+            key: "expect_amount"
+
+        },
+        {
+            id: 2,
+            question: `Does the client have any certain amount of hours on mind for the
+            first set of tasks?`,
+            answer: "",
+            key: "certain_amount_hour"
+        },
+        {
+            id: 3,
+            question: "For how long the project may continue?",
+            answer: "",
+            key: "long_project"
         }
     ]
 

@@ -10,7 +10,11 @@ import style from "../sections/styles/dashboardHeaderSection.module.css";
 // ui components
 import Button from "../ui/customComponents/Button/Button";
 
+// hooks
+import { useAuth } from "../../../hooks/useAuth";
+
 const PageNavigateButtons = ({ navigateData, className = "" }) => {
+    const auth = useAuth();
     return (
         <div className={`${className}`}>
             <Switch>
@@ -25,29 +29,31 @@ const PageNavigateButtons = ({ navigateData, className = "" }) => {
                 >
                     Won Deal
                 </Button>
-                <Button
-                    onClick={() =>
-                        window.open(
-                            `/account/deals/${navigateData?.deal?.deal_stage?.id}`,
-                            "_blank"
-                        )
-                    }
-                    className={`${style?.dashboardHeaderButton} ml-2`}
-                >
-                    Deal Page
-                </Button>
-                <Switch.Case condition={navigateData?.deal?.lead_id}>
+                <Switch.Case condition={auth.getRoleId() === 1}>
                     <Button
                         onClick={() =>
                             window.open(
-                                `/account/leads/${navigateData?.deal?.lead_id}`,
+                                `/account/deals/${navigateData?.deal?.deal_stage?.id}`,
                                 "_blank"
                             )
                         }
                         className={`${style?.dashboardHeaderButton} ml-2`}
                     >
-                        Lead Page
+                        Deal 
                     </Button>
+                    <Switch.Case condition={navigateData?.deal?.lead_id}>
+                        <Button
+                            onClick={() =>
+                                window.open(
+                                    `/account/leads/${navigateData?.deal?.lead_id}`,
+                                    "_blank"
+                                )
+                            }
+                            className={`${style?.dashboardHeaderButton} ml-2`}
+                        >
+                            Lead
+                        </Button>
+                    </Switch.Case>
                 </Switch.Case>
             </Switch>
         </div>
