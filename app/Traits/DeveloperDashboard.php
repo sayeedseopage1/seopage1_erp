@@ -267,10 +267,10 @@ trait DeveloperDashboard
         } else {
             $devId = Auth::id();
 
-            // $startDate = Carbon::now()->startOfMonth();
-            // $endDate = Carbon::now()->endOfMonth()->addDays(1);
-            $startDate = Carbon::parse('2024-05-01')->startOfMonth();
-            $endDate = Carbon::parse('2024-05-31')->endOfMonth()->addDays(1);
+            $startDate = Carbon::now()->startOfMonth();
+            $endDate = Carbon::now()->endOfMonth()->addDays(1);
+            // $startDate = Carbon::parse('2024-05-01')->startOfMonth();
+            // $endDate = Carbon::parse('2024-05-31')->endOfMonth()->addDays(1);
 
             $tasksUserInDate = Task::whereBetween('created_at', [$startDate, $endDate])
                 ->whereRelation('taskUsers', 'user_id', $devId);
