@@ -2,32 +2,27 @@ import React, { useEffect } from "react";
 import RatingModal from "../../Modal/RatingModal";
 import { useAuth } from "../../../../hooks/useAuth";
 import _ from "lodash";
-import { useLocation } from "react-router-dom";
+import FractionalRating from "../../../../global/FractionalRating";
 
 const ActionRating = ({ data }) => {
     const [showModal, setShowModal] = React.useState(false);
-    const location = useLocation();
-    const queryParams = new URLSearchParams(location.search);
-    const portfolio_id = queryParams.get("portfolio_id");
-    console.log(
-        "portfolio id from param",
-        portfolio_id,
-        "state portfolio id",
-        data?.id
-    );
-    useEffect(() => {
-        if (portfolio_id == data?.id) {
-            setShowModal(true);
-        }
-    }, [portfolio_id]);
 
-    console.log("show modal", showModal);
     const auth = useAuth();
     return (
         <div>
             {_.includes([1, 8], auth?.getRoleId()) ? (
                 data?.rating_score > 0 ? (
-                    <div> ⭐{data?.rating_score}/5</div>
+                    <div>
+                        {" "}
+                        <FractionalRating
+                            value={Number(data?.rating_score) / 6}
+                            stop={1}
+                            IconColor={"gold"}
+                            readonly={true}
+                            fractions={8}
+                        />
+                        {data?.rating_score}/5
+                    </div>
                 ) : (
                     <button
                         className="portfolio_table_action_rating_button"
@@ -39,7 +34,20 @@ const ActionRating = ({ data }) => {
             ) : (
                 <div>
                     {" "}
-                    {data?.rating_score ? `⭐${data?.rating_score}/5` : "N/A"}
+                    {data?.rating_score ? (
+                        <span>
+                            <FractionalRating
+                                value={Number(data?.rating_score) / 6}
+                                stop={1}
+                                IconColor={"gold"}
+                                readonly={true}
+                                fractions={8}
+                            />
+                            {data?.rating_score}/5{" "}
+                        </span>
+                    ) : (
+                        "N/A"
+                    )}
                 </div>
             )}
 

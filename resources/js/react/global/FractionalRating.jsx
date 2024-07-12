@@ -7,6 +7,7 @@ import styles from "./FractionalRating.module.css";
  *
  * @param {value} props - value of rating
  * @param {onChange} props - function to change the value of rating
+ * @param {fractions} props - number of fractions
  * @returns  FractionalRating component
  */
 const FractionalRating = ({
@@ -15,6 +16,7 @@ const FractionalRating = ({
     readonly,
     stop,
     IconColor = "gray",
+    fractions = 4,
 }) => {
     return (
         <Rating
@@ -42,7 +44,7 @@ const FractionalRating = ({
                     style={{ color: "gold", fontSize: "20px" }}
                 />
             }
-            fractions={4}
+            fractions={fractions}
             stop={stop ?? 10}
             className={styles.rating}
             onChange={onChange}
