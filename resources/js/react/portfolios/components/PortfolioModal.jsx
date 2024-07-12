@@ -58,7 +58,9 @@ const PortfolioModal = ({ isOpen, close, data, isLoading }) => {
                     <div className="sp1_modal-panel sp1_task_create_modal_panel w-100">
                         {/* header */}
                         <div className="sp1_modal-head">
-                            <div className="sp1_modal-title">View Category</div>
+                            <div className="sp1_modal-title">
+                                Project Details
+                            </div>
                             <div onClick={close} className="sp1_modal-close">
                                 <RxCross2 color="white" size={"25px"} />
                             </div>
@@ -222,7 +224,7 @@ const PortfolioModal = ({ isOpen, close, data, isLoading }) => {
                                             Secondary page name and number:{" "}
                                         </DataComponent>
                                         <DataComponent
-                                            label={`Is There Any Major Functions You Want To Mention About This Project? (Mention the name of the functionality and a brief description with screenshot):`}
+                                            label={`Was there any major functionality in this project? If yes, mention the name of the functionality and a brief description with screenshot`}
                                             value={""}
                                             fontSize="16px"
                                             color="#8198AA"
