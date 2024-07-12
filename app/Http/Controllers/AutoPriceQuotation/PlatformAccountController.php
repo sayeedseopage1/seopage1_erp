@@ -23,6 +23,7 @@ class PlatformAccountController extends Controller
         $validated = $request->validate([
             'type' => 'required|numeric',
             'username' => 'required|string',
+            'name' => 'required|string',
             'user_url' => 'required|string',
             'email' => 'required|email',
             'profile_type' => 'required|numeric',
@@ -62,6 +63,7 @@ class PlatformAccountController extends Controller
         $validated = $request->validate([
             'type' => 'required|numeric',
             'username' => 'required|string',
+            'name' => 'required|string',
             'user_url' => 'required|string',
             'email' => 'required|email',
             'profile_type' => 'required|numeric',
