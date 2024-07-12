@@ -5,13 +5,14 @@ namespace App\Http\Controllers\AutoPriceQuotation;
 use Carbon\Carbon;
 use App\Models\Project;
 use App\Models\Currency;
-use Illuminate\Http\Request;
-use App\Models\PlatformAccount;
-use App\Http\Controllers\Controller;
 use App\Models\DealStage;
-use App\Models\PriceQuotation;
 use App\Models\ProjectCms;
 use App\Models\ProjectNiche;
+use Illuminate\Http\Request;
+use App\Models\PriceQuotation;
+use App\Models\PlatformAccount;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 
 class PriceQuotationController extends Controller
@@ -182,8 +183,8 @@ class PriceQuotationController extends Controller
             // Calculate project budget with multiplying factor of platform account
             if(isset($validated['platform_account_id']) && $validated['platform_account_id']){
                 $platformAccount = PlatformAccount::select(['id','type','company_name','name','username','user_url','email','profile_type','multiplying_factor'])->where('id', $validated['platform_account_id'])->first();
-                PriceQuotation::create([
-                    'serial_no' => '001',
+                $priceQuotation = PriceQuotation::create([
+                    'serial_no' => $this->generateSerialNumber(PriceQuotation::orderBy('id', 'desc')->first()->serial_no??'SEOPAGE1-'.date("Y").'-000'),
                     'deal_stage_id' => $validated['deal_stage_id'],
                     'project_cms_id' => $validated['project_cms_id'],
                     'project_niche_id' => $validated['project_niche_id'],
@@ -202,8 +203,13 @@ class PriceQuotationController extends Controller
                     'platform_account_id' => $validated['platform_account_id'],
                     'calculated_actual_budget' => number_format($projectBudgetWithDeadlineValue * $platformAccount->multiplying_factor, 2),
                     'calculated_usd_budget' => number_format(($projectBudgetWithDeadlineValue * $platformAccount->multiplying_factor) / $currency->exchange_rate, 2),
+                    'added_by' => Auth::user()->id
                 ]);
-            
+
+                return response()->json([
+                    'status' => 200,
+                    'data' => PriceQuotation::with('dealStage:id,short_code,client_username,client_name,client_badge,project_name','projectCms:id,cms_name','projectNiche:id,category_name','currency:id,currency_name,currency_symbol,currency_code,exchange_rate','platformAccount','dealStage.client','addedBy')->find($priceQuotation->id)
+                ]);
             }else{
                 return response()->json([
                     'status' => 400,
@@ -313,5 +319,28 @@ class PriceQuotationController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    function generateSerialNumber($latestSerial) {
+        $currentYear = date("Y");
+        
+        // Extract the year and serial number from the latest serial
+        preg_match('/SEOPAGE1-(\d{4})-(\d{3})/', $latestSerial, $matches);
+        $latestYear = $matches[1];
+        $latestSerialNo = (int)$matches[2];
+        
+        if ($latestYear == $currentYear) {
+            $newSerialNo = $latestSerialNo + 1;
+        } else {
+            $newSerialNo = 1;
+        }
+    
+        // Format the serial number to 3 digits
+        $formattedSerialNo = str_pad($newSerialNo, 3, '0', STR_PAD_LEFT);
+    
+        // Generate the new serial number
+        $newSerial = "SEOPAGE1-$currentYear-$formattedSerialNo";
+        
+        return $newSerial;
     }
 }
