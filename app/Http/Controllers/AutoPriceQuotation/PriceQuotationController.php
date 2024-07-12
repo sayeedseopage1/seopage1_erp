@@ -21,7 +21,7 @@ class PriceQuotationController extends Controller
     {
         return response()->json([
             'status' => 200,
-            'data' => PriceQuotation::with('dealStage:id,short_code,client_username,client_name,client_badge,project_name','projectCms:id,cms_name','projectNiche:id,category_name','currency:id,currency_name,currency_symbol,currency_code,exchange_rate','platformAccount','dealStage.client','addedBy')->orderBy('id', 'desc')->paginate(20)
+            'data' => PriceQuotation::with('dealStage:id,short_code,client_username,client_name,client_badge,project_name','projectCms:id,cms_name','projectNiche:id,category_name','currency:id,currency_name,currency_symbol,currency_code,exchange_rate','platformAccount','dealStage.client','addedBy','dealStage.deal:id,deal_id,amount,actual_amount')->orderBy('id', 'desc')->paginate(20)
         ]);
     }
 
@@ -230,14 +230,12 @@ class PriceQuotationController extends Controller
     {
         return response()->json([
             'status' => 200,
-            'data' => PriceQuotation::with('dealStage:id,short_code,client_username,client_name,client_badge,project_name','projectCms:id,cms_name','projectNiche:id,category_name','currency:id,currency_name,currency_symbol,currency_code,exchange_rate','platformAccount','dealStage.client','addedBy')->find($id)
+            'data' => PriceQuotation::with('dealStage:id,short_code,client_username,client_name,client_badge,project_name','projectCms:id,cms_name','projectNiche:id,category_name','currency:id,currency_name,currency_symbol,currency_code,exchange_rate','platformAccount','dealStage.client','addedBy','dealStage.deal:id,deal_id,amount,actual_amount')->find($id)
         ]);
     }
 
     function generateSerialNumber($latestSerial) {
         $currentYear = date("Y");
-        
-        // Extract the year and serial number from the latest serial
         preg_match('/SEOPAGE1-(\d{4})-(\d{3})/', $latestSerial, $matches);
         $latestYear = $matches[1];
         $latestSerialNo = (int)$matches[2];
@@ -247,13 +245,9 @@ class PriceQuotationController extends Controller
         } else {
             $newSerialNo = 1;
         }
-    
-        // Format the serial number to 3 digits
+
         $formattedSerialNo = str_pad($newSerialNo, 3, '0', STR_PAD_LEFT);
-    
-        // Generate the new serial number
         $newSerial = "SEOPAGE1-$currentYear-$formattedSerialNo";
-        
         return $newSerial;
     }
 }

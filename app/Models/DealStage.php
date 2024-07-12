@@ -35,5 +35,10 @@ class DealStage extends Model
     public function client()
   {
       return $this->belongsTo(User::class, 'client_username');
-  }
+  } 
+
+    public function deal()
+    {
+        return $this->hasOne(Deal::class, 'deal_id', 'short_code');
+    }
 }
