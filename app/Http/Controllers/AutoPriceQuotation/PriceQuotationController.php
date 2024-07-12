@@ -17,32 +17,14 @@ use Illuminate\Support\Facades\Validator;
 
 class PriceQuotationController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function index()
     {
-        //
+        return response()->json([
+            'status' => 200,
+            'data' => PriceQuotation::with('dealStage:id,short_code,client_username,client_name,client_badge,project_name','projectCms:id,cms_name','projectNiche:id,category_name','currency:id,currency_name,currency_symbol,currency_code,exchange_rate','platformAccount','dealStage.client','addedBy')->orderBy('id', 'desc')->paginate(20)
+        ]);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
