@@ -1293,6 +1293,14 @@ class TaskController extends AccountBaseController
             $task_revision->lead_comment = $request->comment;
         }
 
+        if(Auth::user()->role_id == 15){
+            $task_revision->revision_status = 'Probationary Project Manager';
+            $task_revision->lead_comment = $request->comment;
+        }elseif(Auth::user()->role_id == 16){
+            $task_revision->revision_status = 'Probationary Lead Developer';
+            $task_revision->lead_comment = $request->comment;
+        }
+
         if (Auth::user()->role_id == 4 || Auth::user()->role_id == 1 || Auth::user()->role_id == 8) {
             $task_revision->revision_status = 'Project Manager Revision';
             $task_revision->pm_comment = $request->comment;
@@ -1329,18 +1337,21 @@ class TaskController extends AccountBaseController
 
         /**EMPLOYEE EVALUATION START */
         $evaluation_task = EmployeeEvaluationTask::where('task_id',$task_revision->task_id)->first();
-        $user = User::where('id',$evaluation_task->user_id)->first();
-        if($user->role_id == 15 || $user->role_id == 16 || $user->role_id == 17){
-            $taskFind = Task::where('id',$request->task_id)->where('u_id','!=',null)->where('independent_task_status',1)->first();
-            if($taskFind != null){
-                $evaluation = EmployeeEvaluationTask::where('task_id',$taskFind->id)->first();
-                if($evaluation !=null)
-                {
-                    $evaluation->revision_number = $task_revision->revision_no;
-                    $evaluation->save();
+        if($evaluation_task !=null)
+        {
+            $user = User::where('id',$evaluation_task->user_id)->first();
+            if($user->role_id == 15 || $user->role_id == 16 || $user->role_id == 17){
+                $taskFind = Task::where('id',$request->task_id)->where('u_id','!=',null)->where('independent_task_status',1)->first();
+                if($taskFind != null){
+                    $evaluation = EmployeeEvaluationTask::where('task_id',$taskFind->id)->first();
+                    if($evaluation !=null)
+                    {
+                        $evaluation->revision_number = $task_revision->revision_no;
+                        $evaluation->save();
+                    }
                 }
             }
-        }
+        }        
         //ONLY FOR Developer
         $taskFind = Task::where('id',$request->task_id)->where('u_id',null)->where('independent_task_status',1)->first(); 
         if($taskFind != null){
