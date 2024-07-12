@@ -7,9 +7,17 @@ import styles from "./FractionalRating.module.css";
  *
  * @param {value} props - value of rating
  * @param {onChange} props - function to change the value of rating
+ * @param {fractions} props - number of fractions
  * @returns  FractionalRating component
  */
-const FractionalRating = ({ value, onChange, readonly }) => {
+const FractionalRating = ({
+    value,
+    onChange,
+    readonly,
+    stop,
+    IconColor = "gray",
+    fractions = 4,
+}) => {
     return (
         <Rating
             readonly={readonly}
@@ -26,7 +34,7 @@ const FractionalRating = ({ value, onChange, readonly }) => {
                 >
                     <i
                         className="far fa-star"
-                        style={{ color: "gray", fontSize: "20px" }}
+                        style={{ color: IconColor, fontSize: "20px" }}
                     />
                 </div>
             }
@@ -36,8 +44,8 @@ const FractionalRating = ({ value, onChange, readonly }) => {
                     style={{ color: "gold", fontSize: "20px" }}
                 />
             }
-            fractions={4}
-            stop={10}
+            fractions={fractions}
+            stop={stop ?? 10}
             className={styles.rating}
             onChange={onChange}
             initialRating={value}
