@@ -7,10 +7,9 @@ use App\Models\Project;
 use App\Models\Currency;
 use Illuminate\Http\Request;
 use App\Models\PlatformAccount;
-use App\Models\ProjectPortfolio;
-use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use App\Models\DealStage;
+use App\Models\PriceQuotation;
 use App\Models\ProjectCms;
 use App\Models\ProjectNiche;
 use Illuminate\Support\Facades\Validator;
@@ -61,7 +60,7 @@ class PriceQuotationController extends Controller
             'currency_id' => 'required|numeric',
             'deadline_type' => 'required|numeric',
             'no_of_days' => 'nullable',
-            'platform_account_id' => 'required|exists:platform_accounts,id',
+            'platform_account_id' => 'nullable|exists:platform_accounts,id',
             'is_selected' => 'nullable|numeric|in:0,1'
         ]);
         
@@ -115,6 +114,7 @@ class PriceQuotationController extends Controller
 
         // Increase project budget for major functionality (Each functionality will multiplying by 400)
         $projectBudgetWighMajorFunctionality = $projectBudgetWithMissedTimeTracking + ($validated['no_of_major_functionalities'] ? $validated['no_of_major_functionalities'] * 400 : 0);
+        $majorFunctionalityHours = ($validated['no_of_major_functionalities'] ? $validated['no_of_major_functionalities'] * 400 : 0) / 20;
        
         // Calculate hours for other works and every hour will multiplying by 20 (Speed Optimization: 6 Hours, Content Writing: 3 Hours per 1000 Words, Logo designd: 4 Hours per logo, UI Design: 3 Hours per page, Others: User inputs hour value in this field)
         $contentWritingHours = isset($validated['content_writing']) && $validated['content_writing'] ? (3 / 1000) * $validated['content_writing'] : 0;
@@ -145,9 +145,10 @@ class PriceQuotationController extends Controller
         // Add hours per day multiplication with calculated project budget
         $projectBudgetWithDeadlineValue = $projectBudgetRounded;
         $no_of_day_required = $validated['no_of_days'];
+        $calculated_total_hours = number_format($projectStimatedHoursDependOnPrimaryAndSecondaryPages, 2) + number_format($majorFunctionalityHours, 2) + number_format($totalHoursOfOtherWorks, 2);
         if($validated['deadline_type'] == 2){
             $actualNoOfDays = $validated['no_of_days'] - 3;
-            $hoursPerDay = $projectStimatedHoursDependOnPrimaryAndSecondaryPages / $actualNoOfDays;
+            $hoursPerDay = $calculated_total_hours / $actualNoOfDays;
             $multiplicationForHoursPerDay = 1;
             if($hoursPerDay <= 4){
                 $multiplicationForHoursPerDay = 1;
@@ -166,37 +167,74 @@ class PriceQuotationController extends Controller
             }
             $projectBudgetWithDeadlineValue = $projectBudgetRounded * $multiplicationForHoursPerDay;
         }elseif($validated['deadline_type'] == 1){
-            $no_of_day_required = ceil($projectStimatedHoursDependOnPrimaryAndSecondaryPages / 4) + 3;
+            $no_of_day_required = ceil($calculated_total_hours / 4) + 3;
         }
 
-        // Calculate project budget with multiplying factor of platform account
-        if($validated['platform_account_id']){
-            $platformAccouts = PlatformAccount::where('id', $validated['platform_account_id'])->get();
-        }else{
-            $platformAccouts = PlatformAccount::get();
-        }
+        
 
-        $data = array();
-        foreach($platformAccouts as $key => $platformAccout){
-            $data[$key]['deal_stage'] = DealStage::select(['id','short_code','client_username','project_name'])->find($validated['deal_stage_id']);
-            $data[$key]['project_cms'] = ProjectCms::select(['id','cms_name'])->find($validated['project_cms_id']);
-            $data[$key]['project_niche'] = ProjectNiche::select(['id','category_name'])->find($validated['project_niche_id']);
-            $data[$key]['no_of_primary_pages'] = $validated['no_of_primary_pages'];
-            $data[$key]['no_of_secondary_pages'] = $validated['no_of_secondary_pages'];
-            $data[$key]['no_of_major_functionalities'] = $validated['no_of_major_functionalities'];
-            $data[$key]['risk_factor'] = $validated['risk_factor'];
-            $data[$key]['currency_id'] = Currency::select(['id','currency_name','currency_symbol','currency_code','exchange_rate'])->find($validated['currency_id']);
-            $data[$key]['deadline_type'] = $validated['deadline_type'];
-            $data[$key]['no_of_days'] = $validated['no_of_days'];
-            $data[$key]['platform_account_id'] = $platformAccout->id;
-            $data[$key]['calculated_project_budget'] = $projectBudgetWithDeadlineValue * $platformAccout->multiplying_factor;
-            $data[$key]['calculated_total_hours'] = $projectStimatedHoursDependOnPrimaryAndSecondaryPages;
-            $data[$key]['calculated_no_of_days'] = $no_of_day_required;
-        }
+        
+        $dealStage = DealStage::select(['id','short_code','client_username','project_name'])->find($validated['deal_stage_id']);
+        $projectCms = ProjectCms::select(['id','cms_name'])->find($validated['project_cms_id']);
+        $projectNiche = ProjectNiche::select(['id','category_name'])->find($validated['project_niche_id']);
+        $currency = Currency::select(['id','currency_name','currency_symbol','currency_code','exchange_rate'])->find($validated['currency_id']);
 
         if(isset($validated['is_selected']) && $validated['is_selected'] == 1){
-            // Store and provide invoice data
+            // Calculate project budget with multiplying factor of platform account
+            if(isset($validated['platform_account_id']) && $validated['platform_account_id']){
+                $platformAccount = PlatformAccount::select(['id','type','company_name','name','username','user_url','email','profile_type','multiplying_factor'])->where('id', $validated['platform_account_id'])->first();
+                PriceQuotation::create([
+                    'serial_no' => '001',
+                    'deal_stage_id' => $validated['deal_stage_id'],
+                    'project_cms_id' => $validated['project_cms_id'],
+                    'project_niche_id' => $validated['project_niche_id'],
+                    'no_of_primary_pages' => $validated['no_of_primary_pages'],
+                    'no_of_secondary_pages' => $validated['no_of_secondary_pages'],
+                    'no_of_major_functionalities' => $validated['no_of_major_functionalities'],
+                    'risk_factor' => $validated['risk_factor'],
+                    'total_hours_of_primary_page' => number_format($validated['no_of_primary_pages'] * $existingHoursForEachPrimaryPage, 2),
+                    'total_hours_of_secondary_page' => number_format($validated['no_of_secondary_pages'] * $existingHoursForEachSecondaryPage, 2),
+                    'total_hours_of_major_functionality' => number_format($majorFunctionalityHours, 2),
+                    'total_hours_of_others_works' => number_format($totalHoursOfOtherWorks, 2),
+                    'total_calculated_hours' => number_format($calculated_total_hours, 2),
+                    'currency_id' => $validated['currency_id'],
+                    'deadline_type' => $validated['deadline_type'],
+                    'no_of_days' => $no_of_day_required,
+                    'platform_account_id' => $validated['platform_account_id'],
+                    'calculated_actual_budget' => number_format($projectBudgetWithDeadlineValue * $platformAccount->multiplying_factor, 2),
+                    'calculated_usd_budget' => number_format(($projectBudgetWithDeadlineValue * $platformAccount->multiplying_factor) / $currency->exchange_rate, 2),
+                ]);
+            
+            }else{
+                return response()->json([
+                    'status' => 400,
+                    'message' => 'Something went wrong!'
+                ]);
+            }
         }else{
+            // Calculate project budget with multiplying factor of platform account
+            if(isset($validated['platform_account_id']) && $validated['platform_account_id']){
+                $platformAccounts = PlatformAccount::select(['id','type','company_name','name','username','user_url','email','profile_type','multiplying_factor'])->where('id', $validated['platform_account_id'])->get();
+            }else{
+                $platformAccounts = PlatformAccount::select(['id','type','company_name','name','username','user_url','email','profile_type','multiplying_factor'])->get();
+            }
+            $data = array();
+            foreach($platformAccounts as $key => $platformAccount){
+                $data[$key]['deal_stage'] = $dealStage;
+                $data[$key]['project_cms'] = $projectCms;
+                $data[$key]['project_niche'] = $projectNiche;
+                $data[$key]['no_of_primary_pages'] = $validated['no_of_primary_pages'];
+                $data[$key]['no_of_secondary_pages'] = $validated['no_of_secondary_pages'];
+                $data[$key]['no_of_major_functionalities'] = $validated['no_of_major_functionalities'];
+                $data[$key]['risk_factor'] = $validated['risk_factor'];
+                $data[$key]['hours_of_other_works'] = $totalHoursOfOtherWorks;
+                $data[$key]['currency'] = $currency;
+                $data[$key]['platform_account'] = $platformAccount;
+                $data[$key]['calculated_project_budget'] = number_format($projectBudgetWithDeadlineValue * $platformAccount->multiplying_factor, 2);
+                $data[$key]['calculated_total_hours'] = number_format($calculated_total_hours, 2);
+                $data[$key]['calculated_no_of_days'] = $no_of_day_required;
+                $data[$key]['caculated_project_budget_in_usd'] = number_format(($projectBudgetWithDeadlineValue * $platformAccount->multiplying_factor) / $data[$key]['currency']->exchange_rate, 2);
+            }
+
             return response()->json([
                 'status' => 200,
                 'data' => $data,
