@@ -61,16 +61,22 @@ const DashboardSalesAndPMInfoSection = ({ projectData, isLoading }) => {
                         />
                         {handleLoadingComponent(
                             isLoading,
-                            <TextLoaderDynamic
-                                number={2}
-                                widthDeference={20}
-                                hight={16}
-                                className="mb-2"
-                                parentClassName="pl-4 pt-3"
-                            />,
                             <SectionContentContainer
                                 color="linear-gradient(0deg, #F2F9FE 0%, #F2F9FE 100%), #D9D9D9"
-                                maxHeight="35vh"
+                                maxHeight="7vh"
+                                minHeight="7vh"
+                            >
+                                <TextLoaderDynamic
+                                    number={1}
+                                    widthDeference={20}
+                                    hight={16}
+                                    className="mb-2"
+                                />
+                            </SectionContentContainer>,
+                            <SectionContentContainer
+                                color="linear-gradient(0deg, #F2F9FE 0%, #F2F9FE 100%), #D9D9D9"
+                                maxHeight="7vh"
+                                minHeight="7vh"
                                 className="pt-3"
                                 dangerouslySetInnerHTML={{
                                     __html:
@@ -98,17 +104,31 @@ const DashboardSalesAndPMInfoSection = ({ projectData, isLoading }) => {
                         />
                         {handleLoadingComponent(
                             isLoading,
-                            <TextLoaderDynamic
-                                number={10}
-                                widthDeference={20}
-                                hight={16}
-                                fullSizeCount={5}
-                                className="mb-2"
-                                parentClassName="pl-4 pt-3"
-                            />,
                             <SectionContentContainer
                                 color="linear-gradient(0deg, #F2F9FE 0%, #F2F9FE 100%), #D9D9D9"
-                                maxHeight="35vh"
+                                maxHeight="44.5vh"
+                                minHeight="44.5vh"
+                            >
+                                <TextLoaderDynamic
+                                    number={10}
+                                    widthDeference={20}
+                                    hight={16}
+                                    fullSizeCount={5}
+                                    className="mb-2"
+                                />
+                                <br />
+                                <TextLoaderDynamic
+                                    number={6}
+                                    widthDeference={20}
+                                    hight={16}
+                                    fullSizeCount={4}
+                                    className="mb-2"
+                                />
+                            </SectionContentContainer>,
+                            <SectionContentContainer
+                                color="linear-gradient(0deg, #F2F9FE 0%, #F2F9FE 100%), #D9D9D9"
+                                maxHeight="44.5vh"
+                                minHeight="44.5vh"
                                 className="pt-3"
                                 dangerouslySetInnerHTML={{
                                     __html:
@@ -136,17 +156,23 @@ const DashboardSalesAndPMInfoSection = ({ projectData, isLoading }) => {
                         />
                         {handleLoadingComponent(
                             isLoading,
-                            <TextLoaderDynamic
-                                number={8}
-                                widthDeference={20}
-                                hight={16}
-                                fullSizeCount={3}
-                                className="mb-2"
-                                parentClassName="pl-4 pt-3"
-                            />,
                             <SectionContentContainer
                                 color="linear-gradient(0deg, #F2F9FE 0%, #F2F9FE 100%), #D9D9D9"
-                                maxHeight="35vh"
+                                maxHeight="12vh"
+                                minHeight="12vh"
+                            >
+                                <TextLoaderDynamic
+                                    number={8}
+                                    widthDeference={20}
+                                    hight={16}
+                                    fullSizeCount={3}
+                                    className="mb-2"
+                                />
+                            </SectionContentContainer>,
+                            <SectionContentContainer
+                                color="linear-gradient(0deg, #F2F9FE 0%, #F2F9FE 100%), #D9D9D9"
+                                maxHeight="12vh"
+                                minHeight="12vh"
                                 className="pt-3"
                                 dangerouslySetInnerHTML={{
                                     __html:
@@ -157,34 +183,6 @@ const DashboardSalesAndPMInfoSection = ({ projectData, isLoading }) => {
                         )}
                     </SectionContainer>
                     {/* End Project Involved Other Department */}
-                    <SectionContainer className="mb-4">
-                        <DashboardCardTitle
-                            title="Any other notes for the project manager/technical team"
-                            isBorderUse={true}
-                            borderType="dotted"
-                        />
-                        {handleLoadingComponent(
-                            isLoading,
-                            <TextLoaderDynamic
-                                number={5}
-                                widthDeference={20}
-                                hight={16}
-                                fullSizeCount={2}
-                                className="mb-2"
-                                parentClassName="pl-4 pt-3"
-                            />,
-                            <SectionContentContainer
-                                color="linear-gradient(0deg, #F2F9FE 0%, #F2F9FE 100%), #D9D9D9"
-                                maxHeight="35vh"
-                                className="pt-3 "
-                                dangerouslySetInnerHTML={{
-                                    __html:
-                                        !isLoading &&
-                                        formatHttp(dealInfo?.description9),
-                                }}
-                            />
-                        )}
-                    </SectionContainer>
                 </div>
                 <div>
                     {/* Project Reference Website */}
@@ -204,16 +202,22 @@ const DashboardSalesAndPMInfoSection = ({ projectData, isLoading }) => {
                         />
                         {handleLoadingComponent(
                             isLoading,
-                            <TextLoaderDynamic
-                                number={2}
-                                widthDeference={20}
-                                hight={16}
-                                className="mb-2"
-                                parentClassName="pl-4 pt-3"
-                            />,
                             <SectionContentContainer
                                 color="linear-gradient(0deg, #F2F9FE 0%, #F2F9FE 100%), #D9D9D9"
-                                maxHeight="35vh"
+                                maxHeight="7vh"
+                                minHeight="7vh"
+                            >
+                                <TextLoaderDynamic
+                                    number={2}
+                                    widthDeference={20}
+                                    hight={16}
+                                    className="mb-2"
+                                />
+                            </SectionContentContainer>,
+                            <SectionContentContainer
+                                color="linear-gradient(0deg, #F2F9FE 0%, #F2F9FE 100%), #D9D9D9"
+                                maxHeight="7vh"
+                                minHeight="7vh"
                                 className="pt-3"
                                 dangerouslySetInnerHTML={{
                                     __html:
@@ -242,25 +246,28 @@ const DashboardSalesAndPMInfoSection = ({ projectData, isLoading }) => {
 
                         {handleLoadingComponent(
                             isLoading,
-                            <>
-                                <TextLoaderDynamic
-                                    number={4}
-                                    widthDeference={20}
-                                    hight={16}
-                                    className="mb-2"
-                                    parentClassName="pl-4 pt-3"
-                                />
-                                <TextLoaderDynamic
-                                    number={4}
-                                    widthDeference={20}
-                                    hight={16}
-                                    className="mb-2"
-                                    parentClassName="pl-4 pt-3"
-                                />
-                            </>,
                             <SectionContentContainer
                                 color="linear-gradient(0deg, #F2F9FE 0%, #F2F9FE 100%), #D9D9D9"
-                                maxHeight="35vh"
+                                maxHeight="7vh"
+                                minHeight="7vh"
+                            >
+                                <TextLoaderDynamic
+                                    number={4}
+                                    widthDeference={20}
+                                    hight={16}
+                                    className="mb-2"
+                                />
+                                <TextLoaderDynamic
+                                    number={4}
+                                    widthDeference={20}
+                                    hight={16}
+                                    className="mb-2"
+                                />
+                            </SectionContentContainer>,
+                            <SectionContentContainer
+                                color="linear-gradient(0deg, #F2F9FE 0%, #F2F9FE 100%), #D9D9D9"
+                                maxHeight="7vh"
+                                minHeight="7vh"
                                 className="pt-3"
                                 dangerouslySetInnerHTML={{
                                     __html:
@@ -288,19 +295,23 @@ const DashboardSalesAndPMInfoSection = ({ projectData, isLoading }) => {
                         />
                         {handleLoadingComponent(
                             isLoading,
-                            <>
+                            <SectionContentContainer
+                                color="linear-gradient(0deg, #F2F9FE 0%, #F2F9FE 100%), #D9D9D9"
+                                maxHeight="7vh"
+                                minHeight="7vh"
+                            >
                                 <TextLoaderDynamic
                                     number={5}
                                     widthDeference={20}
                                     hight={16}
                                     fullSizeCount={4}
                                     className="mb-2"
-                                    parentClassName="pl-4 pt-3"
                                 />
-                            </>,
+                            </SectionContentContainer>,
                             <SectionContentContainer
                                 color="linear-gradient(0deg, #F2F9FE 0%, #F2F9FE 100%), #D9D9D9"
-                                maxHeight="35vh"
+                                maxHeight="7vh"
+                                minHeight="7vh"
                                 className="pt-3"
                                 dangerouslySetInnerHTML={{
                                     __html:
@@ -312,7 +323,7 @@ const DashboardSalesAndPMInfoSection = ({ projectData, isLoading }) => {
                     </SectionContainer>
                     {/* End Logo Reference */}
                     {/* login Information */}
-                    <SectionContainer>
+                    <SectionContainer className="mb-4">
                         <DashboardCardTitle
                             title={
                                 DetailsSalesExecutiveConstant?.requiredLogins
@@ -328,17 +339,23 @@ const DashboardSalesAndPMInfoSection = ({ projectData, isLoading }) => {
                         />
                         {handleLoadingComponent(
                             isLoading,
-                            <TextLoaderDynamic
-                                number={6}
-                                widthDeference={20}
-                                hight={16}
-                                fullSizeCount={2}
-                                className="mb-2"
-                                parentClassName="pl-4 pt-3"
-                            />,
                             <SectionContentContainer
                                 color="linear-gradient(0deg, #F2F9FE 0%, #F2F9FE 100%), #D9D9D9"
-                                maxHeight="35vh"
+                                maxHeight="7vh"
+                                minHeight="7vh"
+                            >
+                                <TextLoaderDynamic
+                                    number={6}
+                                    widthDeference={20}
+                                    hight={16}
+                                    fullSizeCount={2}
+                                    className="mb-2"
+                                />
+                            </SectionContentContainer>,
+                            <SectionContentContainer
+                                color="linear-gradient(0deg, #F2F9FE 0%, #F2F9FE 100%), #D9D9D9"
+                                maxHeight="7vh"
+                                minHeight="7vh"
                                 className="pt-3"
                                 dangerouslySetInnerHTML={{
                                     __html:
@@ -349,6 +366,40 @@ const DashboardSalesAndPMInfoSection = ({ projectData, isLoading }) => {
                         )}
                     </SectionContainer>
                     {/* End login Information */}
+                    <SectionContainer>
+                        <DashboardCardTitle
+                            title="Any other notes for the project manager/technical team"
+                            isBorderUse={true}
+                            borderType="dotted"
+                        />
+                        {handleLoadingComponent(
+                            isLoading,
+                            <SectionContentContainer
+                                color="linear-gradient(0deg, #F2F9FE 0%, #F2F9FE 100%), #D9D9D9"
+                                maxHeight="12vh"
+                                minHeight="12vh"
+                            >
+                                <TextLoaderDynamic
+                                    number={5}
+                                    widthDeference={20}
+                                    hight={16}
+                                    fullSizeCount={2}
+                                    className="mb-2"
+                                />
+                            </SectionContentContainer>,
+                            <SectionContentContainer
+                                color="linear-gradient(0deg, #F2F9FE 0%, #F2F9FE 100%), #D9D9D9"
+                                maxHeight="12vh"
+                                minHeight="12vh"
+                                className="pt-3 "
+                                dangerouslySetInnerHTML={{
+                                    __html:
+                                        !isLoading &&
+                                        formatHttp(dealInfo?.description9),
+                                }}
+                            />
+                        )}
+                    </SectionContainer>
                 </div>
             </div>
             {/* End Details shared by the sales executive */}
@@ -380,16 +431,22 @@ const DashboardSalesAndPMInfoSection = ({ projectData, isLoading }) => {
                             />
                             {handleLoadingComponent(
                                 isLoading,
-                                <TextLoaderDynamic
-                                    number={5}
-                                    widthDeference={20}
-                                    hight={16}
-                                    fullSizeCount={2}
-                                    className="mb-2"
-                                />,
+                                <SectionContentContainer
+                                    maxHeight="7vh"
+                                    minHeight="7vh"
+                                >
+                                    <TextLoaderDynamic
+                                        number={5}
+                                        widthDeference={20}
+                                        hight={16}
+                                        fullSizeCount={2}
+                                        className="mb-2"
+                                    />
+                                </SectionContentContainer>,
                                 <SectionContentContainer
                                     color="#D8EDFC"
-                                    maxHeight="35vh"
+                                    maxHeight="7vh"
+                                    minHeight="7vh"
                                     className="pt-0"
                                     dangerouslySetInnerHTML={{
                                         __html:
@@ -416,16 +473,22 @@ const DashboardSalesAndPMInfoSection = ({ projectData, isLoading }) => {
                             />
                             {handleLoadingComponent(
                                 isLoading,
-                                <TextLoaderDynamic
-                                    number={5}
-                                    widthDeference={20}
-                                    hight={16}
-                                    fullSizeCount={1}
-                                    className="mb-2"
-                                />,
+                                <SectionContentContainer
+                                    maxHeight="7vh"
+                                    minHeight="7vh"
+                                >
+                                    <TextLoaderDynamic
+                                        number={5}
+                                        widthDeference={20}
+                                        hight={16}
+                                        fullSizeCount={1}
+                                        className="mb-2"
+                                    />
+                                </SectionContentContainer>,
                                 <SectionContentContainer
                                     color="#D8EDFC"
-                                    maxHeight="35vh"
+                                    maxHeight="7vh"
+                                    minHeight="7vh"
                                     className="pt-0"
                                     dangerouslySetInnerHTML={{
                                         __html:
@@ -451,16 +514,22 @@ const DashboardSalesAndPMInfoSection = ({ projectData, isLoading }) => {
                             />
                             {handleLoadingComponent(
                                 isLoading,
-                                <TextLoaderDynamic
-                                    number={5}
-                                    widthDeference={20}
-                                    hight={16}
-                                    fullSizeCount={1}
-                                    className="mb-2"
-                                />,
+                                <SectionContentContainer
+                                    maxHeight="7vh"
+                                    minHeight="7vh"
+                                >
+                                    <TextLoaderDynamic
+                                        number={5}
+                                        widthDeference={20}
+                                        hight={16}
+                                        fullSizeCount={1}
+                                        className="mb-2"
+                                    />
+                                </SectionContentContainer>,
                                 <SectionContentContainer
                                     color="#D8EDFC"
-                                    maxHeight="35vh"
+                                    maxHeight="7vh"
+                                    minHeight="7vh"
                                     className="pt-0"
                                     dangerouslySetInnerHTML={{
                                         __html:
@@ -501,16 +570,28 @@ const DashboardSalesAndPMInfoSection = ({ projectData, isLoading }) => {
                             />
                             {handleLoadingComponent(
                                 isLoading,
-                                <TextLoaderDynamic
-                                    number={5}
-                                    widthDeference={20}
-                                    hight={16}
-                                    fullSizeCount={2}
-                                    className="mb-2"
-                                />,
-                                <p className="boldText">
-                                    {projectInfo?.requirement_defined}
-                                </p>
+                                <SectionContentContainer
+                                    color="#D8EDFC"
+                                    maxHeight="7vh"
+                                    minHeight="7vh"
+                                >
+                                    <TextLoaderDynamic
+                                        number={5}
+                                        widthDeference={20}
+                                        hight={16}
+                                        fullSizeCount={2}
+                                        className="mb-2"
+                                    />
+                                </SectionContentContainer>,
+                                <SectionContentContainer
+                                    color="#D8EDFC"
+                                    maxHeight="7vh"
+                                    minHeight="7vh"
+                                >
+                                    <p className="boldText">
+                                        {projectInfo?.requirement_defined}
+                                    </p>
+                                </SectionContentContainer>
                             )}
                         </SectionContentContainer>
                         {/* End Requirements Defined*/}
@@ -528,16 +609,28 @@ const DashboardSalesAndPMInfoSection = ({ projectData, isLoading }) => {
                             />
                             {handleLoadingComponent(
                                 isLoading,
-                                <TextLoaderDynamic
-                                    number={5}
-                                    widthDeference={20}
-                                    hight={16}
-                                    fullSizeCount={1}
-                                    className="mb-2"
-                                />,
-                                <p className="boldText">
-                                    {projectInfo?.deadline_meet}
-                                </p>
+                                <SectionContentContainer
+                                    color="#D8EDFC"
+                                    maxHeight="7vh"
+                                    minHeight="7vh"
+                                >
+                                    <TextLoaderDynamic
+                                        number={5}
+                                        widthDeference={20}
+                                        hight={16}
+                                        fullSizeCount={1}
+                                        className="mb-2"
+                                    />
+                                </SectionContentContainer>,
+                                <SectionContentContainer
+                                    color="#D8EDFC"
+                                    maxHeight="7vh"
+                                    minHeight="7vh"
+                                >
+                                    <p className="boldText">
+                                        {projectInfo?.deadline_meet}
+                                    </p>
+                                </SectionContentContainer>
                             )}
                         </SectionContentContainer>
                         {/* End Deadline Provided */}

@@ -16,7 +16,7 @@ import { useAuth } from "../../../hooks/useAuth";
 const PageNavigateButtons = ({ navigateData, className = "" }) => {
     const auth = useAuth();
     return (
-        <div className={`${className}`}>
+        <div className={`${className} ${style?.navigationFooterButtons}`}>
             <Switch>
                 <Button
                     onClick={() =>

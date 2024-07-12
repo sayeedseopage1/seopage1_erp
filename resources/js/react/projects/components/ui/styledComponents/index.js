@@ -81,6 +81,7 @@ export const SectionContentContainer = styled.div`
   background: ${props => props.color || props.theme.colors.sectionBg};
   border-radius: 9px;
   max-height: ${props => props.maxHeight || "auto"};
+  min-height: ${props => props.minHeight || "auto"};
   overflow-y: auto;
   position: relative;
   font-family: Poppins, sans-serif;
@@ -135,11 +136,20 @@ export const SectionContentContainer = styled.div`
     border-radius: 10px !important;
   }
   ul {
-
+    padding-left: 5px;
     li {
         margin-left: 20px !important;
         padding: 5px 0 !important;
         list-style-type: disc !important;
+    }
+  }
+
+  ol {
+      padding-left: 5px;
+    li {
+        margin-left: 20px !important;
+        padding: 5px 0 !important;
+        list-style-type: decimal !important;
     }
   }
 

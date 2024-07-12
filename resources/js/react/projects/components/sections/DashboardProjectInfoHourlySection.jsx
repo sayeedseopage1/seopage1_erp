@@ -151,6 +151,10 @@ const DashboardProjectInfoHourlySection = ({ projectData, isLoading }) => {
                             } else {
                                 totalTime = `${projectData?.logged_time_in_hours} Hours`;
                             }
+                        } else if (
+                            projectData?.additional_logged_time_in_minutes > 0
+                        ) {
+                            totalTime = `${projectData?.additional_logged_time_in_minutes} Min.`;
                         } else {
                             totalTime = "0 Hours";
                         }
@@ -162,30 +166,31 @@ const DashboardProjectInfoHourlySection = ({ projectData, isLoading }) => {
                 }
             );
 
-            const hourlyProjectSales = projectBudgetData?.hourlyProjectSalesData?.map((item) => {
-                if (item?.key === "expect_amount") {
-                    return {
-                        ...item,
-                        answer: projectData?.deal?.expect_amount
-                            ? projectData?.deal?.expect_amount
-                            : "N/A",
-                    };
-                } else if (item?.key === "certain_amount_hour") {
-                    return {
-                        ...item,
-                        answer: projectData?.deal?.certain_amount_hour
-                            ? projectData?.deal?.certain_amount_hour
-                            : "N/A",
-                    };
-                } else if (item?.key === "long_project") {
-                    return {
-                        ...item,
-                        answer: projectData?.deal?.long_project
-                            ? projectData?.deal?.long_project
-                            : "N/A",
-                    };
-                }
-            });
+            const hourlyProjectSales =
+                projectBudgetData?.hourlyProjectSalesData?.map((item) => {
+                    if (item?.key === "expect_amount") {
+                        return {
+                            ...item,
+                            answer: projectData?.deal?.expect_amount
+                                ? projectData?.deal?.expect_amount
+                                : "N/A",
+                        };
+                    } else if (item?.key === "certain_amount_hour") {
+                        return {
+                            ...item,
+                            answer: projectData?.deal?.certain_amount_hour
+                                ? projectData?.deal?.certain_amount_hour
+                                : "N/A",
+                        };
+                    } else if (item?.key === "long_project") {
+                        return {
+                            ...item,
+                            answer: projectData?.deal?.long_project
+                                ? projectData?.deal?.long_project
+                                : "N/A",
+                        };
+                    }
+                });
 
             setProjectBudgetData({
                 ...projectBudgetData,
@@ -461,70 +466,85 @@ const DashboardProjectInfoHourlySection = ({ projectData, isLoading }) => {
                                 title="Hourly Rate"
                                 isBorderUse={true}
                             />
-                            <div
-                                className="pt-3 pt-md-0 py-0 py-md-3 d-flex justify-content-between"
-                                style={{
-                                    gap: "16px",
-                                }}
-                            >
-                                <DashboardCardPricingInfo
-                                    amount={`${
-                                        projectData?.deal?.original_currency
-                                            ?.currency_symbol
-                                    } ${Number(
-                                        projectData?.deal?.actual_hourly_rate
-                                    )?.toFixed(2)} ${
-                                        projectData?.deal?.original_currency
-                                            ?.currency_code
-                                    }`}
-                                    isLoading={isLoading}
-                                    className="w-100"
-                                    loaderInformation={{
-                                        number: 1,
-                                        height: 21,
-                                        parentClassName: "w-100",
+                            <Switch>
+                                <div
+                                    className="pt-3 pt-md-0 py-0 py-md-3 d-flex justify-content-between"
+                                    style={{
+                                        gap: "16px",
                                     }}
-                                />
-                                <DashboardCardPricingInfo
-                                    amount={`${
-                                        projectData?.currency?.currency_symbol
-                                    } ${Number(
-                                        projectData?.deal?.hourly_rate
-                                    )?.toFixed(2)} ${
-                                        projectData?.currency?.currency_code
-                                    }`}
-                                    className="w-100"
-                                    isLoading={isLoading}
-                                    loaderInformation={{
-                                        number: 1,
-                                        height: 21,
-                                        parentClassName: "w-100",
-                                    }}
-                                />
-                            </div>
+                                >
+                                    <Switch.Case
+                                        condition={
+                                            projectData?.deal?.original_currency
+                                                ?.currency_code !== "USD"
+                                        }
+                                    >
+                                        <DashboardCardPricingInfo
+                                            amount={`${Number(
+                                                projectData?.deal
+                                                    ?.actual_hourly_rate
+                                            )?.toFixed(2)} ${
+                                                projectData?.deal
+                                                    ?.original_currency
+                                                    ?.currency_code
+                                            } (${
+                                                projectData?.deal
+                                                    ?.original_currency
+                                                    ?.currency_symbol
+                                            })`}
+                                            isLoading={isLoading}
+                                            className="w-100"
+                                            loaderInformation={{
+                                                number: 1,
+                                                height: 21,
+                                                parentClassName: "w-100",
+                                            }}
+                                        />
+                                    </Switch.Case>
+                                    <DashboardCardPricingInfo
+                                        amount={` ${Number(
+                                            projectData?.deal?.hourly_rate
+                                        )?.toFixed(2)} ${
+                                            projectData?.currency?.currency_code
+                                        } (${
+                                            projectData?.currency
+                                                ?.currency_symbol
+                                        })`}
+                                        className="w-100"
+                                        isLoading={isLoading}
+                                        loaderInformation={{
+                                            number: 1,
+                                            height: 21,
+                                            parentClassName: "w-100",
+                                        }}
+                                    />
+                                </div>
+                            </Switch>
                         </div>
                         {/* End Hourly Rate */}
                     </CardWrapper>
                     {/* Hourly Rate Related Question */}
                     <CardWrapper color="#ffffff" className="h-100">
-                        {projectBudgetData.hourlyProjectSalesData?.map((item) => (
-                            <div className="mb-3" key={item?.id}>
-                                <DashboardCardTitle
-                                    title={item?.question}
-                                    isBorderUse={true}
-                                />
-                                <DashboardCardPricingInfo
-                                    amount={item?.answer}
-                                    isLoading={isLoading}
-                                    className="py-3"
-                                    loaderInformation={{
-                                        number: 1,
-                                        height: 21,
-                                        parentClassName: "w-100",
-                                    }}
-                                />
-                            </div>
-                        ))}
+                        {projectBudgetData.hourlyProjectSalesData?.map(
+                            (item) => (
+                                <div className="mb-3" key={item?.id}>
+                                    <DashboardCardTitle
+                                        title={item?.question}
+                                        isBorderUse={true}
+                                    />
+                                    <DashboardCardPricingInfo
+                                        amount={item?.answer}
+                                        isLoading={isLoading}
+                                        className="py-3"
+                                        loaderInformation={{
+                                            number: 1,
+                                            height: 21,
+                                            parentClassName: "w-100",
+                                        }}
+                                    />
+                                </div>
+                            )
+                        )}
                     </CardWrapper>
                     {/* End Hourly Rate Related Question */}
                 </div>

@@ -3,6 +3,7 @@ import PropTypes from "prop-types";
 
 // style
 import style from "./styles/dashboardTaskAndMileStoneSection.module.css";
+import btnStyle from "./styles/dashboardHeaderSection.module.css";
 
 // components - styled components
 import { SectionContainer } from "../ui/styledComponents";
@@ -19,9 +20,10 @@ import { DashboardDataTableMilestoneColumns } from "../Table/DashboardDataTableM
 // context
 import { ProjectDashboardContext } from "../../context/ProjectDashboardProvider";
 
-
 // loader
 import Loader from "../../../global/Loader";
+import Button from "../ui/customComponents/Button/Button";
+import RefreshIcon from "../ui/Icons/RefreshIcon";
 
 /**
  * Dashboard Task And Milestone Section
@@ -42,24 +44,24 @@ const DashboardTaskAndMileStoneSection = () => {
         refetchProjectMilestone,
     } = useContext(ProjectDashboardContext);
 
-
     return (
         <div className={`${style.dashboardTaskAndMileStoneSection} mb-4`}>
             <SectionContainer>
                 <div className="d-flex justify-content-between align-items-center">
                     <DashboardCardTitle title="Task List" isBorderUse={false} />
-                    <SingleButton
-                        label={
-                            isProjectTaskListLoading ? (
-                                <Loader title="Refreshing" />
-                            ) : (
-                                "Refresh"
-                            )
-                        }
-                        className="mr-0"
+                    <Button
                         onClick={() => refetchProjectTaskList()}
-                        type="primary"
-                    />
+                        className={`${btnStyle?.refreshButton} ml-0 ml-md-2 d-flex align-items-center justify-content-center`}
+                        style={{ padding: "9px 20px" }}
+                    >
+                        <RefreshIcon
+                            className={
+                                isProjectTaskListLoading
+                                    ? btnStyle?.refreshButtonActive
+                                    : ""
+                            }
+                        />
+                    </Button>
                 </div>
                 <div className="sp1_tlr_container">
                     <div className="sp1_tlr_tbl_container mx-0 py-3">
@@ -79,18 +81,19 @@ const DashboardTaskAndMileStoneSection = () => {
                         title="Project Milestones"
                         isBorderUse={false}
                     />
-                    <SingleButton
-                        label={
-                            isProjectMilestoneLoading ? (
-                                <Loader title="Refreshing" />
-                            ) : (
-                                "Refresh"
-                            )
-                        }
-                        className="mr-0"
+                    <Button
                         onClick={() => refetchProjectMilestone()}
-                        type="primary"
-                    />
+                        className={`${btnStyle?.refreshButton} ml-0 ml-md-2 d-flex align-items-center justify-content-center`}
+                        style={{ padding: "9px 20px" }}
+                    >
+                        <RefreshIcon
+                            className={
+                                isProjectMilestoneLoading
+                                    ? btnStyle?.refreshButtonActive
+                                    : ""
+                            }
+                        />
+                    </Button>
                 </div>
                 <div className="sp1_tlr_container">
                     <div className="sp1_tlr_tbl_container mx-0 py-3">

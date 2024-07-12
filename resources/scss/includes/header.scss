@@ -15,6 +15,23 @@
       position: relative;
     }
   }
+  .user_image {
+    @media screen  and (max-width: 410px) {
+      display: none;
+    }
+  
+  }
+
+
+.user_name {
+  @media screen  and (max-width: 410px) {
+    font-size: 12px !important;
+  }
+}
+    
+  
+
+
 }
 .header-icon-box {
   display: flex;

@@ -155,11 +155,11 @@ const DashboardHeaderSection = ({ projectData, isLoading }) => {
                     >
                         Working Environment
                     </Button>
-                    <PageNavigateButtons
+                    {/* <PageNavigateButtons
                         className="d-none d-md-flex ml-2"
                         style={style}
                         navigateData={projectData}
-                    />
+                    /> */}
                 </div>
                 <div className={`${style?.dashboardHeaderLeftButtonWrapper}`}>
                     <Switch.Case

@@ -345,20 +345,17 @@ const LeadCreationFormControl = ({ close, presetInitialData = null }) => {
         setError(_error);
         return Object.keys(_error)?.length === 0;
     };
-    console.log("lead form data", formData);
+
 
     // handle submission
     const handleSubmit = async (e) => {
         e.preventDefault();
-
         if (leadInputData.project_type === "hourly")
             delete leadInputData.deadline;
         if (!leadInputData.explanation) delete leadInputData.explanation;
         if (!leadInputData.bidpage_screenshot)
             delete leadInputData.bidpage_screenshot;
-        console.log({ leadInputData });
         const isEmpty = isStateAllHaveValue(leadInputData);
-        console.log({ isEmpty });
         if (isEmpty) {
             const validation = markEmptyFieldsValidation(leadInputData);
             setLeadInputDataValidation({
@@ -371,21 +368,60 @@ const LeadCreationFormControl = ({ close, presetInitialData = null }) => {
             return;
         }
 
-        console.log({ leadInputData });
-
         const isProjectLinkValid = validator.isURL(leadInputData.project_link, {
             protocols: ["http", "https", "ftp"],
         });
 
-        if (!isProjectLinkValid) {
+        const isProjectpageScreenshotLinkValid = validator.isURL(
+            leadInputData.projectpage_screenshot,
+            {
+                protocols: ["http", "https", "ftp"],
+            }
+        );
+        const isInsightScreenshotLinkValid = validator.isURL(
+            leadInputData.insight_screenshot,
+            {
+                protocols: ["http", "https", "ftp"],
+            }
+        );
+
+        if (
+            !isProjectLinkValid ||
+            !isProjectpageScreenshotLinkValid ||
+            !isInsightScreenshotLinkValid
+        ) {
             setLeadInputDataValidation({
                 ...leadInputDataValidation,
-                isProjectLinkValid: true,
+                isProjectLinkValid: isProjectLinkValid ? false : true,
+                isProjectpageScreenshotLinkValid:
+                    isProjectpageScreenshotLinkValid ? false : true,
+                isIninsightScreenshotLinkValid: isInsightScreenshotLinkValid
+                    ? false
+                    : true,
             });
             return;
         }
 
-        console.log({ leadInputData });
+        if (leadInputData?.bidpage_screenshot) {
+            const isBidpageScreenshotLinkValid = validator.isURL(
+                leadInputData?.bidpage_screenshot,
+                {
+                    protocols: ["http", "https", "ftp"],
+                }
+            );
+
+            if (!isBidpageScreenshotLinkValid) {
+                setLeadInputDataValidation({
+                    ...leadInputDataValidation,
+                    isBidpageScreenshotLinkValid: isBidpageScreenshotLinkValid
+                        ? false
+                        : true,
+                });
+                return;
+                Ff;
+            }
+        }
+
 
         try {
             const res = await leadCreate(formData).unwrap();
@@ -408,6 +444,7 @@ const LeadCreationFormControl = ({ close, presetInitialData = null }) => {
                         : error?.message?.customMessages;
                 setValidationErrors(errors);
                 if (errors.includes("The project id has already been taken.")) {
+                    toast.error("The project id has already been taken.");
                     setLeadInputDataValidation({
                         ...leadInputDataValidation,
                         isProjectIdUnique: true,
@@ -489,12 +526,12 @@ const LeadCreationFormControl = ({ close, presetInitialData = null }) => {
         }
     }, [deadline]);
 
-    React.useEffect(() => {
-        if (error?.isSubmitting) {
-            console.log("error", error);
-            isValid();
-        }
-    }, [formData]);
+    // React.useEffect(() => {
+    //     if (error?.isSubmitting) {
+    //         console.log("error", error);
+    //         isValid();
+    //     }
+    // }, [formData]);
 
     React.useEffect(() => {
         if (leadInputDataValidation.isSubmitting) {
@@ -534,7 +571,7 @@ const LeadCreationFormControl = ({ close, presetInitialData = null }) => {
                     ),
                     isProjectpageScreenshotLinkValid:
                         validationErrors?.includes(
-                            "The projectpage screenshot format is invalid."
+                            "The Project Page screenshot format is invalid."
                         ),
                     isIninsightScreenshotLinkValid: validationErrors?.includes(
                         "The insight screenshot format is invalid."
@@ -1325,7 +1362,7 @@ const LeadCreationFormControl = ({ close, presetInitialData = null }) => {
                                 {leadInputDataValidation.isProjectpageScreenshotLinkValid && (
                                     <ErrorText>
                                         {" "}
-                                        The projectpage screenshot format is
+                                        The project Page screenshot format is
                                         invalid.{" "}
                                     </ErrorText>
                                 )}

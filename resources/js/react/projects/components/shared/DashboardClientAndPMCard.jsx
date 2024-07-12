@@ -32,7 +32,7 @@ const DashboardClientAndPMCard = ({
                 {handleLoadingComponent(
                     isLoading,
                     <UserCardLoader />,
-                    <div className="d-flex align-items-center py-4">
+                    <div className="d-flex align-items-center py-2 py-md-4">
                         <div className="dashboardCardPersonImage">
                             <a
                                 href={`/account/clients/${projectData?.client?.id}`}
@@ -77,7 +77,7 @@ const DashboardClientAndPMCard = ({
                 {handleLoadingComponent(
                     isLoading,
                     <UserCardLoader />,
-                    <div className="d-flex align-items-center py-4">
+                    <div className="d-flex align-items-center py-2 py-md-4">
                         <div className="dashboardCardPersonImage">
                             <a
                                 href={`/account/employees/${projectData?.pm?.id}`}

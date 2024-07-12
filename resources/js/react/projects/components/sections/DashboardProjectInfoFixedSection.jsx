@@ -138,8 +138,10 @@ const DashboardProjectInfoFixedSection = ({ projectData, isLoading }) => {
                             } else {
                                 totalTime = `${projectData?.logged_time_in_hours} Hours`;
                             }
+                        } else if(projectData?.additional_logged_time_in_minutes > 0) {
+                            totalTime = `${projectData?.additional_logged_time_in_minutes} Min.`;
                         } else {
-                            totalTime = "0 Hours";
+                            totalTime = "0";
                         }
                     }
                     return {

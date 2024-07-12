@@ -1055,7 +1055,7 @@ export const ProjectBudgetData = {
 
         {
             id: 1,
-            title: "Earning",
+            title: "Earnings",
             price: "",
             currency: "",
             currency_symbol: "",
@@ -1064,7 +1064,7 @@ export const ProjectBudgetData = {
         },
         {
             id: 2,
-            title: "Earning",
+            title: "Earnings",
             price: "",
             currency: "",
             currency_symbol: "",
