@@ -35,6 +35,7 @@ return new class extends Migration
             $table->decimal('calculated_actual_budget')->default(0);
             $table->decimal('calculated_usd_budget')->default(0);
             $table->decimal('project_budget')->nullable();
+            $table->unsignedBigInteger('added_by')->nullable();
             $table->timestamps();
         });
     }

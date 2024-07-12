@@ -2,8 +2,9 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Models\Currency;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class PriceQuotation extends Model
 {
@@ -30,5 +31,36 @@ class PriceQuotation extends Model
         'calculated_actual_budget',
         'calculated_usd_budget',
         'project_budget',
+        'added_by'
     ];
+
+    public function dealStage()
+    {
+        return $this->hasOne(DealStage::class, 'id', 'deal_stage_id');
+    }
+
+    public function projectCms()
+    {
+        return $this->hasOne(ProjectCms::class, 'id', 'project_cms_id');
+    }
+
+    public function projectNiche()
+    {
+        return $this->hasOne(ProjectNiche::class, 'id', 'project_niche_id');
+    }
+
+    public function currency()
+    {
+        return $this->hasOne(Currency::class, 'id', 'currency_id');
+    }
+
+    public function platformAccount()
+    {
+        return $this->hasOne(PlatformAccount::class, 'id', 'platform_account_id');
+    }
+
+    public function addedBy()
+    {
+        return $this->hasOne(User::class, 'id', 'added_by');
+    }
 }
