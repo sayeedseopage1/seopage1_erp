@@ -77,8 +77,6 @@ class PriceQuotationController extends Controller
             $projects = $projectWithCmsNiche;
         }
 
-        // return $projects->get();
-
         $total_logged_minutes = (clone $projects)->get()->sum('times_sum_total_minutes');
         $total_parimary_pages = (clone $projects)->get()->sum('project_portfolio.main_page_number');
         $total_secondary_pages = (clone $projects)->get()->sum('project_portfolio.secondary_page_number');
@@ -88,13 +86,13 @@ class PriceQuotationController extends Controller
         $existingProjectBudget = $total_logged_hours * 20;
         $existingBudgetForEachPrimaryPage = (($existingProjectBudget / 100) * 70) / $total_parimary_pages;
         $existingBudgetForEachSecondaryPage = (($existingProjectBudget / 100) * 30) / $total_secondary_pages;
-        
+
         // Calculate project budget depend on no of primary and secondary pages 
         $projectBudgetDependOnPrimaryAndSecondaryPages = ($validated['no_of_primary_pages'] * $existingBudgetForEachPrimaryPage) + ($validated['no_of_secondary_pages'] * $existingBudgetForEachSecondaryPage);
         
         // Add extra 5% for any missed time tracking by our team with calculated budget
         $projectBudgetWithMissedTimeTracking = $projectBudgetDependOnPrimaryAndSecondaryPages + (($projectBudgetDependOnPrimaryAndSecondaryPages / 100) * 5);
-
+        
         // Increase project budget for major functionality (Each functionality will multiplying by 400)
         $projectBudgetWighMajorFunctionality = $projectBudgetWithMissedTimeTracking + ($validated['no_of_major_functionalities'] ? $validated['no_of_major_functionalities'] * 400 : 0);
         $majorFunctionalityHours = ($validated['no_of_major_functionalities'] ? $validated['no_of_major_functionalities'] * 400 : 0) / 20;
@@ -111,7 +109,7 @@ class PriceQuotationController extends Controller
 
         // Add risk factor value with calculated project budget
         $projectBudgetWithRiskFactor = $projectBudgetWithOtherWorks + (($projectBudgetWithOtherWorks / 100) * ($validated['risk_factor'] ? $validated['risk_factor'] : 0));
-       
+
         // Convert to actual currency if project is in another currency other than usd it will then add extra 6% with calculated project budget
         $projectBudgetInActualCurrency = Currency::find($validated['currency_id'])->exchange_rate * $projectBudgetWithRiskFactor;
         $projectBudgetWithCurrencyCheck = $projectBudgetInActualCurrency + ($validated['currency_id'] > 1 ? ($projectBudgetInActualCurrency / 100) * 6 : 0);
@@ -129,6 +127,7 @@ class PriceQuotationController extends Controller
         $projectBudgetWithDeadlineValue = $projectBudgetRounded;
         $no_of_day_required = $validated['no_of_days'];
         $calculated_total_hours = number_format($projectStimatedHoursDependOnPrimaryAndSecondaryPages, 2) + number_format($majorFunctionalityHours, 2) + number_format($totalHoursOfOtherWorks, 2);
+        $notDoableMessage = null;
         if($validated['deadline_type'] == 2){
             $actualNoOfDays = $validated['no_of_days'] - 3;
             $hoursPerDay = $calculated_total_hours / $actualNoOfDays;
@@ -142,19 +141,13 @@ class PriceQuotationController extends Controller
             }elseif($hoursPerDay > 7 && $hoursPerDay <= 10){
                 $multiplicationForHoursPerDay = 2;
             }elseif($hoursPerDay > 10){
-                return response()->json([
-                    'status' => 400,
-                    'message' => 'The project is not feasible! The estimated working hours per day are excessive',
-                    'estimated_hours_per_day' => $hoursPerDay
-                ]);
+                $no_of_day_required = ceil($calculated_total_hours / 4) + 3;
+                $notDoableMessage = "This project is not doable in ". $validated['no_of_days'] ." days. The minimum deadline should be ".$no_of_day_required." days.";
             }
             $projectBudgetWithDeadlineValue = $projectBudgetRounded * $multiplicationForHoursPerDay;
         }elseif($validated['deadline_type'] == 1){
             $no_of_day_required = ceil($calculated_total_hours / 4) + 3;
         }
-
-        
-
         
         $dealStage = DealStage::select(['id','short_code','client_username','project_name'])->find($validated['deal_stage_id']);
         $projectCms = ProjectCms::select(['id','cms_name'])->find($validated['project_cms_id']);
@@ -174,17 +167,17 @@ class PriceQuotationController extends Controller
                     'no_of_secondary_pages' => $validated['no_of_secondary_pages'],
                     'no_of_major_functionalities' => $validated['no_of_major_functionalities'],
                     'risk_factor' => $validated['risk_factor'],
-                    'total_hours_of_primary_page' => number_format($validated['no_of_primary_pages'] * $existingHoursForEachPrimaryPage, 2),
-                    'total_hours_of_secondary_page' => number_format($validated['no_of_secondary_pages'] * $existingHoursForEachSecondaryPage, 2),
-                    'total_hours_of_major_functionality' => number_format($majorFunctionalityHours, 2),
-                    'total_hours_of_others_works' => number_format($totalHoursOfOtherWorks, 2),
-                    'total_calculated_hours' => number_format($calculated_total_hours, 2),
+                    'total_hours_of_primary_page' => round($validated['no_of_primary_pages'] * $existingHoursForEachPrimaryPage, 2),
+                    'total_hours_of_secondary_page' => round($validated['no_of_secondary_pages'] * $existingHoursForEachSecondaryPage, 2),
+                    'total_hours_of_major_functionality' => round($majorFunctionalityHours, 2),
+                    'total_hours_of_others_works' => round($totalHoursOfOtherWorks, 2),
+                    'total_calculated_hours' => round($calculated_total_hours, 2),
                     'currency_id' => $validated['currency_id'],
                     'deadline_type' => $validated['deadline_type'],
                     'no_of_days' => $no_of_day_required,
                     'platform_account_id' => $validated['platform_account_id'],
-                    'calculated_actual_budget' => number_format($projectBudgetWithDeadlineValue * $platformAccount->multiplying_factor, 2),
-                    'calculated_usd_budget' => number_format(($projectBudgetWithDeadlineValue * $platformAccount->multiplying_factor) / $currency->exchange_rate, 2),
+                    'calculated_actual_budget' => round($projectBudgetWithDeadlineValue * $platformAccount->multiplying_factor, 2),
+                    'calculated_usd_budget' => round(($projectBudgetWithDeadlineValue * $platformAccount->multiplying_factor) / $currency->exchange_rate, 2),
                     'added_by' => Auth::user()->id
                 ]);
 
@@ -221,6 +214,8 @@ class PriceQuotationController extends Controller
                 $data[$key]['calculated_total_hours'] = number_format($calculated_total_hours, 2);
                 $data[$key]['calculated_no_of_days'] = $no_of_day_required;
                 $data[$key]['caculated_project_budget_in_usd'] = number_format(($projectBudgetWithDeadlineValue * $platformAccount->multiplying_factor) / $data[$key]['currency']->exchange_rate, 2);
+                $data[$key]['not_doable_message'] = $notDoableMessage;
+                $data[$key]['hours_per_day'] = $hoursPerDay ?? 4;
             }
 
             return response()->json([
@@ -229,78 +224,14 @@ class PriceQuotationController extends Controller
                 'previous_payloads' => $validated
             ]);
         }
-        
-
-
-        // $platformAccounts = PlatformAccount::when(
-        //     !$validated['platform_account_id'], 
-        //     fn($query) => $query->where('id', $validated['platform_account_id'])
-        // )->get();
-        
-        // $data = $platformAccounts->map(function ($platformAccount) use ($validated, $projectBudgetWithDeadlineValue, $no_of_day_required) {
-        //     return [
-        //         'deal_stage_id' => $validated['deal_stage_id'],
-        //         'project_cms_id' => $validated['project_cms_id'],
-        //         'project_niche_id' => $validated['project_niche_id'],
-        //         'no_of_primary_pages' => $validated['no_of_primary_pages'],
-        //         'no_of_secondary_pages' => $validated['no_of_secondary_pages'],
-        //         'no_of_major_functionalities' => $validated['no_of_major_functionalities'],
-        //         'risk_factor' => $validated['risk_factor'],
-        //         'currency_id' => $validated['currency_id'],
-        //         'deadline_type' => $validated['deadline_type'],
-        //         'no_of_days' => $validated['no_of_days'],
-        //         'platform_account_id' => $platformAccount->id,
-        //         'calculated_project_budget' => $projectBudgetWithDeadlineValue * $platformAccount->multiplying_factor,
-        //         'calculated_no_of_days' => $no_of_day_required,
-        //     ];
-        // });
-        
-        // return ($data->toArray());
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function show($id)
     {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
+        return response()->json([
+            'status' => 200,
+            'data' => PriceQuotation::with('dealStage:id,short_code,client_username,client_name,client_badge,project_name','projectCms:id,cms_name','projectNiche:id,category_name','currency:id,currency_name,currency_symbol,currency_code,exchange_rate','platformAccount','dealStage.client','addedBy')->find($id)
+        ]);
     }
 
     function generateSerialNumber($latestSerial) {

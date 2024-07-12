@@ -1576,7 +1576,7 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
     Route::get('get-cms-list', [PriceQuotationInsightController::class, 'getCmsList'])->name('get.cms.list');
     Route::get('get-project-niches', [PriceQuotationInsightController::class, 'getProjectNiche'])->name('get.project.niches');
     Route::get('get-currencies', [PriceQuotationInsightController::class, 'getCurrencies'])->name('get.currencies');
-    Route::resource('price-quotations', PriceQuotationController::class)->only(['index','store']);
+    Route::resource('price-quotations', PriceQuotationController::class)->only(['index','store','show']);
     Route::get('test-store', [PriceQuotationController::class, 'store']);
 });
 
