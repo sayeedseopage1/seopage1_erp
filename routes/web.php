@@ -929,6 +929,7 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
     //get tasks subtasks data
     Route::get('tasks/get-tasks-subtasks/{id}', [TaskController::class, 'get_task_subtask'])->name('get-task-subtasks');
     //tasks all data
+    Route::get('get-today-submission-data', [TaskController::class, 'todaySubmissionData']);
     Route::get('tasks/{any?}', [TaskController::class, 'index'])
         ->where('any', '^(?!api\/)[\/\w\.-]*')
         ->where('any', '^(?:(?!\d+).)*');
