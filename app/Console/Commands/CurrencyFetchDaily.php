@@ -47,7 +47,7 @@ class CurrencyFetchDaily extends Command
             }
             DB::commit();
         } catch (\Exception $e) {
-            throw $e;
+            // throw $e;
             DB::rollBack();
         }
     }
