@@ -72,24 +72,30 @@ const DailyReportSubmissionEnforcer = ({ close, reminderDate, onSubmit }) => {
 
     return (
         <div className="sp1_single_task--modal">
-            <DailyReportSubmissionButton />
+            <DailyReportSubmissionButton
+            // task={task}
+            // reportDate={reportedDate}
+            // onSubmit={(status) => updateTask(task, status)}
+            />
         </div>
     );
 };
 
-const DailyReportSubmissionButton = ({}) => {
-    const [show, setShow] = React.useState(false);
+const DailyReportSubmissionButton = ({ task, reportDate, onSubmit }) => {
+    const [show, setShow] = React.useState(true);
     return (
         <>
             <Button onClick={() => setShow(true)}> Click to Submit </Button>
 
             {/* daily report submission form */}
-            <Modal isOpen={show}>
-                <DailyReportSubmissionForm
-                    show={show}
-                    close={() => setShow(false)}
-                />
-            </Modal>
+
+            <DailyReportSubmissionForm
+                // task={task}
+                // reportDate={reportDate}
+                close={() => setShow(false)}
+                // onSubmit={onSubmit}
+                show={show}
+            />
         </>
     );
 };

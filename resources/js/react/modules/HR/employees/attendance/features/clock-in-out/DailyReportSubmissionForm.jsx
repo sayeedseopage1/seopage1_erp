@@ -142,6 +142,7 @@ const DailyReportSubmissionForm = ({
                 overlay: {
                     backgroundColor: "rgba(0, 0, 0, 0.6)",
                     margin: "auto auto",
+                    zIndex: 1000000,
                 },
                 content: {
                     borderRadius: "10px",
@@ -151,6 +152,7 @@ const DailyReportSubmissionForm = ({
                     margin: "auto auto",
                     padding: "10px",
                     overflowY: "auto",
+                    zIndex: 1000001,
                 },
             }}
             ariaHideApp={false}
