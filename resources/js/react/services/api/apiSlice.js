@@ -43,6 +43,8 @@ export const apiSlice = createApi({
         "GET_SALES_RISK_ANALYSIS_INPUT_FIELDS",
         "ALL_REVISION",
         "EVALUATION_HISTORY",
+        "ALL_PORTFOLIO",
+        "PORTFOLIO_BY_ID",
     ],
     endpoints: () => ({}),
 });

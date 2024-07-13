@@ -1598,9 +1598,7 @@
 }
 
 .sp1_modal-panel {
-  width: -moz-fit-content;
-  width: fit-content;
-  max-width: 90vw;
+  max-width: 956px;
   min-width: 300px;
   height: -moz-fit-content;
   height: fit-content;
@@ -1608,18 +1606,20 @@
   margin-inline: auto;
   margin-top: 40px;
   background: #fff;
-  border-radius: 10px;
+  border-radius: 29px 29px;
 }
 
 .sp1_modal-head {
   display: flex;
+  height: 80px;
   align-items: center;
   justify-content: space-between;
-  gap: 20px;
-  padding: 6px 10px;
+  font-size: 20px;
+  padding: 20px 40px;
   border-bottom: 1px solid rgba(0, 0, 0, 0.1);
-  border-top-left-radius: 10px;
-  border-top-right-radius: 10px;
+  background: #1D82F5;
+  color: white;
+  border-radius: 29px 29px 0px 0px;
 }
 
 .sp1_modal-close {
@@ -1629,6 +1629,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  cursor: pointer;
 }
 
 .sp1_modal-body {
