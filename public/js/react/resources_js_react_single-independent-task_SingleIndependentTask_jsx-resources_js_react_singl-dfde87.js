@@ -9255,7 +9255,7 @@ var LeadConfirmationModal = function LeadConfirmationModal(_ref) {
     buttonVisible = _React$useState2[0],
     setButtonVisible = _React$useState2[1];
   // const [countDown, setCountDown] = React.useState(5);
-  var _React$useState3 = react__WEBPACK_IMPORTED_MODULE_0___default().useState(10),
+  var _React$useState3 = react__WEBPACK_IMPORTED_MODULE_0___default().useState(3),
     _React$useState4 = _slicedToArray(_React$useState3, 2),
     countDown = _React$useState4[0],
     setCountDown = _React$useState4[1];
@@ -9270,7 +9270,7 @@ var LeadConfirmationModal = function LeadConfirmationModal(_ref) {
         setButtonVisible(true);
         clearInterval(timeIntervelId);
         // }, 5000);
-      }, 10000);
+      }, 3000);
       return function () {
         clearTimeout(timeOutId);
         clearInterval(timeIntervelId);
