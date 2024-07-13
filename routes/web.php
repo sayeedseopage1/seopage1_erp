@@ -1563,6 +1563,8 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
     Route::get('/portfolio/get-sub-category/{website_cat_id}', [PortfolioController::class, 'getSubCategory']);
     Route::get('/filter-cms-categories', [PortfolioController::class, 'filterCmsCategories'])->name('filter-cms-categories');
     Route::get('/filter-data/{dataId}', [PortfolioController::class, 'filterDataShow']);
+    Route::post('portfolio-rating-store', [PortfolioController::class, 'ratingStore']);
+    Route::post('portfolio-rating-update', [PortfolioController::class, 'ratingUpdate']);
 
   //  Route::any('tasks/{any?}', [TaskController::class, 'home'])->where('any', '.*');
 

@@ -23,6 +23,8 @@ use App\Models\TaskRevisionDispute;
 use App\Models\Task;
 use App\Models\Taskuser;
 use App\Models\ProjectMember;
+use App\Models\ProjectPortfolio;
+use App\Models\ProjectSubmission;
 use App\Models\TaskComment;
 use DB;
 
@@ -2169,6 +2171,47 @@ class HelperPendingActionController extends AccountBaseController
 
             }
         }
+        public function portfolioRating($projectId)
+        {
+            $project = Project::where('id',$projectId)->first();
+            $project_portfolio = ProjectPortfolio::where('project_id',$projectId)->first();
+            $project_submission = ProjectSubmission::where('project_id',$projectId)->first();
+            $pm = User::where('id',$project->pm_id)->first();
+            $client = User::where('id',$project->client_id)->first();
+            $authorizers = User::whereIn('role_id', [1,8])->get();
+            foreach ($authorizers as $key => $authorizer) {
+                $action = new PendingAction();
+                $action->code = 'WSR';
+                $action->serial = 'WSR'.'x'.$key;
+                $action->item_name= 'Website rating!';
+                $action->heading= 'Website rating!';
+                if($project_portfolio->portfolio_link != null){
+                $action->message = 'Please rate website <a href="'.$project_portfolio->portfolio_link.'">'.$project_portfolio->portfolio_link.'</a> for client <a href="'.route('clients.show',$client->id).'">'.$client->name.'</a> by PM <a href="'.route('employees.show',$pm->id).'">'.$pm->name.'</a>';
+                }elseif($project_submission->dummy_link != null){
+                    $action->message = 'Please rate website <a href="'.$project_submission->dummy_link.'">'.$project_submission->dummy_link.'</a> for client <a href="'.route('clients.show',$client->id).'">'.$client->name.'</a> by PM <a href="'.route('employees.show',$pm->id).'">'.$pm->name.'</a>';
+                }else{
+                    $action->message = 'Please rate website <span class="text-danger">No Link Provided</span> for client <a href="'.route('clients.show',$client->id).'">'.$client->name.'</a> by PM <a href="'.route('employees.show',$pm->id).'">'.$pm->name.'</a>';
+                }
+                $action->timeframe= 24;
+                $action->project_id = $project->id;
+                $action->client_id = $project->client_id;
+                $action->portfolio_id = $project_portfolio->id;
+                $action->authorization_for= $authorizer->id;
+                $button = [
+                    [
+                        'button_name' => 'Rate',
+                        'button_color' => 'primary',
+                        'button_type' => 'redirect_url',
+                        'button_url' => route('portfolio.index', ['portfolio_id' => $project_portfolio->id, 'show' => 'all']),
+                    ],
+
+                ];
+                $action->button = json_encode($button);
+                $action->save();
+
+            }
+        }
+
         //New Pm Evaluation Start
         public function NewPmEvaluation($user)
         {
