@@ -19,6 +19,7 @@ import DisputeProjectFromModal from "../modal/DisputeProjectFromModal";
 import DisputeProjectAuthorizeModal from "../modal/DisputeProjectAuthorizeModal";
 import Switch from "../../../global/Switch";
 import { useAuth } from "../../../hooks/useAuth";
+import DeadlineChangeHistoryModal from "../modal/DeadlineChangeHistoryModal";
 
 // Modal Names
 // ProjectDE = Project Deadline Extension
@@ -37,11 +38,6 @@ import { useAuth } from "../../../hooks/useAuth";
 const DashboardActionButtonSection = ({ projectData, isLoading }) => {
     const ViewModalButtons = projectData?.buttons;
     const user = useAuth();
-    // Dummy for Dispute Project Authorization Modal
-    const [dummyDisputeData, setDummyDisputeData] = React.useState({
-        isDisputeSubmitted: false,
-        disputeData: {},
-    });
 
     // Modal Open State Variables
     const [isPmTaskGuidelineModalOpen, setIsPmTaskGuidelineModalOpen] =
@@ -54,10 +50,8 @@ const DashboardActionButtonSection = ({ projectData, isLoading }) => {
         React.useState(false);
     const [isDisputeProjectModalOpen, setIsDisputeProjectModalOpen] =
         React.useState(false);
-    const [
-        isDisputeProjectAuthorizeModalOpen,
-        setIsDisputeProjectAuthorizeModalOpen,
-    ] = React.useState(false);
+    const [isDeadlineHistoryModalOpen, setIsDeadlineHistoryModalOpen] =
+        React.useState(false);
 
     // Handle Modal Open and Close Function with Action Function as Parameter (if needed)
     const handleModal = (setModalOpenFunc, isOpen, action) => {
@@ -73,7 +67,8 @@ const DashboardActionButtonSection = ({ projectData, isLoading }) => {
                 <Switch.Case
                     condition={
                         ViewModalButtons?.extend_deadline_form ||
-                        ViewModalButtons?.pm_task_guidline || ViewModalButtons?.extend_deadline_pending
+                        ViewModalButtons?.pm_task_guidline ||
+                        ViewModalButtons?.extend_deadline_pending
                     }
                 >
                     <SectionContainer
@@ -101,6 +96,24 @@ const DashboardActionButtonSection = ({ projectData, isLoading }) => {
                                 className={`${style.dashboardActionButton}`}
                             >
                                 Project Deadline Ext. Request
+                            </Button>
+                        </Switch.Case>
+                        <Switch.Case
+                            condition={
+                                user.getRoleId() === 1 &&
+                                projectData?.project_deadline_extension?.length
+                            }
+                        >
+                            <Button
+                                onClick={() =>
+                                    handleModal(
+                                        setIsDeadlineHistoryModalOpen,
+                                        true
+                                    )
+                                }
+                                className={`${style.dashboardActionButton}`}
+                            >
+                                Project Deadline History
                             </Button>
                         </Switch.Case>
                         <Switch.Case
@@ -263,6 +276,18 @@ const DashboardActionButtonSection = ({ projectData, isLoading }) => {
                                 projectData?.dispute_admin_comment,
                         },
                     }}
+                    isLoading={isLoading}
+                />
+            )}
+
+            {/* Deadline Change History Modal */}
+            {isDeadlineHistoryModalOpen && (
+                <DeadlineChangeHistoryModal
+                    isModalOpen={isDeadlineHistoryModalOpen}
+                    closeModal={() =>
+                        handleModal(setIsDeadlineHistoryModalOpen, false)
+                    }
+                    modalData={projectData?.project_deadline_extension}
                     isLoading={isLoading}
                 />
             )}

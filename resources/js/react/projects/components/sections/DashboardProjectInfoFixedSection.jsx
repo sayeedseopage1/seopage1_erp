@@ -37,7 +37,9 @@ const DashboardProjectInfoFixedSection = ({ projectData, isLoading }) => {
             const updateProjectBudget = projectBudgetData.project_budget.map(
                 (budget) => {
                     if (budget?.key === "project_budget") {
-                        const totalAmount = Number(projectData?.deal?.amount) +  Number(projectData?.deal?.upsell_amount);
+                        const totalAmount =
+                            Number(projectData?.deal?.amount) +
+                            Number(projectData?.deal?.upsell_amount);
                         return {
                             ...budget,
                             price: totalAmount.toFixed(2),
@@ -46,7 +48,9 @@ const DashboardProjectInfoFixedSection = ({ projectData, isLoading }) => {
                                 projectData?.currency?.currency_symbol,
                         };
                     } else if (budget.key === "amount") {
-                        const totalAmount = Number(projectData?.deal?.actual_amount) +  Number(projectData?.deal?.upsell_actual_amount);
+                        const totalAmount =
+                            Number(projectData?.deal?.actual_amount) +
+                            Number(projectData?.deal?.upsell_actual_amount);
                         return {
                             ...budget,
                             price: totalAmount.toFixed(2),
@@ -138,10 +142,12 @@ const DashboardProjectInfoFixedSection = ({ projectData, isLoading }) => {
                             } else {
                                 totalTime = `${projectData?.logged_time_in_hours} Hours`;
                             }
-                        } else if(projectData?.additional_logged_time_in_minutes > 0) {
+                        } else if (
+                            projectData?.additional_logged_time_in_minutes > 0
+                        ) {
                             totalTime = `${projectData?.additional_logged_time_in_minutes} Min.`;
                         } else {
-                            totalTime = "0";
+                            totalTime = "0 Hours";
                         }
                     }
                     return {
@@ -196,22 +202,36 @@ const DashboardProjectInfoFixedSection = ({ projectData, isLoading }) => {
                     />
                     <div className="pt-3 pt-md-0 py-0 py-md-3">
                         <div className="d-flex justify-content-md-between flex-column flex-md-row ">
-                            {projectBudgetData?.project_budget.map((budget) => (
-                                <DashboardCardPricingInfo
-                                    key={budget?.id}
-                                    amount={budget?.price}
-                                    title={budget?.title}
-                                    icon={budget?.icon}
-                                    currency={budget?.currency}
-                                    currency_symbol={budget?.currency_symbol}
-                                    isLoading={isLoading}
-                                    loaderInformation={{
-                                        number: 1,
-                                        height: 21,
-                                        parentClassName: "w-100",
-                                    }}
-                                />
-                            ))}
+                            {projectBudgetData?.project_budget
+                                .filter((item) => {
+                                    const project_budget =
+                                        projectBudgetData?.project_budget?.find(
+                                            (info) =>
+                                                info?.key === "project_budget"
+                                        )?.currency;
+                                    return (
+                                        item?.key !== "amount" ||
+                                        item?.currency !== project_budget
+                                    );
+                                })
+                                .map((budget) => (
+                                    <DashboardCardPricingInfo
+                                        key={budget?.id}
+                                        amount={budget?.price}
+                                        title={budget?.title}
+                                        icon={budget?.icon}
+                                        currency={budget?.currency}
+                                        currency_symbol={
+                                            budget?.currency_symbol
+                                        }
+                                        isLoading={isLoading}
+                                        loaderInformation={{
+                                            number: 1,
+                                            height: 21,
+                                            parentClassName: "w-100",
+                                        }}
+                                    />
+                                ))}
                         </div>
                     </div>
                 </CardWrapper>
@@ -287,22 +307,35 @@ const DashboardProjectInfoFixedSection = ({ projectData, isLoading }) => {
                         isBorderUse={true}
                     />
                     <div className="d-flex justify-content-between flex-wrap py-3">
-                        {projectBudgetData.earning_expenses.map((moneyInfo) => (
-                            <DashboardCardPricingInfo
-                                key={moneyInfo?.id}
-                                amount={Number(moneyInfo?.price)?.toFixed(2)}
-                                title={moneyInfo?.title}
-                                icon={moneyInfo?.icon}
-                                currency={moneyInfo?.currency}
-                                currency_symbol={moneyInfo?.currency_symbol}
-                                isLoading={isLoading}
-                                loaderInformation={{
-                                    number: 1,
-                                    height: 21,
-                                    parentClassName: "w-100",
-                                }}
-                            />
-                        ))}
+                        {projectBudgetData?.earning_expenses
+                            ?.filter((item) => {
+                                const earningsCurrency =
+                                    projectBudgetData?.earning_expenses?.find(
+                                        (info) => info.key === "earnings"
+                                    )?.currency;
+                                return (
+                                    item.key !== "actual_earnings" ||
+                                    item.currency !== earningsCurrency
+                                );
+                            })
+                            ?.map((moneyInfo) => (
+                                <DashboardCardPricingInfo
+                                    key={moneyInfo?.id}
+                                    amount={Number(moneyInfo?.price)?.toFixed(
+                                        2
+                                    )}
+                                    title={moneyInfo?.title}
+                                    icon={moneyInfo?.icon}
+                                    currency={moneyInfo?.currency}
+                                    currency_symbol={moneyInfo?.currency_symbol}
+                                    isLoading={isLoading}
+                                    loaderInformation={{
+                                        number: 1,
+                                        height: 21,
+                                        parentClassName: "w-100",
+                                    }}
+                                />
+                            ))}
                     </div>
                 </CardWrapper>
                 {/* End Earnings & Expenses Card */}
@@ -315,5 +348,5 @@ export default DashboardProjectInfoFixedSection;
 
 DashboardProjectInfoFixedSection.propTypes = {
     projectData: PropTypes.object,
-    isLoading: PropTypes.bool
+    isLoading: PropTypes.bool,
 };

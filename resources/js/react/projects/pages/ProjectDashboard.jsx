@@ -37,10 +37,13 @@ const ProjectDashboard = ({ projectType }) => {
     const isVShowAllViewModalButtons = () => {
         const buttons = projectData?.buttons;
         return (
+            projectData?.project_deadline_extension?.length ||
             buttons?.pm_task_guidline ||
             buttons?.project_qc_data ||
             buttons?.completion_form_data ||
-            buttons?.see_project_dispute || buttons?.extend_deadline_form || buttons?.extend_deadline_pending
+            buttons?.see_project_dispute ||
+            buttons?.extend_deadline_form ||
+            buttons?.extend_deadline_pending
         );
     };
 
