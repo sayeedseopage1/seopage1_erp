@@ -68,7 +68,9 @@ const DashboardActionButtonSection = ({ projectData, isLoading }) => {
                     condition={
                         ViewModalButtons?.extend_deadline_form ||
                         ViewModalButtons?.pm_task_guidline ||
-                        ViewModalButtons?.extend_deadline_pending
+                        ViewModalButtons?.extend_deadline_pending ||
+                        (user.getRoleId() === 1 &&
+                            projectData?.project_deadline_extension?.length)
                     }
                 >
                     <SectionContainer

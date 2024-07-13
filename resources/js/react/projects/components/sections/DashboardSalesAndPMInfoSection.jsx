@@ -21,6 +21,7 @@ import { DetailsSalesExecutiveConstant } from "../../constants";
 
 // Helper -
 import { formatHttp, handleLoadingComponent } from "../../helper";
+import Switch from "../../../global/Switch";
 
 /**
  * Dashboard Sales And PM Info Section
@@ -415,133 +416,205 @@ const DashboardSalesAndPMInfoSection = ({ projectData, isLoading }) => {
                     />
                     {/* Comments by Project Manager */}
 
-                    <SectionContainer>
-                        {/* Requirements Defined*/}
-                        <SectionContentContainer
-                            color="#D8EDFC"
-                            maxHeight="35vh"
-                            className="pt-3 mb-4"
-                        >
-                            {" "}
-                            <DashboardCardTitle
-                                title="Did the sales executive defined requirements for this project properly?"
-                                isBorderUse={true}
-                                borderType="dotted"
-                                className="mb-3"
-                            />
-                            {handleLoadingComponent(
-                                isLoading,
-                                <SectionContentContainer
-                                    maxHeight="7vh"
-                                    minHeight="7vh"
-                                >
-                                    <TextLoaderDynamic
-                                        number={5}
-                                        widthDeference={20}
-                                        hight={16}
-                                        fullSizeCount={2}
-                                        className="mb-2"
-                                    />
-                                </SectionContentContainer>,
-                                <SectionContentContainer
-                                    color="#D8EDFC"
-                                    maxHeight="7vh"
-                                    minHeight="7vh"
-                                    className="pt-0"
-                                    dangerouslySetInnerHTML={{
-                                        __html:
-                                            !isLoading &&
-                                            formatHttp(
+                    <Switch>
+                        <SectionContainer>
+                            {/* Requirements Defined*/}
+                            <SectionContentContainer
+                                color="#D8EDFC"
+                                maxHeight="35vh"
+                                className="pt-3 mb-4"
+                            >
+                                {" "}
+                                <DashboardCardTitle
+                                    title="Confirm that requirement is defined or not?"
+                                    isBorderUse={true}
+                                    borderType="dotted"
+                                    className="mb-3"
+                                />
+                                {handleLoadingComponent(
+                                    isLoading,
+                                    <SectionContentContainer
+                                        maxHeight="7vh"
+                                        minHeight="7vh"
+                                    >
+                                        <TextLoaderDynamic
+                                            number={5}
+                                            widthDeference={20}
+                                            hight={16}
+                                            fullSizeCount={2}
+                                            className="mb-2"
+                                        />
+                                    </SectionContentContainer>,
+                                    <>
+                                        <Switch.Case
+                                            condition={
+                                                !dealInfo?.requirment_define
+                                            }
+                                        >
+                                            <SectionContentContainer
+                                                color="#D8EDFC"
+                                                maxHeight="7vh"
+                                                minHeight="7vh"
+                                                className="pt-0"
+                                            >
+                                                <p className="boldText">N/A</p>
+                                            </SectionContentContainer>
+                                        </Switch.Case>
+
+                                        <Switch.Case
+                                            condition={
                                                 dealInfo?.requirment_define
-                                            ),
-                                    }}
+                                            }
+                                        >
+                                            <SectionContentContainer
+                                                color="#D8EDFC"
+                                                maxHeight="7vh"
+                                                minHeight="7vh"
+                                                className="pt-0"
+                                                dangerouslySetInnerHTML={{
+                                                    __html:
+                                                        !isLoading &&
+                                                        formatHttp(
+                                                            dealInfo?.requirment_define
+                                                        ),
+                                                }}
+                                            />
+                                        </Switch.Case>
+                                    </>
+                                )}
+                            </SectionContentContainer>
+                            {/* End Requirements Defined*/}
+                            {/* Price Authorization */}
+                            <SectionContentContainer
+                                color="#D8EDFC"
+                                maxHeight="35vh"
+                                className="pt-3 mb-4"
+                            >
+                                <DashboardCardTitle
+                                    title="Confirm that price is ok?"
+                                    isBorderUse={true}
+                                    borderType="dotted"
+                                    className="mb-3"
                                 />
-                            )}
-                        </SectionContentContainer>
-                        {/* End Requirements Defined*/}
-                        {/* Price Authorization */}
-                        <SectionContentContainer
-                            color="#D8EDFC"
-                            maxHeight="35vh"
-                            className="pt-3 mb-4"
-                        >
-                            <DashboardCardTitle
-                                title="Did the sales executive set price for this project properly?"
-                                isBorderUse={true}
-                                borderType="dotted"
-                                className="mb-3"
-                            />
-                            {handleLoadingComponent(
-                                isLoading,
-                                <SectionContentContainer
-                                    maxHeight="7vh"
-                                    minHeight="7vh"
-                                >
-                                    <TextLoaderDynamic
-                                        number={5}
-                                        widthDeference={20}
-                                        hight={16}
-                                        fullSizeCount={1}
-                                        className="mb-2"
-                                    />
-                                </SectionContentContainer>,
-                                <SectionContentContainer
-                                    color="#D8EDFC"
-                                    maxHeight="7vh"
-                                    minHeight="7vh"
-                                    className="pt-0"
-                                    dangerouslySetInnerHTML={{
-                                        __html:
-                                            !isLoading &&
-                                            formatHttp(
+                                {handleLoadingComponent(
+                                    isLoading,
+                                    <SectionContentContainer
+                                        maxHeight="7vh"
+                                        minHeight="7vh"
+                                    >
+                                        <TextLoaderDynamic
+                                            number={5}
+                                            widthDeference={20}
+                                            hight={16}
+                                            fullSizeCount={1}
+                                            className="mb-2"
+                                        />
+                                    </SectionContentContainer>,
+                                    <>
+                                        <Switch.Case
+                                            condition={
+                                                !dealInfo?.price_authorization
+                                            }
+                                        >
+                                            <SectionContentContainer
+                                                color="#D8EDFC"
+                                                maxHeight="7vh"
+                                                minHeight="7vh"
+                                                className="pt-0"
+                                            >
+                                                <p className="boldText">N/A</p>
+                                            </SectionContentContainer>
+                                        </Switch.Case>
+
+                                        <Switch.Case
+                                            condition={
                                                 dealInfo?.price_authorization
-                                            ),
-                                    }}
+                                            }
+                                        >
+                                            <SectionContentContainer
+                                                color="#D8EDFC"
+                                                maxHeight="7vh"
+                                                minHeight="7vh"
+                                                className="pt-0"
+                                                dangerouslySetInnerHTML={{
+                                                    __html:
+                                                        !isLoading &&
+                                                        formatHttp(
+                                                            dealInfo?.price_authorization
+                                                        ),
+                                                }}
+                                            />
+                                        </Switch.Case>
+                                    </>
+                                )}
+                            </SectionContentContainer>
+                            {/* End Deadline Provided */}
+                            <SectionContentContainer
+                                color="#D8EDFC"
+                                maxHeight="35vh"
+                                className="pt-3"
+                            >
+                                <DashboardCardTitle
+                                    title="Has sales team set project deadline properly?"
+                                    isBorderUse={true}
+                                    borderType="dotted"
+                                    className="mb-3"
                                 />
-                            )}
-                        </SectionContentContainer>
-                        {/* End Deadline Provided */}
-                        <SectionContentContainer
-                            color="#D8EDFC"
-                            maxHeight="35vh"
-                            className="pt-3"
-                        >
-                            <DashboardCardTitle
-                                title="Did the sales executive set deadline for this project correctly?"
-                                isBorderUse={true}
-                                borderType="dotted"
-                                className="mb-3"
-                            />
-                            {handleLoadingComponent(
-                                isLoading,
-                                <SectionContentContainer
-                                    maxHeight="7vh"
-                                    minHeight="7vh"
-                                >
-                                    <TextLoaderDynamic
-                                        number={5}
-                                        widthDeference={20}
-                                        hight={16}
-                                        fullSizeCount={1}
-                                        className="mb-2"
-                                    />
-                                </SectionContentContainer>,
-                                <SectionContentContainer
-                                    color="#D8EDFC"
-                                    maxHeight="7vh"
-                                    minHeight="7vh"
-                                    className="pt-0"
-                                    dangerouslySetInnerHTML={{
-                                        __html:
-                                            !isLoading &&
-                                            formatHttp(
+                                {handleLoadingComponent(
+                                    isLoading,
+                                    <SectionContentContainer
+                                        maxHeight="7vh"
+                                        minHeight="7vh"
+                                    >
+                                        <TextLoaderDynamic
+                                            number={5}
+                                            widthDeference={20}
+                                            hight={16}
+                                            fullSizeCount={1}
+                                            className="mb-2"
+                                        />
+                                    </SectionContentContainer>,
+
+                                    <>
+                                        <Switch.Case
+                                            condition={
+                                                !dealInfo?.project_deadline_authorization
+                                            }
+                                        >
+                                            <SectionContentContainer
+                                                color="#D8EDFC"
+                                                maxHeight="7vh"
+                                                minHeight="7vh"
+                                                className="pt-0"
+                                            >
+                                                <p className="boldText">N/A</p>
+                                            </SectionContentContainer>
+                                        </Switch.Case>
+
+                                        <Switch.Case
+                                            condition={
                                                 dealInfo?.project_deadline_authorization
-                                            ),
-                                    }}
-                                />
-                            )}
-                        </SectionContentContainer>
-                    </SectionContainer>
+                                            }
+                                        >
+                                            <SectionContentContainer
+                                                color="#D8EDFC"
+                                                maxHeight="7vh"
+                                                minHeight="7vh"
+                                                className="pt-0"
+                                                dangerouslySetInnerHTML={{
+                                                    __html:
+                                                        !isLoading &&
+                                                        formatHttp(
+                                                            dealInfo?.project_deadline_authorization
+                                                        ),
+                                                }}
+                                            />
+                                        </Switch.Case>
+                                    </>
+                                )}
+                            </SectionContentContainer>
+                        </SectionContainer>
+                    </Switch>
                 </div>
                 <div className="flex flex-column">
                     {/* Any other notes for the project manager/technical team */}
@@ -589,7 +662,8 @@ const DashboardSalesAndPMInfoSection = ({ projectData, isLoading }) => {
                                     minHeight="7vh"
                                 >
                                     <p className="boldText">
-                                        {projectInfo?.requirement_defined}
+                                        {projectInfo?.requirement_defined ??
+                                            "N/A"}
                                     </p>
                                 </SectionContentContainer>
                             )}
@@ -602,7 +676,7 @@ const DashboardSalesAndPMInfoSection = ({ projectData, isLoading }) => {
                             className="pt-3"
                         >
                             <DashboardCardTitle
-                                title="Is the deadline provided by sales realistic"
+                                title="Is the deadline provided by sales realistic?"
                                 isBorderUse={true}
                                 borderType="dotted"
                                 className="mb-3"
@@ -628,7 +702,7 @@ const DashboardSalesAndPMInfoSection = ({ projectData, isLoading }) => {
                                     minHeight="7vh"
                                 >
                                     <p className="boldText">
-                                        {projectInfo?.deadline_meet}
+                                        {projectInfo?.deadline_meet ?? "N/A"}
                                     </p>
                                 </SectionContentContainer>
                             )}

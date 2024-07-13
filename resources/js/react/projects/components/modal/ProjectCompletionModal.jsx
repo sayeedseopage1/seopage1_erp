@@ -728,7 +728,8 @@ const ProjectCompletionModal = ({
                                                     {
                                                         projectCompletionData
                                                             ?.project_portfolio
-                                                            ?.cms_category?.cms_name
+                                                            ?.cms_category
+                                                            ?.cms_name
                                                     }
                                                 </p>
                                             </Switch.Case>
@@ -761,7 +762,8 @@ const ProjectCompletionModal = ({
                                                     {
                                                         projectCompletionData
                                                             ?.project_portfolio
-                                                            ?.project_website_type?.website_type
+                                                            ?.project_website_type
+                                                            ?.website_type
                                                     }
                                                 </p>
                                             </Switch.Case>
@@ -796,7 +798,8 @@ const ProjectCompletionModal = ({
                                                     {
                                                         projectCompletionData
                                                             ?.project_portfolio
-                                                            ?.project_niche?.category_name
+                                                            ?.project_niche
+                                                            ?.category_name
                                                     }
                                                 </p>
                                             </Switch.Case>
@@ -1266,7 +1269,8 @@ const ProjectCompletionModal = ({
                                                     condition={
                                                         projectCompletionData
                                                             ?.project_submission
-                                                            ?.dummy_information
+                                                            ?.dummy_information ===
+                                                        1
                                                     }
                                                 >
                                                     <p className="mb-1">Yes</p>
@@ -1293,6 +1297,20 @@ const ProjectCompletionModal = ({
                                                             }
                                                         </a>
                                                     </p>
+                                                </Switch.Case>
+                                                <Switch.Case
+                                                    condition={
+                                                        projectCompletionData
+                                                            ?.project_submission
+                                                            ?.dummy_information ===
+                                                            0 ||
+                                                        projectCompletionData
+                                                            ?.project_submission
+                                                            .dummy_information ===
+                                                            null
+                                                    }
+                                                >
+                                                    <p className="mb-1">No</p>
                                                 </Switch.Case>
                                             </Switch.Case>
                                             <Switch.Case

@@ -37,7 +37,7 @@ const ProjectDashboard = ({ projectType }) => {
     const isVShowAllViewModalButtons = () => {
         const buttons = projectData?.buttons;
         return (
-            projectData?.project_deadline_extension?.length ||
+            projectData?.project_deadline_extension?.length > 0 ||
             buttons?.pm_task_guidline ||
             buttons?.project_qc_data ||
             buttons?.completion_form_data ||

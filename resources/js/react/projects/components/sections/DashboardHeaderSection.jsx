@@ -155,11 +155,6 @@ const DashboardHeaderSection = ({ projectData, isLoading }) => {
                     >
                         Working Environment
                     </Button>
-                    {/* <PageNavigateButtons
-                        className="d-none d-md-flex ml-2"
-                        style={style}
-                        navigateData={projectData}
-                    /> */}
                 </div>
                 <div className={`${style?.dashboardHeaderLeftButtonWrapper}`}>
                     <Switch.Case
@@ -251,6 +246,23 @@ const DashboardHeaderSection = ({ projectData, isLoading }) => {
                             className={`${style?.dashboardHeaderButton} ${style.dashboardHeaderButtonAnimation} ml-0 ml-md-2`}
                         >
                             Milestone Cancel Authorize
+                        </Button>
+                    </Switch.Case>
+                    <Switch.Case
+                        condition={
+                            actionButtons?.deliverable_authorization
+                        }
+                    >
+                        <Button
+                            onClick={() =>
+                                window.open(
+                                    `/account/projects/${projectData?.id}?tab=deliverables`,
+                                    "_blank"
+                                )
+                            }
+                            className={`${style?.dashboardHeaderButton} ${style.dashboardHeaderButtonAnimation} ml-0 ml-md-2`}
+                        >
+                            Deliverables Authorization
                         </Button>
                     </Switch.Case>
                     <Switch.Case

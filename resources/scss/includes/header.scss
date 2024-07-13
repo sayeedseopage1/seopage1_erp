@@ -19,20 +19,28 @@
     @media screen  and (max-width: 410px) {
       display: none;
     }
-  
+
   }
 
-
-.user_name {
+  .user_name {
+    @media screen  and (max-width: 410px) {
+      font-size: 12px !important;
+    }
+    span {
+      @media screen  and (max-width: 410px) {
+        font-size: 12px !important;
+      }
+    }
+  }
   @media screen  and (max-width: 410px) {
-    font-size: 12px !important;
+    float: none !important;
   }
+
 }
-    
   
 
 
-}
+
 .header-icon-box {
   display: flex;
   align-items: center;
