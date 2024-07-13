@@ -23,10 +23,14 @@ const Select = ({
     const [isOpen, setIsOpen] = React.useState(false);
     const [selected, setSelected] = React.useState(value);
     const [elementRef, setElementRef] = React.useState(null);
-    
+
     React.useEffect(() => {
         setSelected(value);
-    }, [value])
+
+        if (value !== null) {
+            setIsOpen(false);
+        }
+    }, [value]);
 
     const toggle = () => setIsOpen(!isOpen);
     const close = () => setIsOpen(false);
@@ -37,7 +41,7 @@ const Select = ({
     };
 
     const handleClick = (e) => {
-        e.preventDefault()
+        e.preventDefault();
         toggle();
         onClick && onClick();
     };
@@ -56,7 +60,7 @@ const Select = ({
             }}
         >
             <React.Fragment>
-                <div ref={setElementRef}>
+                <div ref={setElementRef} className={`${props?.disabled ? css?.pointerEventsNone : ""}`}>
                     <div
                         className={`${css.select} ${className}`}
                         onMouseDown={handleClick}
@@ -79,8 +83,8 @@ const Select = ({
     );
 };
 
-const Options = ({ children, className = "",}) => {
-    const { elementRef,visible, close } = useSelect();
+const Options = ({ children, className = "" }) => {
+    const { elementRef, visible, close } = useSelect();
     const [popperElement, setPopperElement] = React.useState(null);
     // popper
     const { styles, attributes } = usePopper(elementRef, popperElement, {
@@ -124,19 +128,23 @@ const Options = ({ children, className = "",}) => {
     );
 };
 
-const Search = ({children}) => {
-    const [query, setQuery] = React.useState('');
-    return(
+const Search = ({ children }) => {
+    const [query, setQuery] = React.useState("");
+    return (
         <React.Fragment>
             <div className={css.search_box}>
-                <input type="search" value={query} placeholder="Search..." onChange={e=>setQuery(e.target.value)} />
+                <input
+                    type="search"
+                    value={query}
+                    autoFocus
+                    placeholder="Search..."
+                    onChange={(e) => setQuery(e.target.value)}
+                />
             </div>
-            <div className={css.wrapper}>
-                {children(query)}
-            </div>
+            <div className={css.wrapper}>{children(query)}</div>
         </React.Fragment>
-    )
-}
+    );
+};
 
 // option
 const Option = ({ value, className = "", children }) => {

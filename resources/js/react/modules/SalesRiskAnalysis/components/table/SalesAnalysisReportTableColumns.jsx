@@ -90,27 +90,34 @@ export const SalesAnalysisReportTableColumns = [
         cell: ({ row }) => {
             const data = row?.original;
             return (
-                <a
-                    href={`/account/leads/${data?.lead_id}`}
-                    className={`multine-ellipsis btn btn-info`}
-                    style={viewBtnStyle}
-                    ref={(node) => {
-                        if (node) {
-                            node.style.setProperty(
-                                "color",
-                                "white",
-                                "important"
-                            );
-                            node.style.setProperty(
-                                "background-color",
-                                "#1492d2",
-                                "important"
-                            );
-                        }
-                    }}
-                >
-                    View Lead
-                </a>
+                <Switch>
+                    <Switch.Case condition={data?.lead_id === null}>
+                        <p className="multiline-ellipsis">Not Available Yet</p>
+                    </Switch.Case>
+                    <Switch.Case condition={data?.lead_id !== null}>
+                        <a
+                            href={`/account/leads/${data?.lead_id}`}
+                            className={`multine-ellipsis btn btn-info`}
+                            style={viewBtnStyle}
+                            ref={(node) => {
+                                if (node) {
+                                    node.style.setProperty(
+                                        "color",
+                                        "white",
+                                        "important"
+                                    );
+                                    node.style.setProperty(
+                                        "background-color",
+                                        "#1492d2",
+                                        "important"
+                                    );
+                                }
+                            }}
+                        >
+                            View Lead
+                        </a>
+                    </Switch.Case>
+                </Switch>
             );
         },
     },
@@ -133,9 +140,21 @@ export const SalesAnalysisReportTableColumns = [
         accessorKey: "country",
         cell: ({ row }) => {
             const data = row?.original;
+
+            const getCountry = (country) => {
+                if (
+                    country === "" ||
+                    country === null ||
+                    country === undefined
+                ) {
+                    return "N/A";
+                } else {
+                    return country;
+                }
+            };
             return (
                 <p className="multiline-ellipsis">
-                    {data?.country ?? "Not Available Yet"}
+                    {getCountry(data?.country)}
                 </p>
             );
         },
@@ -183,18 +202,22 @@ export const SalesAnalysisReportTableColumns = [
             const data = row?.original;
             return (
                 <Switch>
-                    <Switch.Case condition={data?.points}>
+                    <Switch.Case
+                        condition={
+                            data?.points !== null && data?.points !== undefined
+                        }
+                    >
                         <p className="multiline-ellipsis">{data?.points}</p>
                     </Switch.Case>
-                    <Switch.Case condition={!data?.points}>
+                    <Switch.Case
+                        condition={
+                            data?.points === null || data?.points === undefined
+                        }
+                    >
                         {["previous-won", "previous-denied"].includes(
-                            data?.status.toLowerCase()
+                            data?.status?.toLowerCase()
                         ) ? (
-                            <p
-                                style={{
-                                    ...customStyle.previousAuthorized,
-                                }}
-                            >
+                            <p style={{ ...customStyle.previousAuthorized }}>
                                 Previous Report
                             </p>
                         ) : (
@@ -477,6 +500,8 @@ export const SalesAnalysisReportTableColumns = [
                             );
                         }
                     }}
+
+                    
                     target="_blank"
                 >
                     <GrView />

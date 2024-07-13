@@ -8,7 +8,7 @@ import { useAuth } from "../../../../../../hooks/useAuth";
 import ShowClock from "../../components/ShowClock";
 import styles from "./AttendanceControlButton.module.css";
 import { WorkStatusConfirmationModal } from "./WorkStatusConfirmationModal";
-
+import _ from "lodash";
 /**
  * * It's a headless features component
  * * It's Responsible for Employee check in & check out control
@@ -72,7 +72,7 @@ export const AttendanceControlButton = () => {
 
     return (
         <>
-            {auth.roleId !== 14 && (
+            {!_.includes([14, 15, 16, 17], auth.getRoleId()) && (
                 <>
                     <Switch>
                         <div className={styles.attendance_button_group}>

@@ -264,6 +264,7 @@ const EvaluationRatingModal = ({
             isOpen={isSingleEvaluationModalOpen}
             onRequestClose={() => toggleSingleEvaluationModal()}
             ariaHideApp={false}
+            closeTimeoutMS={500}
         >
             <RatingTitleAndTableSection>
                 <EvalTableTitle>
