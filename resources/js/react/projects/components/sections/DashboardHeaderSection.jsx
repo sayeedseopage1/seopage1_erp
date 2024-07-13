@@ -231,6 +231,20 @@ const DashboardHeaderSection = ({ projectData, isLoading }) => {
                             Explain Dispute
                         </Button>
                     </Switch.Case>
+                    {/* <Switch.Case
+                        condition={
+                            actionButtons?.explain_dispute && user?.roleId === 8
+                        }
+                    >
+                        <Button
+                            onClick={() =>
+                                handleModal(setIsExplainDisputeModalOpen, true)
+                            }
+                            className={`${style?.dashboardHeaderButton} ${style.dashboardHeaderButtonAnimation} ml-0 ml-md-2`}
+                        >
+                            Submit QC From
+                        </Button>
+                    </Switch.Case> */}
                     <Switch.Case
                         condition={
                             actionButtons?.milestone_cancel_authorization
