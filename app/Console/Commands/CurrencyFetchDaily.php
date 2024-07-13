@@ -31,21 +31,23 @@ class CurrencyFetchDaily extends Command
     public function handle()
     {
         $client = new Client();
-        $url = 'https://v6.exchangerate-api.com/v6/acb4cb3dd77299b122d36480/latest/USD';
+        $urlOne = 'https://v6.exchangerate-api.com/v6/acb4cb3dd77299b122d36480/latest/USD';
+        $urlTwo = 'https://openexchangerates.org/api/latest.json?app_id=dcaeb890e6ee40d4a35b08f2c0ea70f3';
 
         try {
             DB::beginTransaction();
-            $response = $client->request('GET', $url);
+            $response = $client->request('GET', $urlTwo);
             $body = $response->getBody()->getContents();
 
             $data = json_decode($body, true);
-            $aedValue = $data['conversion_rates']['AED'];
             foreach(Currency::get() as $currency){
-                $currency->exchange_rate = $data['conversion_rates'][$currency->currency_code];
+                // $currency->exchange_rate = $data['conversion_rates'][$currency->currency_code]; // For $urlOne
+                $currency->exchange_rate = $data['rates'][$currency->currency_code]; // For $urlTwo
                 $currency->save();
             }
             DB::commit();
         } catch (\Exception $e) {
+            throw $e;
             DB::rollBack();
         }
     }
