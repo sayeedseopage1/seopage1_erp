@@ -10,14 +10,8 @@
                             data-target="#number_of_task_received{{ $number_of_tasks_received_lead }}">
                             {{ $number_of_tasks_received_lead }}
                         </a>
-                        {{-- <span class="f-12 font-weight-normal text-lightest">
-                            @lang('Received tasks this cycle')
-                            <i class="fa fa-question-circle" aria-hidden="true" data-toggle="modal" data-target="#"></i>
-
-                        </span> --}}
                     </p>
-                    {{-- @include('dashboard.ajax.leaddeveloper.modals.number_of_task_received') --}}
-
+                     @include('dashboard.ajax.leaddeveloper.modals.number_of_task_received')
                 </div>
             </div>
             <div class="d-block">
@@ -37,14 +31,8 @@
                             data-target="#submit_number_of_tasks_in_this_month_lead{{ $submit_number_of_tasks_in_this_month_lead }}">
                             {{ $submit_number_of_tasks_in_this_month_lead }}
                         </a>
-                        {{-- <span class="f-12 font-weight-normal text-lightest">
-                            @lang('Primary pages')
-                            <i class="fa fa-question-circle" aria-hidden="true" data-toggle="modal" data-target="#"></i>
-
-                        </span> --}}
                     </p>
-                    {{-- @include('dashboard.ajax.leaddeveloper.modals.number_of_task_submitted') --}}
-
+                    @include('dashboard.ajax.leaddeveloper.modals.number_of_task_submitted')
                 </div>
             </div>
             <div class="d-block">
@@ -63,9 +51,8 @@
                         <a href="#" data-toggle="modal" data-target="#">
                             {{ $first_attempt_approve_task_in_this_month_lead }}
                         </a>
-
                     </p>
-
+                     @include('dashboard.ajax.leaddeveloper.modals.first_attempt_approve_task_in_this_month_lead')
                 </div>
             </div>
             <div class="d-block">
