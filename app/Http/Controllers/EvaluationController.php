@@ -171,10 +171,10 @@ class EvaluationController extends AccountBaseController
         //                 }
         //             }
             
-        // return response()->json([
-        //     'data' => $employeeEvaluations,
-        //     'status' => 200
-        // ]);
+        return response()->json([
+            'data' => [],
+            'status' => 200
+        ]);
     }
 
 
