@@ -206,7 +206,7 @@ use App\Http\Controllers\EmployeeShiftChangeRequestController;
 use App\Http\Controllers\EvaluationController;
 use App\Http\Controllers\SalesRiskPolicyController;
 use App\Http\Controllers\PlatformAccountsController;
-// use App\Http\Controllers\PriceQuotationController;
+use App\Http\Controllers\AllPriceQuotationController;
 
 /*
 |--------------------------------------------------------------------------
@@ -569,7 +569,7 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
         Route::resource('pending-action', PendingActionController::class);
     });
 
-    PlatformAccountsController::Route('platform-accounts');
+    PlatformAccountsController::Route('all-platform-accounts');
 
     /* Setting menu routes ends here */
     Route::resource('company-settings', SettingsController::class)->only(['edit', 'update', 'index', 'change_language']);
@@ -1579,10 +1579,10 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
     Route::get('get-project-niches', [PriceQuotationInsightController::class, 'getProjectNiche'])->name('get.project.niches');
     Route::get('get-currencies', [PriceQuotationInsightController::class, 'getCurrencies'])->name('get.currencies');
     Route::resource('price-quotations', PriceQuotationController::class)->only(['index','store','show']);
-    Route::get('test-store', [PriceQuotationController::class, 'store']);
+    // Route::get('all-platform-accounts')
 });
 
-// PriceQuotationController::Route();
+AllPriceQuotationController::Route();
 
 //custom route for seopage1
 Route::get('/deals/client-form/{id}', [HomeController::class, 'deal']);

@@ -14,7 +14,7 @@ class PlatformAccountsController extends AccountBaseController
         $this->pageTitle = 'Platform Accounts';
     }
 
-    static function Route($uri = 'account/platform-accounts', $name = 'platform-accounts')
+    static function Route($uri = 'account/all-platform-accounts', $name = 'all-platform-accounts')
     {
         Route::controller(self::class)->prefix($uri)->name($name.'.')->group(function(){
             Route::get('/', 'index')->name('index');

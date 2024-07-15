@@ -10,7 +10,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
-class PriceQuotationController extends AccountBaseController
+class AllPriceQuotationController extends AccountBaseController
 {
     public function __construct()
     {
@@ -18,7 +18,7 @@ class PriceQuotationController extends AccountBaseController
         $this->pageTitle = 'Price Quotations';
     }
 
-    static function Route($uri = 'account/price-quotations', $name = 'price-quotations')
+    static function Route($uri = 'account/all-price-quotations', $name = 'all-price-quotations')
     {
         Route::controller(self::class)->prefix($uri)->name($name . '.')->group(function () {
             Route::get('/', 'index')->name('index');
