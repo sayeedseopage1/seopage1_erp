@@ -7,6 +7,7 @@ use App\Models\PlatformAccount;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Validator;
 
 class PlatformAccountController extends Controller
 {
@@ -14,13 +15,13 @@ class PlatformAccountController extends Controller
     {
         return response()->json([
             'status' => 200,
-            'data' => PlatformAccount::get()
+            'data' => PlatformAccount::paginate(20)
         ]);
     }
 
     public function store(Request $request)
     {
-        $validated = $request->validate([
+        $validator = Validator::make($request->all(), [
             'type' => 'required|numeric',
             'username' => 'required|string',
             'name' => 'required|string',
@@ -31,6 +32,14 @@ class PlatformAccountController extends Controller
             'multiplying_factor' => 'required|numeric',
             'confirmation_of_data_accuracy' => 'nullable'
         ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'errors' => $validator->errors()->all()
+            ], 422);
+        }
+
+        $validated = $validator->validated();
         
         $validated['added_by'] = Auth::user()->id;
         // return $validated;
