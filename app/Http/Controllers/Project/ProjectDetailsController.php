@@ -22,7 +22,7 @@ class ProjectDetailsController extends Controller
      */
     public function __invoke(Request $request, $project_id)
     {
-        $project = Project::select(['id','project_name','project_short_code','client_id','pm_id','start_date','deadline','project_budget','currency_id','deal_id','project_challenge','comments','requirement_defined','deadline_meet','project_summary','status','dispute_status','dispute_admin_comment'])
+        $project = Project::select(['id','project_name','project_short_code','client_id','pm_id','start_date','deadline','project_budget','currency_id','deal_id','project_challenge','comments','requirement_defined','deadline_meet','project_summary','status','dispute_status','dispute_admin_comment','authorization_status'])
         ->with(
             'client:id,name,user_name,country_id', 
             'client.country:id,iso,nicename', 
