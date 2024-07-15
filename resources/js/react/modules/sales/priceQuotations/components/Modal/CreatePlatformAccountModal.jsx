@@ -8,7 +8,7 @@ import { useEffect, useState } from "react";
 import Button from "../Shared/Button";
 import CustomInput from "../UI/CustomInput/CustomInput";
 import CustomModal from "../UI/CustomModal/CustomModal";
-import CustomDropDown from "../UI/CustomDropDown/CustomDropDown"; 
+import CustomDropDown from "../UI/CustomDropDown/CustomDropDown";
 import CustomModalHeader from "../UI/CustomModalHeader/CustomModalHeader";
 // Components - Local - Styled Components
 import { ContentWrapper, ModalContentContainer } from "../UI/StyledComponents";
@@ -25,14 +25,18 @@ import {
     isStateAllHaveValue,
     markEmptyFieldsValidation,
 } from "../../../../../utils/stateValidation";
-
+import {
+    useCreatePlatformAccountMutation,
+    useUpdatePlatformAccountMutation,
+} from "../../../../../services/api/platformAccountApiSlice";
 
 const platformAccountState = {
     validation: {
-        platform: false,
-        user_name: false,
+        type: false,
+        username: false,
+        name: false,
         user_url: false,
-        account_email: false,
+        email: false,
         profile_type: false,
         generated_on: false,
         multiplying_factor: false,
@@ -40,14 +44,15 @@ const platformAccountState = {
         isEmailInValid: false,
     },
     inputs: {
-        platform: {},
-        user_name: "",
+        type: {},
+        username: "",
+        name: "",
         user_url: "",
-        account_email: "",
+        email: "",
         profile_type: {},
         generated_on: null,
         multiplying_factor: "",
-        is_information_accurate: false,
+        confirmation_of_data_accuracy: false,
     },
 };
 
@@ -72,20 +77,15 @@ const CreatePlatformAccountModal = ({
         });
     };
 
-    const dummyUpdateData = () => {
-        AccountListDummyData.map((item) => {
-            if (item.id === platformAccountInputs.id) {
-                return {
-                    ...item,
-                    ...platformAccountInputs,
-                };
-            }
-            return item;
-        });
-    };
+    const [createPlatformAccount, { isLoading: isCreatingPlatformAccount }] =
+        useCreatePlatformAccountMutation();
 
-    const handleSubmit = () => {
-        const { is_information_accurate, ...formData } = platformAccountInputs;
+    const [updatePlatformAccount, { isLoading: isUpdatingPlatformAccount }] =
+        useUpdatePlatformAccountMutation();
+
+    const handleSubmit = async () => {
+        const { confirmation_of_data_accuracy, ...formData } =
+            platformAccountInputs;
         const isEmpty = isStateAllHaveValue(formData);
         if (isEmpty) {
             const validation = markEmptyFieldsValidation(formData);
@@ -99,12 +99,12 @@ const CreatePlatformAccountModal = ({
             return;
         }
         // Email Validation
-        if (!isEmail(platformAccountInputs.account_email)) {
+        if (!isEmail(platformAccountInputs.email)) {
             setPlatformAccountValidation({
                 ...platformAccountValidation,
                 is_submitting: true,
-                isEmailInValid: platformAccountInputs.account_email
-                    ? isEmailInvalid(platformAccountInputs.account_email)
+                isEmailInValid: platformAccountInputs.email
+                    ? isEmailInvalid(platformAccountInputs.email)
                     : false,
             });
             toast.error("Invalid Email");
@@ -113,21 +113,28 @@ const CreatePlatformAccountModal = ({
 
         // API Call
         try {
-            setIsLoading(true);
+            const apiCall = isPlatformAccountUpdate
+                ? updatePlatformAccount
+                : createPlatformAccount;
 
-            setTimeout(() => {
-                setIsLoading(false);
+            const payload = {
+                ...platformAccountInputs,
+                type: platformAccountInputs.type.id,
+                confirmation_of_data_accuracy: 1, // Always true
+                profile_type: platformAccountInputs.profile_type.id,
+                status: 1, // Active (1) - Inactive (0) but default is active
+                multiplying_factor: Number(
+                    platformAccountInputs.multiplying_factor
+                ),
+            };
+
+            const res = await apiCall(payload).unwrap();
+            if (res.status === 200) {
+                toast.success(res.message);
                 closeModal();
-                if (isPlatformAccountUpdate) {
-                    dummyUpdateData();
-                }
-                toast.success(
-                    isPlatformAccountUpdate
-                        ? "Platform Account Updated Successfully"
-                        : "Platform Account Created Successfully"
-                );
-            }, 3000);
+            }
         } catch (error) {
+            console.log("Error", error);
             toast.error("Something went wrong");
         }
     };
@@ -144,15 +151,15 @@ const CreatePlatformAccountModal = ({
             setPlatformAccountValidation({
                 ...platformAccountValidation,
                 ...validation,
-                isEmailInValid: platformAccountInputs.account_email
-                    ? isEmailInvalid(platformAccountInputs.account_email)
+                isEmailInValid: platformAccountInputs.email
+                    ? isEmailInvalid(platformAccountInputs.email)
                     : false,
             });
         }
     }, [
         platformAccountInputs,
         platformAccountValidation.is_submitting,
-        platformAccountValidation.account_email,
+        platformAccountValidation.email,
     ]);
 
     return (
@@ -177,32 +184,45 @@ const CreatePlatformAccountModal = ({
                         placeholder="Select Platform"
                         data={PlatformOptions}
                         isRequired
-                        filedName="platform"
-                        selected={platformAccountInputs?.platform}
+                        filedName="type"
+                        selected={platformAccountInputs?.type}
                         setSelected={handleInputChange}
                         isError={
                             platformAccountValidation?.is_submitting &&
-                            platformAccountValidation?.platform
+                            platformAccountValidation?.type
                         }
                         errorText="Platform is required"
                     />
                     <CustomInput
-                        label="2. User Name"
-                        fieldName="user_name"
+                        label="2. Name"
+                        fieldName="name"
                         isRequired
-                        value={platformAccountInputs?.user_name}
+                        value={platformAccountInputs?.name}
                         onChange={handleInputChange}
-                        errorText="User Name is required"
+                        errorText="Name is required"
                         isError={
                             platformAccountValidation?.is_submitting &&
-                            platformAccountValidation?.user_name
+                            platformAccountValidation?.name
                         }
-                        placeholder="Enter User Name"
+                        placeholder="Enter Name"
                     />
                 </ContentWrapper>
                 <ContentWrapper className="mb-3">
                     <CustomInput
-                        label="3. User Url"
+                        label="3. User Name"
+                        fieldName="username"
+                        isRequired
+                        value={platformAccountInputs?.username}
+                        onChange={handleInputChange}
+                        errorText="User Name is required"
+                        isError={
+                            platformAccountValidation?.is_submitting &&
+                            platformAccountValidation?.username
+                        }
+                        placeholder="Enter User Name"
+                    />
+                    <CustomInput
+                        label="4. User Url"
                         fieldName="user_url"
                         isRequired
                         value={platformAccountInputs?.user_url}
@@ -214,17 +234,19 @@ const CreatePlatformAccountModal = ({
                         }
                         errorText="User Url is required"
                     />
+                </ContentWrapper>
+                <ContentWrapper className="mb-3">
                     <CustomInput
-                        label="4. Account Email"
-                        fieldName="account_email"
+                        label="5. Account Email"
+                        fieldName="email"
                         type="email"
                         isRequired
-                        value={platformAccountInputs?.account_email}
+                        value={platformAccountInputs?.email}
                         onChange={handleInputChange}
                         placeholder="Enter Account Email"
                         isError={
                             platformAccountValidation?.is_submitting &&
-                            (platformAccountValidation?.account_email ||
+                            (platformAccountValidation?.email ||
                                 platformAccountValidation.isEmailInValid)
                         }
                         errorText={
@@ -233,10 +255,8 @@ const CreatePlatformAccountModal = ({
                                 : "Account Email is required"
                         }
                     />
-                </ContentWrapper>
-                <ContentWrapper className="mb-3">
                     <CustomDropDown
-                        label="5. Profile Type"
+                        label="6. Profile Type"
                         placeholder="Select Profile Type"
                         data={ProfileTypeOptions}
                         isRequired
@@ -249,8 +269,10 @@ const CreatePlatformAccountModal = ({
                         }
                         errorText="Profile Type is required"
                     />
+                </ContentWrapper>
+                <ContentWrapper className="mb-2">
                     <CustomInput
-                        label="6. Generated On"
+                        label="7. Generated On"
                         fieldName="generated_on"
                         isRequired
                         value={platformAccountInputs?.generated_on}
@@ -263,10 +285,8 @@ const CreatePlatformAccountModal = ({
                         }
                         errorText="Generated On is required"
                     />
-                </ContentWrapper>
-                <ContentWrapper className="mb-2">
                     <CustomInput
-                        label="7. Multiplying Factor"
+                        label="8. Multiplying Factor"
                         fieldName="multiplying_factor"
                         isRequired
                         type="number"
@@ -279,16 +299,18 @@ const CreatePlatformAccountModal = ({
                         errorText="Multiplying Factor is required"
                         onChange={handleInputChange}
                     />
+                </ContentWrapper>
+                <ContentWrapper className="my-2">
                     <div className="d-flex flex-column">
                         <div className="mb-3 custom_check_box">
                             <Checkbox
                                 checked={
-                                    platformAccountInputs?.is_information_accurate
+                                    platformAccountInputs?.confirmation_of_data_accuracy
                                 }
                                 onChange={(e) => {
                                     handleInputChange({
                                         target: {
-                                            name: "is_information_accurate",
+                                            name: "confirmation_of_data_accuracy",
                                             value: e.target.checked,
                                         },
                                     });
@@ -301,10 +323,15 @@ const CreatePlatformAccountModal = ({
                         <div className="d-flex">
                             <Button
                                 className="mr-2 price_quotation_custom_button price_quotation_custom_button_primary"
-                                isLoading={isLoading}
+                                isLoading={
+                                    isCreatingPlatformAccount ||
+                                    isUpdatingPlatformAccount
+                                }
                                 disabled={
-                                    platformAccountInputs.is_information_accurate ===
-                                    false
+                                    platformAccountInputs.confirmation_of_data_accuracy ===
+                                        false ||
+                                    isCreatingPlatformAccount ||
+                                    isUpdatingPlatformAccount
                                 }
                                 loaderTitle={
                                     isPlatformAccountUpdate

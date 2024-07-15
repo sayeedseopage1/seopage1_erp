@@ -19,17 +19,19 @@ import { AccountListDummyData } from "../constant";
 
 // Modal
 import CreatePlatformAccountModal from "../components/Modal/CreatePlatformAccountModal";
+import { usePlatformAccountsQuery } from "../../../../services/api/platformAccountApiSlice";
 
 const platformAccountState = {
     inputs: {
         type: {},
-        user_name: "",
+        username: "",
+        name: "",
         user_url: "",
-        account_email: "",
+        email: "",
         profile_type: {},
         generated_on: null,
         multiplying_factor: "",
-        is_information_accurate: false,
+        confirmation_of_data_accuracy: false,
     },
 };
 
@@ -42,27 +44,20 @@ const AccountLists = () => {
     const [platformAccountInputs, setPlatformAccountInputs] = React.useState(
         platformAccountState.inputs
     );
-    const [isLoading, setIsLoading] = React.useState(true);
-    const [, /*filter*/ setFilter] = React.useState();
-
     
     // Modal State
     const [isPlatformAccountModalOpen, setIsPlatformAccountModalOpen] =
         React.useState(false);
 
-    // Dummy  refetch
-    const refetch = () => {
-        setIsLoading(true);
-    };
+    const  {
+        data,
+        isLoading,
+        isFetching,
+        refetch,
+    } = usePlatformAccountsQuery("")
 
-    // Dummy filter
-    useEffect(() => {
-        if (isLoading) {
-            setTimeout(() => {
-                setIsLoading(false);
-            }, 3000);
-        }
-    }, [isLoading]);
+    const  platformAccounts = data?.data || []
+    const isPlatformAccountLoading = isLoading || isFetching;
 
     // Handle Modal Open and Close Function with Action Function as Parameter (if needed)
     const handleModal = (setModalOpenFunc, isOpen, action) => {
@@ -150,14 +145,14 @@ const AccountLists = () => {
                             {/* refresh */}
                             <RefreshButton
                                 onClick={refetch}
-                                isLoading={isLoading}
+                                isLoading={isPlatformAccountLoading}
                                 className="font-weight-normal price_quotation_refresh_button border-0"
                             />
                         </Flex>
                         <DataTable
                             tableName="accountLists"
                             tableData={{
-                                data: AccountListDummyData,
+                                data: platformAccounts,
                                 from: 1,
                                 to: 10,
                                 total: 10,
@@ -166,7 +161,7 @@ const AccountLists = () => {
                                 pageIndex: 0,
                             }}
                             tableColumns={AccountListTableColumns}
-                            isLoading={isLoading}
+                            isLoading={isPlatformAccountLoading}
                             justifyStyleColumn={{
                                 profile_type: "center",
                                 generated_on: "center",
