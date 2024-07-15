@@ -22,7 +22,7 @@ import CreatePlatformAccountModal from "../components/Modal/CreatePlatformAccoun
 
 const platformAccountState = {
     inputs: {
-        platform: {},
+        type: {},
         user_name: "",
         user_url: "",
         account_email: "",

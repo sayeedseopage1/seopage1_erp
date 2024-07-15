@@ -1,6 +1,5 @@
 import React, { useEffect } from "react";
 import PropTypes from "prop-types";
-
 import { toast } from "react-toastify";
 
 import _ from "lodash";
@@ -35,6 +34,7 @@ import {
     QuotationDummyData,
 } from "../../constant";
 import { usePDF } from "react-to-pdf";
+
 
 const PriceQuotationsGenerateModal = ({
     isModalOpen,
