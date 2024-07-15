@@ -10,3 +10,6 @@ import "./sales/priceQuotations/main";
 import './digital-marketing/DmDeals/main';
 import './digital-marketing/DmLeads/main';
 import './digital-marketing/DmWonDeals/main';
+
+// Sales Risk Analysis
+import './SalesRiskAnalysis/main';

@@ -34,10 +34,14 @@ grumphp.yml
 /bootstrap/cache/*
 storage/reviewed
 *.bak
-
+.prettierrc.json
 
 .scannerwork
 coverage
 
 __TODO__
 package-lock.json
+
+#test
+.scannerwork
+reload_pages.sh

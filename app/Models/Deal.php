@@ -13,6 +13,8 @@ class Deal extends Model
     use HasFactory;
     protected $table = 'deals';
 
+    static $saleAnalysisStatus = ['previous-won', 'previous-denied', 'pending', 'analysis', 'authorized', 'auto-authorized', 'denied', 'no-analysis'];
+
     public function original_currency()
     {
         return $this->belongsTo(Currency::class, 'original_currency_id');

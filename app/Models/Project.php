@@ -425,4 +425,12 @@ class Project extends BaseModel
             return false;
         }
     }
+
+    public function project_portfolio(){
+        return $this->hasOne(ProjectPortfolio::class, 'project_id')->orderBy('id', 'desc');
+    }
+
+    public function project_submission(){
+        return $this->hasOne(ProjectSubmission::class, 'project_id');
+    }
 }

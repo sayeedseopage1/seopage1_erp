@@ -62,5 +62,6 @@ mix.js("resources/js/app.jsx", "public/js/react")
     .version()
 
 // mix.browserSync({
-//     proxy: "http://127.0.0.1:8000",
+//     proxy: "http://127.0.0.1:8000/",
+    
 // });

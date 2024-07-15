@@ -63,6 +63,54 @@ const ActionsButton = ({ data }) => {
                             {btn.button_name}
                         </button>
                     );
+                } else if (
+                    btn.button_type === "modal" &&
+                    data?.code === "TCOA"
+                ) {
+                    return (
+                        <div>
+                            {btn.button_name === "View and Reply" && (
+                                <button
+                                    key={i}
+                                    disabled={handleBtnDisable(8)}
+                                    onClick={() => {
+                                        setViewCommentModal((prev) => !prev);
+                                        dispatch(setPendingActionId(data?.id));
+                                    }}
+                                    className={`${style.action_btn}`}
+                                >
+                                    View & Reply
+                                </button>
+                            )}
+
+                            {btn.button_name === "Not relevant to me" && (
+                                <button
+                                    key={i}
+                                    disabled={handleBtnDisable(8)}
+                                    onClick={() => {
+                                        setIsRelevantModal((prev) => !prev);
+
+                                        dispatch(setPendingActionId(data?.id));
+                                    }}
+                                    className={`${style.action_btn}`}
+                                >
+                                    Not Relevant to me
+                                </button>
+                            )}
+                            {btn.button_name === "View" && (
+                                <button
+                                    key={i}
+                                    disabled={handleBtnDisable(8)}
+                                    onClick={() =>
+                                        setViewModal((prev) => !prev)
+                                    }
+                                    className={`${style.action_btn}`}
+                                >
+                                    View
+                                </button>
+                            )}
+                        </div>
+                    );
                 } else if (btn.button_type === "modal") {
                     return (
                         <div>
@@ -89,48 +137,6 @@ const ActionsButton = ({ data }) => {
                                     className={`${style.action_btn}`}
                                 >
                                     Acknowledge & create a task
-                                </button>
-                            )}
-                        </div>
-                    );
-                } else if (btn.button_type === "modal") {
-                    return (
-                        <div>
-                            {btn.button_name === "View and Reply" && (
-                                <button
-                                    disabled={handleBtnDisable(8)}
-                                    onClick={() => {
-                                        setViewCommentModal((prev) => !prev);
-                                        dispatch(setPendingActionId(data?.id));
-                                    }}
-                                    className={`${style.action_btn}`}
-                                >
-                                    View & Reply
-                                </button>
-                            )}
-
-                            {btn.button_name === "Not relevant to me" && (
-                                <button
-                                    disabled={handleBtnDisable(8)}
-                                    onClick={() => {
-                                        setIsRelevantModal((prev) => !prev);
-
-                                        dispatch(setPendingActionId(data?.id));
-                                    }}
-                                    className={`${style.action_btn}`}
-                                >
-                                    Not Relevant to me
-                                </button>
-                            )}
-                            {btn.button_name === "View" && (
-                                <button
-                                    disabled={handleBtnDisable(8)}
-                                    onClick={() =>
-                                        setViewModal((prev) => !prev)
-                                    }
-                                    className={`${style.action_btn}`}
-                                >
-                                    View
                                 </button>
                             )}
                         </div>

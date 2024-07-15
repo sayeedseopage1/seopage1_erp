@@ -12,7 +12,6 @@
 @endphp
 
 @section('content')
-
     @push('styles')
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css"
             integrity="sha512-xh6O/CkQoPOWDdYTDqeRdPCVd1SpvCA9XXcUnZS2FmJNp1coAFzvtCN9BmamE+4aHK8yyUHUSCcJHgXloTyT2A=="
@@ -26,8 +25,8 @@
 
         <style>
             /**
-        * FilePond Custom Styles
-        */
+                                                                                        * FilePond Custom Styles
+                                                                                        */
             .uploadFile {
                 width: 30%;
                 border: none;
@@ -356,15 +355,15 @@
 
 
             /* .sbinfo ul li:nth-child(2) {
-                padding-right: 0px;
-                padding-left: 5px;
-                width: 60px;
-            }
-            .sbinfo ul li:nth-child(3) {
-                padding-right: 0px;
-                padding-left: 5px;
-                width: 60px;
-            } */
+                                                                                                padding-right: 0px;
+                                                                                                padding-left: 5px;
+                                                                                                width: 60px;
+                                                                                            }
+                                                                                            .sbinfo ul li:nth-child(3) {
+                                                                                                padding-right: 0px;
+                                                                                                padding-left: 5px;
+                                                                                                width: 60px;
+                                                                                            } */
 
             .custom_scroling_seo {
                 width: 100%;
@@ -423,9 +422,9 @@
             }
 
             /* .comments-section .btn-default:hover {
-                background-color: #111;
-                color: #fff;
-            } */
+                                                                                                background-color: #111;
+                                                                                                color: #fff;
+                                                                                            } */
 
             .comment_btn {
                 display: inline-block;
@@ -608,8 +607,8 @@
 
 
             /**
-        * File  Custom Styles
-        */
+                                                                                        * File  Custom Styles
+                                                                                        */
 
             .btn-file {
                 position: relative;
@@ -673,7 +672,9 @@
                 position: relative;
             }
 
-            .sp1_deal-stage-wrapper > h3:hover{cursor: default}
+            .sp1_deal-stage-wrapper>h3:hover {
+                cursor: default
+            }
 
             .sp1_deal-stage-content {
                 width: 450px;
@@ -686,12 +687,13 @@
                 max-height: 350px;
                 overflow-y: auto
             }
-            .sp1_deal-stage-content > p {
+
+            .sp1_deal-stage-content>p {
                 margin-bottom: 4px;
             }
 
-            @media screen and (max-width:720px){
-                ..sp1_deal-stage-content{
+            @media screen and (max-width:720px) {
+                ..sp1_deal-stage-content {
                     width: 100%;
                     max-width: 100%;
                 }
@@ -708,12 +710,14 @@
 
     $currency = App\Models\Currency::where('id', $deal->original_currency_id)->first();
     $lead_converted_date = $deal->created_at->diffForHumans();
-    $dealStage = App\Models\DealStage::where('id',$deal->id)->first();
+    $dealStage = App\Models\DealStage::where('id', $deal->id)->first();
     // dd($dealStage);
     //$value= $deal->actual_amount. $currency->currency_symbol;
     //  $bid_value= $deal->bid_value. $currency->currency_symbol;
-    //  dd($deal);
-    //  dd($deal);
+    if ($deal->lead_id) 
+        $salesDeal = App\Models\Deal::where('lead_id', $deal->lead_id)->first();
+    else 
+        $salesDeal = App\Models\Deal::where('deal_id', $deal->short_code)->first();
     ?>
     <section class="seodeals py-5">
         <div class="custom_container">
@@ -722,20 +726,23 @@
                     <div class="deal_item">
                         @if ($deal->client_name == null)
                             <h3><i class="fa-solid fa-user-large"></i> Client Username:
-                                <span>{{ $deal->client_username }}</span> </h3>
+                                <span>{{ $deal->client_username }}</span>
+                            </h3>
                         @else
                             <h3><i class="fa-solid fa-user-large"></i> Client Name: <span>{{ $deal->client_name }}</span>
                             </h3>
                         @endif
                         <h3><i class="fa-solid fa-money-bill-transfer"></i> Converted On:
                             <span>{{ $deal->created_at->format('d M, Y') }}</span>
-                            <span>({{ $deal->created_at->format('h : i A') }})</span> </h3>
+                            <span>({{ $deal->created_at->format('h : i A') }})</span>
+                        </h3>
                         @if ($deal->won_lost == null)
                             <h3><i class="fa-solid fa-hands-bubbles"></i> Deal Won/Lost: <span>N\A</span> </h3>
                         @else
                             <h3><i class="fa-solid fa-hands-bubbles"></i> Deal Won/Lost:
                                 <span>{{ $deal->updated_at->format('d M, Y') }}</span>
-                                <span>({{ $deal->updated_at->format('h : i A') }})</span> </h3>
+                                <span>({{ $deal->updated_at->format('h : i A') }})</span>
+                            </h3>
                         @endif
                     </div>
                 </div>
@@ -745,7 +752,8 @@
                         <h3><i class="fa-solid fa-list-check"></i> Project Name: <span>{{ $deal->project_name }}</span>
                         </h3>
                         <h3><i class="fa-solid fa-sack-dollar"></i> Project Budget:
-                            <span>{{ $currency->currency_symbol }}{{ $deal->actual_amount }}</span> </h3>
+                            <span>{{ $currency->currency_symbol }}{{ $deal->actual_amount }}</span>
+                        </h3>
                         {{-- <h3><i class="fa-solid fa-medal"></i> Skills: <span>PHP, Laravel, MySQL, Git, React.js</span></h3> --}}
                     </div>
                 </div>
@@ -753,7 +761,72 @@
                 <div class="col-md-4 text-center">
                     <div class="deal_item ">
                         <h3>Deal Status</h3><br>
-                        @if ($deal->won_lost == null)
+                        @if (isset($salesDeal))
+                            <input type="hidden" value="{{ $salesDeal->id }}">
+                            @if ($salesDeal->sale_analysis_status == 'analysis')
+                                @if (auth()->user()->role_id == 1)
+                                    <div class="text-center">
+                                        <h2 style="color:rgb(62, 146, 214);">In Analysis</h2>
+                                    </div>
+                                    <div class="sp1_deal-stage-wrapper">
+                                        <h2 style="color:rgb(62, 146, 214);"><a class="btn btn-info"
+                                                href="{{ route('contracts.show', [$salesDeal->id, 'tab' => 'sales-analysis-report']) }}">Analysis
+                                                Page</a></h2>
+                                    </div>
+                                @else
+                                    <div class="text-center">
+                                        <h2 style="color:rgb(62, 146, 214);">In Analysis</h2>
+                                    </div>
+                                    <div class="sp1_deal-stage-wrapper">
+                                        <h2 style="color:rgb(62, 146, 214);">
+                                            <a class="btn btn-info" href="{{ route('edit-deal-details', $salesDeal->id) }}">
+                                                Update Deal Details
+                                            </a>
+                                        </h2>
+                                    </div>
+                                @endif
+                            @elseif (in_array($salesDeal->sale_analysis_status, ['authorized', 'auto-authorized', 'no-analysis']))
+
+                                @if($salesDeal->released_at)
+                                    <div class="text-center">
+                                        <h2 style="color:green;">Won</h2>
+                                    </div>
+                                @else
+                                    <div class="sp1_deal-stage-wrapper">
+                                        <h2 style="color:rgb(62, 146, 214);">
+                                            <a class="btn btn-info" href="{{ route('edit-deal-details', $salesDeal->id) }}">
+                                                Update Deal Details
+                                            </a>
+                                        </h2>
+                                    </div>
+                                @endif
+
+                            @elseif($salesDeal->sale_analysis_status == 'previous-won')
+                                <div class="text-center">
+                                    <h2 style="color:green;">Previous Won</h2>
+                                </div>
+                            @elseif($salesDeal->sale_analysis_status == 'previous-denied')
+                                <div class="text-center">
+                                    <h2 style="color:red;">Previous Lost</h2>
+                                </div>
+                            @elseif ($salesDeal->sale_analysis_status == 'denied')
+                                <div class="text-center">
+                                    <h2 style="color:red;">Denied</h2>
+                                </div>
+                            @elseif ($salesDeal->client_name)
+                                <div class="text-center text-warning">
+                                    <h2>Pending</h2>
+                                </div>
+                                <div class="sp1_deal-stage-wrapper">
+                                    <h2 style="color:rgb(62, 146, 214);">
+                                        <a class="btn btn-info"
+                                            href="{{ route('account.sale-risk-policies.risk-analysis', $salesDeal->id) }}">
+                                            Complete Sales Risk Form
+                                        </a>
+                                    </h2>
+                                </div>
+                            @endif
+                        @elseif ($deal->won_lost == null)
                             @if ($deal->deal_stage == 5)
                                 <div class="row mx-auto">
                                     {{-- @if ($deal->authorization_status == 0)
@@ -763,44 +836,67 @@
 
                             @else --}}
 
-                                    @if (Auth::user()->role_id==4)
+                                    @if (Auth::user()->role_id == 4)
                                         <div class="sp1_deal-stage-wrapper">
-                                            <a href="#" data-bs-toggle="modal" data-bs-target="#clientDealaddStageModal"
-                                        data-bs-whatever="@mdo" class="btn btn-success wons w-40" onclick="event.preventDefault()">Won The Deal</a>
+                                            <a href="#" data-bs-toggle="modal"
+                                                data-bs-target="#clientDealaddStageModal" data-bs-whatever="@mdo"
+                                                class="btn btn-success wons w-40" onclick="event.preventDefault()">Won
+                                                The
+                                                Deal</a>
                                             <div class="sp1_deal-stage-content text-left">
-                                                <p>If the deal was won during your shift (When you were on duty), then click on it and complete the next processes.</p>
+                                                <p>If the deal was won during your shift (When you were on duty), then
+                                                    click
+                                                    on it and complete the next processes.</p>
                                             </div>
                                         </div>
-                                        @else
-                                         {{-- WHEN DEGITAL MERKITING IS TRUE  --}}
-                                            @if ($dealStage->convert_ld_status == 'DM')
-                                                <div class="sp1_deal-stage-wrapper">
-                                                    <a href="#" data-toggle="dealModal" data-target="#dm-dealaddstagemodal" class="btn btn-success wons deal-modal-toggle w-40" onclick="event.preventDefault()">Won The Deal</a>
-                                                    <div class="sp1_deal-stage-content text-left">
-                                                        <p>If the deal was won during your shift (When you were on duty), then click on it and complete the next processes.</p>
-                                                    </div>
-                                                </div>
-                                                <a href="#" data-bs-toggle="modal" data-bs-target="#dm-lostmodal" data-bs-whatever="@mdo" class="btn btn-danger loss w-40">Lost The Deal</a>
-                                            @else
-                                                <div class="sp1_deal-stage-wrapper">
-                                                    <a href="#" data-toggle="dealModal" data-target="#dealaddstagemodal" class="btn btn-success wons deal-modal-toggle w-40" onclick="event.preventDefault()">Won The Deal</a>
-                                                    <div class="sp1_deal-stage-content text-left">
-                                                        <p>If the deal was won during your shift (When you were on duty), then click on it and complete the next processes.</p>
-                                                    </div>
-                                                </div>
-                                                <a href="#" data-bs-toggle="modal" data-bs-target="#lostmodal" data-bs-whatever="@mdo" class="btn btn-danger loss w-40">Lost The Deal</a>
-                                            @endif
+                                    @else
                                         {{-- WHEN DEGITAL MERKITING IS TRUE  --}}
+                                        @if ($dealStage->convert_ld_status == 'DM')
+                                            <div class="sp1_deal-stage-wrapper">
+                                                <a href="#" data-toggle="dealModal"
+                                                    data-target="#dm-dealaddstagemodal"
+                                                    class="btn btn-success wons deal-modal-toggle w-40"
+                                                    onclick="event.preventDefault()">Won The Deal</a>
+                                                <div class="sp1_deal-stage-content text-left">
+                                                    <p>If the deal was won during your shift (When you were on duty),
+                                                        then
+                                                        click on it and complete the next processes.</p>
+                                                </div>
+                                            </div>
+                                            <a href="#" data-bs-toggle="modal" data-bs-target="#dm-lostmodal"
+                                                data-bs-whatever="@mdo" class="btn btn-danger loss w-40">Lost The
+                                                Deal</a>
+                                        @else
+                                            <div class="sp1_deal-stage-wrapper">
+                                                <a href="#" data-toggle="dealModal" data-target="#dealaddstagemodal"
+                                                    class="btn btn-success wons deal-modal-toggle w-40"
+                                                    onclick="event.preventDefault()">Won The Deal</a>
+                                                <div class="sp1_deal-stage-content text-left">
+                                                    <p>If the deal was won during your shift (When you were on duty),
+                                                        then
+                                                        click on it and complete the next processes.</p>
+                                                </div>
+                                            </div>
+                                            <a href="#" data-bs-toggle="modal" data-bs-target="#lostmodal"
+                                                data-bs-whatever="@mdo" class="btn btn-danger loss w-40">Lost The
+                                                Deal</a>
                                         @endif
+                                        {{-- WHEN DEGITAL MERKITING IS TRUE  --}}
+                                    @endif
                                     {{-- @endif --}}
 
                                 </div>
-                                
+
                                 @include('contracts.modals.client_dealaddstagemodal')
                                 @include('contracts.modals.dealaddstagemodal')
                                 @include('contracts.modals.deallostmodal')
                                 @include('contracts.modals.dm-dealaddstagemodal')
                                 @include('contracts.modals.dm-deallostmodal')
+                            @elseif($deal->deal_stage == 2 && $price_quotation_count == 0)
+                                <div class="text-center">
+                                    <a class="btn btn-success w-40" onclick="changeUrl()">Generate Price Quotation</a>
+                                </div>
+                                <div id="priceQuotationForm"></div>
                             @else
                                 N\A
                             @endif
@@ -835,12 +931,19 @@
                         <div class="sp1_deal-stage-wrapper">
                             <h3>Contact Made</h3>
                             <div class="sp1_deal-stage-content">
-                                <p>Write a bit about your bidding amount and deadline, so it’s easier for the closer to understand the background. Many clients start with this message “If your price final?” “Or, I am going to award now. Are you ready to start?”
+                                <p>Write a bit about your bidding amount and deadline, so it’s easier for the closer to
+                                    understand the background. Many clients start with this message “If your price final?”
+                                    “Or, I am going to award now. Are you ready to start?”
                                 </p>
-                                <p>At that point, the closer has to analyze if the price was actually real or a placeholder by comparing the requirements and everything which consumes time. Here are some good examples of how you should enter details here,</p>
-                                <p>“Here everything what the client wanted was specific, and I put a real price (500 USD) and deadline (10 days) for the work. Closer may still rethink these depending on various things.”
+                                <p>At that point, the closer has to analyze if the price was actually real or a placeholder
+                                    by comparing the requirements and everything which consumes time. Here are some good
+                                    examples of how you should enter details here,</p>
+                                <p>“Here everything what the client wanted was specific, and I put a real price (500 USD)
+                                    and deadline (10 days) for the work. Closer may still rethink these depending on various
+                                    things.”
                                 </p>
-                                <p>Or “Here the project brief was generic, and I put a placeholder bid and timeframe to complete the bidding process.”
+                                <p>Or “Here the project brief was generic, and I put a placeholder bid and timeframe to
+                                    complete the bidding process.”
                                 </p>
                             </div>
                         </div>
@@ -903,7 +1006,8 @@
                                                     enctype="multipart/form-data">
                                                     @csrf
                                                     <input type="hidden" name="deal_stage_id" value="0">
-                                                    <input type="hidden" name="deal_id" value="{{ $deal->short_code }}">
+                                                    <input type="hidden" name="deal_id"
+                                                        value="{{ $deal->short_code }}">
                                                     <div class="form-floating mb-3">
                                                         <textarea class="form-control" rows="3" cols="20" name="comment" placeholder="Leave a comment here"
                                                             id="floatingTextarea2" style="height: auto"></textarea>
@@ -913,25 +1017,28 @@
                                                         <div class="files">
                                                             <span class="btn btn-default btn-file">
                                                                 <i class="fa fa-paperclip"></i>
-                                                                <input type="file" name="attach[]" multiple id="fileInput" />
+                                                                <input type="file" name="attach[]" multiple
+                                                                    id="fileInput" />
                                                             </span>
-                                                            <input type="submit" class="btn btn-default pull-right comment_btn text-end" value="Comment">
+                                                            <input type="submit"
+                                                                class="btn btn-default pull-right comment_btn text-end"
+                                                                value="Comment">
                                                             <br />
                                                             <ul class="fileList" id="fileList"></ul>
                                                         </div>
                                                     </div>
 
                                                     <!-- <div class="wrapper">
-                                                               <input type="file" id="file-input" name="attach[]" multiple>
-                                                               <label for="file-input">
+                                                                                                       <input type="file" id="file-input" name="attach[]" multiple>
+                                                                                                       <label for="file-input">
 
-                                                                 <i class="fa fa-paperclip fa-2x"></i>
-                                                                 <span></span>
-                                                               </label>
+                                                                                                         <i class="fa fa-paperclip fa-2x"></i>
+                                                                                                         <span></span>
+                                                                                                       </label>
 
-                                                               <i class="fa fa-times-circle remove"></i>
-                                                               <input type="submit" class="btn btn-default pull-right comment_btn text-end" value="Comment">
-                                                             </div> -->
+                                                                                                       <i class="fa fa-times-circle remove"></i>
+                                                                                                       <input type="submit" class="btn btn-default pull-right comment_btn text-end" value="Comment">
+                                                                                                     </div> -->
 
 
 
@@ -958,12 +1065,7 @@
                             @if ($deal->deal_stage == 0)
                                 @include('contracts.modals.dealqualifymodal2')
                             @endif
-                        @elseif(
-                            $deal->deal_stage == 1 ||
-                                $deal->deal_stage == 2 ||
-                                $deal->deal_stage == 3 ||
-                                $deal->deal_stage == 4 ||
-                                $deal->deal_stage == 5)
+                        @elseif($deal->deal_stage >= 1)
                             <?php
 
                             $lead_converted_to_qualified = App\Models\DealStageChange::where('deal_id', $deal->short_code)
@@ -1074,25 +1176,28 @@
                                                         <div class="files">
                                                             <span class="btn btn-default btn-file">
                                                                 <i class="fa fa-paperclip"></i>
-                                                                <input type="file" name="attach[]" multiple id="fileInput" />
+                                                                <input type="file" name="attach[]" multiple
+                                                                    id="fileInput" />
                                                             </span>
-                                                            <input type="submit" class="btn btn-default pull-right comment_btn text-end" value="Comment">
+                                                            <input type="submit"
+                                                                class="btn btn-default pull-right comment_btn text-end"
+                                                                value="Comment">
                                                             <br />
                                                             <ul class="fileList" id="fileList"></ul>
                                                         </div>
                                                     </div>
 
                                                     <!-- <div class="wrapper">
-                                                               <input type="file" id="file-input" name="attach[]" multiple>
-                                                               <label for="file-input">
+                                                                                                       <input type="file" id="file-input" name="attach[]" multiple>
+                                                                                                       <label for="file-input">
 
-                                                                 <i class="fa fa-paperclip fa-2x"></i>
-                                                                 <span></span>
-                                                               </label>
+                                                                                                         <i class="fa fa-paperclip fa-2x"></i>
+                                                                                                         <span></span>
+                                                                                                       </label>
 
-                                                               <i class="fa fa-times-circle remove"></i>
-                                                               <input type="submit" class="btn btn-default pull-right comment_btn text-end" value="Comment">
-                                                             </div> -->
+                                                                                                       <i class="fa fa-times-circle remove"></i>
+                                                                                                       <input type="submit" class="btn btn-default pull-right comment_btn text-end" value="Comment">
+                                                                                                     </div> -->
 
 
 
@@ -1114,7 +1219,7 @@
                                 Click me to Change Stage
                             </a>
                             @include('contracts.modals.dealqualifymodal2')
-                        @elseif($deal->deal_stage == 2 || $deal->deal_stage == 3 || $deal->deal_stage == 4 || $deal->deal_stage == 5)
+                        @elseif($deal->deal_stage >= 2)
                             <?php
 
                             $lead_converted_to_req_def = App\Models\DealStageChange::where('deal_id', $deal->short_code)
@@ -1208,24 +1313,27 @@
                                                         <div class="files">
                                                             <span class="btn btn-default btn-file">
                                                                 <i class="fa fa-paperclip"></i>
-                                                                <input type="file" name="attach[]" multiple id="fileInput" />
+                                                                <input type="file" name="attach[]" multiple
+                                                                    id="fileInput" />
                                                             </span>
-                                                            <input type="submit" class="btn btn-default pull-right comment_btn text-end" value="Comment">
+                                                            <input type="submit"
+                                                                class="btn btn-default pull-right comment_btn text-end"
+                                                                value="Comment">
                                                             <br />
                                                             <ul class="fileList" id="fileList"></ul>
                                                         </div>
                                                     </div>
                                                     <!-- <div class="wrapper">
-                                                               <input type="file" id="file-input" name="attach[]" multiple>
-                                                               <label for="file-input">
+                                                                                                       <input type="file" id="file-input" name="attach[]" multiple>
+                                                                                                       <label for="file-input">
 
-                                                                 <i class="fa fa-paperclip fa-2x"></i>
-                                                                 <span></span>
-                                                               </label>
+                                                                                                         <i class="fa fa-paperclip fa-2x"></i>
+                                                                                                         <span></span>
+                                                                                                       </label>
 
-                                                               <i class="fa fa-times-circle remove"></i>
-                                                               <input type="submit" class="btn btn-default pull-right comment_btn text-end" value="Comment">
-                                                             </div> -->
+                                                                                                       <i class="fa fa-times-circle remove"></i>
+                                                                                                       <input type="submit" class="btn btn-default pull-right comment_btn text-end" value="Comment">
+                                                                                                     </div> -->
 
 
 
@@ -1241,13 +1349,13 @@
                     <!-- col-12 col-sm-2 nopadding  -->
 
                     <div class="col-12 col-sm-2 nopadding">
-                        @if ($deal->deal_stage == 2)
+                        @if ($deal->deal_stage == 2 && $price_quotation_count)
                             <a class="deal" data-bs-toggle="modal" data-bs-target="#qualifymodal2"
                                 data-bs-whatever="@mdo">
                                 Click me to Change Stage
                             </a>
                             @include('contracts.modals.dealqualifymodal2')
-                        @elseif($deal->deal_stage == 3 || $deal->deal_stage == 4 || $deal->deal_stage == 5)
+                        @elseif($deal->deal_stage >= 2 && $price_quotation_count)
                             <?php
 
                             $lead_converted_to_prop_def = App\Models\DealStageChange::where('deal_id', $deal->short_code)
@@ -1348,24 +1456,27 @@
                                                         <div class="files">
                                                             <span class="btn btn-default btn-file">
                                                                 <i class="fa fa-paperclip"></i>
-                                                                <input type="file" name="attach[]" multiple id="fileInput" />
+                                                                <input type="file" name="attach[]" multiple
+                                                                    id="fileInput" />
                                                             </span>
-                                                            <input type="submit" class="btn btn-default pull-right comment_btn text-end" value="Comment">
+                                                            <input type="submit"
+                                                                class="btn btn-default pull-right comment_btn text-end"
+                                                                value="Comment">
                                                             <br />
                                                             <ul class="fileList" id="fileList"></ul>
                                                         </div>
                                                     </div>
                                                     <!-- <div class="wrapper">
-                                                               <input type="file" id="file-input" name="attach[]" multiple>
-                                                               <label for="file-input">
+                                                                                                       <input type="file" id="file-input" name="attach[]" multiple>
+                                                                                                       <label for="file-input">
 
-                                                                 <i class="fa fa-paperclip fa-2x"></i>
-                                                                 <span></span>
-                                                               </label>
+                                                                                                         <i class="fa fa-paperclip fa-2x"></i>
+                                                                                                         <span></span>
+                                                                                                       </label>
 
-                                                               <i class="fa fa-times-circle remove"></i>
-                                                               <input type="submit" class="btn btn-default pull-right comment_btn text-end" value="Comment">
-                                                             </div> -->
+                                                                                                       <i class="fa fa-times-circle remove"></i>
+                                                                                                       <input type="submit" class="btn btn-default pull-right comment_btn text-end" value="Comment">
+                                                                                                     </div> -->
 
 
 
@@ -1391,7 +1502,7 @@
                                 Click me to Change Stage
                             </a>
                             @include('contracts.modals.dealqualifymodal2')
-                        @elseif($deal->deal_stage == 4 || $deal->deal_stage == 5)
+                        @elseif($deal->deal_stage >= 3)
                             <?php
 
                             $lead_converted_to_neg_def = App\Models\DealStageChange::where('deal_id', $deal->short_code)
@@ -1491,25 +1602,28 @@
                                                         <div class="files">
                                                             <span class="btn btn-default btn-file">
                                                                 <i class="fa fa-paperclip"></i>
-                                                                <input type="file" name="attach[]" multiple id="fileInput" />
+                                                                <input type="file" name="attach[]" multiple
+                                                                    id="fileInput" />
                                                             </span>
-                                                            <input type="submit" class="btn btn-default pull-right comment_btn text-end" value="Comment">
+                                                            <input type="submit"
+                                                                class="btn btn-default pull-right comment_btn text-end"
+                                                                value="Comment">
                                                             <br />
                                                             <ul class="fileList" id="fileList"></ul>
                                                         </div>
                                                     </div>
 
                                                     <!-- <div class="wrapper">
-                                                               <input type="file" id="file-input" name="attach[]" multiple>
-                                                               <label for="file-input">
+                                                                                                       <input type="file" id="file-input" name="attach[]" multiple>
+                                                                                                       <label for="file-input">
 
-                                                                 <i class="fa fa-paperclip fa-2x"></i>
-                                                                 <span></span>
-                                                               </label>
+                                                                                                         <i class="fa fa-paperclip fa-2x"></i>
+                                                                                                         <span></span>
+                                                                                                       </label>
 
-                                                               <i class="fa fa-times-circle remove"></i>
-                                                               <input type="submit" class="btn btn-default pull-right comment_btn text-end" value="Comment">
-                                                             </div> -->
+                                                                                                       <i class="fa fa-times-circle remove"></i>
+                                                                                                       <input type="submit" class="btn btn-default pull-right comment_btn text-end" value="Comment">
+                                                                                                     </div> -->
 
 
 
@@ -1529,7 +1643,7 @@
                                 Click me to Change Stage
                             </a>
                             @include('contracts.modals.dealqualifymodal2')
-                        @elseif($deal->deal_stage == 5)
+                        @elseif($deal->deal_stage >= 4)
                             <?php
 
                             $lead_converted_to_mile_def = App\Models\DealStageChange::where('deal_id', $deal->short_code)
@@ -1628,25 +1742,28 @@
                                                         <div class="files">
                                                             <span class="btn btn-default btn-file">
                                                                 <i class="fa fa-paperclip"></i>
-                                                                <input type="file" name="attach[]" multiple id="fileInput" />
+                                                                <input type="file" name="attach[]" multiple
+                                                                    id="fileInput" />
                                                             </span>
-                                                            <input type="submit" class="btn btn-default pull-right comment_btn text-end" value="Comment">
+                                                            <input type="submit"
+                                                                class="btn btn-default pull-right comment_btn text-end"
+                                                                value="Comment">
                                                             <br />
                                                             <ul class="fileList" id="fileList"></ul>
                                                         </div>
                                                     </div>
 
                                                     <!-- <div class="wrapper">
-                                                              <input type="file" id="file-input" name="attach[]" multiple>
-                                                              <label for="file-input">
+                                                                                                      <input type="file" id="file-input" name="attach[]" multiple>
+                                                                                                      <label for="file-input">
 
-                                                                <i class="fa fa-paperclip fa-2x"></i>
-                                                                <span></span>
-                                                              </label>
+                                                                                                        <i class="fa fa-paperclip fa-2x"></i>
+                                                                                                        <span></span>
+                                                                                                      </label>
 
-                                                              <i class="fa fa-times-circle remove"></i>
-                                                              <input type="submit" class="btn btn-default pull-right comment_btn text-end" value="Comment">
-                                                            </div> -->
+                                                                                                      <i class="fa fa-times-circle remove"></i>
+                                                                                                      <input type="submit" class="btn btn-default pull-right comment_btn text-end" value="Comment">
+                                                                                                    </div> -->
 
 
 
@@ -1675,11 +1792,6 @@
 
         </div>
     </section>
-
-
-
-
-
 @endsection
 
 
@@ -1743,7 +1855,7 @@
                     });
 
                     var removeLink = "<a class=\"removeFile\" href=\"#\" data-fileid=\"" + fileId +
-                    "\"> X </a>";
+                        "\"> X </a>";
                     // file size file.size, " bytes. &nbsp; &nbsp; ",
                     output.push("<li><strong>", escape(file.name), "</strong> ", removeLink, "</li> ");
                 };
@@ -1824,46 +1936,57 @@
         })()
     </script>
 
-<script>
-    // fileInput attchment
-    document.addEventListener('DOMContentLoaded', function () {
-        var fileInput = document.getElementById('fileInput');
-        var fileList = document.getElementById('fileList');
+    <script>
+        // fileInput attchment
+        document.addEventListener('DOMContentLoaded', function() {
+            var fileInput = document.getElementById('fileInput');
+            var fileList = document.getElementById('fileList');
 
-        fileInput.addEventListener('change', function () {
-            fileList.innerHTML = ''; 
+            fileInput.addEventListener('change', function() {
+                fileList.innerHTML = '';
 
-            var files = fileInput.files;
-            for (var i = 0; i < files.length; i++) {
-                var li = document.createElement('li');
-                li.textContent = files[i].name;
-                fileList.appendChild(li);
-            }
+                var files = fileInput.files;
+                for (var i = 0; i < files.length; i++) {
+                    var li = document.createElement('li');
+                    li.textContent = files[i].name;
+                    fileList.appendChild(li);
+                }
+            });
         });
-    });
-</script>
+    </script>
 
-{{-- modal control --}}
+    {{-- modal control --}}
 
-<script>
-    var modalToggle = document.querySelectorAll(".deal-modal-toggle");
-    var dismissModal = document.querySelectorAll(".dismiss-modal");
+    <script>
+        var modalToggle = document.querySelectorAll(".deal-modal-toggle");
+        var dismissModal = document.querySelectorAll(".dismiss-modal");
 
-    modalToggle.forEach(element => {
-        // add event listener 
-        element.addEventListener('click', function() {
-            const targetModal = document.querySelector(this.dataset.target);
-            targetModal.classList.toggle('show')
+        modalToggle.forEach(element => {
+            // add event listener
+            element.addEventListener('click', function() {
+                const targetModal = document.querySelector(this.dataset.target);
+                targetModal.classList.toggle('show')
+            })
+        });
+
+        dismissModal.forEach(element => {
+            // add event listener
+            element.addEventListener('click', function() {
+                const targetModal = document.querySelector(this.dataset.dismissModal);
+                targetModal.classList.remove('show');
+            })
         })
-    });
-
-    dismissModal.forEach(element => {
-        // add event listener 
-        element.addEventListener('click', function() {
-            const targetModal = document.querySelector(this.dataset.dismissModal);
-            targetModal.classList.remove('show');
-        })
-    })
-</script>
-
+    </script>
+    <script>
+        function changeUrl() {
+            var currentUrl = window.location.href;
+            console.log(currentUrl);
+            if (currentUrl.includes('?show=price_quotation_form')) {
+                var newUrl = currentUrl;
+            } else {
+                var newUrl = currentUrl + '?show=price_quotation_form';
+            }
+            window.location.href = newUrl;
+        }
+    </script>
 @endpush

@@ -19,7 +19,7 @@ import ReviewExtendRequestModal from "./ReviewExtendModal";
 import GoalExtensionHistoryModal from "./GoalExtensionHistoryModal";
 import DeadlineExplanationHistoryModal from "./DeadlineExplanationHistoryModal";
 import PmGoalsTableLoader from "../loader/PmGoalsTableLoader";
-import style from "../styles/pmgoaltable.module.css"
+
 
 const PmGoalsTable = ({ projectDetails, isLoading, isFetchingPmGoal, pmGoal, PmGoalsTableColumns, tableName, refetchPmGoal }) => {
     const [data, setData] = React.useState(pmGoal || []);
