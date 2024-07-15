@@ -238,7 +238,10 @@ const DashboardHeaderSection = ({ projectData, isLoading }) => {
                     >
                         <Button
                             onClick={() =>
-                                handleModal(setIsExplainDisputeModalOpen, true)
+                                window.open(
+                                    `/account/projects/${projectData?.id}?tab=milestones`,
+                                    "_blank"
+                                )
                             }
                             className={`${style?.dashboardHeaderButton} ${style.dashboardHeaderButtonAnimation} ml-0 ml-md-2`}
                         >

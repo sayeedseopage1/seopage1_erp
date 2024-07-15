@@ -162,6 +162,13 @@ export const SectionContentContainer = styled.div`
     line-height: normal;
   }
 
+
+  &.saleExecutiveInfoRightSide{
+    min-height: 9vh !important;
+    max-height: 9vh !important;
+  }
+
+
   @media (max-width: 768px) {
     padding: 14px;
 

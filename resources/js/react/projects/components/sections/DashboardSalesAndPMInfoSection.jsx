@@ -46,7 +46,7 @@ const DashboardSalesAndPMInfoSection = ({ projectData, isLoading }) => {
             <div className={`${style.dashboardSalesAndPMInfoSection} mb-4`}>
                 <div>
                     {/* Project Brief in 2-8 Words */}
-                    <SectionContainer className="mb-4">
+                    <SectionContainer className="mb-4" minHeight="16vh" maxHeight="16vh">
                         <DashboardCardTitle
                             title={
                                 DetailsSalesExecutiveConstant?.wordsHere2_8
@@ -89,7 +89,7 @@ const DashboardSalesAndPMInfoSection = ({ projectData, isLoading }) => {
                     </SectionContainer>
                     {/* End Project Brief in 2-8 Words */}
                     {/* Project Brief in 3-4 Words */}
-                    <SectionContainer className="mb-4">
+                    <SectionContainer className="mb-4" minHeight="60vh" maxHeight="60">
                         <DashboardCardTitle
                             title={
                                 DetailsSalesExecutiveConstant?.linesHere3_4
@@ -187,7 +187,7 @@ const DashboardSalesAndPMInfoSection = ({ projectData, isLoading }) => {
                 </div>
                 <div>
                     {/* Project Reference Website */}
-                    <SectionContainer className="mb-4">
+                    <SectionContainer className="mb-4" minHeight="16vh" maxHeight="16vh">
                         <DashboardCardTitle
                             title={
                                 DetailsSalesExecutiveConstant?.referenceWebsite
@@ -230,7 +230,7 @@ const DashboardSalesAndPMInfoSection = ({ projectData, isLoading }) => {
                     </SectionContainer>
                     {/* End Project Reference Website */}
                     {/* Client Concern */}
-                    <SectionContainer className="mb-4">
+                    <SectionContainer className="mb-4" minHeight="16vh" maxHeight="16vh">
                         <DashboardCardTitle
                             title={
                                 DetailsSalesExecutiveConstant?.clientConcern
@@ -269,7 +269,7 @@ const DashboardSalesAndPMInfoSection = ({ projectData, isLoading }) => {
                                 color="linear-gradient(0deg, #F2F9FE 0%, #F2F9FE 100%), #D9D9D9"
                                 maxHeight="7vh"
                                 minHeight="7vh"
-                                className="pt-3"
+                                className="pt-3 "
                                 dangerouslySetInnerHTML={{
                                     __html:
                                         !isLoading &&
@@ -280,7 +280,7 @@ const DashboardSalesAndPMInfoSection = ({ projectData, isLoading }) => {
                     </SectionContainer>
                     {/* End Client Concern */}
                     {/* Logo Reference */}
-                    <SectionContainer className="mb-4">
+                    <SectionContainer className="mb-4" minHeight="16vh" maxHeight="16vh">
                         <DashboardCardTitle
                             title={
                                 DetailsSalesExecutiveConstant?.logoReference
@@ -313,7 +313,7 @@ const DashboardSalesAndPMInfoSection = ({ projectData, isLoading }) => {
                                 color="linear-gradient(0deg, #F2F9FE 0%, #F2F9FE 100%), #D9D9D9"
                                 maxHeight="7vh"
                                 minHeight="7vh"
-                                className="pt-3"
+                                className="pt-3 "
                                 dangerouslySetInnerHTML={{
                                     __html:
                                         !isLoading &&
@@ -324,7 +324,7 @@ const DashboardSalesAndPMInfoSection = ({ projectData, isLoading }) => {
                     </SectionContainer>
                     {/* End Logo Reference */}
                     {/* login Information */}
-                    <SectionContainer className="mb-4">
+                    <SectionContainer className="mb-4" minHeight="16vh" maxHeight="16vh">
                         <DashboardCardTitle
                             title={
                                 DetailsSalesExecutiveConstant?.requiredLogins
@@ -357,7 +357,7 @@ const DashboardSalesAndPMInfoSection = ({ projectData, isLoading }) => {
                                 color="linear-gradient(0deg, #F2F9FE 0%, #F2F9FE 100%), #D9D9D9"
                                 maxHeight="7vh"
                                 minHeight="7vh"
-                                className="pt-3"
+                                className="pt-3 "
                                 dangerouslySetInnerHTML={{
                                     __html:
                                         !isLoading &&
