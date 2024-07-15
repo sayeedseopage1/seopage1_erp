@@ -53,7 +53,10 @@ use Illuminate\Support\Facades\Redirect;
 use Toastr;
 use App\Notifications\DealAuthorizationSendNotification;
 use Notification;
-use App\Models\GoalSetting;;
+use App\Models\GoalSetting;
+use App\Models\PriceQuotation;
+
+;
 use App\Models\RoleUser;
 use Illuminate\Support\Facades\Route;
 
@@ -601,6 +604,8 @@ class DealController extends AccountBaseController
                 $this->view = 'deals.ajax.deal_details';
                 break;
         }
+
+        $this->price_quotation_count = PriceQuotation::where('deal_stage_id', $id)->count();
 
         if (request()->ajax()) {
             $html = view($this->view, $this->data)->render();

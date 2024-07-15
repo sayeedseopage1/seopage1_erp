@@ -892,6 +892,11 @@
                                 @include('contracts.modals.deallostmodal')
                                 @include('contracts.modals.dm-dealaddstagemodal')
                                 @include('contracts.modals.dm-deallostmodal')
+                            @elseif($deal->deal_stage == 2 && $price_quotation_count == 0)
+                                <div class="text-center">
+                                    <a class="btn btn-success w-40" onclick="changeUrl()">Generate Price Quotation</a>
+                                </div>
+                                <div id="priceQuotationForm"></div>
                             @else
                                 N\A
                             @endif
@@ -906,9 +911,6 @@
                                 </div>
                             @endif
                         @endif
-                        <div class="text-center">
-                            <a class="btn btn-success w-40" onclick="changeUrl()">Generate Price Quotation</a>
-                        </div>
                     </div>
                 </div>
 
@@ -1347,13 +1349,13 @@
                     <!-- col-12 col-sm-2 nopadding  -->
 
                     <div class="col-12 col-sm-2 nopadding">
-                        @if ($deal->deal_stage == 2)
+                        @if ($deal->deal_stage == 2 && $price_quotation_count)
                             <a class="deal" data-bs-toggle="modal" data-bs-target="#qualifymodal2"
                                 data-bs-whatever="@mdo">
                                 Click me to Change Stage
                             </a>
                             @include('contracts.modals.dealqualifymodal2')
-                        @elseif($deal->deal_stage >= 2)
+                        @elseif($deal->deal_stage >= 2 && $price_quotation_count)
                             <?php
 
                             $lead_converted_to_prop_def = App\Models\DealStageChange::where('deal_id', $deal->short_code)
