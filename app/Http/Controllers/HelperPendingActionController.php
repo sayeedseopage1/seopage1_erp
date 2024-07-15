@@ -2218,7 +2218,7 @@ class HelperPendingActionController extends AccountBaseController
             $evaluation = EmployeeEvaluation::where('user_id',$user)->first();
             $new_pm = User::where('id',$user)->first(); 
             $evaluation_task = EmployeeEvaluationTask::where('user_id',$new_pm->id)->first(); 
-            $task = Task::where('id',$evaluation_task->task_id)->first();
+            $task = $evaluation_task ? Task::where('id', $evaluation_task->task_id)->first() : null;
             $authorizers= User::where('role_id',8)->get();
             foreach ($authorizers as $key => $authorizer) {
                 $action = new PendingAction();
@@ -2242,7 +2242,7 @@ class HelperPendingActionController extends AccountBaseController
                     $action->message = 'Fill out the initial performance evaluation form for the new Sales Person <a href="'.route('employees.show',$new_pm->id).'">'.$new_pm->name.'</a>!';
                 }
                 $action->timeframe= 24;
-                $action->task_id = $task->id;
+                $action->task_id = $task->id ?? null;
                 $action->developer_id = $new_pm->id;
                 $action->authorization_for= $authorizer->id;
                 if($evaluation->user_status == 'PM'){
