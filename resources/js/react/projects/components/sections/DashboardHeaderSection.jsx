@@ -219,7 +219,7 @@ const DashboardHeaderSection = ({ projectData, isLoading }) => {
                     </Switch.Case>
                     <Switch.Case
                         condition={
-                            actionButtons?.explain_dispute && user?.roleId !== 1
+                            actionButtons?.explain_dispute && user?.roleId === 4
                         }
                     >
                         <Button
@@ -231,9 +231,9 @@ const DashboardHeaderSection = ({ projectData, isLoading }) => {
                             Explain Dispute
                         </Button>
                     </Switch.Case>
-                    {/* <Switch.Case
+                    <Switch.Case
                         condition={
-                            actionButtons?.explain_dispute && user?.roleId === 8
+                            actionButtons?.complete_q_and_c && user?.roleId === 4
                         }
                     >
                         <Button
@@ -247,7 +247,7 @@ const DashboardHeaderSection = ({ projectData, isLoading }) => {
                         >
                             Submit QC From
                         </Button>
-                    </Switch.Case> */}
+                    </Switch.Case>
                     <Switch.Case
                         condition={
                             actionButtons?.milestone_cancel_authorization
