@@ -71,14 +71,14 @@ const routes = [
     {
         id: 1,
         containerId: "priceQuotationContentContainer",
-        baseUrl: "/account/price-quotations",
+        baseUrl: "/account/all-price-quotations",
         contextProvider: PriceQuotationsProvider,
         pageComponent: <PriceQuotations />,
     },
     {
         id: 2,
         containerId: "platformAccountContainer",
-        baseUrl: "/account/platform-accounts",
+        baseUrl: "/account/all-platform-accounts",
         contextProvider: PriceQuotationsProvider,
         pageComponent: <AccountLists />,
     },
