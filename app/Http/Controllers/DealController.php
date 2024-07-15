@@ -164,6 +164,7 @@ class DealController extends AccountBaseController
             'description' => 'required',
             'original_currency_id' => 'required',
             'comments' => 'required',
+            'country' => 'required'
         ]);
 
         if ($request->project_type == 'fixed') {
@@ -384,8 +385,13 @@ class DealController extends AccountBaseController
             $user->name = $request->client_name;
             $user->user_name = $request->client_username;
             $user->login= 'disable';
+            $user->country_id = $request->country;
             $user->email_notifications = 0;
             $user->save();
+        }
+        else if($find_user->country_id == null) {
+            $find_user->country_id = $request->country;
+            $find_user->save();
         }
 
         $deal_stage= new DealStageChange();

@@ -44,7 +44,9 @@ export const apiSlice = createApi({
         "ALL_REVISION",
         "EVALUATION_HISTORY",
         "SINGLE_PROJECT_DETAILS",
-        "PROJECT_PENDING_EXTENSION_HISTORY"
+        "PROJECT_PENDING_EXTENSION_HISTORY",
+        "ALL_PORTFOLIO",
+        "PORTFOLIO_BY_ID",
     ],
     endpoints: () => ({}),
 });

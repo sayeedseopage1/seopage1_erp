@@ -603,15 +603,29 @@
                                 </div>
                             </div>
                           @endif
-                          <div class="row pb-2 {{ $deal->is_drafted ? '' : 'd-none'}}">
-                            <div class="col-md-12">
-                                <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" value="1" name="is_drafted" id="is_drafted">
-                                    <label class="form-check-label m-1" for="flexCheckDefault">
-                                        Keep it as draft
-                                    </label>
-                                </div>
-                              </div>
+                          <div class="d-flex flex-row">
+                            <div class="form-check mr-3">
+
+                                @if (in_array($deal->sale_analysis_status, ['pending', 'analysis']))
+                                <input class="form-check-input" type="checkbox" value="1" name="is_drafted" id="is_drafted" checked disabled>
+                                <label class="form-check-label m-1" for="flexCheckDefault">
+                                    Keep it as draft <b>(Awaiting for admin authorization)</b>
+                                </label>
+                                @else
+                                <input class="form-check-input" type="checkbox" value="1" name="is_drafted" id="is_drafted">
+                                <label class="form-check-label m-1" for="flexCheckDefault">
+                                    Keep it as draft
+                                </label>
+                                @endif
+                            </div>
+                            @if (in_array($deal->sale_analysis_status, ['pending', 'analysis']))
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" value="1" name="final_submission" id="final_submission">
+                                <label class="form-check-label m-1" for="flexCheckDefault">
+                                    Final Submission
+                                </label>
+                            </div>
+                            @endif
                           </div>
                             <br>
 
@@ -887,6 +901,7 @@
                 'client_email': document.getElementById("client_email").value,
                 'profile_link': document.getElementById("profile_link").value,
                 'is_drafted': $('#is_drafted').is(":checked") ? 1 : 0,
+                'is_final': $('#final_submission').is(":checked") ? 1 : 0,
                 'deal_category': deal_category,
                 'cms_id': cms_id,
                 'message_link': message_links_values,

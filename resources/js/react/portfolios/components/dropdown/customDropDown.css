@@ -1,0 +1,76 @@
+.price_quotations_custom_dropdown .cnx_dropdown__toggle {
+  padding: 12px 15px !important;
+  background-color: var(--primaryDarkBlue);
+  border-radius: 5px;
+  color: var(--primaryDarkText);
+  font-family: Poppins, sans-serif;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+}
+
+.price_quotations_custom_dropdown_menu {
+  border: none !important;
+  scrollbar-width: thin;
+  scrollbar-color: #99bcd4 transparent;
+  scroll-behavior: smooth !important;
+  border-radius: 8px !important;
+  -webkit-border-radius: 5px;
+}
+.price_quotations_custom_dropdown_menu::-webkit-scrollbar {
+  width: 10px !important;
+  scroll-behavior: smooth !important;
+}
+
+.price_quotations_custom_dropdown_menu::-webkit-scrollbar-thumb {
+  background-color: #ccc !important;
+  border-radius: 10px !important;
+}
+.price_quotations_custom_dropdown_menu::-webkit-scrollbar-track {
+  background-color: var(--primaryLightBlue) !important;
+  border-radius: 10px !important;
+}
+
+
+
+.price_quotations_custom_dropdown_menu .cnx_dropdown__item {
+  background-color: transparent;
+  padding: 12px 5px !important;
+  border-radius: 5px !important;
+  color: var(--primaryDarkText);
+  font-family: Poppins, sans-serif;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+}
+
+.price_quotations_custom_dropdown_menu .cnx_dropdown__item:hover {
+  background-color: var(--primaryLightDarkBlue) !important;
+}
+
+.price_quotations_custom_dropdown_menu .cnx_dropdown__item.active {
+  background-color: var(--primaryLightDarkBlue) !important;
+  color: var(--primaryDarkText) !important;
+}
+.price_quotations_custom_dropdown_menu .cnx_dropdown__item.active:hover {
+  background-color: var(--primaryLightDarkBlue) !important;
+  color: var(--primaryDarkText) !important;
+}
+
+
+.price_quotations_custom_dropdown_menu .singleline-ellipsis{
+  white-space: nowrap;
+  font-size: 14px !important;
+}
+
+.cnx__ins__ui_search_input {
+  padding: 8px 10px 8px 30px !important;
+}
+
+
+.price_quotations_custom_dropdown .cnx_select_box_tag {
+  padding: 6px !important;
+  border-radius: 4px !important;
+}

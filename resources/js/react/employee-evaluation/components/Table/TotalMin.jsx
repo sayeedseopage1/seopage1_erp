@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { useGetTaskListQuery } from "../../../services/api/EvaluationApiSlice";
-
+import { Spin } from "antd";
 import { convertTime } from "../../../utils/converTime";
+import { is } from "immutable";
 
 const TotalMin = ({ data }) => {
     const {
@@ -31,7 +32,7 @@ const TotalMin = ({ data }) => {
         (acc, item) => acc + item.total_min,
         0
     );
-    return <div>{convertTime(TotalMin)}</div>;
+    return <div>{isLoading ? <Spin /> : convertTime(TotalMin)}</div>;
 };
 
 export default TotalMin;

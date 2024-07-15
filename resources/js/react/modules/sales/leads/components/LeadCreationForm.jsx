@@ -346,7 +346,6 @@ const LeadCreationFormControl = ({ close, presetInitialData = null }) => {
         return Object.keys(_error)?.length === 0;
     };
 
-
     // handle submission
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -508,8 +507,12 @@ const LeadCreationFormControl = ({ close, presetInitialData = null }) => {
 
     // filter
     const getCountries = (data, query) => {
-        return data?.filter((d) =>
-            d?.name?.toLowerCase()?.includes(query?.toLowerCase())
+        return data?.filter(
+            (d) =>
+                d?.name?.toLowerCase()?.includes(query?.toLowerCase()) ||
+                d?.iso3?.toLowerCase()?.includes(query?.toLowerCase()) ||
+                d?.nicename?.toLowerCase()?.includes(query?.toLowerCase()) ||
+                d?.iso?.toLowerCase()?.includes(query?.toLowerCase())
         );
     };
 
