@@ -155,11 +155,6 @@ const DashboardHeaderSection = ({ projectData, isLoading }) => {
                     >
                         Working Environment
                     </Button>
-                    {/* <PageNavigateButtons
-                        className="d-none d-md-flex ml-2"
-                        style={style}
-                        navigateData={projectData}
-                    /> */}
                 </div>
                 <div className={`${style?.dashboardHeaderLeftButtonWrapper}`}>
                     <Switch.Case
@@ -236,6 +231,23 @@ const DashboardHeaderSection = ({ projectData, isLoading }) => {
                             Explain Dispute
                         </Button>
                     </Switch.Case>
+                    {/* <Switch.Case
+                        condition={
+                            actionButtons?.explain_dispute && user?.roleId === 8
+                        }
+                    >
+                        <Button
+                            onClick={() =>
+                                window.open(
+                                    `/account/projects/${projectData?.id}?tab=milestones`,
+                                    "_blank"
+                                )
+                            }
+                            className={`${style?.dashboardHeaderButton} ${style.dashboardHeaderButtonAnimation} ml-0 ml-md-2`}
+                        >
+                            Submit QC From
+                        </Button>
+                    </Switch.Case> */}
                     <Switch.Case
                         condition={
                             actionButtons?.milestone_cancel_authorization
@@ -251,6 +263,23 @@ const DashboardHeaderSection = ({ projectData, isLoading }) => {
                             className={`${style?.dashboardHeaderButton} ${style.dashboardHeaderButtonAnimation} ml-0 ml-md-2`}
                         >
                             Milestone Cancel Authorize
+                        </Button>
+                    </Switch.Case>
+                    <Switch.Case
+                        condition={
+                            actionButtons?.deliverable_authorization
+                        }
+                    >
+                        <Button
+                            onClick={() =>
+                                window.open(
+                                    `/account/projects/${projectData?.id}?tab=deliverables`,
+                                    "_blank"
+                                )
+                            }
+                            className={`${style?.dashboardHeaderButton} ${style.dashboardHeaderButtonAnimation} ml-0 ml-md-2`}
+                        >
+                            Deliverables Authorization
                         </Button>
                     </Switch.Case>
                     <Switch.Case
