@@ -2,14 +2,16 @@
 
 namespace App\Models;
 
+use App\Models\LeadStatus;
 use App\Observers\LeadObserver;
 use App\Traits\CustomFieldsTrait;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Notifications\Notifiable;
-use App\Models\LeadStatus;
+use Illuminate\Database\Eloquent\Casts\Attribute;
+use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+
 // use App\Models\Scopes\OrderByDesc;
 
 /**
@@ -95,7 +97,7 @@ use App\Models\LeadStatus;
  * @property-read \App\Models\LeadCategory|null $category
  * @method static \Illuminate\Database\Eloquent\Builder|Lead whereHash($value)
  */
-class Lead extends BaseModel 
+class Lead extends BaseModel
 {
     use Notifiable, HasFactory;
     use CustomFieldsTrait;
@@ -110,13 +112,12 @@ class Lead extends BaseModel
     {
         // static::addGlobalScope(new OrderByDesc); // assign the Scope here
     }
-    
+
     public function getImageUrlAttribute()
     {
         $gravatarHash = md5(strtolower(trim($this->client_email)));
         return 'https://www.gravatar.com/avatar/' . $gravatarHash . '.png?s=200&d=mp';
     }
-
 
     /**
      * Route notifications for the mail channel.
@@ -215,6 +216,10 @@ class Lead extends BaseModel
         $addedBy = User::find($this->added_by);
 
         return $addedBy ?: null;
+    }
+    public function addedByUser()
+    {
+        return $this->belongsTo(User::class, 'added_by');
     }
     public function user()
     {
