@@ -9061,6 +9061,7 @@ var AssginedToSelection = function AssginedToSelection(_ref) {
   var selected = _ref.selected,
     onSelect = _ref.onSelect,
     taskCategory = _ref.taskCategory;
+  var auth = (0,_hooks_useAuth__WEBPACK_IMPORTED_MODULE_5__.useAuth)();
   var _React$useState = react__WEBPACK_IMPORTED_MODULE_0__.useState(""),
     _React$useState2 = _slicedToArray(_React$useState, 2),
     query = _React$useState2[0],
@@ -9073,6 +9074,7 @@ var AssginedToSelection = function AssginedToSelection(_ref) {
   var _useGetTaskDetailsQue = (0,_services_api_SingleTaskPageApi__WEBPACK_IMPORTED_MODULE_2__.useGetTaskDetailsQuery)("/".concat(params === null || params === void 0 ? void 0 : params.taskId, "/json?mode=employees")),
     data = _useGetTaskDetailsQue.data,
     isFetching = _useGetTaskDetailsQue.isFetching;
+  console.log("fetching empoloyees", data);
   var _useDeveloperInProgre = (0,_services_api_SingleTaskPageApi__WEBPACK_IMPORTED_MODULE_2__.useDeveloperInProgressTaskQuery)(employeeId, {
       skip: !employeeId
     }),
@@ -9087,15 +9089,20 @@ var AssginedToSelection = function AssginedToSelection(_ref) {
     employees = lodash__WEBPACK_IMPORTED_MODULE_1___default().filter(data, function (d) {
       return Number(d.role_id) === 10;
     });
+  } else if (auth.roleId === 15) {
+    employees = lodash__WEBPACK_IMPORTED_MODULE_1___default().filter(data, function (d) {
+      return Number(d.role_id) === 6;
+    });
   } else {
     employees = lodash__WEBPACK_IMPORTED_MODULE_1___default().filter(data, function (d) {
-      return Number(d.role_id) === 5 || Number(d.role_id) === 14;
+      return Number(d.role_id) === 5 || Number(d.role_id) === 14 || Number(d.role_id) === 6;
     });
   }
   // console.log("employees", employees);
   var filteredData = query === "" ? employees : (_employees = employees) === null || _employees === void 0 ? void 0 : _employees.filter(function (employee) {
     return employee === null || employee === void 0 ? void 0 : employee.name.toLowerCase().includes(query.toLowerCase());
   });
+  console.log("employees", employees);
   return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(_headlessui_react__WEBPACK_IMPORTED_MODULE_8__.Combobox, {
     value: selected,
     onChange: onSelect,
@@ -18854,7 +18861,7 @@ var TimerControl = function TimerControl(_ref) {
         setShowExpirationNotifyModal: setShowExpirationNotifyModal,
         timeLeft: timeLeft
       })]
-    }), console.log("timeleft , expireDate, show expire task modal", timeLeft, expireDateForTrainer, showExpirationNotifyModal)]
+    })]
   });
 };
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (TimerControl);

@@ -505,12 +505,12 @@ const TimerControl = ({ task, timerStart, setTimerStart, auth }) => {
                 </>
             )}
 
-            {console.log(
+            {/* {console.log(
                 "timeleft , expireDate, show expire task modal",
                 timeLeft,
                 expireDateForTrainer,
                 showExpirationNotifyModal
-            )}
+            )} */}
         </React.Fragment>
     );
 };
