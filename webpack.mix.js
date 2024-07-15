@@ -1,5 +1,5 @@
 const mix = require("laravel-mix");
-
+const { BundleAnalyzerPlugin } = require("webpack-bundle-analyzer");
 /*
  |--------------------------------------------------------------------------
  | Mix Asset Management
@@ -44,6 +44,12 @@ mix.js("resources/js/app.jsx", "public/js/react")
     .sourceMaps(true, "source-map")
     .webpackConfig((webpack) => {
         return {
+            plugins: [
+                new BundleAnalyzerPlugin({
+                    analyzerMode: "static",
+                    openAnalyzer: false,
+                }),
+            ],
             resolve: {
                 fallback: {
                     crypto: require.resolve("crypto-browserify"),
@@ -53,7 +59,7 @@ mix.js("resources/js/app.jsx", "public/js/react")
             },
         };
     })
-    .version();
+    .version()
 
 // mix.browserSync({
 //     proxy: "http://127.0.0.1:8000/",

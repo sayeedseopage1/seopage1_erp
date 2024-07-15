@@ -11,6 +11,9 @@
 # public/js/app.js
 # public/js/vendor.js.map
 # public/js/vendor.js
+/public/bundle-report.html
+/public/report.html
+
 
 .phpunit.result.cache
 Homestead.json
@@ -32,6 +35,9 @@ grumphp.yml
 storage/reviewed
 *.bak
 .prettierrc.json
+
+.scannerwork
+coverage
 
 __TODO__
 package-lock.json

@@ -370,7 +370,7 @@
                                     </x-slot>
                                 </x-sub-menu-item>
                                 <x-sub-menu-item :link="route('deals.index')" :text="'Deals'" />
-
+                                <x-sub-menu-item :link="route('price-quotations.index')" :text="'Price Quotations'" />
                                 <x-sub-menu-item :link="route('account.sale-risk-policies.report-list')" :text="'Sales Analysis Reports'" />
 
                                 <x-sub-menu-item :link="route('contracts.index')" :text="'Won Deals'" />
@@ -895,6 +895,7 @@
                             : route('profile-settings.index')" :text="'General Settings'" />
                         @if (Auth::user()->role_id == 1)
                             <x-sub-menu-item :link="route('kpi-settings.index')" :text="'KPI Settings'" />
+                            <x-sub-menu-item  :link="route('platform-accounts.index')" :text="'Platform Accounts'" />
                             <x-sub-menu-item :link="route('account.sale-risk-policies.index')" :text="'Sales Risk Policies'" />
                             <x-sub-menu-item :link="route('incentive-settings.index')" :text="'Incentives Settings'" />
                             <x-sub-menu-item :link="route('pm-goal-setting.index')" :text="'PM Goal Settings'" />

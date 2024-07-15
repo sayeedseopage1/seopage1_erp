@@ -1,0 +1,218 @@
+:root {
+  --primaryBlue: #1492E6;
+  --primaryDarkBlue: #D5ECFC;
+  --primaryLightDarkBlue: #EAF6FF;
+  --primaryExtraDarkBlue: #0471c5;
+  --primaryLightBlue: #EAF6FF;
+  --primaryDarkText: #000000;
+  --primaryLightText: #FFFFFF;
+  --borderColor: #C6C6C6;
+  --primarySuccess: #70CA62;
+  --primaryDanger: #FF6666;
+  --primaryLightDanger: #fd6b6b;
+  --primaryExtraLightDanger: #FBEEF0;
+  --lightgray: #8F8F8F;
+  --primaryGrayText: #837D7D,
+  --primaryFont: 'Poppins', sans-serif;
+}
+
+/* Table Style */
+.sp1_price_quotation_table_wrapper {
+  max-height: calc(100vh - 330px);
+  overflow: auto;
+  overflow-y: hidden;
+  border-radius: 16px 16px 0 0;
+}
+
+.sp1_price_quotation_table {
+  min-width: 100%;
+}
+
+.sp1_price_quotation_thead {
+  position: sticky;
+  top: 0;
+  left: 0;
+  width: 100%;
+}
+
+.sp1_price_quotation_thead_tr {
+  background-color: var(--primaryBlue);
+  color: var(--primaryLightText);
+}
+
+.sp1_price_quotation_thead_th {
+  min-width: 150px;
+  max-width: 150px;
+  width: 150px;
+  background-color: var(--primaryBlue);
+  position: relative;
+  color: var(--primaryLightText);
+  cursor: default;
+  font-family: Poppins, sans-serif;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+  padding: 20px;
+  text-wrap: nowrap;
+}
+
+.sp1_price_quotation_column_sort_btn {
+  background-color: transparent;
+}
+
+
+.sp1_price_quotation_td {
+  border-top: 1px solid transparent;
+  border-bottom: 1px solid transparent;
+  border-bottom-color: rgb(0 0 0 / 5%);
+  padding: 6px 0;
+  transition: background 0.2s ease-in-out;
+  color: var(--primaryDarkText);
+  font-family: Poppins, sans-serif;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+}
+
+
+.sp1_price_quotation_thead_th:not(:first-child) {
+  padding-left: 8px !important;
+  padding-right: 8px !important;
+}
+
+.sp1_price_quotation_td:first-child {
+  padding-left: 20px !important;
+}
+
+.platform_account_table .sp1_price_quotation_td {
+  padding-top: 15px;
+  padding-bottom: 15px;
+}
+
+
+/* Table Content style */
+
+.table_asc_dec.priceDec::before {
+  color: var(--primaryDanger);
+}
+
+.table_asc_dec.priceAse::after {
+  color: var(--primarySuccess);
+}
+
+
+.sp1_price_quotation_tr:nth-child(odd) {
+  background-color: var(--primaryLightText);
+}
+
+.sp1_price_quotation_tr:nth-child(even) {
+  background-color: var(--primaryLightBlue);
+}
+
+.sp1_price_quotation_tr:hover {
+  background-color: var(--primaryLightBlue);
+}
+
+
+/* Button Color */
+.price_quotation_refresh_button {
+  background-color: var(--primaryBlue) !important;
+  color: var(--primaryLightText) !important;
+  font-family: Poppins, sans-serif;
+  font-weight: 400;
+}
+
+.price_quotation_refresh_button:hover {
+  background-color: var(--primaryExtraDarkBlue) !important;
+}
+
+.price_quotation_custom_button {
+  padding: 11px 45px !important;
+  font-family: Poppins, sans-serif;
+  font-size: 18px !important;
+  font-style: normal !important;
+  font-weight: 500 !important;
+  line-height: normal !important;
+  border-radius: 5px !important;
+  border: none !important;
+}
+
+.price_quotation_custom_button_primary {
+  background-color: var(--primaryBlue) !important;
+  color: var(--primaryLightText) !important;
+  border: none !important;
+}
+
+.price_quotation_custom_button_primary:hover {
+  background-color: var(--primaryExtraDarkBlue) !important;
+  border: none !important;
+}
+
+.price_quotation_custom_button_danger {
+  background-color: var(--primaryDanger) !important;
+  color: var(--primaryLightText) !important;
+  border: none !important;
+}
+
+.price_quotation_custom_button_danger:hover {
+  background-color: var(--primaryLightDanger) !important;
+}
+
+
+
+/* Each modal Style */
+
+
+.extra_other_works_container {
+  padding: 15px;
+  display: flex;
+  flex-direction: column;
+  max-height: 150px;
+  overflow: auto;
+  border: 1px solid var(--primaryDarkBlue);
+  list-style: none;
+  scrollbar-width: thin;
+  scrollbar-color: #99bcd4 transparent;
+  scroll-behavior: smooth !important;
+  border-radius: 8px !important;
+  -webkit-border-radius: 5px;
+}
+
+.extra_other_works_container::-webkit-scrollbar {
+  width: 10px !important;
+  scroll-behavior: smooth !important;
+}
+
+.extra_other_works_container::-webkit-scrollbar-thumb {
+  background-color: #ccc !important;
+  border-radius: 10px !important;
+}
+
+.extra_other_works_container::-webkit-scrollbar-track {
+  background-color: var(--primaryLightBlue) !important;
+  border-radius: 10px !important;
+}
+
+.extra_other_works_container li {
+  display: flex;
+  align-items: center;
+}
+
+.extra_other_works_container li:not(:last-child) {
+  margin-bottom: 8px;
+}
+
+.extra_other_works_container li p {
+  color: var(--primaryDarkText);
+  font-family: Poppins, sans-serif;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+  margin-left: 8px;
+}
+
+
+

@@ -56,7 +56,6 @@ const Content = () => {
 
 // filter container 
 // id: dealTableFilterBarContainer
-
 const container = document.getElementById("wonDealTableContainer");
 if (container) {
     ReactDOM.createRoot(container).render(

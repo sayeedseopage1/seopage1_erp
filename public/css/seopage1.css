@@ -1663,11 +1663,14 @@ abbr {
   user-select: none;
 }
 
+<<<<<<< HEAD
 .cnx_dropdown__item_disabled {
   pointer-events: none;
   opacity: 0.5;
 }
 
+=======
+>>>>>>> origin/auto_price_quotation_mahfuj
 .font-medium {
   font-weight: 500;
 }

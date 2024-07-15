@@ -18,7 +18,6 @@ const Button = ({
     onClick,
     isLoading = false,
     loaderTitle = "Loading...",
-
     ...props
 }) => {
     const variantClass = {

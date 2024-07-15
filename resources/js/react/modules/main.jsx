@@ -4,6 +4,7 @@ import "./HR/main";
 import "./sales/leads/main";
 import "./sales/deals/main";
 import "./sales/won-deals/main";
+import "./sales/priceQuotations/main";
 
 // digital marketing
 import './digital-marketing/DmDeals/main';

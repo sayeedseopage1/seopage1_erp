@@ -11,6 +11,7 @@ import tasksReducer from './features/tasksSlice';
 import errorSlice from "./features/errorSlice";
 import filterOptionReducer from "./features/filterOptionSlice";
 import saleRiskAnalysisReducer from './features/saleRiskAnalysisSlice';
+import priceQuotationsSlice from "./features/priceQuotationsSlice";
 
 export const store = configureStore({
     reducer: {
@@ -23,6 +24,7 @@ export const store = configureStore({
         pointPageFilterOption: pointPageFilterReducer,
         subTask: subtaskReducer,
         timeLogHistory: timeLogHistoryReducer,
+        priceQuotations: priceQuotationsSlice,
         tasks: tasksReducer,
         filterOptions: filterOptionReducer,
         error: errorSlice

@@ -21,7 +21,6 @@ const pointPageFilterSlice = createSlice({
     reducers: {
         setFilterState: (state, action) => {
             const { department, team, employee } = action.payload;
-
             state.departments = department;
             state.shift = team;
             state.employees = employee;

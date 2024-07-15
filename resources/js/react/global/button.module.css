@@ -12,6 +12,7 @@
     align-items: center;
     gap: 6px;
     white-space: nowrap;
+    font-family: poppins, sans-serif;
 }
 
 .cnx__btn:disabled{

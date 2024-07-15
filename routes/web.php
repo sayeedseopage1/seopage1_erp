@@ -205,6 +205,8 @@ use App\Http\Controllers\PaymentGatewayCredentialController;
 use App\Http\Controllers\EmployeeShiftChangeRequestController;
 use App\Http\Controllers\EvaluationController;
 use App\Http\Controllers\SalesRiskPolicyController;
+use App\Http\Controllers\PlatformAccountsController;
+// use App\Http\Controllers\PriceQuotationController;
 
 /*
 |--------------------------------------------------------------------------
@@ -567,7 +569,7 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
         Route::resource('pending-action', PendingActionController::class);
     });
 
-
+    PlatformAccountsController::Route('platform-accounts');
 
     /* Setting menu routes ends here */
     Route::resource('company-settings', SettingsController::class)->only(['edit', 'update', 'index', 'change_language']);
@@ -1579,6 +1581,8 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
     Route::resource('price-quotations', PriceQuotationController::class)->only(['index','store','show']);
     Route::get('test-store', [PriceQuotationController::class, 'store']);
 });
+
+// PriceQuotationController::Route();
 
 //custom route for seopage1
 Route::get('/deals/client-form/{id}', [HomeController::class, 'deal']);
