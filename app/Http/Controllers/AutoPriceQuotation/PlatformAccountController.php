@@ -15,7 +15,7 @@ class PlatformAccountController extends Controller
     {
         return response()->json([
             'status' => 200,
-            'data' => PlatformAccount::get()
+            'data' => PlatformAccount::paginate(20)
         ]);
     }
 
