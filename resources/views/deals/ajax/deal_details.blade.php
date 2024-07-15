@@ -906,6 +906,9 @@
                                 </div>
                             @endif
                         @endif
+                        <div class="text-center">
+                            <a class="btn btn-success w-40" onclick="changeUrl()">Generate Price Quotation</a>
+                        </div>
                     </div>
                 </div>
 
@@ -1971,5 +1974,17 @@
                 targetModal.classList.remove('show');
             })
         })
+    </script>
+    <script>
+        function changeUrl() {
+            var currentUrl = window.location.href;
+            console.log(currentUrl);
+            if (currentUrl.includes('?show=price_quotation_form')) {
+                var newUrl = currentUrl;
+            } else {
+                var newUrl = currentUrl + '?show=price_quotation_form';
+            }
+            window.location.href = newUrl;
+        }
     </script>
 @endpush
