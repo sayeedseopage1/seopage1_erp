@@ -1,0 +1,59 @@
+.sp1_antd_Modal .ant-modal-content {
+  border-radius: 29px !important;
+  padding: 24px !important;
+}
+
+
+/* 
+  Custom Modal Title hide with close button
+*/
+.sp1_antd_modal_title_with_close_hide .ant-modal-close {
+  display: none !important;
+}
+
+/* 
+  Custom Modal Title hide with close button
+*/
+.sp1_antd_modal_title_with_close_hide .ant-modal-content {
+  padding: 0 !important;
+  border-radius: 10px !important;
+}
+
+/* 
+  Custom Modal Title show with close button
+*/
+.sp1_antd_modal_title_with_close .ant-modal-title {
+  color: #000 !important;
+  font-family: Poppins, sans-serif !important;
+  font-size: 20px !important;
+  font-style: normal !important;
+  font-weight: 500 !important;
+  line-height: normal !important;
+}
+
+.sp1_antd_modal_title_with_close .ant-modal-close {
+  top: 29px !important;
+  right: 20px !important;
+}
+
+.sp1_antd_modal_title_with_close .ant-modal-close-x {
+  font-size: 25px !important;
+}
+
+
+
+
+
+@media screen and (max-width: 768px) {
+  .sp1_antd_modal_title_with_close .ant-modal-title {
+    font-size: 24px !important;
+  }
+
+  .sp1_antd_modal_title_with_close .ant-modal-close {
+    top: 20px !important;
+  }
+
+  .sp1_antd_modal_title_with_close .ant-modal-close-x {
+    font-size: 20px !important;
+  }
+}

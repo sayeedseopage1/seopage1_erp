@@ -11,6 +11,7 @@
 # public/js/app.js
 # public/js/vendor.js.map
 # public/js/vendor.js
+/public/report.html
 
 .phpunit.result.cache
 Homestead.json
@@ -40,3 +41,8 @@ package-lock.json
 .scannerwork
 reload_pages.sh
 .devdbrc
+coverage
+.scannerwork
+reload_pages.sh
+deadcode.json
+webpack.plugins.config.js

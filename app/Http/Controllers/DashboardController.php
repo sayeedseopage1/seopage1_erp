@@ -106,6 +106,11 @@ class DashboardController extends AccountBaseController
 
     }
 
+    public function tempDashboard($temp)
+    {
+        return view('dashboard.temp_dashboard', $this->data);
+    }
+
     public function widget(Request $request, $dashboardType)
     {
         $data = $request->all();
@@ -839,5 +844,24 @@ class DashboardController extends AccountBaseController
         $this->sales = User::where('id', $id)->first();
         $this->pageTitle = 'Sales Performance';
         return $this->SalesDashboardAdminView($this->sales);
+    }
+
+    // temp lead
+    public function tempLeadDevDashboard($id)
+    {
+        $this->lead_dev = User::where('id', $id)->first();
+        return view('dashboard.temp_lead_admin_dashboard', $this->data);
+    }
+
+    public function tempDevDashboard($id)
+    {
+        $this->dev = User::where('id', $id)->first();
+        return view('dashboard.temp_dev_admin_dashboard', $this->data);
+    }
+
+    public function tempSalesDashboard($id)
+    {
+        $this->sales = User::where('id', $id)->first();
+        return view('dashboard.temp_sales_admin_dashboard', $this->data);
     }
   }

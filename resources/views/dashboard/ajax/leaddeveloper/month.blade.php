@@ -527,7 +527,7 @@
                         </td>
                         <td>
                             <a href="{{route('tasks.show',$task->id)}}"> {{$task->heading}}</a>
-                        
+
                         </td>
                         <td>
                             @if($task->ProjectId != null)
