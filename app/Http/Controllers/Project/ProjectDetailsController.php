@@ -4,10 +4,11 @@ namespace App\Http\Controllers\Project;
 
 use App\Models\Task;
 use App\Models\Project;
+use App\Models\Currency;
 use Illuminate\Http\Request;
 use App\Models\PmTaskGuideline;
+use App\Models\ProjectMilestone;
 use App\Http\Controllers\Controller;
-use App\Models\Currency;
 use Illuminate\Support\Facades\Auth;
 use App\Models\ProjectDeadlineExtension;
 use App\Models\PMTaskGuidelineAuthorization;
@@ -98,6 +99,10 @@ class ProjectDetailsController extends Controller
         $projectArray['buttons']['milestone_cancel_authorization'] = (Auth::user()->role_id == 1 || Auth::user()->role_id == 8) && $project->milestones->where('cancelation_status', 'submitted')->count() && $project->status != 'canceled' ? true : false;
         $projectArray['buttons']['deliverable_authorization'] = (Auth::user()->role_id == 1 && $project->authorization_status == 'submitted') ? true : false;
 
+        $last_milestone = ProjectMilestone::where('project_id',$project->id)->orderBy('id','desc')->first();
+        $incomplete_milestone = ProjectMilestone::where('project_id',$project->id)->where('status','incomplete')->count();
+        $projectArray['buttons']['complete_q_and_c'] = ($last_milestone && $incomplete_milestone == 0 && $last_milestone->qc_status == 0 && $project->dispute_status != 1) ? true : false;
+        
         if($project->status == 'in progress' || $project->status == 'not started' || $project->status == 'on hold'){
             $projectArray['buttons']['mark_as_incomplete'] = $project->dispute_status != 1 && (Auth::user()->role_id == 1 || Auth::user()->role_id == 8) ? true : false;
             $projectArray['buttons']['explain_dispute'] = !$project->projectDispute && $project->dispute_status == 1 && (Auth::user()->role_id == 1 || Auth::user()->role_id == 8 || Auth::user()->role_id == 4) ? true : false;
