@@ -1145,7 +1145,7 @@ var Subtasks = function Subtasks() {
                 });
               } else if (auth.getRoleId() === 6) {
                 _data = lodash__WEBPACK_IMPORTED_MODULE_0___default().filter(res.tasks, function (d) {
-                  return Number(d.added_by) === auth.getId();
+                  return Number(d.added_by) === auth.getId() || Number(d.assigned_to_id) === auth.getId();
                 });
               } else if (auth.isHasRolePermission(13)) {
                 _data = lodash__WEBPACK_IMPORTED_MODULE_0___default().filter(res.tasks, function (d) {
