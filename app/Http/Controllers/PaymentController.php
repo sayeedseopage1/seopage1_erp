@@ -1635,7 +1635,11 @@ class PaymentController extends AccountBaseController
             $link = '<a href="' . route('projects.show', $project->id) . '">' . $text . '</a>';
             $this->logProjectActivity($project->id, $link);
         }
-
+        //PENDING ACTION FOR PROJECT PORTFOLIO RATING SYSTEM
+        if($project->status == 'finished' || $project->status == 'partially finished'){
+            $helper = new HelperPendingActionController();
+            $helper->portfolioRating($project->id);
+        }
         \DB::commit();
         return Reply::successWithData(__('messages.paymentSuccess'), ['redirectUrl' => $redirectUrl]);
     }

@@ -345,7 +345,7 @@ const LeadCreationFormControl = ({ close, presetInitialData = null }) => {
         setError(_error);
         return Object.keys(_error)?.length === 0;
     };
-    console.log("lead form data", formData);
+    // console.log("lead form data", formData);
 
     // handle submission
     const handleSubmit = async (e) => {
@@ -356,9 +356,9 @@ const LeadCreationFormControl = ({ close, presetInitialData = null }) => {
         if (!leadInputData.explanation) delete leadInputData.explanation;
         if (!leadInputData.bidpage_screenshot)
             delete leadInputData.bidpage_screenshot;
-        console.log({ leadInputData });
+        // console.log({ leadInputData });
         const isEmpty = isStateAllHaveValue(leadInputData);
-        console.log({ isEmpty });
+        // console.log({ isEmpty });
         if (isEmpty) {
             const validation = markEmptyFieldsValidation(leadInputData);
             setLeadInputDataValidation({
@@ -371,7 +371,7 @@ const LeadCreationFormControl = ({ close, presetInitialData = null }) => {
             return;
         }
 
-        console.log({ leadInputData });
+        // console.log({ leadInputData });
 
         const isProjectLinkValid = validator.isURL(leadInputData.project_link, {
             protocols: ["http", "https", "ftp"],
@@ -385,7 +385,7 @@ const LeadCreationFormControl = ({ close, presetInitialData = null }) => {
             return;
         }
 
-        console.log({ leadInputData });
+        // console.log({ leadInputData });
 
         try {
             const res = await leadCreate(formData).unwrap();
@@ -471,8 +471,12 @@ const LeadCreationFormControl = ({ close, presetInitialData = null }) => {
 
     // filter
     const getCountries = (data, query) => {
-        return data?.filter((d) =>
-            d?.name?.toLowerCase()?.includes(query?.toLowerCase())
+        return data?.filter(
+            (d) =>
+                d?.name?.toLowerCase()?.includes(query?.toLowerCase()) ||
+                d?.iso3?.toLowerCase()?.includes(query?.toLowerCase()) ||
+                d?.nicename?.toLowerCase()?.includes(query?.toLowerCase()) ||
+                d?.iso?.toLowerCase()?.includes(query?.toLowerCase())
         );
     };
 

@@ -372,6 +372,7 @@ class TimelogController extends AccountBaseController
      */
     public function startTimer(Request $request)
     {
+        // dd($request->all());
     // DB::beginTransaction();
      $userID = Auth::id();
 
@@ -418,7 +419,6 @@ class TimelogController extends AccountBaseController
             }
         }
         $task_board_column= TaskboardColumn::where('id',$task_status->board_column_id)->first();
-        //  dd($task_status);
           $timeLog = new ProjectTimeLog();
 
             $activeTimer = ProjectTimeLog::with('user')
@@ -469,9 +469,11 @@ class TimelogController extends AccountBaseController
                 $checklogCount = ProjectTimeLog::where('task_id', $request->task_id)->count();
 
                 if($checklogCount == 1){
-                    $text = 'Developer ' . Auth::user()->name . ' started working on subtask ' . $request->memo;
-                    $link = '<a href="' . route('tasks.show', $request->task_id) . '">' . $text . '</a>';
-                    $this->logProjectActivity($timeLog->project_id, $link);
+                    if($timeLog->project_id != null){
+                        $text = 'Developer ' . Auth::user()->name . ' started working on subtask ' . $request->memo;
+                        $link = '<a href="' . route('tasks.show', $request->task_id) . '">' . $text . '</a>';
+                        $this->logProjectActivity($timeLog->project_id, $link);
+                    }
                 }
 
                 function ordinal($number) {
@@ -486,11 +488,13 @@ class TimelogController extends AccountBaseController
 
                 $revision = TaskRevision::where('task_id',$request->task_id)->orderBy('id','desc')->first();
                 if($revision != null){
-                    $revisionBy = User::where('id', $revision->added_by)->first();
-                    $revision_number = ordinal($revision->revision_no);
-                    $text = 'Developer ' . Auth::user()->name . ' started working on subtask ' . $request->memo . ' for the ' . $revision_number . ' time after a revision was given by ' . $revisionBy->name;
-                    $link = '<a href="' . route('tasks.show', $request->task_id) . '">' . $text . '</a>';
-                    $this->logProjectActivity($timeLog->project_id, $link);
+                    if($timeLog->project_id != null){
+                        $revisionBy = User::where('id', $revision->added_by)->first();
+                        $revision_number = ordinal($revision->revision_no);
+                        $text = 'Developer ' . Auth::user()->name . ' started working on subtask ' . $request->memo . ' for the ' . $revision_number . ' time after a revision was given by ' . $revisionBy->name;
+                        $link = '<a href="' . route('tasks.show', $request->task_id) . '">' . $text . '</a>';
+                        $this->logProjectActivity($timeLog->project_id, $link);
+                    }
                 }
 
 
@@ -524,7 +528,7 @@ class TimelogController extends AccountBaseController
 
     public function stopTimer(Request $request)
     {
-    // dd($request->all());
+        // DB::beginTransaction();
      if(Auth::user()->role_id == 1)
      {
         $timeId = $request->timeId;
@@ -533,7 +537,6 @@ class TimelogController extends AccountBaseController
        // dd($timeLog);
         $timeLog->end_time = Carbon::now();
         $timeLog->save();
-     //   dd($timeLog);
 
         $timeLog->total_hours = (int)$timeLog->end_time->diff($timeLog->start_time)->format('%d') * 24 + (int)$timeLog->end_time->diff($timeLog->start_time)->format('%H');
         $timeLog->total_minutes = ((int)$timeLog->total_hours * 60) + (int)($timeLog->end_time->diff($timeLog->start_time)->format('%i'));
@@ -541,7 +544,11 @@ class TimelogController extends AccountBaseController
         $timeLog->save();
 
         /**EMPLOYEE EVALUATION START */
-        $taskFind = Task::where('id',$request->task_id)->where('u_id',null)->where('independent_task_status',1)->first(); //Find SubTask
+        if(Auth::user()->role_id == 15 || Auth::user()->role_id == 16 || Auth::user()->role_id == 17){
+            $taskFind = Task::where('id',$request->task_id)->where('u_id','!=',null)->where('independent_task_status',1)->first();
+        }else{
+            $taskFind = Task::where('id',$request->task_id)->where('u_id',null)->where('independent_task_status',1)->first();
+        }
         if($taskFind != null){
             $evaluation = EmployeeEvaluationTask::where('task_id',$taskFind->id)->first();
             if($evaluation !=null)
@@ -564,9 +571,8 @@ class TimelogController extends AccountBaseController
      }else
      {
         $timeId = $request->id;
-        //dd( $timeId);
+        // dd( $timeId);
         $timeLog = ProjectTimeLog::find($timeId);
-       // dd($timeLog);
         $editTimelogPermission = user()->permission('edit_timelogs');
         $activeTimelogPermission = user()->permission('manage_active_timelogs');
 
@@ -589,7 +595,11 @@ class TimelogController extends AccountBaseController
         $timeLog->save();
 
         /**EMPLOYEE EVALUATION START */
-        $taskFind = Task::where('id',$request->task_id)->where('u_id',null)->where('independent_task_status',1)->first(); //Find SubTask
+        if(Auth::user()->role_id == 15 || Auth::user()->role_id == 16 || Auth::user()->role_id == 17){
+            $taskFind = Task::where('id',$request->task_id)->where('u_id','!=',null)->where('independent_task_status',1)->first();
+        }else{
+            $taskFind = Task::where('id',$request->task_id)->where('u_id',null)->where('independent_task_status',1)->first();
+        }
         if($taskFind != null){
             $evaluation = EmployeeEvaluationTask::where('task_id',$taskFind->id)->first();
             if($evaluation !=null)
