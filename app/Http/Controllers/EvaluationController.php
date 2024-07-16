@@ -114,7 +114,7 @@ class EvaluationController extends AccountBaseController
 
 
     public function getAllEvaluation(Request $request)
-    // {
+    {
     //     $startDate = $request->start_date ?? null;
     //     $endDate = $request->end_date ?? null;
     //     $limit = $request->limit ??  10;
