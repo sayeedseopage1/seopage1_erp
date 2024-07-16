@@ -516,7 +516,7 @@ class HelperPmProjectStatusController extends AccountBaseController
                     $days = ceil(($deliverable->estimation_time - 4) / 3);
                 else if ($lastGoal->project_category == 'highPriority')
                     $days = ceil(($deliverable->estimation_time - 5) / 3);
-                else if ($lastGoal->project_category == 'topMostPriority')
+                else if (in_array($lastGoal->project_category, ['topMostPriority', 'criticallySensitive']))
                     $days = ceil(($deliverable->estimation_time - 6) / 3);
                 break;
             case $goalCount > 2:
