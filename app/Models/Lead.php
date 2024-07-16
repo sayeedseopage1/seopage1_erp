@@ -149,6 +149,10 @@ class Lead extends BaseModel
     {
         return $this->belongsTo(DealStage::class, 'lead_id');
     }
+    public function dealStage(): HasOne
+    {
+        return $this->hasOne(DealStage::class, 'lead_id');
+    }
 
     public function leadStatus(): BelongsTo
     {
@@ -232,6 +236,11 @@ class Lead extends BaseModel
     public function original_currency()
     {
         return $this->belongsTo(Currency::class, 'original_currency_id');
+    }
+
+    public function leadDeal()
+    {
+        return  $this->hasOne(Deal::class, 'lead_id');
     }
 
 }
