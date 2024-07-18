@@ -169,7 +169,7 @@ const DailyReportSubmissionForm = ({
         (_, index) => `id_${index + 1}`
     );
 
-    const [inputValues, setInputValues] = React.useState();
+    const [inputValues, setInputValues] = React.useState([]);
 
     const handleChange = (id, value) => {
         setInputValues({
@@ -269,7 +269,7 @@ const DailyReportSubmissionForm = ({
                     <br />
                     {pageDetailsArray?.map((id, index) => (
                         <SubmissionForSinglePage
-                            value={inputValues[id] || ""}
+                            value={inputValues[id]}
                             key={id}
                             id={id}
                             handleChange={handleChange}
