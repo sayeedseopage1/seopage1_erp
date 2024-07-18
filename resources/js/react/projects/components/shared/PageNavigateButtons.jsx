@@ -25,7 +25,7 @@ const PageNavigateButtons = ({ navigateData, className = "" }) => {
                             "_blank"
                         )
                     }
-                    className={`${style?.dashboardHeaderButton}`}
+                    className={`${style?.dashboardHeaderButton} text-nowrap`}
                 >
                     Won Deal
                 </Button>
