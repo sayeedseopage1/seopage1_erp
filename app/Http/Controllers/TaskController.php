@@ -7671,18 +7671,19 @@ class TaskController extends AccountBaseController
             ]);
         }
     }
-    
+   
     public function todaySubmissionData()
     {
         $categories = DailySubmissionCategory::with('dailySubmissionFields')
-            ->get()
-            ->map(function($category) {
-                $category->category_fields = $category->dailySubmissionFields->map(function($field) use ($category) {
-                    $field->category_name = $category->name;
-                    return $field;
-                });
-                return $category;
+        ->get()
+        ->map(function($category) {
+            $category->category_fields = $category->dailySubmissionFields->map(function($field) use ($category) {
+                $field->category_name = $category->name;
+                return $field;
             });
+            unset($category->dailySubmissionFields);
+            return $category;
+        });
 
         return response()->json([
             'categories' => $categories,
