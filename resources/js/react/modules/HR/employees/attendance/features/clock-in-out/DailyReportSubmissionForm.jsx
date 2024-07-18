@@ -1,6 +1,7 @@
 import axios from "axios";
 import React from "react";
 import { toast } from "react-toastify";
+
 import CKEditorComponent from "../../../../../../ckeditor";
 import FileUploader from "../../../../../../file-upload/FileUploader";
 import Button from "../../../../../../global/Button";
@@ -13,6 +14,19 @@ import {
 } from "../../../../../../global/styled-component/Form";
 import { checkIsURL } from "../../../../../../utils/check-is-url";
 import ReactModal from "react-modal";
+import { RxCross2 } from "react-icons/rx";
+import {
+    CloseButton,
+    FrontendPassword,
+    HeaderLabel,
+    InputItem,
+    ItemTitle,
+    ModalBody,
+    ModalContainer,
+    ModalHeader,
+    NumberOfPages,
+} from "./DailySubmissionUI";
+import SubmissionForSinglePage from "./helper/daily-submission/SubmissionForSinglePage";
 
 /**
  * * This component render task report form
@@ -136,6 +150,34 @@ const DailyReportSubmissionForm = ({
         }
     };
 
+    //mitul
+    const [isFrontendPassword, setIsFrontendPassword] = React.useState("no");
+    const [frontendPasswordValue, setFrontendPasswordValue] =
+        React.useState("");
+    console.log(frontendPasswordValue, "frontendPasswordValue");
+    const handleFrontendPasswordChange = (event) => {
+        setIsFrontendPassword(event.target.value);
+    };
+
+    const [numberOfPages, setNumberOfPages] = React.useState(1);
+
+    const handleNumberOfPagesChange = (event) => {
+        setNumberOfPages(event.target.value);
+    };
+    const pageDetailsArray = Array.from(
+        { length: numberOfPages },
+        (_, index) => `id_${index + 1}`
+    );
+
+    const [inputValues, setInputValues] = React.useState();
+
+    const handleChange = (id, value) => {
+        setInputValues({
+            ...inputValues,
+            [id]: value,
+        });
+    };
+    console.log(inputValues, "inputValues");
     return (
         <ReactModal
             style={{
@@ -145,14 +187,13 @@ const DailyReportSubmissionForm = ({
                     zIndex: 1000000,
                 },
                 content: {
-                    borderRadius: "10px",
-                    maxWidth: "100%",
-                    height: "fit-content",
-                    maxHeight: "100%",
+                    borderRadius: "29px 29px 0px 0px",
+                    maxWidth: "956px",
+                    maxHeight: "95%",
                     margin: "auto auto",
-                    padding: "10px",
-                    overflowY: "auto",
+                    padding: "0px",
                     zIndex: 1000001,
+                    border: "none",
                 },
             }}
             ariaHideApp={false}
@@ -160,7 +201,82 @@ const DailyReportSubmissionForm = ({
             onRequestClose={close}
             closeTimeoutMS={500}
         >
-            <div>modal</div>
+            <ModalContainer>
+                <ModalHeader>
+                    <HeaderLabel>Daily Task Progress Report Form</HeaderLabel>
+                    <CloseButton onClick={close}>
+                        <RxCross2 color="white" size={"25px"} />
+                    </CloseButton>
+                </ModalHeader>
+                <ModalBody>
+                    <FrontendPassword>
+                        <ItemTitle>Enter frontend password</ItemTitle>
+                        <div>
+                            <input
+                                type="radio"
+                                name="frontend_password"
+                                value="no"
+                                checked={isFrontendPassword === "no"}
+                                onChange={handleFrontendPasswordChange}
+                            />
+                            {"  "} No frontend password
+                        </div>
+                        <div>
+                            <input
+                                type="radio"
+                                name="frontend_password"
+                                value="yes"
+                                checked={isFrontendPassword === "yes"}
+                                onChange={handleFrontendPasswordChange}
+                            />
+                            {"  "} We do have a frontend password
+                        </div>
+                        <br />
+                        {isFrontendPassword === "yes" && (
+                            <InputItem
+                                width="200%"
+                                placeHolder="write password.."
+                                label="Insert the password here:"
+                                value={frontendPasswordValue}
+                                onChange={(e) =>
+                                    setFrontendPasswordValue(e.target.value)
+                                }
+                            />
+                        )}
+                    </FrontendPassword>
+                    <br />
+
+                    <NumberOfPages>
+                        <HeaderLabel>
+                            Number of pages you worked on today under this task
+                        </HeaderLabel>
+
+                        <input
+                            type="number"
+                            value={numberOfPages}
+                            onChange={handleNumberOfPagesChange}
+                            style={{
+                                borderRadius: "6px",
+                                background: "#d8edfc",
+                                width: "50px",
+                                height: "40px",
+                                border: "none",
+                                padding: "10px",
+                            }}
+                        />
+                        <p style={{ marginTop: "10px" }}>pages</p>
+                    </NumberOfPages>
+                    <br />
+                    {pageDetailsArray?.map((id, index) => (
+                        <SubmissionForSinglePage
+                            value={inputValues[id] || ""}
+                            key={id}
+                            id={id}
+                            handleChange={handleChange}
+                        />
+                    ))}
+                </ModalBody>
+            </ModalContainer>
         </ReactModal>
     );
 };
