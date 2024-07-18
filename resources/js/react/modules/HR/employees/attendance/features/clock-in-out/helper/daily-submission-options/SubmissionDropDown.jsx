@@ -26,6 +26,8 @@ const SubmissionDropDown = ({
     useEffect(() => {
         fetchCategoryData();
     }, []);
+
+    console.log(categories, "categories");
     return (
         <div>
             <Dropdown>
