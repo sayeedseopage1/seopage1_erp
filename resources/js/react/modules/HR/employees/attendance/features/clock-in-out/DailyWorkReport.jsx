@@ -8,7 +8,8 @@ import Toaster from "../../../../../../global/Toaster";
 import { useAuth } from "../../../../../../hooks/useAuth";
 import { WorkStatusConfirmationModal } from "./WorkStatusConfirmationModal";
 import styles from "./WorkStatusConfirmationModal.module.css";
-
+import { store } from "../../../../../../services/store";
+import { Provider } from "react-redux";
 export const DailyWorkReport = () => {
     const [showAcknowledgementReminder, setShowAcknowledgementReminder] =
         React.useState(false);
@@ -127,9 +128,9 @@ const container = document.getElementById("react-features-container");
 if (container) {
     ReactDOM.createRoot(container).render(
         <React.StrictMode>
-            <>
+            <Provider store={store}>
                 <DailyWorkReport />
-            </>
+            </Provider>
         </React.StrictMode>
     );
 }

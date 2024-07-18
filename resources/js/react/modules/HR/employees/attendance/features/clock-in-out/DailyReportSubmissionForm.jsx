@@ -26,7 +26,7 @@ import {
     ModalHeader,
     NumberOfPages,
 } from "./DailySubmissionUI";
-import SubmissionForSinglePage from "./helper/daily-submission/SubmissionForSinglePage";
+import SubmissionForSinglePage from "./helper/daily-submission-options/SubmissionForSinglePage";
 
 /**
  * * This component render task report form
