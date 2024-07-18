@@ -155,6 +155,11 @@ const DashboardHeaderSection = ({ projectData, isLoading }) => {
                     >
                         Working Environment
                     </Button>
+                    <PageNavigateButtons
+                        className="d-none d-md-flex ml-2"
+                        style={style}
+                        navigateData={projectData}
+                    />
                 </div>
                 <div className={`${style?.dashboardHeaderLeftButtonWrapper}`}>
                     <Switch.Case
@@ -233,7 +238,8 @@ const DashboardHeaderSection = ({ projectData, isLoading }) => {
                     </Switch.Case>
                     <Switch.Case
                         condition={
-                            actionButtons?.complete_q_and_c && user?.roleId === 4
+                            actionButtons?.complete_q_and_c &&
+                            user?.roleId === 4
                         }
                     >
                         <Button
@@ -266,9 +272,7 @@ const DashboardHeaderSection = ({ projectData, isLoading }) => {
                         </Button>
                     </Switch.Case>
                     <Switch.Case
-                        condition={
-                            actionButtons?.deliverable_authorization
-                        }
+                        condition={actionButtons?.deliverable_authorization}
                     >
                         <Button
                             onClick={() =>

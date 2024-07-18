@@ -113,7 +113,7 @@ const ProjectDashboard = ({ projectType }) => {
                 {/* End Project Sales and PM Info Section */}
 
                 {/* Page Navigate Buttons */}
-                <SectionContainer className="mt-4 d-flex">
+                <SectionContainer className="mt-4 d-flex d-md-none">
                     <PageNavigateButtons
                         className="navigationFooterButtons"
                         navigateData={projectData}

@@ -93,7 +93,6 @@
     font-family: Poppins, sans-serif;
     width: 100%;
     text-wrap: nowrap;
-    flex: 1 !important;
   }
 
 
@@ -143,9 +142,6 @@
   display: flex;
 }
 
-.navigationFooterButtons .dashboardHeaderButton {
-  flex: 1;
-}
 
 @media screen and (max-width: 375px) {
   .dashboardHeaderButton {
