@@ -12,7 +12,7 @@ const SubmissionForSinglePage = ({ id, handleChange, value }) => {
         });
     console.log(selectedCategoryDropDown, "selectedCategoryDropDown");
     return (
-        <div style={{ marginBottom: "50px" }}>
+        <div style={{ marginBottom: "50px", marginTop: "30px" }}>
             <div style={{ fontWeight: "bold" }}>
                 Enter the page URL for Page #{id}
             </div>

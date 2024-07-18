@@ -75,16 +75,16 @@ const SubmissionDropDown = ({
 export default SubmissionDropDown;
 
 const dropdownStyle = {
-    width: "530ppx",
+    width: "50%",
+    height: "40px",
     padding: "10px",
-    border: "1px solid #ccc",
     backgroundColor: "#D8EDFC",
     cursor: "pointer",
     position: "relative",
 };
 
 const menuStyle = {
-    width: "530px",
+    width: "41.5%",
     border: "1px solid #ccc",
     borderRadius: "4px",
     backgroundColor: "#fff",

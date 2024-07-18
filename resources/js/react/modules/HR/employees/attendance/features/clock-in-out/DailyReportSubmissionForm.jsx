@@ -234,7 +234,7 @@ const DailyReportSubmissionForm = ({
                         <br />
                         {isFrontendPassword === "yes" && (
                             <InputItem
-                                width="200%"
+                                width="150%"
                                 placeHolder="write password.."
                                 label="Insert the password here:"
                                 value={frontendPasswordValue}
