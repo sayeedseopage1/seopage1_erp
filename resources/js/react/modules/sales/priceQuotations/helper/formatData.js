@@ -24,7 +24,7 @@ export const formatPriceQuotationsForPayload = (priceQuotations) => {
     currency_id: priceQuotations?.currency_id?.id,
     deadline_type: priceQuotations?.deadline_type.id,
     risk_factor: priceQuotations?.risk_factor === "Yes" ? priceQuotations?.risk_percentage : null,
-    no_of_major_functionalities: priceQuotations?.major_works === "Yes" ? priceQuotations?.no_of_major_functionalities : null,
+    no_of_major_functionalities: priceQuotations?.major_works === "Yes" ? Number(priceQuotations?.no_of_major_functionalities) : null,
     no_of_days: priceQuotations?.deadline_type?.id === 2 ? Number(priceQuotations?.no_of_days) : null,
     content_writing: contentWriting ? Number(contentWriting) : null,
     no_of_ui_design_page: uiDesign ? Number(uiDesign) : null,

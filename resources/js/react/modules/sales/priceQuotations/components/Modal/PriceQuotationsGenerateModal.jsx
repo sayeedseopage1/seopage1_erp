@@ -40,6 +40,7 @@ import usePriceQuotations from "../../hooks/usePriceQuotations";
 
 // Helper
 import { formatPriceQuotationsForPayload } from "../../helper/formatData";
+import { useCreatePriceQuotationMutation } from "../../../../../services/api/priceQuotationsApiSlice";
 
 const PriceQuotationsGenerateModal = ({
     isModalOpen,
@@ -129,18 +130,8 @@ const PriceQuotationsGenerateModal = ({
         return filterSpeedOptimization.length !== other_works_data.length;
     };
 
-    const dummyPromise = async () => {
-        return new Promise((resolve) => {
-            setTimeout(() => {
-                const data = {
-                    message: "Price Quotation has been Generated Successfully.",
-                    data: priceQuotationsInputs,
-                    status: 200,
-                };
-                resolve(data);
-            }, 5000);
-        });
-    };
+    const [createPriceQuotation, { isLoading: isCreatingPriceQuotation }] =
+        useCreatePriceQuotationMutation();
 
     const handleSubmitPriceQuotations = async () => {
         const {
@@ -189,12 +180,15 @@ const PriceQuotationsGenerateModal = ({
         }
 
         try {
-            const payload = formatPriceQuotationsForPayload(
-                priceQuotationsInputs
-            );
+            const payload = {
+                ...formatPriceQuotationsForPayload(priceQuotationsInputs),
+                is_selected: 0
+            };
 
-            setIsLoading(true);
-            const res = await dummyPromise();
+            
+
+            const res = await createPriceQuotation(payload).unwrap();
+
             if (res.status === 200) {
                 toast.success(res.message);
                 setPriceQuotationsInputs((prev) => {
@@ -356,8 +350,8 @@ const PriceQuotationsGenerateModal = ({
                 <ContentWrapper className="justify-content-center pt-3">
                     <Button
                         className="mr-2 price_quotation_custom_button price_quotation_custom_button_primary"
-                        isLoading={isLoading}
-                        disabled={isLoading}
+                        isLoading={isCreatingPriceQuotation}
+                        disabled={isCreatingPriceQuotation}
                         loaderTitle={handleActionButton("loadingTitle")}
                         onClick={handleActionButton("buttonAction")}
                     >
