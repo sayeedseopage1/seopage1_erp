@@ -33,6 +33,7 @@ const DataTable = ({
     isLoading,
     justifyStyleColumn,
     sortingColumn,
+    onPageChange,
 }) => {
     // Table State
     const [sorting, setSorting] = React.useState([]);
@@ -76,7 +77,6 @@ const DataTable = ({
     // handle page size change
     const handlePageSizeChange = (e) => {
         e.preventDefault();
-
         const paginate = {
             pageIndex,
             pageSize: e.target.value,

@@ -11,6 +11,7 @@ import SearchBox from "../../Shared/Searchbox";
 // style
 import "./customDropDown.css";
 import Switch from "../../../../../../global/Switch";
+import { Placeholder } from "../../../../../../global/Placeholder";
 
 const CustomDropDown = ({
     data,
@@ -27,11 +28,11 @@ const CustomDropDown = ({
     isError,
     errorText,
     disabledTitle,
+    isFullDropDownLoading = false,
     isMultiple = false,
 }) => {
     const [query, setQuery] = React.useState("");
     const startCase = _.startCase(selected?.name);
-
 
     const debouncedSetQuery = useCallback(
         _.debounce((value) => {
@@ -41,7 +42,7 @@ const CustomDropDown = ({
     );
 
     const handleSearchChange = (value) => {
-        setQuery(value);  // Immediate update for instant feedback
+        setQuery(value); // Immediate update for instant feedback
         debouncedSetQuery(value);
     };
 
@@ -92,121 +93,131 @@ const CustomDropDown = ({
                 className="mb-3 d-inline"
             />
             <Switch>
-                <Popover title={disabledTitle}>
-                    <div
-                        className={`${
-                            sidebarItem
-                                ? `d-flex flex-column w-100 mt-2`
-                                : "d-flex align-items-center"
-                        } ${className} sp1__pp_filter_dd_wrapper`}
-                    >
-                        <Dropdown register className="w-100">
-                            <Dropdown.Toggle
-                                className={` ${
-                                    sidebarItem
-                                        ? "sp1__pp_filter_dd_toggle py-2 px-2 border w-100"
-                                        : "sp1__pp_filter_dd_toggle w-100 mw-100 cnx_dropdown__dd__toggle"
-                                }  ${
-                                    isDisableUse ? "sp1_remove_toggle_icon" : ""
-                                }`}
-                                disabled={isDisableUse}
-                            >
-                                <Switch.Case condition={isMultiple}>
-                                    <div
-                                        className="flex-wrap d-flex"
-                                        style={{
-                                            gap: "5px",
-                                        }}
-                                    >
-                                        {selected?.length
-                                            ? selected?.map((item) => (
-                                                  <div
-                                                      key={`${
-                                                          item?.name
-                                                      }-${Math?.random()}`}
-                                                      className="cnx_select_box_tag"
-                                                  >
-                                                      <button
-                                                          aria-label="removeTag"
-                                                          onClick={() =>
-                                                              handleAddOrRemove(
-                                                                  item,
-                                                                  isMultiple
-                                                              )
-                                                          }
-                                                      >
-                                                          <i className="fa-solid fa-xmark" />
-                                                      </button>
-                                                      <span>{item?.name}</span>
-                                                  </div>
-                                              ))
-                                            : placeholder}
-                                    </div>
-                                </Switch.Case>
-                                <Switch.Case condition={!isMultiple}>
-                                    <Tooltip
-                                        title={startCase}
-                                    >
-                                        <span
-                                            data-toggle={"tooltip"}
-                                            id="select-department-sal-risk"
-                                            className="singleline-ellipsis text-left"
-                                        >
-                                            {selected?.name ? (
-                                                <span>{startCase}</span>
-                                            ) : (
-                                                placeholder
-                                            )}
-                                        </span>
-                                    </Tooltip>
-                                </Switch.Case>
-                            </Dropdown.Toggle>
-
-                            <Dropdown.Menu
-                                id={`cnx_dropdown__menu_open--${data?.id}`}
-                                className="price_quotations_custom_dropdown_menu"
-                            >
-                                {isSearchBoxUse && (
-                                    <div>
-                                        <SearchBox
-                                            autoFocus={true}
-                                            value={query}
-                                            onChange={handleSearchChange}
-                                        />
-                                    </div>
-                                )}
-                                <div className="sp1_filter--users">
-                                    {filteredOptions?.slice(0, 100)?.map((item) => (
-                                        <Dropdown.Item
-                                            key={item.id}
-                                            className={`sp1__pp_filter_dd_item singleline-ellipsis text-left ${addActiveClass(
-                                                item
-                                            )}`}
-                                            onClick={() => {
-                                                handleAddOrRemove(
-                                                    item,
-                                                    isMultiple
-                                                );
+                <Switch.Case condition={isFullDropDownLoading}>
+                    <Placeholder width="100%" height="48px" />
+                </Switch.Case>
+                <Switch.Case condition={!isFullDropDownLoading}>
+                    <Popover title={disabledTitle}>
+                        <div
+                            className={`${
+                                sidebarItem
+                                    ? `d-flex flex-column w-100 mt-2`
+                                    : "d-flex align-items-center"
+                            } ${className} sp1__pp_filter_dd_wrapper`}
+                        >
+                            <Dropdown register className="w-100">
+                                <Dropdown.Toggle
+                                    className={` ${
+                                        sidebarItem
+                                            ? "sp1__pp_filter_dd_toggle py-2 px-2 border w-100"
+                                            : "sp1__pp_filter_dd_toggle w-100 mw-100 cnx_dropdown__dd__toggle"
+                                    }  ${
+                                        isDisableUse
+                                            ? "sp1_remove_toggle_icon"
+                                            : ""
+                                    }`}
+                                    disabled={isDisableUse}
+                                >
+                                    <Switch.Case condition={isMultiple}>
+                                        <div
+                                            className="flex-wrap d-flex"
+                                            style={{
+                                                gap: "5px",
                                             }}
-                                            disabled={item?.disabled}
                                         >
-                                            {item?.name}{" "}
-                                            {isMultiple &&
-                                                selected?.some((selectedItem) =>
-                                                    _.isEqual(
-                                                        selectedItem,
-                                                        item
-                                                    )
-                                                ) && (
-                                                    <i className="fa-solid fa-check mr-2" />
+                                            {selected?.length
+                                                ? selected?.map((item) => (
+                                                      <div
+                                                          key={`${
+                                                              item?.name
+                                                          }-${Math?.random()}`}
+                                                          className="cnx_select_box_tag"
+                                                      >
+                                                          <button
+                                                              aria-label="removeTag"
+                                                              onClick={() =>
+                                                                  handleAddOrRemove(
+                                                                      item,
+                                                                      isMultiple
+                                                                  )
+                                                              }
+                                                          >
+                                                              <i className="fa-solid fa-xmark" />
+                                                          </button>
+                                                          <span>
+                                                              {item?.name}
+                                                          </span>
+                                                      </div>
+                                                  ))
+                                                : placeholder}
+                                        </div>
+                                    </Switch.Case>
+                                    <Switch.Case condition={!isMultiple}>
+                                        <Tooltip title={startCase}>
+                                            <span
+                                                data-toggle={"tooltip"}
+                                                id="select-department-sal-risk"
+                                                className="singleline-ellipsis text-left"
+                                            >
+                                                {selected?.name ? (
+                                                    <span>{startCase}</span>
+                                                ) : (
+                                                    placeholder
                                                 )}
-                                        </Dropdown.Item>
-                                    ))}
-                                </div>
-                            </Dropdown.Menu>
-                        </Dropdown>
-                    </div>
-                </Popover>
+                                            </span>
+                                        </Tooltip>
+                                    </Switch.Case>
+                                </Dropdown.Toggle>
+
+                                <Dropdown.Menu
+                                    id={`cnx_dropdown__menu_open--${data?.id}`}
+                                    className="price_quotations_custom_dropdown_menu"
+                                >
+                                    {isSearchBoxUse && (
+                                        <div>
+                                            <SearchBox
+                                                autoFocus={true}
+                                                value={query}
+                                                onChange={handleSearchChange}
+                                            />
+                                        </div>
+                                    )}
+                                    <div className="sp1_filter--users">
+                                        {filteredOptions
+                                            ?.slice(0, 100)
+                                            ?.map((item) => (
+                                                <Dropdown.Item
+                                                    key={item.id}
+                                                    className={`sp1__pp_filter_dd_item singleline-ellipsis text-left ${addActiveClass(
+                                                        item
+                                                    )}`}
+                                                    onClick={() => {
+                                                        handleAddOrRemove(
+                                                            item,
+                                                            isMultiple
+                                                        );
+                                                    }}
+                                                    disabled={item?.disabled}
+                                                >
+                                                    {item?.name}{" "}
+                                                    {isMultiple &&
+                                                        selected?.some(
+                                                            (selectedItem) =>
+                                                                _.isEqual(
+                                                                    selectedItem,
+                                                                    item
+                                                                )
+                                                        ) && (
+                                                            <i className="fa-solid fa-check mr-2" />
+                                                        )}
+                                                </Dropdown.Item>
+                                            ))}
+                                    </div>
+                                </Dropdown.Menu>
+                            </Dropdown>
+                        </div>
+                    </Popover>
+                </Switch.Case>
             </Switch>
             {isError && (
                 <span

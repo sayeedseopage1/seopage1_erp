@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useContext, useEffect } from "react";
 import { MdFormatListBulletedAdd } from "react-icons/md";
 
 // Section Components
@@ -8,78 +8,53 @@ import PriceQuotationFilterBar from "../components/Section/PriceQuotationFilterB
 import { Flex } from "../../../../global/styled-component/Flex";
 
 // Components - Shared
+import Button from "../components/Shared/Button";
 import RefreshButton from "../components/Shared/RefreshButton";
 import PriceQuotationsGenerateModal from "../components/Modal/PriceQuotationsGenerateModal";
-import Button from "../components/Shared/Button";
 
 // Table Components
 import { PriceQuotationsTableColumns } from "../components/Table/PriceQuotationsTableColumns";
 import DataTable from "../components/Table/DataTable";
 
-// Dummy Data
-import { PriceQuotationsDummyData } from "../constant";
+// testing
 import useWhyDidYouRender from "../../../../hooks/useWhyDidYouRender";
 
-export const priceQuotationsState = {
-    inputs: {
-        cms: {},
-        category: {},
-        primary_page: null,
-        secondary_page: null,
-        major_works: null,
-        number_of_functionalities: null,
-        other_works: [],
-        risk_factors: null,
-        risk_percentage: null,
-        other_works_data: [],
-        client: {},
-        deal: {},
-        client_currency: {},
-        deadline: null,
-        platform_account: {},
-        step: "submit-price-quotation",
-    },
-    validation: {
-        cms: false,
-        category: false,
-        primary_page: false,
-        client: false,
-        deal: false,
-        secondary_page: false,
-        major_works: false,
-        other_works: false,
-        risk_factors: false,
-        client_currency: false,
-        deadline: false,
-        platform_account: false,
-        is_submitting: false,
-    },
-};
+// Context
+import {
+    PriceQuotationsContext,
+    priceQuotationsState,
+} from "../context/PriceQuotationsProvider";
+
+// Services
+import { useAllPriceQuotationsQuery } from "../../../../services/api/priceQuotationsApiSlice";
 
 const PriceQuotations = () => {
     useWhyDidYouRender("PriceQuotations");
 
-    const [priceQuotationsInputs, setPriceQuotationsInputs] = React.useState(
-        priceQuotationsState.inputs
+    // Context
+    const { priceQuotationsInputs, setPriceQuotationsInputs } = useContext(
+        PriceQuotationsContext
     );
+
     const [isPriceQuotationModalOpen, setIsPriceQuotationModalOpen] =
         React.useState(false);
     const [isLoading, setIsLoading] = React.useState(false);
     const [, /*filter*/ setFilter] = React.useState();
 
-    // Dummy  refetch
-    const refetch = () => {
-        setIsLoading(true);
-    };
 
-    // Dummy filter
-    useEffect(() => {
-        if (isLoading) {
-            setTimeout(() => {
-                setIsLoading(false);
-            }, 3000);
-        }
-    }, [isLoading]);
+    // All Price Quotations Query
+    const {
+        data: priceQuotationsResponse,
+        isLoading: isPriceQuotationsLoading,
+        isFetching: isPriceQuotationsFetching,
+        refetch: priceQuotationsRefetch,
+    } = useAllPriceQuotationsQuery();
+
+    // Price Quotations Data
+    const priceQuotationsData = priceQuotationsResponse?.data || {};
+    // price quotations data loading
+    const isPriceQuotationsDataLoading =
+        isPriceQuotationsLoading || isPriceQuotationsFetching;
 
     /**
      * Toggles the state of a modal and optionally executes an additional action.
@@ -95,6 +70,7 @@ const PriceQuotations = () => {
         }
     };
 
+    // Modal Title
     const handleModalTitle = () => {
         const titleList = {
             "submit-price-quotation": "Get A Price Quotations",
@@ -134,25 +110,17 @@ const PriceQuotations = () => {
                         </div>
                         {/* refresh */}
                         <RefreshButton
-                            onClick={refetch}
+                            onClick={priceQuotationsRefetch}
                             isLoading={isLoading}
                             className="font-weight-normal price_quotation_refresh_button border-0"
                         />
                     </Flex>
                     <DataTable
                         tableName="priceQuotations"
-                        tableData={{
-                            data: PriceQuotationsDummyData,
-                            from: 1,
-                            to: 10,
-                            total: 10,
-                            last_page: 1,
-                            pageSize: 10,
-                            pageIndex: 0,
-                        }}
+                        tableData={priceQuotationsData}
                         tableColumns={PriceQuotationsTableColumns}
                         tableActions={{}}
-                        isLoading={isLoading}
+                        isLoading={isPriceQuotationsDataLoading}
                         justifyStyleColumn={{
                             requested_on: "center",
                             primary_page: "center",

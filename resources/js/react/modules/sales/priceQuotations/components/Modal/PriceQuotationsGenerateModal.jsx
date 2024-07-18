@@ -14,9 +14,6 @@ import CustomModalHeader from "../UI/CustomModalHeader/CustomModalHeader";
 // Components - Shared - Styled Components
 import { ContentWrapper, ModalContentContainer } from "../UI/StyledComponents";
 
-// Constants
-import { priceQuotationsState } from "../../pages/PriceQuotations";
-
 // Utils
 import {
     isStateAllHaveValue,
@@ -34,7 +31,8 @@ import {
     QuotationDummyData,
 } from "../../constant";
 import { usePDF } from "react-to-pdf";
-
+import { priceQuotationsState } from "../../context/PriceQuotationsProvider";
+import usePriceQuotations from "../../hooks/usePriceQuotations";
 
 const PriceQuotationsGenerateModal = ({
     isModalOpen,
@@ -43,7 +41,9 @@ const PriceQuotationsGenerateModal = ({
     priceQuotationsInputs,
     setPriceQuotationsInputs,
 }) => {
-    const { toPDF, targetRef } = usePDF({filename: 'page.pdf'});
+    const {} = usePriceQuotations();
+
+    const { toPDF, targetRef } = usePDF({ filename: "page.pdf" });
     const [isLoading, setIsLoading] = React.useState(false);
     const [selectedPriceQuotation, setSelectedPriceQuotation] =
         React.useState(null);
@@ -202,7 +202,7 @@ const PriceQuotationsGenerateModal = ({
     };
 
     const handleDownloadPDF = async () => {
-        toPDF()
+        toPDF();
     };
 
     useEffect(() => {
@@ -270,7 +270,6 @@ const PriceQuotationsGenerateModal = ({
         }
     };
 
-    console.log(selectedPriceQuotation);
     return (
         <CustomModal
             isModalOpen={isModalOpen}
@@ -346,10 +345,11 @@ const PriceQuotationsGenerateModal = ({
                         {handleActionButton("buttonLabel")}
                     </Button>
                     <Button
-                        className="price_quotation_custom_button price_quotation_custom_button_danger"
+                        className="price_quotation_custom_button price_quotation_custom_button_danger d-flex align-items-center justify-content-center"
                         isLoading={false}
                         onClick={closeModal}
                         size="md"
+                        style={{ minWidth: "220px" }}
                     >
                         Close
                     </Button>

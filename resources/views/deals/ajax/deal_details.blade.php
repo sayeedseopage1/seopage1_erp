@@ -893,9 +893,9 @@
                                 @include('contracts.modals.dm-dealaddstagemodal')
                                 @include('contracts.modals.dm-deallostmodal')
                             @elseif($deal->deal_stage == 2 && $price_quotation_count == 0)
-                                <div class="text-center">
+                                {{-- <div class="text-center">
                                     <a class="btn btn-success w-40" onclick="changeUrl()">Generate Price Quotation</a>
-                                </div>
+                                </div> --}}
                                 <div id="priceQuotationForm"></div>
                             @else
                                 N\A

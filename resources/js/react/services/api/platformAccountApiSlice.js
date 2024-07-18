@@ -1,9 +1,14 @@
 import { apiSlice } from "./apiSlice";
 
 
+const _token = document
+  .querySelector("meta[name='csrf-token']")
+  .getAttribute("content");
+
+
 const platformAccountApiSlice = apiSlice.injectEndpoints({
   endpoints: (build) => ({
-    platformAccounts: build.query({
+    getAllPlatformAccounts: build.query({
       query: () => `/account/platform-accounts`,
       providesTags: ["PlatformAccounts"],
     }),
@@ -12,6 +17,9 @@ const platformAccountApiSlice = apiSlice.injectEndpoints({
         url: `/account/platform-accounts`,
         method: "POST",
         body: data,
+        headers: {
+          "X-CSRF-TOKEN": _token,
+        },
       }),
       invalidatesTags: (result, error, arg) => {
         const tags = ["PlatformAccounts"];
@@ -23,9 +31,28 @@ const platformAccountApiSlice = apiSlice.injectEndpoints({
     }),
     updatePlatformAccount: build.mutation({
       query: (data) => ({
-        url: `/account/platform-accounts/${data.id}/update`,
+        url: `account/platform-accounts/${data.id}`,
         method: "PUT",
         body: data,
+        headers: {
+          "X-CSRF-TOKEN": _token,
+        },
+      }),
+      invalidatesTags: (result, error, arg) => {
+        const tags = ["PlatformAccounts"];
+        if (result && !error) {
+          return tags.map((tag) => ({ type: tag }));
+        }
+      },
+    }),
+    updateStatusPlatformAccount: build.mutation({
+      query: (data) => ({
+        url: `/account/platform-accounts/update-status`,
+        method: "POST",
+        body: data,
+        headers: {
+          "X-CSRF-TOKEN": _token,
+        },
       }),
       invalidatesTags: (result, error, arg) => {
         const tags = ["PlatformAccounts"];
@@ -42,8 +69,9 @@ const platformAccountApiSlice = apiSlice.injectEndpoints({
 
 
 export const {
-  usePlatformAccountsQuery,
+  useGetAllPlatformAccountsQuery,
   useCreatePlatformAccountMutation,
   useUpdatePlatformAccountMutation,
+  useUpdateStatusPlatformAccountMutation,
   useSinglePlatformAccountQuery,
 } = platformAccountApiSlice;

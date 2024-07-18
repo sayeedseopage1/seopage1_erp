@@ -1,12 +1,15 @@
 import { FaRegEdit } from "react-icons/fa";
 import { Switch as AntdSwitch } from "antd";
+import { isURL } from "validator";
 
 // Components -Styled Components
 import { TableTdWrapper } from "../UI/StyledComponents";
 
 // Components - UI
 import Switch from "../../../../../global/Switch";
-import { isURL } from "validator";
+
+// Constants
+import { PlatformOptions, ProfileTypeOptions } from "../../constant";
 
 export const AccountListTableColumns = [
     {
@@ -15,17 +18,46 @@ export const AccountListTableColumns = [
         accessorKey: "platform",
         cell: ({ row }) => {
             const data = row.original;
+            const platform = PlatformOptions.find(
+                (item) => item.id === data?.type
+            );
+
+            const Icons = platform?.icon;
+
             return (
                 <TableTdWrapper justifyContent="flex-start">
-                    <p>{data?.platform ? data?.platform?.name : "--"}</p>
+                    <Switch>
+                        <Switch.Case condition={platform.type === "svg"}>
+                            <Icons
+                                fill={platform?.color}
+                                size={23}
+                                className="mr-2"
+                            />
+                        </Switch.Case>
+                        <Switch.Case condition={platform.type === "img"}>
+                            <img
+                                src={platform?.icon}
+                                alt={platform?.name}
+                                className="mr-2"
+                                width={23}
+                                height={23}
+                            />
+                        </Switch.Case>
+                    </Switch>
+                    <p>{platform?.name ?? "--"}</p>
                 </TableTdWrapper>
             );
         },
     },
     {
-        id: "user_name",
+        id: "name",
+        header: "Name",
+        accessorKey: "name",
+    },
+    {
+        id: "username",
         header: "User name",
-        accessorKey: "user_name",
+        accessorKey: "username",
     },
     {
         id: "user_url",
@@ -37,7 +69,7 @@ export const AccountListTableColumns = [
                 <TableTdWrapper justifyContent="flex-start">
                     <Switch>
                         <Switch.Case condition={isURL(data?.user_url)}>
-                            <a href={data?.user_url}>{data?.user_url}</a>
+                            <a className="singleline-ellipsis" href={data?.user_url}>{data?.user_url}</a>
                         </Switch.Case>
                         <Switch.Case condition={!isURL(data?.user_url)}>
                             <p>{data?.user_url ?? "--"}</p>
@@ -49,9 +81,9 @@ export const AccountListTableColumns = [
     },
 
     {
-        id: "account_email",
+        id: "email",
         header: "Account email",
-        accessorKey: "account_email",
+        accessorKey: "email",
     },
     {
         id: "profile_type",
@@ -59,11 +91,12 @@ export const AccountListTableColumns = [
         accessorKey: "profile_type",
         cell: ({ row }) => {
             const data = row.original;
+            const profileType = ProfileTypeOptions.find(
+                (item) => item.id === data?.profile_type
+            );
             return (
                 <TableTdWrapper justifyContent="center">
-                    <p>
-                        {data?.profile_type ? data?.profile_type?.name : "--"}
-                    </p>
+                    <p>{profileType?.name ?? "--"}</p>
                 </TableTdWrapper>
             );
         },
@@ -121,9 +154,7 @@ export const AccountListTableColumns = [
                         }}
                         className="ml-2 antd_custom_switch"
                     >
-                        <AntdSwitch
-                            checked={data?.is_active}
-                        />
+                        <AntdSwitch checked={data?.status} />
                     </button>
                 </TableTdWrapper>
             );

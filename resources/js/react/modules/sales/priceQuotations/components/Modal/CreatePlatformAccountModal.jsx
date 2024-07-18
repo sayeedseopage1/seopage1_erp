@@ -1,6 +1,8 @@
 import PropTypes from "prop-types";
 import { Checkbox } from "antd";
 import isEmail from "validator/lib/isEmail";
+import dayjs from "dayjs";
+import { isURL } from "validator";
 import { toast } from "react-toastify";
 import { useEffect, useState } from "react";
 
@@ -27,8 +29,10 @@ import {
 } from "../../../../../utils/stateValidation";
 import {
     useCreatePlatformAccountMutation,
+    useSinglePlatformAccountQuery,
     useUpdatePlatformAccountMutation,
 } from "../../../../../services/api/platformAccountApiSlice";
+import { formatAPIErrors } from "../../../../../utils/formatAPIErrors";
 
 const platformAccountState = {
     validation: {
@@ -77,12 +81,44 @@ const CreatePlatformAccountModal = ({
         });
     };
 
+    // Create Platform Account Mutation
     const [createPlatformAccount, { isLoading: isCreatingPlatformAccount }] =
         useCreatePlatformAccountMutation();
 
+    // Update Platform Account Mutation
     const [updatePlatformAccount, { isLoading: isUpdatingPlatformAccount }] =
         useUpdatePlatformAccountMutation();
 
+    // Get single Platform Account
+    const {
+        data: singlePlatformAccount,
+        isLoading: isSinglePlatformAccountLoading,
+        isFetching: isSinglePlatformAccountFetching,
+    } = useSinglePlatformAccountQuery(platformAccountInputs?.id, {
+        skip: !platformAccountInputs?.id,
+        refetchOnMountOrArgChange: true,
+    });
+
+    const singlePlatformAccountData = singlePlatformAccount?.data;
+    const isLoadingPlatformAccount =
+        isSinglePlatformAccountLoading || isSinglePlatformAccountFetching;
+
+    useEffect(() => {
+        if (!isLoadingPlatformAccount && singlePlatformAccountData?.id) {
+            setPlatformAccountInputs({
+                ...platformAccountInputs,
+                type: PlatformOptions.find(
+                    (item) => item.id === singlePlatformAccountData?.type
+                ),
+                profile_type: ProfileTypeOptions.find(
+                    (item) =>
+                        item.id === singlePlatformAccountData?.profile_type
+                ),
+            });
+        }
+    }, [singlePlatformAccountData, isLoadingPlatformAccount]);
+
+    // submit form
     const handleSubmit = async () => {
         const { confirmation_of_data_accuracy, ...formData } =
             platformAccountInputs;
@@ -94,7 +130,6 @@ const CreatePlatformAccountModal = ({
                 ...validation,
                 is_submitting: true,
             });
-
             toast.error("Please Complete the form properly");
             return;
         }
@@ -107,11 +142,27 @@ const CreatePlatformAccountModal = ({
                     ? isEmailInvalid(platformAccountInputs.email)
                     : false,
             });
-            toast.error("Invalid Email");
             return;
         }
 
-        // API Call
+        if (hasSpace(platformAccountInputs?.username)) {
+            setPlatformAccountValidation({
+                ...platformAccountValidation,
+                is_submitting: true,
+                isUsernameInValid: true,
+            });
+            return;
+        }
+
+        if (isURLInvalid(platformAccountInputs?.user_url)) {
+            setPlatformAccountValidation({
+                ...platformAccountValidation,
+                is_submitting: true,
+                isUserURLInValid: true,
+            });
+            return;
+        }
+
         try {
             const apiCall = isPlatformAccountUpdate
                 ? updatePlatformAccount
@@ -126,15 +177,17 @@ const CreatePlatformAccountModal = ({
                 multiplying_factor: Number(
                     platformAccountInputs.multiplying_factor
                 ),
+                generated_on: dayjs(platformAccountInputs.generated_on).format(
+                    "YYYY-MM-DD"
+                ),
             };
 
             const res = await apiCall(payload).unwrap();
-            if (res.status === 200) {
+            if (res?.status === 200) {
                 toast.success(res.message);
                 closeModal();
             }
         } catch (error) {
-            console.log("Error", error);
             toast.error("Something went wrong");
         }
     };
@@ -142,6 +195,16 @@ const CreatePlatformAccountModal = ({
     // Helper Function to check if email is invalid
     function isEmailInvalid(email) {
         return !isEmail(email);
+    }
+
+    function hasSpace(str) {
+        return /\s/.test(str);
+    }
+
+    function isURLInvalid(url) {
+        return !isURL(url, {
+            protocols: ["http", "https", "ftp"],
+        });
     }
 
     // UseEffect to check if form is submitting
@@ -153,6 +216,12 @@ const CreatePlatformAccountModal = ({
                 ...validation,
                 isEmailInValid: platformAccountInputs.email
                     ? isEmailInvalid(platformAccountInputs.email)
+                    : false,
+                isUsernameInValid: platformAccountInputs.username
+                    ? hasSpace(platformAccountInputs.username)
+                    : false,
+                isUserURLInValid: platformAccountInputs.user_url
+                    ? isURLInvalid(platformAccountInputs.user_url)
                     : false,
             });
         }
@@ -185,6 +254,7 @@ const CreatePlatformAccountModal = ({
                         data={PlatformOptions}
                         isRequired
                         filedName="type"
+                        isFullDropDownLoading={isLoadingPlatformAccount}
                         selected={platformAccountInputs?.type}
                         setSelected={handleInputChange}
                         isError={
@@ -200,6 +270,7 @@ const CreatePlatformAccountModal = ({
                         value={platformAccountInputs?.name}
                         onChange={handleInputChange}
                         errorText="Name is required"
+                        isLoading={isLoadingPlatformAccount}
                         isError={
                             platformAccountValidation?.is_submitting &&
                             platformAccountValidation?.name
@@ -214,10 +285,16 @@ const CreatePlatformAccountModal = ({
                         isRequired
                         value={platformAccountInputs?.username}
                         onChange={handleInputChange}
-                        errorText="User Name is required"
+                        isLoading={isLoadingPlatformAccount}
+                        errorText={
+                            platformAccountValidation.isUsernameInValid
+                                ? "Username should not have space"
+                                : "User Name is required"
+                        }
                         isError={
-                            platformAccountValidation?.is_submitting &&
-                            platformAccountValidation?.username
+                            (platformAccountValidation?.is_submitting &&
+                                platformAccountValidation?.username) ||
+                            platformAccountValidation.isUsernameInValid
                         }
                         placeholder="Enter User Name"
                     />
@@ -228,11 +305,17 @@ const CreatePlatformAccountModal = ({
                         value={platformAccountInputs?.user_url}
                         onChange={handleInputChange}
                         placeholder="Enter User Name"
+                        isLoading={isLoadingPlatformAccount}
                         isError={
-                            platformAccountValidation?.is_submitting &&
-                            platformAccountValidation["user_url"]
+                            (platformAccountValidation?.is_submitting &&
+                                platformAccountValidation["user_url"]) ||
+                            platformAccountValidation.isUserURLInValid
                         }
-                        errorText="User Url is required"
+                        errorText={
+                            platformAccountValidation.isUserURLInValid
+                                ? "Invalid URL"
+                                : "User URL is required"
+                        }
                     />
                 </ContentWrapper>
                 <ContentWrapper className="mb-3">
@@ -241,6 +324,7 @@ const CreatePlatformAccountModal = ({
                         fieldName="email"
                         type="email"
                         isRequired
+                        isLoading={isLoadingPlatformAccount}
                         value={platformAccountInputs?.email}
                         onChange={handleInputChange}
                         placeholder="Enter Account Email"
@@ -261,6 +345,8 @@ const CreatePlatformAccountModal = ({
                         data={ProfileTypeOptions}
                         isRequired
                         filedName="profile_type"
+                        isFullDropDownLoading={isLoadingPlatformAccount}
+                        isLoading={isLoadingPlatformAccount}
                         selected={platformAccountInputs?.profile_type}
                         setSelected={handleInputChange}
                         isError={
@@ -278,6 +364,7 @@ const CreatePlatformAccountModal = ({
                         value={platformAccountInputs?.generated_on}
                         placeholder="Enter Generated On"
                         type="date"
+                        isLoading={isLoadingPlatformAccount}
                         onChange={handleInputChange}
                         isError={
                             platformAccountValidation?.is_submitting &&
@@ -292,6 +379,7 @@ const CreatePlatformAccountModal = ({
                         type="number"
                         value={platformAccountInputs?.multiplying_factor}
                         placeholder="Enter Multiplying Factor"
+                        isLoading={isLoadingPlatformAccount}
                         isError={
                             platformAccountValidation?.is_submitting &&
                             platformAccountValidation?.multiplying_factor
@@ -331,7 +419,8 @@ const CreatePlatformAccountModal = ({
                                     platformAccountInputs.confirmation_of_data_accuracy ===
                                         false ||
                                     isCreatingPlatformAccount ||
-                                    isUpdatingPlatformAccount
+                                    isUpdatingPlatformAccount ||
+                                    isLoadingPlatformAccount
                                 }
                                 loaderTitle={
                                     isPlatformAccountUpdate
@@ -344,7 +433,7 @@ const CreatePlatformAccountModal = ({
                                 {isPlatformAccountUpdate ? "Update" : "Create"}
                             </Button>
                             <Button
-                                className="price_quotation_custom_button price_quotation_custom_button_danger"
+                                className="price_quotation_custom_button price_quotation_custom_button_danger d-flex justify-content-center align-items-center"
                                 isLoading={false}
                                 onClick={closeModal}
                                 size="md"

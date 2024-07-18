@@ -9,7 +9,7 @@ export const markEmptyFieldsValidation = (data) => {
 };
 
 export const isStateAllHaveValue = (objectState) => {
-  return Object.entries(objectState).some(([key, value]) => value === null || value === "");
+  return Object.entries(objectState).some(([key, value]) => value === null || value === "" || (_.isObject(value) && _.isEmpty(value)));
 }
 
 /**

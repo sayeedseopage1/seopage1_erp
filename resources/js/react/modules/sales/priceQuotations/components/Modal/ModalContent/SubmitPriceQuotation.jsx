@@ -19,7 +19,12 @@ import ExtraWorksInputsContainer from "./ExtraWorksInputsContainer";
 
 // Helper Function
 import { generateUniqueId } from "../../../../../../utils";
+
+// Constants
 import { PriceQuotationsDataInputOptions } from "../../../constant";
+
+// hooks
+import usePriceQuotations from "../../../hooks/usePriceQuotations";
 
 const SubmitPriceQuotation = ({
     handleInputChange,
@@ -29,9 +34,23 @@ const SubmitPriceQuotation = ({
     setExtraInfoInputsValidation,
     priceQuotationsInputsValidation,
 }) => {
-    const { filterOptions } = useContext(PriceQuotationsContext);
-    const { category, deadline } = PriceQuotationsDataInputOptions;
-    
+    const {
+        cmsData,
+        isCMSLoading,
+        currenciesData,
+        isCurrenciesLoading,
+        accountsData,
+        isAccountsLoading,
+    } = useContext(PriceQuotationsContext);
+    const { deadline } = PriceQuotationsDataInputOptions;
+    const {
+        clientsData,
+        dealsData,
+        projectNichesData,
+        isClientsLoading,
+        isDealLoading,
+        isProjectNichesLoading,
+    } = usePriceQuotations(priceQuotationsInputs);
 
     // Extra Handler for generating title with the number of words or logo or pages etc
     const extraHandler = (e, type, fieldName, parent) => {
@@ -79,7 +98,7 @@ const SubmitPriceQuotation = ({
             words: `Content Writing ${value} words`,
             logo: `Logo Creation ${value} logos`,
             pages: `UI Design ${value} pages`,
-            other: `Others ${value} hours`,
+            hours: `Others ${value} hours`,
         };
         return titles[type];
     };
@@ -92,10 +111,11 @@ const SubmitPriceQuotation = ({
                     isSearchBoxUse
                     filedName="client"
                     label="1. Client Name"
-                    data={filterOptions?.clients}
+                    data={clientsData}
                     setSelected={handleInputChange}
                     placeholder="Select Client Name"
                     errorText="Client Name is required"
+                    isFullDropDownLoading={isClientsLoading}
                     selected={priceQuotationsInputs?.client}
                     isError={
                         priceQuotationsInputsValidation?.is_submitting &&
@@ -107,18 +127,15 @@ const SubmitPriceQuotation = ({
                     isSearchBoxUse
                     filedName="deal"
                     label="2. Deal Name"
-                    isDisableUse={!priceQuotationsInputs?.client?.user_name}
-                    data={filterOptions?.deals.filter(
-                        (deal) =>
-                            deal?.client_username ===
-                            priceQuotationsInputs?.client?.user_name
-                    )}
+                    isDisableUse={!priceQuotationsInputs?.client?.name}
+                    data={dealsData}
                     placeholder="Select Deal Name"
+                    isFullDropDownLoading={isDealLoading}
                     setSelected={handleInputChange}
                     errorText="Deal Name is required"
                     selected={priceQuotationsInputs?.deal}
                     disabledTitle={
-                        !priceQuotationsInputs?.client?.user_name &&
+                        !priceQuotationsInputs?.client?.name &&
                         "Please select Client Name first"
                     }
                     isError={
@@ -134,8 +151,9 @@ const SubmitPriceQuotation = ({
                     isSearchBoxUse
                     filedName="cms"
                     placeholder="Select CMS"
-                    data={filterOptions?.cms}
+                    data={cmsData}
                     errorText="CMS is required"
+                    isFullDropDownLoading={isCMSLoading}
                     setSelected={handleInputChange}
                     selected={priceQuotationsInputs?.cms}
                     isError={
@@ -144,13 +162,15 @@ const SubmitPriceQuotation = ({
                     }
                 />
                 <CustomDropDown
-                    data={category}
+                    data={projectNichesData}
                     isRequired
                     label="4. Category"
                     filedName="category"
                     placeholder="Select Category"
                     errorText="Category is required"
+                    isSearchBoxUse
                     setSelected={handleInputChange}
+                    isFullDropDownLoading={isProjectNichesLoading}
                     selected={priceQuotationsInputs?.category}
                     isError={
                         priceQuotationsInputsValidation?.is_submitting &&
@@ -267,15 +287,16 @@ const SubmitPriceQuotation = ({
                         </Switch.Case>
                     </Switch>
                 </div>
-
                 <CustomDropDown
                     isRequired={true}
                     label="10. Clients Currency"
                     filedName={"client_currency"}
                     placeholder="Select a Currency"
                     setSelected={handleInputChange}
-                    data={filterOptions?.currencies}
+                    data={currenciesData}
+                    isSearchBoxUse
                     errorText="Client Currency is required"
+                    isFullDropDownLoading={isCurrenciesLoading}
                     selected={priceQuotationsInputs?.client_currency}
                     isError={
                         priceQuotationsInputsValidation?.is_submitting &&
@@ -284,28 +305,52 @@ const SubmitPriceQuotation = ({
                 />
             </ContentWrapper>
             <ContentWrapper className="mb-3">
-                <CustomDropDown
-                    data={deadline}
-                    isRequired={true}
-                    filedName="deadline"
-                    label="11. Deadline"
-                    placeholder="Select Deadline"
-                    setSelected={handleInputChange}
-                    errorText="Deadline is required"
-                    selected={priceQuotationsInputs?.deadline}
-                    isError={
-                        priceQuotationsInputsValidation?.is_submitting &&
-                        priceQuotationsInputsValidation?.deadline
-                    }
-                />
+                <div className="d-flex flex-column">
+                    <CustomDropDown
+                        data={deadline}
+                        isRequired={true}
+                        filedName="deadline"
+                        label="11. Deadline"
+                        placeholder="Select Deadline"
+                        setSelected={handleInputChange}
+                        errorText="Deadline is required"
+                        selected={priceQuotationsInputs?.deadline}
+                        isError={
+                            priceQuotationsInputsValidation?.is_submitting &&
+                            priceQuotationsInputsValidation?.deadline
+                        }
+                    />
+                    <Switch>
+                        <Switch.Case
+                            condition={
+                                priceQuotationsInputs?.deadline?.value === "fixed"
+                            }
+                        >
+                            <CustomInput
+                                isChild
+                                type="number"
+                                label="i. Number of days required"
+                                fieldName="no_of_days "
+                                onChange={handleInputChange}
+                                errorText="Number of days required"
+                                value={priceQuotationsInputs?.no_of_days}
+                                isError={
+                                    priceQuotationsInputsValidation?.is_submitting &&
+                                    priceQuotationsInputsValidation?.no_of_days
+                                }
+                            />
+                        </Switch.Case>
+                    </Switch>
+                </div>
                 <CustomDropDown
                     isRequired={true}
                     filedName="platform_account"
                     label="12. Freelancer account"
-                    data={filterOptions?.accounts}
+                    data={accountsData}
                     setSelected={handleInputChange}
                     placeholder="Select Freelancer Account"
                     errorText="Freelancer Account is required"
+                    isFullDropDownLoading={isAccountsLoading}
                     selected={priceQuotationsInputs?.platform_account}
                     isError={
                         priceQuotationsInputsValidation?.is_submitting &&
@@ -313,6 +358,7 @@ const SubmitPriceQuotation = ({
                     }
                 />
             </ContentWrapper>
+            <ContentWrapper className="mb-3"></ContentWrapper>
         </React.Fragment>
     );
 };

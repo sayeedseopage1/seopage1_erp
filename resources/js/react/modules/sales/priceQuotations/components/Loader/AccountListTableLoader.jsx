@@ -19,6 +19,11 @@ const AccountListTableLoader = ({ prevItemLength = 10, tableCol }) => {
                 </div>
             </td>
             <td className="sp1_price_quotation_td px-2">
+                <div className="d-flex justify-content-center flex-column">
+                    <Placeholder width="80px" height="13px" />
+                </div>
+            </td>
+            <td className="sp1_price_quotation_td px-2">
                 <div className="d-flex align-items-center">
                     <Placeholder width="80px" height="13px" />
                 </div>

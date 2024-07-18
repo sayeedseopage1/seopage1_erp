@@ -2,6 +2,7 @@ import React, { useEffect } from "react";
 import { IoAddSharp } from "react-icons/io5";
 import Swal from "sweetalert2";
 import dayjs from "dayjs";
+import { toast } from "react-toastify";
 
 // Components - Global - Styled Components
 import { Flex } from "../../../../global/styled-component/Flex";
@@ -14,12 +15,16 @@ import RefreshButton from "../components/Shared/RefreshButton";
 import { AccountListTableColumns } from "../components/Table/AccountListTableColumns";
 import DataTable from "../components/Table/DataTable";
 
-// Dummy Data
-import { AccountListDummyData } from "../constant";
 
 // Modal
 import CreatePlatformAccountModal from "../components/Modal/CreatePlatformAccountModal";
-import { usePlatformAccountsQuery } from "../../../../services/api/platformAccountApiSlice";
+
+// API
+import {
+    useGetAllPlatformAccountsQuery,
+    useUpdateStatusPlatformAccountMutation,
+} from "../../../../services/api/platformAccountApiSlice";
+
 
 const platformAccountState = {
     inputs: {
@@ -44,19 +49,15 @@ const AccountLists = () => {
     const [platformAccountInputs, setPlatformAccountInputs] = React.useState(
         platformAccountState.inputs
     );
-    
+
     // Modal State
     const [isPlatformAccountModalOpen, setIsPlatformAccountModalOpen] =
         React.useState(false);
 
-    const  {
-        data,
-        isLoading,
-        isFetching,
-        refetch,
-    } = usePlatformAccountsQuery("")
+    const { data, isLoading, isFetching, refetch } =
+        useGetAllPlatformAccountsQuery("");
 
-    const  platformAccounts = data?.data || []
+    const platformAccounts = data?.data || [];
     const isPlatformAccountLoading = isLoading || isFetching;
 
     // Handle Modal Open and Close Function with Action Function as Parameter (if needed)
@@ -81,13 +82,21 @@ const AccountLists = () => {
         },
         disablePlatformAccount: (data) => {
             showConfirmation({
-                text:  data.is_active ? "Disable" : "Enable",
+                text: data?.status === 1 ? "Disable" : "Enable",
+                data: data,
             });
         },
     };
 
-    const showConfirmation = ({text}) => {
-        let actionText  = `Yes, ${text} it!`
+    // Update Platform Account Mutation
+    const [
+        updateStatusPlatformAccount,
+        { isLoading: isUpdatingPlatformAccount },
+    ] = useUpdateStatusPlatformAccountMutation();
+
+    // Show Confirmation Dialog
+    const showConfirmation = ({ text, data }) => {
+        let actionText = `Yes, ${text} it!`;
         Swal.fire({
             title: "Are you sure?",
             text: `You want to ${text} this account.`,
@@ -98,24 +107,29 @@ const AccountLists = () => {
             confirmButtonText: actionText,
             preConfirm: () => {
                 Swal.showLoading();
-                return handleConfirm()
-            }
-        })
+                return handleConfirm(data);
+            },
+        });
     };
 
-    const handleConfirm = async () => {
-        return new Promise((resolve) => {
-            setTimeout(() => {
-                resolve(true);
-                Swal.fire({
-                    icon: "success",
-                    title: "Account has been disabled",
-                    showConfirmButton: false,
-                    timer: 1500,
-                });
-            }, 1500);
-        });
-    }
+    // Handle Status Update
+    const handleConfirm = async (data) => {
+        try {
+            const payload = {
+                id: data.id,
+                status: data.status === 1 ? 0 : 1,
+            };
+            const response = await updateStatusPlatformAccount(
+                payload
+            ).unwrap();
+            if (response.status === "success") {
+                toast.success(response.message);
+            }
+        } catch (error) {
+            console.log("error", error);
+            toast.error("Something went wrong. Please try again later.");
+        }
+    };
 
     return (
         <React.Fragment>
@@ -151,15 +165,7 @@ const AccountLists = () => {
                         </Flex>
                         <DataTable
                             tableName="accountLists"
-                            tableData={{
-                                data: platformAccounts,
-                                from: 1,
-                                to: 10,
-                                total: 10,
-                                last_page: 1,
-                                pageSize: 10,
-                                pageIndex: 0,
-                            }}
+                            tableData={platformAccounts}
                             tableColumns={AccountListTableColumns}
                             isLoading={isPlatformAccountLoading}
                             justifyStyleColumn={{
@@ -169,6 +175,7 @@ const AccountLists = () => {
                                 action: "center",
                             }}
                             tableActions={metaAction}
+                            onPageChange={() => {}}
                         />
                     </div>
                 </div>

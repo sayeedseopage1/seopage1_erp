@@ -20,6 +20,7 @@ import AccountLists from "./pages/AccountLists";
 
 // Context
 import PriceQuotationsProvider from "./context/PriceQuotationsProvider";
+import DealStagePriceQuotations from "./pages/DealStagePriceQuotations";
 
 // Content component
 const Content = () => {
@@ -79,11 +80,17 @@ const routes = [
         id: 2,
         containerId: "platformAccountContainer",
         baseUrl: "/account/all-platform-accounts",
-        contextProvider: PriceQuotationsProvider,
+        contextProvider: React.Fragment,
         pageComponent: <AccountLists />,
     },
+    {
+        id: 3,
+        containerId: "priceQuotationForm",
+        baseUrl: "/account/deals",
+        contextProvider: PriceQuotationsProvider,
+        pageComponent: <DealStagePriceQuotations />,
+    },
 ];
-
 
 // Render your routes
 const renderRoutes = () => {
@@ -95,7 +102,7 @@ const renderRoutes = () => {
                     <Provider store={store}>
                         <route.contextProvider>
                             <DndProvider backend={HTML5Backend}>
-                                <BrowserRouter basename={route.baseUrl}>
+                                <BrowserRouter basename={route?.baseUrl}>
                                     <Routes>
                                         <Route
                                             path="/"
@@ -103,7 +110,11 @@ const renderRoutes = () => {
                                             key={route.id}
                                         >
                                             <Route
-                                                path="/"
+                                                path={
+                                                    route.id === 3
+                                                        ? "/:dealId"
+                                                        : "/"
+                                                }
                                                 element={route.pageComponent}
                                                 key={route.id}
                                             />

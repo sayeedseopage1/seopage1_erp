@@ -40,7 +40,7 @@ class PlatformAccountController extends Controller
         }
 
         $validated = $validator->validated();
-        
+
         $validated['added_by'] = Auth::user()->id;
         // return $validated;
 
@@ -58,7 +58,7 @@ class PlatformAccountController extends Controller
         }
     }
 
-    
+
     public function show($id)
     {
         return response()->json([
@@ -69,6 +69,7 @@ class PlatformAccountController extends Controller
 
     public function update(Request $request, $id)
     {
+
         $validated = $request->validate([
             'type' => 'required|numeric',
             'username' => 'required|string',
@@ -86,6 +87,30 @@ class PlatformAccountController extends Controller
             return response()->json([
                 'status' => 200,
                 'message' => "Platform account updated successfully"
+            ]);
+        } catch (\Throwable $th) {
+            return response()->json([
+                'status' => 400,
+                'message' => "Something went wrong!"
+            ]);
+        }
+    }
+
+    public function updateStatus(Request $request)
+    {
+        
+        $validated = $request->validate([
+            'status' => 'required|numeric',
+            "id" => 'required|numeric'
+        ]);
+        
+        try {
+            $platformAccount = PlatformAccount::where('id', $validated['id'])->first();
+            $platformAccount->status = $validated['status'];
+            $platformAccount->save();
+            return response()->json([
+                'status' => 200,
+                'message' => "Platform account status updated successfully"
             ]);
         } catch (\Throwable $th) {
             return response()->json([

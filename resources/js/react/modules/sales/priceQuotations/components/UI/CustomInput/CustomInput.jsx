@@ -9,6 +9,7 @@ import CustomLabel from "../CustomLabel/CustomLabel";
 import "./customInput.css";
 import Switch from "../../../../../../global/Switch";
 import Button from "../../Shared/Button";
+import { Placeholder } from "../../../../../../global/Placeholder";
 
 const CustomInput = ({
     label,
@@ -23,6 +24,7 @@ const CustomInput = ({
     isChild = false,
     errorText,
     onClick,
+    isLoading,
     ...rest
 }) => {
     const notInputTypeUsed = ["date", "button", "percentage", "extra"];
@@ -39,63 +41,110 @@ const CustomInput = ({
                 isRequired={isRequired}
             />
             <Switch>
-                <Switch.Case condition={type === "date"}>
-                    <DatePicker
-                        className="custom_date_picker"
-                        type="date"
-                        id={fieldName}
-                        name={fieldName}
-                        format="DD/MM/YYYY"
-                        placeholder="DD/MM/YYYY"
-                        defaultValue={value}
-                        onChange={(e) => {
-                            onChange({
-                                target: {
-                                    name: fieldName,
-                                    value: e,
-                                },
-                            });
-                        }}
-                    />
+                <Switch.Case condition={isLoading}>
+                    <Placeholder width="100%" height="48px" />
                 </Switch.Case>
-                <Switch.Case condition={type === "button"}>
-                    <div className="d-flex custom_input_button_container">
-                        <Button
-                            onClick={() => {
+                <Switch.Case condition={!isLoading}>
+                    <Switch.Case condition={type === "date"}>
+                        <DatePicker
+                            className="custom_date_picker"
+                            type="date"
+                            id={fieldName}
+                            name={fieldName}
+                            format="DD/MM/YYYY"
+                            placeholder="DD/MM/YYYY"
+                            defaultValue={value}
+                            onChange={(e) => {
                                 onChange({
                                     target: {
                                         name: fieldName,
-                                        value: "Yes",
+                                        value: e,
                                     },
                                 });
                             }}
-                            className={`price_quotation_custom_button custom_input_btn_yes py-2 ${
-                                value === "Yes" ? "yes_active" : ""
-                            }`}
+                        />
+                    </Switch.Case>
+                    <Switch.Case condition={type === "button"}>
+                        <div className="d-flex custom_input_button_container">
+                            <Button
+                                onClick={() => {
+                                    onChange({
+                                        target: {
+                                            name: fieldName,
+                                            value: "Yes",
+                                        },
+                                    });
+                                }}
+                                className={`price_quotation_custom_button custom_input_btn_yes py-2 ${
+                                    value === "Yes" ? "yes_active" : ""
+                                }`}
+                            >
+                                Yes
+                            </Button>
+                            <Button
+                                onClick={() => {
+                                    onChange({
+                                        target: {
+                                            name: fieldName,
+                                            value: "No",
+                                        },
+                                    });
+                                }}
+                                className={`price_quotation_custom_button custom_input_btn_no py-2 ${
+                                    value === "No" ? "no_active" : ""
+                                }`}
+                            >
+                                No
+                            </Button>
+                        </div>
+                    </Switch.Case>
+                    <Switch.Case condition={type === "percentage"}>
+                        <div className="d-flex align-items-center">
+                            <input
+                                className={`form-control w-75 ${className}`}
+                                id={fieldName}
+                                name={fieldName}
+                                value={value}
+                                placeholder={placeholder}
+                                onChange={(e) => {
+                                    onChange({
+                                        target: {
+                                            name: fieldName,
+                                            value: e.target.value,
+                                        },
+                                    });
+                                }}
+                                {...rest}
+                                type="number"
+                            />
+                            <p className="w-25 ml-4 custom_label_child">
+                                Percentage(%)
+                            </p>
+                        </div>
+                    </Switch.Case>
+                    <Switch.Case condition={type === "extra"}>
+                        <form
+                            onSubmit={onClick}
+                            className="d-flex align-items-center"
                         >
-                            Yes
-                        </Button>
-                        <Button
-                            onClick={() => {
-                                onChange({
-                                    target: {
-                                        name: fieldName,
-                                        value: "No",
-                                    },
-                                });
-                            }}
-                            className={`price_quotation_custom_button custom_input_btn_no py-2 ${
-                                value === "No" ? "no_active" : ""
-                            }`}
-                        >
-                            No
-                        </Button>
-                    </div>
-                </Switch.Case>
-                <Switch.Case condition={type === "percentage"}>
-                    <div className="d-flex align-items-center">
+                            <input
+                                className={`form-control w-75 ${className}`}
+                                id={fieldName}
+                                name={fieldName}
+                                value={value}
+                                placeholder={placeholder}
+                                onChange={onChange}
+                                {...rest}
+                                type="number"
+                            />
+                            <button className="price_quotation_custom_button price_quotation_custom_button_primary ml-3 d-flex align-items-center">
+                                <span>+</span> Add
+                            </button>
+                        </form>
+                    </Switch.Case>
+                    <Switch.Case condition={!notInputTypeUsed.includes(type)}>
                         <input
-                            className={`form-control w-75 ${className}`}
+                            className={`form-control ${className}`}
                             id={fieldName}
                             name={fieldName}
                             value={value}
@@ -109,53 +158,9 @@ const CustomInput = ({
                                 });
                             }}
                             {...rest}
-                            type="number"
+                            type={type}
                         />
-                        <p className="w-25 ml-4 custom_label_child">
-                            Percentage(%)
-                        </p>
-                    </div>
-                </Switch.Case>
-                <Switch.Case condition={type === "extra"}>
-                    <form
-                        onSubmit={onClick}
-                        className="d-flex align-items-center"
-                    >
-                        <input
-                            className={`form-control w-75 ${className}`}
-                            id={fieldName}
-                            name={fieldName}
-                            value={value}
-                            placeholder={placeholder}
-                            onChange={onChange}
-                            {...rest}
-                            type="number"
-                        />
-                        <button
-                            className="price_quotation_custom_button price_quotation_custom_button_primary ml-3 d-flex align-items-center"
-                        >
-                            <span>+</span> Add
-                        </button>
-                    </form>
-                </Switch.Case>
-                <Switch.Case condition={!notInputTypeUsed.includes(type)}>
-                    <input
-                        className={`form-control ${className}`}
-                        id={fieldName}
-                        name={fieldName}
-                        value={value}
-                        placeholder={placeholder}
-                        onChange={(e) => {
-                            onChange({
-                                target: {
-                                    name: fieldName,
-                                    value: e.target.value,
-                                },
-                            });
-                        }}
-                        {...rest}
-                        type={type}
-                    />
+                    </Switch.Case>
                 </Switch.Case>
             </Switch>
             {isError && (
@@ -184,4 +189,5 @@ CustomInput.propTypes = {
     errorText: PropTypes.string,
     isChild: PropTypes.bool,
     onClick: PropTypes.func,
+    isLoading: PropTypes.bool,
 };

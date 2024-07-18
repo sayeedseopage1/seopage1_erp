@@ -1,19 +1,32 @@
+import { SiFreelancer } from "react-icons/si";
+
+import FiverrImg from "../../../../../../../public/images/fiverr.png";
+import UpworkImg from "../../../../../../../public/images/upwork.png";
+
+
 // Constants for Price Quotations module
 export const PlatformOptions = [
   {
     "id": 1,
     "name": "Freelancer.com",
-    "value": "freelancer.com"
+    "value": "freelancer.com",
+    icon: SiFreelancer,
+    color: "#29B2FE",
+    type: "svg"
   },
   {
     "id": 2,
     "name": "Upwork",
-    "value": "upwork"
+    "value": "upwork",
+    icon: UpworkImg,
+    type: "img"
   },
   {
     "id": 3,
     "name": "Fiverr",
-    "value": "fiverr"
+    "value": "fiverr",
+    icon: FiverrImg,
+    type: "img"
   }
 ]
 
@@ -22,14 +35,19 @@ export const PlatformOptions = [
 export const ProfileTypeOptions = [
   {
     id: 1,
-    name: "Old Profile",
-    value: "old_profile"
+    name: "New Profile",
+    value: "new_profile"
   },
   {
     id: 2,
     name: "Mid Profile",
     value: "mid_profile"
-  }
+  },
+  {
+    id: 3,
+    name: "Old Profile",
+    value: "old_profile"
+  },
 ]
 
 //Speed optimization
@@ -381,7 +399,7 @@ export const QuotationDummyData = [
     deadline_hours: 2
   },
   {
-    id:2,
+    id: 2,
     cms: "Wordpress",
     category: "Setup Domain and Hosting",
     primary_page: 3,
@@ -443,7 +461,7 @@ export const PriceQuotationsInvoiceDummyData = {
 
 
 
-export const QuotationTableLabel={
+export const QuotationTableLabel = {
   cms: "CMS",
   category: "Category",
   primary_page: "Primary Page",
