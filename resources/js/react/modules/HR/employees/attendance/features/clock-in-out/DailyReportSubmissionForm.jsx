@@ -184,7 +184,7 @@ const DailyReportSubmissionForm = ({
                 overlay: {
                     backgroundColor: "rgba(0, 0, 0, 0.6)",
                     margin: "auto auto",
-                    zIndex: 1000000,
+                    zIndex: 9998,
                 },
                 content: {
                     borderRadius: "29px 29px 0px 0px",
@@ -192,7 +192,7 @@ const DailyReportSubmissionForm = ({
                     maxHeight: "95%",
                     margin: "auto auto",
                     padding: "0px",
-                    zIndex: 1000001,
+                    zIndex: 9999,
                     border: "none",
                 },
             }}

@@ -17,7 +17,7 @@ const SubmissionForSinglePage = ({ id, handleChange, value }) => {
                 Enter the page URL for Page #{id}
             </div>
             <InputItem
-                width="100%"
+                width="50%"
                 placeHolder="Provide URL Link.."
                 value={value}
                 onChange={(e) => handleChange(id, e.target.value)}

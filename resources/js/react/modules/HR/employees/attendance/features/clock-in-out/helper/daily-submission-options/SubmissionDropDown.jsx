@@ -1,14 +1,14 @@
-import React, { useEffect } from "react";
-
-import Dropdown from "../../../../../../../../global/Dropdown";
-
+import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { set } from "lodash";
+
 const SubmissionDropDown = ({
     selectedCategoryDropDown,
     setSelectedCategoryDropDown,
 }) => {
-    const [categories, setCategories] = React.useState([]);
+    const [categories, setCategories] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [menuVisible, setMenuVisible] = useState(false);
+
     const fetchCategoryData = async () => {
         try {
             const response = await axios.get(
@@ -20,6 +20,8 @@ const SubmissionDropDown = ({
             }
         } catch (error) {
             console.error("Error fetching data:", error);
+        } finally {
+            setLoading(false);
         }
     };
 
@@ -27,53 +29,85 @@ const SubmissionDropDown = ({
         fetchCategoryData();
     }, []);
 
-    console.log(categories, "categories");
     return (
         <div>
-            <Dropdown>
-                <div>
-                    <label htmlFor="">What did you do on this page </label>
-                    <Dropdown.Toggle
-                        className="portfolio-filter-dd-toggle"
-                        iconSize={20}
-                    >
-                        <span className="singleline-ellipsis">
-                            {selectedCategoryDropDown?.name ?? "Select Here"}
-                        </span>
-                    </Dropdown.Toggle>
+            <label htmlFor="categoryDropdown">
+                What did you do on this page
+            </label>
+            <div
+                id="categoryDropdown"
+                style={dropdownStyle}
+                onClick={() => setMenuVisible(!menuVisible)}
+            >
+                <span>{selectedCategoryDropDown?.name ?? "Select Here"}</span>
+            </div>
+            {menuVisible && (
+                <div style={menuStyle}>
+                    {loading ? (
+                        <div style={loadingStyle}>Loading...</div>
+                    ) : (
+                        categories?.map((option) => (
+                            <div
+                                key={option.id}
+                                style={
+                                    selectedCategoryDropDown?.id === option.id
+                                        ? selectedItemStyle
+                                        : itemStyle
+                                }
+                                onClick={() => {
+                                    setSelectedCategoryDropDown(option);
+                                    setMenuVisible(false);
+                                }}
+                            >
+                                {option.name}
+                                {selectedCategoryDropDown?.id === option.id && (
+                                    <i className="fa-solid fa-check" />
+                                )}
+                            </div>
+                        ))
+                    )}
                 </div>
-
-                <Dropdown.Menu
-                    placement="bottom"
-                    className="portfolio_dropdown_menu"
-                >
-                    <div className="portfolio-filter-dd-menu">
-                        {_.map(categories, (option) => (
-                            <abbr key={option.id} title={option.name}>
-                                <Dropdown.Item
-                                    className="d-flex items-center justify-content-between"
-                                    onClick={() => {
-                                        setSelectedCategoryDropDown(option);
-                                    }}
-                                >
-                                    <span
-                                        className="singleline-ellipsis"
-                                        style={{ width: "90%" }}
-                                    >
-                                        {option.name}
-                                    </span>
-                                    {selectedCategoryDropDown?.id ===
-                                        option.id && (
-                                        <i className="fa-solid fa-check " />
-                                    )}
-                                </Dropdown.Item>
-                            </abbr>
-                        ))}
-                    </div>
-                </Dropdown.Menu>
-            </Dropdown>
+            )}
         </div>
     );
 };
 
 export default SubmissionDropDown;
+
+const dropdownStyle = {
+    width: "530ppx",
+    padding: "10px",
+    border: "1px solid #ccc",
+    backgroundColor: "#D8EDFC",
+    cursor: "pointer",
+    position: "relative",
+};
+
+const menuStyle = {
+    width: "530px",
+    border: "1px solid #ccc",
+    borderRadius: "4px",
+    backgroundColor: "#fff",
+    maxHeight: "200px",
+    overflowY: "auto",
+    zIndex: 1000,
+    position: "absolute",
+};
+
+const itemStyle = {
+    padding: "10px",
+    cursor: "pointer",
+    backgroundColor: "#D8EDFC",
+    borderBottom: "1px solid #ccc",
+};
+
+const selectedItemStyle = {
+    ...itemStyle,
+    backgroundColor: "#A5D8FF",
+};
+
+const loadingStyle = {
+    padding: "10px",
+    textAlign: "center",
+    backgroundColor: "#D8EDFC",
+};
