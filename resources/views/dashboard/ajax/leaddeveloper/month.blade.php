@@ -11,7 +11,7 @@
                             {{ $number_of_tasks_received_lead }}
                         </a>
                     </p>
-                     @include('dashboard.ajax.leaddeveloper.modals.number_of_task_received')
+                    @include('dashboard.ajax.leaddeveloper.modals.number_of_task_received')
                 </div>
             </div>
             <div class="d-block">
@@ -48,11 +48,12 @@
                     Manager</h5>
                 <div class="d-flex flex-wrap">
                     <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
-                        <a href="#" data-toggle="modal" data-target="#">
+                        <a href="#" data-toggle="modal"
+                            data-target="#first_attempt_approve_task_in_this_month_lead{{ count($first_attempt_approve_task_in_this_month_lead_data) }}">
                             {{ $first_attempt_approve_task_in_this_month_lead }}
                         </a>
                     </p>
-                     @include('dashboard.ajax.leaddeveloper.modals.first_attempt_approve_task_in_this_month_lead')
+                    @include('dashboard.ajax.leaddeveloper.modals.first_attempt_approve_task_in_this_month_lead')
                 </div>
             </div>
             <div class="d-block">
