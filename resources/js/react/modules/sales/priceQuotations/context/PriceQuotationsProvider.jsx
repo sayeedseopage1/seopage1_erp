@@ -8,6 +8,7 @@ import {
     useGetCurrenciesQuery,
 } from "../../../../services/api/priceQuotationsApiSlice";
 import { useGetAllPlatformAccountsQuery } from "../../../../services/api/platformAccountApiSlice";
+import { stat } from "fs";
 
 export const priceQuotationsState = {
     inputs: {
@@ -23,9 +24,10 @@ export const priceQuotationsState = {
         other_works_data: [],
         client: {},
         deal_stage_id: {},
-        client_currency: {},
-        deadline: null,
-        platform_account: {},
+        currency_id: {},
+        deadline_type: null,
+        no_of_days : null,
+        platform_account_id: {},
         step: "submit-price-quotation",
     },
     validation: {
@@ -38,9 +40,9 @@ export const priceQuotationsState = {
         major_works: false,
         other_works: false,
         risk_factor: false,
-        client_currency: false,
-        deadline: false,
-        platform_account: false,
+        currency_id: false,
+        deadline_type: false,
+        platform_account_id: false,
         is_submitting: false,
     },
 };
@@ -50,7 +52,6 @@ export const PriceQuotationsContext = createContext({});
 const PriceQuotationsProvider = ({ children }) => {
     const [cmsData, setCMSData] = useState([]);
     const [currenciesData, setCurrenciesData] = useState([]);
-    const [accountsData, setAccountsData] = useState([]);
 
     const [priceQuotationsInputs, setPriceQuotationsInputs] = useState(
         priceQuotationsState.inputs
@@ -67,9 +68,6 @@ const PriceQuotationsProvider = ({ children }) => {
         useGetCurrenciesQuery("", {
             refetchOnMountOrArgChange: true,
         });
-
-    const { data: accountsResponse, isLoading: isAccountsLoading } =
-        useGetAllPlatformAccountsQuery();
 
     useEffect(() => {
         if (!isCurrenciesLoading && currenciesResponse?.data?.length >0) {
@@ -92,16 +90,8 @@ const PriceQuotationsProvider = ({ children }) => {
             setCMSData(formatCMS);
         }
 
-        if (!isAccountsLoading && accountsResponse?.data?.data?.length > 0) {
-            const formatAccounts = accountsResponse?.data?.data?.map((account) => {
-                return {
-                    ...account,
-                    name: account?.username,
-                };
-            });
-            setAccountsData(formatAccounts);
-        }
-    }, [isCurrenciesLoading, isCMSLoading, isAccountsLoading]);
+
+    }, [isCurrenciesLoading, isCMSLoading]);
 
     // Value
     const PriceQuotationsValue = useMemo(() => {
@@ -110,8 +100,6 @@ const PriceQuotationsProvider = ({ children }) => {
             isCMSLoading,
             currenciesData,
             isCurrenciesLoading,
-            accountsData,
-            isAccountsLoading,
             priceQuotationsInputs,
             setPriceQuotationsInputs,
         };

@@ -28,20 +28,15 @@ import usePriceQuotations from "../../../hooks/usePriceQuotations";
 
 const SubmitPriceQuotation = ({
     handleInputChange,
+    isDealStagePage,
     priceQuotationsInputs,
     setPriceQuotationsInputs,
     extraInfoInputsValidation,
     setExtraInfoInputsValidation,
     priceQuotationsInputsValidation,
 }) => {
-    const {
-        cmsData,
-        isCMSLoading,
-        currenciesData,
-        isCurrenciesLoading,
-        accountsData,
-        isAccountsLoading,
-    } = useContext(PriceQuotationsContext);
+    const { cmsData, isCMSLoading, currenciesData, isCurrenciesLoading } =
+        useContext(PriceQuotationsContext);
     const { deadline } = PriceQuotationsDataInputOptions;
     const {
         clientsData,
@@ -50,6 +45,8 @@ const SubmitPriceQuotation = ({
         isClientsLoading,
         isDealLoading,
         isProjectNichesLoading,
+        accountsData,
+        isAccountsLoading,
     } = usePriceQuotations(priceQuotationsInputs);
 
     // Extra Handler for generating title with the number of words or logo or pages etc
@@ -77,6 +74,7 @@ const SubmitPriceQuotation = ({
             value: inputValue,
             parent: parent,
             status: true,
+            parent_value: parent?.value,
         };
         setPriceQuotationsInputs({
             ...priceQuotationsInputs,
@@ -112,6 +110,7 @@ const SubmitPriceQuotation = ({
                     filedName="client"
                     label="1. Client Name"
                     data={clientsData}
+                    isDisableUse={isDealStagePage}
                     setSelected={handleInputChange}
                     placeholder="Select Client Name"
                     errorText="Client Name is required"
@@ -125,22 +124,24 @@ const SubmitPriceQuotation = ({
                 <CustomDropDown
                     isRequired
                     isSearchBoxUse
-                    filedName="deal"
+                    filedName="deal_stage_id"
                     label="2. Deal Name"
-                    isDisableUse={!priceQuotationsInputs?.client?.name}
+                    isDisableUse={
+                        !priceQuotationsInputs?.client?.name || isDealStagePage
+                    }
                     data={dealsData}
                     placeholder="Select Deal Name"
                     isFullDropDownLoading={isDealLoading}
                     setSelected={handleInputChange}
                     errorText="Deal Name is required"
-                    selected={priceQuotationsInputs?.deal}
+                    selected={priceQuotationsInputs?.deal_stage_id}
                     disabledTitle={
                         !priceQuotationsInputs?.client?.name &&
                         "Please select Client Name first"
                     }
                     isError={
                         priceQuotationsInputsValidation?.is_submitting &&
-                        priceQuotationsInputsValidation?.deal
+                        priceQuotationsInputsValidation?.deal_stage_id
                     }
                 />
             </ContentWrapper>
@@ -149,32 +150,32 @@ const SubmitPriceQuotation = ({
                     isRequired
                     label="3. CMS"
                     isSearchBoxUse
-                    filedName="cms"
+                    filedName="project_cms_id"
                     placeholder="Select CMS"
                     data={cmsData}
                     errorText="CMS is required"
                     isFullDropDownLoading={isCMSLoading}
                     setSelected={handleInputChange}
-                    selected={priceQuotationsInputs?.cms}
+                    selected={priceQuotationsInputs?.project_cms_id}
                     isError={
                         priceQuotationsInputsValidation?.is_submitting &&
-                        priceQuotationsInputsValidation?.cms
+                        priceQuotationsInputsValidation?.project_cms_id
                     }
                 />
                 <CustomDropDown
                     data={projectNichesData}
                     isRequired
                     label="4. Category"
-                    filedName="category"
+                    filedName="project_niche_id"
                     placeholder="Select Category"
                     errorText="Category is required"
                     isSearchBoxUse
                     setSelected={handleInputChange}
                     isFullDropDownLoading={isProjectNichesLoading}
-                    selected={priceQuotationsInputs?.category}
+                    selected={priceQuotationsInputs?.project_niche_id}
                     isError={
                         priceQuotationsInputsValidation?.is_submitting &&
-                        priceQuotationsInputsValidation?.category
+                        priceQuotationsInputsValidation?.project_niche_id
                     }
                 />
             </ContentWrapper>
@@ -182,29 +183,29 @@ const SubmitPriceQuotation = ({
                 <CustomInput
                     isRequired
                     type="number"
-                    fieldName="primary_page"
+                    fieldName="no_of_primary_pages"
                     onChange={handleInputChange}
                     errorText="Primary pages is required"
                     label="5. Number of primary pages required"
-                    value={priceQuotationsInputs?.primary_page}
+                    value={priceQuotationsInputs?.no_of_primary_pages}
                     placeholder="Enter Number of Primary Pages"
                     isError={
                         priceQuotationsInputsValidation?.is_submitting &&
-                        priceQuotationsInputsValidation["primary_page"]
+                        priceQuotationsInputsValidation["no_of_primary_pages"]
                     }
                 />
                 <CustomInput
                     isRequired
                     type="number"
-                    fieldName="secondary_page"
+                    fieldName="no_of_secondary_pages"
                     onChange={handleInputChange}
                     errorText="Secondary pages is required"
                     label="6. Number of secondary pages required"
-                    value={priceQuotationsInputs?.secondary_page}
+                    value={priceQuotationsInputs?.no_of_secondary_pages}
                     placeholder="Enter Number of Secondary Pages"
                     isError={
                         priceQuotationsInputsValidation?.is_submitting &&
-                        priceQuotationsInputsValidation["secondary_page"]
+                        priceQuotationsInputsValidation["no_of_secondary_pages"]
                     }
                 />
             </ContentWrapper>
@@ -228,16 +229,16 @@ const SubmitPriceQuotation = ({
                                 isRequired
                                 type="number"
                                 onChange={handleInputChange}
-                                fieldName="number_of_functionalities"
+                                fieldName="no_of_major_functionalities"
                                 errorText="Number of Functionalities Required"
                                 label="i. Number of Functionalities Requirements"
                                 value={
-                                    priceQuotationsInputs?.number_of_functionalities
+                                    priceQuotationsInputs?.no_of_major_functionalities
                                 }
                                 placeholder="Enter Number of Functionalities"
                                 isError={
                                     priceQuotationsInputsValidation?.is_submitting &&
-                                    priceQuotationsInputsValidation?.number_of_functionalities
+                                    priceQuotationsInputsValidation?.no_of_major_functionalities
                                 }
                             />
                         </Switch.Case>
@@ -260,15 +261,15 @@ const SubmitPriceQuotation = ({
                 <div className="d-flex flex-column">
                     <CustomInput
                         type="button"
-                        fieldName="risk_factors"
+                        fieldName="risk_factor"
                         onChange={handleInputChange}
-                        value={priceQuotationsInputs?.risk_factors}
+                        value={priceQuotationsInputs?.risk_factor}
                         label="9. Is there any risk factors involved? "
                     />
                     <Switch>
                         <Switch.Case
                             condition={
-                                priceQuotationsInputs?.risk_factors === "Yes"
+                                priceQuotationsInputs?.risk_factor === "Yes"
                             }
                         >
                             <CustomInput
@@ -290,17 +291,17 @@ const SubmitPriceQuotation = ({
                 <CustomDropDown
                     isRequired={true}
                     label="10. Clients Currency"
-                    filedName={"client_currency"}
+                    filedName={"currency_id"}
                     placeholder="Select a Currency"
                     setSelected={handleInputChange}
                     data={currenciesData}
                     isSearchBoxUse
                     errorText="Client Currency is required"
                     isFullDropDownLoading={isCurrenciesLoading}
-                    selected={priceQuotationsInputs?.client_currency}
+                    selected={priceQuotationsInputs?.currency_id}
                     isError={
                         priceQuotationsInputsValidation?.is_submitting &&
-                        priceQuotationsInputsValidation?.client_currency
+                        priceQuotationsInputsValidation?.currency_id
                     }
                 />
             </ContentWrapper>
@@ -309,28 +310,29 @@ const SubmitPriceQuotation = ({
                     <CustomDropDown
                         data={deadline}
                         isRequired={true}
-                        filedName="deadline"
+                        filedName="deadline_type"
                         label="11. Deadline"
                         placeholder="Select Deadline"
                         setSelected={handleInputChange}
                         errorText="Deadline is required"
-                        selected={priceQuotationsInputs?.deadline}
+                        selected={priceQuotationsInputs?.deadline_type}
                         isError={
                             priceQuotationsInputsValidation?.is_submitting &&
-                            priceQuotationsInputsValidation?.deadline
+                            priceQuotationsInputsValidation?.deadline_type
                         }
                     />
                     <Switch>
                         <Switch.Case
                             condition={
-                                priceQuotationsInputs?.deadline?.value === "fixed"
+                                priceQuotationsInputs?.deadline_type?.value ===
+                                "fixed"
                             }
                         >
                             <CustomInput
                                 isChild
                                 type="number"
                                 label="i. Number of days required"
-                                fieldName="no_of_days "
+                                fieldName="no_of_days"
                                 onChange={handleInputChange}
                                 errorText="Number of days required"
                                 value={priceQuotationsInputs?.no_of_days}
@@ -344,21 +346,22 @@ const SubmitPriceQuotation = ({
                 </div>
                 <CustomDropDown
                     isRequired={true}
-                    filedName="platform_account"
+                    filedName="platform_account_id"
                     label="12. Freelancer account"
-                    data={accountsData}
+                    data={accountsData?.filter(
+                        (account) => account?.status === 1
+                    )}
                     setSelected={handleInputChange}
                     placeholder="Select Freelancer Account"
                     errorText="Freelancer Account is required"
                     isFullDropDownLoading={isAccountsLoading}
-                    selected={priceQuotationsInputs?.platform_account}
+                    selected={priceQuotationsInputs?.platform_account_id}
                     isError={
                         priceQuotationsInputsValidation?.is_submitting &&
-                        priceQuotationsInputsValidation?.platform_account
+                        priceQuotationsInputsValidation?.platform_account_id
                     }
                 />
             </ContentWrapper>
-            <ContentWrapper className="mb-3"></ContentWrapper>
         </React.Fragment>
     );
 };
@@ -367,6 +370,7 @@ export default SubmitPriceQuotation;
 
 SubmitPriceQuotation.propTypes = {
     handleInputChange: PropTypes.func.isRequired,
+    isDealStagePage: PropTypes.bool.isRequired,
     priceQuotationsInputs: PropTypes.object.isRequired,
     setPriceQuotationsInputs: PropTypes.func.isRequired,
     extraInfoInputsValidation: PropTypes.object.isRequired,

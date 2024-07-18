@@ -183,8 +183,7 @@ const CustomDropDown = ({
                                         </div>
                                     )}
                                     <div className="sp1_filter--users">
-                                        {filteredOptions
-                                            ?.slice(0, 100)
+                                        {filteredOptions?.slice(0, 100)
                                             ?.map((item) => (
                                                 <Dropdown.Item
                                                     key={item.id}

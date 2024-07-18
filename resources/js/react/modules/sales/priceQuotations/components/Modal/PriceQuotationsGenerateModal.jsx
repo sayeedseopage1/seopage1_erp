@@ -1,6 +1,7 @@
 import React, { useEffect } from "react";
 import PropTypes from "prop-types";
 import { toast } from "react-toastify";
+import { usePDF } from "react-to-pdf";
 
 import _ from "lodash";
 
@@ -30,14 +31,21 @@ import {
     PriceQuotationsInvoiceDummyData,
     QuotationDummyData,
 } from "../../constant";
-import { usePDF } from "react-to-pdf";
+
+// Context
 import { priceQuotationsState } from "../../context/PriceQuotationsProvider";
+
+// Hooks
 import usePriceQuotations from "../../hooks/usePriceQuotations";
+
+// Helper
+import { formatPriceQuotationsForPayload } from "../../helper/formatData";
 
 const PriceQuotationsGenerateModal = ({
     isModalOpen,
     closeModal,
     modalTitle,
+    isDealStagePage = false,
     priceQuotationsInputs,
     setPriceQuotationsInputs,
 }) => {
@@ -88,9 +96,9 @@ const PriceQuotationsGenerateModal = ({
                     is_submitting: false,
                 });
             } else if (name === "client") {
-                updatedInputs.deal = {};
+                updatedInputs.deal_stage_id = {};
                 updatedInputs[name] = value;
-            } else if (name === "major_works" || name === "risk_factors") {
+            } else if (name === "major_works" || name === "risk_factor") {
                 updatedInputs[name] = value;
                 if (value === "NO") {
                     if (name === "major_works") {
@@ -137,23 +145,29 @@ const PriceQuotationsGenerateModal = ({
     const handleSubmitPriceQuotations = async () => {
         const {
             major_works,
-            risk_factors,
+            risk_factor,
             other_works,
             other_works_data,
-            number_of_functionalities,
+            no_of_major_functionalities,
             risk_percentage,
+            no_of_days,
             ...formData
         } = priceQuotationsInputs;
         const payload = {
             ...formData,
         };
 
-        if (major_works === "Yes" && number_of_functionalities === null) {
-            payload.number_of_functionalities = null;
+        if (major_works === "Yes" && no_of_major_functionalities === null) {
+            payload.no_of_major_functionalities = null;
         }
-        if (risk_factors === "Yes" && risk_percentage === null) {
+        if (risk_factor === "Yes" && risk_percentage === null) {
             payload.risk_percentage = null;
         }
+
+        if (formData?.deadline_type?.name === "Fixed" && no_of_days === null) {
+            payload.no_of_days = null;
+        }
+
         const isEmpty = isStateAllHaveValue(payload);
         if (isEmpty) {
             const validation = markEmptyFieldsValidation(payload);
@@ -175,6 +189,10 @@ const PriceQuotationsGenerateModal = ({
         }
 
         try {
+            const payload = formatPriceQuotationsForPayload(
+                priceQuotationsInputs
+            );
+
             setIsLoading(true);
             const res = await dummyPromise();
             if (res.status === 200) {
@@ -214,7 +232,7 @@ const PriceQuotationsGenerateModal = ({
                 other_works: validateOtherWorks(priceQuotationsInputs),
                 other_works_data: false,
                 risk_percentage:
-                    priceQuotationsInputs?.risk_factors === "Yes" &&
+                    priceQuotationsInputs?.risk_factor === "Yes" &&
                     !priceQuotationsInputs?.risk_percentage,
                 number_of_functionalities:
                     priceQuotationsInputs?.major_works === "Yes" &&
@@ -295,6 +313,7 @@ const PriceQuotationsGenerateModal = ({
                     >
                         <SubmitPriceQuotation
                             handleInputChange={handleInputChange}
+                            isDealStagePage={isDealStagePage}
                             priceQuotationsInputs={priceQuotationsInputs}
                             setPriceQuotationsInputs={setPriceQuotationsInputs}
                             extraInfoInputsValidation={
@@ -365,6 +384,7 @@ PriceQuotationsGenerateModal.propTypes = {
     isModalOpen: PropTypes.bool,
     closeModal: PropTypes.func,
     modalTitle: PropTypes.string,
+    isDealStagePage: PropTypes.bool,
     priceQuotationsInputs: PropTypes.object,
     setPriceQuotationsInputs: PropTypes.func,
 };

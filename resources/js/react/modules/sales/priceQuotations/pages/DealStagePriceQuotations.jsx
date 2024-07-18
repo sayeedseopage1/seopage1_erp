@@ -18,8 +18,6 @@ const DealStagePriceQuotations = () => {
         React.useState(false);
 
     const pathName = window?.location?.pathname?.split("deals/")?.pop();
-    let [searchParams, setSearchParams] = useSearchParams();
-
 
     /**
      * Toggles the state of a modal and optionally executes an additional action.
@@ -34,6 +32,30 @@ const DealStagePriceQuotations = () => {
             action();
         }
     };
+
+    const container = document.getElementById("priceQuotationForm");
+
+    useEffect(() => {
+        if (container) {
+            const dealName = container.getAttribute("data-deal_name");
+            const clientName = container.getAttribute("data-client_name");
+
+            const clientData = {
+                id: 1,
+                name: clientName,
+            };
+
+            const dealStageData = {
+                id: pathName,
+                name: dealName,
+            };
+            setPriceQuotationsInputs((prevState) => ({
+                ...prevState,
+                client: clientData,
+                deal_stage_id: dealStageData,
+            }));
+        }
+    }, []);
 
     const handleModalTitle = () => {
         const titleList = {
@@ -66,6 +88,7 @@ const DealStagePriceQuotations = () => {
                     modalTitle={handleModalTitle()}
                     priceQuotationsInputs={priceQuotationsInputs}
                     setPriceQuotationsInputs={setPriceQuotationsInputs}
+                    isDealStagePage
                 />
             )}
         </>

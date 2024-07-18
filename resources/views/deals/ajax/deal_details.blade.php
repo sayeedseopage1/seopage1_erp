@@ -896,7 +896,7 @@
                                 {{-- <div class="text-center">
                                     <a class="btn btn-success w-40" onclick="changeUrl()">Generate Price Quotation</a>
                                 </div> --}}
-                                <div id="priceQuotationForm"></div>
+                                <div id="priceQuotationForm" data-deal_name="{{$deal->project_name}}" data-client_name="{{$deal->client_username}}"></div>
                             @else
                                 N\A
                             @endif
