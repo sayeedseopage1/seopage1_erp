@@ -77,6 +77,9 @@ trait LeadDashboard
 
             $this->username_lead = auth()->user()->name;
 
+            $taskHistoryWithDateAndId = TaskHistory::whereBetween('created_at', [$startDate, $endDate])
+                ->where('user_id', auth()->id());
+
             $taskWithId = Task::whereRelation('taskUsers', 'user_id', auth()->id())->whereNull('subtask_id');
 
             $taskWithStartEndDateWithId = clone $taskWithId;
@@ -87,14 +90,15 @@ trait LeadDashboard
 
             $taskWithStartEndDateWithIdWithConfirm->where('board_column_id', 4);
 
-            $leadDevNumberOfApprovedTaskByClientInFirstAttempt = clone $taskWithStartEndDateWithIdWithConfirm;
+
+            $leadDevNumberOfApprovedTaskByClientInFirstAttempt = clone $taskHistoryWithDateAndId;
 
             [
                 $this->number_of_approved_tasks_on_1st_attempt_by_client,
                 $this->number_of_approved_tasks_on_1st_attempt_by_client_data,
             ] = $this->leadDevNumberOfApprovedTaskByClientInFirstAttempt($leadDevNumberOfApprovedTaskByClientInFirstAttempt);
 
-            $leadDevAvgNumberOfAttemptsNeededForApprovalByClient = clone $taskWithStartEndDateWithIdWithConfirm;
+            $leadDevAvgNumberOfAttemptsNeededForApprovalByClient = clone $taskHistoryWithDateAndId;
             [
                 $this->avg_number_of_attempts_needed_for_approval_by_client,
                 $this->total_number_of_attempts_needed_for_approval_by_client,
@@ -108,14 +112,14 @@ trait LeadDashboard
             ] = $this->leadNumberOfTasksReceived($leadNumberOfTasksReceived);
 
 
-            $leadNumberOfSubmittedTasks = clone $taskWithStartEndDateWithId;
+            $leadNumberOfSubmittedTasks = clone $taskHistoryWithDateAndId;
             [
                 $this->submit_number_of_tasks_in_this_month_lead,
                 $this->submit_number_of_tasks_in_this_month_lead_data
             ] = $this->leadNumberOfSubmittedTasks($leadNumberOfSubmittedTasks);
 
 
-            $leadNumberOfApprovedTasksOn1stAttemptByProjectManager = clone $taskWithStartEndDateWithId;
+            $leadNumberOfApprovedTasksOn1stAttemptByProjectManager = clone $taskHistoryWithDateAndId;
             [
                 $this->average_submission_approval_by_pm_lead,
                 $this->submission_approval_by_pm_lead,
@@ -125,7 +129,7 @@ trait LeadDashboard
             ] = $this->leadNumberOfApprovedTasksOn1stAttemptAndAvgByProjectManager($leadNumberOfApprovedTasksOn1stAttemptByProjectManager);
 
 
-            $leadAverageTaskSubmissionTime = clone $taskWithStartEndDateWithId;
+            $leadAverageTaskSubmissionTime = clone $taskHistoryWithDateAndId;
 
             [
                 $this->average_submission_day_in_this_month_lead,
@@ -134,13 +138,13 @@ trait LeadDashboard
 
             //-----------Percentage of tasks where deadline was missed -----------------//
 
-            $leadPercentageOfTasksWhereDeadlineWasMissed = clone $taskWithStartEndDateWithIdWithConfirm;
+            $leadPercentageOfTasksWhereDeadlineWasMissed = clone $taskHistoryWithDateAndId;
             [
                 $this->percentage_of_tasks_deadline_lead,
                 $this->estimate_missed_task_data_lead
             ] = $this->leadPercentageOfTasksWhereDeadlineWasMissed($leadPercentageOfTasksWhereDeadlineWasMissed);
 
-            $leadNumberOfApproval = clone $taskWithStartEndDateWithId;
+            $leadNumberOfApproval = clone $taskHistoryWithDateAndId;
             [
                 $this->number_of_approval,
                 $this->number_of_approval_data,
@@ -211,7 +215,7 @@ trait LeadDashboard
                 $this->total_in_progress_date_range_table_lead
             ] = $this->leadAverageNumberOfInProgressTasks($leadAverageNumberOfInProgressTasks);
 
-            $leadHoursSpentInRevisions = clone $taskWithStartEndDateWithId;
+            $leadHoursSpentInRevisions = clone $taskHistoryWithDateAndId;
             [
                 $this->logged_hours_for_all_submitted,
                 $this->logged_hours_in_tasks_with_revisions,
@@ -221,21 +225,21 @@ trait LeadDashboard
             ] = $this->leadHoursSpentInRevisions($leadHoursSpentInRevisions);
 
 
-            $leadPercentageOfTasksWhereGivenEstimatedTimeWasMissedWithRevision = clone $taskWithStartEndDateWithId;
+            $leadPercentageOfTasksWhereGivenEstimatedTimeWasMissedWithRevision = clone $taskHistoryWithDateAndId;
             [
                 $this->percentage_number_task_cross_estimate_time_lead,
                 $this->percentage_of_tasks_where_given_estimated_time_was_missed_with_revision,
                 $this->percentage_of_tasks_where_given_estimated_time_was_missed_with_revision_data
             ] = $this->leadPercentageOfTasksWhereGivenEstimatedTimeWasMissedWithRevision($leadPercentageOfTasksWhereGivenEstimatedTimeWasMissedWithRevision);
 
-            $leadPercentageOfTasksWhereGivenEstimatedTimeWasMissedWithoutRevisions = clone $taskWithStartEndDateWithId;
+            $leadPercentageOfTasksWhereGivenEstimatedTimeWasMissedWithoutRevisions = clone $taskHistoryWithDateAndId;
             [
                 $this->percentage_of_tasks_where_given_estimated_time_was_missed_without_revision,
                 $this->percentage_of_tasks_where_given_estimated_time_was_missed_without_revision_data
             ] = $this->leadPercentageOfTasksWhereGivenEstimatedTimeWasMissedWithoutRevisions($leadPercentageOfTasksWhereGivenEstimatedTimeWasMissedWithoutRevisions);
 
 
-            $leadPercentageOfTasksWithRevisions = clone $taskWithStartEndDateWithId;
+            $leadPercentageOfTasksWithRevisions = clone $taskHistoryWithDateAndId;
             [
                 $this->lead_task_with_revision_total,
                 $this->lead_task_with_revision,
