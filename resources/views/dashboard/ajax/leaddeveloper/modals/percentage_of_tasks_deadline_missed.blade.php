@@ -6,7 +6,7 @@
             <div class="modal-header">
                 <div class="modal-title">
                     <h4>Number of submitted tasks: __</h4>
-                    <h4>Number of tasks where deadline was missed: {{ $estimate_missed_task_data_lead->count() }}</h4>
+                    <h4>Number of tasks where deadline was missed: {{ count($estimate_missed_task_data_lead) }}</h4>
 
                 </div>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -49,7 +49,7 @@
                                     {{ $row->firstTaskSubmission->created_at }}
                                 </td>
                                 <td>
-                                    {{\Carbon\Carbon::parse($row->firstTaskSubmission->created_at)->diffForHumans($row->due_date) }}
+                                    {{ \Carbon\Carbon::parse($row->firstTaskSubmission->created_at)->diffForHumans($row->due_date) }}
                                 </td>
                             </tr>
                         @endforeach
