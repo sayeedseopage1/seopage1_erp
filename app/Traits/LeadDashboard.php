@@ -265,13 +265,13 @@ trait LeadDashboard
 
             // $devId = Auth::id();
 
-            // $startDate = Carbon::parse(request('startDate'))->format('Y-m-d');
-            // $endDate = Carbon::parse(request('endDate'))->format('Y-m-d');
+            $startDate = Carbon::parse(request('startDate'))->format('Y-m-d');
+            $endDate = Carbon::parse(request('endDate'))->format('Y-m-d');
 
 
 
-            $startDate = Carbon::parse('2024-05-01')->startOfMonth();
-            $endDate = Carbon::parse('2024-05-31')->endOfMonth()->addDays(1);
+            // $startDate = Carbon::parse('2024-05-01')->startOfMonth();
+            // $endDate = Carbon::parse('2024-05-31')->endOfMonth()->addDays(1);
 
             $this->username_lead = auth()->user()->name;
 
