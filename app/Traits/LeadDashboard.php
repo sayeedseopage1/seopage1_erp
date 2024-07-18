@@ -7,15 +7,16 @@ use App\Models\Task;
 use App\Helper\Reply;
 use App\Models\Leave;
 use App\Models\Holiday;
+use App\Models\RoleUser;
 use Carbon\CarbonPeriod;
 use Nette\Utils\DateTime;
 use App\Models\TaskHistory;
+use App\Models\TaskRevision;
 use App\Models\ProjectTimeLog;
 use App\Models\DashboardWidget;
 use App\Models\AttendanceSetting;
 use Illuminate\Support\Facades\DB;
 use App\Models\ProjectTimeLogBreak;
-use App\Models\RoleUser;
 use App\Models\TaskRevisionDispute;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Database\Eloquent\Builder;
@@ -264,13 +265,18 @@ trait LeadDashboard
 
             // $devId = Auth::id();
 
-            $startDate = Carbon::parse(request('startDate'))->format('Y-m-d');
-            $endDate = Carbon::parse(request('endDate'))->addDays(1)->format('Y-m-d');
+            // $startDate = Carbon::parse(request('startDate'))->format('Y-m-d');
+            // $endDate = Carbon::parse(request('endDate'))->format('Y-m-d');
 
-            // $startDate = Carbon::parse('2024-05-01')->startOfMonth();
-            // $endDate = Carbon::parse('2024-05-31')->endOfMonth()->addDays(1);
+
+
+            $startDate = Carbon::parse('2024-05-01')->startOfMonth();
+            $endDate = Carbon::parse('2024-05-31')->endOfMonth()->addDays(1);
 
             $this->username_lead = auth()->user()->name;
+
+            $taskHistoryWithDateAndId = TaskHistory::whereBetween('created_at', [$startDate, $endDate])
+                ->where('user_id', auth()->id());
 
             $taskWithId = Task::whereRelation('taskUsers', 'user_id', auth()->id())->whereNull('subtask_id');
 
@@ -283,14 +289,14 @@ trait LeadDashboard
             $taskWithStartEndDateWithIdWithConfirm->where('board_column_id', 4);
 
 
-            $leadDevNumberOfApprovedTaskByClientInFirstAttempt = clone $taskWithStartEndDateWithIdWithConfirm;
+            $leadDevNumberOfApprovedTaskByClientInFirstAttempt = clone $taskHistoryWithDateAndId;
 
             [
                 $this->number_of_approved_tasks_on_1st_attempt_by_client,
                 $this->number_of_approved_tasks_on_1st_attempt_by_client_data,
             ] = $this->leadDevNumberOfApprovedTaskByClientInFirstAttempt($leadDevNumberOfApprovedTaskByClientInFirstAttempt);
 
-            $leadDevAvgNumberOfAttemptsNeededForApprovalByClient = clone $taskWithStartEndDateWithIdWithConfirm;
+            $leadDevAvgNumberOfAttemptsNeededForApprovalByClient = clone $taskHistoryWithDateAndId;
             [
                 $this->avg_number_of_attempts_needed_for_approval_by_client,
                 $this->total_number_of_attempts_needed_for_approval_by_client,
@@ -304,14 +310,14 @@ trait LeadDashboard
             ] = $this->leadNumberOfTasksReceived($leadNumberOfTasksReceived);
 
 
-            $leadNumberOfSubmittedTasks = clone $taskWithStartEndDateWithId;
+            $leadNumberOfSubmittedTasks = clone $taskHistoryWithDateAndId;
             [
                 $this->submit_number_of_tasks_in_this_month_lead,
                 $this->submit_number_of_tasks_in_this_month_lead_data
             ] = $this->leadNumberOfSubmittedTasks($leadNumberOfSubmittedTasks);
 
 
-            $leadNumberOfApprovedTasksOn1stAttemptByProjectManager = clone $taskWithStartEndDateWithId;
+            $leadNumberOfApprovedTasksOn1stAttemptByProjectManager = clone $taskHistoryWithDateAndId;
             [
                 $this->average_submission_approval_by_pm_lead,
                 $this->submission_approval_by_pm_lead,
@@ -321,7 +327,7 @@ trait LeadDashboard
             ] = $this->leadNumberOfApprovedTasksOn1stAttemptAndAvgByProjectManager($leadNumberOfApprovedTasksOn1stAttemptByProjectManager);
 
 
-            $leadAverageTaskSubmissionTime = clone $taskWithStartEndDateWithId;
+            $leadAverageTaskSubmissionTime = clone $taskHistoryWithDateAndId;
 
             [
                 $this->average_submission_day_in_this_month_lead,
@@ -330,13 +336,13 @@ trait LeadDashboard
 
             //-----------Percentage of tasks where deadline was missed -----------------//
 
-            $leadPercentageOfTasksWhereDeadlineWasMissed = clone $taskWithStartEndDateWithIdWithConfirm;
+            $leadPercentageOfTasksWhereDeadlineWasMissed = clone $taskHistoryWithDateAndId;
             [
                 $this->percentage_of_tasks_deadline_lead,
                 $this->estimate_missed_task_data_lead
             ] = $this->leadPercentageOfTasksWhereDeadlineWasMissed($leadPercentageOfTasksWhereDeadlineWasMissed);
 
-            $leadNumberOfApproval = clone $taskWithStartEndDateWithId;
+            $leadNumberOfApproval = clone $taskHistoryWithDateAndId;
             [
                 $this->number_of_approval,
                 $this->number_of_approval_data,
@@ -407,7 +413,7 @@ trait LeadDashboard
                 $this->total_in_progress_date_range_table_lead
             ] = $this->leadAverageNumberOfInProgressTasks($leadAverageNumberOfInProgressTasks);
 
-            $leadHoursSpentInRevisions = clone $taskWithStartEndDateWithId;
+            $leadHoursSpentInRevisions = clone $taskHistoryWithDateAndId;
             [
                 $this->logged_hours_for_all_submitted,
                 $this->logged_hours_in_tasks_with_revisions,
@@ -417,21 +423,21 @@ trait LeadDashboard
             ] = $this->leadHoursSpentInRevisions($leadHoursSpentInRevisions);
 
 
-            $leadPercentageOfTasksWhereGivenEstimatedTimeWasMissedWithRevision = clone $taskWithStartEndDateWithId;
+            $leadPercentageOfTasksWhereGivenEstimatedTimeWasMissedWithRevision = clone $taskHistoryWithDateAndId;
             [
                 $this->percentage_number_task_cross_estimate_time_lead,
                 $this->percentage_of_tasks_where_given_estimated_time_was_missed_with_revision,
                 $this->percentage_of_tasks_where_given_estimated_time_was_missed_with_revision_data
             ] = $this->leadPercentageOfTasksWhereGivenEstimatedTimeWasMissedWithRevision($leadPercentageOfTasksWhereGivenEstimatedTimeWasMissedWithRevision);
 
-            $leadPercentageOfTasksWhereGivenEstimatedTimeWasMissedWithoutRevisions = clone $taskWithStartEndDateWithId;
+            $leadPercentageOfTasksWhereGivenEstimatedTimeWasMissedWithoutRevisions = clone $taskHistoryWithDateAndId;
             [
                 $this->percentage_of_tasks_where_given_estimated_time_was_missed_without_revision,
                 $this->percentage_of_tasks_where_given_estimated_time_was_missed_without_revision_data
             ] = $this->leadPercentageOfTasksWhereGivenEstimatedTimeWasMissedWithoutRevisions($leadPercentageOfTasksWhereGivenEstimatedTimeWasMissedWithoutRevisions);
 
 
-            $leadPercentageOfTasksWithRevisions = clone $taskWithStartEndDateWithId;
+            $leadPercentageOfTasksWithRevisions = clone $taskHistoryWithDateAndId;
             [
                 $this->lead_task_with_revision_total,
                 $this->lead_task_with_revision,
@@ -475,16 +481,20 @@ trait LeadDashboard
     private function leadNumberOfSubmittedTasks($taskWithStartEndDateWithId)
     {
         $submit_number_of_tasks_lead_dev_data = $taskWithStartEndDateWithId
-            ->select('id', 'heading', 'project_id', 'created_at', 'status', 'start_date', 'board_column_id')
-            ->with(
-                'project.pm:id,name',
-                'project.client:id,name',
-                'project:id,pm_id,client_id',
-                'stat:id,label_color,column_name',
-                'oldestSubTask'
-            )->whereHas('history', function (Builder $query) {
-                $query->where('board_column_id', 6);
+            ->whereHas('task', function ($q) {
+                $q->whereNull('subtask_id');
             })
+            ->where('board_column_id', 6)
+            ->with(
+                'task.stat:id,label_color,column_name',
+                'task.oldestSubTask',
+                'task:id,created_at,due_date,heading,board_column_id,project_id',
+                'task.project:id,pm_id,client_id',
+                'task.project.client:id,name',
+                'task.project.pm:id,name',
+            )
+            ->select('id', 'task_id', 'created_at', 'board_column_id')
+            ->groupBy('task_id')
             ->get();
 
         return [
@@ -493,32 +503,68 @@ trait LeadDashboard
         ];
     }
 
-    private function leadDevNumberOfApprovedTaskByClientInFirstAttempt($taskWithStartEndDateWithIdWithConfirm)
+    private function leadDevNumberOfApprovedTaskByClientInFirstAttempt($taskHistoryWithDateAndId)
     {
 
-        $task_ids = $taskWithStartEndDateWithIdWithConfirm->get()->pluck('id')->toArray();
+        $task_ids = $taskHistoryWithDateAndId->whereHas('task', function ($q) {
+            $q->whereNull('subtask_id');
+        })->where('board_column_id', 6)->get()->pluck('task_id')->toArray();
 
-        $number_of_approved_tasks_on_1st_attempt_by_client_data = $taskWithStartEndDateWithIdWithConfirm
-            ->select('id', 'created_at', 'due_date', 'heading', 'board_column_id', 'project_id')
-            ->doesntHave('revisions')
-            ->orWhere(function ($query) use ($task_ids) {
-                $query->whereIn('id', $task_ids)
-                    ->whereHas('revisions', function (Builder $query) {
-                        $query->where('final_responsible_person', '!=', 'LD')
-                            // ->where('is_accept', 0)
-                            ->where('dispute_between', 'PLR')
-                            ->orWhereRelation('taskRevisionDispute', 'raised_against_percent', '>', 50);
-                    });
-            })
-            ->with(
-                'stat:id,label_color,column_name',
-                'project.pm:id,name',
-                'project.client:id,name',
-                'project:id,pm_id,client_id',
-                'latestTaskSubmission:id,task_id,created_at',
-                'latestTaskApprove:id,task_id,created_at',
-            )
-            ->get();
+
+        $number_of_approved_tasks = Task::with(
+            'stat:id,label_color,column_name',
+            'project.pm:id,name',
+            'project.client:id,name',
+            'project:id,pm_id,client_id',
+            'latestTaskSubmission:id,task_id,created_at',
+            'latestTaskApprove:id,task_id,created_at',
+            'revisions.taskRevisionDispute',
+        )->select('id', 'created_at', 'due_date', 'heading', 'board_column_id', 'project_id')->whereIn('id', $task_ids);
+
+        $task_with_revisions = clone $number_of_approved_tasks;
+
+        $task_with_revisions = $task_with_revisions->has('revisions')->get();
+        $task_id_array = [];
+        $task_id_client_array = [];
+        foreach ($task_with_revisions as $task_with_revision) {
+            $totalRevisionsCount = 0;
+            $isResponsibleCount = 0;
+            $totalClientCount = 0;
+            $clientCount = 0;
+            foreach ($task_with_revision->revisions as $revision) {
+                if ($revision->final_responsible_person == 'PM' && $revision->dispute_between == 'PLR') {
+
+                    $isResponsibleCount++;
+
+                } elseif (
+                    ($revision->dispute_between == 'PLR') &&
+                    $revision?->taskRevisionDispute?->raised_against_percent &&
+                    ($revision?->taskRevisionDispute?->raised_against_percent > 50)
+                ) {
+                    $isResponsibleCount++;
+                }
+                // elseif ($revision->final_responsible_person == 'C' && $revision->dispute_between == 'CPR') {
+                //     $clientCount++;
+                // }
+                if ($revision->dispute_between == 'PLR') {
+                    $totalRevisionsCount++;
+                }
+                // if ($revision->dispute_between == 'CPR') {
+                //     $totalClientCount++;
+                // }
+                if (!$revision->final_responsible_person) {
+                    $totalRevisionsCount--;
+                }
+            }
+            if ($isResponsibleCount != $totalRevisionsCount) {
+                array_push($task_id_array, $task_with_revision->id);
+            }
+            if ($clientCount != $totalClientCount) {
+                array_push($task_id_client_array, $task_with_revision->id);
+            }
+        }
+
+        $number_of_approved_tasks_on_1st_attempt_by_client_data = $number_of_approved_tasks->doesntHave('revisions')->orWhereIn('id', $task_id_array)->get();
 
         return [
             $number_of_approved_tasks_on_1st_attempt_by_client_data->count(),
@@ -526,33 +572,48 @@ trait LeadDashboard
         ];
     }
 
-    private function leadNumberOfApprovedTasksOn1stAttemptAndAvgByProjectManager($taskWithStartEndDateWithId)
+    private function leadNumberOfApprovedTasksOn1stAttemptAndAvgByProjectManager($taskHistoryWithDateAndId)
     {
-        $number_of_approved_tasks_by_project_manager_date = $taskWithStartEndDateWithId
-            ->select('id', 'heading', 'project_id', 'created_at', 'status', 'due_date', 'board_column_id')
+        $number_of_approved_tasks_by_project_manager_date = $taskHistoryWithDateAndId
             ->with(
-                'project.client:id,name',
-                'project:id,pm_id,client_id',
-                'latestTaskSubmission:id,task_id,created_at',
-                'latestTaskApprove:id,task_id,created_at',
-                'stat:id,label_color,column_name',
-            )->withCount([
-                    'revisions as revisions_for_responsible' => function ($q) {
-                        $q->where('final_responsible_person', 'LD')
-                            ->Where('dispute_between', 'PLR')
-                            ->orWhereRelation('taskRevisionDispute', 'raised_against_percent', '>', 50);
-                    }
-                ])
-            ->whereIn('board_column_id', [6, 4])->get();
+                'task.stat:id,label_color,column_name',
+                'task:id,created_at,due_date,heading,board_column_id,project_id',
+                'task.project:id,pm_id,client_id',
+                'task.project.client:id,name',
+                'task.project.pm:id,name',
+                'task.latestTaskSubmission:id,task_id,created_at',
+                'task.latestTaskApprove:id,task_id,created_at',
+            )->whereHas('task', function ($q) {
+                $q->whereNull('subtask_id');
+            })->where('board_column_id', 6)
+            ->whereRelation('task', 'board_column_id', 4)
+            ->groupBy('task_id')
+            ->select('id', 'task_id', 'user_id', 'created_at', 'board_column_id', DB::raw('COUNT(*) as total_submitted'))
+            ->get();
 
-        $number_of_approved_tasks_on_1st_attempt_by_project_manager_date = clone $taskWithStartEndDateWithId;
+        // Dispute
+        $dispute_win_lead_dev = 0;
+        $task_revisions = TaskRevision::with('taskRevisionDispute')->whereIn('task_id', $number_of_approved_tasks_by_project_manager_date->pluck('task_id')->toArray())
+            ->Where('dispute_between', 'PLR')
+            ->get();
 
-        $total_attempts = $number_of_approved_tasks_by_project_manager_date->count() + $number_of_approved_tasks_by_project_manager_date->sum('revisions_for_responsible');
+        foreach ($task_revisions as $task_revision) {
+            if ($task_revision->final_responsible_person == 'FM') {
+                $dispute_win_lead_dev++;
+            } elseif ($task_revision?->taskRevisionDispute?->raised_against_percent && ($task_revision?->taskRevisionDispute?->raised_against_percent < 50)) {
+                $dispute_win_lead_dev++;
+            }
+        }
+        // Dispute
+
+        $number_of_approved_tasks_on_1st_attempt_by_project_manager_date = clone $taskHistoryWithDateAndId;
+
+        $total_attempts = $number_of_approved_tasks_by_project_manager_date->sum('total_submitted') - $dispute_win_lead_dev;
         if ($total_attempts) {
             $average_number_of_attempts_needed = round($total_attempts / $number_of_approved_tasks_by_project_manager_date->count(), 2);
         }
 
-        $number_of_approved_tasks_on_1st_attempt_by_project_manager_date = $number_of_approved_tasks_on_1st_attempt_by_project_manager_date->doesntHave('revisions')->get();
+        $number_of_approved_tasks_on_1st_attempt_by_project_manager_date = $number_of_approved_tasks_on_1st_attempt_by_project_manager_date->doesntHave('revision')->get();
 
         return [
             $average_number_of_attempts_needed ?? 0,
@@ -563,13 +624,14 @@ trait LeadDashboard
         ];
     }
 
-    private function leadDevAvgNumberOfAttemptsNeededForApprovalByClient($taskWithStartEndDateWithIdWithConfirm)
+    private function leadDevAvgNumberOfAttemptsNeededForApprovalByClient($taskHistoryWithDateAndId)
     {
-        $task_ids = $taskWithStartEndDateWithIdWithConfirm->get()->pluck('id')->toArray();
+        $task_ids = $taskHistoryWithDateAndId->whereHas('task', function ($q) {
+            $q->whereNull('subtask_id');
+        })->where('board_column_id', 4)
+            ->get()->pluck('task_id')->toArray();
 
-        $number_of_attempts_needed_for_approval_by_client = $taskWithStartEndDateWithIdWithConfirm
-            ->select('id', 'created_at', 'due_date', 'heading', 'board_column_id', 'project_id')
-            ->doesntHave('revisions')
+        $number_of_attempts_needed_for_approval_by_client = Task::doesntHave('revisions')
             ->orWhere(function ($query) use ($task_ids) {
                 $query->whereIn('id', $task_ids)
                     ->whereHas('revisions', function (Builder $query) {
@@ -602,7 +664,7 @@ trait LeadDashboard
                 'latestTaskApprove:id,task_id,created_at',
                 'latestTaskSubmission:id,task_id,created_at',
                 'taskUser'
-            )->get();
+            )->find($task_ids);
 
         $total_attempts = $number_of_attempts_needed_for_approval_by_client->sum('only_responsible_revisions_count') + $number_of_attempts_needed_for_approval_by_client->count();
         $avg_no_attempts = 0;
@@ -617,25 +679,30 @@ trait LeadDashboard
         ];
     }
 
-    private function leadPercentageOfTasksWithRevisions($taskWithStartEndDateWithId)
+    private function leadPercentageOfTasksWithRevisions($taskHistoryWithDateAndId)
     {
 
-        $number_of_tasks_completed_model = $taskWithStartEndDateWithId
-            ->select('id', 'created_at', 'heading', 'board_column_id', 'project_id')
-            ->with(
-                // 'stat:id,label_color,column_name',
-                // 'project.pm:id,name',
-                'project.client:id,name',
-                'project:id,pm_id,client_id',
-                'revisions:id,task_id,final_responsible_person,dispute_between',
-                'revisions.taskRevisionDispute:id,revision_id,task_id,raised_against_percent',
-                // 'latestTaskSubmission:id,task_id,created_at',
-                // 'latestTaskApprove:id,task_id,created_at',
-            )->whereHas('history', function (Builder $query) {
-                $query->where('board_column_id', 6);
-            })->get();
+        $task_id = $taskHistoryWithDateAndId->whereHas('task', function ($q) {
+            $q->whereNull('subtask_id');
+        })->where('board_column_id', 4)
+            ->get()->pluck('task_id')->toArray();
 
-        $number_of_tasks_with_revision_completed_model = $taskWithStartEndDateWithId
+
+        $allTask = Task::with(
+            'project.client:id,name',
+            'project:id,pm_id,client_id',
+            'revisions:id,task_id,final_responsible_person,dispute_between',
+            'revisions.taskRevisionDispute:id,revision_id,task_id,raised_against_percent',
+        )->whereHas('history', function (Builder $query) {
+            $query->where('board_column_id', 6);
+        })->whereIn('id', $task_id);
+
+        $number_of_tasks_completed_model = clone $allTask;
+        $number_of_tasks_with_revision_completed_model = clone $allTask;
+
+        $number_of_tasks_completed_model = $number_of_tasks_completed_model->select('id', 'created_at', 'heading', 'board_column_id', 'project_id')->get();
+
+        $number_of_tasks_with_revision_completed_model = $number_of_tasks_with_revision_completed_model
             ->withCount([
                 'revisions' => function ($query) {
                     $query->where('final_responsible_person', '=', 'LD')
@@ -670,18 +737,21 @@ trait LeadDashboard
         ];
     }
 
-    private function leadAverageTaskSubmissionTime($taskWithStartEndDateWithId)
+    private function leadAverageTaskSubmissionTime($taskHistoryWithDateAndId)
     {
-        $average_task_submission_time_data = $taskWithStartEndDateWithId
-            ->select('id', 'created_at', 'heading', 'board_column_id', 'project_id')
-            ->has('firstHistoryForDevReview')
+        $task_id = $taskHistoryWithDateAndId->whereHas('task', function ($q) {
+            $q->whereNull('subtask_id');
+        })->where('board_column_id', 6)
+            ->get()->pluck('task_id')->toArray();
+
+        $average_task_submission_time_data = Task::has('firstHistoryForDevReview')
             ->with(
                 'firstHistoryForDevReview',
                 'project.pm:id,name',
                 'project.client:id,name',
                 'project:id,pm_id,client_id',
                 'historyForReviews:id,task_id,created_at'
-            )->get();
+            )->select('id', 'created_at', 'heading', 'board_column_id', 'project_id')->find($task_id);
 
 
         $days = [];
@@ -1147,102 +1217,103 @@ trait LeadDashboard
         ];
     }
 
-    private function leadPercentageOfTasksWhereDeadlineWasMissed($taskWithStartEndDateWithIdWithConfirm)
+    private function leadPercentageOfTasksWhereDeadlineWasMissed($taskHistoryWithDateAndId)
     {
-        $completed_tasks_by_lead_developer = $taskWithStartEndDateWithIdWithConfirm
-            ->with('firstHistoryForDevReview')
-            ->whereHas('history', function (Builder $query) {
-                $query->where('board_column_id', 6);
-            })->get();
+        $task_id = $taskHistoryWithDateAndId->whereHas('task', function ($q) {
+            $q->whereNull('subtask_id');
+        })->where('board_column_id', 4)->get()->pluck('task_id')->toArray();
 
-        $test_id_where_deadline_missed = [];
+        $completed_tasks_by_lead_developer = Task::with(
+            'firstHistoryForDevReview',
+            'project.pm:id,name',
+            'project.client:id,name',
+            'project:id,pm_id,client_id',
+        )->find($task_id);
+
+        $percentage_of_tasks_where_deadline_was_missed_data = [];
 
         foreach ($completed_tasks_by_lead_developer as $task) {
             if (!Carbon::parse($task->due_date)->greaterThanOrEqualTo(Carbon::parse($task->firstHistoryForDevReview->created_at)->toDateString())) {
-                array_push($test_id_where_deadline_missed, $task->id);
+                array_push($percentage_of_tasks_where_deadline_was_missed_data, $task);
             }
         }
 
         $percentage_of_tasks_where_deadline_was_missed = 0;
-        if (count($test_id_where_deadline_missed)) {
-            $percentage_of_tasks_where_deadline_was_missed = round((count($test_id_where_deadline_missed) / $completed_tasks_by_lead_developer->count()) * 100, 2);
+        if (count($percentage_of_tasks_where_deadline_was_missed_data)) {
+            $percentage_of_tasks_where_deadline_was_missed = round((count($percentage_of_tasks_where_deadline_was_missed_data) / $completed_tasks_by_lead_developer->count()) * 100, 2);
         }
-
-        $percentage_of_tasks_where_deadline_was_missed_data = $taskWithStartEndDateWithIdWithConfirm
-            ->select('id', 'created_at', 'due_date', 'heading', 'board_column_id', 'project_id')
-            ->with(
-                'project.pm:id,name',
-                'project.client:id,name',
-                'project:id,pm_id,client_id',
-            )->whereIn('id', $test_id_where_deadline_missed)->get();
 
         return [
             $percentage_of_tasks_where_deadline_was_missed,
             $percentage_of_tasks_where_deadline_was_missed_data
         ];
     }
-    private function leadPercentageOfTasksWhereGivenEstimatedTimeWasMissedWithRevision($taskWithStartEndDateWithId)
+    private function leadPercentageOfTasksWhereGivenEstimatedTimeWasMissedWithRevision($taskHistoryWithDateAndId)
     {
 
-        $completed_tasks_by_lead_developer = $taskWithStartEndDateWithId
-            ->with('taskSubTasks.timeLogged')
-            ->withSum('timeLogged', 'total_minutes')
-            ->get();
+        $task_id = $taskHistoryWithDateAndId->whereHas('task', function ($q) {
+            $q->whereNull('subtask_id');
+        })->where('board_column_id', 4)->get()->pluck('task_id')->toArray();
 
-        $task_ids = [];
+        $completed_tasks_by_lead_developer = Task::with(
+            'taskSubTasks.timeLogged',
+            'project.pm:id,name',
+            'project.client:id,name',
+            'project:id,pm_id,client_id',
+            'timeLogged',
+        )->withSum('timeLogged', 'total_minutes')->find($task_id);
+
+        $percentage_of_tasks_where_given_estimated_time_was_missed_with_revision_data = [];
         foreach ($completed_tasks_by_lead_developer as $task) {
             $total_sub_task_log_time = $task->taskSubTasks->sum('total_log_time_in_min');
             $total_task_log_time = $total_sub_task_log_time + $task->time_logged_sum_total_minutes;
             if ($total_task_log_time > $task->total_estimate_minutes) {
-                array_push($task_ids, $task->id);
+                array_push($percentage_of_tasks_where_given_estimated_time_was_missed_with_revision_data, $task);
             }
         }
 
-        $number_task_cross_estimate_time = count($task_ids);
+        $number_task_cross_estimate_time = count($percentage_of_tasks_where_given_estimated_time_was_missed_with_revision_data);
         $percentage_of_tasks_where_given_estimated_time_was_missed_with_revision = 0;
         if ($completed_tasks_by_lead_developer->count()) {
             $percentage_of_tasks_where_given_estimated_time_was_missed_with_revision = round(($number_task_cross_estimate_time / $completed_tasks_by_lead_developer->count()) * 100, 2);
         }
 
-        $percentage_of_tasks_where_given_estimated_time_was_missed_with_revision_data = $taskWithStartEndDateWithId->with('timeLogged', 'project.pm', 'project.client')->whereIn('id', $task_ids)->get();
-
         return [
             $percentage_of_tasks_where_given_estimated_time_was_missed_with_revision,
-            $percentage_of_tasks_where_given_estimated_time_was_missed_with_revision_data->count(),
+            count($percentage_of_tasks_where_given_estimated_time_was_missed_with_revision_data),
             $percentage_of_tasks_where_given_estimated_time_was_missed_with_revision_data
         ];
     }
-    private function leadPercentageOfTasksWhereGivenEstimatedTimeWasMissedWithoutRevisions($taskWithStartEndDateWithId)
+    private function leadPercentageOfTasksWhereGivenEstimatedTimeWasMissedWithoutRevisions($taskHistoryWithDateAndId)
     {
-        $completed_tasks_by_lead_developer = $taskWithStartEndDateWithId
-            ->with(
-                'taskSubTasks.timeLoggedWithoutRevision',
-            )
-            ->withSum('timeLoggedWithoutRevision', 'total_minutes')
-            ->get();
 
-        $task_ids = [];
+        $task_id = $taskHistoryWithDateAndId->whereHas('task', function ($q) {
+            $q->whereNull('subtask_id');
+        })->where('board_column_id', 4)->get()->pluck('task_id')->toArray();
+
+        $completed_tasks_by_lead_developer = Task::with(
+            'taskSubTasks.timeLoggedWithoutRevision',
+            'project.pm:id,name',
+            'project.client:id,name',
+            'project:id,pm_id,client_id',
+            'timeLogged'
+        )->withSum('timeLoggedWithoutRevision', 'total_minutes')->find($task_id);
+
+        $percentage_of_tasks_where_given_estimated_time_was_missed_without_revision_data = [];
         foreach ($completed_tasks_by_lead_developer as $task) {
             $total_sub_task_log_time = $task->taskSubTasks->sum('total_log_time_without_revision_in_min');
             $total_task_log_time = $total_sub_task_log_time + $task->time_logged_without_revision_sum_total_minutes;
-            if ($total_task_log_time > $task->total_estimate_minutes) {
-                array_push($task_ids, $task->id);
+            if ($total_task_log_time > ($task->estimate_hours * 60 + $task->total_estimate_minutes)) {
+                array_push($percentage_of_tasks_where_given_estimated_time_was_missed_without_revision_data, $task);
             }
         }
 
-        $number_task_cross_estimate_time = count($task_ids);
+        $number_task_cross_estimate_time = count($percentage_of_tasks_where_given_estimated_time_was_missed_without_revision_data);
         $percentage_of_tasks_where_given_estimated_time_was_missed_without_revision = 0;
         if ($completed_tasks_by_lead_developer->count()) {
             $percentage_of_tasks_where_given_estimated_time_was_missed_without_revision = round(($number_task_cross_estimate_time / $completed_tasks_by_lead_developer->count()) * 100, 2);
         }
 
-        $percentage_of_tasks_where_given_estimated_time_was_missed_without_revision_data = $taskWithStartEndDateWithId
-            ->with(
-                'timeLogged',
-                'project.pm:id,name',
-                'project.client:id,name',
-                'project:id,pm_id,client_id',
-            )->whereIn('id', $task_ids)->get();
 
         return [
             $percentage_of_tasks_where_given_estimated_time_was_missed_without_revision,
@@ -1292,10 +1363,13 @@ trait LeadDashboard
         ];
     }
 
-    private function leadHoursSpentInRevisions($taskWithStartEndDateWithId)
+    private function leadHoursSpentInRevisions($taskHistoryWithDateAndId)
     {
+        $task_id = $taskHistoryWithDateAndId->whereHas('task', function ($q) {
+            $q->whereNull('subtask_id');
+        })->where('board_column_id', 4)->get()->pluck('task_id')->toArray();
 
-        $parent_task_wise_total_hours_spent_in_revisions_data = $taskWithStartEndDateWithId->has('revisions')
+        $parent_task_wise_total_hours_spent_in_revisions_data = Task::has('revisions')
             ->with([
                 'project.pm:id,name',
                 'project.client:id,name',
@@ -1312,7 +1386,7 @@ trait LeadDashboard
                 'taskUser',
             ])
             ->withSum('timeLoggedOnlyRevision', 'total_minutes')
-            ->get();
+            ->find($task_id);
 
         $parent_task_wise_total_mins_spent_in_revisions = 0;
         $logged_min_for_all_submitted = 0;
@@ -1338,22 +1412,29 @@ trait LeadDashboard
             $parent_task_wise_total_hours_spent_in_revisions_data
         ];
     }
-    private function leadNumberOfApproval($taskWithStartEndDateWithId)
+    private function leadNumberOfApproval($taskHistoryWithDateAndId)
     {
-        $number_of_approval_data = $taskWithStartEndDateWithId
-            ->with(
-                'TaskApproves',
-                'firstHistoryForLeadDevApproval',
-                'project.pm:id,name',
-                'project.client:id,name',
-                'project:id,pm_id,client_id',
-                'oldestSubTask',
-                'latestTaskApprove:id,task_id,created_at',
-            )
-            ->has('firstHistoryForLeadDevApproval')->get();
 
+        $task_id = $taskHistoryWithDateAndId->whereHas('task', function ($q) {
+            $q->whereNotNull('subtask_id');
+        })->where('board_column_id', 8)
+            ->groupBy('task_id')
+            ->select('task_id')
+            ->get()->pluck('task_id')->toArray();
+
+        $number_of_approval_data = Task::with(
+            'TaskApproves',
+            'firstHistoryForLeadDevApproval',
+            'project.pm:id,name',
+            'project.client:id,name',
+            'project:id,pm_id,client_id',
+            'oldestSubTask',
+            'latestTaskApprove:id,task_id,created_at',
+        )->has('firstHistoryForLeadDevApproval')->find($task_id);
+
+        $manually_approved_tasks_data = [];
         $manually_approved_tasks_array = [];
-        $auto_approved_tasks_array = [];
+        $auto_approved_tasks_data = [];
         foreach ($number_of_approval_data as $task) {
 
             $approveDate = date('Y-m-d', strtotime($task->firstHistoryForLeadDevApproval->created_at));
@@ -1361,24 +1442,19 @@ trait LeadDashboard
             $approve = $task->TaskApproves()->whereDate('created_at', $approveDate)->where('user_id', auth()->id())->first();
 
             if ($approve != NULL) {
+                array_push($manually_approved_tasks_data, $task);
                 array_push($manually_approved_tasks_array, $task->id);
             } else {
-                array_push($auto_approved_tasks_array, $task->id);
+                array_push($auto_approved_tasks_data, $task);
             }
         }
-
-        $auto_approved_tasks_data = clone $taskWithStartEndDateWithId;
-        $manually_approved_tasks_data = clone $taskWithStartEndDateWithId;
-
-        $manually_approved_tasks_data = $manually_approved_tasks_data->whereIn('id', $manually_approved_tasks_array)->get();
-        $auto_approved_tasks_data = $auto_approved_tasks_data->whereIn('id', $auto_approved_tasks_array)->get();
 
         return [
             $number_of_approval_data->count(),
             $number_of_approval_data,
-            $auto_approved_tasks_data->count(),
+            count($auto_approved_tasks_data),
             $auto_approved_tasks_data,
-            $manually_approved_tasks_data->count(),
+            count($manually_approved_tasks_data),
             $manually_approved_tasks_data,
             $manually_approved_tasks_array
         ];

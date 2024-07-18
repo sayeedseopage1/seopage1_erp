@@ -26,7 +26,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach ($total_number_of_attempts_needed_for_approval_by_client_data as $row)
+                        @foreach ($number_of_approved_tasks_on_1st_attempt_by_client_data as $row)
                             <tr>
                                 <td>{{ ++$loop->index }}</td>
                                 <td>

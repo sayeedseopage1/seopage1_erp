@@ -6,7 +6,7 @@
             <div class="modal-header">
                 <div class="modal-title">
                     <h4>Number of submitted tasks: __</h4>
-                    <h4>Number of tasks where deadline was missed: {{ $submit_number_of_tasks_in_this_month_lead }}</h4>
+                    <h4>Number of tasks where deadline was missed: {{ $estimate_missed_task_data_lead->count() }}</h4>
 
                 </div>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">

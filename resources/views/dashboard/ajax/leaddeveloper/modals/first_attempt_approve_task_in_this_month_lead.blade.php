@@ -31,29 +31,29 @@
                             <tr>
                                 <td>{{ ++$loop->index }}</td>
                                 <td>
-                                    <a href="{{ route('tasks.show', $row->id) }}">{{ $row->heading }}<a>
+                                    <a href="{{ route('tasks.show', $row?->task?->id) }}">{{ $row?->task?->heading }}<a>
                                 </td>
                                 <td>
-                                    @if ($row?->project?->client)
-                                        <a href="{{ route('clients.show', $row->project->client->id) }}">
-                                            {{ $row->project->client->name }}</a>
+                                    @if ($row?->task?->project?->client)
+                                        <a href="{{ route('clients.show', $row?->task?->project->client->id) }}">
+                                            {{ $row?->task?->project->client->name }}</a>
                                     @endif
                                 </td>
                                 <td>
-                                    {{ $row->created_at->format('d-m-Y g:i A') }}
+                                    {{ $row?->task?->created_at->format('d-m-Y g:i A') }}
                                 </td>
                                 <td>
-                                    {{ $row->due_date->format('d-m-Y g:i A') }}
+                                    {{ $row?->task?->due_date->format('d-m-Y g:i A') }}
                                 </td>
                                 <td>
-                                    {{ $row?->latestTaskSubmission?->created_at->format('d-m-Y g:i A') }}
+                                    {{ $row?->task?->latestTaskSubmission?->created_at->format('d-m-Y g:i A') }}
                                 </td>
                                 <td>
-                                    {{ $row?->latestTaskApprove?->created_at->format('d-m-Y g:i A') }}
+                                    {{ $row?->task?->latestTaskApprove?->created_at->format('d-m-Y g:i A') }}
                                 </td>
                                 <td>
-                                    <span style="color: {{ $row->stat->label_color }}">
-                                        {{ $row->stat->column_name }}</span>
+                                    <span style="color: {{ $row?->task?->stat->label_color }}">
+                                        {{ $row?->task?->stat->column_name }}</span>
                                 </td>
                             </tr>
                         @endforeach

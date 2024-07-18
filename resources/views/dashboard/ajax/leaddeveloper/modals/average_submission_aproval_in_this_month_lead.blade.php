@@ -31,28 +31,28 @@
                             <tr>
                                 <td>{{ ++$loop->index }}</td>
                                 <td>
-                                    <a href="{{ route('tasks.show', $row->id) }}">{{ $row->heading }}<a>
+                                    <a href="{{ route('tasks.show', $row?->task?->id) }}">{{ $row?->task?->heading }}<a>
                                 </td>
                                 <td>
-                                    @if ($row?->project?->client)
-                                        <a href="{{ route('clients.show', $row->project->client->id) }}">
-                                            {{ $row->project->client->name }}</a>
+                                    @if ($row?->task?->project?->client)
+                                        <a href="{{ route('clients.show', $row?->task?->project->client->id) }}">
+                                            {{ $row?->task?->project->client->name }}</a>
                                     @endif
                                 </td>
                                 <td>
-                                    {{ $row->created_at }}
+                                    {{ $row?->task?->created_at }}
                                 </td>
                                 <td>
-                                    {{ $row->due_date }}
+                                    {{ $row?->task?->due_date }}
                                 </td>
                                 <td>
-                                    {{ $row?->latestTaskSubmission?->created_at }}
+                                    {{ $row?->task?->latestTaskSubmission?->created_at }}
                                 </td>
                                 <td>
-                                    {{ $row?->status }}
+                                    {{ $row?->task?->status }}
                                 </td>
                                 <td>
-                                    {{ $row?->revisions_for_responsible + 1 }}
+                                    {{ $row?->total_submitted }}
                                 </td>
                             </tr>
                         @endforeach
