@@ -112,9 +112,8 @@ class EvaluationController extends AccountBaseController
         //
     }
 
-
-    public function getAllEvaluation(Request $request)
-    {
+    // public function getAllEvaluation(Request $request)
+    // {
     //     $startDate = $request->start_date ?? null;
     //     $endDate = $request->end_date ?? null;
     //     $limit = $request->limit ??  10;
@@ -171,58 +170,84 @@ class EvaluationController extends AccountBaseController
     //                     }
     //                 }
             
+    //     return response()->json([
+    //         'data' => $employeeEvaluations,
+    //         'status' => 200
+    //     ]);
+    // }
+
+
+    public function getAllEvaluation(Request $request)
+    {
+        $employeeEvaluations = EmployeeEvaluation::select('employee_evaluations.*','roles.id as roleId','roles.name as role_name','team_lead.name as team_lead_name')
+        ->selectRaw('SUM(employee_evaluation_tasks.total_hours) as total_hours_alt')
+        ->selectRaw('MIN(employee_evaluation_tasks.created_at) as first_task_assign_on')
+        ->selectRaw('(MAX(employee_evaluation_tasks.round) - 1) as round_requied')
+        ->selectRaw('(SELECT MIN(created_at) FROM project_time_logs WHERE project_time_logs.user_id = employee_evaluations.user_id) as started_working_on')
+        ->leftJoin('employee_evaluation_tasks', 'employee_evaluations.user_id', '=', 'employee_evaluation_tasks.user_id')
+        ->leftJoin('users', function ($join) {
+            $join->on('employee_evaluations.user_id', '=', 'users.id')->leftJoin('roles', 'users.role_id', '=', 'roles.id');
+        })
+        ->leftJoin('users as team_lead', 'employee_evaluations.team_lead_id', '=', 'team_lead.id')
+        ->when($request->start_date && $request->end_date, function($query) use ($request) {
+            return $query->whereBetween('employee_evaluations.created_at', [Carbon::parse($request->start_date)->startOfDay(),Carbon::parse($request->end_date)->endOfDay()]);
+        })
+        ->when($request->search, function($query) use ($request){
+            $query->where('employee_evaluations.user_name', 'like', '%' . request('search') . '%')->orWhere('employee_evaluations.join_date', 'like', '%' . request('search') . '%')->orWhere('employee_evaluations.accept_rejected', 'like', '%' . request('search') . '%');
+        })
+        ->groupBy('employee_evaluations.id', 'employee_evaluations.user_id', 'roles.id', 'roles.name', 'team_lead.name')->paginate($request->limit??10);
+            
         return response()->json([
-            'data' => [],
+            'data' => $employeeEvaluations,
             'status' => 200
         ]);
     }
 
-
     public function getSingleEvaluation($user_id)
     {
-        // $evaluationQuery = EmployeeEvaluation::select('employee_evaluations.*', 'added_by.id as added_by_id', 'added_by.name as added_by_name','addedBy.id as addedById','addedBy.name as addedByName','tasks.id as task_id','roles.id as roleId', 'roles.name as role_name', 'tmLead.name as team_lead_name')
-        // ->selectRaw('MIN(sub_tasks.created_at) as first_task_assign_on')
-        // ->selectRaw('MIN(mainTask.created_at) as firstTaskAssignOn')
-        // ->selectRaw('MIN(project_time_logs.created_at) as started_working_on')
-        // ->selectRaw('COUNT(DISTINCT task_users.id) as total_task_assigned')
-        // ->selectRaw('COUNT(DISTINCT employee_evaluation_tasks.submission_date) as total_task_submit')
+        $evaluationQuery = EmployeeEvaluation::select('employee_evaluations.*', 'added_by.id as added_by_id', 'added_by.name as added_by_name','addedBy.id as addedById','addedBy.name as addedByName','tasks.id as task_id','roles.id as roleId', 'roles.name as role_name', 'tmLead.name as team_lead_name')
+        ->selectRaw('MIN(sub_tasks.created_at) as first_task_assign_on')
+        ->selectRaw('MIN(mainTask.created_at) as firstTaskAssignOn')
+        ->selectRaw('MIN(project_time_logs.created_at) as started_working_on')
+        ->selectRaw('COUNT(DISTINCT task_users.id) as total_task_assigned')
+        ->selectRaw('COUNT(DISTINCT employee_evaluation_tasks.submission_date) as total_task_submit')
 
-        // ->leftJoin('employee_evaluation_tasks', 'employee_evaluations.user_id', '=', 'employee_evaluation_tasks.user_id')
-        // ->leftJoin('sub_tasks', 'employee_evaluations.user_id', '=', 'sub_tasks.assigned_to')
-        // ->leftJoin('tasks', 'sub_tasks.task_id', '=', 'tasks.id')
-        // ->leftJoin('users as added_by', 'sub_tasks.added_by', '=', 'added_by.id')
-        // //this is for pm evaluation only start
-        // ->leftJoin('tasks as mainTask', 'employee_evaluation_tasks.task_id', '=', 'mainTask.id')
-        // ->leftJoin('users as addedBy', 'mainTask.added_by', '=', 'addedBy.id')
-        // //this is for pm evaluation only end
-        // ->leftJoin('users', 'employee_evaluations.user_id', '=', 'users.id')
-        // ->leftJoin('users as tmLead', 'employee_evaluations.team_lead_id', '=', 'tmLead.id')
-        // ->leftJoin('roles', 'users.role_id', '=', 'roles.id')
-        // ->leftJoin('project_time_logs', 'employee_evaluations.user_id', '=', 'project_time_logs.user_id')
-        // ->leftJoin('task_users', 'employee_evaluations.user_id', '=', 'task_users.user_id')
-        // ->where('employee_evaluations.user_id', $user_id)
-        //     ->groupBy('employee_evaluations.id');
+        ->leftJoin('employee_evaluation_tasks', 'employee_evaluations.user_id', '=', 'employee_evaluation_tasks.user_id')
+        ->leftJoin('sub_tasks', 'employee_evaluations.user_id', '=', 'sub_tasks.assigned_to')
+        ->leftJoin('tasks', 'sub_tasks.task_id', '=', 'tasks.id')
+        ->leftJoin('users as added_by', 'sub_tasks.added_by', '=', 'added_by.id')
+        //this is for pm evaluation only start
+        ->leftJoin('tasks as mainTask', 'employee_evaluation_tasks.task_id', '=', 'mainTask.id')
+        ->leftJoin('users as addedBy', 'mainTask.added_by', '=', 'addedBy.id')
+        //this is for pm evaluation only end
+        ->leftJoin('users', 'employee_evaluations.user_id', '=', 'users.id')
+        ->leftJoin('users as tmLead', 'employee_evaluations.team_lead_id', '=', 'tmLead.id')
+        ->leftJoin('roles', 'users.role_id', '=', 'roles.id')
+        ->leftJoin('project_time_logs', 'employee_evaluations.user_id', '=', 'project_time_logs.user_id')
+        ->leftJoin('task_users', 'employee_evaluations.user_id', '=', 'task_users.user_id')
+        ->where('employee_evaluations.user_id', $user_id)
+            ->groupBy('employee_evaluations.id');
 
-        // // Rest of your query
+        // Rest of your query
 
-        // $employeeEvaluations = $evaluationQuery->get();
+        $employeeEvaluations = $evaluationQuery->get();
 
-        // foreach ($employeeEvaluations as $data) {
-        //     $taskUser = TaskUser::where('user_id', $data->user_id)->first();
-        //     if ($taskUser != null) {
-        //         $total_hours = EmployeeEvaluationTask::where('user_id', $taskUser->user_id)->sum('total_hours');
-        //         $total_min = EmployeeEvaluationTask::where('user_id', $taskUser->user_id)->sum('total_min');
-        //         $revision = EmployeeEvaluationTask::where('user_id', $taskUser->user_id)->sum('revision_number');
-        //         $data->total_hours = $total_hours;
-        //         $data->total_minutes = $total_min;
-        //         $data->total_revision = $revision;
-        //     }
-        // }
+        foreach ($employeeEvaluations as $data) {
+            $taskUser = TaskUser::where('user_id', $data->user_id)->first();
+            if ($taskUser != null) {
+                $total_hours = EmployeeEvaluationTask::where('user_id', $taskUser->user_id)->sum('total_hours');
+                $total_min = EmployeeEvaluationTask::where('user_id', $taskUser->user_id)->sum('total_min');
+                $revision = EmployeeEvaluationTask::where('user_id', $taskUser->user_id)->sum('revision_number');
+                $data->total_hours = $total_hours;
+                $data->total_minutes = $total_min;
+                $data->total_revision = $revision;
+            }
+        }
 
-        // return response()->json([
-        //     'data' => $employeeEvaluations,
-        //     'status' => 200
-        // ]);
+        return response()->json([
+            'data' => $employeeEvaluations,
+            'status' => 200
+        ]);
     }
 
 
@@ -230,37 +255,37 @@ class EvaluationController extends AccountBaseController
 
    public function getEmployeeTask($id)
     {
-        // $data = EmployeeEvaluationTask::select(
-        //     'employee_evaluation_tasks.*',
-        //     'taskboard_columns.id as task_board_column_id',
-        //     'taskboard_columns.column_name as task_board_column_name',
-        //     'taskboard_columns.slug as task_board_column_slug',
-        //     'taskboard_columns.label_color as task_board_column_color',
-        //     'taskboard_columns.priority as task_board_column_priority',
-        //     'task_submissions.screen_record_link',
-        //     'tasks.id as task_id',
-        //     'users.id as added_by_id','users.name as added_by_name',
-        //     'addedBy.id as addedById','addedBy.name as addedByName'
-        // )
-        // ->leftJoin('tasks', 'employee_evaluation_tasks.task_id', 'tasks.id')
-        // ->leftJoin('taskboard_columns', 'tasks.board_column_id', 'taskboard_columns.id')
-        // ->leftJoin('task_submissions', 'tasks.id', 'task_submissions.task_id')
-        // ->leftJoin('users', 'employee_evaluation_tasks.lead_dev_id', 'users.id')
-        // ->leftJoin('users as addedBy', 'employee_evaluation_tasks.team_lead_id', 'addedBy.id')
-        // ->where('employee_evaluation_tasks.user_id', $id)
-        // ->get();
+        $data = EmployeeEvaluationTask::select(
+            'employee_evaluation_tasks.*',
+            'taskboard_columns.id as task_board_column_id',
+            'taskboard_columns.column_name as task_board_column_name',
+            'taskboard_columns.slug as task_board_column_slug',
+            'taskboard_columns.label_color as task_board_column_color',
+            'taskboard_columns.priority as task_board_column_priority',
+            'task_submissions.screen_record_link',
+            'tasks.id as task_id',
+            'users.id as added_by_id','users.name as added_by_name',
+            'addedBy.id as addedById','addedBy.name as addedByName'
+        )
+        ->leftJoin('tasks', 'employee_evaluation_tasks.task_id', 'tasks.id')
+        ->leftJoin('taskboard_columns', 'tasks.board_column_id', 'taskboard_columns.id')
+        ->leftJoin('task_submissions', 'tasks.id', 'task_submissions.task_id')
+        ->leftJoin('users', 'employee_evaluation_tasks.lead_dev_id', 'users.id')
+        ->leftJoin('users as addedBy', 'employee_evaluation_tasks.team_lead_id', 'addedBy.id')
+        ->where('employee_evaluation_tasks.user_id', $id)
+        ->get();
 
-        // $groupedData = $data->groupBy('task_id')->map(function ($tasks) {
-        //     $firstTask = $tasks->first();
-        //     $firstTask->screen_record_links = $tasks->pluck('screen_record_link')->filter()->values()->toArray();
-        //     unset($firstTask->screen_record_link);
-        //     return $firstTask;
-        // })->values();
+        $groupedData = $data->groupBy('task_id')->map(function ($tasks) {
+            $firstTask = $tasks->first();
+            $firstTask->screen_record_links = $tasks->pluck('screen_record_link')->filter()->values()->toArray();
+            unset($firstTask->screen_record_link);
+            return $firstTask;
+        })->values();
 
-        // return response()->json([
-        //     'data' => $groupedData,
-        //     'status' => 200
-        // ]);
+        return response()->json([
+            'data' => $groupedData,
+            'status' => 200
+        ]);
     }
 
     public function storeEmployeeTaskEvaluation(Request $request)
