@@ -7671,24 +7671,42 @@ class TaskController extends AccountBaseController
             ]);
         }
     }
+    // public function todaySubmissionData()
+    // {
+    //     $categories = DailySubmissionCategory::select('daily_submission_categories.*')
+    //         ->leftJoin('daily_submission_fields', 'daily_submission_fields.daily_submission_category_id', '=', 'daily_submission_categories.id')
+    //         ->groupBy('daily_submission_categories.id')
+    //         ->get()
+    //         ->map(function($category) {
+    //             $category->category_fields = DailySubmissionField::select('daily_submission_fields.*', 'daily_submission_categories.name as category_name')
+    //                 ->leftJoin('daily_submission_categories', 'daily_submission_categories.id', '=', 'daily_submission_fields.daily_submission_category_id')
+    //                 ->where('daily_submission_fields.daily_submission_category_id', $category->id)
+    //                 ->get();
+    //             return $category;
+    //         });
+
+    //     return response()->json([
+    //         'categories' => $categories,
+    //         'comments' => '1 - text, 2 - url, 3 - number, 4 - file, 5 - longText, 6 - list',
+    //         'status'=> 200
+    //     ]);
+    // }
     public function todaySubmissionData()
     {
-        $categories = DailySubmissionCategory::select('daily_submission_categories.*')
-            ->leftJoin('daily_submission_fields', 'daily_submission_fields.daily_submission_category_id', '=', 'daily_submission_categories.id')
-            ->groupBy('daily_submission_categories.id')
+        $categories = DailySubmissionCategory::with('dailySubmissionFields')
             ->get()
             ->map(function($category) {
-                $category->category_fields = DailySubmissionField::select('daily_submission_fields.*', 'daily_submission_categories.name as category_name')
-                    ->leftJoin('daily_submission_categories', 'daily_submission_categories.id', '=', 'daily_submission_fields.daily_submission_category_id')
-                    ->where('daily_submission_fields.daily_submission_category_id', $category->id)
-                    ->get();
+                $category->category_fields = $category->dailySubmissionFields->map(function($field) use ($category) {
+                    $field->category_name = $category->name;
+                    return $field;
+                });
                 return $category;
             });
 
         return response()->json([
             'categories' => $categories,
             'comments' => '1 - text, 2 - url, 3 - number, 4 - file, 5 - longText, 6 - list',
-            'status'=> 200
+            'status' => 200
         ]);
     }
 }
