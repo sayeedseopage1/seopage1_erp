@@ -428,5 +428,30 @@ $viewDesignationPermission = user()->permission('view_designation');
             $(MODAL_LG + ' ' + MODAL_HEADING).html('...');
             $.ajaxModal(MODAL_LG, url);
         });
+
+        $('body').on('change', '.pm_enable_disable', function() {
+            var pm_id = $(this).data('user-id');
+            var status = $(this).val();
+            var token = "{{ csrf_token() }}";
+
+            if (typeof pm_id !== 'undefined') {
+                $.easyAjax({
+                    url: "{{ route('project-assign') }}",
+                    type: "POST",
+                    blockUI: true,
+                    container: '#employees-table',
+                    data: {
+                        status: status,
+                        id: pm_id,
+                        _token: token
+                    },
+                    success: function(response) {
+                        if (response.status == "success") {
+                            window.LaravelDataTables["employees-table"].draw();
+                        }
+                    }
+                })
+            }
+        });
     </script>
 @endpush
