@@ -50,4 +50,13 @@ class Deal extends Model
     {
         return $this->hasOne(PMProject::class, 'deal_id');
     }
+
+    public function dealStageChanges()
+    {
+        return $this->hasMany(DealStageChange::class, 'deal_id', 'deal_id');
+    }
+    // public function dealStageChangesQualifying()
+    // {
+    //     return $this->hasMany(DealStageChange::class, 'deal_id', 'deal_id')->where('deal_stage_id', 1);
+    // }
 }

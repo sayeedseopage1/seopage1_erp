@@ -95,7 +95,7 @@ trait SalesDashboardAdminView
             'start_date' => 'required|date',
             'end_date' => 'required|date|after:start_date',
         ]);
-        if ($validator->fails()) {
+        if (!$validator->fails()) {
             dd(Reply::error(__('validation_failed'), $validator->errors()));
             return Reply::error(__('validation_failed'), $validator->errors());
         } else {
@@ -131,15 +131,20 @@ trait SalesDashboardAdminView
             $numberOfLeadsReceivedFixed = clone $leadsWithDateAndId;
             $numberOfLeadsReceivedHourly = clone $leadsWithDateAndId;
 
-            $this->number_of_leads_received_get = $numberOfLeadsReceivedGet->with('currency:id,currency_symbol', 'addedByUser:id,name')
-                ->select('id', 'currency_id', 'added_by', 'client_name', 'bid_value', 'created_at', 'deal_status')->limit(10)->get();
 
+            $numberOfLeadsReceivedFixed = clone $numberOfLeadsReceivedFixed->where('project_type', 'fixed');
+            $numberOfLeadsReceivedHourly = clone $numberOfLeadsReceivedHourly->where('project_type', 'hourly');
 
-            $this->number_of_leads_received = $this->number_of_leads_received_get->count();
+            // $this->number_of_leads_received_get = $numberOfLeadsReceivedGet->with('currency:id,currency_symbol', 'addedByUser:id,name')
+            //     ->select('id', 'currency_id', 'added_by', 'client_name', 'bid_value', 'created_at', 'deal_status')->get();
 
-            $this->number_of_leads_received_fixed = $numberOfLeadsReceivedFixed->where('project_type', 'fixed')->count();
+            $this->number_of_leads_received_get = $numberOfLeadsReceivedGet->get();
 
-            $this->number_of_leads_received_hourly = $numberOfLeadsReceivedHourly->where('project_type', 'hourly')->count();
+            $this->number_of_leads_received = $numberOfLeadsReceivedGet->count();
+
+            $this->number_of_leads_received_fixed = $numberOfLeadsReceivedFixed->count();
+
+            $this->number_of_leads_received_hourly = $numberOfLeadsReceivedHourly->count();
 
 
             $saleExecutive += [
@@ -164,13 +169,27 @@ trait SalesDashboardAdminView
             //     ->count();
 
 
-            $this->number_of_leads_convert_deals = $numberOfLeadsReceivedGet->has('dealStage')->count();
 
-            $this->number_of_leads_convert_deals_get = $numberOfLeadsReceivedGet->get();
+            $number_of_leads_convert_deals = $numberOfLeadsReceivedGet->whereHas('dealStage', function ($q) use ($startDate1, $endDate1) {
+                $q->whereBetween('created_at', [$startDate1, $endDate1]);
+            });
 
-            $this->number_of_leads_convert_deals_fixed = $numberOfLeadsReceivedFixed->has('dealStage')->count();
+            $number_of_leads_convert_deals_fixed = $numberOfLeadsReceivedFixed->whereHas('dealStage', function ($q) use ($startDate1, $endDate1) {
+                $q->whereBetween('created_at', [$startDate1, $endDate1]);
+            });
 
-            $this->number_of_leads_convert_deals_hourly = $numberOfLeadsReceivedHourly->has('dealStage')->count();
+            $number_of_leads_convert_deals_hourly = $numberOfLeadsReceivedHourly->whereHas('dealStage', function ($q) use ($startDate1, $endDate1) {
+                $q->whereBetween('created_at', [$startDate1, $endDate1]);
+            });
+
+
+            $this->number_of_leads_convert_deals = $number_of_leads_convert_deals->count();
+
+            $this->number_of_leads_convert_deals_get = $number_of_leads_convert_deals->get();
+
+            $this->number_of_leads_convert_deals_fixed = $number_of_leads_convert_deals_fixed->count();
+
+            $this->number_of_leads_convert_deals_hourly = $number_of_leads_convert_deals_hourly->count();
 
 
             $saleExecutive += [
@@ -180,13 +199,29 @@ trait SalesDashboardAdminView
                 'number_of_leads_convert_deals_hourly' => $this->number_of_leads_convert_deals_hourly,
             ];
 
-            $this->number_of_leads_convert_won_deals = $numberOfLeadsReceivedGet->has('leadDeal.pm_project')->count();
 
-            $this->number_of_leads_convert_won_deals_get = $numberOfLeadsReceivedGet->get();
+            $number_of_leads_convert_won_deals = $number_of_leads_convert_deals->with('leadDeal.pm_project')
+                ->whereHas('leadDeal', function ($q) use ($startDate1, $endDate1) {
+                    $q->whereBetween('created_at', [$startDate1, $endDate1]);
+                });
 
-            $this->number_of_leads_convert_won_deals_fixed = $numberOfLeadsReceivedFixed->has('leadDeal.pm_project')->count();
+            $number_of_leads_convert_won_deals_fixed = $number_of_leads_convert_deals_fixed->with('leadDeal.pm_project')
+                ->whereHas('leadDeal', function ($q) use ($startDate1, $endDate1) {
+                    $q->whereBetween('created_at', [$startDate1, $endDate1]);
+                });
 
-            $this->number_of_leads_convert_won_deals_hourly = $numberOfLeadsReceivedHourly->has('leadDeal.pm_project')->count();
+            $number_of_leads_convert_won_deals_hourly = $number_of_leads_convert_deals_hourly->with('leadDeal.pm_project')
+                ->whereHas('leadDeal', function ($q) use ($startDate1, $endDate1) {
+                    $q->whereBetween('created_at', [$startDate1, $endDate1]);
+                });
+
+            $this->number_of_leads_convert_won_deals = $number_of_leads_convert_won_deals->count();
+
+            $this->number_of_leads_convert_won_deals_get = $number_of_leads_convert_won_deals->get();
+
+            $this->number_of_leads_convert_won_deals_fixed = $number_of_leads_convert_won_deals_fixed->count();
+
+            $this->number_of_leads_convert_won_deals_hourly = $number_of_leads_convert_won_deals_hourly->count();
 
             $saleExecutive += [
                 'number_of_leads_convert_won_deals' => $this->number_of_leads_convert_won_deals,
@@ -207,7 +242,7 @@ trait SalesDashboardAdminView
             $delay_minute = $leadsWithDateAndId->sum('bidding_minutes');
             $delay_second = $leadsWithDateAndId->sum('bidding_seconds');
 
-            $this->average_bidding_delay_time = $number_of_leads_create ? round(((($delay_minute * 60) + $delay_second) / $number_of_leads_create) / 60, 2) : 0;
+            $this->average_bidding_delay_time = $number_of_leads_create ? round((($delay_minute * 60 + $delay_second) / $number_of_leads_create) / 60, 2) : 0;
 
             $saleExecutive += [
                 'average_number_of_leads_amount' => $this->average_number_of_leads_amount,
@@ -275,23 +310,17 @@ trait SalesDashboardAdminView
 
             //    Country wise bidding breakdown End
 
-            dd($saleExecutive);
 
             // --------------Number of won deals (fixed)-------------//
 
-            $number_of_leads_convert_won_deals = DB::table('deals')
-                ->select('deals.*')
-                ->where('deals.project_type', 'fixed')
-                ->where('deals.created_at', '>=', $startDate)
-                ->where('deals.created_at', '<', $endDate)
-                ->get();
+            $number_of_leads_convert_won_fix_deals = Deal::with('lead', 'dealStageChanges')
+                ->whereBetween('created_at', [$startDate1, $endDate1])
+                ->where('project_type', 'fixed')->get();
 
             $won_deals_count = 0;
             $won_deals_value = 0;
 
-            foreach ($number_of_leads_convert_won_deals as $won_deals) {
-
-                //closing the deal
+            foreach ($number_of_leads_convert_won_fix_deals as $won_deals) {
 
                 if ($won_deals->added_by == $salesId) {
 
@@ -299,251 +328,156 @@ trait SalesDashboardAdminView
                     $won_deals_value += .125 * $won_deals->amount;
                 }
 
-
-                //The bidder
-
-                $leads = DB::table('leads')
-                    ->where('added_by', $salesId)
-                    ->where('id', $won_deals->lead_id)
-                    ->count();
-
-                if ($leads > 0) {
+                if ($won_deals?->lead?->added_by == $salesId) {
 
                     $won_deals_count += .25;
                     $won_deals_value += .25 * $won_deals->amount;
 
                 }
 
-                //Qualifying
+                $qualify_contribution = 0;
+                $needs_defined_contribution = 0;
+                $proposal_made_contribution = 0;
+                $negotiation_contribution = 0;
+                $milestone_contribution = 0;
 
-                $qualify_contribution = DB::table('deal_stage_changes')
-                    ->where('deal_id', $won_deals->deal_id)
-                    ->where('deal_stage_id', 1)
-                    ->count();
+                foreach ($won_deals?->dealStageChanges as $dealStageChanges) {
 
-                $qualify = DB::table('deal_stage_changes')
-                    ->where('deal_id', $won_deals->deal_id)
-                    ->where('updated_by', $salesId)
-                    ->where('deal_stage_id', 1)
-                    ->count();
+                    if ($dealStageChanges->updated_by == $salesId) {
 
-                if ($qualify > 0) {
+                        switch ($dealStageChanges->deal_stage_id) {
+                            case 1:
+                                $qualify_contribution++;
+                                break;
+                            case 2:
+                                $needs_defined_contribution++;
+                                break;
+                            case 3:
+                                $proposal_made_contribution++;
+                                break;
+                            case 4:
+                                $negotiation_contribution++;
+                                break;
+                            case 5:
+                                $milestone_contribution++;
+                                break;
+                            default:
+                                # code...
+                                break;
+                        }
+                    }
+                }
+                if ($qualify_contribution) {
                     $won_deals_count += .0375 / $qualify_contribution;
                     $won_deals_value += .0375 / $qualify_contribution * $won_deals->amount;
-
                 }
-
-
-                //Needs Defined
-
-                $needs_defined_contribution = DB::table('deal_stage_changes')
-                    ->where('deal_id', $won_deals->deal_id)
-                    ->where('deal_stage_id', 2)
-                    ->count();
-
-                $needs_defined = DB::table('deal_stage_changes')
-                    ->where('deal_id', $won_deals->deal_id)
-                    ->where('updated_by', $salesId)
-                    ->where('deal_stage_id', 2)
-                    ->count();
-
-                if ($needs_defined > 0) {
+                if ($needs_defined_contribution) {
                     $won_deals_count += .1875 / $needs_defined_contribution;
                     $won_deals_value += .1875 / $needs_defined_contribution * $won_deals->amount;
                 }
-
-                //Proposal made
-
-
-                $proposal_made_contribution = DB::table('deal_stage_changes')
-                    ->where('deal_id', $won_deals->deal_id)
-                    ->where('deal_stage_id', 3)
-                    ->count();
-
-                $proposal_made = DB::table('deal_stage_changes')
-                    ->where('deal_id', $won_deals->deal_id)
-                    ->where('updated_by', $salesId)
-                    ->where('deal_stage_id', 3)
-                    ->count();
-
-                if ($proposal_made > 0) {
+                if ($proposal_made_contribution) {
                     $won_deals_count += .125 / $proposal_made_contribution;
                     $won_deals_value += .125 / $proposal_made_contribution * $won_deals->amount;
                 }
-
-                //Negotiation started
-
-                $negotiation_contribution = DB::table('deal_stage_changes')
-                    ->where('deal_id', $won_deals->deal_id)
-                    ->where('deal_stage_id', 4)
-                    ->count();
-
-                $negotiation = DB::table('deal_stage_changes')
-                    ->where('deal_id', $won_deals->deal_id)
-                    ->where('updated_by', $salesId)
-                    ->where('deal_stage_id', 4)
-                    ->count();
-
-                if ($negotiation > 0) {
+                if ($negotiation_contribution) {
                     $won_deals_count += .125 / $negotiation_contribution;
                     $won_deals_value += .125 / $negotiation_contribution * $won_deals->amount;
                 }
-
-                //Sharing milestone breakdown
-
-                $milestone_contribution = DB::table('deal_stage_changes')
-                    ->where('deal_id', $won_deals->deal_id)
-                    ->where('deal_stage_id', 5)
-                    ->count();
-
-                $milestone = DB::table('deal_stage_changes')
-                    ->where('deal_id', $won_deals->deal_id)
-                    ->where('updated_by', $salesId)
-                    ->where('deal_stage_id', 5)
-                    ->count();
-
-                if ($milestone > 0) {
+                if ($milestone_contribution) {
                     $won_deals_count += .15 / $milestone_contribution;
                     $won_deals_value += .15 / $milestone_contribution * $won_deals->amount;
                 }
-
             }
 
-            $this->won_deals_count_fixed = $won_deals_count;
-            $this->won_deals_value_fixed = $won_deals_value;
+            $this->won_deals_count_fixed = round($won_deals_count, 2);
+            $this->won_deals_value_fixed = round($won_deals_value, 2);
 
+            $saleExecutive += [
+                'won_deals_count_fixed' => $this->won_deals_count_fixed,
+                'won_deals_value_fixed' => $this->won_deals_value_fixed,
+            ];
 
+            // dd($saleExecutive);
             // --------------Number of won deals (hourly)-------------//
 
-            $number_of_leads_convert_won_deals = DB::table('deals')
-                ->select('deals.*')
-                ->where('deals.project_type', 'hourly')
-                ->where('deals.created_at', '>=', $startDate)
-                ->where('deals.created_at', '<', $endDate)
-                ->get();
+            $number_of_leads_convert_won_hourly_deals = Deal::with('lead', 'dealStageChanges')
+                ->whereBetween('created_at', [$startDate, $endDate])
+                ->where('project_type', 'hourly')->get();
 
             $won_deals_count = 0;
             $won_deals_value = 0;
 
-            foreach ($number_of_leads_convert_won_deals as $won_deals) {
+            foreach ($number_of_leads_convert_won_hourly_deals as $won_deals) {
 
                 //closing the deal
 
                 if ($won_deals->added_by == $salesId) {
-
                     $won_deals_count += .125;
                     $won_deals_value += $won_deals->hourly_rate;
                 }
 
-
                 //The bidder
-
-                $leads = DB::table('leads')
-                    ->where('added_by', $salesId)
-                    ->where('id', $won_deals->lead_id)
-                    ->count();
-
-                if ($leads > 0) {
-
+                if ($won_deals?->lead?->added_by == $salesId) {
                     $won_deals_count += .25;
                     $won_deals_value += .25 * $won_deals->hourly_rate;
                 }
 
-                //Qualifying
+                $qualify_contribution = 0;
+                $needs_defined_contribution = 0;
+                $proposal_made_contribution = 0;
+                $negotiation_contribution = 0;
+                $milestone_contribution = 0;
 
-                $qualify_contribution = DB::table('deal_stage_changes')
-                    ->where('deal_id', $won_deals->deal_id)
-                    ->where('deal_stage_id', 1)
-                    ->count();
+                foreach ($won_deals?->dealStageChanges as $dealStageChanges) {
 
-                $qualify = DB::table('deal_stage_changes')
-                    ->where('deal_id', $won_deals->deal_id)
-                    ->where('updated_by', $salesId)
-                    ->where('deal_stage_id', 1)
-                    ->count();
+                    if ($dealStageChanges->updated_by == $salesId) {
+                        switch ($dealStageChanges->deal_stage_id) {
+                            case 1:
+                                $qualify_contribution++;
+                                break;
+                            case 2:
+                                $needs_defined_contribution++;
+                                break;
+                            case 3:
+                                $proposal_made_contribution++;
+                                break;
+                            case 4:
+                                $negotiation_contribution++;
+                                break;
+                            case 5:
+                                $milestone_contribution++;
+                                break;
+                            default:
+                                # code...
+                                break;
+                        }
+                    }
+                }
 
-                if ($qualify > 0) {
+                if ($qualify_contribution) {
                     $won_deals_count += .0375 / $qualify_contribution;
                     $won_deals_value += .0375 / $qualify_contribution * $won_deals->hourly_rate;
                 }
-
-
-                //Needs Defined
-
-                $needs_defined_contribution = DB::table('deal_stage_changes')
-                    ->where('deal_id', $won_deals->deal_id)
-                    ->where('deal_stage_id', 2)
-                    ->count();
-
-                $needs_defined = DB::table('deal_stage_changes')
-                    ->where('deal_id', $won_deals->deal_id)
-                    ->where('updated_by', $salesId)
-                    ->where('deal_stage_id', 2)
-                    ->count();
-
-                if ($needs_defined > 0) {
+                if ($needs_defined_contribution) {
                     $won_deals_count += .1875 / $needs_defined_contribution;
                     $won_deals_value += .1875 / $needs_defined_contribution * $won_deals->hourly_rate;
                 }
-
-                //Proposal made
-
-
-                $proposal_made_contribution = DB::table('deal_stage_changes')
-                    ->where('deal_id', $won_deals->deal_id)
-                    ->where('deal_stage_id', 3)
-                    ->count();
-
-                $proposal_made = DB::table('deal_stage_changes')
-                    ->where('deal_id', $won_deals->deal_id)
-                    ->where('updated_by', $salesId)
-                    ->where('deal_stage_id', 3)
-                    ->count();
-
-                if ($proposal_made > 0) {
+                if ($proposal_made_contribution) {
                     $won_deals_count += .125 / $proposal_made_contribution;
                     $won_deals_value += .125 / $proposal_made_contribution * $won_deals->hourly_rate;
                 }
-
-                //Negotiation started
-
-                $negotiation_contribution = DB::table('deal_stage_changes')
-                    ->where('deal_id', $won_deals->deal_id)
-                    ->where('deal_stage_id', 4)
-                    ->count();
-
-                $negotiation = DB::table('deal_stage_changes')
-                    ->where('deal_id', $won_deals->deal_id)
-                    ->where('updated_by', $salesId)
-                    ->where('deal_stage_id', 4)
-                    ->count();
-
-                if ($negotiation > 0) {
+                if ($negotiation_contribution) {
                     $won_deals_count += .125 / $negotiation_contribution;
                     $won_deals_value += .125 / $negotiation_contribution * $won_deals->hourly_rate;
                 }
-
-                //Sharing milestone breakdown
-
-                $milestone_contribution = DB::table('deal_stage_changes')
-                    ->where('deal_id', $won_deals->deal_id)
-                    ->where('deal_stage_id', 5)
-                    ->count();
-
-                $milestone = DB::table('deal_stage_changes')
-                    ->where('deal_id', $won_deals->deal_id)
-                    ->where('updated_by', $salesId)
-                    ->where('deal_stage_id', 5)
-                    ->count();
-
-                if ($milestone > 0) {
+                if ($milestone_contribution) {
                     $won_deals_count += .15 / $milestone_contribution;
                     $won_deals_value += .15 / $milestone_contribution * $won_deals->hourly_rate;
                 }
             }
 
-            $this->won_deals_count_hourly = $won_deals_count;
-            $this->won_deals_value_hourly = $won_deals_value;
+            $this->won_deals_count_hourly = round($won_deals_count, 2);
+            $this->won_deals_value_hourly = round($won_deals_value, 2);
 
 
             // --------------Number of won deals (Country wise)-------------//
