@@ -79,6 +79,9 @@ trait DeveloperDashboard
 
             $this->username = auth()->user()->name;
 
+            $taskHistoryWithDateAndId = TaskHistory::whereBetween('created_at', [$startDate, $endDate])
+                ->where('user_id', auth()->id());
+
 
             $numberOfTasksReceived = clone $tasksUserInDate;
             [
@@ -98,7 +101,7 @@ trait DeveloperDashboard
                 $this->average_number_of_attempts_needed_for_approval_by_client_data
             ] = $this->averageNumberOfAttemptsNeededForApprovalByClient($averageNumberOfAttemptsNeededForApprovalByClient);
 
-            $numberOfSubmittedTasks = clone $tasksUserInDate;
+            $numberOfSubmittedTasks = clone $taskHistoryWithDateAndId;
             [
                 $this->submit_number_of_tasks_in_this_month_data,
                 $this->submit_number_of_tasks_in_this_month,
@@ -108,7 +111,7 @@ trait DeveloperDashboard
                 $this->submit_number_of_tasks_secondary_page_in_this_month,
                 $this->submit_number_of_tasks_others_page_in_this_month_data,
                 $this->submit_number_of_tasks_others_page_in_this_month,
-            ] = $this->numberOfSubmittedTasks($numberOfSubmittedTasks);
+            ] = $this->numberOfSubmittedTasks($numberOfSubmittedTasks, $startDate, $endDate);
 
 
             $numberOfApprovedTasksOn1stAttemptByLeadDeveloper = clone $tasksUserInDate;
@@ -278,6 +281,9 @@ trait DeveloperDashboard
 
             $this->username = auth()->user()->name;
 
+            $taskHistoryWithDateAndId = TaskHistory::whereBetween('created_at', [$startDate, $endDate])
+                ->where('user_id', auth()->id());
+
             $numberOfTasksReceived = clone $tasksUserInDate;
             [
                 $this->number_of_tasks_received_data,
@@ -296,7 +302,7 @@ trait DeveloperDashboard
                 $this->average_number_of_attempts_needed_for_approval_by_client_data
             ] = $this->averageNumberOfAttemptsNeededForApprovalByClient($averageNumberOfAttemptsNeededForApprovalByClient);
 
-            $numberOfSubmittedTasks = clone $tasksUserInDate;
+            $numberOfSubmittedTasks = clone $taskHistoryWithDateAndId;
             [
                 $this->submit_number_of_tasks_in_this_month_data,
                 $this->submit_number_of_tasks_in_this_month,
@@ -306,7 +312,7 @@ trait DeveloperDashboard
                 $this->submit_number_of_tasks_secondary_page_in_this_month,
                 $this->submit_number_of_tasks_others_page_in_this_month_data,
                 $this->submit_number_of_tasks_others_page_in_this_month,
-            ] = $this->numberOfSubmittedTasks($numberOfSubmittedTasks);
+            ] = $this->numberOfSubmittedTasks($numberOfSubmittedTasks, $startDate, $endDate);
 
             //-----------------------------number of tasks approved in first attempt(in cycle) Client-----------------------//
 
@@ -533,17 +539,36 @@ trait DeveloperDashboard
         ];
     }
 
-    private function numberOfSubmittedTasks($tasksUserInDate)
+    private function numberOfSubmittedTasks($taskHistoryWithDateAndId, $startDate, $endDate)
     {
-        $tasksUserInDate = $tasksUserInDate->with(
-            'taskType:id,task_id,task_type', 
-            'stat:id,label_color,column_name', 
-            'project:id,pm_id,client_id', 
-            'project.client:id,name', 
+
+
+        $taskHistoryWithDateAndId = $taskHistoryWithDateAndId->where('board_column_id', 6)
+            ->groupBy('task_id')
+            ->get()
+            ->pluck('task_id')->toArray();
+
+        $taskFirstSubmitted = TaskHistory::where('board_column_id', 6)
+            ->groupBy('task_id')
+            ->whereIn('task_id', $taskHistoryWithDateAndId)
+            ->select('id', 'task_id', 'created_at', 'board_column_id')
+            ->get();
+
+        $taskId = [];
+        foreach ($taskFirstSubmitted as $task) {
+            if ($task->created_at >= $startDate && $task->created_at <= $endDate) {
+                array_push($taskId, $task->task_id);
+            }
+        }
+        $tasksUserInDate = Task::with(
+            'taskType:id,task_id,task_type',
+            'stat:id,label_color,column_name',
+            'project:id,pm_id,client_id',
+            'project.client:id,name',
             'submissions',
-            )->whereHas('history', function ($q) {
-                $q->where('board_column_id', 6);
-            })->select('id', 'created_at', 'heading', 'board_column_id', 'start_date', 'project_id');
+        )->whereIn('id', $taskId)
+            ->select('id', 'created_at', 'heading', 'board_column_id', 'start_date', 'project_id');
+
         if ($tasksUserInDate->count()) {
             $task_primary = clone $tasksUserInDate;
             $task_secondary = clone $tasksUserInDate;
@@ -577,13 +602,13 @@ trait DeveloperDashboard
     private function numberOfApprovedTasksOn1stAttemptByLeadDeveloper($tasksUserInDate)
     {
         $approved_1st_time_by_lead_dev = $tasksUserInDate->with(
-            'taskType:id,task_id,task_type', 
-            'project:id,pm_id,client_id', 
-            'project.client:id,name', 
-            'latestTaskSubmission', 
-            'latestTaskApprove', 
+            'taskType:id,task_id,task_type',
+            'project:id,pm_id,client_id',
+            'project.client:id,name',
+            'latestTaskSubmission',
+            'latestTaskApprove',
             'createBy'
-            )->where('board_column_id', 4)->whereNotNull('subtask_id')->doesntHave('revisions')
+        )->where('board_column_id', 4)->whereNotNull('subtask_id')->doesntHave('revisions')
             ->select('id', 'created_at', 'created_by', 'heading', 'board_column_id', 'start_date', 'project_id');
 
         if ($approved_1st_time_by_lead_dev->count()) {
@@ -707,15 +732,15 @@ trait DeveloperDashboard
     private function AvgNumberOfAttemptsNeededForApprovalByLeadDeveloper($tasksUserInDate)
     {
         $avg_no_of_submission_needed_for_app_by_lead_dev = $tasksUserInDate->with(
-            'firstHistoryForDevDoing', 
-            'firstHistoryForLeadDevApproval', 
-            'taskType', 
-            'stat:id,label_color,column_name', 
-            'project.pm', 
-            'project.client', 
-            'revisions', 
+            'firstHistoryForDevDoing',
+            'firstHistoryForLeadDevApproval',
+            'taskType',
+            'stat:id,label_color,column_name',
+            'project.pm',
+            'project.client',
+            'revisions',
             'firstTaskSubmission'
-            )->has('firstHistoryForLeadDevApproval')
+        )->has('firstHistoryForLeadDevApproval')
             ->where('board_column_id', 4)
             ->whereNotNull('subtask_id')->get();
 
@@ -777,14 +802,14 @@ trait DeveloperDashboard
     private function percentageOfTasksWithRevisions($tasksUserInDate)
     {
         $all_tasks_with_revision = $tasksUserInDate->with(
-            'taskType', 
+            'taskType',
             'stat:id,label_color,column_name',
             'project:id,pm_id,client_id',
             'project.pm:id,name',
-            'project.client:id,name', 
-            'revisions', 
+            'project.client:id,name',
+            'revisions',
             'firstTaskSubmission'
-            )->whereIn('board_column_id', [6, 4])
+        )->whereIn('board_column_id', [6, 4])
             ->whereNotNull('subtask_id');
 
         $percentage_of_tasks_with_revision_data = clone $all_tasks_with_revision;
@@ -825,16 +850,16 @@ trait DeveloperDashboard
     private function totalNumberOfRevisions($tasksUserInDate)
     {
         $revision_task_data = $tasksUserInDate->with(
-            'taskType', 
+            'taskType',
             'stat:id,label_color,column_name',
             'project.pm:id,name',
             'project.client:id,name',
             'project:id,pm_id,client_id',
-            'revisions.user', 
-            'revisions.taskRevisionDispute.taskDisputeQuestions', 
-            'revisions.taskRevisionDispute.winner', 
+            'revisions.user',
+            'revisions.taskRevisionDispute.taskDisputeQuestions',
+            'revisions.taskRevisionDispute.winner',
             'revisions.taskRevisionDispute.raisedBy'
-            )->whereIn('board_column_id', [6, 4])
+        )->whereIn('board_column_id', [6, 4])
             ->whereNotNull('subtask_id')
             ->has('revisions')->withCount('revisions')->get();
         $total_revision = $revision_task_data->sum('revisions_count');
@@ -848,14 +873,14 @@ trait DeveloperDashboard
     private function averageTaskSubmissionTime($tasksUserInDate)
     {
         $average_task_submission_time_data = $tasksUserInDate->with(
-            'taskType', 
+            'taskType',
             'stat:id,label_color,column_name',
             'project.pm:id,name',
             'project.client:id,name',
             'project:id,pm_id,client_id',
-            'revisions', 
+            'revisions',
             'firstHistoryForDevReview'
-            )->where('board_column_id', 4)
+        )->where('board_column_id', 4)
             ->whereNotNull('subtask_id')->get();
 
         $all_task_sub_time_in_days = [];
@@ -954,7 +979,7 @@ trait DeveloperDashboard
         }
 
         $number_of_tasks_data = $tasksUserInDate->with(
-            'taskType', 
+            'taskType',
             'timeLogged',
             'project.pm:id,name',
             'project.client:id,name',
@@ -987,7 +1012,7 @@ trait DeveloperDashboard
         }
 
         $number_of_tasks_data = $tasksUserInDate->with(
-            'taskType', 
+            'taskType',
             'timeLogged',
             'project.pm:id,name',
             'project.client:id,name',
@@ -1036,10 +1061,10 @@ trait DeveloperDashboard
             'project.pm:id,name',
             'project.client:id,name',
             'project:id,pm_id,client_id',
-            'revisions.timeLogs', 
+            'revisions.timeLogs',
             'firstTaskSubmission.timeLogs',
             'taskUser'
-            )->has('timeLoggedOnlyRevision')->withSum('timeLoggedOnlyRevision', 'total_minutes')->get();
+        )->has('timeLoggedOnlyRevision')->withSum('timeLoggedOnlyRevision', 'total_minutes')->get();
 
         $total_revision_time_in_mins = $task_with_revision_time->sum('time_logged_only_revision_sum_total_minutes');
 

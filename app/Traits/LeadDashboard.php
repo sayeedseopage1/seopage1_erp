@@ -73,7 +73,7 @@ trait LeadDashboard
             ini_set('max_execution_time', 180);
 
             $startDate = Carbon::parse(request('startDate'))->format('Y-m-d');
-            $endDate = Carbon::parse(request('endDate'))->addDays(1)->format('Y-m-d');
+            $endDate = Carbon::parse(request('endDate'))->format('Y-m-d');
 
             $this->username_lead = auth()->user()->name;
 
@@ -116,7 +116,7 @@ trait LeadDashboard
             [
                 $this->submit_number_of_tasks_in_this_month_lead,
                 $this->submit_number_of_tasks_in_this_month_lead_data
-            ] = $this->leadNumberOfSubmittedTasks($leadNumberOfSubmittedTasks);
+            ] = $this->leadNumberOfSubmittedTasks($leadNumberOfSubmittedTasks, $startDate, $endDate);
 
 
             $leadNumberOfApprovedTasksOn1stAttemptByProjectManager = clone $taskHistoryWithDateAndId;
@@ -318,7 +318,7 @@ trait LeadDashboard
             [
                 $this->submit_number_of_tasks_in_this_month_lead,
                 $this->submit_number_of_tasks_in_this_month_lead_data
-            ] = $this->leadNumberOfSubmittedTasks($leadNumberOfSubmittedTasks);
+            ] = $this->leadNumberOfSubmittedTasks($leadNumberOfSubmittedTasks, $startDate, $endDate);
 
 
             $leadNumberOfApprovedTasksOn1stAttemptByProjectManager = clone $taskHistoryWithDateAndId;
@@ -467,6 +467,7 @@ trait LeadDashboard
 
     private function leadNumberOfTasksReceived($taskWithStartEndDateWithId)
     {
+
         $number_of_tasks_received_lead_data = $taskWithStartEndDateWithId
             ->select('id', 'heading', 'project_id', 'created_at', 'status', 'start_date', 'board_column_id')
             ->with(
@@ -482,24 +483,35 @@ trait LeadDashboard
         ];
     }
 
-    private function leadNumberOfSubmittedTasks($taskWithStartEndDateWithId)
+    private function leadNumberOfSubmittedTasks($taskHistoryWithDateAndId, $startDate, $endDate)
     {
-        $submit_number_of_tasks_lead_dev_data = $taskWithStartEndDateWithId
-            ->whereHas('task', function ($q) {
-                $q->whereNull('subtask_id');
-            })
-            ->where('board_column_id', 6)
-            ->with(
-                'task.stat:id,label_color,column_name',
-                'task.oldestSubTask',
-                'task:id,created_at,due_date,heading,board_column_id,project_id',
-                'task.project:id,pm_id,client_id',
-                'task.project.client:id,name',
-                'task.project.pm:id,name',
-            )
-            ->select('id', 'task_id', 'created_at', 'board_column_id')
+
+        $taskHistoryWithDateAndId = $taskHistoryWithDateAndId->where('board_column_id', 6)
             ->groupBy('task_id')
+            ->get()
+            ->pluck('task_id')->toArray();
+
+        $taskFirstSubmitted = TaskHistory::where('board_column_id', 6)
+            ->groupBy('task_id')
+            ->whereIn('task_id', $taskHistoryWithDateAndId)
+            ->select('id', 'task_id', 'created_at', 'board_column_id')
             ->get();
+
+        $taskId = [];
+        foreach ($taskFirstSubmitted as $task) {
+            if ($task->created_at >= $startDate && $task->created_at <= $endDate) {
+                array_push($taskId, $task->task_id);
+            }
+        }
+
+
+        $submit_number_of_tasks_lead_dev_data = Task::with(
+            'stat:id,label_color,column_name',
+            'oldestSubTask',
+            'project:id,pm_id,client_id',
+            'project.client:id,name',
+            'project.pm:id,name',
+        )->select('id', 'created_at', 'start_date', 'due_date', 'heading', 'board_column_id', 'project_id')->find($taskId);
 
         return [
             $submit_number_of_tasks_lead_dev_data->count(),
