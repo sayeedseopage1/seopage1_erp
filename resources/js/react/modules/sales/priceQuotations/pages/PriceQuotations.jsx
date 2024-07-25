@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from "react";
+import React, { useContext } from "react";
 import { MdFormatListBulletedAdd } from "react-icons/md";
 
 // Section Components
@@ -30,28 +30,45 @@ import { useAllPriceQuotationsQuery } from "../../../../services/api/priceQuotat
 
 const PriceQuotations = () => {
     useWhyDidYouRender("PriceQuotations");
-
     // Context
-    const { priceQuotationsInputs, setPriceQuotationsInputs } = useContext(
-        PriceQuotationsContext
-    );
+    const {
+        clientsData,
+        isClientsLoading,
+        priceQuotationsInputs,
+        setPriceQuotationsInputs,
+        priceQuotationsResponse,
+        setPriceQuotationsResponse,
+    } = useContext(PriceQuotationsContext);
 
     const [isPriceQuotationModalOpen, setIsPriceQuotationModalOpen] =
         React.useState(false);
-    const [isLoading, setIsLoading] = React.useState(false);
     const [, /*filter*/ setFilter] = React.useState();
+    const [{ pageIndex, pageSize }, setPagination] = React.useState({
+        pageIndex: 0,
+        pageSize: 10,
+    });
 
+    // make query string
+    const queryString = (object) => {
+        const queryObject = _.pickBy(object, Boolean);
+        return new URLSearchParams(queryObject).toString();
+    };
 
     // All Price Quotations Query
     const {
-        data: priceQuotationsResponse,
+        data: priceQuotationsResponseData,
         isLoading: isPriceQuotationsLoading,
         isFetching: isPriceQuotationsFetching,
         refetch: priceQuotationsRefetch,
-    } = useAllPriceQuotationsQuery();
+    } = useAllPriceQuotationsQuery(
+        queryString({
+            page: pageIndex + 1,
+            limit: pageSize,
+        })
+    );
 
     // Price Quotations Data
-    const priceQuotationsData = priceQuotationsResponse?.data || {};
+    const priceQuotationsData = priceQuotationsResponseData?.data || {};
     // price quotations data loading
     const isPriceQuotationsDataLoading =
         isPriceQuotationsLoading || isPriceQuotationsFetching;
@@ -81,10 +98,31 @@ const PriceQuotations = () => {
         return titleList[priceQuotationsInputs.step];
     };
 
+    const metaAction = {
+        viewPDf: (columnData) => {
+            setPriceQuotationsInputs((prev) => {
+                return {
+                    ...prev,
+                    step: "view-price-quotation-invoice",
+                };
+            });
+            setPriceQuotationsResponse({
+                ...priceQuotationsResponse,
+                invoiceData: columnData,
+            });
+            handleModal(setIsPriceQuotationModalOpen, true);
+        },
+    };
+
+    // Pagination
+    const onPageChange = (paginate) => {
+        setPagination(paginate);
+    };
+
     return (
         <div className="price_quotations_container">
             {/* Price Quotations Filter */}
-            <PriceQuotationFilterBar setFilter={setFilter} />
+            <PriceQuotationFilterBar setFilter={setFilter} clientsData={clientsData} />
 
             {/* Price Quotations Table */}
             <div className="sp1_tlr_container">
@@ -92,7 +130,7 @@ const PriceQuotations = () => {
                     <Flex
                         justifyContent="space-between"
                         alignItem="center"
-                        className="mb-3"
+                        className="mb-3 sp1_tlr_tbl_action_buttons"
                     >
                         <div className="d-flex flex-wrap flex-md-nowrap">
                             <Button
@@ -111,7 +149,7 @@ const PriceQuotations = () => {
                         {/* refresh */}
                         <RefreshButton
                             onClick={priceQuotationsRefetch}
-                            isLoading={isLoading}
+                            isLoading={isPriceQuotationsDataLoading}
                             className="font-weight-normal price_quotation_refresh_button border-0"
                         />
                     </Flex>
@@ -119,16 +157,18 @@ const PriceQuotations = () => {
                         tableName="priceQuotations"
                         tableData={priceQuotationsData}
                         tableColumns={PriceQuotationsTableColumns}
-                        tableActions={{}}
+                        tableActions={metaAction}
                         isLoading={isPriceQuotationsDataLoading}
                         justifyStyleColumn={{
-                            requested_on: "center",
+                            requested_on: "flex-start",
                             primary_page: "center",
                             secondary_page: "center",
                             other_works_needed: "center",
                             system_suggested_price: "center",
                             project_budget: "center",
+                            action: "center",
                         }}
+                        onPageChange={onPageChange}
                         sortingColumn={["clients"]}
                     />
                 </div>
@@ -148,6 +188,10 @@ const PriceQuotations = () => {
                             setPriceQuotationsInputs(
                                 priceQuotationsState.inputs
                             );
+                            setPriceQuotationsResponse({
+                                ...priceQuotationsResponse,
+                                isNotDoAble: false,
+                            });
                         })
                     }
                 />

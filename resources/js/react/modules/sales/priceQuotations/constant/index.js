@@ -123,335 +123,57 @@ export const PriceQuotationsDataInputOptions = {
   ]
 }
 
-// Dummy data for Price Quotations module
-export const PriceQuotationsDummyData = [
-  {
-    "id": 1,
-    "client_id": 1,
-    "client_name": "Client 1",
-    "client_image": "image.jpg",
-    "deal_name": "lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua",
-    "deal_id": 1,
-    "requested_by_name": "User 1",
-    "requested_by_id": 1,
-    "requested_by_image": "image.jpg",
-    "requested_on": "2021-09-01",
-    "primary_page": 6,
-    "secondary_page": 11,
-    "other_works_needed": "1h",
-    "system_suggested_price": 1000,
-    "project_budget": 2000
-  },
-  {
-    "id": 2,
-    "client_id": 2,
-    "client_name": "Client 2",
-    "client_image": "image.jpg",
-    "deal_name": "Ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua",
-    "deal_id": 2,
-    "requested_by_name": "User 2",
-    "requested_by_id": 2,
-    "requested_by_image": "image.jpg",
-    "requested_on": "2021-09-02",
-    "primary_page": 7,
-    "secondary_page": 12,
-    "other_works_needed": "2h",
-    "system_suggested_price": 2000,
-    "project_budget": 4000
-  },
-  {
-    "id": 3,
-    "client_id": 3,
-    "client_name": "Client 3",
-    "client_image": "image.jpg",
-    "deal_name": "Dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua",
-    "deal_id": 3,
-    "requested_by_name": "User 3",
-    "requested_by_id": 3,
-    "requested_by_image": "image.jpg",
-    "requested_on": "2021-09-03",
-    "primary_page": 8,
-    "secondary_page": 13,
-    "other_works_needed": "3h",
-    "system_suggested_price": 3000,
-    "project_budget": 6000
-  },
-  {
-    "id": 4,
-    "client_id": 4,
-    "client_name": "Client 4",
-    "client_image": "image.jpg",
-    "deal_name": "ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua",
-    "deal_id": 4,
-    "requested_by_name": "User 4",
-    "requested_by_id": 4,
-    "requested_by_image": "image.jpg",
-    "requested_on": "2021-09-04",
-    "primary_page": 9,
-    "secondary_page": 14,
-    "other_works_needed": "4h",
-    "system_suggested_price": 4000,
-    "project_budget": 8000
-  },
-  {
-    "id": 5,
-    "client_id": 5,
-    "client_name": "Client 5",
-    "client_image": "image.jpg",
-    "deal_name": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua",
-    "deal_id": 5,
-    "requested_by_name": "User 5",
-    "requested_by_id": 5,
-    "requested_by_image": "image.jpg",
-    "requested_on": "2021-09-05",
-    "primary_page": 10,
-    "secondary_page": 15,
-    "other_works_needed": "5h",
-    "system_suggested_price": 5000,
-    "project_budget": 10000
-  },
-  {
-    "id": 6,
-    "client_id": 6,
-    "client_name": "Client 6",
-    "client_image": "image.jpg",
-    "deal_name": "ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua",
-    "deal_id": 6,
-    "requested_by_name": "User 6",
-    "requested_by_id": 6,
-    "requested_by_image": "image.jpg",
-    "requested_on": "2021-09-06",
-    "primary_page": 11,
-    "secondary_page": 16,
-    "other_works_needed": "6h",
-    "system_suggested_price": 6000,
-    "project_budget": 12000
-  },
-  {
-    "id": 7,
-    "client_id": 7,
-    "client_name": "Client 7",
-    "client_image": "image.jpg",
-    "deal_name": "ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua",
-    "deal_id": 7,
-    "requested_by_name": "User 7",
-    "requested_by_id": 7,
-    "requested_by_image": "image.jpg",
-    "requested_on": "2021-09-07",
-    "primary_page": 12,
-    "secondary_page": 17,
-    "other_works_needed": "7h",
-    "system_suggested_price": 7000,
-    "project_budget": 14000
-  },
-  {
-    "id": 8,
-    "client_id": 8,
-    "client_name": "Client 8",
-    "client_image": "image.jpg",
-    "deal_name": "ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua",
-    "deal_id": 8,
-    "requested_by_name": "User 8",
-    "requested_by_id": 8,
-    "requested_by_image": "image.jpg",
-    "requested_on": "2021-09-08",
-    "primary_page": 13,
-    "secondary_page": 18,
-    "other_works_needed": "8h",
-    "system_suggested_price": 8000,
-    "project_budget": 16000
-  },
-  {
-    "id": 9,
-    "client_id": 9,
-    "client_name": "Client 9",
-    "client_image": "image.jpg",
-    "deal_name": "ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua",
-    "deal_id": 9,
-    "requested_by_name": "User 9",
-    "requested_by_id": 9,
-    "requested_by_image": "image.jpg",
-    "requested_on": "2021-09-09",
-    "primary_page": 14,
-    "secondary_page": 19,
-    "other_works_needed": "9h",
-    "system_suggested_price": 9000,
-    "project_budget": 18000
-  },
-  {
-    "id": 10,
-    "client_id": 10,
-    "client_name": "Client 10",
-    "client_image": "image.jpg",
-    "deal_name": "ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua",
-    "deal_id": 10,
-    "requested_by_name": "User 10",
-    "requested_by_id": 10,
-    "requested_by_image": "image.jpg",
-    "requested_on": "2021-09-10",
-    "primary_page": 15,
-    "secondary_page": 20,
-    "other_works_needed": "10h",
-    "system_suggested_price": 10000,
-    "project_budget": 20000
-  }
-]
 
-
-export const AccountListDummyData = [
-  {
-    "id": 1,
-    "platform": {
-      "id": 2,
-      "name": "Upwork",
-      "value": "upwork"
-    },
-    "user_name": "User 1",
-    "user_url": "user1.com",
-    "account_email": "useremail1@gmail.com",
-    "profile_type": {
-      id: 1,
-      name: "Old Profile",
-      value: "old_profile"
-    },
-    "generated_on": "2021-09-01",
-    "multiplying_factor": 1,
-    is_active: true
-
-  },
-  {
-    "id": 2,
-    "platform": {
-      "id": 1,
-      "name": "Freelancer.com",
-      "value": "freelancer.com"
-    },
-    "user_name": "User 2",
-    "user_url": "user2.com",
-    "account_email": "useremail2@gmail.com",
-    "profile_type": {
-      id: 1,
-      name: "Old Profile",
-      value: "old_profile"
-    },
-    "generated_on": "2021-09-02",
-    "multiplying_factor": 2,
-    is_active: true
-
-  },
-  {
-    "id": 3,
-    "platform": {
-      "id": 1,
-      "name": "Freelancer.com",
-      "value": "freelancer.com"
-    },
-    "user_name": "User 3",
-    "user_url": "user3.com",
-    "account_email": "useremail3@gmail.com",
-    "profile_type": {
-      id: 1,
-      name: "Old Profile",
-      value: "old_profile"
-    },
-    "generated_on": "2021-09-03",
-    "multiplying_factor": 3,
-    is_active: false
-
-  },
-  {
-    "id": 4,
-    "platform": {
-      "id": 2,
-      "name": "Upwork",
-      "value": "upwork"
-    },
-    "user_name": "User 4",
-    "user_url": "user4.com",
-    "account_email": "useremail4@gmail.com",
-    "profile_type": {
-      id: 2,
-      name: "Mid Profile",
-      value: "mid_profile"
-    },
-    "generated_on": "2021-09-04",
-    "multiplying_factor": 4,
-    is_active: false
-  }
-]
-
-
-export const QuotationDummyData = [
-  {
-    id: 1,
-    cms: "Wordpress",
-    category: "Setup Domain and Hosting",
-    primary_page: 2,
-    secondary_page: 3,
-    major_functionalities: "Yes(2 Hours)",
-    others_works: "7 Hours",
-    risk_factors: "Yes (10%)",
-    currency: "USD",
-    platform_account: "rajat07me",
-    estimated_budget: 219.29,
-    client_currency_amount: 300,
-    deadline: "fixed",
-    deadline_hours: 2
-  },
-  {
-    id: 2,
-    cms: "Wordpress",
-    category: "Setup Domain and Hosting",
-    primary_page: 3,
-    secondary_page: 4,
-    major_functionalities: "Yes(5 Hours)",
-    others_works: "10 Hours",
-    risk_factors: "Yes (20%)",
-    currency: "USD",
-    platform_account: "ranjika08",
-    estimated_budget: 219.29,
-    client_currency_amount: 300,
-    deadline: "fixed",
-    deadline_hours: 5
-  }
-]
 
 export const PriceQuotationsInvoiceDummyData = {
   client: {
     name: "Joseph Swami",
     user_id: "Joseph S.",
-    message_thread: "http:frelancer.com/messages/josep..."
   },
+  serviceProvider: {
+    company: "",
+    name: "",
+    platform_account_id: ""
+
+  },
+  serial_no: "",
   deadline: "20 July 2021",
   total_hours: 90,
+  total_price: "",
+  message_link: "https://www.freelancer.com/u/investorksa?from=messaging",
   items: [
     {
       sl: 1,
       items: "Number of primary pages",
-      quantity: 3,
+      quantity: null,
       descriptions: "Approximate working hours needed",
-      total_hours: "30"
+      total_hours: "",
+      key: "total_hours_of_primary_page",
     },
     {
       sl: 2,
       items: "Number of secondary pages",
-      quantity: 5,
+      quantity: null,
       descriptions: "Approximate working hours needed",
-      total_hours: "20"
+      total_hours: "",
+      key: "total_hours_of_secondary_page"
     },
     {
       sl: 3,
       items: "Number of functional work",
-      quantity: 1,
+      quantity: null,
       descriptions: "Approximate working hours needed",
-      total_hours: "20"
+      total_hours: "",
+      key: "total_hours_of_major_functionality"
+
     },
     {
       sl: 4,
       items: "Developers",
       quantity: "This will be Other works",
       descriptions: "Approximate working hours needed",
-      total_hours: "20"
+      total_hours: "",
+      key: "total_hours_of_others_works"
     }
   ]
 
@@ -459,6 +181,171 @@ export const PriceQuotationsInvoiceDummyData = {
 
 
 
+export const InvoiceDummyData = {
+  "id": 1,
+  "serial_no": "SEOPAGE1-2024-001",
+  "deal_stage_id": 176,
+  "project_cms_id": 1,
+  "project_niche_id": 1,
+  "no_of_primary_pages": 1,
+  "no_of_secondary_pages": 4,
+  "no_of_major_functionalities": null,
+  "risk_factor": null,
+  "total_hours_of_primary_page": "7.08",
+  "total_hours_of_secondary_page": "5.62",
+  "total_hours_of_major_functionality": "0.00",
+  "total_hours_of_others_works": "30.00",
+  "total_calculated_hours": "42.70",
+  "currency_id": 1,
+  "deadline_type": 2,
+  "no_of_days": "10.00",
+  "platform_account_id": 1,
+  "calculated_actual_budget": "1300.50",
+  "calculated_usd_budget": "1300.50",
+  "project_budget": null,
+  "added_by": {
+    "id": 230,
+    "name": "Riadus Salehin",
+    "user_name": null,
+    "email": "riad1@seopage1.net",
+    "two_factor_secret": null,
+    "two_factor_recovery_codes": null,
+    "two_factor_confirmed": 0,
+    "two_factor_email_confirmed": 0,
+    "image": "avatar_blank.png",
+    "mobile": "01958363552",
+    "gender": "male",
+    "salutation": "mr",
+    "locale": "en",
+    "status": "active",
+    "login": "enable",
+    "onesignal_player_id": null,
+    "last_login": "2024-07-19T08:04:11+06:00",
+    "email_notifications": 1,
+    "country_id": 18,
+    "dark_theme": 0,
+    "rtl": 0,
+    "two_fa_verify_via": null,
+    "two_factor_code": null,
+    "two_factor_expires_at": null,
+    "admin_approval": 1,
+    "permission_sync": 1,
+    "google_calendar_status": 1,
+    "role_id": 1,
+    "shift": null,
+    "activation_status": 1,
+    "image_url": "http://172.27.27.88:8000/user-uploads/avatar/avatar_blank.png",
+    "modules": [
+      "clients",
+      "projects",
+      "tickets",
+      "invoices",
+      "estimates",
+      "events",
+      "messages",
+      "tasks",
+      "timelogs",
+      "contracts",
+      "notices",
+      "payments",
+      "orders",
+      "knowledgebase",
+      "employees",
+      "attendance",
+      "expenses",
+      "leaves",
+      "leads",
+      "holidays",
+      "products",
+      "reports",
+      "settings"
+    ],
+    "user_other_role": true,
+    "role": [
+      {
+        "user_id": 230,
+        "role_id": 1
+      },
+      {
+        "user_id": 230,
+        "role_id": 2
+      }
+    ],
+    "client_details": null,
+    "session": null,
+    "employee_detail": {
+      "id": 42,
+      "user_id": 230,
+      "employee_id": "Seopage1/061",
+      "address": "Springwood, House No. 5/A, Road No. 01, Shekhertek, PC Culture Housing, Mohammadpur, Dhaka - 1207",
+      "hourly_rate": null,
+      "slack_username": null,
+      "department_id": 8,
+      "designation_id": 20,
+      "joining_date": "2022-05-01T06:00:00+06:00",
+      "last_date": null,
+      "added_by": 1,
+      "last_updated_by": 1,
+      "attendance_reminder": "2023-07-28",
+      "date_of_birth": "1992-03-12T00:00:00+06:00",
+      "calendar_view": "task,events,holiday,tickets,leaves",
+      "about_me": "I am an SEO specialist with experience in Laravel-based web development and currently working as a project manager for an internal ERP software development project for my company. My skills in SEO include understanding the technical aspects of optimizing a website built on the Laravel framework for search engines and having experience working with the latest SEO techniques and strategies, including on-page optimization, link building, keyword research, and analytics. I am able to work closely with developers to implement technical SEO changes and track the success of those changes through analytics. I also provide guidance on content creation and promotion to ensure that the website is reaching its target audience.\r\n\r\nAs a Project Manager, I am responsible for leading and coordinating the internal ERP software development project, including managing the project team, setting project timelines, and ensuring that the project stays on track. I have experience managing projects from start to finish, including planning, execution, monitoring, controlling, and closing the project. I am skilled in project management tools and methodologies. I am able to communicate effectively with stakeholders and team members to ensure that the project is delivered on time and to the satisfaction of the stakeholders.",
+      "reporting_to": 62,
+      "upcoming_birthday": "2025-03-12",
+      "designation": {
+        "id": 20,
+        "name": "Manager",
+        "parent_id": 16,
+        "added_by": null,
+        "last_updated_by": null
+      }
+    }
+  },
+  "created_at": "2024-07-19T02:21:09.000000Z",
+  "updated_at": "2024-07-19T02:21:09.000000Z",
+  "deal_stage": {
+    "id": 176,
+    "short_code": "DSEOP1RYGI3F",
+    "client_username": "Koloboyy",
+    "client_name": "Rene K.",
+    "client_badge": "new client",
+    "project_name": "Looking for Website Design! Professional and no Wordpress Indian Work! Modern Website Design for Cannabis Shop!",
+    "message_link": "https://www.freelancer.com/u/investorksa?from=messaging",
+    "client": null
+  },
+  "project_cms": {
+    "id": 1,
+    "cms_name": "WordPress"
+  },
+  "project_niche": {
+    "id": 1,
+    "category_name": "Fitness"
+  },
+  "currency": {
+    "id": 1,
+    "currency_name": "Dollars",
+    "currency_symbol": "$",
+    "currency_code": "USD",
+    "exchange_rate": 1
+  },
+  "platform_account": {
+    "id": 1,
+    "type": 1,
+    "company_name": "Seopage1",
+    "username": "cimiju",
+    "name": "Lewis Conrad",
+    "user_url": "http://172.27.27.88:8000/account/all-platform-accounts",
+    "email": "fenevuda@mailinator.com",
+    "profile_type": 1,
+    "generated_on": "2024-07-23 00:00:00",
+    "multiplying_factor": "1.00",
+    "confirmation_of_data_accuracy": 1,
+    "status": 1,
+    "added_by": 230,
+    "created_at": "2024-07-16T05:07:26.000000Z",
+    "updated_at": "2024-07-16T09:20:27.000000Z"
+  }
+}
 
 
 export const QuotationTableLabel = {

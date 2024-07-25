@@ -1,10 +1,17 @@
+import { FaEye } from "react-icons/fa";
+import dayjs from "dayjs";
+
 // Components -Styled Components
 import { TableTdWrapper } from "../UI/StyledComponents";
 
 // Components - UI
 import PersonAvatar from "../Shared/PersonAvatar";
 import TablePopover from "../Shared/TablePopover";
+
+// Components - Logic - Global
 import Switch from "../../../../../global/Switch";
+
+// Helper
 import { getAseDseColor } from "../../helper";
 
 export const PriceQuotationsTableColumns = [
@@ -13,16 +20,77 @@ export const PriceQuotationsTableColumns = [
         header: "Clients",
         accessorKey: "clients",
         cell: ({ row }) => {
-            const data = row.original;
+            const dealStage = row.original.deal_stage;
+
             return (
-                <PersonAvatar
-                    avatar={data.client_image}
-                    key={data.client_name}
-                    imageParentClass="rounded-circle"
-                    name={data.client_name}
-                    imageClass="rounded-circle"
-                    url={`/account/clients/${data?.client_id}`}
-                />
+                <Switch>
+                    <Switch.Case
+                        condition={
+                            dealStage?.client_badge === "existing client" &&
+                            dealStage?.client_details !== null
+                        }
+                    >
+                        <PersonAvatar
+                            avatar={dealStage?.client_details?.image_url}
+                            imageParentClass="rounded-circle"
+                            name={
+                                dealStage?.client_details?.name ||
+                                dealStage?.client_details?.user_name
+                            }
+                            imageClass="rounded-circle"
+                            url={`/account/clients/${dealStage?.client_details?.id}`}
+                        />
+                    </Switch.Case>
+                    <Switch.Case
+                        condition={
+                            dealStage?.client_badge === "existing client" &&
+                            dealStage?.client_details === null
+                        }
+                    >
+                        <PersonAvatar
+                            avatar={null} // New Client did't have an image, that's why we use null
+                            imageParentClass="rounded-circle"
+                            name={
+                                dealStage?.client_name ||
+                                dealStage?.client_username
+                            }
+                            imageClass="rounded-circle"
+                        />
+                    </Switch.Case>
+                    <Switch.Case
+                        condition={
+                            dealStage?.client_badge === "new client" &&
+                            dealStage?.client_details === null
+                        }
+                    >
+                        <PersonAvatar
+                            avatar={null} // New Client did't have an image, that's why we use null
+                            imageParentClass="rounded-circle"
+                            name={
+                                dealStage?.client_name ||
+                                dealStage?.client_username
+                            }
+                            imageClass="rounded-circle"
+                        />
+                    </Switch.Case>
+                    <Switch.Case
+                        condition={
+                            dealStage?.client_badge === "new client" &&
+                            dealStage?.client_details !== null
+                        }
+                    >
+                        <PersonAvatar
+                            avatar={dealStage?.client_details?.image_url}
+                            imageParentClass="rounded-circle"
+                            name={
+                                dealStage?.client_details?.name ||
+                                dealStage?.client_details?.user_name
+                            }
+                            imageClass="rounded-circle"
+                            url={`/account/clients/${dealStage?.client_details?.id}`}
+                        />
+                    </Switch.Case>
+                </Switch>
             );
         },
     },
@@ -34,7 +102,7 @@ export const PriceQuotationsTableColumns = [
             const data = row.original;
             return (
                 <TablePopover
-                    text={data?.deal_name}
+                    text={data?.deal_stage?.project_name}
                     btnClass="text-left"
                     isDangerHtml={false}
                 />
@@ -46,15 +114,15 @@ export const PriceQuotationsTableColumns = [
         header: "Requested by",
         accessorKey: "requested_by",
         cell: ({ row }) => {
-            const data = row.original;
+            const person = row?.original?.added_by;
             return (
                 <PersonAvatar
-                    avatar={data.requested_by_image}
-                    key={data.requested_by_id}
+                    avatar={person?.image_url}
+                    key={person?.id}
                     imageParentClass="rounded-circle"
-                    name={data.requested_by_name}
+                    name={person?.name}
                     imageClass="rounded-circle"
-                    url={`/account/employees/${data?.requested_by_id}`}
+                    url={`/account/employees/${person?.id}`}
                 />
             );
         },
@@ -68,7 +136,7 @@ export const PriceQuotationsTableColumns = [
             const data = row.original;
             return (
                 <TableTdWrapper>
-                    <p>{data?.requested_on ? data?.requested_on : "--"}</p>
+                    {dayjs(data?.created_at).format("YYYY-MM-DD HH:mm")}
                 </TableTdWrapper>
             );
         },
@@ -81,7 +149,11 @@ export const PriceQuotationsTableColumns = [
             const data = row.original;
             return (
                 <TableTdWrapper>
-                    <p>{data?.primary_page ? data?.primary_page : "--"}</p>
+                    <p>
+                        {data?.no_of_primary_pages
+                            ? data?.no_of_primary_pages
+                            : "--"}
+                    </p>
                 </TableTdWrapper>
             );
         },
@@ -94,7 +166,11 @@ export const PriceQuotationsTableColumns = [
             const data = row.original;
             return (
                 <TableTdWrapper>
-                    <p>{data?.secondary_page ? data?.secondary_page : "--"}</p>
+                    <p>
+                        {data?.no_of_secondary_pages
+                            ? data?.no_of_secondary_pages
+                            : "--"}
+                    </p>
                 </TableTdWrapper>
             );
         },
@@ -105,12 +181,20 @@ export const PriceQuotationsTableColumns = [
         accessorKey: "other_works_needed",
         cell: ({ row }) => {
             const data = row.original;
+
+            const getHourWithMin = (check) => {
+                const duration = parseFloat(check);
+                const getHours = parseInt(duration);
+                const getMin = (duration - getHours) * 60;
+                return `${getHours} Hours ${
+                    getMin === 0 ? "" : ` ${Math.floor(getMin)} Min`
+                }`;
+            };
             return (
                 <TableTdWrapper>
                     <p>
-                        {data?.other_works_needed
-                            ? data?.other_works_needed
-                            : "--"}
+                        {getHourWithMin(data?.total_hours_of_others_works) ??
+                            "--"}
                     </p>
                 </TableTdWrapper>
             );
@@ -118,7 +202,7 @@ export const PriceQuotationsTableColumns = [
     },
     {
         id: "system_suggested_price",
-        header: "System suggested price",
+        header: "System sugg. price",
         accessorKey: "system_suggested_price",
         cell: ({ row }) => {
             const data = row.original;
@@ -127,19 +211,19 @@ export const PriceQuotationsTableColumns = [
                     <p className="d-flex">
                         <Switch>
                             <Switch.Case
-                                condition={data?.system_suggested_price}
+                                condition={data?.calculated_usd_budget}
                             >
-                                $ {data?.system_suggested_price}{" "}
+                                $ {data?.calculated_usd_budget}{" "}
                                 <button className="sp1_price_quotation_column_sort_btn ml-2">
                                     <span
                                         className={`table_asc_dec ${getAseDseColor(
-                                            data?.project_budget
+                                            data?.calculated_usd_budget
                                         )}`}
                                     ></span>
                                 </button>
                             </Switch.Case>
                             <Switch.Case
-                                condition={!data?.system_suggested_price}
+                                condition={!data?.calculated_usd_budget}
                             >
                                 {"--"}
                             </Switch.Case>
@@ -175,6 +259,22 @@ export const PriceQuotationsTableColumns = [
                             </Switch.Case>
                         </Switch>
                     </p>
+                </TableTdWrapper>
+            );
+        },
+    },
+    {
+        id: "action",
+        header: "Action",
+        accessorKey: "action",
+        cell: ({ row, table }) => {
+            const data = row.original;
+            const action = table.options.meta;
+            return (
+                <TableTdWrapper>
+                    <button onClick={() => action.viewPDf(data)}>
+                        <FaEye fill="var(--primaryBlue)" size={28} />
+                    </button>
                 </TableTdWrapper>
             );
         },

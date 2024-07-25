@@ -3,7 +3,6 @@ import PropTypes from "prop-types";
 
 // Style
 import "./style/viewPriceQuotationsInvoice.css";
-import dayjs from "dayjs";
 
 const ViewPriceQuotationsInvoice = ({ invoiceData, targetRef }) => {
     return (
@@ -22,9 +21,11 @@ const ViewPriceQuotationsInvoice = ({ invoiceData, targetRef }) => {
                 <div className="view_price_quotations_invoice_provider_left">
                     <h6>Service Provider:</h6>
                     <div>
-                        <p>Seopage1</p>
-                        <span>Rajat Chakraborty</span>
-                        <span>User Id: Rajat C.</span>
+                        <p>{invoiceData?.serviceProvider?.company_name}</p>
+                        <span>{invoiceData?.serviceProvider["name"]}</span>
+                        <span>
+                            User Id: {invoiceData?.serviceProvider["username"]}
+                        </span>
                     </div>
                 </div>
                 <div className="view_price_quotations_invoice_provider_right">
@@ -32,13 +33,11 @@ const ViewPriceQuotationsInvoice = ({ invoiceData, targetRef }) => {
                         <tbody>
                             <tr>
                                 <td>Serial No:</td>
-                                <td>SEOPAGE1-P.I-24-031</td>
+                                <td>{invoiceData["serial_no"]}</td>
                             </tr>
                             <tr>
                                 <td>Date:</td>
-                                <td>
-                                    {dayjs(new Date()).format("DD.MM.YYYY")}
-                                </td>
+                                <td>{invoiceData["create_at"]}</td>
                             </tr>
                         </tbody>
                     </table>
@@ -48,19 +47,28 @@ const ViewPriceQuotationsInvoice = ({ invoiceData, targetRef }) => {
                 <div className="view_price_quotations_invoice_provider_left">
                     <h6>Client/Bill to:</h6>
                     <div>
-                        <p>{invoiceData?.client?.name}</p>
-                        <span>User Id: {invoiceData?.client?.user_id}</span>
+                        <p>{invoiceData["client"]?.client_name}</p>
+                        <span>
+                            User Id: {invoiceData["client"].client_username}
+                        </span>
                         <span>
                             Message Thread:{" "}
-                            <a href={invoiceData?.client?.message_thread}>
-                                {invoiceData?.client?.message_thread}
-                            </a>
+                            {invoiceData["client"].message_thread && (
+                                <a href={invoiceData["client"].message_thread}>
+                                    {invoiceData["client"].message_thread
+                                        .length > 25
+                                        ? `${invoiceData[
+                                              "client"
+                                          ].message_thread.slice(0, 25)}...`
+                                        : invoiceData["client"].message_thread}
+                                </a>
+                            )}
                         </span>
                     </div>
                 </div>
                 <div className="view_price_quotations_invoice_provider_right_deadline">
                     <h6>Deadline:</h6>
-                    <p>{invoiceData?.deadline}</p>
+                    <p>{invoiceData?.invoiceDeadline}</p>
                 </div>
             </div>
             <div className="view_price_quotations_invoice_table_wrapper">
@@ -92,11 +100,11 @@ const ViewPriceQuotationsInvoice = ({ invoiceData, targetRef }) => {
                     <div className="view_price_quotations_invoice_footer_top">
                         <p>
                             Total hours needed:{" "}
-                            <span>{invoiceData?.total_hours} hours</span>
+                            <span>{invoiceData?.total_calculated_hours}</span>
                         </p>
                         <p>
-                            Total price :
-                            <span> System suggested price price plus 10%</span>
+                            Total price :{" "}
+                            <span>System suggested price price plus 10%</span>
                         </p>
                     </div>
                     <div className="view_price_quotations_invoice_footer_bottom">
@@ -118,4 +126,5 @@ export default ViewPriceQuotationsInvoice;
 
 ViewPriceQuotationsInvoice.propTypes = {
     invoiceData: PropTypes.object.isRequired,
+    targetRef: PropTypes.object.isRequired,
 };

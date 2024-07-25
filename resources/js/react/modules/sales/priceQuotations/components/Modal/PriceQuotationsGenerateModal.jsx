@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import { toast } from "react-toastify";
 import { usePDF } from "react-to-pdf";
@@ -26,21 +26,19 @@ import SubmitPriceQuotation from "./ModalContent/SubmitPriceQuotation";
 import ViewPriceQuotation from "./ModalContent/ViewPriceQuotation";
 import ViewPriceQuotationsInvoice from "./ModalContent/ViewPriceQuotationsInvoice";
 
-// Dummy Data
-import {
-    PriceQuotationsInvoiceDummyData,
-    QuotationDummyData,
-} from "../../constant";
-
 // Context
-import { priceQuotationsState } from "../../context/PriceQuotationsProvider";
-
-// Hooks
-import usePriceQuotations from "../../hooks/usePriceQuotations";
+import {
+    PriceQuotationsContext,
+    priceQuotationsState,
+} from "../../context/PriceQuotationsProvider";
 
 // Helper
-import { formatPriceQuotationsForPayload } from "../../helper/formatData";
+import {
+    formatInvoiceData,
+    formatPriceQuotationsForPayload,
+} from "../../helper/formatData";
 import { useCreatePriceQuotationMutation } from "../../../../../services/api/priceQuotationsApiSlice";
+import { useReactToPrint } from "react-to-print";
 
 const PriceQuotationsGenerateModal = ({
     isModalOpen,
@@ -50,10 +48,12 @@ const PriceQuotationsGenerateModal = ({
     priceQuotationsInputs,
     setPriceQuotationsInputs,
 }) => {
-    const {} = usePriceQuotations();
-
-    const { toPDF, targetRef } = usePDF({ filename: "page.pdf" });
-    const [isLoading, setIsLoading] = React.useState(false);
+    const { priceQuotationsResponse, setPriceQuotationsResponse } = useContext(
+        PriceQuotationsContext
+    );
+    const [printPreparing, setPrintPreparing] = React.useState(false);
+    const [isPDFDownloading, setIsPDFDownloading] = useState(false);
+    const { toPDF, targetRef } = usePDF();
     const [selectedPriceQuotation, setSelectedPriceQuotation] =
         React.useState(null);
     const [extraInfoInputsValidation, setExtraInfoInputsValidation] =
@@ -182,13 +182,9 @@ const PriceQuotationsGenerateModal = ({
         try {
             const payload = {
                 ...formatPriceQuotationsForPayload(priceQuotationsInputs),
-                is_selected: 0
+                is_selected: 0,
             };
-
-            
-
             const res = await createPriceQuotation(payload).unwrap();
-
             if (res.status === 200) {
                 toast.success(res.message);
                 setPriceQuotationsInputs((prev) => {
@@ -197,26 +193,92 @@ const PriceQuotationsGenerateModal = ({
                         step: "view-price-quotation",
                     };
                 });
-                setIsLoading(false);
+                const formatPayload = {
+                    data: res.data,
+                    previous_payloads: res.previous_payloads,
+                    mainData: payload,
+                    isNotDoAble: res?.data?.some(
+                        (item) => item?.not_doable_message
+                    ),
+                };
+                setPriceQuotationsResponse(formatPayload);
             }
         } catch (error) {
             toast.error("Something went wrong");
         }
     };
 
+    // Check Price Quotation
     const handleViewPriceQuotation = async () => {
-        setPriceQuotationsInputs((prev) => {
-            return {
-                ...prev,
-                step: "view-price-quotation-invoice",
+        try {
+            const payload = {
+                ...priceQuotationsResponse.previous_payloads,
+                is_selected: 1,
+                platform_account_id:
+                    selectedPriceQuotation?.platform_account?.id,
             };
-        });
+            const res = await createPriceQuotation(payload).unwrap();
+            if (res.status === 200) {
+                setPriceQuotationsResponse((prev) => {
+                    return {
+                        ...prev,
+                        invoiceData: res?.data,
+                    };
+                });
+                setPriceQuotationsInputs((prev) => {
+                    return {
+                        ...prev,
+                        step: "view-price-quotation-invoice",
+                    };
+                });
+            }
+        } catch (error) {
+            toast.error("Something went wrong");
+        }
     };
 
+    const handleAgainGeneratePriceQuotations = async (priceQuotations) => {
+        try {
+            const payload = {
+                ...priceQuotationsResponse.previous_payloads,
+                is_selected: 0,
+                no_of_days: priceQuotations?.calculated_no_of_days,
+            };
+            const res = await createPriceQuotation(payload).unwrap();
+            if (res.status === 200) {
+                setPriceQuotationsResponse((prev) => {
+                    return {
+                        ...prev,
+                        data: res?.data,
+                        isNotDoAble: res?.data?.some(
+                            (item) => item?.not_doable_message
+                        ),
+                    };
+                });
+                setPriceQuotationsInputs((prev) => {
+                    return {
+                        ...prev,
+                        step: "view-price-quotation",
+                    };
+                });
+            }
+        } catch (error) {
+            toast.error("Something went wrong");
+        }
+    };
+
+    // Download PDF Function
     const handleDownloadPDF = async () => {
-        toPDF();
+        setIsPDFDownloading(true);
+
+         toPDF({
+            filename: `Invoice-${priceQuotationsResponse?.invoiceData.serial_no}.pdf`,
+        });
+
+        setIsPDFDownloading(false);
     };
 
+    // Validation
     useEffect(() => {
         if (priceQuotationsInputsValidation.is_submitting) {
             const validation = markEmptyFieldsValidation(priceQuotationsInputs);
@@ -257,7 +319,10 @@ const PriceQuotationsGenerateModal = ({
                 buttonAction: handleSubmitPriceQuotations,
             },
             "view-price-quotation": {
-                loadingTitle: "Confirming...",
+                // Here add condition for if is not do able true then it will show this
+                loadingTitle: priceQuotationsResponse?.isNotDoAble
+                    ? "Generating..."
+                    : "Confirming...",
                 buttonLabel: "Check Quotation",
                 buttonAction: handleViewPriceQuotation,
             },
@@ -276,7 +341,7 @@ const PriceQuotationsGenerateModal = ({
             case "submit-price-quotation":
                 return "1100px";
             case "view-price-quotation":
-                return "1300px";
+                return "1450px";
             case "view-price-quotation-invoice":
                 return "1300px";
         }
@@ -301,7 +366,7 @@ const PriceQuotationsGenerateModal = ({
                 <Switch>
                     <Switch.Case
                         condition={
-                            priceQuotationsInputs.step ===
+                            priceQuotationsInputs?.step ===
                             "submit-price-quotation"
                         }
                     >
@@ -323,26 +388,32 @@ const PriceQuotationsGenerateModal = ({
                     </Switch.Case>
                     <Switch.Case
                         condition={
-                            priceQuotationsInputs.step ===
+                            priceQuotationsInputs?.step ===
                             "view-price-quotation"
                         }
                     >
                         <ViewPriceQuotation
-                            quotationData={QuotationDummyData}
+                            quotationData={priceQuotationsResponse}
                             setSelectedPriceQuotation={
                                 setSelectedPriceQuotation
+                            }
+                            handleAgainGeneratePriceQuotations={
+                                handleAgainGeneratePriceQuotations
                             }
                             selectedPriceQuotation={selectedPriceQuotation}
                         />
                     </Switch.Case>
                     <Switch.Case
                         condition={
-                            priceQuotationsInputs.step ===
-                            "view-price-quotation-invoice"
+                            priceQuotationsInputs?.step ===
+                                "view-price-quotation-invoice" &&
+                            priceQuotationsResponse?.invoiceData !== null
                         }
                     >
                         <ViewPriceQuotationsInvoice
-                            invoiceData={PriceQuotationsInvoiceDummyData}
+                            invoiceData={formatInvoiceData(
+                                priceQuotationsResponse?.invoiceData
+                            )}
                             targetRef={targetRef}
                         />
                     </Switch.Case>
@@ -350,8 +421,16 @@ const PriceQuotationsGenerateModal = ({
                 <ContentWrapper className="justify-content-center pt-3">
                     <Button
                         className="mr-2 price_quotation_custom_button price_quotation_custom_button_primary"
-                        isLoading={isCreatingPriceQuotation}
-                        disabled={isCreatingPriceQuotation}
+                        isLoading={isCreatingPriceQuotation || isPDFDownloading}
+                        disabled={
+                            isCreatingPriceQuotation ||
+                            priceQuotationsResponse?.isNotDoAble ||
+                            (priceQuotationsInputs?.step ===
+                                "view-price-quotation" &&
+                                !selectedPriceQuotation?.platform_account
+                                    ?.id) ||
+                            isPDFDownloading
+                        }
                         loaderTitle={handleActionButton("loadingTitle")}
                         onClick={handleActionButton("buttonAction")}
                     >

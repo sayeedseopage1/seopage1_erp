@@ -1,18 +1,19 @@
 import React, { useContext, useEffect } from "react";
-import PropTypes from "prop-types";
-import { useSearchParams } from "react-router-dom";
 
 // Components - Modal
 import PriceQuotationsGenerateModal from "../components/Modal/PriceQuotationsGenerateModal";
 
 // Context
-import { PriceQuotationsContext } from "../context/PriceQuotationsProvider";
+import { PriceQuotationsContext, priceQuotationsState } from "../context/PriceQuotationsProvider";
 
 const DealStagePriceQuotations = () => {
     // Context
-    const { priceQuotationsInputs, setPriceQuotationsInputs } = useContext(
-        PriceQuotationsContext
-    );
+    const {
+        priceQuotationsInputs,
+        setPriceQuotationsInputs,
+        priceQuotationsResponse,
+        setPriceQuotationsResponse,
+    } = useContext(PriceQuotationsContext);
 
     const [isPriceQuotationModalOpen, setIsPriceQuotationModalOpen] =
         React.useState(false);
@@ -25,6 +26,7 @@ const DealStagePriceQuotations = () => {
      * @param {Function} setModalOpenFunc - Function to set the modal open state.
      * @param {boolean} isOpen - Boolean indicating whether the modal should be open (true) or closed (false).
      * @param {Function} [action] - Optional function to execute after setting the modal state.
+     * @returns - void
      */
     const handleModal = (setModalOpenFunc, isOpen, action) => {
         setModalOpenFunc(isOpen);
@@ -33,18 +35,16 @@ const DealStagePriceQuotations = () => {
         }
     };
 
+    // first get id then access to Deal name and client name on modal to auto fill up
     const container = document.getElementById("priceQuotationForm");
-
     useEffect(() => {
         if (container) {
             const dealName = container.getAttribute("data-deal_name");
             const clientName = container.getAttribute("data-client_name");
-
             const clientData = {
                 id: 1,
                 name: clientName,
             };
-
             const dealStageData = {
                 id: pathName,
                 name: dealName,
@@ -57,6 +57,7 @@ const DealStagePriceQuotations = () => {
         }
     }, []);
 
+    // Helper function for
     const handleModalTitle = () => {
         const titleList = {
             "submit-price-quotation": "Get A Price Quotations",
@@ -69,9 +70,10 @@ const DealStagePriceQuotations = () => {
 
     return (
         <>
-            <div class="text-center">
+            {/* This button show when deal stage === 2 */}
+            <div className="text-center">
                 <button
-                    class="btn btn-success w-40"
+                    className="btn btn-success w-40"
                     onClick={() =>
                         handleModal(setIsPriceQuotationModalOpen, true)
                     }
@@ -79,11 +81,21 @@ const DealStagePriceQuotations = () => {
                     Generate Price Quotation
                 </button>
             </div>
+
+            {/* This modal will open on   */}
             {isPriceQuotationModalOpen && (
                 <PriceQuotationsGenerateModal
                     isModalOpen={isPriceQuotationModalOpen}
                     closeModal={() =>
-                        handleModal(setIsPriceQuotationModalOpen, false)
+                        handleModal(setIsPriceQuotationModalOpen, false, () => {
+                            setPriceQuotationsInputs(
+                                priceQuotationsState.inputs
+                            );
+                            setPriceQuotationsResponse({
+                                ...priceQuotationsResponse,
+                                isNotDoAble: false,
+                            });
+                        })
                     }
                     modalTitle={handleModalTitle()}
                     priceQuotationsInputs={priceQuotationsInputs}

@@ -1,10 +1,15 @@
 import { apiSlice } from "./apiSlice";
 
 
+const _token = document
+  .querySelector("meta[name='csrf-token']")
+  .getAttribute("content");
+
+
 const priceQuotationsApiSlice = apiSlice.injectEndpoints({
   endpoints: (build) => ({
     allPriceQuotations: build.query({
-      query: (query) => `/account/price-quotations${query || ""}`,
+      query: (query) => `/account/price-quotations?${query || ""}`,
       providesTags: ["PriceQuotations"],
     }),
     createPriceQuotation: build.mutation({
@@ -12,6 +17,9 @@ const priceQuotationsApiSlice = apiSlice.injectEndpoints({
         url: `/account/price-quotations`,
         method: "POST",
         body: data,
+        headers: {
+          "X-CSRF-TOKEN": _token,
+        },
       }),
       invalidatesTags: ["PriceQuotations"],
     }),

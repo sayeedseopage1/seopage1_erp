@@ -1,17 +1,16 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import { useWindowSize } from "react-use";
 import PropTypes from "prop-types";
 
 // Components - UI- Shared
 import JqueryDateRangePicker from "../Shared/JqueryDateRangePicker";
+import PersonFilter from "../Shared/PersonFilter";
 
-const PriceQuotationFilterBar = ({ setFilter }) => {
-    const { /*width*/ } = useWindowSize();
-    const [client, /*setClient*/] = React.useState(null);
+const PriceQuotationFilterBar = ({ setFilter, clientsData }) => {
+    const [client, setClient] = React.useState(null);
     const [startDate, setStartDate] = React.useState(null);
     const [endDate, setEndDate] = React.useState(null);
-    const [search, /*setSearch*/] = React.useState("");
+    const [search /*setSearch*/] = React.useState("");
 
     const searchText = React.useDeferredValue(search);
 
@@ -41,6 +40,15 @@ const PriceQuotationFilterBar = ({ setFilter }) => {
                 customDayRange={60}
                 onApply={() => {}}
             />
+
+            <PersonFilter
+                value={client}
+                onChange={setClient}
+                title="Client"
+                display={(value) => value?.name}
+                searchBy={(value) => value?.name}
+                data={clientsData}
+            />
         </div>,
         document.getElementById("priceQuotationFilterContainer")
     );
@@ -50,4 +58,5 @@ export default PriceQuotationFilterBar;
 
 PriceQuotationFilterBar.propTypes = {
     setFilter: PropTypes.func,
+    clientsData: PropTypes.array,
 };

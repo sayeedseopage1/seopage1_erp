@@ -9,7 +9,7 @@ const _token = document
 const platformAccountApiSlice = apiSlice.injectEndpoints({
   endpoints: (build) => ({
     getAllPlatformAccounts: build.query({
-      query: () => `/account/platform-accounts`,
+      query: (query) => `/account/platform-accounts${query || ""}`,
       providesTags: ["PlatformAccounts"],
     }),
     createPlatformAccount: build.mutation({

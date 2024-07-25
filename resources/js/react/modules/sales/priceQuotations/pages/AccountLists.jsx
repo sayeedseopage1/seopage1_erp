@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { IoAddSharp } from "react-icons/io5";
 import Swal from "sweetalert2";
 import dayjs from "dayjs";
@@ -15,7 +15,6 @@ import RefreshButton from "../components/Shared/RefreshButton";
 import { AccountListTableColumns } from "../components/Table/AccountListTableColumns";
 import DataTable from "../components/Table/DataTable";
 
-
 // Modal
 import CreatePlatformAccountModal from "../components/Modal/CreatePlatformAccountModal";
 
@@ -24,7 +23,6 @@ import {
     useGetAllPlatformAccountsQuery,
     useUpdateStatusPlatformAccountMutation,
 } from "../../../../services/api/platformAccountApiSlice";
-
 
 const platformAccountState = {
     inputs: {
@@ -41,6 +39,10 @@ const platformAccountState = {
 };
 
 const AccountLists = () => {
+    const [{ pageIndex, pageSize }, setPagination] = React.useState({
+        pageIndex: 0,
+        pageSize: 10,
+    });
     const [isPlatformAccountUpdate, setIsPlatformAccountUpdate] =
         React.useState(false);
     const [modalTitle, setModalTitle] = React.useState(
@@ -50,12 +52,24 @@ const AccountLists = () => {
         platformAccountState.inputs
     );
 
+
     // Modal State
     const [isPlatformAccountModalOpen, setIsPlatformAccountModalOpen] =
         React.useState(false);
 
+    // make query string
+    const queryString = (object) => {
+        const queryObject = _.pickBy(object, Boolean);
+        return new URLSearchParams(queryObject).toString();
+    };
+
     const { data, isLoading, isFetching, refetch } =
-        useGetAllPlatformAccountsQuery("");
+        useGetAllPlatformAccountsQuery(
+            `?${queryString({
+                page: pageIndex + 1,
+                limit: pageSize,
+            })}`
+        );
 
     const platformAccounts = data?.data || [];
     const isPlatformAccountLoading = isLoading || isFetching;
@@ -89,10 +103,8 @@ const AccountLists = () => {
     };
 
     // Update Platform Account Mutation
-    const [
-        updateStatusPlatformAccount,
-        { isLoading: isUpdatingPlatformAccount },
-    ] = useUpdateStatusPlatformAccountMutation();
+    const [updateStatusPlatformAccount] =
+        useUpdateStatusPlatformAccountMutation();
 
     // Show Confirmation Dialog
     const showConfirmation = ({ text, data }) => {
@@ -131,6 +143,11 @@ const AccountLists = () => {
         }
     };
 
+    // Pagination
+    const onPageChange = (paginate) => {
+        setPagination(paginate);
+    };
+
     return (
         <React.Fragment>
             <div className="price_quotations_container">
@@ -140,7 +157,7 @@ const AccountLists = () => {
                         <Flex
                             justifyContent="space-between"
                             alignItem="center"
-                            className="mb-3"
+                            className="mb-3 sp1_tlr_tbl_action_buttons"
                         >
                             <div className="d-flex flex-wrap flex-md-nowrap">
                                 <Button
@@ -175,7 +192,7 @@ const AccountLists = () => {
                                 action: "center",
                             }}
                             tableActions={metaAction}
-                            onPageChange={() => {}}
+                            onPageChange={onPageChange}
                         />
                     </div>
                 </div>

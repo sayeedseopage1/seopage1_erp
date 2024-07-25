@@ -2,13 +2,11 @@ import { createContext, useMemo, useState, useEffect } from "react";
 import PropTypes from "prop-types";
 
 // API
-
 import {
+    useGetClientsQuery,
     useGetCMSListQuery,
     useGetCurrenciesQuery,
 } from "../../../../services/api/priceQuotationsApiSlice";
-import { useGetAllPlatformAccountsQuery } from "../../../../services/api/platformAccountApiSlice";
-import { stat } from "fs";
 
 export const priceQuotationsState = {
     inputs: {
@@ -26,9 +24,9 @@ export const priceQuotationsState = {
         deal_stage_id: {},
         currency_id: {},
         deadline_type: null,
-        no_of_days : null,
+        no_of_days: null,
         platform_account_id: {},
-        step: "submit-price-quotation",
+        step: "submit-price-quotation", // This will be default value
     },
     validation: {
         project_cms_id: false,
@@ -51,7 +49,14 @@ export const PriceQuotationsContext = createContext({});
 
 const PriceQuotationsProvider = ({ children }) => {
     const [cmsData, setCMSData] = useState([]);
+    const [clientsData, setClientsData] = useState([]);
     const [currenciesData, setCurrenciesData] = useState([]);
+    const [priceQuotationsResponse, setPriceQuotationsResponse] = useState({
+        data: [],
+        previous_payloads: {},
+        invoiceData: null,
+        isNotDoAble: false,
+    });
 
     const [priceQuotationsInputs, setPriceQuotationsInputs] = useState(
         priceQuotationsState.inputs
@@ -69,14 +74,22 @@ const PriceQuotationsProvider = ({ children }) => {
             refetchOnMountOrArgChange: true,
         });
 
+    // Get Clients Data
+    const { data: clientResponse, isLoading: isClientsLoading } =
+        useGetClientsQuery("", {
+            refetchOnMountOrArgChange: true,
+        });
+
     useEffect(() => {
-        if (!isCurrenciesLoading && currenciesResponse?.data?.length >0) {
-            const formatCurrencies = currenciesResponse?.data?.map((currency) => {
-                return {
-                    ...currency,
-                    name: currency?.currency_name,
-                };
-            });
+        if (!isCurrenciesLoading && currenciesResponse?.data?.length > 0) {
+            const formatCurrencies = currenciesResponse?.data?.map(
+                (currency) => {
+                    return {
+                        ...currency,
+                        name: currency?.currency_name,
+                    };
+                }
+            );
             setCurrenciesData(formatCurrencies);
         }
 
@@ -90,18 +103,30 @@ const PriceQuotationsProvider = ({ children }) => {
             setCMSData(formatCMS);
         }
 
-
-    }, [isCurrenciesLoading, isCMSLoading]);
+        // Format the Clients Data
+        if (!isClientsLoading && clientResponse?.data?.length > 0) {
+            const formatClients = clientResponse?.data.map((client, index) => ({
+                id: index + 1,
+                name: client,
+            }));
+            setClientsData(formatClients);
+        }
+    }, [isCurrenciesLoading, isCMSLoading, isClientsLoading]);
 
     // Value
     const PriceQuotationsValue = useMemo(() => {
         return {
+           
             cmsData,
             isCMSLoading,
             currenciesData,
+            clientsData,
+            isClientsLoading,
             isCurrenciesLoading,
             priceQuotationsInputs,
             setPriceQuotationsInputs,
+            priceQuotationsResponse,
+            setPriceQuotationsResponse,
         };
     });
 

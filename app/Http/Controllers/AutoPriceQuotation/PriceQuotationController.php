@@ -21,7 +21,7 @@ class PriceQuotationController extends Controller
     {
         return response()->json([
             'status' => 200,
-            'data' => PriceQuotation::with('dealStage:id,short_code,client_username,client_name,client_badge,project_name','projectCms:id,cms_name','projectNiche:id,category_name','currency:id,currency_name,currency_symbol,currency_code,exchange_rate','platformAccount','dealStage.client','addedBy','dealStage.deal:id,deal_id,amount,actual_amount')->orderBy('id', 'desc')->paginate(20)
+            'data' => PriceQuotation::with('dealStage:id,short_code,client_username,client_name,client_badge,project_name,message_link','projectCms:id,cms_name','projectNiche:id,category_name','currency:id,currency_name,currency_symbol,currency_code,exchange_rate','platformAccount','dealStage.clientDetails','addedBy','dealStage.deal:id,deal_id,amount,actual_amount')->orderBy('id', 'desc')->paginate(20)
         ]);
     }
 
@@ -33,8 +33,8 @@ class PriceQuotationController extends Controller
             'project_niche_id' => 'required|exists:project_niches,id',
             'no_of_primary_pages' => 'required|numeric',
             'no_of_secondary_pages' => 'required|numeric',
-            'no_of_major_functionalities' => 'required|numeric',
-            'risk_factor' => 'required|numeric',
+            'no_of_major_functionalities' => 'nullable|numeric',
+            'risk_factor' => 'nullable|numeric',
             'content_writing' => 'nullable',
             'speed_optimization' => 'nullable',
             'no_of_ui_design_page' => 'nullable',
@@ -183,7 +183,7 @@ class PriceQuotationController extends Controller
 
                 return response()->json([
                     'status' => 200,
-                    'data' => PriceQuotation::with('dealStage:id,short_code,client_username,client_name,client_badge,project_name','projectCms:id,cms_name','projectNiche:id,category_name','currency:id,currency_name,currency_symbol,currency_code,exchange_rate','platformAccount','dealStage.client','addedBy')->find($priceQuotation->id)
+                    'data' => PriceQuotation::with('dealStage:id,short_code,client_username,client_name,client_badge,project_name,message_link','projectCms:id,cms_name','projectNiche:id,category_name','currency:id,currency_name,currency_symbol,currency_code,exchange_rate','platformAccount','dealStage.client','addedBy')->find($priceQuotation->id)
                 ]);
             }else{
                 return response()->json([
@@ -194,9 +194,9 @@ class PriceQuotationController extends Controller
         }else{
             // Calculate project budget with multiplying factor of platform account
             if(isset($validated['platform_account_id']) && $validated['platform_account_id']){
-                $platformAccounts = PlatformAccount::select(['id','type','company_name','name','username','user_url','email','profile_type','multiplying_factor'])->where('id', $validated['platform_account_id'])->get();
+                $platformAccounts = PlatformAccount::select(['id','type','company_name','name','username','user_url','email','profile_type','multiplying_factor'])->where('id', $validated['platform_account_id'])->where("status", 1)->get();
             }else{
-                $platformAccounts = PlatformAccount::select(['id','type','company_name','name','username','user_url','email','profile_type','multiplying_factor'])->get();
+                $platformAccounts = PlatformAccount::select(['id','type','company_name','name','username','user_url','email','profile_type','multiplying_factor'])->where("status", 1)->get();
             }
             $data = array();
             foreach($platformAccounts as $key => $platformAccount){
@@ -230,7 +230,7 @@ class PriceQuotationController extends Controller
     {
         return response()->json([
             'status' => 200,
-            'data' => PriceQuotation::with('dealStage:id,short_code,client_username,client_name,client_badge,project_name','projectCms:id,cms_name','projectNiche:id,category_name','currency:id,currency_name,currency_symbol,currency_code,exchange_rate','platformAccount','dealStage.client','addedBy','dealStage.deal:id,deal_id,amount,actual_amount')->find($id)
+            'data' => PriceQuotation::with('dealStage:id,short_code,client_username,client_name,client_badge,project_name, message_link','projectCms:id,cms_name','projectNiche:id,category_name','currency:id,currency_name,currency_symbol,currency_code,exchange_rate','platformAccount','dealStage.client','addedBy','dealStage.deal:id,deal_id,amount,actual_amount')->find($id)
         ]);
     }
 

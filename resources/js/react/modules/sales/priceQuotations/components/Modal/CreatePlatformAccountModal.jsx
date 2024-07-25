@@ -12,12 +12,13 @@ import CustomInput from "../UI/CustomInput/CustomInput";
 import CustomModal from "../UI/CustomModal/CustomModal";
 import CustomDropDown from "../UI/CustomDropDown/CustomDropDown";
 import CustomModalHeader from "../UI/CustomModalHeader/CustomModalHeader";
+
+
 // Components - Local - Styled Components
 import { ContentWrapper, ModalContentContainer } from "../UI/StyledComponents";
 
 // Constants
 import {
-    AccountListDummyData,
     PlatformOptions,
     ProfileTypeOptions,
 } from "../../constant";
@@ -27,12 +28,13 @@ import {
     isStateAllHaveValue,
     markEmptyFieldsValidation,
 } from "../../../../../utils/stateValidation";
+
+// Api Services
 import {
     useCreatePlatformAccountMutation,
     useSinglePlatformAccountQuery,
     useUpdatePlatformAccountMutation,
 } from "../../../../../services/api/platformAccountApiSlice";
-import { formatAPIErrors } from "../../../../../utils/formatAPIErrors";
 
 const platformAccountState = {
     validation: {
@@ -68,7 +70,6 @@ const CreatePlatformAccountModal = ({
     modalTitle,
     isPlatformAccountUpdate,
 }) => {
-    const [isLoading, setIsLoading] = useState(false);
     const [platformAccountValidation, setPlatformAccountValidation] = useState(
         platformAccountState.validation
     );

@@ -66,6 +66,12 @@ const PriceQuotationsTableLoader = ({ prevItemLength = 10, tableCol }) => {
                     <Placeholder width="80px" height="13px" className="my-3" />
                 </div>
             </td>
+            <td className="sp1_price_quotation_td px-2">
+                <div className="d-flex align-items-center justify-content-center">
+                    <Placeholder width="25px" height="25px" />
+                    <Placeholder width="25px" height="25px" className="ml-2" />
+                </div>
+            </td>
         </tr>
     ));
 };

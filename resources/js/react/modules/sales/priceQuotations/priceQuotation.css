@@ -12,7 +12,7 @@
   --primaryLightDanger: #fd6b6b;
   --primaryExtraLightDanger: #FBEEF0;
   --lightgray: #8F8F8F;
-  --primaryGrayText: #837D7D,
+  --primaryGrayText: #837D7D;
   --primaryFont: 'Poppins', sans-serif;
 }
 
@@ -34,6 +34,8 @@
   left: 0;
   width: 100%;
 }
+
+
 
 .sp1_price_quotation_thead_tr {
   background-color: var(--primaryBlue);
@@ -115,6 +117,25 @@
   background-color: var(--primaryLightBlue);
 }
 
+/* Table colum style */
+
+.sp1_price_quotation_thead_th--deal_name,
+.sp1_price_quotation_thead_th--requested_by {
+  min-width: 170px;
+  max-width: 170px;
+  width: 170px;
+}
+
+
+@media screen and (max-width: 560px) {
+  .sp1_tlr_tbl_action_buttons {
+    flex-direction: column;
+    justify-content: flex-start;
+  }
+
+}
+
+
 
 /* Button Color */
 .price_quotation_refresh_button {
@@ -163,8 +184,6 @@
 
 
 /* Each modal Style */
-
-
 .extra_other_works_container {
   padding: 15px;
   display: flex;
@@ -213,6 +232,3 @@
   line-height: normal;
   margin-left: 8px;
 }
-
-
-

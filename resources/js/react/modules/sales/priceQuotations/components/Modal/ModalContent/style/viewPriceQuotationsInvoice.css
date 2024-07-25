@@ -3,7 +3,12 @@
   box-shadow: 0px 0px 33px 0px rgba(0, 0, 0, 0.05);
   padding: 25px;
   background-color: var(--primaryLightText);
+  width: 100%;
+  min-width: 1229px;   /* Here min width use because of invoice design will broke when width size reduce */
+  box-sizing: border-box;
 }
+
+
 
 .view_price_quotations_invoice_header {
   display: flex;
@@ -48,6 +53,8 @@
   font-weight: 600;
   line-height: normal;
   text-transform: uppercase;
+  min-width: 220px;
+  max-width: 220px;
 }
 
 .view_price_quotations_invoice_provider_left div {
@@ -180,7 +187,6 @@
   font-style: normal;
   font-weight: 500;
   line-height: normal;
-  padding: 20px;
   text-wrap: nowrap;
   text-align: center;
   padding: 15px;

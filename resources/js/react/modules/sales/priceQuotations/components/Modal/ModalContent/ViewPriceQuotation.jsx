@@ -8,15 +8,17 @@ const ViewPriceQuotation = ({
     quotationData,
     selectedPriceQuotation,
     setSelectedPriceQuotation,
+    handleAgainGeneratePriceQuotations 
 }) => {
     return (
         <div className="view_price_Quotation_wrapper">
-            {quotationData.map((quotation) => {
+            {quotationData?.data?.map((quotation) => {
                 return (
                     <PlatformAccountCard
                         quotationData={quotation}
                         setSelectedPriceQuotation={setSelectedPriceQuotation}
                         selectedPriceQuotation={selectedPriceQuotation}
+                        handleAgainGeneratePriceQuotations={handleAgainGeneratePriceQuotations}
                     />
                 );
             })}
@@ -27,7 +29,8 @@ const ViewPriceQuotation = ({
 export default ViewPriceQuotation;
 
 ViewPriceQuotation.propTypes = {
-    quotationData: PropTypes.array,
+    quotationData: PropTypes.object,
     selectedPriceQuotation: PropTypes.object,
     setSelectedPriceQuotation: PropTypes.func,
+    handleAgainGeneratePriceQuotations: PropTypes.func
 };

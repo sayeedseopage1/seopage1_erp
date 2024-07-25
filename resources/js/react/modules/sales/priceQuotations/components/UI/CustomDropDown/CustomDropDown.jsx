@@ -183,7 +183,8 @@ const CustomDropDown = ({
                                         </div>
                                     )}
                                     <div className="sp1_filter--users">
-                                        {filteredOptions?.slice(0, 100)
+                                        {filteredOptions
+                                            ?.slice(0, 100)
                                             ?.map((item) => (
                                                 <Dropdown.Item
                                                     key={item.id}
@@ -218,6 +219,7 @@ const CustomDropDown = ({
                     </Popover>
                 </Switch.Case>
             </Switch>
+            {/* Error Message */}
             {isError && (
                 <span
                     style={{ color: "red", fontSize: "14px", marginTop: "8px" }}
@@ -247,4 +249,5 @@ CustomDropDown.propTypes = {
     errorText: PropTypes.string,
     isMultiple: PropTypes.bool,
     disabledTitle: PropTypes.any,
+    isFullDropDownLoading: PropTypes.bool,
 };
