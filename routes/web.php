@@ -1579,7 +1579,7 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
     Route::get('get-project-niches', [PriceQuotationInsightController::class, 'getProjectNiche'])->name('get.project.niches');
     Route::get('get-currencies', [PriceQuotationInsightController::class, 'getCurrencies'])->name('get.currencies');
     Route::resource('price-quotations', PriceQuotationController::class)->only(['index','store','show']);
-    // Route::get('all-platform-accounts')
+    Route::get('get-users-for-price-quotation', [PriceQuotationInsightController::class, 'getUsersForPriceQuotation'])->name('get.users.for.price.quotation');
 });
 
 AllPriceQuotationController::Route();

@@ -2,12 +2,13 @@
 
 namespace App\Http\Controllers\AutoPriceQuotation;
 
+use App\Models\User;
+use App\Models\Currency;
 use App\Models\DealStage;
 use App\Models\ProjectCms;
+use App\Models\ProjectNiche;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Models\Currency;
-use App\Models\ProjectNiche;
 
 class PriceQuotationInsightController extends Controller
 {
@@ -23,7 +24,7 @@ class PriceQuotationInsightController extends Controller
 
     public function getDealNameFromDealStage($client_username)
     {
-        $data = DealStage::select(['id','short_code','client_username','client_name','project_name','actual_amount','amount','deal_status'])->where('client_username', $client_username)->get();
+        $data = DealStage::select(['id','short_code','client_username','client_name','project_name','actual_amount','amount','deal_status'])->where('client_username', 'like', "{$client_username}")->get();
         return response()->json([
             'status' => 200,
             'data' => $data
@@ -55,6 +56,13 @@ class PriceQuotationInsightController extends Controller
         return response()->json([
             'status' => 200,
             'data' => $data
+        ]);
+    }
+
+    public function getUsersForPriceQuotation(){
+        return response()->json([
+            'status' => 200,
+            'data' => User::select(['id','name','user_name','image'])->whereIn('role_id', [1,4,7,8])->get()
         ]);
     }
 }
