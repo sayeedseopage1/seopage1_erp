@@ -58,10 +58,10 @@ class HelperPmProjectStatusController extends AccountBaseController
     {
         switch ($project->goal_creation_time_type) {
             case '1':
-            default:
                 return $pm_project->project_award_time_platform;
                 break;
             case '2':
+            default:
                 return $deal->released_at;
                 break;
             case '3':
@@ -536,11 +536,11 @@ class HelperPmProjectStatusController extends AccountBaseController
         $goal->project_category = $lastGoal->project_category;
 
         $goal->goal_code = $goalCodes['code'];
-        $goal->goal_name = $goalCodes['name'];
+        $goal->goal_name = sprintf($goalCodes['name'], $deliverable->estimation_time);
         $goal->goal_type = $goalCodes['type'];
         $goal->goal_start_date = $lastGoal->goal_start_date;
 
-        $endDate = $deliverable->created_at;
+        $endDate = now();
         for ($i = 0; $i < $days; $i++) {
             $endDate = Carbon::parse($endDate)->addDay(1);
             if (Carbon::parse($endDate)->format("D") == "Sun")

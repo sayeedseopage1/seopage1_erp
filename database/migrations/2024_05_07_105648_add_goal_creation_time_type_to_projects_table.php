@@ -19,7 +19,7 @@ return new class extends Migration
 
             $string = "";
             foreach (Project::$goalCreationTimeType as $key => $value) $string .= " $key-$value,";
-            $table->tinyInteger('goal_creation_time_type')->default('1')->after('new_deadline')->comment($string);
+            $table->tinyInteger('goal_creation_time_type')->default('2')->after('new_deadline')->comment($string);
 
             $projectComment = DB::select("SHOW TABLE STATUS WHERE Name='projects'");
             $table->comment( $projectComment[0]->Comment . "
