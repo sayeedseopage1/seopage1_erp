@@ -256,13 +256,15 @@ const PriceQuotationsGenerateModal = ({
     // Download PDF Function
     const handleDownloadPDF = async () => {
         setIsPDFDownloading(true);
-
         try {
             const checking = await toPDF({
                 filename: `Invoice-${priceQuotationsResponse?.invoiceData.serial_no}.pdf`,
                 resolution: 2,
             });
         } finally {
+            if(isMinimizeUse){
+                window.location.reload()
+            }
             setIsPDFDownloading(false);
         }
     };

@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from "react";
+import React, { useContext, useEffect, useState } from "react";
 
 // Components - Modal
 import PriceQuotationsGenerateModal from "../components/Modal/PriceQuotationsGenerateModal";
@@ -10,6 +10,8 @@ import {
 } from "../context/PriceQuotationsProvider";
 
 const DealStagePriceQuotations = () => {
+    const [isMinimize, setIsMinimize] = useState(false);
+    const [dealClientData, setDealClientData] = useState({});
     // Context
     const {
         priceQuotationsInputs,
@@ -49,9 +51,13 @@ const DealStagePriceQuotations = () => {
                 name: clientName,
             };
             const dealStageData = {
-                id: pathName,
+                id: Number(pathName),
                 name: dealName,
             };
+            setDealClientData({
+                client: clientData,
+                deal_stage_id: dealStageData,
+            });
             setPriceQuotationsInputs((prevState) => ({
                 ...prevState,
                 client: clientData,
@@ -81,7 +87,9 @@ const DealStagePriceQuotations = () => {
                         handleModal(setIsPriceQuotationModalOpen, true)
                     }
                 >
-                    Generate Price Quotation
+                    {isMinimize
+                        ? "Reopen, Price Quotation"
+                        : "Generate Price Quotation"}
                 </button>
             </div>
 
@@ -91,13 +99,17 @@ const DealStagePriceQuotations = () => {
                     isModalOpen={isPriceQuotationModalOpen}
                     closeModal={() =>
                         handleModal(setIsPriceQuotationModalOpen, false, () => {
-                            setPriceQuotationsInputs(
-                                priceQuotationsState.inputs
-                            );
+                            const payload = {
+                                ...priceQuotationsState.inputs,
+                                client: dealClientData?.client,
+                                deal_stage_id: dealClientData?.deal_stage_id,
+                            };
+                            setPriceQuotationsInputs(payload);
                             setPriceQuotationsResponse({
                                 ...priceQuotationsResponse,
                                 isNotDoAble: false,
                             });
+                            setIsMinimize(false);
                         })
                     }
                     modalTitle={handleModalTitle()}
@@ -106,7 +118,9 @@ const DealStagePriceQuotations = () => {
                     isDealStagePage
                     isMinimizeUse
                     handleMinimize={() =>
-                        handleModal(setIsPriceQuotationModalOpen, false)
+                        handleModal(setIsPriceQuotationModalOpen, false, () => {
+                            setIsMinimize(true);
+                        })
                     }
                 />
             )}

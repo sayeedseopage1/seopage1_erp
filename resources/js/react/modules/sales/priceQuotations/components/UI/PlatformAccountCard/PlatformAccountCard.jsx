@@ -16,7 +16,6 @@ const PlatformAccountCard = ({
     quotationData,
     selectedPriceQuotation,
     setSelectedPriceQuotation,
-    handleAgainGeneratePriceQuotations,
 }) => {
     const [state, copyToClipboard] = useCopyToClipboard();
     const [isShow, setIsShow] = useState(false);

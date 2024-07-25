@@ -17,7 +17,7 @@ const CustomModalHeader = ({
             <h2 className="singleline-ellipsis">{title}</h2>
             <div>
                 {minimize && (
-                    <button onClick={handleMinimize} className="mr-1">
+                    <button onClick={handleMinimize} className="mr-2">
                         <AiOutlineMinus size={26} />
                     </button>
                 )}

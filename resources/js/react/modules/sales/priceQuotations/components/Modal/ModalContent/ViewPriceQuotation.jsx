@@ -15,6 +15,7 @@ const ViewPriceQuotation = ({
             {quotationData?.data?.map((quotation) => {
                 return (
                     <PlatformAccountCard
+                        key={quotation.id}
                         quotationData={quotation}
                         setSelectedPriceQuotation={setSelectedPriceQuotation}
                         selectedPriceQuotation={selectedPriceQuotation}
