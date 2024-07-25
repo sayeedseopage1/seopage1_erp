@@ -15,6 +15,7 @@ class PriceQuotation extends Model
         'deal_stage_id',
         'project_cms_id',
         'project_niche_id',
+        'client_username',
         'no_of_primary_pages',
         'no_of_secondary_pages',
         'no_of_major_functionalities',
@@ -30,6 +31,8 @@ class PriceQuotation extends Model
         'platform_account_id',
         'calculated_actual_budget',
         'calculated_usd_budget',
+        'actual_budget_with_additional_percent',
+        'usd_budget_with_additional_percent',
         'project_budget',
         'added_by'
     ];

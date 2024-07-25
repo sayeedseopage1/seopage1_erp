@@ -19,6 +19,7 @@ return new class extends Migration
             $table->foreignId('deal_stage_id')->nullable()->constrained();
             $table->foreignId('project_cms_id')->nullable()->constrained();
             $table->foreignId('project_niche_id')->nullable()->constrained();
+            $table->string('client_username')->nullable();
             $table->unsignedTinyInteger('no_of_primary_pages')->default(0);
             $table->unsignedTinyInteger('no_of_secondary_pages')->default(0);
             $table->unsignedTinyInteger('no_of_major_functionalities')->nullable();
@@ -34,6 +35,8 @@ return new class extends Migration
             $table->foreignId('platform_account_id')->nullable()->constrained();
             $table->decimal('calculated_actual_budget')->default(0);
             $table->decimal('calculated_usd_budget')->default(0);
+            $table->decimal('actual_budget_with_additional_percent')->default(0);
+            $table->decimal('usd_budget_with_additional_percent')->default(0);
             $table->decimal('project_budget')->nullable();
             $table->unsignedBigInteger('added_by')->nullable();
             $table->timestamps();
