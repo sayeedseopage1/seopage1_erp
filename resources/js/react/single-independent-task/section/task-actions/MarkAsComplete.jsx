@@ -135,7 +135,10 @@ const MarkAsComplete = ({ task, auth }) => {
             toast.warn("Please describe what you've done!");
             valid = false;
         }
-        if (auth.roleId === 14 && !checkIsURL(screenRecordUrl)) {
+        if (
+            _.includes([14, 15, 16, 17], auth?.getRoleId()) &&
+            !checkIsURL(screenRecordUrl)
+        ) {
             toast.warn("Please provide a valid url");
             setScreenRecordUrlErr("Please provide a valid url");
             valid = false;
