@@ -54,7 +54,7 @@ const DashboardClientAndPMCard = ({
                                 <img
                                     src={`/flags/4x3/${
                                         projectData?.client?.country?.iso ||
-                                        "BD"
+                                        "bd"
                                     }.svg`}
                                     alt="client country flag"
                                     className="mr-1"
@@ -98,7 +98,7 @@ const DashboardClientAndPMCard = ({
                             <div className="d-flex align-items-center dashboardCardPersonCountry">
                                 <img
                                     src={`/flags/4x3/${
-                                        projectData?.pm?.country?.iso || "BD"
+                                        projectData?.pm?.country?.iso || "bd"
                                     }.svg`}
                                     alt="pm country flag"
                                     className="mr-1"
