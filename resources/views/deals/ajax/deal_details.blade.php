@@ -1355,7 +1355,7 @@
                                 Click me to Change Stage
                             </a>
                             @include('contracts.modals.dealqualifymodal2')
-                        @elseif($deal->deal_stage >= 2 && $price_quotation_count)
+                        @elseif($deal->deal_stage > 2)
                             <?php
 
                             $lead_converted_to_prop_def = App\Models\DealStageChange::where('deal_id', $deal->short_code)
