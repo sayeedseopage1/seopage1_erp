@@ -17,11 +17,21 @@ use Illuminate\Support\Facades\Validator;
 
 class PriceQuotationController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
         return response()->json([
             'status' => 200,
+<<<<<<< HEAD
             'data' => PriceQuotation::with('dealStage:id,short_code,client_username,client_name,client_badge,project_name,message_link','projectCms:id,cms_name','projectNiche:id,category_name','currency:id,currency_name,currency_symbol,currency_code,exchange_rate','platformAccount','dealStage.clientDetails','addedBy','dealStage.deal:id,deal_id,amount,actual_amount')->orderBy('id', 'desc')->paginate(20)
+=======
+            'data' => PriceQuotation::with('dealStage:id,short_code,client_username,client_name,client_badge,project_name','projectCms:id,cms_name','projectNiche:id,category_name','currency:id,currency_name,currency_symbol,currency_code,exchange_rate','platformAccount','dealStage.client','addedBy','dealStage.deal:id,deal_id,amount,actual_amount')->when($request->start_date && $request->end_date, function($query) use($request){
+                return $query->whereBetween('created_at', [Carbon::parse($request->start_date)->startOfDay(), Carbon::parse($request->end_date)->endOfDay()]);
+            })->when($request->client_username, function($query) use($request){
+                return $query->where('client_username', $request->client_username);
+            })->when($request->added_by, function($query) use($request){
+                return $query->where('added_by', $request->added_by);
+            })->orderBy('id', 'desc')->paginate($request->limit??10)
+>>>>>>> b8f4b0ca2bbe6ab77e800c9446f05f32ee8371a4
         ]);
     }
 
@@ -158,11 +168,14 @@ class PriceQuotationController extends Controller
             // Calculate project budget with multiplying factor of platform account
             if(isset($validated['platform_account_id']) && $validated['platform_account_id']){
                 $platformAccount = PlatformAccount::select(['id','type','company_name','name','username','user_url','email','profile_type','multiplying_factor'])->where('id', $validated['platform_account_id'])->first();
+                $calculated_actual_budget = round($projectBudgetWithDeadlineValue * $platformAccount->multiplying_factor, 2);
+                $calculated_usd_budget = round(($projectBudgetWithDeadlineValue * $platformAccount->multiplying_factor) / $currency->exchange_rate, 2);
                 $priceQuotation = PriceQuotation::create([
                     'serial_no' => $this->generateSerialNumber(PriceQuotation::orderBy('id', 'desc')->first()->serial_no??'SEOPAGE1-'.date("Y").'-000'),
                     'deal_stage_id' => $validated['deal_stage_id'],
                     'project_cms_id' => $validated['project_cms_id'],
                     'project_niche_id' => $validated['project_niche_id'],
+                    'client_username' => $dealStage->client_username,
                     'no_of_primary_pages' => $validated['no_of_primary_pages'],
                     'no_of_secondary_pages' => $validated['no_of_secondary_pages'],
                     'no_of_major_functionalities' => $validated['no_of_major_functionalities'],
@@ -176,8 +189,10 @@ class PriceQuotationController extends Controller
                     'deadline_type' => $validated['deadline_type'],
                     'no_of_days' => $no_of_day_required,
                     'platform_account_id' => $validated['platform_account_id'],
-                    'calculated_actual_budget' => round($projectBudgetWithDeadlineValue * $platformAccount->multiplying_factor, 2),
-                    'calculated_usd_budget' => round(($projectBudgetWithDeadlineValue * $platformAccount->multiplying_factor) / $currency->exchange_rate, 2),
+                    'calculated_actual_budget' => $calculated_actual_budget,
+                    'calculated_usd_budget' => $calculated_usd_budget,
+                    'calculated_actual_budget' => round($calculated_actual_budget * 1.1, 2),
+                    'calculated_usd_budget' => round($calculated_usd_budget * 1.1, 2),
                     'added_by' => Auth::user()->id
                 ]);
 
