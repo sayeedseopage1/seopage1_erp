@@ -88,7 +88,7 @@ const usePriceQuotations = (priceQuotationsInputs) => {
             formatAccounts?.unshift({ id: 0, name: "All", status: 1 });
             setAccountsData(formatAccounts);
         }
-    }, [isDealLoading, isClientsLoading, isProjectNichesLoading]);
+    }, [isDealLoading, isClientsLoading, isProjectNichesLoading, isAccountsLoading]);
 
     return {
         clientsData,

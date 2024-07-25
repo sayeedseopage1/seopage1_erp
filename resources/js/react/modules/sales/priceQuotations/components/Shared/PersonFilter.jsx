@@ -57,7 +57,7 @@ export default function PersonFilter({ value, onChange, data, title, display = i
                         >
                             Select All
                         </Listbox.Option>
-                        {filteredData?.map((person) => (
+                        {filteredData?.slice(0, 100)?.map((person) => (
                             <Listbox.Option
                                 className={({ active, selected }) =>
                                     `${styles.dropdownItem} ${

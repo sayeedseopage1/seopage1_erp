@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Auth;
 
 class PlatformAccountsController extends AccountBaseController
 {
@@ -23,6 +24,7 @@ class PlatformAccountsController extends AccountBaseController
 
     function index()
     {
+        if (!in_array(Auth::user()->role_id, [1, 4, 7, 8])) abort(403);
         return view('platform-accounts.index', $this->data);
     }
 }

@@ -35,8 +35,13 @@ const SubmitPriceQuotation = ({
     setExtraInfoInputsValidation,
     priceQuotationsInputsValidation,
 }) => {
-    const { cmsData, isCMSLoading, currenciesData, isCurrenciesLoading } =
-        useContext(PriceQuotationsContext);
+    const {
+        cmsData,
+        isCMSLoading,
+        currenciesData,
+        isCurrenciesLoading,
+        priceQuotationsResponse,
+    } = useContext(PriceQuotationsContext);
     const { deadline } = PriceQuotationsDataInputOptions;
     const {
         clientsData,
@@ -334,11 +339,16 @@ const SubmitPriceQuotation = ({
                                 label="i. Number of days required"
                                 fieldName="no_of_days"
                                 onChange={handleInputChange}
-                                errorText="Number of days required"
+                                errorText={`${
+                                    priceQuotationsResponse?.isNotDoAble
+                                        ? priceQuotationsResponse?.data?.[0]?.not_doable_message
+                                        : "Number of days required"
+                                }`}
                                 value={priceQuotationsInputs?.no_of_days}
                                 isError={
-                                    priceQuotationsInputsValidation?.is_submitting &&
-                                    priceQuotationsInputsValidation?.no_of_days
+                                    (priceQuotationsInputsValidation?.is_submitting &&
+                                        priceQuotationsInputsValidation?.no_of_days) ||
+                                    priceQuotationsResponse?.isNotDoAble
                                 }
                             />
                         </Switch.Case>

@@ -37,13 +37,16 @@ import {
     formatInvoiceData,
     formatPriceQuotationsForPayload,
 } from "../../helper/formatData";
+
+// Api
 import { useCreatePriceQuotationMutation } from "../../../../../services/api/priceQuotationsApiSlice";
-import { useReactToPrint } from "react-to-print";
 
 const PriceQuotationsGenerateModal = ({
     isModalOpen,
     closeModal,
     modalTitle,
+    isMinimizeUse = false,
+    handleMinimize,
     isDealStagePage = false,
     priceQuotationsInputs,
     setPriceQuotationsInputs,
@@ -67,6 +70,7 @@ const PriceQuotationsGenerateModal = ({
         setPriceQuotationsInputsValidation,
     ] = React.useState(priceQuotationsState.validation);
 
+    // Handle Input Change
     const handleInputChange = (e) => {
         const { name, value } = e.target;
         setPriceQuotationsInputs((prev) => {
@@ -130,9 +134,11 @@ const PriceQuotationsGenerateModal = ({
         return filterSpeedOptimization.length !== other_works_data.length;
     };
 
+    // Create Price Quotation Mutation
     const [createPriceQuotation, { isLoading: isCreatingPriceQuotation }] =
         useCreatePriceQuotationMutation();
 
+    // Submit Price Quotations
     const handleSubmitPriceQuotations = async () => {
         const {
             major_works,
@@ -237,48 +243,31 @@ const PriceQuotationsGenerateModal = ({
         }
     };
 
-    const handleAgainGeneratePriceQuotations = async (priceQuotations) => {
-        try {
-            const payload = {
-                ...priceQuotationsResponse.previous_payloads,
-                is_selected: 0,
-                no_of_days: priceQuotations?.calculated_no_of_days,
+    // Again Generate Price Quotations Function for not do able case
+    const handleAgainGeneratePriceQuotations = () => {
+        setPriceQuotationsInputs((prev) => {
+            return {
+                ...prev,
+                step: "submit-price-quotation",
             };
-            const res = await createPriceQuotation(payload).unwrap();
-            if (res.status === 200) {
-                setPriceQuotationsResponse((prev) => {
-                    return {
-                        ...prev,
-                        data: res?.data,
-                        isNotDoAble: res?.data?.some(
-                            (item) => item?.not_doable_message
-                        ),
-                    };
-                });
-                setPriceQuotationsInputs((prev) => {
-                    return {
-                        ...prev,
-                        step: "view-price-quotation",
-                    };
-                });
-            }
-        } catch (error) {
-            toast.error("Something went wrong");
-        }
+        });
     };
 
     // Download PDF Function
     const handleDownloadPDF = async () => {
         setIsPDFDownloading(true);
 
-         toPDF({
-            filename: `Invoice-${priceQuotationsResponse?.invoiceData.serial_no}.pdf`,
-        });
-
-        setIsPDFDownloading(false);
+        try {
+            const checking = await toPDF({
+                filename: `Invoice-${priceQuotationsResponse?.invoiceData.serial_no}.pdf`,
+                resolution: 2,
+            });
+        } finally {
+            setIsPDFDownloading(false);
+        }
     };
 
-    // Validation
+    // State Validation
     useEffect(() => {
         if (priceQuotationsInputsValidation.is_submitting) {
             const validation = markEmptyFieldsValidation(priceQuotationsInputs);
@@ -305,13 +294,21 @@ const PriceQuotationsGenerateModal = ({
 
     /**
      * Handles the action button based on the current step in the price quotation process.
+     *   * @param {string} type - The type of action button. Can be one of the following:
+     *   - "submit-price-quotation"
+     *   - "view-price-quotation"
+     *   - "view-price-quotation-invoice"
+     *
+     * @param {boolean} [isBoolean=false] - An optional boolean flag used to determine the button label and action for "view-price-quotation".
+     *   - If `true`, the button label will be "Re Generating" and the action will be `handleAgainGeneratePriceQuotations`.
+     *   - If `false` or omitted, the button label will be "Check Quotation" and the action will be `handleViewPriceQuotation`.
      *
      * @returns {Object} - An object containing the loading title, button label, and button action.
      * @returns {string} return.loadingTitle - The title displayed while the action is loading.
      * @returns {string} return.buttonLabel - The label of the action button.
      * @returns {Function} return.buttonAction - The function to be executed on button click.
      */
-    const handleActionButton = (type) => {
+    const handleActionButton = (type, isBoolean = false) => {
         const submitQuotation = {
             "submit-price-quotation": {
                 loadingTitle: "Generating...",
@@ -320,11 +317,11 @@ const PriceQuotationsGenerateModal = ({
             },
             "view-price-quotation": {
                 // Here add condition for if is not do able true then it will show this
-                loadingTitle: priceQuotationsResponse?.isNotDoAble
-                    ? "Generating..."
-                    : "Confirming...",
-                buttonLabel: "Check Quotation",
-                buttonAction: handleViewPriceQuotation,
+                loadingTitle: "Confirming...",
+                buttonLabel: isBoolean ? "Re Generating" : "Check Quotation",
+                buttonAction: isBoolean
+                    ? handleAgainGeneratePriceQuotations
+                    : handleViewPriceQuotation,
             },
             "view-price-quotation-invoice": {
                 loadingTitle: "Downloading...",
@@ -355,7 +352,12 @@ const PriceQuotationsGenerateModal = ({
             width={addWidthDynamically()}
             isCentered
         >
-            <CustomModalHeader title={modalTitle} closeModal={closeModal} />
+            <CustomModalHeader
+                title={modalTitle}
+                closeModal={closeModal}
+                handleMinimize={handleMinimize}
+                minimize={isMinimizeUse}
+            />
             <ModalContentContainer
                 color="var(--primaryLightDarkBlue)"
                 style={{
@@ -397,9 +399,6 @@ const PriceQuotationsGenerateModal = ({
                             setSelectedPriceQuotation={
                                 setSelectedPriceQuotation
                             }
-                            handleAgainGeneratePriceQuotations={
-                                handleAgainGeneratePriceQuotations
-                            }
                             selectedPriceQuotation={selectedPriceQuotation}
                         />
                     </Switch.Case>
@@ -424,17 +423,23 @@ const PriceQuotationsGenerateModal = ({
                         isLoading={isCreatingPriceQuotation || isPDFDownloading}
                         disabled={
                             isCreatingPriceQuotation ||
-                            priceQuotationsResponse?.isNotDoAble ||
                             (priceQuotationsInputs?.step ===
                                 "view-price-quotation" &&
+                                !priceQuotationsResponse?.isNotDoAble &&
                                 !selectedPriceQuotation?.platform_account
                                     ?.id) ||
                             isPDFDownloading
                         }
                         loaderTitle={handleActionButton("loadingTitle")}
-                        onClick={handleActionButton("buttonAction")}
+                        onClick={handleActionButton(
+                            "buttonAction",
+                            priceQuotationsResponse?.isNotDoAble
+                        )}
                     >
-                        {handleActionButton("buttonLabel")}
+                        {handleActionButton(
+                            "buttonLabel",
+                            priceQuotationsResponse?.isNotDoAble
+                        )}
                     </Button>
                     <Button
                         className="price_quotation_custom_button price_quotation_custom_button_danger d-flex align-items-center justify-content-center"

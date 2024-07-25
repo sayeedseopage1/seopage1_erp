@@ -18,7 +18,6 @@ const ViewPriceQuotation = ({
                         quotationData={quotation}
                         setSelectedPriceQuotation={setSelectedPriceQuotation}
                         selectedPriceQuotation={selectedPriceQuotation}
-                        handleAgainGeneratePriceQuotations={handleAgainGeneratePriceQuotations}
                     />
                 );
             })}

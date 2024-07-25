@@ -42,7 +42,7 @@ const PriceQuotations = () => {
 
     const [isPriceQuotationModalOpen, setIsPriceQuotationModalOpen] =
         React.useState(false);
-    const [, /*filter*/ setFilter] = React.useState();
+    const [filter, setFilter] = React.useState();
     const [{ pageIndex, pageSize }, setPagination] = React.useState({
         pageIndex: 0,
         pageSize: 10,
@@ -64,7 +64,11 @@ const PriceQuotations = () => {
         queryString({
             page: pageIndex + 1,
             limit: pageSize,
-        })
+            ...filter,
+        }),
+        {
+            refetchOnMountOrArgChange: true,
+        }
     );
 
     // Price Quotations Data
@@ -122,7 +126,10 @@ const PriceQuotations = () => {
     return (
         <div className="price_quotations_container">
             {/* Price Quotations Filter */}
-            <PriceQuotationFilterBar setFilter={setFilter} clientsData={clientsData} />
+            <PriceQuotationFilterBar
+                setFilter={setFilter}
+                clientsData={clientsData}
+            />
 
             {/* Price Quotations Table */}
             <div className="sp1_tlr_container">

@@ -44,9 +44,9 @@ const PlatformAccountCard = ({
             caculated_project_budget_in_usd,
             calculated_project_budget,
             calculated_no_of_days,
-            calculated_total_hours
+            calculated_total_hours,
         } = quotationData || {};
-    
+
         const formattedData = [
             `CMS Name: ${project_cms?.cms_name}`,
             `Project Category: ${project_niche?.category_name}`,
@@ -58,7 +58,9 @@ const PlatformAccountCard = ({
             `Currency: ${currency?.currency_name}`,
             `Estimated Budget: $ ${caculated_project_budget_in_usd} USD (Default)`,
             `Amount: ${calculated_project_budget} ${currency?.currency_symbol} (Client’s Currency)`,
-            `Deadline: ${calculated_no_of_days} day but not be rigid (${getHourWithMin(calculated_total_hours)} hours)`
+            `Deadline: ${calculated_no_of_days} day but not be rigid (${getHourWithMin(
+                calculated_total_hours
+            )} hours)`,
         ].join(",\n");
 
         toast.info("Price Quotations Copy on clipboard");
@@ -77,9 +79,6 @@ const PlatformAccountCard = ({
             handleCopy(e);
         } else if (type === "selectedPriceQuotation") {
             setSelectedPriceQuotation(quotationData);
-        } else if (type === "notDoAble") {
-            e.stopPropagation();
-            handleAgainGeneratePriceQuotations(quotationData);
         }
     };
 
@@ -215,12 +214,7 @@ const PlatformAccountCard = ({
                         </div>
                     </Switch.Case>
                     <Switch.Case condition={quotationData?.not_doable_message}>
-                        <button
-                            onClick={(e) =>
-                                handlePlatformAccountCard("notDoAble", e)
-                            }
-                            className="platform_account_card_not_doable"
-                        >
+                        <button className="platform_account_card_not_doable alert alert-warning">
                             <h6>
                                 {quotationData?.not_doable_message}See price for
                                 the same requirements to be delivered in{" "}

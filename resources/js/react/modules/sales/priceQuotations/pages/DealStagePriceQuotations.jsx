@@ -4,7 +4,10 @@ import React, { useContext, useEffect } from "react";
 import PriceQuotationsGenerateModal from "../components/Modal/PriceQuotationsGenerateModal";
 
 // Context
-import { PriceQuotationsContext, priceQuotationsState } from "../context/PriceQuotationsProvider";
+import {
+    PriceQuotationsContext,
+    priceQuotationsState,
+} from "../context/PriceQuotationsProvider";
 
 const DealStagePriceQuotations = () => {
     // Context
@@ -101,6 +104,10 @@ const DealStagePriceQuotations = () => {
                     priceQuotationsInputs={priceQuotationsInputs}
                     setPriceQuotationsInputs={setPriceQuotationsInputs}
                     isDealStagePage
+                    isMinimizeUse
+                    handleMinimize={() =>
+                        handleModal(setIsPriceQuotationModalOpen, false)
+                    }
                 />
             )}
         </>

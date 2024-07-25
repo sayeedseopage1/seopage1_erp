@@ -10,9 +10,9 @@ const PriceQuotationFilterBar = ({ setFilter, clientsData }) => {
     const [client, setClient] = React.useState(null);
     const [startDate, setStartDate] = React.useState(null);
     const [endDate, setEndDate] = React.useState(null);
-    const [search /*setSearch*/] = React.useState("");
+    const [addedBy, setAddedBy] = React.useState(null);
 
-    const searchText = React.useDeferredValue(search);
+ 
 
     const _startData = React.useMemo(() => startDate, [startDate]);
     const _endData = React.useMemo(() => endDate, [endDate]);
@@ -22,14 +22,12 @@ const PriceQuotationFilterBar = ({ setFilter, clientsData }) => {
             ...prev,
             start_date: _startData,
             end_date: _endData,
-            client_id: client?.id,
+            client_username: client?.name ?? null,
+            added_by: addedBy?.id ?? null,
         }));
-    }, [_startData, _endData, client]);
+    }, [_startData, _endData, client, addedBy]);
 
-    // search data
-    React.useEffect(() => {
-        setFilter((prev) => ({ ...prev, search: searchText }));
-    }, [searchText]);
+    
     return ReactDOM.createPortal(
         <div className="sp1_task_filter_bar">
             <JqueryDateRangePicker
@@ -40,11 +38,18 @@ const PriceQuotationFilterBar = ({ setFilter, clientsData }) => {
                 customDayRange={60}
                 onApply={() => {}}
             />
-
             <PersonFilter
                 value={client}
                 onChange={setClient}
                 title="Client"
+                display={(value) => value?.name}
+                searchBy={(value) => value?.name}
+                data={clientsData}
+            />
+            <PersonFilter
+                value={addedBy}
+                onChange={setAddedBy}
+                title="Added By"
                 display={(value) => value?.name}
                 searchBy={(value) => value?.name}
                 data={clientsData}

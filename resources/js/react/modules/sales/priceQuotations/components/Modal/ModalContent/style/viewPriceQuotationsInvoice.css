@@ -4,7 +4,8 @@
   padding: 25px;
   background-color: var(--primaryLightText);
   width: 100%;
-  min-width: 1229px;   /* Here min width use because of invoice design will broke when width size reduce */
+  min-width: 1229px;
+  /* Here min width use because of invoice design will broke when width size reduce */
   box-sizing: border-box;
 }
 
@@ -269,7 +270,7 @@
 }
 
 .view_price_quotations_invoice_footer_top>p {
-  width: 50%;
+  width: 48%;
   color: var(--primaryDarkText);
   font-family: Poppins, sans-serif;
   font-size: 18px;

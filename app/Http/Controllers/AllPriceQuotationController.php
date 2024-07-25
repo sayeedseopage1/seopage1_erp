@@ -9,6 +9,7 @@ use App\Models\ProjectCms;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Auth;
 
 class AllPriceQuotationController extends AccountBaseController
 {
@@ -28,6 +29,8 @@ class AllPriceQuotationController extends AccountBaseController
 
     function index()
     {
+        if (!in_array(Auth::user()->role_id, [1, 4, 7, 8])) abort(403);
+        
         return view('price-quotations.index', $this->data);
     }
 

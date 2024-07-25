@@ -52,7 +52,6 @@ const AccountLists = () => {
         platformAccountState.inputs
     );
 
-
     // Modal State
     const [isPlatformAccountModalOpen, setIsPlatformAccountModalOpen] =
         React.useState(false);
@@ -68,7 +67,10 @@ const AccountLists = () => {
             `?${queryString({
                 page: pageIndex + 1,
                 limit: pageSize,
-            })}`
+            })}`,
+            {
+                refetchOnMountOrArgChange: true,
+            }
         );
 
     const platformAccounts = data?.data || [];
