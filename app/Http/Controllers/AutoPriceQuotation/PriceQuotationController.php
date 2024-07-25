@@ -17,11 +17,17 @@ use Illuminate\Support\Facades\Validator;
 
 class PriceQuotationController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
         return response()->json([
             'status' => 200,
-            'data' => PriceQuotation::with('dealStage:id,short_code,client_username,client_name,client_badge,project_name','projectCms:id,cms_name','projectNiche:id,category_name','currency:id,currency_name,currency_symbol,currency_code,exchange_rate','platformAccount','dealStage.client','addedBy','dealStage.deal:id,deal_id,amount,actual_amount')->orderBy('id', 'desc')->paginate(20)
+            'data' => PriceQuotation::with('dealStage:id,short_code,client_username,client_name,client_badge,project_name','projectCms:id,cms_name','projectNiche:id,category_name','currency:id,currency_name,currency_symbol,currency_code,exchange_rate','platformAccount','dealStage.client','addedBy','dealStage.deal:id,deal_id,amount,actual_amount')->when($request->start_date && $request->end_date, function($query) use($request){
+                return $query->whereBetween('created_at', [Carbon::parse($request->start_date)->startOfDay(), Carbon::parse($request->end_date)->endOfDay()]);
+            })->when($request->client_username, function($query) use($request){
+                return $query->where('client_username', $request->client_username);
+            })->when($request->added_by, function($query) use($request){
+                return $query->where('added_by', $request->added_by);
+            })->orderBy('id', 'desc')->paginate($request->limit??10)
         ]);
     }
 

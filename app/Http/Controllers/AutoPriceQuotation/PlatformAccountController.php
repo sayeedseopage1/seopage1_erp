@@ -11,11 +11,11 @@ use Illuminate\Support\Facades\Validator;
 
 class PlatformAccountController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
         return response()->json([
             'status' => 200,
-            'data' => PlatformAccount::paginate(20)
+            'data' => PlatformAccount::paginate($request->limit??10)
         ]);
     }
 
