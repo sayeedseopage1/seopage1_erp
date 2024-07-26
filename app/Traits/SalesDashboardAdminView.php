@@ -912,19 +912,19 @@ trait SalesDashboardAdminView
             $this->no_of_won_deals_count = $dealWithSaleIdDateClone->get();
 
 
-            $this->no_of_won_deals_value = $dealWithSaleIdDateClone->sum('amount');
+            $this->no_of_won_deals_value = round($dealWithSaleIdDateClone->sum('amount'), 2);
 
-            $this->canceled_project_count = $dealWithSaleIdDatePartiallyFinishedClone->with('project')
+            $this->canceled_project_count = $dealWithSaleIdDatePartiallyFinishedClone->with('project', 'user', 'currency')
                 ->whereRelation('project', 'status', 'partially finished')
                 ->orWhereRelation('project', 'status', 'canceled')
                 ->get();
 
-            $this->rejected_project_count = $dealWithSaleIdDateDeniedClone->with('project')->where('deals.status', '!=', 'Denied')->get();
+            $this->rejected_project_count = $dealWithSaleIdDateDeniedClone->with('project', 'user', 'currency')->where('deals.status', '!=', 'Denied')->get();
 
             if (count($this->no_of_won_deals_count)) {
                 $this->avg_deal_amount = $this->no_of_won_deals_value / count($this->no_of_won_deals_count);
                 $this->finished_project_ratio = count($this->finished_project_count) / count($this->no_of_won_deals_count);
-                $this->canceled_project_ratio = count($this->canceled_project_count) / count($this->no_of_won_deals_count);
+                $this->canceled_project_ratio = round(count($this->canceled_project_count) / count($this->no_of_won_deals_count), 2);
                 $this->rejected_project_ratio = count($this->rejected_project_count) / count($this->no_of_won_deals_count);
 
             } else {
@@ -944,6 +944,8 @@ trait SalesDashboardAdminView
                 ->get();
 
             $saleExecutive += [
+                'no_of_won_deals_count' => $this->no_of_won_deals_count,
+                'no_of_won_deals_value' => $this->no_of_won_deals_value,
                 'avg_deal_amount' => $this->avg_deal_amount,
                 'finished_project_ratio' => $this->finished_project_ratio,
                 'canceled_project_ratio' => $this->canceled_project_ratio,

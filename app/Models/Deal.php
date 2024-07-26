@@ -21,6 +21,10 @@ class Deal extends Model
     {
         return $this->belongsTo(Currency::class, 'original_currency_id');
     }
+    public function currency()
+    {
+        return $this->belongsTo(Currency::class, 'currency_id');
+    }
     public function user()
     {
         return $this->belongsTo(User::class, 'added_by');
