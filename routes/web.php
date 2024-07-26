@@ -1171,6 +1171,7 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
     Route::get('evaluation-total-revision/{id}', [EvaluationController::class,'totalRevision']);
     Route::get('evaluation-task/{id}', [EvaluationController::class,'EmployeeEvaluationTask']);
     Route::get('evaluation-history/{id}', [EvaluationController::class,'EmployeeEvaluationHistory']);
+    Route::get('evaluation-total-task-revision/{user_id}/{round}', [EvaluationController::class,'evaluationTotalTaskRevision']);
     //Pm goal Settings
     Route::resource('pm-goal-setting', PmGoalSetingController::class);
     Route::post('pm-goal-setting-update', [PmGoalSetingController::class, 'pmGoalUpdate'])->name('pm-goal-setting-update');
@@ -1568,6 +1569,8 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
     Route::get('/portfolio/get-sub-category/{website_cat_id}', [PortfolioController::class, 'getSubCategory']);
     Route::get('/filter-cms-categories', [PortfolioController::class, 'filterCmsCategories'])->name('filter-cms-categories');
     Route::get('/filter-data/{dataId}', [PortfolioController::class, 'filterDataShow']);
+    Route::post('portfolio-rating-store', [PortfolioController::class, 'ratingStore']);
+    Route::post('portfolio-rating-update', [PortfolioController::class, 'ratingUpdate']);
 
   //  Route::any('tasks/{any?}', [TaskController::class, 'home'])->where('any', '.*');
 

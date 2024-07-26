@@ -139,6 +139,18 @@ const ActionsButton = ({ data }) => {
                                     Acknowledge & create a task
                                 </button>
                             )}
+                            {btn.button_name === "Create a new task" && (
+                                <button
+                                    key={i}
+                                    onClick={() => {
+                                        setAcknowledgementTask((prev) => !prev);
+                                        dispatch(setPendingActionId(data?.id));
+                                    }}
+                                    className={`${style.action_btn}`}
+                                >
+                                    Create a new task
+                                </button>
+                            )}
                         </div>
                     );
                 }

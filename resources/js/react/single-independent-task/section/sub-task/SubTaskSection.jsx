@@ -181,8 +181,9 @@ const SubTaskSection = ({ status }) => {
                     style={{ zIndex: isTaskModalOpen ? "110" : "" }}
                 >
                     <i
-                        className={`fa-solid fa-circle-chevron-${isTaskModalOpen ? "right" : "left"
-                            }`}
+                        className={`fa-solid fa-circle-chevron-${
+                            isTaskModalOpen ? "right" : "left"
+                        }`}
                         style={{ color: "#276fec" }}
                     />
                 </button>
@@ -206,38 +207,39 @@ const SubTaskSection = ({ status }) => {
                     )}
                 </div>
 
-                {subTaskCreationPermision({ task: Task, auth, status }) && (
-                    <Button
-                        variant="tertiary"
-                        className="sp1_tark_add_item"
-                        aria-label="addButton"
-                        onClick={toggleAddButton}
-                    >
-                        {isTaskModalOpen ? (
-                            <React.Fragment>
-                                <i
-                                    className="fa-solid fa-xmark"
-                                    style={{ fontSize: "12px" }}
-                                />{" "}
-                                Close
-                            </React.Fragment>
-                        ) : (
-                            <React.Fragment>
-                                {inProgressTaskStatus ? (
-                                    <Loader title="Loading..." />
-                                ) : (
-                                    <>
-                                        <i
-                                            className="fa-solid fa-plus"
-                                            style={{ fontSize: "12px" }}
-                                        />{" "}
-                                        Sub Task
-                                    </>
-                                )}
-                            </React.Fragment>
-                        )}
-                    </Button>
-                )}
+                {subTaskCreationPermision({ task: Task, auth, status }) &&
+                    !_.includes([15, 16, 17], Number(auth.roleId)) && (
+                        <Button
+                            variant="tertiary"
+                            className="sp1_tark_add_item"
+                            aria-label="addButton"
+                            onClick={toggleAddButton}
+                        >
+                            {isTaskModalOpen ? (
+                                <React.Fragment>
+                                    <i
+                                        className="fa-solid fa-xmark"
+                                        style={{ fontSize: "12px" }}
+                                    />{" "}
+                                    Close
+                                </React.Fragment>
+                            ) : (
+                                <React.Fragment>
+                                    {inProgressTaskStatus ? (
+                                        <Loader title="Loading..." />
+                                    ) : (
+                                        <>
+                                            <i
+                                                className="fa-solid fa-plus"
+                                                style={{ fontSize: "12px" }}
+                                            />{" "}
+                                            Sub Task
+                                        </>
+                                    )}
+                                </React.Fragment>
+                            )}
+                        </Button>
+                    )}
             </div>
 
             <div className="sp1_task_right_card--body">

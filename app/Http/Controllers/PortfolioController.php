@@ -3,21 +3,23 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use App\Models\PendingAction;
+use App\Models\PendingActionPast;
 use App\Models\Project;
 use App\Models\ProjectCms;
 use App\Models\ProjectNiche;
 use App\Models\ProjectPortfolio;
+use App\Models\ProjectSubmission;
 use App\Models\ProjectTimeLog;
 use App\Models\ProjectWebsitePlugin;
 use App\Models\ProjectWebsiteTheme;
 use App\Models\ProjectWebsiteType;
+use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Request as FacadesRequest;
-
-use function Google\Auth\Cache\get;
-use function Symfony\Component\HttpClient\Response\select;
 
 class PortfolioController extends AccountBaseController
 {
@@ -40,16 +42,6 @@ class PortfolioController extends AccountBaseController
         $this->website_categories = ProjectNiche::whereNull('parent_category_id')->get();
         $this->website_themes = ProjectWebsiteTheme::all();
         $this->website_plugins = ProjectWebsitePlugin::whereNotNull('plugin_name')->get();
-
-//        $this->portfolios = DB::table('project_portfolios')
-//            ->join('projects', 'project_portfolios.project_id', '=', 'projects.id')
-//            ->join('users', 'projects.client_id', '=', 'users.id')
-//            ->join('project_submissions', 'project_portfolios.project_id', '=', 'project_submissions.project_id')
-//            ->select('project_portfolios.*', 'users.user_name', 'projects.project_name', 'projects.project_budget', 'project_submissions.actual_link')
-//            ->get();
-
-//                dd($this->website_subcategories);
-
         return view('portfolio.index', $this->data);
     }
 
@@ -202,9 +194,68 @@ class PortfolioController extends AccountBaseController
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function ratingStore(Request $request)
     {
-        //
+        $portfolio = ProjectPortfolio::where('id', $request->portfolio_id)->first();
+        $portfolio->rating_score = $request->rating_score;
+        $portfolio->added_by_comment = $request->added_by_comment;
+        $portfolio->rating_added_by = $request->rating_added_by;
+        $portfolio->save();
+
+        $actions = PendingAction::where('code','WSR')->where('past_status',0)->where('portfolio_id',$portfolio->id)->get();
+        if($actions != null)
+        {
+            foreach ($actions as $key => $action) 
+            {
+                $action->authorized_by= Auth::id();
+                $action->authorized_at= Carbon::now();
+                $action->past_status = 1;
+                $action->save();
+                
+                $project = Project::where('id',$portfolio->project_id)->first();
+                $project_submission = ProjectSubmission::where('project_id',$project->id)->first();
+                $pm = User::where('id',$project->pm_id)->first();
+                $client = User::where('id',$project->client_id)->first();
+                $authorize_by= User::where('id',$action->authorized_by)->first();
+
+                $past_action= new PendingActionPast();
+                $past_action->item_name = $action->item_name;
+                $past_action->code = $action->code;
+                $past_action->serial = $action->serial;
+                $past_action->action_id = $action->id;
+                $past_action->heading = 'Website rating added successfully!';
+                if($portfolio->portfolio_link != null){
+                    $past_action->message = 'Website <a href="'.$portfolio->portfolio_link.'">'.$portfolio->portfolio_link.'</a> for client <a href="'.route('clients.show',$client->id).'">'.$client->name.'</a> by PM <a href="'.route('employees.show',$pm->id).'">'.$pm->name.'</a> was rated by <a href="'.route('employees.show',$authorize_by->id).'">'.$authorize_by->name.'</a>';
+                    }elseif($project_submission->dummy_link != null){
+                        $past_action->message = 'Website <a href="'.$project_submission->dummy_link.'">'.$project_submission->dummy_link.'</a> for client <a href="'.route('clients.show',$client->id).'">'.$client->name.'</a> by PM <a href="'.route('employees.show',$pm->id).'">'.$pm->name.'</a> was rated by <a href="'.route('employees.show',$authorize_by->id).'">'.$authorize_by->name.'</a>';
+                    }else{
+                        $past_action->message = 'Website <span class="text-danger">No Link Provided</span> for client <a href="'.route('clients.show',$client->id).'">'.$client->name.'</a> by PM <a href="'.route('employees.show',$pm->id).'">'.$pm->name.'</a> was rated by <a href="'.route('employees.show',$authorize_by->id).'">'.$authorize_by->name.'</a>';
+                    }
+                $past_action->timeframe = $action->timeframe;
+                $past_action->authorization_for = $action->authorization_for;
+                $past_action->authorized_by = $action->authorized_by;
+                $past_action->authorized_at = $action->authorized_at;
+                $past_action->expired_status = $action->expired_status;
+                $past_action->past_status = $action->past_status;
+                $past_action->project_id = $action->project_id;
+                $past_action->client_id = $action->client_id;
+                $button = [
+                    [
+                        'button_name' => 'View rating',
+                        'button_color' => 'primary',
+                        'button_type' => 'redirect_url',
+                        'button_url' => route('portfolio.index', ['portfolio_id' => $portfolio->id, 'show' => 'all']),
+                    ],
+                ];
+                $past_action->button = json_encode($button);
+                $past_action->save();
+            }
+        }
+
+        return response()->json([
+            'message' => 'Rating added successfully',
+        ], 200);
+
     }
 
     /**
@@ -236,9 +287,19 @@ class PortfolioController extends AccountBaseController
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function ratingUpdate(Request $request)
     {
-        //
+        $portfolio = ProjectPortfolio::where('id', $request->portfolio_id)->first();
+        $portfolio->rating_score = $request->rating_score;
+        $portfolio->added_by_comment = $request->added_by_comment;
+        $portfolio->rating_updated_by = $request->rating_updated_by;
+        $portfolio->rating_updated_at = Carbon::now();
+        $portfolio->save();
+
+        return response()->json([
+            'message' => 'Rating Updated successfully',
+        ], 200);
+
     }
 
     /**
@@ -275,24 +336,33 @@ class PortfolioController extends AccountBaseController
 
 
     // get portfolio data
-    public function get_portfolio_data(Request $request){
-
+    public function get_portfolio_data(Request $request)
+    {
         $cms = $request->cms ?? null;
         $website_type = $request->website_type ?? null;
         $website_category = $request->website_category ?? null;
         $website_sub_category = $request->website_sub_category ?? null;
         $theme_id = $request->theme_id ?? null;
         $plugin_id = $request->plugin_id ?? null;
+        $rating = $request->rating_id ?? null;
         $limit = $request->page_size ?? 30;
 
         // $itemsPaginated = SalesRiskPolicy::where('parent_id', null)->offset($req->input('limit', 10) * $req->input('page', 1))->paginate($req->input('limit', 10));
         $rawData1 = DB::table('project_portfolios as pp')
         ->leftJoin('project_submissions as ps', 'ps.project_id', '=', 'pp.project_id')
-        ->select('pp.*')
+        ->leftJoin('projects', 'pp.project_id', '=', 'projects.id')
+        ->leftJoin('users as client', 'projects.client_id', '=', 'client.id')
+        ->leftJoin('users as pm', 'projects.pm_id', '=', 'pm.id')
+        ->leftJoin('project_niches as category', 'pp.niche', '=', 'category.id')
+        ->leftJoin('project_niches as subcategory', 'pp.sub_niche', '=', 'subcategory.id')
+        ->leftJoin('project_cms', 'pp.cms_category', '=', 'project_cms.id')
+        ->leftJoin('project_website_types', 'pp.website_type', '=', 'project_website_types.id')
+        ->leftJoin('project_website_themes', 'pp.theme_id', '=', 'project_website_themes.id')
+        ->select('pp.*','client.id as clientId','client.name as clientName','pm.id as pmId','pm.name as pmName','category.category_name','subcategory.category_name as sub_category_name','project_cms.cms_name','project_website_types.website_type as websiteType','project_website_themes.theme_name','project_website_themes.theme_name')
         ->where('pp.portfolio_link', '!=', null)
         ->whereNotIn('pp.portfolio_link',["n/a", "N/A", "na", "NA"])
         ->where('ps.status', 'accepted')
-        ->where(function($query) use ($cms, $website_type, $website_category, $website_sub_category, $theme_id, $plugin_id) {
+        ->where(function($query) use ($cms, $website_type, $website_category, $website_sub_category, $theme_id, $plugin_id, $rating) {
             if ($cms) {
                 $query->where('pp.cms_category', $cms);
             }
@@ -317,16 +387,41 @@ class PortfolioController extends AccountBaseController
                 $query->whereJsonContains('pp.plugin_list', [$plugin_id]);
             }
 
+            $ratingRanges = [
+                1 => [0.25, 1.75],
+                2 => [2.00, 2.75],
+                3 => [3.00, 3.75],
+                4 => [4.00, 4.75],
+                5 => [5.00],
+            ];
+            
+            if (isset($rating) && array_key_exists($rating, $ratingRanges)) {
+                $range = $ratingRanges[$rating];
+                $query->where('pp.rating_score', '>=', $range[0]);
+                if (count($range) > 1) {
+                    $query->where('pp.rating_score', '<=', $range[1]);
+                }
+            }
+
         })
+        ->orderBy('pp.rating_score', 'desc')
         ->distinct();
 
         $rawData2 = DB::table('project_portfolios as pp')
         ->leftJoin('project_submissions as ps', 'ps.project_id', '=', 'pp.project_id')
-        ->select('pp.*')
+        ->leftJoin('projects', 'pp.project_id', '=', 'projects.id')
+        ->leftJoin('users as client', 'projects.client_id', '=', 'client.id')
+        ->leftJoin('users as pm', 'projects.pm_id', '=', 'pm.id')
+        ->leftJoin('project_niches as category', 'pp.niche', '=', 'category.id')
+        ->leftJoin('project_niches as subcategory', 'pp.sub_niche', '=', 'subcategory.id')
+        ->leftJoin('project_cms', 'pp.cms_category', '=', 'project_cms.id')
+        ->leftJoin('project_website_types', 'pp.website_type', '=', 'project_website_types.id')
+        ->leftJoin('project_website_themes', 'pp.theme_id', '=', 'project_website_themes.id')
+        ->select('pp.*','client.id as clientId','client.name as clientName','pm.id as pmId','pm.name as pmName','category.category_name','subcategory.category_name as sub_category_name','project_cms.cms_name','project_website_types.website_type as websiteType','project_website_themes.theme_name','project_website_themes.theme_name')
         ->where('pp.portfolio_link', '!=', null)
         ->whereNotIn('pp.portfolio_link',["n/a", "N/A", "na", "NA"])
         ->where('ps.status', 'accepted')
-        ->where(function($query) use ($cms, $website_type, $website_category, $website_sub_category, $theme_id, $plugin_id) {
+        ->where(function($query) use ($cms, $website_type, $website_category, $website_sub_category, $theme_id, $plugin_id ,$rating) {
             if ($cms) {
                 $query->where('pp.cms_category', $cms);
             }
@@ -351,7 +446,24 @@ class PortfolioController extends AccountBaseController
                 $query->whereJsonContains('pp.plugin_list', [$plugin_id]);
             }
 
+            $ratingRanges = [
+                1 => [0.25, 1.75],
+                2 => [2.00, 2.75],
+                3 => [3.00, 3.75],
+                4 => [4.00, 4.75],
+                5 => [5.00],
+            ];
+            
+            if (isset($rating) && array_key_exists($rating, $ratingRanges)) {
+                $range = $ratingRanges[$rating];
+                $query->where('pp.rating_score', '>=', $range[0]);
+                if (count($range) > 1) {
+                    $query->where('pp.rating_score', '<=', $range[1]);
+                }
+            }
+
         })
+        ->orderBy('pp.rating_score', 'desc')
         ->distinct();
 
         $totalRow = $rawData1->get()->count();
