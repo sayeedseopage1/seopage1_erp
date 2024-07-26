@@ -101,7 +101,10 @@ const TimerControl = ({ task, timerStart, setTimerStart, auth }) => {
                     expireDate.getTime() - currentTime.getTime();
                 setTimeLeft(Math.max(0, Math.floor(timeDifference / 1000)));
 
-                if (currentTime >= expireDate && auth.roleId === 14) {
+                if (
+                    currentTime >= expireDate &&
+                    _.includes([14, 15, 16, 17], Number(auth.roleId))
+                ) {
                     setExpiredTimerForNewEmployee(true);
                     stopTimer();
                     clearInterval(intervalRef.current); // Stop the interval
@@ -172,11 +175,11 @@ const TimerControl = ({ task, timerStart, setTimerStart, auth }) => {
                 workReport &&
                 workReport.data &&
                 (workReport.data.check_in_check_out.check_in_status ||
-                    auth.roleId === 14) &&
+                    _.includes([14, 15, 16, 17], Number(auth.roleId))) &&
                 (workReport.data.daily_task_report.daily_submission_status ||
-                    auth.roleId === 14) &&
+                    _.includes([14, 15, 16, 17], Number(auth.roleId))) &&
                 (workReport.data.hours_log_report.hours_log_report_status ||
-                    auth.roleId === 14)
+                    _.includes([14, 15, 16, 17], Number(auth.roleId)))
             ) {
                 await startTimerApi({
                     task_id: task?.id,
@@ -470,7 +473,7 @@ const TimerControl = ({ task, timerStart, setTimerStart, auth }) => {
                 startTimer={startTimerControl}
             />
 
-            {auth.roleId === 14 && (
+            {_.includes([14, 15, 16, 17], Number(auth.roleId)) && (
                 <>
                     <ExpiredTimeModalForNewEmployee
                         showExpirationWarningModal={showExpirationWarningModal}
@@ -492,6 +495,13 @@ const TimerControl = ({ task, timerStart, setTimerStart, auth }) => {
                         timeLeft={timeLeft}
                     />
                 </>
+            )}
+
+            {console.log(
+                "timeleft , expireDate, show expire task modal",
+                timeLeft,
+                expireDateForTrainer,
+                showExpirationNotifyModal
             )}
         </React.Fragment>
     );

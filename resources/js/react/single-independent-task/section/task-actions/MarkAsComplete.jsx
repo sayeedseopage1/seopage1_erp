@@ -135,7 +135,10 @@ const MarkAsComplete = ({ task, auth }) => {
             toast.warn("Please describe what you've done!");
             valid = false;
         }
-        if (auth.roleId === 14 && !checkIsURL(screenRecordUrl)) {
+        if (
+            _.includes([14, 15, 16, 17], auth?.getRoleId()) &&
+            !checkIsURL(screenRecordUrl)
+        ) {
             toast.warn("Please provide a valid url");
             setScreenRecordUrlErr("Please provide a valid url");
             valid = false;
@@ -297,7 +300,10 @@ const MarkAsComplete = ({ task, auth }) => {
                                 </div>
 
                                 {/* single link for screen recording in case of trainee , role id===14 */}
-                                {auth.roleId === 14 && (
+                                {_.includes(
+                                    [14, 15, 16, 17],
+                                    Number(auth.roleId)
+                                ) && (
                                     <div className="form-group">
                                         <label htmlFor="exampleFormControlInput1">
                                             Screen recording of the last work

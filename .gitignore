@@ -44,3 +44,4 @@ package-lock.json
 #test
 .scannerwork
 reload_pages.sh
+.devdbrc

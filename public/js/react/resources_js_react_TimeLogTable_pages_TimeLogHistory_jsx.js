@@ -1094,9 +1094,7 @@ var TimeLogHistory = function TimeLogHistory() {
               }));
               setCurrentPage(1);
             })["catch"](function (err) {
-              var _console;
-              return (/* eslint-disable */(_console = console).log.apply(_console, _toConsumableArray(oo_oo("884100442_66_28_66_44_4", err)))
-              );
+              return console.log(err);
             });
           case 3:
           case "end":
@@ -1184,6 +1182,7 @@ var TimeLogHistory = function TimeLogHistory() {
   });
 };
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (TimeLogHistory);
+<<<<<<< HEAD
 /* istanbul ignore next */ /* c8 ignore start */ /* eslint-disable */
 ;
 function oo_cm() {
@@ -1226,6 +1225,8 @@ function oo_te(v, i) {
   return v;
 }
 ; /*eslint unicorn/no-abusive-eslint-disable:,eslint-comments/disable-enable-pair:,eslint-comments/no-unlimited-disable:,eslint-comments/no-aggregating-enable:,eslint-comments/no-duplicate-disable:,eslint-comments/no-unused-disable:,eslint-comments/no-unused-enable:,*/
+=======
+>>>>>>> aed693ea0995fe68224c7d13b272087e948a897d
 
 /***/ }),
 

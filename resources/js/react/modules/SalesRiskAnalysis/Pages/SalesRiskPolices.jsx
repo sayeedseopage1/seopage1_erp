@@ -282,12 +282,9 @@ const SalesRiskPolices = () => {
 
                     // this will check if add policy button is enabled or not, if enabled then it will not update the policy
                     // if not enabled then it will update the policy
-                    const checkIsAddPolicyButtonEnabled = settings?.find(
-                        (setting) =>
-                            setting?.name === "enable_add_policy_button"
-                    )?.value;
+                    const checkIsEditButtonEnable = settings?.value;
 
-                    if (!checkIsAddPolicyButtonEnabled) {
+                    if (!checkIsEditButtonEnable) {
                         setIsPolicyUpdating(true);
                     }
                 } else {
@@ -609,15 +606,7 @@ const SalesRiskPolices = () => {
                 <div className="d-flex justify-content-between align-items-center">
                     <div className="d-flex flex-column flex-md-row align-items-start align-items-md-center">
                         <Switch>
-                            <Switch.Case
-                                condition={
-                                    settings?.find(
-                                        (item) =>
-                                            item?.name ===
-                                            "enable_add_policy_button"
-                                    )?.value === true
-                                }
-                            >
+                            <Switch.Case condition={settings?.value}>
                                 <button
                                     onClick={
                                         isQuestionTypeLoading
@@ -625,6 +614,9 @@ const SalesRiskPolices = () => {
                                             : () => openAddModal("policy")
                                     }
                                     className="btn btn-info mb-3 mb-md-0 mr-3"
+                                    style={{
+                                        padding: "9px 12px",
+                                    }}
                                 >
                                     <Switch.Case
                                         condition={isQuestionTypeLoading}

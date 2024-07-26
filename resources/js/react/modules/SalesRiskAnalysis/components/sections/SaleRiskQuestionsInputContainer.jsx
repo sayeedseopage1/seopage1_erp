@@ -52,7 +52,7 @@ const SaleRiskQuestionsInputContainer = ({
 
     // Check if question is active and return boolean value
     const getBooleanValue = (question) => {
-        return question?.questions?.length
+        return question?.questions?.length;
     };
 
     // Add number on title if question is not child
@@ -63,6 +63,21 @@ const SaleRiskQuestionsInputContainer = ({
         return `${index + 1}. ${title}`;
     };
 
+    //
+    const getValueIfLongTextRequired = (value) => {
+        if (value?.selected) {
+            return value?.selected;
+        }
+        return value;
+    };
+
+    const getLogTextIsRequired = (question) => {
+        if (typeof question?.value === "object") {
+            return question?.value?.isRequired;
+        } else {
+            return true;
+        }
+    };
 
     return (
         <motion.div
@@ -134,7 +149,7 @@ const SaleRiskQuestionsInputContainer = ({
                                     />
                                 </Switch.Case>
                             </Switch.Case>
-                            <Switch.Case condition={question.type === "yesNo"}>
+                            <Switch.Case condition={question?.type === "yesNo"}>
                                 <CustomButtons
                                     label={addNumberOnTitle(
                                         index,
@@ -166,8 +181,9 @@ const SaleRiskQuestionsInputContainer = ({
                                     <SaleRiskQuestionsInputContainer
                                         questions={question?.questions?.filter(
                                             (item) =>
-                                                item?.value ===
-                                                getInputValue(question.id)
+                                                getValueIfLongTextRequired(
+                                                    item?.value
+                                                ) === getInputValue(question.id)
                                         )}
                                         inputsData={inputsData}
                                         isChild={true}
@@ -306,13 +322,16 @@ const SaleRiskQuestionsInputContainer = ({
                                 </Switch.Case>
                             </Switch.Case>
                             <Switch.Case
-                                condition={question.type === "longText"}
+                                condition={question?.type === "longText"}
                             >
                                 <CustomInputs
                                     isChild={isChild}
                                     type={"longText"}
-                                    comment={question.comment}
-                                    isSubmitting={isSubmitting}
+                                    comment={question?.comment}
+                                    isSubmitting={
+                                        isSubmitting &&
+                                        getLogTextIsRequired(question)
+                                    }
                                     value={getInputValue(question.id)}
                                     placeholder={question?.placeholder}
                                     label={addNumberOnTitle(

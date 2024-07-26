@@ -74,7 +74,7 @@ const Subtasks = () => {
                             res.tasks,
                             (d) => Number(d.assigned_to_id) === auth.getId()
                         );
-                    } else if (auth.getRoleId() === 14) {
+                    } else if (_.includes([14, 15, 16, 17], auth.getRoleId())) {
                         _data = _.filter(
                             res.tasks,
                             (d) => Number(d.assigned_to_id) === auth.getId()
