@@ -201,6 +201,7 @@ use App\Http\Controllers\ProjectTemplateSubTaskController;
 use App\Http\Controllers\PaymentGatewayCredentialController;
 use App\Http\Controllers\EmployeeShiftChangeRequestController;
 use App\Http\Controllers\EvaluationController;
+use App\Http\Controllers\Projects\ProjectInsightController;
 use App\Http\Controllers\SalesRiskPolicyController;
 
 /*
@@ -1570,6 +1571,7 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
 
     // Graphic task files delete
     Route::get('graphic-task-file/delete/{id}', [TaskController::class, 'deleteGraphicTaskFile'])->name('graphic.task.file.delete');
+    Route::get('project-details-with-assignable-pm/{deal_id}', [ProjectInsightController::class, 'projectDetailsWithAssignablePm'])->name('project.details.with.assignable.pm');
 });
 
 //custom route for seopage1
