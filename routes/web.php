@@ -1580,12 +1580,8 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
     Route::get('get-project-niches', [PriceQuotationInsightController::class, 'getProjectNiche'])->name('get.project.niches');
     Route::get('get-currencies', [PriceQuotationInsightController::class, 'getCurrencies'])->name('get.currencies');
     Route::resource('price-quotations', PriceQuotationController::class)->only(['index','store','show']);
-<<<<<<< HEAD
     Route::post('platform-accounts/update-status', [PlatformAccountController::class, 'updateStatus']);
-    // Route::get('all-platform-accounts')
-=======
     Route::get('get-users-for-price-quotation', [PriceQuotationInsightController::class, 'getUsersForPriceQuotation'])->name('get.users.for.price.quotation');
->>>>>>> b8f4b0ca2bbe6ab77e800c9446f05f32ee8371a4
 });
 
 AllPriceQuotationController::Route();

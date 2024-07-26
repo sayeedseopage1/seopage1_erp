@@ -21,17 +21,13 @@ class PriceQuotationController extends Controller
     {
         return response()->json([
             'status' => 200,
-<<<<<<< HEAD
-            'data' => PriceQuotation::with('dealStage:id,short_code,client_username,client_name,client_badge,project_name,message_link','projectCms:id,cms_name','projectNiche:id,category_name','currency:id,currency_name,currency_symbol,currency_code,exchange_rate','platformAccount','dealStage.clientDetails','addedBy','dealStage.deal:id,deal_id,amount,actual_amount')->orderBy('id', 'desc')->paginate(20)
-=======
-            'data' => PriceQuotation::with('dealStage:id,short_code,client_username,client_name,client_badge,project_name','projectCms:id,cms_name','projectNiche:id,category_name','currency:id,currency_name,currency_symbol,currency_code,exchange_rate','platformAccount','dealStage.client','addedBy','dealStage.deal:id,deal_id,amount,actual_amount')->when($request->start_date && $request->end_date, function($query) use($request){
+            'data' => PriceQuotation::with('dealStage:id,short_code,client_username,client_name,client_badge,project_name,message_link', 'projectCms:id,cms_name', 'projectNiche:id,category_name', 'currency:id,currency_name,currency_symbol,currency_code,exchange_rate', 'platformAccount', 'dealStage.clientDetails', 'addedBy', 'dealStage.deal:id,deal_id,amount,actual_amount')->when($request->start_date && $request->end_date, function ($query) use ($request) {
                 return $query->whereBetween('created_at', [Carbon::parse($request->start_date)->startOfDay(), Carbon::parse($request->end_date)->endOfDay()]);
-            })->when($request->client_username, function($query) use($request){
+            })->when($request->client_username, function ($query) use ($request) {
                 return $query->where('client_username', $request->client_username);
-            })->when($request->added_by, function($query) use($request){
+            })->when($request->added_by, function ($query) use ($request) {
                 return $query->where('added_by', $request->added_by);
-            })->orderBy('id', 'desc')->paginate($request->limit??10)
->>>>>>> b8f4b0ca2bbe6ab77e800c9446f05f32ee8371a4
+            })->orderBy('id', 'desc')->paginate($request->limit ?? 10)
         ]);
     }
 
@@ -56,34 +52,34 @@ class PriceQuotationController extends Controller
             'platform_account_id' => 'nullable|exists:platform_accounts,id',
             'is_selected' => 'nullable|numeric|in:0,1'
         ]);
-        
+
         if ($validator->fails()) {
             return response()->json([
                 'errors' => $validator->errors()->all()
             ], 422);
         }
-        
+
         $validated = $validator->validated();
 
-        $projectsQuery = Project::with('project_portfolio')->withSum('times', 'total_minutes')->whereHas('project_submission', function($query) use($validated){
+        $projectsQuery = Project::with('project_portfolio')->withSum('times', 'total_minutes')->whereHas('project_submission', function ($query) use ($validated) {
             return $query->where('created_at', '>', Carbon::parse('2023-12-01')->startOfDay())->where('status', 'accepted');
         });
-        
-        $projectWithCmsNiche = (clone $projectsQuery)->whereHas('project_portfolio', function($query) use($validated) {
+
+        $projectWithCmsNiche = (clone $projectsQuery)->whereHas('project_portfolio', function ($query) use ($validated) {
             return $query->where('cms_category', $validated['project_cms_id'])->where('niche', $validated['project_niche_id']);
         });
 
-        if(!(clone $projectWithCmsNiche)->count()){
-            $projectWithCms = (clone $projectsQuery)->whereHas('project_portfolio', function($query) use($validated) {
+        if (!(clone $projectWithCmsNiche)->count()) {
+            $projectWithCms = (clone $projectsQuery)->whereHas('project_portfolio', function ($query) use ($validated) {
                 return $query->where('cms_category', $validated['project_cms_id']);
             });
 
-            if(!(clone $projectWithCms)->count()){
+            if (!(clone $projectWithCms)->count()) {
                 $projects = $projectsQuery;
-            }else{
+            } else {
                 $projects = $projectWithCms;
             }
-        }else{
+        } else {
             $projects = $projectWithCmsNiche;
         }
 
@@ -99,14 +95,14 @@ class PriceQuotationController extends Controller
 
         // Calculate project budget depend on no of primary and secondary pages 
         $projectBudgetDependOnPrimaryAndSecondaryPages = ($validated['no_of_primary_pages'] * $existingBudgetForEachPrimaryPage) + ($validated['no_of_secondary_pages'] * $existingBudgetForEachSecondaryPage);
-        
+
         // Add extra 5% for any missed time tracking by our team with calculated budget
         $projectBudgetWithMissedTimeTracking = $projectBudgetDependOnPrimaryAndSecondaryPages + (($projectBudgetDependOnPrimaryAndSecondaryPages / 100) * 5);
-        
+
         // Increase project budget for major functionality (Each functionality will multiplying by 400)
         $projectBudgetWighMajorFunctionality = $projectBudgetWithMissedTimeTracking + ($validated['no_of_major_functionalities'] ? $validated['no_of_major_functionalities'] * 400 : 0);
         $majorFunctionalityHours = ($validated['no_of_major_functionalities'] ? $validated['no_of_major_functionalities'] * 400 : 0) / 20;
-       
+
         // Calculate hours for other works and every hour will multiplying by 20 (Speed Optimization: 6 Hours, Content Writing: 3 Hours per 1000 Words, Logo designd: 4 Hours per logo, UI Design: 3 Hours per page, Others: User inputs hour value in this field)
         $contentWritingHours = isset($validated['content_writing']) && $validated['content_writing'] ? (3 / 1000) * $validated['content_writing'] : 0;
         $speedOptimizationHours = isset($validated['speed_optimization']) && $validated['speed_optimization'] ? 6 : 0;
@@ -136,42 +132,42 @@ class PriceQuotationController extends Controller
         // Add hours per day multiplication with calculated project budget
         $projectBudgetWithDeadlineValue = $projectBudgetRounded;
         $no_of_day_required = $validated['no_of_days'];
-        $calculated_total_hours = number_format($projectStimatedHoursDependOnPrimaryAndSecondaryPages, 2) + number_format($majorFunctionalityHours, 2) + number_format($totalHoursOfOtherWorks, 2);
+        $calculated_total_hours = round($projectStimatedHoursDependOnPrimaryAndSecondaryPages, 2) + round($majorFunctionalityHours, 2) + round($totalHoursOfOtherWorks, 2);
         $notDoableMessage = null;
-        if($validated['deadline_type'] == 2){
+        if ($validated['deadline_type'] == 2) {
             $actualNoOfDays = $validated['no_of_days'] - 3;
             $hoursPerDay = $calculated_total_hours / $actualNoOfDays;
             $multiplicationForHoursPerDay = 1;
-            if($hoursPerDay <= 4){
+            if ($hoursPerDay <= 4) {
                 $multiplicationForHoursPerDay = 1;
-            }elseif($hoursPerDay > 4 && $hoursPerDay <= 5.5){
+            } elseif ($hoursPerDay > 4 && $hoursPerDay <= 5.5) {
                 $multiplicationForHoursPerDay = 1.2;
-            }elseif($hoursPerDay > 5.5 && $hoursPerDay <= 7){
+            } elseif ($hoursPerDay > 5.5 && $hoursPerDay <= 7) {
                 $multiplicationForHoursPerDay = 1.5;
-            }elseif($hoursPerDay > 7 && $hoursPerDay <= 10){
+            } elseif ($hoursPerDay > 7 && $hoursPerDay <= 10) {
                 $multiplicationForHoursPerDay = 2;
-            }elseif($hoursPerDay > 10){
+            } elseif ($hoursPerDay > 10) {
                 $no_of_day_required = ceil($calculated_total_hours / 4) + 3;
-                $notDoableMessage = "This project is not doable in ". $validated['no_of_days'] ." days. The minimum deadline should be ".$no_of_day_required." days.";
+                $notDoableMessage = "This project is not doable in " . $validated['no_of_days'] . " days. The minimum deadline should be " . $no_of_day_required . " days.";
             }
             $projectBudgetWithDeadlineValue = $projectBudgetRounded * $multiplicationForHoursPerDay;
-        }elseif($validated['deadline_type'] == 1){
+        } elseif ($validated['deadline_type'] == 1) {
             $no_of_day_required = ceil($calculated_total_hours / 4) + 3;
         }
-        
-        $dealStage = DealStage::select(['id','short_code','client_username','project_name'])->find($validated['deal_stage_id']);
-        $projectCms = ProjectCms::select(['id','cms_name'])->find($validated['project_cms_id']);
-        $projectNiche = ProjectNiche::select(['id','category_name'])->find($validated['project_niche_id']);
-        $currency = Currency::select(['id','currency_name','currency_symbol','currency_code','exchange_rate'])->find($validated['currency_id']);
 
-        if(isset($validated['is_selected']) && $validated['is_selected'] == 1){
+        $dealStage = DealStage::select(['id', 'short_code', 'client_username', 'project_name'])->find($validated['deal_stage_id']);
+        $projectCms = ProjectCms::select(['id', 'cms_name'])->find($validated['project_cms_id']);
+        $projectNiche = ProjectNiche::select(['id', 'category_name'])->find($validated['project_niche_id']);
+        $currency = Currency::select(['id', 'currency_name', 'currency_symbol', 'currency_code', 'exchange_rate'])->find($validated['currency_id']);
+
+        if (isset($validated['is_selected']) && $validated['is_selected'] == 1) {
             // Calculate project budget with multiplying factor of platform account
-            if(isset($validated['platform_account_id']) && $validated['platform_account_id']){
-                $platformAccount = PlatformAccount::select(['id','type','company_name','name','username','user_url','email','profile_type','multiplying_factor'])->where('id', $validated['platform_account_id'])->first();
+            if (isset($validated['platform_account_id']) && $validated['platform_account_id']) {
+                $platformAccount = PlatformAccount::select(['id', 'type', 'company_name', 'name', 'username', 'user_url', 'email', 'profile_type', 'multiplying_factor'])->where('id', $validated['platform_account_id'])->first();
                 $calculated_actual_budget = round($projectBudgetWithDeadlineValue * $platformAccount->multiplying_factor, 2);
                 $calculated_usd_budget = round(($projectBudgetWithDeadlineValue * $platformAccount->multiplying_factor) / $currency->exchange_rate, 2);
                 $priceQuotation = PriceQuotation::create([
-                    'serial_no' => $this->generateSerialNumber(PriceQuotation::orderBy('id', 'desc')->first()->serial_no??'SEOPAGE1-'.date("Y").'-000'),
+                    'serial_no' => $this->generateSerialNumber(PriceQuotation::orderBy('id', 'desc')->first()->serial_no ?? 'SEOPAGE1-' . date("Y") . '-000'),
                     'deal_stage_id' => $validated['deal_stage_id'],
                     'project_cms_id' => $validated['project_cms_id'],
                     'project_niche_id' => $validated['project_niche_id'],
@@ -191,30 +187,30 @@ class PriceQuotationController extends Controller
                     'platform_account_id' => $validated['platform_account_id'],
                     'calculated_actual_budget' => $calculated_actual_budget,
                     'calculated_usd_budget' => $calculated_usd_budget,
-                    'calculated_actual_budget' => round($calculated_actual_budget * 1.1, 2),
-                    'calculated_usd_budget' => round($calculated_usd_budget * 1.1, 2),
+                    'actual_budget_with_additional_percent' => round($calculated_actual_budget * 1.1, 2),
+                    'usd_budget_with_additional_percent' => round($calculated_usd_budget * 1.1, 2),
                     'added_by' => Auth::user()->id
                 ]);
 
                 return response()->json([
                     'status' => 200,
-                    'data' => PriceQuotation::with('dealStage:id,short_code,client_username,client_name,client_badge,project_name,message_link','projectCms:id,cms_name','projectNiche:id,category_name','currency:id,currency_name,currency_symbol,currency_code,exchange_rate','platformAccount','dealStage.client','addedBy')->find($priceQuotation->id)
+                    'data' => PriceQuotation::with('dealStage:id,short_code,client_username,client_name,client_badge,project_name,message_link', 'projectCms:id,cms_name', 'projectNiche:id,category_name', 'currency:id,currency_name,currency_symbol,currency_code,exchange_rate', 'platformAccount', 'dealStage.clientDetails', 'addedBy')->find($priceQuotation->id)
                 ]);
-            }else{
+            } else {
                 return response()->json([
                     'status' => 400,
                     'message' => 'Something went wrong!'
                 ]);
             }
-        }else{
+        } else {
             // Calculate project budget with multiplying factor of platform account
-            if(isset($validated['platform_account_id']) && $validated['platform_account_id']){
-                $platformAccounts = PlatformAccount::select(['id','type','company_name','name','username','user_url','email','profile_type','multiplying_factor'])->where('id', $validated['platform_account_id'])->where("status", 1)->get();
-            }else{
-                $platformAccounts = PlatformAccount::select(['id','type','company_name','name','username','user_url','email','profile_type','multiplying_factor'])->where("status", 1)->get();
+            if (isset($validated['platform_account_id']) && $validated['platform_account_id']) {
+                $platformAccounts = PlatformAccount::select(['id', 'type', 'company_name', 'name', 'username', 'user_url', 'email', 'profile_type', 'multiplying_factor'])->where('id', $validated['platform_account_id'])->where("status", 1)->get();
+            } else {
+                $platformAccounts = PlatformAccount::select(['id', 'type', 'company_name', 'name', 'username', 'user_url', 'email', 'profile_type', 'multiplying_factor'])->where("status", 1)->get();
             }
             $data = array();
-            foreach($platformAccounts as $key => $platformAccount){
+            foreach ($platformAccounts as $key => $platformAccount) {
                 $data[$key]['deal_stage'] = $dealStage;
                 $data[$key]['project_cms'] = $projectCms;
                 $data[$key]['project_niche'] = $projectNiche;
@@ -245,16 +241,17 @@ class PriceQuotationController extends Controller
     {
         return response()->json([
             'status' => 200,
-            'data' => PriceQuotation::with('dealStage:id,short_code,client_username,client_name,client_badge,project_name, message_link','projectCms:id,cms_name','projectNiche:id,category_name','currency:id,currency_name,currency_symbol,currency_code,exchange_rate','platformAccount','dealStage.client','addedBy','dealStage.deal:id,deal_id,amount,actual_amount')->find($id)
+            'data' => PriceQuotation::with('dealStage:id,short_code,client_username,client_name,client_badge,project_name,message_link, message_link, clientDetails', 'projectCms:id,cms_name', 'projectNiche:id,category_name', 'currency:id,currency_name,currency_symbol,currency_code,exchange_rate', 'platformAccount', 'dealStage.clientDetails', 'addedBy', 'dealStage.deal:id,deal_id,amount,actual_amount')->find($id)
         ]);
     }
 
-    function generateSerialNumber($latestSerial) {
+    function generateSerialNumber($latestSerial)
+    {
         $currentYear = date("Y");
         preg_match('/SEOPAGE1-(\d{4})-(\d{3})/', $latestSerial, $matches);
         $latestYear = $matches[1];
         $latestSerialNo = (int)$matches[2];
-        
+
         if ($latestYear == $currentYear) {
             $newSerialNo = $latestSerialNo + 1;
         } else {

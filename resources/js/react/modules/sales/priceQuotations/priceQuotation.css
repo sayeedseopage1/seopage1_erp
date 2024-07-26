@@ -10,6 +10,7 @@
   --primarySuccess: #70CA62;
   --primaryDanger: #FF6666;
   --primaryLightDanger: #fd6b6b;
+  --primaryHardDanger:#D81A1A;
   --primaryExtraLightDanger: #FBEEF0;
   --lightgray: #8F8F8F;
   --primaryGrayText: #837D7D;
@@ -231,4 +232,15 @@
   font-weight: 400;
   line-height: normal;
   margin-left: 8px;
+}
+
+
+
+@media screen and (max-width:768px) {
+  .priceQuotationsGenerationModal .price_quotation_modal_button{
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    align-items: center;
+  }
 }

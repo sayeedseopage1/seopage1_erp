@@ -1,12 +1,12 @@
 .platform_account_card_wrapper {
-  border-radius: 5px;
+  border-radius: 16px;
   box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.20);
   border: none;
   position: relative;
   overflow: hidden;
   background-color: var(--primaryLightDarkBlue);
-  max-width: 35vw;
-  min-width: 35vw;
+  max-width: 40vw;
+  min-width: 40vw;
 }
 
 .platform_account_card_wrapper:hover {
@@ -14,10 +14,33 @@
 }
 
 .platform_account_card_wrapper.active {
-  box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.30);
-  padding: 4px;
   transition: all 0.3s ease-in-out;
-  border: 3px solid var(--primaryBlue);
+}
+
+.platform_account_card_selected {
+  position: absolute;
+  top: 15px;
+  left: 20px;
+  animation: fade-let-to-right 0.5s ease-in-out forwards;
+  background-color: var(--primaryLightText);
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+@keyframes fade-let-to-right {
+  from {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
 }
 
 .platform_account_card_header {
@@ -25,8 +48,8 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  border-top-left-radius: 5px;
-  border-top-right-radius: 5px;
+  border-top-left-radius: 16px;
+  border-top-right-radius: 16px;
   position: relative;
 }
 
@@ -44,7 +67,7 @@
 .platform_account_card_header button {
   position: absolute;
   right: 10px;
-  top: 10px;
+  top: 15px;
   background-color: var(--primaryLightText);
   border: none;
   color: var(--primaryBlue);
@@ -56,6 +79,10 @@
   padding: 6px 10px;
   border-radius: 4px;
   cursor: pointer;
+}
+
+.platform_account_card_table{
+  overflow: auto;
 }
 
 .platform_account_card_table table {
@@ -137,6 +164,7 @@
   margin-bottom: 0;
   text-align: left;
 }
+
 .platform_account_card_budget_info h5 span {
   font-family: Poppins, sans-serif;
   font-size: 14px;
@@ -165,6 +193,7 @@
   flex-direction: column;
   align-items: flex-end;
   width: 36%;
+  padding-left: 4px;
 }
 
 .platform_account_card_deadline p {
@@ -189,12 +218,23 @@
   font-family: Poppins, sans-serif;
 }
 
-.platform_account_card_not_doable {
-  background-color: transparent;
-  cursor: pointer;
+.platform_account_card_footer_not_doable {
+  background-color: var(--primaryHardDanger);
+  display: flex;
+  padding: 20px;
+  border-bottom-left-radius: 16px;
+  border-bottom-right-radius: 16px;
 }
 
-.platform_account_card_not_doable h6 {
+.platform_account_card_footer_not_doable_icon {
+  margin-right: 12px;
+}
+
+.platform_account_card_footer_not_doable_icon svg {
+  transform: rotate(180deg);
+}
+
+.platform_account_card_footer_not_doable p {
   color: var(--primaryLightText);
   font-family: Poppins, sans-serif;
   font-size: 14px;
@@ -202,4 +242,62 @@
   line-height: normal;
   margin-bottom: 0;
   background-color: transparent;
+}
+
+.platform_account_card_footer_not_doable p span {
+  font-family: Poppins, sans-serif;
+  font-size: 16px;
+  font-weight: 500;
+}
+
+
+/* Media Query */
+
+@media (min-width:1299px) and (max-width:1499px) {
+  .platform_account_card_wrapper {
+    max-width: 45vw;
+    min-width: 45vw;
+  }
+}
+
+@media (min-width: 769px) and (max-width:1299px) {
+  .platform_account_card_wrapper {
+    max-width: 50vw;
+    min-width: 50vw;
+  }
+}
+
+@media screen and (max-width:768px) {
+  .platform_account_card_wrapper {
+    max-width: 90vw;
+    min-width: 90vw;
+  }
+
+  .platform_account_card_footer {
+    flex-direction: column;
+  }
+
+  .platform_account_card_budget_info {
+    width: 100%;
+    border-right: none;
+    text-align: left;
+    border-bottom: 1px solid;
+    padding-bottom: 12px;
+  }
+
+
+  .platform_account_card_budget_info p span {
+    font-family: Poppins, sans-serif;
+    font-weight: 500;
+  }
+
+  .platform_account_card_deadline {
+    width: 100%;
+    align-items: flex-start;
+    padding-top: 12px;
+  }
+
+  .platform_account_card_selected{
+    display: none;
+  }
 }

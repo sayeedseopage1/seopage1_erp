@@ -24,7 +24,7 @@ const ViewPriceQuotationsInvoice = ({ invoiceData, targetRef }) => {
                         <p>{invoiceData?.serviceProvider?.company_name}</p>
                         <span>{invoiceData?.serviceProvider["name"]}</span>
                         <span>
-                            User Id: {invoiceData?.serviceProvider["username"]}
+                        <strong> User Id:</strong> {invoiceData?.serviceProvider["username"]}
                         </span>
                     </div>
                 </div>
@@ -49,10 +49,11 @@ const ViewPriceQuotationsInvoice = ({ invoiceData, targetRef }) => {
                     <div>
                         <p>{invoiceData["client"]?.client_name}</p>
                         <span>
-                            User Id: {invoiceData["client"].client_username}
+                            <strong> User Id:</strong>{" "}
+                            {invoiceData["client"].client_username}
                         </span>
                         <span>
-                            Message Thread:{" "}
+                            <strong> Message Thread: </strong>
                             {invoiceData["client"].message_thread && (
                                 <a href={invoiceData["client"].message_thread}>
                                     {invoiceData["client"].message_thread
@@ -104,7 +105,8 @@ const ViewPriceQuotationsInvoice = ({ invoiceData, targetRef }) => {
                         </p>
                         <p>
                             Total price :{" "}
-                            <span>System suggested price price plus 10%</span>
+                            {/* <span>System suggested price price plus 10%</span> */}
+                            <span> $ {invoiceData?.total_price}</span>
                         </p>
                     </div>
                     <div className="view_price_quotations_invoice_footer_bottom">

@@ -136,7 +136,7 @@ export const PriceQuotationsTableColumns = [
             const data = row.original;
             return (
                 <TableTdWrapper>
-                    {dayjs(data?.created_at).format("YYYY-MM-DD HH:mm")}
+                    {dayjs(data?.created_at).format("YYYY-MM-DD h:mm:ss A")}
                 </TableTdWrapper>
             );
         },
@@ -238,23 +238,23 @@ export const PriceQuotationsTableColumns = [
         header: "Project Budget",
         accessorKey: "project_budget",
         cell: ({ row }) => {
-            const data = row.original;
+            const dealData = row?.original?.deal_stage?.deal;
 
             return (
                 <TableTdWrapper>
                     <p className="d-flex">
                         <Switch>
-                            <Switch.Case condition={data?.project_budget}>
-                                $ {data?.project_budget}{" "}
+                            <Switch.Case condition={dealData}>
+                                $ {Number(dealData?.amount).toFixed(2)}{" "}
                                 <button className="sp1_price_quotation_column_sort_btn ml-2">
                                     <span
                                         className={`table_asc_dec ${getAseDseColor(
-                                            data?.project_budget
+                                            Number(dealData?.amount).toFixed(2)
                                         )}`}
                                     ></span>
                                 </button>
                             </Switch.Case>
-                            <Switch.Case condition={!data?.project_budget}>
+                            <Switch.Case condition={!dealData}>
                                 {"--"}
                             </Switch.Case>
                         </Switch>

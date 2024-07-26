@@ -34,6 +34,7 @@ const PriceQuotations = () => {
     const {
         clientsData,
         isClientsLoading,
+        userListData,
         priceQuotationsInputs,
         setPriceQuotationsInputs,
         priceQuotationsResponse,
@@ -129,6 +130,7 @@ const PriceQuotations = () => {
             <PriceQuotationFilterBar
                 setFilter={setFilter}
                 clientsData={clientsData}
+                userListData={userListData}
             />
 
             {/* Price Quotations Table */}
@@ -167,7 +169,7 @@ const PriceQuotations = () => {
                         tableActions={metaAction}
                         isLoading={isPriceQuotationsDataLoading}
                         justifyStyleColumn={{
-                            requested_on: "flex-start",
+                            requested_on: "center",
                             primary_page: "center",
                             secondary_page: "center",
                             other_works_needed: "center",

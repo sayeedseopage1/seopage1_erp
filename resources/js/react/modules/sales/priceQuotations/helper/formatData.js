@@ -54,7 +54,7 @@ export const formatInvoiceData = (priceQuotations) => {
     create_at: formatData(priceQuotations?.created_at),
     invoiceDeadline: formatData(priceQuotations?.created_at, 1), // hear Add 1 Days extra
     total_calculated_hours: getHourWithMin(priceQuotations?.total_calculated_hours),
-    total_price: priceQuotations?.calculated_usd_budget,
+    total_price: priceQuotations?.usd_budget_with_additional_percent,
     client: {
       client_name: priceQuotations?.deal_stage?.client_name,
       client_username: priceQuotations?.deal_stage?.client_username,

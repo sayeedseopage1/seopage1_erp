@@ -6,6 +6,7 @@ import {
     useGetClientsQuery,
     useGetCMSListQuery,
     useGetCurrenciesQuery,
+    useGetUserListQuery,
 } from "../../../../services/api/priceQuotationsApiSlice";
 
 export const priceQuotationsState = {
@@ -49,6 +50,7 @@ export const PriceQuotationsContext = createContext({});
 
 const PriceQuotationsProvider = ({ children }) => {
     const [cmsData, setCMSData] = useState([]);
+    const [userListData, setUserListData] = useState([]);
     const [clientsData, setClientsData] = useState([]);
     const [currenciesData, setCurrenciesData] = useState([]);
     const [priceQuotationsResponse, setPriceQuotationsResponse] = useState({
@@ -77,6 +79,11 @@ const PriceQuotationsProvider = ({ children }) => {
     // Get Clients Data
     const { data: clientResponse, isLoading: isClientsLoading } =
         useGetClientsQuery("", {
+            refetchOnMountOrArgChange: true,
+        });
+    // Get Clients Data
+    const { data: userListResponse, isLoading: isUserListLoading } =
+        useGetUserListQuery("", {
             refetchOnMountOrArgChange: true,
         });
 
@@ -111,15 +118,26 @@ const PriceQuotationsProvider = ({ children }) => {
             }));
             setClientsData(formatClients);
         }
-    }, [isCurrenciesLoading, isCMSLoading, isClientsLoading]);
+        // Format the User list
+        if (!isUserListLoading && userListResponse?.data?.length > 0) {
+            const formatUserList = userListResponse?.data;
+            setUserListData(formatUserList);
+        }
+    }, [
+        isCurrenciesLoading,
+        isCMSLoading,
+        isClientsLoading,
+        isUserListLoading,
+    ]);
 
     // Value
     const PriceQuotationsValue = useMemo(() => {
         return {
-           
             cmsData,
             isCMSLoading,
             currenciesData,
+            userListData,
+            isUserListLoading,
             clientsData,
             isClientsLoading,
             isCurrenciesLoading,

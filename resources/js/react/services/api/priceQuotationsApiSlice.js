@@ -41,6 +41,9 @@ const priceQuotationsApiSlice = apiSlice.injectEndpoints({
     getClients: build.query({
       query: (query) => `/account/get-clients-from-deal-stage${query}`,
     }),
+    getUserList: build.query({
+      query: (query) => `/account/get-users-for-price-quotation`,
+    }),
   }),
 });
 
@@ -54,4 +57,5 @@ export const {
   useGetProjectNichesQuery,
   useGetDealNamesQuery,
   useGetClientsQuery,
+  useGetUserListQuery
 } = priceQuotationsApiSlice;

@@ -36,6 +36,9 @@ const PersonAvatar = ({
                                 width="40px"
                                 className={`${imageClass}`}
                                 onError={handleError}
+                                style={{
+                                    minWidth: "40px",
+                                }}
                             />
                         </div>
                     ) : (
@@ -46,6 +49,7 @@ const PersonAvatar = ({
                                 width: "40px",
                                 height: "40px",
                                 backgroundColor: "#f3f4f6",
+                                minWidth: "40px",
                             }}
                         >
                             <div

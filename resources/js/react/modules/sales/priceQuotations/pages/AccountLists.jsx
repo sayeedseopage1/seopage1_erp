@@ -159,7 +159,7 @@ const AccountLists = () => {
                         <Flex
                             justifyContent="space-between"
                             alignItem="center"
-                            className="mb-3 sp1_tlr_tbl_action_buttons"
+                            className="mb-3 d-flex"
                         >
                             <div className="d-flex flex-wrap flex-md-nowrap">
                                 <Button

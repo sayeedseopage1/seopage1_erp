@@ -411,7 +411,7 @@ const CreatePlatformAccountModal = ({
                         </div>
                         <div className="d-flex">
                             <Button
-                                className="mr-2 price_quotation_custom_button price_quotation_custom_button_primary"
+                                className="mr-2 price_quotation_custom_button price_quotation_custom_button_primary price_quotation_modal_button"
                                 isLoading={
                                     isCreatingPlatformAccount ||
                                     isUpdatingPlatformAccount
@@ -434,7 +434,7 @@ const CreatePlatformAccountModal = ({
                                 {isPlatformAccountUpdate ? "Update" : "Create"}
                             </Button>
                             <Button
-                                className="price_quotation_custom_button price_quotation_custom_button_danger d-flex justify-content-center align-items-center"
+                                className="price_quotation_custom_button price_quotation_custom_button_danger d-flex justify-content-center align-items-center price_quotation_modal_button"
                                 isLoading={false}
                                 onClick={closeModal}
                                 size="md"

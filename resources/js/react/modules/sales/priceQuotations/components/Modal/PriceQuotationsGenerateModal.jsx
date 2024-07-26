@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import { toast } from "react-toastify";
 import { usePDF } from "react-to-pdf";
-
+import { useWindowSize } from "react-use";
 import _ from "lodash";
 
 // Components - UI - Custom
@@ -51,10 +51,11 @@ const PriceQuotationsGenerateModal = ({
     priceQuotationsInputs,
     setPriceQuotationsInputs,
 }) => {
+    const {width} = useWindowSize();
     const { priceQuotationsResponse, setPriceQuotationsResponse } = useContext(
         PriceQuotationsContext
     );
-    const [printPreparing, setPrintPreparing] = React.useState(false);
+
     const [isPDFDownloading, setIsPDFDownloading] = useState(false);
     const { toPDF, targetRef } = usePDF();
     const [selectedPriceQuotation, setSelectedPriceQuotation] =
@@ -340,11 +341,13 @@ const PriceQuotationsGenerateModal = ({
             case "submit-price-quotation":
                 return "1100px";
             case "view-price-quotation":
-                return "1450px";
+                return width < 1200 ? "1100px" : "1450px" 
             case "view-price-quotation-invoice":
                 return "1300px";
         }
     };
+
+
 
     return (
         <CustomModal
@@ -353,6 +356,7 @@ const PriceQuotationsGenerateModal = ({
             height="95vh"
             width={addWidthDynamically()}
             isCentered
+            parentClassName="priceQuotationsGenerationModal"
         >
             <CustomModalHeader
                 title={modalTitle}
@@ -421,7 +425,7 @@ const PriceQuotationsGenerateModal = ({
                 </Switch>
                 <ContentWrapper className="justify-content-center pt-3">
                     <Button
-                        className="mr-2 price_quotation_custom_button price_quotation_custom_button_primary"
+                        className="mr-2 price_quotation_custom_button price_quotation_custom_button_primary price_quotation_modal_button"
                         isLoading={isCreatingPriceQuotation || isPDFDownloading}
                         disabled={
                             isCreatingPriceQuotation ||
@@ -444,7 +448,7 @@ const PriceQuotationsGenerateModal = ({
                         )}
                     </Button>
                     <Button
-                        className="price_quotation_custom_button price_quotation_custom_button_danger d-flex align-items-center justify-content-center"
+                        className="price_quotation_custom_button price_quotation_custom_button_danger d-flex align-items-center justify-content-center price_quotation_modal_button"
                         isLoading={false}
                         onClick={closeModal}
                         size="md"

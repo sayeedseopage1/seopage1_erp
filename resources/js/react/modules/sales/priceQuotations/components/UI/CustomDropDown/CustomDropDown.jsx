@@ -160,7 +160,7 @@ const CustomDropDown = ({
                                                 className="singleline-ellipsis text-left"
                                             >
                                                 {selected?.name ? (
-                                                    <span>{startCase}</span>
+                                                    <span>{selected?.name}</span>
                                                 ) : (
                                                     placeholder
                                                 )}

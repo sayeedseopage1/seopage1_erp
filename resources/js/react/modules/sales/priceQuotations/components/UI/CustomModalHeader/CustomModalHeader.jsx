@@ -15,7 +15,7 @@ const CustomModalHeader = ({
     return (
         <div className={`customModalHeader ${className}`}>
             <h2 className="singleline-ellipsis">{title}</h2>
-            <div>
+            <div className="d-flex">
                 {minimize && (
                     <button onClick={handleMinimize} className="mr-2">
                         <AiOutlineMinus size={26} />

@@ -20,7 +20,7 @@ const TablePopover = ({ text, isDangerHtml = false, btnClass = "" }) => {
                     <div
                         className={`${style.projectStatus_percent_popover_button} ${btnClass}  multine-ellipsis`}
                     >
-                        {text ?? "--"}%
+                        {text ?? "--"}
                     </div>
                 )}
             </Popover.Button>
