@@ -4,6 +4,7 @@ use Carbon\Carbon;
 use App\Models\Deal;
 use App\Models\Lead;
 use App\Models\Task;
+use App\Models\Contract;
 use App\Models\TaskHistory;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -24,29 +25,51 @@ use App\Http\Controllers\Api\ProjectController;
 
 Route::get('/test-route', function () {
 
-    $startDate = Carbon::parse('2024-06-01')->startOfMonth();
-    $endDate = Carbon::parse('2024-06-31')->endOfMonth();
-    $salesId = 217;
+    $startDate = Carbon::parse('2023-06-01')->startOfMonth();
+    $endDate = Carbon::parse('2023-06-31')->endOfMonth();
+    $salesId = 221;
 
-    $leads_country_data = DB::table('leads')
-        ->where('created_at', '>=', $startDate)
-        ->where('created_at', '<', $endDate)
-        // ->distinct('country')
-        ->groupBy('country')
-        ->get()->pluck('country')->toArray();
+    $dealWithSaleIdDate = Deal::where('added_by', $salesId)->whereBetween('created_at', [$startDate, $endDate]);
 
-    $leads_country_data_db = DB::table('leads')
-        ->select('country')
-        ->where('created_at', '>=', $startDate)
-        ->where('created_at', '<', $endDate)
-        ->distinct('country')
+    $dealWithSaleIdDateClone = clone $dealWithSaleIdDate;
+    $dealWithSaleIdDatePartiallyFinishedClone = clone $dealWithSaleIdDate;
+    $dealWithSaleIdDateDeniedClone = clone $dealWithSaleIdDate;
+
+    $this->no_of_won_deals_count = $dealWithSaleIdDateClone->get();
+
+
+    $this->no_of_won_deals_value = $dealWithSaleIdDateClone->sum('amount');
+
+    $this->canceled_project_count = $dealWithSaleIdDatePartiallyFinishedClone->with('project')
+        ->whereRelation('project', 'status', 'partially finished')
+        ->orWhereRelation('project', 'status', 'canceled')
         ->get();
-    dd(
-        $leads_country_data,
-        $leads_country_data_db
-    );
 
+    $this->rejected_project_count = $dealWithSaleIdDateDeniedClone->with('project')->where('deals.status', '!=', 'Denied')->get();
 
+    // if (count($this->no_of_won_deals_count) > 0) {
+    //     $this->avg_deal_amount = $this->no_of_won_deals_value / count($this->no_of_won_deals_count);
+    //     $this->finished_project_ratio = count($this->finished_project_count) / count($this->no_of_won_deals_count);
+    //     $this->canceled_project_ratio = count($this->canceled_project_count) / count($this->no_of_won_deals_count);
+    //     $this->rejected_project_ratio = count($this->rejected_project_count) / count($this->no_of_won_deals_count);
+
+    // } else {
+    //     $this->avg_deal_amount = 0;
+    //     $this->finished_project_ratio = 0;
+    //     $this->canceled_project_ratio = 0;
+    //     $this->rejected_project_ratio = 0;
+
+    // }
+
+    $this->country_wise_won_deals_count = Deal::
+        join('users as client', 'client.id', 'deals.client_id')
+        ->where('deals.added_by', $salesId)
+        ->whereBetween('deals.created_at', [$startDate, $endDate])
+        ->groupBy('client.country_id')
+        ->where('deals.status', '!=', 'Denied')
+        ->get();
+
+    dd($this->canceled_project_count, $this->rejected_project_count, $this->country_wise_won_deals_count);
 
 });
 

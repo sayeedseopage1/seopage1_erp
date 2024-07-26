@@ -156,4 +156,8 @@ class Contract extends BaseModel
         return $this->belongsTo(Currency::class, 'original_currency_id');
     }
 
+    public function project()
+    {
+        return $this->belongsTo(project::class, 'deal_id', 'deal_id');
+    }
 }

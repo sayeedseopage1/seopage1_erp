@@ -28,6 +28,7 @@
                     </thead>
                     <tbody>
                         @foreach ($number_of_leads_received_get as $row)
+                        
                             <tr>
                                 <td>{{ $loop->index + 1 }}</td>
                                 <td>

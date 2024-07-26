@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Models\Lead;
 use App\Models\User;
+use App\Models\Project;
 use App\Models\Currency;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasOne;
@@ -49,6 +50,11 @@ class Deal extends Model
     public function pm_project(): HasOne
     {
         return $this->hasOne(PMProject::class, 'deal_id');
+    }
+
+    public function project(): HasOne
+    {
+        return $this->hasOne(Project::class, 'deal_id');
     }
 
     public function dealStageChanges()
