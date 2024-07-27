@@ -2435,6 +2435,14 @@ class ContractController extends AccountBaseController
 
     public function award_time_incress_update(Request $request)
     {
+        $request->validate([
+            "id" => 'required',
+            "request_id" => 'required',
+            "hours" => 'required',
+            "creation_type" => 'required',
+            "mode" => 'required',
+        ]);
+        
         //  DB::beginTransaction();
         $deal = Deal::find($request->id);
         //    / dd($deal->id);
@@ -2477,6 +2485,7 @@ class ContractController extends AccountBaseController
                 $project= Project::find($project_id->id);
                 $project->project_status = 'pending';
                 $project->status = 'not started';
+                $project->goal_creation_time_type = $request->creation_type;
                 $project->save();
                 $helper = new HelperPendingActionController();
 
