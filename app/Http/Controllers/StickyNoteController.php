@@ -110,7 +110,7 @@ class StickyNoteController extends AccountBaseController
 
     public function edit($id)
     {
-        $this->stickyNote = StickyNote::where('user_id', user()->id)->where('id', $id)->firstOrFail();
+        $this->stickyNote = StickyNote::with('client','project','milestone','task')->where('user_id', user()->id)->where('id', $id)->firstOrFail();
         $this->pageTitle = __('app.edit') . ' ' . __('app.note');
 
         if (request()->ajax()) {
@@ -125,12 +125,19 @@ class StickyNoteController extends AccountBaseController
 
     public function update(UpdateStickyNote $request, $id)
     {
+        if (Auth::user()->role_id == 4) {
+            $validated = $request->validate([
+                'reminder_time' => 'required',
+                'notetext' => 'required',
+            ]);
+        }
         $sticky = StickyNote::findOrFail($id);
         $sticky->note_text  = $request->notetext;
         $sticky->colour     = $request->colour;
+        $sticky->reminder_time = Carbon::now()->addHours($request->reminder_time);
         $sticky->save();
 
-        return Reply::successWithData(__('messages.noteUpdated'), ['redirectUrl' => route('sticky-notes.index')]);
+        return response()->json(['status' => 200]);
     }
 
     public function destroy($id)

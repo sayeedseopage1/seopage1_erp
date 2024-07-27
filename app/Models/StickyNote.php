@@ -41,5 +41,21 @@ class StickyNote extends BaseModel
     {
         return $this->belongsTo(User::class, 'user_id')->withoutGlobalScopes(['active']);
     }
+    public function client()
+    {
+        return $this->hasOne(User::class, 'id', 'client_id');
+    }
+    public function project()
+    {
+        return $this->hasOne(Project::class, 'id', 'project_id');
+    }
+    public function milestone()
+    {
+        return $this->hasOne(ProjectMilestone::class, 'id', 'milestone_id');
+    }
+    public function task()
+    {
+        return $this->hasOne(Task::class, 'id', 'task_id');
+    }
 
 }
