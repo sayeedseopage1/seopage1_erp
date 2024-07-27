@@ -945,7 +945,11 @@ class TaskController extends AccountBaseController
         //need pending action
 
         /**EMPLOYEE EVALUATION START */
-        $taskFind = Task::where('id',$request->task_id)->where('u_id',null)->where('independent_task_status',1)->first(); //Find SubTask
+        if(Auth::user()->role_id == 15 || Auth::user()->role_id == 16 || Auth::user()->role_id == 17){
+            $taskFind = Task::where('id',$request->task_id)->where('u_id','!=',null)->where('independent_task_status',1)->first(); //Find SubTask
+        }else{
+            $taskFind = Task::where('id',$request->task_id)->where('u_id',null)->where('independent_task_status',1)->first(); //Find SubTask
+        }
         if($taskFind != null){
             $evaluation = EmployeeEvaluationTask::where('task_id',$taskFind->id)->first();
             if($evaluation !=null)
@@ -1325,6 +1329,20 @@ class TaskController extends AccountBaseController
         $task_revision->save();
 
         /**EMPLOYEE EVALUATION START */
+        $evaluation_task = EmployeeEvaluationTask::where('task_id',$task_revision->task_id)->first();
+        $user = User::where('id',$evaluation_task->user_id)->first();
+        if($user->role_id == 15 || $user->role_id == 16 || $user->role_id == 17){
+            $taskFind = Task::where('id',$request->task_id)->where('u_id','!=',null)->where('independent_task_status',1)->first();
+            if($taskFind != null){
+                $evaluation = EmployeeEvaluationTask::where('task_id',$taskFind->id)->first();
+                if($evaluation !=null)
+                {
+                    $evaluation->revision_number = $task_revision->revision_no;
+                    $evaluation->save();
+                }
+            }
+        }
+        //ONLY FOR Developer
         $taskFind = Task::where('id',$request->task_id)->where('u_id',null)->where('independent_task_status',1)->first(); 
         if($taskFind != null){
             $evaluation = EmployeeEvaluationTask::where('task_id',$taskFind->id)->first();

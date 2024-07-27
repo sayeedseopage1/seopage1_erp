@@ -115,9 +115,9 @@ class ProjectPmGoal extends Model
             'regular' => [
                 [
                     'code' => 'HTA',
-                    'name' => 'At least one task has been assigned and 1 hour has been tracked.',
+                    'name' => 'At least 1 hours have been tracked.',
                     'type' => 'task_need_to_be_assigned',
-                    'complete' => 'At least one task has been assigned and 1 hour has been tracked.',
+                    'complete' => 'At least 1 hours have been tracked.',
                     'expire' => 'At least one task was not assigned and 1 hour was not tracked within the specified timeframe.'
                 ],
                 [
@@ -126,28 +126,7 @@ class ProjectPmGoal extends Model
                     'type' => 'hours_3_tracked',
                     'complete' => 'At least 3 hours have been tracked.',
                     'expire' => 'At least 3 hours were not tracked within the specified timeframe.'
-                ],
-                [
-                    'code' => '6HT',
-                    'name' => 'At least 6 hours have been tracked.',
-                    'type' => 'hours_6_tracked',
-                    'complete' => 'At least 6 hours have been tracked.',
-                    'expire' => 'At least 6 hours were not tracked within the specified timeframe.'
-                ],
-                [
-                    'code' => '10HT',
-                    'name' => 'At least 10 hours have been tracked.',
-                    'type' => 'hours_10_tracked_between_6th_and_12th_days',
-                    'complete' => 'At least 10 hours have been tracked',
-                    'expire' => 'At least 10 hours were not tracked within the specified timeframe.'
-                ],
-                [
-                    'code' => '10HTW',
-                    'name' => 'At least 10 hours have been tracked during that week.',
-                    'type' => 'hours_10_tracked_during_week',
-                    'complete' => 'At least 10 hours have been tracked during this week.',
-                    'expire' => 'At least 10 hours were not tracked during that week within the specified timeframe.'
-                ],
+                ]
             ],
             'priority' => [
                 [
@@ -163,28 +142,7 @@ class ProjectPmGoal extends Model
                     'type' => 'hours_3_tracked',
                     'complete' => 'At least 3 hours have been tracked.',
                     'expire' => 'At least 3 hours were not tracked within the specified timeframe.'
-                ],
-                [
-                    'code' => '7HT',
-                    'name' => 'At least 7 hours have been tracked.',
-                    'type' => 'hours_7_tracked',
-                    'complete' => 'At least 7 hours have been tracked.',
-                    'expire' => 'At least 7 hours were not tracked within the specified timeframe.'
-                ],
-                [
-                    'code' => '12HT',
-                    'name' => 'At least 12 hours have been tracked.',
-                    'type' => 'hours_12_tracked_between_6th_and_12th_days',
-                    'complete' => 'At least 12 hours have been tracked.',
-                    'expire' => 'At least 12 hours were not tracked within the specified timeframe.'
-                ],
-                [
-                    'code' => '12HTW',
-                    'name' => 'At least 12 hours have been tracked during that week.',
-                    'type' => 'hours_12_tracked_during_week',
-                    'complete' => 'At least 12 hours have been tracked during this week.',
-                    'expire' => 'At least 12 hours were not tracked during that week within the specified timeframe.'
-                ],
+                ]
             ],
             'highPriority' => [
                 [
@@ -200,28 +158,7 @@ class ProjectPmGoal extends Model
                     'type' => 'hours_4_tracked',
                     'complete' => 'At least 4 hours have been tracked.',
                     'expire' => 'At least 4 hours were not tracked within the specified timeframe.'
-                ],
-                [
-                    'code' => '8HT',
-                    'name' => 'At least 8 hours have been tracked.',
-                    'type' => 'hours_8_tracked',
-                    'complete' => 'At least 8 hours have been tracked.',
-                    'expire' => 'At least 8 hours were not tracked within the specified timeframe.'
-                ],
-                [
-                    'code' => '15HT',
-                    'name' => 'At least 15 hours have been tracked.',
-                    'type' => 'hours_15_tracked_between_6th_and_12th_days',
-                    'complete' => 'At least 15 hours have been tracked.',
-                    'expire' => 'At least 15 hours were not tracked within the specified timeframe.'
-                ],
-                [
-                    'code' => '15HTW',
-                    'name' => 'At least 15 hours have been tracked during that week.',
-                    'type' => 'hours_15_tracked_during_week',
-                    'complete' => 'At least 15 hours have been tracked during this week.',
-                    'expire' => 'At least 15 hours were not tracked during that week within the specified timeframe.'
-                ],
+                ]
             ],
             'topMostPriority' => [
                 [
@@ -237,28 +174,7 @@ class ProjectPmGoal extends Model
                     'type' => 'hours_5_tracked',
                     'complete' => 'At least 5 hours have been tracked.',
                     'expire' => 'At least 5 hours were not tracked within the specified timeframe.'
-                ],
-                [
-                    'code' => '8HT',
-                    'name' => 'At least 8 hours have been tracked.',
-                    'type' => 'hours_8_tracked',
-                    'complete' => 'At least 8 hours have been tracked.',
-                    'expire' => 'At least 8 hours were not tracked within the specified timeframe.'
-                ],
-                [
-                    'code' => '15HT',
-                    'name' => 'At least 15 hours have been tracked.',
-                    'type' => 'hours_15_tracked_between_6th_and_12th_days',
-                    'complete' => 'At least 15 hours have been tracked.',
-                    'expire' => 'At least 15 hours were not tracked within the specified timeframe.'
-                ],
-                [
-                    'code' => '15HTW',
-                    'name' => 'At least 15 hours have been tracked during that week.',
-                    'type' => 'hours_15_tracked_during_week',
-                    'complete' => 'At least 15 hours have been tracked during this week.',
-                    'expire' => 'At least 15 hours were not tracked during that week within the specified timeframe.'
-                ],
+                ]
             ],
             'criticallySensitive' => [
                 [
@@ -274,35 +190,14 @@ class ProjectPmGoal extends Model
                     'type' => 'hours_5_tracked',
                     'complete' => 'At least 5 hours have been tracked.',
                     'expire' => 'At least 5 hours were not tracked within the specified timeframe.'
-                ],
-                [
-                    'code' => '10HT',
-                    'name' => 'At least 10 hours have been tracked.',
-                    'type' => 'hours_10_tracked',
-                    'complete' => 'At least 10 hours have been tracked.',
-                    'expire' => 'At least 10 hours were not tracked within the specified timeframe.'
-                ],
-                [
-                    'code' => '18HT',
-                    'name' => 'At least 18 hours have been tracked.',
-                    'type' => 'hours_18_tracked_between_6th_and_12th_days',
-                    'complete' => 'At least 18 hours have been tracked.',
-                    'expire' => 'At least 18 hours were not tracked within the specified timeframe.'
-                ],
-                [
-                    'code' => '18HTW',
-                    'name' => 'At least 18 hours have been tracked during that week.',
-                    'type' => 'hours_18_tracked_during_week',
-                    'complete' => 'At least 18 hours have been tracked during this week.',
-                    'expire' => 'At least 18 hours were not tracked during that week within the specified timeframe.'
-                ],
+                ]
             ],
             'newMilestone' => [
                 'code' => 'RAM',
-                'name' => 'Release one more added milestone',
+                'name' => 'At least %s hours have been tracked.',
                 'type' => 'release_added_milestone',
-                'complete' => 'One more milestone have been released.',
-                'expire' => 'One more milestone have not been released within the specified timeframe.'
+                'complete' => 'At least %s hours have been tracked.',
+                'expire' => 'At least %s hours have not been tracked.'
             ]
         ],
         'upsell' => [

@@ -35,13 +35,21 @@ class DatabaseSync extends Command
     public function handle()
     {
         try {
-            
+
             // deals - status list update
             $statusList = "'" . implode("','", Deal::$saleAnalysisStatus) . "'";
             DB::statement("ALTER TABLE `deals`
             CHANGE COLUMN `sale_analysis_status` `sale_analysis_status` 
-            ENUM(".$statusList.") 
+            ENUM(" . $statusList . ") 
             NOT NULL DEFAULT 'pending';");
+
+            // project default goal creation date type set to 2 (released_at)
+            DB::statement("ALTER TABLE `projects`
+	        CHANGE COLUMN `goal_creation_time_type` `goal_creation_time_type`  
+            TINYINT(3) NOT NULL DEFAULT '2' 
+            COMMENT ' 1-Award Time, 2-Submission Time, 3-Authorization Time, 4-Project Accept Time, 5-Deadline Extension Request Time,' 
+            AFTER `new_deadline`;
+            ");
 
             $this->info('Database sync ends successfully.');
 
@@ -49,6 +57,5 @@ class DatabaseSync extends Command
         } catch (\Throwable $th) {
             throw $th;
         }
-
     }
 }

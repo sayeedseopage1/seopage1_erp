@@ -63,11 +63,19 @@ export const GoalExtensionHistoryTableColumn = [
         accessorKey: "old_duration",
         cell: ({ row }) => {
             const data = row?.original;
-            return (
-                <span>
-                    {` ${data?.old_duration} Days` ?? "--"}
-                </span>
-            );
+            const handleDuration = () => {
+                if (data?.old_duration) {
+                    const duration = parseFloat(data?.old_duration);
+                    const getDays = parseInt(duration);
+                    const getHours = Math.floor((duration - getDays) * 24);
+                    return `${getDays} Days${
+                        getHours === 0 ? "" : ` ${getHours} Hours`
+                    }`;
+                } else {
+                    return "--";
+                }
+            };
+            return <span>{handleDuration()}</span>;
         },
     },
 
@@ -77,11 +85,19 @@ export const GoalExtensionHistoryTableColumn = [
         accessorKey: "new_duration",
         cell: ({ row }) => {
             const data = row?.original;
-            return (
-                <span>
-                    {`${data?.new_duration} Days` ?? "--"}
-                </span>
-            );
+            const handleDuration = () => {
+                if (data?.new_duration) {
+                    const duration = parseFloat(data?.new_duration);
+                    const getDays = parseInt(duration);
+                    const getHours = Math.floor((duration - getDays) * 24);
+                    return `${getDays} Days${
+                        getHours === 0 ? "" : ` ${getHours} Hours`
+                    }`;
+                } else {
+                    return "--";
+                }
+            };
+            return <span>{handleDuration()}</span>;
         },
     },
     {
@@ -91,7 +107,10 @@ export const GoalExtensionHistoryTableColumn = [
         cell: ({ row }) => {
             const data = row?.original;
             return (
-                <TablePopover text={data?.extended_pm_reason} isDangerHtml={true} />
+                <TablePopover
+                    text={data?.extended_pm_reason}
+                    isDangerHtml={true}
+                />
             );
         },
     },
@@ -102,7 +121,10 @@ export const GoalExtensionHistoryTableColumn = [
         cell: ({ row }) => {
             const data = row?.original;
             return (
-                <TablePopover text={data?.extended_admin_comment} isDangerHtml={true} />
+                <TablePopover
+                    text={data?.extended_admin_comment}
+                    isDangerHtml={true}
+                />
             );
         },
     },
@@ -115,7 +137,7 @@ export const GoalExtensionHistoryTableColumn = [
             return (
                 <div className="d-flex align-items-center">
                     <i
-                        class="fa fa-circle mr-1 f-10"
+                        className="fa fa-circle mr-1 f-10"
                         style={{
                             color:
                                 data?.goal_status === 0
@@ -134,19 +156,14 @@ export const GoalExtensionHistoryTableColumn = [
         accessorKey: "extension_req_on",
     },
 
-
     {
         id: "extension_req_for",
         header: "Extension Requested For (Date)",
         accessorKey: "extension_req_for",
         cell: ({ row }) => {
             const data = row?.original;
-            return (
-                <span>
-                    {data?.extension_req_for ?? "--"}
-                </span>
-            );
-        }
+            return <span>{data?.extension_req_for ?? "--"}</span>;
+        },
     },
     {
         id: "extension_req_for",
@@ -159,7 +176,7 @@ export const GoalExtensionHistoryTableColumn = [
                     {data?.extended_day ? `${data?.extended_day} Days` : "--"}
                 </span>
             );
-        }
+        },
     },
     {
         id: "extension_req_authorized_for",
@@ -167,12 +184,8 @@ export const GoalExtensionHistoryTableColumn = [
         accessorKey: "extension_req_auth_for",
         cell: ({ row }) => {
             const data = row?.original;
-            return (
-                <span>
-                    {`${data?.extension_req_auth_for}` ?? "--"}
-                </span>
-            );
-        }
+            return <span>{`${data?.extension_req_auth_for}` ?? "--"}</span>;
+        },
     },
     {
         id: "extension_req_authorized_for",
@@ -182,10 +195,12 @@ export const GoalExtensionHistoryTableColumn = [
             const data = row?.original;
             return (
                 <span>
-                    {data.admin_extended_day ? `${data?.admin_extended_day} Days` : "--"}
+                    {data.admin_extended_day
+                        ? `${data?.admin_extended_day} Days`
+                        : "--"}
                 </span>
             );
-        }
+        },
     },
     {
         id: "authorization_status",
@@ -238,5 +253,5 @@ export const GoalExtensionHistoryTableColumn = [
                 </CreatedBy>
             );
         },
-    }
+    },
 ];

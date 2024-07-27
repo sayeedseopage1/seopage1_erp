@@ -27,6 +27,8 @@
                         @php
                             $client = \App\Models\User::where('id',$item->client_id)->first();
                             $project = \App\Models\Project::where('project_name',$item->project_name)->first();
+                            if (!$project) 
+                              continue;
                         @endphp
                     <tr>
                         <td>{{ $loop->iteration }}</td>

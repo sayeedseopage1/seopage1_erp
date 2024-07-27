@@ -40,3 +40,4 @@ package-lock.json
 .scannerwork
 reload_pages.sh
 public/report.html
+.devdbrc

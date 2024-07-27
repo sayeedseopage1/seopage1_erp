@@ -90,27 +90,34 @@ export const SalesAnalysisReportTableColumns = [
         cell: ({ row }) => {
             const data = row?.original;
             return (
-                <a
-                    href={`/account/leads/${data?.lead_id}`}
-                    className={`multine-ellipsis btn btn-info`}
-                    style={viewBtnStyle}
-                    ref={(node) => {
-                        if (node) {
-                            node.style.setProperty(
-                                "color",
-                                "white",
-                                "important"
-                            );
-                            node.style.setProperty(
-                                "background-color",
-                                "#1492d2",
-                                "important"
-                            );
-                        }
-                    }}
-                >
-                    View Lead
-                </a>
+                <Switch>
+                    <Switch.Case condition={data?.lead_id === null}>
+                        <p className="multiline-ellipsis">Not Available Yet</p>
+                    </Switch.Case>
+                    <Switch.Case condition={data?.lead_id !== null}>
+                        <a
+                            href={`/account/leads/${data?.lead_id}`}
+                            className={`multine-ellipsis btn btn-info`}
+                            style={viewBtnStyle}
+                            ref={(node) => {
+                                if (node) {
+                                    node.style.setProperty(
+                                        "color",
+                                        "white",
+                                        "important"
+                                    );
+                                    node.style.setProperty(
+                                        "background-color",
+                                        "#1492d2",
+                                        "important"
+                                    );
+                                }
+                            }}
+                        >
+                            View Lead
+                        </a>
+                    </Switch.Case>
+                </Switch>
             );
         },
     },
@@ -493,6 +500,8 @@ export const SalesAnalysisReportTableColumns = [
                             );
                         }
                     }}
+
+                    
                     target="_blank"
                 >
                     <GrView />
