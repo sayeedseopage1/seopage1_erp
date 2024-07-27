@@ -92,27 +92,30 @@ trait SalesDashboardAdminView
         // dd(request()->all(), request('start_date'), request('end_date'), $sales->id);
 
         $validator = Validator::make(request()->all(), [
-            'start_date' => 'required|date',
-            'end_date' => 'required|date|after:start_date',
+            'start_date' => 'date',
+            'end_date' => 'date|after:start_date',
         ]);
-        if (!$validator->fails()) {
+        if ($validator->fails()) {
             dd(Reply::error(__('validation_failed'), $validator->errors()));
             return Reply::error(__('validation_failed'), $validator->errors());
         } else {
             $salesId = $sales->id;
-
-            $startDate = Carbon::parse('2023-06-01')->startOfMonth();
-            $endDate = Carbon::parse('2023-06-31')->endOfMonth();
-
-            // $startDate = Carbon::now()->startOfMonth();
-            // $endDate = Carbon::now()->endOfMonth();
+            
+            
+            if(request('start_date') && request('end_date')){
+                $startDate = Carbon::parse(request('start_date'))->format('Y-m-d');
+                $endDate = Carbon::parse(request('end_date'))->format('Y-m-d');
+            }else{
+                $startDate = Carbon::now()->startOfMonth();
+                $endDate = Carbon::now()->endOfMonth();
+                // $startDate = Carbon::parse('2023-06-01')->startOfMonth();
+                // $endDate = Carbon::parse('2023-06-31')->endOfMonth();
+            }
 
             $exclude_end_date = Carbon::parse($endDate)->subDays(45)->format('Y-m-d');
 
             $this->username = $sales->name;
 
-            // $this->startDate1 = Carbon::parse($startDate);
-            // $this->endDate1 = Carbon::parse($endDate);
 
 
             $leadsWithSaleId = Lead::where('added_by', $salesId);
@@ -943,19 +946,19 @@ trait SalesDashboardAdminView
                 ->where('deals.status', '!=', 'Denied')
                 ->get();
 
-            $saleExecutive += [
-                'no_of_won_deals_count' => $this->no_of_won_deals_count,
-                'no_of_won_deals_value' => $this->no_of_won_deals_value,
-                'avg_deal_amount' => $this->avg_deal_amount,
-                'finished_project_ratio' => $this->finished_project_ratio,
-                'canceled_project_ratio' => $this->canceled_project_ratio,
-                'rejected_project_ratio' => $this->rejected_project_ratio,
-                'country_wise_won_deals_count' => $this->country_wise_won_deals_count,
-            ];
+            // $saleExecutive += [
+            //     'no_of_won_deals_count' => $this->no_of_won_deals_count,
+            //     'no_of_won_deals_value' => $this->no_of_won_deals_value,
+            //     'avg_deal_amount' => $this->avg_deal_amount,
+            //     'finished_project_ratio' => $this->finished_project_ratio,
+            //     'canceled_project_ratio' => $this->canceled_project_ratio,
+            //     'rejected_project_ratio' => $this->rejected_project_ratio,
+            //     'country_wise_won_deals_count' => $this->country_wise_won_deals_count,
+            // ];
 
-            dd($saleExecutive);
+            return response($saleExecutive , 200)->header('Content-Type', 'application/json');
 
-            return view('dashboard.employee.admin_view_sales_executive', $this->data);
+            // return view('dashboard.employee.admin_view_sales_executive', $this->data);
         }
 
 
