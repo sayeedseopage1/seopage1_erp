@@ -1514,6 +1514,7 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
     Route::post('/insights/goals/edit/{id}', [InsightsController::class, 'editGoal'])->name('insights/goals/edit');
     Route::post('/insights/goal-title/edit/title/{data}', [InsightsController::class, 'editGoalTitle'])->name('insights.goals-title.edit');
     Route::post('/insights/dashboards/add', [InsightsController::class, 'storeDashboard'])->name('insights/dashboards/add');
+    Route::get('goal-mark-as-public', [InsightsController::class, 'goalMarkAsPublic'])->name('insights.goal.mark.as.public');
     //basic apis for react for data checking
     Route::get('/tasks/developer-task-history/{id}', [TimelogReportController::class, 'DeveloperTaskHistory']);
     Route::get('/tasks/parent-task-subtasks/{id}', [TaskController::class, 'CHeckSubtasks'])->name('check-subtasks');
@@ -1572,7 +1573,7 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
     // Graphic task files delete
     Route::get('graphic-task-file/delete/{id}', [TaskController::class, 'deleteGraphicTaskFile'])->name('graphic.task.file.delete');
     Route::get('project-details-with-assignable-pm/{deal_id}', [ProjectInsightController::class, 'projectDetailsWithAssignablePm'])->name('project.details.with.assignable.pm');
-    Route::get('reassign-pm-to-project', [ProjectInsightController::class, 'reassignPmToProject'])->name('reassign.pm.to.project');
+    Route::post('reassign-pm-to-project', [ProjectInsightController::class, 'reassignPmToProject'])->name('reassign.pm.to.project');
 });
 
 //custom route for seopage1

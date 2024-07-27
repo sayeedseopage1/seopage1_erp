@@ -2,23 +2,24 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
+use Auth;
+use App\Models\Deal;
+use App\Models\Lead;
 use App\Models\User;
-use App\Models\Seopage1Team;
-use App\Models\GoalSetting;
-use App\Models\GoalRecurring;
+use App\Models\Payment;
+use App\Models\Project;
 use App\Models\Section;
 use App\Models\Dashboard;
 use App\Models\DealStage;
-use App\Models\Payment;
-use App\Models\Lead;
-use App\Models\Project;
-use Illuminate\Support\Facades\DB;
-use App\Models\Deal;
+use App\Models\GoalSetting;
+use App\Models\Seopage1Team;
+use Illuminate\Http\Request;
+use App\Models\GoalRecurring;
 use App\Models\DealStageChange;
-use Auth;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\DB;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Validator;
 
 class InsightsController extends AccountBaseController
 {
@@ -1141,6 +1142,28 @@ public function getGoal(Request $request, $id)
 
             return response()->json($response);
         }
+    }
+
+    public function goalMarkAsPublic(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'is_public' => 'required|in:1'
+        ]);
+        
+        if ($validator->fails()) {
+            return response()->json([
+                'errors' => $validator->errors()
+            ], 422);
+        }
+
+        GoalSetting::where('is_private', 1)->update([
+            'is_private' => 0
+        ]);
+
+        return response()->json([
+            'status' => 200,
+            'data' => 'All private goals have been marked as public successfully'
+        ]);
     }
 }
 
