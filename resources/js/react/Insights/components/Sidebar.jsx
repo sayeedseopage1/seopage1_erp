@@ -21,9 +21,12 @@ import { CompareDate } from "../utils/dateController";
 import SidebarItems from "./SidebarItems";
 import { useTeams } from "../hooks/useTeams";
 import PrivateGoalAssignModal from "./PrivateGoalAssignModal";
+import { useAuth } from "../../hooks/useAuth";
 
 const InsightSidebar = () => {
+    const auth = useAuth();
     const [search, setSearch] = React.useState("");
+    const [copyFilter, setCopyFilter] = React.useState(null);  // this state is for send data on assign goal modal fetch new data after assign goal
     const { sections, getSectionsByType } = useSections();
     const { teams } = useTeams();
     const { dashboards } = useDashboards();
@@ -57,6 +60,7 @@ const InsightSidebar = () => {
         const _filteredGoals = {
             active: [],
             past: [],
+            private: [],
         };
 
         if (goals?.goals && goals?.goals?.length > 0) {
@@ -66,19 +70,19 @@ const InsightSidebar = () => {
 
                 if (
                     !goal.endDate ||
-                    compareDate.isSameOrBefore(today, goal.endDate)
+                    (compareDate.isSameOrBefore(today, goal.endDate) &&
+                        goal?.is_private !== 1)
                 ) {
                     return { ...goal, title, status: "Active" };
-                } else if(goal.is_private === 1) {
-                    return { ...goal, title, status: "Past" };
-                
+                } else if (goal.is_private === 1) {
+                    return { ...goal, title, status: "Private" };
                 } else {
                     return { ...goal, title, status: "Past" };
                 }
             });
 
             _filteredGoals.private = _goals.filter(
-                (goal) => goal.is_private === 1
+                (goal) => goal.status === "Private"
             );
             _filteredGoals.active = _goals.filter(
                 (goal) => goal.status === "Active"
@@ -159,6 +163,7 @@ const InsightSidebar = () => {
         };
 
         setSelectedMonth(month);
+        setCopyFilter(filter);
         fetchGoals(filter);
     }, []);
 
@@ -171,7 +176,7 @@ const InsightSidebar = () => {
             end_date: month.end,
             shift_id: selectedTeam?.id || null,
         };
-
+        setCopyFilter(filter);
         fetchGoals(filter);
     };
 
@@ -185,7 +190,7 @@ const InsightSidebar = () => {
             end_date: month?.end,
             shift_id: team?.id || null,
         };
-
+        setCopyFilter(filter);
         fetchGoals(filter);
     };
 
@@ -621,112 +626,137 @@ const InsightSidebar = () => {
                         </div>
                         <Accordion.Item.Body>
                             {/* goal section */}
-                            {["Private", "Active", "Past"]?.map((section) => (
-                                <Accordion key={section}>
-                                    <Accordion.Item
-                                        defaultActive={section === "Active"}
-                                    >
-                                        <div className="cnx_ins__sidebar_dashboards_header __inner">
-                                            <Accordion.Item.Header
-                                                icon={false}
-                                                className="__accordion"
-                                            >
-                                                {(active) => (
-                                                    <div
-                                                        className={`cnx_ins__sidebar_dashboards_title __inner  w-100 ${
-                                                            section ===
-                                                            "Private"
-                                                                ? "justify-content-between"
-                                                                : ""
-                                                        }`}
-                                                    >
-                                                        <div className="d-flex align-items-center">
-                                                            <i
-                                                                className={`fa-solid mx-2 fa-chevron-${
-                                                                    active
-                                                                        ? "down"
-                                                                        : "right"
-                                                                }`}
-                                                            />
-                                                            {section}
+                            {["Private", "Active", "Past"]
+                                ?.filter((item) => {
+                                    if (
+                                        auth.getRoleId() === 1 &&
+                                        item === "Private"
+                                    ) {
+                                        return item;
+                                    } else if (
+                                        auth.getRoleId() !== 1 &&
+                                        item === "Private"
+                                    ) {
+                                        return false;
+                                    }
 
-                                                            {goalsIsFetching ? (
-                                                                <div className="ml-2">
-                                                                    <div
-                                                                        className="spinner-border"
-                                                                        style={{
-                                                                            width: ".85rem",
-                                                                            height: ".85rem",
-                                                                            border: "0.1em solid currentcolor",
-                                                                            borderRightColor:
-                                                                                "transparent",
-                                                                        }}
-                                                                    />
-                                                                </div>
-                                                            ) : (
-                                                                <span className="cnx_ins__sidebar_dashboards_title_badge ml-2">
-                                                                    {filteredGoals[
-                                                                        _.camelCase(
-                                                                            section
-                                                                        )
-                                                                    ]?.filter(
-                                                                        (d) =>
-                                                                            _.toLower(
-                                                                                d.title
-                                                                            ).includes(
-                                                                                _.lowerCase(
-                                                                                    search
-                                                                                )
+                                    return item;
+                                })
+                                .map((section) => (
+                                    <Accordion key={section}>
+                                        <Accordion.Item
+                                            defaultActive={section === "Active"}
+                                        >
+                                            <div className="cnx_ins__sidebar_dashboards_header __inner">
+                                                <Accordion.Item.Header
+                                                    icon={false}
+                                                    className="__accordion"
+                                                >
+                                                    {(active) => (
+                                                        <div
+                                                            className={`cnx_ins__sidebar_dashboards_title __inner  w-100 ${
+                                                                section ===
+                                                                "Private"
+                                                                    ? "justify-content-between"
+                                                                    : ""
+                                                            }`}
+                                                        >
+                                                            <div className="d-flex align-items-center">
+                                                                <i
+                                                                    className={`fa-solid mx-2 fa-chevron-${
+                                                                        active
+                                                                            ? "down"
+                                                                            : "right"
+                                                                    }`}
+                                                                />
+                                                                {section}
+
+                                                                {goalsIsFetching ? (
+                                                                    <div className="ml-2">
+                                                                        <div
+                                                                            className="spinner-border"
+                                                                            style={{
+                                                                                width: ".85rem",
+                                                                                height: ".85rem",
+                                                                                border: "0.1em solid currentcolor",
+                                                                                borderRightColor:
+                                                                                    "transparent",
+                                                                            }}
+                                                                        />
+                                                                    </div>
+                                                                ) : (
+                                                                    <span className="cnx_ins__sidebar_dashboards_title_badge ml-2">
+                                                                        {filteredGoals[
+                                                                            _.camelCase(
+                                                                                section
                                                                             )
-                                                                    )?.length ||
-                                                                        0}
-                                                                </span>
-                                                            )}
-                                                        </div>
+                                                                        ]?.filter(
+                                                                            (
+                                                                                d
+                                                                            ) =>
+                                                                                _.toLower(
+                                                                                    d.title
+                                                                                ).includes(
+                                                                                    _.lowerCase(
+                                                                                        search
+                                                                                    )
+                                                                                )
+                                                                        )
+                                                                            ?.length ||
+                                                                            0}
+                                                                    </span>
+                                                                )}
+                                                            </div>
 
-                                                        {section ===
-                                                            "Private" && (
-                                                            <Button
-                                                                onClick={(
-                                                                    e
-                                                                ) => {
-                                                                    e.stopPropagation();
-                                                                    console.log(
-                                                                        "He Meade Us"
-                                                                    );
-                                                                    handleModal(
-                                                                        setIsPrivateGoalAssignModalOpen,
-                                                                        true
-                                                                    );
-                                                                }}
-                                                            >
-                                                                Assign
-                                                            </Button>
-                                                        )}
+                                                            {section ===
+                                                                "Private" &&
+                                                                filteredGoals
+                                                                    ?.private
+                                                                    ?.length >
+                                                                    0 && (
+                                                                    <Button
+                                                                        onClick={(
+                                                                            e
+                                                                        ) => {
+                                                                            e.stopPropagation();
+
+                                                                            handleModal(
+                                                                                setIsPrivateGoalAssignModalOpen,
+                                                                                true
+                                                                            );
+                                                                        }}
+                                                                    >
+                                                                        Assign
+                                                                    </Button>
+                                                                )}
+                                                        </div>
+                                                    )}
+                                                </Accordion.Item.Header>
+                                            </div>
+                                            <Accordion.Item.Body>
+                                                {goals?.goals?.length > 0 ? (
+                                                    <SidebarItems
+                                                        goals={
+                                                            filteredGoals[
+                                                                _.camelCase(
+                                                                    section
+                                                                )
+                                                            ]
+                                                        }
+                                                        search={search}
+                                                    />
+                                                ) : goalsIsFetching ? null : (
+                                                    <div className="cnx_ins__sidebar_item_link cnx_ins__sidebar_item">
+                                                        <span>
+                                                            No active goals
+                                                        </span>
                                                     </div>
                                                 )}
-                                            </Accordion.Item.Header>
-                                        </div>
-                                        <Accordion.Item.Body>
-                                            {goals?.goals?.length > 0 ? (
-                                                <SidebarItems
-                                                    goals={
-                                                        filteredGoals[
-                                                            _.camelCase(section)
-                                                        ]
-                                                    }
-                                                    search={search}
-                                                />
-                                            ) : goalsIsFetching ? null : (
-                                                <div className="cnx_ins__sidebar_item_link cnx_ins__sidebar_item">
-                                                    <span>No active goals</span>
-                                                </div>
-                                            )}
-                                            {/*end goals*/}
-                                        </Accordion.Item.Body>
-                                    </Accordion.Item>
-                                </Accordion>
-                            ))}
+                                                {/*end goals*/}
+                                            </Accordion.Item.Body>
+                                        </Accordion.Item>
+                                    </Accordion>
+                                ))}
                             {/* end goal section */}
                         </Accordion.Item.Body>
                     </Accordion.Item>
@@ -738,6 +768,10 @@ const InsightSidebar = () => {
                         isPrivateGoalAssignModalOpen={
                             isPrivateGoalAssignModalOpen
                         }
+                        handleClosePrivateGoalAssignModal={() =>
+                            handleModal(setIsPrivateGoalAssignModalOpen, false)
+                        }
+                        filter={copyFilter}
                     />
                 )}
 

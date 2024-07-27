@@ -1,5 +1,5 @@
 import { result } from "lodash";
-import { apiSlice } from "./apiSlice";            
+import { apiSlice } from "./apiSlice";
 
 
 const goalApiSlice = apiSlice.injectEndpoints({
@@ -28,16 +28,16 @@ const goalApiSlice = apiSlice.injectEndpoints({
         }),
 
         editGoalTitle: build.mutation({
-            query: ({id, title}) =>  ({
+            query: ({ id, title }) => ({
                 url: `/account/insights/goal-title/edit/title/${id}`,
                 method: 'POST',
-                body:{ 
-                    id, 
-                    title, 
-                    _token: document.querySelector('meta[name="csrf-token"]').getAttribute('content') 
+                body: {
+                    id,
+                    title,
+                    _token: document.querySelector('meta[name="csrf-token"]').getAttribute('content')
                 }
             }),
-            
+
             invalidatesTags: (result, error, arg) => [{ type: 'Goal', id: 'LIST' }]
         }),
 
@@ -54,17 +54,17 @@ const goalApiSlice = apiSlice.injectEndpoints({
                     _token: document.querySelector('meta[name="csrf-token"]').getAttribute('content')
                 }
             }),
-          invalidatesTags: (result, error, arg) => {
-            // invalidate goal and deal queries
-            if(result) return ([
-                { type: 'Goal', id:arg.id }, 
-                { type: 'Deal', goalId: arg.id }
-            ])
-          }
+            invalidatesTags: (result, error, arg) => {
+                // invalidate goal and deal queries
+                if (result) return ([
+                    { type: 'Goal', id: arg.id },
+                    { type: 'Deal', goalId: arg.id }
+                ])
+            }
         }),
 
         // add goal
-        addGoal : build.mutation({
+        addGoal: build.mutation({
             query: (data) => ({
                 url: `/account/insights/goals/add`,
                 method: 'POST',
@@ -75,9 +75,22 @@ const goalApiSlice = apiSlice.injectEndpoints({
             }),
 
             invalidatesTags: (result, error, arg) => [{ type: 'Goal', id: 'LIST' }]
-        })
+        }),
+        // Goal make as public 
+        makeGoalPublic: build.mutation({
+            query: () => ({
+                url: `/account/goal-mark-as-public`,
+                method: 'POST',
+                body: {
+                    is_public: 1,
+                    _token: document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                }
+            }),
+
+            invalidatesTags: (result, error, arg) => [{ type: 'Goal', id: 'LIST' }]
+        }),
     })
-}) ;
+});
 
 
 
@@ -87,12 +100,13 @@ const goalApiSlice = apiSlice.injectEndpoints({
 
 
 
-export const { 
-    useGetGoalsQuery, 
+export const {
+    useGetGoalsQuery,
     useLazyGetGoalsQuery,
-    useEditGoalTitleMutation, 
-    useGetGoalByIdQuery, 
+    useEditGoalTitleMutation,
+    useGetGoalByIdQuery,
     useUpdateGoalMutation,
     useAddGoalMutation,
+    useMakeGoalPublicMutation,
 } = goalApiSlice;
 

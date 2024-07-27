@@ -30,6 +30,7 @@ class ProjectInsightController extends Controller
 
     public function reassignPmToProject(Request $request)
     {
+        // dd($request->all());
         $validator = Validator::make($request->all(), [
             'deal_id' => 'required|exists:deals,id',
             'pm_id' => 'required|exists:p_m_assigns,pm_id'

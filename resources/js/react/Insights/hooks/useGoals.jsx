@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { useUpdateGoalMutation, useAddGoalMutation, useLazyGetGoalsQuery } from "../services/api/goalsApiSlice";
+import { useUpdateGoalMutation, useAddGoalMutation, useLazyGetGoalsQuery, useMakeGoalPublicMutation } from "../services/api/goalsApiSlice";
 import { getPeriod } from "../utils/getPeriod";
 import dayjs from 'dayjs';
 import _ from "lodash";
@@ -42,11 +42,18 @@ export const useGoals = () => {
     ] = useLazyGetGoalsQuery();
 
 
+    const [
+        makeGoalPublic,
+        {
+            isLoading: isGoalPublicIsLoading,
+            isSuccess: isGoalPublicIsSuccess,
+        }
+
+    ] = useMakeGoalPublicMutation();
    
 
 
     const handleGoalsState = (goalsData) => {
- 
         if(goalsData && !goalsIsFetching){
             const newGoals = [];
             const newRecurring = [];
@@ -563,7 +570,6 @@ export const useGoals = () => {
 
     
 
-
     return {
         goals,
         fetchGoals,
@@ -586,7 +592,10 @@ export const useGoals = () => {
         addGoalIsLoading,
         addGoalIsFetching,
 
-
+        // make goal public
+        makeGoalPublic,
+        isGoalPublicIsLoading,
+        isGoalPublicIsSuccess,
         // 
         addedGoalSummary,
         wonGoalSummary,
