@@ -5,7 +5,15 @@ namespace App\Http\Controllers;
 use App\Helper\Reply;
 use App\Http\Requests\Sticky\StoreStickyNote;
 use App\Http\Requests\Sticky\UpdateStickyNote;
+use App\Models\Project;
+use App\Models\ProjectMilestone;
 use App\Models\StickyNote;
+use App\Models\Task;
+use App\Models\User;
+use Carbon\Carbon;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class StickyNoteController extends AccountBaseController
 {
@@ -39,6 +47,10 @@ class StickyNoteController extends AccountBaseController
     public function create()
     {
         $this->stickyNotes = StickyNote::where('user_id', user()->id)->orderBy('updated_at', 'desc')->get();
+
+        $this->find_client = Project::where('pm_id', user()->id)->where('status', 'in progress')->pluck('client_id')->toArray();
+        $this->clients = User::whereIn('id', $this->find_client)->select('id','name')->get();
+
         $this->pageTitle = __('modules.sticky.addNote');
 
         if (request()->ajax()) {
@@ -52,15 +64,33 @@ class StickyNoteController extends AccountBaseController
         return view('sticky-notes.index', $this->data);
     }
 
-    public function store(StoreStickyNote $request)
+    public function store(Request $request)
     {
+        if (Auth::user()->role_id == 4) {
+            $validated = $request->validate([
+                'colour' => 'required',
+                'note_type' => 'required',
+                'client_id' => ['required_if:note_type,Project'],
+                'project_id' => ['required_if:note_type,Project'],
+                'reminder_time' => 'required',
+                'notetext' => 'required',
+            ]);
+        }
         $sticky = new StickyNote();
-        $sticky->note_text  = $request->notetext;
         $sticky->colour     = $request->colour;
-        $sticky->user_id = user()->id;
+        //PM Notes Start
+        $sticky->note_type = $request->note_type;
+        $sticky->client_id = $request->client_id;
+        $sticky->project_id = $request->project_id;
+        $sticky->milestone_id = $request->milestone_id;
+        $sticky->task_id = $request->task_id;
+        //PM Notes End
+        $sticky->reminder_time = Carbon::now()->addHours($request->reminder_time);
+        $sticky->note_text  = $request->notetext;
+        $sticky->user_id = Auth::user()->id;
         $sticky->save();
 
-        return Reply::successWithData(__('messages.noteCreated'), ['redirectUrl' => route('sticky-notes.index')]);
+        return response()->json(['status' => 200]);
     }
 
     public function show($id)
@@ -107,6 +137,26 @@ class StickyNoteController extends AccountBaseController
     {
         StickyNote::destroy($id);
         return Reply::successWithData(__('messages.deleteSuccess'), ['redirectUrl' => route('sticky-notes.index')]);
+    }
+
+    public function clientProject(Request $request)
+    {
+        $findClientProject = Project::where('client_id', $request->client_id)->where('pm_id', Auth::user()->id)->where('status', 'in progress')->select('id', 'project_name')->get();
+
+        return response()->json($findClientProject);
+    }
+
+    public function projectMilestone(Request $request)
+    {
+        $findProjectMilestone = ProjectMilestone::where('project_id', $request->project_id)->select('id', 'milestone_title')->get();
+        $findProjectTask = Task::where(['project_id' => $request->project_id,'subtask_id' => null,'board_column_id' => 4])->get();
+        return response()->json(['project_milestones' => $findProjectMilestone, 'project_tasks' => $findProjectTask]);
+    }
+    
+    public function milestoneTask(Request $request)
+    {
+        $findMilestoneTask = Task::where(['milestone_id' => $request->milestone_id,'subtask_id' => null,'board_column_id' => 4])->get();
+        return response()->json($findMilestoneTask);
     }
 
 }

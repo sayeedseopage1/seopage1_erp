@@ -11,7 +11,7 @@
 
 <div class="d-flex">
     <div id="table-actions" class="flex-grow-1 align-items-center">
-        <x-forms.link-primary :link="route('sticky-notes.create')" class="mr-3 openRightModal float-left" icon="plus">
+        <x-forms.link-primary :link="route('sticky-notes.create')" class="mr-3 float-left" icon="plus">
             @lang('modules.sticky.addNote')
         </x-forms.link-primary>
     </div>

@@ -6,25 +6,102 @@
                     @lang('app.note') @lang('app.details')</h4>
 
                 <div class="row p-20">
-                    <div class="col-sm-12 col-md-6 col-lg-3">
-                        <x-forms.select fieldName="colour" fieldId="colour" :fieldLabel="__('modules.sticky.colors')">
-                            <option data-content="<i class='fa fa-circle mr-2 text-red'></i>" value="red">
-                            </option>
-                            <option data-content="<i class='fa fa-circle mr-2 text-dark-green'></i>" value="green">
-                            </option>
-                            <option selected data-content="<i class='fa fa-circle mr-2 text-blue'></i>" value="blue">
-                            </option>
-                            <option data-content="<i class='fa fa-circle mr-2 text-yellow'></i>" value="yellow">
-                            </option>
-                            <option data-content="<i class='fa fa-circle mr-2 text-dark-grey'></i>" value="purple">
-                            </option>
-                        </x-forms.select>
+                    <div class="col-sm-12 col-md-6 col-lg-3 mt-3">
+                        <label class="f-14 text-dark-grey mb-12" data-label="true" for="colour">Colors
+                            <sup class="f-14 mr-1">*</sup>
+                        </label>
+                        <div class="dropdown bootstrap-select form-control select-picker">
+                            <select name="colour" id="colour" class="form-control select-picker" data-size="8" tabindex="null">
+                                <option data-content="<i class='fa fa-circle mr-2 text-red'></i>" value="red"></option>
+                                <option data-content="<i class='fa fa-circle mr-2 text-dark-green'></i>" value="green"></option>
+                                <option selected="" data-content="<i class='fa fa-circle mr-2 text-blue'></i>" value="blue"></option>
+                                <option data-content="<i class='fa fa-circle mr-2 text-yellow'></i>" value="yellow"></option>
+                                <option data-content="<i class='fa fa-circle mr-2 text-dark-grey'></i>" value="purple"></option>
+                            </select>
+                            <label id="colour_error" class="text-danger" for="colour"></label>
+                        </div>
+                    </div>
+                    {{-- For PM Only --}}
+                    @if(Auth::user()->role_id == 4)
+                    <div class="col-sm-12 col-md-6 col-lg-3 mt-3">
+                        <label class="f-14 text-dark-grey mb-12" data-label="true" for="note_type">Note Type
+                            <sup class="f-14 mr-1">*</sup>
+                        </label>
+                        <div class="dropdown bootstrap-select form-control select-picker">
+                            <select name="note_type" id="note_type" data-live-search="true" class="form-control select-picker error" data-size="8">
+                                <option value="">--</option>
+                                <option value="Project">Project</option>
+                                <option value="Non-Project">Non-Project</option>
+                            </select>
+                            <label id="note_type_error" class="text-danger" for="note_type"></label>
+                        </div>
+                    </div>
+                    <div class="col-sm-12 col-md-6 col-lg-3 mt-3" id="clientField" style="display: none">
+                        <label class="f-14 text-dark-grey mb-12" data-label="true" for="client_id">Clients
+                            <sup class="f-14 mr-1">*</sup>
+                        </label>
+                        <div class="dropdown bootstrap-select form-control select-picker">
+                            <select name="client_id" id="client_id" data-live-search="true" class="form-control select-picker error" data-size="8">
+                                <option value="">--</option>
+                                @foreach ($clients as $client)
+                                <option value="{{ $client->id }}">{{ $client->name }}</option>
+                                @endforeach
+                            </select>
+                            <label id="client_id_error" class="text-danger" for="client_id"></label>
+                        </div>
+                    </div>
+                    <div class="col-sm-12 col-md-6 col-lg-3 mt-3" id="projectField" style="display: none">
+                        <label class="f-14 text-dark-grey mb-12" data-label="true" for="project_id">Projects
+                            <sup class="f-14 mr-1">*</sup>
+                        </label>
+                        <div class="dropdown bootstrap-select form-control select-picker">
+                            <select name="project_id" id="project_id" data-live-search="true" class="form-control select-picker error" data-size="8">
+                                <option value="">--</option>
+                            </select>
+                            <label id="project_id_error" class="text-danger" for="project_id"></label>
+                        </div>
+                    </div>
+                    <div class="col-sm-12 col-md-6 col-lg-3 mt-3" id="milestoneField" style="display: none">
+                        <label class="f-14 text-dark-grey mb-12" data-label="true" for="milestone_id">Milestones</label>
+                        <div class="dropdown bootstrap-select form-control select-picker">
+                            <select name="milestone_id" id="milestone_id" data-live-search="true" class="form-control select-picker error" data-size="8">
+                                <option value="">--</option>
+                            </select>
+                            <label id="milestone_id_error" class="text-danger" for="milestone_id"></label>
+                        </div>
+                    </div>
+                    <div class="col-sm-12 col-md-6 col-lg-3 mt-3" id="taskField" style="display: none">
+                        <label class="f-14 text-dark-grey mb-12" data-label="true" for="task_id">Tasks</label>
+                        <div class="dropdown bootstrap-select form-control select-picker">
+                            <select name="task_id" id="task_id" data-live-search="true" class="form-control select-picker error" data-size="8">
+                                <option value="">--</option>
+                            </select>
+                            <label id="task_id_error" class="text-danger" for="task_id"></label>
+                        </div>
+                    </div>
+                    @endif
+                    <div class="col-sm-12 col-md-6 col-lg-3 mt-3">
+                        <label class="f-14 text-dark-grey mb-12" data-label="true" for="reminder_time">When should the system remind you about this note?
+                            <sup class="f-14 mr-1">*</sup>
+                        </label>
+                        <div class="dropdown bootstrap-select form-control select-picker">
+                            <select name="reminder_time" id="reminder_time" data-live-search="true" class="form-control select-picker error" data-size="8">
+                                <option value="">--</option>
+                                @for ($i = 1; $i <= 120; $i++)
+                                    <option value="{{ $i }}">In {{ $i }} hour{{ $i > 1 ? 's' : '' }}</option>
+                                @endfor
+                            </select>
+                            <label id="reminder_time_error" class="text-danger" for="reminder_time"></label>
+                        </div>
                     </div>
 
-                    <div class="col-lg-12">
-                        <x-forms.textarea :fieldLabel="__('app.note')" fieldName="notetext" fieldId="notetext" />
+                    <div class="col-lg-12 mt-3">
+                        <label class="f-14 text-dark-grey mb-12" data-label="true" for="notetext">Note
+                            <sup class="f-14 mr-1">*</sup>
+                        </label>
+                        <textarea class="form-control" name="notetext" id="notetext" rows="10"></textarea>
+                        <label id="notetext_error" class="text-danger" for="notetext"></label>
                     </div>
-
                 </div>
 
                 <x-form-actions>
@@ -41,27 +118,196 @@
 
 <script>
     $(document).ready(function() {
-
-        $('#save-notice').click(function() {
-            const url = "{{ route('sticky-notes.store') }}";
-
-            $.easyAjax({
-                url: url,
-                container: '#save-notice-data-form',
+        $('#note_type').change(function() {
+            if ($(this).val() == 'Project') {
+                $('#clientField').show();
+                $('#projectField').show();
+                $('#milestoneField').show();
+                $('#taskField').show();
+            } else {
+                $('#clientField').hide();
+                $('#projectField').hide();
+                $('#milestoneField').hide();
+                $('#taskField').hide();
+            }
+        });
+        // ONLY FOR PROJECTS DROPDOWN
+        $('#client_id').change(function() {
+            var client_id = $(this).val();
+            var data = {
+                'client_id': client_id
+            }
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
+            $.ajax({
                 type: "POST",
-                disableButton: true,
-                blockUI: true,
-                buttonSelector: "#save-notice",
-                file: true,
-                data: $('#save-notice-data-form').serialize(),
-                success: function(response) {
-                    if (response.status == 'success') {
-                        window.location.href = response.redirectUrl;
-                    }
+                url: "{{route('sticky_notes.client_project')}}",
+                data: data,
+                dataType: "json",
+                success: function (response) {
+                    $('#project_id').empty();
+                    $('#project_id').append('<option value="">--</option>');
+                    $.each(response, function(index, project) {
+                        $('#project_id').append('<option value="' + project.id + '">' + project.project_name + '</option>');
+                    });
+                    $('#project_id').selectpicker('refresh');
+                },
+                error: function(error) {
+                    // console.log(response);
                 }
             });
         });
+        // ONLY FOR MILESTONES DROPDOWN
+        $('#project_id').change(function() {
+            var project_id = $(this).val();
+            var data = {
+                'project_id': project_id
+            }
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
+            $.ajax({
+                type: "POST",
+                url: "{{route('sticky_notes.project_milestone')}}",
+                data: data,
+                dataType: "json",
+                success: function(response) {
+                    // Populate Milestones
+                    $('#milestone_id').empty();
+                    $('#milestone_id').append('<option value="">--</option>');
+                    $.each(response.project_milestones, function(index, milestone) {
+                        $('#milestone_id').append('<option value="' + milestone.id + '">' + milestone.milestone_title + '</option>');
+                    });
+                    $('#milestone_id').selectpicker('refresh');
 
-        init(RIGHT_MODAL);
+                    // Populate Tasks
+                    $('#task_id').empty();
+                    $('#task_id').append('<option value="">--</option>');
+                    $.each(response.project_tasks, function(index, task) {
+                        $('#task_id').append('<option value="' + task.id + '">' + task.heading + '</option>');
+                    });
+                    $('#task_id').selectpicker('refresh');
+                },
+                error: function(error) {
+                    // Handle error
+                }
+            });
+        });
+        // ONLY FOR TASKS DROPDOWN
+        $('#milestone_id').change(function() {
+            var milestone_id = $(this).val();
+            var data = {
+                'milestone_id': milestone_id
+            }
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
+            $.ajax({
+                type: "POST",
+                url: "{{route('sticky_notes.milestone_task')}}",
+                data: data,
+                dataType: "json",
+                success: function (response) {
+                    $('#task_id').empty();
+                    $('#task_id').append('<option value="">--</option>');
+                    $.each(response, function(index, task) {
+                        $('#task_id').append('<option value="' + task.id + '">' + task.heading + '</option>');
+                    });
+                    $('#task_id').selectpicker('refresh');
+                },
+                error: function(error) {
+                    // console.log(response);
+                }
+            });
+        });
+    });
+    $(document).ready(function() {        
+        $('#save-notice').click(function(e){
+            e.preventDefault();
+            $('#save-notice').attr("disabled", true);
+            $('#save-notice').html("Processing...");
+
+            var data= {
+                '_token': "{{ csrf_token() }}",
+                'colour': document.getElementById("colour").value,
+                'note_type': document.getElementById("note_type").value,
+                'client_id': document.getElementById("client_id").value,
+                'project_id': document.getElementById("project_id").value,
+                'milestone_id': document.getElementById("milestone_id").value,
+                'task_id': document.getElementById("task_id").value,
+                'reminder_time': document.getElementById("reminder_time").value,
+                'notetext': document.getElementById("notetext").value,
+            }
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
+            $.ajax({
+                type: "POST",
+                url: "{{route('sticky-notes.store')}}",
+                data: data,
+                dataType: "json",
+                success: function (response) {
+                    if (response.status==200) {
+                        $(location).prop('href', '{{route("sticky-notes.index")}}');
+                        toastr.success('Note Added Successfully');
+                        $('#save-notice').attr("disabled", false);
+                        $('#save-notice').html("Submit");
+                    }
+                },
+                error: function(error) {
+                    if(error.responseJSON.errors.colour){
+                        $('#colour_error').text(error.responseJSON.errors.colour);
+                    }else{
+                        $('#colour_error').text('');
+                    }
+                    if(error.responseJSON.errors.note_type){
+                        $('#note_type_error').text(error.responseJSON.errors.note_type);
+                    }else{
+                        $('#note_type_error').text('');
+                    }
+                    if(error.responseJSON.errors.client_id){
+                        $('#client_id_error').text(error.responseJSON.errors.client_id);
+                    }else{
+                        $('#client_id_error').text('');
+                    }
+                    if(error.responseJSON.errors.project_id){
+                        $('#project_id_error').text(error.responseJSON.errors.project_id);
+                    }else{
+                        $('#project_id_error').text('');
+                    }
+                    if(error.responseJSON.errors.milestone_id){
+                        $('#milestone_id_error').text(error.responseJSON.errors.milestone_id);
+                    }else{
+                        $('#milestone_id_error').text('');
+                    }
+                    if(error.responseJSON.errors.task_id){
+                        $('#task_id_error').text(error.responseJSON.errors.task_id);
+                    }else{
+                        $('#task_id_error').text('');
+                    }
+                    if(error.responseJSON.errors.reminder_time){
+                        $('#reminder_time_error').text(error.responseJSON.errors.reminder_time);
+                    }else{
+                        $('#reminder_time_error').text('');
+                    }
+                    if(error.responseJSON.errors.notetext){
+                        $('#notetext_error').text(error.responseJSON.errors.notetext);
+                    }else{
+                        $('#notetext_error').text('');
+                    }
+                    $('#save-notice').attr("disabled", false);
+                    $('#save-notice').html("Submit");
+                }
+            });
+        });
     });
 </script>

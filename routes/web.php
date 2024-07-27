@@ -1461,6 +1461,9 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
     Route::resource('expense-report', ExpenseReportController::class);
 
     Route::resource('sticky-notes', StickyNoteController::class);
+    Route::post('client-project', [StickyNoteController::class, 'clientProject'])->name('sticky_notes.client_project');
+    Route::post('project-milestone', [StickyNoteController::class, 'projectMilestone'])->name('sticky_notes.project_milestone');
+    Route::post('milestone-task', [StickyNoteController::class, 'milestoneTask'])->name('sticky_notes.milestone_task');
 
     Route::post('show-notifications', [NotificationController::class, 'showNotifications'])->name('show_notifications');
 

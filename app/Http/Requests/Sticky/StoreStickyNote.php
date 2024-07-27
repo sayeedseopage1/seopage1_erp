@@ -28,9 +28,9 @@ class StoreStickyNote extends CoreRequest
      */
     public function rules()
     {
-        return [
-            'notetext' => 'required'
-        ];
+        // return [
+        //     'notetext' => 'required'
+        // ];
     }
 
 }
