@@ -29,7 +29,7 @@ const InsightSidebar = () => {
     const [filteredGoals, setFilteredGoals] = React.useState({
         active: [],
         past: [],
-        privateGoals: [],
+        private: [],
     });
     const { reports } = useSelector((state) => state.reports);
     const [goals, setGoals] = React.useState({
@@ -71,7 +71,7 @@ const InsightSidebar = () => {
                 }
             });
 
-            _filteredGoals.privateGoals = _goals.filter(
+            _filteredGoals.private = _goals.filter(
                 (goal) => goal.status === "Active"
             );
             _filteredGoals.active = _goals.filter(
@@ -607,21 +607,28 @@ const InsightSidebar = () => {
                         </div>
                         <Accordion.Item.Body>
                             {/* goal section */}
-                            {["Private Goals", "Active", "Past"]?.map(
-                                (section) => (
-                                    <Accordion key={section}>
-                                        <Accordion.Item
-                                            defaultActive={section === "Active"}
-                                        >
-                                            <div className="cnx_ins__sidebar_dashboards_header __inner">
-                                                <Accordion.Item.Header
-                                                    icon={false}
-                                                    className="__accordion"
-                                                >
-                                                    {(active) => (
-                                                        <div className="cnx_ins__sidebar_dashboards_title __inner">
+                            {["Private", "Active", "Past"]?.map((section) => (
+                                <Accordion key={section}>
+                                    <Accordion.Item
+                                        defaultActive={section === "Active"}
+                                    >
+                                        <div className="cnx_ins__sidebar_dashboards_header __inner">
+                                            <Accordion.Item.Header
+                                                icon={false}
+                                                className="__accordion"
+                                            >
+                                                {(active) => (
+                                                    <div
+                                                        className={`cnx_ins__sidebar_dashboards_title __inner  w-100 ${
+                                                            section ===
+                                                            "Private"
+                                                                ? "justify-content-between"
+                                                                : ""
+                                                        }`}
+                                                    >
+                                                        <div className="d-flex align-items-center">
                                                             <i
-                                                                className={`fa-solid fa-chevron-${
+                                                                className={`fa-solid mx-2 fa-chevron-${
                                                                     active
                                                                         ? "down"
                                                                         : "right"
@@ -630,7 +637,7 @@ const InsightSidebar = () => {
                                                             {section}
 
                                                             {goalsIsFetching ? (
-                                                                <div>
+                                                                <div className="ml-2">
                                                                     <div
                                                                         className="spinner-border"
                                                                         style={{
@@ -643,7 +650,7 @@ const InsightSidebar = () => {
                                                                     />
                                                                 </div>
                                                             ) : (
-                                                                <span className="cnx_ins__sidebar_dashboards_title_badge">
+                                                                <span className="cnx_ins__sidebar_dashboards_title_badge ml-2">
                                                                     {filteredGoals[
                                                                         _.camelCase(
                                                                             section
@@ -661,46 +668,38 @@ const InsightSidebar = () => {
                                                                         0}
                                                                 </span>
                                                             )}
-
-                                                            {section ===
-                                                                "Private Goals" && (
-                                                                // <Button>
-                                                                //     Assign Goals
-                                                                // </Button>
-                                                                <img
-                                                                    src="../../../../../public/images/tasks.png"
-                                                                    alt="Assign"
-                                                                />
-                                                            )}
                                                         </div>
-                                                    )}
-                                                </Accordion.Item.Header>
-                                            </div>
-                                            <Accordion.Item.Body>
-                                                {goals?.goals?.length > 0 ? (
-                                                    <SidebarItems
-                                                        goals={
-                                                            filteredGoals[
-                                                                _.camelCase(
-                                                                    section
-                                                                )
-                                                            ]
-                                                        }
-                                                        search={search}
-                                                    />
-                                                ) : goalsIsFetching ? null : (
-                                                    <div className="cnx_ins__sidebar_item_link cnx_ins__sidebar_item">
-                                                        <span>
-                                                            No active goals
-                                                        </span>
+
+                                                        {section ===
+                                                            "Private" && (
+                                                            <Button>
+                                                                Assign
+                                                            </Button>
+                                                        )}
                                                     </div>
                                                 )}
-                                                {/*end goals*/}
-                                            </Accordion.Item.Body>
-                                        </Accordion.Item>
-                                    </Accordion>
-                                )
-                            )}
+                                            </Accordion.Item.Header>
+                                        </div>
+                                        <Accordion.Item.Body>
+                                            {goals?.goals?.length > 0 ? (
+                                                <SidebarItems
+                                                    goals={
+                                                        filteredGoals[
+                                                            _.camelCase(section)
+                                                        ]
+                                                    }
+                                                    search={search}
+                                                />
+                                            ) : goalsIsFetching ? null : (
+                                                <div className="cnx_ins__sidebar_item_link cnx_ins__sidebar_item">
+                                                    <span>No active goals</span>
+                                                </div>
+                                            )}
+                                            {/*end goals*/}
+                                        </Accordion.Item.Body>
+                                    </Accordion.Item>
+                                </Accordion>
+                            ))}
                             {/* end goal section */}
                         </Accordion.Item.Body>
                     </Accordion.Item>

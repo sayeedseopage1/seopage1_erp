@@ -476,6 +476,8 @@ const TrackingInput = ({
     edit,
     setEdit,
     setGoalType,
+    isMonthlyAutoRecurring,
+    setIsMonthlyAutoRecurring
 }) => {
     const [checked, setChecked] = React.useState(false);
     const [period, setPeriod] = React.useState(recurring);
@@ -559,7 +561,7 @@ const TrackingInput = ({
 
                 <GoalType goalType={goalType} setGoalType={setGoalType} />
             </div>
-            <div>
+            <div className="d-flex align-items-center">
                 {endDate ? (
                     <div className="cnx_ins__goal_modal__tracking_input">
                         <input
@@ -591,14 +593,19 @@ const TrackingInput = ({
                     </Tooltip>
                 )}
                 {/*  */}
-                <div className="cnx_ins__goal_modal__tracking_input">
+                <div className="cnx_ins__goal_modal__tracking_input ml-4">
                     <input
                         type="checkbox"
-                        checked={checked}
-                        id="recurring_auto"
-                        onChange={(e) => {}}
+                        checked={isMonthlyAutoRecurring}
+                        id="is_monthly_auto_recurring"
+                        onChange={(e) => {
+                            setIsMonthlyAutoRecurring(e.target.checked ? 1 : 0);
+                        }}
                     />
-                    <label htmlFor="recurring_auto" className="mb-0">
+                    <label
+                        htmlFor="is_monthly_auto_recurring "
+                        className="mb-0"
+                    >
                         Make it recurring
                     </label>
                 </div>
@@ -655,6 +662,8 @@ const GoalFormModal = () => {
     const [dealType, setDealType] = React.useState("");
     const [goalType, setGoalType] = React.useState("");
     const [achievablePoints, setAchievablePoints] = React.useState("0");
+    const [isMonthlyAutoRecurring, setIsMonthlyAutoRecurring] = React.useState(0)
+
     // const [general, setGeneral] = React.useState(false);
     const [edit, setEdit] = React.useState(false);
     const {
@@ -774,6 +783,7 @@ const GoalFormModal = () => {
             qualified,
             goalType,
             achievablePoints: Number(achievablePoints),
+            is_monthly_auto_recurring: isMonthlyAutoRecurring
         };
 
         if (_.lowerCase(mode) === "edit") {
@@ -1094,6 +1104,8 @@ const GoalFormModal = () => {
                                 edit={edit}
                                 setEdit={setEdit}
                                 setGoalType={setGoalType}
+                                setIsMonthlyAutoRecurring={setIsMonthlyAutoRecurring}
+                                isMonthlyAutoRecurring={isMonthlyAutoRecurring}
                             />
                         </div>
                     </div>
