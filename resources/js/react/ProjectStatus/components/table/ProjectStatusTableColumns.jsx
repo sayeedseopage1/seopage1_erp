@@ -93,6 +93,12 @@ export const ProjectStatusTableColumns = [
         id: "project_category",
         header: "Project Category",
         accessorKey: "project_category",
+        cell: ({ row }) => {
+            const data = row.original;
+            return (
+              <span className="text-capitalize">{data?.project_category}</span>
+            );
+        }
     },
     {
         id: "goal_start_date",
