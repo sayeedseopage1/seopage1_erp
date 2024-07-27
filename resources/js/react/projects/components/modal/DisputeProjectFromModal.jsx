@@ -200,6 +200,7 @@ const DisputeProjectFromModal = ({
                     height: "calc(86vh - 70px)",
                     borderRadius: "0 0 8px 8px",
                 }}
+                
             >
                 <div className="disputeProjectInfoHeader">
                     <h6>
@@ -215,7 +216,7 @@ const DisputeProjectFromModal = ({
                 <ModalContentContainer
                     color="#FFF"
                     padding="35px"
-                    className="rounded"
+                    className="rounded projectModalContent"
                 >
                     {/* Client username and Project Value */}
                     <div className="modalInputContainer mb-4">
