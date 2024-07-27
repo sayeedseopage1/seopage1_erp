@@ -17,6 +17,7 @@ import ReactModal from "react-modal";
 import { RxCross2 } from "react-icons/rx";
 import {
     CloseButton,
+    DailySubmissionButtonContainer,
     FrontendPassword,
     HeaderLabel,
     InputItem,
@@ -25,6 +26,7 @@ import {
     ModalContainer,
     ModalHeader,
     NumberOfPages,
+    RadioInput,
 } from "./DailySubmissionUI";
 import SubmissionForSinglePage from "./helper/daily-submission-options/SubmissionForSinglePage";
 
@@ -150,11 +152,16 @@ const DailyReportSubmissionForm = ({
         }
     };
 
-    //mitul
+    //mitul work
+    const [dailySubPagesData, setDailySubPagesData] = React.useState({});
+
+    const handleDailySubPagesData = (data, type) => {
+        if (type === "frontendPassword")
+            setDailySubmissionData([...dailySubmissionData, data]);
+    };
     const [isFrontendPassword, setIsFrontendPassword] = React.useState("no");
     const [frontendPasswordValue, setFrontendPasswordValue] =
         React.useState("");
-    console.log(frontendPasswordValue, "frontendPasswordValue");
     const handleFrontendPasswordChange = (event) => {
         setIsFrontendPassword(event.target.value);
     };
@@ -166,18 +173,12 @@ const DailyReportSubmissionForm = ({
     };
     const pageDetailsArray = Array.from(
         { length: numberOfPages },
-        (_, index) => `id_${index + 1}`
+        (_, index) => `${index + 1}`
     );
 
-    const [inputValues, setInputValues] = React.useState([]);
+    console.log("frontend Password Value", frontendPasswordValue);
+    console.log("daily submission data", dailySubPagesData);
 
-    const handleChange = (id, value) => {
-        setInputValues({
-            ...inputValues,
-            [id]: value,
-        });
-    };
-    console.log(inputValues, "inputValues");
     return (
         <ReactModal
             style={{
@@ -187,13 +188,19 @@ const DailyReportSubmissionForm = ({
                     zIndex: 9998,
                 },
                 content: {
-                    borderRadius: "29px 29px 0px 0px",
-                    maxWidth: "956px",
-                    maxHeight: "95%",
+                    borderRadius: "29px 29px 10px 10px",
+                    maxWidth: "800px",
+                    height: "98%",
                     margin: "auto auto",
                     padding: "0px",
                     zIndex: 9999,
                     border: "none",
+                    // Additional styles for hiding scrollbars
+                    msOverflowStyle: "none", // IE and Edge
+                    scrollbarWidth: "none", // Firefox
+                    "&::-webkit-scrollbar": {
+                        display: "none", // Chrome, Safari, Opera
+                    },
                 },
             }}
             ariaHideApp={false}
@@ -211,26 +218,26 @@ const DailyReportSubmissionForm = ({
                 <ModalBody>
                     <FrontendPassword>
                         <ItemTitle>Enter frontend password</ItemTitle>
-                        <div>
-                            <input
+                        <Flex>
+                            <RadioInput
                                 type="radio"
                                 name="frontend_password"
                                 value="no"
                                 checked={isFrontendPassword === "no"}
                                 onChange={handleFrontendPasswordChange}
-                            />
-                            {"  "} No frontend password
-                        </div>
-                        <div>
-                            <input
+                            />{" "}
+                            <span>No frontend password</span>
+                        </Flex>
+                        <Flex>
+                            <RadioInput
                                 type="radio"
                                 name="frontend_password"
                                 value="yes"
                                 checked={isFrontendPassword === "yes"}
                                 onChange={handleFrontendPasswordChange}
-                            />
-                            {"  "} We do have a frontend password
-                        </div>
+                            />{" "}
+                            <span>We do have a frontend password</span>
+                        </Flex>
                         <br />
                         {isFrontendPassword === "yes" && (
                             <InputItem
@@ -267,15 +274,25 @@ const DailyReportSubmissionForm = ({
                         <p style={{ marginTop: "10px" }}>pages</p>
                     </NumberOfPages>
                     <br />
-                    {pageDetailsArray?.map((id, index) => (
+                    {pageDetailsArray?.map((pageNumber, index) => (
                         <SubmissionForSinglePage
-                            value={inputValues[id]}
-                            key={id}
-                            id={id}
-                            handleChange={handleChange}
+                            key={index}
+                            dailySubPagesData={dailySubPagesData}
+                            setDailySubPagesData={setDailySubPagesData}
+                            handleDailySubPagesData={handleDailySubPagesData}
+                            pageNumber={pageNumber}
                         />
                     ))}
                 </ModalBody>
+
+                <DailySubmissionButtonContainer>
+                    <Button variant="primary" size="md">
+                        Submit
+                    </Button>
+                    <Button variant="danger" size="md" onClick={close}>
+                        Close
+                    </Button>
+                </DailySubmissionButtonContainer>
             </ModalContainer>
         </ReactModal>
     );
