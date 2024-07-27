@@ -4,16 +4,16 @@ import Button from "../../components/Button";
 import { User } from "../../../utils/user-details";
 import dayjs from "dayjs";
 import FileUploader from "../../../file-upload/FileUploader";
-import { useWindowSize } from 'react-use'
+import { useWindowSize } from "react-use";
 import Modal from "../../components/Modal";
 
 const SubmitionView = ({ isOpen, close, toggle, data, isLoading }) => {
-    const links = _.compact(_.split(data?.links, ','));
-    const attaches = _.compact(_.split(data?.attaches, ',')); 
+    const links = _.compact(_.split(data?.links, ","));
+    const attaches = _.compact(_.split(data?.attaches, ","));
     const { width: deviceWidth } = useWindowSize();
 
     const content = () => {
-        return(
+        return (
             <div className="sp1-subtask-form --modal-panel --modal-submitted">
                 <div className="sp1-subtask-form --modal-panel-header">
                     <div className="d-flex align-items-center">
@@ -41,55 +41,150 @@ const SubmitionView = ({ isOpen, close, toggle, data, isLoading }) => {
                 </div>
 
                 <div className="sp1-subtask-form --modal-panel-body --modal-submitted-body">
-                    <div className="mt-3 d-flex flex-column" style={{ gap: "10px" }} >
+                    <div
+                        className="mt-3 d-flex flex-column"
+                        style={{ gap: "10px" }}
+                    >
                         <div>
-                            <span className="fs-14 font-weight-bold d-block mb-3" style={{ color: "#767581" }} >
+                            <span
+                                className="fs-14 font-weight-bold d-block mb-3"
+                                style={{ color: "#767581" }}
+                            >
                                 Submitted By
                             </span>
 
                             <div className="d-flex align-items-center">
                                 <div>
-                                    {
-                                        data?.image ? (
-                                            <img
+                                    {data?.image ? (
+                                        <img
                                             src={`/user-uploads/avatar/${data?.image}`}
                                             alt={data?.name}
                                             width={32}
                                             height={32}
                                             className="rounded-circle"
-                                        />):(
-                                            <div className="sp1-item-center rounded-circle border" style={{ width: '32px', height: '32px' }} >
-                                                <span className="font-weight-bold" style={{fontSize:'1.2rem'}}>{data?.name?.slice(0,1)}</span>
-                                            </div>
-                                        )
-                                    }
+                                        />
+                                    ) : (
+                                        <div
+                                            className="sp1-item-center rounded-circle border"
+                                            style={{
+                                                width: "32px",
+                                                height: "32px",
+                                            }}
+                                        >
+                                            <span
+                                                className="font-weight-bold"
+                                                style={{ fontSize: "1.2rem" }}
+                                            >
+                                                {data?.name?.slice(0, 1)}
+                                            </span>
+                                        </div>
+                                    )}
                                 </div>
                                 <div className="d-flex flex-column px-2">
-                                    <a className="text-underline text-primary" href={`/account/employees/${data?.user_id}`} style={{ color: "#767581" }} > {data?.name} </a>
-                                    <span className="d-block" style={{ color: "#767581" }}>
-                                        {dayjs(data?.submission_date).format( "MMM DD, YYYY" )} at {dayjs(data?.submission_date).format("hh:mm a" )}
+                                    <a
+                                        className="text-underline text-primary"
+                                        href={`/account/employees/${data?.user_id}`}
+                                        style={{ color: "#767581" }}
+                                    >
+                                        {" "}
+                                        {data?.name}{" "}
+                                    </a>
+                                    <span
+                                        className="d-block"
+                                        style={{ color: "#767581" }}
+                                    >
+                                        {dayjs(data?.submission_date).format(
+                                            "MMM DD, YYYY"
+                                        )}{" "}
+                                        at{" "}
+                                        {dayjs(data?.submission_date).format(
+                                            "hh:mm a"
+                                        )}
                                     </span>
                                 </div>
                             </div>
                         </div>
 
-                        <div className="d-flex flex-column mt-3" style={{ gap: "10px" }} >
-                            <span className="d-block fs-14 font-weight-bold" style={{ color: "#767581" }} > Links </span>
-                            <ul style={{  listStyle: "unset", marginLeft: "30px"}} >
+                        <div
+                            className="d-flex flex-column mt-3"
+                            style={{ gap: "10px" }}
+                        >
+                            <span
+                                className="d-block fs-14 font-weight-bold"
+                                style={{ color: "#767581" }}
+                            >
+                                {" "}
+                                Links{" "}
+                            </span>
+                            <ul
+                                style={{
+                                    listStyle: "unset",
+                                    marginLeft: "30px",
+                                }}
+                            >
                                 {links?.map((link, i) => (
-                                    <li style={{ listStyle: "unset" }}  key={link + i} >
-                                        <a className="hover-underline text-primary" target="_blank" href={link} > {link} </a>
+                                    <li
+                                        style={{ listStyle: "unset" }}
+                                        key={link + i}
+                                    >
+                                        <a
+                                            className="hover-underline text-primary"
+                                            target="_blank"
+                                            href={link}
+                                        >
+                                            {" "}
+                                            {link}{" "}
+                                        </a>
                                     </li>
                                 ))}
                             </ul>
                         </div>
+                        {data?.screen_record_link && (
+                            <div
+                                className="d-flex flex-column mt-3"
+                                style={{ gap: "10px" }}
+                            >
+                                <span
+                                    className="d-block fs-14 font-weight-bold"
+                                    style={{ color: "#767581" }}
+                                >
+                                    {" "}
+                                    Screen Record Link{" "}
+                                </span>
+                                <ul
+                                    style={{
+                                        listStyle: "unset",
+                                        marginLeft: "30px",
+                                    }}
+                                >
+                                    <li style={{ listStyle: "unset" }}>
+                                        <a
+                                            className="hover-underline text-primary"
+                                            target="_blank"
+                                            href={data?.screen_record_link}
+                                        >
+                                            {" "}
+                                            {data?.screen_record_link}{" "}
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                        )}
 
                         <div className="mt-2 mt-3">
-                            <span className="d-block fs-12 font-weight-bold mb-2" style={{ color: "#767581" }}>
+                            <span
+                                className="d-block fs-12 font-weight-bold mb-2"
+                                style={{ color: "#767581" }}
+                            >
                                 Description
                             </span>
                             {data?.text ? (
-                                <div className="sp1_ck_content" dangerouslySetInnerHTML={{ __html: data?.text }} />
+                                <div
+                                    className="sp1_ck_content"
+                                    dangerouslySetInnerHTML={{
+                                        __html: data?.text,
+                                    }}
+                                />
                             ) : (
                                 <span style={{ color: "rgb(180, 188, 196)" }}>
                                     No description is available
@@ -98,7 +193,10 @@ const SubmitionView = ({ isOpen, close, toggle, data, isLoading }) => {
                         </div>
 
                         <div className="mt-3">
-                            <span className="d-block fs-12 font-weight-bold mb-2" style={{ color: "#767581" }}>
+                            <span
+                                className="d-block fs-12 font-weight-bold mb-2"
+                                style={{ color: "#767581" }}
+                            >
                                 Attached Files
                             </span>
 
@@ -112,36 +210,49 @@ const SubmitionView = ({ isOpen, close, toggle, data, isLoading }) => {
                                             deleteAble={false}
                                             downloadUrl={`${file}`}
                                             previewUrl={`${file}`}
-                                            fileType={_.includes(["png","jpg", "jpeg", "gif", "svg"], _.last(_.split(file, '.'))) ? 'images' : 'others'}
+                                            fileType={
+                                                _.includes(
+                                                    [
+                                                        "png",
+                                                        "jpg",
+                                                        "jpeg",
+                                                        "gif",
+                                                        "svg",
+                                                    ],
+                                                    _.last(_.split(file, "."))
+                                                )
+                                                    ? "images"
+                                                    : "others"
+                                            }
                                             ext=""
                                         />
                                     ))}
                                 </FileUploader>
-                                ) : (
-                                    <span
-                                        className=""
-                                        style={{ color: "rgb(180, 188, 196)" }}
-                                    >
-                                        No Attachment is available
-                                    </span>
-                                )}
+                            ) : (
+                                <span
+                                    className=""
+                                    style={{ color: "rgb(180, 188, 196)" }}
+                                >
+                                    No Attachment is available
+                                </span>
+                            )}
                         </div>
                     </div>
                 </div>
             </div>
-        )
-    }
+        );
+    };
 
-    if(deviceWidth > 1200){
+    if (deviceWidth > 1200) {
         return (
             <CustomModal isOpen={isOpen} toggleRef={toggle}>
                 {content()}
             </CustomModal>
-        )
-    }else{
+        );
+    } else {
         return (
             <React.Fragment>
-                <Modal isOpen={isOpen}> { content() } </Modal> 
+                <Modal isOpen={isOpen}> {content()} </Modal>
             </React.Fragment>
         );
     }

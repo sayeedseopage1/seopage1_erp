@@ -1,7 +1,7 @@
 import _ from "lodash";
 import React from "react";
 import { useWindowSize } from "react-use";
-import { useAuth } from '../../../hooks/useAuth';
+import { useAuth } from "../../../hooks/useAuth";
 import ClientFilter from "./ClientFilter";
 import FilterSidebar from "./FilterSidebar";
 import JqueryDateRangePicker from "./JqueryDateRangePicker";
@@ -46,10 +46,13 @@ const Filterbar = ({ onFilter }) => {
             start_date,
             end_date,
             assignee_to: _developer?.id,
+            assignee_to_name: _developer?.name,
             // client_id: _client?.id,
             assignee_by: _leadDeveloper?.id,
+            assignee_by_name: _leadDeveloper?.name,
             pm_id: _pm?.id,
             status: _status?.id,
+            status_name: _status?.column_name,
             // date_filter_by,
         };
 
@@ -112,16 +115,15 @@ const Filterbar = ({ onFilter }) => {
                         currentUser={!isTopManagement}
                     />
 
-
                     <HDivider />
 
                     {/* {page === "subtasks" ? ( */}
-                        <UserFilter
-                            title="Assigned To"
-                            state={developer}
-                            setState={setDeveloper}
-                            roleIds={[5]}
-                        />
+                    <UserFilter
+                        title="Assigned To"
+                        state={developer}
+                        setState={setDeveloper}
+                        roleIds={[5]}
+                    />
                     {/* ) : (
                         <UserFilter
                             title="Assigned To"

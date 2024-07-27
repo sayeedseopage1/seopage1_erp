@@ -9,7 +9,7 @@ import {
 import Loader from "../../components/Loader";
 import { Placeholder } from "../../../global/Placeholder";
 
-const AssginedToSelection = ({ selected, onSelect, taskCategory }) => {
+const AssginedToSelection = ({ selected, onSelect, taskCategory, isDesignerTask }) => {
     const [query, setQuery] = React.useState("");
 
     const params = useParams();
@@ -35,15 +35,15 @@ const AssginedToSelection = ({ selected, onSelect, taskCategory }) => {
         query === ""
             ? employees
             : employees?.filter((employee) => {
-                  return employee?.name
-                      .toLowerCase()
-                      .includes(query.toLowerCase());
-              });
+                return employee?.name
+                    .toLowerCase()
+                    .includes(query.toLowerCase());
+            });
 
     return (
-        <Combobox value={selected} onChange={onSelect}>
+        <Combobox value={selected} onChange={onSelect} disabled={isDesignerTask}>
             <div className="form-group position-relative my-3">
-                <label htmlFor="">Assigned To</label>
+                <label htmlFor="" className={`f-14 text-dark-gray mb-1`}>Assigned To</label>
                 <Combobox.Button className="d-flex align-items-center w-100 sp1-selection-display-button">
                     <Combobox.Input
                         onChange={(e) => setQuery(e.target.value)}
@@ -133,9 +133,8 @@ const Option = ({ employee }) => {
                         />
                     </div>
                     <span
-                        className={`block truncate ${
-                            selected ? "font-medium" : "font-normal"
-                        }`}
+                        className={`block truncate ${selected ? "font-medium" : "font-normal"
+                            }`}
                     >
                         <span className="mr-2">{employee?.name}</span>
                         {data?.status === 400 ? (

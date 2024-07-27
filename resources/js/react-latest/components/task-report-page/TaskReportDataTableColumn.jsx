@@ -135,7 +135,9 @@ export const TaskReportDataTableColumn = [
                                 href={`/account/projects/${original?.projectId}`}
                                 target="_blank"
                             >
-                                {original?.project_name}
+                                <span style={{ color: "#3366CC" }}>
+                                    {original?.project_name}
+                                </span>
                             </a>
                         </Popover.Button>
 
@@ -174,7 +176,10 @@ export const TaskReportDataTableColumn = [
                                 href={`/account/tasks/${original?.taskId}`}
                                 target="_blank"
                             >
-                                {original?.task_heading}
+                                <span style={{ color: "#3366CC" }}>
+                                    {" "}
+                                    {original?.task_heading}
+                                </span>
                             </a>
                         </Popover.Button>
 

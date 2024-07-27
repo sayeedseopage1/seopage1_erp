@@ -31,7 +31,12 @@ grumphp.yml
 /bootstrap/cache/*
 storage/reviewed
 *.bak
-
+.prettierrc.json
 
 __TODO__
 package-lock.json
+
+#test
+.scannerwork
+reload_pages.sh
+.devdbrc

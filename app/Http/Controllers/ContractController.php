@@ -56,6 +56,7 @@ use App\Models\AuthorizationAction;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\File;
 use App\DataTables\WonDealsDataTable;
+use App\Events\SalesPolicyEvent;
 use App\Models\LeadsDealsActivityLog;
 use App\Models\kpiSettingGenerateSale;
 use Illuminate\Support\Facades\Redirect;
@@ -226,7 +227,7 @@ class ContractController extends AccountBaseController
             return $next($request);
         });
         $deal = Deal::where('id', $id)->first();
-        if(Auth::user()->role_id!=1 && $deal->status!='pending') abort_403(true);
+        if( !in_array(auth()->user()->role_id, [1, 4]) && $deal->status!='pending') abort_403(true);
         return view('contracts.editdealdetails', $this->data, compact('deal'));
     }
 //storing new deals
@@ -260,7 +261,7 @@ class ContractController extends AccountBaseController
             ], 422);
         }
 
-       
+
         $existing_client = User::where('user_name', $request->user_name)->first();
         $chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ01234567890123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
         $suffle = substr(str_shuffle($chars), 0, 6);
@@ -464,12 +465,11 @@ class ContractController extends AccountBaseController
     //storing lead to deal
     public function storeLeadDeal(Request $request)
     {
-        // dd($request->all());
-        \DB::beginTransaction();
+        DB::beginTransaction();
         $current_time = Carbon::now()->format('d-m-Y H:i:s');
         $award_date = strtotime($request->award_time);
         $aw_dt = date('Y-m-d H:i:s', $award_date);
-        
+
         $validated = $request->validate([
             //            'user_name' => 'required',
             'client_name' => 'required',
@@ -479,6 +479,14 @@ class ContractController extends AccountBaseController
             // 'current_time' => 'date|date_format:d-m-Y H:i A',
             'award_time' => 'required|date|before:' . $current_time,
         ]);
+
+        if ($request->project_type != 'hourly') {
+            $request->validate([
+                'deadline' => 'required|date',
+            ]);
+        }
+
+
         //  dd($request);
         $to = Carbon::parse($current_time);
         $from = Carbon::parse($request->award_time);
@@ -502,22 +510,34 @@ class ContractController extends AccountBaseController
         if ($deal_stage->deal_stage == 0) {
             $deal->deal_stage = $deal_stage->deal_stage + 1;
             $deal->comments = $deal_stage->comments;
-            $deal->won_lost = 'Yes';
+            // $deal->won_lost = 'Yes';
             $deal->save();
         } elseif ($deal_stage->deal_stage == 1) {
             $deal->deal_stage = $deal_stage->deal_stage + 1;
             $deal->comments = $deal_stage->comments;
-            $deal->won_lost = 'Yes';
+            // $deal->won_lost = 'Yes';
             $deal->save();
         } elseif ($deal_stage->deal_stage == 2) {
             $deal->deal_stage = $deal_stage->deal_stage + 1;
             $deal->comments = $deal_stage->comments;
-            $deal->won_lost = 'Yes';
+            // $deal->won_lost = 'Yes';
             $deal->save();
+        }elseif ($deal_stage->deal_stage == 5) {
+            $deal->deal_stage = 6;
+            // $deal->won_lost = 'Yes';
+            $deal->save();
+
+            $stageChange = new DealStageChange();
+            $stageChange->lead_id = $deal->lead_id;
+            $stageChange->deal_id = $deal->short_code;
+            $stageChange->deal_stage_id = $deal->deal_stage;
+            $stageChange->updated_by = Auth::id();
+            $stageChange->save();
         } else {
             $deal->deal_stage = $deal_stage->deal_stage;
             $deal->comments = $deal_stage->comments;
-            $deal->won_lost = 'Yes';
+            // $deal->won_lost = 'Yes';
+            $deal->status = 'pending';
             $deal->save();
             //$lead_id = Lead::where('id', $request->lead_id)->first();
             if (Auth::id() != null) {
@@ -544,7 +564,11 @@ class ContractController extends AccountBaseController
         $existing_client = User::where('user_name', $request->user_name)->first();
         $chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ01234567890123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
         $suffle = substr(str_shuffle($chars), 0, 6);
-        $deal = new Deal();
+
+        $deal = Deal::where('deal_id', $deal->short_code)->first();
+        if(!$deal )
+            $deal = new Deal();
+
         $deal->deal_id = $request->deal_id;
         $deal->project_name = $request->project_name;
         $deal->profile_link = $request->profile_link;
@@ -561,6 +585,11 @@ class ContractController extends AccountBaseController
         $deal->client_username = $request->user_name;
         $deal->lead_id = $request->lead_id;
         $deal->added_by = Auth::id();
+
+        // no analysis required for hourly project 
+        if ($request->project_type == 'hourly') {
+            $deal->sale_analysis_status = 'no-analysis';
+        }
         //$date= Carbon::now();
 
         $date = date('Y-m-d H:i:s');
@@ -578,8 +607,16 @@ class ContractController extends AccountBaseController
         } else {
             $deal->client_badge = 'new client';
         }
+
+        if ($deal->project_type == 'hourly') {
+            $today = \Carbon\Carbon::now();
+            $deadline = $today->addYear();
+            $deal->deadline = $deadline;
+        } else {
+            $deal->deadline = $request->deadline;
+        }
+
         $deal->save();
-       // dd($deal);
         //$lead_con_id = Lead::where('id', $request->lead_id)->first();
         if (Auth::id() != null) {
             $agent_id = SalesCount::where('user_id', Auth::id())->first();
@@ -633,33 +670,33 @@ class ContractController extends AccountBaseController
 
         $deal_client = Deal::find($deal->id);
         $deal_client->client_id = $user->id;
-        $deal->submission_status= 'Submitted';
+        $deal->submission_status = 'Submitted';
 
-        $client_details= ClientForm::where('client_username',$user->user_name)->first();
+        $client_details = ClientForm::where('client_username', $user->user_name)->first();
         // /dd($client_details);
         if ($client_details != null) {
             $deal_client->submission_status = 'Submitted';
 
-            $new_client_form= new ClientForm();
+            $new_client_form = new ClientForm();
             $new_client_form->deal_id = $deal->id;
-            $new_client_form->client_username= $client_details->client_username;
-            $new_client_form->client_email= $client_details->client_email;
-            $new_client_form->client_phone =$client_details->client_phone;
-            $new_client_form->client_whatsapp= $client_details->client_whatsapp;
-            $new_client_form->client_skype= $client_details->client_skype;
-            $new_client_form->client_telegram= $client_details->client_telegram;
-            $new_client_form->client_messenger =$client_details->client_messenger;
-            $new_client_form->client_imo= $client_details->client_imo;
-            $new_client_form->message= $client_details->message;
-            $new_client_form->timezone= $client_details->timezone;
-            $new_client_form->day= $client_details->day;
-            $new_client_form->checklist= $client_details->checklist;
+            $new_client_form->client_username = $client_details->client_username;
+            $new_client_form->client_email = $client_details->client_email;
+            $new_client_form->client_phone = $client_details->client_phone;
+            $new_client_form->client_whatsapp = $client_details->client_whatsapp;
+            $new_client_form->client_skype = $client_details->client_skype;
+            $new_client_form->client_telegram = $client_details->client_telegram;
+            $new_client_form->client_messenger = $client_details->client_messenger;
+            $new_client_form->client_imo = $client_details->client_imo;
+            $new_client_form->message = $client_details->message;
+            $new_client_form->timezone = $client_details->timezone;
+            $new_client_form->day = $client_details->day;
+            $new_client_form->checklist = $client_details->checklist;
             $new_client_form->save();
         }
-       // dd($new_client_form);
+        // dd($new_client_form);
         $deal_client->save();
 
-        $contract = new Contract();
+        $contract = Contract::find($deal->id) ?: new Contract();
         $contract->id = $deal->id;
         $contract->deal_id = $deal->id;
         $contract->subject = $request->project_name;
@@ -691,7 +728,7 @@ class ContractController extends AccountBaseController
         $project->deliverable_authorization = 0;
         $currency = Currency::where('id', $request->original_currency_id)->first();
         //dd($currency);
-        $project->project_budget = (($request->amount) + ($request->upsell_amount) )/ $currency->exchange_rate;
+        $project->project_budget = (($request->amount) + ($request->upsell_amount)) / $currency->exchange_rate;
         $project->due = $deal->amount + $deal->upsell_amount;
 
         $project->completion_percent = 0;
@@ -700,7 +737,7 @@ class ContractController extends AccountBaseController
         $project->status = 'not started';
         $project->public = 0;
         $project->save();
-     //   dd($project);
+        //   dd($project);
 
         // dd($existing_client);
         if ($existing_client != null) {
@@ -786,7 +823,7 @@ class ContractController extends AccountBaseController
 
         // activity log
         $user = Auth::user();
-        $text = $user->getRole->name . ' ' . $user->name . ' - Closed Deal (' . $deal->project_name . ') for ' . $deal->actual_amount . '$ (Client: ' . $deal->client_name . ')';
+        $text = $user->name . ' closed the deal for ' . $deal->actual_amount . '$';
         $link = '<a href="' . route('deals.show', $deal->id) . '">' . $text . '</a>';
         $activityLog = new LeadsDealsActivityLog();
         if ($lead != null) {
@@ -827,9 +864,16 @@ class ContractController extends AccountBaseController
             }
         }
 
+        if ($request->project_type == 'hourly') {
+            return response()->json([
+                'status' => 'success',
+                'redirectUrl' => route('dealDetails', $deal->id)
+            ]);
+        }
+
         return response()->json([
             'status' => 'success',
-            'redirectUrl' => route('dealDetails', $deal->id)
+            'redirectUrl' => route('account.sale-risk-policies.risk-analysis', $deal->id)
         ]);
     }
     public function Milestone($id)
@@ -1035,7 +1079,7 @@ class ContractController extends AccountBaseController
     }
     //storing deal large form
 
-    
+
     public function storedealDetails(Request $request)
     {
     //    dd($request->all());
@@ -1176,7 +1220,7 @@ class ContractController extends AccountBaseController
             $deal->deal_category = $request->deal_category;
             if ($deal->project_type == 'hourly') {
                 $today = \Carbon\Carbon::now();
-                $deadline = $today->addYear(); 
+                $deadline = $today->addYear();
                 $deal->deadline = $deadline;
             }else{
                 $deal->deadline = $request->deadline;
@@ -1200,6 +1244,7 @@ class ContractController extends AccountBaseController
             $deal->description7 = $request->description7;
             $deal->description8 = $request->description8;
             $deal->description9 = $request->description9;
+            $deal->is_final = $request->is_final;
 
             $deal->save();
            // dd($deal);
@@ -1209,7 +1254,7 @@ class ContractController extends AccountBaseController
 
             if ($deal->project_type == 'hourly') {
                 $today = \Carbon\Carbon::now();
-                $deadline = $today->addYear(); 
+                $deadline = $today->addYear();
                 $project->deadline = $deadline;
             }else{
                 $project->deadline = $request->deadline;
@@ -1272,7 +1317,7 @@ class ContractController extends AccountBaseController
             $client->name = $request->client_name;
             $client->save();
 
-        if(!$request->is_drafted){
+        if(!$request->is_drafted && in_array($deal->sale_analysis_status, ['authorized','auto-authorized', 'no-analysis'])){
             $lead_developer_id = RoleUser::where('role_id', 6)->get();
             //dd($lead_developer_id);
             foreach ($lead_developer_id as $lead) {
@@ -1283,7 +1328,7 @@ class ContractController extends AccountBaseController
                 $lead_developer->lead_developer_id = $lead->user_id;
                 $lead_developer->save();
             }
-
+            
             // $pm_count = PMAssign::select('project_count')->min('project_count');
             // $pm_user = PMAssign::where('project_count', $pm_count)->first();
             if ($deal->pm_id == null) {
@@ -1420,9 +1465,9 @@ class ContractController extends AccountBaseController
                         $pm_project_update->monthly_actual_project_amount = $pm_project_update->monthly_actual_project_amount + $deal->amount;
                         $pm_project_update->save();
                     }
+                    }
                 }
-            }
-
+                
             $deal_pm_id = Deal::where('id', $request->id)->first();
             $project_id = Project::where('deal_id', $deal_pm_id->id)->first();
             $project_admin_update = Project::find($project_id->id);
@@ -1445,7 +1490,7 @@ class ContractController extends AccountBaseController
 
             $qualified_sale->amount = $deal->amount;
             //$qualified_sale->actual_amount= $deal->actual_amount . $currency->currency_code;
-            
+
             $qualified_sale->save();
 
             // $helper = new HelperPendingActionController();
@@ -1509,7 +1554,7 @@ class ContractController extends AccountBaseController
             // //dd($clientdetail);
             // $clientdetail->company_name= $request->organization;
             // $clientdetail->save();
-            
+
 
             $sender = User::where('id', Auth::id())->first();
 
@@ -1543,6 +1588,7 @@ class ContractController extends AccountBaseController
                 ]);
             }
 
+
         }
 
         $deal = Deal::find($deal->id);
@@ -1550,11 +1596,11 @@ class ContractController extends AccountBaseController
         $deal->is_drafted = $request->is_drafted;
         $deal->released_at = $request->is_drafted ? null : Carbon::now();
         $deal->save();
-           
+
           //  dd($project);
             //need pending action
-          
-          
+
+
           //  dd($project);
             //need pending action
             if(Auth::user()->role_id==4){
@@ -1564,11 +1610,13 @@ class ContractController extends AccountBaseController
                 $project_member->project_id = $project->id;
                 $project_member->save();
             }
-        //    / dd("asd asl d");
-
-
             DB::commit();
             // all good
+
+            // pending action for sales lead authorization when removed form draft
+            if ($deal->project_type == 'fixed') 
+                event(new SalesPolicyEvent('sales_lead_authorization', $deal));
+
         } catch (\Exception $e) {
             DB::rollback();
             Toastr::error('Action Failed', 'Error', ["positionClass" => "toast-top-right", 'redirectUrl']);
@@ -1597,7 +1645,7 @@ class ContractController extends AccountBaseController
                 'description8' => 'required',
                 'description9' => 'required',
                 'deal_category' => 'required',
-               
+
                 'project_summary' => $request->has('project_summary') ? 'required' : '',
             ], [
                 'project_name.required' => 'Please enter the project name!',
@@ -1612,7 +1660,7 @@ class ContractController extends AccountBaseController
                 'description8.required' => 'To ensure all departments are aligned, we kindly request your confirmation on cross-departmental work for this project. Please let us know if cross-departmental work is involved or not.',
                 'description9.required' => 'Notes for the project manager/technical team is required, please write if any notes for manager/technical team are available.',
                 'deal_category.required' => 'This field is required!',
-               
+
                 'project_summary.required' => 'This field is required!',
             ]);
         } else {
@@ -1635,7 +1683,7 @@ class ContractController extends AccountBaseController
                 'description8' => 'required',
                 'description9' => 'required',
                 'deal_category' => 'required',
-                
+
                 'project_summary' => $request->has('project_summary') ? 'required' : '',
             ], [
                 'project_name.required' => 'Please enter the project name!',
@@ -1656,7 +1704,7 @@ class ContractController extends AccountBaseController
                 'description8.required' => 'To ensure all departments are aligned, we kindly request your confirmation on cross-departmental work for this project. Please let us know if cross-departmental work is involved or not.',
                 'description9.required' => 'Notes for the project manager/technical team is required, please write if any notes for manager/technical team are available.',
                 'deal_category.required' => 'This field is required!',
-               
+
                 'project_summary.required' => 'This field is required!',
             ]);
         }
@@ -1714,7 +1762,7 @@ class ContractController extends AccountBaseController
             }
             if ($deal->project_type == 'hourly') {
                 $today = \Carbon\Carbon::now();
-                $deadline = $today->addYear(); 
+                $deadline = $today->addYear();
                 $deal->deadline = $deadline;
             }else{
                 $deal->deadline = $request->deadline;
@@ -1738,6 +1786,7 @@ class ContractController extends AccountBaseController
             $deal->description7 = $request->description7;
             $deal->description8 = $request->description8;
             $deal->description9 = $request->description9;
+            $deal->is_final = $request->is_final;
             $deal->cms_id = $item[0] ?? null;
             $deal->cms_name = $item[1] ?? null;
             $deal->updated_by = Auth::id();
@@ -1750,7 +1799,7 @@ class ContractController extends AccountBaseController
 
             if ($deal->project_type == 'hourly') {
                 $today = \Carbon\Carbon::now();
-                $deadline = $today->addYear(); 
+                $deadline = $today->addYear();
                 $project->deadline = $deadline;
             }else{
                 $project->deadline = $request->deadline;
@@ -1808,281 +1857,19 @@ class ContractController extends AccountBaseController
             $client->email = $request->client_email;
             $client->name = $request->client_name;
             $client->save();
+            
+            // assign pm lead
+            if ($deal->pm_id == null && ($deal->is_drafted && !$request->is_drafted)) 
+                self::dealAssignPmAndLead($deal, $project);
 
-            if ($deal->pm_id == null && ($deal->is_drafted && !$request->is_drafted)) {
-                $lead_developer_id = RoleUser::where('role_id', 6)->get();
-                //dd($lead_developer_id);
-                foreach ($lead_developer_id as $lead) {
-                    $lead_developer = new ProjectMember();
-                    $lead_developer->user_id = $lead->user_id;
-                    $lead_developer->project_id = $project->id;
-                    $lead_developer->hourly_rate = 0;
-                    $lead_developer->lead_developer_id = $lead->user_id;
-                    $lead_developer->save();
-                }
-
-                // $pm_count = PMAssign::select('project_count')->min('project_count');
-                // $pm_user = PMAssign::where('project_count', $pm_count)->first();
-                if ($deal->pm_id == null) {
-                    $pm_count = PMAssign::select('monthly_project_count')->where('status', 1)->min('monthly_project_count');
-                    $pm_user = PMAssign::where('monthly_project_count', $pm_count)->where('status', 1)->first();
-                    if ($pm_count < 2) {
-                        if ($pm_user != null) {
-                            $pmassign = new PMProject();
-                            $pmassign->project_id = $project->id;
-                            $pmassign->status = 'pending';
-                            if(Auth::user()->role_id==4){
-                            $pmassign->pm_id = Auth::id();
-                            }else{
-                            $pmassign->pm_id = $pm_user->pm_id;
-                            }
-                            $pmassign->deal_id = $deal->id;
-                            $pmassign->client_id = $client->id;
-                            $pmassign->save();
-                            $deal_assign = Deal::find($deal->id);
-                            if(Auth::user()->role_id==4){
-                            $deal_assign->pm_id = Auth::id();
-                            }else{
-                            $deal_assign->pm_id = $pm_user->pm_id;
-                            }
-                            $deal_assign->save();
-                            $pm_assign_project = Project::find($project->id);
-                            $pm_assign_project->pm_id = $pmassign->pm_id;
-                            $pm_assign_project->save();
-                            //$email = $request->email;
-
-
-                            //  $pm_project= PMAssign::where('pm_id',$pm_id->pm_id)->first();
-                            $pm_project_find = PMAssign::where('pm_id', $pm_user->pm_id)->first();
-                            $pm_project_update = PMAssign::find($pm_project_find->id);
-                            $pm_project_update->project_count = $pm_project_update->project_count + 1;
-                            $pm_project_update->amount = $pm_project_update->amount + $deal->amount;
-                            $pm_project_update->monthly_project_count = $pm_project_update->monthly_project_count + 1;
-                            $pm_project_update->monthly_project_amount = $pm_project_update->monthly_project_amount + $deal->amount;
-                            $pm_project_update->actual_amount = $pm_project_update->actual_amount + $deal->amount;
-                            $pm_project_update->monthly_actual_project_amount = $pm_project_update->monthly_actual_project_amount + $deal->amount;
-                            $pm_project_update->save();
-                        }
-                    } else {
-                        $items = PMAssign::where('status', 1)->get();
-                        // $pm_amount = $items->min('amount');
-                        // $pm_count_id = $items->min('project_count');
-                        //
-                        // $pm_find_id = PMAssign::where('amount', $pm_amount)->first();
-                        // $pm_min_pro = PMAssign::where('project_count', $pm_count_id)->first();
-                        // $find_rest = PMAssign::where('project_count', $pm_count_id)->get();
-                        //
-                        // $fin_min = $find_rest->min('amount');
-                        //
-                        // $final_id = PMAssign::where('amount', $fin_min)->first();
-
-                        $pm_amount = $items->min('monthly_project_amount');
-                        $pm_count_id = $items->min('monthly_project_count');
-
-                        $pm_find_id = PMAssign::where('monthly_project_amount', $pm_amount)->first();
-                        $pm_min_pro = PMAssign::where('monthly_project_count', $pm_count_id)->first();
-                        $find_rest = PMAssign::where('monthly_project_count', $pm_count_id)->get();
-
-                        $fin_min = $find_rest->min('monthly_project_amount');
-
-                        $final_id = PMAssign::where('monthly_project_amount', $fin_min)->first();
-
-                        //  $exceptional =   $pm_count= PMAssign::select('project_count')->where('')->get();
-
-                        if ($pm_find_id->monthly_project_count + 1 <= $pm_count_id * 1.5) {
-                            $pmassign = new PMProject();
-                            $pmassign->project_id = $project->id;
-                            $pmassign->status = 'pending';
-                            $pmassign->deal_id = $deal->id;
-                            $pmassign->client_id = $client->id;
-                            if(Auth::user()->role_id==4){
-                            $pmassign->pm_id = Auth::id();
-                            }else{
-                            $pmassign->pm_id = $pm_find_id->pm_id;
-                            }
-                            $pmassign->save();
-                            $deal_assign = Deal::find($deal->id);
-                            if(Auth::user()->role_id==4){
-                            $deal_assign->pm_id = Auth::id;
-                            }else{
-                            $deal_assign->pm_id = $pm_find_id->pm_id;
-                            }
-                            $deal_assign->save();
-                            $pm_assign_project = Project::find($project->id);
-                            $pm_assign_project->pm_id = $pmassign->pm_id;
-                            $pm_assign_project->save();
-
-                            //  $pm_project= PMAssign::where('pm_id',$pm_id->pm_id)->first();
-                            $pm_project_find = PMAssign::where('pm_id', $pm_find_id->pm_id)->first();
-                            $pm_project_update = PMAssign::find($pm_project_find->id);
-                            $pm_project_update->project_count = $pm_project_update->project_count + 1;
-                            $pm_project_update->amount = $pm_project_update->amount + $deal->amount;
-                            $pm_project_update->monthly_project_count = $pm_project_update->monthly_project_count + 1;
-                            $pm_project_update->monthly_project_amount = $pm_project_update->monthly_project_amount + $deal->amount;
-                            $pm_project_update->actual_amount = $pm_project_update->actual_amount + $deal->amount;
-                            $pm_project_update->monthly_actual_project_amount = $pm_project_update->monthly_actual_project_amount + $deal->amount;
-                            $pm_project_update->save();
-                        } else {
-                            $pmassign = new PMProject();
-                            $pmassign->project_id = $project->id;
-                            $pmassign->status = 'pending';
-                            $pmassign->deal_id = $deal->id;
-                            $pmassign->client_id = $client->id;
-                            if(Auth::user()->role_id==4){
-                            $pmassign->pm_id = Auth::id();
-                            }else{
-                            $pmassign->pm_id = $final_id->pm_id;
-                            }
-                            $pmassign->save();
-                            $deal_assign = Deal::find($deal->id);
-                            if(Auth::user()->role_id==4){
-                            $deal_assign->pm_id = Auth::id();
-                            }else{
-                            $deal_assign->pm_id = $final_id->pm_id;
-                            }
-                            $deal_assign->save();
-                            $pm_assign_project = Project::find($project->id);
-                            $pm_assign_project->pm_id = $pmassign->pm_id;
-                            $pm_assign_project->save();
-
-                            //  $pm_project= PMAssign::where('pm_id',$pm_id->pm_id)->first();
-                            $pm_project_find = PMAssign::where('pm_id', $final_id->pm_id)->first();
-                            $pm_project_update = PMAssign::find($pm_project_find->id);
-                            $pm_project_update->project_count = $pm_project_update->project_count + 1;
-                            $pm_project_update->amount = $pm_project_update->amount + $deal->amount;
-                            $pm_project_update->monthly_project_count = $pm_project_update->monthly_project_count + 1;
-                            $pm_project_update->monthly_project_amount = $pm_project_update->monthly_project_amount + $deal->amount;
-                            $pm_project_update->actual_amount = $pm_project_update->actual_amount + $deal->amount;
-                            $pm_project_update->monthly_actual_project_amount = $pm_project_update->monthly_actual_project_amount + $deal->amount;
-                            $pm_project_update->save();
-                        }
-                    }
-                }
-
-                $deal_pm_id = Deal::where('id', $request->id)->first();
-                $project_id = Project::where('deal_id', $deal_pm_id->id)->first();
-                $project_admin_update = Project::find($project_id->id);
-                $project_admin_update->added_by = $project_id->pm_id;
-                $project_admin_update->project_admin = $project_id->pm_id;
-                $project_admin_update->save();
-
-                $qualified_sale = new QualifiedSale();
-                $qualified_sale->project_name = $deal->project_name;
-
-                $qualified_sale->deal_id = $deal->id;
-                $qualified_sale->project_id = $project->id;
-                $qualified_sale->deal_short_code = $deal->deal_id;
-                $qualified_sale->date = Carbon::now();
-                $qualified_sale->client_id = $deal->client_id;
-                $qualified_sale->client_name = $deal->client_name;
-                $qualified_sale->pm_id = $project_id->pm_id;
-                $qualified_sale->pm_name = $project_id->pm_name->name;
-
-                $qualified_sale->amount = $deal->amount;
-
-                $qualified_sale->save();
-
-                // $helper = new HelperPendingActionController();
-                // $helper->WonDealAcceptAuthorization($project,$qualified_sale->pm_id);
-
-                // /dd($qualified_sale);
-
-
-
-                // if ($deal->project_type == 'fixed') {
-                //     $user = User::where('id', $deal_pm_id->pm_id)->first();
-                //     Notification::send($user, new WonDealNotification($deal));
-                // }else{
-                //     Notification::send($user, new HourlyDealNotification($deal));
-                // }
-
-                if ($deal->project_type == 'fixed') {
-                    $users = User::where('role_id', 1)->get();
-                    foreach ($users as $usr) {
-                        Notification::send($usr, new WonDealNotification($deal));
-                    }
-                }else{
-                    $users = User::where('role_id', 1)->get();
-                    foreach ($users as $usr) {
-                        Notification::send($usr, new HourlyDealNotification($deal));
-                    }
-                }
-                
-                $users = User::where('role_id', 8)->get();
-
-                foreach ($users as $key => $user) {
-                    //start authorization action
-                    $authorization_action = new AuthorizationAction();
-                    $authorization_action->model_name = $deal->getMorphClass();
-                    $authorization_action->model_id = $deal->id;
-                    $authorization_action->type = 'saleslead_price_authorization';
-                    $authorization_action->deal_id = $project_id->deal_id;
-                    $authorization_action->project_id = $project_id->id;
-                    $authorization_action->link = route('authorization_request', $project_id->deal_id);
-                    $authorization_action->title = 'Sales Lead Price Authorization';
-                    $authorization_action->authorization_for = $user->id;
-                    $authorization_action->save();
-                    // dd($authorization_action);
-                    //end authorization action
-
-
-                    Notification::send($user, new DealAuthorizationSendNotification($deal, Auth::user()));
-
-                    $this->triggerPusher('notification-channel', 'notification', [
-                        'user_id' => $user->id,
-                        'role_id' => $user->role_id,
-                        'title' => 'Price authorization request from ' . Auth::user()->name,
-                        'body' => Auth::user()->name . ' send price authorization request for ' . $deal->project_name,
-                        'redirectUrl' => route('deals.show', $project_id->deal_id)
-                    ]);
-                }
-                // dd("true");
-
-                //need pending action
-             
-               
-                //need pending action
-                //dd($authorization_action);
-                // $check_new_pm= User::where('id',$deal->pm_id)->first();
-                // $new_pm = EmployeeDetails::where('user_id',$check_new_pm->id)->first();
-                // $to = Carbon::createFromFormat('Y-m-d H:s:i', Carbon::now());
-
-                // $from = Carbon::createFromFormat('Y-m-d H:s:i', $new_pm->joining_date);
-
-                // $diff_in_days = $from->diffInDays($to);
-                // if($diff_in_days < 30)
-                // {
-                //     $startOfWeek = Carbon::now()->startOfWeek();
-                //     $endOfWeek = Carbon::now()->endOfWeek();
-                //     $new_pm_project_count= Project::where('pm_id',$new_pm->user_id)->where('created_at',[$startOfWeek, $endOfWeek])->count();
-                //     if($new_pm_project_count > 1)
-                //     {
-                //         $new_pm_assign = PMAssign::where('pm_id',$new_pm->user_id)->first();
-                //         $new_pm_status= PMAssign::find($new_pm_assign->id);
-                //         $new_pm_status->status = 0;
-                //         $new_pm_status->save();
-                //     }
-
-                // }
-
-
-
-
-
-                //  Mail::to($test->email)->send(new WonDealMail($project));
-                //   $users= User::where('role_id',1)->get();
-                //   foreach ($users as $usr) {
-                //     Mail::to($usr->email)->send(new WonDealMail($project_id));
-                //   }
-
-
-
-            }
-            $deal= Deal::find($deal->id);
+            // $deal= Deal::find($deal->id);
             $deal->authorization_status = $deal->is_drafted && !$request->is_drafted ? 2 : $deal->authorization_status;
             $deal->is_drafted = $request->is_drafted;
             $deal->released_at = $request->is_drafted ? null : Carbon::now();
             $deal->save();
+
+            // past action for large form submission
+            event(new SalesPolicyEvent('pending_large_from_submission', $deal, ['past'=>'']));
 
             //         $sender= User::where('id',Auth::id())->first();
             //         $users= User::where('role_id',8)->orWhere('role_id',1)->get();
@@ -2106,6 +1893,9 @@ class ContractController extends AccountBaseController
             }
 
             DB::commit();
+
+            // pending action for sales lead authorization
+            event(new SalesPolicyEvent('sales_lead_authorization', $deal));
             // all good
         } catch (\Exception $e) {
             DB::rollback();
@@ -2333,13 +2123,17 @@ class ContractController extends AccountBaseController
             case 'renew':
                 $this->view = 'contracts.ajax.renew';
                 break;
+            case 'sales-analysis-report':
+                if (auth()->user()->role_id != 1) return redirect()->route('contracts.show', $id);
+                $this->view = 'contracts.ajax.salesAnalysisReport';
+                break;
             default:
                 $this->view = 'contracts.ajax.summary';
                 break;
         }
 
         $itemDeal = $this->data['contract']->deal;
-        
+
         if((Auth::user()->role_id == 7 || Auth::user()->role_id == 8) && !($itemDeal->is_drafted == 0 && ($itemDeal->authorization_status == 1 || (((Carbon::now()->diffInSeconds($itemDeal->released_at) > 10800) && (Carbon::parse($itemDeal->released_at)->format('H:i:s') >= '07:00' && Carbon::parse($itemDeal->released_at)->format('H:i:s') < '23:30')) || ((Carbon::parse($itemDeal->released_at)->format('H:i:s') < '07:00' || Carbon::parse($itemDeal->released_at)->format('H:i:s') >= '23:30') && (Carbon::parse(now())->format('H:i:s') >= '10:00') || Carbon::parse($itemDeal->released_at)->format('Y-m-d') < now()->format('Y-m-d')))))){
             $this->data['contract']->deal->pm_id = null;
         }
@@ -2504,6 +2298,10 @@ class ContractController extends AccountBaseController
             $deal->price_authorization = $request->price_authorization;
             $deal->requirment_define = $request->requirment_define;
             $deal->project_deadline_authorization = $request->project_deadline_authorization;
+
+            // pending action for sales lead authorization for fixed project
+            if($deal->project_type == 'fixed')
+                event(new SalesPolicyEvent('sales_lead_authorization', $deal, ['past' => 'accept']));
         }
 
         //kpi settings
@@ -2576,7 +2374,7 @@ class ContractController extends AccountBaseController
             $qualified_sale->save();
         }
 
-        
+
         if(!$request->denyDeal){
             $user = User::where('id', $deal->pm_id)->first();
             if ($deal->project_type == 'fixed') {
@@ -2591,13 +2389,25 @@ class ContractController extends AccountBaseController
             $helper = new HelperPendingActionController();
             $helper->WonDealAcceptAuthorization($project, $project->pm_id);
         }
+        $deal->save();
 
-        if ($deal->save()) {
-            return response()->json([
-                'success' => true,
-                'message' => 'Data inserted successfully'
-            ]);
+        $user = Auth::user();
+        $text = 'The deal was authorized by ' . $user->name . ' as sales lead';
+        $link = '<a href="' . route('deals.show', $deal->id) . '">' . $text . '</a>';
+        $activityLog = new LeadsDealsActivityLog();
+        if ($deal->lead_id != null) {
+            $activityLog->lead_id = $deal->lead_id;
         }
+        $activityLog->deal_id = $deal->id;
+        $activityLog->project_id = $project->id;
+        $activityLog->message = $link;
+        $activityLog->created_by = Auth::id();
+        $activityLog->save();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Data inserted successfully'
+        ]);
     }
 
     public function award_time_increase_index()
@@ -2621,7 +2431,7 @@ class ContractController extends AccountBaseController
 
         if ($data->save()) {
 
-           //need pending action 
+           //need pending action
            $project= Project::where('deal_id',$request->id)->first();
            $helper = new HelperPendingActionController();
 
@@ -2694,13 +2504,13 @@ class ContractController extends AccountBaseController
                 $award_time_request->approved_by = $this->user->id;
                 $award_time_request->status = $mode;
                 if ($award_time_request->save()) {
-                    
+
                     $project= Project::where('deal_id',$award_time_request->deal_id)->first();
                     $actions = PendingAction::where('code','WDADA')->where('past_status',0)->where('project_id',$project->id)->get();
                     if($actions != null)
                     {
                     foreach ($actions as $key => $action) {
-                       
+
                             $action->authorized_by= Auth::id();
                             $action->authorized_at= Carbon::now();
                             $action->past_status = 1;
@@ -2708,7 +2518,7 @@ class ContractController extends AccountBaseController
                             $project_manager= User::where('id',$project->pm_id)->first();
                             $client= User::where('id',$project->client_id)->first();
                             $authorize_by= User::where('id',$action->authorized_by)->first();
-            
+
                             $past_action= new PendingActionPast();
                             $past_action->item_name = $action->item_name;
                             $past_action->code = $action->code;
@@ -2729,8 +2539,8 @@ class ContractController extends AccountBaseController
                             $past_action->milestone_id = $action->milestone_id;
                             $past_action->save();
                           //  dd($past_action);
-                            
-                       
+
+
                     }
                 }
                     return response()->json([
@@ -2750,6 +2560,7 @@ public function storeClientDeal(Request $request){
         'client_name' => 'required',
         'project_name' => 'required',
         'amount' => 'required|min:1',
+        'project_type' => 'required'
     ]);
 
     $deal_stage = DealStage::where('id', $request->id)->first();
@@ -2759,22 +2570,23 @@ public function storeClientDeal(Request $request){
     if ($deal_stage->deal_stage == 0) {
         $deal->deal_stage = $deal_stage->deal_stage + 1;
         $deal->comments = $deal_stage->comments;
-        $deal->won_lost = 'Yes';
+        // $deal->won_lost = 'Yes';
         $deal->save();
     } elseif ($deal_stage->deal_stage == 1) {
         $deal->deal_stage = $deal_stage->deal_stage + 1;
         $deal->comments = $deal_stage->comments;
-        $deal->won_lost = 'Yes';
+        // $deal->won_lost = 'Yes';
         $deal->save();
     } elseif ($deal_stage->deal_stage == 2) {
         $deal->deal_stage = $deal_stage->deal_stage + 1;
         $deal->comments = $deal_stage->comments;
-        $deal->won_lost = 'Yes';
+        // $deal->won_lost = 'Yes';
         $deal->save();
     } else {
-        $deal->deal_stage = $deal_stage->deal_stage;
+        if ($deal->deal_stage == 5) 
+            $deal->deal_stage = 6;
         $deal->comments = $deal_stage->comments;
-        $deal->won_lost = 'Yes';
+        // $deal->won_lost = 'Yes';
         $deal->save();
 
         //$lead_id = Lead::where('id', $request->lead_id)->first();
@@ -2821,6 +2633,10 @@ public function storeClientDeal(Request $request){
     $deal->lead_id = $request->lead_id;
     $deal->added_by = Auth::id();
     $deal->status = 'Accepted';
+
+    if ($request->project_type == 'hourly') {
+        $deal->sale_analysis_status = 'no-analysis';
+    }
     //$date= Carbon::now();
 
     $date = date('Y-m-d H:i:s');
@@ -2983,7 +2799,7 @@ public function storeClientDeal(Request $request){
 
     // activity log
     $user = Auth::user();
-    $text = $user->getRole->name . ' ' . $user->name . ' - Closed Deal (' . $deal->project_name . ') for ' . $deal->actual_amount . '$ (Client: ' . $deal->client_name . ')';
+    $text = $user->name . ' closed the deal for ' . $deal->actual_amount . '$';
     $link = '<a href="' . route('deals.show', $deal->id) . '">' . $text . '</a>';
     $activityLog = new LeadsDealsActivityLog();
     if ($lead != null) {
@@ -3011,9 +2827,17 @@ public function storeClientDeal(Request $request){
             $this->triggerPusher('lead-updated-channel', 'lead-updated', $pusher_options);
         }
     }
+
+        if ($request->project_type == 'hourly') {
+            return response()->json([
+                'status' => 'success',
+                'redirectUrl' => route('dealDetails', $deal->id)
+            ]);
+        }
+        
         return response()->json([
             'status' => 'success',
-            'redirectUrl' => route('dealDetails', $deal->id)
+            'redirectUrl' => route('account.sale-risk-policies.risk-analysis', $deal->id)
         ]);
 }
 public function getAllContracts(Request $request){
@@ -3035,7 +2859,8 @@ public function getAllContracts(Request $request){
     ->leftJoin('users as pm', 'pm.id', 'deals.pm_id')
     ->leftJoin('users as client', 'client.id', 'deals.client_id')
     ->leftJoin('p_m_projects', 'deals.id', 'p_m_projects.deal_id')
-    ->where('deals.dept_status','WD');
+    ->where('deals.dept_status','WD')
+    ->whereNotIn('deals.sale_analysis_status',['denied', 'analysis', 'pending']);
 
     if ($startDate !== null && $endDate !== null) {
         $dealsQuery->where(function ($q) use ($startDate, $endDate) {
@@ -3064,7 +2889,7 @@ public function getAllContracts(Request $request){
     if ($request->status != null) {
         $dealsQuery->where('deals.status', $request->status);
     }
-    
+
     if (Auth::user()->role_id == 4) {
         $now = \Carbon\Carbon::now()->toDateTimeString();
         $dealsQuery->where('deals.pm_id',Auth::id())
@@ -3099,7 +2924,7 @@ public function getAllContracts(Request $request){
     $deals = $dealsQuery
         ->orderBy('deals.id', 'desc')
         ->paginate($limit);
-    
+
 
     /**AMOUNT CHECK ITS UPSELL OR NOT START */
     foreach ($deals as $itemDeal){
@@ -3183,7 +3008,7 @@ public function getAllContracts(Request $request){
             $itemDeal->closing_date = null;
             $itemDeal->pm_id = null;
         }
-        
+
     }
     /**AMOUNT CHECK ITS UPSELL OR NOT END */
     /**COUNT OF AWARD TIME REQUEST DATA START */
@@ -3241,7 +3066,7 @@ public function exportContracts(Request $request){
     if ($request->status != null) {
         $dealsQuery->where('deals.status', $request->status);
     }
-    
+
     if (Auth::user()->role_id == 4) {
         $dealsQuery->where('pm_id',Auth::id());
     }else {
@@ -3277,5 +3102,207 @@ public function exportContracts(Request $request){
         'status'=> 200,
     ]);
 }
+
+    public function dealAssignPmAndLead(Deal $deal, Project $project = null)
+    {
+        if (!$project)
+            $project = Project::where('deal_id', $deal->id)->first();
+
+        $lead_developer_id = RoleUser::where('role_id', 6)->get();
+        //dd($lead_developer_id);
+        foreach ($lead_developer_id as $lead) {
+            $lead_developer = new ProjectMember();
+            $lead_developer->user_id = $lead->user_id;
+            $lead_developer->project_id = $project->id;
+            $lead_developer->hourly_rate = 0;
+            $lead_developer->lead_developer_id = $lead->user_id;
+            $lead_developer->save();
+        }
+        
+        if ($deal->pm_id == null) {
+            $pm_count = PMAssign::select('monthly_project_count')->where('status', 1)->min('monthly_project_count');
+            $pm_user = PMAssign::where('monthly_project_count', $pm_count)->where('status', 1)->first();
+            if ($pm_count < 2) {
+                if ($pm_user != null) {
+                    $pmassign = new PMProject();
+                    $pmassign->project_id = $project->id;
+                    $pmassign->status = 'pending';
+                    if (Auth::user()->role_id == 4) {
+                        $pmassign->pm_id = Auth::id();
+                    } else {
+                        $pmassign->pm_id = $pm_user->pm_id;
+                    }
+                    $pmassign->deal_id = $deal->id;
+                    $pmassign->client_id = $deal->client_id;
+                    $pmassign->save();
+                    $deal_assign = Deal::find($deal->id);
+                    if (Auth::user()->role_id == 4) {
+                        $deal_assign->pm_id = Auth::id();
+                    } else {
+                        $deal_assign->pm_id = $pm_user->pm_id;
+                    }
+                    $deal_assign->save();
+                    $pm_assign_project = Project::find($project->id);
+                    $pm_assign_project->pm_id = $pmassign->pm_id;
+                    $pm_assign_project->save();
+
+                    
+                    $pm_project_find = PMAssign::where('pm_id', $pm_user->pm_id)->first();
+                    $pm_project_update = PMAssign::find($pm_project_find->id);
+                    $pm_project_update->project_count = $pm_project_update->project_count + 1;
+                    $pm_project_update->amount = $pm_project_update->amount + $deal->amount;
+                    $pm_project_update->monthly_project_count = $pm_project_update->monthly_project_count + 1;
+                    $pm_project_update->monthly_project_amount = $pm_project_update->monthly_project_amount + $deal->amount;
+                    $pm_project_update->actual_amount = $pm_project_update->actual_amount + $deal->amount;
+                    $pm_project_update->monthly_actual_project_amount = $pm_project_update->monthly_actual_project_amount + $deal->amount;
+                    $pm_project_update->save();
+                }
+            } else {
+                $items = PMAssign::where('status', 1)->get();
+
+                $pm_amount = $items->min('monthly_project_amount');
+                $pm_count_id = $items->min('monthly_project_count');
+
+                $pm_find_id = PMAssign::where('monthly_project_amount', $pm_amount)->first();
+                $find_rest = PMAssign::where('monthly_project_count', $pm_count_id)->get();
+
+                $fin_min = $find_rest->min('monthly_project_amount');
+
+                $final_id = PMAssign::where('monthly_project_amount', $fin_min)->first();
+
+                //  $exceptional =   $pm_count= PMAssign::select('project_count')->where('')->get();
+
+                if ($pm_find_id->monthly_project_count + 1 <= $pm_count_id * 1.5) {
+                    $pmassign = new PMProject();
+                    $pmassign->project_id = $project->id;
+                    $pmassign->status = 'pending';
+                    $pmassign->deal_id = $deal->id;
+                    $pmassign->client_id = $deal->client_id;
+                    if (Auth::user()->role_id == 4) {
+                        $pmassign->pm_id = Auth::id();
+                    } else {
+                        $pmassign->pm_id = $pm_find_id->pm_id;
+                    }
+                    $pmassign->save();
+                    $deal_assign = Deal::find($deal->id);
+                    if (Auth::user()->role_id == 4) {
+                        $deal_assign->pm_id = Auth::id;
+                    } else {
+                        $deal_assign->pm_id = $pm_find_id->pm_id;
+                    }
+                    $deal_assign->save();
+                    $pm_assign_project = Project::find($project->id);
+                    $pm_assign_project->pm_id = $pmassign->pm_id;
+                    $pm_assign_project->save();
+
+                    //  $pm_project= PMAssign::where('pm_id',$pm_id->pm_id)->first();
+                    $pm_project_find = PMAssign::where('pm_id', $pm_find_id->pm_id)->first();
+                    $pm_project_update = PMAssign::find($pm_project_find->id);
+                    $pm_project_update->project_count = $pm_project_update->project_count + 1;
+                    $pm_project_update->amount = $pm_project_update->amount + $deal->amount;
+                    $pm_project_update->monthly_project_count = $pm_project_update->monthly_project_count + 1;
+                    $pm_project_update->monthly_project_amount = $pm_project_update->monthly_project_amount + $deal->amount;
+                    $pm_project_update->actual_amount = $pm_project_update->actual_amount + $deal->amount;
+                    $pm_project_update->monthly_actual_project_amount = $pm_project_update->monthly_actual_project_amount + $deal->amount;
+                    $pm_project_update->save();
+                } else {
+                    $pmassign = new PMProject();
+                    $pmassign->project_id = $project->id;
+                    $pmassign->status = 'pending';
+                    $pmassign->deal_id = $deal->id;
+                    $pmassign->client_id = $deal->client_id;;
+                    if (Auth::user()->role_id == 4) {
+                        $pmassign->pm_id = Auth::id();
+                    } else {
+                        $pmassign->pm_id = $final_id->pm_id;
+                    }
+                    $pmassign->save();
+                    $deal_assign = Deal::find($deal->id);
+                    if (Auth::user()->role_id == 4) {
+                        $deal_assign->pm_id = Auth::id();
+                    } else {
+                        $deal_assign->pm_id = $final_id->pm_id;
+                    }
+                    $deal_assign->save();
+                    $pm_assign_project = Project::find($project->id);
+                    $pm_assign_project->pm_id = $pmassign->pm_id;
+                    $pm_assign_project->save();
+
+                    //  $pm_project= PMAssign::where('pm_id',$pm_id->pm_id)->first();
+                    $pm_project_find = PMAssign::where('pm_id', $final_id->pm_id)->first();
+                    $pm_project_update = PMAssign::find($pm_project_find->id);
+                    $pm_project_update->project_count = $pm_project_update->project_count + 1;
+                    $pm_project_update->amount = $pm_project_update->amount + $deal->amount;
+                    $pm_project_update->monthly_project_count = $pm_project_update->monthly_project_count + 1;
+                    $pm_project_update->monthly_project_amount = $pm_project_update->monthly_project_amount + $deal->amount;
+                    $pm_project_update->actual_amount = $pm_project_update->actual_amount + $deal->amount;
+                    $pm_project_update->monthly_actual_project_amount = $pm_project_update->monthly_actual_project_amount + $deal->amount;
+                    $pm_project_update->save();
+                }
+            }
+        }
+
+        $project_id = Project::where('deal_id', $deal->id)->first();
+        $project_admin_update = Project::find($project_id->id);
+        $project_admin_update->added_by = $project_id->pm_id;
+        $project_admin_update->project_admin = $project_id->pm_id;
+        $project_admin_update->save();
+
+        $qualified_sale = new QualifiedSale();
+        $qualified_sale->project_name = $deal->project_name;
+
+        $qualified_sale->deal_id = $deal->id;
+        $qualified_sale->project_id = $project->id;
+        $qualified_sale->deal_short_code = $deal->deal_id;
+        $qualified_sale->date = Carbon::now();
+        $qualified_sale->client_id = $deal->client_id;
+        $qualified_sale->client_name = $deal->client_name;
+        $qualified_sale->pm_id = $project_id->pm_id;
+        $qualified_sale->pm_name = $project_id->pm_name->name;
+
+        $qualified_sale->amount = $deal->amount;
+
+        $qualified_sale->save();
+        
+        if ($deal->project_type == 'fixed') {
+            $users = User::where('role_id', 1)->get();
+            foreach ($users as $usr) {
+                Notification::send($usr, new WonDealNotification($deal));
+            }
+        } else {
+            $users = User::where('role_id', 1)->get();
+            foreach ($users as $usr) {
+                Notification::send($usr, new HourlyDealNotification($deal));
+            }
+        }
+
+        $users = User::where('role_id', 8)->get();
+        
+        foreach ($users as $key => $user) {
+            //start authorization action
+            $authorization_action = new AuthorizationAction();
+            $authorization_action->model_name = $deal->getMorphClass();
+            $authorization_action->model_id = $deal->id;
+            $authorization_action->type = 'saleslead_price_authorization';
+            $authorization_action->deal_id = $project_id->deal_id;
+            $authorization_action->project_id = $project_id->id;
+            $authorization_action->link = route('authorization_request', $project_id->deal_id);
+            $authorization_action->title = 'Sales Lead Price Authorization';
+            $authorization_action->authorization_for = $user->id;
+            $authorization_action->save();
+            // dd($authorization_action);
+            //end authorization action
+
+            Notification::send($user, new DealAuthorizationSendNotification($deal, Auth::user()));
+            
+            $this->triggerPusher('notification-channel', 'notification', [
+                'user_id' => $user->id,
+                'role_id' => $user->role_id,
+                'title' => 'Price authorization request from ' . Auth::user()->name,
+                'body' => Auth::user()->name . ' send price authorization request for ' . $deal->project_name,
+                'redirectUrl' => route('deals.show', $project_id->deal_id)
+            ]);
+        }
+    }
 
 }

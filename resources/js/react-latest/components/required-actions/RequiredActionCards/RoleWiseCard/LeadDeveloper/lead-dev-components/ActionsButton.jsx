@@ -12,27 +12,33 @@ import { useDispatch } from "react-redux";
 
 import { useGetCommentsQuery } from "../../../../../../services/api/commentsApiSlice";
 import { useWindowSize } from "react-use";
-import EvaluationModal from "../../../EmployeeEvaluation/modal/EvaluationModal";
+
 import RelevantModal from "../../Developer/dev-components/RelevantModal";
-import CommentsBody from "../../../../../../../react/UI/comments/CommentsBody";
+
 import CommentBodyForPendingActions from "../../../../../../../react/UI/comments/CommentBodyForPendingActions";
 import CommentContainerDecider from "../../../../../../../react/UI/comments/CommentContainerDecider";
 import { useCommentStore } from "../../../../../../../react/UI/comments/zustand/store";
 import { setPendingActionId } from "../../../../../../services/features/pendingActionSlice";
 import CommentsBodyWithoutSendBox from "../../../../../../../react/UI/comments/CommentBodyWithoutSendBox";
 
+import { usePendingActionStore } from "../../../../../../Zustand/store";
+import EvaluationAcknowledgeSubtaskModal from "../../../EmployeeEvaluation/modal/EvaluationAcknowledgeSubtaskModal";
+import EvaluationAcknowledgeModal from "../../../EmployeeEvaluation/modal/EvaluationAcknowledgeModal";
+
 const ActionsButton = ({ data }) => {
     const dispatch = useDispatch();
-
+    const { setPendingAction } = usePendingActionStore();
     const { commentState } = useCommentStore();
     const [fullScreenView, setFullScreenView] = React.useState(false);
     const [viewCommentModal, setViewCommentModal] = React.useState(false);
     const [viewModal, setViewModal] = React.useState(false);
     const [isRelevantModal, setIsRelevantModal] = React.useState(false);
-    const [isEvaluationModal, setIsEvaluationModal] = React.useState(false);
+    const [acknowledgement, setAcknowledgement] = React.useState(false);
+    const [acknowledgementSubtask, setAcknowledgementSubtask] =
+        React.useState(false);
     const { width } = useWindowSize();
     const taskId = data?.task_id;
-
+    const developerId = data?.developer_id;
     const {
         data: comments,
         isFetching,
@@ -72,6 +78,7 @@ const ActionsButton = ({ data }) => {
                         <div>
                             {btn.button_name === "View and Reply" && (
                                 <button
+                                    key={i}
                                     disabled={handleBtnDisable(6)}
                                     onClick={() => {
                                         setViewCommentModal((prev) => !prev);
@@ -85,6 +92,7 @@ const ActionsButton = ({ data }) => {
 
                             {btn.button_name === "Not relevant to me" && (
                                 <button
+                                    key={i}
                                     disabled={handleBtnDisable(6)}
                                     onClick={() => {
                                         setIsRelevantModal((prev) => !prev);
@@ -98,6 +106,7 @@ const ActionsButton = ({ data }) => {
                             )}
                             {btn.button_name === "View" && (
                                 <button
+                                    key={i}
                                     disabled={handleBtnDisable(6)}
                                     onClick={() =>
                                         setViewModal((prev) => !prev)
@@ -106,6 +115,66 @@ const ActionsButton = ({ data }) => {
                                 >
                                     View
                                 </button>
+                            )}
+                        </div>
+                    );
+                } else if (btn.button_type === "modal") {
+                    return (
+                        <div>
+                            {btn.button_name === "Acknowledge It" && (
+                                <button
+                                    key={i}
+                                    onClick={() => {
+                                        setPendingAction(data);
+                                        setAcknowledgement((prev) => !prev);
+                                        dispatch(setPendingActionId(data?.id));
+                                    }}
+                                    className={`${style.action_btn}`}
+                                >
+                                    Acknowledge It
+                                </button>
+                            )}
+                            {btn.button_name ===
+                                "Acknowledge & create sub-tasks" && (
+                                <button
+                                    key={i}
+                                    onClick={() => {
+                                        setPendingAction(data);
+                                        setAcknowledgementSubtask(
+                                            (prev) => !prev
+                                        );
+                                        dispatch(setPendingActionId(data?.id));
+                                    }}
+                                    className={`${style.action_btn}`}
+                                >
+                                    Acknowledge & create sub-tasks
+                                </button>
+                            )}
+                            {btn.button_name === "Delete" && (
+                                <div>
+                                    <ModalWithBtnTemplate
+                                        key={i}
+                                        btn_color={btn.button_color}
+                                        btn_name={btn.button_name}
+                                        modal_heading={data.heading}
+                                        showBottomCloseBtn={false}
+                                        // maxWidth={handleModalWidth(btn)}
+                                        btn_Disable={handleBtnDisable(6)}
+                                    >
+                                        {(setIsOpen) => {
+                                            // modal form
+                                            if (btn?.modal_form) {
+                                                return (
+                                                    <ModalForm
+                                                        setIsOpen={setIsOpen}
+                                                        form_data={btn}
+                                                    />
+                                                );
+                                            }
+                                        }}
+                                    </ModalWithBtnTemplate>
+                                    {/* <button>click</button> */}
+                                </div>
                             )}
                         </div>
                     );
@@ -138,16 +207,7 @@ const ActionsButton = ({ data }) => {
 
             {/* mitul work start */}
 
-            {/* {data?.task_id && (
-                <button
-                    onClick={() => setIsEvaluationModal((prev) => !prev)}
-                    className={`${style.action_btn}`}
-                >
-                    Evaluate
-                </button>
-            )} */}
-
-            {/* this modal is for view and reply button  */}
+            {/* this modal is for live view and reply button  */}
             <CommentContainerDecider
                 fullScreenView={fullScreenView}
                 isOpen={viewCommentModal}
@@ -198,9 +258,16 @@ const ActionsButton = ({ data }) => {
                 isRelevantModal={isRelevantModal}
             />
 
-            <EvaluationModal
-                setIsEvaluationModal={setIsEvaluationModal}
-                isEvaluationModal={isEvaluationModal}
+            <EvaluationAcknowledgeSubtaskModal
+                developerId={developerId}
+                setAcknowledgementSubtask={setAcknowledgementSubtask}
+                acknowledgementSubtask={acknowledgementSubtask}
+            />
+
+            <EvaluationAcknowledgeModal
+                developerId={developerId}
+                setAcknowledgement={setAcknowledgement}
+                acknowledgement={acknowledgement}
             />
         </>
     );

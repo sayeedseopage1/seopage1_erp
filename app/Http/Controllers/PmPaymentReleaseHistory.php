@@ -42,7 +42,7 @@ class PmPaymentReleaseHistory extends AccountBaseController
        
         $startDate = Carbon::now()->startofMonth();
         $assignEndDate = Carbon::now()->endofMonth()->addDay();
-        $pmId = 209;
+        $pmId = Auth::user()->role_id == 4 ? Auth::user()->id : 209;
       
        
 
