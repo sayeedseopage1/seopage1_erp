@@ -10,11 +10,11 @@ use App\Models\ProjectMilestone;
 use App\Models\StickyNote;
 use App\Models\Task;
 use App\Models\User;
+use Brian2694\Toastr\Facades\Toastr;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
-use Toastr;
 
 class StickyNoteController extends AccountBaseController
 {
