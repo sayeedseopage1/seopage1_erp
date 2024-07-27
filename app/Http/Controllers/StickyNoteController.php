@@ -14,6 +14,7 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Toastr;
 
 class StickyNoteController extends AccountBaseController
 {
@@ -119,8 +120,12 @@ class StickyNoteController extends AccountBaseController
         }
         
         $this->view = 'sticky-notes.ajax.edit';
-
-        return view('sticky-notes.index', $this->data);
+        if($this->stickyNote->status == 'Live'){
+            return view('sticky-notes.index', $this->data);
+        }else{
+            Toastr::success('You can not update this note now.', 'Success', ["positionClass" => "toast-top-right"]);
+            return back();
+        }
     }
 
     public function update(UpdateStickyNote $request, $id)
@@ -133,8 +138,8 @@ class StickyNoteController extends AccountBaseController
         }
         $sticky = StickyNote::findOrFail($id);
         $sticky->note_text  = $request->notetext;
-        $sticky->colour     = $request->colour;
         $sticky->reminder_time = Carbon::now()->addHours($request->reminder_time);
+        $sticky->user_id = Auth::user()->id;
         $sticky->save();
 
         return response()->json(['status' => 200]);

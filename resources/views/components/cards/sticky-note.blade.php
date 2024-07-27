@@ -31,10 +31,10 @@
 
                     <div class="dropdown-menu dropdown-menu-right border-grey rounded b-shadow-4 p-0"
                         aria-labelledby="dropdownMenuLink" tabindex="0">
-                        <a class="openRightModal dropdown-item"
+                        <a class="dropdown-item"
                             href="{{ route('sticky-notes.show', $stickyNote->id) }}"><i
                                 class="fa fa-eye mr-2"></i>@lang('app.view')</a>
-                        <a class="openRightModal dropdown-item"
+                        <a class="dropdown-item"
                             href="{{ route('sticky-notes.edit', $stickyNote->id) }}"><i
                                 class="fa fa-edit mr-2"></i>@lang('app.edit')</a>
                         <a class="dropdown-item delete-note" data-note-id="{{ $stickyNote->id }}"
