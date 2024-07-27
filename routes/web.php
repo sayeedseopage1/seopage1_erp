@@ -1572,6 +1572,7 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
     // Graphic task files delete
     Route::get('graphic-task-file/delete/{id}', [TaskController::class, 'deleteGraphicTaskFile'])->name('graphic.task.file.delete');
     Route::get('project-details-with-assignable-pm/{deal_id}', [ProjectInsightController::class, 'projectDetailsWithAssignablePm'])->name('project.details.with.assignable.pm');
+    Route::get('reassign-pm-to-project', [ProjectInsightController::class, 'reassignPmToProject'])->name('reassign.pm.to.project');
 });
 
 //custom route for seopage1
