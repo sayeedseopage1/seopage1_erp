@@ -21,7 +21,7 @@ class GenerateRecurringGoalMonthly extends Command
      *
      * @var string
      */
-    protected $description = 'Command description';
+    protected $description = 'generate recurring goal monthly based on is_monthly_auto_recurring status of a goal';
 
     /**
      * Execute the console command.
@@ -30,8 +30,8 @@ class GenerateRecurringGoalMonthly extends Command
      */
     public function handle()
     {
-        $start_date = Carbon::now()->subMonths(0)->startOfMonth();
-        $end_date = Carbon::now()->subMonths(0)->endOfMonth();
+        $start_date = Carbon::now()->subMonth()->startOfMonth();
+        $end_date = Carbon::now()->subMonth()->endOfMonth();
         
         try {
             DB::beginTransaction();
