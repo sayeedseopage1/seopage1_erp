@@ -1,113 +1,92 @@
-import React, { useEffect, useState } from "react";
-import axios from "axios";
+import React from "react";
+import { FaAngleDown } from "react-icons/fa6";
+import styled from "styled-components";
 
 const SubmissionDropDown = ({
-    selectedCategoryDropDown,
-    setSelectedCategoryDropDown,
+    categories,
+    selectedCategory,
+    onCategoryChange,
 }) => {
-    const [categories, setCategories] = useState([]);
-    const [loading, setLoading] = useState(true);
-    const [menuVisible, setMenuVisible] = useState(false);
-
-    const fetchCategoryData = async () => {
-        try {
-            const response = await axios.get(
-                "/account/get-today-submission-data"
-            );
-            if (response) {
-                console.log("response", response?.data?.categories);
-                setCategories(response?.data?.categories);
-            }
-        } catch (error) {
-            console.error("Error fetching data:", error);
-        } finally {
-            setLoading(false);
-        }
-    };
-
-    useEffect(() => {
-        fetchCategoryData();
-    }, []);
+    const [menuVisible, setMenuVisible] = React.useState(true);
 
     return (
-        <div>
-            <label htmlFor="categoryDropdown">
-                What did you do on this page
-            </label>
-            <div
-                id="categoryDropdown"
-                style={dropdownStyle}
-                onClick={() => setMenuVisible(!menuVisible)}
-            >
-                <span>{selectedCategoryDropDown?.name ?? "Select Here"}</span>
-            </div>
-            {menuVisible && (
-                <div style={menuStyle}>
-                    {loading ? (
-                        <div style={loadingStyle}>Loading...</div>
-                    ) : (
-                        categories?.map((option) => (
-                            <div
-                                key={option.id}
-                                style={
-                                    selectedCategoryDropDown?.id === option.id
-                                        ? selectedItemStyle
-                                        : itemStyle
-                                }
-                                onClick={() => {
-                                    setSelectedCategoryDropDown(option);
-                                    setMenuVisible(false);
-                                }}
-                            >
-                                {option.name}
-                                {selectedCategoryDropDown?.id === option.id && (
-                                    <i className="fa-solid fa-check" />
-                                )}
-                            </div>
-                        ))
-                    )}
-                </div>
-            )}
-        </div>
+        <Container>
+            <Dropdown onClick={() => setMenuVisible(!menuVisible)}>
+                <strong>{selectedCategory?.name ?? "Select Here"}</strong>
+                <span
+                    style={{
+                        transform: menuVisible
+                            ? "rotate(180deg)"
+                            : "rotate(0deg)",
+                        transition: "transform 0.5s ease",
+                    }}
+                >
+                    <FaAngleDown size="18px" />
+                </span>
+            </Dropdown>
+
+            <Menu menuVisible={menuVisible}>
+                {categories?.map((option) => (
+                    <Item
+                        key={option.id}
+                        selected={selectedCategory?.id === option.id}
+                        onClick={() => {
+                            onCategoryChange(option);
+                            setMenuVisible(false);
+                        }}
+                    >
+                        <span style={{ marginRight: "30px" }}>
+                            {option.name}
+                        </span>
+                        {selectedCategory?.id === option.id && (
+                            <i className="fa-solid fa-check" />
+                        )}
+                    </Item>
+                ))}
+            </Menu>
+        </Container>
     );
 };
 
 export default SubmissionDropDown;
 
-const dropdownStyle = {
-    width: "50%",
-    height: "40px",
-    padding: "10px",
-    backgroundColor: "#D8EDFC",
-    cursor: "pointer",
-    position: "relative",
-};
+const Container = styled.div`
+    margin-bottom: 20px;
+`;
 
-const menuStyle = {
-    width: "41.5%",
-    border: "1px solid #ccc",
-    borderRadius: "4px",
-    backgroundColor: "#fff",
-    maxHeight: "200px",
-    overflowY: "auto",
-    zIndex: 1000,
-    position: "absolute",
-};
+const Dropdown = styled.div`
+    width: 65%;
+    margin-top: 10px;
+    height: 45px;
+    padding: 10px 15px;
+    background-color: #d8edfc;
+    cursor: pointer;
+    position: relative;
+    display: flex;
+    justify-content: space-between;
+`;
 
-const itemStyle = {
-    padding: "10px",
-    cursor: "pointer",
-    backgroundColor: "#D8EDFC",
-    borderBottom: "1px solid #ccc",
-};
+const Menu = styled.div`
+    width: 65%;
+    border-radius: 4px;
+    background-color: #d8edfc;
+    max-height: ${(props) => (props.menuVisible ? "300px" : "0")};
+    overflow-y: auto;
+    z-index: 1000;
+    transition: max-height 0.5s ease;
+    -ms-overflow-style: none; // IE and Edge
+    scrollbar-width: none; // Firefox
+    &::-webkit-scrollbar {
+        display: none; // Chrome, Safari, Opera
+    }
+`;
 
-const selectedItemStyle = {
-    ...itemStyle,
-    backgroundColor: "#A5D8FF",
-};
-
-const loadingStyle = {
-    padding: "10px",
-    textAlign: "center",
-    backgroundColor: "#D8EDFC",
-};
+const Item = styled.div`
+    padding: 10px;
+    cursor: pointer;
+    background-color: #d8edfc;
+    border-bottom: 1px solid #c1def2;
+    margin: 0px 15px;
+    color: ${(props) => (props.selected ? "#63bbff" : "initial")};
+    font-weight: ${(props) => (props.selected ? "bold" : "normal")};
+`;
