@@ -120,13 +120,7 @@ class StickyNoteController extends AccountBaseController
         }
         
         $this->view = 'sticky-notes.ajax.edit';
-        if($this->stickyNote->status == 'Live'){
-            return view('sticky-notes.index', $this->data);
-        }else{
-            return Reply::successWithData(__('Mark as Completed'), ['redirectUrl' => route('sticky-notes.index')]);
-            Toastr::success('You can not update this note now.', 'Success', ["positionClass" => "toast-top-right"]);
-            return back();
-        }
+        return view('sticky-notes.index', $this->data);
     }
 
     public function update(UpdateStickyNote $request, $id)
@@ -148,7 +142,9 @@ class StickyNoteController extends AccountBaseController
 
     public function destroy($id)
     {
-        StickyNote::destroy($id);
+        $note = StickyNote::find($id);
+        $note->status = 'Deleted';
+        $note->save();
         return Reply::successWithData(__('messages.deleteSuccess'), ['redirectUrl' => route('sticky-notes.index')]);
     }
 
@@ -175,7 +171,7 @@ class StickyNoteController extends AccountBaseController
     public function noteComplete($id)
     {
         $note = StickyNote::find($id);
-        $note->status = 'Complete';
+        $note->status = 'Completed';
         $note->save();
         return Reply::successWithData(__('Mark as Completed'), ['redirectUrl' => route('sticky-notes.index')]);
     }

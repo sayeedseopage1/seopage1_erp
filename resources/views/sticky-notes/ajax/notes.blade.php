@@ -77,11 +77,10 @@
         console.log(id);
         Swal.fire({
             title: "@lang('messages.sweetAlertTitle')",
-            text: "@lang('messages.recoverRecord')",
             icon: 'warning',
             showCancelButton: true,
             focusConfirm: false,
-            confirmButtonText: "@lang('messages.confirmDelete')",
+            confirmButtonText: "Yes Mark as Complete",
             cancelButtonText: "@lang('app.cancel')",
             customClass: {
                 confirmButton: 'btn btn-primary mr-3',

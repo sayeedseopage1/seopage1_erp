@@ -34,6 +34,7 @@
                         <a class="dropdown-item"
                             href="{{ route('sticky-notes.show', $stickyNote->id) }}"><i
                                 class="fa fa-eye mr-2"></i>@lang('app.view')</a>
+                            @if($stickyNote->status == 'Live')
                         <a class="dropdown-item"
                             href="{{ route('sticky-notes.edit', $stickyNote->id) }}"><i
                                 class="fa fa-edit mr-2"></i>@lang('app.edit')</a>
@@ -41,6 +42,10 @@
                             href="javascript:;"><i class="fa fa-trash mr-2"></i>@lang('app.delete')</a>
                         <a class="dropdown-item mark-as-complete" data-note-id="{{ $stickyNote->id }}"
                             href="javascript:;"><i class="fa fa-check mr-2"></i>Mark as complete</a>
+                            @else
+                            <a class="dropdown-item""
+                                href="javascript:;"><i class="fa fa-check-square mr-2"></i>Completed</a>
+                            @endif
                     </div>
                 </div>
             </div>
@@ -49,6 +54,13 @@
     <div class="card-footer bg-white border-0">
         <div class="d-flex justify-content-between">
             <div class="text-lightest">{{ $stickyNote->created_at->format(global_setting()->date_format) }}</div>
+            @if($stickyNote->status == 'Live')
+            <div class="text-primary">Incomplete</div>
+            @elseif ($stickyNote->status == 'Completed')
+            <div class="text-success">Completed</div>
+            @else
+            <div class="text-danger">Deleted</div>
+            @endif
             <div class="text-{{ $colour }}"><i class="fa fa-circle"></i></div>
         </div>
     </div>

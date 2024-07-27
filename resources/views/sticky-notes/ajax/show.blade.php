@@ -31,7 +31,7 @@
                                     type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                     <i class="fa fa-ellipsis-h"></i>
                                 </button>
-
+                                @if($stickyNotes->status == 'Live')
                                 <div class="dropdown-menu dropdown-menu-right border-grey rounded b-shadow-4 p-0"
                                     aria-labelledby="dropdownMenuLink" tabindex="0">
                                     <a class="dropdown-item openRightModal"
@@ -39,6 +39,7 @@
                                     <a class="dropdown-item delete-snote"
                                         data-note-id="{{ $stickyNotes->id }}">@lang('app.delete')</a>
                                 </div>
+                                @endif
                             </div>
                         </div>
                     </div>
@@ -47,7 +48,22 @@
 
                     <x-cards.data-row :label="__('modules.sticky.colors')"
                         value="<i class='fa fa-square f-21 mr-2 text-{{ $colour }}'></i>" html="true" />
-
+                    @if (Auth::user()->role_id == 4)
+                    <x-cards.data-row :label="__('Note Type')" :value="$stickyNotes->note_type" html="true" />
+                    @if($stickyNotes->client_id)   
+                    <x-cards.data-row :label="__('Client')" :value="$stickyNotes->client->name" html="true" />
+                    @endif
+                    @if($stickyNotes->project_id)   
+                    <x-cards.data-row :label="__('Project')" :value="$stickyNotes->project->project_name" html="true" />
+                    @endif
+                    @if($stickyNotes->milestone_id)
+                    <x-cards.data-row :label="__('Milestone')" :value="$stickyNotes->milestone->milestone_title" html="true" />
+                    @endif
+                    @if($stickyNotes->task_id)  
+                    <x-cards.data-row :label="__('Task')" :value="$stickyNotes->task->heading" html="true" />
+                    @endif
+                    @endif
+                    <x-cards.data-row :label="__('You will receive a reminder at')" :value="\Carbon\Carbon::parse($stickyNotes->reminder_at)->format('d-m-Y H:i A')" html="true" />
                     <x-cards.data-row :label="__('app.note')" :value="$stickyNotes->note_text" html="true" />
                 </div>
             </div>
