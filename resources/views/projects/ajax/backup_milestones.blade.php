@@ -6,7 +6,7 @@ $deleteProjectMilestonePermission = ($project->project_admin == user()->id) ? 'a
 @endphp
 
 <!-- ROW START -->
-<link rel="stylesheet" href="http://cdn.bootcss.com/toastr.js/latest/css/toastr.min.css">
+<link rel="stylesheet" href="{{asset('toastr/toastr.min.css')}}">
 
 
 <div class="row py-5">

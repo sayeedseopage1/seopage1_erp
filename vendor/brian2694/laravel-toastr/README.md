@@ -90,7 +90,7 @@ You should add `{!! Toastr::message() !!}` to your html.
 <html>
     <head>
         <title>Laravel</title>
-        <link rel="stylesheet" href="http://cdn.bootcss.com/toastr.js/latest/css/toastr.min.css">
+        <link rel="stylesheet" href="{{asset('toastr/toastr.min.css')}}">
     </head>
     <body>
         <div class="container">
@@ -99,7 +99,7 @@ You should add `{!! Toastr::message() !!}` to your html.
             </div>
         </div>
 		<script src="https://cdn.bootcss.com/jquery/2.2.4/jquery.min.js"></script>
-        <script src="https://cdn.bootcss.com/toastr.js/latest/js/toastr.min.js"></script>
+        <link rel="stylesheet" href="{{asset('toastr/toastr.min.js')}}">
         {!! Toastr::message() !!}
     </body>
 </html>
