@@ -15,7 +15,7 @@
         @endphp
 
 @endswitch
-<div class="card sticky-note border">
+<div class="card sticky-note border" style="height: 250px;">
     <div class="card-body text-justify text-wrap">
         <div class="row">
 
@@ -39,6 +39,8 @@
                                 class="fa fa-edit mr-2"></i>@lang('app.edit')</a>
                         <a class="dropdown-item delete-note" data-note-id="{{ $stickyNote->id }}"
                             href="javascript:;"><i class="fa fa-trash mr-2"></i>@lang('app.delete')</a>
+                        <a class="dropdown-item mark-as-complete" data-note-id="{{ $stickyNote->id }}"
+                            href="javascript:;"><i class="fa fa-check mr-2"></i>Mark as complete</a>
                     </div>
                 </div>
             </div>

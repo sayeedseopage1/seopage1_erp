@@ -71,4 +71,49 @@
         });
     });
 
+    // Mark as complete
+    $('body').on('click', '.mark-as-complete', function() {
+        var id = $(this).data('note-id');
+        console.log(id);
+        Swal.fire({
+            title: "@lang('messages.sweetAlertTitle')",
+            text: "@lang('messages.recoverRecord')",
+            icon: 'warning',
+            showCancelButton: true,
+            focusConfirm: false,
+            confirmButtonText: "@lang('messages.confirmDelete')",
+            cancelButtonText: "@lang('app.cancel')",
+            customClass: {
+                confirmButton: 'btn btn-primary mr-3',
+                cancelButton: 'btn btn-secondary'
+            },
+            showClass: {
+                popup: 'swal2-noanimation',
+                backdrop: 'swal2-noanimation'
+            },
+            buttonsStyling: false
+        }).then((result) => {
+            if (result.isConfirmed) {
+                var url = "{{ route('sticky-notes.mark-as-complete', ':id') }}";
+                url = url.replace(':id', id);
+
+                var token = "{{ csrf_token() }}";
+
+                $.easyAjax({
+                    type: 'POST',
+                    url: url,
+                    data: {
+                        '_token': token,
+                        '_method': 'GET'
+                    },
+                    success: function(response) {
+                        if (response.status == "success") {
+                            window.location.href = response.redirectUrl;
+                        }
+                    }
+                });
+            }
+        });
+    });
+
 </script>

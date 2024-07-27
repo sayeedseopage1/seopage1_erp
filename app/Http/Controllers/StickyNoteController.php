@@ -123,6 +123,7 @@ class StickyNoteController extends AccountBaseController
         if($this->stickyNote->status == 'Live'){
             return view('sticky-notes.index', $this->data);
         }else{
+            return Reply::successWithData(__('Mark as Completed'), ['redirectUrl' => route('sticky-notes.index')]);
             Toastr::success('You can not update this note now.', 'Success', ["positionClass" => "toast-top-right"]);
             return back();
         }
@@ -169,6 +170,14 @@ class StickyNoteController extends AccountBaseController
     {
         $findMilestoneTask = Task::where(['milestone_id' => $request->milestone_id,'subtask_id' => null,'board_column_id' => 4])->get();
         return response()->json($findMilestoneTask);
+    }
+
+    public function noteComplete($id)
+    {
+        $note = StickyNote::find($id);
+        $note->status = 'Complete';
+        $note->save();
+        return Reply::successWithData(__('Mark as Completed'), ['redirectUrl' => route('sticky-notes.index')]);
     }
 
 }
