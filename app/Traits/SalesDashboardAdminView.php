@@ -55,7 +55,7 @@ trait SalesDashboardAdminView
                 $endDate   = Carbon::parse(request('end_date'))->format('Y-m-d');
             } else {
                 $startDate = Carbon::now()->startOfMonth();
-                $endDate   = Carbon::now()->endOfMonth();
+                $endDate   = Carbon::now()->endOfDay();
                 // $startDate = Carbon::parse('2023-06-01')->startOfMonth();
                 // $endDate = Carbon::parse('2023-06-31')->endOfMonth();
             }
@@ -216,21 +216,6 @@ trait SalesDashboardAdminView
 
             $this->bidding_frequency = $frequency_count ? $total_minutes / $frequency_count : 0;
 
-            //    Country wise bidding breakdown Start
-
-            $country_wise_lead_counts = clone $leadsWithDateAndId;
-
-            $this->country_wise_lead_counts = $country_wise_lead_counts
-                ->select('country', DB::raw('COUNT(*) as lead_count'))
-                ->groupBy('country')
-                ->orderBy('lead_count', 'DESC')
-                ->get();
-
-            $saleExecutive += [
-                'country_wise_lead_counts' => $this->country_wise_lead_counts
-            ];
-
-            //    Country wise bidding breakdown End
 
 
             // --------------Number of won deals (fixed)-------------//
@@ -398,100 +383,100 @@ trait SalesDashboardAdminView
                 'won_deals_value_hourly' => $this->won_deals_value_hourly,
             ];
 
-            // --------------Number of won deals (Country wise)-------------//
+            // // --------------Number of won deals (Country wise)-------------//
 
-            $leads_country_data = Lead::with('leadDeal.dealStageChanges')
-                ->whereHas('leadDeal', function ($query) use ($startDate, $endDate) {
-                    $query->whereBetween('created_at', [$startDate, $endDate]);
-                })
-                ->get()
-                ->groupBy('country')
-                ->toArray();
+            // $leads_country_data = Lead::with('leadDeal.dealStageChanges')
+            //     ->whereHas('leadDeal', function ($query) use ($startDate, $endDate) {
+            //         $query->whereBetween('created_at', [$startDate, $endDate]);
+            //     })
+            //     ->get()
+            //     ->groupBy('country')
+            //     ->toArray();
 
-            $leads_country = [];
+            // $leads_country = [];
 
-            foreach ($leads_country_data as $key => $leads) {
-                $country_data = ['country' => $key];
+            // foreach ($leads_country_data as $key => $leads) {
+            //     $country_data = ['country' => $key];
 
-                $won_deals_count = 0;
-                $won_deals_value = 0;
+            //     $won_deals_count = 0;
+            //     $won_deals_value = 0;
 
-                foreach ($leads as $lead) {
-                    if ($lead['lead_deal']['added_by'] == $salesId && isset($lead['lead_deal'])) {
-                        //closing the deal
-                        $won_deals_count += .125;
-                        $won_deals_value += $lead['lead_deal']['project_type'] == 'fixed' ? .125 * $lead['lead_deal']['amount'] : .125 * $lead['lead_deal']['hourly_rate'];
-                    }
-                    if ($lead['added_by'] == $salesId && isset($lead['lead_deal'])) {
-                        //The bidder
-                        $won_deals_count += .25;
-                        $won_deals_value += $lead['lead_deal']['project_type'] == 'fixed' ? .25 * $lead['lead_deal']['amount'] : .25 * $lead['lead_deal']['hourly_rate'];
-                    }
+            //     foreach ($leads as $lead) {
+            //         if ($lead['lead_deal']['added_by'] == $salesId && isset($lead['lead_deal'])) {
+            //             //closing the deal
+            //             $won_deals_count += .125;
+            //             $won_deals_value += $lead['lead_deal']['project_type'] == 'fixed' ? .125 * $lead['lead_deal']['amount'] : .125 * $lead['lead_deal']['hourly_rate'];
+            //         }
+            //         if ($lead['added_by'] == $salesId && isset($lead['lead_deal'])) {
+            //             //The bidder
+            //             $won_deals_count += .25;
+            //             $won_deals_value += $lead['lead_deal']['project_type'] == 'fixed' ? .25 * $lead['lead_deal']['amount'] : .25 * $lead['lead_deal']['hourly_rate'];
+            //         }
 
-                    $qualify_contribution       = 0;
-                    $needs_defined_contribution = 0;
-                    $proposal_made_contribution = 0;
-                    $negotiation_contribution   = 0;
-                    $milestone_contribution     = 0;
+            //         $qualify_contribution       = 0;
+            //         $needs_defined_contribution = 0;
+            //         $proposal_made_contribution = 0;
+            //         $negotiation_contribution   = 0;
+            //         $milestone_contribution     = 0;
 
-                    foreach ($lead['lead_deal']['deal_stage_changes'] ?? [] as $dealStageChanges) {
-                        if ($dealStageChanges['updated_by'] == $salesId) {
-                            switch ($dealStageChanges['deal_stage_id']) {
-                                case 1:
-                                    $qualify_contribution++;
-                                    break;
-                                case 2:
-                                    $needs_defined_contribution++;
-                                    break;
-                                case 3:
-                                    $proposal_made_contribution++;
-                                    break;
-                                case 4:
-                                    $negotiation_contribution++;
-                                    break;
-                                case 5:
-                                    $milestone_contribution++;
-                                    break;
-                                default:
-                                    # code...
-                                    break;
-                            }
-                        }
-                    }
+            //         foreach ($lead['lead_deal']['deal_stage_changes'] ?? [] as $dealStageChanges) {
+            //             if ($dealStageChanges['updated_by'] == $salesId) {
+            //                 switch ($dealStageChanges['deal_stage_id']) {
+            //                     case 1:
+            //                         $qualify_contribution++;
+            //                         break;
+            //                     case 2:
+            //                         $needs_defined_contribution++;
+            //                         break;
+            //                     case 3:
+            //                         $proposal_made_contribution++;
+            //                         break;
+            //                     case 4:
+            //                         $negotiation_contribution++;
+            //                         break;
+            //                     case 5:
+            //                         $milestone_contribution++;
+            //                         break;
+            //                     default:
+            //                         # code...
+            //                         break;
+            //                 }
+            //             }
+            //         }
 
-                    if ($qualify_contribution) {
-                        $won_deals_count += .0375 / $qualify_contribution;
-                        $won_deals_value += $lead['lead_deal']['project_type'] == 'fixed' ? .0375 / $qualify_contribution * $lead['lead_deal']['amount'] : .0375 / $qualify_contribution * $lead['lead_deal']['hourly_rate'];
-                    }
-                    if ($needs_defined_contribution) {
-                        $won_deals_count += .1875 / $needs_defined_contribution;
-                        $won_deals_value += $lead['lead_deal']['project_type'] == 'fixed' ? .1875 / $needs_defined_contribution * $lead['lead_deal']['amount'] : .1875 / $needs_defined_contribution * $lead['lead_deal']['hourly_rate'];
-                    }
-                    if ($proposal_made_contribution) {
-                        $won_deals_count += .125 / $proposal_made_contribution;
-                        $won_deals_value += $lead['lead_deal']['project_type'] == 'fixed' ? .125 / $proposal_made_contribution * $lead['lead_deal']['amount'] : .125 / $proposal_made_contribution * $lead['lead_deal']['hourly_rate'];
-                    }
-                    if ($negotiation_contribution) {
-                        $won_deals_count += .125 / $negotiation_contribution;
-                        $won_deals_value += $lead['lead_deal']['project_type'] == 'fixed' ? .125 / $negotiation_contribution * $lead['lead_deal']['amount'] : .125 / $negotiation_contribution * $lead['lead_deal']['hourly_rate'];
-                    }
-                    if ($milestone_contribution) {
-                        $won_deals_count += .15 / $milestone_contribution;
-                        $won_deals_value += $lead['lead_deal']['project_type'] == 'fixed' ? .15 / $milestone_contribution * $lead['lead_deal']['amount'] : .15 / $milestone_contribution * $lead['lead_deal']['hourly_rate'];
-                    }
-                }
-                $country_data += [
-                    'won_deals_count' => round($won_deals_count, 2),
-                    'won_deals_value' => round($won_deals_value, 2),
-                ];
-                $leads_country[] = $country_data;
-            }
+            //         if ($qualify_contribution) {
+            //             $won_deals_count += .0375 / $qualify_contribution;
+            //             $won_deals_value += $lead['lead_deal']['project_type'] == 'fixed' ? .0375 / $qualify_contribution * $lead['lead_deal']['amount'] : .0375 / $qualify_contribution * $lead['lead_deal']['hourly_rate'];
+            //         }
+            //         if ($needs_defined_contribution) {
+            //             $won_deals_count += .1875 / $needs_defined_contribution;
+            //             $won_deals_value += $lead['lead_deal']['project_type'] == 'fixed' ? .1875 / $needs_defined_contribution * $lead['lead_deal']['amount'] : .1875 / $needs_defined_contribution * $lead['lead_deal']['hourly_rate'];
+            //         }
+            //         if ($proposal_made_contribution) {
+            //             $won_deals_count += .125 / $proposal_made_contribution;
+            //             $won_deals_value += $lead['lead_deal']['project_type'] == 'fixed' ? .125 / $proposal_made_contribution * $lead['lead_deal']['amount'] : .125 / $proposal_made_contribution * $lead['lead_deal']['hourly_rate'];
+            //         }
+            //         if ($negotiation_contribution) {
+            //             $won_deals_count += .125 / $negotiation_contribution;
+            //             $won_deals_value += $lead['lead_deal']['project_type'] == 'fixed' ? .125 / $negotiation_contribution * $lead['lead_deal']['amount'] : .125 / $negotiation_contribution * $lead['lead_deal']['hourly_rate'];
+            //         }
+            //         if ($milestone_contribution) {
+            //             $won_deals_count += .15 / $milestone_contribution;
+            //             $won_deals_value += $lead['lead_deal']['project_type'] == 'fixed' ? .15 / $milestone_contribution * $lead['lead_deal']['amount'] : .15 / $milestone_contribution * $lead['lead_deal']['hourly_rate'];
+            //         }
+            //     }
+            //     $country_data += [
+            //         'won_deals_count' => round($won_deals_count, 2),
+            //         'won_deals_value' => round($won_deals_value, 2),
+            //     ];
+            //     $leads_country[] = $country_data;
+            // }
 
-            // $this->leads_country_data = $leads_country;
+            // // $this->leads_country_data = $leads_country;
 
-            $saleExecutive += [
-                'leads_country_data' => $leads_country,
-            ];
+            // $saleExecutive += [
+            //     'leads_country_data' => $leads_country,
+            // ];
 
             //---------------Project completion/Won deal ratio-----------------------------------//
 
@@ -872,6 +857,169 @@ trait SalesDashboardAdminView
                 'country_wise_won_deals_count' => $this->country_wise_won_deals_count,
             ];
 
+            return response(['data' => $saleExecutive], 200)->header('Content-Type', 'application/json');
+        }
+    }
+
+    public function salesDashboardCountryWiseBiddingBreakdownAdminApi($sales)
+    {
+        $validator = Validator::make(request()->all(), [
+            'start_date' => 'date',
+            'end_date'   => 'date|after:start_date',
+        ]);
+        if ($validator->fails()) {
+            return Reply::error(__('validation_failed'), $validator->errors());
+        } else {
+            $salesId = $sales->id;
+            if (request('start_date') && request('end_date')) {
+                $startDate = Carbon::parse(request('start_date'))->format('Y-m-d');
+                $endDate   = Carbon::parse(request('end_date'))->format('Y-m-d');
+            } else {
+                $startDate = Carbon::now()->startOfMonth();
+                $endDate   = Carbon::now()->endOfDay();
+                // $startDate = Carbon::parse('2023-06-01')->startOfMonth();
+                // $endDate = Carbon::parse('2023-06-31')->endOfMonth();
+            }
+
+            $leadsWithSaleId = Lead::where('added_by', $salesId)
+                ->whereBetween('created_at', [$startDate, $endDate])
+                ->select('country', DB::raw('COUNT(*) as lead_count'))
+                ->groupBy('country')
+                ->orderBy('lead_count', 'DESC')
+                ->get();
+
+            $saleExecutive = [
+                'country_wise_leads' => $leadsWithSaleId
+            ];
+            return response(['data' => $saleExecutive], 200)->header('Content-Type', 'application/json');
+        }
+    }
+    public function salesDashboardCountryWiseWonDealsAdminApi($sales)
+    {
+        $validator = Validator::make(request()->all(), [
+            'start_date' => 'date',
+            'end_date'   => 'date|after:start_date',
+        ]);
+        if ($validator->fails()) {
+            return Reply::error(__('validation_failed'), $validator->errors());
+        } else {
+            $salesId = $sales->id;
+
+            if (request('start_date') && request('end_date')) {
+                $startDate = Carbon::parse(request('start_date'))->format('Y-m-d');
+                $endDate   = Carbon::parse(request('end_date'))->format('Y-m-d');
+            } else {
+                $startDate = Carbon::now()->startOfMonth();
+                $endDate   = Carbon::now()->endOfDay();
+                // $startDate = Carbon::parse('2023-06-01')->startOfMonth();
+                // $endDate = Carbon::parse('2023-06-31')->endOfMonth();
+            }
+
+            // $country_wise_won_deals_count = Deal::join('users as client', 'client.id', 'deals.client_id')
+            //     ->where('deals.added_by', $salesId)
+            //     ->whereBetween('deals.created_at', [$startDate, $endDate])
+            //     ->groupBy('client.country_id')
+            //     ->where('deals.status', '!=', 'Denied')
+            //     ->get();
+
+            // --------------Number of won deals (Country wise)-------------//
+
+            $leads_country_data = Lead::with('leadDeal.dealStageChanges')
+                ->whereHas('leadDeal', function ($query) use ($startDate, $endDate) {
+                    $query->whereBetween('created_at', [$startDate, $endDate]);
+                })
+                ->get()
+                ->groupBy('country')
+                ->toArray();
+
+            $leads_country = [];
+
+            foreach ($leads_country_data as $key => $leads) {
+                $country_data = ['country' => $key];
+
+                $won_deals_count = 0;
+                $won_deals_value = 0;
+
+                foreach ($leads as $lead) {
+                    if ($lead['lead_deal']['added_by'] == $salesId && isset($lead['lead_deal'])) {
+                        //closing the deal
+                        $won_deals_count += .125;
+                        $won_deals_value += $lead['lead_deal']['project_type'] == 'fixed' ? .125 * $lead['lead_deal']['amount'] : .125 * $lead['lead_deal']['hourly_rate'];
+                    }
+                    if ($lead['added_by'] == $salesId && isset($lead['lead_deal'])) {
+                        //The bidder
+                        $won_deals_count += .25;
+                        $won_deals_value += $lead['lead_deal']['project_type'] == 'fixed' ? .25 * $lead['lead_deal']['amount'] : .25 * $lead['lead_deal']['hourly_rate'];
+                    }
+
+                    $qualify_contribution       = 0;
+                    $needs_defined_contribution = 0;
+                    $proposal_made_contribution = 0;
+                    $negotiation_contribution   = 0;
+                    $milestone_contribution     = 0;
+
+                    foreach ($lead['lead_deal']['deal_stage_changes'] ?? [] as $dealStageChanges) {
+                        if ($dealStageChanges['updated_by'] == $salesId) {
+                            switch ($dealStageChanges['deal_stage_id']) {
+                                case 1:
+                                    $qualify_contribution++;
+                                    break;
+                                case 2:
+                                    $needs_defined_contribution++;
+                                    break;
+                                case 3:
+                                    $proposal_made_contribution++;
+                                    break;
+                                case 4:
+                                    $negotiation_contribution++;
+                                    break;
+                                case 5:
+                                    $milestone_contribution++;
+                                    break;
+                                default:
+                                    # code...
+                                    break;
+                            }
+                        }
+                    }
+
+                    if ($qualify_contribution) {
+                        $won_deals_count += .0375 / $qualify_contribution;
+                        $won_deals_value += $lead['lead_deal']['project_type'] == 'fixed' ? .0375 / $qualify_contribution * $lead['lead_deal']['amount'] : .0375 / $qualify_contribution * $lead['lead_deal']['hourly_rate'];
+                    }
+                    if ($needs_defined_contribution) {
+                        $won_deals_count += .1875 / $needs_defined_contribution;
+                        $won_deals_value += $lead['lead_deal']['project_type'] == 'fixed' ? .1875 / $needs_defined_contribution * $lead['lead_deal']['amount'] : .1875 / $needs_defined_contribution * $lead['lead_deal']['hourly_rate'];
+                    }
+                    if ($proposal_made_contribution) {
+                        $won_deals_count += .125 / $proposal_made_contribution;
+                        $won_deals_value += $lead['lead_deal']['project_type'] == 'fixed' ? .125 / $proposal_made_contribution * $lead['lead_deal']['amount'] : .125 / $proposal_made_contribution * $lead['lead_deal']['hourly_rate'];
+                    }
+                    if ($negotiation_contribution) {
+                        $won_deals_count += .125 / $negotiation_contribution;
+                        $won_deals_value += $lead['lead_deal']['project_type'] == 'fixed' ? .125 / $negotiation_contribution * $lead['lead_deal']['amount'] : .125 / $negotiation_contribution * $lead['lead_deal']['hourly_rate'];
+                    }
+                    if ($milestone_contribution) {
+                        $won_deals_count += .15 / $milestone_contribution;
+                        $won_deals_value += $lead['lead_deal']['project_type'] == 'fixed' ? .15 / $milestone_contribution * $lead['lead_deal']['amount'] : .15 / $milestone_contribution * $lead['lead_deal']['hourly_rate'];
+                    }
+                }
+                $country_data += [
+                    'won_deals_count' => round($won_deals_count, 2),
+                    'won_deals_value' => round($won_deals_value, 2),
+                ];
+                $leads_country[] = $country_data;
+            }
+
+            // $this->leads_country_data = $leads_country;
+
+            // $saleExecutive += [
+            //     'leads_country_data' => $leads_country,
+            // ];
+
+            $saleExecutive = [
+                'country_wise_won_deals' => $leads_country,
+            ];
             return response(['data' => $saleExecutive], 200)->header('Content-Type', 'application/json');
         }
     }

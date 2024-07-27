@@ -60,8 +60,7 @@ class DashboardController extends AccountBaseController
     {
         parent::__construct();
         $this->pageTitle = 'app.menu.dashboard';
-        $this->middleware(function ($request, $next)
-        {
+        $this->middleware(function ($request, $next) {
             $this->viewOverviewDashboard = user()->permission('view_overview_dashboard');
             $this->viewProjectDashboard  = user()->permission('view_project_dashboard');
             $this->viewClientDashboard   = user()->permission('view_client_dashboard');
@@ -264,10 +263,8 @@ class DashboardController extends AccountBaseController
             // Events
             $model = Event::with('attendee', 'attendee.user');
 
-            $model->where(function ($query)
-            {
-                $query->whereHas('attendee', function ($query)
-                {
+            $model->where(function ($query) {
+                $query->whereHas('attendee', function ($query) {
                     $query->where('user_id', user()->id);
                 });
                 $query->orWhere('added_by', user()->id);
@@ -311,12 +308,10 @@ class DashboardController extends AccountBaseController
             $completedTaskColumn = TaskboardColumn::completeColumn();
             $tasks               = Task::with('boardColumn')
                 ->where('board_column_id', '<>', $completedTaskColumn->id)
-                ->whereHas('users', function ($query)
-                {
+                ->whereHas('users', function ($query) {
                     $query->where('user_id', user()->id);
                 })
-                ->where(function ($q) use ($startDate, $endDate)
-                {
+                ->where(function ($q) use ($startDate, $endDate) {
                     $q->whereBetween(DB::raw('DATE(tasks.`due_date`)'), [$startDate->toDateString(), $endDate->toDateString()]);
 
                     $q->orWhereBetween(DB::raw('DATE(tasks.`start_date`)'), [$startDate->toDateString(), $endDate->toDateString()]);
@@ -652,11 +647,11 @@ class DashboardController extends AccountBaseController
                     'data'            => $user,
                 ],
                 'daily_task_report'  => [
-                        'daily_submission_status' => $userDailyTaskSubmission,
-                        'data'                    => [
-                            'checking_date' => $userClockIn->created_at ?? '',
-                        ],
+                    'daily_submission_status' => $userDailyTaskSubmission,
+                    'data'                    => [
+                        'checking_date' => $userClockIn->created_at ?? '',
                     ],
+                ],
                 'hours_log_report'   => [
                     'hours_log_report_status' => $logStatus,
                     'data'                    => [
@@ -742,11 +737,11 @@ class DashboardController extends AccountBaseController
                     'data'            => $user,
                 ],
                 'daily_task_report'  => [
-                        'daily_submission_status' => $userDailyTaskSubmission ? true : false,
-                        'data'                    => [
-                            'checking_date' => $userClockIn->created_at,
-                        ],
+                    'daily_submission_status' => $userDailyTaskSubmission ? true : false,
+                    'data'                    => [
+                        'checking_date' => $userClockIn->created_at,
                     ],
+                ],
                 'hours_log_report'   => [
                     'hours_log_report_status' => $logStatus,
                     'data'                    => [
@@ -853,6 +848,16 @@ class DashboardController extends AccountBaseController
     {
         $this->sales = User::where('id', $id)->first();
         return $this->salesDashboardAdminApi($this->sales);
+    }
+    public function adminSalesPerformanceCountryWiseBiddingBreakdownApi($id)
+    {
+        $this->sales = User::where('id', $id)->first();
+        return $this->salesDashboardCountryWiseBiddingBreakdownAdminApi($this->sales);
+    }
+    public function adminSalesPerformanceCountryWiseWiseWonDealsApi($id)
+    {
+        $this->sales = User::where('id', $id)->first();
+        return $this->salesDashboardCountryWiseWonDealsAdminApi($this->sales);
     }
 
     // temp lead
