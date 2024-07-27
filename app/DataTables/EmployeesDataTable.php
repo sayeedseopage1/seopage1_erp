@@ -106,29 +106,19 @@ class EmployeesDataTable extends BaseDataTable
                     if($user->role_id == 4)
                     {
                         $pmassign= PMAssign::where('pm_id',$user->id)->first();
-                        if($pmassign->status == 0)
-                        {
-                            $button= '';
-                            $button .= '
-                            <form action="'.route('project-assign').'" method="POST">
-                            <input type="hidden" name="_token" value="'.csrf_token() .'" />
-                            <input type="hidden" name="id" value="'.$row->id .'" />
-                            <button value="enable" name="project_enable" class="btn btn-success btn-sm align-items-center mw-250">Enable</button>
-                            </form>
-                            ';
-                            return $button;
-                        }else {
-                            $button= '';
-                            $button .= '
-                            <form action="'.route('project-assign').'" method="POST">
-                            <input type="hidden" name="_token" value="'.csrf_token() .'" />
-                            <input type="hidden" name="id" value="'.$row->id .'" />
-                            <button value="disable" name="project_enable" class="btn btn-danger btn-sm align-items-center mw-250">Disable</button>
-                            </form>
-                            ';
-                            return $button;
-                        }
-                       
+                        $button= '';
+                        $button .= '
+                        <form action="'.route('project-assign').'" method="POST">
+                        <input type="hidden" name="_token" value="'.csrf_token() .'" />
+                        <input type="hidden" name="id" value="'.$row->id .'" />
+                        <select name="pm_status" class="form-control height-35 f-14 pm_enable_disable" data-user-id="' . $row->id . '">
+                            <option value="1" '.($pmassign->status == 1 ? "selected" : "").'>On</option>
+                            <option value="0" '.($pmassign->status == 0 ? "selected" : "").'>Off</option>
+                            <option value="2" '.($pmassign->status == 2 ? "selected" : "").'>Permanently Disabled</option>
+                        </select>
+                        </form>
+                        ';
+                        return $button;
                     }else
                     {
                         return '--';

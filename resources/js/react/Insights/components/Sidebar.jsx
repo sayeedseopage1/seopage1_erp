@@ -20,12 +20,15 @@ import dayjs from "dayjs";
 import { CompareDate } from "../utils/dateController";
 import SidebarItems from "./SidebarItems";
 import { useTeams } from "../hooks/useTeams";
+import PrivateGoalAssignModal from "./PrivateGoalAssignModal";
 
 const InsightSidebar = () => {
     const [search, setSearch] = React.useState("");
     const { sections, getSectionsByType } = useSections();
     const { teams } = useTeams();
     const { dashboards } = useDashboards();
+    const [isPrivateGoalAssignModalOpen, setIsPrivateGoalAssignModalOpen] =
+        React.useState(false);
     const [filteredGoals, setFilteredGoals] = React.useState({
         active: [],
         past: [],
@@ -66,13 +69,16 @@ const InsightSidebar = () => {
                     compareDate.isSameOrBefore(today, goal.endDate)
                 ) {
                     return { ...goal, title, status: "Active" };
+                } else if(goal.is_private === 1) {
+                    return { ...goal, title, status: "Past" };
+                
                 } else {
                     return { ...goal, title, status: "Past" };
                 }
             });
 
             _filteredGoals.private = _goals.filter(
-                (goal) => goal.status === "Active"
+                (goal) => goal.is_private === 1
             );
             _filteredGoals.active = _goals.filter(
                 (goal) => goal.status === "Active"
@@ -121,6 +127,14 @@ const InsightSidebar = () => {
             )}`;
         },
     });
+
+    // Handle Modal Open and Close Function with Action Function as Parameter (if needed)
+    const handleModal = (setModalOpenFunc, isOpen, action) => {
+        setModalOpenFunc(isOpen);
+        if (action) {
+            action();
+        }
+    };
 
     React.useEffect(() => {
         let month = {
@@ -672,7 +686,20 @@ const InsightSidebar = () => {
 
                                                         {section ===
                                                             "Private" && (
-                                                            <Button>
+                                                            <Button
+                                                                onClick={(
+                                                                    e
+                                                                ) => {
+                                                                    e.stopPropagation();
+                                                                    console.log(
+                                                                        "He Meade Us"
+                                                                    );
+                                                                    handleModal(
+                                                                        setIsPrivateGoalAssignModalOpen,
+                                                                        true
+                                                                    );
+                                                                }}
+                                                            >
                                                                 Assign
                                                             </Button>
                                                         )}
@@ -704,6 +731,16 @@ const InsightSidebar = () => {
                         </Accordion.Item.Body>
                     </Accordion.Item>
                 </Accordion>
+                {/* Privet goal Assign Modal */}
+
+                {isPrivateGoalAssignModalOpen && (
+                    <PrivateGoalAssignModal
+                        isPrivateGoalAssignModalOpen={
+                            isPrivateGoalAssignModalOpen
+                        }
+                    />
+                )}
+
                 {/* end Goal */}
 
                 {/* Reports */}
