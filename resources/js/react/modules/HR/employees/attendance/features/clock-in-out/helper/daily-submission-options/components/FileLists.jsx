@@ -5,7 +5,8 @@ import { Flex } from "../../../../../../../../../global/styled-component/Flex";
 const FileLists = ({ links }) => {
     // Function to check if a URL is an image
     const isImage = (url) => {
-        return /\.(jpg|jpeg|png|gif|bmp|webp)$/i.test(url);
+        // return /\.(jpg|jpeg|png|gif|bmp|webp)$/i.test(url);
+        return false;
     };
 
     return (

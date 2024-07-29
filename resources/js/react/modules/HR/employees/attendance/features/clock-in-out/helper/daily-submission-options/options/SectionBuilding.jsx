@@ -22,6 +22,7 @@ import FileLists from "../components/FileLists";
 import { FileListSection } from "../components/FileListsSection";
 
 const SectionBuilding = ({
+    pageUrl,
     sectionId,
     pageNumber,
     category,
@@ -29,7 +30,8 @@ const SectionBuilding = ({
 }) => {
     const [sectionBuildingData, setSectionBuildingData] = useState({
         id: `${sectionId}`,
-        pageNumber: `${pageNumber}`,
+        pageId: `${pageNumber}`,
+        pageUrl: `${pageUrl}`,
         categoryId: `${category.id}`,
         categoryName: `${category.name}`,
         sectionName: "",
@@ -58,6 +60,15 @@ const SectionBuilding = ({
             }
         });
     }, [sectionBuildingData]);
+
+    useEffect(() => {
+        return () => {
+            setSinglePageData((prev) =>
+                prev.filter((data) => data.id !== `${sectionId}`)
+            );
+        };
+    }, [sectionId, setSinglePageData]);
+
     const handleDataChange = (value, dataName) => {
         const fileDataNames = [
             "webVersionFile",
@@ -79,7 +90,7 @@ const SectionBuilding = ({
         }
     };
 
-    console.log("section building data", sectionBuildingData);
+    // console.log("section building data", sectionBuildingData);
     return (
         <StyledSection>
             <SectionHeader>Section Name</SectionHeader>

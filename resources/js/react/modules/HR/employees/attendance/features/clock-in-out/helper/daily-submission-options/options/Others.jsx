@@ -1,6 +1,52 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { InputItem } from "../../../DailySubmissionUI";
-const Others = () => {
+const Others = ({
+    pageUrl,
+    sectionId,
+    pageNumber,
+    category,
+    setSinglePageData,
+}) => {
+    const [othersData, setOthersData] = useState({
+        id: `${sectionId}`,
+        pageId: `${pageNumber}`,
+        pageUrl: `${pageUrl}`,
+        categoryId: `${category.id}`,
+        categoryName: `${category.name}`,
+        workDone: "",
+        screenshotUrl: "",
+        comment: "",
+    });
+
+    useEffect(() => {
+        setSinglePageData((prev) => {
+            const index = prev.findIndex((item) => item.id === othersData.id);
+            if (index > -1) {
+                // Update existing section
+                const updatedData = [...prev];
+                updatedData[index] = othersData;
+                return updatedData;
+            } else {
+                // Add new section
+                return [...prev, othersData];
+            }
+        });
+    }, [othersData]);
+    useEffect(() => {
+        return () => {
+            setSinglePageData((prev) =>
+                prev.filter((data) => data.id !== `${sectionId}`)
+            );
+        };
+    }, [sectionId, setSinglePageData]);
+    const handleDataChange = (value, dataName) => {
+        setOthersData({
+            ...othersData,
+            [dataName]: value,
+        });
+    };
+
+    // console.log("othersData", othersData);
     return (
         <div>
             <div>
@@ -8,8 +54,9 @@ const Others = () => {
                 <InputItem
                     width="100%"
                     placeHolder=""
-                    // value={value}
-                    // onChange={(e) => handleChange(id, e.target.value)}
+                    onChange={(e) =>
+                        handleDataChange(e.target.value, "workDone")
+                    }
                 />
             </div>
             <div>
@@ -17,8 +64,9 @@ const Others = () => {
                 <InputItem
                     width="100%"
                     placeHolder=""
-                    // value={value}
-                    // onChange={(e) => handleChange(id, e.target.value)}
+                    onChange={(e) =>
+                        handleDataChange(e.target.value, "screenshotUrl")
+                    }
                 />
             </div>
             <div>
@@ -26,8 +74,9 @@ const Others = () => {
                 <InputItem
                     width="100%"
                     placeHolder=""
-                    // value={value}
-                    // onChange={(e) => handleChange(id, e.target.value)}
+                    onChange={(e) =>
+                        handleDataChange(e.target.value, "comment")
+                    }
                 />
             </div>
         </div>
