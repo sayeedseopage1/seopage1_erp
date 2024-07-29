@@ -14,3 +14,4 @@ export const getHourWithMin = (check) => {
       getMin === 0 ? "" : ` ${Math.floor(getMin)} Min`
   }`;
 };
+

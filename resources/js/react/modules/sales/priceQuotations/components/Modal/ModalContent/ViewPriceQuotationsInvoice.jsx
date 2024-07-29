@@ -106,7 +106,7 @@ const ViewPriceQuotationsInvoice = ({ invoiceData, targetRef }) => {
                         <p>
                             Total price :{" "}
                             {/* <span>System suggested price price plus 10%</span> */}
-                            <span> $ {invoiceData?.total_price}</span>
+                            <span> ${invoiceData?.total_price}</span>
                         </p>
                     </div>
                     <div className="view_price_quotations_invoice_footer_bottom">

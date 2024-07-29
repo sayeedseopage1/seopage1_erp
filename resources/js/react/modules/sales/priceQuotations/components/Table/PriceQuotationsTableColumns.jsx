@@ -1,4 +1,6 @@
 import { FaEye } from "react-icons/fa";
+import { IoCopyOutline } from "react-icons/io5";
+import { IoMdCheckmark } from "react-icons/io";
 import dayjs from "dayjs";
 
 // Components -Styled Components
@@ -13,6 +15,7 @@ import Switch from "../../../../../global/Switch";
 
 // Helper
 import { getAseDseColor } from "../../helper";
+import { useState } from "react";
 
 export const PriceQuotationsTableColumns = [
     {
@@ -211,19 +214,19 @@ export const PriceQuotationsTableColumns = [
                     <p className="d-flex">
                         <Switch>
                             <Switch.Case
-                                condition={data?.calculated_usd_budget}
+                                condition={data?.usd_budget_with_additional_percent}
                             >
-                                $ {data?.calculated_usd_budget}{" "}
-                                <button className="sp1_price_quotation_column_sort_btn ml-2">
+                                ${data?.usd_budget_with_additional_percent}{" "}
+                                {/* <button className="sp1_price_quotation_column_sort_btn ml-2">
                                     <span
                                         className={`table_asc_dec ${getAseDseColor(
-                                            data?.calculated_usd_budget
+                                            data?.usd_budget_with_additional_percent
                                         )}`}
                                     ></span>
-                                </button>
+                                </button> */}
                             </Switch.Case>
                             <Switch.Case
-                                condition={!data?.calculated_usd_budget}
+                                condition={!data?.usd_budget_with_additional_percent}
                             >
                                 {"--"}
                             </Switch.Case>
@@ -245,14 +248,14 @@ export const PriceQuotationsTableColumns = [
                     <p className="d-flex">
                         <Switch>
                             <Switch.Case condition={dealData}>
-                                $ {Number(dealData?.amount).toFixed(2)}{" "}
-                                <button className="sp1_price_quotation_column_sort_btn ml-2">
+                                ${Number(dealData?.amount).toFixed(2)}{" "}
+                                {/* <button className="sp1_price_quotation_column_sort_btn ml-2">
                                     <span
                                         className={`table_asc_dec ${getAseDseColor(
                                             Number(dealData?.amount).toFixed(2)
                                         )}`}
                                     ></span>
-                                </button>
+                                </button> */}
                             </Switch.Case>
                             <Switch.Case condition={!dealData}>
                                 {"--"}
@@ -270,10 +273,36 @@ export const PriceQuotationsTableColumns = [
         cell: ({ row, table }) => {
             const data = row.original;
             const action = table.options.meta;
+            let status = false;
+
+            const handleCopy = () => {
+                status = true;
+                action.copyToClipBoard(data);
+                setTimeout(() => {
+                    status = false;
+                }, 1000);
+            };
+
             return (
                 <TableTdWrapper>
                     <button onClick={() => action.viewPDf(data)}>
                         <FaEye fill="var(--primaryBlue)" size={28} />
+                    </button>
+                    <button onClick={handleCopy} className="ml-2"> 
+                        <Switch>
+                            <Switch.Case condition={status}>
+                                <IoMdCheckmark
+                                    fill="var(--primaryBlue)"
+                                    size={28}
+                                />
+                            </Switch.Case>
+                            <Switch.Case condition={!status}>
+                                <IoCopyOutline
+                                    fill="var(--primaryBlue)"
+                                    size={28}
+                                />
+                            </Switch.Case>
+                        </Switch>
                     </button>
                 </TableTdWrapper>
             );

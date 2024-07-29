@@ -93,7 +93,7 @@ const PriceQuotationsProvider = ({ children }) => {
                 (currency) => {
                     return {
                         ...currency,
-                        name: currency?.currency_name,
+                        name: `${currency?.currency_name} (${currency?.currency_symbol})` ,
                     };
                 }
             );

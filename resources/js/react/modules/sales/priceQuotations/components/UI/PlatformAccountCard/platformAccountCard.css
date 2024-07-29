@@ -5,8 +5,8 @@
   position: relative;
   overflow: hidden;
   background-color: var(--primaryLightDarkBlue);
-  max-width: 40vw;
-  min-width: 40vw;
+  max-width: 35vw;
+  min-width: 35vw;
 }
 
 .platform_account_card_wrapper:hover {

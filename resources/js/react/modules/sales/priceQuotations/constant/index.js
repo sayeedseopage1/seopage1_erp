@@ -35,17 +35,17 @@ export const PlatformOptions = [
 export const ProfileTypeOptions = [
   {
     id: 1,
-    name: "New Profile",
+    name: "New",
     value: "new_profile"
   },
   {
     id: 2,
-    name: "Mid Profile",
+    name: "Mid",
     value: "mid_profile"
   },
   {
     id: 3,
-    name: "Old Profile",
+    name: "Old",
     value: "old_profile"
   },
 ]

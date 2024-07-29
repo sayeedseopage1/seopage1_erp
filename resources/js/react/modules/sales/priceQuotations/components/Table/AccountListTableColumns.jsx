@@ -109,7 +109,7 @@ export const AccountListTableColumns = [
             const data = row.original;
             return (
                 <TableTdWrapper justifyContent="center">
-                    <p>{data?.generated_on ? data?.generated_on : "--"}</p>
+                    <p>{data?.generated_on ? data?.generated_on?.split(" ")[0] : "--"}</p>
                 </TableTdWrapper>
             );
         },

@@ -8,7 +8,6 @@ const ViewPriceQuotation = ({
     quotationData,
     selectedPriceQuotation,
     setSelectedPriceQuotation,
-    handleAgainGeneratePriceQuotations 
 }) => {
     return (
         <div className="view_price_Quotation_wrapper">
@@ -19,6 +18,7 @@ const ViewPriceQuotation = ({
                         quotationData={quotation}
                         setSelectedPriceQuotation={setSelectedPriceQuotation}
                         selectedPriceQuotation={selectedPriceQuotation}
+
                     />
                 );
             })}
@@ -32,5 +32,4 @@ ViewPriceQuotation.propTypes = {
     quotationData: PropTypes.object,
     selectedPriceQuotation: PropTypes.object,
     setSelectedPriceQuotation: PropTypes.func,
-    handleAgainGeneratePriceQuotations: PropTypes.func
 };

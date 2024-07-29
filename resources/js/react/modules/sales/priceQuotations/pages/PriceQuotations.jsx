@@ -16,9 +16,6 @@ import PriceQuotationsGenerateModal from "../components/Modal/PriceQuotationsGen
 import { PriceQuotationsTableColumns } from "../components/Table/PriceQuotationsTableColumns";
 import DataTable from "../components/Table/DataTable";
 
-// testing
-import useWhyDidYouRender from "../../../../hooks/useWhyDidYouRender";
-
 // Context
 import {
     PriceQuotationsContext,
@@ -27,9 +24,11 @@ import {
 
 // Services
 import { useAllPriceQuotationsQuery } from "../../../../services/api/priceQuotationsApiSlice";
+import { useCopyToClipboard } from "react-use";
+import { getHourWithMin } from "../helper";
+import { toast } from "react-toastify";
 
 const PriceQuotations = () => {
-    useWhyDidYouRender("PriceQuotations");
     // Context
     const {
         clientsData,
@@ -40,7 +39,8 @@ const PriceQuotations = () => {
         priceQuotationsResponse,
         setPriceQuotationsResponse,
     } = useContext(PriceQuotationsContext);
-
+    const [state, copyToClipboard] = useCopyToClipboard();
+    const [isCopyed, setIsCopyed] = React.useState(false);
     const [isPriceQuotationModalOpen, setIsPriceQuotationModalOpen] =
         React.useState(false);
     const [filter, setFilter] = React.useState();
@@ -117,6 +117,49 @@ const PriceQuotations = () => {
             });
             handleModal(setIsPriceQuotationModalOpen, true);
         },
+        copyToClipBoard: (columnData) => {
+            handleCopyData(columnData);
+        },
+    };
+
+    const handleCopyData = (quotationData) => {
+        const {
+            project_cms,
+            project_niche,
+            no_of_primary_pages,
+            no_of_secondary_pages,
+            no_of_major_functionalities,
+            hours_of_other_works,
+            risk_factor,
+            currency,
+            usd_budget_with_additional_percent,
+            actual_budget_with_additional_percent,
+            no_of_days,
+            total_calculated_hours,
+        } = quotationData || {};
+
+        const formattedData = [
+            `CMS Name: ${project_cms?.cms_name}`,
+            `Project Category: ${project_niche?.category_name}`,
+            `No. Primary Page Need: ${no_of_primary_pages}`,
+            `No. Secondary Page Need: ${no_of_secondary_pages}`,
+            `Any Major Functionalities Needed: ${
+                no_of_major_functionalities || 0
+            }`,
+            `How Many Hours of Other Works Needed: ${
+                hours_of_other_works || 0
+            }`,
+            `Risk Factors: ${risk_factor || 0}%`,
+            `Currency: ${currency?.currency_name}`,
+            `Estimated Budget: $${usd_budget_with_additional_percent} USD (Default)`,
+            `Amount: ${currency?.currency_symbol}${actual_budget_with_additional_percent} ${currency?.currency_code}  (Client’s Currency)`,
+            `Deadline: ${no_of_days} day but not be rigid (${getHourWithMin(
+                total_calculated_hours
+            )})`,
+        ].join(",\n");
+
+        toast.info("Price Quotations Copy on clipboard");
+        copyToClipboard(formattedData);
     };
 
     // Pagination

@@ -1,12 +1,11 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import PropTypes from "prop-types";
 import { MdDone } from "react-icons/md";
 import { useCopyToClipboard } from "react-use";
 import { IoCopyOutline } from "react-icons/io5";
 import { BiSolidInfoSquare } from "react-icons/bi";
 import { FaCheck } from "react-icons/fa";
-
-
+import { toast } from "react-toastify";
 
 // Constants
 import { PlatformOptions, QuotationTableLabel } from "../../../constant";
@@ -14,7 +13,12 @@ import { PlatformOptions, QuotationTableLabel } from "../../../constant";
 // style
 import "./platformAccountCard.css";
 import Switch from "../../../../../../global/Switch";
-import { toast } from "react-toastify";
+
+// Helper
+import { getHourWithMin } from "../../../helper";
+
+// Context
+import { PriceQuotationsContext } from "../../../context/PriceQuotationsProvider";
 
 const PlatformAccountCard = ({
     quotationData,
@@ -23,6 +27,7 @@ const PlatformAccountCard = ({
 }) => {
     const [state, copyToClipboard] = useCopyToClipboard();
     const [isShow, setIsShow] = useState(false);
+    const { priceQuotationsInputs } = useContext(PriceQuotationsContext);
 
     const handleCopy = (e) => {
         e.stopPropagation();
@@ -55,8 +60,12 @@ const PlatformAccountCard = ({
             `Project Category: ${project_niche?.category_name}`,
             `No. Primary Page Need: ${no_of_primary_pages}`,
             `No. Secondary Page Need: ${no_of_secondary_pages}`,
-            `Any Major Functionalities Needed: ${no_of_major_functionalities || 0}`,
-            `How Many Hours of Other Works Needed: ${hours_of_other_works || 0}`,
+            `Any Major Functionalities Needed: ${
+                no_of_major_functionalities || 0
+            }`,
+            `How Many Hours of Other Works Needed: ${
+                hours_of_other_works || 0
+            }`,
             `Risk Factors: ${risk_factor || 0}%`,
             `Currency: ${currency?.currency_name}`,
             `Estimated Budget: $ ${caculated_project_budget_in_usd} USD (Default)`,
@@ -85,16 +94,6 @@ const PlatformAccountCard = ({
         }
     };
 
-    // Helper get hours to decimal Number
-    const getHourWithMin = (hours) => {
-        const duration = parseFloat(hours);
-        const getHours = parseInt(duration);
-        const getMin = (duration - getHours) * 60;
-        return `${getHours} Hours ${
-            getHours === 0 ? "" : ` ${Math.floor(getMin)} Min`
-        }`;
-    };
-
     // Helper - for get Platform type
     const getPlatformData = PlatformOptions?.find(
         (item) => item?.id === quotationData?.platform_account?.type
@@ -115,6 +114,16 @@ const PlatformAccountCard = ({
                     height={23}
                 />
             );
+        }
+    };
+
+    const getDeadlineText = (deadlineType) => {
+        switch (deadlineType?.name) {
+            case "Flexible":
+                return "but not be rigid";
+            case "Fixed":
+                return "but fixed and rigid";
+            default:
         }
     };
 
@@ -142,10 +151,7 @@ const PlatformAccountCard = ({
                         }
                     >
                         <div className="platform_account_card_selected">
-                            <FaCheck
-                                size={20}
-                                fill="var(--primarySuccess)"
-                            />
+                            <FaCheck size={20} fill="var(--primarySuccess)" />
                         </div>
                     </Switch.Case>
                     <p className="d-flex align-items-center">
@@ -241,7 +247,7 @@ const PlatformAccountCard = ({
                             <h5>
                                 Estimated Budget:{" "}
                                 <span>
-                                    ${" "}
+                                    $
                                     {
                                         quotationData?.caculated_project_budget_in_usd
                                     }{" "}
@@ -251,11 +257,11 @@ const PlatformAccountCard = ({
                             <h6>
                                 Amount:{" "}
                                 <span>
-                                {quotationData?.currency?.currency_symbol}
+                                    {quotationData?.currency?.currency_symbol}
+                                    {quotationData?.calculated_project_budget}
                                     {
-                                        quotationData?.calculated_project_budget
+                                        quotationData?.currency?.currency_name
                                     }{" "}
-                                    {quotationData?.currency?.currency_name}{" "}
                                     (Client’s Currency)
                                 </span>
                             </h6>
@@ -263,8 +269,10 @@ const PlatformAccountCard = ({
                         <div className="platform_account_card_deadline">
                             <p>Deadline</p>
                             <h6>
-                                {quotationData?.calculated_no_of_days} day but
-                                not be rigid{" "}
+                                {quotationData?.calculated_no_of_days} day{" "}
+                                {getDeadlineText(
+                                    priceQuotationsInputs?.deadline_type
+                                )}
                                 <span>
                                     (
                                     {getHourWithMin(
@@ -289,8 +297,7 @@ const PlatformAccountCard = ({
                             <span>Error!</span>{" "}
                             {quotationData?.not_doable_message} See price for
                             the same requirements to be delivered in{" "}
-                            {quotationData?.calculated_no_of_days}{" "}
-                            days here.
+                            {quotationData?.calculated_no_of_days} days here.
                         </p>
                     </div>
                 </Switch.Case>
