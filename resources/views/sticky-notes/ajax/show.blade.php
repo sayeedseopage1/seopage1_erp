@@ -34,7 +34,7 @@
                                 @if($stickyNotes->status == 'Live')
                                 <div class="dropdown-menu dropdown-menu-right border-grey rounded b-shadow-4 p-0"
                                     aria-labelledby="dropdownMenuLink" tabindex="0">
-                                    <a class="dropdown-item openRightModal"
+                                    <a class="dropdown-item"
                                         href="{{ route('sticky-notes.edit', $stickyNotes->id) }}">@lang('app.edit')</a>
                                     <a class="dropdown-item delete-snote"
                                         data-note-id="{{ $stickyNotes->id }}">@lang('app.delete')</a>
