@@ -130,6 +130,7 @@ class PmGoalEventListener
         // );
 
         $goal = ProjectPmGoal::where('project_id', $project->id)->first();
+        // dd($goal->project_type);
         if ($goal->project_type == 'fixed' && $goal->project_category == 'regular') {
             self::fixedRegularPmGoalCompletion($project, $milestoneSum, $paidAmount, $milestoneCount, $paidMilestoneCount);
             return;
@@ -166,14 +167,9 @@ class PmGoalEventListener
         } else if ($projectBudget > $milestoneSum && $projectBudget == $paidAmount) {
             $goal = ProjectPmGoal::where(['project_id' => $project->id, 'goal_code' => 'ERAG'])->first();
             if (!$goal || time() > strtotime($goal->goal_end_date)) return;
-
-            foreach ($goalCodes as $item) {
-                if ($item['code'] == $goal->goal_code) {
-                    $goal->expired_meet_description = $item['complete'];
-                    break;
-                }
-            }
-
+            
+            $goalCodes = ProjectPmGoal::$goalCodes['fixed']['extraGoal'];
+            $goal->expired_meet_description = $goalCodes['complete'];
             $goal->goal_status = 1;
             $goal->save();
         } else if ($projectBudget < $paidAmount) {
@@ -258,17 +254,23 @@ class PmGoalEventListener
         $goal = ProjectPmGoal::where(['project_id' => $projectId, 'goal_code' => 'HTA'])->first();
         if (!$goal) return;
 
+        $projectPriority = $goal->project_category;
+        $goalCodes = ProjectPmGoal::$goalCodes['hourly'][$projectPriority];
+
         if ($goal->goal_status == 0 && time() <= strtotime($goal->goal_end_date)) {
             $goal->goal_status = 1;
+            foreach ($goalCodes as $item) {
+                if ($item['code'] == $goal->goal_code) {
+                    $goal->expired_meet_description = $item['complete'];
+                    break;
+                }
+            }
             $goal->save();
         }
 
         if ($totalMinutes < 3 * 60) return;
 
         // 2nd goal completion ----------------------- //
-        $projectPriority = $goal->project_category;
-        $goalCodes = ProjectPmGoal::$goalCodes['hourly'][$projectPriority];
-
         if ($projectPriority == 'regular' || $projectPriority == 'priority') {
             $goal = ProjectPmGoal::where(['project_id' => $projectId, 'goal_code' => '3HT', 'goal_status' => 0])->first();
             if ($goal && time() <= strtotime($goal->goal_end_date)) {
@@ -329,12 +331,7 @@ class PmGoalEventListener
                 if (time() > strtotime($item->goal_end_date)) return;
                 // dd($dIds, $total, $totalMinutes, ($deliverable->estimation_time * 60));
                 if ($totalMinutes >= ($deliverable->estimation_time * 60)) {
-                    foreach ($goalCodes as $code) {
-                        if ($code['code'] == $item->goal_code) {
-                            $item->expired_meet_description = $code['complete'];
-                            break;
-                        }
-                    }
+                    $item->expired_meet_description = $item->goal_name;
                     $item->goal_status = 1;
                     $item->save();
                     break;
