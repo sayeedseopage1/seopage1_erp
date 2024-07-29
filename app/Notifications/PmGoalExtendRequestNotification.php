@@ -2,6 +2,7 @@
 
 namespace App\Notifications;
 
+use App\Models\PmGoalDeadlineExtHistory;
 use App\Models\Project;
 use App\Models\ProjectPmGoal;
 use App\Models\User;
@@ -47,6 +48,7 @@ class PmGoalExtendRequestNotification extends Notification
 
         $goal= ProjectPmGoal::where('id',$this->goal->id)->first();
         $project= Project::where('id',$goal->project_id)->first();
+        $extension = PmGoalDeadlineExtHistory::where('goal_id', $this->goal->id)->first();
         $url = url('/account/project-status?modal_type=filtered_goal_details&goal_id=' . $goal->id. '&project_id='.$project->id);
         $client= User::where('id',$goal->client_id)->first();
         $pm= User::where('id',$goal->pm_id)->first();
@@ -95,11 +97,11 @@ class PmGoalExtendRequestNotification extends Notification
         </p>'
         .
         '<p>
-            <b style="color: black">' . __('Extension requested') . ': '.'</b>' . '<span>'.$goal->extended_day. ' Days'.'</span>'. '
+            <b style="color: black">' . __('Extension requested') . ': '.'</b>' . '<span>'.$extension->extended_day. ' Days'.'</span>'. '
         </p>'
         .
         '<p>
-            <b style="color: black">' . __('Reason for extension') . ': '.'</b>' . '<span>'.$goal->extended_reason.'</span>'. '
+            <b style="color: black">' . __('Reason for extension') . ': '.'</b>' . '<span>'.$extension->extended_pm_reason.'</span>'. '
         </p>';
         $goal->mail_status = 4;
         $goal->save();

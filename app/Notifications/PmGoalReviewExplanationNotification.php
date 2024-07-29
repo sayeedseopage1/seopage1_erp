@@ -69,10 +69,10 @@ class PmGoalReviewExplanationNotification extends Notification
         $greet= '<p><b style="color: black">'  . '<span style="color:black">'.'Hi '. $notifiable->name. ','.'</span>'.'</b></p>';
         $header = '<strong>' . __('PM '.$pm->name.': '.$goal_count.' goal for client ' . $client->name . ' was not met! Add your rating!') . '</strong>';
 
-        $body= '<p>'.'PM'. $pm->name .' couldn’t meet his goal. Please check the details below:'.'</p>';
+        $body= '<p>'.'PM '. $pm->name .' couldn’t meet his goal. Please check the details below:'.'</p>';
         $content =
         '<p>
-            <b style="color: black">' . __('Project name') . ': '.'</b>' . '<a href="'.route('projects.show',$project->id).'">'.$project->project_name . '
+            <b style="color: black">' . __('Project name') . ': '.'</b>' . '<a href="'.route('projects.show',$project->id).'"> '.$project->project_name . '
         </p>'.
         '<p>
             <b style="color: black">' . __('Client name') . ': '.'</b>' . '<a href="'.route('clients.show',$client->id).'">'.$client->name .'</a>'. '
