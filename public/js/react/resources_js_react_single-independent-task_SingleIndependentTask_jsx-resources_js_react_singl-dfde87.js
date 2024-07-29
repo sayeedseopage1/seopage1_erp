@@ -15748,7 +15748,7 @@ var MarkAsComplete = function MarkAsComplete(_ref) {
       react_toastify__WEBPACK_IMPORTED_MODULE_3__.toast.warn("Please describe what you've done!");
       valid = false;
     }
-    if (auth.roleId === 14 && !(0,_utils_check_is_url__WEBPACK_IMPORTED_MODULE_11__.checkIsURL)(screenRecordUrl)) {
+    if (lodash__WEBPACK_IMPORTED_MODULE_0___default().includes([14, 15, 16, 17], auth === null || auth === void 0 ? void 0 : auth.getRoleId()) && !(0,_utils_check_is_url__WEBPACK_IMPORTED_MODULE_11__.checkIsURL)(screenRecordUrl)) {
       react_toastify__WEBPACK_IMPORTED_MODULE_3__.toast.warn("Please provide a valid url");
       setScreenRecordUrlErr("Please provide a valid url");
       valid = false;
