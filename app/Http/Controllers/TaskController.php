@@ -6720,7 +6720,7 @@ class TaskController extends AccountBaseController
     public function storeDailySubmission(Request $request)
     {
 
-
+        dd($request);
         $daily_submission = new DailySubmission();
 
         if ($request->file('file') != null) {
