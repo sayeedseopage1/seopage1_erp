@@ -70,6 +70,7 @@ export const SectionContainer = styled.div`
     padding: 20px;
     background: #d8edfc;
     width: 65%;
+    margin-bottom: 10px;
 `;
 
 export const SectionTitle = styled.p`
