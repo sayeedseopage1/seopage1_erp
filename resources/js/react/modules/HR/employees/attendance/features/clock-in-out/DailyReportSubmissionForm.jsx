@@ -1,5 +1,5 @@
 import axios from "axios";
-import React from "react";
+import React, { useEffect } from "react";
 import { toast } from "react-toastify";
 
 import CKEditorComponent from "../../../../../../ckeditor";
@@ -44,56 +44,135 @@ const DailyReportSubmissionForm = ({
     onSubmit,
 }) => {
     const [isLoading, setIsLoading] = React.useState(false);
-    const [completedSection, setCompletedSection] = React.useState("");
-    const [attachmentLink, setAttachmentLink] = React.useState("");
-    const [files, setFiles] = React.useState([]);
-    const [description, setDescription] = React.useState("");
+
     const [markAsCompleted, setMarkAsCompleted] = React.useState(false);
 
-    const [error, setError] = React.useState(null);
+    //mitul work
+    const [dailySubPagesData, setDailySubPagesData] = React.useState({});
 
-    // editor data change
-    const handleEditorChange = (e, editor) => {
-        const data = editor.getData();
-        setDescription(data);
+    const handleDailySubPagesData = (data, type) => {
+        if (type === "frontendPassword")
+            setDailySubmissionData([...dailySubmissionData, data]);
+    };
+    const [isFrontendPassword, setIsFrontendPassword] = React.useState("no");
+    const [frontendPasswordValue, setFrontendPasswordValue] =
+        React.useState("");
+    const handleFrontendPasswordChange = (event) => {
+        setIsFrontendPassword(event.target.value);
     };
 
-    // check validation of form
-    const isValid = () => {
-        let errCount = 0;
-        let err = new Object();
+    const [numberOfPages, setNumberOfPages] = React.useState(1);
+    const [pageDetailsArray, setPageDetailsArray] = React.useState([]);
+    React.useEffect(() => {
+        const pageArray = Array.from(
+            { length: numberOfPages },
+            (_, index) => `${index + 1}`
+        );
+        setPageDetailsArray(pageArray);
+        setFrontendPasswordValue("");
+    }, [numberOfPages]);
 
-        if (!attachmentLink) {
-            errCount++;
-            err.attachmentLink = "You have to provide the link of you work";
+    console.log("daily submission data", dailySubPagesData);
+    console.log("setFrontendPasswordValue", frontendPasswordValue);
+
+    useEffect(() => {
+        setDailySubPagesData((prev) => ({ ...prev, frontendPasswordValue }));
+    }, [frontendPasswordValue, numberOfPages]);
+
+    const validateDailySubPagesData = () => {
+        const errors = [];
+        const { pageData, frontendPasswordValue } = dailySubPagesData;
+
+        // Check if frontendPasswordValue is defined
+        if (
+            frontendPasswordValue === undefined ||
+            frontendPasswordValue.trim() === ""
+        ) {
+            errors.push("Frontend password cannot be empty.");
         }
 
-        if (attachmentLink && !checkIsURL(attachmentLink)) {
-            errCount++;
-            err.attachmentLink = "Please provide a valid url";
-        }
+        pageData.forEach((page, pageIndex) => {
+            if (page) {
+                page.forEach((section, sectionIndex) => {
+                    // Check each field for undefined and trim if it's a string
+                    if (
+                        section.pageId === undefined ||
+                        section.pageId.trim() === ""
+                    ) {
+                        errors.push(
+                            `Page ${pageIndex + 1}, Section ${
+                                sectionIndex + 1
+                            }: Page ID cannot be empty.`
+                        );
+                    }
+                    if (
+                        section.categoryId === undefined ||
+                        section.categoryId.trim() === ""
+                    ) {
+                        errors.push(
+                            `Page ${pageIndex + 1}, Section ${
+                                sectionIndex + 1
+                            }: Category ID cannot be empty.`
+                        );
+                    }
+                    if (
+                        section.categoryName === undefined ||
+                        section.categoryName.trim() === ""
+                    ) {
+                        errors.push(
+                            `Page ${pageIndex + 1}, Section ${
+                                sectionIndex + 1
+                            }: Category Name cannot be empty.`
+                        );
+                    }
+                    if (
+                        section.name === undefined ||
+                        section.name.trim() === ""
+                    ) {
+                        errors.push(
+                            `Page ${pageIndex + 1}, Section ${
+                                sectionIndex + 1
+                            }: Section Name cannot be empty.`
+                        );
+                    }
+                    if (
+                        (section.screenshotUrl === undefined ||
+                            section.screenshotUrl.trim() === "") &&
+                        (section.bugName === undefined ||
+                            section.bugName.trim() === "")
+                    ) {
+                        errors.push(
+                            `Page ${pageIndex + 1}, Section ${
+                                sectionIndex + 1
+                            }: Screenshot URL or Bug Name cannot be empty.`
+                        );
+                    }
+                });
+            }
+        });
 
-        if (!description) {
-            errCount++;
-            err.description = "Please describe what you've done!";
-        }
-
-        if (!completedSection) {
-            errCount++;
-            err.completedSection =
-                "You must provide at least one section name that you have completed";
-        }
-
-        setError(err);
-        return errCount === 0;
+        return errors;
     };
 
-    // handle form submission
     const handleSubmission = (e) => {
         setIsLoading(true);
         e.preventDefault();
+        const pageData = JSON.stringify(dailySubPagesData);
 
-        if (!isValid()) {
+        const validationErrors = validateDailySubPagesData();
+        if (validationErrors.length > 0) {
+            const errorMessage = validationErrors.join("\n");
+            toast.error(errorMessage, {
+                position: toast.POSITION.TOP_RIGHT,
+                autoClose: false, // Prevent auto-hide
+                style: {
+                    backgroundColor: "#f8d7da",
+                    color: "#721c24",
+                    padding: "16px",
+                    borderRadius: "8px",
+                    fontSize: "16px",
+                },
+            });
             setIsLoading(false);
             return;
         }
@@ -106,18 +185,13 @@ const DailyReportSubmissionForm = ({
         fd.append("client_id", task.clientId);
         fd.append("client_name", task.client_name);
         fd.append("hours_spent", task.total_time_spent);
-        fd.append("link_name", attachmentLink);
-        fd.append("section_name", completedSection);
-        fd.append("comment", description);
-        fd.append("mark_as_complete", false);
-        fd.append("report_date", reportDate);
         fd.append(
             "_token",
             document
                 .querySelector("meta[name='csrf-token']")
                 .getAttribute("content")
         );
-        files.forEach((file) => fd.append("file[]", file));
+        fd.append("pageData", pageData);
 
         // form submit
         const formSubmit = async () => {
@@ -151,34 +225,6 @@ const DailyReportSubmissionForm = ({
             formSubmit();
         }
     };
-
-    //mitul work
-    const [dailySubPagesData, setDailySubPagesData] = React.useState({});
-
-    const handleDailySubPagesData = (data, type) => {
-        if (type === "frontendPassword")
-            setDailySubmissionData([...dailySubmissionData, data]);
-    };
-    const [isFrontendPassword, setIsFrontendPassword] = React.useState("no");
-    const [frontendPasswordValue, setFrontendPasswordValue] =
-        React.useState("");
-    const handleFrontendPasswordChange = (event) => {
-        setIsFrontendPassword(event.target.value);
-    };
-
-    const [numberOfPages, setNumberOfPages] = React.useState(1);
-
-    const handleNumberOfPagesChange = (event) => {
-        setNumberOfPages(event.target.value);
-    };
-    const pageDetailsArray = Array.from(
-        { length: numberOfPages },
-        (_, index) => `${index + 1}`
-    );
-
-    console.log("frontend Password Value", frontendPasswordValue);
-    console.log("daily submission data", dailySubPagesData);
-
     return (
         <ReactModal
             style={{
@@ -261,7 +307,9 @@ const DailyReportSubmissionForm = ({
                         <input
                             type="number"
                             value={numberOfPages}
-                            onChange={handleNumberOfPagesChange}
+                            onChange={(e) => {
+                                setNumberOfPages(e.target.value);
+                            }}
                             style={{
                                 borderRadius: "6px",
                                 background: "#d8edfc",
@@ -276,6 +324,7 @@ const DailyReportSubmissionForm = ({
                     <br />
                     {pageDetailsArray?.map((pageNumber, index) => (
                         <SubmissionForSinglePage
+                            numberOfPages={numberOfPages}
                             key={index}
                             dailySubPagesData={dailySubPagesData}
                             setDailySubPagesData={setDailySubPagesData}
@@ -286,7 +335,11 @@ const DailyReportSubmissionForm = ({
                 </ModalBody>
 
                 <DailySubmissionButtonContainer>
-                    <Button variant="primary" size="md">
+                    <Button
+                        variant="primary"
+                        size="md"
+                        onClick={handleSubmission}
+                    >
                         Submit
                     </Button>
                     <Button variant="danger" size="md" onClick={close}>
@@ -294,6 +347,9 @@ const DailyReportSubmissionForm = ({
                     </Button>
                 </DailySubmissionButtonContainer>
             </ModalContainer>
+            <div style={{ overflow: "auto" }}>
+                {JSON.stringify(dailySubPagesData)}
+            </div>
         </ReactModal>
     );
 };
