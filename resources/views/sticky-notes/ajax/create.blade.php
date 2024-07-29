@@ -80,6 +80,66 @@
                         </div>
                     </div>
                     @endif
+                    {{-- For Lead Only --}}
+                    @if(Auth::user()->role_id == 6)
+                    <div class="col-sm-12 col-md-6 col-lg-3 mt-3">
+                        <label class="f-14 text-dark-grey mb-12" data-label="true" for="note_type">Note Type
+                            <sup class="f-14 mr-1">*</sup>
+                        </label>
+                        <div class="dropdown bootstrap-select form-control select-picker">
+                            <select name="note_type" id="note_type" data-live-search="true" class="form-control select-picker error" data-size="8">
+                                <option value="">--</option>
+                                <option value="Task">Task</option>
+                                <option value="Non-Task">Non-Task</option>
+                            </select>
+                            <label id="note_type_error" class="text-danger" for="note_type"></label>
+                        </div>
+                    </div>
+                    <div class="col-sm-12 col-md-6 col-lg-3 mt-3" id="clientField" style="display: none">
+                        <label class="f-14 text-dark-grey mb-12" data-label="true" for="client_id">Clients
+                            <sup class="f-14 mr-1">*</sup>
+                        </label>
+                        <div class="dropdown bootstrap-select form-control select-picker">
+                            <select name="client_id" id="client_id" data-live-search="true" class="form-control select-picker error" data-size="8">
+                                <option value="">--</option>
+                                @foreach ($lead_dev_clients as $client)
+                                <option value="{{ $client->id }}">{{ $client->name }}</option>
+                                @endforeach
+                            </select>
+                            <label id="client_id_error" class="text-danger" for="client_id"></label>
+                        </div>
+                    </div>
+                    <div class="col-sm-12 col-md-6 col-lg-3 mt-3" id="projectField" style="display: none">
+                        <label class="f-14 text-dark-grey mb-12" data-label="true" for="project_id">Projects
+                            <sup class="f-14 mr-1">*</sup>
+                        </label>
+                        <div class="dropdown bootstrap-select form-control select-picker">
+                            <select name="project_id" id="project_id" data-live-search="true" class="form-control select-picker error" data-size="8">
+                                <option value="">--</option>
+                            </select>
+                            <label id="project_id_error" class="text-danger" for="project_id"></label>
+                        </div>
+                    </div>
+                    <div class="col-sm-12 col-md-6 col-lg-3 mt-3" id="milestoneField" style="display: none">
+                        <label class="f-14 text-dark-grey mb-12" data-label="true" for="milestone_id">Milestones</label>
+                        <div class="dropdown bootstrap-select form-control select-picker">
+                            <select name="milestone_id" id="milestone_id" data-live-search="true" class="form-control select-picker error" data-size="8">
+                                <option value="">--</option>
+                            </select>
+                            <label id="milestone_id_error" class="text-danger" for="milestone_id"></label>
+                        </div>
+                    </div>
+                    <div class="col-sm-12 col-md-6 col-lg-3 mt-3" id="taskField" style="display: none">
+                        <label class="f-14 text-dark-grey mb-12" data-label="true" for="task_id">Tasks</label>
+                        <div class="dropdown bootstrap-select form-control select-picker">
+                            <select name="task_id" id="task_id" data-live-search="true" class="form-control select-picker error" data-size="8">
+                                <option value="">--</option>
+                            </select>
+                            <label id="task_id_error" class="text-danger" for="task_id"></label>
+                        </div>
+                    </div>
+                    @endif
+
                     <div class="col-sm-12 col-md-6 col-lg-3 mt-3">
                         <label class="f-14 text-dark-grey mb-12" data-label="true" for="reminder_time">When should the system remind you about this note?
                             <sup class="f-14 mr-1">*</sup>
@@ -119,6 +179,7 @@
 <script>
     $(document).ready(function() {
         $('#note_type').change(function() {
+            // ONLY FOR PROJECT MANAGER
             if ($(this).val() == 'Project') {
                 $('#clientField').show();
                 $('#projectField').show();
@@ -128,6 +189,14 @@
                 $('#clientField').hide();
                 $('#projectField').hide();
                 $('#milestoneField').hide();
+                $('#taskField').hide();
+            }
+            // ONLY FOR lEAD MANAGER
+            if ($(this).val() == 'Task') {
+                $('#clientField').show();
+                $('#taskField').show();
+            } else {
+                $('#clientField').hide();
                 $('#taskField').hide();
             }
         });

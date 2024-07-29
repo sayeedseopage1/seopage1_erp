@@ -9,6 +9,7 @@ use App\Models\Project;
 use App\Models\ProjectMilestone;
 use App\Models\StickyNote;
 use App\Models\Task;
+use App\Models\TaskUser;
 use App\Models\User;
 use Brian2694\Toastr\Facades\Toastr;
 use Carbon\Carbon;
@@ -51,6 +52,19 @@ class StickyNoteController extends AccountBaseController
 
         $this->find_client = Project::where('pm_id', user()->id)->where('status', 'in progress')->pluck('client_id')->toArray();
         $this->clients = User::whereIn('id', $this->find_client)->select('id','name')->get();
+
+        $this->lead_dev_clients = Project::where('projects.status','in progress')->whereIn('projects.id', function($query) {
+            $query->select('tasks.project_id')
+                ->from('tasks')
+                ->leftJoin('task_users', 'task_users.task_id', '=', 'tasks.id')
+                ->whereNotNull('tasks.project_id')
+                ->where('tasks.board_column_id', '!=', 4)
+                ->where('task_users.user_id', user()->id)
+                ->groupBy('tasks.project_id');
+        })
+        ->leftJoin('users', 'users.id', '=', 'projects.client_id')
+        ->select(['users.id', 'users.name'])
+        ->get();
 
         $this->pageTitle = __('modules.sticky.addNote');
 
