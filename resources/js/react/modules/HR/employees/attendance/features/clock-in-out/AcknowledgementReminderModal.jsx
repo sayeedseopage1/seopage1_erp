@@ -180,7 +180,11 @@ const AcknowledgementReminderModal = ({
                     }
 
                     setTImeLeft(res.data.leftMin);
-                    if (submissionType !== "CONTINUE") {
+
+                    if (
+                        submissionType !== "CONTINUE" ||
+                        (submissionType === "CONTINUE" && res.data.leftMin <= 0)
+                    ) {
                         onSubmit();
                         close();
                     }
