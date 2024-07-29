@@ -42,7 +42,19 @@ export const PercentageofGMTableColumn = [
         accessorKey: "duration",
         cell: ({ row }) => {
             const data = row?.original;
-            return <span>{`${data?.duration} Days` ?? "--"}</span>;
+            const handleDuration = () => {
+                if (data?.duration) {
+                    const duration = parseFloat(data?.duration);
+                    const getDays = parseInt(duration);
+                    const getHours = Math.floor((duration - getDays) * 24);
+                    return `${getDays} Days${
+                        getHours === 0 ? "" : ` ${getHours} Hours`
+                    }`;
+                } else {
+                    return "--";
+                }
+            };
+            return <span>{handleDuration()}</span>;
         },
     },
     {
