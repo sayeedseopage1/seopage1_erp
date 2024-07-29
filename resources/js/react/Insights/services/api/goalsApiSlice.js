@@ -7,6 +7,7 @@ const goalApiSlice = apiSlice.injectEndpoints({
         getGoals: build.query({
             query: (query) => `/account/insights/goals/get/${query}`,
             providesTags: (result) => [{ type: 'Goal', id: 'LIST' }],
+            keepUnusedDataFor: 0.0001,
         }),
 
         addNewGoal: build.mutation({
@@ -86,8 +87,6 @@ const goalApiSlice = apiSlice.injectEndpoints({
                     _token: document.querySelector('meta[name="csrf-token"]').getAttribute('content')
                 }
             }),
-
-            invalidatesTags: (result, error, arg) => [{ type: 'Goal', id: 'LIST' }]
         }),
     })
 });

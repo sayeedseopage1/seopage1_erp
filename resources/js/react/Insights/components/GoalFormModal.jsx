@@ -701,6 +701,7 @@ const GoalFormModal = () => {
             // tracking value
             setTrackingValue(data.trackingValue);
 
+            setIsMonthlyAutoRecurring(data?.is_monthly_auto_recurring || 0)
             // recurring
             setRecurring(data.recurring || []);
             // qualified

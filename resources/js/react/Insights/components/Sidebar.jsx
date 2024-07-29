@@ -26,7 +26,7 @@ import { useAuth } from "../../hooks/useAuth";
 const InsightSidebar = () => {
     const auth = useAuth();
     const [search, setSearch] = React.useState("");
-    const [copyFilter, setCopyFilter] = React.useState(null);  // this state is for send data on assign goal modal fetch new data after assign goal
+    const [copyFilter, setCopyFilter] = React.useState(null); // this state is for send data on assign goal modal fetch new data after assign goal
     const { sections, getSectionsByType } = useSections();
     const { teams } = useTeams();
     const { dashboards } = useDashboards();
@@ -38,23 +38,26 @@ const InsightSidebar = () => {
         private: [],
     });
     const { reports } = useSelector((state) => state.reports);
-    const [goals, setGoals] = React.useState({
-        goals: [],
-        recurring: [],
-    });
+    // const [goals, setGoals] = React.useState({
+    //     goals: [],
+    //     recurring: [],
+    // });
     const dispatch = useDispatch();
     const compareDate = new CompareDate();
-    const { goals: __goals, fetchGoals, goalsIsFetching } = useGoals();
+    const __allGoals = useSelector((state) => state.goals);
+    const { goals, fetchGoals, goalsIsFetching, goalsIsSuccess } = useGoals();
+
+    // console.log(__goals, goalsIsFetching);
 
     // filter items
     const [selectedTeam, setSelectedTeam] = React.useState(null);
     const [selectedMonth, setSelectedMonth] = React.useState(null);
     const [selectedYear, setSelectedYear] = React.useState(2023);
 
-    React.useEffect(() => {
-        // check if goals and __goals are not equal
-        setGoals({ ...__goals });
-    }, [__goals, goalsIsFetching]);
+    // React.useEffect(() => {
+    //     // check if goals and __goals are not equal
+    //     setGoals({ ...__goals });
+    // }, [__goals, , goalsIsFetching]);
 
     React.useEffect(() => {
         const _filteredGoals = {
@@ -63,8 +66,8 @@ const InsightSidebar = () => {
             private: [],
         };
 
-        if (goals?.goals && goals?.goals?.length > 0) {
-            let _goals = goals?.goals?.map((goal) => {
+        if (__allGoals?.allGoals?.goals && __allGoals?.allGoals?.goals?.length > 0) {
+            let _goals = __allGoals?.allGoals?.goals?.map((goal) => {
                 let title = goal?.title;
                 let today = dayjs().format("YYYY-MM-DD");
 
@@ -92,7 +95,8 @@ const InsightSidebar = () => {
             );
         }
         setFilteredGoals(_filteredGoals);
-    }, [goalsIsFetching, goals]);
+    }, [__allGoals?.allGoals?.goals, goalsIsFetching, goalsIsSuccess]);
+
 
     // get all unique sections
     const getDashboardSections = () => {
