@@ -52,7 +52,7 @@ export const formatInvoiceData = (priceQuotations) => {
   const payload = {
     serial_no: priceQuotations?.serial_no,
     create_at: formatData(priceQuotations?.created_at),
-    invoiceDeadline: formatData(priceQuotations?.created_at, 1), // hear Add 1 Days extra
+    invoiceDeadline: formatData(priceQuotations?.created_at, priceQuotations?.no_of_days?.split('.')[0]), // hear Add 1 Days extra
     total_calculated_hours: getHourWithMin(priceQuotations?.total_calculated_hours),
     total_price: priceQuotations?.usd_budget_with_additional_percent,
     client: {

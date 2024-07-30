@@ -1,4 +1,5 @@
 import { FaEye } from "react-icons/fa";
+import { IoCopy } from "react-icons/io5";
 import { IoCopyOutline } from "react-icons/io5";
 import { IoMdCheckmark } from "react-icons/io";
 import dayjs from "dayjs";
@@ -214,7 +215,9 @@ export const PriceQuotationsTableColumns = [
                     <p className="d-flex">
                         <Switch>
                             <Switch.Case
-                                condition={data?.usd_budget_with_additional_percent}
+                                condition={
+                                    data?.usd_budget_with_additional_percent
+                                }
                             >
                                 ${data?.usd_budget_with_additional_percent}{" "}
                                 {/* <button className="sp1_price_quotation_column_sort_btn ml-2">
@@ -226,7 +229,9 @@ export const PriceQuotationsTableColumns = [
                                 </button> */}
                             </Switch.Case>
                             <Switch.Case
-                                condition={!data?.usd_budget_with_additional_percent}
+                                condition={
+                                    !data?.usd_budget_with_additional_percent
+                                }
                             >
                                 {"--"}
                             </Switch.Case>
@@ -288,24 +293,37 @@ export const PriceQuotationsTableColumns = [
                     <button onClick={() => action.viewPDf(data)}>
                         <FaEye fill="var(--primaryBlue)" size={28} />
                     </button>
-                    <button onClick={handleCopy} className="ml-2"> 
-                        <Switch>
-                            <Switch.Case condition={status}>
-                                <IoMdCheckmark
-                                    fill="var(--primaryBlue)"
-                                    size={28}
-                                />
-                            </Switch.Case>
-                            <Switch.Case condition={!status}>
-                                <IoCopyOutline
-                                    fill="var(--primaryBlue)"
-                                    size={28}
-                                />
-                            </Switch.Case>
-                        </Switch>
-                    </button>
+                    <ShowCopyItem
+                        copyItem={data}
+                        handleClipboard={action.copyToClipBoard}
+                    />
                 </TableTdWrapper>
             );
         },
     },
 ];
+
+const ShowCopyItem = ({ copyItem, handleClipboard }) => {
+    const [status, setStatus] = useState(false);
+
+    const handleCopy = () => {
+        setStatus(true);
+        handleClipboard(copyItem);
+        setTimeout(() => {
+            setStatus(false);
+        }, 1000);
+    };
+
+    return (
+        <button onClick={handleCopy} className="ml-2">
+            <Switch>
+                <Switch.Case condition={status}>
+                    <IoMdCheckmark fill="var(--primaryBlue)" size={28} />
+                </Switch.Case>
+                <Switch.Case condition={!status}>
+                    <IoCopy fill="var(--primaryBlue)" size={28} />
+                </Switch.Case>
+            </Switch>
+        </button>
+    );
+};
