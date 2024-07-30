@@ -91,7 +91,7 @@ class DashboardController extends AccountBaseController
             return $this->UxUiDashboard();
         }
         if ($this->user->role_id == 7) {
-            return $this->SalesDashboard();
+            return $this->salesDashboard();
         }
         if ($this->user->role_id == 10) {
             return $this->GraphicsDashboard();
@@ -103,7 +103,36 @@ class DashboardController extends AccountBaseController
         if (in_array('client', user_roles())) {
             return $this->clientPanelDashboard();
         }
+    }
 
+    public function indexApi()
+    {
+        $this->isCheckScript();
+        if (in_array('Lead Developer', user_roles())) {
+            return $this->LeadDashboard();
+        }
+        if ($this->user->role_id == 4) {
+            return $this->PmDashboard();
+        }
+        if ($this->user->role_id == 5) {
+            return $this->DeveloperDashboard();
+        }
+        if ($this->user->role_id == 9) {
+            return $this->UxUiDashboard();
+        }
+        if ($this->user->role_id == 7) {
+            return $this->salesDashboardApi();
+        }
+        if ($this->user->role_id == 10) {
+            return $this->GraphicsDashboard();
+        }
+        if (in_array('employee', user_roles())) {
+            return $this->employeeDashboard();
+        }
+
+        if (in_array('client', user_roles())) {
+            return $this->clientPanelDashboard();
+        }
     }
 
     public function tempDashboard($temp)
@@ -805,13 +834,6 @@ class DashboardController extends AccountBaseController
             ->orderBy('task_history.created_at', 'desc')
             ->get();
         //  dd($status_history);
-
-
-
-
-
-
-
     }
     public function task_revision($id)
     {
@@ -844,19 +866,20 @@ class DashboardController extends AccountBaseController
         $this->pageTitle = 'Sales Performance';
         return $this->SalesDashboardAdminView($this->sales);
     }
-    public function adminSalesPerformanceApi($id)
+    public function adminSalesPerformanceApi($id = null)
     {
-        $this->sales = User::where('id', $id)->first();
+        $this->sales = $id ? User::where('id', $id)->first() : auth()->user();
+        dd($this->sales, auth()->user(), $id);
         return $this->salesDashboardAdminApi($this->sales);
     }
-    public function adminSalesPerformanceCountryWiseBiddingBreakdownApi($id)
+    public function adminSalesPerformanceCountryWiseBiddingBreakdownApi($id = null)
     {
-        $this->sales = User::where('id', $id)->first();
+        $this->sales = $id ? User::where('id', $id)->first() : auth()->user();
         return $this->salesDashboardCountryWiseBiddingBreakdownAdminApi($this->sales);
     }
-    public function adminSalesPerformanceCountryWiseWiseWonDealsApi($id)
+    public function adminSalesPerformanceCountryWiseWiseWonDealsApi($id = null)
     {
-        $this->sales = User::where('id', $id)->first();
+        $this->sales = $id ? User::where('id', $id)->first() : auth()->user();
         return $this->salesDashboardCountryWiseWonDealsAdminApi($this->sales);
     }
 

@@ -2,40 +2,14 @@
 
 namespace App\Traits;
 
-use Auth;
-use DateTime;
-use Response;
 use Carbon\Carbon;
 use App\Models\Deal;
 use App\Models\Lead;
-use App\Models\Task;
 use App\Helper\Reply;
-use App\Models\Event;
-use App\Models\Leave;
-use App\Models\Notice;
-use App\Models\Ticket;
-use App\Models\Holiday;
 use App\Models\Project;
 use App\Models\Contract;
-use Carbon\CarbonPeriod;
-use App\Models\DealStage;
-use App\Models\LeadAgent;
-use App\Models\Attendance;
-use Illuminate\Http\Request;
-use App\Models\CompanyAddress;
-use App\Models\ProjectTimeLog;
-use Illuminate\Foundation\Mix;
-use App\Models\DashboardWidget;
-use App\Models\EmployeeDetails;
-use App\Models\TaskboardColumn;
-use App\Models\AttendanceSetting;
-use App\Models\TicketAgentGroups;
 use Illuminate\Support\Facades\DB;
-use App\Models\ProjectTimeLogBreak;
-use App\Models\EmployeeShiftSchedule;
 use Illuminate\Support\Facades\Validator;
-use Illuminate\Database\Eloquent\Collection;
-use App\Http\Requests\ClockIn\ClockInRequest;
 
 trait SalesDashboardAdminView
 {
@@ -45,9 +19,11 @@ trait SalesDashboardAdminView
             'start_date' => 'date',
             'end_date'   => 'date|after:start_date',
         ]);
+
         if ($validator->fails()) {
             return Reply::error(__('validation_failed'), $validator->errors());
         } else {
+            dd($sales);
             $salesId = $sales->id;
 
             if (request('start_date') && request('end_date')) {
@@ -64,8 +40,6 @@ trait SalesDashboardAdminView
 
             $this->username = $sales->name;
 
-
-
             $leadsWithSaleId = Lead::where('added_by', $salesId);
 
             $leadsWithDateAndIdClone = clone $leadsWithSaleId;
@@ -77,7 +51,6 @@ trait SalesDashboardAdminView
             $numberOfLeadsReceivedGet    = clone $leadsWithDateAndId;
             $numberOfLeadsReceivedFixed  = clone $leadsWithDateAndId;
             $numberOfLeadsReceivedHourly = clone $leadsWithDateAndId;
-
 
             $numberOfLeadsReceivedFixed  = clone $numberOfLeadsReceivedFixed->where('project_type', 'fixed');
             $numberOfLeadsReceivedHourly = clone $numberOfLeadsReceivedHourly->where('project_type', 'hourly');
@@ -141,8 +114,8 @@ trait SalesDashboardAdminView
                     $q->whereBetween('created_at', [$startDate, $endDate]);
                 });
 
-            $this->number_of_leads_convert_won_deals        = $number_of_leads_convert_won_deals->count();
             $this->number_of_leads_convert_won_deals_get    = $number_of_leads_convert_won_deals->get();
+            $this->number_of_leads_convert_won_deals        = $number_of_leads_convert_won_deals->count();
             $this->number_of_leads_convert_won_deals_fixed  = $number_of_leads_convert_won_deals_fixed->count();
             $this->number_of_leads_convert_won_deals_hourly = $number_of_leads_convert_won_deals_hourly->count();
 
@@ -490,7 +463,7 @@ trait SalesDashboardAdminView
             $wonDealCountRejectProjectClone = clone $contractsSaleEndDate;
 
             //--------Finished Projects---------------//
-            $this->finished_project_count = Deal::with('project')
+            $finished_project_count = Deal::with('project')
                 ->where([
                     ['added_by', '=', $salesId],
                     ['created_at', '<', $endDate],
@@ -809,38 +782,37 @@ trait SalesDashboardAdminView
                 'number_of_leads_convert_won_deals_table_hourly' => $numberOfLeadsConvertWonDealsTableHourly,
             ];
 
-            $dealWithSaleIdDate = Deal::where('added_by', $salesId)->whereBetween('created_at', [$startDate, $endDate]);
+            $dealWithSaleIdDate = Deal::with('currency', 'user')->where('added_by', $salesId)->whereBetween('created_at', [$startDate, $endDate]);
 
             $dealWithSaleIdDateClone                  = clone $dealWithSaleIdDate;
             $dealWithSaleIdDatePartiallyFinishedClone = clone $dealWithSaleIdDate;
             $dealWithSaleIdDateDeniedClone            = clone $dealWithSaleIdDate;
 
-            $this->no_of_won_deals_count = $dealWithSaleIdDateClone->get();
+            $no_of_won_deals = $dealWithSaleIdDateClone->get();
 
 
             $this->no_of_won_deals_value = round($dealWithSaleIdDateClone->sum('amount'), 2);
 
-            $this->canceled_project_count = $dealWithSaleIdDatePartiallyFinishedClone->with('project', 'user', 'currency')
+            $canceled_project_count = $dealWithSaleIdDatePartiallyFinishedClone->with('project', 'user', 'currency')
                 ->whereRelation('project', 'status', 'partially finished')
                 ->orWhereRelation('project', 'status', 'canceled')
                 ->get();
 
-            $this->rejected_project_count = $dealWithSaleIdDateDeniedClone->with('project', 'user', 'currency')->where('deals.status', '!=', 'Denied')->get();
+            $rejected_project_count = $dealWithSaleIdDateDeniedClone->with('project', 'user', 'currency')->where('deals.status', '!=', 'Denied')->get();
 
-            if (count($this->no_of_won_deals_count)) {
-                $this->avg_deal_amount        = $this->no_of_won_deals_value / count($this->no_of_won_deals_count);
-                $this->finished_project_ratio = count($this->finished_project_count) / count($this->no_of_won_deals_count);
-                $this->canceled_project_ratio = round(count($this->canceled_project_count) / count($this->no_of_won_deals_count), 2);
-                $this->rejected_project_ratio = count($this->rejected_project_count) / count($this->no_of_won_deals_count);
+            if (count($no_of_won_deals)) {
+                $avg_deal_amount        = round($this->no_of_won_deals_value / count($no_of_won_deals), 2);
+                $finished_project_ratio = round(count($finished_project_count) / count($no_of_won_deals), 2);
+                $canceled_project_ratio = round(count($canceled_project_count) / count($no_of_won_deals), 2);
+                $rejected_project_ratio = round(count($rejected_project_count) / count($no_of_won_deals), 2);
             } else {
-                $this->avg_deal_amount        = 0;
-                $this->finished_project_ratio = 0;
-                $this->canceled_project_ratio = 0;
-                $this->rejected_project_ratio = 0;
+                $avg_deal_amount        = 0;
+                $finished_project_ratio = 0;
+                $canceled_project_ratio = 0;
+                $rejected_project_ratio = 0;
             }
 
-            $this->country_wise_won_deals_count = Deal::
-                join('users as client', 'client.id', 'deals.client_id')
+            $country_wise_won_deals_count = Deal::join('users as client', 'client.id', 'deals.client_id')
                 ->where('deals.added_by', $salesId)
                 ->whereBetween('deals.created_at', [$startDate, $endDate])
                 ->groupBy('client.country_id')
@@ -848,13 +820,18 @@ trait SalesDashboardAdminView
                 ->get();
 
             $saleExecutive += [
-                'no_of_won_deals_count'        => $this->no_of_won_deals_count,
+                'no_of_won_deals'              => $no_of_won_deals,
+                'no_of_won_deals_count'        => $no_of_won_deals->count(),
                 'no_of_won_deals_value'        => $this->no_of_won_deals_value,
-                'avg_deal_amount'              => $this->avg_deal_amount,
-                'finished_project_ratio'       => $this->finished_project_ratio,
-                'canceled_project_ratio'       => $this->canceled_project_ratio,
-                'rejected_project_ratio'       => $this->rejected_project_ratio,
-                'country_wise_won_deals_count' => $this->country_wise_won_deals_count,
+                'avg_deal_amount'              => $avg_deal_amount,
+                'finished_project_ratio'       => $finished_project_ratio,
+                'finished_project_count'       => $finished_project_count->count(),
+                'canceled_project_ratio'       => $canceled_project_ratio,
+                'canceled_project_count'       => $canceled_project_count->count(),
+                'rejected_project_ratio'       => $rejected_project_ratio,
+                'rejected_project_count'       => $rejected_project_count->count(),
+                'country_wise_won_deals'       => $country_wise_won_deals_count,
+                'country_wise_won_deals_count' => $country_wise_won_deals_count->count(),
             ];
 
             return response(['data' => $saleExecutive], 200)->header('Content-Type', 'application/json');
@@ -881,15 +858,24 @@ trait SalesDashboardAdminView
                 // $endDate = Carbon::parse('2023-06-31')->endOfMonth();
             }
 
-            $leadsWithSaleId = Lead::where('added_by', $salesId)
-                ->whereBetween('created_at', [$startDate, $endDate])
-                ->select('country', DB::raw('COUNT(*) as lead_count'))
-                ->groupBy('country')
-                ->orderBy('lead_count', 'DESC')
-                ->get();
+            //Country wise bidding breakdown
+
+            $number_of_leads_received = Lead::where('added_by', $salesId)
+                ->whereBetween('created_at', [$startDate, $endDate]);
+
+            $number_of_leads_receivedClone = clone $number_of_leads_received;
+
+            if ($number_of_leads_received->count()) {
+                $country_wise_lead_counts = $number_of_leads_receivedClone->select('country', DB::raw('COUNT(*) as lead_count'))
+                    ->groupBy('country')->orderBy('lead_count', 'DESC')->get();
+            } else {
+                $country_wise_lead_counts = [];
+            }
 
             $saleExecutive = [
-                'country_wise_leads' => $leadsWithSaleId
+                'country_wise_leads'       => $country_wise_lead_counts ?? [],
+                'country_wise_leads_count' => count($country_wise_lead_counts) ?? 0,
+                'number_of_leads_received' => $number_of_leads_received->count() ?? 0,
             ];
             return response(['data' => $saleExecutive], 200)->header('Content-Type', 'application/json');
         }
@@ -1011,16 +997,10 @@ trait SalesDashboardAdminView
                 $leads_country[] = $country_data;
             }
 
-            // $this->leads_country_data = $leads_country;
-
-            // $saleExecutive += [
-            //     'leads_country_data' => $leads_country,
-            // ];
-
             $saleExecutive = [
                 'country_wise_won_deals' => $leads_country,
             ];
-            return response(['data' => $saleExecutive], 200)->header('Content-Type', 'application/json');
+            return response(['data' => $saleExecutive])->header('Content-Type', 'application/json');
         }
     }
 
