@@ -164,7 +164,41 @@ class StickyNoteController extends AccountBaseController
 
     public function clientProject(Request $request)
     {
-        $findClientProject = Project::where('client_id', $request->client_id)->where('pm_id', Auth::user()->id)->where('status', 'in progress')->select('id', 'project_name')->get();
+        if(Auth::user()->role_id == 4){
+            $findClientProject = Project::where('client_id', $request->client_id)->where('pm_id', Auth::user()->id)->where('status', 'in progress')->select('id', 'project_name')->get();
+        }elseif(Auth::user()->role_id == 6){
+            // $leadDevTasks = Project::leftJoin('tasks', 'projects.id', '=', 'tasks.project_id')
+            // ->leftJoin('task_users', 'tasks.id', '=', 'task_users.task_id')
+            // ->where('projects.client_id', $request->client_id)
+            // ->where('projects.status', 'in progress')
+            // ->whereNull('tasks.subtask_id')
+            // ->where('tasks.board_column_id', '!=', 4)
+            // ->where('task_users.user_id', user()->id)
+            // ->select('tasks.id','tasks.heading')
+            // ->get();
+
+            // $leadDevTasks = Project::with('tasks', 'task_users')
+            // ->whereNull('tasks.subtask_id')
+            // ->where('tasks.board_column_id', '!=', 4)
+            // ->where('task_users.user_id', user()->id)
+            // ->where('projects.client_id', $request->client_id)
+            // ->where('projects.status', 'in progress')
+            // ->select('tasks.id', 'tasks.heading')
+            // ->get();
+
+            // $leadDevTasks = Project::with(['tasks' => function($query) {
+            //     $query->leftJoin('task_users', 'tasks.id', '=', 'task_users.task_id')
+            //           ->whereNull('tasks.subtask_id')
+            //           ->where('tasks.board_column_id', '!=', 4)
+            //           ->where('task_users.user_id', user()->id)
+            //           ->select('tasks.id', 'tasks.heading');
+            // }])
+            // ->where('projects.client_id', $request->client_id)
+            // ->where('projects.status', 'in progress')
+            // ->get();
+
+            dd($leadDevTasks);
+        }
 
         return response()->json($findClientProject);
     }
