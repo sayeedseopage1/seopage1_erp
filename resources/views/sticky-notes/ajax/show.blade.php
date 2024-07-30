@@ -48,7 +48,7 @@
 
                     <x-cards.data-row :label="__('modules.sticky.colors')"
                         value="<i class='fa fa-square f-21 mr-2 text-{{ $colour }}'></i>" html="true" />
-                    @if (Auth::user()->role_id == 4)
+                    @if (Auth::user()->role_id == 4 || Auth::user()->role_id == 6)
                     <x-cards.data-row :label="__('Note Type')" :value="$stickyNotes->note_type" html="true" />
                     @if($stickyNotes->client_id)   
                     <x-cards.data-row :label="__('Client')" :value="$stickyNotes->client->name" html="true" />
@@ -61,6 +61,9 @@
                     @endif
                     @if($stickyNotes->task_id)  
                     <x-cards.data-row :label="__('Task')" :value="$stickyNotes->task->heading" html="true" />
+                    @endif
+                    @if($stickyNotes->sub_task_id)  
+                    <x-cards.data-row :label="__('Subtask')" :value="$stickyNotes->subtask->title" html="true" />
                     @endif
                     @endif
                     <x-cards.data-row :label="__('You will receive a reminder at')" :value="\Carbon\Carbon::parse($stickyNotes->reminder_at)->format('d-m-Y H:i A')" html="true" />

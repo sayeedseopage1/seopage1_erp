@@ -109,33 +109,26 @@
                             <label id="client_id_error" class="text-danger" for="client_id"></label>
                         </div>
                     </div>
-                    <div class="col-sm-12 col-md-6 col-lg-3 mt-3" id="projectField" style="display: none">
-                        <label class="f-14 text-dark-grey mb-12" data-label="true" for="project_id">Projects
+                    <div class="col-sm-12 col-md-6 col-lg-3 mt-3" id="taskField" style="display: none">
+                        <label class="f-14 text-dark-grey mb-12" data-label="true" for="task_id">Tasks
                             <sup class="f-14 mr-1">*</sup>
                         </label>
-                        <div class="dropdown bootstrap-select form-control select-picker">
-                            <select name="project_id" id="project_id" data-live-search="true" class="form-control select-picker error" data-size="8">
-                                <option value="">--</option>
-                            </select>
-                            <label id="project_id_error" class="text-danger" for="project_id"></label>
-                        </div>
-                    </div>
-                    <div class="col-sm-12 col-md-6 col-lg-3 mt-3" id="milestoneField" style="display: none">
-                        <label class="f-14 text-dark-grey mb-12" data-label="true" for="milestone_id">Milestones</label>
-                        <div class="dropdown bootstrap-select form-control select-picker">
-                            <select name="milestone_id" id="milestone_id" data-live-search="true" class="form-control select-picker error" data-size="8">
-                                <option value="">--</option>
-                            </select>
-                            <label id="milestone_id_error" class="text-danger" for="milestone_id"></label>
-                        </div>
-                    </div>
-                    <div class="col-sm-12 col-md-6 col-lg-3 mt-3" id="taskField" style="display: none">
-                        <label class="f-14 text-dark-grey mb-12" data-label="true" for="task_id">Tasks</label>
                         <div class="dropdown bootstrap-select form-control select-picker">
                             <select name="task_id" id="task_id" data-live-search="true" class="form-control select-picker error" data-size="8">
                                 <option value="">--</option>
                             </select>
                             <label id="task_id_error" class="text-danger" for="task_id"></label>
+                        </div>
+                    </div>
+                    <div class="col-sm-12 col-md-6 col-lg-3 mt-3" id="subtaskField" style="display: none">
+                        <label class="f-14 text-dark-grey mb-12" data-label="true" for="subtask_id">Subtask
+                            <sup class="f-14 mr-1">*</sup>
+                        </label>
+                        <div class="dropdown bootstrap-select form-control select-picker">
+                            <select name="subtask_id" id="subtask_id" data-live-search="true" class="form-control select-picker error" data-size="8">
+                                <option value="">--</option>
+                            </select>
+                            <label id="subtask_id_error" class="text-danger" for="subtask_id"></label>
                         </div>
                     </div>
                     @endif
@@ -180,6 +173,7 @@
     $(document).ready(function() {
         $('#note_type').change(function() {
             // ONLY FOR PROJECT MANAGER
+            @if(Auth::user()->role_id == 4)
             if ($(this).val() == 'Project') {
                 $('#clientField').show();
                 $('#projectField').show();
@@ -191,14 +185,19 @@
                 $('#milestoneField').hide();
                 $('#taskField').hide();
             }
+            @endif
             // ONLY FOR lEAD MANAGER
+            @if(Auth::user()->role_id == 6)
             if ($(this).val() == 'Task') {
                 $('#clientField').show();
                 $('#taskField').show();
+                $('#subtaskField').show();
             } else {
                 $('#clientField').hide();
                 $('#taskField').hide();
+                $('#subtaskField').hide();
             }
+            @endif
         });
         // ONLY FOR PROJECTS DROPDOWN
         $('#client_id').change(function() {
@@ -217,12 +216,21 @@
                 data: data,
                 dataType: "json",
                 success: function (response) {
+                    @if(Auth::user()->role_id == 4)
                     $('#project_id').empty();
                     $('#project_id').append('<option value="">--</option>');
                     $.each(response, function(index, project) {
                         $('#project_id').append('<option value="' + project.id + '">' + project.project_name + '</option>');
                     });
                     $('#project_id').selectpicker('refresh');
+                    @elseif (Auth::user()->role_id == 6)
+                    $('#task_id').empty();
+                    $('#task_id').append('<option value="">--</option>');
+                    $.each(response, function(index, task) {
+                        $('#task_id').append('<option value="' + task.id + '">' + task.heading + '</option>');
+                    });
+                    $('#task_id').selectpicker('refresh');
+                    @endif
                 },
                 error: function(error) {
                     // console.log(response);
@@ -296,6 +304,35 @@
                 }
             });
         });
+        // ONLY FOR SUBTASKS DROPDOWN
+        $('#task_id').change(function() {
+            var task_id = $(this).val();
+            var data = {
+                'task_id': task_id
+            }
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
+            $.ajax({
+                type: "POST",
+                url: "{{route('sticky_notes.subtask')}}",
+                data: data,
+                dataType: "json",
+                success: function (response) {
+                    $('#subtask_id').empty();
+                    $('#subtask_id').append('<option value="">--</option>');
+                    $.each(response, function(index, subtask) {
+                        $('#subtask_id').append('<option value="' + subtask.id + '">' + subtask.title + '</option>');
+                    });
+                    $('#subtask_id').selectpicker('refresh');
+                },
+                error: function(error) {
+                    // console.log(response);
+                }
+            });
+        });
     });
     $(document).ready(function() {        
         $('#save-notice').click(function(e){
@@ -308,9 +345,12 @@
                 'colour': document.getElementById("colour").value,
                 'note_type': document.getElementById("note_type").value,
                 'client_id': document.getElementById("client_id").value,
+                @if (Auth::user()->role_id == 4)
                 'project_id': document.getElementById("project_id").value,
                 'milestone_id': document.getElementById("milestone_id").value,
+                @endif
                 'task_id': document.getElementById("task_id").value,
+                'subtask_id': document.getElementById("subtask_id").value,
                 'reminder_time': document.getElementById("reminder_time").value,
                 'notetext': document.getElementById("notetext").value,
             }
@@ -362,6 +402,11 @@
                         $('#task_id_error').text(error.responseJSON.errors.task_id);
                     }else{
                         $('#task_id_error').text('');
+                    }
+                    if(error.responseJSON.errors.subtask_id){
+                        $('#subtask_id_error').text(error.responseJSON.errors.subtask_id);
+                    }else{
+                        $('#subtask_id_error').text('');
                     }
                     if(error.responseJSON.errors.reminder_time){
                         $('#reminder_time_error').text(error.responseJSON.errors.reminder_time);

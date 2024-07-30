@@ -57,5 +57,9 @@ class StickyNote extends BaseModel
     {
         return $this->hasOne(Task::class, 'id', 'task_id');
     }
+    public function subtask()
+    {
+        return $this->hasOne(SubTask::class, 'id', 'sub_task_id');
+    }
 
 }

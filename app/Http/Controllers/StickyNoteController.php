@@ -8,6 +8,7 @@ use App\Http\Requests\Sticky\UpdateStickyNote;
 use App\Models\Project;
 use App\Models\ProjectMilestone;
 use App\Models\StickyNote;
+use App\Models\SubTask;
 use App\Models\Task;
 use App\Models\TaskUser;
 use App\Models\User;
@@ -90,6 +91,16 @@ class StickyNoteController extends AccountBaseController
                 'reminder_time' => 'required',
                 'notetext' => 'required',
             ]);
+        }elseif(Auth::user()->role_id == 6){
+            $validated = $request->validate([
+                'colour' => 'required',
+                'note_type' => 'required',
+                'client_id' => 'required',
+                'task_id' => 'required',
+                'subtask_id' => 'required',
+                'reminder_time' => 'required',
+                'notetext' => 'required',
+            ]);
         }
         $sticky = new StickyNote();
         $sticky->colour     = $request->colour;
@@ -100,6 +111,9 @@ class StickyNoteController extends AccountBaseController
         $sticky->milestone_id = $request->milestone_id;
         $sticky->task_id = $request->task_id;
         //PM Notes End
+        //Lead dev Notes start
+        $sticky->sub_task_id = $request->subtask_id;
+        //Lead dev Notes end
         $sticky->reminder_time = Carbon::now()->addHours($request->reminder_time);
         $sticky->note_text  = $request->notetext;
         $sticky->user_id = Auth::user()->id;
@@ -125,7 +139,7 @@ class StickyNoteController extends AccountBaseController
 
     public function edit($id)
     {
-        $this->stickyNote = StickyNote::with('client','project','milestone','task')->where('user_id', user()->id)->where('id', $id)->firstOrFail();
+        $this->stickyNote = StickyNote::with('client','project','milestone','task','subtask')->where('user_id', user()->id)->where('id', $id)->firstOrFail();
         $this->pageTitle = __('app.edit') . ' ' . __('app.note');
 
         if (request()->ajax()) {
@@ -166,41 +180,20 @@ class StickyNoteController extends AccountBaseController
     {
         if(Auth::user()->role_id == 4){
             $findClientProject = Project::where('client_id', $request->client_id)->where('pm_id', Auth::user()->id)->where('status', 'in progress')->select('id', 'project_name')->get();
+
+            return response()->json($findClientProject);
         }elseif(Auth::user()->role_id == 6){
-            // $leadDevTasks = Project::leftJoin('tasks', 'projects.id', '=', 'tasks.project_id')
-            // ->leftJoin('task_users', 'tasks.id', '=', 'task_users.task_id')
-            // ->where('projects.client_id', $request->client_id)
-            // ->where('projects.status', 'in progress')
-            // ->whereNull('tasks.subtask_id')
-            // ->where('tasks.board_column_id', '!=', 4)
-            // ->where('task_users.user_id', user()->id)
-            // ->select('tasks.id','tasks.heading')
-            // ->get();
-
-            // $leadDevTasks = Project::with('tasks', 'task_users')
-            // ->whereNull('tasks.subtask_id')
-            // ->where('tasks.board_column_id', '!=', 4)
-            // ->where('task_users.user_id', user()->id)
-            // ->where('projects.client_id', $request->client_id)
-            // ->where('projects.status', 'in progress')
-            // ->select('tasks.id', 'tasks.heading')
-            // ->get();
-
-            // $leadDevTasks = Project::with(['tasks' => function($query) {
-            //     $query->leftJoin('task_users', 'tasks.id', '=', 'task_users.task_id')
-            //           ->whereNull('tasks.subtask_id')
-            //           ->where('tasks.board_column_id', '!=', 4)
-            //           ->where('task_users.user_id', user()->id)
-            //           ->select('tasks.id', 'tasks.heading');
-            // }])
-            // ->where('projects.client_id', $request->client_id)
-            // ->where('projects.status', 'in progress')
-            // ->get();
-
-            dd($leadDevTasks);
+            $leadDevTasks = Project::leftJoin('tasks', 'projects.id', '=', 'tasks.project_id')
+                        ->leftJoin('task_users', 'tasks.id', '=', 'task_users.task_id')
+                        ->where('projects.client_id', $request->client_id)
+                        ->where('projects.status', 'in progress')
+                        ->where('tasks.subtask_id', null)
+                        ->where('tasks.board_column_id', '!=', 4)
+                        ->where('task_users.user_id', Auth::user()->id)
+                        ->select('tasks.id', 'heading')
+                        ->get();
+         return response()->json($leadDevTasks);
         }
-
-        return response()->json($findClientProject);
     }
 
     public function projectMilestone(Request $request)
@@ -214,6 +207,11 @@ class StickyNoteController extends AccountBaseController
     {
         $findMilestoneTask = Task::where(['milestone_id' => $request->milestone_id,'subtask_id' => null,'board_column_id' => 4])->get();
         return response()->json($findMilestoneTask);
+    }
+    public function taskSubtask(Request $request)
+    {
+        $findSubTask = SubTask::where('task_id', $request->task_id)->select('id', 'title')->get();
+        return response()->json($findSubTask);
     }
 
     public function noteComplete($id)
