@@ -242,11 +242,17 @@ class PmGoalEventListener
         $goal->save();
     }
 
-    private function hourlyGoalCompletion($event)
+    public function hourlyGoalCompletion($event, $data = null)
     {
-        $projectId = $event->data['projectId'];
-        $totalMinutes = ProjectTimeLog::where('project_id', $projectId)->sum('total_minutes');
-        // dd($totalMinutes);
+        if ($event != null) {
+            $projectId = $event->data['projectId'];
+            $totalMinutes = ProjectTimeLog::where('project_id', $projectId)->sum('total_minutes');
+        }
+        else {
+            $projectId = $data['projectId'];
+            $totalMinutes = $data['totalMinute'];
+        }
+        // dd($data);
 
         if ($totalMinutes < 60) return;
 
@@ -314,6 +320,7 @@ class PmGoalEventListener
         } else return;
         // 2nd goal completion end ----------------------- //
 
+        // dd($totalMinutes);
         // find next goal
         $goals = ProjectPmGoal::where(['project_id' => $projectId])->whereNotIn('goal_code', ['HTA', '3HT', '4HT', '5HT'])->get();
         if (count($goals) < 1) return;
