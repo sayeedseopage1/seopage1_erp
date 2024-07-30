@@ -136,10 +136,11 @@ class Project extends BaseModel
 
     public static $goalCreationTimeType = [
         '1'=> "Award Time",
-        '2'=> "Submission Time",
-        '3'=> "Authorization Time",
-        '4'=> "Project Accept Time",
-        '5'=> "Deadline Extension Request Time",
+        '2'=> "Sales Form Submission Time",
+        '3'=> "Sales Lead Authorization Time",
+        '4'=> "Project Acceptance Time",
+        '5'=> "Award Time Extension Authorization Time",
+        '6'=> "Award Time Increase Request Time",
     ];
 
     public static $types = [

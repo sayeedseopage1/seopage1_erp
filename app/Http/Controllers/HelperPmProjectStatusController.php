@@ -68,12 +68,17 @@ class HelperPmProjectStatusController extends AccountBaseController
                 return $deal->authorized_on;
                 break;
             case '4':
-                return $project->project_acceptance_time;
+                return now();
                 break;
             case '5':
                 $increaseRequest = AwardTimeIncress::where('deal_id', $deal->id)->first();
                 if (!$increaseRequest) throw new Exception('Award Time Increase data not found');
                 return $increaseRequest->updated_at;
+                break;
+            case '6':
+                $increaseRequest = AwardTimeIncress::where('deal_id', $deal->id)->first();
+                if (!$increaseRequest) throw new Exception('Award Time Increase data not found');
+                return $increaseRequest->created_at;
                 break;
         }
     }

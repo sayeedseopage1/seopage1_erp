@@ -3,9 +3,7 @@
 namespace App\Console\Commands;
 
 use App\Models\Deal;
-use App\Models\PolicyQuestionValue;
-use App\Models\SalesPolicyQuestion;
-use Carbon\Carbon;
+use App\Models\Project;
 use Illuminate\Console\Command;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\DB;
@@ -44,12 +42,27 @@ class DatabaseSync extends Command
             NOT NULL DEFAULT 'pending';");
 
             // project default goal creation date type set to 2 (released_at)
-            DB::statement("ALTER TABLE `projects`
-	        CHANGE COLUMN `goal_creation_time_type` `goal_creation_time_type`  
-            TINYINT(3) NOT NULL DEFAULT '2' 
-            COMMENT ' 1-Award Time, 2-Submission Time, 3-Authorization Time, 4-Project Accept Time, 5-Deadline Extension Request Time,' 
-            AFTER `new_deadline`;
-            ");
+            Schema::table('projects', function (Blueprint $table) {
+
+                $string = "";
+                foreach (Project::$goalCreationTimeType as $key => $value) $string .= " $key-$value,";
+                // $table->tinyInteger('goal_creation_time_type')->default('2')->after('new_deadline')->comment($string)->change();
+                DB::statement("ALTER TABLE `projects`
+	            CHANGE COLUMN `goal_creation_time_type` `goal_creation_time_type` 
+                TINYINT(3) NOT NULL DEFAULT '2' 
+                COMMENT '$string' AFTER `new_deadline`;
+                ");
+
+                $table->comment("
+                goal_creation_time_type description:
+                1. award time = p_m_projects::project_award_time_platform
+                2. sales large form submission time = deals::released_at
+                3. sales lead authorization time = deals::authorized_on.
+                4. project accept time = projects::project_acceptance_time
+                5. when admin authorizes the extension request  = award_time_incresses_request::updated_at
+                6. when project manager submits the extension request  = award_time_incresses_request::created_at
+                ");
+            });
 
             $this->info('Database sync ends successfully.');
 

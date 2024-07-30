@@ -2370,35 +2370,7 @@ class ContractController extends AccountBaseController
     {
         if ($this->user->role_id == 1) {
             $this->award_time_request = AwardTimeIncress::where('status', '0')->orderBy('id', 'desc')->get()->map(function($item){
-                $type = PMProject::where('deal_id', $item->deal_id)->first();
-                
-                $goalTimeType = [];
-                if ($type && $type->project_award_time_platform) {
-                    $goalTimeType['1'] = Project::$goalCreationTimeType['1'];
-                }
-                $type = Deal::find($item->deal_id);
-                if ($type) {
-                    if ($type->released_at) {
-                        $goalTimeType['2'] = Project::$goalCreationTimeType['2'];
-                    }
-                    if ($type->authorized_on) {
-                        $goalTimeType['3'] = Project::$goalCreationTimeType['3'];
-                    }
-                }
-                
-                $type = Project::where('deal_id',$item->deal_id)->first();
-                if ($type && $type->project_acceptance_time)
-                {
-                    $goalTimeType['4'] = Project::$goalCreationTimeType['4'];
-                }
-                
-                $type = AwardTimeIncress::where('deal_id',$item->deal_id)->first();
-                if ($type)
-                {
-                    $goalTimeType['5'] = Project::$goalCreationTimeType['5'];
-                }
-                
-                $item->goalTimeType = $goalTimeType;
+                $item->goalTimeType = Project::$goalCreationTimeType;
                 return $item;
             });
             

@@ -19,16 +19,21 @@ return new class extends Migration
 
             $string = "";
             foreach (Project::$goalCreationTimeType as $key => $value) $string .= " $key-$value,";
-            $table->tinyInteger('goal_creation_time_type')->default('2')->after('new_deadline')->comment($string);
+            // $table->tinyInteger('goal_creation_time_type')->default('2')->after('new_deadline')->comment($string)->change();
+            DB::statement("ALTER TABLE `projects`
+            CHANGE COLUMN `goal_creation_time_type` `goal_creation_time_type` 
+            TINYINT(3) NOT NULL DEFAULT '2' 
+            COMMENT '$string' AFTER `new_deadline`;
+            ");
 
-            $projectComment = DB::select("SHOW TABLE STATUS WHERE Name='projects'");
-            $table->comment( $projectComment[0]->Comment . "
+            $table->comment("
             goal_creation_time_type description:
-            1. Will it be award time = p_m_projects::project_award_time_platform
-            2. will it be sales large form submission time = deals::released_at
-            3. will it be sales lead authorization time = We don't have this data, need to store it on deals table.
-            4. will it be project accept time = projects::project_acceptance_time
-            5. it will be the time when the time extension request will be authorized = award_time_incresses_request::updated_at
+            1. award time = p_m_projects::project_award_time_platform
+            2. sales large form submission time = deals::released_at
+            3. sales lead authorization time = deals::authorized_on.
+            4. project accept time = projects::project_acceptance_time
+            5. when admin authorizes the extension request  = award_time_incresses_request::updated_at
+            6. when project manager submits the extension request  = award_time_incresses_request::created_at
             ");
         });
     }
