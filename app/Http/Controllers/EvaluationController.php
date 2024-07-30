@@ -318,7 +318,7 @@ class EvaluationController extends AccountBaseController
     public function storeSubmissionEvaluation(Request $request)
     {
         // dd($request->all());
-        // DB::beginTransaction();
+        DB::beginTransaction();
         $task_sum = EmployeeEvaluationTask::where('user_id',$request->user_id)->sum('avg_rating');
         $task_count = EmployeeEvaluationTask::where('user_id',$request->user_id)->count('avg_rating');
         $avg_rating = $task_count > 0 ? $task_sum / $task_count : 0;
@@ -344,6 +344,7 @@ class EvaluationController extends AccountBaseController
         $actions = PendingAction::whereIn('code',['NDPE','NDPM','NLDE','NSEE'])->where('task_id',$evaluation_task->task_id)->where('past_status',0)->get();
         if($actions != null)
         {
+            dd('here');
             foreach ($actions as $key => $action) {
             $action->authorized_by= Auth::id();
             $action->authorized_at= Carbon::now();
@@ -406,6 +407,7 @@ class EvaluationController extends AccountBaseController
             $past_action->button = json_encode($button);
             $past_action->save();
             }
+            dd('ok');
         }
         if(Auth::user()->role_id == 8){
             $helper = new HelperPendingActionController();
