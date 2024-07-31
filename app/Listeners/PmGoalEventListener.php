@@ -64,7 +64,8 @@ class PmGoalEventListener
         $goal = ProjectPmGoal::where(['project_id' => $projectId, 'goal_code' => 'DCS'])->first();
         if (!$goal && time() > strtotime($goal->goal_end_date)) return;
 
-        $goalCodes = ProjectPmGoal::$goalCodes[$goal->project_type][$goal->project_category];
+        $project_category = $goal->project_category == 'regular' ?  'regular' : 'priority';
+        $goalCodes = ProjectPmGoal::$goalCodes[$goal->project_type][$project_category];
 
         foreach ($goalCodes as $item) {
             if ($item['code'] == 'DCS') {
@@ -81,14 +82,12 @@ class PmGoalEventListener
     {
         $projectId = $event->data['projectId'];
 
-        // $task = Task::where(['project_id' => $projectId, 'board_column_id' => 9])->count();
-        // if ($task != 1) return;
-
         $goal = ProjectPmGoal::where(['project_id' => $projectId, 'goal_code' => 'TSM'])->first();
-
+        // dd(time() > strtotime($goal->goal_end_date));
         if (time() > strtotime($goal->goal_end_date)) return;
 
-        $goalCodes = ProjectPmGoal::$goalCodes[$goal->project_type][$goal->project_category];
+        $project_category = $goal->project_category == 'regular' ?  'regular' : 'priority';
+        $goalCodes = ProjectPmGoal::$goalCodes[$goal->project_type][$project_category];
         foreach ($goalCodes as $item) {
             if ($item['code'] == 'TSM') {
                 $goal->expired_meet_description = $item['complete'];
