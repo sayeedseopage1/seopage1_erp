@@ -679,6 +679,9 @@ export const ModalContentContainer = styled.div`
           th:nth-child(3){
             width: 50%;
           }
+          .projectQCSModal{
+            font-family: Poppins , sans-serif;
+          }
           .projectQCSModal:nth-child(1)  {
             width: 5% !important;
 
@@ -939,6 +942,12 @@ export const ModalContentContainer = styled.div`
 
   @media screen and (max-width: 768px) {
     padding: 16px 20px;
+
+    &.projectModalContent{
+      border-radius: 0px !important;
+    }
   }
+
+
   
 `

@@ -29,6 +29,10 @@ import { useAuthorizeQcFormMutation } from "../../../services/api/projectApiSlic
 import { toast } from "react-toastify";
 import DashboardCardTitle from "../ui/DashboardCardTitle/DashboardCardTitle";
 import TextLoaderDynamic from "../loader/TextLoaderDynamic";
+import {
+    isStateAllHaveValue,
+    markEmptyFieldsValidation,
+} from "../../../utils/stateValidation";
 
 // Dummy Data
 const payloadData = {
@@ -80,12 +84,27 @@ const ProjectQCSubmissionFormModal = ({
     const user = useAuth();
     const [actionType, setActionType] = useState("");
     const [adminComment, setAdminComment] = useState("");
+    const [adminCommentDataValidation, setAdminCommentDataValidation] =
+        useState({
+            adminComment: false,
+            isSubmitting: false,
+        });
 
     const [authorizeQcForm, { isLoading: isAuthorizeQCFormLoading }] =
         useAuthorizeQcFormMutation();
 
     // Handle Admin Comment
     const handleAdminComment = async (type) => {
+        const isEmpty = isStateAllHaveValue({ adminComment });
+        if (isEmpty) {
+            const validation = markEmptyFieldsValidation({ adminComment });
+            setAdminCommentDataValidation({
+                ...adminCommentDataValidation,
+                ...validation,
+                isSubmitting: true,
+            });
+            return;
+        }
         setActionType(type);
         try {
             const payload = {
@@ -123,6 +142,17 @@ const ProjectQCSubmissionFormModal = ({
             });
         }
     }, [modalData?.project_qc_submission, isLoading]);
+
+    // Validation on Submit
+    useEffect(() => {
+        if (adminCommentDataValidation?.isSubmitting) {
+            const validation = markEmptyFieldsValidation({ adminComment });
+            setAdminCommentDataValidation({
+                ...adminCommentDataValidation,
+                ...validation,
+            });
+        }
+    }, [adminComment, adminCommentDataValidation?.isSubmitting]);
     return (
         <CustomAntModal
             isModalOpen={isModalOpen}
@@ -137,13 +167,14 @@ const ProjectQCSubmissionFormModal = ({
                 className="customModalHeaderWithSticky"
             />
             <ModalContentContainer
-                className="px-0"
+                className="px-0 projectModalContent"
                 style={{
                     height: "calc(85vh - 100px)",
                     overflowY: "auto",
                 }}
+                
             >
-                <ModalContentContainer>
+                <ModalContentContainer className="projectModalContent">
                     <div className="stepHeader">
                         <h3>
                             Step – 01: Complete These Checklists Before
@@ -311,7 +342,7 @@ const ProjectQCSubmissionFormModal = ({
                                         fullSizeCount={1}
                                         className="mb-2"
                                     />,
-                                    <p >
+                                    <p>
                                         <p>
                                             <Switch.Case
                                                 condition={htmlTagRegex.test(
@@ -372,8 +403,10 @@ const ProjectQCSubmissionFormModal = ({
                                 onChange={(e) => {
                                     setAdminComment(e.target.value);
                                 }}
+                                isRequired
                                 rows={6}
                                 cols={50}
+                                className="mb-3"
                                 isDangerHtml={htmlTagRegex.test(
                                     modalData.admin_comment
                                 )}
@@ -383,6 +416,11 @@ const ProjectQCSubmissionFormModal = ({
                                         : false
                                 }
                             />
+                            {adminCommentDataValidation?.adminComment && (
+                                <span className="text-danger">
+                                    Admin Comment is required
+                                </span>
+                            )}
                         </ModalContentContainer>
                     </Switch.Case>
                     {/* Buttons */}
@@ -413,7 +451,9 @@ const ProjectQCSubmissionFormModal = ({
                                                 handleAdminComment("approve")
                                             }
                                             type="primary"
-                                            isDisabled={isAuthorizeQCFormLoading}
+                                            isDisabled={
+                                                isAuthorizeQCFormLoading
+                                            }
                                         />
                                     </Switch.Case>
                                 </Switch>

@@ -27,6 +27,10 @@ import { toast } from "react-toastify";
 import { useAuth } from "../../../hooks/useAuth";
 import TextLoaderDynamic from "../loader/TextLoaderDynamic";
 import DashboardCardTitle from "../ui/DashboardCardTitle/DashboardCardTitle";
+import {
+    isStateAllHaveValue,
+    markEmptyFieldsValidation,
+} from "../../../utils/stateValidation";
 
 /**
  * Project Completion Modal
@@ -47,6 +51,11 @@ const ProjectCompletionModal = ({
 }) => {
     const user = useAuth();
     const [adminComment, setAdminComment] = useState("");
+    const [adminCommentDataValidation, setAdminCommentDataValidation] =
+        useState({
+            adminComment: false,
+            isSubmitting: false,
+        });
     const [actionType, setActionType] = useState("");
     const [projectCompletionData, setProjectCompletionData] =
         useState(modalData);
@@ -58,6 +67,16 @@ const ProjectCompletionModal = ({
 
     // Handle Admin Comment
     const handleAdminComment = async (type) => {
+        const isEmpty = isStateAllHaveValue({ adminComment });
+        if (isEmpty) {
+            const validation = markEmptyFieldsValidation({ adminComment });
+            setAdminCommentDataValidation({
+                ...adminCommentDataValidation,
+                ...validation,
+                isSubmitting: true,
+            });
+            return;
+        }
         setActionType(type);
         try {
             const payload = {
@@ -101,6 +120,17 @@ const ProjectCompletionModal = ({
         }
     }, [modalData]);
 
+    // Validation on Submit
+    useEffect(() => {
+        if (adminCommentDataValidation?.isSubmitting) {
+            const validation = markEmptyFieldsValidation({ adminComment });
+            setAdminCommentDataValidation({
+                ...adminCommentDataValidation,
+                ...validation,
+            });
+        }
+    }, [adminComment, adminCommentDataValidation?.isSubmitting]);
+
     return (
         <CustomAntModal
             isModalOpen={isModalOpen}
@@ -114,7 +144,7 @@ const ProjectCompletionModal = ({
                 closeModal={closeModal}
                 className="customModalHeaderWithSticky"
             />
-            <ModalContentContainer>
+            <ModalContentContainer className="projectModalContent">
                 {/* Actual Site Links */}
                 <div className="modalContentHeader">
                     <p>
@@ -1502,11 +1532,18 @@ const ProjectCompletionModal = ({
                                 projectCompletionData?.project_submission
                                     ?.admin_comment
                             )}
+                            isRequired
+                            className="mb-3"
                             isDisabled={
                                 projectCompletionData?.project_submission
                                     ?.admin_comment ?? false
                             }
                         />
+                        {adminCommentDataValidation?.adminComment && (
+                            <span className="text-danger">
+                                Admin Comment is required
+                            </span>
+                        )}
                     </Switch.Case>
                     <Switch.Case
                         condition={
