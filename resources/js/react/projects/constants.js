@@ -1052,16 +1052,6 @@ export const ProjectBudgetData = {
 
     ],
     earning_expenses: [
-
-        {
-            id: 1,
-            title: "Earnings",
-            price: "",
-            currency: "",
-            currency_symbol: "",
-            key: "earnings",
-            icon: "/images/dollar-circle.png"
-        },
         {
             id: 2,
             title: "Earnings",
@@ -1070,6 +1060,15 @@ export const ProjectBudgetData = {
             currency_symbol: "",
             key: "actual_earnings",
             icon: "/images/money-tick.png"
+        },
+        {
+            id: 1,
+            title: "Earnings",
+            price: "",
+            currency: "",
+            currency_symbol: "",
+            key: "earnings",
+            icon: "/images/dollar-circle.png"
         },
         {
             id: 3,

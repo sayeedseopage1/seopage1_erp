@@ -214,6 +214,7 @@ const DashboardProjectInfoFixedSection = ({ projectData, isLoading }) => {
                                         item?.currency !== project_budget
                                     );
                                 })
+                                .reverse()
                                 .map((budget) => (
                                     <DashboardCardPricingInfo
                                         key={budget?.id}
@@ -256,6 +257,7 @@ const DashboardProjectInfoFixedSection = ({ projectData, isLoading }) => {
                                         item?.currency !== upsold_amount
                                     );
                                 })
+                                .reverse()
                                 ?.map((budget) => (
                                     <DashboardCardPricingInfo
                                         key={budget?.id}
