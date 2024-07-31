@@ -23,7 +23,7 @@ class ProjectDetailsController extends Controller
      */
     public function __invoke(Request $request, $project_id)
     {
-        $project = Project::select(['id','project_name','project_short_code','client_id','pm_id','start_date','deadline','project_budget','currency_id','deal_id','project_challenge','comments','requirement_defined','deadline_meet','project_summary','status','dispute_status','dispute_admin_comment','authorization_status'])
+        $project = Project::select(['id','project_name','project_short_code','client_id','pm_id','start_date','deadline','project_budget','currency_id','deal_id','project_challenge','comments','requirement_defined','deadline_meet','project_summary','status','dispute_status','dispute_admin_comment','authorization_status', 'project_status'])
         ->with(
             'client:id,name,user_name,country_id', 
             'client.country:id,iso,nicename', 
@@ -102,7 +102,9 @@ class ProjectDetailsController extends Controller
         $last_milestone = ProjectMilestone::where('project_id',$project->id)->orderBy('id','desc')->first();
         $incomplete_milestone = ProjectMilestone::where('project_id',$project->id)->where('status','incomplete')->count();
         $projectArray['buttons']['complete_q_and_c'] = ($last_milestone && $incomplete_milestone == 0 && $last_milestone->qc_status == 0 && $project->dispute_status != 1) ? true : false;
-        
+        $projectArray['buttons']['submit_completion_form'] = ($last_milestone && $incomplete_milestone == 0 && $last_milestone->qc_status == 1 && $last_milestone->invoice_created == 1 && $last_milestone->project_completion_status == 0) ? true : false;
+        $projectArray['last_milestone_id'] = $last_milestone->id;
+
         if($project->status == 'in progress' || $project->status == 'not started' || $project->status == 'on hold'){
             $projectArray['buttons']['mark_as_incomplete'] = $project->dispute_status != 1 && (Auth::user()->role_id == 1 || Auth::user()->role_id == 8) ? true : false;
             $projectArray['buttons']['explain_dispute'] = !$project->projectDispute && $project->dispute_status == 1 && (Auth::user()->role_id == 1 || Auth::user()->role_id == 8 || Auth::user()->role_id == 4) ? true : false;

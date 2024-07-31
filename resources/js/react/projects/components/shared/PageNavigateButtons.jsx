@@ -18,17 +18,19 @@ const PageNavigateButtons = ({ navigateData, className = "" }) => {
     return (
         <div className={`${className} ${style?.navigationFooterButtons}`}>
             <Switch>
-                <Button
-                    onClick={() =>
-                        window.open(
-                            `/account/contracts/${navigateData?.deal_id}`,
-                            "_blank"
-                        )
-                    }
-                    className={`${style?.dashboardHeaderButton} text-nowrap`}
-                >
-                    Won Deal
-                </Button>
+                <Switch.Case condition={navigateData?.deal_id}>
+                    <Button
+                        onClick={() =>
+                            window.open(
+                                `/account/contracts/${navigateData?.deal_id}`,
+                                "_blank"
+                            )
+                        }
+                        className={`${style?.dashboardHeaderButton} text-nowrap`}
+                    >
+                        Won Deal
+                    </Button>
+                </Switch.Case>
                 <Switch.Case condition={auth.getRoleId() === 1}>
                     <Button
                         onClick={() =>
@@ -39,7 +41,7 @@ const PageNavigateButtons = ({ navigateData, className = "" }) => {
                         }
                         className={`${style?.dashboardHeaderButton} ml-2`}
                     >
-                        Deal 
+                        Deal
                     </Button>
                     <Switch.Case condition={navigateData?.deal?.lead_id}>
                         <Button

@@ -244,22 +244,36 @@ const DashboardProjectInfoFixedSection = ({ projectData, isLoading }) => {
                     />
                     <div className="pt-3 pt-md-0 py-0 py-md-3">
                         <div className="d-flex justify-content-between flex-column flex-md-row">
-                            {projectBudgetData?.upsold_amount?.map((budget) => (
-                                <DashboardCardPricingInfo
-                                    key={budget?.id}
-                                    amount={budget?.price}
-                                    title={budget?.title}
-                                    icon={budget?.icon}
-                                    currency={budget?.currency}
-                                    currency_symbol={budget?.currency_symbol}
-                                    isLoading={isLoading}
-                                    loaderInformation={{
-                                        number: 1,
-                                        height: 21,
-                                        parentClassName: "w-100",
-                                    }}
-                                />
-                            ))}
+                            {projectBudgetData?.upsold_amount
+                                ?.filter((item) => {
+                                    const upsold_amount =
+                                        projectBudgetData?.upsold_amount?.find(
+                                            (info) =>
+                                                info?.key === "upsell_amount"
+                                        )?.currency;
+                                    return (
+                                        item?.key !== "upsell_actual_amount" ||
+                                        item?.currency !== upsold_amount
+                                    );
+                                })
+                                ?.map((budget) => (
+                                    <DashboardCardPricingInfo
+                                        key={budget?.id}
+                                        amount={budget?.price}
+                                        title={budget?.title}
+                                        icon={budget?.icon}
+                                        currency={budget?.currency}
+                                        currency_symbol={
+                                            budget?.currency_symbol
+                                        }
+                                        isLoading={isLoading}
+                                        loaderInformation={{
+                                            number: 1,
+                                            height: 21,
+                                            parentClassName: "w-100",
+                                        }}
+                                    />
+                                ))}
                         </div>
                     </div>
                 </CardWrapper>
@@ -274,6 +288,24 @@ const DashboardProjectInfoFixedSection = ({ projectData, isLoading }) => {
                 <CardWrapper
                     color="#ffffff"
                     className="d-flex justify-content-between flex-column flex-md-row estimatedTimeHoursLoggedCard"
+                    style={{
+                        // This is for the height of the card to be auto if there are more than 2 items
+                        minHeight:
+                            projectBudgetData?.earning_expenses?.filter(
+                                (item) => {
+                                    const earningsCurrency =
+                                        projectBudgetData?.earning_expenses?.find(
+                                            (info) => info.key === "earnings"
+                                        )?.currency;
+                                    return (
+                                        item.key !== "actual_earnings" ||
+                                        item.currency !== earningsCurrency
+                                    );
+                                }
+                            ).length > 2
+                                ? "auto"
+                                : "160px",
+                    }}
                 >
                     {projectBudgetData.hours_logged.map((logInfo) => (
                         <div className="d-flex flex-column" key={logInfo.id}>

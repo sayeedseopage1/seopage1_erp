@@ -54,6 +54,7 @@ export const SectionContainer = styled.div`
   border-radius: 8px !important;
   -webkit-border-radius: 5px;
   overflow: hidden;
+  word-break: break-all;
 
   &::-webkit-scrollbar {
     width: 10px !important;

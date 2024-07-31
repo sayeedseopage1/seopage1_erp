@@ -903,7 +903,7 @@ export const DetailsSalesExecutiveConstant = {
     },
     linesHere3_4: {
         title: `Elaborate the "WHAT" 3-4 lines here`,
-        infoText: "The client needs a 5 page static WordPress website for his new design agency. It should include home, about, his services in one page, blog, and contact. The look and feel should be better than the references",
+        infoText: "Examples: The client needs a 5 page static WordPress website for his new design agency. It should include home, about, his services in one page, blog, and contact. The look and feel should be better than the references",
     },
     referenceWebsite: {
         title: "Reference websites and what the references are for",

@@ -13,7 +13,7 @@ import DashboardCardPricingInfo from "../ui/DashboardCardPricingInfo/DashboardCa
 import DashboardCardTitle from "../ui/DashboardCardTitle/DashboardCardTitle";
 
 // Constants
-import { HourlyProjectSalesData, ProjectBudgetData } from "../../constants";
+import { ProjectBudgetData } from "../../constants";
 
 // style
 import style from "./styles/dashboardProjectInfoHourlySection.module.css";

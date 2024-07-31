@@ -22,7 +22,7 @@ import { useAuth } from "../../../hooks/useAuth";
 import DeadlineChangeHistoryModal from "../modal/DeadlineChangeHistoryModal";
 
 // Modal Names
-// ProjectDE = Project Deadline Extension
+
 // ProjectQCSF = Project QC Submission Form
 
 /**
@@ -44,8 +44,6 @@ const DashboardActionButtonSection = ({ projectData, isLoading }) => {
         React.useState(false);
     const [isProjectCompletionModalOpen, setIsProjectCompletionModalOpen] =
         React.useState(false);
-    const [isProjectDEModalOpen, setIsProjectDEModalOpen] =
-        React.useState(false);
     const [isProjectQCSFModalOpen, setIsProjectQCSFModalOpen] =
         React.useState(false);
     const [isDisputeProjectModalOpen, setIsDisputeProjectModalOpen] =
@@ -66,9 +64,7 @@ const DashboardActionButtonSection = ({ projectData, isLoading }) => {
             <Switch>
                 <Switch.Case
                     condition={
-                        ViewModalButtons?.extend_deadline_form ||
                         ViewModalButtons?.pm_task_guidline ||
-                        ViewModalButtons?.extend_deadline_pending ||
                         (user.getRoleId() === 1 &&
                             projectData?.project_deadline_extension?.length)
                     }
@@ -78,31 +74,6 @@ const DashboardActionButtonSection = ({ projectData, isLoading }) => {
                     >
                         <Switch.Case
                             condition={
-                                ViewModalButtons?.extend_deadline_pending
-                            }
-                        >
-                            <Button
-                                disabled
-                                className={`${style.dashboardActionButton} ${style.dashboardActionButtonPending}`}
-                            >
-                                Project Deadline Ext. Pending
-                            </Button>
-                        </Switch.Case>
-                        <Switch.Case
-                            condition={ViewModalButtons?.extend_deadline_form}
-                        >
-                            <Button
-                                onClick={() =>
-                                    handleModal(setIsProjectDEModalOpen, true)
-                                }
-                                className={`${style.dashboardActionButton}`}
-                            >
-                                Project Deadline Ext. Request
-                            </Button>
-                        </Switch.Case>
-                        <Switch.Case
-                            condition={
-                                user.getRoleId() === 1 &&
                                 projectData?.project_deadline_extension?.length
                             }
                         >
@@ -232,17 +203,7 @@ const DashboardActionButtonSection = ({ projectData, isLoading }) => {
                     isLoading={isLoading}
                 />
             )}
-            {/* Project Deadline Extension Form */}
-            {isProjectDEModalOpen && (
-                <ProjectDeadlineExtensionModal
-                    isModalOpen={isProjectDEModalOpen}
-                    closeModal={() =>
-                        handleModal(setIsProjectDEModalOpen, false)
-                    }
-                    modalData={projectData}
-                    isLoading={isLoading}
-                />
-            )}
+            
 
             {/* Project QC Submission Form */}
             {isProjectQCSFModalOpen && (

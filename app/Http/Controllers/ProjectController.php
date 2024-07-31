@@ -3876,7 +3876,7 @@ class ProjectController extends AccountBaseController
         $project_cms = ProjectCms::where('cms_name',$request->cms_category)->first();
 
         $project_portfolio = new ProjectPortfolio();
-
+        $project_portfolio->id = ProjectPortfolio::max('id')+1;
         $project_portfolio->project_id = $project->project_id;
         if ($project_cms) {
             $project_portfolio->cms_category = $project_cms->id;

@@ -41,8 +41,9 @@ export function formatHttp(text) {
   let formattedText = linkifyHtml(cleanedText, options);
 
   // Replace inner text of anchor tags if it exceeds 50 characters
+  // this characters limit remove for as requested by the Top Management 
   formattedText = formattedText.replace(/<a\s+href="([^"]+)"[^>]*>([^<]{51,})<\/a>/gi, (match, p1) => {
-    return `<a href="${p1}" target="_blank">View Link</a>`;
+    return `<a href="${p1}" target="_blank">${p1}</a>`;
   });
 
   return formattedText;

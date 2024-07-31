@@ -57,6 +57,13 @@
   animation: rotate 1s linear infinite;
 }
 
+
+.dashboardActionButtonPending {
+  background: #FFC107 !important;
+  color: #000 !important;
+  cursor: not-allowed !important;
+}
+
 @keyframes rotate {
   from {
     transform: rotate(0deg);

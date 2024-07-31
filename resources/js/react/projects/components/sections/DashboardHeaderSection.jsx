@@ -9,6 +9,8 @@ import PageNavigateButtons from "../shared/PageNavigateButtons";
 
 // Styles
 import style from "./styles/dashboardHeaderSection.module.css";
+// style
+import styles from "../sections/styles/dashboardHeaderSection.module.css";
 
 // Components - Modal
 import WorkingEnvironmentModal from "../modal/WorkingEnvironmentModal";
@@ -33,12 +35,14 @@ import DisputeProjectAuthorizeModal from "../modal/DisputeProjectAuthorizeModal"
 import ProjectQCSubmissionFormModal from "../modal/ProjectQCSubmissionFormModal";
 import ProjectCompletionModal from "../modal/ProjectCompletionModal";
 import { useAuth } from "../../../hooks/useAuth";
+import ProjectDeadlineExtensionModal from "../modal/ProjectDeadlineExtensionModal";
 
 // ShortName
 // WN - WorkingEnvironment;
 // TGABA - TaskGuidelineNeedsAuthorizedByAdmin;
 // DE- DeadlineExtension;
 // PD - ProjectDispute;
+// ProjectDE = Project Deadline Extension
 
 /**
  * Dashboard Header Section
@@ -76,6 +80,8 @@ const DashboardHeaderSection = ({ projectData, isLoading }) => {
     const [isQCSubmissionModalOpen, setIsQCSubmissionModalOpen] =
         React.useState(false);
     const [isCompletionAuthorizeModalOpen, setIsCompletionAuthorizeModalOpen] =
+        React.useState(false);
+    const [isProjectDEModalOpen, setIsProjectDEModalOpen] =
         React.useState(false);
 
     // Handle Modal Open and Close Function with Action Function as Parameter (if needed)
@@ -155,11 +161,108 @@ const DashboardHeaderSection = ({ projectData, isLoading }) => {
                     >
                         Working Environment
                     </Button>
-                    <PageNavigateButtons
-                        className="d-none d-md-flex ml-2"
-                        style={style}
-                        navigateData={projectData}
-                    />
+                    <div
+                        className={`d-none d-md-flex ml-2 ${styles?.navigationFooterButtons}`}
+                    >
+                        <Switch>
+                            <Switch.Case condition={projectData?.deal_id}>
+                                <Button
+                                    onClick={() =>
+                                        window.open(
+                                            `/account/contracts/${projectData?.deal_id}`,
+                                            "_blank"
+                                        )
+                                    }
+                                    className={`${styles?.dashboardHeaderButton} text-nowrap`}
+                                >
+                                    Won Deal
+                                </Button>
+                            </Switch.Case>
+                            <Switch.Case
+                                condition={
+                                    actionButtons?.extend_deadline_pending
+                                }
+                            >
+                                <Button
+                                    disabled
+                                    className={`ml-2 ${style.dashboardHeaderButton} ${style.dashboardActionButtonPending}`}
+                                >
+                                    Request Deadline Ext. Pending
+                                </Button>
+                            </Switch.Case>
+                            <Switch.Case
+                                condition={actionButtons?.extend_deadline_form}
+                            >
+                                <Button
+                                    onClick={() =>
+                                        handleModal(
+                                            setIsProjectDEModalOpen,
+                                            true
+                                        )
+                                    }
+                                    className={`${style.dashboardHeaderButton} ml-2`}
+                                >
+                                    Request Deadline Ext.
+                                </Button>
+                            </Switch.Case>
+                            <Switch.Case condition={user.getRoleId() === 1}>
+                                <Button
+                                    onClick={() =>
+                                        window.open(
+                                            `/account/deals/${projectData?.deal?.deal_stage?.id}`,
+                                            "_blank"
+                                        )
+                                    }
+                                    className={`${styles?.dashboardHeaderButton} ml-2`}
+                                >
+                                    Deal
+                                </Button>
+                                <Switch.Case
+                                    condition={projectData?.deal?.lead_id}
+                                >
+                                    <Button
+                                        onClick={() =>
+                                            window.open(
+                                                `/account/leads/${projectData?.deal?.lead_id}`,
+                                                "_blank"
+                                            )
+                                        }
+                                        className={`${styles?.dashboardHeaderButton} ml-2`}
+                                    >
+                                        Lead
+                                    </Button>
+                                </Switch.Case>
+                            </Switch.Case>
+                        </Switch>
+                    </div>
+                </div>
+                <div
+                    className={`d-flex d-md-none mb-3 ${styles?.navigationFooterButtons}`}
+                >
+                    <Switch>
+                        <Switch.Case
+                            condition={actionButtons?.extend_deadline_pending}
+                        >
+                            <Button
+                                disabled
+                                className={`${style.dashboardHeaderButton} ${style.dashboardActionButtonPending}`}
+                            >
+                                Request Deadline Ext. Pending
+                            </Button>
+                        </Switch.Case>
+                        <Switch.Case
+                            condition={actionButtons?.extend_deadline_form}
+                        >
+                            <Button
+                                onClick={() =>
+                                    handleModal(setIsProjectDEModalOpen, true)
+                                }
+                                className={`${style.dashboardHeaderButton} ml-2`}
+                            >
+                                Request Deadline Ext.
+                            </Button>
+                        </Switch.Case>
+                    </Switch>
                 </div>
                 <div className={`${style?.dashboardHeaderLeftButtonWrapper}`}>
                     <Switch.Case
@@ -219,7 +322,7 @@ const DashboardHeaderSection = ({ projectData, isLoading }) => {
                             }
                             className={`${style?.dashboardHeaderButton} ${style.dashboardHeaderButtonAnimation} ml-0 ml-md-2`}
                         >
-                            Project Completion Authorize
+                            Authorize Completion Form
                         </Button>
                     </Switch.Case>
                     <Switch.Case
@@ -245,13 +348,31 @@ const DashboardHeaderSection = ({ projectData, isLoading }) => {
                         <Button
                             onClick={() =>
                                 window.open(
-                                    `/account/projects/${projectData?.id}?tab=milestones`,
+                                    `/projects/q&c/${projectData?.id}/${projectData?.last_milestone_id}`,
                                     "_blank"
                                 )
                             }
                             className={`${style?.dashboardHeaderButton} ${style.dashboardHeaderButtonAnimation} ml-0 ml-md-2`}
                         >
                             Submit QC From
+                        </Button>
+                    </Switch.Case>
+                    <Switch.Case
+                        condition={
+                            actionButtons?.submit_completion_form &&
+                            user?.roleId === 4
+                        }
+                    >
+                        <Button
+                            onClick={() =>
+                                window.open(
+                                    `/projects/project-completion/${projectData?.last_milestone_id}`,
+                                    "_blank"
+                                )
+                            }
+                            className={`${style?.dashboardHeaderButton} ${style.dashboardHeaderButtonAnimation} ml-0 ml-md-2`}
+                        >
+                            Submit Completion Form
                         </Button>
                     </Switch.Case>
                     <Switch.Case
@@ -268,7 +389,7 @@ const DashboardHeaderSection = ({ projectData, isLoading }) => {
                             }
                             className={`${style?.dashboardHeaderButton} ${style.dashboardHeaderButtonAnimation} ml-0 ml-md-2`}
                         >
-                            Milestone Cancel Authorize
+                            Authorize Milestone Cancelation
                         </Button>
                     </Switch.Case>
                     <Switch.Case
@@ -375,6 +496,18 @@ const DashboardHeaderSection = ({ projectData, isLoading }) => {
                     }}
                     handleAction={handleProjectIncomplete}
                     isLoading={incompleteProjectLoading}
+                />
+            )}
+
+            {/* Project Deadline Extension Form */}
+            {isProjectDEModalOpen && (
+                <ProjectDeadlineExtensionModal
+                    isModalOpen={isProjectDEModalOpen}
+                    closeModal={() =>
+                        handleModal(setIsProjectDEModalOpen, false)
+                    }
+                    modalData={projectData}
+                    isLoading={isLoading}
                 />
             )}
 
