@@ -1,0 +1,38 @@
+.sp1_dashboard_card_info_wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 0px;
+}
+
+.sp1_dashboard_card_info_title {
+  font-family: var(--primaryFont);
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+  color: var(--primaryDarkText);
+  gap: 5px;
+}
+
+.sp1_dashboard_card_info_title_text {
+  font-family: var(--primaryFont);
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+  color: var(--primaryGrayText);
+}
+
+.sp1_dashboard_card_info_value {
+  background-color: transparent;
+  border: none;
+  font-family: var(--primaryFont);
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: normal;
+  color: var(--primaryDarkText);
+  margin-top: 8px;
+  width: fit-content;
+}

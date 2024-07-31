@@ -62,11 +62,11 @@ class DashboardController extends AccountBaseController
         $this->pageTitle = 'app.menu.dashboard';
         $this->middleware(function ($request, $next) {
             $this->viewOverviewDashboard = user()->permission('view_overview_dashboard');
-            $this->viewProjectDashboard = user()->permission('view_project_dashboard');
-            $this->viewClientDashboard = user()->permission('view_client_dashboard');
-            $this->viewHRDashboard = user()->permission('view_hr_dashboard');
-            $this->viewTicketDashboard = user()->permission('view_ticket_dashboard');
-            $this->viewFinanceDashboard = user()->permission('view_finance_dashboard');
+            $this->viewProjectDashboard  = user()->permission('view_project_dashboard');
+            $this->viewClientDashboard   = user()->permission('view_client_dashboard');
+            $this->viewHRDashboard       = user()->permission('view_hr_dashboard');
+            $this->viewTicketDashboard   = user()->permission('view_ticket_dashboard');
+            $this->viewFinanceDashboard  = user()->permission('view_finance_dashboard');
             return $next($request);
         });
 
@@ -104,6 +104,11 @@ class DashboardController extends AccountBaseController
             return $this->clientPanelDashboard();
         }
 
+    }
+
+    public function tempDashboard($temp)
+    {
+        return view('dashboard.temp_dashboard', $this->data);
     }
 
     public function widget(Request $request, $dashboardType)
@@ -220,17 +225,17 @@ class DashboardController extends AccountBaseController
 
     public function weekTimelog()
     {
-        $now = now(global_setting()->timezone);
-        $attndcSetting = AttendanceSetting::first();
-        $this->timelogDate = $timelogDate = Carbon::parse(request()->date);
+        $now                 = now(global_setting()->timezone);
+        $attndcSetting       = AttendanceSetting::first();
+        $this->timelogDate   = $timelogDate = Carbon::parse(request()->date);
         $this->weekStartDate = $now->copy()->startOfWeek($attndcSetting->week_start_from);
-        $this->weekEndDate = $this->weekStartDate->copy()->addDays(7);
-        $this->weekPeriod = CarbonPeriod::create($this->weekStartDate, $this->weekStartDate->copy()->addDays(6)); // Get All Dates from start to end date
+        $this->weekEndDate   = $this->weekStartDate->copy()->addDays(7);
+        $this->weekPeriod    = CarbonPeriod::create($this->weekStartDate, $this->weekStartDate->copy()->addDays(6)); // Get All Dates from start to end date
 
-        $this->dateWiseTimelogs = ProjectTimeLog::dateWiseTimelogs($timelogDate->toDateString(), user()->id);
+        $this->dateWiseTimelogs     = ProjectTimeLog::dateWiseTimelogs($timelogDate->toDateString(), user()->id);
         $this->dateWiseTimelogBreak = ProjectTimeLogBreak::dateWiseTimelogBreak($timelogDate->toDateString(), user()->id);
 
-        $this->weekWiseTimelogs = ProjectTimeLog::weekWiseTimelogs($this->weekStartDate->copy()->toDateString(), $this->weekEndDate->copy()->toDateString(), user()->id);
+        $this->weekWiseTimelogs     = ProjectTimeLog::weekWiseTimelogs($this->weekStartDate->copy()->toDateString(), $this->weekEndDate->copy()->toDateString(), user()->id);
         $this->weekWiseTimelogBreak = ProjectTimeLogBreak::weekWiseTimelogBreak($this->weekStartDate->toDateString(), $this->weekEndDate->toDateString(), user()->id);
 
         $html = view('dashboard.employee.week_timelog', $this->data)->render();
@@ -240,14 +245,14 @@ class DashboardController extends AccountBaseController
     public function privateCalendar()
     {
         if (request()->filter) {
-            $employee_details = EmployeeDetails::where('user_id', user()->id)->first();
+            $employee_details                = EmployeeDetails::where('user_id', user()->id)->first();
             $employee_details->calendar_view = (request()->filter != false) ? request()->filter : null;
             $employee_details->save();
             session()->forget('user');
         }
 
         $startDate = Carbon::parse(request('start'));
-        $endDate = Carbon::parse(request('end'));
+        $endDate   = Carbon::parse(request('end'));
 
         // get calendar view current logined user
         $calendar_filter_array = explode(',', user()->employeeDetails->calendar_view);
@@ -272,11 +277,11 @@ class DashboardController extends AccountBaseController
 
             foreach ($events as $key => $event) {
                 $eventData[] = [
-                    'id' => $event->id,
-                    'title' => ucfirst($event->event_name),
-                    'start' => $event->start_date_time,
-                    'end' => $event->end_date_time,
-                    'event_type' => 'event',
+                    'id'            => $event->id,
+                    'title'         => ucfirst($event->event_name),
+                    'start'         => $event->start_date_time,
+                    'end'           => $event->end_date_time,
+                    'event_type'    => 'event',
                     'extendedProps' => ['bg_color' => $event->label_color, 'color' => '#fff', 'icon' => 'fa-calendar']
                 ];
             }
@@ -288,11 +293,11 @@ class DashboardController extends AccountBaseController
 
             foreach ($holidays as $key => $holiday) {
                 $eventData[] = [
-                    'id' => $holiday->id,
-                    'title' => ucfirst($holiday->occassion),
-                    'start' => $holiday->date,
-                    'end' => $holiday->date,
-                    'event_type' => 'holiday',
+                    'id'            => $holiday->id,
+                    'title'         => ucfirst($holiday->occassion),
+                    'start'         => $holiday->date,
+                    'end'           => $holiday->date,
+                    'event_type'    => 'holiday',
                     'extendedProps' => ['bg_color' => '#1d82f5', 'color' => '#fff', 'icon' => 'fa-star']
                 ];
             }
@@ -301,7 +306,7 @@ class DashboardController extends AccountBaseController
         if (in_array('task', $calendar_filter_array)) {
             // tasks
             $completedTaskColumn = TaskboardColumn::completeColumn();
-            $tasks = Task::with('boardColumn')
+            $tasks               = Task::with('boardColumn')
                 ->where('board_column_id', '<>', $completedTaskColumn->id)
                 ->whereHas('users', function ($query) {
                     $query->where('user_id', user()->id);
@@ -314,11 +319,11 @@ class DashboardController extends AccountBaseController
 
             foreach ($tasks as $key => $task) {
                 $eventData[] = [
-                    'id' => $task->id,
-                    'title' => ucfirst($task->heading),
-                    'start' => $task->start_date,
-                    'end' => $task->due_date ? $task->due_date : $task->start_date,
-                    'event_type' => 'task',
+                    'id'            => $task->id,
+                    'title'         => ucfirst($task->heading),
+                    'start'         => $task->start_date,
+                    'end'           => $task->due_date ? $task->due_date : $task->start_date,
+                    'event_type'    => 'task',
                     'extendedProps' => ['bg_color' => $task->boardColumn->label_color, 'color' => '#fff', 'icon' => 'fa-list']
                 ];
             }
@@ -331,11 +336,11 @@ class DashboardController extends AccountBaseController
 
             foreach ($tickets as $key => $ticket) {
                 $eventData[] = [
-                    'id' => $ticket->id,
-                    'title' => ucfirst($ticket->subject),
-                    'start' => $ticket->updated_at,
-                    'end' => $ticket->updated_at,
-                    'event_type' => 'ticket',
+                    'id'            => $ticket->id,
+                    'title'         => ucfirst($ticket->subject),
+                    'start'         => $ticket->updated_at,
+                    'end'           => $ticket->updated_at,
+                    'event_type'    => 'ticket',
                     'extendedProps' => ['bg_color' => '#1d82f5', 'color' => '#fff', 'icon' => 'fa-ticket-alt']
                 ];
             }
@@ -356,11 +361,11 @@ class DashboardController extends AccountBaseController
                 $duration = ($leave->duration == 'half day') ? '( ' . __('app.halfday') . ' )' : '';
 
                 $eventData[] = [
-                    'id' => $leave->id,
-                    'title' => $duration . ' ' . ucfirst($leave->user->name),
-                    'start' => $leave->leave_date->toDateString(),
-                    'end' => $leave->leave_date->toDateString(),
-                    'event_type' => 'leave',
+                    'id'            => $leave->id,
+                    'title'         => $duration . ' ' . ucfirst($leave->user->name),
+                    'start'         => $leave->leave_date->toDateString(),
+                    'end'           => $leave->leave_date->toDateString(),
+                    'event_type'    => 'leave',
                     /** @phpstan-ignore-next-line */
                     'extendedProps' => ['name' => 'Leave : ' . ucfirst($leave->user->name), 'bg_color' => $leave->color, 'color' => '#fff', 'icon' => 'fa-plane-departure']
                 ];
@@ -373,7 +378,7 @@ class DashboardController extends AccountBaseController
     public function projectManageDetalsOnAdvanceDashboard(Request $request)
     {
         $startDate = Carbon::createFromFormat($this->global->date_format, $request->startDate);
-        $endDate = Carbon::createFromFormat($this->global->date_format, $request->endDate);
+        $endDate   = Carbon::createFromFormat($this->global->date_format, $request->endDate);
 
         $project_counts = PMAssign::where('pm_id', $request->pm_id)->whereBetween('created_at', [$startDate, $endDate])->first();
         if (!is_null($project_counts) && $project_counts->project_count != 0) {
@@ -399,13 +404,13 @@ class DashboardController extends AccountBaseController
             }
 
         } else {
-            $total_release_percentage = 0;
+            $total_release_percentage          = 0;
             $percentage_of_project_cancelation = 0;
-            $projects_on_hold_percentage = 0;
+            $projects_on_hold_percentage       = 0;
         }
         if (!is_null($project_counts) && $project_counts->amount != 0) {
 
-            $project_cancelation_rate = Project::where('pm_id', $request->pm_id)->where('status', 'canceled')->whereBetween('created_at', [$startDate, $endDate])->sum('project_budget');
+            $project_cancelation_rate               = Project::where('pm_id', $request->pm_id)->where('status', 'canceled')->whereBetween('created_at', [$startDate, $endDate])->sum('project_budget');
             $percentage_of_project_cancelation_rate = ($project_cancelation_rate / $project_counts->amount) * 100;
         } else {
 
@@ -413,17 +418,17 @@ class DashboardController extends AccountBaseController
         }
 
         $html = view('dashboard.ajax.projectManageDetalsOnAdvanceDashboard', [
-            'pm_id' => $request->pm_id,
-            'project_counts' => $project_counts,
-            'total_release_percentage' => $total_release_percentage,
-            'percentage_of_project_cancelation' => $percentage_of_project_cancelation,
+            'pm_id'                                  => $request->pm_id,
+            'project_counts'                         => $project_counts,
+            'total_release_percentage'               => $total_release_percentage,
+            'percentage_of_project_cancelation'      => $percentage_of_project_cancelation,
             'percentage_of_project_cancelation_rate' => $percentage_of_project_cancelation_rate,
-            'projects_on_hold_percentage' => $projects_on_hold_percentage,
+            'projects_on_hold_percentage'            => $projects_on_hold_percentage,
         ])->render();
 
         return response()->json([
             'status' => 'success',
-            'html' => $html
+            'html'   => $html
         ]);
     }
     public function pmDashboardExplanation()
@@ -433,60 +438,60 @@ class DashboardController extends AccountBaseController
     }
     public function pmPerformance($id)
     {
-        $this->pm = User::where('id', $id)->first();
+        $this->pm        = User::where('id', $id)->first();
         $this->pageTitle = 'PM Performance';
         return $this->PmDashboardAdminPmView($this->pm);
     }
     public function coreMetric()
     {
-        $this->pageTitle = "Update Core Metrics";
+        $this->pageTitle       = "Update Core Metrics";
         $this->pm_core_metrics = PmCoreMetric::orderBy('id', 'desc')->first();
         return view('core_metric.index', $this->data);
     }
     public function updateCoreMetric(Request $request, $id)
     {
         $validator = $request->validate([
-            'released_amount_for_cycle' => 'required|numeric|min:0',
-            'total_released_amount' => 'required|numeric|min:0',
-            'avg_project_completion_time_for_cycle' => 'required|numeric|min:0',
-            'avg_project_completion_time_in_cycle' => 'required|numeric|min:0',
-            'progress_project_count' => 'required|numeric|min:0',
-            'progress_project_count_2' => 'required|numeric|min:0',
-            'progress_project_value' => 'required|numeric|min:0',
-            'progress_project_value_2' => 'required|numeric|min:0',
+            'released_amount_for_cycle'                    => 'required|numeric|min:0',
+            'total_released_amount'                        => 'required|numeric|min:0',
+            'avg_project_completion_time_for_cycle'        => 'required|numeric|min:0',
+            'avg_project_completion_time_in_cycle'         => 'required|numeric|min:0',
+            'progress_project_count'                       => 'required|numeric|min:0',
+            'progress_project_count_2'                     => 'required|numeric|min:0',
+            'progress_project_value'                       => 'required|numeric|min:0',
+            'progress_project_value_2'                     => 'required|numeric|min:0',
             'project_completion_rate_for_this_cycle_count' => 'required|numeric|min:0',
-            'project_completion_rate_in_this_cycle_count' => 'required|numeric|min:0',
+            'project_completion_rate_in_this_cycle_count'  => 'required|numeric|min:0',
             'project_completion_rate_for_this_cycle_value' => 'required|numeric|min:0',
-            'project_completion_rate_in_this_cycle_value' => 'required|numeric|min:0',
-            'value_of_upsale' => 'required|numeric|min:0',
-            'current' => 'required|numeric|min:0',
-            'current_plus_old_ones' => 'required|numeric|min:0',
-            'cancelation_rate' => 'required|numeric|min:0',
-            'number_of_revisions_for_cycle' => 'required|numeric|min:0',
-            'number_of_revisions_in_cycle' => 'required|numeric|min:0',
-            'avg_payment_per_day' => 'required|numeric|min:0',
+            'project_completion_rate_in_this_cycle_value'  => 'required|numeric|min:0',
+            'value_of_upsale'                              => 'required|numeric|min:0',
+            'current'                                      => 'required|numeric|min:0',
+            'current_plus_old_ones'                        => 'required|numeric|min:0',
+            'cancelation_rate'                             => 'required|numeric|min:0',
+            'number_of_revisions_for_cycle'                => 'required|numeric|min:0',
+            'number_of_revisions_in_cycle'                 => 'required|numeric|min:0',
+            'avg_payment_per_day'                          => 'required|numeric|min:0',
         ]);
 
-        $pm_core_metric = PmCoreMetric::find($id);
-        $pm_core_metric->released_amount_for_cycle = $request->released_amount_for_cycle;
-        $pm_core_metric->total_released_amount = $request->total_released_amount;
-        $pm_core_metric->avg_project_completion_time_for_cycle = $request->avg_project_completion_time_for_cycle;
-        $pm_core_metric->avg_project_completion_time_in_cycle = $request->avg_project_completion_time_in_cycle;
-        $pm_core_metric->progress_project_count = $request->progress_project_count;
-        $pm_core_metric->progress_project_count_2 = $request->progress_project_count_2;
-        $pm_core_metric->progress_project_value = $request->progress_project_value;
-        $pm_core_metric->progress_project_value_2 = $request->progress_project_value_2;
+        $pm_core_metric                                               = PmCoreMetric::find($id);
+        $pm_core_metric->released_amount_for_cycle                    = $request->released_amount_for_cycle;
+        $pm_core_metric->total_released_amount                        = $request->total_released_amount;
+        $pm_core_metric->avg_project_completion_time_for_cycle        = $request->avg_project_completion_time_for_cycle;
+        $pm_core_metric->avg_project_completion_time_in_cycle         = $request->avg_project_completion_time_in_cycle;
+        $pm_core_metric->progress_project_count                       = $request->progress_project_count;
+        $pm_core_metric->progress_project_count_2                     = $request->progress_project_count_2;
+        $pm_core_metric->progress_project_value                       = $request->progress_project_value;
+        $pm_core_metric->progress_project_value_2                     = $request->progress_project_value_2;
         $pm_core_metric->project_completion_rate_for_this_cycle_count = $request->project_completion_rate_for_this_cycle_count;
-        $pm_core_metric->project_completion_rate_in_this_cycle_count = $request->project_completion_rate_in_this_cycle_count;
+        $pm_core_metric->project_completion_rate_in_this_cycle_count  = $request->project_completion_rate_in_this_cycle_count;
         $pm_core_metric->project_completion_rate_for_this_cycle_value = $request->project_completion_rate_for_this_cycle_value;
-        $pm_core_metric->project_completion_rate_in_this_cycle_value = $request->project_completion_rate_in_this_cycle_value;
-        $pm_core_metric->value_of_upsale = $request->value_of_upsale;
-        $pm_core_metric->current = $request->current;
-        $pm_core_metric->current_plus_old_ones = $request->current_plus_old_ones;
-        $pm_core_metric->cancelation_rate = $request->cancelation_rate;
-        $pm_core_metric->number_of_revisions_for_cycle = $request->number_of_revisions_for_cycle;
-        $pm_core_metric->number_of_revisions_in_cycle = $request->number_of_revisions_in_cycle;
-        $pm_core_metric->avg_payment_per_day = $request->avg_payment_per_day;
+        $pm_core_metric->project_completion_rate_in_this_cycle_value  = $request->project_completion_rate_in_this_cycle_value;
+        $pm_core_metric->value_of_upsale                              = $request->value_of_upsale;
+        $pm_core_metric->current                                      = $request->current;
+        $pm_core_metric->current_plus_old_ones                        = $request->current_plus_old_ones;
+        $pm_core_metric->cancelation_rate                             = $request->cancelation_rate;
+        $pm_core_metric->number_of_revisions_for_cycle                = $request->number_of_revisions_for_cycle;
+        $pm_core_metric->number_of_revisions_in_cycle                 = $request->number_of_revisions_in_cycle;
+        $pm_core_metric->avg_payment_per_day                          = $request->avg_payment_per_day;
         $pm_core_metric->save();
 
         return response()->json(['status' => 200]);
@@ -495,8 +500,8 @@ class DashboardController extends AccountBaseController
     {
 
         $currentDateTime = Carbon::now();
-        $desiredTime = Carbon::createFromTime(16, 45, 0); // 4:29 PM
-        $current_day = Carbon::now();
+        $desiredTime     = Carbon::createFromTime(16, 45, 0); // 4:29 PM
+        $current_day     = Carbon::now();
         // dd($current_day->dayOfWeek);
         $dayOfWeek = $current_day->dayOfWeek;
         if ($dayOfWeek === Carbon::SATURDAY) {
@@ -508,23 +513,23 @@ class DashboardController extends AccountBaseController
 
         // Current time is greater than 4:29 PM
         // Add your logic here
-        $stop_time = new DeveloperStopTimer();
+        $stop_time                                           = new DeveloperStopTimer();
         $stop_time->reason_for_less_tracked_hours_a_day_task = $request->reason_for_less_tracked_hours_a_day_task;
-        $stop_time->durations = $request->durations;
-        $stop_time->comment = $request->comment;
-        $stop_time->leave_period = $request->leave_period;
-        $stop_time->child_reason = $request->child_reason;
-        $stop_time->responsible_person = $request->responsible_person;
-        $stop_time->related_to_any_project = $request->related_to_any_project;
-        $stop_time->responsible_person_id = $request->responsible_person_id;
-        $stop_time->project_id = $request->project_id;
-        $stop_time->forgot_to_track_task_id = $request->forgot_to_track_task_id;
-        $stop_time->task_id = $request->task_id;
-        $stop_time->user_id = $request->user_id;
-        $stop_time->transition_hours = $request->transition_hours;
-        $stop_time->transition_minutes = $request->transition_minutes;
-        $stop_time->date = $request->date;
-        $stop_time->client = $request->client;
+        $stop_time->durations                                = $request->durations;
+        $stop_time->comment                                  = $request->comment;
+        $stop_time->leave_period                             = $request->leave_period;
+        $stop_time->child_reason                             = $request->child_reason;
+        $stop_time->responsible_person                       = $request->responsible_person;
+        $stop_time->related_to_any_project                   = $request->related_to_any_project;
+        $stop_time->responsible_person_id                    = $request->responsible_person_id;
+        $stop_time->project_id                               = $request->project_id;
+        $stop_time->forgot_to_track_task_id                  = $request->forgot_to_track_task_id;
+        $stop_time->task_id                                  = $request->task_id;
+        $stop_time->user_id                                  = $request->user_id;
+        $stop_time->transition_hours                         = $request->transition_hours;
+        $stop_time->transition_minutes                       = $request->transition_minutes;
+        $stop_time->date                                     = $request->date;
+        $stop_time->client                                   = $request->client;
 
         $stop_time->save();
 
@@ -559,11 +564,11 @@ class DashboardController extends AccountBaseController
     public function clockInStatus()
     {
         $user_id = Auth::user()->id;
-        $today = Carbon::now();
+        $today   = Carbon::now();
 
         if (Auth::user()->role_id = 5 || Auth::user()->role_id = 9 || Auth::user()->role_id = 10) {
 
-            $user = Attendance::where('user_id', $user_id)->whereDate('created_at', $today)->where('clock_out_time')->first();
+            $user        = Attendance::where('user_id', $user_id)->whereDate('created_at', $today)->where('clock_out_time')->first();
             $userClockIn = Attendance::where('user_id', $user_id)->whereDate('created_at', '!=', $today)->orderBy('created_at', 'desc')->first();
 
             if (Attendance::where('user_id', $user_id)->whereDate('created_at', '!=', $today)->count()) {
@@ -595,9 +600,9 @@ class DashboardController extends AccountBaseController
                 }
 
                 $userDeveloperHoursTrack = DeveloperStopTimer::where('user_id', $userClockIn->user_id ?? '')->whereDate('date', '=', $userClockIn->created_at ?? '')->orderBy('created_at', 'desc')->first();
-                $userTotalMin = ProjectTimeLog::where('user_id', $user_id)->whereDate('created_at', '=', $userClockIn->created_at ?? '')->orderBy('created_at', 'desc')->sum('total_minutes');
-                $createdAt = Carbon::parse($userClockIn->created_at ?? '');
-                $logStatus = true;
+                $userTotalMin            = ProjectTimeLog::where('user_id', $user_id)->whereDate('created_at', '=', $userClockIn->created_at ?? '')->orderBy('created_at', 'desc')->sum('total_minutes');
+                $createdAt               = Carbon::parse($userClockIn->created_at ?? '');
+                $logStatus               = true;
 
                 // dd($userTotalMin);
 
@@ -623,13 +628,13 @@ class DashboardController extends AccountBaseController
                     }
                 }
             } else {
-                $minimum_log_hours = 0;
-                $userTotalMin = 0;
-                $logStatus = true;
+                $minimum_log_hours       = 0;
+                $userTotalMin            = 0;
+                $logStatus               = true;
                 $userDailyTaskSubmission = true;
             }
         } else {
-            $logStatus = true;
+            $logStatus               = true;
             $userDailyTaskSubmission = true;
         }
 
@@ -640,21 +645,21 @@ class DashboardController extends AccountBaseController
             'data' => [
                 'check_in_check_out' => [
                     'check_in_status' => $user ? true : false,
-                    'data' => $user,
+                    'data'            => $user,
                 ],
-                'daily_task_report' => [
+                'daily_task_report'  => [
                     'daily_submission_status' => $userDailyTaskSubmission,
-                    'data' => [
+                    'data'                    => [
                         'checking_date' => $userClockIn->created_at ?? '',
                     ],
                 ],
-                'hours_log_report' => [
+                'hours_log_report'   => [
                     'hours_log_report_status' => $logStatus,
-                    'data' => [
-                        'checking_date' => $userClockIn->created_at ?? '',
-                        'complete_hours' => $userTotalMin,
+                    'data'                    => [
+                        'checking_date'            => $userClockIn->created_at ?? '',
+                        'complete_hours'           => $userTotalMin,
                         'target_minimum_log_hours' => $minimum_log_hours,
-                        'incomplete_hours' => $incomplete_hours < 0 ? 0 : $incomplete_hours,
+                        'incomplete_hours'         => $incomplete_hours < 0 ? 0 : $incomplete_hours,
                     ]
                 ]
             ],
@@ -664,16 +669,16 @@ class DashboardController extends AccountBaseController
     public function clockOutStatus()
     {
         $user_id = Auth::user()->id;
-        $today = Carbon::now();
+        $today   = Carbon::now();
 
         if (Auth::user()->role_id = 5 || Auth::user()->role_id = 9 || Auth::user()->role_id = 10) {
 
-            $user = Attendance::where('user_id', $user_id)->whereDate('created_at', $today)->orderBy('id', 'desc')->first();
+            $user                 = Attendance::where('user_id', $user_id)->whereDate('created_at', $today)->orderBy('id', 'desc')->first();
             $user->clock_out_time = Carbon::now();
             $user->save();
 
-            $userClockIn = Attendance::where('user_id', $user_id)->whereDate('created_at', $today)->orderBy('created_at', 'desc')->first();
-            $userGetTasks = ProjectTimeLog::where('user_id', $userClockIn->user_id)
+            $userClockIn   = Attendance::where('user_id', $user_id)->whereDate('created_at', $today)->orderBy('created_at', 'desc')->first();
+            $userGetTasks  = ProjectTimeLog::where('user_id', $userClockIn->user_id)
                 ->whereDate('created_at', $userClockIn->created_at)
                 ->orderBy('created_at', 'desc')
                 ->groupBy('task_id')
@@ -700,8 +705,8 @@ class DashboardController extends AccountBaseController
                 ->whereDate('date', '=', $userClockIn->created_at)
                 ->orderBy('created_at', 'desc')
                 ->first();
-            $userTotalMin = ProjectTimeLog::where('user_id', $user_id)->whereDate('created_at', '=', $userClockIn->created_at)->orderBy('created_at', 'desc')->sum('total_minutes');
-            $createdAt = Carbon::parse($userClockIn->created_at);
+            $userTotalMin            = ProjectTimeLog::where('user_id', $user_id)->whereDate('created_at', '=', $userClockIn->created_at)->orderBy('created_at', 'desc')->sum('total_minutes');
+            $createdAt               = Carbon::parse($userClockIn->created_at);
 
             $logStatus = true;
 
@@ -730,21 +735,21 @@ class DashboardController extends AccountBaseController
             'data' => [
                 'check_in_check_out' => [
                     'check_in_status' => false,
-                    'data' => $user,
+                    'data'            => $user,
                 ],
-                'daily_task_report' => [
+                'daily_task_report'  => [
                     'daily_submission_status' => $userDailyTaskSubmission ? true : false,
-                    'data' => [
+                    'data'                    => [
                         'checking_date' => $userClockIn->created_at,
                     ],
                 ],
-                'hours_log_report' => [
+                'hours_log_report'   => [
                     'hours_log_report_status' => $logStatus,
-                    'data' => [
-                        'checking_date' => $userClockIn->created_at,
-                        'complete_hours' => $userTotalMin,
+                    'data'                    => [
+                        'checking_date'            => $userClockIn->created_at,
+                        'complete_hours'           => $userTotalMin,
                         'target_minimum_log_hours' => $minimum_log_hours,
-                        'incomplete_hours' => $incomplete_hours < 0 ? 0 : $incomplete_hours,
+                        'incomplete_hours'         => $incomplete_hours < 0 ? 0 : $incomplete_hours,
                     ]
                 ]
             ],
@@ -756,24 +761,24 @@ class DashboardController extends AccountBaseController
     public function developerDailytrackHoursLog(Request $request)
     {
         //dd($request->all());
-        $stop_time = new DeveloperStopTimer();
+        $stop_time                                           = new DeveloperStopTimer();
         $stop_time->reason_for_less_tracked_hours_a_day_task = $request->reason_for_less_tracked_hours_a_day_task;
-        $stop_time->durations = $request->durations;
-        $stop_time->comment = $request->comment;
-        $stop_time->leave_period = $request->leave_period;
-        $stop_time->child_reason = $request->child_reason;
-        $stop_time->responsible_person = $request->responsible_person;
-        $stop_time->related_to_any_project = $request->related_to_any_project;
-        $stop_time->responsible_person_id = $request->responsible_person_id;
-        $stop_time->forgot_to_track_task_id = $request->forgot_to_track_task_id;
-        $stop_time->user_id = Auth::user()->id;
-        $stop_time->transition_hours = $request->transition_hours;
-        $stop_time->transition_minutes = $request->transition_minutes;
-        $stop_time->date = $request->date;
+        $stop_time->durations                                = $request->durations;
+        $stop_time->comment                                  = $request->comment;
+        $stop_time->leave_period                             = $request->leave_period;
+        $stop_time->child_reason                             = $request->child_reason;
+        $stop_time->responsible_person                       = $request->responsible_person;
+        $stop_time->related_to_any_project                   = $request->related_to_any_project;
+        $stop_time->responsible_person_id                    = $request->responsible_person_id;
+        $stop_time->forgot_to_track_task_id                  = $request->forgot_to_track_task_id;
+        $stop_time->user_id                                  = Auth::user()->id;
+        $stop_time->transition_hours                         = $request->transition_hours;
+        $stop_time->transition_minutes                       = $request->transition_minutes;
+        $stop_time->date                                     = $request->date;
 
         $stop_time->project_id = $request->project_id;
-        $stop_time->task_id = $request->task_id;
-        $project = Project::where('id', $request->project_id)->first();
+        $stop_time->task_id    = $request->task_id;
+        $project               = Project::where('id', $request->project_id)->first();
         if ($project != null) {
             $stop_time->client_id = $project->client_id;
 
@@ -824,20 +829,39 @@ class DashboardController extends AccountBaseController
     }
     public function leadDevPerformance($id)
     {
-        $this->lead_dev = User::where('id', $id)->first();
+        $this->lead_dev  = User::where('id', $id)->first();
         $this->pageTitle = 'Lead Developer Performance';
         return $this->LeadDashboardAdminView($this->lead_dev);
     }
     public function devPerformance($id)
     {
-        $this->dev = User::where('id', $id)->first();
+        $this->dev       = User::where('id', $id)->first();
         $this->pageTitle = 'Developer Performance';
         return $this->DevDashboardAdminView($this->dev);
     }
     public function salesPerformance($id)
     {
-        $this->sales = User::where('id', $id)->first();
+        $this->sales     = User::where('id', $id)->first();
         $this->pageTitle = 'Sales Performance';
         return $this->SalesDashboardAdminView($this->sales);
+    }
+
+    // temp lead
+    public function tempLeadDevDashboard($id)
+    {
+        $this->lead_dev = User::where('id', $id)->first();
+        return view('dashboard.temp_lead_admin_dashboard', $this->data);
+    }
+
+    public function tempDevDashboard($id)
+    {
+        $this->dev = User::where('id', $id)->first();
+        return view('dashboard.temp_dev_admin_dashboard', $this->data);
+    }
+
+    public function tempSalesDashboard($id)
+    {
+        $this->sales = User::where('id', $id)->first();
+        return view('dashboard.temp_sales_admin_dashboard', $this->data);
     }
 }

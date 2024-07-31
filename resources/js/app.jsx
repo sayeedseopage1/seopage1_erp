@@ -19,6 +19,7 @@ import "./react/employee-evaluation/main";
 import "./react/headless-features/main";
 import "./react/modules/main";
 // import './react/revison-page/main'
+import "./react/Dashboard/index"
 
 // react latest components
 import "./react-latest/routes/routes";

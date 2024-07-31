@@ -1,0 +1,46 @@
+.sp1_modal_header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #1D82F5;
+  color: white;
+  padding: 16px 30px;
+  border-radius: 8px 8px 0 0;
+}
+
+.sp1_modal_header_with_sticky{
+  position: sticky;
+  top: 0;
+  z-index: 5;
+}
+
+.sp1_modal_header h2 {
+  font-family: Poppins, sans-serif;
+  font-size: 24px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+  color: #FFF;
+  margin-bottom: 0;
+}
+
+.sp1_modal_header button {
+  background-color: transparent;
+  border: none;
+  color: white;
+  font-size: 26px;
+  cursor: pointer;
+}
+.sp1_modal_header svg {
+  fill: white;
+}
+
+@media screen and (max-width: 768px) {
+  .sp1_modal_header {
+    padding: 16px 20px;
+  }
+  .sp1_modal_header h2 {
+    font-size: 20px;
+  }
+  
+}
