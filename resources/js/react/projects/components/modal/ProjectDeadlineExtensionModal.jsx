@@ -86,7 +86,7 @@ const ProjectDeadlineExtensionModal = ({
                 new_deadline: dayjs(deadlineExtensionData.newDeadline).format("YYYY-MM-DD"),
                 extension: deadlineExtensionData.reason,
                 description: deadlineExtensionData.description,
-                old_deadline: dayjs(deadlineExtensionData.modalData?.deadline).format("YYYY-MM-DD"),
+                old_deadline: dayjs(modalData?.deadline).format("YYYY-MM-DD"),
                 project_id: modalData?.id,
             };
             const res = await deadlineExtensionRequest(payload).unwrap()
