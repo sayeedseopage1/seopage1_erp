@@ -194,6 +194,20 @@ class ProjectController extends AccountBaseController
 
         }
 
+        /** PROJECT MANAGER GOAL FUNCTION START */
+        if (Auth::user()->role_id == 4) {
+            $pm_goal = ProjectPmGoal::all();
+            if (!is_null($pm_goal) && $pm_goal->isNotEmpty()) {
+                foreach ($pm_goal as $item) {
+                    $current_date = now();
+                    $goal_end_date = Carbon::parse($item->goal_end_date)->addHours(24);
+                    if (Auth::user()->id == $item->pm_id && $current_date->gte($goal_end_date) && $item->goal_status == 0 && $item->reason == null) {
+                        return view('projects.ajax.goale_alert', $this->data);
+                    }
+                }
+            }
+        }
+        /** PROJECT MANAGER GOAL FUNCTION END */
         return $dataTable->render('projects.index', $this->data);
     }
     public function ProjectOverviewFilter(Request $request)
@@ -2259,6 +2273,18 @@ class ProjectController extends AccountBaseController
 
         // abort_403(user()->permission('view_projects') == 'added' && $this->project->added_by != user()->id);
 
+        if (Auth::user()->role_id == 4) {
+            $pm_goal = ProjectPmGoal::all();
+            if (!is_null($pm_goal) && $pm_goal->isNotEmpty()) {
+                foreach ($pm_goal as $item) {
+                    $current_date = now();
+                    $goal_end_date = Carbon::parse($item->goal_end_date)->addHours(24);
+                    if (Auth::user()->id == $item->pm_id && $current_date->gte($goal_end_date) && $item->goal_status == 0 && $item->reason == null) {
+                        return view('projects.ajax.goale_alert', $this->data);
+                    }
+                }
+            }
+        }
 
         return view('projects.show', $this->data);
     }
