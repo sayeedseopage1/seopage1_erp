@@ -516,16 +516,22 @@ class HelperPmProjectStatusController extends AccountBaseController
         $goalCodes = ProjectPmGoal::$goalCodes['hourly']['newMilestone'];
 
         switch ($goalCount) {
-            case 2:
-                if (in_array($lastGoal->project_category, ['regular', 'priority']))
+            case $goalCount == 2:
+
+                if (in_array($lastGoal->project_category, ['regular', 'priority'])) {
                     $days = ceil(($deliverable->estimation_time - 4) / 3);
-                else if ($lastGoal->project_category == 'highPriority')
+                    $estimatedHours = $deliverable->estimation_time - 4;
+                } else if ($lastGoal->project_category == 'highPriority') {
                     $days = ceil(($deliverable->estimation_time - 5) / 3);
-                else if (in_array($lastGoal->project_category, ['topMostPriority', 'criticallySensitive']))
+                    $estimatedHours = $deliverable->estimation_time - 5;
+                } else if (in_array($lastGoal->project_category, ['topMostPriority', 'criticallySensitive'])) {
                     $days = ceil(($deliverable->estimation_time - 6) / 3);
+                    $estimatedHours = $deliverable->estimation_time - 6;
+                }
                 break;
             case $goalCount > 2:
                 $days = ceil($deliverable->estimation_time / 3);
+                $estimatedHours = $deliverable->estimation_time;
                 break;
 
             default:
@@ -541,7 +547,7 @@ class HelperPmProjectStatusController extends AccountBaseController
         $goal->project_category = $lastGoal->project_category;
 
         $goal->goal_code = $goalCodes['code'];
-        $goal->goal_name = sprintf($goalCodes['name'], $deliverable->estimation_time);
+        $goal->goal_name = sprintf($goalCodes['name'], $estimatedHours);
         $goal->goal_type = $goalCodes['type'];
         $goal->goal_start_date = $lastGoal->goal_start_date;
 
