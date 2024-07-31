@@ -1465,6 +1465,7 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
     Route::post('project-milestone', [StickyNoteController::class, 'projectMilestone'])->name('sticky_notes.project_milestone');
     Route::post('milestone-task', [StickyNoteController::class, 'milestoneTask'])->name('sticky_notes.milestone_task');
     Route::post('task-subtask', [StickyNoteController::class, 'taskSubtask'])->name('sticky_notes.subtask');
+    Route::post('sticky-note-clients', [StickyNoteController::class, 'noteClients'])->name('sticky_notes.clients');
     Route::get('sticky-notes-complete/{id}', [StickyNoteController::class, 'noteComplete'])->name('sticky-notes.mark-as-complete');
 
     Route::post('show-notifications', [NotificationController::class, 'showNotifications'])->name('show_notifications');

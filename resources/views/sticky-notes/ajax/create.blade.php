@@ -174,7 +174,7 @@
                      </div>
                      @endif
                      {{-- For Admin Only --}}
-                    @if(Auth::user()->role_id == 4)
+                    @if(Auth::user()->role_id == 1)
                     <div class="col-sm-12 col-md-6 col-lg-3 mt-3">
                         <label class="f-14 text-dark-grey mb-12" data-label="true" for="note_type">Note Type
                             <sup class="f-14 mr-1">*</sup>
@@ -196,9 +196,6 @@
                         <div class="dropdown bootstrap-select form-control select-picker">
                             <select name="client_id" id="client_id" data-live-search="true" class="form-control select-picker error" data-size="8">
                                 <option value="">--</option>
-                                @foreach ($clients as $client)
-                                <option value="{{ $client->id }}">{{ $client->name }}</option>
-                                @endforeach
                             </select>
                             <label id="client_id_error" class="text-danger" for="client_id"></label>
                         </div>
@@ -215,7 +212,9 @@
                         </div>
                     </div>
                     <div class="col-sm-12 col-md-6 col-lg-3 mt-3" id="milestoneField" style="display: none">
-                        <label class="f-14 text-dark-grey mb-12" data-label="true" for="milestone_id">Milestones</label>
+                        <label class="f-14 text-dark-grey mb-12" data-label="true" for="milestone_id">Milestones
+                            <sup class="f-14 mr-1">*</sup>
+                        </label>
                         <div class="dropdown bootstrap-select form-control select-picker">
                             <select name="milestone_id" id="milestone_id" data-live-search="true" class="form-control select-picker error" data-size="8">
                                 <option value="">--</option>
@@ -224,12 +223,36 @@
                         </div>
                     </div>
                     <div class="col-sm-12 col-md-6 col-lg-3 mt-3" id="taskField" style="display: none">
-                        <label class="f-14 text-dark-grey mb-12" data-label="true" for="task_id">Tasks</label>
+                        <label class="f-14 text-dark-grey mb-12" data-label="true" for="task_id">Tasks
+                            <sup class="f-14 mr-1">*</sup>
+                        </label>
                         <div class="dropdown bootstrap-select form-control select-picker">
                             <select name="task_id" id="task_id" data-live-search="true" class="form-control select-picker error" data-size="8">
                                 <option value="">--</option>
                             </select>
                             <label id="task_id_error" class="text-danger" for="task_id"></label>
+                        </div>
+                    </div>
+                    <div class="col-sm-12 col-md-6 col-lg-3 mt-3" id="dealField" style="display: none">
+                        <label class="f-14 text-dark-grey mb-12" data-label="true" for="deal_id">Deal
+                            <sup class="f-14 mr-1">*</sup>
+                        </label>
+                        <div class="dropdown bootstrap-select form-control select-picker">
+                            <select name="deal_id" id="deal_id" data-live-search="true" class="form-control select-picker error" data-size="8">
+                                <option value="">--</option>
+                            </select>
+                            <label id="deal_id_error" class="text-danger" for="deal_id"></label>
+                        </div>
+                    </div>
+                    <div class="col-sm-12 col-md-6 col-lg-3 mt-3" id="wonDealField" style="display: none">
+                        <label class="f-14 text-dark-grey mb-12" data-label="true" for="won_deal_id">Won Deal
+                            <sup class="f-14 mr-1">*</sup>
+                        </label>
+                        <div class="dropdown bootstrap-select form-control select-picker">
+                            <select name="won_deal_id" id="won_deal_id" data-live-search="true" class="form-control select-picker error" data-size="8">
+                                <option value="">--</option>
+                            </select>
+                            <label id="won_deal_id_error" class="text-danger" for="won_deal_id"></label>
                         </div>
                     </div>
                     @endif
@@ -275,47 +298,78 @@
         $('#note_type').change(function() {
             // ONLY FOR PROJECT MANAGER
             @if(Auth::user()->role_id == 4)
-            if ($(this).val() == 'Project') {
-                $('#clientField').show();
-                $('#projectField').show();
-                $('#milestoneField').show();
-                $('#taskField').show();
-            } else {
+                if ($(this).val() == 'Project') {
+                    $('#clientField').show();
+                    $('#projectField').show();
+                    $('#milestoneField').show();
+                    $('#taskField').show();
+                } else {
+                    $('#clientField').hide();
+                    $('#projectField').hide();
+                    $('#milestoneField').hide();
+                    $('#taskField').hide();
+                }
+            @endif
+            // ONLY FOR lEAD MANAGER
+            @if(Auth::user()->role_id == 6)
+                if ($(this).val() == 'Task') {
+                    $('#clientField').show();
+                    $('#taskField').show();
+                    $('#subtaskField').show();
+                } else {
+                    $('#clientField').hide();
+                    $('#taskField').hide();
+                    $('#subtaskField').hide();
+                }
+            @endif
+            // ONLY FOR DEVELOPERS
+            @if(Auth::user()->role_id == 5)
+                if ($(this).val() == 'Sub-Task') {
+                    $('#clientField').show();
+                    $('#subtaskField').show();
+                } else {
+                    $('#clientField').hide();
+                    $('#subtaskField').hide();
+                }
+            @endif
+            // ONLY FOR ADMIN/Team lead
+            @if (Auth::user()->role_id == 1)
+                const selectedValue = $(this).val();
                 $('#clientField').hide();
                 $('#projectField').hide();
                 $('#milestoneField').hide();
                 $('#taskField').hide();
-            }
-            @endif
-            // ONLY FOR lEAD MANAGER
-            @if(Auth::user()->role_id == 6)
-            if ($(this).val() == 'Task') {
-                $('#clientField').show();
-                $('#taskField').show();
-                $('#subtaskField').show();
-            } else {
-                $('#clientField').hide();
-                $('#taskField').hide();
-                $('#subtaskField').hide();
-            }
-            @endif
-            // ONLY FOR DEVELOPERS
-            @if(Auth::user()->role_id == 5)
-            if ($(this).val() == 'Sub-Task') {
-                $('#clientField').show();
-                $('#subtaskField').show();
-            } else {
-                $('#clientField').hide();
-                $('#subtaskField').hide();
-            }
+                $('#dealField').hide();
+                $('#wonDealField').hide();
+
+                if (selectedValue == 'Project') {
+                    $('#clientField').show();
+                    $('#projectField').show();
+                    $('#milestoneField').show();
+                    $('#taskField').show();
+                } else if (selectedValue == 'Deal') {
+                    $('#clientField').show();
+                    $('#dealField').show();
+                } else if (selectedValue == 'Won Deal') {
+                    $('#clientField').show();
+                    $('#wonDealField').show();
+                }
             @endif
         });
         // ONLY FOR PROJECTS DROPDOWN
         $('#client_id').change(function() {
             var client_id = $(this).val();
+            @if(Auth::user()->role_id == 8 || Auth::user()->role_id == 1)
+            var note_type = $('#note_type').val();
+            var data = {
+                'client_id': client_id,
+                'note_type': note_type
+            }
+            @else
             var data = {
                 'client_id': client_id
             }
+            @endif
             $.ajaxSetup({
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -327,13 +381,29 @@
                 data: data,
                 dataType: "json",
                 success: function (response) {
-                    @if(Auth::user()->role_id == 4)
-                        $('#project_id').empty();
-                        $('#project_id').append('<option value="">--</option>');
-                        $.each(response, function(index, project) {
-                            $('#project_id').append('<option value="' + project.id + '">' + project.project_name + '</option>');
-                        });
-                        $('#project_id').selectpicker('refresh');
+                    @if(Auth::user()->role_id == 4 || Auth::user()->role_id == 1)
+                        if(response.status == 'deal'){
+                            $('#deal_id').empty();
+                            $('#deal_id').append('<option value="">--</option>');
+                            $.each(response.data, function(index, project) {
+                                $('#deal_id').append('<option value="' + project.id + '">' + project.project_name + '</option>');
+                            });
+                            $('#deal_id').selectpicker('refresh');
+                        }else if(response.status == 'won_deal'){
+                            $('#won_deal_id').empty();
+                            $('#won_deal_id').append('<option value="">--</option>');
+                            $.each(response.data, function(index, project) {
+                                $('#won_deal_id').append('<option value="' + project.id + '">' + project.project_name + '</option>');
+                            });
+                            $('#won_deal_id').selectpicker('refresh');
+                        }else{
+                            $('#project_id').empty();
+                            $('#project_id').append('<option value="">--</option>');
+                            $.each(response.data, function(index, project) {
+                                $('#project_id').append('<option value="' + project.id + '">' + project.project_name + '</option>');
+                            });
+                            $('#project_id').selectpicker('refresh');
+                        }
 
                     @elseif (Auth::user()->role_id == 6)
                         $('#task_id').empty();
@@ -452,6 +522,54 @@
                 }
             });
         });
+        @if (Auth::user()->role_id == 1)
+        // ONLY FOR CLIENTS DROPDOWN
+        $('#note_type').change(function() {
+            var note_type = $(this).val();
+            var data = {
+                'note_type': note_type
+            }
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
+            $.ajax({
+                type: "POST",
+                url: "{{route('sticky_notes.clients')}}",
+                data: data,
+                dataType: "json",
+                success: function (response) {
+                    @if(Auth::user()->role_id == 8 || Auth::user()->role_id == 1)
+                        $('#client_id').empty();
+                        $('#client_id').append('<option value="">--</option>');
+                        $.each(response, function(index, data) {
+                            $('#client_id').append('<option value="' + data.id + '">' + data.name + '</option>');
+                        });
+                        $('#client_id').selectpicker('refresh');
+
+                    @elseif (Auth::user()->role_id == 6)
+                        $('#task_id').empty();
+                        $('#task_id').append('<option value="">--</option>');
+                        $.each(response, function(index, task) {
+                            $('#task_id').append('<option value="' + task.id + '">' + task.heading + '</option>');
+                        });
+                        $('#task_id').selectpicker('refresh');
+                    @elseif (Auth::user()->role_id == 5)
+                        $('#subtask_id').empty();
+                        $('#subtask_id').append('<option value="">--</option>');
+                        $.each(response, function(index, subtask) {
+                            $('#subtask_id').append('<option value="' + subtask.id + '">' + subtask.title + '</option>');
+                        });
+                        $('#subtask_id').selectpicker('refresh');
+                    @endif
+                },
+                error: function(error) {
+                    // console.log(response);
+                }
+            });
+        });
+        @endif
     });
     $(document).ready(function() {        
         $('#save-notice').click(function(e){
@@ -464,7 +582,7 @@
                 'colour': document.getElementById("colour").value,
                 'note_type': document.getElementById("note_type").value,
                 'client_id': document.getElementById("client_id").value,
-                @if (Auth::user()->role_id == 4)
+                @if (Auth::user()->role_id == 4 || Auth::user()->role_id == 8 || Auth::user()->role_id == 1)
                 'project_id': document.getElementById("project_id").value,
                 'milestone_id': document.getElementById("milestone_id").value,
                 'task_id': document.getElementById("task_id").value,
@@ -475,6 +593,10 @@
                 @endif
                 @if (Auth::user()->role_id == 5)
                 'subtask_id': document.getElementById("subtask_id").value,
+                @endif
+                @if (Auth::user()->role_id == 8 || Auth::user()->role_id == 1)
+                'deal_id': document.getElementById("deal_id").value,
+                'won_deal_id': document.getElementById("won_deal_id").value,
                 @endif
                 'reminder_time': document.getElementById("reminder_time").value,
                 'notetext': document.getElementById("notetext").value,
@@ -532,6 +654,16 @@
                         $('#subtask_id_error').text(error.responseJSON.errors.subtask_id);
                     }else{
                         $('#subtask_id_error').text('');
+                    }
+                    if(error.responseJSON.errors.deal_id){
+                        $('#deal_id_error').text(error.responseJSON.errors.deal_id);
+                    }else{
+                        $('#deal_id_error').text('');
+                    }
+                    if(error.responseJSON.errors.won_deal_id){
+                        $('#won_deal_id_error').text(error.responseJSON.errors.won_deal_id);
+                    }else{
+                        $('#won_deal_id_error').text('');
                     }
                     if(error.responseJSON.errors.reminder_time){
                         $('#reminder_time_error').text(error.responseJSON.errors.reminder_time);

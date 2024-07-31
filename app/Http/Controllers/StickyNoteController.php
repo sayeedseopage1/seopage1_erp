@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Helper\Reply;
 use App\Http\Requests\Sticky\StoreStickyNote;
 use App\Http\Requests\Sticky\UpdateStickyNote;
+use App\Models\Deal;
+use App\Models\DealStage;
 use App\Models\Project;
 use App\Models\ProjectMilestone;
 use App\Models\StickyNote;
@@ -50,10 +52,10 @@ class StickyNoteController extends AccountBaseController
     public function create()
     {
         $this->stickyNotes = StickyNote::where('user_id', user()->id)->orderBy('updated_at', 'desc')->get();
-
+        // For PM
         $this->find_client = Project::where('pm_id', user()->id)->where('status', 'in progress')->pluck('client_id')->toArray();
         $this->clients = User::whereIn('id', $this->find_client)->select('id','name')->get();
-
+        // For lead develoepr
         $this->lead_dev_clients = Project::where('projects.status','in progress')->whereIn('projects.id', function($query) {
             $query->select('tasks.project_id')
                 ->from('tasks')
@@ -66,7 +68,7 @@ class StickyNoteController extends AccountBaseController
         ->leftJoin('users', 'users.id', '=', 'projects.client_id')
         ->select(['users.id', 'users.name'])
         ->get();
-
+        // For Developer
         $this->dev_clients = Project::where('projects.status','in progress')->whereIn('projects.id', function($query) {
             $query->select('tasks.project_id')
                 ->from('tasks')
@@ -79,6 +81,7 @@ class StickyNoteController extends AccountBaseController
         ->leftJoin('users', 'users.id', '=', 'projects.client_id')
         ->select(['users.id', 'users.name'])
         ->get();
+        
 
         $this->pageTitle = __('modules.sticky.addNote');
 
@@ -123,6 +126,19 @@ class StickyNoteController extends AccountBaseController
                 'reminder_time' => 'required',
                 'notetext' => 'required',
             ]);
+        }elseif(Auth::user()->role_id == 1 || Auth::user()->role_id == 8){
+            $validated = $request->validate([
+                'colour' => 'required',
+                'note_type' => 'required',
+                'client_id' => ['required_if:note_type,Project,Deal,Won Deal'],
+                'project_id' => ['required_if:note_type,Project,Deal,Won Deal'],
+                'milestone_id' => ['required_if:note_type,Project,Deal,Won Deal'],
+                'task_id' => ['required_if:note_type,Project,Deal,Won Deal'],
+                'deal_id' => ['required_if:note_type,Deal'],
+                'won_deal_id' => ['required_if:note_type,Deal'],
+                'reminder_time' => 'required',
+                'notetext' => 'required',
+            ]);
         }
         $sticky = new StickyNote();
         $sticky->colour     = $request->colour;
@@ -135,6 +151,10 @@ class StickyNoteController extends AccountBaseController
         //PM Notes End
         //Lead lead/dev Notes start
         $sticky->sub_task_id = $request->subtask_id;
+        //Lead lead/dev Notes end
+        //Lead admin/teamlead Notes start
+        $sticky->deal_id = $request->deal_id;
+        $sticky->won_deal_id = $request->won_deal_id;
         //Lead lead/dev Notes end
         $sticky->reminder_time = Carbon::now()->addHours($request->reminder_time);
         $sticky->note_text  = $request->notetext;
@@ -230,6 +250,21 @@ class StickyNoteController extends AccountBaseController
 
          return response()->json($devsubtasks);
 
+        }elseif(Auth::user()->role_id == 1 || Auth::user()->role_id == 8){
+            if($request->note_type == 'Project'){
+                $findClientProject = Project::where('client_id', $request->client_id)->where('status', 'in progress')->select('id', 'project_name')->get();
+                return response()->json(['data'=> $findClientProject, 'status'=>'project']);
+
+            }elseif($request->note_type == 'Deal'){
+                $client = User::where('id', $request->client_id)->first();
+                $findClientDeals = DealStage::where('client_username', $client->user_name)->get(['id', 'project_name']);
+                return response()->json(['data'=> $findClientDeals, 'status'=>'deal']);
+
+            }elseif($request->note_type == 'Won Deal'){
+                $findClientWonDeals = Deal::where('client_id', $request->client_id)->where('status', 'Accepted')->get(['id', 'project_name']);
+                return response()->json(['data'=> $findClientWonDeals, 'status'=>'won_deal']);
+            }
+            
         }
     }
 
@@ -243,12 +278,29 @@ class StickyNoteController extends AccountBaseController
     public function milestoneTask(Request $request)
     {
         $findMilestoneTask = Task::where(['milestone_id' => $request->milestone_id,'subtask_id' => null,'board_column_id' => 4])->get();
+
         return response()->json($findMilestoneTask);
     }
     public function taskSubtask(Request $request)
     {
         $findSubTask = SubTask::where('task_id', $request->task_id)->select('id', 'title')->get();
         return response()->json($findSubTask);
+    }
+
+    public function noteClients(Request $request)
+    {
+        if($request->note_type == 'Project'){
+            $find_project_clients = Project::where('status','in progress')->pluck('client_id')->toArray();
+            $datas = User::whereIn('id', $find_project_clients)->select('id','name')->get();
+        }elseif($request->note_type == 'Deal'){
+            $deal_clients = DealStage::where('won_lost', null)->pluck('client_username')->toArray();
+            $datas = User::whereIn('user_name', $deal_clients)->select('id','name')->get();
+        }elseif($request->note_type == 'Won Deal'){
+            $find_deal_client = Deal::where('client_id','!=',null)->where('status','Accepted')->pluck('client_id')->toArray();
+            $datas = User::whereIn('id', $find_deal_client)->select('id','name')->get();
+        }
+
+        return response()->json($datas);
     }
 
     public function noteComplete($id)
